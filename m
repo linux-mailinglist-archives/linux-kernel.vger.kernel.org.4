@@ -2,117 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E951667944
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4E7667940
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240352AbjALP3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S240101AbjALP3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240425AbjALP2d (ORCPT
+        with ESMTP id S240489AbjALP2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:28:33 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCAFC78;
-        Thu, 12 Jan 2023 07:20:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E5A8ACE1E5E;
-        Thu, 12 Jan 2023 15:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AD5C433EF;
-        Thu, 12 Jan 2023 15:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673536849;
-        bh=BCtqMXLEe/UrckfTQBcikiufFT6uV7gISnRdD1HnshI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=rLIAB4+YH0UkEjySHkRENtPC/rBWbpv589rl+z7ZX09HHf3UqIEsEYEaOSAFTkLhH
-         Xp8o8rGAg+HFhCmfPublTEgYRnW3MkEvPuprCQm7z5gyJG2R0ZlkTkv+llEUd/qhT9
-         9hX143H78hyJzyub1ma/iIkrxUozsRG2th0G0+TgBBkdhWsbrmO4307R55MVVFoJ9U
-         d+KyF3qo+ozgNPR2vuugPofojy6gHDiU0BSiW4laDRPOoqnnWv59bmyORkJzRajufJ
-         t8v6oABnPEVmBdBJMjusHsRGRai3V4AbFqK75vsPhb8fHZo4sEMLIDoenZ/lTMrAjQ
-         ZaZGtbbqXRi7A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 933835C0AF8; Thu, 12 Jan 2023 07:20:48 -0800 (PST)
-Date:   Thu, 12 Jan 2023 07:20:48 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, seanjc@google.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
-        Michal Luczaj <mhal@rbox.co>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] Documentation: kvm: fix SRCU locking order docs
-Message-ID: <20230112152048.GJ4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230111183031.2449668-1-pbonzini@redhat.com>
- <a14a13a690277d4cc95a4b26aa2d9a4d9b392a74.camel@infradead.org>
+        Thu, 12 Jan 2023 10:28:47 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FFE122
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:21:39 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g13so28925695lfv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PLjUlihlOn6KrGPfRsDYWE8893zqQEmbofoas2WFAEc=;
+        b=SywnFV2N5Emj10XSfvVuUokJIgUcgT0jKNBvmfrF+iAFEDZptKOCpmVa3qb44nslus
+         8Th7qYWysspKoTbf/7loSNdwBCoo5irw7kASu3kdhVV93zVCIrmojeT3YeY2rj+A9o5V
+         Dqgl3H3jpUl7lL8s0JfdKKGlGzC9CJ02x3SjsGIYqfTHf7tQd9mMEvVECjf0Gt8D60wE
+         bf8yoagzNlt5pSFFsebfeJI0mOhJrZ4CiONTVav8bqTXDcxFaFdX+D4O+Eb7e3n4ugNv
+         vmr9rWgbEprXXIv3o2Qt35adjprPHK2QFPLoX8bgAVxbgjqdrRVyh0BOdfiP+ulM/ZoS
+         lPdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PLjUlihlOn6KrGPfRsDYWE8893zqQEmbofoas2WFAEc=;
+        b=Ul5mfV+j2vEp4xG8Gc4uvp23sC7FgnjMhfcPpah8xI/zpr9LiXYL7FWWRDTnuf8PS8
+         iCLwpddJZsDe0kENIfDMBzdWHkLpchS1RM73lEB7kvU/3oN9EwK9ZaJJ9H9wNLpDv6rg
+         B5YFT9sqxC+8it5fSeUsSJiB9IgLeJEeBo+Afh74FEZwm6M81hpoBHYN8/PKlPCyJ+px
+         zag/UyxmNkvaGfAjyLZkM/kEr+SZbgbrrjCopS1Hv5rJu4BYK171MqdlxWO+aKQQ5mfl
+         OLeaxp/1lZzKrHab8+UKzEA576bg2zW3NM0coG3PNLhvURuvUabPysOX3oNUp3yp1H0g
+         eDhQ==
+X-Gm-Message-State: AFqh2kp4gjQf9jBytvK4a/HYigy0EiNgarLLRh2qiNWo411O440pP+GK
+        oMX0nrldFW1G8V7nnO5mLVHIV3KQjqsJl8QZrmQKxA==
+X-Google-Smtp-Source: AMrXdXvWNGq+Iy/iMVcrZTawQSw4jKiWni/BUS3d6esGNtRp3GYOUo2KvW6/tQ2Yn6O4Pz+QNQVr2R90jVZRYrnek0U=
+X-Received: by 2002:a05:6512:33cd:b0:4cb:3df9:b25f with SMTP id
+ d13-20020a05651233cd00b004cb3df9b25fmr1751541lfg.653.1673536897679; Thu, 12
+ Jan 2023 07:21:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a14a13a690277d4cc95a4b26aa2d9a4d9b392a74.camel@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com> <20230101-patch-series-v2-6-2-rc1-v2-9-fa1897efac14@collabora.com>
+In-Reply-To: <20230101-patch-series-v2-6-2-rc1-v2-9-fa1897efac14@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Thu, 12 Jan 2023 12:21:26 -0300
+Message-ID: <CAAEAJfDkTX=EwDCs+uN0bFwMb_JhJfkQiwRR9+b-9v3cJnPTsw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/12] staging: media: rkvdec: h264: Add callbacks for h264
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Alex Bee <knaerzche@gmail.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Collabora Kernel-domain <kernel@collabora.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:24:16AM +0000, David Woodhouse wrote:
-> On Wed, 2023-01-11 at 13:30 -0500, Paolo Bonzini wrote:
-> > 
-> > +- ``synchronize_srcu(&kvm->srcu)`` is called inside critical sections
-> > +  for kvm->lock, vcpu->mutex and kvm->slots_lock.  These locks _cannot_
-> > +  be taken inside a kvm->srcu read-side critical section; that is, the
-> > +  following is broken::
-> > +
-> > +      srcu_read_lock(&kvm->srcu);
-> > +      mutex_lock(&kvm->slots_lock);
-> > +
-> 
-> "Don't tell me. Tell lockdep!"
-> 
-> Did we conclude in
-> https://lore.kernel.org/kvm/122f38e724aae9ae8ab474233da1ba19760c20d2.camel@infradead.org/
-> that lockdep *could* be clever enough to catch a violation of this rule
-> by itself?
-> 
-> The general case of the rule would be that 'if mutex A is taken in a
-> read-section for SCRU B, then any synchronize_srcu(B) while mutex A is
-> held shall be verboten'. And vice versa.
-> 
-> If we can make lockdep catch it automatically, yay!
+On Thu, Jan 12, 2023 at 9:56 AM Sebastian Fricke
+<sebastian.fricke@collabora.com> wrote:
+>
+> Implement the valid format and sps validation callbacks for H264.
+> H264 already has a SPS validation function, adjust it to fit the
+> function the declaration and add error messages.
+> Additionally, add a function to fetch attributes from the SPS in a human
+> readable format to make the code more self documenting.
+>
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> ---
+>  drivers/staging/media/rkvdec/rkvdec-h264.c | 105 ++++++++++++++++++++++-------
+>  1 file changed, 80 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> index 4fc167b42cf0..17b215874ddd 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> @@ -1026,40 +1026,80 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_ctx *ctx,
+>         return 0;
+>  }
+>
+> -static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
+> -                                   const struct v4l2_ctrl_h264_sps *sps)
+> +/*
+> + * Convert some fields from the SPS structure into human readable attributes.
+> + */
+> +static int rkvdec_h264_get_sps_attributes(struct rkvdec_ctx *ctx, void *sps,
+> +                                         struct sps_attributes *attributes)
+> +{
+> +       struct v4l2_ctrl_h264_sps *h264_sps = sps;
+> +       unsigned int width = (h264_sps->pic_width_in_mbs_minus1 + 1) * 16;
+> +       unsigned int height = (h264_sps->pic_height_in_map_units_minus1 + 1) * 16;
+> +       /*
+> +        * When frame_mbs_only_flag is not set, this is field height,
+> +        * which is half the final height (see (7-18) in the
+> +        * specification)
+> +        */
+> +       if (!(h264_sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
+> +               height *= 2;
+> +
+> +       attributes->width = width;
+> +       attributes->height = height;
+> +       attributes->luma_bitdepth = h264_sps->bit_depth_luma_minus8 + 8;
+> +       attributes->chroma_bitdepth = h264_sps->bit_depth_chroma_minus8 + 8;
+> +       switch (h264_sps->chroma_format_idc) {
+> +       case 0:
+> +               attributes->subsampling = 400;
+> +               break;
+> +       case 1:
+> +               attributes->subsampling = 420;
+> +               break;
+> +       case 2:
+> +               attributes->subsampling = 422;
+> +               break;
+> +       case 3:
+> +               attributes->subsampling = 444;
+> +               break;
+> +       };
+> +       return 0;
+> +}
+> +
+> +static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx, void *sps,
+> +                                   struct v4l2_pix_format_mplane *pix_mp)
+>  {
+> -       unsigned int width, height;
+> +       struct sps_attributes attributes = {0};
+> +
+> +       rkvdec_h264_get_sps_attributes(ctx, sps, &attributes);
+>
+>         /*
+>          * TODO: The hardware supports 10-bit and 4:2:2 profiles,
+>          * but it's currently broken in the driver.
+>          * Reject them for now, until it's fixed.
+>          */
+> -       if (sps->chroma_format_idc > 1)
+> -               /* Only 4:0:0 and 4:2:0 are supported */
+> +       if (attributes.subsampling > 420) {
+> +               dev_err(ctx->dev->dev,
+> +                       "Only 4:0:0 and 4:2:0 subsampling schemes are supported, got: %d\n",
+> +                       attributes.subsampling);
+>                 return -EINVAL;
+> -       if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+> -               /* Luma and chroma bit depth mismatch */
+> +       }
+> +       if (attributes.luma_bitdepth != attributes.chroma_bitdepth) {
+> +               dev_err(ctx->dev->dev,
+> +                       "Luma and chroma bit depth mismatch, luma %d, chroma %d\n",
+> +                       attributes.luma_bitdepth, attributes.chroma_bitdepth);
+>                 return -EINVAL;
+> -       if (sps->bit_depth_luma_minus8 != 0)
+> -               /* Only 8-bit is supported */
+> +       }
+> +       if (attributes.luma_bitdepth != 8) {
+> +               dev_err(ctx->dev->dev, "Only 8-bit H264 formats supported, SPS %d\n",
+> +                       attributes.luma_bitdepth);
+>                 return -EINVAL;
+> +       }
+>
+> -       width = (sps->pic_width_in_mbs_minus1 + 1) * 16;
+> -       height = (sps->pic_height_in_map_units_minus1 + 1) * 16;
+> -
+> -       /*
+> -        * When frame_mbs_only_flag is not set, this is field height,
+> -        * which is half the final height (see (7-18) in the
+> -        * specification)
+> -        */
+> -       if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
+> -               height *= 2;
+> -
+> -       if (width > ctx->coded_fmt.fmt.pix_mp.width ||
+> -           height > ctx->coded_fmt.fmt.pix_mp.height)
+> +       if (attributes.width > pix_mp->width || attributes.height > pix_mp->height) {
+> +               dev_err(ctx->dev->dev,
+> +                       "Incompatible SPS dimension, SPS %dx%d, Pixel format %dx%d.",
+> +                       attributes.width, attributes.height, pix_mp->width, pix_mp->height);
+>                 return -EINVAL;
+> +       }
+>
+>         return 0;
+>  }
+> @@ -1077,8 +1117,9 @@ static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
+>         if (!ctrl)
+>                 return -EINVAL;
+>
+> -       ret = rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
+> -       if (ret)
+> +       ret = rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps,
+> +                                      &ctx->coded_fmt.fmt.pix_mp);
 
-Unfortunately, lockdep needs to see a writer to complain, and that patch
-just adds a reader.  And adding that writer would make lockdep complain
-about things that are perfectly fine.  It should be possible to make
-lockdep catch this sort of thing, but from what I can see, doing so
-requires modifications to lockdep itself.
+Not a problem with this patch, but I wonder why we accepted a validation
+in the start_streaming step.
 
-> If not, I'm inclined to suggest that we have explicit wrappers of our
-> own for kvm_mutex_lock() which will do the check directly.
+At this point, the driver accepted all the format negotiations in try_fmt.
+It's difficult for applications to recover from this, as there would
+be no way to tell what failed,
+we would be returning EINVAL, which as per the spec is "buffer type is
+not supported,
+or no buffers have been allocated (memory mapping) or enqueued (output) yet.".
 
-This does allow much more wiggle room.  For example, you guys could decide
-to let lockdep complain about things that other SRCU users want to do.
-For completeness, here is one such scenario:
+I think it would really make a lot of sense to fix this now, instead of continue
+abusing it. And also, I'd like to prevent a possible anti-pattern from
+spreading.
 
-CPU 0:  read_lock(&rla); srcu_read_lock(&srcua); ...
+Thanks!
+Ezequiel
 
-CPU 1:  srcu_read_lock(&srcua); read_lock(&rla); ...
-
-CPU 2:  synchronize_srcu(&srcua);
-
-CPU 3: 	write_lock(&rla); ...
-
-If you guys are OK with lockdep complaining about this, then doing a
-currently mythical rcu_write_acquire()/rcu_write_release() pair around
-your calls to synchronize_srcu() should catch the other issue.
-
-And probably break something else, but you have to start somewhere!  ;-)
-
-							Thanx, Paul
+> +       if (ret < 0)
+>                 return ret;
+>
+>         h264_ctx = kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
+> @@ -1175,10 +1216,21 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+>         return 0;
+>  }
+>
+> +static u32 rkvdec_h264_valid_fmt(struct rkvdec_ctx *ctx)
+> +{
+> +       /*
+> +        * Only 8 bit 4:0:0 and 4:2:0 formats supported for now.
+> +        * The SPS is validated at a different function thus we can assume that
+> +        * it is correct.
+> +        */
+> +       return V4L2_PIX_FMT_NV12;
+> +}
+> +
+>  static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
+>  {
+>         if (ctrl->id == V4L2_CID_STATELESS_H264_SPS)
+> -               return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
+> +               return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps,
+> +                                               &ctx->coded_fmt.fmt.pix_mp);
+>
+>         return 0;
+>  }
+> @@ -1189,4 +1241,7 @@ const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
+>         .stop = rkvdec_h264_stop,
+>         .run = rkvdec_h264_run,
+>         .try_ctrl = rkvdec_h264_try_ctrl,
+> +       .valid_fmt = rkvdec_h264_valid_fmt,
+> +       .sps_check = rkvdec_h264_validate_sps,
+> +       .get_sps_attributes = rkvdec_h264_get_sps_attributes,
+>  };
+>
+> --
+> 2.25.1
