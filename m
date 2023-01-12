@@ -2,209 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A81666FD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1310666FD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbjALKid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S239801AbjALKih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbjALKhp (ORCPT
+        with ESMTP id S232257AbjALKho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:37:45 -0500
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA8655879
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:31:53 -0800 (PST)
-Received: by mail-ej1-x64a.google.com with SMTP id hp2-20020a1709073e0200b0084d47e3fe82so8446112ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LSkZFm2zhcJ11sH6VV/UUBhi7d17SDGndMSvaJIxOZI=;
-        b=osDqB7oB9rliiSEwujnVRRlF2iLya0drTf/pDhu92kUkCg30pCF8TFT1zoQOR4sxof
-         rQ/zRExf3uGEYMJLnCrYtgReLRAHWLcYQ1RtH/q4QvG5G9TTKt32LQLyr1J9mOujv62k
-         JCsOMnQUJ0f0/46fBpXaS4x3rk4UOuiWnE1PsQRb71wyBl2SffSxNs5jCB75hKlG4z7y
-         +UbLxQ+m0/phOR5KpY8E1S8LYGdxd4kEQul9sOPZ46HQQ4h3z7WD5mTStE1O9wNy5YMr
-         cspLC3jr8JFMi+zRboBTrI9qpopxyybLjqw1gAbnZVDC/B9Zs5UzjAsesbGTV9RDtNg2
-         DQdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LSkZFm2zhcJ11sH6VV/UUBhi7d17SDGndMSvaJIxOZI=;
-        b=HkwhWymDeSuRJrwZxp8Di+rlFzN4MsjBC7kPGBrzKkT9obRTvgoH61UtCTckxEMpKE
-         PGdjmH7FG4mfILhHJ1FTXRJRJ7f0zXeXcdItG5/G49Bdssbi4vyrunK0IPR70Om2wi2N
-         eoHKluZGZ1HGyWz7I2ob8PFmxotplilpBPdbLUp3IgR+y6QM12w5+hBiJn/yTmRtRYIn
-         DuFY8ds5ZJxNBBULIq+PWsYZCLoOJM9Y7boctHNS88cNe86NJ8ayQQbnQA6JWSm0bHYx
-         rGMIDSexwl7XiIs2MrMRv57T3kXecW6bjc4qPB2PbqOWUnpdyWy1knJ/rmStGOBfwWC8
-         T1dg==
-X-Gm-Message-State: AFqh2kpjEpwEky6YIuONcMzru1m87OHCyATqXzN2ARUrDL4+QOmWliB+
-        CwjZGZ3Qur5mQVVBTQx5bC3Sw5M0/Io=
-X-Google-Smtp-Source: AMrXdXsiV3DmNxAS7ow1FffnVfftZlNGUXqJ+SVvKBpRxiv55Tp5gQYdKTozmOpocUEgNb+vEtR77ZqNiQc=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:c17f:273f:c35:6186])
- (user=glider job=sendgmr) by 2002:a17:906:b88d:b0:7c0:911e:199a with SMTP id
- hb13-20020a170906b88d00b007c0911e199amr5393223ejb.689.1673519511607; Thu, 12
- Jan 2023 02:31:51 -0800 (PST)
-Date:   Thu, 12 Jan 2023 11:31:47 +0100
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230112103147.382416-1-glider@google.com>
-Subject: [PATCH] kmsan: silence -Wmissing-prototypes warnings
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        peterz@infradead.org, mingo@redhat.com, elver@google.com,
-        dvyukov@google.com, linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        kernel test robot <lkp@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 05:37:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65EC55859
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:31:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 881BC37A70;
+        Thu, 12 Jan 2023 10:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673519509; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kDuPR09Dky6UQGEK8I/znXJ94j8W8+WzXtKjSCowtwg=;
+        b=LQIkCKUXynd6jc9SPtAHB2A+Io+pkIU/tiOOvHF83rUX9Xf8Cc93wtwI98EUcqE5YskUNh
+        lvDjl+WXKFu3XVEpvRaeZk84rUiJwVJTtlavo5Kc4EidIj4yvmOJPU2hBvvgZjUTmjrNBO
+        O3Ekoxg+kGGcqUMwUedJuIOrnLRnyKg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673519509;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kDuPR09Dky6UQGEK8I/znXJ94j8W8+WzXtKjSCowtwg=;
+        b=YG1dh487UFcMJUm/4zYAGXs6or6Rn8kMzqTxFtttPEokrg6ut1P9gEWRfLhsn8l/+WI4Wd
+        hul9YqRxhb+J96CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6128513585;
+        Thu, 12 Jan 2023 10:31:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id amgwF5Xhv2NsKAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 12 Jan 2023 10:31:49 +0000
+Message-ID: <e8b737fd-6204-419d-0592-5441ea344704@suse.cz>
+Date:   Thu, 12 Jan 2023 11:31:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 2/5] mm: mlock: use folios and a folio batch internally
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <cover.1672043615.git.lstoakes@gmail.com>
+ <03ac78b416be5a361b79464acc3da7f93b9c37e8.1672043615.git.lstoakes@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <03ac78b416be5a361b79464acc3da7f93b9c37e8.1672043615.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building the kernel with W=1, the compiler reports numerous
-warnings about the missing prototypes for KMSAN instrumentation hooks.
+On 12/26/22 09:44, Lorenzo Stoakes wrote:
+> This brings mlock in line with the folio batches declared in mm/swap.c and
+> makes the code more consistent across the two.
+> 
+> The existing mechanism for identifying which operation each folio in the
+> batch is undergoing is maintained, i.e. using the lower 2 bits of the
+> struct folio address (previously struct page address). This should continue
+> to function correctly as folios remain at least system word-aligned.
+> 
+> All invoctions of mlock() pass either a non-compound page or the head of a
+> THP-compound page and no tail pages need updating so this functionality
+> works with struct folios being used internally rather than struct pages.
+> 
+> In this patch the external interface is kept identical to before in order
+> to maintain separation between patches in the series, using a rather
+> awkward conversion from struct page to struct folio in relevant functions.
+> 
+> However, this maintenance of the existing interface is intended to be
+> temporary - the next patch in the series will update the interfaces to
+> accept folios directly.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-Because these functions are not supposed to be called explicitly by the
-kernel code (calls to them are emitted by the compiler), they do not
-have to be declared in the headers. Instead, we add forward declarations
-right before the definitions to silence the warnings produced by
--Wmissing-prototypes.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202301020356.dFruA4I5-lkp@intel.com/T/
-Reported-by: Vlastimil Babka <vbabka@suse.cz>
-Suggested-by: Marco Elver <elver@google.com>
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
- mm/kmsan/instrumentation.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+with some nits:
 
-diff --git a/mm/kmsan/instrumentation.c b/mm/kmsan/instrumentation.c
-index 770fe02904f36..cf12e9616b243 100644
---- a/mm/kmsan/instrumentation.c
-+++ b/mm/kmsan/instrumentation.c
-@@ -38,7 +38,15 @@ get_shadow_origin_ptr(void *addr, u64 size, bool store)
- 	return ret;
- }
- 
-+/*
-+ * KMSAN instrumentation functions follow. They are not declared elsewhere in
-+ * the kernel code, so they are preceded by prototypes, to silence
-+ * -Wmissing-prototypes warnings.
-+ */
-+
- /* Get shadow and origin pointers for a memory load with non-standard size. */
-+struct shadow_origin_ptr __msan_metadata_ptr_for_load_n(void *addr,
-+							uintptr_t size);
- struct shadow_origin_ptr __msan_metadata_ptr_for_load_n(void *addr,
- 							uintptr_t size)
- {
-@@ -47,6 +55,8 @@ struct shadow_origin_ptr __msan_metadata_ptr_for_load_n(void *addr,
- EXPORT_SYMBOL(__msan_metadata_ptr_for_load_n);
- 
- /* Get shadow and origin pointers for a memory store with non-standard size. */
-+struct shadow_origin_ptr __msan_metadata_ptr_for_store_n(void *addr,
-+							 uintptr_t size);
- struct shadow_origin_ptr __msan_metadata_ptr_for_store_n(void *addr,
- 							 uintptr_t size)
- {
-@@ -59,12 +69,16 @@ EXPORT_SYMBOL(__msan_metadata_ptr_for_store_n);
-  * with fixed size.
-  */
- #define DECLARE_METADATA_PTR_GETTER(size)                                  \
-+	struct shadow_origin_ptr __msan_metadata_ptr_for_load_##size(      \
-+		void *addr);                                               \
- 	struct shadow_origin_ptr __msan_metadata_ptr_for_load_##size(      \
- 		void *addr)                                                \
- 	{                                                                  \
- 		return get_shadow_origin_ptr(addr, size, /*store*/ false); \
- 	}                                                                  \
- 	EXPORT_SYMBOL(__msan_metadata_ptr_for_load_##size);                \
-+	struct shadow_origin_ptr __msan_metadata_ptr_for_store_##size(     \
-+		void *addr);                                               \
- 	struct shadow_origin_ptr __msan_metadata_ptr_for_store_##size(     \
- 		void *addr)                                                \
- 	{                                                                  \
-@@ -86,6 +100,7 @@ DECLARE_METADATA_PTR_GETTER(8);
-  * entering or leaving IRQ. We omit the check for kmsan_in_runtime() to ensure
-  * the memory written to in these cases is also marked as initialized.
-  */
-+void __msan_instrument_asm_store(void *addr, uintptr_t size);
- void __msan_instrument_asm_store(void *addr, uintptr_t size)
- {
- 	unsigned long ua_flags;
-@@ -138,6 +153,7 @@ static inline void set_retval_metadata(u64 shadow, depot_stack_handle_t origin)
- }
- 
- /* Handle llvm.memmove intrinsic. */
-+void *__msan_memmove(void *dst, const void *src, uintptr_t n);
- void *__msan_memmove(void *dst, const void *src, uintptr_t n)
- {
- 	depot_stack_handle_t origin;
-@@ -162,6 +178,7 @@ void *__msan_memmove(void *dst, const void *src, uintptr_t n)
- EXPORT_SYMBOL(__msan_memmove);
- 
- /* Handle llvm.memcpy intrinsic. */
-+void *__msan_memcpy(void *dst, const void *src, uintptr_t n);
- void *__msan_memcpy(void *dst, const void *src, uintptr_t n)
- {
- 	depot_stack_handle_t origin;
-@@ -188,6 +205,7 @@ void *__msan_memcpy(void *dst, const void *src, uintptr_t n)
- EXPORT_SYMBOL(__msan_memcpy);
- 
- /* Handle llvm.memset intrinsic. */
-+void *__msan_memset(void *dst, int c, uintptr_t n);
- void *__msan_memset(void *dst, int c, uintptr_t n)
- {
- 	depot_stack_handle_t origin;
-@@ -217,6 +235,7 @@ EXPORT_SYMBOL(__msan_memset);
-  * uninitialized value to memory. When reporting an error, KMSAN unrolls and
-  * prints the whole chain of stores that preceded the use of this value.
-  */
-+depot_stack_handle_t __msan_chain_origin(depot_stack_handle_t origin);
- depot_stack_handle_t __msan_chain_origin(depot_stack_handle_t origin)
- {
- 	depot_stack_handle_t ret = 0;
-@@ -237,6 +256,7 @@ depot_stack_handle_t __msan_chain_origin(depot_stack_handle_t origin)
- EXPORT_SYMBOL(__msan_chain_origin);
- 
- /* Poison a local variable when entering a function. */
-+void __msan_poison_alloca(void *address, uintptr_t size, char *descr);
- void __msan_poison_alloca(void *address, uintptr_t size, char *descr)
- {
- 	depot_stack_handle_t handle;
-@@ -272,6 +292,7 @@ void __msan_poison_alloca(void *address, uintptr_t size, char *descr)
- EXPORT_SYMBOL(__msan_poison_alloca);
- 
- /* Unpoison a local variable. */
-+void __msan_unpoison_alloca(void *address, uintptr_t size);
- void __msan_unpoison_alloca(void *address, uintptr_t size)
- {
- 	if (!kmsan_enabled || kmsan_in_runtime())
-@@ -287,6 +308,7 @@ EXPORT_SYMBOL(__msan_unpoison_alloca);
-  * Report that an uninitialized value with the given origin was used in a way
-  * that constituted undefined behavior.
-  */
-+void __msan_warning(u32 origin);
- void __msan_warning(u32 origin)
- {
- 	if (!kmsan_enabled || kmsan_in_runtime())
-@@ -303,6 +325,7 @@ EXPORT_SYMBOL(__msan_warning);
-  * At the beginning of an instrumented function, obtain the pointer to
-  * `struct kmsan_context_state` holding the metadata for function parameters.
-  */
-+struct kmsan_context_state *__msan_get_context_state(void);
- struct kmsan_context_state *__msan_get_context_state(void)
- {
- 	return &kmsan_get_context()->cstate;
--- 
-2.39.0.314.g84b9a713c41-goog
+> -static struct lruvec *__munlock_page(struct page *page, struct lruvec *lruvec)
+> +static struct lruvec *__munlock_folio(struct folio *folio, struct lruvec *lruvec)
+>  {
+> -	int nr_pages = thp_nr_pages(page);
+> +	int nr_pages = folio_nr_pages(folio);
+>  	bool isolated = false;
+>  
+> -	if (!TestClearPageLRU(page))
+> +	if (!folio_test_clear_lru(folio))
+>  		goto munlock;
+>  
+>  	isolated = true;
+> -	lruvec = folio_lruvec_relock_irq(page_folio(page), lruvec);
+> +	lruvec = folio_lruvec_relock_irq(folio, lruvec);
+>  
+> -	if (PageUnevictable(page)) {
+> +	if (folio_test_unevictable(folio)) {
+>  		/* Then mlock_count is maintained, but might undercount */
+> -		if (page->mlock_count)
+> -			page->mlock_count--;
+> -		if (page->mlock_count)
+> +		if (folio->mlock_count)
+> +			folio->mlock_count--;
+> +		if (folio->mlock_count)
+>  			goto out;
+>  	}
+>  	/* else assume that was the last mlock: reclaim will fix it if not */
+>  
+>  munlock:
+> -	if (TestClearPageMlocked(page)) {
+> -		__mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+> -		if (isolated || !PageUnevictable(page))
+> +	if (folio_test_clear_mlocked(folio)) {
+> +		zone_stat_mod_folio(folio, NR_MLOCK, -nr_pages);
+
+AFAIK the 1:1 replacement would be __zone_stat_mod_folio(), this is stronger
+thus not causing a bug, but unneccessary?
+
+> +		if (isolated || !folio_test_unevictable(folio))
+>  			__count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
+>  		else
+>  			__count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
+>  	}
+>  
+> -	/* page_evictable() has to be checked *after* clearing Mlocked */
+> -	if (isolated && PageUnevictable(page) && page_evictable(page)) {
+> -		del_page_from_lru_list(page, lruvec);
+> -		ClearPageUnevictable(page);
+> -		add_page_to_lru_list(page, lruvec);
+> +	/* folio_evictable() has to be checked *after* clearing Mlocked */
+> +	if (isolated && folio_test_unevictable(folio) && folio_evictable(folio)) {
+> +		lruvec_del_folio(lruvec, folio);
+> +		folio_clear_unevictable(folio);
+> +		lruvec_add_folio(lruvec, folio);
+>  		__count_vm_events(UNEVICTABLE_PGRESCUED, nr_pages);
+>  	}
+>  out:
+>  	if (isolated)
+> -		SetPageLRU(page);
+> +		folio_set_lru(folio);
+>  	return lruvec;
+>  }
+>  
+>  /*
+> - * Flags held in the low bits of a struct page pointer on the mlock_pvec.
+> + * Flags held in the low bits of a struct folio pointer on the mlock_fbatch.
+>   */
+>  #define LRU_PAGE 0x1
+>  #define NEW_PAGE 0x2
+
+Should it be X_FOLIO now?
+
+> -static inline struct page *mlock_lru(struct page *page)
+> +static inline struct folio *mlock_lru(struct folio *folio)
+>  {
+> -	return (struct page *)((unsigned long)page + LRU_PAGE);
+> +	return (struct folio *)((unsigned long)folio + LRU_PAGE);
+>  }
+>  
+> -static inline struct page *mlock_new(struct page *page)
+> +static inline struct folio *mlock_new(struct folio *folio)
+>  {
+> -	return (struct page *)((unsigned long)page + NEW_PAGE);
+> +	return (struct folio *)((unsigned long)folio + NEW_PAGE);
+>  }
+>  
+>  /*
+> - * mlock_pagevec() is derived from pagevec_lru_move_fn():
+> - * perhaps that can make use of such page pointer flags in future,
+> - * but for now just keep it for mlock.  We could use three separate
+> - * pagevecs instead, but one feels better (munlocking a full pagevec
+> - * does not need to drain mlocking pagevecs first).
+> + * mlock_folio_batch() is derived from folio_batch_move_lru(): perhaps that can
+> + * make use of such page pointer flags in future, but for now just keep it for
+
+		       ^ folio?	
+
+> + * mlock.  We could use three separate folio batches instead, but one feels
+> + * better (munlocking a full folio batch does not need to drain mlocking folio
+> + * batches first).
+>   */
+> -static void mlock_pagevec(struct pagevec *pvec)
+> +static void mlock_folio_batch(struct folio_batch *fbatch)
 
