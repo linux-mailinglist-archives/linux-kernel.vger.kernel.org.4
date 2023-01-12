@@ -2,123 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295A666F9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F028666F9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjALK3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S232257AbjALK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237417AbjALK2B (ORCPT
+        with ESMTP id S237183AbjALK2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 05:28:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9DF2019;
-        Thu, 12 Jan 2023 02:25:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 900FC3FB4E;
-        Thu, 12 Jan 2023 10:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673519138; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RFRkZ+Fj3t8T5BZaiHz5NCYqROwzY9AM/nVOyatEKtk=;
-        b=kXlRU9udXbFgZotDjntGowEBuvchX+T2tPOQt4l2B/QItP41pyuGf09UekzD58fu0LIxRc
-        w76yu+pkH0Ua7YBS6uJ2rwWDxCoFeyaVSAeCGGeNdqLbR3tAQh+xq9uDiO7GTSj2Wj7bNn
-        HineNr8vyQXh2nAR99gNAKtfqxMYBuI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6650E13585;
-        Thu, 12 Jan 2023 10:25:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9ozhGCLgv2PZJgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 12 Jan 2023 10:25:38 +0000
-Date:   Thu, 12 Jan 2023 11:25:37 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, android-mm@google.com,
-        jstultz@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH 0/4] Track exported dma-buffers with memcg
-Message-ID: <Y7/gIRv9aJfPK7/f@dhcp22.suse.cz>
-References: <20230109213809.418135-1-tjmercier@google.com>
- <CALvZod4ru7F38tAO-gM9ZFKaEhS0w3KqFbPwhwcTvgJs4xMUow@mail.gmail.com>
- <Y78+rfzXPq5XGs9O@phenom.ffwll.local>
- <20230112075631.wc6fd54ci55drhkp@google.com>
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FB4DF38
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:25:40 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so13071511ila.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:25:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kw4ldf34KKwQJFbqI8sJn48aCZGzATF3l5fLGibU/RM=;
+        b=zDnWKyI5AqVI4MLmxQHFQmQod1zcGXaGkzL+huqEQkfkFR+aObuGPJDzLdXeZflA0X
+         BtNYiQBj9uo7Az6vH7sef2t/GveRHfpPN09WXSoY+/S1spoMi5LGaWZUDF7vYwVDe7mD
+         03U7lnzKAUtPp8hzRWBRPA3alEa10QXMeVX/nUQCXDb89rK3sBTlCdzdzlGBoWhMapUq
+         Ysu+WADq5X8Didw7psSD9oUbwYr+iWGBfmjwKQLf8jyI1qpxWPSbAvLSajD2KteeSny4
+         NM+wmPyNfT6E0m+hUEcPe55vqoOdrxkXlHp/rANVYAN+38/7TY54GA1wPP/N7f2pVNq3
+         OeJg==
+X-Gm-Message-State: AFqh2koZKMSZVVlU8SDPnAmMUt2rq6vb0uGWk3mOtPtGirZjq7ff4QcL
+        32SOTlYSHxKF618EnwzHY59BrH1ppg8Hz5syosZuAndIaFXV
+X-Google-Smtp-Source: AMrXdXtYV4/OEOs9KND78/jPEaBxMhtuwzseWgl+eWin9zEmgeb0+6TYyJB4nSSXlhbLvU0mCQVU4zKfh/T6ujAneNYc9et1wq7u
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112075631.wc6fd54ci55drhkp@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:11aa:b0:30e:d531:a2e with SMTP id
+ 10-20020a056e0211aa00b0030ed5310a2emr55189ilj.318.1673519139759; Thu, 12 Jan
+ 2023 02:25:39 -0800 (PST)
+Date:   Thu, 12 Jan 2023 02:25:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d9ae1305f20e89bd@google.com>
+Subject: [syzbot] [tmpfs?] kernel BUG in folio_flags
+From:   syzbot <syzbot+fa6f2ee9039b87ef86c4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 12-01-23 07:56:31, Shakeel Butt wrote:
-> On Wed, Jan 11, 2023 at 11:56:45PM +0100, Daniel Vetter wrote:
-> > 
-> [...]
-> > I think eventually, at least for other "account gpu stuff in cgroups" use
-> > case we do want to actually charge the memory.
-> > 
-> > The problem is a bit that with gpu allocations reclaim is essentially "we
-> > pass the error to userspace and they get to sort the mess out". There are
-> > some exceptions (some gpu drivers to have shrinkers) would we need to make
-> > sure these shrinkers are tied into the cgroup stuff before we could enable
-> > charging for them?
-> > 
-> 
-> No, there is no requirement to have shrinkers or making such memory
-> reclaimable before charging it. Though existing shrinkers and the
-> possible future shrinkers would need to be converted into memcg aware
-> shrinkers.
-> 
-> Though there will be a need to update user expectations that if they 
-> use memcgs with hard limits, they may start seeing memcg OOMs after the
-> charging of dmabuf.
+Hello,
 
-Agreed. This wouldn't be the first in kernel memory charged memory that
-is not directly reclaimable. With a dedicated counter an excessive
-dmabuf usage would be visible in the oom report because we do print
-memcg stats.
+syzbot found the following issue on:
 
-It is definitely preferable to have a shrinker mechanism but if that is
-to be done in a follow up step then this is acceptable. But leaving out
-charging from early on sounds like a bad choice to me.
--- 
-Michal Hocko
-SUSE Labs
+HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c67c5e480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=fa6f2ee9039b87ef86c4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fa6f2ee9039b87ef86c4@syzkaller.appspotmail.com
+
+ dentry_kill fs/dcache.c:745 [inline]
+ dput+0x6ac/0xe10 fs/dcache.c:913
+ __fput+0x3cc/0xa90 fs/file_table.c:329
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb17/0x2a90 kernel/exit.c:867
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ get_signal+0x225f/0x24f0 kernel/signal.c:2859
+------------[ cut here ]------------
+kernel BUG at include/linux/page-flags.h:317!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 10782 Comm: syz-executor.1 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:folio_flags.constprop.0+0x122/0x150 include/linux/page-flags.h:317
+Code: 52 ff ff ff e8 ff f2 cd ff 48 8d 43 ff 49 39 c4 0f 84 40 ff ff ff e8 ed f2 cd ff 48 c7 c6 40 0b 57 8a 4c 89 e7 e8 2e e4 05 00 <0f> 0b e8 57 c2 1b 00 e9 fe fe ff ff e8 4d c2 1b 00 eb a9 4c 89 e7
+RSP: 0018:ffffc90005437b00 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc90014e22000
+RDX: 0000000000040000 RSI: ffffffff81b3ca02 RDI: 0000000000000000
+RBP: 0000000000000004 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: ffffea0000b28100
+R13: 0000000000000000 R14: dffffc0000000000 R15: 1ffffd400016502c
+FS:  00007f1e422fd700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005642ce910130 CR3: 000000001cef4000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ folio_test_head include/linux/page-flags.h:780 [inline]
+ folio_test_large include/linux/page-flags.h:801 [inline]
+ folio_nr_pages include/linux/mm.h:1735 [inline]
+ compound_nr include/linux/mm.h:1747 [inline]
+ zero_user_segments.constprop.0+0x262/0x350 include/linux/highmem.h:288
+ shmem_write_end+0x684/0x780 mm/shmem.c:2600
+ generic_perform_write+0x316/0x570 mm/filemap.c:3783
+ __generic_file_write_iter+0x2ae/0x500 mm/filemap.c:3900
+ generic_file_write_iter+0xe3/0x350 mm/filemap.c:3932
+ call_write_iter include/linux/fs.h:1852 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9ed/0xe10 fs/read_write.c:584
+ ksys_write+0x12b/0x250 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1e4168c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1e422fd168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f1e417abf80 RCX: 00007f1e4168c0c9
+RDX: 0000000000000004 RSI: 00000000200000c0 RDI: 0000000000000003
+RBP: 00007f1e416e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc7e6ac66f R14: 00007f1e422fd300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:folio_flags.constprop.0+0x122/0x150 include/linux/page-flags.h:317
+Code: 52 ff ff ff e8 ff f2 cd ff 48 8d 43 ff 49 39 c4 0f 84 40 ff ff ff e8 ed f2 cd ff 48 c7 c6 40 0b 57 8a 4c 89 e7 e8 2e e4 05 00 <0f> 0b e8 57 c2 1b 00 e9 fe fe ff ff e8 4d c2 1b 00 eb a9 4c 89 e7
+RSP: 0018:ffffc90005437b00 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc90014e22000
+RDX: 0000000000040000 RSI: ffffffff81b3ca02 RDI: 0000000000000000
+RBP: 0000000000000004 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: ffffea0000b28100
+R13: 0000000000000000 R14: dffffc0000000000 R15: 1ffffd400016502c
+FS:  00007f1e422fd700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005642ce910130 CR3: 000000001cef4000 CR4: 00000000003506e0
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
