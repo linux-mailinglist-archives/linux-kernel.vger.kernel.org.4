@@ -2,216 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872E766712B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6C066712F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbjALLor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S231857AbjALLrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239441AbjALLoV (ORCPT
+        with ESMTP id S231694AbjALLq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:44:21 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DC354737
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:35:14 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id a9so1625426ybb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:35:14 -0800 (PST)
+        Thu, 12 Jan 2023 06:46:26 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7165C92C
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:37:30 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id l22so14314698eja.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:37:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZdRy8QTItnLRyny4d2jEHrecgEcHxwrD4J8NtmTL7Y=;
-        b=SmA+oCE6TuGwbe2Xxh1HHB85rLlmPcddh1Tg8ni226DuXlH4RYgHFgwTNjWnK+hIys
-         wbwhICrZRvoXjfR3033PKcTsF5+Zb9yl2OcZDq6+Vu20nsMUgERxpMHaz9DsCCSsKds9
-         pKwALp0zEfZxMQRvR/NRnF8fYZRMmvKnPtuGfg2soZ4w4iSPkWisa0K2npbmQn0k0Dww
-         Pil4sA0iEjKKxQE8Qa6pry2EJGIG2nXl/ag3OsJUo7wv/n5QfE8M7N4Sf+FFR2rZ2Dq5
-         l5jY0BDLbd1+KDAtPtTqIxjgWji5tWY6t307XezHRSS5amR7ZG7eMLg/9nnEv2/OpiJ6
-         9kAw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hXQ/SgOW9ZIz5YPVls2OSgh2a8mqb0cRkYRLLkLbVHI=;
+        b=uX4CGHSmu8BJWn04RKsyh8DbfwXi9VpEohOvGmvvEE2DZjYm7gO3ehgZujRagi2N8T
+         Fg+s2iMX/JLFPBnFtxDCUZQZlsrOc6+OvM8Y2vD60B4FfXZQTWcPKHNJEbUAb5d/oEDr
+         2XgyxpDm5qb6z441NicpOHTr8KNOLBO5zwfCfANgmQN60KEknw4qzzN6SsfY15Mqwrw9
+         6IyZJNSH4R2RSwjka4pIg/3sTBaoDcZ6M00tG44WtAO+nWSWunMKlgC5jxq10D+XuXxv
+         3U5Cm3IH140QagEVhbtEIbnaYS/0ywNZ/ShGG47XQ5NnF+Dx31aMIpLREa9qr0UkwYj+
+         3ldw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sZdRy8QTItnLRyny4d2jEHrecgEcHxwrD4J8NtmTL7Y=;
-        b=ZtZxHbZSy3jkZ95VLMU7rmXFEXo9LYgZplhQZvf1hKy/4pWkhfflDlA+NkLzmF5BE+
-         BLuYZrWNoeZ6hL6NfTS//RmN7RdTai614B1IdAH7V7h/8Te+Fjs9t6vKrQM0qiC1taHU
-         TITh53V9beN3Sw7sR6Fr+4yyNKg+GJvOOICX9VEHjft+0q9dDG7/ZOKaZDjB/E9zwENP
-         o4PaBJKRwxUpcoHOBc+mnMRqDUqKEvP0AFBQlfam/WyhTl9W+IU83JEE3vhAm1Z9JdSV
-         cbKkuARC6Am8vb1PiuLFE+37K2103PvkmEmgdBFRSCdU+EH3RLxkI+ZrBMPd8mTISd7J
-         NI7Q==
-X-Gm-Message-State: AFqh2koORfGdjyCrBook6ex6rBRL6d416F1oTW8m9ci2Q3ZlGtsCLkGw
-        vQb7/Dp8L+5Q47Yym80US9K/GD9BLV3IwR3O50zSpQ==
-X-Google-Smtp-Source: AMrXdXsKOjoo2EXnu3Tqsyki97VXA+55QinQw21cvlQPMGCjj8pLnIr5qWtWkgNPBXQn0krLQs14d6T11dXADaRCx4E=
-X-Received: by 2002:a5b:a90:0:b0:70b:87d5:4a73 with SMTP id
- h16-20020a5b0a90000000b0070b87d54a73mr5919340ybq.584.1673523313774; Thu, 12
- Jan 2023 03:35:13 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hXQ/SgOW9ZIz5YPVls2OSgh2a8mqb0cRkYRLLkLbVHI=;
+        b=ECfZacjirTYewHo8MwuF8E9ogpVPxKItuGVua88PFYbZ8rK5KtOMwURvLBVGbOdpRi
+         grypekLJ7bc1O9oThMCVflbE6sCK5eMz+L4RVcNwNp9o8baSarOzaIHdGADNnv3UrNIc
+         fGcxdYPg0mcnLrxNhhYGv5p6Zcqi73rL3oj8Yva7Pj9Jm32B7Sh6MckMY/YDkleYXElP
+         duCbuV80LAt4UZcJSZIk34aIK6V5Q/fPwSZMgMNjzbLDDc34FfBXwJXGYoM0iPYJ0bqw
+         lnAJj61iE3J79qaLWBagNWrR2SaRnidI7z0zSTMRMVLGFdwGySZAoQ4yYB/edSCtlF8b
+         Yujw==
+X-Gm-Message-State: AFqh2kq5UM1hBGYi+M2rPY7kxfqA66H7DlUEkIHwq4w5Hw3CrYvTuw0d
+        Facf5cDF/bJvQobVDiTE0550Yw==
+X-Google-Smtp-Source: AMrXdXtISiqCWRExHvPBfANuhyJGYIWCtdeYm0iF4V7TNOJs9R8iNDdaYn430QChTu9b2s5637tU/Q==
+X-Received: by 2002:a17:907:c28f:b0:83f:5f77:8ff9 with SMTP id tk15-20020a170907c28f00b0083f5f778ff9mr65293259ejc.12.1673523449252;
+        Thu, 12 Jan 2023 03:37:29 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id ku12-20020a170907788c00b0084d4564c65fsm5158059ejc.42.2023.01.12.03.37.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 03:37:28 -0800 (PST)
+Message-ID: <4562c5c8-e2bd-4ade-55df-dab07540ce19@linaro.org>
+Date:   Thu, 12 Jan 2023 12:37:26 +0100
 MIME-Version: 1.0
-References: <20230112103147.382416-1-glider@google.com>
-In-Reply-To: <20230112103147.382416-1-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 12 Jan 2023 12:34:37 +0100
-Message-ID: <CANpmjNMznQsC6ftzy7MCa7uQVCFv=MFg6JW28QdnGPyzFEZn5A@mail.gmail.com>
-Subject: Re: [PATCH] kmsan: silence -Wmissing-prototypes warnings
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        peterz@infradead.org, mingo@redhat.com, dvyukov@google.com,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        kernel test robot <lkp@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 5/5] PM: domains: Do not call
+ device_pm_check_callbacks() when holding genpd_lock()
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
+ <20221219151503.385816-6-krzysztof.kozlowski@linaro.org>
+ <Y7/vdnD8qELX4A5m@linutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y7/vdnD8qELX4A5m@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 at 11:31, Alexander Potapenko <glider@google.com> wrote:
->
-> When building the kernel with W=1, the compiler reports numerous
-> warnings about the missing prototypes for KMSAN instrumentation hooks.
->
-> Because these functions are not supposed to be called explicitly by the
-> kernel code (calls to them are emitted by the compiler), they do not
-> have to be declared in the headers. Instead, we add forward declarations
-> right before the definitions to silence the warnings produced by
-> -Wmissing-prototypes.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202301020356.dFruA4I5-lkp@intel.com/T/
-> Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+On 12/01/2023 12:31, Sebastian Andrzej Siewior wrote:
+> On 2022-12-19 16:15:03 [+0100], Krzysztof Kozlowski wrote:
+>> If PM domain on PREEMPT_RT is marked as GENPD_FLAG_RT_SAFE(), the
+>> genpd_lock() will be a raw spin lock, thus device_pm_check_callbacks()
+> 
+> a raw_spinlock_t
+> 
+>> must be called outside of the domain lock.
+> 
+> Right. First the sleeping lock, followed by the spinning locks. This is
+> covered in
+> 	Documentation/locking/locktypes.rst
+> 
+> at the end. 
 
-Reviewed-by: Marco Elver <elver@google.com>
+I don't understand your comment. Do you expect me to change something?
 
-> ---
->  mm/kmsan/instrumentation.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/mm/kmsan/instrumentation.c b/mm/kmsan/instrumentation.c
-> index 770fe02904f36..cf12e9616b243 100644
-> --- a/mm/kmsan/instrumentation.c
-> +++ b/mm/kmsan/instrumentation.c
-> @@ -38,7 +38,15 @@ get_shadow_origin_ptr(void *addr, u64 size, bool store)
->         return ret;
->  }
->
-> +/*
-> + * KMSAN instrumentation functions follow. They are not declared elsewhere in
-> + * the kernel code, so they are preceded by prototypes, to silence
-> + * -Wmissing-prototypes warnings.
-> + */
-> +
->  /* Get shadow and origin pointers for a memory load with non-standard size. */
-> +struct shadow_origin_ptr __msan_metadata_ptr_for_load_n(void *addr,
-> +                                                       uintptr_t size);
->  struct shadow_origin_ptr __msan_metadata_ptr_for_load_n(void *addr,
->                                                         uintptr_t size)
->  {
-> @@ -47,6 +55,8 @@ struct shadow_origin_ptr __msan_metadata_ptr_for_load_n(void *addr,
->  EXPORT_SYMBOL(__msan_metadata_ptr_for_load_n);
->
->  /* Get shadow and origin pointers for a memory store with non-standard size. */
-> +struct shadow_origin_ptr __msan_metadata_ptr_for_store_n(void *addr,
-> +                                                        uintptr_t size);
->  struct shadow_origin_ptr __msan_metadata_ptr_for_store_n(void *addr,
->                                                          uintptr_t size)
->  {
-> @@ -59,12 +69,16 @@ EXPORT_SYMBOL(__msan_metadata_ptr_for_store_n);
->   * with fixed size.
->   */
->  #define DECLARE_METADATA_PTR_GETTER(size)                                  \
-> +       struct shadow_origin_ptr __msan_metadata_ptr_for_load_##size(      \
-> +               void *addr);                                               \
->         struct shadow_origin_ptr __msan_metadata_ptr_for_load_##size(      \
->                 void *addr)                                                \
->         {                                                                  \
->                 return get_shadow_origin_ptr(addr, size, /*store*/ false); \
->         }                                                                  \
->         EXPORT_SYMBOL(__msan_metadata_ptr_for_load_##size);                \
-> +       struct shadow_origin_ptr __msan_metadata_ptr_for_store_##size(     \
-> +               void *addr);                                               \
->         struct shadow_origin_ptr __msan_metadata_ptr_for_store_##size(     \
->                 void *addr)                                                \
->         {                                                                  \
-> @@ -86,6 +100,7 @@ DECLARE_METADATA_PTR_GETTER(8);
->   * entering or leaving IRQ. We omit the check for kmsan_in_runtime() to ensure
->   * the memory written to in these cases is also marked as initialized.
->   */
-> +void __msan_instrument_asm_store(void *addr, uintptr_t size);
->  void __msan_instrument_asm_store(void *addr, uintptr_t size)
->  {
->         unsigned long ua_flags;
-> @@ -138,6 +153,7 @@ static inline void set_retval_metadata(u64 shadow, depot_stack_handle_t origin)
->  }
->
->  /* Handle llvm.memmove intrinsic. */
-> +void *__msan_memmove(void *dst, const void *src, uintptr_t n);
->  void *__msan_memmove(void *dst, const void *src, uintptr_t n)
->  {
->         depot_stack_handle_t origin;
-> @@ -162,6 +178,7 @@ void *__msan_memmove(void *dst, const void *src, uintptr_t n)
->  EXPORT_SYMBOL(__msan_memmove);
->
->  /* Handle llvm.memcpy intrinsic. */
-> +void *__msan_memcpy(void *dst, const void *src, uintptr_t n);
->  void *__msan_memcpy(void *dst, const void *src, uintptr_t n)
->  {
->         depot_stack_handle_t origin;
-> @@ -188,6 +205,7 @@ void *__msan_memcpy(void *dst, const void *src, uintptr_t n)
->  EXPORT_SYMBOL(__msan_memcpy);
->
->  /* Handle llvm.memset intrinsic. */
-> +void *__msan_memset(void *dst, int c, uintptr_t n);
->  void *__msan_memset(void *dst, int c, uintptr_t n)
->  {
->         depot_stack_handle_t origin;
-> @@ -217,6 +235,7 @@ EXPORT_SYMBOL(__msan_memset);
->   * uninitialized value to memory. When reporting an error, KMSAN unrolls and
->   * prints the whole chain of stores that preceded the use of this value.
->   */
-> +depot_stack_handle_t __msan_chain_origin(depot_stack_handle_t origin);
->  depot_stack_handle_t __msan_chain_origin(depot_stack_handle_t origin)
->  {
->         depot_stack_handle_t ret = 0;
-> @@ -237,6 +256,7 @@ depot_stack_handle_t __msan_chain_origin(depot_stack_handle_t origin)
->  EXPORT_SYMBOL(__msan_chain_origin);
->
->  /* Poison a local variable when entering a function. */
-> +void __msan_poison_alloca(void *address, uintptr_t size, char *descr);
->  void __msan_poison_alloca(void *address, uintptr_t size, char *descr)
->  {
->         depot_stack_handle_t handle;
-> @@ -272,6 +292,7 @@ void __msan_poison_alloca(void *address, uintptr_t size, char *descr)
->  EXPORT_SYMBOL(__msan_poison_alloca);
->
->  /* Unpoison a local variable. */
-> +void __msan_unpoison_alloca(void *address, uintptr_t size);
->  void __msan_unpoison_alloca(void *address, uintptr_t size)
->  {
->         if (!kmsan_enabled || kmsan_in_runtime())
-> @@ -287,6 +308,7 @@ EXPORT_SYMBOL(__msan_unpoison_alloca);
->   * Report that an uninitialized value with the given origin was used in a way
->   * that constituted undefined behavior.
->   */
-> +void __msan_warning(u32 origin);
->  void __msan_warning(u32 origin)
->  {
->         if (!kmsan_enabled || kmsan_in_runtime())
-> @@ -303,6 +325,7 @@ EXPORT_SYMBOL(__msan_warning);
->   * At the beginning of an instrumented function, obtain the pointer to
->   * `struct kmsan_context_state` holding the metadata for function parameters.
->   */
-> +struct kmsan_context_state *__msan_get_context_state(void);
->  struct kmsan_context_state *__msan_get_context_state(void)
->  {
->         return &kmsan_get_context()->cstate;
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+> 
+>> This solves on PREEMPT_RT:
+> Yes but
+>>   [ BUG: Invalid wait context ]
+> 
+> This "Invalid wait context" should also trigger on !PREEMPT_RT with
+> CONFIG_PROVE_RAW_LOCK_NESTING.
+
+Could be, I just did not hit it.
+
+> 
+>>   6.1.0-rt5-00325-g8a5f56bcfcca #8 Tainted: G        W
+>>   -----------------------------
+>>   swapper/0/1 is trying to lock:
+>>   ffff76e045dec9a0 (&dev->power.lock){+.+.}-{3:3}, at: device_pm_check_callbacks+0x20/0xf0
+>>   other info that might help us debug this:
+>>   context-{5:5}
+>>   3 locks held by swapper/0/1:
+>>    #0: ffff76e045deb8e8 (&dev->mutex){....}-{4:4}, at: __device_attach+0x38/0x1c0
+>>    #1: ffffa92b81f825e0 (gpd_list_lock){+.+.}-{4:4}, at: __genpd_dev_pm_attach+0x7c/0x250
+>>    #2: ffff76e04105c7a0 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x1c/0x30
+>>   stack backtrace:
+>>   CPU: 5 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
+>>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+>>   Call trace:
+>>    dump_backtrace.part.0+0xe0/0xf0
+>>    show_stack+0x18/0x40
+>>    dump_stack_lvl+0x8c/0xb8
+>>    dump_stack+0x18/0x34
+>>    __lock_acquire+0x938/0x2100
+>>    lock_acquire.part.0+0x104/0x28c
+>>    lock_acquire+0x68/0x84
+>>    rt_spin_lock+0x40/0x100
+>>    device_pm_check_callbacks+0x20/0xf0
+>>    dev_pm_domain_set+0x54/0x64
+>>    genpd_add_device+0x258/0x340
+>>    __genpd_dev_pm_attach+0xa8/0x250
+>>    genpd_dev_pm_attach_by_id+0xc4/0x190
+>>    genpd_dev_pm_attach_by_name+0x3c/0x60
+>>    dev_pm_domain_attach_by_name+0x20/0x30
+>>    dt_idle_attach_cpu+0x24/0x90
+>>    psci_cpuidle_probe+0x300/0x4b0
+>>    platform_probe+0x68/0xe0
+>>    really_probe+0xbc/0x2dc
+>>    __driver_probe_device+0x78/0xe0
+>>    driver_probe_device+0x3c/0x160
+>>    __device_attach_driver+0xb8/0x140
+>>    bus_for_each_drv+0x78/0xd0
+>>    __device_attach+0xa8/0x1c0
+>>    device_initial_probe+0x14/0x20
+>>    bus_probe_device+0x9c/0xa4
+>>    device_add+0x3b4/0x8dc
+>>    platform_device_add+0x114/0x234
+>>    platform_device_register_full+0x108/0x1a4
+>>    psci_idle_init+0x6c/0xb0
+>>    do_one_initcall+0x74/0x450
+>>    kernel_init_freeable+0x2e0/0x350
+>>    kernel_init+0x24/0x130
+>>    ret_from_fork+0x10/0x20
+> 
+> I would prefer a description of the issue instead hacing this
+> backtrace.
+
+I'll extend the commit msg.
+
+> 
+>> Cc: Adrien Thierry <athierry@redhat.com>
+>> Cc: Brian Masney <bmasney@redhat.com>
+>> Cc: linux-rt-users@vger.kernel.org
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/base/power/domain.c | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index 4dfce1d476f4..db499ba40497 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -1666,10 +1666,14 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
+>>  	if (ret)
+>>  		goto out;
+>>  
+>> +
+>> +	/* PREEMPT_RT: Must be outside of genpd_lock */
+> 
+> Could this comment be rewritten if needed?
+> The callback, which acquires sleeping locks on PREEMPT_RT, can be moved
+> before genpd_lock() because it does not rely on this lock. It must be
+> moved because the latter may acquire spinning locks.
+
+Sure
+
+Best regards,
+Krzysztof
+
