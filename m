@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD60667415
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5065566742E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232907AbjALOCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S232050AbjALOD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjALOCF (ORCPT
+        with ESMTP id S229518AbjALODW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:02:05 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D279517E3;
-        Thu, 12 Jan 2023 06:02:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673532124; x=1705068124;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nmBkWzTGPQmO2j44FytSg1Prn+t+R62VDjJB8NnPYeU=;
-  b=E6t2XIf+TwYKKgPwQCm07YQb5rK8BmEeMJMk5Po1+WY9x02zZYyQasjE
-   +rcGaTQxn4BPbtryWfaGJTKIM51qPfh0vRS6MvSJnpeR9wIBkSkFfBxyZ
-   Vdi4+EdrKY1FoiTjmujR4JnPDMV5Wi3XJgCbRIM4kwDkXgsSmn0G03TCa
-   db4qlsfzQWgQ3oGg9CfiNgjsfIuSDmsMBbpGs3J6+6uvfj/hYijL19mz6
-   TAY19joK0WLj6P2CyPnbQ9I9CEh9r3ehSb2sdPtPJRYc1T34uXUUglvvE
-   +5S5n06+TssboSHt5BOgamLf8+xlCm5qAUJia/dYjxWKwt1zu9t6oexTK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325732431"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="325732431"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 06:01:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800215229"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="800215229"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2023 06:01:40 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 856EBE1; Thu, 12 Jan 2023 16:02:14 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 1/1] power: supply: collie_battery: Convert to GPIO descriptors (part 2)
-Date:   Thu, 12 Jan 2023 16:02:09 +0200
-Message-Id: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 12 Jan 2023 09:03:22 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BEA52C45
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:03:20 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id c6so20327653pls.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:03:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SYAMfoPma/2nQAfBEMxDluOdt4GLLWOFoMahVP43u/U=;
+        b=Mf/tlkmlfMBejawj3GBrzWk2JkrS5z/ymRrcMYXZYmNw+hoZMokkdmj1uePxiCQQ7T
+         +pobWmWlxNHwvSUoRUoY3W6l3NQp2Uk1qIguf+oxGsk+OFIl4JcvmLE7W/nsyEezxITQ
+         mL1Ewx1jQ4UrF+OvIRPnzUqTeoOyrZZ67vJuJCyA6Roj5fc4FGR+1bfUJKodVK6AWTtS
+         YPgCGXwxLqtzi09IJIRC+pHbUkM7SIyDe5sXnDfagMc5IATQy9silgLk4f7/xJVyfKxl
+         VJw2Im3boyYWeS2Qj6GHHxpfBvPXpZa1tFMcvsQUyv86tVJGlWxIW5K4nvf0XfT8MaeE
+         CCyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SYAMfoPma/2nQAfBEMxDluOdt4GLLWOFoMahVP43u/U=;
+        b=uwR4ZYJ9vbsoUvaygFCvY/hG7hEFAjK4eqj9PqkxCWU5VwTSQ3cJpWgZZikQSiATGi
+         0KE/i/VmJP5K8lBCEFdE+x8ii/NtOsGDSIJ9jwklLmXu86yXZrbHhm29P+D3eA2+p3gu
+         dmLfEGp2Okmh6rhpDrMpjybhxbYNZIbFJH6FHXBdJB+pZJ3+XTl19xtXjP+Bt2SzJJxw
+         byPzGf58NXNkA/pT48ZsLnzIbgAE9qTbACgmXV4OU257L/OOLneEmBj8AM9PLnCOX9Kl
+         JtweXFxUypDeHYqVrj0gdTsT94CxIBYIQL184an/MgB3wou3fhOKUMbhB7/6BrySEBR3
+         fpRA==
+X-Gm-Message-State: AFqh2kqpaAePvT+ENJHpOJdEffNL/GdUnhj5ZrcUhPJk4BrJAbrzRco9
+        mcPKhf1SCN0C4qqiewbHWlhBow==
+X-Google-Smtp-Source: AMrXdXslITcQTVnMcKFsd09fLItgDivV8yXOl4rnwDD026pL3dkblJOdaOcQoIfmj0GfXrGwcPfYHw==
+X-Received: by 2002:a17:902:a3c1:b0:193:2a8c:28cb with SMTP id q1-20020a170902a3c100b001932a8c28cbmr14480469plb.21.1673532199587;
+        Thu, 12 Jan 2023 06:03:19 -0800 (PST)
+Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
+        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b001925016e34bsm12351455plg.79.2023.01.12.06.03.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 06:03:18 -0800 (PST)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH 0/7] RISC-V KVM virtualize AIA CSRs
+Date:   Thu, 12 Jan 2023 19:32:57 +0530
+Message-Id: <20230112140304.1830648-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Finish the job started by the commit ba940ed83218 ("power: supply:
-collie_battery: Convert to GPIO descriptors"), i.e. convert the use
-of gpio_to_irq() to gpiod_to_irq(). No functional changes intended.
+The RISC-V AIA specification is now frozen as-per the RISC-V international
+process. The latest frozen specifcation can be found at:
+https://github.com/riscv/riscv-aia/releases/download/1.0-RC1/riscv-interrupts-1.0-RC1.pdf
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/power/supply/collie_battery.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This series implements first phase of AIA virtualization which targets
+virtualizing AIA CSRs. This also provides a foundation for the second
+phase of AIA virtualization which will target in-kernel AIA irqchip
+(including both IMSIC and APLIC).
 
-diff --git a/drivers/power/supply/collie_battery.c b/drivers/power/supply/collie_battery.c
-index 7fb9b549f2de..68390bd1004f 100644
---- a/drivers/power/supply/collie_battery.c
-+++ b/drivers/power/supply/collie_battery.c
-@@ -404,7 +404,7 @@ static int collie_bat_probe(struct ucb1x00_dev *dev)
- 		goto err_psy_reg_bu;
- 	}
- 
--	ret = request_irq(gpio_to_irq(COLLIE_GPIO_CO),
-+	ret = request_irq(gpiod_to_irq(collie_bat_main.gpio_full),
- 				collie_bat_gpio_isr,
- 				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
- 				"main full", &collie_bat_main);
-@@ -440,7 +440,7 @@ static int collie_bat_probe(struct ucb1x00_dev *dev)
- 
- static void collie_bat_remove(struct ucb1x00_dev *dev)
- {
--	free_irq(gpio_to_irq(COLLIE_GPIO_CO), &collie_bat_main);
-+	free_irq(gpiod_to_irq(collie_bat_main.gpio_full), &collie_bat_main);
- 	power_supply_unregister(collie_bat_bu.psy);
- 	power_supply_unregister(collie_bat_main.psy);
- 
+The first two patches are shared with the "Linux RISC-V AIA Support"
+series which adds AIA driver support.
+
+To test this series, use AIA drivers from the "Linux RISC-V AIA Support"
+series and use KVMTOOL from the riscv_aia_v1 branch at:
+https://github.com/avpatel/kvmtoo.git
+
+These patches can also be found in the riscv_kvm_aia_csr_v1 branch at:
+https://github.com/avpatel/linux.git
+
+Anup Patel (7):
+  RISC-V: Add AIA related CSR defines
+  RISC-V: Detect AIA CSRs from ISA string
+  RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
+  RISC-V: KVM: Initial skeletal support for AIA
+  RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+  RISC-V: KVM: Virtualize per-HART AIA CSRs
+  RISC-V: KVM: Implement guest external interrupt line management
+
+ arch/riscv/include/asm/csr.h      | 101 ++++-
+ arch/riscv/include/asm/hwcap.h    |   8 +
+ arch/riscv/include/asm/kvm_aia.h  | 137 +++++++
+ arch/riscv/include/asm/kvm_host.h |  14 +-
+ arch/riscv/include/uapi/asm/kvm.h |  22 +-
+ arch/riscv/kernel/cpu.c           |   2 +
+ arch/riscv/kernel/cpufeature.c    |   2 +
+ arch/riscv/kvm/Makefile           |   1 +
+ arch/riscv/kvm/aia.c              | 624 ++++++++++++++++++++++++++++++
+ arch/riscv/kvm/main.c             |  14 +
+ arch/riscv/kvm/mmu.c              |   3 +-
+ arch/riscv/kvm/vcpu.c             | 185 +++++++--
+ arch/riscv/kvm/vcpu_insn.c        |   4 +-
+ arch/riscv/kvm/vm.c               |   4 +
+ arch/riscv/kvm/vmid.c             |   4 +-
+ 15 files changed, 1072 insertions(+), 53 deletions(-)
+ create mode 100644 arch/riscv/include/asm/kvm_aia.h
+ create mode 100644 arch/riscv/kvm/aia.c
+
 -- 
-2.39.0
+2.34.1
 
