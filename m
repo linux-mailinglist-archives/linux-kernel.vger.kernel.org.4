@@ -2,206 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF90A666D8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9741666DA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238488AbjALJKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        id S239894AbjALJLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbjALJJw (ORCPT
+        with ESMTP id S239940AbjALJKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:09:52 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2040.outbound.protection.outlook.com [40.107.20.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CDB517D2;
-        Thu, 12 Jan 2023 01:05:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c2BHJKBEiQuLwlb2aZm2Z0qiS3AAp13szarBIwtQ2EHrOAlSUPkbej13w1aKkYVWmWVhA2xF92W7lciPQ/uTPznNgpDlhfmrgKJ8LmZ2YMukdZXGjBu6LiJZiwvy2QSoCRHJ6DOHDSSpDpVtDMZn9skpl3RZBaobtiwMs4RtrGT3wmwyS1G/Z2GMDQib8aDthHCaskrMaeYs/Wlq7CbMGDbcbSjivJKrMNDQzOno23dClqxFgNoC5BigkfmBX7D6kQFu6blnnyyYeOQUCQaE+k72jx5CRDUKtTmpeX4yNBSGUgFiixvr4DSpJqp95WxVGbUP0AzSkPobNeK17afFng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fmo9r4dCtCA/pxiFPT/rVXfK/Ozo6bHQOtSI5P6fCwA=;
- b=EtGkFCBRA3YG5FDHsZcVM1NHGB6BJv1zMliQsgZ4W7yR2A9/bOEzL0J/s8oc2woABl5VhQlFRiTQPdHKmAFVG8z/3uDCBKwIl+jjYBJOh9GlElJQiZKuFif2H2UdBJY4qm4iFNiwoHhLNmHu2sfBVy+DItK32FlCqfeeuBdys5fSFahdN1WRol32V9EW3MnMbfUbDdzCJvwuGBoZJrBrydAbcKCqw+fHaJF1fEOXsMv9U4bbedAC1cyKiEKh4zDGPrNXcXD4pyfFbmx2ZtZnHaIW7LfqR4B7QpoNAz2UHbrw0F+QbNurt7U2/q7JtGtFCxcPB0JEISrGBAZ7hPvYMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fmo9r4dCtCA/pxiFPT/rVXfK/Ozo6bHQOtSI5P6fCwA=;
- b=AzfyT4SmOWvHif3VUY2cBmgQ6YKE+gn8k1adgcjIl7Db1yupYAtgk9zqhdoOUxUtpcsmOCNgoFi6Gzdm0AgpRni5FkbxuBp99ukHFN+o8rKcp5ZLe3ttWu8Xe5Nv9zQ2n904bWUmgbbSSBd+W20rgvGNgBp2B+ktl9XtIx2M4vk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AM9PR04MB8875.eurprd04.prod.outlook.com (2603:10a6:20b:40a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
- 2023 09:05:15 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::3a82:42b3:f1ed:5c3d]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::3a82:42b3:f1ed:5c3d%7]) with mapi id 15.20.6002.013; Thu, 12 Jan 2023
- 09:05:15 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] media: amphion: support to decode sorenson spark video
-Date:   Thu, 12 Jan 2023 17:04:48 +0800
-Message-Id: <ab85e597c37aad849480bfe912d5e06aebc51726.1673513975.git.ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1673513975.git.ming.qian@nxp.com>
-References: <cover.1673513975.git.ming.qian@nxp.com>
-Content-Transfer-Encoding: 8bit
+        Thu, 12 Jan 2023 04:10:22 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4D4E43E;
+        Thu, 12 Jan 2023 01:06:08 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 964DB5C00EF;
+        Thu, 12 Jan 2023 04:06:07 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 04:06:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1673514367; x=1673600767; bh=i0Vf2i9x70
+        fWXxPpRrZTCxU0nL+Gr6Pa34HbDF5NKhg=; b=YTjeuD4wKJ7HrtZWtHhsXNxsKq
+        cNOVgLCCr48zVApp4I+dGidjpEwO52kI/8/OrHx57KOqKryuXjC5Oo9PxBtatKSC
+        akFuo+LTIiOo2IOpWyEtd4McQR8bboOjcgNME7zFfOe6HqER4caPmWWjZ0rw8Aw+
+        IsoBj0NCmu06X6oiESocaT4tjYVsbJ34o3YFpPKVXYGTyQZ+70G49533ENDbjEnH
+        4lm6DTLz2fzScqMe3ccvk2HNwy7VFdCyfUYT8uU0mO9ZfsQksv9nW+rKRetDFfTG
+        iDXVXWFp9SO7N/Sm2GSxYbg1WtoUZbByWlgBPQ1fyb75nEoldGrG8YTCrSaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673514367; x=1673600767; bh=i0Vf2i9x70fWXxPpRrZTCxU0nL+G
+        r6Pa34HbDF5NKhg=; b=pm2NzmomMkR6Z3IEHZh5NgtTVo2jgipoBuDt//2h/AG5
+        S+4jqrHNsbCYqk1f+BJk4M89mnBHUpQXfx+whFXWQWyNjnhmB8cUSv1rk0Q9t0SG
+        wgq29B9BL9Meb7p9htR+vi9/xI510gtGWLS1jl3rU3GJMQ7qShSqkUi9NaTEGIPv
+        xDJy1fyQZP/AahEnLBaTDR9zyeSql52rSVVZMeVffw21bsYhYQpqCOIR13HQcFvk
+        0kKbo7v3yW8UVnov+KowhBPbbUSbqDc35UBhEe5SNb+109CLpIySP4lOSufu01P+
+        Huw1fG7dFS41lGNxuZ6e7iyLxCDSnnTqLwFFr4vJ3w==
+X-ME-Sender: <xms:f82_Y8rZObVjPMvCH-CvjESEUl2uHJqzkyZKi7F2iGL3XYXt6nVvtA>
+    <xme:f82_YypTe13rIXZFEJIKbWBekxKT9GgOjt3z9NfnF4uA0VUxzoRWXNE87IaVxJmV2
+    p8hrRb3s5Gl0pd79LY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleehgdduvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:f82_YxN9UqinprXnHU1kvfphUuDyKIhuD2U8BqWCZx7u2KnwQ2vZlQ>
+    <xmx:f82_Yz6_5dOaz3XKTO-tHclB4-cvIoTkrxVMn_dgva0BU9EqyLJyHg>
+    <xmx:f82_Y77lD_AIrBduzpD3zz0-yQDpV2HLm8K7RNeC9Z_V-J7nvNzlKg>
+    <xmx:f82_Y1vQNmbKVazZWrQ3ChoPEmDrxRRabaxg0_f1Y_WqB8xUU-d_bg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F26A7B60086; Thu, 12 Jan 2023 04:06:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <4d2f2b81-b7ab-4ad6-84cc-f3a3c932880d@app.fastmail.com>
+In-Reply-To: <20230112083746.9551-3-lukas.bulwahn@gmail.com>
+References: <20230112083746.9551-1-lukas.bulwahn@gmail.com>
+ <20230112083746.9551-3-lukas.bulwahn@gmail.com>
+Date:   Thu, 12 Jan 2023 10:05:47 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
+Cc:     "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] ARM: pxa: remove further dead code after pxa93 support removal
 Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0200.apcprd04.prod.outlook.com
- (2603:1096:4:187::15) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM9PR04MB8875:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45814b56-dd3f-49fd-bb8d-08daf47c1ecf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xjBDMsPhl1OVeStKllHLvsMobhcLVc3yBymeQMwE6Hp8AfJ7UKQpqLcHARR1oW5dyVMraPMTwKjN64TFew//EycGClAV6pXVoP1HI/CutwKQboUgnpxBOt/cZ4EoRw7+UNUQ8CrSoChB8hs6l2HmSNgAlEcSws2fR8emhX4j5WnAG/cr/Et3U545PFnqHJZa4IJy4S0gRbD4hSnFS+XgLTIxbKB27yDxVDd5KykkZtZDNF/PqMQaWRweej40bLeMPWFVQnWIJTPX6myt2xdRWzb1GRmR/5Aa2ioWCj1KOsrXrVKJKKBSt3l4FAkmZRpjZqFUmdJDDABfAIfK8BmqigXO24dxjJbCIaPtZxn1GREmzgHbtE3/6CdNz1STdNA5XjgQsGX3EGu9SmEMy3a8DtCuaHWBTY1fmVtrbkTtdvOmKqOksu1fRY4uzVRSX4h13HhyadR2cxodCfYMemHMhe5Sn+bf//0Z449eK6cEq+Z7heJARYKUzd4mTQ6LygIQSCSbo3EAgs6olkisIQv+bcTvvekLB34QG5FbRcYlY5MN6RC+N59LWoqHUPGlpSgwKW1jsSQGGsBn/Yekj9mCzxPG867Lh7a3jrUbrKs5pQBt1cmBLxIXEI9a1IvTcytO8qZmfa1iiD2avVsKyqQ6Dd3cOEskjMSD4QiY9TPuFLD4xqnDd5MuohH142PRkZ9TBHIT32v4xbQAUhR0XT0ptw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(366004)(346002)(451199015)(38100700002)(2906002)(6506007)(5660300002)(8936002)(6512007)(186003)(44832011)(7416002)(41300700001)(36756003)(26005)(6666004)(86362001)(52116002)(66476007)(8676002)(4326008)(66946007)(66556008)(38350700002)(2616005)(478600001)(316002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3XPXqEKFJnO8vq2Gx+UbEa9A8Gag7qnBPzvbjqfWluw9rSA8xy61+96EP6fv?=
- =?us-ascii?Q?Xqp3CiOYBF834lBNDvv8dhTdMGDkdIFqot1MxYM1ZqBoShG5y51PqSfTmUW5?=
- =?us-ascii?Q?T/qpYgut9LHfrFYME0aBs9V7avFZLX8iEhrSTVXiu6NpAkENDYpXZiU0bGwr?=
- =?us-ascii?Q?N7UbLYApbHFjHqZDJ3DaH3pxu8/fF59cliISg7fVqhh5MXB8Ezx0CXTyZUyv?=
- =?us-ascii?Q?yLxiyicMkCSq+bGNcbIjICsBHN+bZ2z5Ap9yJqgIK4gTMLHKqnx3jl2dgY6h?=
- =?us-ascii?Q?S6Mph4d7gKtIFrbFocRK7LymsgsxnjytbyE1tnTnxRTpRVQPJWiEIA8F91Fm?=
- =?us-ascii?Q?4AK8h7s+OGJfHVs8wD7G9EophEAFDVRqZhdHVFdffp9n6JE/UxTkdWSKYjCG?=
- =?us-ascii?Q?pKM6PcYDMqI3axXX3RltfikfXF+U6v0S5OmwHwCdYvh7oUlklJYped7r1zRL?=
- =?us-ascii?Q?G4wuxJTzkXn8zcUt0fy2X/ZexzLxuq4lzqNEx7jAtyP4H4tWb/zQCJkq/tRI?=
- =?us-ascii?Q?WUAMCbQWvGtvWGpzdcnHnKfZfo1L54oMe8vdCb6scHMcuNSwx9t+qL+m3AZJ?=
- =?us-ascii?Q?1hG67a+9HdyBYvl/TUdoP3pAVW0l2ArTKRXgfLYl5yTqF3pKo32PObSTxgOh?=
- =?us-ascii?Q?abi2Vy8TfVm5MJ1Gxniv+qQGvn8fDKIDkLg8EySWYJQGoVUWbKAfQXMYfCe0?=
- =?us-ascii?Q?358d1wazIT10L5EpLV0/96kelGBEcwaSk0ubwK6QxBkhIoPi86aTcbz/5uIF?=
- =?us-ascii?Q?qMhTvyw+Z0SBqOYCJ7ugnqapY89AI+Azl1AnCe/1Wo7/+UKXAGTy5+qiCb1a?=
- =?us-ascii?Q?Rpsv5qTyIBKqqp3tH/yuOdI2/wxPw0QjA4YFXC+2mJv5rLCQUPaerlUqMB3b?=
- =?us-ascii?Q?1XE+ICJygTQMIgbNTpDY9gtNqo0Xej7yjnzaGezt6bFRB7Ok9peXvcMTngbj?=
- =?us-ascii?Q?zQnAxxLI/2vPwW7VcWJ+JCL6+eEBGUUv/H8b04IhQIPjaiM05nfDHuuY7Rug?=
- =?us-ascii?Q?7NuT9IPID2I3P0W9zwHss8kLGzKXO0ktUFjsz/moRjXP6izb2NnoWKze4ddN?=
- =?us-ascii?Q?AoDmiQQ01dyRCghHudpp7GKVzr1XTyAXMaBW4q1OzFmoM/zouAmfBoj7PzO7?=
- =?us-ascii?Q?YfvZZK+xEUb3YsVg69ZNNAIldAX6AW+nVZuGwyF18hi/MJwjrir5GJXJVgiu?=
- =?us-ascii?Q?JKS2IrUGkd+xUS/oWRAI1SGW9Rn0psnuKRdLJeHZ9LvuMyioisGGN8EwSm4J?=
- =?us-ascii?Q?h3+OLWUh2NFZ+oV1wsyFVzENuh6rfRtrxGLZulXB1sUEkFyr3IYj59ttaxuH?=
- =?us-ascii?Q?ck0Kke9AGkZ/xI5/8dAhWN07UK8nl1I3jR9MrvfirH2SwY3/0nckH0f8dMBM?=
- =?us-ascii?Q?dJOOsjzXD1EBCVVx6V0iSRMmvWj8NFzgxveumDd17ue0y5NN/xjLdqIDSLSZ?=
- =?us-ascii?Q?S6/OcabWYDJqYpT7mqcITUtPw436nvubpPh85gLprqH+/2+bGcLczoV+4tTD?=
- =?us-ascii?Q?UWoFh8dlTc0ncim/mYuRtFtNxyW8ZPvsQXVWE4evIgm3gN9+LTwdyIsdV2oH?=
- =?us-ascii?Q?2qSBdN+BPJxdWiIXUo36F8aWTDOLzXe77smW+HPu?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45814b56-dd3f-49fd-bb8d-08daf47c1ecf
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 09:05:15.8117
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aLeZP/TyVfl04OXdPz5lyIAib6Z2LgoFwsD+BpfjJAtfoZYyQQzbyAA/4kHmJFqxseW7+QohtUs7S0VuLH7qkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8875
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorenson Spark is an implementation of H.263 for use
-in Flash Video and Adobe Flash files.
-amphion decoder can support it by insert some startcode
-before sequence and picture.
+On Thu, Jan 12, 2023, at 09:37, Lukas Bulwahn wrote:
+> Commit 150ccb6f9a89 ("ARM: pxa: remove pxa93x support") removes configs
+> CPU_PXA930 and CPU_PXA935 and uses of cpu_is_pxa93x() and cpu_is_pxa935().
+>
+> Remove some further dead code in ./include/linux/soc/pxa/cpu.h on top of
+> that commit above.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/amphion/vdec.c       |  7 +++++++
- drivers/media/platform/amphion/vpu_malone.c | 18 ++++++++++++++++++
- 2 files changed, 25 insertions(+)
+I had this in an earlier version and ended up leaving this bit in
+when I reworked the series to not drop support for PXA310 and PXA320.
 
-diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index 87f9f8e90ab1..09304b96f40d 100644
---- a/drivers/media/platform/amphion/vdec.c
-+++ b/drivers/media/platform/amphion/vdec.c
-@@ -165,6 +165,13 @@ static const struct vpu_format vdec_formats[] = {
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
- 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION | V4L2_FMT_FLAG_COMPRESSED
- 	},
-+	{
-+		.pixfmt = V4L2_PIX_FMT_SPK,
-+		.mem_planes = 1,
-+		.comp_planes = 1,
-+		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION | V4L2_FMT_FLAG_COMPRESSED
-+	},
- 	{0, 0, 0, 0},
- };
- 
-diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
-index 2c9bfc6a5a72..67ba637c4c7f 100644
---- a/drivers/media/platform/amphion/vpu_malone.c
-+++ b/drivers/media/platform/amphion/vpu_malone.c
-@@ -562,6 +562,7 @@ static struct malone_fmt_mapping fmt_mappings[] = {
- 	{V4L2_PIX_FMT_H263,        MALONE_FMT_ASP},
- 	{V4L2_PIX_FMT_JPEG,        MALONE_FMT_JPG},
- 	{V4L2_PIX_FMT_VP8,         MALONE_FMT_VP8},
-+	{V4L2_PIX_FMT_SPK,         MALONE_FMT_SPK},
- };
- 
- static enum vpu_malone_format vpu_malone_format_remap(u32 pixelformat)
-@@ -987,6 +988,7 @@ static const struct malone_padding_scode padding_scodes[] = {
- 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_XVID,        {0xb1010000, 0x0}},
- 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_H263,        {0xb1010000, 0x0}},
- 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_VP8,         {0x34010000, 0x0}},
-+	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_SPK,         {0x34010000, 0x0}},
- 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0xefff0000, 0x0}},
- 	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H264,        {0x0B010000, 0}},
- 	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H264_MVC,    {0x0B010000, 0}},
-@@ -998,6 +1000,7 @@ static const struct malone_padding_scode padding_scodes[] = {
- 	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_XVID,        {0xb1010000, 0x0}},
- 	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H263,        {0xb1010000, 0x0}},
- 	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_VP8,         {0x34010000, 0x0}},
-+	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_SPK,         {0x34010000, 0x0}},
- 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0x0, 0x0}},
- 	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264,        {0x15010000, 0x0}},
- 	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264_MVC,    {0x15010000, 0x0}},
-@@ -1411,6 +1414,16 @@ static int vpu_malone_insert_scode_vp8_pic(struct malone_scode_t *scode)
- 	return size;
- }
- 
-+static int vpu_malone_insert_scode_spk_seq(struct malone_scode_t *scode)
-+{
-+	return vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_SPK, 0);
-+}
-+
-+static int vpu_malone_insert_scode_spk_pic(struct malone_scode_t *scode)
-+{
-+	return vpu_malone_insert_scode_pic(scode, MALONE_CODEC_ID_SPK, 0);
-+}
-+
- static const struct malone_scode_handler scode_handlers[] = {
- 	{
- 		/* fix me, need to swap return operation after gstreamer swap */
-@@ -1427,6 +1440,11 @@ static const struct malone_scode_handler scode_handlers[] = {
- 		.insert_scode_seq = vpu_malone_insert_scode_vp8_seq,
- 		.insert_scode_pic = vpu_malone_insert_scode_vp8_pic,
- 	},
-+	{
-+		.pixelformat = V4L2_PIX_FMT_SPK,
-+		.insert_scode_seq = vpu_malone_insert_scode_spk_seq,
-+		.insert_scode_pic = vpu_malone_insert_scode_spk_pic,
-+	},
- };
- 
- static const struct malone_scode_handler *get_scode_handler(u32 pixelformat)
--- 
-2.38.1
+You are probably right that we should not reference the removed
+Kconfig symbols, but I see that this causes a regression
+unless I also bring back the change to
 
+drivers/mmc/host/pxamci.c:                              || cpu_is_pxa935())
+
+    Arnd
