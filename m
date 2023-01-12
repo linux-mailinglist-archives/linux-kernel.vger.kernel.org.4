@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4383466682E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 01:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75858666838
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 02:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjALA7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 19:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S235978AbjALBFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 20:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjALA7l (ORCPT
+        with ESMTP id S229726AbjALBFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 19:59:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F321A07B
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:59:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B62AB81DA5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:59:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6858C433F1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673485176;
-        bh=TT/Y7hIeQw1DXoXtbRNnXe5+Y/xnTCFsp6Nk8sjS+f4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eLy6cjuOjyOIgFwZm8WubLFXBO33lWFEPuVfYJ4CcHotf8VcEhgFjlSebZv5UJDfT
-         EOXJNRiBqFB4BzyC9gXTyiz7xinJQrIkAPAsl2ywUIDARL7G3jt4V+YS9WHRGJCvrY
-         f0ApAb0MjCkXHMgj10Y1hxjy3o3vcZyLudMtKHPyGdwVnb0pbfp0A8cZqZIz1GGiPO
-         PWwrg86QqM/3RuqRwiRhJIvQkPFjL7yoVx1H0HbbWnMNZFX/YfB2zEUx358aUiQopX
-         ujvqnKhF5jWTsXWs0puCqsPsJK8ZGEuNWeE+om9ZzH7x2Hrza9DZ5Z795tKgHaO7o3
-         7gLq6uJFxHDJw==
-Received: by mail-ej1-f42.google.com with SMTP id fy8so41003891ejc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 16:59:36 -0800 (PST)
-X-Gm-Message-State: AFqh2krKoxX7knebf70Cv5sDtkKns3LLGDNt76D3Z30nljRTu4HjtZvJ
-        rVxKOnIEgiw11jaSW+oTtGeFsp5bL7tAui39Mck=
-X-Google-Smtp-Source: AMrXdXuW/ogJ4wj3usOAcVkVZUdam6aewau6TPDNSdvX8xMT3Fbcc/WgRUUrqlgRKfwLBxDez7UaNpQ/SRt7JeOtFg4=
-X-Received: by 2002:a17:906:5616:b0:852:132b:2d7e with SMTP id
- f22-20020a170906561600b00852132b2d7emr1023741ejq.224.1673485175029; Wed, 11
- Jan 2023 16:59:35 -0800 (PST)
+        Wed, 11 Jan 2023 20:05:32 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFEA1ADB2
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 17:05:30 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NsmYv3KmWz4f3w0m
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:05:23 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP4 (Coremail) with SMTP id gCh0CgBXDLDSXL9j+Zc5Bg--.15749S2;
+        Thu, 12 Jan 2023 09:05:25 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] fscache: Use wait_on_bit() to wait for the freeing
+ of relinquished volume
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, Jeff Layton <jlayton@kernel.org>,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>, houtao1@huawei.com
+References: <20221226103309.953112-2-houtao@huaweicloud.com>
+ <20221226103309.953112-1-houtao@huaweicloud.com>
+ <2431838.1673453170@warthog.procyon.org.uk>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <4e839278-fadb-24da-3a4e-50e58a0e7cc6@huaweicloud.com>
+Date:   Thu, 12 Jan 2023 09:05:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20230112004048.26191-1-hejinyang@loongson.cn>
-In-Reply-To: <20230112004048.26191-1-hejinyang@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 12 Jan 2023 08:59:23 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7XKtkFoC=8ahME2L=nGzo4DHG6g7XMVcCCrMop_aSEwA@mail.gmail.com>
-Message-ID: <CAAhV-H7XKtkFoC=8ahME2L=nGzo4DHG6g7XMVcCCrMop_aSEwA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] LoongArch: Add generic ex-handler unwind in
- prologue unwinder
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Qing Zhang <zhangqing@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <2431838.1673453170@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: gCh0CgBXDLDSXL9j+Zc5Bg--.15749S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4rArW3tw45Ww15Cr4UJwb_yoWxAFg_Ww
+        s0vrZFkayv9wnrKw1Utr1fKa1rZr1kGF4fW397Wr10qF97JFZru397u3yxGrW7K3W2vr9F
+        93s2gryqywn09jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,231 +66,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang,
+Hi,
 
-Have you tested this patch on NUMA systems?  I don't say it cannot
-work, I just concern about it, because NUMA systems use different
-exception tables.
+On 1/12/2023 12:06 AM, David Howells wrote:
+> Hou Tao <houtao@huaweicloud.com> wrote:
+>
+>>  			clear_bit(FSCACHE_VOLUME_ACQUIRE_PENDING, &cursor->flags);
+>> +			/*
+>> +			 * Paired with barrier in wait_on_bit(). Check
+>> +			 * wake_up_bit() and waitqueue_active() for details.
+>> +			 */
+>> +			smp_mb__after_atomic();
+>>  			wake_up_bit(&cursor->flags, FSCACHE_VOLUME_ACQUIRE_PENDING);
+> What two values are you applying a partial ordering to?
+cursor->flags and wq->head. fscache_wake_pending_volume() will write
+cursor->flags and read wq->head through waitqueue_active(), and the wait will
+write wq->head then read cursor->flags.
+>
+> David
+>
 
-Huacai
-
-On Thu, Jan 12, 2023 at 8:41 AM Jinyang He <hejinyang@loongson.cn> wrote:
->
-> When exception is triggered, code flow go handle_\exception in some
-> cases. One of stackframe in this case as follows,
->
-> high -> +-------+
->         | REGS  |  <- a pt_regs
->         |       |
->         |       |  <- ex trigger
->         | REGS  |  <- ex pt_regs   <-+
->         |       |                    |
->         |       |                    |
-> low  -> +-------+           ->unwind-+
->
-> When unwinder unwind to handler_\exception it cannot go on prologue
-> analysis. It is asynchronous code flow, we should get the next frame
-> PC from regs->csr_era but not from regs->regs[1]. And we copy the
-> handler codes to eentry in the early time and copy the handler codes
-> to NUMA-relative memory named pcpu_handlers if NUMA is enabled. Thus,
-> unwinder cannot unwind normally. Therefore, try to give some hint in
-> handler_\exception and fixup it in unwind_next_frame.
->
-> Reported-by: Qing Zhang <zhangqing@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/loongarch/include/asm/unwind.h     |   2 +-
->  arch/loongarch/kernel/genex.S           |   3 +
->  arch/loongarch/kernel/unwind_prologue.c | 100 +++++++++++++++++++++---
->  arch/loongarch/mm/tlb.c                 |   2 +-
->  4 files changed, 92 insertions(+), 15 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-> index cb428e1b19af..a38eb152aefb 100644
-> --- a/arch/loongarch/include/asm/unwind.h
-> +++ b/arch/loongarch/include/asm/unwind.h
-> @@ -22,7 +22,7 @@ struct unwind_state {
->         char type; /* UNWINDER_XXX */
->         struct stack_info stack_info;
->         struct task_struct *task;
-> -       bool first, error, is_ftrace;
-> +       bool first, error, reset;
->         int graph_idx;
->         unsigned long sp, pc, ra;
->  };
-> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-> index 75e5be807a0d..7e5c293ed89f 100644
-> --- a/arch/loongarch/kernel/genex.S
-> +++ b/arch/loongarch/kernel/genex.S
-> @@ -67,14 +67,17 @@ SYM_FUNC_END(except_vec_cex)
->         .macro  BUILD_HANDLER exception handler prep
->         .align  5
->         SYM_FUNC_START(handle_\exception)
-> +       666:
->         BACKUP_T0T1
->         SAVE_ALL
->         build_prep_\prep
->         move    a0, sp
->         la.abs  t0, do_\handler
->         jirl    ra, t0, 0
-> +       668:
->         RESTORE_ALL_AND_RET
->         SYM_FUNC_END(handle_\exception)
-> +       SYM_DATA(unwind_hint_\exception, .word 668b - 666b)
->         .endm
->
->         BUILD_HANDLER ade ade badv
-> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-> index e6c3f2ee507c..e52c18c2b604 100644
-> --- a/arch/loongarch/kernel/unwind_prologue.c
-> +++ b/arch/loongarch/kernel/unwind_prologue.c
-> @@ -2,21 +2,100 @@
->  /*
->   * Copyright (C) 2022 Loongson Technology Corporation Limited
->   */
-> +#include <linux/cpumask.h>
->  #include <linux/ftrace.h>
->  #include <linux/kallsyms.h>
->
->  #include <asm/inst.h>
-> +#include <asm/loongson.h>
->  #include <asm/ptrace.h>
-> +#include <asm/setup.h>
->  #include <asm/unwind.h>
->
-> -static inline void unwind_state_fixup(struct unwind_state *state)
-> +extern const int unwind_hint_ade;
-> +extern const int unwind_hint_ale;
-> +extern const int unwind_hint_bp;
-> +extern const int unwind_hint_fpe;
-> +extern const int unwind_hint_fpu;
-> +extern const int unwind_hint_lsx;
-> +extern const int unwind_hint_lasx;
-> +extern const int unwind_hint_lbt;
-> +extern const int unwind_hint_ri;
-> +extern const int unwind_hint_watch;
-> +extern unsigned long eentry;
-> +#ifdef CONFIG_NUMA
-> +extern unsigned long pcpu_handlers[NR_CPUS];
-> +#endif
-> +
-> +static inline bool scan_handler(unsigned long entry_offset)
->  {
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> -       static unsigned long ftrace = (unsigned long)ftrace_call + 4;
-> +       int idx, offset;
->
-> -       if (state->pc == ftrace)
-> -               state->is_ftrace = true;
-> +       if (entry_offset >= EXCCODE_INT_START * VECSIZE)
-> +               return false;
-> +
-> +       idx = entry_offset / VECSIZE;
-> +       offset = entry_offset % VECSIZE;
-> +       switch (idx) {
-> +       case EXCCODE_ADE:
-> +               return offset == unwind_hint_ade;
-> +       case EXCCODE_ALE:
-> +               return offset == unwind_hint_ale;
-> +       case EXCCODE_BP:
-> +               return offset == unwind_hint_bp;
-> +       case EXCCODE_FPE:
-> +               return offset == unwind_hint_fpe;
-> +       case EXCCODE_FPDIS:
-> +               return offset == unwind_hint_fpu;
-> +       case EXCCODE_LSXDIS:
-> +               return offset == unwind_hint_lsx;
-> +       case EXCCODE_LASXDIS:
-> +               return offset == unwind_hint_lasx;
-> +       case EXCCODE_BTDIS:
-> +               return offset == unwind_hint_lbt;
-> +       case EXCCODE_INE:
-> +               return offset == unwind_hint_ri;
-> +       case EXCCODE_WATCH:
-> +               return offset == unwind_hint_watch;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
-> +static inline bool fix_exceptions(unsigned long pc)
-> +{
-> +#ifdef CONFIG_NUMA
-> +       int cpu;
-> +
-> +       for_each_possible_cpu(cpu) {
-> +               if (!pcpu_handlers[cpu])
-> +                       continue;
-> +               if (scan_handler(pc - pcpu_handlers[cpu]))
-> +                       return true;
-> +       }
->  #endif
-> +       return scan_handler(pc - eentry);
-> +}
-> +
-> +/*
-> + * As we meet ftrace_regs_entry, reset first flag like first doing
-> + * tracing. Prologue analysis will stop soon because PC is at entry.
-> + */
-> +static inline bool fix_ftrace(unsigned long pc)
-> +{
-> +#ifdef CONFIG_DYNAMIC_FTRACE
-> +       return pc == (unsigned long)ftrace_call + LOONGARCH_INSN_SIZE;
-> +#else
-> +       return false;
-> +#endif
-> +}
-> +
-> +static inline bool unwind_state_fixup(struct unwind_state *state)
-> +{
-> +       if (!fix_exceptions(state->pc) && !fix_ftrace(state->pc))
-> +               return false;
-> +       state->reset = true;
-> +       return true;
->  }
->
->  /*
-> @@ -39,14 +118,10 @@ static bool unwind_by_prologue(struct unwind_state *state)
->         if (state->sp >= info->end || state->sp < info->begin)
->                 return false;
->
-> -       if (state->is_ftrace) {
-> -               /*
-> -                * As we meet ftrace_regs_entry, reset first flag like first doing
-> -                * tracing. Prologue analysis will stop soon because PC is at entry.
-> -                */
-> +       if (state->reset) {
->                 regs = (struct pt_regs *)state->sp;
->                 state->first = true;
-> -               state->is_ftrace = false;
-> +               state->reset = false;
->                 state->pc = regs->csr_era;
->                 state->ra = regs->regs[1];
->                 state->sp = regs->regs[3];
-> @@ -111,8 +186,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
->
->  out:
->         state->first = false;
-> -       unwind_state_fixup(state);
-> -       return !!__kernel_text_address(state->pc);
-> +       return unwind_state_fixup(state) || __kernel_text_address(state->pc);
->  }
->
->  static bool next_frame(struct unwind_state *state)
-> diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-> index da3681f131c8..8bad6b0cff59 100644
-> --- a/arch/loongarch/mm/tlb.c
-> +++ b/arch/loongarch/mm/tlb.c
-> @@ -251,7 +251,7 @@ static void output_pgtable_bits_defines(void)
->  }
->
->  #ifdef CONFIG_NUMA
-> -static unsigned long pcpu_handlers[NR_CPUS];
-> +unsigned long pcpu_handlers[NR_CPUS];
->  #endif
->  extern long exception_handlers[VECSIZE * 128 / sizeof(long)];
->
-> --
-> 2.34.3
->
->
