@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE02667AAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BFD667ABB
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjALQXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S236730AbjALQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjALQWX (ORCPT
+        with ESMTP id S234044AbjALQZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:22:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB8E55B0;
-        Thu, 12 Jan 2023 08:19:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE76A62071;
-        Thu, 12 Jan 2023 16:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58166C433EF;
-        Thu, 12 Jan 2023 16:19:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673540374;
-        bh=KIhE0X/TCSZ5yljv2IhM8/pMTZ0UticyVsF8g70H148=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lLMVgh0Qy8MTdtsLGUGUgtTJ5xr/F5yp7nJdu0pKLXw3oAEYRAsoQq9BxUmi8VTIM
-         74FAK81RdQ/jaiNhYcgHtWBGY9hssnYq9x/1I/8Uw2wdpkQzYxHUv2QskitQeYzu8l
-         UgT5qh/2WOQ0mLBbqtfxDgDgBWlaWqFj5dzOZrpLHrb10CfO2enHMo3eMaVn6yBz5q
-         RMaj+sntLqdwz5Z4dNoG+1jux4M0BBnAy1e3QIL7Mvqi3iAGbdesXTLKlMbBLuAgw7
-         gxTuilJFD0et/FW24g0gL6BFgq2BOKh5vJmBE3l+f+Fwx/UDMBtSNm8dcmPidbYSgT
-         E4hnVu0hwubHA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pG0In-0003Nw-34; Thu, 12 Jan 2023 17:19:41 +0100
-Date:   Thu, 12 Jan 2023 17:19:41 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Duke =?utf-8?B?WGluKOi+m+WuieaWhyk=?= <duke_xinanwen@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jerry.meng@quectel.com,
-        duke.xin@quectel.com
-Subject: Re: [PATCH] USB: serial: option: add Quectel EM05CN modem
-Message-ID: <Y8AzHUc4R9M/mK2L@hovoldconsulting.com>
-References: <20221214043546.10339-1-duke_xinanwen@163.com>
+        Thu, 12 Jan 2023 11:25:51 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F3B479C1;
+        Thu, 12 Jan 2023 08:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673540551; x=1705076551;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b1y0t5i31C9uBnIOZ8Em+IhwTn+G8oRmBT8YWgv/OBQ=;
+  b=VGnlRUe/j6FpiGPeMUuIWarb0AF44BS9cdum+DL2xX9uWYE73Pe3bXr9
+   YvogKh4yWKVyiWP1Hmb/HPCvLssTYviWyb65rNBK6QnQHLNjGWjS3dLLJ
+   349xd30ApLWBvDAGnfUDCyFCSmSxvFVgOadmvP/kTpq7k4QfCG9WtorlE
+   NZjuPPm9wWYcoVuoVLVuAl2Y9qDan1HbkBtqavc4tW3f1Z4oICiGZwc7e
+   5n4hYnvQ4WJlnCx6njFNDbQB9+X+/LdCxKDL7gYyg8HqOGGB6D6vFEu5A
+   vdFxWskMQIrEn8ZLn6T/T7LS+2J4v0/OIcH6dGN22lb8X3opr77By24vJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388239573"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="388239573"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:22:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="688381595"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="688381595"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jan 2023 08:22:27 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pG0LS-0088hY-0Z;
+        Thu, 12 Jan 2023 18:22:26 +0200
+Date:   Thu, 12 Jan 2023 18:22:25 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v1 1/1] gpiolib: of: Move enum of_gpio_flags to its only
+ user
+Message-ID: <Y8AzwdCGr4VFjP5X@smile.fi.intel.com>
+References: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221214043546.10339-1-duke_xinanwen@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 08:35:46PM -0800, Duke Xin(辛安文) wrote:
-> Add support for the following Quectel EM05CN composition:
-> 
-> 0x0312: AT + MBIM + DIAG + NMEA + MODEM
-> 
-> usb-devices output:
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0312 Rev= 3.18
-> S:  Manufacturer=Quectel
-> S:  Product=Quectel EM05-CN
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 2 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 2 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
-> ---
->  drivers/usb/serial/option.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index dee79c7d82d5..a35842be0ca0 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_EM05G			0x030a
->  #define QUECTEL_PRODUCT_EM060K			0x030b
->  #define QUECTEL_PRODUCT_EM05G_SG		0x0311
-> +#define QUECTEL_PRODUCT_EM05CN                0x0312
+On Thu, Jan 12, 2023 at 04:51:40PM +0200, Andy Shevchenko wrote:
+> GPIO library for OF is the only user for enum of_gpio_flags.
+> Move it there.
 
-Please use tabs for indenting the values and make sure they line up with
-the surrounding ones.
+...
 
->  #define QUECTEL_PRODUCT_EM12			0x0512
->  #define QUECTEL_PRODUCT_RM500Q			0x0800
->  #define QUECTEL_PRODUCT_RM520N			0x0801
-> @@ -1163,6 +1164,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(6) | ZLP },
->  	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
->  	  .driver_info = RSVD(6) | ZLP },
-> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05CN, 0xff),
-> +	  .driver_info = RSVD(6) | ZLP },
+> +/*
+> + * This is Linux-specific flags. By default controllers' and Linux' mapping
+> + * match, but GPIO controllers are free to translate their own flags to
+> + * Linux-specific in their .xlate callback. Though, 1:1 mapping is recommended.
+> + */
 
-Based on the usb-devices output above you have no interface #6 so this
-should not be needed, right?
+Now that I re-read the comment, I think this can be postponed until we get a
+consensus that no new driver is ever should do non 1:1 mapping.
 
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
+If that consensus achieved, we may drop this enum altogether and replace it
+with the generic flags..
 
-Johan
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
