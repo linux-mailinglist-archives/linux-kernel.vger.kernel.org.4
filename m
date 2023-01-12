@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB884667D8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9907D667D8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240282AbjALSKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        id S240247AbjALSLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240229AbjALSJe (ORCPT
+        with ESMTP id S240287AbjALSKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:09:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F27464A;
-        Thu, 12 Jan 2023 09:37:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C5906205E;
-        Thu, 12 Jan 2023 17:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4817C433D2;
-        Thu, 12 Jan 2023 17:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673545067;
-        bh=HXALqRZtlCaFSHe30HCG0ocQ7PVCQxc3yrath6As/Zs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=UClruSFxvw5t/jRHOFW025K2YrjsX8C3k+ZIzIbA3WXuzciIjTz10/ltM8EpTvCBP
-         Zv/JZhlrPJbxXWfGZ4vopTdMs0BdAweliRVHCxYN7rpfn5H2LdFzKWqfrbfTGhwWzC
-         eMUWVyaoyJnOZIlgQl4kNCaO2HLx9kuKxZ4rTBE7Wh0Yn86VjlO+CYp7Kw3fQi8m3c
-         1w+eeOCJldp+EumI4YcQLIoppH/NStjg/0XhXw37mtUenRnAkuAxAoQTPBoyBYZIoJ
-         +y+XNPkF4iobPIlckgjPHwBPNomgxv9cr5luf3mkpzridJZJZpbchh5SA7t0el2Tsy
-         jrz0V9XX+rQ3Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7D0005C0AF8; Thu, 12 Jan 2023 09:37:47 -0800 (PST)
-Date:   Thu, 12 Jan 2023 09:37:47 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: linux-next: manual merge of the rcu tree with the tomoyo tree
-Message-ID: <20230112173747.GO4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230111111439.4c4745d2@canb.auug.org.au>
+        Thu, 12 Jan 2023 13:10:49 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D6E7F47D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:38:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673545119; x=1705081119;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/XVhOXIzxC2c6cc0HV8x6SQi3STZ8h9Gysr+/y46yVU=;
+  b=g3AKDzAz0xahjF6aVR0+IiMyudcI5OybkR5G3Y+WQ5bapEhAoVl+2S1d
+   6glcuiE+EFTbNAU+As93hhNzgBjwtc4cPnGzaaL9onsTgG58Swf1Zs7Uv
+   LRL0V9sMNhH8w66cZ+psYk401bHPLHqx2khAc7O3/BWarUrJyPkwfn1OL
+   teZlWGthkXyMYPHy4HGrNl/AbqWXs+8IViVX0gBweRut4LoF+CG+dSBjP
+   CQ/RwyAaPAiS5yUwWwueviPC5dnO/vu78MPiWmXYtErSAHB3OQR5wV7ma
+   yo/zIX1AECdItT+bd3/S/tqpjz8KLoUIzx5lMJyBcY8Uxs3QkVKP4UdOO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="386113742"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="386113742"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 09:38:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="781832914"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="781832914"
+Received: from jbetan3x-mobl1.amr.corp.intel.com (HELO [10.209.143.163]) ([10.209.143.163])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 09:38:38 -0800
+Message-ID: <756fcb2d-d571-18cb-985e-d907ab682275@linux.intel.com>
+Date:   Thu, 12 Jan 2023 11:38:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230111111439.4c4745d2@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] regmap: sdw: Remove 8-bit value size restriction
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+References: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
+ <20230112171840.2098463-3-ckeepax@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230112171840.2098463-3-ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 11:14:39AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the rcu tree got a conflict in:
-> 
->   security/tomoyo/Kconfig
-> 
-> between commit:
-> 
->   80f8be7af03f ("tomoyo: Omit use of bin2c")
-> 
-> from the tomoyo tree and commit:
-> 
->   ed87f6865857 ("tomoyo: Remove "select SRCU"")
-> 
-> from the rcu tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-
-I have it noted down, thank you!
-
-							Thanx, Paul
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc security/tomoyo/Kconfig
-> index 772d2ab58fd1,a9796b400312..000000000000
-> --- a/security/tomoyo/Kconfig
-> +++ b/security/tomoyo/Kconfig
-> @@@ -6,7 -6,7 +6,6 @@@ config SECURITY_TOMOY
->   	select SECURITYFS
->   	select SECURITY_PATH
->   	select SECURITY_NETWORK
-> - 	select SRCU
->  -	select BUILD_BIN2C
->   	default n
->   	help
->   	  This selects TOMOYO Linux, pathname-based access control.
 
 
+> -static int regmap_sdw_write(void *context, unsigned int reg, unsigned int val)
+> +static int regmap_sdw_write(void *context, const void *val_buf, size_t val_size)
+>  {
+>  	struct device *dev = context;
+>  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+> +	/* First word of buffer contains the destination address */
+> +	u32 addr = le32_to_cpu(*(const __le32 *)val_buf);
+> +	const u8 *val = val_buf;
+>  
+> -	return sdw_write_no_pm(slave, reg, val);
+> +	return sdw_nwrite_no_pm(slave, addr, val_size - sizeof(addr), val + sizeof(addr));
+>  }
+>  
+> -static int regmap_sdw_read(void *context, unsigned int reg, unsigned int *val)
+> +static int regmap_sdw_gather_write(void *context,
+> +				   const void *reg_buf, size_t reg_size,
+> +				   const void *val_buf, size_t val_size)
+>  {
+>  	struct device *dev = context;
+>  	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+> -	int read;
+> +	u32 addr = le32_to_cpu(*(const __le32 *)reg_buf);
+
+what's the difference between regmap_sdw_write() and
+regmap_sdw_gather_write()? Seems to me that it's the same functionality
+of writing at consecutive addresses. It's not a true 'gather' in the
+sense that only the first address is used?
+
+>  
+> -	read = sdw_read_no_pm(slave, reg);
+> -	if (read < 0)
+> -		return read;
+> +	return sdw_nwrite_no_pm(slave, addr, val_size, val_buf);
+> +}
+>  
+> -	*val = read;
+> -	return 0;
