@@ -2,200 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F9E666F8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5662D666F93
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234437AbjALK1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S234936AbjALK2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbjALK0G (ORCPT
+        with ESMTP id S231925AbjALK1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:26:06 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA8B21B9;
-        Thu, 12 Jan 2023 02:23:13 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 12 Jan 2023 05:27:23 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E41A6342
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:24:16 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFAE56602DAB;
-        Thu, 12 Jan 2023 10:23:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673518991;
-        bh=hS2H0a3ptc3YuE9h2MNVIG6ow1PNq2RWuA8fASP77XU=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=hGczgOjzan6yiGBXczrM/B3CCIqpx3KGdXAuB8JIyMpRqarWgcvV71D4A6CPHwVlK
-         ggAtrwoGpoD8JZwidFTPZsr8Ip8TW+N3KlxXT9TcK/R+CpbhVOXIykxI8a9n7WvhOk
-         mTgW144dsIExqYHBnUr9u8ZWKji3sIk4oLry/1cMpdyBYMCeven7cWDYPflgunik+C
-         muzE49oSDuOLK5ufxAcWsgg7pt4t4asSvxC6sgMVJAakE5S1iCa69QJ0NSLoxMP36D
-         xp7e24G/b66O7n975XIOrXlkHZbAel6ygRjGX03wVawjrGPhTbFP6vyRGI3G8XpqA/
-         TjtjKvZvbQS+g==
-Message-ID: <c8cb5ae1-10f1-8065-d6ac-dc5a24827462@collabora.com>
-Date:   Thu, 12 Jan 2023 11:23:07 +0100
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 132F437EE5;
+        Thu, 12 Jan 2023 10:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673519054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f1K7S+Dbef2e7Z1LDtP00y2aYmviXeaCNz28skMxcd0=;
+        b=Rt4ReSjNAZ2kIhuT2FpCMchcAKd/Ks3eF4fNH91l20U4B3u+4ZzbLIGKWa0LiKwvnvHsma
+        pJZzn+vPNFwiSv/ypAjW1m0vwbMeU/3iVXLjKl1LCma4jNLRBTLpGoecP+BNGhA0Y3QL05
+        1dmiH5RX42NDq40+xQDlGKpx0J2tCL4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673519054;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f1K7S+Dbef2e7Z1LDtP00y2aYmviXeaCNz28skMxcd0=;
+        b=MUOnY49z2Xw+4H9qNdyStJflUh9pj2IPxm4Vrpye3I4fiAHhzXZz6rOK888u/oySVzkCau
+        q6vr7ti/JgCphzAg==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id EB9A6136AE;
+        Thu, 12 Jan 2023 10:24:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id +e2SOM3fv2MyMgAAGKfGzw
+        (envelope-from <tzimmermann@suse.de>); Thu, 12 Jan 2023 10:24:13 +0000
+Message-ID: <8a154783-b433-c9b8-bfe5-286dde1258e9@suse.de>
+Date:   Thu, 12 Jan 2023 11:24:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget driver
- names
-To:     Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-References: <20230111065105.29205-1-chanh@os.amperecomputing.com>
- <4e98a5ee-96a1-eb98-8529-68f36c3cb7fa@collabora.com>
- <f9e653ce-52bb-cb89-8845-2a718e76b718@amperemail.onmicrosoft.com>
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 02/11] drm/gma500: Use
+ drm_aperture_remove_conflicting_pci_framebuffers
 Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <f9e653ce-52bb-cb89-8845-2a718e76b718@amperemail.onmicrosoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+To:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-2-daniel.vetter@ffwll.ch>
+ <bad82927-1c58-4c2a-c265-571e10d1f67d@suse.de>
+ <Y7/Z5dvADG6AspV3@phenom.ffwll.local>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <Y7/Z5dvADG6AspV3@phenom.ffwll.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------5MxemaYPsZ0zHzCVm084PrOY"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------5MxemaYPsZ0zHzCVm084PrOY
+Content-Type: multipart/mixed; boundary="------------p7AmGwSpjIjIUFsgB9Yy8z0w";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: DRI Development <dri-devel@lists.freedesktop.org>,
+ Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+ LKML <linux-kernel@vger.kernel.org>, Daniel Vetter <daniel.vetter@intel.com>
+Message-ID: <8a154783-b433-c9b8-bfe5-286dde1258e9@suse.de>
+Subject: Re: [PATCH 02/11] drm/gma500: Use
+ drm_aperture_remove_conflicting_pci_framebuffers
+References: <20230111154112.90575-1-daniel.vetter@ffwll.ch>
+ <20230111154112.90575-2-daniel.vetter@ffwll.ch>
+ <bad82927-1c58-4c2a-c265-571e10d1f67d@suse.de>
+ <Y7/Z5dvADG6AspV3@phenom.ffwll.local>
+In-Reply-To: <Y7/Z5dvADG6AspV3@phenom.ffwll.local>
 
-W dniu 12.01.2023 o 09:33, Chanh Nguyen pisze:
-> 
-> 
-> On 11/01/2023 16:46, Andrzej Pietrasiewicz wrote:
->> Hello,
->>
->> W dniu 11.01.2023 o 07:51, Chanh Nguyen pisze:
->>> It is unable to use configfs to attach more than one gadget. When
->>> attaching the second gadget, it always fails and the kernel message
->>> prints out:
->>>
->>> Error: Driver 'configfs-gadget' is already registered, aborting...
->>> UDC core: g1: driver registration failed: -16
->>>
->>> This commit fixes the problem by using the gadget name as a suffix
->>> to each configfs_gadget's driver name, thus making the names
->>> distinct.
->>>
->>> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
->>> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
->>>
->>> ---
->>> Changes in v3:
->>>    - Use the gadget name as a unique suffix instead     [Andrzej]
->>>    - Remove the driver.name allocation by template        [Chanh]
->>>    - Update commit message                                [Chanh]
->>>
->>> Changes in v2:
->>>    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->>>    - Move the clean up code from gadgets_drop() to
->>>      gadget_info_attr_release()                        [Frank Li]
->>>    - Correct the resource free up in gadges_make()   [Alan Stern]
->>>    - Remove the unnecessary variable in gadgets_make()    [Chanh]
->>>    - Fixes minor grammar issue in commit message          [Chanh]
->>> ---
->>>   drivers/usb/gadget/configfs.c | 12 ++++++++++--
->>>   1 file changed, 10 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
->>> index 96121d1c8df4..0853536cbf2e 100644
->>> --- a/drivers/usb/gadget/configfs.c
->>> +++ b/drivers/usb/gadget/configfs.c
->>> @@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct config_item 
->>> *item)
->>>       WARN_ON(!list_empty(&gi->string_list));
->>>       WARN_ON(!list_empty(&gi->available_func));
->>>       kfree(gi->composite.gadget_driver.function);
->>> +    kfree(gi->composite.gadget_driver.driver.name);
->>>       kfree(gi);
->>>   }
->>> @@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver 
->>> configfs_driver_template = {
->>>       .max_speed    = USB_SPEED_SUPER_PLUS,
->>>       .driver = {
->>>           .owner          = THIS_MODULE,
->>> -        .name        = "configfs-gadget",
->>>       },
->>>       .match_existing_only = 1,
->>>   };
->>> @@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
->>>       gi->composite.gadget_driver = configfs_driver_template;
->>> +    gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
->>> +                                "configfs-gadget.%s", name);
->>
->> This line is 88 chars long, which means you're taking advantage of checkpatch
->> allowing 100 columns nowadays. That's absolutely fine. If you collapse the above
->> two lines into one, the combined length is exactly 100 chars, so you might
->> just as well use a single line. In any case (collapsed or not) you can add my
->>
->> Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
->>
-> 
-> Thanks Andrzej for the review.
-> 
-> Just found out the commit title is not totally correct.
-> It should be "usb: gadget: Append name as suffix to configfs-gadget driver names".
-> 
+--------------p7AmGwSpjIjIUFsgB9Yy8z0w
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Heh, good catch :D
+SGkNCg0KQW0gMTIuMDEuMjMgdW0gMTA6NTkgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KPiBP
+biBUaHUsIEphbiAxMiwgMjAyMyBhdCAxMDowNDo0OEFNICswMTAwLCBUaG9tYXMgWmltbWVy
+bWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMTEuMDEuMjMgdW0gMTY6NDEgc2Nocmll
+YiBEYW5pZWwgVmV0dGVyOg0KPj4+IFRoaXMgb25lIG51a2VzIGFsbCBmcmFtZWJ1ZmZlcnMs
+IHdoaWNoIGlzIGEgYml0IG11Y2guIEluIHJlYWxpdHkNCj4+PiBnbWE1MDAgaXMgaWdwdSBh
+bmQgbmV2ZXIgc2hpcHBlZCB3aXRoIGFueXRoaW5nIGRpc2NyZXRlLCBzbyB0aGVyZSBzaG91
+bGQNCj4+PiBub3QgYmUgYW55IGRpZmZlcmVuY2UuDQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5
+OiBEYW5pZWwgVmV0dGVyIDxkYW5pZWwudmV0dGVyQGludGVsLmNvbT4NCj4+PiAtLS0NCj4+
+PiAgICBkcml2ZXJzL2dwdS9kcm0vZ21hNTAwL3BzYl9kcnYuYyB8IDIgKy0NCj4+PiAgICAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4+Pg0KPj4+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZ21hNTAwL3BzYl9kcnYuYyBiL2RyaXZl
+cnMvZ3B1L2RybS9nbWE1MDAvcHNiX2Rydi5jDQo+Pj4gaW5kZXggY2Q5YzczZjVhNjRhLi45
+YjBkYWY5MGRjNTAgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2dtYTUwMC9w
+c2JfZHJ2LmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZ21hNTAwL3BzYl9kcnYuYw0K
+Pj4+IEBAIC00MjksNyArNDI5LDcgQEAgc3RhdGljIGludCBwc2JfcGNpX3Byb2JlKHN0cnVj
+dCBwY2lfZGV2ICpwZGV2LCBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCAqZW50KQ0KPj4+
+ICAgIAkgKiBUT0RPOiBSZWZhY3RvciBwc2JfZHJpdmVyX2xvYWQoKSB0byBtYXAgdmRjX3Jl
+ZyBlYXJsaWVyLiBUaGVuIHdlDQo+Pj4gICAgCSAqICAgICAgIG1pZ2h0IGJlIGFibGUgdG8g
+cmVhZCB0aGUgZnJhbWVidWZmZXIgcmFuZ2UgZnJvbSB0aGUgZGV2aWNlLg0KPj4+ICAgIAkg
+Ki8NCj4+PiAtCXJldCA9IGRybV9hcGVydHVyZV9yZW1vdmVfZnJhbWVidWZmZXJzKHRydWUs
+ICZkcml2ZXIpOw0KPj4+ICsJcmV0ID0gZHJtX2FwZXJ0dXJlX3JlbW92ZV9jb25mbGljdGlu
+Z19wY2lfZnJhbWVidWZmZXJzKHBkZXYsICZkcml2ZXIpOw0KPj4NCj4+IFRoaXMgZG9lcyBu
+b3Qgd29yay4gVGhlIGNvbW1lbnQganVzdCBhYm92ZSB0aGUgY2hhbmdlZCBsaW5lIGV4cGxh
+aW5zIHdoeS4NCj4+IFRoZSBkZXZpY2UgdXNlcyBzaGFyZWQgbWVtb3J5IHNpbWlsYXIgdG8g
+b3RoZXIgaW50ZWdyYXRlZCBJbnRlbCBjaGlwcy4gVGhlDQo+PiBjb25zb2xlIGlzIHNvbWV3
+aGVyZSBpbiBhIDE2IE1pQiByYW5nZSwgd2hpY2ggaGFzIGJlZW4gc3RvbGVuIGJ5IHRoZSBC
+SU9TDQo+PiBmcm9tIG1haW4gbWVtb3J5LiBUaGVyZSdzIG9ubHkgYSAxIE1pQiBtZW1vcnkg
+cmFuZ2Ugb24gdGhlIGRldmljZSB0byBwcm9ncmFtDQo+PiB0aGUgZGV2aWNlLiBVbmxlc3Mg
+eW91IHdhbnQgdG8gcmVmYWN0b3IgYXMgZGVzY3JpYmVkLCB0aGlzIGNhbGwgaGFzIHRvIGNv
+dmVyDQo+PiB0aGUgd2hvbGUgbWVtb3J5IGZvciBub3cuDQo+IA0KPiBVaC4gU28gaXQncyBt
+YXliZSBub3Qgc28gcHJldHR5LCBidXQgd2hhdCBpZiBJIGp1c3QgY2FsbCBib3RoIGZ1bmN0
+aW9ucz8NCg0KVGhhdCdzIHdheXMgbW9yZSB1Z2x5IElNSE8uDQoNCj4gVGhhdCB3YXkgd2Ug
+Z2V0IHRoZSB2Z2EgaGFuZGxpbmcgdGhyb3VnaCB0aGUgcGNpIG9uZSwgYW5kIHRoZSAibWFr
+ZSBzdXJlDQo+IHRoZXJlJ3Mgbm8gZmIgbGVmdCIgdGhyb3VnaCB0aGUgb3RoZXIgb25lLiBQ
+bHVzIGNvbW1lbnQgb2YgY291cnNlLg0KPiANCj4gT3RoZXJ3aXNlIHdlJ2QgbmVlZCB0byBz
+b21laG93IGtlZXAgdGhlIHZnYSBzdHVmZiBpbiB0aGUgbm9uLXBjaSBwYXRocywNCj4gYW5k
+IHRoYXQganVzdCBmZWVscyBhbGwga2luZHMgb2Ygd3JvbmcgdG8gbWUuDQoNCldpdGggeW91
+ciBwYXRjaCBhcHBsaWVkLCBhcGVydHVyZV9kZXRhY2hfZGV2aWNlcygpIGRvZXMgYWxsIHRo
+ZSB3b3JrIG9mIA0KcmVtb3ZpbmcuIEknZCBhZGQgdGhlIGZvbGxvd2luZyBpbnRlcm5hbCBm
+dW5jdGlvbnM6DQoNCnN0YXRpYyB2b2lkIGFwZXJ0dXJlX2RldGFjaF9oZWFkKGJvb2wgaXNf
+cHJpbWFyeSkNCnsNCgkvKg0KCSAqIGxlbmd0aHkgY29tbWVudCBoZXJlDQoJICovDQoJaWYg
+KGlzX3ByaW1hcnkpDQoJCXN5c2ZiX2Rpc2FibGUoKQ0KfQ0KDQpzdGF0aWMgdm9pZCBhcGVy
+dHVyZV9kZXRhY2hfdGFpbChib29sIHJlbW92ZV92Z2EpDQp7DQoJaWYgKHJlbW92ZV92Z2Ep
+IHsNCgkJYXBlcnR1cmVfZGV0YWNoX2RldmljZXMoVkdBX1BIWVNfKQ0KCQl2Z2FfcmVtb3Zl
+X3ZnYWNvbigpDQoJfQ0KfQ0KDQpBbmQgY2FsbCBib3RoIG9mIHRoZW0gYXQgdGhlIGJlZ2lu
+bmluZy9lbmQgb2YgDQphcGVydHVyZV9yZW1vdmVfY29uZmxpY3RpbmdfZGV2aWNlcygpIGFu
+ZCANCmFwZXJ0dXJlX3JlbW92ZV9jb25mbGljdGluZ19wY2lfZGV2aWNlcygpLg0KDQpZb3Un
+ZCBzdGlsbCBuZWVkIHRvIHByaW1hcnkgYXJndW1lbnQgdG8gDQphcGVydHVyZV9yZW1vdmVf
+Y29uZmxpY3RpbmdfZGV2aWNlcygpLCBidXQgdGhlcmUgd2lsbCBiZSBubyBjb2RlIA0KZHVw
+bGljYXRpb24gd2l0aCB0aGUgYXBlcnR1cmUgaGVscGVycyBhbmQgdGhlIHB1cnBvc2Ugb2Yg
+ZWFjaCBjb2RlIA0KZnJhZ21lbnQgd2lsbCBiZSBjbGVhcmVyLg0KDQpCZXN0IHJlZ2FyZHMN
+ClRob21hcw0KDQo+IC1EYW5pZWwNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhp
+Y3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBH
+bWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4
+MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-"Append gadget name to configfs-gadget driver names?"
+--------------p7AmGwSpjIjIUFsgB9Yy8z0w--
 
-I'm not a native speaker, but to me "to append" is the opposite of "to prepend",
-isn't it? So IMO "to append" already contains the notion of "adding at the end",
-which is the same thing as a suffix. I also suggest it is better to qualify the
-"name", it is not just any name, it is specifically a gadget name. If you only
-insert the word "gadget" and don't remove "as suffix" then the title becomes
-lengthy, hence my suggestion as above.
+--------------5MxemaYPsZ0zHzCVm084PrOY
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> I wonder if these issues could be fixed when get merged or should I resend a v4 
-> with that two lines collapsed and with the title adjust?
+-----BEGIN PGP SIGNATURE-----
 
-If it is only about making the title better reflect patch contents and
-whitespace changes I'd say it is ok to send a v4 with Reviewed-by and Tested-by
-already added. Not making the maintainer think why there's no ID numbers is
-a good thing. But then Greg's automaton might get confused if it sees a v4
-without v1, 2 and 3 preceding it. I'm not sure how it reacts if you reply-to v3
-with corrected title, either. On the flip side, if you send a new patch (without
-any v number) in a new thread, you also make the maintainer think why the patch
-already contains R-b and T-b, so...
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmO/380FAwAAAAAACgkQlh/E3EQov+Cj
+iw/9FxhqllgjdEiRBeEtQe3EhqBrwDvigdMou3soOuZRFCN2cDxAQxarBqxawulW8SigwmeRe6Fs
+MQzOhwghtWFYHH6w+Lz573MI97e+i+3uRWmV3/rHDaOzW7uAUz3bxBF4SrXm5eQ87t9SI76DXU0K
+2FHZ4QPNlaKlqLGXQ+Dbb2sc71Om04FZKjp48/Gat7PTMSLKwieKRMJh5qS0BOaRoT9JVKqHV59l
+ufRk2bHLR4Hv6yErDdgVKcxrjW9/dAIJ+47DuqXQchUzJCxOTMXbhtoOoLkwbwQ7Kjaa+sB8ruyk
+5CB/6PccioaNHEtMtTNNJcTSjMo6ow38gTzsKbTiHin/LDBU1WUM8SkjG+rzceiU3jF4nI2prD8B
+NTfiYL1FBmpL30LSPBVNFuRyVev21E7QYHHdENRrprsmGQ+oZ5XXmDNM/DE01JAbH27o2RpBlaru
+121azvtF072Q2rGtVu9otjmpYAhDRBCblBxJf9SBRl1xXxuSVqs2cKP5CIPzZDf3q/u4o2vA3bZP
+qYpLDfp2jZ9FyWhXxkXSDnHa6ic7wZN3lHlWjYdqX6NUMiUfFAVQK67UVFv0LUj/LQxbjEU8MrZ4
+pef2+44LScL3lR+OMNCF68Qh6JKdouHef8NWIsmQK7re/u9+aobzE3/RW3b8dpSi+Bihel5rONNQ
+PgI=
+=r/TG
+-----END PGP SIGNATURE-----
 
-Regards,
-
-Andrzej
-
-> 
-> Thanks a lot,
-> - Chanh
-> 
->>> +    if (!gi->composite.gadget_driver.driver.name)
->>> +        goto err;
->>> +
->>>       gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->>>       gi->composite.name = gi->composite.gadget_driver.function;
->>>       if (!gi->composite.gadget_driver.function)
->>> -        goto err;
->>> +        goto out_free_driver_name;
->>>       return &gi->group;
->>> +
->>> +out_free_driver_name:
->>> +    kfree(gi->composite.gadget_driver.driver.name);
->>>   err:
->>>       kfree(gi);
->>>       return ERR_PTR(-ENOMEM);
->>
-
+--------------5MxemaYPsZ0zHzCVm084PrOY--
