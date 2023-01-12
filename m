@@ -2,154 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E1766728C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C8E667286
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjALMtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjALMsY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229796AbjALMsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 12 Jan 2023 07:48:24 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01A4D48B;
-        Thu, 12 Jan 2023 04:48:22 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CCBNUg005248;
-        Thu, 12 Jan 2023 12:47:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CFdM1omF0Dr/kBzLaSaXcUlDHFRRHkojFaPFXE91R6s=;
- b=FkkwKW/waQJ258WKGrq223clkR/Ze96qDmd9dlFsttqRrvHldNxyconsclh33e2qtS8t
- J7O/+H6a0eJTmKYpTWFcql2QH8Ryrb6PR1/MWMEuM+Z/V3vbvozI+YqCLZ3rM4tDT9nb
- 67r8rfN+C3F0QUhJqNxZadGkiqLE2CVuK8jjQnMkhrTKvGFW3q0Rrkg9+Om/g+8xyMBE
- yr6QgG6ooe7fUkBqVgLVZWL5nkCHixju8xP4b/rqB9VEyhJb+NvKTqz/ut+tY0yi1XiJ
- yPVtfm3WI7Db+cFdLPhP6MDZDGR79IMA8m+qnJJPZH7ja3i+UCUm+z/OLsEfqJuqgqcG yQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2fwprctw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 12:47:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30CClkjF001242
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Jan 2023 12:47:46 GMT
-Received: from [10.216.63.5] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 12 Jan
- 2023 04:47:43 -0800
-Message-ID: <ac581485-029a-f8e6-4f66-0a21f4e5bf33@quicinc.com>
-Date:   Thu, 12 Jan 2023 18:17:39 +0530
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229483AbjALMsC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 12 Jan 2023 07:48:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D2D4C735;
+        Thu, 12 Jan 2023 04:47:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BDD6B81DD5;
+        Thu, 12 Jan 2023 12:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837E4C433F1;
+        Thu, 12 Jan 2023 12:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673527677;
+        bh=7zZrtN8lmZKOOP4+fso5bw1M8rjneci9uxIRHPuWDgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=blPoptpCI5TVw04j6Uhfv3eMlNkUaOX5zUB2uS8oijYwVXOJP9UpjgZbfm+h4Utms
+         pSR+QBlb2klOw1xHCe5LkrZsFcpd0DBiBzpP1Rcfdr6K816Fz0OJS2KBpsbm72BkD7
+         MGb++JTPURweTALy/PkKhEGelWwvB8qYR6SFw7NE=
+Date:   Thu, 12 Jan 2023 13:47:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kent Russell <kent.russell@amd.com>,
+        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 1/1] drm/amdkfd: Check for null pointer after
+ calling kmemdup
+Message-ID: <Y8ABeXQLzWdoaGAY@kroah.com>
+References: <20230104175633.1420151-1-dragos.panait@windriver.com>
+ <20230104175633.1420151-2-dragos.panait@windriver.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: ERRATUM_858921 is broken on 5.15 kernel
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <mark.rutland@arm.com>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-References: <ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com>
- <86sfgpnjsg.wl-maz@kernel.org>
- <9aafa9d9-70f8-67de-df43-e2fb282a4a67@quicinc.com>
- <86ilhgng9n.wl-maz@kernel.org>
-Content-Language: en-US
-From:   Yogesh Lal <quic_ylal@quicinc.com>
-In-Reply-To: <86ilhgng9n.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: y5Gr1o2smgwGkoC4l4GET-AuZuzdDsNK
-X-Proofpoint-ORIG-GUID: y5Gr1o2smgwGkoC4l4GET-AuZuzdDsNK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_07,2023-01-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 spamscore=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301120090
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104175633.1420151-2-dragos.panait@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 04, 2023 at 07:56:33PM +0200, Dragos-Marian Panait wrote:
+> From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> 
+> [ Upstream commit abfaf0eee97925905e742aa3b0b72e04a918fa9e ]
+> 
+> As the possible failure of the allocation, kmemdup() may return NULL
+> pointer.
+> Therefore, it should be better to check the 'props2' in order to prevent
+> the dereference of NULL pointer.
+> 
+> Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> index 86b4dadf772e..02e3c650ed1c 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> @@ -408,6 +408,9 @@ static int kfd_parse_subtype_iolink(struct crat_subtype_iolink *iolink,
+>  			return -ENODEV;
+>  		/* same everything but the other direction */
+>  		props2 = kmemdup(props, sizeof(*props2), GFP_KERNEL);
+> +		if (!props2)
+> +			return -ENOMEM;
 
-On 1/9/2023 4:09 PM, Marc Zyngier wrote:
-> On Mon, 09 Jan 2023 06:52:20 +0000,
-> Yogesh Lal <quic_ylal@quicinc.com> wrote:
->> tested it on affected h/w but looks like sched_clock is still pointing
->> to !arch_timer_counter_has_wa() function calls,
->> may be due to sched_clock_register will register once during non
->> errata impacted core booting.
-> Ah, of course. We register the function itself instead of an
-> indirection. Please try this on top of the previous patch.
-Thanks for the patch, its working fine now.
->
-> Thanks,
->
-> 	M.
->
-> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-> index a7cf0a2c86d3..8232c86b9e7c 100644
-> --- a/drivers/clocksource/arm_arch_timer.c
-> +++ b/drivers/clocksource/arm_arch_timer.c
-> @@ -217,7 +217,12 @@ static notrace u64 arch_counter_get_cntvct(void)
->    * to exist on arm64. arm doesn't use this before DT is probed so even
->    * if we don't have the cp15 accessors we won't have a problem.
->    */
-> -u64 (*arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
-> +static u64 (*__arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
-> +
-> +u64 arch_timer_read_counter(void)
-> +{
-> +	return __arch_timer_read_counter();
-> +}
->   EXPORT_SYMBOL_GPL(arch_timer_read_counter);
->   
->   static u64 arch_counter_read(struct clocksource *cs)
-> @@ -595,7 +600,7 @@ void arch_timer_enable_workaround(const struct arch_timer_erratum_workaround *wa
->   
->   	if (wa->read_cntvct_el0 || wa->read_cntpct_el0) {
->   		atomic_set(&timer_unstable_counter_workaround_in_use, 1);
-> -		arch_timer_read_counter = arch_counter_get_read_fn();
-> +		__arch_timer_read_counter = arch_counter_get_read_fn();
->   	}
->   
->   	/*
-> @@ -1103,10 +1108,10 @@ static void __init arch_counter_register(unsigned type)
->   
->   	/* Register the CP15 based counter if we have one */
->   	if (type & ARCH_TIMER_TYPE_CP15) {
-> -		arch_timer_read_counter = arch_counter_get_read_fn();
-> +		__arch_timer_read_counter = arch_counter_get_read_fn();
->   		clocksource_counter.vdso_clock_mode = vdso_default;
->   	} else {
-> -		arch_timer_read_counter = arch_counter_get_cntvct_mem;
-> +		__arch_timer_read_counter = arch_counter_get_cntvct_mem;
->   	}
->   
->   	width = arch_counter_get_width();
-> diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_arch_timer.h
-> index e3c3816d19ba..3ac297a756e8 100644
-> --- a/include/clocksource/arm_arch_timer.h
-> +++ b/include/clocksource/arm_arch_timer.h
-> @@ -89,7 +89,7 @@ struct arch_timer_mem {
->   #ifdef CONFIG_ARM_ARCH_TIMER
->   
->   extern u32 arch_timer_get_rate(void);
-> -extern u64 (*arch_timer_read_counter)(void);
-> +extern u64 arch_timer_read_counter(void);
->   extern struct arch_timer_kvm_info *arch_timer_get_kvm_info(void);
->   extern bool arch_timer_evtstrm_available(void);
->   
->
+Not going to queue this up as this is a bogus CVE.
