@@ -2,214 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728D16678F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310D56678F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbjALPVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S240349AbjALPVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240246AbjALPU5 (ORCPT
+        with ESMTP id S232342AbjALPVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:20:57 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74B650F43
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:13:11 -0800 (PST)
-Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5C6236602D8E;
-        Thu, 12 Jan 2023 15:13:08 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673536390;
-        bh=3I7GRdum8hBzhIgYNw9/pBTx5mC+mLGjCGvmsD9CzGk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=emjg/aGsZzqAQRpou+KCDlAHohWHqowgj8ixxWdMLpNu5wlSM40cktTMQ22sB8Rke
-         E3DmAP0ZtS7MgKJolw/NSnYvfe/6CWjTc2aNzXYznuAMcQJ1Ux+MR6gj813Ls9TnYe
-         mp+T4mXwswh/9izn/rla131cknJHyJfuK25p8NTulskgZVwThZ8d22Lr4WMWjj5FL9
-         swTrntRDv45kY39tie3VtfEr7qUqDpewNESZRnbznUMJ6GsV/fjBNZOO6Yrz60U6DT
-         32N2xWPUvc4f/1H1Ig+VD4hlRtm+hQIk9euABPCrF9tjPKtqdqGNcVm0fmSn4ne1Nc
-         XwFrc0SeRPeiA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: defconfig: Enable missing configs for mt8192-asurada
-Date:   Thu, 12 Jan 2023 10:12:38 -0500
-Message-Id: <20230112151238.1930126-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 12 Jan 2023 10:21:12 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2124.outbound.protection.outlook.com [40.107.255.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D139D93
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:13:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cR2GJxYiDBWuwHQfNctRQRbOFDfhcfH1Sh9i/iIstGAljToeBaNMVw+0Z15TNsiUu7O4xbWhtdVMi32LpFKCt1TE6deceuzwTI6G95QXG6TveK6pn6ke1gZN7zAcqLmYM/bcBtuZU1Uzth6iXVoFPrNs0gRZiLGX7HyquBQYkDhCie9U6eBIJLD9B1wirD/9nq9TaqjFWkhHjrDjSG3RWTBXi4CWYFbG39JpCJuvOzP/hzcmNwSoIb6K/ToCHt4StO0rEI5+iil33WqXqOIVBUPl8inZbOZJJ0evDs3aQovgzdb9n9MrSYpZIxeaAutXf86lNHa5U90FOxref3WIuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qu0zBJM4Hr0BlEu1LMHIvb5WjxXyz2HMFpMCU68o/IM=;
+ b=co6iOaBpelJS4v0Bss+C5eLOIkHDYk+OZL943dnv0u6mt0KJkP0+5H2y0b8sisYbkex2gcISr9vHmVV7WEOK0jA03Ke1OExyD8awj33Apba7XwgZCCto0hfjHc1RLw7ZaPSAwzPU+GSJdeMSKbWebLOTxh/OscU/kNVtRoV+L1BdA/j6b+TZEBbFGdj0AW4o8TWWa6tfSLrOCOcYq5QeqzHPeK4czjUXXS2yR6b5vYN7YC76gdAB7dtxpcwl5a2CON2bZFqEt9pDpcTZRMwkPpI/spwv+a7bcRuxNN9C2zCI3Z0U2VLr8ozDJwG3AXD1FuoMHIYWCXJ2OXpuFDqjog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qu0zBJM4Hr0BlEu1LMHIvb5WjxXyz2HMFpMCU68o/IM=;
+ b=aJEQmdEDHnsx5fc6znHLMQtpAQ0PlpgYwlWuWlNXfmMRAQV+bqXr3BcjrBLYQL5EVaPrzQ5KUX/amihIN5UBrrSchTGoE49seXR1cCJryQPZfS/H/P4y+RgUGoOMv/aw+CAJJ/SgHi6vpv+UvU/o0d7RcsdcnYV4kUq670LYge8Fr/tIsuDrS5zuB/0pPR7cUjW0dfjDouneb0jL7OgfWbOHnZpmahqShOQGoQVJMx3igJeMQEQya2CZueEJKsQNAJ+SK6W+xEPFU8iqh3K/Ps3QoCJF7JIeYBASLqebjMKwWYCkWjMy621VmedFPhrTzZDWAQjRf0Io/1UcJelG5A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TY0PR06MB5460.apcprd06.prod.outlook.com (2603:1096:400:32f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.11; Thu, 12 Jan
+ 2023 15:13:37 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Thu, 12 Jan 2023
+ 15:13:37 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] f2fs: reset iostat_count in f2fs_reset_iostat()
+Date:   Thu, 12 Jan 2023 23:13:28 +0800
+Message-Id: <20230112151328.29124-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <Y78LNobSXGF5N3tn@google.com>
+References: <Y78LNobSXGF5N3tn@google.com>
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0024.apcprd02.prod.outlook.com
+ (2603:1096:4:195::18) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB5460:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0cf2817c-bae3-496f-d021-08daf4af944c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p7ncpTRynvLzu/Hi374WnYPuXjlT1kKLghVUDlKCIpRZyVLoPgPhlqvhYujziN6SgKzyZ/Z6FvYje6/3N6Px7iqcHd1XmKKOEAfVscNJCRMnV3rV1MhPN/zrOb8tDToV21/rpGjJSErZobXXbx930AyCHEy6rrwednnVEooDBJewUX5rzIpYVe09jNJXX9kpCWnzsVweBzeLb2xSivaTln2LHM4dS3/Z6dlXpJDgV1weiW//GqRS+/+1GutvICGNjVP2S7B8rgQ2qrg7mtIyaACX7nV6L4Fbd4PCOh05VEp8ZMaKkTFlo43DjoagTgZ4VYN8M8q5YahZiS0SHdof1vxQt4gKPoLHVk+P8SRLvi/JVaL/VItlZkzzg0LFUibkWDyHjyRLnSNW8sCyAxe5CXwXoF4YWTHMAcFkj5cBwZTYpKQ+JRkSsBSUXJ7d5PK2LoD38s9xE4lU7O/T6VDy5V35iAaX5cJJTDVxmmWaFJod1aiaQLqULMI29shLnPZUIP6ECIN8Gad1jB+Hh8O0E8LGZ4J1RCYdtSbNLf8gsMUwrKB5UggOVUg8FTY4uvRiDDwjNY7dYSf24TeGDeV+ihZz9f8PDSv3NElcrsjuxvK/zn68YhvzjLxUaVGYKB2qPZdUPxmp8mu5d5AOJjKaB41N4KBLyceQTKikZKTZWh4EtTE3opTz0iDahwHW/8N3Vizj+aHvQX4ThhswSTmhl/bdctr6UOUxIDwL+RyF3Kc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199015)(38100700002)(83380400001)(38350700002)(4326008)(86362001)(66476007)(4744005)(8936002)(8676002)(66556008)(2906002)(5660300002)(2616005)(6666004)(41300700001)(186003)(6506007)(26005)(6512007)(478600001)(966005)(6486002)(316002)(52116002)(66946007)(1076003)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ECJROhaOqy84cUKAI9QExPiiZxaYvmDCt4Ft2UndvwiSy4pBAiVBufJ4IV9v?=
+ =?us-ascii?Q?zxOT4ld0mEJlim3NWx+ZOkLTb5cunQPmY4VYYOjGtFpyGDLC0fZSB2Y4IFSM?=
+ =?us-ascii?Q?habWk7ng/2bRWB3GwwonjoyQuxhX78KkZQ/l4RkpwR9veMlerAtTHedTCsIO?=
+ =?us-ascii?Q?/jyFDcnOyDJc2JNIzL+U6ewCn3lhtU9MazNsoiISbj4F8FWr22gNqE37K0cU?=
+ =?us-ascii?Q?vWj3q9OXtML5422wV5qRtt6M0kerVGp4N3/beAowPQWjkBQMPg6xQMz8Ml5r?=
+ =?us-ascii?Q?8YTSywF4PmmsrLfO3jrtQZlfO72biPwNwk9iRRDeaVvZDY5aUl0DWNsMkV7g?=
+ =?us-ascii?Q?BitiRNVlrINyZBXVfnqyA8e+K2hQ/L/x2fmga9IAJxu1pu+fu0keXtkXmLOK?=
+ =?us-ascii?Q?8zOzL5+JLtg3jW9hHjuEMalwhWVTEwp6Jn6d3GgyMdOn3x8EZPJNof6gWxWp?=
+ =?us-ascii?Q?EdMKzxVfYuzvfFe+rqxhhKD9YNKPhSixpd3tKz3oizO6h9ER2rGnWpb/9Fal?=
+ =?us-ascii?Q?cXfBzbE46hV+2NyJypqIghbrHoThqFFBJkAVx8gHs6tzJ04imOBQlAZQM36j?=
+ =?us-ascii?Q?PMbyUCwYOWCrztr5OP9akq9dpSF0wAVz7CZtwa9bRVxL79PPQyE94x7DOgVk?=
+ =?us-ascii?Q?fOJdtG1m5RiDqWHRtmcWeOVi23gLurbv6TFndLUiDLYh8+W3DzZJgjr2vUdO?=
+ =?us-ascii?Q?AS4zdRX0rGk5txOA96r4oZI6vaJ8RvyKrYOtYUt1Y182mKZFWy6DP9Lv0BPD?=
+ =?us-ascii?Q?9nr1U+WAXs5sluT7gsoRfNX5P82Yqk95f7hjJZSsVyA19tVbsnCdtLdNbF9b?=
+ =?us-ascii?Q?8PUlbBoG7Snx3l2kukNxMGH3i02HpjTqG7Jau5v4tysx2+U0qO/N2nU9SHEM?=
+ =?us-ascii?Q?AAM5KZz+dCYB94J8ze5MGzZHjxsbR2C9LznR5t25+2D4G/e/8/1sZdVEorJP?=
+ =?us-ascii?Q?qMqwcHe2P+UaiDyXgZoYE3Mc6SCRD5ICNnKtnN2UomDT4f3OoNQPa6hu5sgC?=
+ =?us-ascii?Q?CSmeqVXVnsyXAXYgQK9CySfpqrLOv/ouUufzjPN0/iwZ4hKKRHMiXmrY66sc?=
+ =?us-ascii?Q?3Z0/4hbjaQ/mcIkofrXJXhru7rlxZsy5QEIi4Um1HRXlAVLxK+Ih3y+O6gLC?=
+ =?us-ascii?Q?v7nBn9hcFUH2j/oCwKNIMzJM+5QrsnIoFsvUtcHDDPvS/UBrtzs0IS6cJfY2?=
+ =?us-ascii?Q?7z2QxKE5aqJHXrTQoJS/17p3bJTcVZP+K9G1CuQP+EEgXaRiRX2Czmy0VAln?=
+ =?us-ascii?Q?B/Wf1xnQbyrTQjJFe4yimkDBzcrvIxbgDK05d+jN2n8yS9V/fva7P4ezQF08?=
+ =?us-ascii?Q?8uFWgZx8jfLsQIsIQnB3PQOhCT5L7AcxJdmTB/AlNh6EvjwU1eWRvKOGPfB/?=
+ =?us-ascii?Q?GaoHaWGRd0z5hpl0fIEfqEVqbAfnHS32drpOdLBVnvoXDW7x0Z7ki8Mm/zbj?=
+ =?us-ascii?Q?0UyGVmtS4qkVNoyrBaa6xkXBbpAi35wiZJfP/NL/08g8gQuFP3NZXoXyIKVc?=
+ =?us-ascii?Q?ebF9HKOuwvCP1m6OJQGgAxnE7El8e0S5BSpmpLz7ssiLvy+DnV1+KjbcMg0m?=
+ =?us-ascii?Q?5DKOc13Gii/tmn+eSSDJpjs/fGmBv0kfDisElOCy?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cf2817c-bae3-496f-d021-08daf4af944c
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 15:13:37.3049
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0DnC1Pttgxw3X3J4n5Axlnhedf0R9FJnM1a+314t/btdRwHaI9rxcIFaoCcpIVW7d39WOwoWdyYwnfu8Zk6VOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5460
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable missing configs in the arm64 defconfig to get all devices probing
-on mt8192-asurada based machines.
+Dear Jaegeuk,
 
-The devices enabled are: MediaTek Bluetooth USB controller, MediaTek
-PCIe Gen3 MAC controller, MT7921E wireless adapter, Elan I2C Trackpad,
-MediaTek SPI NOR flash controller, Mediatek SPMI Controller, ChromeOS EC
-regulators, MT6315 PMIC, MediaTek Video Codec, MT8192 sound cards,
-ChromeOS EC rpmsg communication, all MT8192 clocks.
+> Hi Yangtao,
+> 
+> These are all in dev-test branch, which means you don't need to stack up more
+> patches on top of it. I just integrated most of them into two original patches.
 
-Support for DMA Restricted Pool is also enabled since it is used by the
-WiFi card on this platform.
+Ok, I'll merge the previous commits and resend next time.
 
-REGULATOR_CROS_EC is enabled as builtin since it powers the MMC
-controller for the SD card, making it required for booting on some
-setups.
+> Could you please take a look at this?
 
-By enabling the support for all of this platform's devices on the
-defconfig we make it effortless to test the relevant hardware both by
-developers as well as CI systems like KernelCI.
+LGTM.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Applied with the fix.
 
----
+Thanks!
 
- arch/arm64/configs/defconfig | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+BTW, I would like to ask whether it is possible to maintain discard in separated file.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index f3053e7018fe..4e806d8068f6 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -196,6 +196,7 @@ CONFIG_BT_HIDP=m
- CONFIG_BT_LEDS=y
- # CONFIG_BT_DEBUGFS is not set
- CONFIG_BT_HCIBTUSB=m
-+CONFIG_BT_HCIBTUSB_MTK=y
- CONFIG_BT_HCIUART=m
- CONFIG_BT_HCIUART_LL=y
- CONFIG_BT_HCIUART_BCM=y
-@@ -231,6 +232,7 @@ CONFIG_PCIE_ALTERA_MSI=y
- CONFIG_PCI_HOST_THUNDER_PEM=y
- CONFIG_PCI_HOST_THUNDER_ECAM=y
- CONFIG_PCIE_ROCKCHIP_HOST=m
-+CONFIG_PCIE_MEDIATEK_GEN3=m
- CONFIG_PCIE_BRCMSTB=m
- CONFIG_PCI_IMX6=y
- CONFIG_PCI_LAYERSCAPE=y
-@@ -403,6 +405,7 @@ CONFIG_BRCMFMAC=m
- CONFIG_MWIFIEX=m
- CONFIG_MWIFIEX_SDIO=m
- CONFIG_MWIFIEX_PCIE=m
-+CONFIG_MT7921E=m
- CONFIG_WL18XX=m
- CONFIG_WLCORE_SDIO=m
- CONFIG_INPUT_EVDEV=y
-@@ -411,6 +414,7 @@ CONFIG_KEYBOARD_GPIO=y
- CONFIG_KEYBOARD_SNVS_PWRKEY=m
- CONFIG_KEYBOARD_IMX_SC_KEY=m
- CONFIG_KEYBOARD_CROS_EC=y
-+CONFIG_MOUSE_ELAN_I2C=m
- CONFIG_INPUT_TOUCHSCREEN=y
- CONFIG_TOUCHSCREEN_ATMEL_MXT=m
- CONFIG_TOUCHSCREEN_GOODIX=m
-@@ -513,6 +517,7 @@ CONFIG_SPI_FSL_DSPI=y
- CONFIG_SPI_MESON_SPICC=m
- CONFIG_SPI_MESON_SPIFC=m
- CONFIG_SPI_MT65XX=y
-+CONFIG_SPI_MTK_NOR=m
- CONFIG_SPI_ORION=y
- CONFIG_SPI_PL022=y
- CONFIG_SPI_ROCKCHIP=y
-@@ -528,6 +533,7 @@ CONFIG_SPI_TEGRA210_QUAD=m
- CONFIG_SPI_TEGRA114=m
- CONFIG_SPI_SPIDEV=m
- CONFIG_SPMI=y
-+CONFIG_SPMI_MTK_PMIF=m
- CONFIG_PINCTRL_MAX77620=y
- CONFIG_PINCTRL_SINGLE=y
- CONFIG_PINCTRL_OWL=y
-@@ -674,6 +680,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_REGULATOR_AXP20X=y
- CONFIG_REGULATOR_BD718XX=y
- CONFIG_REGULATOR_BD9571MWV=y
-+CONFIG_REGULATOR_CROS_EC=y
- CONFIG_REGULATOR_FAN53555=y
- CONFIG_REGULATOR_GPIO=y
- CONFIG_REGULATOR_HI6421V530=y
-@@ -681,6 +688,7 @@ CONFIG_REGULATOR_HI655X=y
- CONFIG_REGULATOR_MAX77620=y
- CONFIG_REGULATOR_MAX8973=y
- CONFIG_REGULATOR_MP8859=y
-+CONFIG_REGULATOR_MT6315=m
- CONFIG_REGULATOR_MT6358=y
- CONFIG_REGULATOR_MT6359=y
- CONFIG_REGULATOR_MT6360=y
-@@ -714,6 +722,7 @@ CONFIG_V4L_PLATFORM_DRIVERS=y
- CONFIG_SDR_PLATFORM_DRIVERS=y
- CONFIG_V4L_MEM2MEM_DRIVERS=y
- CONFIG_VIDEO_MEDIATEK_JPEG=m
-+CONFIG_VIDEO_MEDIATEK_VCODEC=m
- CONFIG_VIDEO_QCOM_CAMSS=m
- CONFIG_VIDEO_QCOM_VENUS=m
- CONFIG_VIDEO_RCAR_ISP=m
-@@ -827,6 +836,8 @@ CONFIG_SND_SOC_IMX_AUDMIX=m
- CONFIG_SND_SOC_MT8183=m
- CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=m
- CONFIG_SND_SOC_MT8183_DA7219_MAX98357A=m
-+CONFIG_SND_SOC_MT8192=m
-+CONFIG_SND_SOC_MT8192_MT6359_RT1015_RT5682=m
- CONFIG_SND_MESON_AXG_SOUND_CARD=m
- CONFIG_SND_MESON_GX_SOUND_CARD=m
- CONFIG_SND_SOC_QCOM=m
-@@ -1070,6 +1081,7 @@ CONFIG_VIDEO_MAX96712=m
- CONFIG_CHROME_PLATFORMS=y
- CONFIG_CROS_EC=y
- CONFIG_CROS_EC_I2C=y
-+CONFIG_CROS_EC_RPMSG=m
- CONFIG_CROS_EC_SPI=y
- CONFIG_CROS_EC_CHARDEV=m
- CONFIG_COMMON_CLK_RK808=y
-@@ -1092,6 +1104,18 @@ CONFIG_CLK_IMX8QXP=y
- CONFIG_CLK_IMX8ULP=y
- CONFIG_CLK_IMX93=y
- CONFIG_TI_SCI_CLK=y
-+CONFIG_COMMON_CLK_MT8192_AUDSYS=y
-+CONFIG_COMMON_CLK_MT8192_CAMSYS=y
-+CONFIG_COMMON_CLK_MT8192_IMGSYS=y
-+CONFIG_COMMON_CLK_MT8192_IMP_IIC_WRAP=y
-+CONFIG_COMMON_CLK_MT8192_IPESYS=y
-+CONFIG_COMMON_CLK_MT8192_MDPSYS=y
-+CONFIG_COMMON_CLK_MT8192_MFGCFG=y
-+CONFIG_COMMON_CLK_MT8192_MMSYS=y
-+CONFIG_COMMON_CLK_MT8192_MSDC=y
-+CONFIG_COMMON_CLK_MT8192_SCP_ADSP=y
-+CONFIG_COMMON_CLK_MT8192_VDECSYS=y
-+CONFIG_COMMON_CLK_MT8192_VENCSYS=y
- CONFIG_COMMON_CLK_QCOM=y
- CONFIG_QCOM_A53PLL=y
- CONFIG_QCOM_CLK_APCS_MSM8916=y
-@@ -1398,6 +1422,7 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
- CONFIG_CRYPTO_DEV_HISI_ZIP=m
- CONFIG_CRYPTO_DEV_HISI_HPRE=m
- CONFIG_CRYPTO_DEV_HISI_TRNG=m
-+CONFIG_DMA_RESTRICTED_POOL=y
- CONFIG_CMA_SIZE_MBYTES=32
- CONFIG_PRINTK_TIME=y
- CONFIG_DEBUG_KERNEL=y
--- 
-2.39.0
+https://patchwork.kernel.org/project/f2fs/patch/20221217132318.37718-1-frank.li@vivo.com/
 
+MBR,
+Yangtao
