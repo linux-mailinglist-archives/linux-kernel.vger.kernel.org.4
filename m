@@ -2,112 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA5E667C91
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16205667C9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjALRdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S230316AbjALRfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjALRdA (ORCPT
+        with ESMTP id S229835AbjALRfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:33:00 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D64F9084A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:56:51 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id ay12-20020a05600c1e0c00b003d9ea12bafcso11638923wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NjHuwJVvoYNT2uvYdEC/ruHEzZSQ99pHET9SRyBrpMg=;
-        b=Ulx820dPVpcnDvb0tvaeokZDfpZP37Nols/n3mmFUZTpY+hTISecMM8OFojo9iHXGP
-         /YbBsDMjN9k38zUbm/9TosPj4s8npP/DCj9wKuA1fhGt7e/cbFh403wPuRHUeMOF0aP/
-         2Bd2POxZ/33gYFjBdHcoVMyzU5b2A2nnStnb20rpSguN8DehiF3fswRfSd73Vmh75M6K
-         9b0VoFhlUyL7ymfKCmCJWztJDbMtI/9Kdgm5nZwzd/qS3PaWF8dlskd4anC6aeLwWk2Y
-         F7O+KO4ctBh19H9F/m/lVYgFso+T5r6fXxk9PEvp78wWmbRkuAkFkcr6NjM36xfkxA6/
-         WZ3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NjHuwJVvoYNT2uvYdEC/ruHEzZSQ99pHET9SRyBrpMg=;
-        b=3RlqB2LxlhffJktNmof4G+yapieP4szHcL5sDLQ3rZdUtJxuovXTG8HjOjTYm16I22
-         QtGFNT6wPNaXiodIICY3Ev2/vEKBegM+6ifvLxut1MFSsXFkW8GCdnm9koNukt4Dz/uw
-         J6ffP//FNwgbh4D5eHcbNMDKoiFXdqo6Okk2GbHzTYfC4QdP4iemSzc1+1h4ETW2Py8t
-         GJGOeqJHtXppqUGZmWSBm5gcElaMPQV+lBpzxS9kgsNLvq+9f/PViMqaBJMrIsLHig5X
-         VdxJZPTAvkZjgOSIN+XQki8f2f847Ri0CRaqR/RI2Pk5J1WCmfmrkd9++/0r7jJR0skW
-         GiVQ==
-X-Gm-Message-State: AFqh2kpIf8mONsUYDuw6z/1ZhCp5Ub6BPp9wn5MNgDDUwEjC9knvMvBZ
-        CtmywUcmnzX0QJtjwQEeCQXpokE+bn87mEEjOMZBgg==
-X-Google-Smtp-Source: AMrXdXvU9QWUX1dUYojLCt0gPxlCTcekhhvkG0RKdkGYihjF9ONnkAROkARv3qDd34glPFmVTVlZs8fDE0ahJb5nxVw=
-X-Received: by 2002:a05:600c:4f56:b0:3d9:7950:dc5f with SMTP id
- m22-20020a05600c4f5600b003d97950dc5fmr2932518wmq.120.1673542562430; Thu, 12
- Jan 2023 08:56:02 -0800 (PST)
+        Thu, 12 Jan 2023 12:35:14 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6607A6B1BF;
+        Thu, 12 Jan 2023 08:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673542660; x=1705078660;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V4SKDzmsS6x7U3N+8mtwUbu1ps9tCegCs00ZfkA9voQ=;
+  b=YkNrbCbAXqR6+1dFD3raJOCHonQ3Vz/I69ivf2KAtwEljD8sZ/ypc/Wx
+   KN3+7c++SL8bhkZzLeC4ZqG8kNH35nb+MzIBxOUP50bxKWFz2eKcNBOOt
+   MWXMtccQRkz69eDj6a//pnY2DoqJg3jtRprLdV36RyH6Arhki1bhtXlI9
+   wAEvbP680yT77xowNhkgKSDazskb1bEYnqEZXBRRTAxL4kT4f0clOOJJu
+   Q3noPCG0YFQaRxbfZjmmIzixYyZV6niY0Exq/vdMQ+skCKaEYgsf9nY5l
+   4GkKZJsbmHn3ikcoF+xthyBCqufz1aaG4anT0yDhEKkXL2vgU+WcFeIv7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325016136"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="325016136"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:56:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="651232500"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="651232500"
+Received: from jacton-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.213.195.171])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 08:56:21 -0800
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+To:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [RFC v3 00/12] DRM scheduling cgroup controller
+Date:   Thu, 12 Jan 2023 16:55:57 +0000
+Message-Id: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-22-jthoughton@google.com> <Y78+/wleTEC3gyqu@x1n>
- <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
- <Y8AnROAtMngKntnq@x1n> <CADrL8HWFfqCqbpmvv8BSpvvzJ9aEeBEN30bMLuWGancsfMXv2w@mail.gmail.com>
-In-Reply-To: <CADrL8HWFfqCqbpmvv8BSpvvzJ9aEeBEN30bMLuWGancsfMXv2w@mail.gmail.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 12 Jan 2023 11:55:51 -0500
-Message-ID: <CADrL8HV6wuwJ+yPV2S4YkOT=V7Wmi_=Jk_pZE0NO6ZFVY1PgJw@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The original approach was implemented in RFC v1, but the
-> implementation was broken: the way refcount was handled was wrong; it
-> was incremented once for each new page table mapping. (How?
-> find_lock_page(), called once per hugetlb_no_page/UFFDIO_CONTINUE
-> would increment refcount and we wouldn't drop it, and in
-> __unmap_hugepage_range(), the mmu_gather bits would decrement the
-> refcount once per mapping.)
->
-> At the time, I figured the complexity of handling mapcount AND
-> refcount correctly in the original approach would be quite complex, so
-> I switched to the new one.
+From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 
-Sorry I didn't make this clear... the following steps are how we could
-correctly implement the original approach.
+This series contains a proposal for a DRM scheduling cgroup controller which
+implements a weight based hierarchical GPU usage budget based controller
+similar in concept to some of the existing controllers.
 
-> 1. In places that already change the mapcount, check that we're
-> installing the hstate-level PTE, not a high-granularity PTE. Adjust
-> mapcount AND refcount appropriately.
-> 2. In the HGM walking bits, to the caller if we made the hstate-level
-> PTE present. (hugetlb_[pmd,pte]_alloc is the source of truth.) Need to
-> keep track of this until we figure out which page we're allocating
-> PTEs for, then change mapcount/refcount appropriately.
-> 3. In unmapping bits, change mmu_gather/tlb bits to drop refcount only
-> once per hugepage. (This is probably the hardest of these three things
-> to get right.)
+Motivation mostly comes from my earlier proposal where I identified that GPU
+scheduling lags significantly behind what is available for CPU and IO. Whereas
+back then I was proposing to somehow tie this with process nice, feedback mostly
+was that people wanted cgroups. So here it is - in the world of heterogenous
+computing pipelines I think it is time to do something about this gap.
+
+Code is not finished but should survive some light experimenting with. I am
+sharing it early since the topic has been controversial in the past. I hope to
+demonstrate there are gains to be had in real world usage(*), today, and that
+the concepts the proposal relies are well enough established and stable.
+
+*) Specifically under ChromeOS which uses cgroups to control CPU bandwith for
+   VMs based on the window focused status. It can be demonstrated how GPU
+   scheduling control can easily be integrated into that setup.
+
+*) Another real world example later in the cover letter.
+
+There should be no conflict with this proposal and any efforts to implement
+memory usage based controller. Skeleton DRM cgroup controller is deliberatly
+purely a skeleton patch where any further functionality can be added with no
+real conflicts. [In fact, perhaps scheduling is even easier to deal with than
+memory accounting.]
+
+Structure of the series is as follows:
+
+  1-2) Improve client ownership tracking in DRM core.
+    3) Adds a skeleton DRM cgroup controller with no functionality.
+  4-9) Laying down some infrastructure to enable the controller.
+   10) The controller itself.
+11-12) i915 support for the controller.
+
+The proposals defines a delegation of duties between the tree parties: cgroup
+controller, DRM core and individual drivers. Two way communication interfaces
+are then defined to enable the delegation to work.
+
+DRM scheduling soft limits
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Because of the heterogenous hardware and driver DRM capabilities, soft limits
+are implemented as a loose co-operative (bi-directional) interface between the
+controller and DRM core.
+
+The controller configures the GPU time allowed per group and periodically scans
+the belonging tasks to detect the over budget condition, at which point it
+invokes a callback notifying the DRM core of the condition.
+
+DRM core provides an API to query per process GPU utilization and 2nd API to
+receive notification from the cgroup controller when the group enters or exits
+the over budget condition.
+
+Individual DRM drivers which implement the interface are expected to act on this
+in the best-effort manner only. There are no guarantees that the soft limits
+will be respected.
+
+DRM scheduling soft limits interface files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  drm.weight
+	Standard cgroup weight based control [1, 10000] used to configure the
+	relative distributing of GPU time between the sibling groups.
+
+  drm.period_us (Most probably only a debugging aid during RFC phase.)
+	An integer representing the period with which the controller should look
+	at the GPU usage by the group and potentially send the over/under budget
+	signal.
+	Value of zero (defaul) disables the soft limit checking.
+
+This builds upon the per client GPU utilisation work which landed recently for a
+few drivers. My thinking is that in principle, an intersect of drivers which
+support both that and some sort of scheduling control, like  priorities, could
+also in theory support this controller.
+
+Another really interesting angle for this controller is that it mimics the same
+control menthod used by the CPU scheduler. That is the proportional/weight based
+GPU time budgeting. Which makes it easy to configure and does not need a new
+mental model.
+
+However, as the introduction mentions, GPUs are much more heterogenous and
+therefore the controller uses very "soft" wording as to what it promises. The
+general statement is that it can define budgets, notify clients when they are
+over them, and let individual drivers implement best effort handling of those
+conditions.
+
+Delegation of duties in the implementation goes likes this:
+
+ * DRM cgroup controller implements the control files and the scanning loop.
+ * DRM core is required to track all DRM clients belonging to processes so it
+   can answer when asked how much GPU time is a process using.
+ * DRM core also provides a call back which the controller will call when a
+   certain process is over budget.
+ * Individual drivers need to implement two similar hooks, but which work for
+   a single DRM client. Over budget callback and GPU utilisation query.
+
+What I have demonstrated in practice is that when wired to i915, in a really
+primitive way where the over-budget condition simply lowers the scheduling
+priority, the concept can be almost equally effective as the static priority
+control. I say almost because the design where budget control depends on the
+periodic usage scanning has a fundamental delay, so responsiveness will depend
+on the scanning period, which may or may not be a problem for a particular use
+case.
+
+There are also interesting conversations to be had around mental models for what
+is GPU usage as a single number when faced with GPUs which have different
+execution engines. To an extent this is similar to the multi-core and cgroup
+CPU controller problems, but definitely goes further than that.
+
+I deliberately did not want to include any such complications in the controller
+itself and left the individual drivers to handle it. For instance in the i915
+over-budget callback it will not do anything unless client's GPU usage is on a
+physical engine which is oversubscribed. This enables multiple clients to be
+harmlessly over budget, as long as they are not competing for the same GPU
+resource.
+
+Example usage from within a Linux desktop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Standard Linux distributions like Ubuntu already uses cgroups heavily for
+session management and that could easily be extended with the DRM controller.
+
+After logging into the system graphically we can enable the DRM controller
+throughout the cgroups hierarchy:
+
+echo +drm > /sys/fs/cgroup/cgroup.subtree_control
+echo +drm > /sys/fs/cgroup/user.slice/cgroup.subtree_control
+echo +drm > /sys/fs/cgroup/user.slice/user-$(id -u).slice/cgroup.subtree_control
+
+Next we will open two SSH sessions, just so separate cgroups are handily created
+by systemd for this experiment.
+
+Roughly simultaneously we run the following two benchmarks in each session
+respectively:
+
+1)
+./GpuTest /test=pixmark_julia_fp32 /width=1920 /height=1080 /fullscreen /no_scorebox /benchmark /benchmark_duration_ms=60000
+
+2)
+vblank_mode=0 bin/testfw_app --gl_api=desktop_core --width=1920 --height=1080 --fullscreen 1 --gfx=glfw -t gl_manhattan
+
+(The only reason for vsync off here is because I struggled to find an easily
+runnable and demanding enough benchmark, or to run on a screen large enough to
+make even a simpler ones demanding.)
+
+With this test we get 252fps from GpuTest and 96fps from GfxBenchmark.
+
+Premise here is that one of these GPU intensive benchmarks is intended to be ran
+by the user with lower priority. Imagine kicking off some background compute
+processing and continuing to use the UI for other tasks. Hence the user will now
+re-run the test by first lowering the weight control of the first session (DRM
+cgroup):
+
+1)
+echo 50 | sudo tee /sys/fs/cgroup/`cut -d':' -f3 /proc/self/cgroup`/drm.weight
+./GpuTest /test=pixmark_julia_fp32 /width=1920 /height=1080 /fullscreen /no_scorebox /benchmark /benchmark_duration_ms=60000
+
+2)
+vblank_mode=0 bin/testfw_app --gl_api=desktop_core --width=1920 --height=1080 --fullscreen 1 --gfx=glfw -t gl_manhattan
+
+In this case we will see that GpuTest has recorded 208fps (~18% down) and
+GfxBenchmark 114fps (18% up), demonstrating that even a very simple approach of
+wiring up i915 to the DRM cgroup controller can enable external GPU scheduling
+control.
+
+* Note here that default weight is 100, so setting 50 for the background session
+  is asking the controller to give it half as much GPU bandwidth.
+
+* Also note that in the RFC stage the DRM controller itself boots in a disabled
+  state and needs to be explicitly enabled by setting a scanning period such as:
+  echo 1000000 | sudo tee /sys/fs/cgroup/drm.period_us.
+
+v2:
+ * Prefaced the series with some core DRM work as suggested by Christian.
+ * Dropped the priority based controller for now.
+ * Dropped the introspection cgroup controller file.
+ * Implemented unused budget sharing/propagation.
+ * Some small fixes/tweak as per review feedback and in general.
+
+ v3:
+ * Dropped one upstreamed patch.
+ * Logging cleanup (use DRM macros where available).
+
+Tvrtko Ursulin (12):
+  drm: Track clients by tgid and not tid
+  drm: Update file owner during use
+  cgroup: Add the DRM cgroup controller
+  drm/cgroup: Track clients per owning process
+  drm/cgroup: Allow safe external access to file_priv
+  drm/cgroup: Add ability to query drm cgroup GPU time
+  drm/cgroup: Add over budget signalling callback
+  drm/cgroup: Only track clients which are providing drm_cgroup_ops
+  cgroup/drm: Client exit hook
+  cgroup/drm: Introduce weight based drm cgroup control
+  drm/i915: Wire up with drm controller GPU time query
+  drm/i915: Implement cgroup controller over budget throttling
+
+ Documentation/admin-guide/cgroup-v2.rst       |  37 ++
+ drivers/gpu/drm/Kconfig                       |   1 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c       |   6 +-
+ drivers/gpu/drm/drm_auth.c                    |   3 +-
+ drivers/gpu/drm/drm_cgroup.c                  | 203 +++++++
+ drivers/gpu/drm/drm_debugfs.c                 |  12 +-
+ drivers/gpu/drm/drm_file.c                    |  60 +-
+ drivers/gpu/drm/drm_ioctl.c                   |   3 +
+ .../gpu/drm/i915/gem/i915_gem_execbuffer.c    |  38 +-
+ drivers/gpu/drm/i915/i915_driver.c            |  11 +
+ drivers/gpu/drm/i915/i915_drm_client.c        | 209 ++++++-
+ drivers/gpu/drm/i915/i915_drm_client.h        |  13 +
+ drivers/gpu/drm/nouveau/nouveau_drm.c         |   5 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_gem.c           |   6 +-
+ include/drm/drm_clients.h                     |  47 ++
+ include/drm/drm_drv.h                         |  36 ++
+ include/drm/drm_file.h                        |  17 +-
+ include/linux/cgroup_drm.h                    |  13 +
+ include/linux/cgroup_subsys.h                 |   4 +
+ init/Kconfig                                  |   8 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/drm.c                           | 570 ++++++++++++++++++
+ 23 files changed, 1273 insertions(+), 31 deletions(-)
+ create mode 100644 drivers/gpu/drm/drm_cgroup.c
+ create mode 100644 include/drm/drm_clients.h
+ create mode 100644 include/linux/cgroup_drm.h
+ create mode 100644 kernel/cgroup/drm.c
+
+-- 
+2.34.1
+
