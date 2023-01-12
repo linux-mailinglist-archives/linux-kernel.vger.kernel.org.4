@@ -2,145 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B0F66702E
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D03667031
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjALKth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S234198AbjALKuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbjALKsc (ORCPT
+        with ESMTP id S239761AbjALKtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:48:32 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D40C568BC
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673520067; x=1705056067;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=n4mMvDBCUUkPNh9oZ0WvOrPiW6bxkVYRMSeaBL2O/dQ=;
-  b=K+gk+3m1+wLuuCEuNLwXzeckiKOu2PoDPibbPuOIZ3lSGGLdIVJKM/Uz
-   ejC7zCCev2dIg1lQ1K6pyIDns290b3CpxwrjH9fCMfVSCbhkuyUZqPFLY
-   m+xUKo6Lwzvw/JDoXOEkD4aDiqp77Gb7kHQQzTFo6Su7DLA5f2QasWbpw
-   LnqdMRl2Wfdf8vinME4OVEdKdG2Cb+gbPp1d6lpuqDCgtDgN9e7vYiQjA
-   l0R8CxbGNLeknJeaCMYbScs3md8/gomgW+pONA3AatZhYzl2ALmaQsf+D
-   FLYSFDg41vl8rfK9oqL3TR/13uy+2K+cNoLS+AxC/3v73Uo4SW2iGsoeM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324904430"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="324904430"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:40:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="903136440"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="903136440"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Jan 2023 02:40:50 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFv0r-000A3G-1I;
-        Thu, 12 Jan 2023 10:40:49 +0000
-Date:   Thu, 12 Jan 2023 18:40:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/core] BUILD SUCCESS
- 0e2213fe0ab4c04da0e2354e84ec3b90e59939a4
-Message-ID: <63bfe389.rzPOoZLELoElvqYn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 12 Jan 2023 05:49:23 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D151E3D9;
+        Thu, 12 Jan 2023 02:41:52 -0800 (PST)
+Date:   Thu, 12 Jan 2023 10:41:50 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673520110;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5SOEF2nIRTJ795tnPp75YTjnJZP/VrV7respELeucs=;
+        b=ql2iUcEacyAeNg3ed0/DCVsR2yKvru65exXlHzag8vwmLr0gYWG+jC77KwMrwUcQCaRytG
+        GOhk45hUn79JUD/0QyOAfEn1S69d/3shrk+so8n8R13k+s21ci3C5Hj24EchYbQRM9Jad6
+        TcQlspgOuLk2Suz7RigySarrfkU8qvPfInXarzzPr0jCwvigY+P8HoWthn2rOXuOJhFhkb
+        jVGi+qP7iYZK7zhuTCMrFCqs20/yGbEvonDXoKrKEvPH7y7XAA5+z0VzM8DEer4QYNipFh
+        M18qx4Mc59KUzI/cOxy9HTnN0jXR//kKXhlMuVEXHK1Boi+iGX8WS0oA1CCWtg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673520110;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5SOEF2nIRTJ795tnPp75YTjnJZP/VrV7respELeucs=;
+        b=icfSo/P/EnESWB8djUiftrSfc1pC/41ipvTrd862cD3pCQ52oAdu0Aom6CjamusJGPx9kY
+        LYWWCDQimAH6BUCA==
+From:   "tip-bot2 for Breno Leitao" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/bugs: Reset speculation control settings on init
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Breno Leitao <leitao@debian.org>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221128153148.1129350-1-leitao@debian.org>
+References: <20221128153148.1129350-1-leitao@debian.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Message-ID: <167352011025.4906.15940595409237822889.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
-branch HEAD: 0e2213fe0ab4c04da0e2354e84ec3b90e59939a4  irqchip: Use irq_domain_alloc_irqs()
+The following commit has been merged into the x86/cpu branch of tip:
 
-elapsed time: 793m
+Commit-ID:     0125acda7d76b943ca55811df40ed6ec0ecf670f
+Gitweb:        https://git.kernel.org/tip/0125acda7d76b943ca55811df40ed6ec0ecf670f
+Author:        Breno Leitao <leitao@debian.org>
+AuthorDate:    Mon, 28 Nov 2022 07:31:48 -08:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Thu, 12 Jan 2023 11:37:01 +01:00
 
-configs tested: 62
-configs skipped: 2
+x86/bugs: Reset speculation control settings on init
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Currently, x86_spec_ctrl_base is read at boot time and speculative bits
+are set if Kconfig items are enabled. For example, IBRS is enabled if
+CONFIG_CPU_IBRS_ENTRY is configured, etc. These MSR bits are not cleared
+if the mitigations are disabled.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-x86_64                            allnoconfig
-i386                                defconfig
-arc                  randconfig-r043-20230110
-i386                          randconfig-a001
-riscv                randconfig-r042-20230110
-i386                          randconfig-a003
-s390                 randconfig-r044-20230110
-i386                          randconfig-a005
-ia64                             allmodconfig
-x86_64                              defconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-x86_64                               rhel-8.3
-i386                          randconfig-a016
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-arm64                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-arm                              allyesconfig
-i386                             allyesconfig
-x86_64                           allyesconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allmodconfig
+This is a problem when kexec-ing a kernel that has the mitigation
+disabled from a kernel that has the mitigation enabled. In this case,
+the MSR bits are not cleared during the new kernel boot. As a result,
+this might have some performance degradation that is hard to pinpoint.
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r041-20230110
-arm                  randconfig-r046-20230110
-hexagon              randconfig-r045-20230110
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                          rhel-8.3-rust
+This problem does not happen if the machine is (hard) rebooted because
+the bit will be cleared by default.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  [ bp: Massage. ]
+
+Suggested-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20221128153148.1129350-1-leitao@debian.org
+---
+ arch/x86/include/asm/msr-index.h |  4 ++++
+ arch/x86/kernel/cpu/bugs.c       | 10 +++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 37ff475..cb359d6 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -49,6 +49,10 @@
+ #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
+ #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
+ 
++/* A mask for bits which the kernel toggles when controlling mitigations */
++#define SPEC_CTRL_MITIGATIONS_MASK	(SPEC_CTRL_IBRS | SPEC_CTRL_STIBP | SPEC_CTRL_SSBD \
++							| SPEC_CTRL_RRSBA_DIS_S)
++
+ #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
+ #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
+ 
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 19e1ce0..5f33704 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -145,9 +145,17 @@ void __init check_bugs(void)
+ 	 * have unknown values. AMD64_LS_CFG MSR is cached in the early AMD
+ 	 * init code as it is not enumerated and depends on the family.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
++	if (cpu_feature_enabled(X86_FEATURE_MSR_SPEC_CTRL)) {
+ 		rdmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
+ 
++		/*
++		 * Previously running kernel (kexec), may have some controls
++		 * turned ON. Clear them and let the mitigations setup below
++		 * rediscover them based on configuration.
++		 */
++		x86_spec_ctrl_base &= ~SPEC_CTRL_MITIGATIONS_MASK;
++	}
++
+ 	/* Select the proper CPU mitigations before patching alternatives: */
+ 	spectre_v1_select_mitigation();
+ 	spectre_v2_select_mitigation();
