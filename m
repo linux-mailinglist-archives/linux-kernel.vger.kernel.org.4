@@ -2,127 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCEB668702
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C24668709
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbjALWc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S232772AbjALWeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbjALWcD (ORCPT
+        with ESMTP id S231911AbjALWeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:32:03 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515FCB3B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:31:58 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 203so20412969yby.10
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 14:31:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/C/ZRKjPzNTEZUCk+rnSkeE6htJTMyaRVi+BQ5BKJ+U=;
-        b=JUPY63vtT6QcwqD9Ws2QE/pf7jC1/0su4w2j3d9Xn0NTdACzrFBjxjuFHWgpThUZws
-         imdknTpaWEjV9uHtradW98A1u35lfMGg1dddhCwsBClQF94e0939KX7UTkXNgez4GIry
-         JxaKGHbkQ7QWJVTYQ0VQgYI43iHND9qXIlcZM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/C/ZRKjPzNTEZUCk+rnSkeE6htJTMyaRVi+BQ5BKJ+U=;
-        b=AZ9V+4kW3UhXaFCecT+MTm35SeXySaRXP4feO98o87vwpuo3TsShFDRiDKFYOG5Dro
-         WBYAY0zzocJcLmneMm9BHChXRc578cFc+VUZOi8CBbqNh1zztulmFhf1OY+Ig6UzdKwB
-         qx0Pkr1HZHKRzUfVXOOsJO5jgk13yseDu0HbX8GMZxK1hCJzu6QPgJIMoyUowxty4+wc
-         IDrpypqjtLNdpdDZwfl+gpc0GK0k5wqMAKFoG3woHxDLvF9vCjU83Sk5daHyuy8eA+YH
-         aF6PhrctQ5fbEIFWY1tFsvnlaBQmr7RQaYJHUZJKOAwDWBfBgkCA53UsJgnxvuGeOpAY
-         2T+Q==
-X-Gm-Message-State: AFqh2kq0PK3OX7iz4RyThZ4Ym/W78Dy58BTfsakydHBHJjwoaKGVUj4V
-        /oNu6+hGwwHOL0vnYvML8FRrzFxvSvm02RDvaccA5A==
-X-Google-Smtp-Source: AMrXdXuznEwChU9VQQ72rYVGqmbsFrMqOVBPMbeBVwgDM2AWPc/3hytO7eUeE33HPvr9ax9Vk/LALEeTjlK/OvpNWf8=
-X-Received: by 2002:a25:1083:0:b0:7ae:5e48:383b with SMTP id
- 125-20020a251083000000b007ae5e48383bmr2843942ybq.223.1673562717561; Thu, 12
- Jan 2023 14:31:57 -0800 (PST)
+        Thu, 12 Jan 2023 17:34:07 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518E5C7;
+        Thu, 12 Jan 2023 14:34:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtK8l48kJz4wgq;
+        Fri, 13 Jan 2023 09:33:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673562840;
+        bh=PhoSnUakHyuJvTd+/WoPTqSpYsR8TzsBlmVWBiKMjPc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cEyFwdPgADBVaoQnWnuORqQzlSNCEeMxpb1XEsweyOGXh4DBk/vW+IKPDrkO/CDda
+         Iy+ZRSEVEkPhEO1DY2VRo1U1I8nfzUJcM8wpPHTamU/xh/vKW3MOlvEULWZtlqrOak
+         kNPjctGlcYRCbTgP7bnanMywaCGm8Pz/SoWgZ4JTVCeJyD5LXJjC1SN8W9KHc/h4nY
+         WVdqdiyV4b4/Tme2IAv8n93XjyxH9Y2tRBeS0+TxkVLunhP47p5s3ECsolDvbiKBmg
+         rD5Cva3AlJTkvxQDtQDVxPHIynGxyoAgApXL3ZUMVG9a2ftobGQv1SkJJsZWANTUvF
+         iCPRa67EzWCqQ==
+Date:   Fri, 13 Jan 2023 09:33:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc-fixes tree
+Message-ID: <20230113093358.45a00788@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230112042104.4107253-1-treapking@chromium.org>
- <20230112042104.4107253-2-treapking@chromium.org> <Y8AL8nTcNcl6zX7H@paasikivi.fi.intel.com>
-In-Reply-To: <Y8AL8nTcNcl6zX7H@paasikivi.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 12 Jan 2023 14:31:45 -0800
-Message-ID: <CACeCKaeN7KBi30M1fRWhTPgMbxF6=B+KuAS7Ny7+i9qCx+=49Q@mail.gmail.com>
-Subject: Re: [PATCH v10 1/9] device property: Add remote endpoint to devcon matcher
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
-        Xin Ji <xji@analogixsemi.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
-        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DTkdQoO84Te2p8NDHJMhYBg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Sakari,
+--Sig_/DTkdQoO84Te2p8NDHJMhYBg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 12, 2023 at 5:32 AM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi Pin-yen,
->
-> On Thu, Jan 12, 2023 at 12:20:56PM +0800, Pin-yen Lin wrote:
-> > From: Prashant Malani <pmalani@chromium.org>
-> > +             /*
-> > +              * Some drivers may register devices for endpoints. Check
-> > +              * the remote-endpoints for matches in addition to the remote
-> > +              * port parent.
-> > +              */
-> > +             node = fwnode_graph_get_remote_endpoint(ep);
-> > +             if (fwnode_device_is_available(node)) {
-> > +                     ret = match(node, con_id, data);
-> > +                     if (ret) {
-> > +                             if (matches)
-> > +                                     matches[count] = ret;
-> > +                             count++;
-> > +                     }
-> > +             }
->
-> Aren't you missing fwnode_handle-put(node) here??
+Hi all,
 
-It shouldn't be necessary. We aren't break-ing/continue-ing here,
-and fwnode_handle_put(node) is called latter in the loop [1][2]
+After merging the drm-misc-fixes tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-BR,
+drivers/gpu/drm/vc4/vc4_bo.c: In function 'vc4_create_object':
+drivers/gpu/drm/vc4/vc4_bo.c:398:13: warning: unused variable 'ret' [-Wunus=
+ed-variable]
+  398 |         int ret;
+      |             ^~~
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/property.c#n1256
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/property.c#n1261
+Caused by commit
+
+  07a2975c65f2 ("drm/vc4: bo: Fix drmm_mutex_init memory hog")
+
+I have used the drm-misc-fixes tree from next-20230112 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DTkdQoO84Te2p8NDHJMhYBg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAitYACgkQAVBC80lX
+0Gy3SAgAgrOdVqEDfP+xxKnErHNmM9Au/FaYVo/KCi0HIbCdryKbzfVfVYqMQppV
+DbN2/OK1hwaA8mVtnG5XIYs5HyMfEJF08IeCmVMW4pG7ZaPJHOMt9fhR1vn0YlCP
+ooOAaO0x+dcJrNWMxJ1QtVeldybXQ+4n+/g2tkakpaflRsSVF24lG4d0a9FfNt/A
+PZskOM7hMTAdVUP3vpBH2GLn+1wTEXFszoOvYs5irmkeKglag1mAuuf8LUbc0XPQ
++5+jch2OgEBNgGJVWy7mLs6o5v08P5yHZcEKYcEhJDLelOmK/Tn5H9Msw2LRmjRu
+9tt8P/DG+9FKsc5L5Hqowi+Gmlp0Kw==
+=fiE3
+-----END PGP SIGNATURE-----
+
+--Sig_/DTkdQoO84Te2p8NDHJMhYBg--
