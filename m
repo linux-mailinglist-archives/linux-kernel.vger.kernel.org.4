@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35762667EC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87A3667EC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240258AbjALTLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S240208AbjALTKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:10:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbjALTKh (ORCPT
+        with ESMTP id S240191AbjALTKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:10:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A2E68792
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673549731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jtq5mk2ZlcYdFm+jeVM9IkCUBXYGBGyXB70gjLkZDU4=;
-        b=F/SCwAsZel3PQiBUqYVc3f0LBC+R3T0Op2XpiZ2uYMwYt4WT2A3FLI/AcjBAB52PDnfzSC
-        j3XbKXWQyoCoVEM8lx2MlM6fhQdZhssN+BIKnHejxCyTQwvNeYF4ML2L0wAhw1gcHgl2ui
-        IUQmLn9CWRdPpWst9UWpWQnQsp7+SN8=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-114-RGX5hrJ9MJKRl6BFUFtnnQ-1; Thu, 12 Jan 2023 13:55:30 -0500
-X-MC-Unique: RGX5hrJ9MJKRl6BFUFtnnQ-1
-Received: by mail-io1-f72.google.com with SMTP id u1-20020a5d8181000000b006ee29a8c421so11922088ion.19
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:55:30 -0800 (PST)
+        Thu, 12 Jan 2023 14:10:00 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB801327
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:55:52 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id y5so14487360pfe.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:55:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j+NRbTNiLmeYUADil1PoK0LGG/uPHqXhDMm4lsmIdtM=;
+        b=nDzN9TwaVepTI4JV1CwYJSALuJFKTnskXh0c3eKxM76cQADzIF8k4QJNXr5mQ/x1bo
+         0DpTZUTmHFuBjscdaIQZPyGFza3TIXAllmjPsLWwXZRN1ETM839IwF4cNTCTUh4XSmzc
+         5YE1s//l4fqyuzFY8c5UdSm2xw3wU++yYZc678/Eo77PvzmmUGSUQTMcwNHjqtH9gkv+
+         ZDHKKaG1KEEAYK03xSXWDJ2OeBynn2slTSp/LFyL24HqUraN5+CNfTldF4qvRmCz7NyE
+         49+tAQ+KUBmgYOGSbXDP4ORjeehSewbWgwhfc2Kh299pzbcMtT8V4NItvTPngjNqe3Tn
+         Bc2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jtq5mk2ZlcYdFm+jeVM9IkCUBXYGBGyXB70gjLkZDU4=;
-        b=b7FokGJ8YICs9Ne3JekDqBhmG5MVqM0K9qXpZH7xwLv+aQzDZukvETCl3O79o0zLai
-         b6SMofkUSGjYzVMD0ze5Svz8SDiBJVhRFYunoC69NR08xO8Vho5gviaRus1DornSJWQP
-         tX1brrHcrR6bJEHfIO4FnWczw4V+2Rrnm8nlnfr6Q71vsJs4nYFLx/3c8VBvE/KTnCLG
-         ZehgraHKppDNY9W+ZUm3vI1d6Bst/RspTrjFPqzeMqQCkj5jCJWLTwXPyc0HKRRufubY
-         orv1sxHuln+h6fDqDlshFvLQiuPJ5DG9h+KyRK/HtoialiOCatZRJSLZDYVPD8sFsQYw
-         CtHQ==
-X-Gm-Message-State: AFqh2kpiNaL09x1CmSYasYiGwfw4300wYOClslfgaD3bIpEwsrFT2rww
-        WIHMzVDXaWOSOyRH0PC9IR7cgTUn7LZf3OqeROE6ux2Ach0wiZJzGAizlxiD8Laao9wb7bFA0kB
-        HxOwqsixnBy/e3thym4OEhC4q
-X-Received: by 2002:a6b:7310:0:b0:6e6:726a:bd80 with SMTP id e16-20020a6b7310000000b006e6726abd80mr5603558ioh.6.1673549729657;
-        Thu, 12 Jan 2023 10:55:29 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv2Omoym4TW6RhKNSuGY+azZ5RJJWKt9Sx5lS2g9n7QxoVXV5rnxv9X0KeND3aavwwXt7lEvA==
-X-Received: by 2002:a6b:7310:0:b0:6e6:726a:bd80 with SMTP id e16-20020a6b7310000000b006e6726abd80mr5603547ioh.6.1673549729437;
-        Thu, 12 Jan 2023 10:55:29 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id p2-20020a056638216200b0039e9628324csm2726266jak.20.2023.01.12.10.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 10:55:28 -0800 (PST)
-Date:   Thu, 12 Jan 2023 11:55:27 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Christian =?UTF-8?B?Qm9ybnRyw6RnZXI=?= 
-        <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v3 1/1] vfio/type1: Respect IOMMU reserved regions in
- vfio_test_domain_fgsp()
-Message-ID: <20230112115527.6d3e7026.alex.williamson@redhat.com>
-In-Reply-To: <20230110164427.4051938-2-schnelle@linux.ibm.com>
-References: <20230110164427.4051938-1-schnelle@linux.ibm.com>
-        <20230110164427.4051938-2-schnelle@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        bh=j+NRbTNiLmeYUADil1PoK0LGG/uPHqXhDMm4lsmIdtM=;
+        b=nsKymg4zfZFS68QUHbYZP55C4FlCzgtV5Z+ey1VZpiclNtQG+2jm4jPKlm2YhAJ4xW
+         OaSUY7wNCH27G9w6cGue/xd370LMO2zncaMWt7pDv06hAMMHhuCmwmYKBhdxSGim/1/J
+         5JGpsatNv/qSnbvqG5g5QQkPQ82YPnnpDxURbL+ozrPyyadVgKlijs74hMTwTQDro/4W
+         Ts31b/eA0TaschGaswuomQDThhig3R1wCxRrIkegUX3NBc0vjBe1nXpy9Hm6UXA3uMyw
+         3V5ynhVfAdxA7yIU9/UcBmDolVJLWA9ZCHlz4ZuTPEGciu91+We0wwkKFuudFGZAR5i9
+         5wIQ==
+X-Gm-Message-State: AFqh2kqQ5G0QGGF7coBumh1hIKXNJGoVbrgcwthKl7FsRwW/ArTVjsQq
+        hO93+Lh8iEjPUDEj4/+Zi0es+B9u133zxvuNt166OZASM8FUBA==
+X-Google-Smtp-Source: AMrXdXuRsx/dID9s7vPNCdE3ysm0ZN/YTdpjQD8e+0PMDJN5HzzxmR5n62jAhFsDyc16t+/iWo5qN1TaqH8e66p8ZWs=
+X-Received: by 2002:a63:c50:0:b0:494:7a78:4bb0 with SMTP id
+ 16-20020a630c50000000b004947a784bb0mr4810678pgm.427.1673549751960; Thu, 12
+ Jan 2023 10:55:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230112023006.1873859-1-masahiroy@kernel.org>
+In-Reply-To: <20230112023006.1873859-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 12 Jan 2023 10:55:45 -0800
+Message-ID: <CAKwvOd=k=veNG=Q-bZxX4iX4q14e2ozO_sHZhdCz1+BwBxq=cQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,36 +72,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 Jan 2023 17:44:27 +0100
-Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+On Wed, Jan 11, 2023 at 6:30 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
+e:
+>
+> In the follow-up of commit fb3041d61f68 ("kbuild: fix SIGPIPE error
+> message for AR=3Dgcc-ar and AR=3Dllvm-ar"), Kees Cook pointed out that
+> tools should _not_ catch their own SIGPIPEs [1] [2].
+>
+> Based on his feedback, LLVM was fixed [3].
+>
+> However, Python's default behavior is to show noisy bracktrace when
+> SIGPIPE is sent. So, scripts written in Python are basically in the
+> same situation as the buggy llvm tools.
+>
+> Example:
+>
+>   $ make -s allnoconfig
+>   $ make -s allmodconfig
+>   $ scripts/diffconfig .config.old .config | head -n1
+>   -ALIX n
+>   Traceback (most recent call last):
+>     File "/home/masahiro/linux/scripts/diffconfig", line 132, in <module>
+>       main()
+>     File "/home/masahiro/linux/scripts/diffconfig", line 130, in main
+>       print_config("+", config, None, b[config])
+>     File "/home/masahiro/linux/scripts/diffconfig", line 64, in print_con=
+fig
+>       print("+%s %s" % (config, new_value))
+>   BrokenPipeError: [Errno 32] Broken pipe
+>
+> Python documentatin [4] notes how to make scripts die immediately and
 
-> Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
-> aperture shrinking") the s390 IOMMU driver uses reserved regions for the
-> system provided DMA ranges of PCI devices. Previously it reduced the
-> size of the IOMMU aperture and checked it on each mapping operation.
-> On current machines the system denies use of DMA addresses below 2^32 for
-> all PCI devices.
-> 
-> Usually mapping IOVAs in a reserved regions is harmless until a DMA
-> actually tries to utilize the mapping. However on s390 there is
-> a virtual PCI device called ISM which is implemented in firmware and
-> used for cross LPAR communication. Unlike real PCI devices this device
-> does not use the hardware IOMMU but inspects IOMMU translation tables
-> directly on IOTLB flush (s390 RPCIT instruction). If it detects IOVA
-> mappings outside the allowed ranges it goes into an error state. This
-> error state then causes the device to be unavailable to the KVM guest.
-> 
-> Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DMA
-> address 0 irrespective of the IOMMUs reserved regions. Even if usually
-> harmless this seems wrong in the general case so instead go through the
-> freshly updated IOVA list and try to find a range that isn't reserved,
-> and fits 2 pages, is PAGE_SIZE * 2 aligned. If found use that for
-> testing for fine grained super pages.
-> 
-> Fixes: af029169b8fd ("vfio/type1: Check reserved region conflict and update iova list")
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+typo: s/documentatin/documentation/
 
-Applied to vfio for-linus branch for v6.2.  Thanks,
+> silently:
+>
+>   """
+>   Piping output of your program to tools like head(1) will cause a
+>   SIGPIPE signal to be sent to your process when the receiver of its
+>   standard output closes early. This results in an exception like
+>   BrokenPipeError: [Errno 32] Broken pipe. To handle this case,
+>   wrap your entry point to catch this exception as follows:
+>
+>     import os
+>     import sys
+>
+>     def main():
+>         try:
+>             # simulate large output (your code replaces this loop)
+>             for x in range(10000):
+>                 print("y")
+>             # flush output here to force SIGPIPE to be triggered
+>             # while inside this try block.
+>             sys.stdout.flush()
+>         except BrokenPipeError:
+>             # Python flushes standard streams on exit; redirect remaining=
+ output
+>             # to devnull to avoid another BrokenPipeError at shutdown
+>             devnull =3D os.open(os.devnull, os.O_WRONLY)
+>             os.dup2(devnull, sys.stdout.fileno())
+>             sys.exit(1)  # Python exits with error code 1 on EPIPE
+>
+>     if __name__ =3D=3D '__main__':
+>         main()
+>
+>   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avoid
+>   BrokenPipeError. Doing that would cause your program to exit
+>   unexpectedly whenever any socket connection is interrupted while
+>   your program is still writing to it.
+>   """
+>
+> Currently, tools/perf/scripts/python/intel-pt-events.py seems the
+> only script that fixes the issue that way.
+>
+> tools/perf/scripts/python/compaction-times.py uses another approach
+> signal.signal(signal.SIGPIPE, signal.SIG_DFL) but the Python
+> documentation clearly says "Don't do it".
+>
+> I cannot fix all Python scripts since there are so many.
+> I fixed some in the scripts/ directory.
 
-Alex
+That's ok; "Rome wasn't built in a day." This is a good start!
+Thank you for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+>
+> [1]: https://lore.kernel.org/all/202211161056.1B9611A@keescook/
+> [2]: https://github.com/llvm/llvm-project/issues/59037
+> [3]: https://github.com/llvm/llvm-project/commit/4787efa38066adb51e2c0494=
+99d25b3610c0877b
+> [4]: https://docs.python.org/3/library/signal.html#note-on-sigpipe
+>
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/checkkconfigsymbols.py         | 13 ++++++++++++-
+>  scripts/clang-tools/run-clang-tools.py | 21 ++++++++++++++-------
+>  scripts/diffconfig                     | 16 ++++++++++++++--
+>  3 files changed, 40 insertions(+), 10 deletions(-)
+>
+> diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols=
+.py
+> index 217d21abc86e..36c920e71313 100755
+> --- a/scripts/checkkconfigsymbols.py
+> +++ b/scripts/checkkconfigsymbols.py
+> @@ -115,7 +115,7 @@ def parse_options():
+>      return args
+>
+>
+> -def main():
+> +def print_undefined_symbols():
+>      """Main function of this module."""
+>      args =3D parse_options()
+>
+> @@ -467,5 +467,16 @@ def parse_kconfig_file(kfile):
+>      return defined, references
+>
+>
+> +def main():
+> +    try:
+> +        print_undefined_symbols()
+> +    except BrokenPipeError:
+> +        # Python flushes standard streams on exit; redirect remaining ou=
+tput
+> +        # to devnull to avoid another BrokenPipeError at shutdown
+> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
+> +        os.dup2(devnull, sys.stdout.fileno())
+> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
+> +
+> +
+>  if __name__ =3D=3D "__main__":
+>      main()
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools=
+/run-clang-tools.py
+> index 56f2ec8f0f40..3266708a8658 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -61,14 +61,21 @@ def run_analysis(entry):
+>
+>
+>  def main():
+> -    args =3D parse_arguments()
+> +    try:
+> +        args =3D parse_arguments()
+>
+> -    lock =3D multiprocessing.Lock()
+> -    pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lock, =
+args))
+> -    # Read JSON data into the datastore variable
+> -    with open(args.path, "r") as f:
+> -        datastore =3D json.load(f)
+> -        pool.map(run_analysis, datastore)
+> +        lock =3D multiprocessing.Lock()
+> +        pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lo=
+ck, args))
+> +        # Read JSON data into the datastore variable
+> +        with open(args.path, "r") as f:
+> +            datastore =3D json.load(f)
+> +            pool.map(run_analysis, datastore)
+> +    except BrokenPipeError:
+> +        # Python flushes standard streams on exit; redirect remaining ou=
+tput
+> +        # to devnull to avoid another BrokenPipeError at shutdown
+> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
+> +        os.dup2(devnull, sys.stdout.fileno())
+> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
+>
+>
+>  if __name__ =3D=3D "__main__":
+> diff --git a/scripts/diffconfig b/scripts/diffconfig
+> index d5da5fa05d1d..43f0f3d273ae 100755
+> --- a/scripts/diffconfig
+> +++ b/scripts/diffconfig
+> @@ -65,7 +65,7 @@ def print_config(op, config, value, new_value):
+>          else:
+>              print(" %s %s -> %s" % (config, value, new_value))
+>
+> -def main():
+> +def show_diff():
+>      global merge_style
+>
+>      # parse command line args
+> @@ -129,4 +129,16 @@ def main():
+>      for config in new:
+>          print_config("+", config, None, b[config])
+>
+> -main()
+> +def main():
+> +    try:
+> +        show_diff()
+> +    except BrokenPipeError:
+> +        # Python flushes standard streams on exit; redirect remaining ou=
+tput
+> +        # to devnull to avoid another BrokenPipeError at shutdown
+> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
+> +        os.dup2(devnull, sys.stdout.fileno())
+> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
+> +
+> +
+> +if __name__ =3D=3D '__main__':
+> +    main()
+> --
+> 2.34.1
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
