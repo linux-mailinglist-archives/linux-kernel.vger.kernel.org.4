@@ -2,140 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF11666F7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F9E666F8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbjALKZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S234437AbjALK1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjALKY7 (ORCPT
+        with ESMTP id S233390AbjALK0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:24:59 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73E5BB2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:19:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JkMsCxmXulHrejdBCAd4CfPB3HS/ukb6LnjAkTfOpXloCLImBt4uTisaBfDiBS48UY8MC6rD9TM89UEN7bpviMJw58drmWh+nTHrYk6oz5fzUAnx2Yj9+CbW8di0p9WmGcx4YgDOvTMXDly+Ua8eRMyW67OFj2BqwvJVVeuCp2L+iGHR4RIl3AOGdQUzwadO/k1VixAnfAcWnba4cs/odwN6V5zapF5CGhXu6O3MDmX64nhK9iG95yQDZA7146/xTiGlbIn5Z4FB8DRcrXc+KL9NazfYdBE4v0SalxwC+tY2CyawRB2pgb8dgIkOpDOCrl+QZiQ8sk/98POZVKXR8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wDttFM7+6mc4aOzqrDMvKNu4cTjm1QMKc3qDWXOqdY4=;
- b=EKq+Zn3EWHiwv2F2q54p4RuKbIGRMCF1SLC/XCsVJT+7uz7COu51xYmXPQIxEVlWLVYh29rorAWZoKu041ED6tkcaY8iJHZ4IZ/tbhBcPSC3dMjqDAc2FijouV1TOQogfxhjyTpBAYe/Q4a4fBkpy1nSQvKRzZ5a527v0QHCsa3Uf13CfJQKLtiEuRyxwvrI1Va1JGnxb+CKJr9wmzwrd/oH+vjmxcnfHOVjZvJ7lsfJ8I599qQBbz6EyhuhJYXSxxRVbERmgqIjSlqybHHu1cCpEWFIOXp/5yvrIE8wvfz1RgJ3h49xPAFwVfPsfaxlnx9RAGwUMdumBVQ524WglQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wDttFM7+6mc4aOzqrDMvKNu4cTjm1QMKc3qDWXOqdY4=;
- b=iwg7UJn4EQrmf6Wg5h016J2TsQT2TtTzmoUBz7Og65ZitZZqZcW1C+NfYnl2wR/uc7QLIkU961BnyKvNTjQO10l2evAZleUbbweykZl0a/Loo30KHDLquHDCr36BQ/xQXhHlcpxfOleq8A0w7XzyM3hydmt6RT90TLdCkbgvL5U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by SA0PR12MB4399.namprd12.prod.outlook.com (2603:10b6:806:98::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
- 2023 10:19:22 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866%5]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 10:19:22 +0000
-Message-ID: <8484786c-d146-dfe4-9bc1-af562e91382f@amd.com>
-Date:   Thu, 12 Jan 2023 15:52:33 +0530
+        Thu, 12 Jan 2023 05:26:06 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA8B21B9;
+        Thu, 12 Jan 2023 02:23:13 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFAE56602DAB;
+        Thu, 12 Jan 2023 10:23:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673518991;
+        bh=hS2H0a3ptc3YuE9h2MNVIG6ow1PNq2RWuA8fASP77XU=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=hGczgOjzan6yiGBXczrM/B3CCIqpx3KGdXAuB8JIyMpRqarWgcvV71D4A6CPHwVlK
+         ggAtrwoGpoD8JZwidFTPZsr8Ip8TW+N3KlxXT9TcK/R+CpbhVOXIykxI8a9n7WvhOk
+         mTgW144dsIExqYHBnUr9u8ZWKji3sIk4oLry/1cMpdyBYMCeven7cWDYPflgunik+C
+         muzE49oSDuOLK5ufxAcWsgg7pt4t4asSvxC6sgMVJAakE5S1iCa69QJ0NSLoxMP36D
+         xp7e24G/b66O7n975XIOrXlkHZbAel6ygRjGX03wVawjrGPhTbFP6vyRGI3G8XpqA/
+         TjtjKvZvbQS+g==
+Message-ID: <c8cb5ae1-10f1-8065-d6ac-dc5a24827462@collabora.com>
+Date:   Thu, 12 Jan 2023 11:23:07 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 15/19] soundwire: amd: add startup and shutdown dai ops
+Subject: Re: [PATCH v3] USB: gadget: Add ID numbers to configfs-gadget driver
+ names
+To:     Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
+        Chanh Nguyen <chanh@os.amperecomputing.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Li <frank.li@nxp.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Vacura <w36195@motorola.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
+        Rondreis <linhaoguo86@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>
+References: <20230111065105.29205-1-chanh@os.amperecomputing.com>
+ <4e98a5ee-96a1-eb98-8529-68f36c3cb7fa@collabora.com>
+ <f9e653ce-52bb-cb89-8845-2a718e76b718@amperemail.onmicrosoft.com>
 Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org, vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
-        arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-16-Vijendar.Mukunda@amd.com>
- <512a60e3-8194-c3ab-99a3-4443db2255a1@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <512a60e3-8194-c3ab-99a3-4443db2255a1@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0238.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::8) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|SA0PR12MB4399:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b658291-8ee3-42f7-c9ab-08daf48678df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dD5KWgbS16p9k0Uwz4XL08H12oPkY69q7qp5z1z9IWzIYnbgFlPoavJnngPLukT7ehYlHfzsUP3hpVJ0MhbGc72g/FAm6CGnFPOpiS9PmKIbv8q48oCiXHhm2Ee96FC1mBbTDGbfjEAMg9bD8LwBtK34FKUs2ySXzqwsI+TBQbUtd5qahhB7mucI0PGUJMmxE1hhvzRg73OvEEGtKztq+vGVCCEQeYcw6LWPa4dUO8Tyft8Kpa529DBAlL6wMOAwIZBKAHq2qAap+w62fVYwLVvYDIp9gcT3W8xJ0hVMVAcODHrorOQJEXPT7Y04OOBLHYb5NIEe8aURmC7UyzVwDgqLIgB73vngBwI7/Pg8Ad1B2CKXK+a5gbAP4fNFw1gamFd86wkn+Ye4Ckd2CYBbmYPH5DXjVoAElNNtWdhPC0aoQlFCiYr2L1Z2RvYUR7xb92TNlRwrHM8CFuXw6DDIOn4PHOQRXYl6v8Rdu3GcoCBtRSQ6GPMArCbGrOksbO9fgnUH0QDYSKO4yNxjCFRn2RiDHM/Ssw89EkmHaEbugGnSo3CfADaZ2u0ELOpp20iLpsOjqXU4BvdR2uI5165tWJIRaFUd6wYIXiZOUVDe1FnAD6F2fP39cv/vXueycw+oggwzlZaYczsPGi+w0617ZzP/PPSlKDJSZbxo6BT4fmLiwMsiEf2sUjU9AybIAY5J+Afg4BCIoWsBI6skn8fH8oHE5eTQeDM+5BrgSSW9Y2g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(451199015)(41300700001)(4326008)(66556008)(54906003)(66476007)(2616005)(316002)(36756003)(8676002)(66946007)(31696002)(86362001)(4744005)(38100700002)(5660300002)(8936002)(6506007)(2906002)(53546011)(31686004)(6486002)(6512007)(6666004)(26005)(186003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MTNnREcrWklZOHp1RzY3ZVAxK1pmMWlESDQwREMvNm1oLzdJdVdvTnV5ZVh4?=
- =?utf-8?B?dDZxOHB6VWZhZzlrU3ZUNHB4dURnMk1EM1hyZCtTOFUrQkMxMW4yYmsrcXIr?=
- =?utf-8?B?TkxkaDVLcFdPZzdrZzlVREJqMDJJYzRJbzdpTkhJVGFSeDlXM2NxVXBxVk9a?=
- =?utf-8?B?VG4wL0xQdEhxdXE4VWJPVGVySDMyU3VBY3B6SWE0cnNhclVVRThuMVhVQ2My?=
- =?utf-8?B?SWpzeHdmZnhmbDJhWGNsVHFYeTBsOGY5S2IvWk1wYkdaQmhDQWN3akkxUkw5?=
- =?utf-8?B?Rm9OV2NJek81aXQ5TFhrZ3lEWnFKQmI4cjlOUWRqOW5FdTg5Zno2eGU0ckJ2?=
- =?utf-8?B?dDVxZS9yT0dheWFYWGtiaGl6UXR0MHBuRWJoaWNoVEpTUk1XaEN2U2xzdWE2?=
- =?utf-8?B?cUNaOXQvWlpYMGVCbTJBUTc0YjVvTGR4R0dndElhdHAxYjNpNlpyUG5GYjNR?=
- =?utf-8?B?c2NhTkY2ekpsUW1mb0U1VWR5N0lLUmh0YXhzRVhiS3dMek9OT0hNYS96bUxG?=
- =?utf-8?B?dHVERTRzVmhsSXBaWmFGb2RwQlpyV25RcW44REdDSk9mNVZYMnRSR1lyQmVX?=
- =?utf-8?B?WHlnN1VaemRCUmpOb0szVXJRb0dmcEtsWm8wVHdISGxnUXpyWlNDd0dqMW9Z?=
- =?utf-8?B?OTZhLzZmTGlMcU1QaEpwMklyN0tMU3NNdUJhR2FYLy9DS1kybm1DUHc4bDl5?=
- =?utf-8?B?dDlLelZFZ0hCMGVwL2t6bGNUcTcvQTU0RVRCeVM4RmJqVll5NEF2RGhUYTBj?=
- =?utf-8?B?N0ovWmcva25iRFpCcmx5WDhGWGVmQVhWbVZvZDdpb3ZKdXpTWjduRThMT0ZP?=
- =?utf-8?B?aUxsTStFbEJyajAvQ0xtNkcwNHpHQVo1SVh4KzFwTjRIT2F2NkgvWGpKZzE1?=
- =?utf-8?B?T2FyTGN6V292NmNzRDNWZEQ3NlhYWnFRZ2FHbE5sUUMvNVpEVGxabjJUOFFv?=
- =?utf-8?B?dkpVV0d4RDBtSGNmRDVFVUVhcEZERVU3blp5N2ZPdFc4UHdaVjFsSWxzNlVM?=
- =?utf-8?B?VFZsamdtTmJHV2k4eFJRaWV1bjNzQ3IrUElhb1AzVUtidWMvaW9DV1l4Yldu?=
- =?utf-8?B?WkNwMmpMRURyOWlLQUdvZFhFYU5uaURuMm9QRHVwOTBtS0oxaUFjU0I5QzhD?=
- =?utf-8?B?Z0o5KzRyc0o3bEg4YXd5RjB0QUVXWVhhTUpoeWhJRUkwY1lQbEhQRCtueW14?=
- =?utf-8?B?dGs0TUM5ZCtMTnRiT2pPeVZ0RTFydktpZHp0cnE4elRaSnVmbjVlTlFUTlgw?=
- =?utf-8?B?RDA2Smgwd2FFaHhuejFvUVBTa0VwUEVReWhUR2h3emZrZ1ZtdnJxYTNpajRw?=
- =?utf-8?B?WnduenJzUi9RRVFuMHdqNHpZWk44OS9CZkUzTW5ORVlnbnk0NzZ0cDJRaW5P?=
- =?utf-8?B?WUprbE43bkhjZVV3blVJdC9zOWFqRlExVVBMYUJaU3VYck1ObXJtNEd4V0ha?=
- =?utf-8?B?SytGVTlBb3VGeTFiZDVpcnA2am1kb3BzMGxWMktjV0t2Y0dESmpZZTVXM1VZ?=
- =?utf-8?B?TURXZmxFT05SNFA4dlRiTmVRd0NjMndjbkp0cWdNQjFjNk93aWMybVFyb0w3?=
- =?utf-8?B?MnBjRVMybHZ5MThxZE1aUG5CWWpnSHhPRnZacmRac0FPTktCSFJaZWh3dk41?=
- =?utf-8?B?YmpTalF2Y1RSVDJTWVVXYmxBTklBLzN3Q1RjZzI0ZGFGaWFMWWFLSDFiL0NB?=
- =?utf-8?B?OS9jcklUQlpqVU9WbFZXY0pjNVFZZVJBdXpGQVdkdmdwODJYeFFyZG1lbkRN?=
- =?utf-8?B?cjk3cWliN1ozUEQ0b2owWWVwQVA4aXlNMTFXdjY0MG1uSisxWDgwVWUvRThh?=
- =?utf-8?B?MkpTbkVGTHlpUDhvcWhGcUxTaDkrQjM4VE9sM3F0NFVnU0Q2a1J4Ny9lU3VI?=
- =?utf-8?B?SG1DM3RleDlXQ0IvUjdwUWEvSGZZNWJhRmhpZFpwODg5QXdCN2oyVHFKalpw?=
- =?utf-8?B?djZGck9DeWpMZ1c2TzlaWVE0Nm5pMlAzRmVMR0dEUVE4amFWTVYwMHhTakR2?=
- =?utf-8?B?NzU2ZlFyQ1o3dkJvbm96REFMMENWNWhQa1BidEduSGZPQ2orcEFVMjNReFJl?=
- =?utf-8?B?M25PakJZNVpPRVhrOEkxZzVVbE1ZZkZLSGRIMXI1ZzJLQnJ1QzJoT3JENUwx?=
- =?utf-8?Q?Is8uHWP0ISTbDvSxKhEcG0CHu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b658291-8ee3-42f7-c9ab-08daf48678df
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 10:19:22.0681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7nlmGFsI8hquz8+G81Yj/YMqXfrJZUp+OUeLxDqL0WbLTJFAX/BiKsaOBCMffEJiM6hMg1RtSDs5E7hA3e9fUA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4399
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <f9e653ce-52bb-cb89-8845-2a718e76b718@amperemail.onmicrosoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/23 21:19, Pierre-Louis Bossart wrote:
->
-> On 1/11/23 03:02, Vijendar Mukunda wrote:
->> Add start up and shutdown dai ops for AMD Master driver.
-> I don't think those startup and shutdown ops are necessary, we removed
-> them for Intel, see "soundwire: intel: remove DAI startup/shutdown"
-will drop this patch.
+Hi,
+
+W dniu 12.01.2023 o 09:33, Chanh Nguyen pisze:
+> 
+> 
+> On 11/01/2023 16:46, Andrzej Pietrasiewicz wrote:
+>> Hello,
+>>
+>> W dniu 11.01.2023 o 07:51, Chanh Nguyen pisze:
+>>> It is unable to use configfs to attach more than one gadget. When
+>>> attaching the second gadget, it always fails and the kernel message
+>>> prints out:
+>>>
+>>> Error: Driver 'configfs-gadget' is already registered, aborting...
+>>> UDC core: g1: driver registration failed: -16
+>>>
+>>> This commit fixes the problem by using the gadget name as a suffix
+>>> to each configfs_gadget's driver name, thus making the names
+>>> distinct.
+>>>
+>>> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
+>>> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+>>>
+>>> ---
+>>> Changes in v3:
+>>>    - Use the gadget name as a unique suffix instead     [Andrzej]
+>>>    - Remove the driver.name allocation by template        [Chanh]
+>>>    - Update commit message                                [Chanh]
+>>>
+>>> Changes in v2:
+>>>    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
+>>>    - Move the clean up code from gadgets_drop() to
+>>>      gadget_info_attr_release()                        [Frank Li]
+>>>    - Correct the resource free up in gadges_make()   [Alan Stern]
+>>>    - Remove the unnecessary variable in gadgets_make()    [Chanh]
+>>>    - Fixes minor grammar issue in commit message          [Chanh]
+>>> ---
+>>>   drivers/usb/gadget/configfs.c | 12 ++++++++++--
+>>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+>>> index 96121d1c8df4..0853536cbf2e 100644
+>>> --- a/drivers/usb/gadget/configfs.c
+>>> +++ b/drivers/usb/gadget/configfs.c
+>>> @@ -393,6 +393,7 @@ static void gadget_info_attr_release(struct config_item 
+>>> *item)
+>>>       WARN_ON(!list_empty(&gi->string_list));
+>>>       WARN_ON(!list_empty(&gi->available_func));
+>>>       kfree(gi->composite.gadget_driver.function);
+>>> +    kfree(gi->composite.gadget_driver.driver.name);
+>>>       kfree(gi);
+>>>   }
+>>> @@ -1572,7 +1573,6 @@ static const struct usb_gadget_driver 
+>>> configfs_driver_template = {
+>>>       .max_speed    = USB_SPEED_SUPER_PLUS,
+>>>       .driver = {
+>>>           .owner          = THIS_MODULE,
+>>> -        .name        = "configfs-gadget",
+>>>       },
+>>>       .match_existing_only = 1,
+>>>   };
+>>> @@ -1623,13 +1623,21 @@ static struct config_group *gadgets_make(
+>>>       gi->composite.gadget_driver = configfs_driver_template;
+>>> +    gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
+>>> +                                "configfs-gadget.%s", name);
+>>
+>> This line is 88 chars long, which means you're taking advantage of checkpatch
+>> allowing 100 columns nowadays. That's absolutely fine. If you collapse the above
+>> two lines into one, the combined length is exactly 100 chars, so you might
+>> just as well use a single line. In any case (collapsed or not) you can add my
+>>
+>> Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+>>
+> 
+> Thanks Andrzej for the review.
+> 
+> Just found out the commit title is not totally correct.
+> It should be "usb: gadget: Append name as suffix to configfs-gadget driver names".
+> 
+
+Heh, good catch :D
+
+"Append gadget name to configfs-gadget driver names?"
+
+I'm not a native speaker, but to me "to append" is the opposite of "to prepend",
+isn't it? So IMO "to append" already contains the notion of "adding at the end",
+which is the same thing as a suffix. I also suggest it is better to qualify the
+"name", it is not just any name, it is specifically a gadget name. If you only
+insert the word "gadget" and don't remove "as suffix" then the title becomes
+lengthy, hence my suggestion as above.
+
+> I wonder if these issues could be fixed when get merged or should I resend a v4 
+> with that two lines collapsed and with the title adjust?
+
+If it is only about making the title better reflect patch contents and
+whitespace changes I'd say it is ok to send a v4 with Reviewed-by and Tested-by
+already added. Not making the maintainer think why there's no ID numbers is
+a good thing. But then Greg's automaton might get confused if it sees a v4
+without v1, 2 and 3 preceding it. I'm not sure how it reacts if you reply-to v3
+with corrected title, either. On the flip side, if you send a new patch (without
+any v number) in a new thread, you also make the maintainer think why the patch
+already contains R-b and T-b, so...
+
+Regards,
+
+Andrzej
+
+> 
+> Thanks a lot,
+> - Chanh
+> 
+>>> +    if (!gi->composite.gadget_driver.driver.name)
+>>> +        goto err;
+>>> +
+>>>       gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
+>>>       gi->composite.name = gi->composite.gadget_driver.function;
+>>>       if (!gi->composite.gadget_driver.function)
+>>> -        goto err;
+>>> +        goto out_free_driver_name;
+>>>       return &gi->group;
+>>> +
+>>> +out_free_driver_name:
+>>> +    kfree(gi->composite.gadget_driver.driver.name);
+>>>   err:
+>>>       kfree(gi);
+>>>       return ERR_PTR(-ENOMEM);
+>>
 
