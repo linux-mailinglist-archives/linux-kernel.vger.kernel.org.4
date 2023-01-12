@@ -2,119 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2786672C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFE06672CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 14:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbjALM7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S233139AbjALNBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 08:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbjALM6n (ORCPT
+        with ESMTP id S232996AbjALNAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:58:43 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55A3A5373C
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 04:57:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C3D012FC;
-        Thu, 12 Jan 2023 04:58:15 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.43.206])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891213F67D;
-        Thu, 12 Jan 2023 04:57:30 -0800 (PST)
-Date:   Thu, 12 Jan 2023 12:57:27 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     guoren@kernel.org
-Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
-        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
-        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
-        e.shatokhin@yadro.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next V7 1/7] riscv: ftrace: Fixup panic by disabling
- preemption
-Message-ID: <Y8ADt98oowRZJdjw@FVFF77S0Q05N>
-References: <20230112090603.1295340-1-guoren@kernel.org>
- <20230112090603.1295340-2-guoren@kernel.org>
- <Y7/6AtX5X0+5qF6Y@FVFF77S0Q05N>
+        Thu, 12 Jan 2023 08:00:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6542157900;
+        Thu, 12 Jan 2023 04:58:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7392D60AC6;
+        Thu, 12 Jan 2023 12:58:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECCEC433EF;
+        Thu, 12 Jan 2023 12:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673528293;
+        bh=D3nneqHedZvyKHPM/6g/ukFvUrU8cEN4MzJmLMER4WQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EKgIOzeDfF66LR9/+ePXrH9jj5zH5Qu+kEYGRgxRaK5znqZKlNXVepAK/pD/bhnym
+         RFGBt0mLv9t6Rrpq9B5CxPXif0hrp+Yj4EX4KT0NyinNAKskgM1FKBzjblv1Lx5jjC
+         pqPhBKes99TzMlyJJZXBkwt17NITK7BCihKt4hwA=
+Date:   Thu, 12 Jan 2023 13:58:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Cc:     stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 5.10 0/1] mt76: move mt76_init_tx_queue in common code
+Message-ID: <Y8AD4jdyOpqrPT9a@kroah.com>
+References: <20230112115850.9208-1-n.zhandarovich@fintech.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7/6AtX5X0+5qF6Y@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112115850.9208-1-n.zhandarovich@fintech.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 12:16:02PM +0000, Mark Rutland wrote:
-> Hi Guo,
+On Thu, Jan 12, 2023 at 03:58:49AM -0800, Nikita Zhandarovich wrote:
+> Svace has identified unchecked return value of mt7615_init_tx_queue
+> function in 5.10 branch, even though it makes sense to track it
+> instead. This issue is fixed in upstream version by Lorenzo's patch.
 > 
-> On Thu, Jan 12, 2023 at 04:05:57AM -0500, guoren@kernel.org wrote:
-> > From: Andy Chiu <andy.chiu@sifive.com>
-> > 
-> > In RISCV, we must use an AUIPC + JALR pair to encode an immediate,
-> > forming a jump that jumps to an address over 4K. This may cause errors
-> > if we want to enable kernel preemption and remove dependency from
-> > patching code with stop_machine(). For example, if a task was switched
-> > out on auipc. And, if we changed the ftrace function before it was
-> > switched back, then it would jump to an address that has updated 11:0
-> > bits mixing with previous XLEN:12 part.
-> > 
-> > p: patched area performed by dynamic ftrace
-> > ftrace_prologue:
-> > p|      REG_S   ra, -SZREG(sp)
-> > p|      auipc   ra, 0x? ------------> preempted
-> > 					...
-> > 				change ftrace function
-> > 					...
-> > p|      jalr    -?(ra) <------------- switched back
-> > p|      REG_L   ra, -SZREG(sp)
-> > func:
-> > 	xxx
-> > 	ret
-> 
-> As mentioned on the last posting, I don't think this is sufficient to fix the
-> issue. I've replied with more detail there:
-> 
->   https://lore.kernel.org/lkml/Y7%2F3hoFjS49yy52W@FVFF77S0Q05N/
-> 
-> Even in a non-preemptible SMP kernel, if one CPU can be in the middle of
-> executing the ftrace_prologue while another CPU is patching the
-> ftrace_prologue, you have the exact same issue.
-> 
-> For example, if CPU X is in the prologue fetches the old AUIPC and the new
-> JALR (because it races with CPU Y modifying those), CPU X will branch to the
-> wrong address. The race window is much smaller in the absence of preemption,
-> but it's still there (and will be exacerbated in virtual machines since the
-> hypervisor can preempt a vCPU at any time).
+> The same patch can be cleanly applied to the 5.10 branch.
 
-With that in mind, I think your current implementation of ftrace_make_call()
-and ftrace_make_nop() have a simlar bug. A caller might execute:
+I do not understand, what issue/bug does this fix?  And how can you
+trigger it?  And why only worry about the 5.10.y kernel branch?
 
-	NOP	// not yet patched to AUIPC
+thanks,
 
-				< AUIPC and JALR instructions both patched >
-
-	JALR
-
-... and go to the wrong place.
-
-Assuming individual instruction fetches are atomic, and that you only ever
-branch to the same trampoline, you could fix that by always leaving the AUIPC
-in place, so that you only patch the JALR to enable/disable the callsite.
-
-Depending on your calling convention, if you have two free GPRs, you might be
-able to avoid the stacking of RA by always saving it to a GPR in the callsite,
-using a different GPR for the address generation, and having the ftrace
-trampoline restore the original RA value, e.g.
-
-	MV	GPR1, ra
-	AUIPC	GPR2, high_bits_of(ftrace_caller)
-	JALR	ra, high_bits(GPR2)			// only patch this
-
-... which'd save an instruction per callsite.
-
-Thanks,
-Mark.
+greg k-h
