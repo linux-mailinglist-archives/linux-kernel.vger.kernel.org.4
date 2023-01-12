@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F306667168
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C87966716A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjALL5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S229639AbjALL50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjALL4o (ORCPT
+        with ESMTP id S232163AbjALL4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:56:44 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20594564EB;
-        Thu, 12 Jan 2023 03:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tA9VcsOS7NQTEj8noepMWEcGNsFK3ovKo6+otF7zRi8=; b=iPoVPVcLC6fC9NBlhZx1jP5Any
-        sKQTYc62BtEy81wLa6HoSwoQ7DvMCh4CD3e29gV9kkdxBrnGW7hSqX9hstN2wEnbz94+dGr4dbJKU
-        /cMIV4nM59AknDpRhdo3NkTntuug1pJSyfDu4M1O8b0VlWVt+J/pt3Q0TnO3B28ElG1MSaJBoEfoA
-        QbVA16zDr9QZWF2BO8WFQLLn6QVWKraWhSSAQvGnruO7hBBGgswEzxJsl9SJRI+ccMiGUz9/YdExM
-        acUB37cBxEs+2oF1+CC4zOF8BT3bVY/TWe8WwUfuZXnhhBVNU/Pja6ipY8fXDLdUlqIGO7ab1u1Lp
-        RjF5169w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36066)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pFw4f-0006Dj-Pb; Thu, 12 Jan 2023 11:48:49 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pFw4V-0002Au-S8; Thu, 12 Jan 2023 11:48:39 +0000
-Date:   Thu, 12 Jan 2023 11:48:39 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jerry Ray <jerry.ray@microchip.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, jbe@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v6 6/6] dsa: lan9303: Migrate to PHYLINK
-Message-ID: <Y7/zlzcyTsF+z0cN@shell.armlinux.org.uk>
-References: <20230109211849.32530-1-jerry.ray@microchip.com>
- <20230109211849.32530-7-jerry.ray@microchip.com>
+        Thu, 12 Jan 2023 06:56:47 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60A45B497
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:49:10 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id f5so1865345ual.12
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:49:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nc90MP0lO5NabKtarT67wAhel1LbFD1g72FNi8Kcmco=;
+        b=Yl4EI4pWEgqt9ywJRpKAJkTPHZ/G6JZI899Id1waManNh6rr1948RRx9EqT9tgD5H5
+         0Fh1H+AMG/3VsmPENHCYilSRmFW9feZyBn9DyRxWOJekUc37VM1yMiKwAkJgmtkmC9vv
+         SFwU4AGjhBQ/CuWHa32sVYMCkfQ6ktX28hCF4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nc90MP0lO5NabKtarT67wAhel1LbFD1g72FNi8Kcmco=;
+        b=MarLb+sjEiNa45i1fKue6fwPlcf4FBHDEWH01rrs4Bfth9HmhNHCd3XtasGXowQhu1
+         aQxITLpdKWCw0wm5F8AyV9nVt/mjPEnXtIymsXppyNiqglihixdgtNXvrdjZX8u/8BYD
+         gmkK7+HcQkYjlWJi+ljiuYE8Vjf9VBhIQZMOm2Z6+F1FnhwhJI1mvXBUKqbCApreiW7j
+         HG5LnCp7xUW20Ce1N8waHd45h6Mi/lhf7596vWH6RvV1qeXwwUnGNSbsXfscPGegTlRX
+         adwz9V3hwXGEpuWbwyc3E7vX8xxclC3zQlkywYtAGh3SY4I0tgl8oUDIx15fNBq74ZyI
+         scvA==
+X-Gm-Message-State: AFqh2korO7Os+KeBMng8J+C7DEyXC7muWiVPDMZhB6mlXl9d+/C9Xo4K
+        ddxqpRSr7hdxs+G4NVvpQ+ORaJxbfcglQ+BHnsR5yw==
+X-Google-Smtp-Source: AMrXdXuItCuiLhRlSwBuSQxSx2uJ8oOcDFtg4BL5xBWj9NfAfa5/6Fit2CP85TF5iq9Cpoxi5wxTi1BTvSSFUBclgq0=
+X-Received: by 2002:ab0:738b:0:b0:469:f0ea:c1f7 with SMTP id
+ l11-20020ab0738b000000b00469f0eac1f7mr7626458uap.0.1673524149333; Thu, 12 Jan
+ 2023 03:49:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109211849.32530-7-jerry.ray@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230111123711.32020-1-allen-kh.cheng@mediatek.com> <20230111123711.32020-8-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20230111123711.32020-8-allen-kh.cheng@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 12 Jan 2023 19:48:58 +0800
+Message-ID: <CAGXv+5EDW9jZxWZW-9nYeK+2UnMR6UE28wASNFZ8MfdDhVKhxg@mail.gmail.com>
+Subject: Re: [PATCH 7/9] arm64: dts: mediatek: mt8186: Add DPI node
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 03:18:49PM -0600, Jerry Ray wrote:
-> +static void lan9303_phylink_get_caps(struct dsa_switch *ds, int port,
-> +				     struct phylink_config *config)
-> +{
-> +	struct lan9303 *chip = ds->priv;
-> +
-> +	dev_dbg(chip->dev, "%s(%d) entered.", __func__, port);
-> +
-> +	config->mac_capabilities = MAC_10 | MAC_100 | MAC_ASYM_PAUSE |
-> +				   MAC_SYM_PAUSE;
+On Wed, Jan 11, 2023 at 8:37 PM Allen-KH Cheng
+<allen-kh.cheng@mediatek.com> wrote:
+>
+> Add DPI node for MT8186 SoC.
+>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8186.dtsi | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> index c52f9be1e750..eab30ab01572 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> @@ -1230,6 +1230,23 @@
+>                         power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
+>                 };
+>
+> +               dpi0: dpi@1400a000 {
 
-You indicate that pause modes are supported, but...
+You could drop the trailing 0 in the label, since there is only one
+instance.
 
-> +static void lan9303_phylink_mac_link_up(struct dsa_switch *ds, int port,
-> +					unsigned int mode,
-> +					phy_interface_t interface,
-> +					struct phy_device *phydev, int speed,
-> +					int duplex, bool tx_pause,
-> +					bool rx_pause)
-> +{
-> +	u32 ctl;
-> +
-> +	/* On this device, we are only interested in doing something here if
-> +	 * this is the xMII port. All other ports are 10/100 phys using MDIO
-> +	 * to control there link settings.
-> +	 */
-> +	if (port != 0)
-> +		return;
-> +
-> +	ctl = lan9303_phy_read(ds, port, MII_BMCR);
-> +
-> +	ctl &= ~BMCR_ANENABLE;
-> +
-> +	if (speed == SPEED_100)
-> +		ctl |= BMCR_SPEED100;
-> +	else if (speed == SPEED_10)
-> +		ctl &= ~BMCR_SPEED100;
-> +	else
-> +		dev_err(ds->dev, "unsupported speed: %d\n", speed);
-> +
-> +	if (duplex == DUPLEX_FULL)
-> +		ctl |= BMCR_FULLDPLX;
-> +	else
-> +		ctl &= ~BMCR_FULLDPLX;
-> +
-> +	lan9303_phy_write(ds, port, MII_BMCR, ctl);
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-There is no code here to program the resolved pause modes. Is it handled
-internally within the switch? (Please add a comment to this effect
-either in get_caps or here.)
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> +                       compatible = "mediatek,mt8186-dpi";
+> +                       reg = <0 0x1400a000 0 0x1000>;
+> +                       clocks = <&topckgen CLK_TOP_DPI>,
+> +                                <&mmsys CLK_MM_DISP_DPI>,
+> +                                <&apmixedsys CLK_APMIXED_TVDPLL>;
+> +                       clock-names = "pixel", "engine", "pll";
+> +                       assigned-clocks = <&topckgen CLK_TOP_DPI>;
+> +                       assigned-clock-parents = <&topckgen CLK_TOP_TVDPLL_D2>;
+> +                       interrupts = <GIC_SPI 309 IRQ_TYPE_LEVEL_LOW 0>;
+> +                       status = "disabled";
+> +
+> +                       port {
+> +                               dpi_out: endpoint { };
+> +                       };
+> +               };
+> +
+>                 dsi0: dsi@14013000 {
+>                         compatible = "mediatek,mt8186-dsi";
+>                         reg = <0 0x14013000 0 0x1000>;
+> --
+> 2.18.0
+>
