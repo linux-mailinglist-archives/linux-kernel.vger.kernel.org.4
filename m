@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5516675E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22196675EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbjALO0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S237313AbjALO1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237125AbjALO0D (ORCPT
+        with ESMTP id S237003AbjALO0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:26:03 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83730559CB;
-        Thu, 12 Jan 2023 06:17:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FOj+YraCL6uazHK4HsAlelpL2+zXlAQOgAoPSryEzvA=; b=cn7Zl5AY2FqhMrNth+lxKfIty3
-        c+k+tAt1vZD8W5otygcqWMXsoi+ZE28+Utw2ry6fAtlD1aYPPcvCLIyMTRIRuncIHRCY5N/4G5N0K
-        CjFje6K8DDDp3Ce4LxdPZXhDbIXL/wtt4ydOC/ndHGSjVTZUnvhDISJoyCIFckCxT1I4DOsIaCQP1
-        HnIFI2susc/zhDlrOuWwQbxXA8OfeM3qHO/t8wveo0x5dea0RHCP2mswA2x6Q1TRM7avvkw5v1mnR
-        /ie8EB1CwLvRcU7NFGvkRN2gibt40xbJznmppdQ5k4Z0+OyUq2PjQ4TAcNc2QEw+YXwJyEB5d5OE/
-        0rQ784ag==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pFyOC-00FKkF-0M; Thu, 12 Jan 2023 14:17:08 +0000
-Date:   Thu, 12 Jan 2023 06:17:07 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 8/9] iov_iter, block: Make bio structs pin pages
- rather than ref'ing if appropriate
-Message-ID: <Y8AWY991ilrO5Yco@infradead.org>
-References: <Y7+6YVkhZsvdW+Hr@infradead.org>
- <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
- <167344731521.2425628.5403113335062567245.stgit@warthog.procyon.org.uk>
- <15237.1673519321@warthog.procyon.org.uk>
- <Y8AUjB5hxkwxhnGK@infradead.org>
+        Thu, 12 Jan 2023 09:26:30 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3927855854;
+        Thu, 12 Jan 2023 06:17:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673533049; x=1705069049;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+9OeLd9jOBkiupMfGGpng53Agg/34VDvHZQiavcP+6w=;
+  b=bGHILp/OgaL47aBNWltQ80ETVAkplGkLQXaoF2Ccr/b0DTPKuV6513tZ
+   X/XU//Zoj4OV7K3VfTUbujCY5lX5fe+/bEa06/7/G3mLjZxB4/yUYEa3T
+   r+BS3HABtohrtaMSquYCVh77gULrgx42ioTDj1JaSpbW6EeDrMogs3KKf
+   6a3fOxLo5HSCqyrv1B1KO3fOi/fpl+tIivQQDpSVqZ3ZGI6Sg1HtTdGOi
+   F6ew+Z/VTWR15cIUj+lh3jR7iSBiHW/X+lXUcbEZKzXqGqRVnKrnZdHew
+   /UdhRvv84wMgXFegLQCpCJhgf9KdEueA525B2Z3f7NGaIY2M24QLuzJzc
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="321406417"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="321406417"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 06:17:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800218009"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="800218009"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2023 06:17:15 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6C97714B; Thu, 12 Jan 2023 16:17:49 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] gpiolib: Do not mention legacy API in the code
+Date:   Thu, 12 Jan 2023 16:17:43 +0200
+Message-Id: <20230112141743.63521-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8AUjB5hxkwxhnGK@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,45 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 06:09:16AM -0800, Christoph Hellwig wrote:
-> On Thu, Jan 12, 2023 at 10:28:41AM +0000, David Howells wrote:
-> > Christoph Hellwig <hch@infradead.org> wrote:
-> > 
-> > > 	if (cleanup_mode & FOLL_GET) {
-> > > 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_PINNED));
-> > > 		bio_set_flag(bio, BIO_PAGE_REFFED);
-> > > 	}
-> > > 	if (cleanup_mode & FOLL_PIN) {
-> > > 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_REFFED));
-> > > 		bio_set_flag(bio, BIO_PAGE_PINNED);
-> > > 	}
-> > 
-> > That won't necessarily work as you might get back cleanup_mode == 0, in which
-> > case both flags are cleared - and neither warning will trip on the next
-> > addition.
-> 
-> Well, it will work for the intended use case even with
-> cleanup_mode == 0, we just won't get the debug check.  Or am I missing
-> something fundamental?
+Replace mentioning of legacy API by the latest one.
 
-In fact looking at the code we can debug check that case too by doing:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/gpio/driver.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	if (cleanup_mode & FOLL_GET) {
- 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_PINNED));
- 		bio_set_flag(bio, BIO_PAGE_REFFED);
- 	} else if (cleanup_mode & FOLL_PIN) {
- 		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_REFFED));
- 		bio_set_flag(bio, BIO_PAGE_PINNED);
- 	} else {
-		WARN_ON_ONCE(bio_test_flag(bio, BIO_PAGE_PINNED) ||
-			     bio_test_flag(bio, BIO_PAGE_REFFED));
-	}
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index 8e2e2618d40e..ddc7a14a274f 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -339,7 +339,7 @@ struct device_node;
+  * @set_multiple: assigns output values for multiple signals defined by "mask"
+  * @set_config: optional hook for all kinds of settings. Uses the same
+  *	packed config format as generic pinconf.
+- * @to_irq: optional hook supporting non-static gpio_to_irq() mappings;
++ * @to_irq: optional hook supporting non-static gpiod_to_irq() mappings;
+  *	implementation may not sleep
+  * @dbg_show: optional routine to show contents in debugfs; default code
+  *	will be used when this is omitted, but custom code can show extra
+-- 
+2.39.0
 
-But given that all calls for the same iter type return the same
-cleanup_mode by defintion I'm not even sure we need any of this
-debug checking, and might as well just do:
-
-	if (cleanup_mode & FOLL_GET)
- 		bio_set_flag(bio, BIO_PAGE_REFFED);
- 	else if (cleanup_mode & FOLL_PIN)
- 		bio_set_flag(bio, BIO_PAGE_PINNED);
