@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78445666B5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A030666B65
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbjALHFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S229863AbjALHJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjALHFU (ORCPT
+        with ESMTP id S236097AbjALHJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:05:20 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD64BD79
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:05:19 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id jl4so19317160plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCOp7CGKuJgMZcUzydJ2EeFkj94gRUyaqxOKfxChq2U=;
-        b=ObYQiTjMQ9zLQ9Y0aV/XuOTFNKjj+rOa3lZzK4STgy6OYXI34kTRdQJ4OkT4Xca/OP
-         nyYAU0jRxfnlRRUVeqsZa1WSNxxop4vjw3iAhcAhjSsFWgjDT8U6X45eUk8C7wH8ZM3U
-         T4+TURds0hddz4PYN9Exy+5IWJPYhFLr6ep2HRBeORiWmvvuQA5d6YPznhISvjDtrL9a
-         ejQ5nMm/E57+K530iqLKxFJClpPjEmXCwQTWsdELmRd3tXiP/53CuCOHEZWerg+4x/vn
-         /O3aYAkPhW7dlrmRbqqaqKUIUhu4JP4A9OgIsbcwMKpqfiHDmnj2NGpi1+09cYx1U7Gl
-         tzaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FCOp7CGKuJgMZcUzydJ2EeFkj94gRUyaqxOKfxChq2U=;
-        b=fWWl3JW48banJmAjMmya/av1YiSI86zMbWZjNyvQDNfpPIV6HuOXe3DJBEu38N8Vj5
-         2NdNFmoMVySD5BZ03h9ppYSJCe0Rr2XHy13v23PTcZKXBJ3QcUIEzHi/beUgAzYO71DC
-         UnOM69yvDHDGQqP5H+KDurLvFZGHV4HdJEFD6FaRZCekgxxqEqKcLUk0XhduldemoxpS
-         BSX0NZD7lloxTuKK50VNc+Jqkfl+wXLeuftzjPD2zZ8lem0EX6kkXnJhMdm3AcKtA6Yz
-         MPkCiMr+O7o2SX7GwfVb25/xqcEutoRgEJfv9oRfTC6ahr5ld+xTpiFVC4Vf4Jwwkytp
-         oCaA==
-X-Gm-Message-State: AFqh2kqaclQW40JDWaupnzGlPdgnS9aZCe6PZM5a7kPhL3icymXFUPLZ
-        qRGh5acv7SrXHlMRXxEkR9J5O6b+pH1hRw==
-X-Google-Smtp-Source: AMrXdXuvrDtoFen4tDX84Z/cO/8oQavnbyoLkTlBajI12yiEhuWBhoEGdnbn7p8nj4PpYns5CmS2mA==
-X-Received: by 2002:a17:902:9a06:b0:189:8790:73b1 with SMTP id v6-20020a1709029a0600b00189879073b1mr4927212plp.65.1673507107951;
-        Wed, 11 Jan 2023 23:05:07 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b001925016e34bsm11459695plg.79.2023.01.11.23.05.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 23:05:07 -0800 (PST)
-From:   korantwork@gmail.com
-To:     ardb@kernel.org, sudeep.holla@arm.com, cristian.marussi@arm.com
-Cc:     linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>,
-        loydlv <loydlv@tencent.com>
-Subject: [PATCH] firmware: fix one UAF issue
-Date:   Thu, 12 Jan 2023 15:05:03 +0800
-Message-Id: <20230112070503.817076-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 12 Jan 2023 02:09:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F921C90D;
+        Wed, 11 Jan 2023 23:09:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65B0BB81D79;
+        Thu, 12 Jan 2023 07:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 107B3C433D2;
+        Thu, 12 Jan 2023 07:09:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673507378;
+        bh=Oqydj0oJ7lWgc8KOd0cdULCtOKRcsaepxFT40526GeM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZI1IE3CfJnmRKlQxUvFKU4HC2yLudSu10piwKyFxLs2wpnk2yv5JAtH2ZoEsg/r5Y
+         nNdZ+MEEoVi2ivlYrIckNxC7b5QAiRZNEi+QVwdCdJAxbZpzPNwahSelwwKmhkH+8m
+         CE5IVFBk9cL5JPxxk49qdqaLpQrFj4QxiHPCORdGym/voqAYBMyIEnRor1Q7LpuFcb
+         zfrQsB+Esn8uhsuWMuAto+4Ukeu362Nug+cyGC4z06w+M94Q8Tus325z4sXeSrBlQo
+         0hb78fq7QCXRebgc81y0w3CWoCfnUB51VGYMkXPSbx9u7PWLihAvGrtiiusrQZpV6+
+         Hra6G/rhgXpWA==
+Date:   Thu, 12 Jan 2023 09:09:34 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Esina Ekaterina <eesina@astralinux.ru>
+Cc:     Zhao Qiang <qiang.zhao@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH v4] net: wan: Add checks for NULL for utdm in
+ undo_uhdlc_init and unmap_si_regs
+Message-ID: <Y7+yLgGr1GO/rXun@unreal>
+References: <20230111102848.44863b9c@kernel.org>
+ <20230111195533.82519-1-eesina@astralinux.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111195533.82519-1-eesina@astralinux.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
+On Wed, Jan 11, 2023 at 10:55:33PM +0300, Esina Ekaterina wrote:
+> If uhdlc_priv_tsa != 1 then utdm is not initialized.
+> And if ret != NULL then goto undo_uhdlc_init, where
+> utdm is dereferenced. Same if dev == NULL.
+> 
+> Found by Astra Linux on behalf of Linux Verification Center
+> (linuxtesting.org) with SVACE.
+> 
+> Signed-off-by: Esina Ekaterina <eesina@astralinux.ru>
+>   ---
+> v4: Fix style
+> v3: Remove braces
+> v2: Add check for NULL for unmap_si_regs
+> ---
+>  drivers/net/wan/fsl_ucc_hdlc.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-There could be the use after free issue in dmi_sysfs_register_handle.
-During handling specializations process, the entry->child could be
-free if the error occurs. However, it will be kobject_put after free.
-So, we set the entry->child to NULL to avoid above case.
+In addition to what Jakub said, please don't send patches as reply-to.
+Please sent them as new threads.
 
-Reported-by: loydlv <loydlv@tencent.com>
-Signed-off-by: Xinghui Li <korantli@tencent.com>
----
- drivers/firmware/dmi-sysfs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
-index 66727ad3361b..dd4ff5f7e200 100644
---- a/drivers/firmware/dmi-sysfs.c
-+++ b/drivers/firmware/dmi-sysfs.c
-@@ -470,6 +470,7 @@ static int dmi_system_event_log(struct dmi_sysfs_entry *entry)
- 	kobject_del(entry->child);
- out_free:
- 	kfree(entry->child);
-+	entry->child = NULL;
- 	return ret;
- }
- 
--- 
-2.31.1
-
+Thanks
