@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB52A666CCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6981C666C77
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 09:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239883AbjALIpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 03:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S239589AbjALIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 03:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239576AbjALIoy (ORCPT
+        with ESMTP id S239547AbjALIdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:44:54 -0500
-X-Greylist: delayed 622 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 00:44:09 PST
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BC7392F9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 00:44:08 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30C8XEtP1791566
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Thu, 12 Jan 2023 08:33:16 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30C8X8q53803742
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Thu, 12 Jan 2023 09:33:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1673512389; bh=jU8aJlbo193snrPLtbyLKpWQuv3u8TMd2nglknjNFfI=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=kbFk+jvc0WJiJ2MWAIbY59qDIXCD+xoT8qJ79VXi6fe9Hy+riYGq8zWs0ZuEtIJFj
-         ynmML9Es81rWDF7w9F6zABAxVPI5JEgMeENsHY0oG5wdjsYm5J755VIzGe9V+KXFPV
-         jsXmqQh76PzdMRIUl4KCX1xv3oWKdCxe1I+ZF3/Q=
-Received: (nullmailer pid 176378 invoked by uid 1000);
-        Thu, 12 Jan 2023 08:33:08 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] r8152: add vendor/device ID pair for Microsoft
- Devkit
-Organization: m
-References: <20230111133228.190801-1-andre.przywara@arm.com>
-        <20230111213143.71f2ad7e@kernel.org>
-Date:   Thu, 12 Jan 2023 09:33:08 +0100
-In-Reply-To: <20230111213143.71f2ad7e@kernel.org> (Jakub Kicinski's message of
-        "Wed, 11 Jan 2023 21:31:43 -0800")
-Message-ID: <87k01s6tkr.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 12 Jan 2023 03:33:33 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79F4F227;
+        Thu, 12 Jan 2023 00:33:32 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EBA412FC;
+        Thu, 12 Jan 2023 00:34:14 -0800 (PST)
+Received: from [192.168.1.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CC0C3F71A;
+        Thu, 12 Jan 2023 00:33:30 -0800 (PST)
+Message-ID: <29f24401-8e39-ea40-52f6-a03c428ca445@arm.com>
+Date:   Thu, 12 Jan 2023 09:33:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Pierre Gondois <pierre.gondois@arm.com>
+Subject: Re: [PATCH v2 20/23] arm64: dts: Update cache properties for
+ socionext
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20221107155825.1644604-1-pierre.gondois@arm.com>
+ <20221107155825.1644604-21-pierre.gondois@arm.com>
+Content-Language: en-US
+In-Reply-To: <20221107155825.1644604-21-pierre.gondois@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
-> On Wed, 11 Jan 2023 13:32:28 +0000 Andre Przywara wrote:
->> The Microsoft Devkit 2023 is a an ARM64 based machine featuring a
->> Realtek 8153 USB3.0-to-GBit Ethernet adapter. As in their other
->> machines, Microsoft uses a custom USB device ID.
->>=20
->> Add the respective ID values to the driver. This makes Ethernet work on
->> the MS Devkit device. The chip has been visually confirmed to be a
->> RTL8153.
->
-> Hm, we have a patch in net-next which reformats the entries:
-> ec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
->
-> Would you like this ID to be also added in stable? We could just=20
-> apply it to net, and deal with the conflict locally. But if you=20
-> don't care about older kernels then better if you rebase.
+(subset for cc list)
+Hello,
+Just a reminder in case the patch was forgotten,
+Regards,
+Pierre
 
-And now I started worrying about consequences of that reformatting...
-Maybe I didn't give this enough thought?
-
-Please let me know if you prefer to have the old macro name back.  We
-can avoid reformatting the list.
-
-
-Bj=C3=B8rn
+On 11/7/22 16:57, Pierre Gondois wrote:
+> The DeviceTree Specification v0.3 specifies that the cache node
+> 'compatible' and 'cache-level' properties are 'required'. Cf.
+> s3.8 Multi-level and Shared Cache Nodes
+> The 'cache-unified' property should be present if one of the
+> properties for unified cache is present ('cache-size', ...).
+> 
+> Update the Device Trees accordingly.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>   arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi | 1 +
+>   arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 2 ++
+>   arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi | 1 +
+>   3 files changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+> index 1c76b4375b2e..6e1e00939214 100644
+> --- a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+> +++ b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+> @@ -52,6 +52,7 @@ cpu1: cpu@1 {
+>   
+>   		l2: l2-cache {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   	};
+>   
+> diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+> index 9308458f9611..db7d20a1a301 100644
+> --- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+> +++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+> @@ -86,10 +86,12 @@ cpu3: cpu@101 {
+>   
+>   		a72_l2: l2-cache0 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   
+>   		a53_l2: l2-cache1 {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   	};
+>   
+> diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
+> index b0c29510a7da..9ce544c9ea0a 100644
+> --- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
+> +++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
+> @@ -83,6 +83,7 @@ cpu3: cpu@3 {
+>   
+>   		l2: l2-cache {
+>   			compatible = "cache";
+> +			cache-level = <2>;
+>   		};
+>   	};
+>   
