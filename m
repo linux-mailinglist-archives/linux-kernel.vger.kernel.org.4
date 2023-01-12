@@ -2,53 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFBA668658
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDE5668665
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 23:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbjALWHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 17:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S240129AbjALWHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 17:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbjALWGb (ORCPT
+        with ESMTP id S229542AbjALWGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 17:06:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C764C3D1CE
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:55:16 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pG5XV-0005Zm-5Q; Thu, 12 Jan 2023 22:55:13 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pG5XU-005cqG-81; Thu, 12 Jan 2023 22:55:12 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pG5XT-00CN2u-D8; Thu, 12 Jan 2023 22:55:11 +0100
-Date:   Thu, 12 Jan 2023 22:55:11 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 3/3] soc: tegra: cbb: Drop empty platform remove function
-Message-ID: <20230112215511.gjmplw4kcq55g6zy@pengutronix.de>
-References: <20221212222549.3779846-1-u.kleine-koenig@pengutronix.de>
- <20221212222549.3779846-4-u.kleine-koenig@pengutronix.de>
+        Thu, 12 Jan 2023 17:06:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5726DD4;
+        Thu, 12 Jan 2023 13:55:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79C0262174;
+        Thu, 12 Jan 2023 21:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2D7C433EF;
+        Thu, 12 Jan 2023 21:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673560557;
+        bh=PiMWPgePScKOV0uoyAba+JA0J1HRl0Cq4MC1tYQpJ2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ieaVvY3nG9tFozYB829OQL4xsKrLLExAZQQ/gKKeLggpsaa7ibA0jEqO73ITQggos
+         v0TRc4N275UabsCNRMqf0ae6dxvAGVmADjDesNdW4wn24Fweou7DJHu2G49sABOElM
+         fF3ThLKH3cldAsnBbIsBlCvU/srsCqL1G6MXK9QPlQrccCpCRivPbqzOLllK6OkiRA
+         tcd6txb3MbRKzs4cCbOh7GJMHZyVWpTYbeVyHgWjuoyMik23zCm4kk3+9FQHSyoxmF
+         ISmPED5Z+8hgi5nL5LIo10efpRJMggv5sWl9hYbQ81HeUy1Wlh2vvliRWkxuX0tI8A
+         x7oOmaLMRaPyQ==
+Date:   Thu, 12 Jan 2023 21:55:52 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>, jszhang@kernel.org
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>
+Subject: Re: [PATCH v3 10/13] riscv: alternative: patch alternatives in the
+ vDSO
+Message-ID: <Y8CB6Cy5ZrTMIkFL@spud>
+References: <20230111171027.2392-1-jszhang@kernel.org>
+ <20230111171027.2392-11-jszhang@kernel.org>
+ <Y7+7TRv7+V0nKNiZ@wendy>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ehjeverzqerdm3oz"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t6Mgjx3f2BNOzJab"
 Content-Disposition: inline
-In-Reply-To: <20221212222549.3779846-4-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y7+7TRv7+V0nKNiZ@wendy>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,40 +67,69 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ehjeverzqerdm3oz
-Content-Type: text/plain; charset=iso-8859-1
+--t6Mgjx3f2BNOzJab
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Thu, Jan 12, 2023 at 07:48:29AM +0000, Conor Dooley wrote:
+> Hey Jisheng,
+>=20
+> On Thu, Jan 12, 2023 at 01:10:24AM +0800, Jisheng Zhang wrote:
+> > Make it possible to use alternatives in the vDSO, so that better
+> > implementations can be used if possible.
+> >=20
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > Reviewed-by: Guo Ren <guoren@kernel.org>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>=20
+> FYI, from this patch onwards the rv32 build is broken.
+> Should be reproduceable with the in-tree rv32_defconfig.
+>=20
+> Unfortunately no logs for you, I've got a CI bug to fix!
 
-On Mon, Dec 12, 2022 at 11:25:49PM +0100, Uwe Kleine-K=F6nig wrote:
-> A remove callback just returning 0 is equivalent to no remove callback
-> at all. So drop the useless function.
+Here's the error:
 
-the other two patches in this series were applied individually to their
-matching trees. For this one I didn't get feedback yet.
+=2E./arch/riscv/kernel/alternative.c:174:21: error: incompatible pointer ty=
+pes passing 'const struct elf64_hdr *' to parameter of type 'const Elf32_Eh=
+dr *' (aka 'const struct elf32_hdr *') [-Werror,-Wincompatible-pointer-type=
+s]
+        alt =3D find_section(hdr, shdr, ".alternative");
+                           ^~~
+=2E./arch/riscv/include/asm/module.h:115:60: note: passing argument to para=
+meter 'hdr' here
+static inline const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
+                                                           ^
+=2E./arch/riscv/kernel/alternative.c:174:26: error: incompatible pointer ty=
+pes passing 'const struct elf64_shdr *' to parameter of type 'const Elf32_S=
+hdr *' (aka 'const struct elf32_shdr *') [-Werror,-Wincompatible-pointer-ty=
+pes]
+        alt =3D find_section(hdr, shdr, ".alternative");
+                                ^~~~
+=2E./arch/riscv/include/asm/module.h:116:25: note: passing argument to para=
+meter 'sechdrs' here
+                                           const Elf_Shdr *sechdrs,
+                                                           ^
+=2E./arch/riscv/kernel/alternative.c:174:6: error: incompatible pointer typ=
+es assigning to 'const struct elf64_shdr *' from 'const Elf32_Shdr *' (aka =
+'const struct elf32_shdr *') [-Werror,-Wincompatible-pointer-types]
+        alt =3D find_section(hdr, shdr, ".alternative");
+            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3 errors generated.
 
-Best regards
-Uwe
+Thanks,
+Conor.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---ehjeverzqerdm3oz
+--t6Mgjx3f2BNOzJab
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPAgbwACgkQwfwUeK3K
-7Amyewf9FgKfvBDPvMGtUFCt3uF8BhdWXQ3azJZiwvT/ijx2xjP82Y1l/aabxIsF
-CEFUMq11W2UWFp3vf7uAbDJwupsWyF8QZPpkkOKNYFkw19Ivp2SNu32gkF6dOqxK
-7xmCKWTNpaKnhSp3da6jiEkxnddjzBzaPN9Cp96JaJcGmLRZYVo5dPs9hh8G+g2M
-BIXqgDfgkHuu0/GILCoJWheQkGOHWQzpCUHxFZYUQJFfYzXYfrrSwY+uYvuxFvf4
-l3nV2KFsnagpSzdvanPsUNuVVSsBvJWC1u6obi88Gu7E8Tvmrv2LJJRVHWOL0g78
-BajKKuOohSncE0t3MRnzsFRHs08bJw==
-=SuTw
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8CB6AAKCRB4tDGHoIJi
+0tFCAP0SCpBMI4iFNNCGroUlQ0Fd+5ofL2sPC2i+e4AjAW6TugD8Do9NPn+zAurA
+/29Zj40trR91yfFMsLQgNM2qHVlkZAU=
+=kql5
 -----END PGP SIGNATURE-----
 
---ehjeverzqerdm3oz--
+--t6Mgjx3f2BNOzJab--
