@@ -2,86 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1445666FEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F79666FEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbjALKml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S238498AbjALKmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbjALKmF (ORCPT
+        with ESMTP id S233808AbjALKmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:42:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3ED33D70;
-        Thu, 12 Jan 2023 02:36:18 -0800 (PST)
-Date:   Thu, 12 Jan 2023 11:36:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673519777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w+q9O0QBx7caBqvk7I7LqqANXtU1eZvZLl5BZlayw+Q=;
-        b=fRkTEumRk4CzMYZUt8LAh/RJ8slqeouYyZNvTpO1GV2VpwmLt01q480Aq5TZFQsQr/6F39
-        5lb1JiQ+ybojkK06e+Vy6YUXqW3Qjls++T+9usTh3TdkJpeYLelEXZV/1PYZtMEVwmpdk2
-        GrwB0N7exf6lKrgLYD/lZOTyG+uaVgtWVnBW/T8YSKj2t2kjnhzbbX+oqEQ05BnkOos+FK
-        5c7rqYZthb29zRTmXw0Li2xcteUcMnDMU9UUhwFkBPshsm43wo7RK819+YszXYU9iF9TTf
-        6bx4S/j8a66hLdcciISidY/sXgF019uGZzjvkhcm/TEJc4XVdyoTE8Luj7jVpw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673519777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w+q9O0QBx7caBqvk7I7LqqANXtU1eZvZLl5BZlayw+Q=;
-        b=9NIVp/yPvUNYUDTJsZlZ0lvXWhGgsOLTh2TTGR1v7URp40uPVOhA5VtsXtLFMU6BNC3wyx
-        mQhpAP9/qYBQ4ABQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
-Message-ID: <Y7/inz5ZoQiR3bP3@linutronix.de>
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
- <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
- <9771639f-5172-8f3b-3ce6-8fd195aa95b3@linaro.org>
+        Thu, 12 Jan 2023 05:42:19 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20E7559C2;
+        Thu, 12 Jan 2023 02:36:34 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 667195C0256;
+        Thu, 12 Jan 2023 05:36:34 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 12 Jan 2023 05:36:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1673519794; x=
+        1673606194; bh=IW9Zp0/sF/1Ckn+yDeOYUE9+fXzzehSr0zbVXxTpuhI=; b=k
+        oMNLx8fIWkOqklFBAPfcX6QBzMCWaLQAk6C65gfs5KpP/w3nmNYo7tuDp4hHd+nE
+        Qzg42r7kHyDzwwqS4HFvc79+z5Fwg8BjA0NmSAZDKt6GAouh5jNP5swLNXeYuDeG
+        3FCFnivtnwzwI/JGkXQpNnu6lEPn8vdekf3imjGMEDbO8eBTBzKKbI1iaP/B1QP2
+        uQ3H+IuLt8cfzhNasII1w9OGAv8BY0HYWhYTscMf8f3j0eV4x0ZpaUlDwh9pOrhu
+        SzZ9S4IlAjQwHi6WUS4V9oY/E6AI7AalxRvE6MA0UQlljh2+HSG/fktWRgZKFOSz
+        kKiyIKXBuQO69lIBPp0fQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673519794; x=
+        1673606194; bh=IW9Zp0/sF/1Ckn+yDeOYUE9+fXzzehSr0zbVXxTpuhI=; b=C
+        aPGQb5EAQKz1I5Lj4/NK2Ac5TXAdXWrIa18CMCB1Lc+Erme2Cq6N9B295N6U7Rgk
+        akGFxlV6C4Od0LHY56XNXXt805VdHYRci6zvFUcvE5rmd4L/ajwX2vkc/NPMCSqa
+        gBjyB05Ya2BkCoRqlqcuDn6Xx1YWFGeSCxEukFTwF4tDe4YneWSA42cU6Duh02Za
+        gvEQvmpnnVuweDOAi0qMlDpSwBlABHKMZxldGM2pQ1UPzM5nI2/BBE1e3cSgfznk
+        BMfaiQntykffDrIYjLTM0XnoURzaGwdNT4Op6iAZ047cbieBMNeNEX2PeNGLrUS+
+        XpO2iAm68u+vbALCvsRWg==
+X-ME-Sender: <xms:suK_Y6kIA8cKHDt2kksd3RRahVa0BzuIB1bBJ6lM_opGh0S2qsX6wA>
+    <xme:suK_Yx2i1Ee8TimwuFdGWmf3fnFyMyelPdRyN5XBbxYulPo0WIi98G-IDoRVixmgY
+    u-0z2AHTGZVPQ>
+X-ME-Received: <xmr:suK_Y4psSy_OFHUQDu6CXH0LYJasImyJZ9gfYyY2RWvb2g8utVyLbwqucxsc3gW2VV3amXOe2o1Hs3cnYhUX5bNFv3deHffZxEU7Cw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeevve
+    etgfevjeffffevleeuhfejfeegueevfeetudejudefudetjedttdehueffnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:suK_Y-mevOZrrzVXmuCQ0YWxmpH2Hzez0RdSD2SwnycQnnxlADsxhg>
+    <xmx:suK_Y43DJH4KjbGOwvVdtQL_88pCLYu2VuL1wt8DItisB8HYFWRLrw>
+    <xmx:suK_Y1uNOso6JVebYxw9a843LMUTN1zR6HGrVIVYzWAHzbAMbMoBAA>
+    <xmx:suK_YxEWeMILbnTu7iginJUJsNO1j3rchj1Qkcu6p0EtCpSz4hBtaA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 12 Jan 2023 05:36:33 -0500 (EST)
+Date:   Thu, 12 Jan 2023 11:36:31 +0100
+From:   Greg KH <greg@kroah.com>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] r8152; preserve device list format
+Message-ID: <Y7/ir/zcJQUVec72@kroah.com>
+References: <87k01s6tkr.fsf@miraculix.mork.no>
+ <20230112100100.180708-1-bjorn@mork.no>
+ <Y7/dBXrI2QkiBFlW@kroah.com>
+ <87cz7k6ooc.fsf@miraculix.mork.no>
+ <878ri86o6j.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9771639f-5172-8f3b-3ce6-8fd195aa95b3@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <878ri86o6j.fsf@miraculix.mork.no>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-06 15:52:57 [+0100], Krzysztof Kozlowski wrote:
-> > Just so I don't get this wrong, since the cpuidle-psci also calls
-> > pm_runtime_* functions so it isn't PREEMPT_RT safe, at least not yet?
+On Thu, Jan 12, 2023 at 11:29:40AM +0100, Bjørn Mork wrote:
+> Bjørn Mork <bjorn@mork.no> writes:
+> > Greg KH <greg@kroah.com> writes:
+> >
+> >> No need for this, just backport the original change to older kernels and
+> >> all will be fine.
+> >>
+> >> Don't live with stuff you don't want to because of stable kernels,
+> >> that's not how this whole process works at all :)
+> >
+> > OK, thanks.  Will prepare a patch for stable instead then.
+> >
+> > But I guess the original patch is unacceptable for stable as-is? It
+> > changes how Linux react to these devces, and includes a completely new
+> > USB device driver (i.e not interface driver).
 > 
-> You are correct. Patch 3 here addresses it by... just not doing runtime
-> PM. This is a hacky workaround but:
-> 1. I don't have any other idea,
-> 2. It's not a big problem because RT systems are not supposed to have
-> any CPU idle (one of first things during RT system tuning is to disable
-> cpuidle).
+> Doh!  I gotta start thinking before I send email.  Will start right
+> after sending this one ;-)
+> 
+> We cannot backport the device-id table change to stable without taking
+> the rest of the patch. The strategy used by the old driver needs two
+> entries per device ID, which is why the macro was there.
+> 
+> So the question is: Can commit ec51fbd1b8a2 ("r8152: add USB device
+> driver for config selection") be accepted in stable?
+> 
+> ( Direct link for convenience since it's not yet in mainline:
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/drivers/net/usb/r8152.c?id=ec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
+> )
+> 
+> This is not within the rules as I read them, but it's your call...
 
-so you say you use idle=poll instead? 
+Ah, yeah, that's simple enough, I'd take it if you send it to me :)
 
-> Best regards,
-> Krzysztof
-
-Sebastian
+greg k-h
