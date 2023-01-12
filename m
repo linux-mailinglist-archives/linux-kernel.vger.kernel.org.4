@@ -2,143 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA5B667E59
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66B0667E57
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjALSqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        id S232991AbjALSp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbjALSpj (ORCPT
+        with ESMTP id S234657AbjALSpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:45:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C661C118
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673547446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yDXFj5hdnKEo0Ma8q/gACMhNgB1M01IuG8WyERS0f3w=;
-        b=fP9th42cLzTdOXxy34eWZh+z9lIB5o9j2d2QCYjrrQtLTnlBst+Z9EcFK3pVRwYuIcZIa8
-        lsl2P4+JreVKgwNnjGLV3vefd8nUeH72mzaZd4RIRyURLr4wEOYFOilliqLWAETphMCkjz
-        bUqfv+VI4iPEQsLyvZ36Ibu4fIKZTTQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-dAmrjTUgPge2Yj9UyCVVYQ-1; Thu, 12 Jan 2023 13:17:21 -0500
-X-MC-Unique: dAmrjTUgPge2Yj9UyCVVYQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7257D380670E;
-        Thu, 12 Jan 2023 18:17:20 +0000 (UTC)
-Received: from [10.22.17.189] (unknown [10.22.17.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 16B6F492C14;
-        Thu, 12 Jan 2023 18:17:20 +0000 (UTC)
-Message-ID: <8b69165c-054d-dad6-9801-7767d40d37ce@redhat.com>
-Date:   Thu, 12 Jan 2023 13:17:19 -0500
+        Thu, 12 Jan 2023 13:45:00 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3065B10BD
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:18:17 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id c85so11127452pfc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:18:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=imZPqnzDLF2i+5vb28S1oLdL2hZHuB+mTkpveovIShk=;
+        b=8VPUwINSyiSI8p+IdNef4gnXqazXTASW8rBSVLlDYvmPraC9doolFMbw3zp/AJjK6m
+         Rf7FeuSH8EFiRzhi8a2coSTBWG6ltnJghPB4eoWhm645OGLNdAbbP0i3HCo+H7/+/R+h
+         +3QmsyeDcsezIxnvJ/Bux8S2zdsvWQBPmE1Z2/XCBemjEz1NAd1qMe6yF7K4ormQQJwm
+         nVWCX4gWlYISWrLoo03A7nPZIkgjtpVyNAZOZJ3PKyvMPuz6/ibPdUHSXJaVI5Mokhdb
+         FOFv8/88KlRvqTyZaxBzoOcZ7KQWg6A/RhfCMAXEySD2Num6gP/vrdCa/hkP0F5cLPx5
+         +jIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=imZPqnzDLF2i+5vb28S1oLdL2hZHuB+mTkpveovIShk=;
+        b=k0z27XRu+0HKoesDjMGUJTKBCOAfAzcYtuviu9wV8ApL2nrNd6RiokNiIqIFn6DAHh
+         t7cD35tIsaHgjw4XUU1jRPLFC+w4oBx1cy1gzXKvIKfO/vJUe4RdnXgwxCZ+wD9josqr
+         QL2RFCFv84xRAKY71LgYRX9WGhhZa/1SXfLVGRnC2V6aIB39/4N9kzH02m85HeF/L+pz
+         z9wtApNNZTaz+FJDtlZJ9DSNQK3/BkDt0dAmxJun+58ImYQhCvZz0iQauioC62pywKsf
+         ii+Kned7Ssk9XWd7e12GxTlVDo9QJo2ABgw84GSyJUVb/imgLaDPijYOyvQNgawgtuFN
+         /y0w==
+X-Gm-Message-State: AFqh2koi8aPD8fQUCaPsv9kIUvWcCTiwPFX8h325LKns+6FPoxcyzVDx
+        XWzf7QDg/siTLhHh0Em9tjHGETCgqUfsmZDrEvOqLA==
+X-Google-Smtp-Source: AMrXdXs4LmKDqs/bftcofPxFVGYVQUr5DcCTiOz9NFVAYiCNRH8NqmJaD8MgxRimG8MqrplGeje8Ej8e82AA9dGt8Vs=
+X-Received: by 2002:a63:d902:0:b0:490:597e:1c0a with SMTP id
+ r2-20020a63d902000000b00490597e1c0amr3599808pgg.309.1673547496600; Thu, 12
+ Jan 2023 10:18:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] acpi: add support for the NBFT
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>
-Cc:     Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Charles Rose <charles_rose@dell.com>,
-        Doug Farley <Douglas_Farley@dell.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>
-References: <20221208232536.591347-1-stuart.w.hayes@gmail.com>
- <CAJZ5v0jq_z3H5Uw7vM1998pgtUyHE0M19aOg+mf1O=UgApf7cg@mail.gmail.com>
-From:   John Meneghini <jmeneghi@redhat.com>
-Organization: RHEL Core Storge Team
-In-Reply-To: <CAJZ5v0jq_z3H5Uw7vM1998pgtUyHE0M19aOg+mf1O=UgApf7cg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221215170046.2010255-1-atishp@rivosinc.com> <20221215170046.2010255-2-atishp@rivosinc.com>
+ <20230112100608.d7tnvhbotjfctlgk@orel>
+In-Reply-To: <20230112100608.d7tnvhbotjfctlgk@orel>
+From:   Atish Kumar Patra <atishp@rivosinc.com>
+Date:   Thu, 12 Jan 2023 10:18:05 -0800
+Message-ID: <CAHBxVyESkQ9Krmn-44f-A8hYzMrZBtBfq15fdx-sHDQfkBMtKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] RISC-V: Define helper functions expose hpm
+ counter width and count
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank Rafael.
+On Thu, Jan 12, 2023 at 2:06 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Thu, Dec 15, 2022 at 09:00:36AM -0800, Atish Patra wrote:
+> > KVM module needs to know how many hardware counters and the counter
+> > width that the platform supports. Otherwise, it will not be able to show
+> > optimal value of virtual counters to the guest. The virtual hardware
+> > counters also need to have the same width as the logical hardware
+> > counters for simplicity. However, there shouldn't be mapping between
+> > virtual hardware counters and logical hardware counters. As we don't
+> > support hetergeneous harts or counters with different width as of now,
+> > the implementation relies on the counter width of the first available
+> > programmable counter.
+> >
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  drivers/perf/riscv_pmu_sbi.c   | 35 +++++++++++++++++++++++++++++++++-
+> >  include/linux/perf/riscv_pmu.h |  3 +++
+> >  2 files changed, 37 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> > index 3852c18..65d4aa4 100644
+> > --- a/drivers/perf/riscv_pmu_sbi.c
+> > +++ b/drivers/perf/riscv_pmu_sbi.c
+> > @@ -49,6 +49,9 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
+> >  static union sbi_pmu_ctr_info *pmu_ctr_list;
+> >  static unsigned int riscv_pmu_irq;
+> >
+> > +/* Cache the available counters in a bitmask */
+> > +unsigned long cmask;
+>
+> I presume this can be static since it's not getting added to the header.
+> And don't we need this to be a long long for rv32? We should probably
+> just use u64.
+>
 
-To clarify: this patch was developed by Stuart Hayes. So there should be no need for that additional Signed-off-bys.
+Yeah. u64 would be better. I will change it along with static. Thanks.
 
-Sorry for the confusion...
+> > +
+> >  struct sbi_pmu_event_data {
+> >       union {
+> >               union {
+> > @@ -264,6 +267,37 @@ static bool pmu_sbi_ctr_is_fw(int cidx)
+> >       return (info->type == SBI_PMU_CTR_TYPE_FW) ? true : false;
+> >  }
+> >
+> > +/*
+> > + * Returns the counter width of a programmable counter and number of hardware
+> > + * counters. As we don't support heterneous CPUs yet, it is okay to just
+>
+> heterogeneous
+>
 
-John A. Meneghini
-Senior Principal Platform Storage Engineer
-RHEL SST - Platform Storage Group
-jmeneghi@redhat.com
+Fixed.
 
-On 12/30/22 12:45, Rafael J. Wysocki wrote:
-> On Fri, Dec 9, 2022 at 12:25 AM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
->>
->> Add support for the NVMe Boot Firmware Table (NBFT) to facilitate
->> booting from NVM Express namespaces which are accessed via
->> NVMe over Fabrics (NVMe-oF).
->>
->> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
-> 
-> Tentatively applied as 6.3 material, but it was unclear what the S-o-b
-> tags below mean, so I've dropped them.
-> 
-> If you are not the original author of the patch, you should add a From
-> line pointing to the original author to it and the corresponding S-o-b
-> tag along with your S-o-b.
-> 
-> If you have developed the patch in collaboration with someone, there
-> should be a Co-developed-by tag pointing to the other author along
-> with the corresponding S-o-b tag.
-> 
-> S-o-b alone is meaningful only if you are sending a patch from someone
-> else, for example as a code maintainer.
-> 
->> Signed-off-by: Doug Farley <Douglas_Farley@dell.com>
->> Signed-off-by: Lenny Szubowicz <lszubowi@redhat.com>
->> ---
->>   drivers/acpi/tables.c | 3 ++-
->>   include/acpi/actbl1.h | 2 ++
->>   2 files changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
->> index 47ec11d4c68e..f390c5883b56 100644
->> --- a/drivers/acpi/tables.c
->> +++ b/drivers/acpi/tables.c
->> @@ -545,7 +545,8 @@ static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
->>          ACPI_SIG_WDDT, ACPI_SIG_WDRT, ACPI_SIG_DSDT, ACPI_SIG_FADT,
->>          ACPI_SIG_PSDT, ACPI_SIG_RSDT, ACPI_SIG_XSDT, ACPI_SIG_SSDT,
->>          ACPI_SIG_IORT, ACPI_SIG_NFIT, ACPI_SIG_HMAT, ACPI_SIG_PPTT,
->> -       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI };
->> +       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI,
->> +       ACPI_SIG_NBFT };
->>
->>   #define ACPI_HEADER_SIZE sizeof(struct acpi_table_header)
->>
->> diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
->> index 15c78678c5d3..6ec43410288a 100644
->> --- a/include/acpi/actbl1.h
->> +++ b/include/acpi/actbl1.h
->> @@ -49,6 +49,8 @@
->>   #define ACPI_SIG_S3PT           "S3PT" /* S3 Performance (sub)Table */
->>   #define ACPI_SIG_PCCS           "PCC"  /* PCC Shared Memory Region */
->>
->> +#define ACPI_SIG_NBFT          "NBFT"  /* NVMe Boot Firmware Table */
->> +
->>   /* Reserved table signatures */
->>
->>   #define ACPI_SIG_MATR           "MATR" /* Memory Address Translation Table */
->> --
->> 2.31.1
->>
-> 
+> > + * return the counter width of the first programmable counter.
+> > + */
+> > +int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr)
+> > +{
+> > +     int i;
+> > +     union sbi_pmu_ctr_info *info;
+> > +     u32 hpm_width = 0, hpm_count = 0;
+> > +
+> > +     if (!cmask)
+> > +             return -EINVAL;
+> > +
+> > +     for_each_set_bit(i, &cmask, RISCV_MAX_COUNTERS) {
+> > +             info = &pmu_ctr_list[i];
+> > +             if (!info)
+> > +                     continue;
+> > +             if (!hpm_width && (info->csr != CSR_CYCLE) && (info->csr != CSR_INSTRET))
+>
+> nit: No need for () around the != expressions
+>
 
+Fixed.
+
+> > +                     hpm_width = info->width;
+> > +             if (info->type == SBI_PMU_CTR_TYPE_HW)
+> > +                     hpm_count++;
+> > +     }
+> > +
+> > +     *hw_ctr_width = hpm_width;
+> > +     *num_hw_ctr = hpm_count;
+> > +
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL(riscv_pmu_get_hpm_info);
+>
+> EXPORT_SYMBOL_GPL ?
+>
+
+Is that mandatory ? I have seen usage of both in arch/riscv and other
+places though.
+I am also not sure if any other non-GPL module should/need access to this.
+
+> > +
+> >  static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+> >  {
+> >       struct hw_perf_event *hwc = &event->hw;
+> > @@ -798,7 +832,6 @@ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
+> >  static int pmu_sbi_device_probe(struct platform_device *pdev)
+> >  {
+> >       struct riscv_pmu *pmu = NULL;
+> > -     unsigned long cmask = 0;
+> >       int ret = -ENODEV;
+> >       int num_counters;
+> >
+> > diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+> > index e17e86a..a1c3f77 100644
+> > --- a/include/linux/perf/riscv_pmu.h
+> > +++ b/include/linux/perf/riscv_pmu.h
+> > @@ -73,6 +73,9 @@ void riscv_pmu_legacy_skip_init(void);
+> >  static inline void riscv_pmu_legacy_skip_init(void) {};
+> >  #endif
+> >  struct riscv_pmu *riscv_pmu_alloc(void);
+> > +#ifdef CONFIG_RISCV_PMU_SBI
+> > +int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr);
+> > +#endif
+> >
+> >  #endif /* CONFIG_RISCV_PMU */
+> >
+> > --
+> > 2.25.1
+> >
+>
+> Thanks,
+> drew
