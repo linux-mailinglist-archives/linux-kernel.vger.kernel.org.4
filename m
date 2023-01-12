@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3FB667C2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21754667C41
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240650AbjALRC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S240346AbjALRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240908AbjALRBt (ORCPT
+        with ESMTP id S240269AbjALRKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:01:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57FE65AA;
-        Thu, 12 Jan 2023 08:43:48 -0800 (PST)
-Date:   Thu, 12 Jan 2023 17:42:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673541761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=QCzsbhTLzC2qtVf51+C0cYLAWf2NacHEGnNMmW1UjiM=;
-        b=Rlk9NyaS5mHcFxktwrMoWoKV8TYV9zSu9qCjJD2qmYicBinFPikHpzWimU0WTOIsloL7KH
-        fuwV5B1Gpv0nAgzYt+9bz7ivbjhUC670q6fwJ9vK/wEnC2X9mP1NwsNsig3Hk6TdYCfJHB
-        zTjropHxTfINdXMa31HrYofg/qcocKPaYjYsTmsAYEZjgwVYcz9MsiX8ogMPbEzfPPzXEr
-        dPaYcF0FOIKj6Ctc2D+wlHiimr7njzAi4DJOiTaZQkP8cjGJ/7+VeJELkCktaf4rduqgyp
-        PROzhPU1o621k99r3qAVJalQ4pujf6yoZlOde2RqRrEngSLxmihCWLL5Buqmiw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673541761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=QCzsbhTLzC2qtVf51+C0cYLAWf2NacHEGnNMmW1UjiM=;
-        b=uZd5+5NupRvsCC1TKIZw8UCJvNlBswwAlAsxp/i83Pvy1pX+DzTfmJu+azk1puDXNbkrDf
-        dG/RL2Gxws6w80DQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [ANNOUNCE] v6.2-rc3-rt1
-Message-ID: <Y8A4f9m/ddIUwfZE@linutronix.de>
+        Thu, 12 Jan 2023 12:10:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E0960857;
+        Thu, 12 Jan 2023 08:48:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F04062092;
+        Thu, 12 Jan 2023 16:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE85C433EF;
+        Thu, 12 Jan 2023 16:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673541726;
+        bh=F609UnYf0WMG5QfHIvhOUjsUndJBWWCnct0nm6EhNSM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OPsjwdv4nwXuXqDGZ+Grn5wxcXDYn9RTtehvqMpkLU44l/jIIjLHEeLJglh3X32Vw
+         zk40TZLH73wxhMWeRaB7cwvF8cyRdMfmc1R5gDhcH0keIHTS5CNYEEuWIkc82okltr
+         hizJFSnMs8oyj3vSvvwBJ/giPdIuMoRLIrM+LipXifeGxnnYKEZK2U4fvjsq4TmSyG
+         /IvtdslpbWYDh4o6Rw0bCq3GcVflqAKEBxOkt96H8Ss/38ALdrOzhY+PNappYNAVFh
+         SNGAuGpcMsrpwHp3a/KayLg8FoowcfN1tbkgGVPBPDW3A12rbOdVid5+7T0IU8WqVW
+         Oy3o9fbvnfJjg==
+Date:   Thu, 12 Jan 2023 10:42:04 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Julian =?iso-8859-1?Q?Gro=DF?= <julian.g@posteo.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: Regression in Kernel 6.0: System partially freezes with "nvme
+ controller is down"
+Message-ID: <20230112164204.GA1768006@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9d46a35f-5830-9761-ca2c-eaa640e9cc86@leemhuis.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RT folks!
+On Thu, Jan 12, 2023 at 03:48:46PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+> ...
+> On 11.01.23 23:11, Julian Groß wrote:
+> > Dear Maintainer,
+> > 
+> > when running Linux Kernel version 6.0.12, 6.0.10, 6.0-rc7, or 6.1.4, my
+> > system seemingly randomly freezes due to the file system being set to
+> > read-only due to an issue with my NVMe controller.
+> > The issue does *not* appear on Linux Kernel version 5.19.11 or lower.
+> > 
+> > Through network logging I am able to catch the issue:
+> > ```
+> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.259288] nvme nvme0:
+> > controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
+> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Does
+> > your device have a faulty power saving mode enabled?
+> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Try
+> > "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off" and report a bug
+> > Jan  8 14:50:16 x299-desktop kernel: [ 1461.331360] nvme 0000:01:00.0:
+> > enabling device (0000 -> 0002)
+> > ...
+> > 
+> > I have tried the suggestion in the log without luck.
+> > 
+> > Attached is a log that includes two system freezes, as well as a list of
+> > PCI(e) devices created by Debian reportbug.
+> > The first freeze happens at "Jan  8 04:26:28" and the second freeze
+> > happens at "Jan  8 14:50:16".
+> > 
+> > Currently, I am using git bisect to narrow down the window of possible
+> > commits, but since the issue appears seemingly random, it will take many
+> > months to identify the offending commit this way.
+> > 
+> > The original Debian bug report is here:
+> > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028309
 
-I'm pleased to announce the v6.2-rc3-rt1 patch set. 
+For some reason the log [1] has very little of the kernel dmesg log.
+It does seem like the freeze is partial (I see messages for hundreds
+or thousands of seconds after the nvme reset), but requires a reboot
+to recover.
 
-Changes since v6.1-rc7-rt5:
+The lspci information [2] shows the 00:1b.0 Root Port leading to the
+01:00.0 NVMe device.
 
-  - Update to v6.2-rc3
+Is it possible to collect lspci output after the nvme freeze?  If so,
+please save the output of:
 
-Known issues
-     - Valentin Schneider reported a few splats on ARM64 in arm_pmu, see
-          https://lore.kernel.org/all/20210810134127.1394269-1-valentin.schneider@arm.com/T/#mf05c04376f59a543da6cceeb72e162af2de2b648
-       It is worked on
-          https://lore.kernel.org/all/20220930111844.1522365-1-mark.rutland@arm.com/
+  sudo lspci -vv -s00:1b.0
+  sudo lspci -vv -s01:00.0
 
-     - It has been reported that the ktimers thread may not be woken up
-       and instead the timer is handled in softirq context.
+Make sure to run lspci as root so we can see the error logging
+registers for these devices.
 
-You can get this release via the git tree at:
+If you can collect more of the dmesg log after the freeze, e.g., via
+the "dmesg" command, that might be helpful, too.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.2-rc3-rt1
+Bjorn
 
-The RT patch against v6.2-rc3 can be found here:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.2/older/patch-6.2-rc3-rt1.patch.xz
-
-The split quilt queue is available at:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.2/older/patches-6.2-rc3-rt1.tar.xz
-
-Sebastian
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1028309;filename=x299-desktop_crash.log.xz;msg=5
+[2] https://bugs.debian.org/cgi-bin/bugreport.cgi?att=0;bug=1028309;msg=5
