@@ -2,118 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3C6667F9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017F3667FAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239837AbjALTtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S232138AbjALTyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232870AbjALTtG (ORCPT
+        with ESMTP id S239596AbjALTxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:49:06 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2047.outbound.protection.outlook.com [40.107.6.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E051133;
-        Thu, 12 Jan 2023 11:44:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OGSwHeIQgrwVZkR9qCmcEaTAqQJYp3nu2F47k28l8TJ4iCYHFneB1qvzCUYxA4BWFeRhwUXDbhji+KibgfAIx92/8sTAew8Ef+zlajWTaYyPmqBuV2h84GW09KcmYrx1k4BuVsHcdN47pOdqbzyfunc4+n88xtsV1ZIthMfByiSKHUuq4+IkLAgHVm+ANJbncOqNQtY9T5bNc7Dnv5Feq0etMB5ROCse4DgoUHhWvrk1t4U17jJsSSqz8ljHS5vDkOyBA1Nq83LorILADkbphQtSbYFu28LOgNjhTFzkvwZT2TRCK6FCFJsofZgy+tceHbv0HVPSNrdwnZpiNDP52g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UZs+qLQ89f9ta00E6LEKYIRUiigae6BTpvlyNy98H9M=;
- b=L2i2pOKFkvxvjKXsnyegFgkycIhXZ4YxY1qSLtVKbza4gh1D0mJXuqovIzSJx6d6FPjvT5orVMLaCA7n/E9mEcM6lXDkCb2Z7nAm2QC8UACw8bSvrZvpc0Fvp9GxL28EeOsbddnB0hjFnrQrbrO11p0ZMQasbj1IX3lie5Ho7tJGAoDT6wyQE+oJCWSpzZ60EY6g9ryu71+4iTBwe1TM2OLe1wwDV92n8TyEgAEMaaW310gbO5N/xVIddFOVrBnqBaslfu+hDwGSwBQmJ9p10f0PsRfE3w00dY66qFTgC5hTv3iMLl879ZTsMLfgA2cdDHqUmZG/N/wCkAGy+rfxyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UZs+qLQ89f9ta00E6LEKYIRUiigae6BTpvlyNy98H9M=;
- b=kS7KmJoScX653sHXktpbYJWcoprAa2avtsdk74uqIuFIBXUD2GcobXGXDorqzOFKxqc7Hs6XL5RmhhLr6WjJ3ds0xs+F6OdffUZeGs/S662UQyAkF1HPm65d/OJdg40gbQdYYVfft7nXzKPN5KDDnSI4cBAwXW7Gnlv9zgVVa3E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AM9PR04MB8178.eurprd04.prod.outlook.com (2603:10a6:20b:3e3::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 19:44:52 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 19:44:52 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linuxppc-dev@lists.ozlabs.org (open list:PCI DRIVER FOR FREESCALE
-        LAYERSCAPE),
-        linux-pci@vger.kernel.org (open list:PCI DRIVER FOR FREESCALE
-        LAYERSCAPE),
-        linux-arm-kernel@lists.infradead.org (moderated list:PCI DRIVER FOR
-        FREESCALE LAYERSCAPE), linux-kernel@vger.kernel.org (open list)
-Cc:     imx@lists.linux.dev
-Subject: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
-Date:   Thu, 12 Jan 2023 14:44:33 -0500
-Message-Id: <20230112194433.1514149-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0194.namprd05.prod.outlook.com
- (2603:10b6:a03:330::19) To HE1PR0401MB2331.eurprd04.prod.outlook.com
- (2603:10a6:3:24::22)
+        Thu, 12 Jan 2023 14:53:36 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EF462E1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:50:25 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id b17so13768513pld.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ryge/t2dGtUeYiomoaYe1sIVBzEg0lEhT0FGAs+ZF8=;
+        b=WTqY+XErbRDFZOIHVMjrxI+vBFiy2DMVALdzGOqX4fTAXhIH2b0hgpKBEO/YEJ7vz7
+         JbefxoAyxigFA6wd5a2X047bLxKxUpVilxbGBirUGJbrMGVdoE49xAW2ZtO/KCpN2/dD
+         S40zu1J+10wNP1DkYDWcYwxA8U4TLwBGAI4vY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
+         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1ryge/t2dGtUeYiomoaYe1sIVBzEg0lEhT0FGAs+ZF8=;
+        b=3NT++9nqzVpZwcd4DOPmUGvliZkFdq8E+wDGfg0hvIFhcHuydLqfLRarJif226C4nK
+         z8Y8+2dwW6BZIAT/czgZEb2BgaxMKReEsbWIMV5OyeFIKnCLIUCbtQ5AMiE3yw7kXa7+
+         +IL7jaGY/HQ5lpYoyvDd7FRR4DU1/Qomx6dJhoqBbDUBvCSRFkk2x5ICyHfsbGhTFVpr
+         ubsxuU6lbvsoVO+6U9+s5sHEoeAAijTXEhLMX+MPVZjANm1Arjig3qjCVYjDgEQVkwCD
+         kLtZINGydF5hFz/MLaMfMcBvsqe3YPptbr5Vd2zeqo18mbmgGQms5lKAt+/KRap6I3Ni
+         WfIw==
+X-Gm-Message-State: AFqh2koFVq7KT9Q2VTtN83fWHujjhVtGslvgHDIrb9Xh1nmjyfXdAONB
+        62b09YxFox9xMPw4/mNq4UvIlwHFN5N4/QkBruW+4Fl5taPUWzUH7MSaeHCOlMbO99UzqTyrWbl
+        009yVVdidB4aJzyIdPIczAUe70Dg7VOnzuJpbi14bFRW05YFtoKt4ShacVh2XNLV/FT5vIAdEcR
+        NrPEqZ474Ipes=
+X-Google-Smtp-Source: AMrXdXv6EU4osdR5EHbTJexp2G6v1oXKI0xL/ibInboOzRjkp5Yo0nep+dEpFtABW0G0Nv6FvLfdkw==
+X-Received: by 2002:a17:90a:1d0b:b0:229:211:1de8 with SMTP id c11-20020a17090a1d0b00b0022902111de8mr3303797pjd.12.1673553024808;
+        Thu, 12 Jan 2023 11:50:24 -0800 (PST)
+Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id om5-20020a17090b3a8500b002192a60e900sm12872938pjb.47.2023.01.12.11.50.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Jan 2023 11:50:23 -0800 (PST)
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
+ <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+ <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+ <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+ <e99a71b2-0b05-1a53-1c29-3778b49a3b86@broadcom.com>
+ <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
+From:   William Zhang <william.zhang@broadcom.com>
+Message-ID: <14a48b44-962e-1839-4fbb-1739ba8dbc35@broadcom.com>
+Date:   Thu, 12 Jan 2023 11:50:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0401MB2331:EE_|AM9PR04MB8178:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3c4e41c-a885-42d4-f97d-08daf4d578ee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hP2gGYIfxD3x0626rWxJM0lKiup7lL6mS340dFtRw78REjJRaQ/v6Gx5sYYzw5eM3P8yOlPuXUv5LxIs5cs1gcD5o/+F/+wJE6aMfhnThFcd0o5dOQeu2u3YJ0Li2xMxgzAy3PxfGDVxZO2Yi3u7Mhh1HLAzh0IEed3ZD3ng39C1KNUnCfpJxkOH8/ssQUGn4NLJZjR9pEMo21vpLBgG78p2N7PXrcWtY7G4EUhXEsc1ekL9sewca8BAcmLdJ++MDUNtNIg6F/lYZaLK8lv4KD5oN0WpBZplJSzEBqBCUfOhmh9is6K0AtQN8D10blS5eNLipq3UuxNbVC31bafIzoFZt7DFdxI+zECbzt4cH7GveWDoHBZT3JdbSL+iKTmlCvkbneoHoL+uI73C/OC66eliABSfmmSV7rajT5Pk8yyxwR7cBhIMzFHnXEWL+2Ot3Y7RzHLwPA8aqyD7QMA3ZIKI05rplNuYo7/8n4T68cb3oWMD0Uiqv49Nt89Ip5lWr/zMLRi5AHfIN/jDAIpvNYL8d1BhkQJdzHIkWna25cObaAx18gl26n550xeGd9/leWPuzXhgbhBU9C92EiXAgd9EuQPVjMH0rFOeZusYG6v9VhaqDP+S8BYVDifgco14rX5V5Nagv4oViTc3C8mBL9AMOkKibHhfj8HWAI1LuhcLjrYWmQY6t1Z/JaDNKd01gAHvAnnqavfUq4kwVMLeT00DojaAL7TSFX4K20vIkSo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199015)(478600001)(6486002)(921005)(41300700001)(6512007)(38100700002)(38350700002)(1076003)(86362001)(316002)(110136005)(2616005)(26005)(66556008)(66946007)(186003)(66476007)(52116002)(4326008)(36756003)(5660300002)(6506007)(2906002)(6666004)(8676002)(8936002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NhSm8xDiITMU+K3EmKP4ytu0Q0w3DLh/fQ/cdaviN9WzfzOw46XmA4rFfM2c?=
- =?us-ascii?Q?tum1X19egOz3Mv9Gk3QGrYpPSDVvO/a5O7p7bmgOWcx97BfnjcDlFkZvGh18?=
- =?us-ascii?Q?fstv+yn99ckKjb9sCUpV1UazlrSjGucAJc0CesCfc3BSnRSTDVL7frxZzRUS?=
- =?us-ascii?Q?4IpBvkr0tO4xLeTYHRHQz9EQoDsPuyKt9PTe/NRnULWjzlMWG4pJAGgzY7rW?=
- =?us-ascii?Q?eHHY2p2H7HX833EVHvXkCGFEjeMYdc2nYuqTkZkZOAD53y7rvOoohQS2uBtW?=
- =?us-ascii?Q?j9FOTz5FgqJvNgou0aoTb11Po1dnIMlzz+F42UoMFIIrwMKo7uTI4bn2DlfE?=
- =?us-ascii?Q?alIugKkzw5Lj8atuBM9EulM91zw9THLiqNDxf+gyNMeqbeZFXO9thNBBQgle?=
- =?us-ascii?Q?DjpE13dNlyBvLM3H5w6pFtvuZSY1djYkpu+8saKHVv43s6xgyR932v0rpTsH?=
- =?us-ascii?Q?5O4TqWSopuDiT5Y3SxAobMCAbsD6GgRiF3/oTS1k8ouP+YCqXNcdHfBcGutl?=
- =?us-ascii?Q?mnDS4C9GPL9VF3CDVUW5axG6MO4KeddT3GGLW/1m7pfoU91ZH0R9HMxc4uqP?=
- =?us-ascii?Q?rOhiVz8PnVpG6yjjtnarMj/ZgJVYx6YsJFi/ZkgYLg9DyPTrcBTfQTDO5GT9?=
- =?us-ascii?Q?Ns3MZnJa/vawi0gmiaWTyfXIXHcnqMguvfznNpLpcceXEN1liMHrjrXrBeM5?=
- =?us-ascii?Q?xJ59LHTn1JpobxqlQ6/fxXxk5k1mX/MTIk64k/Vm/STkT6RSCz2OctOjVAWA?=
- =?us-ascii?Q?enDYDKB0tP1+m4kRnqnYnMQLAWMQWCyEoZKCtYZBO5SwYLQqD6FXf61Y1VKD?=
- =?us-ascii?Q?DXDxnYXyJabVI7eeo0Pq/ouvswEDvkYD5BfrgnDNVyr6yeP3a/iryyUjD0PF?=
- =?us-ascii?Q?lq08LrPSMJ+YHeNB2Lq5lxlGpfE3NIAqDCunavxpJsSUu4I4RxCVKSb0d3Ru?=
- =?us-ascii?Q?XO4Yo0L60qdnaclp/issm4AavN8mrCI+D+NnEnb1b78nmiHgiQUR8ZcNmxjh?=
- =?us-ascii?Q?vmbs9sPggZ1h0L2MtiUe1Nx4Is2dL8xmMBA5SeWWbtMoBmk66PcWS7swnLHB?=
- =?us-ascii?Q?5EpmXjKL+wI+gTQ1gvqZl/Wk4YOtpM05cOw7nxlLdiuBHKOGhATPgTTuCFNb?=
- =?us-ascii?Q?rex2DuRILktz7cjTkGRyjJ0J7OJOZoCfC6W273LonhdAE76hjwsnWXTF0aEb?=
- =?us-ascii?Q?gfYFTlhflGA3cAokUb/AkBO/Wao//Kz85HMh5azPi3+2j075+S8uPA5a+p5H?=
- =?us-ascii?Q?J6Dy45rNpsjNqQaRSre03bobUuKB1z+6dq4pHdn4jKoFI+20T3J4oD0uHIjK?=
- =?us-ascii?Q?W2ECuDDhcKbwaGoohkJrK+Yr9sxKb4pZYbTWLV6FlgGSbDjPg8hhf5p+blEn?=
- =?us-ascii?Q?MqKfJRAaAnvZRn9P4fy/tjik6wmlL5QOD2iLVgtiFbcW32RBzQWMdXqazvom?=
- =?us-ascii?Q?iPhD7HNvzh1YYxxZvmr5ZwnLo2RVVjl7EQxr+2RN3krr9QKKJ9hYg1OUZ/dl?=
- =?us-ascii?Q?TV5o9ynN78AosZRWxoQBQfey8XS7j3gUyKGxQuT+0u2cZ0QFJovcDbvcgQ13?=
- =?us-ascii?Q?9dI5VtZ4VfmnTqmN7mq3/EDmbcGXUneR+nV6yD4u?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3c4e41c-a885-42d4-f97d-08daf4d578ee
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 19:44:52.2989
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CsXuPaBV094uHJ8NY8hL/EMfuJxaBhZEY62H2S5wAfdxJ2KGpG7mXa9ZoZkZNoqM1x3CUru67iiKMAqHLe4ssA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8178
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000096c68005f2166d7b"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,167 +93,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaowei Bao <xiaowei.bao@nxp.com>
+--00000000000096c68005f2166d7b
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-When a link down or hot reset event occurs, the PCI Express EP
-controller's Link Capabilities Register should retain the values of
-the Maximum Link Width and Supported Link Speed configured by RCW.
 
-Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
-Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- .../pci/controller/dwc/pci-layerscape-ep.c    | 112 +++++++++++++++++-
- 1 file changed, 111 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-index ed5cfc9408d9..1b884854c18e 100644
---- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
-+++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-@@ -18,6 +18,22 @@
- 
- #include "pcie-designware.h"
- 
-+#define PCIE_LINK_CAP			0x7C	/* PCIe Link Capabilities*/
-+#define MAX_LINK_SP_MASK		0x0F
-+#define MAX_LINK_W_MASK			0x3F
-+#define MAX_LINK_W_SHIFT		4
-+
-+/* PEX PFa PCIE pme and message interrupt registers*/
-+#define PEX_PF0_PME_MES_DR             0xC0020
-+#define PEX_PF0_PME_MES_DR_LUD         (1 << 7)
-+#define PEX_PF0_PME_MES_DR_LDD         (1 << 9)
-+#define PEX_PF0_PME_MES_DR_HRD         (1 << 10)
-+
-+#define PEX_PF0_PME_MES_IER            0xC0028
-+#define PEX_PF0_PME_MES_IER_LUDIE      (1 << 7)
-+#define PEX_PF0_PME_MES_IER_LDDIE      (1 << 9)
-+#define PEX_PF0_PME_MES_IER_HRDIE      (1 << 10)
-+
- #define to_ls_pcie_ep(x)	dev_get_drvdata((x)->dev)
- 
- struct ls_pcie_ep_drvdata {
-@@ -30,8 +46,90 @@ struct ls_pcie_ep {
- 	struct dw_pcie			*pci;
- 	struct pci_epc_features		*ls_epc;
- 	const struct ls_pcie_ep_drvdata *drvdata;
-+	u8				max_speed;
-+	u8				max_width;
-+	bool				big_endian;
-+	int				irq;
- };
- 
-+static u32 ls_lut_readl(struct ls_pcie_ep *pcie, u32 offset)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+
-+	if (pcie->big_endian)
-+		return ioread32be(pci->dbi_base + offset);
-+	else
-+		return ioread32(pci->dbi_base + offset);
-+}
-+
-+static void ls_lut_writel(struct ls_pcie_ep *pcie, u32 offset,
-+			  u32 value)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+
-+	if (pcie->big_endian)
-+		iowrite32be(value, pci->dbi_base + offset);
-+	else
-+		iowrite32(value, pci->dbi_base + offset);
-+}
-+
-+static irqreturn_t ls_pcie_ep_event_handler(int irq, void *dev_id)
-+{
-+	struct ls_pcie_ep *pcie = (struct ls_pcie_ep *)dev_id;
-+	struct dw_pcie *pci = pcie->pci;
-+	u32 val;
-+
-+	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_DR);
-+	if (!val)
-+		return IRQ_NONE;
-+
-+	if (val & PEX_PF0_PME_MES_DR_LUD)
-+		dev_info(pci->dev, "Detect the link up state !\n");
-+	else if (val & PEX_PF0_PME_MES_DR_LDD)
-+		dev_info(pci->dev, "Detect the link down state !\n");
-+	else if (val & PEX_PF0_PME_MES_DR_HRD)
-+		dev_info(pci->dev, "Detect the hot reset state !\n");
-+
-+	dw_pcie_dbi_ro_wr_en(pci);
-+	dw_pcie_writew_dbi(pci, PCIE_LINK_CAP,
-+			   (pcie->max_width << MAX_LINK_W_SHIFT) |
-+			   pcie->max_speed);
-+	dw_pcie_dbi_ro_wr_dis(pci);
-+
-+	ls_lut_writel(pcie, PEX_PF0_PME_MES_DR, val);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
-+				     struct platform_device *pdev)
-+{
-+	u32 val;
-+	int ret;
-+
-+	pcie->irq = platform_get_irq_byname(pdev, "pme");
-+	if (pcie->irq < 0) {
-+		dev_err(&pdev->dev, "Can't get 'pme' irq.\n");
-+		return pcie->irq;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, pcie->irq,
-+			       ls_pcie_ep_event_handler, IRQF_SHARED,
-+			       pdev->name, pcie);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Can't register PCIe IRQ.\n");
-+		return ret;
-+	}
-+
-+	/* Enable interrupts */
-+	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_IER);
-+	val |=  PEX_PF0_PME_MES_IER_LDDIE | PEX_PF0_PME_MES_IER_HRDIE |
-+		PEX_PF0_PME_MES_IER_LUDIE;
-+	ls_lut_writel(pcie, PEX_PF0_PME_MES_IER, val);
-+
-+	return 0;
-+}
-+
- static const struct pci_epc_features*
- ls_pcie_ep_get_features(struct dw_pcie_ep *ep)
- {
-@@ -125,6 +223,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
- 	struct ls_pcie_ep *pcie;
- 	struct pci_epc_features *ls_epc;
- 	struct resource *dbi_base;
-+	int ret;
- 
- 	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
- 	if (!pcie)
-@@ -155,9 +254,20 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
- 
- 	pci->ep.ops = &ls_pcie_ep_ops;
- 
-+	pcie->big_endian = of_property_read_bool(dev->of_node, "big-endian");
-+
-+	pcie->max_speed = dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) &
-+			  MAX_LINK_SP_MASK;
-+	pcie->max_width = (dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) >>
-+			  MAX_LINK_W_SHIFT) & MAX_LINK_W_MASK;
-+
- 	platform_set_drvdata(pdev, pcie);
- 
--	return dw_pcie_ep_init(&pci->ep);
-+	ret = dw_pcie_ep_init(&pci->ep);
-+	if (ret)
-+		return  ret;
-+
-+	return  ls_pcie_ep_interrupt_init(pcie, pdev);
- }
- 
- static struct platform_driver ls_pcie_ep_driver = {
--- 
-2.34.1
+On 01/12/2023 12:21 AM, Krzysztof Kozlowski wrote:
+> On 11/01/2023 19:44, William Zhang wrote:
+>>
+>>
+>> On 01/11/2023 10:12 AM, Krzysztof Kozlowski wrote:
+>>> On 11/01/2023 19:04, William Zhang wrote:
+>>>>
+>>>>
+>>>> On 01/11/2023 01:02 AM, Krzysztof Kozlowski wrote:
+>>>>> On 10/01/2023 23:18, Florian Fainelli wrote:
+>>>>>> On 1/10/23 00:40, Krzysztof Kozlowski wrote:
+>>>>>>>>> No, it is discouraged in such forms. Family or IP block compatibles
+>>>>>>>>> should be prepended with a specific compatible. There were many issues
+>>>>>>>>> when people insisted on generic or family compatibles...
+>>>>>>>>>
+>>>>>>>>>> Otherwise we will have to have a compatible string with chip model for
+>>>>>>>>>> each SoC even they share the same IP. We already have more than ten of
+>>>>>>>>>> SoCs and the list will increase.  I don't see this is a good solution too.
+>>>>>>>>>
+>>>>>>>>> You will have to do it anyway even with generic fallback, so I don't get
+>>>>>>>>> what is here to gain... I also don't get why Broadcom should be here
+>>>>>>>>> special, different than others. Why it is not a good solution for
+>>>>>>>>> Broadcom SoCs but it is for others?
+>>>>>>>>>
+>>>>>>>> I saw a few other vendors like these qcom ones:
+>>>>>>>>       qcom,spi-qup.yaml
+>>>>>>>>           - qcom,spi-qup-v1.1.1 # for 8660, 8960 and 8064
+>>>>>>>>           - qcom,spi-qup-v2.1.1 # for 8974 and later
+>>>>>>>>           - qcom,spi-qup-v2.2.1 # for 8974 v2 and later
+>>>>>>>>       qcom,spi-qup.yaml
+>>>>>>>>           const: qcom,geni-spi
+>>>>>>>
+>>>>>>> IP block version numbers are allowed when there is clear mapping between
+>>>>>>> version and SoCs using it. This is the case for Qualcomm because there
+>>>>>>> is such clear mapping documented and available for Qualcomm engineers
+>>>>>>> and also some of us (although not public).
+>>>>>>>
+>>>>>>>> I guess when individual who only has one particular board/chip and is
+>>>>>>>> not aware of the IP family,  it is understandable to use the chip
+>>>>>>>> specific compatible string.
+>>>>>>>
+>>>>>>> Family of devices is not a versioned IP block.
+>>>>>>
+>>>>>> Would it be acceptable to define for instance:
+>>>>>>
+>>>>>> - compatible = "brcm,bcm6868-hsspi", "brcm,bcmbca-hsspi";
+>>>>>
+>>>>> Yes, this is perfectly valid. Although it does not solve William
+>>>>> concerns because it requires defining specific compatibles for all of
+>>>>> the SoCs.
+>>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
+>>>>>
+>>>> As I mentioned in another email,  I would be okay to use these
+>>>> compatibles to differentiate by ip rev and to conforms to brcm convention:
+>>>> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.0", "brcm,bcmbca-hsspi";
+>>>> "brcm,bcmXYZ-hsspi", "brcm,bcmbca-hsspi-v1.1", "brcm,bcmbca-hsspi";
+>>>
+>>>
+>>> Drop the version in such case, no benefits. I assume XYZ is the SoC
+>>> model, so for example 6868.
+>>>
+>> Yes XYZ is the SoC model
+>>>>
+>>>> In the two drivers I included in this series, it will be bound to
+>>>> brcm,bcmbca-hsspi-v1.0 (in additional to brcm,bcm6328-hsspi) and
+>>>> brcm,bcmbca-hsspi-v1.1 respectively.  This way we don't need to update
+>>>> the driver with a new soc specific compatible whenever a new chips comes
+>>>> out.
+>>>
+>>> I don't understand why do you bring it now as an argument. You defined
+>>> before that your driver will bind to the generic bcmbca compatible, so
+>>> now it is not enough?
+>>>
+>> No as we are adding chip model specific info here.  The existing driver
+>> spi-bcm63xx-hsspi.c only binds to brcm,bcm6328-hsspi. This driver
+>> supports all the chips with rev1.0 controller so I am using this 6328
+>> string for other chips with v1.0 in the dts patch, which is not ideal.
+> 
+> Why? This is perfectly ideal and usual case. Why changing it?
+> 
+>> Now I have to add more compatible to this driver and for each new chip
+>> with 1.0 in the future if any.
+> 
+> Why you cannot use compatibility with older chipset?
+> 
+IMHO it is really confusing that we have all the SoCs but have to bind 
+to an antique SoC's spi controller compatible and people may think it is 
+a mistake or typo when they don't know they are actually the same. I 
+know there are usage like that but when we have clear knowledge of the 
+IP block with rev info, I think it is much better to have a precise SoC 
+model number and a general revision info in the compatible. As you know 
+they are many usage of IP rev info in the compatible too. 
+brcm,bcm6328-hsspi will stay so it does not break any existing dts 
+reference to that.
 
+Anyway if you still does not like this idea, I will drop the rev info 
+and you have it your way.
+
+> 
+> Best regards,
+> Krzysztof
+> 
+
+--00000000000096c68005f2166d7b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICNpLcJrc+r+/n3XQ2cbkts8RSSi
+wIgA4s4GdRXUzz2IMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDExMjE5NTAyNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAFBOB+bPWyBzFDM8NAVsDL0KEjEbOycb5yhPCHWac4cCzY
+xRWAyBBM9v8pbNPclkEi73lt94eI9qWnBWRqbMnrG5wdDK7G6b+khdqnxQ08pQdYOHVeNsfVKVsw
+0eBkWAdwaYPRTZ4wvGERkvZn7O97sW4jwRJkFshAFVaXJi+911OyYf8ztqkdWv1uzNghMpHrHfv5
+Hncyo5qBi2pGOQUI/brot7jLbFc5wUyJ46YVbmWEdXGzwxcyhAm458HGf2mmVdpW/f81e2D4ciuX
+EWJSBrzc/I2gSfzkoS2OgtYZbJAsArRZKdplmzuX3KPtmss+VgGfsjUsDWTR9Xge9e90
+--00000000000096c68005f2166d7b--
