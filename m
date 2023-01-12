@@ -2,145 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D496676AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9FA6676B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238585AbjALOed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S238924AbjALOez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239450AbjALOdn (ORCPT
+        with ESMTP id S237630AbjALOdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:33:43 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF555AC55;
-        Thu, 12 Jan 2023 06:25:15 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A7CC23200923;
-        Thu, 12 Jan 2023 09:25:12 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 12 Jan 2023 09:25:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673533512; x=1673619912; bh=zd2a00NEe4
-        +bDxczc+Ry0ob6zOWTcbtiiMyZcdFcU0w=; b=YGNxNqkRDCogME/TIrJwOFu+Aw
-        KREFfDsPOtB+pMQXTRSOjSADpBtRnn7ra9dThQy9nYwC5yaFT1k3aZoi1r0cw8k+
-        tZtQBFckNDlZiYSPEjFu22B1zw3L8alU9JbOhL2cROrmsh2p6L75WEvDRpGOlgd2
-        0Oe0Oh6/0kUY1aVj2noXhURTil8Q8TZiK64DpyY7HOtLraktXAnQF2cQNIub/Fd+
-        TBLb7phal05/bJz7ZEvhP6cNFIDtQbD0Ifa7+IUKdSYBrlIu+O75PMLYYnO341zD
-        VmwdYG9nyS06eac4RqrejbcNIO6da7iyTziQCz+EZuoMtNT3oUn/hPg7TlXw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673533512; x=1673619912; bh=zd2a00NEe4+bDxczc+Ry0ob6zOWT
-        cbtiiMyZcdFcU0w=; b=lvKLryXdOqdEofsFsgIJQHOGktZeXc6Az43dxqpjOy4o
-        AffAcHAPxJ0T5mqZ46mKeyrq78/6Dc3K0kLAPr9ElHiyu+h78rtMrtkUNr5Kr6dj
-        GAmBZvUfhKZgbcfDoG9khuNbZ6S+OHA7stvHly/frsr3kr+KKfBBpk8twcj8W2UZ
-        S3rWWH/zrYnfFQA9xKiP6r6yWFHUERBHkAJX72Q/9hLou0QzOCcUgeQcqhzU5VoI
-        DyDNOvUqTentQ0QcgBG8kDfJrIelN2jzDdQnpaQFtSS2k9t9AbRdtJBAF8ONQo6P
-        9hSfp0kKE4X+diUWCs14nZNTtR+ib4YGVMUz0T/euA==
-X-ME-Sender: <xms:RxjAY2-gAMTQkme3l1_1vUzceEGq89VRd3miCOPsXW-AfkRe0R5ARw>
-    <xme:RxjAY2slsnRZE7VDPM4gfQgGCfPJH0cLwE7mmlWVRHb-xTJR-2pyWS86LMm3K9wJ7
-    Wp7mggCGcmA-_Y7huo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefgudfg
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RxjAY8BofP2iwlr4WsTRUE3GFTIilbevoETcx1AdLHUD0DpcEl2baw>
-    <xmx:RxjAY-eF-AmA_kcO6TRy-o70WLcT3DX1-vMFSqtmLyNUVWXbG0nJIQ>
-    <xmx:RxjAY7NRVoYzjn-7RIfz09uKphRe7p3VSBb53XcRHtHlvy3ElmXcZA>
-    <xmx:SBjAY8G2EH6syEFGmLuK_5FPcRgYYbtaUDEmOfbvtGp86NqBKeGo_Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CFB53B60086; Thu, 12 Jan 2023 09:25:11 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <5ad677f3-2cbc-4ba0-bd48-2f832a72fb28@app.fastmail.com>
-In-Reply-To: <20230103203654.59322-4-nick.hawkins@hpe.com>
-References: <20230103203654.59322-1-nick.hawkins@hpe.com>
- <20230103203654.59322-4-nick.hawkins@hpe.com>
-Date:   Thu, 12 Jan 2023 15:24:51 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "Jean Delvare" <jdelvare@suse.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Russell King" <linux@armlinux.org.uk>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 3/5] ARM: dts: add GXP Support for fans and SPI
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 09:33:49 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302215B151
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:25:35 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id vm8so45155461ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:25:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+BrBUxQnYkGxjstTVVMr58Pod5wj5L4LOq9dJdnfLI=;
+        b=LljAZMCyUX53tPkPqaYKiBqfIZEodEXSf4AQQ7t3cGEVJwfrLzh68ORX/7k+wTTfU6
+         7BtMmbi5/1PeecvSPQwGa4mg3wgds/Qv/cG3elqk3vYQkIDLpxkE7OS4zknfE8CpWPpn
+         +EnNc/+NUqbI+6robPoj6sYISNyZZ/W5O9W+b/Fa5ECgLfXo7Fali3QZN1iDmdGaYNJ0
+         1WP/3S1d3DOG9/bgwbxpViZogLhPubgx/t1I56RDvMsWck1f1RJDMB70oAqblnC/fv3E
+         Q+KbLjmCYgEF8bPGxsPJGA0gJp2wfwCmDSjeGOCmif93lbMzS89d44ZYeG5dOUYGu9UT
+         MZjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+BrBUxQnYkGxjstTVVMr58Pod5wj5L4LOq9dJdnfLI=;
+        b=iQ2eHYVP2wREWzHumAa/VqXaoe50XAgKRoy3smW1jkMPRbVZuLZYOJAigmeGMC6Qn4
+         n5Iu4Ss2A4kaPVQppKJJkYLeXUeQlPsFcwnS14TsNuVrt1AiOtricFi7+A7DzvJ1kfMl
+         yLiCycvHHtCirINhgCDPmXLkYudYV9WsZ4qUiGpcAm/YhcdfthGf7D6k6QAXfkyCAcQJ
+         rKAqNRobFKXOERCPy6CeE9CAGg+g0A1oOUFezE7s3JOBT2M3sFjuShh8CeYYGzHiDhRw
+         7DXcgQY5FnAG1rC8Gs8yiXTy5CVMpr3StgnrA/lIk6ECnvZCKA8xZ6VAYK4MRWDCfQxx
+         usSg==
+X-Gm-Message-State: AFqh2kr/zDlLMWQbwIQxzEWw5v/hZaRNdX9JQI2zbwkLZUERjnXaJbTJ
+        UxNyaNXT1eBaERtGv1VgG2M=
+X-Google-Smtp-Source: AMrXdXusDmRSKTbsfO5Ie3X61McUbHUdC7grK0egl7ZUnsQazlmbyiXAh8xaWZH99PYI9RV+FuXE/A==
+X-Received: by 2002:a17:907:9625:b0:7ad:9455:d57d with SMTP id gb37-20020a170907962500b007ad9455d57dmr74612097ejc.74.1673533533746;
+        Thu, 12 Jan 2023 06:25:33 -0800 (PST)
+Received: from gmail.com (1F2EF2EB.nat.pool.telekom.hu. [31.46.242.235])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm7436252ejf.210.2023.01.12.06.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 06:25:33 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 12 Jan 2023 15:25:31 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [GIT PULL] scheduler fixes
+Message-ID: <Y8AYWxzqkoKQfgV9@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 3, 2023, at 21:36, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
->
-> Reorganize the base address of AHB to accommodate the SPI and fan driver
-> register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
-> compatibles. Add comments to make the register range more clear.
->
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
->
+Linus,
 
-> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi 
-> b/arch/arm/boot/dts/hpe-gxp.dtsi
-> index cf735b3c4f35..b73b22a93716 100644
-> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
-> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * Device Tree file for HPE GXP
-> + * Device Tree for HPE
->   */
-> 
->  /dts-v1/;
-> @@ -52,76 +52,102 @@
->  			cache-level = <2>;
->  		};
-> 
-> -		ahb@c0000000 {
-> +		ahb@80000000 {
->  			compatible = "simple-bus";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			ranges = <0x0 0xc0000000 0x30000000>;
-> +			ranges = <0x0 0x80000000 0xf000000>, /* 0x80000000 - 0x8f000000 */
-> +				 <0x40000000 0xc0000000 0x7fffffff>; /* 0xc0000000 - 0xffffffff */
+Please pull the latest sched/urgent git tree from:
 
-I'm a bit confused by the change in the mappings: are you
-sure this all the same ahb bus and not two separate buses?
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-urgent-2023-01-12
 
-The comment for the second range looks wrong to me, as
-you define a 2GB (minus one byte) sized mapping but the
-comment only lists a 1GB (including the last byte) mapping.
+   # HEAD: 9a5418bc48babb313d2a62df29ebe21ce8c06c59 sched/core: Use kfree_rcu() in do_set_cpus_allowed()
 
-I would expect that the original 0x30000000 (including the
-last byte) was correct here.
+- Fix scheduler frequency invariance bug related to overly long tickless periods
+  triggering an integer overflow and disabling the feature.
 
-> -			vic1: interrupt-controller@80f00000 {
-> +			vic1: interrupt-controller@f00000 { /* 0x80f00000 */
+- Fix use-after-free bug in dup_user_cpus_ptr().
 
-This is not the same address as before. I'm also not sure the
-comment is helpful here.
+- Fix do_set_cpus_allowed() deadlock scenarios related to calling kfree() with
+  the pi_lock held. NOTE: the rcu_free() is the 'lazy' solution here - we looked
+  at patches to free the structure after the pi_lock got dropped, but that looked
+  quite a bit messier - and none of this is truly performance critical. We can
+  revisit this if it's too lazy of a solution ...
 
-    Arnd
+ Thanks,
+
+	Ingo
+
+------------------>
+Waiman Long (2):
+      sched/core: Fix use-after-free bug in dup_user_cpus_ptr()
+      sched/core: Use kfree_rcu() in do_set_cpus_allowed()
+
+Yair Podemsky (1):
+      sched/core: Fix arch_scale_freq_tick() on tickless systems
+
+
+ kernel/sched/core.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 60 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 25b582b6ee5f..bb1ee6d7bdde 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2604,27 +2604,71 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+ 		.user_mask = NULL,
+ 		.flags     = SCA_USER,	/* clear the user requested mask */
+ 	};
++	union cpumask_rcuhead {
++		cpumask_t cpumask;
++		struct rcu_head rcu;
++	};
+ 
+ 	__do_set_cpus_allowed(p, &ac);
+-	kfree(ac.user_mask);
++
++	/*
++	 * Because this is called with p->pi_lock held, it is not possible
++	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
++	 * kfree_rcu().
++	 */
++	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
++}
++
++static cpumask_t *alloc_user_cpus_ptr(int node)
++{
++	/*
++	 * See do_set_cpus_allowed() above for the rcu_head usage.
++	 */
++	int size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
++
++	return kmalloc_node(size, GFP_KERNEL, node);
+ }
+ 
+ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+ 		      int node)
+ {
++	cpumask_t *user_mask;
+ 	unsigned long flags;
+ 
+-	if (!src->user_cpus_ptr)
++	/*
++	 * Always clear dst->user_cpus_ptr first as their user_cpus_ptr's
++	 * may differ by now due to racing.
++	 */
++	dst->user_cpus_ptr = NULL;
++
++	/*
++	 * This check is racy and losing the race is a valid situation.
++	 * It is not worth the extra overhead of taking the pi_lock on
++	 * every fork/clone.
++	 */
++	if (data_race(!src->user_cpus_ptr))
+ 		return 0;
+ 
+-	dst->user_cpus_ptr = kmalloc_node(cpumask_size(), GFP_KERNEL, node);
+-	if (!dst->user_cpus_ptr)
++	user_mask = alloc_user_cpus_ptr(node);
++	if (!user_mask)
+ 		return -ENOMEM;
+ 
+-	/* Use pi_lock to protect content of user_cpus_ptr */
++	/*
++	 * Use pi_lock to protect content of user_cpus_ptr
++	 *
++	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
++	 * do_set_cpus_allowed().
++	 */
+ 	raw_spin_lock_irqsave(&src->pi_lock, flags);
+-	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
++	if (src->user_cpus_ptr) {
++		swap(dst->user_cpus_ptr, user_mask);
++		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
++	}
+ 	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
++
++	if (unlikely(user_mask))
++		kfree(user_mask);
++
+ 	return 0;
+ }
+ 
+@@ -3581,6 +3625,11 @@ static inline bool rq_has_pinned_tasks(struct rq *rq)
+ 	return false;
+ }
+ 
++static inline cpumask_t *alloc_user_cpus_ptr(int node)
++{
++	return NULL;
++}
++
+ #endif /* !CONFIG_SMP */
+ 
+ static void
+@@ -5504,7 +5553,9 @@ void scheduler_tick(void)
+ 	unsigned long thermal_pressure;
+ 	u64 resched_latency;
+ 
+-	arch_scale_freq_tick();
++	if (housekeeping_cpu(cpu, HK_TYPE_TICK))
++		arch_scale_freq_tick();
++
+ 	sched_clock_tick();
+ 
+ 	rq_lock(rq, &rf);
+@@ -8239,8 +8290,8 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
+ 	if (retval)
+ 		goto out_put_task;
+ 
+-	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
+-	if (!user_mask) {
++	user_mask = alloc_user_cpus_ptr(NUMA_NO_NODE);
++	if (IS_ENABLED(CONFIG_SMP) && !user_mask) {
+ 		retval = -ENOMEM;
+ 		goto out_put_task;
+ 	}
