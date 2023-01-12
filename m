@@ -2,430 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7953D666E10
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6F6666E08
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240111AbjALJ1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S239674AbjALJ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239998AbjALJ0Z (ORCPT
+        with ESMTP id S239872AbjALJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:26:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F451DF00;
-        Thu, 12 Jan 2023 01:16:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6347961FAF;
-        Thu, 12 Jan 2023 09:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053C5C43392;
-        Thu, 12 Jan 2023 09:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673515002;
-        bh=V+iTp2fjkkAm20fEdfSyZmV2I2f5Y8HxNdX7L5VTNvQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZI9dMC0rgw/GgRcbACAXwtl3Jf2iDQCkbWWYlvIwSf1FaZ3eUKD0n8mZKcPI8e7Va
-         g+bPzNGMTK0XW4EpxTVsVvdQMW7YwRg/H6RWRLxf74eCHONbk/3PV65vHxiZLBh8Ch
-         KYa3GMhNMbAcMVFeaqssFqATUY5nLaRhDWHCUE9DItA49CJ6I4TyRJ2d76LNMsLjRw
-         ry+lLgZd/JMLlE1+u4XLCv+4PEqriArogGZZ+uxIr+13QTEZ+/kKzbDPszF7KJUhuE
-         a2Z7eITUq4j617BlfXdqh0pobT5n6wPUpzEt5+6DbonBpQUcP8vbs3nhWJj9PDB/6k
-         dQki7bl+z1o0Q==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3 3/3] docs/mm: Physical Memory: add structure, introduction and nodes description
-Date:   Thu, 12 Jan 2023 11:16:16 +0200
-Message-Id: <20230112091616.824565-4-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230112091616.824565-1-rppt@kernel.org>
-References: <20230112091616.824565-1-rppt@kernel.org>
+        Thu, 12 Jan 2023 04:26:23 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0961ADA3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:16:29 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id tz12so43190720ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZKR2tXKyALNq5BiHC3M8UwwfGSVJszQwrE9Cpy7GyxA=;
+        b=qcfr3oUGRPmLkFvhnqk2sM0zqTxrvx8QgbhTwONUMbUZGR3JEKj2wmGfuZ8FIBIC6+
+         aTckz82ae5wih36cb1CuxCOgzmzotwWXLTYEnuSTELmjnKQ01rPVMwOMxIFhIYHqaH64
+         iO7178U096AMqLUA3WNLFuBnjohLrRraGWhO3CFGmWMuJzIjoaBFwBi7j5jSvHwIhd5B
+         CS4Q5wdRdw54Eiwi7DV8KoqjlQ+UeowyzdUGZIcLCVq9WjGJbTf/7PcyioI2IGbA5IWl
+         URRRFxlpgQAHM3JnTviBLgRKTN0+pqBsJU4vKdwR0XlKKAarZAt3f2TX0kYHNylTrfog
+         bLSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZKR2tXKyALNq5BiHC3M8UwwfGSVJszQwrE9Cpy7GyxA=;
+        b=J+l/3CG7F3okrZjwPIVPEF1Jfl0M1EPnZP7SXdaP5eZm+iZYnaDKNL1Z1Cj9YZJtL7
+         6IxGaYQhG8vSbxnOAg6lEmLr4BGqv1AK5HKT5ZAWG1ZQf/We4Vha/Pp0COR3x2QWluSz
+         Ikr8BouazzDVNm0dSHH9Y2gCYqZDFRhWbaD/m8P98CKx0zolS+x0E8Zf4tePSmRr7OgF
+         TMAdJ2pgZSyv/bZKcEJoYKihQKnWs1hjiJUW7tEyEEvJoHcv3LGsnmQ3s6iKWAOPcdWq
+         Y4DyQdShX28nT65dWZjkeKia8rzoM0wmtspTK/NZekCAA1iAun5UcYObwUz1pwRLrSf/
+         035g==
+X-Gm-Message-State: AFqh2kqP+LMP/wSr0Lgwsb8bbE7PvfdW3CxP97Pk7L1QMM7bvkxwBfEp
+        zWlo+rJOKYzD2UYYkWgBpEljgA==
+X-Google-Smtp-Source: AMrXdXsHr93+ZbXdYi8g1JbBSFkw8D4sHzKUP1p8Wt9Y0ByRiqExj1DEJ3QGEWmiaj2EtcCmRxhvjg==
+X-Received: by 2002:a17:907:c202:b0:7ad:b14f:dea4 with SMTP id ti2-20020a170907c20200b007adb14fdea4mr65519714ejc.14.1673514987634;
+        Thu, 12 Jan 2023 01:16:27 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id x3-20020a170906b08300b007c0688a68cbsm7303890ejy.176.2023.01.12.01.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 01:16:27 -0800 (PST)
+Message-ID: <1b827ded-cc34-23ae-4b60-7e7993ce659d@linaro.org>
+Date:   Thu, 12 Jan 2023 10:16:25 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: leds: add worldsemi,ws2812b
+Content-Language: en-US
+To:     Chuanhong Guo <gch981213@gmail.com>, Lee Jones <lee@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221212045558.69602-1-gch981213@gmail.com>
+ <20221212045558.69602-3-gch981213@gmail.com>
+ <c592dd31-5e9a-c2a2-1c70-46b7cffa9c5d@linaro.org>
+ <Y6XjHNCLXY9s1IOF@duo.ucw.cz>
+ <9d2c05f6-af5a-2d79-02ea-85c49e244957@linaro.org>
+ <Y7xGUiWBKIAm9YFA@google.com>
+ <1905de3e-438e-b729-7c1c-b154998c5eb6@linaro.org>
+ <Y708DfB41c/ZivRw@google.com>
+ <CAJsYDVJC15cePQ65BR=dxKY8ADoRepbiiFqXTNQzh_6RTAeMYA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJsYDVJC15cePQ65BR=dxKY8ADoRepbiiFqXTNQzh_6RTAeMYA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 11/01/2023 19:53, Chuanhong Guo wrote:
+> Hi!
+> 
+> On Tue, Jan 10, 2023 at 6:21 PM Lee Jones <lee@kernel.org> wrote:
+>>
+>> On Tue, 10 Jan 2023, Krzysztof Kozlowski wrote:
+>>
+>>> On 09/01/2023 17:52, Lee Jones wrote:
+>>>> On Sat, 24 Dec 2022, Krzysztof Kozlowski wrote:
+>>>>
+>>>>> On 23/12/2022 18:19, Pavel Machek wrote:
+>>>>>> Hi!
+>>>>>>
+>>>>>>>> Add dt binding schema for WorldSemi WS2812B driven using SPI
+>>>>>>>> bus.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+>>>>>>>> ---
+>>>>>>>> Changes since v1:
+>>>>>>>> remove linux driver reference from description
+>>>>>>>> remove some obvious descriptions
+>>>>>>>> fix unit address regex in multi-led property
+>>>>>>>> drop various minItems
+>>>>>>>> add maxItems = 1 to reg
+>>>>>>>> fix node names and property orders in binding example
+>>>>>>>> drop -spi from compatible string
+>>>>>>>> add default-brightness
+>>>>>>>>
+>>>>>>>> Change since v2:
+>>>>>>>> drop "this patch" from commit message
+>>>>>>>> rename leds to led-controller
+>>>>>>>> drop default-brightness and default-intensity
+>>>>>>>>
+>>>>>>>> Change since v3:
+>>>>>>>> reword commit title
+>>>>>>>>
+>>>>>>>>  .../bindings/leds/worldsemi,ws2812b.yaml      | 116 ++++++++++++++++++
+>>>>>>>>  1 file changed, 116 insertions(+)
+>>>>>>>>  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>>>>>>>>
+>>>>>>>> diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>>>>>>>> new file mode 100644
+>>>>>>>> index 000000000000..548c05ac3d31
+>>>>>>>> --- /dev/null
+>>>>>>>> +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>>>>>>>> @@ -0,0 +1,116 @@
+>>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>>>>> +%YAML 1.2
+>>>>>>>> +---
+>>>>>>>> +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
+>>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>>>> +
+>>>>>>>> +title: WS2812B LEDs driven using SPI
+>>>>>>>> +
+>>>>>>>> +maintainers:
+>>>>>>>> +  - Chuanhong Guo <gch981213@gmail.com>
+>>>>>>>> +
+>>>>>>>> +description: |
+>>>>>>>> +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
+>>>>>>>> +  together and controlled individually using a single wire.
+>>>>>>>> +  This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
+>>>>>>>> +  Typical setups includes connecting the data pin of the LED chain to MOSI as
+>>>>>>>> +  the only device or using CS and MOSI with a tri-state voltage-level shifter
+>>>>>>>> +  for the data pin.
+>>>>>>>> +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
+>>>>>>>> +  and the controller needs to send all the bytes continuously.
+>>>>>>>> +
+>>>>>>>> +allOf:
+>>>>>>>> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>>>>>>>> +
+>>>>>>>> +properties:
+>>>>>>>> +  compatible:
+>>>>>>>> +    const: worldsemi,ws2812b
+>>>>>>>> +
+>>>>>>>> +  reg:
+>>>>>>>> +    maxItems: 1
+>>>>>>>> +
+>>>>>>>> +  spi-max-frequency:
+>>>>>>>> +    minimum: 2105000
+>>>>>>>> +    maximum: 2850000
+>>>>>>>> +
+>>>>>>>> +  "#address-cells":
+>>>>>>>> +    const: 1
+>>>>>>>> +
+>>>>>>>> +  "#size-cells":
+>>>>>>>> +    const: 0
+>>>>>>>> +
+>>>>>>>> +patternProperties:
+>>>>>>>> +  "^multi-led@[0-9a-f]+$":
+>>>>>>>> +    type: object
+>>>>>>>> +    $ref: leds-class-multicolor.yaml#
+>>>>>>>> +    unevaluatedProperties: false
+>>>>>>>> +
+>>>>>>>> +    properties:
+>>>>>>>> +      color-index:
+>>>>
+>>>> Why "index"?
+>>>>
+>>>> Isn't it just an array of colours rather than an index into something?
+>>>
+>>> Yeah.
+> 
+> The corresponding sysfs interface is called 'multi_index' so I called
+> it this way.
+> 
+>>>
+>>>>
+>>>>>>>> +        description: |
+>>>>>>>> +          A 3-item array specifying color of each components in this LED. It
+>>>>
+>>>> Why are you forcing this to 3?
+>>>>
+>>>> Surely there are multi-colour LEDs containing more or less colours?
+>>>
+>>> For this device, because it has only tuples of three.
+> 
+> WS2812B has 3 colors per chip. There are chips using a similar protocol
+> with 4 colors but my current driver is hard-coded to support exactly 3 colors.
+> 
+>> This doesn't looks like a device specific property to me.
+>>
+>> If this is not going to be used by any other device, shouldn't it
+>> contain a prefix?
+>>
+>>>>>>>> +          should be one of the LED_COLOR_ID_* prefixed definitions from the
+>>>>>>>> +          header include/dt-bindings/leds/common.h. Defaults to
+>>>>
+>>>> Isn't "include" a Linuxisum?
+>>>
+>>> No, better to have full paths, so automated tools can validate them. If
+>>> we ever decide to drop it, we can also make a easier search&replace for
+>>> the pattern starting with include/.
+>>
+>> Very well.  It's your train set. :)
+>>
+>>>>>>>> +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
+>>>>>>>> +          if unspecified.
+>>>>>>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>>>>>> +        maxItems: 3
+>>>>>>>
+>>>>>>> In general I am fine with it, although there is still question for
+>>>>>>> adding more multi-color defines in binding headers to replace this
+>>>>>>> property - GRB/RBG/GBR and even more for RGBW.
+>>>>>>>
+>>>>>>> Pavel, Lee, any thoughts from your side?
+>>>>>>
+>>>>>> This really needs to mention the name this hardware is known as -- I
+>>>>>> believe it is NeoPixel.
+>>>>>
+>>>>> We wait here for feedback on colors... The binding is re-implementing
+>>>>> color, just because of combinations GRB/RBG/GBR, which could be achieved
+>>>>> with new color defines.
+>>>>
+>>>> Sure, but where does that end?
+>>>>
+>>>> How many permutations are there likely to be?
+>>>
+>>> For light emitting devices, RGB seems to be used for so long, that I
+>>> don't expect more permutations (e.g. CMY). On the other hand, someone
+>>> might create LED strip with whatever colors, so maybe indeed better to
+>>> allow any variations as in array.
+>>
+>> Even you suggested variation: "even more for RGBW".
+>>
+>> Caveat: as you are well aware, "I'm new here", so my input is no more
+>> informed or valuable as yours at this point.  I'm just calling it as I
+>> see it.  If you have strong opinions and they differ wildly from mine,
+>> we may have to take intervention from Pavel.  As it stands, the
+>> property, although slightly restricted IMHO, appears fine.
+>>
+>>>> An unlimited array has more of a chance of standing the test of time.
+> 
+> I have another idea that avoids this whole conversation: Abandon
+> color-index completely and determine colors with compatible string
+> and platform data.
+> My original idea of this property is to support WS2812B and its clones
+> with different colors under the same compatible string. Technically
+> genuine WS2812Bs only come with GRB colors and the clones
+> should have their own chip names (e.g. xiaomi,hm0807a for an RGB
+> clone and <unknown vendor>,sk6812 for an RGBW one.). It's
+> reasonable to have one compatible string per chip for colors, a
+> chip-specific property. Also, adding more compatible devices to a
+> driver is less invasive than adding more definitions to leds/common.h
+> What do you think?
 
-Add structure, introduction and Nodes section to Physical Memory
-chapter.
+This sounds good. However it should not lead to compatibles like
+worldsemi,ws2812b-rgb, worldsemi,ws2812b-bgr etc.
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/mm/physical_memory.rst | 346 +++++++++++++++++++++++++++
- 1 file changed, 346 insertions(+)
-
-diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-index 2ab7b8c1c863..eed583af6985 100644
---- a/Documentation/mm/physical_memory.rst
-+++ b/Documentation/mm/physical_memory.rst
-@@ -3,3 +3,349 @@
- ===============
- Physical Memory
- ===============
-+
-+Linux is available for a wide range of architectures so there is a need for an
-+architecture-independent abstraction to represent the physical memory. This
-+chapter describes the structures used to manage physical memory in a running
-+system.
-+
-+The first principal concept prevalent in the memory management is
-+`Non-Uniform Memory Access (NUMA)
-+<https://en.wikipedia.org/wiki/Non-uniform_memory_access>`_.
-+With multi-core and multi-socket machines, memory may be arranged into banks
-+that incur a different cost to access depending on the “distance” from the
-+processor. For example, there might be a bank of memory assigned to each CPU or
-+a bank of memory very suitable for DMA near peripheral devices.
-+
-+Each bank is called a node and the concept is represented under Linux by a
-+``struct pglist_data`` even if the architecture is UMA. This structure is
-+always referenced to by it's typedef ``pg_data_t``. ``A pg_data_t`` structure
-+for a particular node can be referenced by ``NODE_DATA(nid)`` macro where
-+``nid`` is the ID of that node.
-+
-+For NUMA architectures, the node structures are allocated by the architecture
-+specific code early during boot. Usually, these structures are allocated
-+locally on the memory bank they represent. For UMA architectures, only one
-+static ``pg_data_t`` structure called ``contig_page_data`` is used. Nodes will
-+be discussed further in Section :ref:`Nodes <nodes>`
-+
-+The entire physical address space is partitioned into one or more blocks
-+called zones which represent ranges within memory. These ranges are usually
-+determined by architectural constraints for accessing the physical memory.
-+The memory range within a node that corresponds to a particular zone is
-+described by a ``struct zone``, typedeffed to ``zone_t``. Each zone has
-+one of the types described below.
-+
-+* ``ZONE_DMA`` and ``ZONE_DMA32`` historically represented memory suitable for
-+  DMA by peripheral devices that cannot access all of the addressable
-+  memory. For many years there are better more and robust interfaces to get
-+  memory with DMA specific requirements (:ref:`DMA API <_dma_api>`), but
-+  ``ZONE_DMA`` and ``ZONE_DMA32`` still represent memory ranges that have
-+  restrictions on how they can be accessed.
-+  Depending on the architecture, either of these zone types or even they both
-+  can be disabled at build time using ``CONFIG_ZONE_DMA`` and
-+  ``CONFIG_ZONE_DMA32`` configuration options. Some 64-bit platforms may need
-+  both zones as they support peripherals with different DMA addressing
-+  limitations.
-+
-+* ``ZONE_NORMAL`` is for normal memory that can be accessed by the kernel all
-+  the time. DMA operations can be performed on pages in this zone if the DMA
-+  devices support transfers to all addressable memory. ``ZONE_NORMAL`` is
-+  always enabled.
-+
-+* ``ZONE_HIGHMEM`` is the part of the physical memory that is not covered by a
-+  permanent mapping in the kernel page tables. The memory in this zone is only
-+  accessible to the kernel using temporary mappings. This zone is available
-+  only on some 32-bit architectures and is enabled with ``CONFIG_HIGHMEM``.
-+
-+* ``ZONE_MOVABLE`` is for normal accessible memory, just like ``ZONE_NORMAL``.
-+  The difference is that the contents of most pages in ``ZONE_MOVABLE`` is
-+  movable. That means that while virtual addresses of these pages do not
-+  change, their content may move between different physical pages. Often
-+  ``ZONE_MOVABLE`` is populated during memory hotplug, but it may be
-+  also populated on boot using one of ``kernelcore``, ``movablecore`` and
-+  ``movable_node`` kernel command line parameters. See :ref:`Page migration
-+  <page_migration>` and :ref:`Memory Hot(Un)Plug <_admin_guide_memory_hotplug>`
-+  for additional details.
-+
-+* ``ZONE_DEVICE`` represents memory residing on devices such as PMEM and GPU.
-+  It has different characteristics than RAM zone types and it exists to provide
-+  :ref:`struct page <Pages>` and memory map services for device driver
-+  identified physical address ranges. ``ZONE_DEVICE`` is enabled with
-+  configuration option ``CONFIG_ZONE_DEVICE``.
-+
-+It is important to note that many kernel operations can only take place using
-+``ZONE_NORMAL`` so it is the most performance critical zone. Zones are
-+discussed further in Section :ref:`Zones <zones>`.
-+
-+The relation between node and zone extents is determined by the physical memory
-+map reported by the firmware, architectural constraints for memory addressing
-+and certain parameters in the kernel command line.
-+
-+For example, with 32-bit kernel on an x86 UMA machine with 2 Gbytes of RAM the
-+entire memory will be on node 0 and there will be three zones: ``ZONE_DMA``,
-+``ZONE_NORMAL`` and ``ZONE_HIGHMEM``::
-+
-+  0                                                            2G
-+  +-------------------------------------------------------------+
-+  |                            node 0                           |
-+  +-------------------------------------------------------------+
-+
-+  0         16M                    896M                        2G
-+  +----------+-----------------------+--------------------------+
-+  | ZONE_DMA |      ZONE_NORMAL      |       ZONE_HIGHMEM       |
-+  +----------+-----------------------+--------------------------+
-+
-+
-+With a kernel built with ``ZONE_DMA`` disabled and ``ZONE_DMA32`` enabled and
-+booted with ``movablecore=80%`` parameter on an arm64 machine with 16 Gbytes of
-+RAM equally split between two nodes, there will be ``ZONE_DMA32``,
-+``ZONE_NORMAL`` and ``ZONE_MOVABLE`` on node 0, and ``ZONE_NORMAL`` and
-+``ZONE_MOVABLE`` on node 1::
-+
-+
-+  1G                                9G                         17G
-+  +--------------------------------+ +--------------------------+
-+  |              node 0            | |          node 1          |
-+  +--------------------------------+ +--------------------------+
-+
-+  1G       4G        4200M          9G          9320M          17G
-+  +---------+----------+-----------+ +------------+-------------+
-+  |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
-+  +---------+----------+-----------+ +------------+-------------+
-+
-+.. _nodes:
-+
-+Nodes
-+=====
-+
-+As we have mentioned, each node in memory is described by a ``pg_data_t`` which
-+is a typedef for a ``struct pglist_data``. When allocating a page, by default
-+Linux uses a node-local allocation policy to allocate memory from the node
-+closest to the running CPU. As processes tend to run on the same CPU, it is
-+likely the memory from the current node will be used. The allocation policy can
-+be controlled by users as described in
-+Documentation/admin-guide/mm/numa_memory_policy.rst.
-+
-+Most NUMA architectures maintain an array of pointers to the node
-+structures. The actual structures are allocated early during boot when
-+architecture specific code parses the physical memory map reported by the
-+firmware. The bulk of the node initialization happens slightly later in the
-+boot process by free_area_init() function, described later in Section
-+:ref:`Initialization <initialization>`.
-+
-+
-+Along with the node structures, kernel maintains an array of ``nodemask_t``
-+bitmasks called ``node_states``. Each bitmask in this array represents a set of
-+nodes with particular properties as defined by ``enum node_states``:
-+
-+``N_POSSIBLE``
-+  The node could become online at some point.
-+``N_ONLINE``
-+  The node is online.
-+``N_NORMAL_MEMORY``
-+  The node has regular memory.
-+``N_HIGH_MEMORY``
-+  The node has regular or high memory. When ``CONFIG_HIGHMEM`` is disabled
-+  aliased to ``N_NORMAL_MEMORY``.
-+``N_MEMORY``
-+  The node has memory(regular, high, movable)
-+``N_CPU``
-+  The node has one or more CPUs
-+
-+For each node that has a property described above, the bit corresponding to the
-+node ID in the ``node_states[<property>]`` bitmask is set.
-+
-+For example, for node 2 with normal memory and CPUs, bit 2 will be set in ::
-+
-+  node_states[N_POSSIBLE]
-+  node_states[N_ONLINE]
-+  node_states[N_NORMAL_MEMORY]
-+  node_states[N_MEMORY]
-+  node_states[N_CPU]
-+
-+For various operations possible with nodemasks please refer to
-+``include/linux/nodemask.h``.
-+
-+Among other things, nodemasks are used to provide macros for node traversal,
-+namely ``for_each_node()`` and ``for_each_online_node()``.
-+
-+For instance, to call a function foo() for each online node::
-+
-+	for_each_online_node(nid) {
-+		pg_data_t *pgdat = NODE_DATA(nid);
-+
-+		foo(pgdat);
-+	}
-+
-+Node structure
-+--------------
-+
-+The nodes structure ``struct pglist_data`` is declared in
-+``include/linux/mmzone.h``. Here we briefly describe fields of this
-+structure:
-+
-+General
-+~~~~~~~
-+
-+``node_zones``
-+  The zones for this node.  Not all of the zones may be populated, but it is
-+  the full list. It is referenced by this node's node_zonelists as well as
-+  other node's node_zonelists.
-+
-+``node_zonelists``
-+  The list of all zones in all nodes. This list defines the order of zones
-+  that allocations are preferred from. The ``node_zonelists`` is set up by
-+  ``build_zonelists()`` in ``mm/page_alloc.c`` during the initialization of
-+  core memory management structures.
-+
-+``nr_zones``
-+  Number of populated zones in this node.
-+
-+``node_mem_map``
-+  For UMA systems that use FLATMEM memory model the 0's node
-+  ``node_mem_map`` is array of struct pages representing each physical frame.
-+
-+``node_page_ext``
-+  For UMA systems that use FLATMEM memory model the 0's node
-+  ``node_page_ext`` is array of extensions of struct pages. Available only
-+  in the kernels built with ``CONFIG_PAGE_EXTENTION`` enabled.
-+
-+``node_start_pfn``
-+  The page frame number of the starting page frame in this node.
-+
-+``node_present_pages``
-+  Total number of physical pages present in this node.
-+
-+``node_spanned_pages``
-+  Total size of physical page range, including holes.
-+
-+``node_size_lock``
-+  A lock that protects the fields defining the node extents. Only defined when
-+  at least one of ``CONFIG_MEMORY_HOTPLUG`` or
-+  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` configuration options are enabled.
-+  ``pgdat_resize_lock()`` and ``pgdat_resize_unlock()`` are provided to
-+  manipulate ``node_size_lock`` without checking for ``CONFIG_MEMORY_HOTPLUG``
-+  or ``CONFIG_DEFERRED_STRUCT_PAGE_INIT``.
-+
-+``node_id``
-+  The Node ID (NID) of the node, starts at 0.
-+
-+``totalreserve_pages``
-+  This is a per-node reserve of pages that are not available to userspace
-+  allocations.
-+
-+``first_deferred_pfn``
-+  If memory initialization on large machines is deferred then this is the first
-+  PFN that needs to be initialized. Defined only when
-+  ``CONFIG_DEFERRED_STRUCT_PAGE_INIT`` is enabled
-+
-+``deferred_split_queue``
-+  Per-node queue of huge pages that their split was deferred. Defined only when ``CONFIG_TRANSPARENT_HUGEPAGE`` is enabled.
-+
-+``__lruvec``
-+  Per-node lruvec holding LRU lists and related parameters. Used only when
-+  memory cgroups are disabled. It should not be accessed directly, use
-+  ``mem_cgroup_lruvec()`` to look up lruvecs instead.
-+
-+Reclaim control
-+~~~~~~~~~~~~~~~
-+
-+See also :ref:`Page Reclaim <page_reclaim>`.
-+
-+``kswapd``
-+  Per-node instance of kswapd kernel thread.
-+
-+``kswapd_wait``, ``pfmemalloc_wait``, ``reclaim_wait``
-+  Workqueues used to synchronize memory reclaim tasks
-+
-+``nr_writeback_throttled``
-+  Number of tasks that are throttled waiting on dirty pages to clean.
-+
-+``nr_reclaim_start``
-+  Number of pages written while reclaim is throttled waiting for writeback.
-+
-+``kswapd_order``
-+  Controls the order kswapd tries to reclaim
-+
-+``kswapd_highest_zoneidx``
-+  The highest zone index to be reclaimed by kswapd
-+
-+``kswapd_failures``
-+  Number of runs kswapd was unable to reclaim any pages
-+
-+``min_unmapped_pages``
-+  Minimal number of unmapped file backed pages that cannot be reclaimed.
-+  Determined by ``vm.min_unmapped_ratio`` sysctl. Only defined when
-+  ``CONFIG_NUMA`` is enabled.
-+
-+``min_slab_pages``
-+  Minimal number of SLAB pages that cannot be reclaimed. Determined by
-+  ``vm.min_slab_ratio sysctl``. Only defined when ``CONFIG_NUMA`` is enabled
-+
-+``flags``
-+  Flags controlling reclaim behavior.
-+
-+Compaction control
-+~~~~~~~~~~~~~~~~~~
-+
-+``kcompactd_max_order``
-+  Page order that kcompactd should try to achieve.
-+
-+``kcompactd_highest_zoneidx``
-+  The highest zone index to be compacted by kcompactd.
-+
-+``kcompactd_wait``
-+  Workqueue used to synchronize memory compaction tasks.
-+
-+``kcompactd``
-+  Per-node instance of kcompactd kernel thread.
-+
-+``proactive_compact_trigger``
-+  Determines if proactive compaction is enabled. Controlled by
-+  ``vm.compaction_proactiveness`` sysctl.
-+
-+Statistics
-+~~~~~~~~~~
-+
-+``per_cpu_nodestats``
-+  Per-CPU VM statistics for the node
-+
-+``vm_stat``
-+  VM statistics for the node.
-+
-+.. _zones:
-+
-+Zones
-+=====
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
-+
-+.. _pages:
-+
-+Pages
-+=====
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
-+
-+.. _folios:
-+
-+Folios
-+======
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
-+
-+.. _initialization:
-+
-+Initialization
-+==============
-+
-+.. admonition:: Stub
-+
-+   This section is incomplete. Please list and describe the appropriate fields.
--- 
-2.35.1
+Best regards,
+Krzysztof
 
