@@ -2,102 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E226666EA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECDE666E9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236621AbjALJth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239695AbjALJsF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S239692AbjALJsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 12 Jan 2023 04:48:05 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A903050F74;
-        Thu, 12 Jan 2023 01:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673516654; x=1705052654;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=3kPZjp6HimM9YSIBTE/oXUSO1orPN/Jj19BPBdqSxnA=;
-  b=l+UTFcoVie11piSJVRB6ILBprJamFId/vQFYo3nCzcJsU5EKzOHfmN89
-   FkmwIck/5/Sy1y/acUZiVCb/9gsqozH2cUX+DvBO/KW1euLKTH1RSAYIO
-   eKEFAbO72xm5DnmtRiXot98JycuThn7QIqjBtehPF75CuULHFzUPzHINE
-   gJEmoA3TQoEE8vEq05C1DYuOd5VphesIzECoK3FOEHiu/M6GbKJkH9cbn
-   7m92Eqkv5Se2pGOOnWjfN98gJ8W+6Xpl8ClrVGak7jA9R+ZublTQOUo1O
-   VSuhZqK+lZexeRhUn+yHvFLMrkKfZDMt5xd5WXYNVe8eUcoAvFsE3l6EF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="307181255"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="307181255"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:42:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="607725662"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="607725662"
-Received: from vbucoci-mobl1.ger.corp.intel.com ([10.252.52.43])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 01:42:55 -0800
-Date:   Thu, 12 Jan 2023 11:42:53 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-cc:     gregkh@linuxfoundation.org, Kees Cook <keescook@chromium.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/11] tty: vt: replace BUG_ON() by WARN_ON_ONCE()
-In-Reply-To: <20230112080136.4929-7-jirislaby@kernel.org>
-Message-ID: <239b3d75-6186-3c3c-91bb-7ec46545f345@linux.intel.com>
-References: <20230112080136.4929-1-jirislaby@kernel.org> <20230112080136.4929-7-jirislaby@kernel.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239781AbjALJrS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 12 Jan 2023 04:47:18 -0500
+Received: from outbound-smtp21.blacknight.com (outbound-smtp21.blacknight.com [81.17.249.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8722913F21
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:43:45 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp21.blacknight.com (Postfix) with ESMTPS id 2874ECCCFB
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:44 +0000 (GMT)
+Received: (qmail 4654 invoked from network); 12 Jan 2023 09:43:43 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jan 2023 09:43:43 -0000
+Date:   Thu, 12 Jan 2023 09:43:41 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/7] mm/page_alloc.c: Allow __GFP_NOFAIL requests deeper
+ access to reserves
+Message-ID: <20230112094341.hom3ccscbko6v626@techsingularity.net>
+References: <20230109151631.24923-1-mgorman@techsingularity.net>
+ <20230109151631.24923-6-mgorman@techsingularity.net>
+ <Y77ZxWRYe+4RPGRj@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-12161107-1673516577=:1665"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Y77ZxWRYe+4RPGRj@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-12161107-1673516577=:1665
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 12 Jan 2023, Jiri Slaby (SUSE) wrote:
-
-> No need to panic in vc_uniscr_copy_line(), just warn. This should never
-> happen though, as vc_uniscr_check() is supposed to be called before
-> vc_uniscr_copy_line(). And the former checks vc->vc_uni_lines already.
+On Wed, Jan 11, 2023 at 04:46:13PM +0100, Michal Hocko wrote:
+> On Mon 09-01-23 15:16:29, Mel Gorman wrote:
+> > Currently __GFP_NOFAIL allocations without any other flags can access 25%
+> > of the reserves but these requests imply that the system cannot make forward
+> > progress until the allocation succeeds. Allow __GFP_NOFAIL access to 75%
+> > of the min reserve.
 > 
-> In any case, use _ONCE as vc_uniscr_copy_line() is called repeatedly for
-> each line. So don't flood the logs, just in case.
+> I am not sure this is really needed. IIRC the original motivation for
+> allowing NOFAIL request to access access to memory reserves was
+> GFP_NOFS|__GFP_NOFAIL requests which do not invoke the OOM killer.
+> The amount of memory reserves granted was not really important. The
+> point was to allow to move forward. Giving more of the reserves is a
+> double edge sword. It can help in some cases but it can also prevent
+> other high priority users from fwd progress.
 > 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> ---
->  drivers/tty/vt/vt.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index 119b3eafef59..db72375141b0 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -535,7 +535,8 @@ void vc_uniscr_copy_line(const struct vc_data *vc, void *dest, bool viewed,
->  	int offset = row * vc->vc_size_row + col * 2;
->  	unsigned long pos;
->  
-> -	BUG_ON(!uni_lines);
-> +	if (WARN_ON_ONCE(!uni_lines))
-> +		return;
->  
->  	pos = (unsigned long)screenpos(vc, offset, viewed);
->  	if (pos >= vc->vc_origin && pos < vc->vc_scr_end) {
+> I would much rahter see such a change with an example where it really
+> made a difference.
 > 
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Fair point but based on your review for "mm/page_alloc: Give GFP_ATOMIC
+and non-blocking allocations access to reserves" and only allowing
+non-blocking allocations to access reserves if __GFP_HIGH is also
+specified, this patch becomes a no-op and can be dropped.
+
+If GFP_NOFAIL requests really require deeper access to reserves, it'll
+have to be explicitly handled in __zone_watermark_ok and __GFP_NOFAIL
+would be added to the ALLOC_RESERVES collection of flags.
 
 -- 
- i.
-
---8323329-12161107-1673516577=:1665--
+Mel Gorman
+SUSE Labs
