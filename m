@@ -2,93 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71459666982
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 04:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E72666988
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 04:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjALDQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 22:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S229726AbjALDRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 22:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbjALDQ0 (ORCPT
+        with ESMTP id S234237AbjALDRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 22:16:26 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A41DDED5
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:16:25 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id h7so8665625pfq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 19:16:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLgPPN/4BKYUAbBjp/lumqd5Fur98RZfMwe+XyGuCwQ=;
-        b=bjXrKiCPcZ1mnQB/Agf1ffHwErEiwRmfS6XnouNbhPpnaIuZaCD09u1ys66wou6XEw
-         aaPN9EXY0LAew2P3ohjpZskr5qgSGp3QaLiFdo16ELAMQe1VMt2aDRFOXNSQHo3pLGL8
-         uhqGa2RHwvcDX/6hf9PzbxTyGzLpCINmbGeTT91OqvzD4gSMnKgoriAVNyN5ZvivE85/
-         AGSowIYMVw6BgLRHWI0MWlNIA6Bhoot5jzNw319eFU6V/CTTG7vSIb3sV5D2EGdjEurl
-         oMsTt2sAycgXCq3NPWK5lv9Xp3FO+pLxWSEwZLtNwqG3lIi8OA9g5y3VEmmE4xN1LRUO
-         xkbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLgPPN/4BKYUAbBjp/lumqd5Fur98RZfMwe+XyGuCwQ=;
-        b=V8lpvS5FaOfeYAh+GyMqJIlfBu+uYJpUgSwl2DrR481qwmxjO5zFqDcWHJvAVUoOxi
-         dYYf3uTm71Alq2naddPugtMYl2Ts/8vo9Ay0ERDEkKRM8ZadpazYmbaE8CgmzN36kq/L
-         woe/eRnDZ/qlj8ybFbjRH6e8jW6ivF5XRN9O48M6wIUh41g+dcnmn78i0r3EgDNdDcQ9
-         mSrlyKsPjg5abOhn2rcavsBuTziwgrdPvW7S/6/O7ySnx27tpmwDTW02ZYYpqbpV5cAy
-         2BMCbO3Jf0XH8RfHfkaxHbnGv0BQqf0utbizIKkvIbGHh3pTHPeLgEmtEDGw8C5Bygh2
-         BnJg==
-X-Gm-Message-State: AFqh2kqREnsYscJbJ9pVOPGR1AQt68EqxlkwW/dQuGBO5Ly345MLANku
-        UWx/cI0w9nmG2NWlyuGAaWHNvw==
-X-Google-Smtp-Source: AMrXdXu0yK+AtehwqkneInZrjlawWZChNyitggarUNAuCygfbreHfMWSkCNhz90t8Dh3rmThDleTEA==
-X-Received: by 2002:a62:38d8:0:b0:588:4739:9a23 with SMTP id f207-20020a6238d8000000b0058847399a23mr12688063pfa.15.1673493384626;
-        Wed, 11 Jan 2023 19:16:24 -0800 (PST)
-Received: from localhost ([122.172.82.107])
-        by smtp.gmail.com with ESMTPSA id 63-20020a621942000000b0056d98e359a5sm10660750pfz.165.2023.01.11.19.16.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 19:16:23 -0800 (PST)
-Date:   Thu, 12 Jan 2023 08:46:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add missing
- compatibles
-Message-ID: <20230112031621.rphz4zu63ibul374@vireshk-i7>
-References: <20221016090035.565350-1-luca@z3ntu.xyz>
- <4899603.LvFx2qVVIh@g550jk>
+        Wed, 11 Jan 2023 22:17:42 -0500
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C13DED5;
+        Wed, 11 Jan 2023 19:17:41 -0800 (PST)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1pFo5o-0008AG-45; Thu, 12 Jan 2023 04:17:28 +0100
+Date:   Thu, 12 Jan 2023 04:17:28 +0100
+From:   Florian Westphal <fw@strlen.de>
+To:     Quentin Deslandes <qde@naccy.de>
+Cc:     Florian Westphal <fw@strlen.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
+Message-ID: <20230112031728.GL27644@breakpoint.cc>
+References: <20221224000402.476079-1-qde@naccy.de>
+ <20230103114540.GB13151@breakpoint.cc>
+ <8773f286-74ba-4efb-4a94-0c1f91d959bd@naccy.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <4899603.LvFx2qVVIh@g550jk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8773f286-74ba-4efb-4a94-0c1f91d959bd@naccy.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-01-23, 20:48, Luca Weiss wrote:
-> Hi Viresh,
+Quentin Deslandes <qde@naccy.de> wrote:
+> Le 03/01/2023 à 12:45, Florian Westphal a écrit :
+> > You can't make this atomic from userspace perspective, the
+> > get/setsockopt API of iptables uses a read-modify-write model.
 > 
-> gentle bump, I hope this patch could get applied in-time for the next merge 
-> window.
+> This refers to updating the programs from bpfilter's side. It won't
+> be atomic from iptables point of view, but currently bpfilter will
+> remove the program associated to a table, before installing the new
+> one. This means packets received in between those operations are
+> not filtered. I assume a better solution is possible.
 
-I thought Bjorn applied this patch long back. But now that I look back
-at his email, he applied 2/5 and replied to 1/5, probably because
-there wasn't a cover-letter available :(
+Ah, I see, thanks.
 
-Sorry for the confusion, applied now.
+> > Tentatively I'd try to extend libnftnl and generate bpf code there,
+> > since its used by both iptables(-nft) and nftables we'd automatically
+> > get support for both.
+> 
+> That's one of the option, this could also remain in the kernel
+> tree or in a dedicated git repository. I don't know which one would
+> be the best, I'm open to suggestions.
 
--- 
-viresh
+I can imagine that this will see a flurry of activity in the early
+phase so I think a 'semi test repo' makes sense.
+
+Provideded license allows this, useable bits and pieces can then
+be grafted on to libnftnl (or iptables or whatever).
+
+> > I was planning to look into "attach bpf progs to raw netfilter hooks"
+> > in Q1 2023, once the initial nf-bpf-codegen is merged.
+> 
+> Is there any plan to support non raw hooks? That's mainly out
+> of curiosity, I don't even know whether that would be a good thing
+> or not.
+
+Not sure what 'non raw hook' is.  Idea was to expose
+
+1. protcocol family
+2. hook number (prerouting, input etc)
+3. priority
+
+to userspace via bpf syscall/bpf link.
+
+userspace would then provide the above info to kernel via
+bpf(... BPF_LINK_CREATE )
+
+which would then end up doing:
+--------------
+h.hook = nf_hook_run_bpf; // wrapper to call BPF_PROG_RUN
+h.priv = prog; // the bpf program to run
+h.pf = attr->netfilter.pf;
+h.priority = attr->netfilter.priority;
+h.hooknum = attr->netfilter.hooknum;
+
+nf_register_net_hook(net, &h);
+--------------
+
+After that nf_hook_slow() calls the bpf program just like any
+other of the netfilter hooks.
+
+Does that make sense or did you have something else in mind?
