@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35F366767C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D496676AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbjALOcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S238585AbjALOed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237137AbjALOb0 (ORCPT
+        with ESMTP id S239450AbjALOdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:31:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D0259300
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:22:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673533352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xS+WhDCpVAXfoHuOOZG8UbA19f02GKhB5mYWzIxAKis=;
-        b=YurhqiEPS1qkTpy6H3O7DLRyIhjLkKXd7k5H6m/CcStTNwF8pFglFlhCK39yyoRLh4JDpm
-        Snr9jwKkTFJwtq9tU1aZyy4DobraJpDiS0JarnHqDh1pQVSZXu1zlaFhUoklU/x1cVqGd+
-        Y2FDhvwdKpDXc3SLe2gPbkN5ZKU4Qtc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-MofelG4rOpKRCjq502kgtQ-1; Thu, 12 Jan 2023 09:22:28 -0500
-X-MC-Unique: MofelG4rOpKRCjq502kgtQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1B4F2805599;
-        Thu, 12 Jan 2023 14:22:27 +0000 (UTC)
-Received: from eperezma.remote.csb (unknown [10.39.192.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4975B2166B29;
-        Thu, 12 Jan 2023 14:22:26 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     mst@redhat.com, elic@nvidia.com
-Cc:     linux-kernel@vger.kernel.org, parav@nvidia.com, lulu@redhat.com,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        sgarzare@redhat.com, si-wei.liu@oracle.com
-Subject: [RFC 3/3] vdpa/mlx5: take iommu_lock at dup_iotlb
-Date:   Thu, 12 Jan 2023 15:22:18 +0100
-Message-Id: <20230112142218.725622-4-eperezma@redhat.com>
-In-Reply-To: <20230112142218.725622-1-eperezma@redhat.com>
-References: <20230112142218.725622-1-eperezma@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 12 Jan 2023 09:33:43 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF555AC55;
+        Thu, 12 Jan 2023 06:25:15 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id A7CC23200923;
+        Thu, 12 Jan 2023 09:25:12 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 09:25:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1673533512; x=1673619912; bh=zd2a00NEe4
+        +bDxczc+Ry0ob6zOWTcbtiiMyZcdFcU0w=; b=YGNxNqkRDCogME/TIrJwOFu+Aw
+        KREFfDsPOtB+pMQXTRSOjSADpBtRnn7ra9dThQy9nYwC5yaFT1k3aZoi1r0cw8k+
+        tZtQBFckNDlZiYSPEjFu22B1zw3L8alU9JbOhL2cROrmsh2p6L75WEvDRpGOlgd2
+        0Oe0Oh6/0kUY1aVj2noXhURTil8Q8TZiK64DpyY7HOtLraktXAnQF2cQNIub/Fd+
+        TBLb7phal05/bJz7ZEvhP6cNFIDtQbD0Ifa7+IUKdSYBrlIu+O75PMLYYnO341zD
+        VmwdYG9nyS06eac4RqrejbcNIO6da7iyTziQCz+EZuoMtNT3oUn/hPg7TlXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673533512; x=1673619912; bh=zd2a00NEe4+bDxczc+Ry0ob6zOWT
+        cbtiiMyZcdFcU0w=; b=lvKLryXdOqdEofsFsgIJQHOGktZeXc6Az43dxqpjOy4o
+        AffAcHAPxJ0T5mqZ46mKeyrq78/6Dc3K0kLAPr9ElHiyu+h78rtMrtkUNr5Kr6dj
+        GAmBZvUfhKZgbcfDoG9khuNbZ6S+OHA7stvHly/frsr3kr+KKfBBpk8twcj8W2UZ
+        S3rWWH/zrYnfFQA9xKiP6r6yWFHUERBHkAJX72Q/9hLou0QzOCcUgeQcqhzU5VoI
+        DyDNOvUqTentQ0QcgBG8kDfJrIelN2jzDdQnpaQFtSS2k9t9AbRdtJBAF8ONQo6P
+        9hSfp0kKE4X+diUWCs14nZNTtR+ib4YGVMUz0T/euA==
+X-ME-Sender: <xms:RxjAY2-gAMTQkme3l1_1vUzceEGq89VRd3miCOPsXW-AfkRe0R5ARw>
+    <xme:RxjAY2slsnRZE7VDPM4gfQgGCfPJH0cLwE7mmlWVRHb-xTJR-2pyWS86LMm3K9wJ7
+    Wp7mggCGcmA-_Y7huo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdeigecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefgudfg
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:RxjAY8BofP2iwlr4WsTRUE3GFTIilbevoETcx1AdLHUD0DpcEl2baw>
+    <xmx:RxjAY-eF-AmA_kcO6TRy-o70WLcT3DX1-vMFSqtmLyNUVWXbG0nJIQ>
+    <xmx:RxjAY7NRVoYzjn-7RIfz09uKphRe7p3VSBb53XcRHtHlvy3ElmXcZA>
+    <xmx:SBjAY8G2EH6syEFGmLuK_5FPcRgYYbtaUDEmOfbvtGp86NqBKeGo_Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CFB53B60086; Thu, 12 Jan 2023 09:25:11 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <5ad677f3-2cbc-4ba0-bd48-2f832a72fb28@app.fastmail.com>
+In-Reply-To: <20230103203654.59322-4-nick.hawkins@hpe.com>
+References: <20230103203654.59322-1-nick.hawkins@hpe.com>
+ <20230103203654.59322-4-nick.hawkins@hpe.com>
+Date:   Thu, 12 Jan 2023 15:24:51 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Russell King" <linux@armlinux.org.uk>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 3/5] ARM: dts: add GXP Support for fans and SPI
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both iommu changes and lookup are protected by mlx5_vdpa_net->reslock at
-this moment, but:
-* These iotlb changes / queries are not in the fast data path.
-* reslock belongs to netdev, while dup_iotlb seems generic.
-* It's located in a different file than the lock it needs to hold
+On Tue, Jan 3, 2023, at 21:36, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Reorganize the base address of AHB to accommodate the SPI and fan driver
+> register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
+> compatibles. Add comments to make the register range more clear.
+>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+>
 
-Justifies the lock acquisition.
+> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi 
+> b/arch/arm/boot/dts/hpe-gxp.dtsi
+> index cf735b3c4f35..b73b22a93716 100644
+> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
+> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * Device Tree file for HPE GXP
+> + * Device Tree for HPE
+>   */
+> 
+>  /dts-v1/;
+> @@ -52,76 +52,102 @@
+>  			cache-level = <2>;
+>  		};
+> 
+> -		ahb@c0000000 {
+> +		ahb@80000000 {
+>  			compatible = "simple-bus";
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> -			ranges = <0x0 0xc0000000 0x30000000>;
+> +			ranges = <0x0 0x80000000 0xf000000>, /* 0x80000000 - 0x8f000000 */
+> +				 <0x40000000 0xc0000000 0x7fffffff>; /* 0xc0000000 - 0xffffffff */
 
-Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC setting")
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
----
- drivers/vdpa/mlx5/core/mr.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+I'm a bit confused by the change in the mappings: are you
+sure this all the same ahb bus and not two separate buses?
 
-diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
-index 878ee94efa78..e9c8a7f8ee1d 100644
---- a/drivers/vdpa/mlx5/core/mr.c
-+++ b/drivers/vdpa/mlx5/core/mr.c
-@@ -454,13 +454,15 @@ static int dup_iotlb(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *src)
- {
- 	struct vhost_iotlb_map *map;
- 	u64 start = 0, last = ULLONG_MAX;
--	int err;
-+	int err = 0;
-+
-+	spin_lock(&mvdev->cvq.iommu_lock);
- 
- 	vhost_iotlb_reset(mvdev->cvq.iotlb);
- 
- 	if (!src) {
- 		err = vhost_iotlb_add_range(mvdev->cvq.iotlb, start, last, start, VHOST_ACCESS_RW);
--		return err;
-+		goto out;
- 	}
- 
- 	for (map = vhost_iotlb_itree_first(src, start, last); map;
-@@ -468,9 +470,12 @@ static int dup_iotlb(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *src)
- 		err = vhost_iotlb_add_range(mvdev->cvq.iotlb, map->start, map->last,
- 					    map->addr, map->perm);
- 		if (err)
--			return err;
-+			goto out;
- 	}
--	return 0;
-+
-+out:
-+	spin_unlock(&mvdev->cvq.iommu_lock);
-+	return err;
- }
- 
- static void prune_iotlb(struct mlx5_vdpa_dev *mvdev)
--- 
-2.31.1
+The comment for the second range looks wrong to me, as
+you define a 2GB (minus one byte) sized mapping but the
+comment only lists a 1GB (including the last byte) mapping.
 
+I would expect that the original 0x30000000 (including the
+last byte) was correct here.
+
+> -			vic1: interrupt-controller@80f00000 {
+> +			vic1: interrupt-controller@f00000 { /* 0x80f00000 */
+
+This is not the same address as before. I'm also not sure the
+comment is helpful here.
+
+    Arnd
