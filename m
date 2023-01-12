@@ -2,218 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A94E667D4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CD0667D50
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237033AbjALSCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S240215AbjALSDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239911AbjALSBx (ORCPT
+        with ESMTP id S240154AbjALSC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:01:53 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FD01C91E;
-        Thu, 12 Jan 2023 09:24:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8BCAACE1EE8;
-        Thu, 12 Jan 2023 17:24:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B6FC433D2;
-        Thu, 12 Jan 2023 17:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673544238;
-        bh=BBL4eRT9LuIjRu+BhsqKzGDfJ7+01aLPrn3j15DcV1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZiOxpOsqB1lk285bMsQQimEAbNEUp95G/ISy+y3PNKtlIKb+mNXN8eJAHfItvdJhG
-         SJKE2Caf7atfXMbBZtCUbW/vy9EBXdUcN3ieIaAAwgCTSbhR1dL4kojIl4VYYcMLMZ
-         JsUAFt393SL3KweE08CsVWaterHeDlfSpqQH/Vg0TBfC3HkR4fYxxkJR1zwZaXMk/p
-         m2vD4vsXQq9bsvfsAbd8ALXGZjIqGp+4XCvWiZ9A18jq8351sGPPyDCKJwCfxjv40i
-         dgPHs1oNINeUriWlhyjvJjfGa+Q3GRwR29doUggFLdrUwBC1Err3Qkfm22Y2CLTIO3
-         jTpXZZIOR/4yQ==
-Date:   Thu, 12 Jan 2023 18:23:54 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     nbd@nbd.name, ryder.lee@mediatek.com, shayne.chen@mediatek.com,
-        sean.wang@mediatek.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        matthias.bgg@gmail.com, sujuan.chen@mediatek.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, nfraprado@collabora.com, wenst@chromium.org
-Subject: Re: [PATCH] wifi: mt76: Stop unmapping all buffers when WED not
- present
-Message-ID: <Y8BCKrlCtwedrk3U@lore-desk>
-References: <20230112171706.294550-1-angelogioacchino.delregno@collabora.com>
+        Thu, 12 Jan 2023 13:02:29 -0500
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DD755648;
+        Thu, 12 Jan 2023 09:25:16 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id az20so27375390ejc.1;
+        Thu, 12 Jan 2023 09:25:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nRAo6X3Gzu+d8rohxmVob5wOtGI7yz4wlOWRro7CXUA=;
+        b=gFKeHQ4wgG4hygkRVSzeRu0IwaITX4sdnPbQDt+LgJWqcdzCcogb8y4hx7xds8ncqJ
+         snrtzvVlxAkliyCeFUC5eNEzrHGXkGQj8XVkRhSSp/yhJr0LO+xMyAjMun3dBWniXxAY
+         zA88GHE2+fdhPL96RGgrQoJi0T7eUIEGJLUZ+dz+VikCjf7wHtiEDsPJQDPWGfPVX/Tt
+         +vj2WzitgysJ0thVR8n7vvguPrG73xFV4J11QFnE4dQ2zt8uwxPmYYXFV/mp/QsrLON0
+         7avXG4KYki0ZL93SqPKRNlpfYqORYqQnspNuD1Wvw4UwCDewAyTSyQYuIJh2g0Z47fat
+         2IJw==
+X-Gm-Message-State: AFqh2koXBDpkffC7JJ1ZEwHvB2CNcuzdYCpIksqOaY4IcZOOD/wbhDao
+        DK7guY1T7zfFlPnMNjxB/MQvAnJZ3YMFn8J7V1E=
+X-Google-Smtp-Source: AMrXdXsK8Tvqwl2au4/lOh3+aakXmuw3EHFLXbSEAFqucw4DdRf3FjdYtrCyRjiAp75YomeCO2m2YqYfXNZscUXXWxA=
+X-Received: by 2002:a17:907:29c3:b0:84d:4b8e:efc with SMTP id
+ ev3-20020a17090729c300b0084d4b8e0efcmr1137894ejc.390.1673544315331; Thu, 12
+ Jan 2023 09:25:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="luqFSIfwu5Nm9Vpn"
-Content-Disposition: inline
-In-Reply-To: <20230112171706.294550-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+ <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com> <CAJZ5v0jSL3bbEHJLxpn_Liu4DcNeMFG=iQJA_AgophmtXpzMGQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jSL3bbEHJLxpn_Liu4DcNeMFG=iQJA_AgophmtXpzMGQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 18:25:04 +0100
+Message-ID: <CAJZ5v0gbNv-SgTEHpjiQEwk7qELg6EkByd-8en0=wZ=abFD2JA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete callbacks
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 3:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >
+> > The actual idle percentage can be less than the desired because of
+> > interrupts.
+>
+> This is somewhat unclear.
+>
+> > Since the objective for CPU Idle injection is for thermal
+> > control, there should be some way to compensate for lost idle percentage.
+>
+> What does "lost idle percentage" mean here?
+>
+> > Some architectures provide interface to get actual idle percent observed
+> > by the hardware. So, the idle percent can be adjusted using the hardware
+> > feedback. For example, Intel CPUs provides package idle counters, which
+> > is currently used by intel powerclamp driver to adjust idle time.
+> >
+> > The only way this can be done currently is by monitoring hardware idle
+> > percent from a different software thread. This can be avoided by adding
+> > callbacks.
+> >
+> > Add a capability to register a prepare and complete callback during idle
+> > inject registry. Add a new register function idle_inject_register_full()
+> > which also allows to register callbacks.
+> >
+> > If they are not NULL, then prepare callback is called before calling
+> > play_idle_precise() and complete callback is called after calling
+> > play_idle_precise().
+> >
+> > If prepare callback is present and returns non 0 value then
+> > play_idle_precise() is not called to avoid over compensation.
+>
+> This mechanism isn't particularly straightforward, but maybe there's
+> no better way.
+>
+> > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > ---
+> > v2
+> > - Replace begin/end with prepare/complete
+> > - Add new interface idle_inject_register_full with callbacks
+> > - Update kernel doc
+> > - Update commit description
+> >
+> >  drivers/powercap/idle_inject.c | 62 +++++++++++++++++++++++++++++++---
+> >  include/linux/idle_inject.h    |  4 +++
+> >  2 files changed, 62 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> > index dfa989182e71..f48e71501429 100644
+> > --- a/drivers/powercap/idle_inject.c
+> > +++ b/drivers/powercap/idle_inject.c
+> > @@ -63,13 +63,31 @@ struct idle_inject_thread {
+> >   * @idle_duration_us: duration of CPU idle time to inject
+> >   * @run_duration_us: duration of CPU run time to allow
+> >   * @latency_us: max allowed latency
+> > + * @prepare: Callback function which is called before calling
+> > + *             play_idle_precise()
+> > + * @complete: Callback function which is called after calling
+> > + *             play_idle_precise()
+>
+> What about:
+>
+> @prepare: Optional callback deciding whether or not to skip idle
+> injection in the given cycle.
+> @complete: Optional callback updating the state after idle injection.
 
---luqFSIfwu5Nm9Vpn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-> Before the introduction of WED RX support, this driver was resetting
-> buf0 and the TXWI pointer only on the head of the passed queue but
-> now it's doing that on all buffers: while this is fine on systems
-> that are not relying on IOMMU, such as the MT8192 Asurada Spherion
-> Chromebook (MT7921E), it causes a crash on others using IOMMUs, such
-> as the MT8195 Cherry Tomato Chromebook (MT7921E again!).
->=20
-> Reverting to the described behavior solves the following kernel panic:
->=20
-> [   20.357772] Unable to handle kernel paging request at virtual address =
-ffff170fc0000000
-> [   20.365943] Mem abort info:
-> [   20.368989]   ESR =3D 0x0000000096000145
-> [   20.372988]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-> [   20.378551]   SET =3D 0, FnV =3D 0
-> [   20.381857]   EA =3D 0, S1PTW =3D 0
-> [   20.385248]   FSC =3D 0x05: level 1 translation fault
-> [   20.390376] Data abort info:
-> [   20.393507]   ISV =3D 0, ISS =3D 0x00000145
-> [   20.397593]   CM =3D 1, WnR =3D 1
-> [   20.400811] swapper pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000041fb=
-3000
-> [   20.407763] [ffff170fc0000000] pgd=3D180000023fff7003, p4d=3D180000023=
-fff7003, pud=3D0000000000000000
-> [   20.416714] Internal error: Oops: 0000000096000145 [#1] SMP
-> [   20.422535] Modules linked in: af_alg qrtr mt7921e mt7921_common mt76_=
-connac_lib mt76 mac80211 btusb btrtl btintel btmtk btbcm 8021q cfg80211 blu=
-etooth uvcvideo garp mrp snd_sof_ipc_msg_injector snd_sof_ipc_flood_test st=
-p snd_sof_mt8195 videobuf2_vmalloc llc panfrost cros_ec_sensors cros_ec_lid=
-_angle crct10dif_ce mtk_adsp_common ecdh_generic cros_ec_sensors_core ecc s=
-nd_sof_xtensa_dsp gpu_sched rfkill snd_sof_of sbs_battery hid_multitouch cr=
-os_usbpd_logger snd_sof snd_sof_utils fuse ipv6
-> [   20.465969] CPU: 6 PID: 9 Comm: kworker/u16:0 Tainted: G        W     =
-     6.2.0-rc3-next-20230111+ #237
-> [   20.475695] Hardware name: Acer Tomato (rev2) board (DT)
-> [   20.481254] Workqueue: phy0 ieee80211_iface_work [mac80211]
-> [   20.487119] pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
-> [   20.494328] pc : dcache_clean_poc+0x20/0x38
-> [   20.498764] lr : arch_sync_dma_for_device+0x2c/0x40
-> [   20.503893] sp : ffff8000080cb430
-> [   20.507457] x29: ffff8000080cb430 x28: 0000000000000000 x27: ffff1710c=
-740e0d0
-> [   20.514842] x26: ffff1710d8c03b38 x25: ffff1710d75e4fb0 x24: ffff1710c=
-619e280
-> [   20.522225] x23: ffff8000080cb578 x22: 0000000000000001 x21: 000000000=
-0000040
-> [   20.529608] x20: 0000000000000000 x19: ffff1710c740e0d0 x18: 000000000=
-0000030
-> [   20.536991] x17: 000000040044ffff x16: ffffc06d4c37d200 x15: fffffffff=
-fffffff
-> [   20.544373] x14: 0000000000000000 x13: 0000000000007800 x12: 000000000=
-0000000
-> [   20.551755] x11: 0000000000007961 x10: 0000000000007961 x9 : ffffc06d4=
-cbe0ff8
-> [   20.559137] x8 : 0000000000000001 x7 : 0000000000008000 x6 : 000000000=
-0000000
-> [   20.566518] x5 : 000000000000801e x4 : 0000000054765809 x3 : 000000000=
-000003f
-> [   20.573899] x2 : 0000000000000040 x1 : ffff170fc0000040 x0 : ffff170fc=
-0000000
-> [   20.581282] Call trace:
-> [   20.583976]  dcache_clean_poc+0x20/0x38
-> [   20.588061]  iommu_dma_sync_single_for_device+0xc4/0xdc
-> [   20.593534]  dma_sync_single_for_device+0x38/0x120
-> [   20.598574]  mt76_dma_tx_queue_skb+0x4f4/0x5b0 [mt76]
-> [   20.603880]  __mt76_tx_queue_skb+0x5c/0xe0 [mt76]
-> [   20.608836]  mt76_tx+0xbc/0x164 [mt76]
-> [   20.612838]  mt7921_tx+0x9c/0x170 [mt7921_common]
-> [   20.617795]  ieee80211_tx_frags+0x22c/0x2a0 [mac80211]
-> [   20.623215]  __ieee80211_tx+0x90/0x1c0 [mac80211]
-> [   20.628195]  ieee80211_tx+0x114/0x160 [mac80211]
-> [   20.633088]  ieee80211_xmit+0xa0/0xd4 [mac80211]
-> [   20.637980]  __ieee80211_tx_skb_tid_band+0xa8/0x2e0 [mac80211]
-> [   20.644087]  ieee80211_tx_skb_tid+0xac/0x270 [mac80211]
-> [   20.649585]  ieee80211_send_auth+0x1ac/0x250 [mac80211]
-> [   20.655080]  ieee80211_auth+0x16c/0x2dc [mac80211]
-> [   20.660145]  ieee80211_sta_work+0x3a0/0xab4 [mac80211]
-> [   20.665557]  ieee80211_iface_work+0x394/0x400 [mac80211]
-> [   20.671144]  process_one_work+0x294/0x674
-> [   20.675406]  worker_thread+0x7c/0x45c
-> [   20.679316]  kthread+0x104/0x110
-> [   20.682793]  ret_from_fork+0x10/0x20
-> [   20.686621] Code: d2800082 9ac32042 d1000443 8a230000 (d50b7a20)
-> [   20.692962] ---[ end trace 0000000000000000 ]---
->=20
-> Fixes: cd372b8c99c5 ("wifi: mt76: add WED RX support to mt76_dma_{add,get=
-}_buf")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
->  drivers/net/wireless/mediatek/mt76/dma.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/net/wireless/mediatek/mt76/dma.c b/drivers/net/wirel=
-ess/mediatek/mt76/dma.c
-> index 420302ff0328..a0fe3ab0126d 100644
-> --- a/drivers/net/wireless/mediatek/mt76/dma.c
-> +++ b/drivers/net/wireless/mediatek/mt76/dma.c
-> @@ -215,6 +215,12 @@ mt76_dma_add_buf(struct mt76_dev *dev, struct mt76_q=
-ueue *q,
->  	u32 ctrl;
->  	int i, idx =3D -1;
-> =20
-> +	if (txwi && !(q->flags & MT_QFLAG_WED) &&
-> +	    !FIELD_GET(MT_QFLAG_WED_TYPE, q->flags)) {
-> +		q->entry[q->head].txwi =3D DMA_DUMMY_DATA;
-> +		q->entry[q->head].skip_buf0 =3D true;
-> +	}
-> +
->  	for (i =3D 0; i < nbufs; i +=3D 2, buf +=3D 2) {
->  		u32 buf0 =3D buf[0].addr, buf1 =3D 0;
-> =20
-> @@ -238,11 +244,6 @@ mt76_dma_add_buf(struct mt76_dev *dev, struct mt76_q=
-ueue *q,
->  			ctrl =3D FIELD_PREP(MT_DMA_CTL_SD_LEN0, buf[0].len) |
->  			       MT_DMA_CTL_TO_HOST;
->  		} else {
-> -			if (txwi) {
-> -				q->entry[q->head].txwi =3D DMA_DUMMY_DATA;
-> -				q->entry[q->head].skip_buf0 =3D true;
-> -			}
-> -
->  			if (buf[0].skip_unmap)
->  				entry->skip_buf0 =3D true;
->  			entry->skip_buf1 =3D i =3D=3D nbufs - 1;
-> --=20
-> 2.39.0
->=20
-
-I think this issue has been already fixed by Felix here:
-https://lore.kernel.org/linux-wireless/a30d8580-936a-79e4-c1c7-70f3d3b8da35=
-@nbd.name/
-
-Regards,
-Lorenzo
-
---luqFSIfwu5Nm9Vpn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY8BCKgAKCRA6cBh0uS2t
-rA/jAQCdqv3DR4wJvKGDGbEHn7GN+1hbN1u9xaVXyuUH/5sSfAD/SSUtxeGi8eWG
-VH/7JRnX80nENCiJkK2aJnCQ6tqaRgg=
-=+V0g
------END PGP SIGNATURE-----
-
---luqFSIfwu5Nm9Vpn--
+One more thing: ->complete() is not even used by powerclamp AFAICS, so
+I wouldn't add it at this time, because it isn't clear if it's going
+to be useful at all.
