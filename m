@@ -2,218 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA693667994
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4D9667982
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240570AbjALPjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S237030AbjALPjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240613AbjALPiy (ORCPT
+        with ESMTP id S240106AbjALPiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:38:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAA722A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673537356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZMH7oL1ojLL00OhcJ9kVNoLAkEuf5OtGz8iT68u8uvU=;
-        b=jB+T2k/B1/shth6Mmz/YaxghoQ27AOPEzQhcWV9fcuIrin6+2OR6k37m512qbLslP3a4Fq
-        YsgdG41bgyrQ7hHx6qbeWqZILiKQv0UqZVhgNqeJSyHLDssVQng2eOuFdslx3eecvHtESJ
-        d68VDDCQ7fnFIHM0w05pTz4Z9udhkoM=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-394-6a2wk7-IOEuhY2kbZgNOoA-1; Thu, 12 Jan 2023 10:29:12 -0500
-X-MC-Unique: 6a2wk7-IOEuhY2kbZgNOoA-1
-Received: by mail-qk1-f198.google.com with SMTP id m9-20020a05620a290900b0070596994c7eso13276399qkp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:29:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZMH7oL1ojLL00OhcJ9kVNoLAkEuf5OtGz8iT68u8uvU=;
-        b=3slMYka8G1sLEciUpswL72dCa1Iifys3ecX3RsP2NsbZBj8Jmkmfj1FoUOsTogvtRv
-         vXGDL4Pnw6M5X0g66D9W3BFypKWUe3c7dVpyHI+VDijpeSoy59Y2268sE6QpbnVGrlQ6
-         nNyS+flphc81k2OJDHSeo7w+1u8dIDb9f7oHYq1SOVv5ueQm8Mv3jDR4T4YkYdawo94+
-         fyJf4zS/M89LSVivOV6tnQOFEEXW5WA8sJkQ5MVKO1OqQ/1cD3gx4Z+r3irOKVUN+hG0
-         YyncWCs5zlHwglUkz+iM4Hc5JZiO9KkXpQIa6+JxUMIlxOgUHOPBJnjMcb4mjiX1M+Wo
-         WWhg==
-X-Gm-Message-State: AFqh2krr0nrAx9qSXG+Sq38//EPBxMMKZXOikb1/A/U1bJyHvrx1qaGR
-        DesUIfUeHh37K+94lplS9xy/aMqxc3spJMv4jp8vtyhmUdCl7rsnpd5DYWZIhhtbOHcYwjoCDfb
-        OqNWObo7ieojACSffb96RddjP
-X-Received: by 2002:a05:622a:2510:b0:3a8:1677:bc39 with SMTP id cm16-20020a05622a251000b003a81677bc39mr69643456qtb.52.1673537351602;
-        Thu, 12 Jan 2023 07:29:11 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu+8O/sWnQ31LlfQAmjSWTP3JKBg/z6LUtFrCFt7Nlxp9dZVZSfnBngoTT8ia8+jKxx3f5ybA==
-X-Received: by 2002:a05:622a:2510:b0:3a8:1677:bc39 with SMTP id cm16-20020a05622a251000b003a81677bc39mr69643426qtb.52.1673537351249;
-        Thu, 12 Jan 2023 07:29:11 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id f9-20020ac80689000000b00343057845f7sm9164029qth.20.2023.01.12.07.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:29:10 -0800 (PST)
-Date:   Thu, 12 Jan 2023 10:29:08 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
- walk_hugetlb_range
-Message-ID: <Y8AnROAtMngKntnq@x1n>
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-22-jthoughton@google.com>
- <Y78+/wleTEC3gyqu@x1n>
- <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
+        Thu, 12 Jan 2023 10:38:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AD4129;
+        Thu, 12 Jan 2023 07:29:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D35C5B81E80;
+        Thu, 12 Jan 2023 15:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88ECFC433F0;
+        Thu, 12 Jan 2023 15:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673537353;
+        bh=zRqbA/9aTVgnFDge+C5nyFszzES2x1v+sbtjufa6dEU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Nor1IcHyEYEXHJUvCqEFXffEg+s4IbCGwR3TxgvGIbYrP2cWpNWpDcCETn3RigcXl
+         snocMiiyw37s4/VIQfmjewNX/1hhSwj39NcyVgbNOcaa9YYXJ3nNnw/NKLXACymHCZ
+         MwclJAg9+byv/au23jtaSELRhDI6O43Xw7n6B3RRcU87kxSA4wznZiV4UBpggZUk7L
+         sWhCkYuYsZWC0/MX1/rPKHyqhppG6ZK4vW+Kb/8Ne+tyBA8ewZCTWgbCsk1BUzluu6
+         BsVzOUj+T9a116zxnkkLzvWoyTCcl2jEwazjXRHxuGckMNdFm5A5fLKhX3fzKiq3SZ
+         cbd6E0OiOzGXg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 37D2F5C0AF8; Thu, 12 Jan 2023 07:29:13 -0800 (PST)
+Date:   Thu, 12 Jan 2023 07:29:13 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rcu: Remove duplicate settings for rcu boost kthreads
+ affinity
+Message-ID: <20230112152913.GL4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221215090029.2972236-1-qiang1.zhang@intel.com>
+ <20221217010919.GG4001@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880B9403488CAB5DF9810FFDAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB58806ABF242993103390A6F5DAE79@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20221221192622.GD4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y8AiGy6iYiUk7iB+@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8AiGy6iYiUk7iB+@lothringen>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 09:06:48AM -0500, James Houghton wrote:
-> On Wed, Jan 11, 2023 at 5:58 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > James,
-> >
-> > On Thu, Jan 05, 2023 at 10:18:19AM +0000, James Houghton wrote:
-> > > @@ -751,9 +761,9 @@ static int smaps_hugetlb_range(pte_t *pte, unsigned long hmask,
-> > >               int mapcount = page_mapcount(page);
-> > >
-> > >               if (mapcount >= 2)
-> > > -                     mss->shared_hugetlb += huge_page_size(hstate_vma(vma));
-> > > +                     mss->shared_hugetlb += hugetlb_pte_size(hpte);
-> > >               else
-> > > -                     mss->private_hugetlb += huge_page_size(hstate_vma(vma));
-> > > +                     mss->private_hugetlb += hugetlb_pte_size(hpte);
-> > >       }
-> > >       return 0;
-> >
-> > One thing interesting I found with hgm right now is mostly everything will
-> > be counted as "shared" here, I think it's because mapcount is accounted
-> > always to the huge page even if mapped in smaller sizes, so page_mapcount()
-> > to a small page should be huge too because the head page mapcount should be
-> > huge.  I'm curious the reasons behind the mapcount decision.
-> >
-> > For example, would that risk overflow with head_compound_mapcount?  One 1G
-> > page mapping all 4K takes 0.25M counts, while the limit should be 2G for
-> > atomic_t.  Looks like it's possible.
+On Thu, Jan 12, 2023 at 04:07:07PM +0100, Frederic Weisbecker wrote:
+> On Wed, Dec 21, 2022 at 11:26:22AM -0800, Paul E. McKenney wrote:
+> > On Sat, Dec 17, 2022 at 01:02:03PM +0000, Zhang, Qiang1 wrote:
+> > commit 5815245b56229198d5f5d0c48c26d3c0c53ee222
+> > Author: Zqiang <qiang1.zhang@intel.com>
+> > Date:   Wed Dec 21 11:15:43 2022 -0800
+> > 
+> >     rcu: Remove redundant call to rcu_boost_kthread_setaffinity()
+> >     
+> >     The rcu_boost_kthread_setaffinity() function is invoked at
+> >     rcutree_online_cpu() and rcutree_offline_cpu() time, early in the online
+> >     timeline and late in the offline timeline, respectively.  It is also
+> >     invoked from rcutree_dead_cpu(), however, in the absence of userspace
+> >     manipulations (for which userspace must take responsibility), this call
+> >     is redundant with that from rcutree_offline_cpu().  This redundancy can
+> >     be demonstrated by printing out the relevant cpumasks
+> >     
+> >     This commit therefore removes the call to rcu_boost_kthread_setaffinity()
+> >     from rcutree_dead_cpu().
+> >     
+> >     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 > 
-> The original mapcount approach was "if the hstate-level PTE is
-> present, increment the compound_mapcount by 1" (basically "if any of
-> the hugepage is mapped, increment the compound_mapcount by 1"), but
-> this was painful to implement,
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 
-Any more info here on why it was painful?  What is the major blocker?
+Thank you!  I will apply this on my next rebase.
 
-> so I changed it to what it is now (each new PT mapping increments the
-> compound_mapcount by 1). I think you're right, there is absolutely an
-> overflow risk. :( I'm not sure what the best solution is. I could just go
-> back to the old approach.
+							Thanx, Paul
 
-No rush on that; let's discuss it thoroughly before doing anything.  We
-have more context than when it was discussed initially in the calls, so
-maybe a good time to revisit.
-
+> Thanks!
 > 
-> Regarding when things are accounted in private_hugetlb vs.
-> shared_hugetlb, HGM shouldn't change that, because it only applies to
-> shared mappings (right now anyway). It seems like "private_hugetlb"
-> can include cases where the page is shared but has only one mapping,
-> in which case HGM will change it from "private" to "shared".
-
-The two fields are not defined against VM_SHARED, it seems.  At least not
-with current code base.
-
-Let me quote the code again just to be clear:
-
-		int mapcount = page_mapcount(page);    <------------- [1]
-
-		if (mapcount >= 2)
-			mss->shared_hugetlb += hugetlb_pte_size(hpte);
-		else
-			mss->private_hugetlb += hugetlb_pte_size(hpte);
-
-		smaps_hugetlb_hgm_account(mss, hpte);
-
-So that information (for some reason) is only relevant to how many mapcount
-is there.  If we have one 1G page and only two 4K mapped, with the existing
-logic we should see 8K private_hugetlb while in fact I think it should be
-8K shared_hugetlb due to page_mapcount() taking account of both 4K mappings
-(as they all goes back to the head).
-
-I have no idea whether violating that will be a problem or not, I suppose
-at least it needs justification if it will be violated, or hopefully it can
-be kept as-is.
-
 > 
-> >
-> > Btw, are the small page* pointers still needed in the latest HGM design?
-> > Is there code taking care of disabling of hugetlb vmemmap optimization for
-> > HGM?  Or maybe it's not needed anymore for the current design?
-> 
-> The hugetlb vmemmap optimization can still be used with HGM, so there
-> is no code to disable it. We don't need small page* pointers either,
-> except for when we're dealing with mapping subpages, like in
-> hugetlb_no_page. Everything else can handle the hugetlb page as a
-> folio.
-> 
-> I hope we can keep compatibility with the vmemmap optimization while
-> solving the mapcount overflow risk.
-
-Yeh that'll be perfect if it works.  But afaiu even with your current
-design (ignoring all the issues on either smaps accounting or overflow
-risks), we already referenced the small pages, aren't we?  See:
-
-static inline int page_mapcount(struct page *page)
-{
-	int mapcount = atomic_read(&page->_mapcount) + 1;  <-------- here
-
-	if (likely(!PageCompound(page)))
-		return mapcount;
-	page = compound_head(page);
-	return head_compound_mapcount(page) + mapcount;
-}
-
-Even if we assume small page->_mapcount should always be zero in this case,
-we may need to take special care of hugetlb pages in page_mapcount() to not
-reference it at all.  Or I think it's reading random values and some days
-it can be non-zero.
-
-The other approach is probably using the thp approach.  After Hugh's rework
-on the thp accounting I assumed it would be even cleaner (at least no
-DoubleMap complexity anymore.. even though I can't say I fully digested the
-whole history of that).  It's all about what's the major challenges of
-using the same approach there with thp.  You may have more knowledge on
-that aspect so I'd be willing to know.
-
-Thanks,
-
--- 
-Peter Xu
-
+> > 
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index c3255d27286c4..a6181b76fd5ab 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -4165,15 +4165,10 @@ static void rcu_cleanup_dead_rnp(struct rcu_node *rnp_leaf)
+> >   */
+> >  int rcutree_dead_cpu(unsigned int cpu)
+> >  {
+> > -	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+> > -	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
+> > -
+> >  	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
+> >  		return 0;
+> >  
+> >  	WRITE_ONCE(rcu_state.n_online_cpus, rcu_state.n_online_cpus - 1);
+> > -	/* Adjust any no-longer-needed kthreads. */
+> > -	rcu_boost_kthread_setaffinity(rnp, -1);
+> >  	// Stop-machine done, so allow nohz_full to disable tick.
+> >  	tick_dep_clear(TICK_DEP_BIT_RCU);
+> >  	return 0;
