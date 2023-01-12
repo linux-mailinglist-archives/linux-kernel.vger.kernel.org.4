@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7A26679F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B006679F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbjALP4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
+        id S233181AbjALP4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbjALPzV (ORCPT
+        with ESMTP id S231805AbjALPz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:55:21 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B65AC74
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:45:00 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id y25so29001843lfa.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:45:00 -0800 (PST)
+        Thu, 12 Jan 2023 10:55:58 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540BD37503
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:46:05 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d17so18509173wrs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:46:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dO98yJCjhJKHHJFzoPP10XSL6ZvByFzhpcdLh14ZehU=;
-        b=qbMwOpc9CFkIEWKaAfBZ4iBqBlDkEkiCaLEa0TIiVT0KUVr2ybb/EbBiLTdz5YVLUE
-         Xz541blif/x+QxSbtV3PUTbem3MK44eUHNSoCc5Ee9oSRFS+ZxdZnM8YSl0vCLjpdKNM
-         4Q46tXImWOGQBo9e9BBXDUy9CLYZw7xxF5pDW2dqrSUnqr5GZPRYGgphWbGX3Y2zkIFG
-         03zrpJnnS2ajrptfc9VsiKNgoIrN3VFOe0jYnPerRhVoZ2qMwwMPvKSNsoP0ennBlQPG
-         VQtNm0KQ7RcfQ24Dzt7TYGb7C0XVAASglqq3DY4PQqJnZUG0jP5DX8vrh/RTbroA0hZ5
-         659Q==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3a+da2Ixkv3+UWjaOBcx9XincgA8EoIsPdzWIEP5Xs=;
+        b=B0tfqo7jE7yLMGnt5k4IEh2fyztJBU3NkVI59EUvtzIcERfsNgeQHWmCULubiMKtE1
+         hOoJnm60UmqeKtlTjbKOTGTaIVcddcMTTWoF6BAZQP5tK4a+NN7hClja3XJ8RyF7/jOy
+         Xp+M8AqvqGdiLHf+vZDKpA3NEUP9r0vhTR2ua1nw7Rdk5bKRT+dowPsW1j8SCfbQT8LL
+         k00MDKY+H0NZKnS8OBcTen8OcPUC0wPkh+z/6lQZ16Xxk0aYRqKQa1jr4zA4pBO8+ykL
+         iT7E2nt5D2eqX8eAaT3puGVRQVsYuR2TfJRmwxiNhTxb1mDwrdtdxqTGQbIBcpHeZj6e
+         Sl0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dO98yJCjhJKHHJFzoPP10XSL6ZvByFzhpcdLh14ZehU=;
-        b=WcoqgYH50b9LcQvdnm0QBbptudD+PJNYJ9/i+9akKFzMXZpB4/m0ceeF8vEEPWhEtS
-         2/FT/7sU5X7WpSUA7vjhAFUdKpkoXm2YDHX7Z/woKGCqdGXMa0cJsQOtNwcUShpy1/o7
-         iuspqAivwxO1C4bIzVmRV7Q9OfI5pZRTSo2YSDGBXh5ByNWjwfkCgrzpE9Arv33FqpHP
-         mNb89xsj0tbR1lWbmOQAkv1Jz3BM61C+IHbZ9+rquw+pQkacfOBSFCuckWjWRF4acoan
-         SvNrbVJqpLbPPZ0a8ndRd2orn3xw2UZBK+bN7Zs6dvBsZGXL5LVtW/USE/CDuLAD89ds
-         QjDw==
-X-Gm-Message-State: AFqh2kqCN0Knv+MNg000s8FibU9hCzlkDmIJPXq28larITsd7WFi+yI6
-        81Fvkt3wHmG+Sx0VIMtQgPE33g==
-X-Google-Smtp-Source: AMrXdXsgekTVzlXxmGMDXgy2BKSdn+T0k5Wesxz7i7Sb8Q7bfHmXCG0E3MvTzCKFlwNDSvBiF87whw==
-X-Received: by 2002:a05:6512:1395:b0:4b5:b10b:6830 with SMTP id p21-20020a056512139500b004b5b10b6830mr22604048lfa.54.1673538299168;
-        Thu, 12 Jan 2023 07:44:59 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id s6-20020ac25fe6000000b004b6efcb7bb5sm3336312lfg.169.2023.01.12.07.44.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 07:44:57 -0800 (PST)
-Message-ID: <f271900f-0d39-0221-9b6e-d6de1a44a363@linaro.org>
-Date:   Thu, 12 Jan 2023 16:44:55 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n3a+da2Ixkv3+UWjaOBcx9XincgA8EoIsPdzWIEP5Xs=;
+        b=LttmLESUCvw35636EBQRXM7Htoww+Z+KHZOTgE1l4mg/MvQbihQ+YAxQz1htCpKklW
+         S04PNJpUDalVdC9hOwoJek8jJeYUw7kyuGXu62zioy0IO+ULlLJo//LEwGZw0JHWnjJ+
+         8v+DHuFvbklfZ7Qr/YDtlW9it1/Cau2Y2sfTNuEnjUKVF43+9O2wWdOzeUwwoK5RMHf8
+         tgklvFNheUlLIlTPr2G9vZmuQCHCp0OcWOInyUQdV/GbEX1GO6nFz31cHxk36geFNqEV
+         +ClB0Gl+RjDXkKUs3yfuq+jbU/NqJrFTLCAHXjvZo+442X5TAvgZeJE3eirFCCn6+IiD
+         bbdQ==
+X-Gm-Message-State: AFqh2kpyhWOg6TRo9e7IFR4VdSlMVuEGErbh2WHi1tb1RqxQ+m2Og3QR
+        3v3XhA5dTu2E5j+eAm/r6umQ7A==
+X-Google-Smtp-Source: AMrXdXvAVKr/5nv/RC9zvUl2zmh1IkA2ZjzZBFcajvmT94k7AqO7muhveMm8oBLXyFRuLTPbR/geJw==
+X-Received: by 2002:a5d:5405:0:b0:284:8a24:59e6 with SMTP id g5-20020a5d5405000000b002848a2459e6mr35819328wrv.3.1673538363871;
+        Thu, 12 Jan 2023 07:46:03 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d8:37a9:b9c7:ec8a])
+        by smtp.gmail.com with ESMTPSA id f19-20020a1c6a13000000b003d9fb04f658sm8223555wmc.4.2023.01.12.07.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 07:46:03 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2] dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
+Date:   Thu, 12 Jan 2023 16:45:54 +0100
+Message-Id: <20230112154554.442808-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Use MMCX for all DP
- controllers
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <20230112135055.3836555-1-quic_bjorande@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230112135055.3836555-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
+Document the qcom,smmu-500 SMMU on SA8775P platforms.
 
-On 12.01.2023 14:50, Bjorn Andersson wrote:
-> While MDSS_GDSC is a subdomain of MMCX, Linux does not respect this
-> relationship and sometimes invokes sync_state on the rpmhpd (MMCX)
-> before the DisplayPort controller has had a chance to probe.
-> 
-> The result when this happens is that the power is lost to the multimedia
-> subsystem between the probe of msm_drv and the DisplayPort controller -
-> which results in an irrecoverable state.
-> 
-> While this is an implementation problem, this aligns the power domain
-> setting of the one DP instance with that of all the others.
-> 
-> Fixes: 57d6ef683a15 ("arm64: dts: qcom: sc8280xp: Define some of the display blocks")
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-One day we'll hopefully finally overcome this parent-child mess..
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+- rebase on top of Krzysztof's work and add the compatible to the
+  "clock disallow" list
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+ Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Konrad
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 4f4353f84cba..4511fd939c91 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -2533,7 +2533,7 @@ mdss0_dp3: displayport-controller@aea0000 {
->  				interrupts = <15>;
->  				phys = <&mdss0_dp3_phy>;
->  				phy-names = "dp";
-> -				power-domains = <&dispcc0 MDSS_GDSC>;
-> +				power-domains = <&rpmhpd SC8280XP_MMCX>;
->  
->  				assigned-clocks = <&dispcc0 DISP_CC_MDSS_DPTX3_LINK_CLK_SRC>,
->  						  <&dispcc0 DISP_CC_MDSS_DPTX3_PIXEL0_CLK_SRC>;
+diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+index 124253e84c02..ea9205706b7c 100644
+--- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
++++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+@@ -36,6 +36,7 @@ properties:
+           - enum:
+               - qcom,qcm2290-smmu-500
+               - qcom,qdu1000-smmu-500
++              - qcom,sa8775p-smmu-500
+               - qcom,sc7180-smmu-500
+               - qcom,sc7280-smmu-500
+               - qcom,sc8180x-smmu-500
+@@ -326,6 +327,7 @@ allOf:
+               - nvidia,smmu-500
+               - qcom,qcm2290-smmu-500
+               - qcom,qdu1000-smmu-500
++              - qcom,sa8775p-smmu-500
+               - qcom,sc7180-smmu-500
+               - qcom,sc8180x-smmu-500
+               - qcom,sc8280xp-smmu-500
+-- 
+2.37.2
+
