@@ -2,81 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E94667D3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7C5667D41
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240093AbjALSBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S239903AbjALSCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjALSAq (ORCPT
+        with ESMTP id S239778AbjALSBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:00:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3068D12A9C;
-        Thu, 12 Jan 2023 09:21:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF834B81F02;
-        Thu, 12 Jan 2023 17:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882A3C433D2;
-        Thu, 12 Jan 2023 17:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673544107;
-        bh=o7rPePvZaQDhl2ZpAhDIh2cz7WD2ro08e3IDoDoypXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g1SdsksPV8I4OGhRFfJFW2e7Mfe7i/6SaB8a3aA6go7HS8htWAPK+bO/7ykzUP3Y0
-         ywxqRA6azp8u4YUy9EXLmyYTAypEC7bHG0tnOMYEJco4Q93DekkiTn6AVIIVFj3eNL
-         hZJBsJutqWf4ciswJ16ZSBsLpfoFi+4OudDBYzTdJS1z2qRHMeiL1/Fulwplch4g2I
-         BJqEE8BUMB/CiY0NeXbeHq7kcqs0emD/FDL30zhHFkaqsHpp/NUDtozFo5cWlXPzn3
-         uIxIqRCFgOC7RwYPHn3o8anIXSFABOY+khRVV3sC4SiDoZzxVkdvK6BeLgR2+AIVba
-         SRkQA3LfoxDIQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pG1H0-0004pA-IB; Thu, 12 Jan 2023 18:21:55 +0100
-Date:   Thu, 12 Jan 2023 18:21:54 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
-Message-ID: <Y8BBsid+Jaul3RDr@hovoldconsulting.com>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-20-johan+linaro@kernel.org>
- <87mt7sbtf9.ffs@tglx>
- <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
- <878rjcbnp8.ffs@tglx>
- <871qo1hqng.ffs@tglx>
+        Thu, 12 Jan 2023 13:01:16 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0E113D1B
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:22:08 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id q23-20020a17090a065700b002290913a521so2028605pje.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:22:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0xDr4QknDNxPi2cT8FrUuwNvsQNO379ZboIpi4mwvIk=;
+        b=Fiy522RNvvYxq4nWHpNZeEHiH1/P9P8SLmCZIIqj2T5uix0e9SLinDtq8qjCWr3RvO
+         M++tjLHwR63OcuftzaEi1ChHQB/nAHWAlphG1r3019blrCX5ANTv/XcoJVZFBBzi6aUe
+         MvLJxuqoSKKFHXXwDx19ZDLhPn5pfMZSOuEkIskLBENuvcoYcn3D/7ZnF+V0JdJj2ozl
+         w3ZMpd9CGXnSWHPtu6A4IicaLCensH+4iBwQSp85GIynWT/+gTgkDRA2xQ+ry9YEolgp
+         /TFO++DWjtppIUWlzcQtHMiWEruGd66Jn+076IgtMtnBQOtWeZNPvs9hxtIGRLFYmktV
+         Etnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0xDr4QknDNxPi2cT8FrUuwNvsQNO379ZboIpi4mwvIk=;
+        b=6KxJkA4nzXGoXRjCuz4ckkmwCyXQCWvJpGv+8Z5RY66eW3HxY+b0pxbBfitgNkb0x/
+         aV0dU8tZGBzVeyN/zJwKnp3JL8KUfO0euPdqttHObOoYx6mgn5vemV1CkUzpKbvDhD76
+         FMR/1IxGRzgakWI20r/RLUvQa9ORI3hCgoemsc4SzIqgqoyTfmyxycYgF7SHOgllOPmK
+         0Qc3Ryd4HQouoPgI6DJho6hPqF3C7fBG57NPPsVmsKuDCl/v7UfzxNiImhjPwYbJGBRS
+         EV8jnzUF4IcLK/3cH6Br6CxPxU5nlVdl03w0omsoX2YKtJ8TIAmrXhjZIUiUO5ZRyaGV
+         Tv7A==
+X-Gm-Message-State: AFqh2kqk9V6yo8Bdf1IspDxgwk7UTWru39ELaa5YUg/+4G6x392lgc/m
+        N+ibdzL039NIetKR/s/UuyurlhvxXOEsVLxwMrZf
+X-Google-Smtp-Source: AMrXdXu2M2VDaYhrvTSfy4I4j0IQ3Wj0M50ON3uTCXgABm7WK5YXNWc5b+Li6BFUEvojgI035C9WkWYZx2mqYyqriPo=
+X-Received: by 2002:a17:902:cec8:b0:192:6675:8636 with SMTP id
+ d8-20020a170902cec800b0019266758636mr4530544plg.15.1673544128229; Thu, 12 Jan
+ 2023 09:22:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871qo1hqng.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+ <20221201104125.919483-3-roberto.sassu@huaweicloud.com> <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
+In-Reply-To: <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 12 Jan 2023 12:21:57 -0500
+Message-ID: <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
+Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 07:28:35PM +0100, Thomas Gleixner wrote:
-> On Mon, Dec 12 2022 at 17:18, Thomas Gleixner wrote:
-> > On Mon, Dec 12 2022 at 15:29, Johan Hovold wrote:
-> >> I added to irq_domain_set_mapping() and which is is called for each
-> >> (inner) domain in a hierarchy when allocating an IRQ.
+On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
 > >
-> > Hmm. Indeed that should do the trick.
+> > In preparation for removing security_old_inode_init_security(), switch to
+> > security_inode_init_security().
 > >
-> > Some comments would be appreciated as the rules around domain->root are
-> > far from obvious.
-> 
-> Any update on this one?
+> > Extend the existing ocfs2_initxattrs() to take the
+> > ocfs2_security_xattr_info structure from fs_info, and populate the
+> > name/value/len triple with the first xattr provided by LSMs.
+>
+> Hi Mark, Joel, Joseph
+>
+> some time ago I sent this patch set to switch to the newer
+> function security_inode_init_security(). Almost all the other parts of
+> this patch set have been reviewed, and the patch set itself should be
+> ready to be merged.
+>
+> I kindly ask if you could have a look at this patch and give your
+> Reviewed-by, so that Paul could take the patch set.
 
-Sorry about the delay. I'll take a look at this tomorrow.
+I've been pushing to clean up some of the LSM interfaces to try and
+simplify things and remove as many special cases as possible,
+Roberto's work in this patchset is part of that.  I would really
+appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
+to make sure you are okay with the changes.
 
-Johan
+I realize that the various end-of-year holidays tend to slow things
+down a bit, but this patchset has been on the lists for over a month
+now; if I don't hear anything in the next week or two I'll assume you
+folks are okay with these patches ...
+
+-- 
+paul-moore.com
