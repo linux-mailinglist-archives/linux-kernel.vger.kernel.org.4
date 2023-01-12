@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DA566847D
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3AC66847C
 	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240709AbjALUyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S240748AbjALUyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbjALUwz (ORCPT
+        with ESMTP id S234650AbjALUwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 15:52:55 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0F2EB0;
-        Thu, 12 Jan 2023 12:26:41 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id g14so20524793ljh.10;
-        Thu, 12 Jan 2023 12:26:41 -0800 (PST)
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4C814022;
+        Thu, 12 Jan 2023 12:26:43 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id n5so20027664ljc.9;
+        Thu, 12 Jan 2023 12:26:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hse8SdC9wuKWXSULFTdDSwReuUUWy3z5aWnQyprXv2E=;
-        b=JYUMzT2iPyVhsc8BWOKwH4+dBDiUodT6g+A/W+T9RK/rghfpMX/AQHP1eHWCGc2Xsn
-         gym5/vPyoP8lAGiU2IpVHhie8eKhEyNo9RoP5Q7rrHyLiy7Ltb0nwj+E1aPClD8uxHrA
-         SgKTEzOOgMyqjNFQZxa1bfALhyNVy1Jt6EsY/iUM+m7YfNwWSlDnbMbLCKhjVJuuG+uo
-         oFI7nCRPeySlZMnrtMNhFZqx9VkcOmTlWODuJ8f8ZPZ1EslmwMCEWnWQ/W+2xgRZkjDM
-         +nRuiF5Z4wT+Kz4AQKjciW/M/ft3IlEvgRJTx/y+24POL7vX7ERWVBMJ5om3vS1A2TFU
-         QC5g==
+        bh=15pPSTBqoyAYCYzMfabcXUrmxuKUpnkxLbI+dGkSmlM=;
+        b=PAq8WbY3gH4wUoKvocUjwqtAWnHfUIZpoE6G0hdtvvZuQ9YdpBhQxSUUtS+wlW/qRb
+         R1diCo9E+LgL3BTe/4RI7BMJ1o974PSvdMF+gJ1aaVU9thHcWJbTFyc7+bzhsmzHGWfQ
+         1Q4KPGSQ9xPRQYKLRJv5HgFyeGiamKxMfzUpRTKQIGnZZNcxBizQbA2zcLDBQ5qttVVD
+         GODzFanVddphjDw9uuCtAjbjaYS3udmiksbO63qCyRArmvOLGfcSwlJN58BGz9qX30t7
+         xIueo5IeT+R9zt09NHM3wVOnD/ilYZj/c9iVLNz7zab2VrTb7Si6/O6qf5wSBGvQghsT
+         sG1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hse8SdC9wuKWXSULFTdDSwReuUUWy3z5aWnQyprXv2E=;
-        b=4sU0Rm0d29kJrheVgQedbVvS2djBCcY1GlLm3QhB/GxO0o0cZ/UBaVQhwPIrA3Eu+x
-         7/xsFsNYEcY7wlW954tvlvS3or88k+9FWM8GyqSexEosG1sUhAduTtBqOLP3FkFEUhKe
-         gBsvOvGNe56gA7sncukcoAmZ1MrOj3bjS7HJ02jub5EaY8UUUNit0QuhvFdUDELIHnYT
-         FULKpfSZNhhNjwvChoozzrXFGtE9chnRlfURePm4Pwa7gX3/GdeNb+QoH3NWj7cD/oyP
-         Gaif00Qtu04nRbMjR3bH70GvaPLIbh8LVsKjJJZ1r09t/mOaDIOE3RcaTGdlapDZ+UHq
-         8A0Q==
-X-Gm-Message-State: AFqh2kqtaM7Pzx3Hzom+29Ta7dAzKOaldzsx9/8e8gClqvjp5tqkW1Ud
-        i1ftYAzJzqAgGG9Vqh1XtYo4m/zmOtZAmA==
-X-Google-Smtp-Source: AMrXdXuqjQLonk10w8PTyyaCobjwK8WUb186aRl+tT6NwwIWuPjyPp8G5diu1hkxLmPEesyFNR60NA==
-X-Received: by 2002:a2e:9206:0:b0:27f:e50b:9e35 with SMTP id k6-20020a2e9206000000b0027fe50b9e35mr11875030ljg.52.1673555199515;
-        Thu, 12 Jan 2023 12:26:39 -0800 (PST)
+        bh=15pPSTBqoyAYCYzMfabcXUrmxuKUpnkxLbI+dGkSmlM=;
+        b=WR0rkw2s3yCDYGhzfxsVsAHC+UyhJCRR9OnVgOI1AVLVGRWi35i0X8Hz1r64boc5w0
+         KfeYPvG53rzwiOpiFALLGSj4mKZ6WxgtH7VwKrtmEjBCmlW66bsr40fkkfVePpBGjKgW
+         WFYPWgH8s3sUYbQT/CNNbH9iu7H9Hi0x3HS9acz3Vds4LagnYH1cuKZuSOEuwM25Har0
+         5hkATEeZSMT8msRyZ6xwFCms6+tOrAfLCaxFI4TxdDRdB4QQ5lyBGJdy55JGswT8oAef
+         3RDobdJ5VIuq5GJwxPbrKf1unT5LyI7Au337oredCRDpJdPPvS4QtPJjHiFIlZ1+tw8X
+         6jug==
+X-Gm-Message-State: AFqh2kp0nyGCvSwPWJt/+AgSKPR1pX6gTBFg3q02M5DNzwgKR2J+iejI
+        HrD45SCNjfg4UiAmb1KJxSLGPDLf7XAmsQ==
+X-Google-Smtp-Source: AMrXdXsA3FOLg84HWWaXb8lSo+5cuVP7KeVN6FpIwHWx2PW7Vh/j8z6EPIW2vjE9YMtVBBu8Afewpw==
+X-Received: by 2002:a2e:a683:0:b0:285:33b1:a64d with SMTP id q3-20020a2ea683000000b0028533b1a64dmr3877242lje.50.1673555201535;
+        Thu, 12 Jan 2023 12:26:41 -0800 (PST)
 Received: from i-vetokaappi.home.lan (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
-        by smtp.gmail.com with ESMTPSA id k6-20020a2eb746000000b00281350bb5fbsm2346731ljo.2.2023.01.12.12.26.38
+        by smtp.gmail.com with ESMTPSA id k6-20020a2eb746000000b00281350bb5fbsm2346731ljo.2.2023.01.12.12.26.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 12:26:38 -0800 (PST)
+        Thu, 12 Jan 2023 12:26:40 -0800 (PST)
 From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -57,12 +57,12 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/8] dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8226
-Date:   Thu, 12 Jan 2023 22:26:07 +0200
-Message-Id: <20230112202612.791455-5-matti.lehtimaki@gmail.com>
+Subject: [PATCH 5/8] ARM: dts: qcom: msm8226: Add node for TCSR halt regs
+Date:   Thu, 12 Jan 2023 22:26:08 +0200
+Message-Id: <20230112202612.791455-6-matti.lehtimaki@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230112202612.791455-1-matti.lehtimaki@gmail.com>
 References: <20230112202612.791455-1-matti.lehtimaki@gmail.com>
@@ -79,25 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the qcom,msm8226-tcsr compatible.
+Add a syscon device node for the TCSR halt regs needed by
+modem and other remoteprocs.
 
 Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 ---
- Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/qcom-msm8226.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index adcae6c007d9..d463fb47278f 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -31,6 +31,7 @@ properties:
-           - qcom,tcsr-ipq6018
-           - qcom,tcsr-ipq8064
-           - qcom,tcsr-mdm9615
-+          - qcom,tcsr-msm8226
-           - qcom,tcsr-msm8660
-           - qcom,tcsr-msm8916
-           - qcom,tcsr-msm8953
+diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
+index 4cba25dad8d6..394662cbf282 100644
+--- a/arch/arm/boot/dts/qcom-msm8226.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
+@@ -590,6 +590,11 @@ tcsr_mutex: hwlock@fd484000 {
+ 			#hwlock-cells = <1>;
+ 		};
+ 
++		tcsr_regs_1: syscon@fd485000 {
++			compatible = "qcom,msm8226-tcsr", "syscon";
++			reg = <0xfd485000 0x1000>;
++		};
++
+ 		adsp: remoteproc@fe200000 {
+ 			compatible = "qcom,msm8226-adsp-pil";
+ 			reg = <0xfe200000 0x100>;
 -- 
 2.34.1
 
