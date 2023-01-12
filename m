@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6E1667855
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4E666785F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240238AbjALO62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S240267AbjALO6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240207AbjALO6B (ORCPT
+        with ESMTP id S240175AbjALO6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:58:01 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3421A631A0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:44:12 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id v30so27114815edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 06:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PS+94AhsHF4SxeSpIBy4eHLkesUY6soqDZJHYUTxL3A=;
-        b=UBGXdTJSUaVfMSAqn+HmlJ31eCe5vqgvz6N+UKxfLvVg+wC0jYDCrbkIZ3vgDidgEF
-         rT2kBBkOM79BRdMnlyPtEb7cqb4qmk1INuH38AC5G6lH0YfYvgEOC/xeLVJRXUe3HQUz
-         xWuMNAfSYd1vBennGumSFahxxrGgcT2gchWoYqAdc4Nns1ZsB57SRBeltGwfsc5fZb86
-         DnRdM96MFSkOhvdjRwKqMNQxjkpoNZD4d8EY80mfqJ1T8zXkRCOr4jMD/51frI6vO8Th
-         wgMkfmk/dU4IoPVYKRJdooXEOslHTZqce28jdkDWQs0xOIPe18JLgmhkR17xM7bx7khU
-         WICQ==
+        Thu, 12 Jan 2023 09:58:02 -0500
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE8763185;
+        Thu, 12 Jan 2023 06:44:20 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id az20so26222455ejc.1;
+        Thu, 12 Jan 2023 06:44:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PS+94AhsHF4SxeSpIBy4eHLkesUY6soqDZJHYUTxL3A=;
-        b=hd8/SuXO5RKTICnkgmQsMZNCiwoZhkAVRWGdLGYrKks1vj1dkXiN8nNTHLdRSH/ZQW
-         Ze4emjTPEiAeWW5woziiKmglxq5moMt9s6W3nXwt823sd0xaxehI2vnIB1kCp/uBLvoQ
-         zT/8A3qpbdU9FruKtLXjASlitueB1BjzMvBOmmo9V0eErEMCqDJA9s4QHnalGzFRAeCb
-         ZHMN0Md8vEKHqs9bv9J2ISCS7bFLrAoROHP14OMSeeEzTsKIt30hRZkC7XQ5JdjFW/W5
-         /uFC/0YDwuBZlXN9wfMuffWgMc7BjMKChqQGOpCL5mSzpKUQuFQ/ILvZ87IdEc8Khoc4
-         O4gg==
-X-Gm-Message-State: AFqh2kqGSH9/jchZmF76tvnlp9m18LEVZISzQ8tVfW4djPIfqgK9U6rI
-        PBuDUlebbTvrMSLkQA+6XE0=
-X-Google-Smtp-Source: AMrXdXsAVpsbC8kapFV2tYELtxpA2szkvOka0Eczlkjr8R3hNSquFs80xbd0C3PUAjziQzjxBs2TdQ==
-X-Received: by 2002:a05:6402:3784:b0:46b:eadf:8d34 with SMTP id et4-20020a056402378400b0046beadf8d34mr63624262edb.7.1673534651337;
-        Thu, 12 Jan 2023 06:44:11 -0800 (PST)
-Received: from gmail.com (1F2EF2EB.nat.pool.telekom.hu. [31.46.242.235])
-        by smtp.gmail.com with ESMTPSA id ti11-20020a170907c20b00b007c10bb5b4b8sm7432416ejc.224.2023.01.12.06.44.10
+        bh=WsaMXqRGnAjzrXyFKJpI3zGOQIGJAJrZOr3w/exX7fI=;
+        b=wy/tOmbskAfElnZVgV1cy4MSSs+k3EFY7THkddVI4Wks9OKvcUUNCpq3AToT0cpkWc
+         2yME016v3HwOoQOmz0jbZJmhonD5Tt7gpcbpETjeupXTlYqXlrATGuqO1ROxItoM75oc
+         zePsGcWxQ5D4cMxdshVnPoKtieiXm6IcVJf2gX4ZfZW0fmyt56uRmlBqaba7buTNY+A6
+         q1CNituj7qUz1o6bz3M9qyTpX5skjfgnEruE0eK6ip83ACY1Z4vIvGRa8AemJJLT0weD
+         BvVQFgiICLhps2B9CMUNmggvYfT9rZoRLVG06d4w9LO0B/HKDtsvZJQxUiGoybDlPw5l
+         KuZw==
+X-Gm-Message-State: AFqh2kpS4bSCxn9tclRwKU1tLqnRpQNajhji3I+fPbPcczFIice9M8jF
+        3zvSIVPPgM+d4CM+FyGRRF8=
+X-Google-Smtp-Source: AMrXdXtnb3+TkGDposSNHyE17TkjfBWtzUm/pcU6e1WQxdulT1PY7oVm1CuVudFeaQvlMOnaXxfJpg==
+X-Received: by 2002:a17:907:a643:b0:83c:7308:b2ed with SMTP id vu3-20020a170907a64300b0083c7308b2edmr67547625ejc.17.1673534658894;
+        Thu, 12 Jan 2023 06:44:18 -0800 (PST)
+Received: from localhost (fwdproxy-cln-000.fbsv.net. [2a03:2880:31ff::face:b00c])
+        by smtp.gmail.com with ESMTPSA id d26-20020a170906305a00b0084c90164a56sm7488501ejd.29.2023.01.12.06.44.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 06:44:10 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 12 Jan 2023 15:44:09 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] timer fixes
-Message-ID: <Y8AcuX1o8aOSp7oj@gmail.com>
+        Thu, 12 Jan 2023 06:44:18 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     asml.silence@gmail.com, dylany@meta.com, axboe@kernel.dk,
+        io-uring@vger.kernel.org
+Cc:     leitao@debian.org, leit@fb.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] io_uring: Rename struct io_op_def
+Date:   Thu, 12 Jan 2023 06:44:10 -0800
+Message-Id: <20230112144411.2624698-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,122 +58,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+The current io_op_def struct is becoming huge and the name is a bit
+generic.
 
-Please pull the latest timers/urgent git tree from:
+The goal of this patch is to rename this struct to `io_issue_def`. This
+struct will contain the hot functions associated with the issue code
+path.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers-urgent-2023-01-12
+For now, this patch only renames the structure, and an upcoming patch
+will break up the structure in two, moving the non-issue fields to a
+secondary struct.
 
-   # HEAD: f3cb80804b8295323919e031281768ba3bf5f8da time: Fix various kernel-doc problems
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ io_uring/io_uring.c | 26 +++++++++++++-------------
+ io_uring/opdef.c    | 16 ++++++++--------
+ io_uring/opdef.h    |  4 ++--
+ io_uring/poll.c     |  2 +-
+ io_uring/rw.c       |  2 +-
+ 5 files changed, 25 insertions(+), 25 deletions(-)
 
-- Fix various DocBook formatting errors in kernel/time/ that
-  generated (justified) warnings during a kernel-doc build.
-
- Thanks,
-
-	Ingo
-
------------------->
-Randy Dunlap (1):
-      time: Fix various kernel-doc problems
-
-
- kernel/time/tick-oneshot.c | 4 ++--
- kernel/time/time.c         | 8 ++++----
- kernel/time/timekeeping.c  | 8 ++++----
- 3 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/time/tick-oneshot.c b/kernel/time/tick-oneshot.c
-index 475ecceda768..5e2c2c26b3cc 100644
---- a/kernel/time/tick-oneshot.c
-+++ b/kernel/time/tick-oneshot.c
-@@ -18,7 +18,7 @@
- #include "tick-internal.h"
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 2ac1cd8d23ea..ac7868ec9be2 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -407,7 +407,7 @@ static inline void io_arm_ltimeout(struct io_kiocb *req)
  
- /**
-- * tick_program_event
-+ * tick_program_event - program the CPU local timer device for the next event
-  */
- int tick_program_event(ktime_t expires, int force)
+ static void io_prep_async_work(struct io_kiocb *req)
  {
-@@ -99,7 +99,7 @@ int tick_switch_to_oneshot(void (*handler)(struct clock_event_device *))
+-	const struct io_op_def *def = &io_op_defs[req->opcode];
++	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 
+ 	if (!(req->flags & REQ_F_CREDS)) {
+@@ -980,7 +980,7 @@ void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
+ void io_req_defer_failed(struct io_kiocb *req, s32 res)
+ 	__must_hold(&ctx->uring_lock)
+ {
+-	const struct io_op_def *def = &io_op_defs[req->opcode];
++	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 
+ 	lockdep_assert_held(&req->ctx->uring_lock);
+ 
+@@ -1708,8 +1708,8 @@ unsigned int io_file_get_flags(struct file *file)
+ 
+ bool io_alloc_async_data(struct io_kiocb *req)
+ {
+-	WARN_ON_ONCE(!io_op_defs[req->opcode].async_size);
+-	req->async_data = kmalloc(io_op_defs[req->opcode].async_size, GFP_KERNEL);
++	WARN_ON_ONCE(!io_issue_defs[req->opcode].async_size);
++	req->async_data = kmalloc(io_issue_defs[req->opcode].async_size, GFP_KERNEL);
+ 	if (req->async_data) {
+ 		req->flags |= REQ_F_ASYNC_DATA;
+ 		return false;
+@@ -1719,7 +1719,7 @@ bool io_alloc_async_data(struct io_kiocb *req)
+ 
+ int io_req_prep_async(struct io_kiocb *req)
+ {
+-	const struct io_op_def *def = &io_op_defs[req->opcode];
++	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 
+ 	/* assign early for deferred execution for non-fixed file */
+ 	if (def->needs_file && !(req->flags & REQ_F_FIXED_FILE))
+@@ -1728,7 +1728,7 @@ int io_req_prep_async(struct io_kiocb *req)
+ 		return 0;
+ 	if (WARN_ON_ONCE(req_has_async_data(req)))
+ 		return -EFAULT;
+-	if (!io_op_defs[req->opcode].manual_alloc) {
++	if (!io_issue_defs[req->opcode].manual_alloc) {
+ 		if (io_alloc_async_data(req))
+ 			return -EAGAIN;
+ 	}
+@@ -1801,7 +1801,7 @@ static void io_clean_op(struct io_kiocb *req)
+ 	}
+ 
+ 	if (req->flags & REQ_F_NEED_CLEANUP) {
+-		const struct io_op_def *def = &io_op_defs[req->opcode];
++		const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 
+ 		if (def->cleanup)
+ 			def->cleanup(req);
+@@ -1827,7 +1827,7 @@ static void io_clean_op(struct io_kiocb *req)
+ 
+ static bool io_assign_file(struct io_kiocb *req, unsigned int issue_flags)
+ {
+-	if (req->file || !io_op_defs[req->opcode].needs_file)
++	if (req->file || !io_issue_defs[req->opcode].needs_file)
+ 		return true;
+ 
+ 	if (req->flags & REQ_F_FIXED_FILE)
+@@ -1840,7 +1840,7 @@ static bool io_assign_file(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
+ {
+-	const struct io_op_def *def = &io_op_defs[req->opcode];
++	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 	const struct cred *creds = NULL;
+ 	int ret;
+ 
+@@ -1894,7 +1894,7 @@ struct io_wq_work *io_wq_free_work(struct io_wq_work *work)
+ void io_wq_submit_work(struct io_wq_work *work)
+ {
+ 	struct io_kiocb *req = container_of(work, struct io_kiocb, work);
+-	const struct io_op_def *def = &io_op_defs[req->opcode];
++	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 	unsigned int issue_flags = IO_URING_F_UNLOCKED | IO_URING_F_IOWQ;
+ 	bool needs_poll = false;
+ 	int ret = 0, err = -ECANCELED;
+@@ -2106,7 +2106,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 		       const struct io_uring_sqe *sqe)
+ 	__must_hold(&ctx->uring_lock)
+ {
+-	const struct io_op_def *def;
++	const struct io_issue_def *def;
+ 	unsigned int sqe_flags;
+ 	int personality;
+ 	u8 opcode;
+@@ -2124,7 +2124,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 		req->opcode = 0;
+ 		return -EINVAL;
+ 	}
+-	def = &io_op_defs[opcode];
++	def = &io_issue_defs[opcode];
+ 	if (unlikely(sqe_flags & ~SQE_COMMON_FLAGS)) {
+ 		/* enforce forwards compatibility on users */
+ 		if (sqe_flags & ~SQE_VALID_FLAGS)
+@@ -3762,7 +3762,7 @@ static __cold int io_probe(struct io_ring_ctx *ctx, void __user *arg,
+ 
+ 	for (i = 0; i < nr_args; i++) {
+ 		p->ops[i].op = i;
+-		if (!io_op_defs[i].not_supported)
++		if (!io_issue_defs[i].not_supported)
+ 			p->ops[i].flags = IO_URING_OP_SUPPORTED;
+ 	}
+ 	p->ops_len = i;
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index 3aa0d65c50e3..3c95e70a625e 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -46,7 +46,7 @@ static __maybe_unused int io_eopnotsupp_prep(struct io_kiocb *kiocb,
+ 	return -EOPNOTSUPP;
  }
  
- /**
-- * tick_check_oneshot_mode - check whether the system is in oneshot mode
-+ * tick_oneshot_mode_active - check whether the system is in oneshot mode
-  *
-  * returns 1 when either nohz or highres are enabled. otherwise 0.
-  */
-diff --git a/kernel/time/time.c b/kernel/time/time.c
-index 526257b3727c..f4198af60fee 100644
---- a/kernel/time/time.c
-+++ b/kernel/time/time.c
-@@ -462,7 +462,7 @@ struct __kernel_old_timeval ns_to_kernel_old_timeval(s64 nsec)
- EXPORT_SYMBOL(ns_to_kernel_old_timeval);
- 
- /**
-- * set_normalized_timespec - set timespec sec and nsec parts and normalize
-+ * set_normalized_timespec64 - set timespec sec and nsec parts and normalize
-  *
-  * @ts:		pointer to timespec variable to be set
-  * @sec:	seconds to set
-@@ -526,7 +526,7 @@ struct timespec64 ns_to_timespec64(s64 nsec)
- EXPORT_SYMBOL(ns_to_timespec64);
- 
- /**
-- * msecs_to_jiffies: - convert milliseconds to jiffies
-+ * __msecs_to_jiffies: - convert milliseconds to jiffies
-  * @m:	time in milliseconds
-  *
-  * conversion is done as follows:
-@@ -541,12 +541,12 @@ EXPORT_SYMBOL(ns_to_timespec64);
-  *   handling any 32-bit overflows.
-  *   for the details see __msecs_to_jiffies()
-  *
-- * msecs_to_jiffies() checks for the passed in value being a constant
-+ * __msecs_to_jiffies() checks for the passed in value being a constant
-  * via __builtin_constant_p() allowing gcc to eliminate most of the
-  * code, __msecs_to_jiffies() is called if the value passed does not
-  * allow constant folding and the actual conversion must be done at
-  * runtime.
-- * the _msecs_to_jiffies helpers are the HZ dependent conversion
-+ * The _msecs_to_jiffies helpers are the HZ dependent conversion
-  * routines found in include/linux/jiffies.h
-  */
- unsigned long __msecs_to_jiffies(const unsigned int m)
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index f72b9f1de178..5579ead449f2 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -1590,10 +1590,10 @@ void __weak read_persistent_clock64(struct timespec64 *ts)
- /**
-  * read_persistent_wall_and_boot_offset - Read persistent clock, and also offset
-  *                                        from the boot.
-+ * @wall_time:	  current time as returned by persistent clock
-+ * @boot_offset:  offset that is defined as wall_time - boot_time
-  *
-  * Weak dummy function for arches that do not yet support it.
-- * @wall_time:	- current time as returned by persistent clock
-- * @boot_offset: - offset that is defined as wall_time - boot_time
-  *
-  * The default function calculates offset based on the current value of
-  * local_clock(). This way architectures that support sched_clock() but don't
-@@ -1701,7 +1701,7 @@ static void __timekeeping_inject_sleeptime(struct timekeeper *tk,
+-const struct io_op_def io_op_defs[] = {
++const struct io_issue_def io_issue_defs[] = {
+ 	[IORING_OP_NOP] = {
+ 		.audit_skip		= 1,
+ 		.iopoll			= 1,
+@@ -536,7 +536,7 @@ const struct io_op_def io_op_defs[] = {
+ const char *io_uring_get_opcode(u8 opcode)
+ {
+ 	if (opcode < IORING_OP_LAST)
+-		return io_op_defs[opcode].name;
++		return io_issue_defs[opcode].name;
+ 	return "INVALID";
  }
  
- #if defined(CONFIG_PM_SLEEP) && defined(CONFIG_RTC_HCTOSYS_DEVICE)
--/**
-+/*
-  * We have three kinds of time sources to use for sleep time
-  * injection, the preference order is:
-  * 1) non-stop clocksource
-@@ -1722,7 +1722,7 @@ bool timekeeping_rtc_skipresume(void)
- 	return !suspend_timing_needed;
- }
+@@ -544,12 +544,12 @@ void __init io_uring_optable_init(void)
+ {
+ 	int i;
  
--/**
-+/*
-  * 1) can be determined whether to use or not only when doing
-  * timekeeping_resume() which is invoked after rtc_suspend(),
-  * so we can't skip rtc_suspend() surely if system has 1).
+-	BUILD_BUG_ON(ARRAY_SIZE(io_op_defs) != IORING_OP_LAST);
++	BUILD_BUG_ON(ARRAY_SIZE(io_issue_defs) != IORING_OP_LAST);
+ 
+-	for (i = 0; i < ARRAY_SIZE(io_op_defs); i++) {
+-		BUG_ON(!io_op_defs[i].prep);
+-		if (io_op_defs[i].prep != io_eopnotsupp_prep)
+-			BUG_ON(!io_op_defs[i].issue);
+-		WARN_ON_ONCE(!io_op_defs[i].name);
++	for (i = 0; i < ARRAY_SIZE(io_issue_defs); i++) {
++		BUG_ON(!io_issue_defs[i].prep);
++		if (io_issue_defs[i].prep != io_eopnotsupp_prep)
++			BUG_ON(!io_issue_defs[i].issue);
++		WARN_ON_ONCE(!io_issue_defs[i].name);
+ 	}
+ }
+diff --git a/io_uring/opdef.h b/io_uring/opdef.h
+index df7e13d9bfba..d718e2ab1ff7 100644
+--- a/io_uring/opdef.h
++++ b/io_uring/opdef.h
+@@ -2,7 +2,7 @@
+ #ifndef IOU_OP_DEF_H
+ #define IOU_OP_DEF_H
+ 
+-struct io_op_def {
++struct io_issue_def {
+ 	/* needs req->file assigned */
+ 	unsigned		needs_file : 1;
+ 	/* should block plug */
+@@ -41,7 +41,7 @@ struct io_op_def {
+ 	void (*fail)(struct io_kiocb *);
+ };
+ 
+-extern const struct io_op_def io_op_defs[];
++extern const struct io_issue_def io_issue_defs[];
+ 
+ void io_uring_optable_init(void);
+ #endif
+diff --git a/io_uring/poll.c b/io_uring/poll.c
+index ee7da6150ec4..7a6d5d0da966 100644
+--- a/io_uring/poll.c
++++ b/io_uring/poll.c
+@@ -658,7 +658,7 @@ static struct async_poll *io_req_alloc_apoll(struct io_kiocb *req,
+ 
+ int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
+ {
+-	const struct io_op_def *def = &io_op_defs[req->opcode];
++	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+ 	struct async_poll *apoll;
+ 	struct io_poll_table ipt;
+ 	__poll_t mask = POLLPRI | POLLERR | EPOLLET;
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 8227af2e1c0f..54b44b9b736c 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -516,7 +516,7 @@ static void io_req_map_rw(struct io_kiocb *req, const struct iovec *iovec,
+ static int io_setup_async_rw(struct io_kiocb *req, const struct iovec *iovec,
+ 			     struct io_rw_state *s, bool force)
+ {
+-	if (!force && !io_op_defs[req->opcode].prep_async)
++	if (!force && !io_issue_defs[req->opcode].prep_async)
+ 		return 0;
+ 	if (!req_has_async_data(req)) {
+ 		struct io_async_rw *iorw;
+-- 
+2.30.2
+
