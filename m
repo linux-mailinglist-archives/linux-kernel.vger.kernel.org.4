@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05A76685CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E666685D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbjALVsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S240310AbjALVsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240345AbjALVrd (ORCPT
+        with ESMTP id S240727AbjALVre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:47:33 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2693A95BF
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:40:21 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id i65so11320783pfc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:40:21 -0800 (PST)
+        Thu, 12 Jan 2023 16:47:34 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915DA6DBB8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:40:22 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id c26so10354478pfp.10
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 13:40:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6nuL0A6b/Cc0UYziUfDk8TnmjwdlAAeWvEhDoJKmGGg=;
-        b=h4yPXUpM4r5Qaaf1l3vXl7ZzDwfTEguwSCBWDkCCeXlC7UoH/Hn6Dvbb/QNdZULD3P
-         QpmWnNV89arn29Y8fZns3qK1XzdXdf5OS/BjNz/nv3aZU9fggTD01LCl0IP1OAuzLFvR
-         iqpyQfB9mrPqy6RgLAw7RCE7xn1tLzfAdlMaBjIK6Fgy0RW9pIdgQF+LccZpOuRoBjFn
-         6ymS+Y9Vz42FBpgu24knYF+rAWaXMfIn/Ew8ixRgIHUWavQDR11RejJqUkZ+gP+MVs6Y
-         QI7jNerOp3oGBGZSoM5jI68pDWHat25n0KVwuTSSUmLfKjH59KZxPS8NBMNOv27dZzsJ
-         JlgQ==
+        bh=4JJiMcoWlhZgKB78U5VEVvQdWOzu1ox9DCMJw9an4s8=;
+        b=kUvO4oovmAHHSaIoJ2m3MMu7qTo+mucZEpq2qcSyu3sEdW2HrH2rrQ6oAmVESctwp5
+         i1Vx3qMpoWOWGqLS5b2DooVkqmswps4vNl+zOWnSXVpiD6sC6fWILS6iWG5+SGPHEy0K
+         WP1a/qe6NEewQOfIgjqtHxScWwYQ9XOBAwL8CcTAK1XIDDCsq9UlCLnaw7j7www4RjQ9
+         w0Qx/xy1Xqm6pN8vB6jrhrWW0AUTWH590XaDQce6pwQIvPw7W7OkOUEEEz3w09mzaP/2
+         MsWlfXtGvcFfO+Al2MrB0WxxosBw7P5OKP8TNBO6YkYPFsxy22nZZKQOVD2JXiREknNl
+         wIXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6nuL0A6b/Cc0UYziUfDk8TnmjwdlAAeWvEhDoJKmGGg=;
-        b=UAstYBxOeR4OCWnRjWXPkOALlEk/EJ5Di5B9VjkDixCCe96Z9ccqn4NVYwayOCXNH7
-         rAYwd4XE1YNlxxlrj4QLWpJQLM3HG7PI5Wy96hYu/qOygl2f0TSeASC6iLlg9OTN9VrX
-         kXJddvp2wZe/7jLMg1JTGOGDCq/fHrUgkDw1DvH8FTo61QdtSe9gb6vELqi/aoeaLti+
-         HO0JYsEleBGhbLCGZX5f2e5MaCCQ6HJk1zBYqCISDuDM3sDXOolha0ggh3SDYpoCMGBI
-         Wp7qKYRpG/EP5p7Q+r/U9Hsu3gpyOAA5RCYoF/aiRsmOmDTZrOGHOdsMmPyDwYACmLTZ
-         JaOg==
-X-Gm-Message-State: AFqh2krmBqL6IOJ7juG5zTdCk7nheKWpFkcLX6QVGlEDG/IwkoR11hTo
-        HSj5aPjNwVi9UYRvhozUX6s=
-X-Google-Smtp-Source: AMrXdXvx4WDioRI5o5hNOn4FDnQL4K9ysgh6nuiXfKhf2xRQQAe6PjHrcFtj5LSaywE3krabmIfaFw==
-X-Received: by 2002:a05:6a00:1d03:b0:580:149a:5650 with SMTP id a3-20020a056a001d0300b00580149a5650mr79037670pfx.22.1673559620511;
-        Thu, 12 Jan 2023 13:40:20 -0800 (PST)
+        bh=4JJiMcoWlhZgKB78U5VEVvQdWOzu1ox9DCMJw9an4s8=;
+        b=rpnkH8yLIYcnLieHfGx1DprTpBVHdKZTeZalSGLFXk5o5wamw5pw/8tDuztFelP1PC
+         m1ZYPLo0MKDaSWQ1SnxUwBnMOYXvAlJKFrKfAFPo2Vy441zgJUr2EfpLDeW+gnij3ZPj
+         haN6HN4vFuE4AsNmgRsbG1iPZE6FPtx8P2zMevU3dWXDle3U21NrL8Ux9AIVi+bGERyn
+         YWmGoX22zeersZTB7qRcgLYSJsOXX55wjH5PCYrRXIH8NW7BWvwBg906DwuVPCHOmTCt
+         KB2XUyaCqgfprKUTWj6WH2F4owq5OvE4EadD7ejAaapV8GH86Y58Dfoz2bkQ0ahL7P5J
+         /ihA==
+X-Gm-Message-State: AFqh2kovPSDG03YOiGHJKpjH6UGuEj/IwiyknAYlnQUInKQ18pHPNsRA
+        Gzo54z81vP7Hhc0/Uza4aNL4IidDkdA=
+X-Google-Smtp-Source: AMrXdXtHDg7+JezyohMyRdwrtxboE7LbL/8+5LdVP47CiHY2iBqXL3dvGwfDDUNyqjtaAea8iTYtaA==
+X-Received: by 2002:a05:6a00:896:b0:586:35dd:91c3 with SMTP id q22-20020a056a00089600b0058635dd91c3mr25796905pfj.29.1673559621684;
+        Thu, 12 Jan 2023 13:40:21 -0800 (PST)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:b71e:23d4:aa6a:47c0])
-        by smtp.gmail.com with ESMTPSA id q20-20020aa79834000000b0058134d2df41sm11344605pfl.146.2023.01.12.13.40.19
+        by smtp.gmail.com with ESMTPSA id q20-20020aa79834000000b0058134d2df41sm11344605pfl.146.2023.01.12.13.40.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 13:40:20 -0800 (PST)
+        Thu, 12 Jan 2023 13:40:21 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
@@ -58,10 +58,11 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH 1/8] perf/core: Save the dynamic parts of sample data size
-Date:   Thu, 12 Jan 2023 13:40:08 -0800
-Message-Id: <20230112214015.1014857-2-namhyung@kernel.org>
+        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        x86@kernel.org
+Subject: [PATCH 2/8] perf/core: Add perf_sample_save_callchain() helper
+Date:   Thu, 12 Jan 2023 13:40:09 -0800
+Message-Id: <20230112214015.1014857-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20230112214015.1014857-1-namhyung@kernel.org>
 References: <20230112214015.1014857-1-namhyung@kernel.org>
@@ -77,112 +78,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The perf sample data can be divided into parts.  The event->header_size
-and event->id_header_size keep the static part of the sample data which
-is determined by the sample_type flags.
+When it saves the callchain to the perf sample data, it needs to update
+the sample flags and the dynamic size.  To make sure this, add the
+perf_sample_save_callchain() helper and convert all call sites.
 
-But other parts like CALLCHAIN and BRANCH_STACK are changing dynamically
-so it needs to see the actual data.  In preparation of handling repeated
-calls for perf_prepare_sample(), it can save the dynamic size to the
-perf sample data to avoid the duplicate work.
-
+Cc: x86@kernel.org
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- include/linux/perf_event.h |  2 ++
- kernel/events/core.c       | 17 ++++++++++-------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ arch/x86/events/amd/ibs.c  |  6 ++----
+ arch/x86/events/intel/ds.c | 12 ++++--------
+ include/linux/perf_event.h | 16 +++++++++++++++-
+ kernel/events/core.c       | 12 ++----------
+ 4 files changed, 23 insertions(+), 23 deletions(-)
 
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index da3f5ebac4e1..417c80bd3274 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -1122,10 +1122,8 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+ 	 * recorded as part of interrupt regs. Thus we need to use rip from
+ 	 * interrupt regs while unwinding call stack.
+ 	 */
+-	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
+-		data.callchain = perf_callchain(event, iregs);
+-		data.sample_flags |= PERF_SAMPLE_CALLCHAIN;
+-	}
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		perf_sample_save_callchain(&data, event, iregs);
+ 
+ 	throttle = perf_event_overflow(event, &data, &regs);
+ out:
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index 6ec326b47e2e..158cf845fc80 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1617,10 +1617,8 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+ 	 * previous PMI context or an (I)RET happened between the record and
+ 	 * PMI.
+ 	 */
+-	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+-		data->callchain = perf_callchain(event, iregs);
+-		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+-	}
++	if (sample_type & PERF_SAMPLE_CALLCHAIN)
++		perf_sample_save_callchain(data, event, iregs);
+ 
+ 	/*
+ 	 * We use the interrupt regs as a base because the PEBS record does not
+@@ -1795,10 +1793,8 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
+ 	 * previous PMI context or an (I)RET happened between the record and
+ 	 * PMI.
+ 	 */
+-	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+-		data->callchain = perf_callchain(event, iregs);
+-		data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+-	}
++	if (sample_type & PERF_SAMPLE_CALLCHAIN)
++		perf_sample_save_callchain(data, event, iregs);
+ 
+ 	*regs = *iregs;
+ 	/* The ip in basic is EventingIP */
 diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 03949d017ac9..16b980014449 100644
+index 16b980014449..a9419608402b 100644
 --- a/include/linux/perf_event.h
 +++ b/include/linux/perf_event.h
-@@ -1103,6 +1103,7 @@ struct perf_sample_data {
- 	 */
- 	u64				sample_flags;
- 	u64				period;
-+	u64				dyn_size;
+@@ -1095,6 +1095,8 @@ int perf_event_read_local(struct perf_event *event, u64 *value,
+ extern u64 perf_event_read_value(struct perf_event *event,
+ 				 u64 *enabled, u64 *running);
  
++extern struct perf_callchain_entry *perf_callchain(struct perf_event *event, struct pt_regs *regs);
++
+ 
+ struct perf_sample_data {
  	/*
- 	 * Fields commonly set by __perf_event_header__init_id(),
-@@ -1158,6 +1159,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- 	/* remaining struct members initialized in perf_prepare_sample() */
- 	data->sample_flags = PERF_SAMPLE_PERIOD;
- 	data->period = period;
-+	data->dyn_size = 0;
+@@ -1167,6 +1169,19 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
+ 	}
+ }
  
- 	if (addr) {
- 		data->addr = addr;
++static inline void perf_sample_save_callchain(struct perf_sample_data *data,
++					      struct perf_event *event,
++					      struct pt_regs *regs)
++{
++	int size = 1;
++
++	data->callchain = perf_callchain(event, regs);
++	size += data->callchain->nr;
++
++	data->dyn_size += size * sizeof(u64);
++	data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
++}
++
+ /*
+  * Clear all bitfields in the perf_branch_entry.
+  * The to and from fields are not cleared because they are
+@@ -1408,7 +1423,6 @@ extern void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct
+ extern struct perf_callchain_entry *
+ get_perf_callchain(struct pt_regs *regs, u32 init_nr, bool kernel, bool user,
+ 		   u32 max_stack, bool crosstask, bool add_mark);
+-extern struct perf_callchain_entry *perf_callchain(struct perf_event *event, struct pt_regs *regs);
+ extern int get_callchain_buffers(int max_stack);
+ extern void put_callchain_buffers(void);
+ extern struct perf_callchain_entry *get_callchain_entry(int *rctx);
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index eacc3702654d..8c8de26f04ab 100644
+index 8c8de26f04ab..0fba98b9cd65 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -7593,7 +7593,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+@@ -7585,16 +7585,8 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 	if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
+ 		data->ip = perf_instruction_pointer(regs);
  
- 		size += data->callchain->nr;
- 
--		header->size += size * sizeof(u64);
-+		data->dyn_size += size * sizeof(u64);
- 	}
+-	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+-		int size = 1;
+-
+-		if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
+-			data->callchain = perf_callchain(event, regs);
+-
+-		size += data->callchain->nr;
+-
+-		data->dyn_size += size * sizeof(u64);
+-	}
++	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
++		perf_sample_save_callchain(data, event, regs);
  
  	if (sample_type & PERF_SAMPLE_RAW) {
-@@ -7619,7 +7619,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			data->raw = NULL;
- 		}
- 
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
-@@ -7631,7 +7631,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += data->br_stack->nr
- 			      * sizeof(struct perf_branch_entry);
- 		}
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (sample_type & (PERF_SAMPLE_REGS_USER | PERF_SAMPLE_STACK_USER))
-@@ -7646,7 +7646,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += hweight64(mask) * sizeof(u64);
- 		}
- 
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (sample_type & PERF_SAMPLE_STACK_USER) {
-@@ -7671,7 +7671,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += sizeof(u64) + stack_size;
- 
- 		data->stack_user_size = stack_size;
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (filtered_sample_type & PERF_SAMPLE_WEIGHT_TYPE)
-@@ -7700,7 +7700,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			size += hweight64(mask) * sizeof(u64);
- 		}
- 
--		header->size += size;
-+		data->dyn_size += size;
- 	}
- 
- 	if (sample_type & PERF_SAMPLE_PHYS_ADDR &&
-@@ -7745,8 +7745,11 @@ void perf_prepare_sample(struct perf_event_header *header,
- 		size = perf_prepare_sample_aux(event, data, size);
- 
- 		WARN_ON_ONCE(size + header->size > U16_MAX);
--		header->size += size;
-+		data->dyn_size += size + sizeof(u64); /* size above */
- 	}
-+
-+	header->size += data->dyn_size;
-+
- 	/*
- 	 * If you're adding more sample types here, you likely need to do
- 	 * something about the overflowing header::size, like repurpose the
+ 		struct perf_raw_record *raw = data->raw;
 -- 
 2.39.0.314.g84b9a713c41-goog
 
