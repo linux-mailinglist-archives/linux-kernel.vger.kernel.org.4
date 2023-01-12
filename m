@@ -2,179 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258EA667DAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73454667DAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 19:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbjALSPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 13:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S240298AbjALSOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 13:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240558AbjALSN4 (ORCPT
+        with ESMTP id S240515AbjALSNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 13:13:56 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F516DBBD
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:20 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12318938wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:20 -0800 (PST)
+        Thu, 12 Jan 2023 13:13:48 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F36DBAA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:17 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id o8so9707275ilo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 09:43:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3e5PBlGJNiXnH3XwFb6/nJ5M/bSXc0/rRRFPQw8A51M=;
-        b=zQXXh8ieB1e2x1HIq9SMzCtwStEEFHMtKWzpbnXpd/2CDancPQSwJjAnn3tJuNHSQz
-         cw52GdKy2buAYmJ67ykJTuE9AdUYvTIvnveJRELMXxX5eUdHdmgsx68kD5caVrRd+YYm
-         BN52TiyqaQ5Oa+9HkstlrEcup1mdv02RCfMv0p8zpLK+6tAd2qCYr2XkokPD3U9NDOLJ
-         xOZ2U3ftJuEuKpm2zTX/est7NFdkW+ZuGc6En9WzO5l9tQ3ohmY+Mq7D5EsL/Up/Tyb1
-         DAIjm7ijZQMk2DicW3ZwFCmVtp+H8WoMJuhx3tGUGd/DbgqnRLM5iEsxNXQwel/I2FLy
-         G4bg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dgKrza2NtsFkWIoqInfkYFIF1ejr0kkPFxk6nS4NQjw=;
+        b=1FP3lYMDFzpooPWyS6CiSsFyMJB3Z4HPH+Fm+WXhIVpiAH13l1yf70RTXoFEOQ0AiH
+         w3T3f9d6cP3OcXoiLTqjvbYjl/WXE+famL6wp/gJ9/np4uZ/nRABO1iHnoCbZkJuk3VP
+         bbdqYVbvdhhOreeNnvGOePMKP9+V9FBRfLET/b27tN7MrJVmCAPsVmFxUanaWE/rYbBD
+         GoywOO1C2biFiY3nY3yVklHN2Rev7Voj76jPiPYwCptFTK14ceLVJdbDrhm6UpyGcmDY
+         cFu7qR88z4FdKVSmJAqtyqBcLzCgdRekRFcJbN5mbh0YRSIWBi1sSRmww//8NWKBPzDm
+         YLRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3e5PBlGJNiXnH3XwFb6/nJ5M/bSXc0/rRRFPQw8A51M=;
-        b=PI/c52sUOvmm0n43o31VybNQAoElnSwVNIMgm5sCra4CBO9jJuRIzznE/drygEIZW0
-         rs96Jddb/VbAqU5f0RSw1OoT3SPzHLW6TYcfOn7sITFeXHXzbX5qlKH7Hsm8pMpAfVdz
-         1He52/PIYXEB7g/kL2TklSUn+t1AA7fbnEEU6MfcnoGVwrm3ycUZabMIzFIbx9ESjp/n
-         TIBPWtpUJfPwcntk3v6DmFoeTJYvK7rQaMA6cvkRwMBg1MD/N/DgNMkXC3ev68ZLQSg2
-         1fjPuirz6U7kCO00+ym70RJXz8xEgNHbCUlEH8Q7f9mgPCEprpqiBrqX9HxXcIc62WnN
-         7Gnw==
-X-Gm-Message-State: AFqh2koUVrDzZj1pyTLmpv7eDfH0nyWI4ovKuRBWQu5hedjMkpqfkqtC
-        4bMmMj3o2EedNkbrqq+I8TuCHA==
-X-Google-Smtp-Source: AMrXdXvsmad4+iB2Sb/Sj//efn71Od0my1o0QKk8x4Q6YxNY4qhjSBwlePQg5j6h89T1z1GdCI98dw==
-X-Received: by 2002:a05:600c:3b87:b0:3d2:813:138a with SMTP id n7-20020a05600c3b8700b003d20813138amr59967266wms.35.1673545398942;
-        Thu, 12 Jan 2023 09:43:18 -0800 (PST)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id hg9-20020a05600c538900b003cfa622a18asm26448769wmb.3.2023.01.12.09.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 09:43:18 -0800 (PST)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 12 Jan 2023 18:42:53 +0100
-Subject: [PATCH net 3/3] selftests: mptcp: userspace: validate v4-v6 subflows mix
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dgKrza2NtsFkWIoqInfkYFIF1ejr0kkPFxk6nS4NQjw=;
+        b=DOl4MVXsusKf0CfnX8SoBroph7XxhsGcD28TuzSCDWa9NROTAmP/QFZXX+QDfPsawG
+         wNpKcdt6tMCVU4V2cVuuGHa/QafT2Nn2Ob0jVm0dllhC54plraCDxAbw1in+hx6ABoqc
+         zHHyml4mZcuMa7oxih+i/+YYLfCNoJV1FKlGbdl2l6ZOXJCpRqrzfH6GJPUNBHCJ6rsj
+         G+IQcYh43qxbHnVxUahRDZ5jizFegbJyMVafLe4aTvcJJwYMNpfFu2pEibdVGOW9cZUl
+         6+QBz1wcPX3GrXVcztueC9E5X32+2Q8OafRYbkTUF4hjaf4uUi6mtAEpc+ruuU+ydzUI
+         +dHg==
+X-Gm-Message-State: AFqh2kpumKDZ6GeP6Motxnp5C+KHwQCi0fFrpCETZ5JZWM8lcNOQgIyZ
+        3K/pXLAYCAjWU/mJ65eetkZ5yw==
+X-Google-Smtp-Source: AMrXdXvclKjcy7OSFpmzvK1g+tr/pTH8hn2p5gv21gwpS+TWX8ENpYOuzI9Tyu6qM5IsG/S8kp3cvA==
+X-Received: by 2002:a92:d28f:0:b0:30b:d89f:35b2 with SMTP id p15-20020a92d28f000000b0030bd89f35b2mr8969427ilp.3.1673545397040;
+        Thu, 12 Jan 2023 09:43:17 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id c72-20020a02964e000000b00363d6918540sm5398895jai.171.2023.01.12.09.43.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 09:43:16 -0800 (PST)
+Message-ID: <b130dd91-0871-6138-9a40-8499fb776875@kernel.dk>
+Date:   Thu, 12 Jan 2023 10:43:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-upstream-net-20230112-netlink-v4-v6-v1-3-6a8363a221d2@tessares.net>
-References: <20230112-upstream-net-20230112-netlink-v4-v6-v1-0-6a8363a221d2@tessares.net>
-In-Reply-To: <20230112-upstream-net-20230112-netlink-v4-v6-v1-0-6a8363a221d2@tessares.net>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishen Maloor <kishen.maloor@intel.com>,
-        Florian Westphal <fw@strlen.de>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3020;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=wMA47rRwNHClCs5+kkPqR8S9uOx26T8C//wUolPsOEs=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjwEayQrKg1fBLIH/Ag9LK+jbOuR/y6ESuubk4Qg62
- Xu6uf2qJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY8BGsgAKCRD2t4JPQmmgc1/ND/
- 4v+GObwwQJ0B5N50mp9+s+fUPH6lM5J8yQ2LrA9D0KBmeCLBYcZnQgoNAMSWDLuLg9+AIYHvvlyDzy
- rPO4l+UZpFnbKYIUfKZPpXpF4pvIJAcjjl7lCJzNCerjJbmPWvEULd5a97uOxMqECScgfurVYrfPMb
- oOsBJFJO7CHwzavV3vqRc2ZpxYrKVhNCrnakBqeyCMu+zUpCImV7fcjCRHXBlvcpFNAiX2D232dgVR
- aSzBjHXWzTFX1gXjPX2altHxIPYsCRIko4EkrxUOVspn49+418BaNCjS4YRxEDH/Ye6jE5TWRouVuE
- hMo6BOZuYv4K8W9E+IuBuAHy38JFI1MKmHlD8MrAMWeH5CAwgSHUVKrNrkfd9XTpZyWG6eWFBUjd0b
- vy/P3W/nRU2UwXHNApC3fpgn6kJpNPAIuyC8zjHHs68XJt51696qiiQoZWpuBidFAZ6dTr8EPuRCT4
- y3J0Xq/9bevMAk6uBldNrFMnMWx11tKeZapRGkoEGeIDkfxz4AwkggwKLWGuRD7W523yGpvsoWDPvX
- akmNFsOwK53zOjAaQERrFf7oAo8hmyvJzb6FcCfFotBpOct7wnS1X41sXp9g94BN/63CJd4JMLlj0i
- 31/aftWgNI74VaaxXTATynQPz3Yw3g9DD3s86hAnsIW4pxXEQrYhbEQigSng==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [syzbot] WARNING: ODEBUG bug in __io_put_task
+Content-Language: en-US
+To:     syzbot <syzbot+1aa0bce76589e2e98756@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000098a61b05f20e62db@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <00000000000098a61b05f20e62db@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MPTCP protocol supports having subflows in both IPv4 and IPv6. In Linux,
-it is possible to have that if the MPTCP socket has been created with
-AF_INET6 family without the IPV6_V6ONLY option.
+On 1/12/23 3:14 AM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14d269ce480000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=1aa0bce76589e2e98756
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
 
-Here, a new IPv4 subflow is being added to the initial IPv6 connection,
-then being removed using Netlink commands.
+I know there's no reproducer yet, but when there is:
 
-Cc: stable@vger.kernel.org # v5.19+
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 47 +++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+#syz test: git://git.kernel.dk/linux.git for-next
 
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index a29deb9fa024..ab2d581f28a1 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -752,6 +752,52 @@ test_subflows()
- 	   "$server4_token" > /dev/null 2>&1
- }
- 
-+test_subflows_v4_v6_mix()
-+{
-+	# Attempt to add a listener at 10.0.2.1:<subflow-port>
-+	ip netns exec "$ns1" ./pm_nl_ctl listen 10.0.2.1\
-+	   $app6_port > /dev/null 2>&1 &
-+	local listener_pid=$!
-+
-+	# ADD_ADDR4 from server to client machine reusing the subflow port on
-+	# the established v6 connection
-+	:>"$client_evts"
-+	ip netns exec "$ns1" ./pm_nl_ctl ann 10.0.2.1 token "$server6_token" id\
-+	   $server_addr_id dev ns1eth2 > /dev/null 2>&1
-+	stdbuf -o0 -e0 printf "ADD_ADDR4 id:%d 10.0.2.1 (ns1) => ns2, reuse port\t\t" $server_addr_id
-+	sleep 0.5
-+	verify_announce_event "$client_evts" "$ANNOUNCED" "$client6_token" "10.0.2.1"\
-+			      "$server_addr_id" "$app6_port"
-+
-+	# CREATE_SUBFLOW from client to server machine
-+	:>"$client_evts"
-+	ip netns exec "$ns2" ./pm_nl_ctl csf lip 10.0.2.2 lid 23 rip 10.0.2.1 rport\
-+	   $app6_port token "$client6_token" > /dev/null 2>&1
-+	sleep 0.5
-+	verify_subflow_events "$client_evts" "$SUB_ESTABLISHED" "$client6_token"\
-+			      "$AF_INET" "10.0.2.2" "10.0.2.1" "$app6_port" "23"\
-+			      "$server_addr_id" "ns2" "ns1"
-+
-+	# Delete the listener from the server ns, if one was created
-+	kill_wait $listener_pid
-+
-+	sport=$(sed --unbuffered -n 's/.*\(sport:\)\([[:digit:]]*\).*$/\2/p;q' "$client_evts")
-+
-+	# DESTROY_SUBFLOW from client to server machine
-+	:>"$client_evts"
-+	ip netns exec "$ns2" ./pm_nl_ctl dsf lip 10.0.2.2 lport "$sport" rip 10.0.2.1 rport\
-+	   $app6_port token "$client6_token" > /dev/null 2>&1
-+	sleep 0.5
-+	verify_subflow_events "$client_evts" "$SUB_CLOSED" "$client6_token" \
-+			      "$AF_INET" "10.0.2.2" "10.0.2.1" "$app6_port" "23"\
-+			      "$server_addr_id" "ns2" "ns1"
-+
-+	# RM_ADDR from server to client machine
-+	ip netns exec "$ns1" ./pm_nl_ctl rem id $server_addr_id token\
-+	   "$server6_token" > /dev/null 2>&1
-+	sleep 0.5
-+}
-+
- test_prio()
- {
- 	local count
-@@ -861,6 +907,7 @@ make_connection "v6"
- test_announce
- test_remove
- test_subflows
-+test_subflows_v4_v6_mix
- test_prio
- test_listener
- 
+All of the ones from today was due to a buggy patch that was staged
+for 6.2, should all be gone with the updated branches.
 
 -- 
-2.37.2
+Jens Axboe
+
+
