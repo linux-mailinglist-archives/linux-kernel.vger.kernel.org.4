@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B449668512
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AAE66851A
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240330AbjALVIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S240829AbjALVLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240625AbjALVIM (ORCPT
+        with ESMTP id S232585AbjALVLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:08:12 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D2A5F493;
-        Thu, 12 Jan 2023 12:52:37 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id x7so7415655qtv.13;
-        Thu, 12 Jan 2023 12:52:37 -0800 (PST)
+        Thu, 12 Jan 2023 16:11:22 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C88F6ECAC
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:55:15 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id e3so10091837wru.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:55:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v7UZeg8WZH4vThWTlw3VjelHJJ+pjC2jFdvq2/134J0=;
-        b=HKrZAuFxYvG5Is33K7J62e6jnU9DKkjx6vBIQ+mO+IxIN5HHlIpAu8lnam2gSnfDJD
-         xzdUnjiBS0R/SsoFFXUrwhmTStSv1w3nvPR4yu6EBxENXBvRHfWmlnxPTUxY2vV3AA+U
-         0U4JGb8JSlKdL8HMv/Ze2XbX7h2/IEGqRkOQ4SoZBCenw+QVQdTqcBhe8+3R9rds9ruG
-         jm8GiNdHhBNKuMRi/mFiPGkqbhyxZuGG6IjLV0pTH0YFUDWugQYYnrzjADfiJ6WnoG7W
-         dBcTWQCc0UzY8phyT9V4HFgwIKhztIqOTOsPZKXZlfRSEpGi3q3Q8wVQZh9SZlD3Jxg2
-         BRvw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1l2nJvkOMhf/Q6N3HmLSKyOtgxFfcSynbTgFlzQDiFk=;
+        b=i7zPfI1s6CYytk6lWGPrP8CLKhu5KppwB4Hin/v8r4IXv34PypNj92GKWH1EOSRi4p
+         4oraSwQAEm4b+M15QRiIqoEKTna1YolT16s/BMD4AsIPQqG9wVIuNSH58/r+iZQoBIVG
+         6mwkTRKJx1TPRFlQyVl+gy3wuKXpz5mLkbJlqaWftImBj3KWxYeqE5qntpqRNAsz9kI3
+         qTpaYV/QRsYLkei4Z8FK21P2zzwwTOLEkpQPUQxQXo8hRg1DLsnyNxa5jXpza5fTj+Hj
+         o/U9rW5lGJ5Zq7ca7PsohBTZwsWbM09H1ERgOjdN9auI7jxsuHpim3TE/JBvk6aMu1eD
+         ID4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v7UZeg8WZH4vThWTlw3VjelHJJ+pjC2jFdvq2/134J0=;
-        b=vMOKdmt7zsFe1jF9tdhcLttNBApzwpvQuvKX5zfB8VoT/D3hcsztqdg6WevsOHnHb0
-         Blt8Uff4UISb0FEEWTr/ODeFb6NPX+Jcxxy4nyMVGwZmR0uPRZttnm5JVXRudLpZcjoU
-         1Dk8Nx7dts3lhe9yW4stkWCVbDXLVDPbnBFRiHYJWdvZ9cnLNaPYJhRTgTrONiKxK90n
-         CN3F+uDBmQmXoXZ6HZpDD5DwIhu1X1mFBnlIv1lmGAM9I3HCNPuvPqid73G2goMJhW5d
-         oZoJcaDXZ6EiFwykRm7EdVl60DidE/AF9JczfwtA0Pohk2cgAZ72JyxIpUFYF6WD8ytW
-         3eEA==
-X-Gm-Message-State: AFqh2krHkCckqJIr6/gqCse/TXl/6IOKYJtH7XHbgvHYGYZjDc6Hgyjl
-        VofTYoxHFw56DxdDvylXOf4=
-X-Google-Smtp-Source: AMrXdXvBg6hye74elpjLgIPaScfZlEZs+P2nrkYQPhY0bFkyjFk5hAvoryoIsF7oKRLYsOlHQcbQkQ==
-X-Received: by 2002:a05:622a:801b:b0:3ac:77ed:3995 with SMTP id jr27-20020a05622a801b00b003ac77ed3995mr26467607qtb.26.1673556756951;
-        Thu, 12 Jan 2023 12:52:36 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ci26-20020a05622a261a00b003b1020128edsm2540482qtb.41.2023.01.12.12.52.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 12:52:36 -0800 (PST)
-Message-ID: <21962784-53e8-4305-d934-b8a5a8bc20fa@gmail.com>
-Date:   Thu, 12 Jan 2023 12:52:25 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1l2nJvkOMhf/Q6N3HmLSKyOtgxFfcSynbTgFlzQDiFk=;
+        b=mqMxNoCYtqmDxyzJ0jXpXLdZCHpUVs1IIQ/d1rqhxCg/yya+F7ndmBJxT+KbBzvUjH
+         vxfoHqC2d83DXWkkTkGOztaSuUash6H6uTAdVlTuOLa+IX4gjBCCIANqTueBjGS9TR7h
+         1l4DTgMzFIOZJzBK7ybRM90AFC+Ka8+XuD+sSsfz3hzLLiActljtcPZUsvzsLow2HR3+
+         d0e2aV8BrVx2lri9CSS1voPJIOJpkdBk29Sq/N9mx/nNMnbKm8RFgx1wwJN7x8rdZhq1
+         ZQVnxXKqu+9YsrfX7D6W5O40swBZINmqAjWOUM62gSACeN7hxTcgBv8UdqKvHR/MH9nV
+         ZLKA==
+X-Gm-Message-State: AFqh2kpgvBeuP2KCt33J6ETJ5ZtQaslzu5FtCyqjjRUAfTtOkaVsCrzc
+        AautQssJhKwjY76NpLX9MteL4ewSEcy4geeoDTqaHQ==
+X-Google-Smtp-Source: AMrXdXsYwjPZS4ox+2H3rYj/QQgBSwzO3H4oIQRT2gZTOuh5fIi6BNpysWWO7nt1I1ptsE2hVc85zlMZnIjIGDNHEQY=
+X-Received: by 2002:a05:6000:12cb:b0:28c:459a:d5d with SMTP id
+ l11-20020a05600012cb00b0028c459a0d5dmr1888523wrx.654.1673556897672; Thu, 12
+ Jan 2023 12:54:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 00/10] 5.15.88-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230112135326.689857506@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230112135326.689857506@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230105090155.357604-1-irogers@google.com> <20230105090155.357604-2-irogers@google.com>
+ <Y8BsqN/HfOf+vKZP@fjasle.eu>
+In-Reply-To: <Y8BsqN/HfOf+vKZP@fjasle.eu>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 12 Jan 2023 12:54:45 -0800
+Message-ID: <CAP-5=fVEcuWbfO2NoTPanUmXXF6bejnN1s8Lm704P8TvKc1yKQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] objtool: Install libsubcmd in build
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 05:56, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.88 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.88-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Thu, Jan 12, 2023 at 12:32 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Thu, Jan 05, 2023 at 01:01:53AM -0800 Ian Rogers wrote:
+> > Including from tools/lib can create inadvertent dependencies. Install
+> > libsubcmd in the objtool build and then include the headers from
+> > there.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> >  tools/objtool/Build    |  2 --
+> >  tools/objtool/Makefile | 33 +++++++++++++++++++++++++--------
+> >  2 files changed, 25 insertions(+), 10 deletions(-)
+> >
+> [...]
+> > diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+> > index a3a9cc24e0e3..fd9b3e3113c6 100644
+> > --- a/tools/objtool/Makefile
+> > +++ b/tools/objtool/Makefile
+> > @@ -12,9 +12,15 @@ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+> >  srctree := $(patsubst %/,%,$(dir $(srctree)))
+> >  endif
+> >
+> > -SUBCMD_SRCDIR                = $(srctree)/tools/lib/subcmd/
+> > -LIBSUBCMD_OUTPUT     = $(or $(OUTPUT),$(CURDIR)/)
+> > -LIBSUBCMD            = $(LIBSUBCMD_OUTPUT)libsubcmd.a
+> > +LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
+> > +ifneq ($(OUTPUT),)
+> > +  LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+> > +else
+> > +  LIBSUBCMD_OUTPUT = $(CURDIR)/libsubcmd
+> > +endif
+> > +LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
+>
+> Hi Ian,
+>
+> Is there a reason for distinguishing between $(LIBSUBCMD_DESTDIR) and
+> $(LIBSUBCMD_OUTPUT)?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+I believe the naming aligns with their use when passed to the
+corresponding sub-make variable, so "DESTDIR=$(LIBSUBCMD_DESTDIR)". It
+is possible to do other this, a slightly different convention is in
+some BPF related code:
+https://lore.kernel.org/lkml/20230112004024.1934601-1-irogers@google.com/
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks,
+Ian
 
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
