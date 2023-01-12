@@ -2,145 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F95667876
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E4166794C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240101AbjALPCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S235171AbjALPbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240253AbjALPC3 (ORCPT
+        with ESMTP id S230102AbjALP3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:02:29 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EABE70;
-        Thu, 12 Jan 2023 06:48:51 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pFyso-0000Xu-Nn; Thu, 12 Jan 2023 15:48:46 +0100
-Message-ID: <9d46a35f-5830-9761-ca2c-eaa640e9cc86@leemhuis.info>
-Date:   Thu, 12 Jan 2023 15:48:46 +0100
+        Thu, 12 Jan 2023 10:29:47 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81295A1A9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:23:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673536990; x=1705072990;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=D0hNIdfv9EWyP1RVxQgqv7k1sO7+UaCb9F79/VZ74AM=;
+  b=a6Pkf11cwTb0P/s5Bjlhh3x10EMKqRkaMdMf22nj0UbGU+1bGbjYfa2r
+   s0QDAp87mMHC0/J1WIJeJTXl75gD+ht4tikr5qvMtRwfYcGVY/pgzGDgx
+   wDWMRyehX2SsJTqC7uq2L1J1XXQD5bl85tBO0PRVPGn+SRNwg0Q+tfKwl
+   hiXlCYYV8R0j+j6CtGn8FcqapyJ73LeFnsI3+I4A5EjIdSmmOODDYpr8e
+   8Rpz2NIuwwNGgU1Zh4WKtvTacV8Ko+J0bElYLLOF0MlCfUxHSWnVryy1t
+   ClXRpMF5dy8QcHyBozgZYZF14D8vRu9MqZXLK3056IIpJtFlGFAYiT7+X
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388212558"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="388212558"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 06:57:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="607816924"
+X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
+   d="scan'208";a="607816924"
+Received: from jbetan3x-mobl1.amr.corp.intel.com (HELO [10.209.143.163]) ([10.209.143.163])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 06:57:10 -0800
+Message-ID: <d83615ae-10d9-ca5b-26aa-522b3f10b43f@linux.intel.com>
+Date:   Thu, 12 Jan 2023 08:19:40 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Regression in Kernel 6.0: System partially freezes with "nvme
- controller is down"
-Content-Language: en-US, de-DE
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-References: <d5d8d106-acce-e20c-827d-1b37de2b2188@posteo.de>
- <0d3206be-fae8-4bbd-4b6c-a5d1f038356d@posteo.de>
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     =?UTF-8?Q?Julian_Gro=c3=9f?= <julian.g@posteo.de>,
-        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <0d3206be-fae8-4bbd-4b6c-a5d1f038356d@posteo.de>
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH] ASoC: soc-pcm.c: Introduce a count to record the times of
+ setting DAIs parameters
+To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20230112065834.580192-1-chancel.liu@nxp.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230112065834.580192-1-chancel.liu@nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673534931;ffc87eac;
-X-HE-SMSGID: 1pFyso-0000Xu-Nn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[adding the nvme maintainers and the regressions mailing list to the
-list of recipients]
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
 
-On 11.01.23 23:11, Julian Groß wrote:
-> Dear Maintainer,
+On 1/12/23 00:58, Chancel Liu wrote:
+> The commit 1da681e52853 ("ASoC: soc-pcm.c: Clear DAIs parameters after
+> stream_active is updated") tries to make sure DAIs parameters can be
+> cleared properly through moving the cleanup to the place where
+> stream_active is updated. However, it will cause the cleanup only
+> happening in soc_pcm_close().
 > 
-> when running Linux Kernel version 6.0.12, 6.0.10, 6.0-rc7, or 6.1.4, my
-> system seemingly randomly freezes due to the file system being set to
-> read-only due to an issue with my NVMe controller.
-> The issue does *not* appear on Linux Kernel version 5.19.11 or lower.
+> Suppose a case: aplay -Dhw:0 44100.wav 48000.wav. The case calls
+> soc_pcm_open()->soc_pcm_hw_params()->soc_pcm_hw_free()->
+> soc_pcm_hw_params()->soc_pcm_hw_free()->soc_pcm_close() in order. The
+> parameters would be remained in the system even if the playback of
+> 44100.wav is finished.
 > 
-> Through network logging I am able to catch the issue:
-> ```
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259288] nvme nvme0:
-> controller is down; will reset: CSTS=0xffffffff, PCI_STATUS=0x10
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Does
-> your device have a faulty power saving mode enabled?
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.259293] nvme nvme0: Try
-> "nvme_core.default_ps_max_latency_us=0 pcie_aspm=off" and report a bug
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.331360] nvme 0000:01:00.0:
-> enabling device (0000 -> 0002)
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.331458] nvme nvme0: Removing
-> after probe failure status: -19
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371389] nvme0n1: detected
-> capacity change from 1953525168 to 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371389] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 1, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371389] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 2, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371392] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 3, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371394] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 5, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371405] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 6, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371406] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 7, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371411] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 8, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371419] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 9, rd 0, flush 0, corrupt 0, gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371425] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 10, rd 0, flush 0, corrupt 0,
-> gen 0
-> Jan  8 14:50:16 x299-desktop kernel: [ 1461.371426] BTRFS error (device
-> nvme0n1p4): bdev /dev/nvme0n1p4 errs: wr 11, rd 0, flush 0, corrupt 0,
-> gen 0
-> ```
+> The case requires us clearing parameters in phase of soc_pcm_hw_free().
+> We shouldn't use stream_active to decide if we must do the cleanup
+> since it is finally updated in soc_pcm_close().
 > 
-> I have tried the suggestion in the log without luck.
+> This patch introduces a usage count called hw_params_count in
+> snd_soc_dai structure. It records the times of setting parameters to
+> this DAI then decreases each time soc_pcm_hw_free() is called. If the
+> count decreases to 0, it means this DAI is not used now and we should
+> clear the parameters.
+
+what makes you think that the use of hw_params and hw_free is symmetrical?
+
+A couple of years ago we found a case where the FE hw_params failed, and
+in that case the BE hw_free was called without the BE hw_params ever
+being invoked first. This is due to the DPCM error handling, and as a
+result all our hw_free implementations test if the resources are
+actually allocated/valid and never assume hw_params was used.
+
+IIRC it's also valid to call hw_params multiple times without calling
+hw_free every time.
+
+> Fixes: 1da681e52853 ("ASoC: soc-pcm.c: Clear DAIs parameters after stream_active is updated")
 > 
-> Attached is a log that includes two system freezes, as well as a list of
-> PCI(e) devices created by Debian reportbug.
-> The first freeze happens at "Jan  8 04:26:28" and the second freeze
-> happens at "Jan  8 14:50:16".
+> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+> ---
+>  include/sound/soc-dai.h |  3 +++
+>  sound/soc/soc-pcm.c     | 16 +++++++++++-----
+>  2 files changed, 14 insertions(+), 5 deletions(-)
 > 
-> Currently, I am using git bisect to narrow down the window of possible
-> commits, but since the issue appears seemingly random, it will take many
-> months to identify the offending commit this way.
-> 
-> The original Debian bug report is here:
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028309
-
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced v5.19..v6.0-rc7
-#regzbot title nvme: system partially freezes with "nvme controller is down"
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+> diff --git a/include/sound/soc-dai.h b/include/sound/soc-dai.h
+> index ea7509672086..a7e589a0fe72 100644
+> --- a/include/sound/soc-dai.h
+> +++ b/include/sound/soc-dai.h
+> @@ -451,6 +451,9 @@ struct snd_soc_dai {
+>  	unsigned int channels;
+>  	unsigned int sample_bits;
+>  
+> +	/* Count of setting DAI parameters */
+> +	unsigned int hw_params_count;
+> +
+>  	/* parent platform/codec */
+>  	struct snd_soc_component *component;
+>  
+> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+> index 579a44d81d9a..2c2a5dcf9e06 100644
+> --- a/sound/soc/soc-pcm.c
+> +++ b/sound/soc/soc-pcm.c
+> @@ -711,14 +711,10 @@ static int soc_pcm_clean(struct snd_soc_pcm_runtime *rtd,
+>  
+>  	if (!rollback) {
+>  		snd_soc_runtime_deactivate(rtd, substream->stream);
+> -		/* clear the corresponding DAIs parameters when going to be inactive */
+> -		for_each_rtd_dais(rtd, i, dai) {
+> -			if (snd_soc_dai_active(dai) == 0)
+> -				soc_pcm_set_dai_params(dai, NULL);
+>  
+> +		for_each_rtd_dais(rtd, i, dai)
+>  			if (snd_soc_dai_stream_active(dai, substream->stream) == 0)
+>  				snd_soc_dai_digital_mute(dai, 1, substream->stream);
+> -		}
+>  	}
+>  
+>  	for_each_rtd_dais(rtd, i, dai)
+> @@ -949,6 +945,14 @@ static int soc_pcm_hw_clean(struct snd_soc_pcm_runtime *rtd,
+>  
+>  	snd_soc_dpcm_mutex_assert_held(rtd);
+>  
+> +	/* clear the corresponding DAIs parameters when hw_params_count decreases to 0 */
+> +	for_each_rtd_dais(rtd, i, dai)
+> +		if (snd_soc_dai_stream_valid(dai, substream->stream)) {
+> +			dai->hw_params_count--;
+> +			if (dai->hw_params_count == 0)
+> +				soc_pcm_set_dai_params(dai, NULL);
+> +		}
+> +
+>  	/* run the stream event */
+>  	snd_soc_dapm_stream_stop(rtd, substream->stream);
+>  
+> @@ -1051,6 +1055,7 @@ static int __soc_pcm_hw_params(struct snd_soc_pcm_runtime *rtd,
+>  
+>  		soc_pcm_set_dai_params(codec_dai, &codec_params);
+>  		snd_soc_dapm_update_dai(substream, &codec_params, codec_dai);
+> +		codec_dai->hw_params_count++;
+>  	}
+>  
+>  	for_each_rtd_cpu_dais(rtd, i, cpu_dai) {
+> @@ -1068,6 +1073,7 @@ static int __soc_pcm_hw_params(struct snd_soc_pcm_runtime *rtd,
+>  		/* store the parameters for each DAI */
+>  		soc_pcm_set_dai_params(cpu_dai, params);
+>  		snd_soc_dapm_update_dai(substream, params, cpu_dai);
+> +		cpu_dai->hw_params_count++;
+>  	}
+>  
+>  	ret = snd_soc_pcm_component_hw_params(substream, params);
