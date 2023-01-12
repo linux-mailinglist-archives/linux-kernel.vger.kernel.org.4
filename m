@@ -2,188 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3B5667C95
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E26D667CD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 18:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjALRd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 12:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S232268AbjALRmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 12:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjALRdT (ORCPT
+        with ESMTP id S231146AbjALRld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 12:33:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C571669B21;
-        Thu, 12 Jan 2023 08:56:55 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Thu, 12 Jan 2023 12:41:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18F46D533;
+        Thu, 12 Jan 2023 09:00:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9D6BD1EC064D;
-        Thu, 12 Jan 2023 17:48:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673542081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=fWLixZfsSchjFbcCFffZRLC8clKaznVXLrwohAMTYUE=;
-        b=JlC5CkuWVfA3Nbv9OZsp2q57S4fDlbnO9lWnOlQl3sUvPQCuFuL3gLQFD2GYqSVJC6Y6od
-        MrungAaDu3mtxeXWt+Rer4rkpCH5GpRSk/ZZlGxZT7UfsRoAdcbLcXGnpE1g5t/LEWTKAx
-        SAdwPKPnS/Zftj6TH4PZIwWjadFGQ7c=
-Date:   Thu, 12 Jan 2023 17:47:57 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     jinankjain@microsoft.com, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, seanjc@google.com,
-        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
-        mikelley@microsoft.com
-Subject: Re: [PATCH v10 5/5] x86/hyperv: Change interrupt vector for nested
- root partition
-Message-ID: <Y8A5vXKBq1T+JXfo@zn.tnic>
-References: <cover.1672639707.git.jinankjain@linux.microsoft.com>
- <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7304C620A6;
+        Thu, 12 Jan 2023 16:48:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63C2C433D2;
+        Thu, 12 Jan 2023 16:48:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673542109;
+        bh=iEhIL+nW7h+nVeLjuHrKXdgkkSgt88PG/Na/VUBipDw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N67P72qnH3CwyPirvpYpWcW9WQYYGMYwJW3np1NFPyvuH3ne1EGDqk0QxHdnmE41o
+         9Jo02WP5f75n4SuX2WOs7ai2xTPMBd6FHNwoAaeYSt9/QOtr6SdT16sE4GWTwNqPvR
+         VhaOp474dV3QHOCvhYhACmzLDg0m6nTMRxtct5R6uzypXcFcyZaDaGXUs0FMR+YRgE
+         gdc2ADYgdotMRW16/RJfi1rIrgF6ctNZ9ZrjpK+P4q73eZnqdFAlj4vLf8dzhLncsZ
+         4/anx9SwbiuS6R0jKGAHjwIMwmU7hIqV6S9qhhhUejYc1HZVQyrYBwX5owcp7i0Aqb
+         Ey4kSYyAVBaDg==
+Date:   Thu, 12 Jan 2023 22:18:15 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] dt-bindings: mailbox: qcom-ipcc: document the sa8775p
+ platform
+Message-ID: <20230112164815.GE4782@thinkpad>
+References: <20230112131636.359402-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230112131636.359402-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 02, 2023 at 07:12:55AM +0000, Jinank Jain wrote:
-> Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
-
-Who's "we"?
-
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
-
-Also, pls read section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst for more details.
-
-Also, see section "Changelog" in
-Documentation/process/maintainer-tip.rst
-
-Bottom line is: personal pronouns are ambiguous in text, especially with
-so many parties/companies/etc developing the kernel so let's avoid them
-please.
-
-> the VMBus interrupt. But this does not work in case of nested
-> hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
-> vector range for VMBus and thus we have to use one of the vectors from
-> that range and setup the IDT accordingly.
+On Thu, Jan 12, 2023 at 02:16:36PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> Add a compatible for the ipcc on sa8775p platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
+
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  arch/x86/include/asm/idtentry.h    |  2 ++
->  arch/x86/include/asm/irq_vectors.h |  6 ++++++
->  arch/x86/kernel/cpu/mshyperv.c     | 15 +++++++++++++++
->  arch/x86/kernel/idt.c              | 10 ++++++++++
->  drivers/hv/vmbus_drv.c             |  3 ++-
->  5 files changed, 35 insertions(+), 1 deletion(-)
+> Sending it separately for easier pick-up into the right tree.
 > 
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index 72184b0b2219..c0648e3e4d4a 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -686,6 +686,8 @@ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested
->  DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_hyperv_callback);
->  DECLARE_IDTENTRY_SYSVEC(HYPERV_REENLIGHTENMENT_VECTOR,	sysvec_hyperv_reenlightenment);
->  DECLARE_IDTENTRY_SYSVEC(HYPERV_STIMER0_VECTOR,	sysvec_hyperv_stimer0);
-> +DECLARE_IDTENTRY_SYSVEC(HYPERV_INTR_NESTED_VMBUS_VECTOR,
-> +			sysvec_hyperv_nested_vmbus_intr);
->  #endif
->  
->  #if IS_ENABLED(CONFIG_ACRN_GUEST)
-> diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
-> index 43dcb9284208..729d19eab7f5 100644
-> --- a/arch/x86/include/asm/irq_vectors.h
-> +++ b/arch/x86/include/asm/irq_vectors.h
-> @@ -102,6 +102,12 @@
->  #if IS_ENABLED(CONFIG_HYPERV)
->  #define HYPERV_REENLIGHTENMENT_VECTOR	0xee
->  #define HYPERV_STIMER0_VECTOR		0xed
-> +/*
-> + * FIXME: Change this, once Microsoft Hypervisor changes its assumption
-      ^^^^^^
-
-This patch looks like it is not ready to go anywhere yet...
-
-> + * around VMBus interrupt vector allocation for nested root partition.
-
-When is that going to happen? If at all...
-
-> + * Or provides a better interface to detect this instead of hardcoding.
-> + */
-> +#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
->  #endif
->  
->  #define LOCAL_TIMER_VECTOR		0xec
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index 938fc82edf05..4dfe0f9d7be3 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -126,6 +126,21 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
->  	set_irq_regs(old_regs);
->  }
->  
-> +DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_nested_vmbus_intr)
-> +{
-> +	struct pt_regs *old_regs = set_irq_regs(regs);
-> +
-> +	inc_irq_stat(irq_hv_callback_count);
-> +
-> +	if (vmbus_handler)
-> +		vmbus_handler();
-> +
-> +	if (ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED)
-> +		ack_APIC_irq();
-> +
-> +	set_irq_regs(old_regs);
-> +}
-> +
->  void hv_setup_vmbus_handler(void (*handler)(void))
->  {
->  	vmbus_handler = handler;
-> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-> index a58c6bc1cd68..3536935cea39 100644
-> --- a/arch/x86/kernel/idt.c
-> +++ b/arch/x86/kernel/idt.c
-> @@ -160,6 +160,16 @@ static const __initconst struct idt_data apic_idts[] = {
->  # endif
->  	INTG(SPURIOUS_APIC_VECTOR,		asm_sysvec_spurious_apic_interrupt),
->  	INTG(ERROR_APIC_VECTOR,			asm_sysvec_error_interrupt),
-> +#ifdef CONFIG_HYPERV
-> +	/*
-> +	 * This is a hack because we cannot install this interrupt handler
-> +	 * via alloc_intr_gate as it does not allow interrupt vector less
-> +	 * than FIRST_SYSTEM_VECTORS. And hyperv does not want anything other
-> +	 * than 0x31-0x34 as the interrupt vector for vmbus interrupt in case
-
-Well:
-
-/*
- * IDT vectors usable for external interrupt sources start at 0x20.
- * (0x80 is the syscall vector, 0x30-0x3f are for ISA)
-				^^^^^^^^^^^^^^^^^^^^^^
-
- */
-#define FIRST_EXTERNAL_VECTOR		0x20
-
-I guess HyperV decided to reuse those...?
+>  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+> index f5c73437fef4..de56640cecca 100644
+> --- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+> @@ -24,6 +24,7 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> +          - qcom,sa8775p-ipcc
+>            - qcom,sc7280-ipcc
+>            - qcom,sc8280xp-ipcc
+>            - qcom,sm6350-ipcc
+> -- 
+> 2.37.2
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+மணிவண்ணன் சதாசிவம்
