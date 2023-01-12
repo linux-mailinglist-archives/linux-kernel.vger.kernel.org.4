@@ -2,98 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8436677F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7505667807
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 15:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240101AbjALOvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 09:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S240081AbjALOvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 09:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbjALOut (ORCPT
+        with ESMTP id S240034AbjALOvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 09:50:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D5312609;
-        Thu, 12 Jan 2023 06:37:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94181B81E69;
-        Thu, 12 Jan 2023 14:37:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494E7C433D2;
-        Thu, 12 Jan 2023 14:37:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673534243;
-        bh=KsWxmfUVUayGypU/e5HMI6DL66/v8eYhpnNqIfHIaMs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hQCoJCrwuXwKJMtsZPjR+eKrgl6iJclHyvYxS3qR0gCWb5KiFT8zEAj5642Ng4HJu
-         44hdWIQTTyxwFjfL4F8ECQSbRblOVZbbOSIpqjZIB1gD4bcB65pgEUZaABlf5RB61/
-         54hqloZv5nwOOM66MnWOgPLbwfZxIf4kfUmCbGUvGE5ASITbwG+xTkFq/EuGExR0w5
-         l1YONvvKCQaXs4qI9SAVeD/NDCkubtUc30fLu13Y0RFcFBKfIJ4mfIkmuo+Ixxvqg/
-         fr7C5V0L9IqJb6lv6EFbwmGRyFf0V6snYNBDevP7hawgaJUlrw2QvbXDFYUojoyPAe
-         fgdnF2tSfOBeQ==
-Date:   Thu, 12 Jan 2023 15:37:16 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH rcu 17/27] drivers/pci/controller: Remove "select SRCU"
-Message-ID: <Y8AbHEzbVv4ebeXU@lpieralisi>
-References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
- <20230105003813.1770367-17-paulmck@kernel.org>
+        Thu, 12 Jan 2023 09:51:06 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3F213F97;
+        Thu, 12 Jan 2023 06:38:04 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id v10so25877051edi.8;
+        Thu, 12 Jan 2023 06:38:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FFSpdMe78nK3l1YFe11xcZzXqYj/l0qc+jemqR1MPsk=;
+        b=dTeOl3G7m7n9MPYNgkHsjIc534IOorjwhDQCc9RlcK0Ufy5LnpyKd62DmgZH732rbE
+         IRNNqmvudWTGLM+BgzkfBApfjCPHsamnyBeFvn+7ijFCavWXED3g9Ho0NrF1sghCZicm
+         kFBszPdBEHLl0NVbaPoIE2SYNnQsuAbgxjLnKmD1FpPfBHaveQJP2eU+VPMw49Ht8hT9
+         K1H5610vQd9pSgC1GOAVygnR+T23cWmPtIdBMz4rMFZ1BbZ64Cl4c0CNdahDEPRAKLrI
+         uS3mfXCaBqTJeIiFN3blkkXaes4d9CRCG/ZtQV0yHDmeQHVxPviueZJh+B5KKNV966B6
+         UClg==
+X-Gm-Message-State: AFqh2kqQIxJFTtVUoKdYHL9ub02slrJJBiYG9TwEcHgFGfEYgACyebZV
+        0aay5SNpPhM7+/s9xT+ziUmWX0Zu8mFWROgGfbM=
+X-Google-Smtp-Source: AMrXdXuQFrQM/eEp39x0D7y1DHfpG8qNEAyV9wY5kgdvXdnEvxaYKwqMREG0+UFK/nIMLHJp16MUdJpWipAxhNT0xEM=
+X-Received: by 2002:a05:6402:298b:b0:47f:7465:6e76 with SMTP id
+ eq11-20020a056402298b00b0047f74656e76mr7256281edb.181.1673534283121; Thu, 12
+ Jan 2023 06:38:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230105003813.1770367-17-paulmck@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+ <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com>
+ <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org> <3e59c5216fad003f079224cd08a7da9b30f6365d.camel@linux.intel.com>
+ <de6a5000-260e-bb4a-31c4-a0cfe533fad4@linaro.org> <8d3a9644657c8f0b54dd272fe0a4d640a8a6dfb9.camel@linux.intel.com>
+In-Reply-To: <8d3a9644657c8f0b54dd272fe0a4d640a8a6dfb9.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 15:37:51 +0100
+Message-ID: <CAJZ5v0jwrqcdG=95QmFCBrr0Ng0gqUXbKPUOk0Hz9wMz7A0HKg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete callbacks
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 04:38:03PM -0800, Paul E. McKenney wrote:
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in selecting it.  Therefore, remove the "select SRCU"
-> Kconfig statements.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: <linux-pci@vger.kernel.org>
-> ---
->  drivers/pci/controller/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Dec 22, 2022 at 6:36 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Hi Daniel,
+>
+> On Thu, 2022-12-22 at 10:50 +0100, Daniel Lezcano wrote:
+> >
+> > Hi Srinivas,
+> >
+> >
+> > On 21/12/2022 21:58, srinivas pandruvada wrote:
+> > > Hi Daniel,
+> > >
+> > > On Wed, 2022-12-21 at 15:52 +0100, Daniel Lezcano wrote:
+> > > >
+> > > > Hi Srinivas,
+> > > >
+> > > > On 30/11/2022 00:34, Srinivas Pandruvada wrote:
+> > > > > The actual idle percentage can be less than the desired because
+> > > > > of
+> > > > > interrupts. Since the objective for CPU Idle injection is for
+> > > > > thermal
+> > > > > control, there should be some way to compensate for lost idle
+> > > > > percentage.
+> > > > > Some architectures provide interface to get actual idle percent
+> > > > > observed
+> > > > > by the hardware. So, the idle percent can be adjusted using the
+> > > > > hardware
+> > > > > feedback. For example, Intel CPUs provides package idle
+> > > > > counters,
+> > > > > which
+> > > > > is currently used by intel powerclamp driver to adjust idle
+> > > > > time.
+> > > > Can you provide an example in terms of timings?
+> > > >
+> > > > I'm not getting how 'prepare' would do by returning a positive
+> > > > value
+> > > > to
+> > > > skip the play_idle_precise() and what will do 'complete' ?
+> > > >
+> > > intel_powerclamp has a logic where if the current idle percentage
+> > > observed from hardware is more than the desired target inject
+> > > percent,
+> > > it skips calling play_idle().
+> > >
+> > > For example if you want to inject 50% idle and system is naturally
+> > > idle
+> > > for 60%, there is no use of calling play_idle in the idle injection
+> > > framework to induce more idle. In this way a workload can run
+> > > immediately.
+> > >
+> > > So trying to emulate the same logic by using powercap/idle_inject
+> > > framework. So prepare() callback in the intel_powerclamp driver
+> > > calls
+> > > the existing function to check if idle-inject should skip for this
+> > > time
+> > > or not.
+> >
+> > The function 'prepare' has the 'cpu' parameter. How can it compare
+> > with
+> > the desired idle duration as this information is not passed to the
+> > callback ?
+> Good question.
+>
+> Calling driver knows what idle_duration he set.
+> In my first version, I passed *idle_duration (with current
+> idle_duration set), so the caller can change this for the current
+> play_idle call if required for one time.
+>
+> But in powerclamp case we either skip the whole play_idle or not. It
+> doesn't change idle duration. So didn't add.
+>
+> But we can add this back.
 
-Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+I don't think that it is necessary at this point.
 
-I assume I don't have to pick this up and it will go via
-a separate route upstream, if I am wrong please let me know.
+Since powerclamp is the only user and it doesn't need idle_duration, I
+would just not add it ATM.
 
-Thanks,
-Lorenzo
-
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 1569d9a3ada0b..b09cdc59bfd02 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -258,7 +258,7 @@ config PCIE_MEDIATEK_GEN3
->  	  MediaTek SoCs.
->  
->  config VMD
-> -	depends on PCI_MSI && X86_64 && SRCU && !UML
-> +	depends on PCI_MSI && X86_64 && !UML
->  	tristate "Intel Volume Management Device Driver"
->  	help
->  	  Adds support for the Intel Volume Management Device (VMD). VMD is a
-> -- 
-> 2.31.1.189.g2e36527f23
-> 
+I have a couple of other comments to the patch, but let me send them separately.
