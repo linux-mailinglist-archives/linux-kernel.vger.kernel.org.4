@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F002366710F
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A1466710C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 12:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235687AbjALLhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 06:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S234757AbjALLhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 06:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjALLgV (ORCPT
+        with ESMTP id S231655AbjALLgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 06:36:21 -0500
+        Thu, 12 Jan 2023 06:36:06 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C330B10073
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:28:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A694FAC8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 03:28:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673522918; x=1705058918;
+  t=1673522911; x=1705058911;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=C4Q7t6S4036xeiDu5xxCUyx970NCpXYQ7LpyZ8TZ13k=;
-  b=OQwuQRuAI0oWu1tRqs5zY9WFfeOvyt1YYsO/qZPnMQ6tWN7Vd2FjsvE3
-   L1h22ULXqTeYCYW89EaPM31TDr25kHpJFXSV0VuiRYCw1g2HT1SLszSB9
-   NxZjKztg3YE+0khNAsTvBTXc3TuCzE+u9Bpm4zvb/C5rRzCXP7pheURqo
-   KS9y5rBbUWBXGRWRuJn7l624MuDoy25zD2uKA5SeGJZxyJBkRbs1QgDyv
-   JuF/dOKzIbyDxhylOUYxZ5zwx7z0zjn7rBmSLPQWqeu6Swhm532mejl1t
-   cvIxS3U6ISHKlWqBr1XmomwutV+IeAKovUedATPZL3LsHSEB/c/t8bpfB
+  bh=vjV8y8LbzUXQrt45Puugictbqi3QHzP5bvn2L0BGWt0=;
+  b=STtktRarbQuzNVOUnZPlKjpufgLYeumQxHaNeEGI7sbA/ZdABTh6uZR3
+   G1agI7ENEq1+0MBbsx43ryAvXWQpKu8gYi6tKwpIvEtjoKgM/UJP2d5Lp
+   Vruv/LC6gUWkahjkrO9sLuManiLWTRp3H2JheP73iM1CQNpWqMbN4U3Ad
+   nKV/YncOediac8+svJWrtMXUTGIPKK6X3RdV9YVJDFfXUNP4QE04AszTk
+   9eSrgthKa7CVBRMQ4BorgssxMcsIkigQHCngNSk3eilKsa8ahgv7vpon2
+   akb2WnJwduXGddq4TTu+zylxYEgBYs5ULdLM0BOEUQewPvfr2bbQPK4cI
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385994962"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385994942"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="385994962"
+   d="scan'208";a="385994942"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 03:28:28 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 03:28:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="986519418"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="986519423"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="986519418"
+   d="scan'208";a="986519423"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga005.fm.intel.com with ESMTP; 12 Jan 2023 03:28:22 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 72458E1; Thu, 12 Jan 2023 13:28:56 +0200 (EET)
+        id 7C04B14B; Thu, 12 Jan 2023 13:28:56 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -55,9 +55,9 @@ Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/5] ASoC: Intel: bytcht_es8316: Drop reference count of ACPI device after use
-Date:   Thu, 12 Jan 2023 13:28:48 +0200
-Message-Id: <20230112112852.67714-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 2/5] ASoC: Intel: bytcr_rt5651: Drop reference count of ACPI device after use
+Date:   Thu, 12 Jan 2023 13:28:49 +0200
+Message-Id: <20230112112852.67714-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230112112852.67714-1-andriy.shevchenko@linux.intel.com>
 References: <20230112112852.67714-1-andriy.shevchenko@linux.intel.com>
@@ -81,64 +81,32 @@ count at the correct place.
 While at it, move to acpi_dev_put() as symmetrical call to the
 acpi_dev_get_first_match_dev().
 
-Fixes: 3c22a73fb873 ("ASoC: Intel: bytcht_es8316: fix HID handling")
+Fixes: 02c0a3b3047f ("ASoC: Intel: bytcr_rt5651: add MCLK, quirks and cleanups")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- sound/soc/intel/boards/bytcht_es8316.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ sound/soc/intel/boards/bytcr_rt5651.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/intel/boards/bytcht_es8316.c b/sound/soc/intel/boards/bytcht_es8316.c
-index 09d1f0f6d686..df157b01df8b 100644
---- a/sound/soc/intel/boards/bytcht_es8316.c
-+++ b/sound/soc/intel/boards/bytcht_es8316.c
-@@ -497,21 +497,28 @@ static int snd_byt_cht_es8316_mc_probe(struct platform_device *pdev)
+diff --git a/sound/soc/intel/boards/bytcr_rt5651.c b/sound/soc/intel/boards/bytcr_rt5651.c
+index 81ac6eeda2e6..8fca9b82d4d0 100644
+--- a/sound/soc/intel/boards/bytcr_rt5651.c
++++ b/sound/soc/intel/boards/bytcr_rt5651.c
+@@ -922,7 +922,6 @@ static int snd_byt_rt5651_mc_probe(struct platform_device *pdev)
  	if (adev) {
- 		snprintf(codec_name, sizeof(codec_name),
+ 		snprintf(byt_rt5651_codec_name, sizeof(byt_rt5651_codec_name),
  			 "i2c-%s", acpi_dev_name(adev));
 -		put_device(&adev->dev);
- 		byt_cht_es8316_dais[dai_index].codecs->name = codec_name;
+ 		byt_rt5651_dais[dai_index].codecs->name = byt_rt5651_codec_name;
  	} else {
  		dev_err(dev, "Error cannot find '%s' dev\n", mach->id);
- 		return -ENXIO;
+@@ -930,6 +929,7 @@ static int snd_byt_rt5651_mc_probe(struct platform_device *pdev)
  	}
  
-+	codec_dev = acpi_get_first_physical_node(adev);
+ 	codec_dev = acpi_get_first_physical_node(adev);
 +	acpi_dev_put(adev);
-+	if (!codec_dev)
-+		return -EPROBE_DEFER;
-+	priv->codec_dev = get_device(codec_dev);
-+
- 	/* override platform name, if required */
- 	byt_cht_es8316_card.dev = dev;
- 	platform_name = mach->mach_params.platform;
- 
- 	ret = snd_soc_fixup_dai_links_platform_name(&byt_cht_es8316_card,
- 						    platform_name);
--	if (ret)
-+	if (ret) {
-+		put_device(codec_dev);
- 		return ret;
-+	}
- 
- 	/* Check for BYTCR or other platform and setup quirks */
- 	dmi_id = dmi_first_match(byt_cht_es8316_quirk_table);
-@@ -539,13 +546,10 @@ static int snd_byt_cht_es8316_mc_probe(struct platform_device *pdev)
- 
- 	/* get the clock */
- 	priv->mclk = devm_clk_get(dev, "pmc_plt_clk_3");
--	if (IS_ERR(priv->mclk))
-+	if (IS_ERR(priv->mclk)) {
-+		put_device(codec_dev);
- 		return dev_err_probe(dev, PTR_ERR(priv->mclk), "clk_get pmc_plt_clk_3 failed\n");
--
--	codec_dev = acpi_get_first_physical_node(adev);
--	if (!codec_dev)
--		return -EPROBE_DEFER;
--	priv->codec_dev = get_device(codec_dev);
-+	}
- 
- 	if (quirk & BYT_CHT_ES8316_JD_INVERTED)
- 		props[cnt++] = PROPERTY_ENTRY_BOOL("everest,jack-detect-inverted");
+ 	if (!codec_dev)
+ 		return -EPROBE_DEFER;
+ 	priv->codec_dev = get_device(codec_dev);
 -- 
 2.39.0
 
