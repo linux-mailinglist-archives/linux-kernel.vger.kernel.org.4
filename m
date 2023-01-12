@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C87668566
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C9C66856C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 22:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240368AbjALVbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 16:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        id S232026AbjALVcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 16:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240618AbjALVaN (ORCPT
+        with ESMTP id S240622AbjALVbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 16:30:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828AA5D419;
-        Thu, 12 Jan 2023 13:11:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DDE4B82028;
-        Thu, 12 Jan 2023 21:11:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE5CC433F0;
-        Thu, 12 Jan 2023 21:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673557886;
-        bh=1lv/KvuGHQRZDolHVavCfpp7julHCynpA3AX6pvaaYA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W73etmzP/d6CGmvUkDbdoac85hc30hUPm02Kv4pn0xFu4zYtLpZjEWE93CUBNxd6i
-         2nu133GHYGhFhQDdUOQL9B4okHCebgBjKSmBvbIWXrNDpQ5gnur9ig105lzUkf5Fxw
-         k4nH+XqvNA/uPVc9r+2x6RT0P/mnPg5ZwR9xkkPvqF7nuQQrTet00VDk2+qEjKc2lt
-         aULGfARm5St002zse5h/cpBDOXNCJ9vMOyMgq1PQjiJgFJHxCZLmpALsAMzY0k6bTC
-         9qvVz0cXHBmLWRo00/ZEjHxVfDiyQTO4OI4w+g6zlj9w6ONR0vjO+4WoTdW31GGmHJ
-         s8iXAduhRnVUw==
-Date:   Thu, 12 Jan 2023 21:11:22 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH v3 03/13] riscv: cpufeature: detect
- RISCV_ALTERNATIVES_EARLY_BOOT earlier
-Message-ID: <Y8B3ekXED+xY82w4@spud>
-References: <20230111171027.2392-1-jszhang@kernel.org>
- <20230111171027.2392-4-jszhang@kernel.org>
+        Thu, 12 Jan 2023 16:31:17 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCCF2718D;
+        Thu, 12 Jan 2023 13:14:15 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id o63so20359512vsc.10;
+        Thu, 12 Jan 2023 13:14:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9G8E/pbF0yCVEwppEfeZ3APRR94ekY7sl663Hc09EMo=;
+        b=CLGQjrQB/cXT4ivLFkBZ2uFfRzV2B4EuZw/fwRZDs/OamGqTfErZRyoEF5zSftNssA
+         aXo/J943u3z52xiiyn9ozbhsyoQruIu2fecHP/z+SDB5JICNMpxq0KcptZnYMIhrShBM
+         YfC96q6zTGqcqq9hX2DPYulrMchhsuMtmAzxE/31s8E9O7Mmo6W9CLXhI76inUfSWyDe
+         +cHCugoc13oZ7d5vWOFEfSgOP8LUmFvg/dNuqBbCgACKDXztYEDpxaveJOoNssA3MPUw
+         vfhD6ahNx593rmXHQEFQIlfxRB/Tly17byXrAoAyTruXS4oWhtjl0KJfWf3LFxNyESR/
+         QMaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9G8E/pbF0yCVEwppEfeZ3APRR94ekY7sl663Hc09EMo=;
+        b=lwjcP3LJom48fO1xI6g9ucOsFcUDiY7e9TDNmB0yMoqTXIQ0g/NFPD6Nw8EmKJ8UPR
+         B0/amOG1IzkTrJgSAuaF+jdli4a+MdM8b8ms+TsNbig/hd9JHAFLHJRTYyuuZk9TtkOO
+         NciDpX/2nKuWLD2eqO4TSWInuvXC9i3/YdICrVBFjN4LDudJyGdpPnaRvqquXN+iUuVn
+         M9+YtW7VzVe7Nlu+FBh7apNLWvDTCZeHchaUTNhhoBuRC4x1TI5AYX74qRyM/+hVxGu5
+         xnGeQaSQPMUd5yWmKzZBZRtDzvF7w7bX9HVyvss8xvTIBEYrEUnKYNiQkcNcy+FaP3j9
+         zPtQ==
+X-Gm-Message-State: AFqh2krS2JFMCgndhPoxuBH0FWuORdvREHS7W9bwnSiLHm3g3/qK7+Q0
+        AM/cor2P+S94j2iXunX8WxA=
+X-Google-Smtp-Source: AMrXdXvqOpDKUMfAeRKnyAEn0jSg0Xdln+Y3NUo/FVdyWNh9GqqApDbAMshix//ZhSV0K8IXOyErgA==
+X-Received: by 2002:a05:6102:32d3:b0:3d1:657e:39ff with SMTP id o19-20020a05610232d300b003d1657e39ffmr335281vss.30.1673558054609;
+        Thu, 12 Jan 2023 13:14:14 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u15-20020a37ab0f000000b006f9c2be0b4bsm11202593qke.135.2023.01.12.13.13.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 13:14:14 -0800 (PST)
+Message-ID: <2fd5c783-94f1-1896-c6b9-431a754aec14@gmail.com>
+Date:   Thu, 12 Jan 2023 13:13:51 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LovTwAzFAus9XXMr"
-Content-Disposition: inline
-In-Reply-To: <20230111171027.2392-4-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next 03/10] net: mdio: mux-bcm-iproc: Separate C22 and
+ C45 transactions
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linuxppc-dev@lists.ozlabs.org, Andrew Lunn <andrew@lunn.ch>
+References: <20230112-net-next-c45-seperation-part-2-v1-0-5eeaae931526@walle.cc>
+ <20230112-net-next-c45-seperation-part-2-v1-3-5eeaae931526@walle.cc>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230112-net-next-c45-seperation-part-2-v1-3-5eeaae931526@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---LovTwAzFAus9XXMr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 12, 2023 at 01:10:17AM +0800, Jisheng Zhang wrote:
-> Currently riscv_cpufeature_patch_func() does nothing at the
-> RISCV_ALTERNATIVES_EARLY_BOOT stage. Add a check to detect whether we
-> are in this stage and exit early. This will allow us to use
-> riscv_cpufeature_patch_func() for scanning of all ISA extensions.
->=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-Probably overkill at this stage, but:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-BTW, would you mind CCing me on all patches in a series if I have
-previously reviewed the series? Makes life easier :)
-
+On 1/12/23 07:15, Michael Walle wrote:
+> From: Andrew Lunn <andrew@lunn.ch>
+> 
+> The MDIO mux broadcom iproc can perform both C22 and C45 transfers.
+> Create separate functions for each and register the C45 versions using
+> the new API calls.
+> 
+> Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
->  arch/riscv/kernel/cpufeature.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
-e.c
-> index 421b3d9578cc..37e8c5e69754 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -328,6 +328,9 @@ void __init_or_module riscv_cpufeature_patch_func(str=
-uct alt_entry *begin,
->  	struct alt_entry *alt;
->  	u32 tmp;
-> =20
-> +	if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
-> +		return;
-> +
->  	for (alt =3D begin; alt < end; alt++) {
->  		if (alt->vendor_id !=3D 0)
->  			continue;
-> --=20
-> 2.38.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Apparently, in the c45 case, the reg value including the MII_ADDR_C45
+> bit is written to the hardware. Looks weird, that a "random" software
+> bit is written to a register. Florian is that correct? Also, with this
+> patch this flag isn't set anymore.
 
---LovTwAzFAus9XXMr
-Content-Type: application/pgp-signature; name="signature.asc"
+We should be masking the MII_ADDR_C45 bit because the MDIO_ADDR_OFFSET 
+only defines bits 0 through 20 as being read/write and bits above being 
+read-only. In practice, this is probably not making any difference or harm.
+-- 
+Florian
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8B3eQAKCRB4tDGHoIJi
-0l9WAQDjvV5jMZGRfroca+fqF0wW1R9hBcmFQzlJLcSWlBTmtgD7ByB9qSa0diKz
-FIYUuKDPYTNZQkruAhzCCdeHLGitswk=
-=MlP/
------END PGP SIGNATURE-----
-
---LovTwAzFAus9XXMr--
