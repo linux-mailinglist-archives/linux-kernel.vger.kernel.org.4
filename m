@@ -2,126 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7D2667EFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56386667EFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 20:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjALTXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 14:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S236181AbjALTYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 14:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239964AbjALTWa (ORCPT
+        with ESMTP id S233616AbjALTYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 14:22:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0058178AB;
-        Thu, 12 Jan 2023 11:10:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F132B82018;
-        Thu, 12 Jan 2023 19:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2D7C433D2;
-        Thu, 12 Jan 2023 19:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673550643;
-        bh=wsRZ5b8Hncv/sjW+FA6nhhHPjnkIIFUD6E+cajEKTX0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Zdy/g2iPZ67TF1wrBtvg8m0PwRcMDlpHljIO+QYfNPhcVZkgzwaLty2cIJU3b+/M5
-         rtYnLBOXWX9YvxA8Ko0v9YAaAe4+mWI9qqBDuMWn/m4OMwhwE+LDjSYl6HlQqjJbas
-         CXdSDH7GfGqlTK2CZjyIjx1mAqi4J9X0+Q432YsBW2DYkA4FesONL7VwilbdiEt2iX
-         OjxpN3jx3kBbd5sR2ufFYlTfiW5FsI3WBsoPxoivAfFRrfAVH4UZkRUMfSsXN+PNrl
-         VLgPZM0R9YD7khxT8xEXO8iQ66u+yAHG9MBHxI+BbxlvlTowFdfjxJgdsBZPunL5kJ
-         jN01SrHNAkxFg==
-Message-ID: <40b90d7309246484afa09b2d2b2e23e7.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 12 Jan 2023 14:24:15 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2111.outbound.protection.outlook.com [40.107.117.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982D22BE5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 11:14:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RjM7eIJhowpMghuJq/6r6ChFLJwG6vifGP6zSIrtbNrdgVpa/6bWeBx3V66AeEYrTYjjzq+ukSRNp5rOnDh0KTRokj1E3wtYoQJGTfeIrbWmb7L04ZVb4GyeaPe5Mm4RS11YSwpXWI1DX0Np33cmePQSHvBCVYfQkOVl4QyGsYravIu5/R6YgRMqS/n9WFMcQRy5cwClGJs6p2zsXzPgGbC7GKeqWAXN7IvNy8QPdraQ8Fjtl5tLPwpzFsEMjBpQvacugF83DkcD0NosocFB1cShBaDiQi9r+fXTYy9rt7L79+bAggYYmVhBJS9V90W9Dsv+kdd6ZCS6lVAVrDto2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YSfuVr0ATpMuO4cP1MdBJD2VjwwBoUhd246okOdieSI=;
+ b=hXux5u6DoJIYr+Pb3QZVJ3nrBAijmUWtRT8rW4xCOxG25jdlzzwpKFOtaTMplffgaCa3GOSSDHattwQlarQ4ctBAuG4lwBodNO3nHzFCfIYG75ZUzECI50Gcl5U0keFHa/PVhcM7nkqllwc95b1GBQSBVrJJLuPlBDDVOZUmKznKQycqs3gDyspqYlGpj4AZAWYntfvdb3bd3HY0+uAHWadaxXCQGL2v59RYJ+K2O2094PtSbjU1vcRn44WZ+0hNiPeQs/lOs7546dBQAptkwTmFSnE8r9PB92326d1TMyoSqpfRJwiX2M5kPFyv+KnPhnO6OI7z3/1aPvMNBt9V9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YSfuVr0ATpMuO4cP1MdBJD2VjwwBoUhd246okOdieSI=;
+ b=kotXwY996bnMFZsDZ3lWRSVtnHEbI1e1jowPIWHQihv0psZbc/0L2wm+fgTIA83kFg2SppZVI5zy75ilTSxeEUn0EMuLK2LfuTUvzo0C1jQZggUuLfMZXj5QBxMvVYumaX/SZxjhv+Bl1//8pePzyHUhNUKWVpQT72jWOyn+poL4mYCea8QshJdaNMU3gyMZptla4T/O9L0RPlc3wS0ojWLJGNjyyZ0DzX8u8OKfSuWf5Hm/RK+kt22GUXTc74kzGD/kUYNL9ke3OtM9BkUOvqo6dCZc/DPN7Ppc4RK8VxYMoF7E/m1bNKKZWrBqdgudxJ4YS7RFMDA2zxOfhIwcAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4202.apcprd06.prod.outlook.com (2603:1096:4:eb::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.12; Thu, 12 Jan 2023 19:14:14 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Thu, 12 Jan 2023
+ 19:14:14 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: return true if all cmd were issued or no cmd need to be issued for f2fs_issue_discard_timeout()
+Date:   Fri, 13 Jan 2023 03:14:04 +0800
+Message-Id: <20230112191404.59020-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0033.apcprd02.prod.outlook.com
+ (2603:1096:3:18::21) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230112135224.3837820-1-quic_bjorande@quicinc.com>
-References: <20230112135224.3837820-1-quic_bjorande@quicinc.com>
-Subject: Re: [PATCH] clk: qcom: gdsc: Disable HW control until supported
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Date:   Thu, 12 Jan 2023 11:10:40 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4202:EE_
+X-MS-Office365-Filtering-Correlation-Id: f12d6343-34da-44d4-0cac-08daf4d13158
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kq5wRH44IIdzETuHe7oOsbve5haX5090U+yVjxjaOedzpx0pQ4ACmhV+vUVi2aOAmMiAGh7ukikBhHhej5Qlm9oj1jA/oy3xEFxCQTQSEAntiSoKw9b21P6K0lCSuV2yAqvLgNqkNPAoid6U/LPkOOnHobvL06b0zM9Po7rw/xZaWg78N8AK2bCKK5KCsEVZ3talvRDqwGtGamyoVI9TZOC35xVPgbgdCelaLHrovZsekYcBOn8U1gP976+TcynU6O8lyG3PaPnSoZ7HCZDWrNmiuhSmsmvfm/R1j6ggpwhKZPfv4FNduX/yXEftYH3G/6rraPIHYp6UNUUhIC2fF3HEHHhBWPNwwTgWG/vw7px585htBaaWEjMvr/Z42gLLYZdhDNbsBQdRRIXu9e8n5vmNByQkKkOslu4mo7CPoK6SvKrDyBrK5tI+Pnr03TKp310z88vj8s8w6V4l5lPaklNT+FDwVIPhGz3THsMSv/huuZFocnA1AxEioSL2mVRmTLmamCKppJu/HPLZEP/FyirMDHX+GAStLOT8YZ4Aq40CL3OtAb8siwr6pP3MzWquAeMmeA59tpDeSaeHosJqh5oTYtrWfUacDXWB1AO7OAdoZUY+hjp2Pv13DFwckzlwh0efi8m6Mt4w4mLHdEs4gHrXcmijjmrPScqhDNJubssM6wGMI1FUmy/JuV9fZj+KtzEQpTVyEOWPRMco+kNSQg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199015)(2906002)(5660300002)(8936002)(26005)(36756003)(41300700001)(186003)(6512007)(66476007)(66946007)(66556008)(86362001)(4326008)(8676002)(38350700002)(38100700002)(52116002)(107886003)(2616005)(478600001)(6666004)(1076003)(83380400001)(6486002)(6506007)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SbPrbFZmN5c+soJLWk3JlIIBMnmTy7gGYW3reFUwmAA+6jWJ0i025i0dbLpO?=
+ =?us-ascii?Q?Hp/6WiSV7ZQ81IMAY+1lTaHOhf0uaxjz5tVvh6gZ3aKDRZfvUTMqf4+meyzh?=
+ =?us-ascii?Q?irauRllj/fj1wb8r98dDJW7oBOBV75TcXOgnDQGzJ2QDM1nZXOhRrEfVs/eF?=
+ =?us-ascii?Q?85BFsQj8XZ47r65GP8X2/w/ZTfRxOk8f8/nwzfFB7OWlZfCSd69a0RSa06zV?=
+ =?us-ascii?Q?wdUadZoxMnnqTn68tTfANxSEJlZOrmvTBvJRfoGqr5rfQ9NfRtIlUYJTxt7F?=
+ =?us-ascii?Q?R8yW+Nkw0RjTRQuSYPg1paeOg6/WEzO3843uXBhwPo0pgRZ4tyf++/EfjsuH?=
+ =?us-ascii?Q?n0L3sW9w7adXlT6DrP2fX8g5UubL2d4BsS2U/Zy8U2uBpM27/rVkNysdXNGQ?=
+ =?us-ascii?Q?uvtQWBOa15n7e700g521fYOMTvrxh/EQZG7xT4IxPhTz3sJlOGGf2GxyUD+H?=
+ =?us-ascii?Q?TbujKAmPDUrS1tD1G6c2IOsfBqiHaAXKB9i8eWWSxvAkecdKThllYy4ESHs0?=
+ =?us-ascii?Q?AicYj66fCR86VdGZu1n7z1Oot3r6p7LT1jjHoZIulPxkX/aHOwbGRHokJC+I?=
+ =?us-ascii?Q?HUagCaIZnTNh+rhp3l4v6QVejrXegFqL23wxmNjb1z/PMf7XlRr/hBRsWhA3?=
+ =?us-ascii?Q?jAGQMkeH5G4imovdXg1MDQG7/xsrVSo0z/ILp8RlfG+/iNa9RpR7tgRa26sM?=
+ =?us-ascii?Q?2k9kvg35A/T09EW/4wkFi2E8ciLWJIAZLDit0hcP+ZVEAX8qLtQVUzOedXgI?=
+ =?us-ascii?Q?GxQRFFkJtUM6ySQqq4V3l/73xJO/7AtwqICexBriz9Nislccrv2OnK9h80aX?=
+ =?us-ascii?Q?LABgnDfcPCql5j7EFl6aiIjOcfWiBd3ABUB58YEeGn6Uy7mheXEk4Ia32nKn?=
+ =?us-ascii?Q?p+KytTWG+yGiO5peA9S6u/mOj7ccMwUE6cie3RTZXfSmU+/ffJxq5BjoHlIz?=
+ =?us-ascii?Q?p92rWm821/Kl5tM+uyDxNBVrguL3lcmHmw84BF3DCP2aFisEiKOWRsgnpVpw?=
+ =?us-ascii?Q?AhOWY3/kQu5TGLl5xLtCQXpS7Q2tVQjQCzuHUwfjwXVnvSYNwmwmVMGGdnae?=
+ =?us-ascii?Q?yMbFKzSfaX/j0YjQvpnDOCMbXuw4HAhzFytZidXHKjlBaPiwPBzmVkYO3sda?=
+ =?us-ascii?Q?ald7NNprXO1Oo8CWES8T1gfSLnjf/WYv/bquHyLCyNX403+HP9hlDEimPMDS?=
+ =?us-ascii?Q?bLhYFvscWhszqg25kGYs4z5Y4HyGYh7yR/1EXvsR4rxRJgJM8ZWwtat5eter?=
+ =?us-ascii?Q?0T+caQ5e7d9242pmqFUF3D6y+hH8t64RZ6c2iiFgUBY5YIB78V3gygStur6A?=
+ =?us-ascii?Q?hK5KaIDSvGgeaNXRsyB+o6glUDTXLo6y3POSpIVvaWP153xNrkmA39WIN1Nj?=
+ =?us-ascii?Q?EHYtiOJ67FvHklB5996BFoieX2+t5z5ZHPYN3iDIY32HQFfV7w3EsXauIEQD?=
+ =?us-ascii?Q?Ggqm2SeYQmS35hbwFBBKMTOAnnN4eanzFeZjvhyBGx+jheoch4VwqlS0rzP1?=
+ =?us-ascii?Q?uGQDk5DbPkeBSeXBTN7WOFUofs19xGZkU1vpFcvmbleMsN1I5D3NZu4VFtUd?=
+ =?us-ascii?Q?RGVU+HTDrlFGplAKM4YIzVGX3uEZGIwwF9k0nCQm?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f12d6343-34da-44d4-0cac-08daf4d13158
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 19:14:14.1730
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qqqh7vDs723Wc5VcLuRB2VT6BFgGcgoKYDAtVY44EypBlDDIWyZZpl15CuYpSVtZUNbVE9cldKwi6NlxgS4h5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4202
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2023-01-12 05:52:24)
-> Software normally uses the SW_COLLAPSE bit to collapse a GDSC, but in
-> some scenarios it's beneficial to let the hardware perform this without
-> software intervention.
->=20
-> This is done by configuring the GDSC in "hardware control" state, in
-> which case the SW_COLLAPSE bit is ignored and some hardware signal is
-> relies upon instead.
->=20
-> The GDSCs are modelled as power-domains in Linux and as such it's
-> reasonable to assume that the device drivers intend for the hardware
-> block to be accessible when their power domain is active.
->=20
-> But in the current implementation, any GDSC that is marked to support
-> hardware control, gets hardware control unconditionally while the
-> client driver requests it to be active. It's therefor conceivable that
-> the hardware collapses a GDSC while Linux is accessing resources
-> depending on it.
+f2fs_issue_discard_timeout() returns whether discard cmds are dropped,
+which does not match the meaning of the function. Let's change it to
+return whether all discard cmd are issued.
 
-Why would software want the GDSC to be enabled and accessing resources
-while the hardware signals that it isn't required? It sounds like
-hardware control isn't complete?
+After commit 4d67490498ac ("f2fs: Don't create discard thread when
+device doesn't support realtime discard"), f2fs_issue_discard_timeout()
+is alse called by f2fs_remount(). Since the comments of
+f2fs_issue_discard_timeout() doesn't make much sense, let's update it.
 
->=20
-> There are ongoing discussions about how to properly expose this control
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/segment.c | 13 ++++++++++---
+ fs/f2fs/super.c   |  7 +++----
+ 2 files changed, 13 insertions(+), 7 deletions(-)
 
-Any link? When we implemented hardware clk gating years ago the design
-was to have software override hardware control when the clk was enabled
-in software and let the hardware control go into effect when the clk was
-disabled in software. Hopefully with power domains this could be
-implemented in a better way by connecting hardware mode to some
-performance state so that enabling the power domain goes to software
-mode and then transitioning to a performance state switches to hardware
-control mode.
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index bd1cd98fa6eb..9346209b7c94 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -1650,7 +1650,14 @@ void f2fs_stop_discard_thread(struct f2fs_sb_info *sbi)
+ 	}
+ }
+ 
+-/* This comes from f2fs_put_super */
++/**
++ * f2fs_issue_discard_timeout() - Issue all discard cmd within UMOUNT_DISCARD_TIMEOUT
++ * @sbi: the f2fs_sb_info data for discard cmd to issue
++ *
++ * When UMOUNT_DISCARD_TIMEOUT is exceeded, all remaining discard commands will be dropped
++ *
++ * Return true if issued all discard cmd or no discard cmd need issue, otherwise return false.
++ */
+ bool f2fs_issue_discard_timeout(struct f2fs_sb_info *sbi)
+ {
+ 	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+@@ -1658,7 +1665,7 @@ bool f2fs_issue_discard_timeout(struct f2fs_sb_info *sbi)
+ 	bool dropped;
+ 
+ 	if (!atomic_read(&dcc->discard_cmd_cnt))
+-		return false;
++		return true;
+ 
+ 	__init_discard_policy(sbi, &dpolicy, DPOLICY_UMOUNT,
+ 					dcc->discard_granularity);
+@@ -1669,7 +1676,7 @@ bool f2fs_issue_discard_timeout(struct f2fs_sb_info *sbi)
+ 	__wait_all_discard_cmd(sbi, NULL);
+ 
+ 	f2fs_bug_on(sbi, atomic_read(&dcc->discard_cmd_cnt));
+-	return dropped;
++	return !dropped;
+ }
+ 
+ static int issue_discard_thread(void *data)
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 5fc83771042d..8f13798058f4 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -1546,7 +1546,7 @@ static void f2fs_put_super(struct super_block *sb)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+ 	int i;
+-	bool dropped;
++	bool done;
+ 
+ 	/* unregister procfs/sysfs entries in advance to avoid race case */
+ 	f2fs_unregister_sysfs(sbi);
+@@ -1576,9 +1576,8 @@ static void f2fs_put_super(struct super_block *sb)
+ 	}
+ 
+ 	/* be sure to wait for any on-going discard commands */
+-	dropped = f2fs_issue_discard_timeout(sbi);
+-
+-	if (f2fs_realtime_discard_enable(sbi) && !sbi->discard_blks && !dropped) {
++	done = f2fs_issue_discard_timeout(sbi);
++	if (f2fs_realtime_discard_enable(sbi) && !sbi->discard_blks && done) {
+ 		struct cp_control cpc = {
+ 			.reason = CP_UMOUNT | CP_TRIMMED,
+ 		};
+-- 
+2.25.1
 
-> to the client drivers, but until conclusion in that discussion is
-> reached, the safer option would be to keep the GDSC in software control
-> mode.
->=20
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  drivers/clk/qcom/gdsc.c | 48 ++++++-----------------------------------
->  1 file changed, 7 insertions(+), 41 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 9e4d6ce891aa..6d3b36a52a48 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -439,6 +398,13 @@ static int gdsc_init(struct gdsc *sc)
->                 on =3D true;
->         }
-> =20
-> +       /* Disable HW trigger mode until propertly supported */
-> +       if (sc->flags & HW_CTRL) {
-> +               ret =3D gdsc_hwctrl(sc, false);
-> +               if (ret < 0)
-> +                       return ret;
-> +       }
-> +
-
-Is it a problem for all hardware controlled gdscs? Or just some of them?
-Should we backport this to stable kernels? I seem to recall that
-hardware mode was required for some drivers like camera and video? Are
-they going to keep working if we simply knock out the hardware control
-mode here?
