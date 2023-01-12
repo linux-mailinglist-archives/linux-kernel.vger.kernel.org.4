@@ -2,151 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFC8667A54
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE999667A5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 17:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbjALQGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 11:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S230496AbjALQKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 11:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbjALQGA (ORCPT
+        with ESMTP id S232651AbjALQKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 11:06:00 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CC560C0;
-        Thu, 12 Jan 2023 07:57:33 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 3ABB57E74D;
-        Thu, 12 Jan 2023 15:57:29 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673539053;
-        bh=rH47GSDKKNn4IUUqXJmB8n2oZPbSj4OOp9WUqqpcbh8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nxvkGyjNUSjXd+lzOaZ4g9MRsycP+OfBHdwmVdPKMl1n+VWlEZdzKXk5V5smNWzyM
-         AkeVdWcijkmoasznjtf/79Ke2SAXtVV8O5agAVVP5Q6iMvFvRYxxxIaIGDGKSGDGu2
-         toBr5Xra526B60HRmVfd3bb+4csF84dSkiLPRJOG6H2OvR5mliIwZBrWPJbQUDXKK1
-         O/LTV6P1zi1bTINjXGWcw6mFug5K1Xz+pwaKY0in6LW8CDx6f9m/3H2hU11JTTcYot
-         KHtdqmPGtAddaMn0XHzGcJJKtPVcu5hiTZzijsgrbKcskT6y8OxDMMeSl/6dKbtPWw
-         XvE679r7y4xLg==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Breno Leitao <leitao@debian.org>,
-        Christian Mazakas <christian.mazakas@gmail.com>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH liburing v1 4/4] man/io_uring_prep_splice.3: Explain more about io_uring_prep_splice()
-Date:   Thu, 12 Jan 2023 22:57:09 +0700
-Message-Id: <20230112155709.303615-5-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230112155709.303615-1-ammar.faizi@intel.com>
-References: <20230112155709.303615-1-ammar.faizi@intel.com>
+        Thu, 12 Jan 2023 11:10:14 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2088.outbound.protection.outlook.com [40.107.100.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D10DC8
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 08:01:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RGLJip6d7IWk+y03NfZm72rIg0NLkJ2O0IF/LeElNdu+GaGQEP37S61Rz/msZOGdXGSkBddml2pgyqir03vYzoGk+Fv0TeNlnH/PQeXq0UBmiW9/lMpaWn6c3p56hWmNiqdfsxPxrwNUmPucGMvS++Ixqc3yUlX8Gfv2LdoP8iB35wZJpNl8592BiK4Rxj2x03ZEp4z1WwfNgfeAda6ow1Rir/rWTTUOEuGsMQVrxsm8SDgu13hLG6PuLquuK/8IYopn963idRKZ3FACM5RTotxrpeuquDGv7msVFwLheL2Ze61Vakl1QNGQ90jY2V5Wp/UqXSB0nklf0ZyHDnUtXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ztiSKMgxa+T+eapAdVy6VYzZ/9aghF+4CFkV1QE9l9g=;
+ b=L1b0/QCVoSe9AIa48dloepoSF08v6ZWFs8uD+PzAceS1Bo8SeWLTAQ6nbJ8fjo7sX/5un3P7ON+CGDJ0uK/EawD7mw67bWK0hlS4+KrbDrx7pMq6IXGLjxj2bnhBwWh/XfdorTBZS7faoqY+OSo7oTEWFIqhiBmSdqiitTkejNCaR9O3B6Qo2iR68ACr/1d0C8W8Ye6RY4u0JDd4YP/sMYKVzl9RmJvNndM3P9CHPnkDuA5FBY0lZLbJL73JfvNWJ6TT5ZK7FBaO5wxsFvUJwhX5036MmL796Ytt56kkwLCCAjncFsqoq3dB52mWZaqR5YlqLo+OXZsYvqRwoD8Tbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ztiSKMgxa+T+eapAdVy6VYzZ/9aghF+4CFkV1QE9l9g=;
+ b=HMIqD0P+4ZQwEinGIJFH/pUhmSPOUFXj4vqTUMGRnmMQiWEWFHcHcjXkFBf+4MjOXGEaSihCCxbGXE1PcFSZVhD6Bu/M2EUdAuz/la3n0bYhUZxer1ETST+Vw4/gIMQXElu1g0JyH/C/8HxySOE5RFmipV+jh0H2bLsW6F/5kPM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by PH7PR12MB7425.namprd12.prod.outlook.com (2603:10b6:510:200::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Thu, 12 Jan
+ 2023 16:00:52 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::756d:ff13:d7bd:d590]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::756d:ff13:d7bd:d590%7]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 16:00:52 +0000
+Message-ID: <b93c319e-b1c9-7488-7f0e-d96a6f98ad79@amd.com>
+Date:   Thu, 12 Jan 2023 11:00:50 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm: amd: display: Fix memory leakage
+To:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        harry.wentland@amd.com
+Cc:     sunpeng.li@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, Jun.Lei@amd.com, Alvin.Lee2@amd.com,
+        meenakshikumar.somasundaram@amd.com, martin.leung@amd.com,
+        Dillon.Varone@amd.com, wenjing.liu@amd.com, alex.hung@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, yusongping@huawei.com,
+        hukeping@huawei.com, artem.kuzin@huawei.com
+References: <20221130025046.2667372-1-konstantin.meskhidze@huawei.com>
+Content-Language: en-US
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <20221130025046.2667372-1-konstantin.meskhidze@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YTBP288CA0033.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:14::46) To MN2PR12MB2941.namprd12.prod.outlook.com
+ (2603:10b6:208:a9::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|PH7PR12MB7425:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3e20839-87a7-4297-7837-08daf4b62e2f
+X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +lMUfdiq5ES6YDbSn/pIu38vb+KbGi49CGwobO2c4qF/j3ZGYSeJF0veBpn+rFtu2hmn5X0goPLJBJke6hh00OuhrkqQHle/rFMpmw6zhQal3r9O7HriA4gMK6SRYgg5Yg+20yD6zfwcG2VcOIOB4yuHMUJDVwJ6flwdZC+NG48ERmpdOgX7MJWbAcuvLK7fT4ODfUJFtWeSxO0Bnhrj1gE55EfeWaCaWXueczGWddCO9Mudsq9W0+9ryG9JJkOJRsGE1neGYb9aSw5JfQHG6Sbu+635n2LHUEzFspMgrS406qglSvZy1eIs6s26Jh8IwXdr+qoSD3vyXVXt83cUgp7W3mAly1ZWQiFRGR3jeiPebbRQvFqQpQPbyu1Z9dABKdkmgfT9sgITPrhgwQhrYakT0YlmX6/OcnlLdY2hFeYgxPmk/fz7gEEH67vPxJxMWIBTCCULJH3Z5G5emo4/ho48eGpn/eAqbWIL9kSEdQeRxuBBaT3hCQTGALFS9xRVKWV1T7e3H6XGe5Puuo8rgf0LuSTy+N5eKsOy5Hom4QvlbCfRzj3VL56DIj2OWXfAW253tJfLpBZvzqgIL8jweF608lCpj1Ubt04HP/um8FJ/LZQB62DKhDe4qm0t6vRkiWxB7cvBomYQobEoIEQCK0ntyAIlAMCGvSa9/T2lUMzsjpMy58NdG6+S+Sp0oKY744MaMywlggoNLuYBb8YV+O/dXrTl9X2pidNRDkao89A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199015)(8936002)(5660300002)(41300700001)(38100700002)(36756003)(2906002)(31696002)(4744005)(86362001)(186003)(31686004)(6486002)(478600001)(26005)(6512007)(6506007)(8676002)(4326008)(66946007)(66556008)(316002)(53546011)(66476007)(2616005)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eXgxV0g5dDdNcER0dXJZcjRmQSt4MVZiTFIweUt1TXp5SXRaeDJlRW9hN1VM?=
+ =?utf-8?B?VGlDbXdpWlVaZWpQYUFFWHhvUVJtelhseHJqY3R0UVJzT1lHWWEvaDM0SzB0?=
+ =?utf-8?B?ZnBKaWZGVXIxQXNoTytld0VMcEVJYmMwNlRteUhPLy83WW9QTjJCcm1MUk1x?=
+ =?utf-8?B?SCtCY2hEUDh2MkNhZVJnQ1R1WUVVVllSRC9KaHpzQXoyVm5aek96Tmh4UWds?=
+ =?utf-8?B?WmJaQnRGSngySjNHL1I1S0tQbVp2WEhGdVVHVVM0Y2VXRmtlMGpRS0NPdkw2?=
+ =?utf-8?B?eHJoZEJPUUVKaXlTN29OYmlwZ3lOZWtER2tSY01hdDhqV3ljNmxDTkUrN1R2?=
+ =?utf-8?B?dnljZk14dmc1ekp3Sm9mZ0NLWEJacThjYTJDbHBBSFl5MkM3NmJtL0YwcHRt?=
+ =?utf-8?B?MXRCcnBFNnorNUJTd1NNNVl2dmR2UGRWSk1hb3VZZTFBWWdaS0wrVkc5UUpM?=
+ =?utf-8?B?UFkyZkxmdUplMUpSanl0ckVrMW1FcmF1aWZOU0xuRXJHUllKOXlXYzBqaG1E?=
+ =?utf-8?B?aTdlc0dERTVqSEp4UENPWEUwQTc1YTc4UEFDUnlYUVpaWU1yVDlYeURKUjVJ?=
+ =?utf-8?B?VkVEWVNZVyt6Vy9TZEcwSkpqMTRjSDEvZ3pldVBXQlovSGVuMkcwU3A2dzJk?=
+ =?utf-8?B?NWpFclVxamxadWFJT1BGOWhDMEZaMk9jWGkzdXJVejV2OEVSbkdIK2ZTamMr?=
+ =?utf-8?B?NFZHK2ZlZFFsMGNPSGlsZldkcysxa2kxdTAyTG9EZ3diVjU1TElCdU1KWEhr?=
+ =?utf-8?B?Y3V6WUdPRHFvOUdmR2QvUldaL3I2a2lzL0JpUDFHV2NYVGIzb3BqcTNJQURx?=
+ =?utf-8?B?RlhzbngwYWkyWW9YUHIwR0NrUGZOYnVnYWdPK1RXSFBzY0Z0RFMvY2NtTUxk?=
+ =?utf-8?B?a0ljNFVCT0d1UC9hMEdRbW16cExwYllXKzVyMStqL3o4bm50YXVzZHVoQVNP?=
+ =?utf-8?B?TjlzV0tFTkVRM3g4MFlLMEgwVXpuTDFQb3p0ZGk1YnJJaSt6QzhMSmpwZEVB?=
+ =?utf-8?B?M013VjdmWk9OOWVmeksvZGsyMHJrQld6WFpqbGkwK1VDcm01Ym1JOWd0djNn?=
+ =?utf-8?B?WWN6aWU4YXozaWN5Q0VmLzhCK0pWK05xT2tVQ3VSRGlybERQTlhqcG8yRUQr?=
+ =?utf-8?B?N0NLajUvVHFqazUvSFlocG1tcWdPNmlOOS9jS1dURUozN3RhM0RQdEhWa1p1?=
+ =?utf-8?B?L1o2ZVNaWWVYdjZxN09mdi9UOXVmQnYrSUxYT2trYzQ3Y0phc3U1NUtkc1hD?=
+ =?utf-8?B?NitKMHM4ZG15Z04ybTF3RFNacmQ4RnIyTzNoVWlRUWhhZytVc3ZGeFVacWZB?=
+ =?utf-8?B?empwWkJjQ2tkMDJ6aW9rNHY3aEt5S1ByQjlnS1lhb2t6WUtvSUZkSnF3NTRZ?=
+ =?utf-8?B?WmE4c005WStHT3BMckdxd2N1L0trQ08vbm1MSnh5U0M5VnJCMTRRUVJQZm8w?=
+ =?utf-8?B?alQ3elo4cEV2WXBRYlR5TXk1eHNmTlh1Z1BGWDBBU1NCbnYyU094MXd2Vm5S?=
+ =?utf-8?B?Q2RCY3J6dnhyWVBteTFhNUt2QVdHZi9yU2dvdjBjeTVLOWljYmRTcnBVSTVj?=
+ =?utf-8?B?Vkcvdlc5d3duakN3SDluNmVSdytxdVJ0OWlCR1BqTGh3Y3pXbkQxOWtkYTRH?=
+ =?utf-8?B?K091QnlzOGh5TTFxbi9OZnB1M09sUEVlWlFFWU16ZUs0WjFvT09FQ3RGZkFn?=
+ =?utf-8?B?bklQWmdLdEFLYXNCa1N5a0Z1aFQzcTduVHVhL3ZtOGt5YjRxYUl5dDFNMERP?=
+ =?utf-8?B?cjBFTXZYUXZiREx5TjNLaGkzcGxyRStmcGQyMjRWdXYzcDc1N3JyZ2haL0Y3?=
+ =?utf-8?B?MG1NQ04xZERFeW43UFhXdnRoMGtrZE5IMDdVRWR6U0ErQkNOcWNmY3pySEN2?=
+ =?utf-8?B?TVFpczJ1ZnlrMmx6UUpmVVZsRXo4Z0NQU1F6Z1U1WjVvaXFaalgwb2xraGNV?=
+ =?utf-8?B?dVJNTlZKa1dNRFIxYkl6bkhRcDQxZlVIb0g4dDRpRytMVzh3WXZXdThkWlJx?=
+ =?utf-8?B?ZUhlNkF0Y0RqNy9xZXJ2bGxtV1BLWnZDNEtGV0RBRm5qbFg2RGorRlFlemZa?=
+ =?utf-8?B?dmFNK0swMytZeXROTUVXekIybmpsMUpPaG5WWDd2VnljTFdCVHNjSHB2N0VX?=
+ =?utf-8?Q?wmSRrN4S+nCNY80d/zXkTB8/R?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3e20839-87a7-4297-7837-08daf4b62e2f
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 16:00:52.5715
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wMGsj4/+vBwPQeZha5hWFp0qyC7+xMJD7SQNINhov0NsPB761h6wz29FW418MbY/KV6Eb+LkTfZTfL9p7zIzzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7425
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-I have found two people confused about the io_uring_prep_splice()
-function, especially on the offset part. The current manpage for
-io_uring_prep_splice() doesn't tell about the rules of the offset
-arguments.
 
-Despite these rules are already noted in "man 2 io_uring_enter",
-people who want to know about this prep function will prefer to read
-"man 3 io_uring_prep_splice".
+On 11/29/22 21:50, Konstantin Meskhidze wrote:
+> This commit fixes memory leakage in dc_construct_ctx() function.
+> 
+> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+> ---
+>   drivers/gpu/drm/amd/display/dc/core/dc.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+> index 997ab031f816..359e28d3567e 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+> @@ -878,6 +878,7 @@ static bool dc_construct_ctx(struct dc *dc,
+>   
+>   	dc_ctx->perf_trace = dc_perf_trace_create();
+>   	if (!dc_ctx->perf_trace) {
+> +		kfree(dc_ctx);
+>   		ASSERT_CRITICAL(false);
+>   		return false;
+>   	}
 
-Let's explain it there!
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
+And applied to amd-staging-drm-next.
 
-Stolen from liburing comment (with some modifications):
-
-  If `fd_in` refers to a pipe, `off_in` must be -1.
-
-  If `fd_in` does not refer to a pipe and `off_in` is -1, then bytes are
-  read from `fd_in` starting from the file offset and it is adjusted
-  appropriately.
-
-  If `fd_in` does not refer to a pipe and `off_in` is not -1, then the
-  starting offset of `fd_in` will be `off_in`.
-
-  The same rules apply to `fd_out` and `off_out`.
-
-  Note that even if `fd_in` or `fd_out` refers to a pipe, the splice
-  operation can still failed with `EINVAL` if one of the fd doesn't
-  explicitly support splice operation, e.g. reading from terminal is
-  unsupported from kernel 5.7 to 5.11.
-
- man/io_uring_prep_splice.3 | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/man/io_uring_prep_splice.3 b/man/io_uring_prep_splice.3
-index cb82ad0..a177bc6 100644
---- a/man/io_uring_prep_splice.3
-+++ b/man/io_uring_prep_splice.3
-@@ -52,6 +52,34 @@ and
- .I fd_in
- given as a registered file descriptor offset.
- 
-+If
-+.I fd_in
-+refers to a pipe,
-+.IR off_in
-+must be -1.
-+
-+If
-+.I fd_in
-+does not refer to a pipe and
-+.I off_in
-+is -1, then bytes are read from
-+.I fd_in
-+starting from the file offset and it is adjusted appropriately.
-+
-+If
-+.I fd_in
-+does not refer to a pipe and
-+.I off_in
-+is not -1, then the starting offset of
-+.I fd_in
-+will be
-+.IR off_in .
-+
-+The same rules apply to
-+.I fd_out
-+and
-+.IR off_out .
-+
- This function prepares an async
- .BR splice (2)
- request. See that man page for details.
-@@ -78,3 +106,13 @@ field.
- .BR io_uring_submit (3),
- .BR io_uring_register (2),
- .BR splice (2)
-+
-+.SH NOTES
-+Note that even if
-+.I fd_in
-+or
-+.I fd_out
-+refers to a pipe, the splice operation can still failed with
-+.B EINVAL
-+if one of the fd doesn't explicitly support splice operation, e.g. reading from
-+terminal is unsupported from kernel 5.7 to 5.11.
--- 
-Ammar Faizi
-
+Thanks
+Siqueira
