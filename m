@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB1466845D
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 570D0668473
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240223AbjALUxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S240633AbjALUxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237286AbjALUwf (ORCPT
+        with ESMTP id S232908AbjALUwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:52:35 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405D63D25
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673555108;
-        bh=ABVJWX1YFWwFvWg/I5xwpsfT16mnlQwmI7g0C+2Jyn4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ojAdu+SEv3o0qPtQaYvRGeG2uLn5uKtQiXcB6KTM8h+Up41sF+U9Zx30cyDFDM+qL
-         LDG5NyFvVCO4jjBEcBz22rctcdkokAyB1pMBrnCeEaVsx9WVh/f9jKOVA7wnL4DDOl
-         tcMN2GybZ2mLvJMu93TI5WMZFsmdQl0uhCSsXeYeHWy2GoSJsJHJsdCD7ffRR1zN3B
-         +ZpGR0poS6xwbmBnFXvwDKewIemlOq2Wa4FRlG5sZ37wDWHO2RZSIrm7Zbl2Fhc6fD
-         0nalsyGAGfmnQQ11U+kVZnmR+W6biaK4SK0UfiywloZmvBMynVfAafhQPTJZi+ezcE
-         gySTVsWSA0Kuw==
-Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NtGJ42rQ1zg6p;
-        Thu, 12 Jan 2023 15:25:08 -0500 (EST)
-Message-ID: <5c64b742-c41a-8c59-c0c8-8b4cdedaaba5@efficios.com>
-Date:   Thu, 12 Jan 2023 15:25:42 -0500
+        Thu, 12 Jan 2023 15:52:55 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A679DEB1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:26:12 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id c9so14652214pfj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I1a5Jj4LhArw7C+veD1AJXimxs0gBRN9QYGmaPZZepQ=;
+        b=LcnxElzta+l75Ylsdgk5tzeX0fCoTfPkGseZ5j2bomhev4jeAdUsp6vHBChkB8yoly
+         Bf6lkv4WYdJ/5DC1BctbcuHJDw2GAANme9nc1SVk3IavR3GOJIdjf34BMl0Vlg/9S0Yq
+         rkDBtZnGuHshIQm9AXgy7ckOqphAzjf1Z+63xGS9Osh3IYHAQT6qORpwS4srH3mADQ2u
+         DIukaRwB1cIiYyGscj+Z2bLeA29CKYSEtiIWnTTtHoZdXEKPj59GyGWv2mZZ1uviEp45
+         aZjic2wb7Xke4T4BrWd2NQcwcv9XLRSpA0ipWAgzlrZ0HZ39vMU5G/osPKCs7M8JpIKe
+         TuNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I1a5Jj4LhArw7C+veD1AJXimxs0gBRN9QYGmaPZZepQ=;
+        b=UKgiKJh5/S2Y3bWI4e/INF7gCreoALz9CwLvkn2tVZZbIhha3NU8XKTqLMJOmj8OLM
+         ZIJSoRQAaPRgfr97v9NKqHoPuqpTgVC0IBNw1JNzBhd2F0ReHvF69KZWVo2sOnMxFzv1
+         XRftZv3Xmyornm/B/TpbOw8aWiOxtSLe9A43md/ETPvZAJFRrgvhkchmeZPW//KV5NoZ
+         Fbb9DVBkEcPX/KP8idKNswl7yAfPvSKe6cJ1CU5a6Bm8kJh1PrnfNbXPDX8oNajGKfzK
+         Q6u7FFTEOP5EIJaItrhLoRxxw7rACM49tv7T5GsDt71zTLFsK7JXSQ48+FSQ9ugASPaQ
+         UARA==
+X-Gm-Message-State: AFqh2kqRHci8j6dL5x58jCIBw2phTTZ1vOEeuHHdE1wGE+GTCnSymRtI
+        0/8ui0vsGQo+mapE5RSeuyFLSREYS/c9P4qa67GNUEq/sNvwJoA=
+X-Google-Smtp-Source: AMrXdXtLHfrPEbNBMn076Vm8h0lZ3DMfIQaIwVz1OKoIMpwXxm+yfgf+J4Mwtwe+0AIs9jvRvcUv83kG4AJ/KIY4qsk=
+X-Received: by 2002:a62:158f:0:b0:588:e66e:4f05 with SMTP id
+ 137-20020a62158f000000b00588e66e4f05mr1348955pfv.23.1673555171377; Thu, 12
+ Jan 2023 12:26:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: rseq CPU ID not correct on 6.0 kernels for pinned threads
-Content-Language: en-US
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        libc-alpha@sourceware.org
-References: <87lem9cnxr.fsf@oldenburg.str.redhat.com>
- <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
- <871qnzpv9l.fsf@oldenburg.str.redhat.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <871qnzpv9l.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230109180717.58855-1-casey@schaufler-ca.com>
+ <20230109180717.58855-3-casey@schaufler-ca.com> <CAHC9VhTaySsuvkj0U9Jbp405+WoRfhtq+ib5ynO-a9BeM+a5Ew@mail.gmail.com>
+ <c1acc2ed-d188-6560-4554-e6e37d47d06d@schaufler-ca.com>
+In-Reply-To: <c1acc2ed-d188-6560-4554-e6e37d47d06d@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 12 Jan 2023 15:26:00 -0500
+Message-ID: <CAHC9VhSZ50nbrFJsxKYstVJMekDK6D4tS=Ddz29EUQe55ZQvKQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/8] LSM: Maintain a table of LSM attribute data
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-12 11:33, Florian Weimer wrote:
-> * Mathieu Desnoyers:
-> 
->> As you also point out, it can also be caused by some other task
->> modifying the affinity of your task concurrently. You could print
->> the result of sched_getaffinity on error to get a better idea of
->> the expected vs actual mask.
->>
->> Lastly, it could be caused by CPU hotplug which would set all bits
->> in the affinity mask as a fallback. As you mention it should not be
->> the cause there.
->>
->> Can you share your kernel configuration ?
-> 
-> Attached.
-> 
-> cpupower frequency-info says:
-> 
-> analyzing CPU 0:
->    driver: intel_cpufreq
->    CPUs which run at the same hardware frequency: 0
->    CPUs which need to have their frequency coordinated by software: 0
->    maximum transition latency: 20.0 us
->    hardware limits: 800 MHz - 4.60 GHz
->    available cpufreq governors: conservative ondemand userspace powersave performance schedutil
->    current policy: frequency should be within 800 MHz and 4.60 GHz.
->                    The governor "schedutil" may decide which speed to use
->                    within this range.
->    current CPU frequency: Unable to call hardware
->    current CPU frequency: 3.20 GHz (asserted by call to kernel)
->    boost state support:
->      Supported: yes
->      Active: yes
-> 
-> And I have: kernel.sched_energy_aware = 1
-> 
->> Is this on a physical machine or in a virtual machine ?
-> 
-> I think it happened on both.
-> 
-> I added additional error reporting to the test (running on kernel
-> 6.0.18-300.fc37.x86_64), and it seems that there is something that is
-> mucking with affinity masks:
-> 
-> info: Detected CPU set size (in bits): 64
-> info: Maximum test CPU: 19
-> error: Pinned thread 17 ran on impossible cpu 7
-> info: getcpu reported CPU 7, node 0
-> info: CPU affinity mask: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
-> error: Pinned thread 3 ran on impossible cpu 13
-> info: getcpu reported CPU 13, node 0
-> info: CPU affinity mask: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
-> info: Main thread ran on 2 CPU(s) of 20 available CPU(s)
-> info: Other threads ran on 20 CPU(s)
-> 
-> For each of these threads, the affinity mask should be a singleton set.
-> Now I need to find out if there is a process that changes affinity
-> settings.
+On Wed, Jan 11, 2023 at 7:36 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> On 1/11/2023 1:01 PM, Paul Moore wrote:
+> > On Mon, Jan 9, 2023 at 1:07 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >> As LSMs are registered add their lsm_id pointers to a table.
+> >> This will be used later for attribute reporting.
+> >>
+> >> Determine the number of possible security modules based on
+> >> their respective CONFIG options. This allows the number to be
+> >> known at build time. This allows data structures and tables
+> >> to use the constant.
+> >>
+> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> >> ---
+> >>  include/linux/security.h |  2 ++
+> >>  security/security.c      | 44 +++++++++++++++++++++++++++++++++-------
+> >>  2 files changed, 39 insertions(+), 7 deletions(-)
 
-If it's not cpu hotunplug, then perhaps something like systemd modifies 
-the AllowedCPUs of your cpuset concurrently ?
+...
 
-Thanks,
+> >> diff --git a/security/security.c b/security/security.c
+> >> index 07a8fe7f92bf..a590fa98ddd6 100644
+> >> --- a/security/security.c
+> >> +++ b/security/security.c
+> >> @@ -388,7 +408,7 @@ static void __init ordered_lsm_init(void)
+> >>         for (lsm = ordered_lsms; *lsm; lsm++)
+> >>                 initialize_lsm(*lsm);
+> >>
+> >> -       kfree(ordered_lsms);
+> >> +       init_debug("lsm count            = %d\n", lsm_active_cnt);
+> >>  }
+> > Given 86ef3c735ec8 ("LSM: Better reporting of actual LSMs at boot"),
+> > is this needed?
+>
+> None of what comes out from lsm.debug is strictly necessary, and
+> human or script can parse "initializing lsm=", but sometimes the
+> number of LSMs is interesting.
 
-Mathieu
+I guess what I was questioning is if printing the @lsm_active_cnt
+variable provides any better information that what is already provided
+by commit 86ef3c735ec8?  We currently print the enabled/active LSMs
+with lsm.debug, printing a count seems a bit redundant to me.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+paul-moore.com
