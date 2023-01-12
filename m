@@ -2,137 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454BA666A12
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE59666A0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 05:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236568AbjALEMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 11 Jan 2023 23:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S236708AbjALEMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 11 Jan 2023 23:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236529AbjALEMC (ORCPT
+        with ESMTP id S236472AbjALEL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 11 Jan 2023 23:12:02 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F074C73F;
-        Wed, 11 Jan 2023 20:11:55 -0800 (PST)
-X-UUID: 3d75cfa4922f11eda06fc9ecc4dadd91-20230112
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=LWVItFchAxjQJyYfmQOrb6XjujvdQkI5SlHsF0+sIgg=;
-        b=ltBoOkmu1NLrzbQAq28P052jhcluYSYKlxwMoYtTAlnVK6jY0UYZgyBr7DqcINP0+z9h+V1x++LGM+2mBB4p0Y4Ai1cciihSEsNkSbrm1i50hEFo+TvqsMLwwtcG8+WuKr3VccowM4rFs9c9xzqSbMQhMn2IeyYUkKux/+V2veI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:9c6f8cf6-8996-48ef-842f-8b5b237d1baf,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:543e81c,CLOUDID:1db66b54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: 3d75cfa4922f11eda06fc9ecc4dadd91-20230112
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1055710536; Thu, 12 Jan 2023 12:11:51 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 12 Jan 2023 12:11:50 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 12 Jan 2023 12:11:49 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3,7/7] media: mediatek: vcodec: change lat thread decode error condition
-Date:   Thu, 12 Jan 2023 12:11:40 +0800
-Message-ID: <20230112041140.833-8-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230112041140.833-1-yunfei.dong@mediatek.com>
-References: <20230112041140.833-1-yunfei.dong@mediatek.com>
+        Wed, 11 Jan 2023 23:11:59 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AD74C726
+        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 20:11:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qwRGgIGvMBSzTYRHyHH2uzDLZhpEJ+ybmVDBCoIg3A4=; b=MmyOjEdUGbl5SwLMEMD9tyv5++
+        +emgk2X5tIqP5v43+brk1xCH7Ba1nG8Oor4w7gBbA3ok+XXy3aS2Cbop5uU9IwuUwBwn5l4IE9EWH
+        Ez63w2gKegeZyNO/57gZAcSSDR9HoP/30R6rAWCBRkM5ITYI2m3oqhF2RSeJMV8iqyEc6nEEqNVBe
+        JprWBUJhqdbj59B4H64EskcLuw8kpEEfSeYeeTbHLaAqEsKt9DMqt8ybcBSdm9mm+CnOeUYKmWOa3
+        ilapNCbotEWqoSR9+JWbFHgEs6ZxA/vhr3RpgoRgJGCmRsr86IxyCKNFFM9mwFOK4RIRp1OM7WkYi
+        bKkKYtig==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pFowK-001PtN-0S;
+        Thu, 12 Jan 2023 04:11:44 +0000
+Date:   Thu, 12 Jan 2023 04:11:44 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Peng Zhang <zhangpeng362@huawei.com>
+Cc:     almaz.alexandrovich@paragon-software.com,
+        kari.argillander@gmail.com, akpm@linux-foundation.org,
+        ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
+        sunnanyong@huawei.com, wangkefeng.wang@huawei.com,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH -next] fs/ntfs3: Fix potential NULL/IS_ERR bug in
+ ntfs_lookup()
+Message-ID: <Y7+IgD3OslNt4XKY@ZenIV>
+References: <20230112013248.2464556-1-zhangpeng362@huawei.com>
+ <Y7+B40Mnnm7/rY+O@ZenIV>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7+B40Mnnm7/rY+O@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If lat thread can't get lat buffer, it should be that current instance
-don't be schedulded, the driver can't free the src buffer directly.
+On Thu, Jan 12, 2023 at 03:43:31AM +0000, Al Viro wrote:
+> On Thu, Jan 12, 2023 at 01:32:48AM +0000, Peng Zhang wrote:
+> > From: ZhangPeng <zhangpeng362@huawei.com>
+> > 
+> > Dan Carpenter reported a Smatch static checker warning:
+> > 
+> > fs/ntfs3/namei.c:96 ntfs_lookup()
+> > error: potential NULL/IS_ERR bug 'inode'
+> > It will cause null-ptr-deref when dir_search_u() returns NULL if the
+> > file is not found.
+> > Fix this by replacing IS_ERR() with IS_ERR_OR_NULL() to add a check for
+> > NULL.
+> 
+> That's a bad approach - you are papering over bad calling conventions instead of
+> fixing them.
+> 
+> IS_ERR_OR_NULL is almost never the right tool.  Occasionally there are valid
+> cases for function possibly returning pointer/NULL/ERR_PTR(...); this is
+> almost certainly not one of those.
+> 
+> Incidentally, inodes with NULL ->i_op should never exist.  _Any_ place that
+> sets ->i_op to NULL is broken, plain and simple.  A new instance of struct
+> inode has ->i_op pointing to empty method table; it *is* initialized.
 
-Fixes: 7b182b8d9c85 ("media: mediatek: vcodec: Refactor get and put capture buffer flow")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c     | 6 ++++--
- .../platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c  | 2 +-
- .../platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c     | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+IOW, the real bug is in ntfs_read_mft() -
+	inode->i_op = NULL;
+in there is garbage.  Unless I'm misreading the history, it used to be possible
+for the damn thing to get all the way to ntfs_lookup() - up until the
+commit 0e8235d28f3a "fs/ntfs3: Check fields while reading" had taken that
+path out:
+-       if (!is_rec_base(rec))
+-               goto Ok;
++       if (!is_rec_base(rec)) {
++               err = -EINVAL;
++               goto out;
++       }
+is the relevant part.  Situation after that commit:
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-index ffbcee04dc26..04beb3f08eea 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-@@ -258,8 +258,10 @@ static void mtk_vdec_worker(struct work_struct *work)
- 		if (src_buf_req)
- 			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
- 	} else {
--		v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
--		v4l2_m2m_buf_done(vb2_v4l2_src, state);
-+		if (ret != -EAGAIN) {
-+			v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
-+			v4l2_m2m_buf_done(vb2_v4l2_src, state);
-+		}
- 		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
- 	}
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-index 8f262e86bb05..07774b6a3dbd 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-@@ -574,7 +574,7 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	lat_buf = vdec_msg_queue_dqbuf(&inst->ctx->msg_queue.lat_ctx);
- 	if (!lat_buf) {
- 		mtk_vcodec_err(inst, "failed to get lat buffer");
--		return -EINVAL;
-+		return -EAGAIN;
- 	}
- 	share_info = lat_buf->private_data;
- 	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index cbb6728b8a40..cf16cf2807f0 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -2070,7 +2070,7 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	lat_buf = vdec_msg_queue_dqbuf(&instance->ctx->msg_queue.lat_ctx);
- 	if (!lat_buf) {
- 		mtk_vcodec_err(instance, "Failed to get VP9 lat buf\n");
--		return -EBUSY;
-+		return -EAGAIN;
- 	}
- 	pfc = (struct vdec_vp9_slice_pfc *)lat_buf->private_data;
- 	if (!pfc) {
--- 
-2.18.0
+	* useless check in ntfs_lookup() is a dead code; it should be
+taken out, especially since it's broken.
+	* NULL assignment in ntfs_read_mft() is still garbage; thankfully,
+with the current tree the inode will either have it overwritten by later
+assignment or it won't make it out of ntfs_read_mft().  Still, that
+assignment should be taken out and shot to get rid of bad example.
 
+While we are at it, the calling conventions of ntfs_read_mft() could've
+been better.  Look:
+
+ntfs_read_mft(inode, ...) either returns its first argument (on success) or
+it disposes of the inode the argument points to and returns ERR_PTR(-E...)
+(on failure).  There is only one caller, and it would be easier to follow if
+it had been
+        /* If this is a freshly allocated inode, need to read it now. */
+        if (inode->i_state & I_NEW) {
+		int err = ntfs_read_mft(inode, name, ref);
+
+		if (unlikely(err)) {
+			if (name)
+				ntfs_set_state(sb->s_fs_info, NTFS_DIRTY_ERROR);
+			iget_failed(inode);
+			return ERR_PTR(err);
+		}
+	} else if (ref->seq != ntfs_i(inode)->mi.mrec->seq) {
+                /* Inode overlaps? */
+                _ntfs_bad_inode(inode);
+        }
+
+        return inode;
+
+with ntfs_read_mft() always acting the same way wrt inode refcount...
