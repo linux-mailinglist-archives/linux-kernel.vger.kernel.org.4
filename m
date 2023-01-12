@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ED2666FE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FC0666FE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbjALKkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S231431AbjALKli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236584AbjALKji (ORCPT
+        with ESMTP id S236595AbjALKk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:39:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA2762F6;
-        Thu, 12 Jan 2023 02:34:15 -0800 (PST)
-Date:   Thu, 12 Jan 2023 10:34:12 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673519653;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HToTxnz9S15tHok02madK+uiew5TU6onPq4bHfE8d2A=;
-        b=nOz4T+TL7Vd238tovZ3AnAwX3NTL85Fw0mGTGmkM5fJphH02+/OFrTKsy6xg2IOlhhJR7M
-        PUze760DEZDJP6sXF5kTOVmJGrHk20eBFfht717jaID0i5WuA7mtMvxCLugIm82p8tL95s
-        eqP8cXajaDi63oaw3rUNKCh3Ssmo3BEzCJdu4HMsQZgg1CICZDtzd6EOXMOGUdn6X9WJ1z
-        rqaksxh0BViQ59apgAKtASHyYCw0SCMVNJ5Acm9sQbtIJAOqD2NsdCoFg0nlhzyG5y/0yv
-        khFWnQFQk4K06LPXqTOJFHSUZdf641kxu2TogXtthWEDWiEkQEklOeJd5NlCjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673519653;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HToTxnz9S15tHok02madK+uiew5TU6onPq4bHfE8d2A=;
-        b=YH9JswKSge9L15v7FPBggySzJukch0Ufe4ArJZs/ZIsaJiLgjdHvBSptT8MGoMGXVFq4G9
-        AG/TBr2pS2Y6K9Bw==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/mm: fix poking_init() for Xen PV guests
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230109150922.10578-1-jgross@suse.com>
-References: <20230109150922.10578-1-jgross@suse.com>
+        Thu, 12 Jan 2023 05:40:59 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5F6574E3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:34:54 -0800 (PST)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id EF99080292A4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:34:53 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id E76AE1004B6B5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 10:34:23 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id FuudpfLUfxrINFuudpJ9kI; Thu, 12 Jan 2023 10:34:23 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=MrOXV0We c=1 sm=1 tr=0 ts=63bfe22f
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=Hb3yA03KV983punxqLMA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DCc3XlxNqADuGnNawjyPGM382LoIqxxCBJw5HrzyTIk=; b=1qW4FU5hU8KRXtbF2ENFm15qQ9
+        t4ZBjV6hapbf2AvpOIm9arnJINGZmtbsM7XK1k0oMg3/pah5URRFPHeLCjeHEcvPwujBAkUxRgyuw
+        yDL1qJasZ8/CadbsPlVWPsMdeuVMP90c/wrhD28WNp739XhRr+P0+gN4NLO+iwJGifhhBQq8iDb4M
+        jRXySSfk5nksMg4+4lT+ea7iGQyishEs1loB9mG62DgLJhUIuTAoNWH3KVfOBm+UY8c0oZdonIlDm
+        6SLUToc4tH8N4UPSPRaK34wsgyGsWrO+OT/WBDpU50WFOdN8i2xBbX5IReFW8pRY18dqcy7BuKy0n
+        Z4giGmDA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51236 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pFuuc-002AnF-DW;
+        Thu, 12 Jan 2023 03:34:22 -0700
+Subject: Re: [PATCH 5.15 000/290] 5.15.87-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230110180031.620810905@linuxfoundation.org>
+In-Reply-To: <20230110180031.620810905@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <0a23518a-fa75-52d0-81b9-b6528ca8d7b4@w6rz.net>
+Date:   Thu, 12 Jan 2023 02:34:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Message-ID: <167351965292.4906.12237792371879613660.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pFuuc-002AnF-DW
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51236
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 1/10/23 10:01 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.87 release.
+> There are 290 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 Jan 2023 17:59:42 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.87-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Commit-ID:     26ce6ec364f18d2915923bc05784084e54a5c4cc
-Gitweb:        https://git.kernel.org/tip/26ce6ec364f18d2915923bc05784084e54a5c4cc
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Mon, 09 Jan 2023 16:09:22 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 12 Jan 2023 11:22:20 +01:00
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-x86/mm: fix poking_init() for Xen PV guests
+Tested-by: Ron Economos <re@w6rz.net>
 
-Commit 3f4c8211d982 ("x86/mm: Use mm_alloc() in poking_init()") broke
-the kernel for running as Xen PV guest.
-
-It seems as if the new address space is never activated before being
-used, resulting in Xen rejecting to accept the new CR3 value (the PGD
-isn't pinned).
-
-Fix that by adding the now missing call of paravirt_arch_dup_mmap() to
-poking_init(). That call was previously done by dup_mm()->dup_mmap() and
-it is a NOP for all cases but for Xen PV, where it is just doing the
-pinning of the PGD.
-
-Fixes: 3f4c8211d982 ("x86/mm: Use mm_alloc() in poking_init()")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230109150922.10578-1-jgross@suse.com
----
- arch/x86/mm/init.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index d398735..cb258f5 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -26,6 +26,7 @@
- #include <asm/pti.h>
- #include <asm/text-patching.h>
- #include <asm/memtype.h>
-+#include <asm/paravirt.h>
- 
- /*
-  * We need to define the tracepoints somewhere, and tlb.c
-@@ -804,6 +805,9 @@ void __init poking_init(void)
- 	poking_mm = mm_alloc();
- 	BUG_ON(!poking_mm);
- 
-+	/* Xen PV guests need the PGD to be pinned. */
-+	paravirt_arch_dup_mmap(NULL, poking_mm);
-+
- 	/*
- 	 * Randomize the poking address, but make sure that the following page
- 	 * will be mapped at the same PMD. We need 2 pages, so find space for 3,
