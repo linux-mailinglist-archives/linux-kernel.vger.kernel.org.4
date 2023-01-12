@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B045668430
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B1E668433
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239814AbjALUqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S232884AbjALUrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbjALUqB (ORCPT
+        with ESMTP id S240221AbjALUq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:46:01 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8DB7BDFE;
-        Thu, 12 Jan 2023 12:14:25 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id 18so28431757edw.7;
-        Thu, 12 Jan 2023 12:14:25 -0800 (PST)
+        Thu, 12 Jan 2023 15:46:56 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81E0BC93;
+        Thu, 12 Jan 2023 12:15:27 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id az7so19222592wrb.5;
+        Thu, 12 Jan 2023 12:15:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ioOXl34VLzTy8PWkypTLZzOP5yVDq5ecCNgcBHDa6WI=;
+        b=BinQEcudtyrVYQorZ1Xc0qlCGaoLXXXhQdR/vg5MAbBfEpSJ7OzjLd8LPJVV2+SLaL
+         jPO69xEndO/H6gkGgmIOv3OTL2rcMwfMHGK8HtmCSspux+aaNs7chTkch21ZCfie1DU1
+         kJ56l3hRI39NhBVL+nqxR1mwAz+ScjEC0HsuShjgaqYGlgFZuEV9MaFYLe3BjlKAZI11
+         k+PzEzHnNgqNsK4BIxEB78evcLVNdIAcjknw+obH1d9GN/uRM2mhba5Qn679OYxqvUML
+         vNTV4pJVt2AVLsRsI07VVP4y+mS5LFb+B0f8ZgOPkrRE2o9QXah2TGdihfH6UgoFwtkx
+         lgTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ENcQXNq3utNbMvThwA9waXitghPXyfLd3y7TavVSyBU=;
-        b=7kc0BsZva0coJoxh8M3uCS8L2TM/gM+0jBmV2ULVnn+YR+qRULiPKEAQWP/gStbzgt
-         x9FyA00DQRN76gBS4FcckYuQ8f3I01R/rV2rYy1zJI4y4xfsir/lKDWUI3epeknwIKJ5
-         Gy1MQSwb5TJ9P8He5YdWGAWKSWpix5CqP4VpY25EuEWCIY7hiYKbPJVrAareyVr3KOSn
-         LC5kAYeR6liG6kvsBq4a6U/jZOKRnEtN+thBHKHBP4Dp8GNdhj//s+lKkFZRFhd434cu
-         D1vfRUNUjE6N5cqhns2gG4PWICtlrj+FlD3/lUsgW9jMTOfcMCpxGOT2ydoAep+mY2M+
-         sghg==
-X-Gm-Message-State: AFqh2kojqWTH+d7a3/RDQ2rhI8oFyWHvpmepwTZLZAP1W/P1uCX5TtAQ
-        21EtnHr9oDmvjnIXlYlx2pZG0dDmGdQASYoJFiCjs43Fir4=
-X-Google-Smtp-Source: AMrXdXu++LaiLKKNORVVOe3znN5KTmtUlYiNj2dteonp2U1gT1nkkMNUO3MErjhJQ3f38SoNLoU/huAvk/5AOXwX+IQ=
-X-Received: by 2002:aa7:c853:0:b0:47e:4f0b:7ad9 with SMTP id
- g19-20020aa7c853000000b0047e4f0b7ad9mr5627141edt.239.1673554455025; Thu, 12
- Jan 2023 12:14:15 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ioOXl34VLzTy8PWkypTLZzOP5yVDq5ecCNgcBHDa6WI=;
+        b=JSZFyp7hze4QFYE6GN4Vj3fTHNZMZNxiTxcHdYEjX3i2TFWm8jgEny5ohYBcCrPCyM
+         jnmkI9Z+Tm6MBsdXDKwxO3fnKH5w/e1JIlmCYull57QhJDsTdOjdSYEaqVwLzi3il3dE
+         JKs5DXwAJMLVlFbdfFx9o2O31cIi6Aow8nU/OR60O1HA1SAQJik7kTwcUxVQgjWlCCe8
+         J4ReEiCy2DsOY2xee3TQAGPA/mqJvvz3f4wPsUw0fVuTl8RfR6/urITEPNrzUrqSbzud
+         yqBV8xVjgV6DtSmq9KBIxFH1RBCyInFoLzibulN+nSeWe4TN4lKYTaZmgOUA9dRfjeT8
+         8jeQ==
+X-Gm-Message-State: AFqh2koTmeGGHNt+zvKmJphRaSCSkv0YMW5MVuau+EuEsdp/q7thQeCo
+        tgCDugD+B31k2oMev8LM31Y=
+X-Google-Smtp-Source: AMrXdXtOwUJVLHA0oe5ZBy611e5s1ACzshDGzDZsnGVBwr/7k/njieWmGDzaa5GzFGBOGi6UDX/ZfA==
+X-Received: by 2002:a5d:680a:0:b0:2bd:c690:2e66 with SMTP id w10-20020a5d680a000000b002bdc6902e66mr4524671wru.5.1673554526300;
+        Thu, 12 Jan 2023 12:15:26 -0800 (PST)
+Received: from suse.localnet (host-79-42-161-127.retail.telecomitalia.it. [79.42.161.127])
+        by smtp.gmail.com with ESMTPSA id s2-20020adff802000000b00241bd7a7165sm17207728wrp.82.2023.01.12.12.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 12:15:25 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH v2 2/4] fs/sysv: Change the signature of dir_get_page()
+Date:   Thu, 12 Jan 2023 21:15:24 +0100
+Message-ID: <4773794.GXAFRqVoOG@suse>
+In-Reply-To: <Y74gRx6jLf2RHgdq@ZenIV>
+References: <20230109170639.19757-1-fmdefrancesco@gmail.com>
+ <20230109170639.19757-3-fmdefrancesco@gmail.com> <Y74gRx6jLf2RHgdq@ZenIV>
 MIME-Version: 1.0
-References: <2687749.mvXUDI8C0e@kreacher>
-In-Reply-To: <2687749.mvXUDI8C0e@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 21:14:03 +0100
-Message-ID: <CAJZ5v0j_bvD=_XOtBdMjOHkBe+BP0Mvm+vQx+LzK97Or=OZeag@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update the ACPICA development list address
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Bob Moore <robert.moore@intel.com>,
-        David Box <david.e.box@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 8:54 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The previous development list ACPICA address, devel@acpica.org, started
+On mercoled=EC 11 gennaio 2023 03:34:47 CET Al Viro wrote:
+> On Mon, Jan 09, 2023 at 06:06:37PM +0100, Fabio M. De Francesco wrote:
+> > -struct sysv_dir_entry * sysv_dotdot (struct inode *dir, struct page **=
+p)
+> > +struct sysv_dir_entry *sysv_dotdot(struct inode *dir, struct page **p)
+> >=20
+> >  {
+> >=20
+> > -	struct page *page =3D dir_get_page(dir, 0);
+> > -	struct sysv_dir_entry *de =3D NULL;
+> > +	struct page *page =3D NULL;
+> > +	struct sysv_dir_entry *de =3D dir_get_page(dir, 0, &page);
+> >=20
+> > -	if (!IS_ERR(page)) {
+> > -		de =3D (struct sysv_dir_entry*) page_address(page) + 1;
+> > +	if (!IS_ERR(de)) {
+> >=20
+> >  		*p =3D page;
+> >=20
+> > +		return (struct sysv_dir_entry *)page_address(page) + 1;
+> >=20
+> >  	}
+> >=20
+> > -	return de;
+> > +	return NULL;
+> >=20
+> >  }
+>=20
+> Would be better off with
+>=20
+> 	struct sysv_dir_entry *de =3D dir_get_page(dir, 0, p);
+>=20
+> 	if (!IS_ERR(de))
+> 		return de + 1;	// ".." is the second directory entry
+> 	return NULL;
+>=20
+> IMO...
 
-This should be "previous ACPICA development list address", sorry for
-the typo (will fix when applying the patch).
+I totally agree with you...
 
-> to bounce some time ago and it is not likely to be restored, so replace
-> it with a new one, acpica-devel@lists.linuxfoundation.org.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  MAINTAINERS |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Index: linux-pm/MAINTAINERS
-> ===================================================================
-> --- linux-pm.orig/MAINTAINERS
-> +++ linux-pm/MAINTAINERS
-> @@ -383,7 +383,7 @@ ACPI COMPONENT ARCHITECTURE (ACPICA)
->  M:     Robert Moore <robert.moore@intel.com>
->  M:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->  L:     linux-acpi@vger.kernel.org
-> -L:     devel@acpica.org
-> +L:     acpica-devel@lists.linuxfoundation.org
->  S:     Supported
->  W:     https://acpica.org/
->  W:     https://github.com/acpica/acpica/
->
->
->
+1) This comment is a good way to explain why we return "de + 1".
+2) "*p =3D page" is redundant, so it's not necessary because we assign the =
+out=20
+argument in dir_get_page() if and only if read_mapping_page() doesn't fail.
+
+I will send v3 asap.
+
+Thanks for your suggestions.
+
+=46abio
+
+
+
