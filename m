@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62F1666F43
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE738666F40
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 11:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237183AbjALKQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 05:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S231992AbjALKPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 05:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239871AbjALKPB (ORCPT
+        with ESMTP id S239865AbjALKPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 05:15:01 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E0362EC
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:25 -0800 (PST)
+        Thu, 12 Jan 2023 05:15:00 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8929F2BC3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 02:14:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673518465; x=1705054465;
+  t=1673518463; x=1705054463;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7okiIaj1mXjjqjJ5IKQzDQSQ9jvp5ruk3bnJVX6pMgw=;
-  b=AdultxN9Xm61l6JCLZ94HprPLAjpGPsuG3cbxLcv1iKqS9+WILhp1/jN
-   G1Pf5v7f+ACDaBknHCTplWRzE1LWMMNk9Gy2fgVV3hcjOUcL7qQKpUnD7
-   KMDemoVK01LNSX7LjzeOM0wTlZnvV5beeACdTuIFOV96LEUP2YnyiQRom
-   XjSIbtJOBJQLdT0yFYoZ8CkkfGm6YyLa4ar7NN4l7iSPE8yvzogf5hV6W
-   64jMPJaIoJp5vnZf3tBNm04uIxjgZlBS+gbRwP4+CBkG9XX1y2UzcxYfo
-   3EnFxIhYEeAWKnuC8Bg0kR0EWjqFg8IISYc5yqOiEX1Bz+m8I5NJZJm0Y
+  bh=oRXi0A8UvnI9/37rkmxYQJBeXqQb51nyJuKI+eZ9+L0=;
+  b=LRVZ29Tfyj3Wl0uGBie3wyX5tY98zZjbNQ9hUTpDKwcUVuc4KR2CfPNq
+   CNnL6jnLilgtAyok7W0PKACK7XGHlbX1fe77My3NGvvkqw2Elj0ZG2w33
+   3tmIqdrDsO8DeIw0fQlHG8e27qLs4H4wTFU1KAIOm0mpvOr8BYUBsrQBv
+   TWIxVPhn/K8kpBCufnFUiPfmScKC30spDWEf8PEAMUlIOeDcXcVs5RKSH
+   Cj3PdIixFOyS4E4VBkrpcpsMP+vtAdzKCm6n7Qu8FCwJXunotllPvIVKI
+   u1iZb7IhzBSJzdaFPc7lXP0XEH5zFNRT/LIACRB63W3iy3WYMr5oBtjs0
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="324899419"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350892187"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="324899419"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:24 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="903128291"
+   d="scan'208";a="350892187"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="659722914"
 X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="903128291"
+   d="scan'208";a="659722914"
 Received: from glieseu-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.52.1])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:21 -0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:14:20 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id A551D109AF5; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
+        id AEE8A109AF6; Thu, 12 Jan 2023 13:14:13 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@intel.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -50,9 +50,9 @@ Cc:     Kuppuswamy Sathyanarayanan
         Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
         linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 5/7] x86/tdx: Use ReportFatalError to report missing SEPT_VE_DISABLE
-Date:   Thu, 12 Jan 2023 13:14:05 +0300
-Message-Id: <20230112101407.24327-6-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 6/7] x86/tdx: Relax SEPT_VE_DISABLE check for debug TD
+Date:   Thu, 12 Jan 2023 13:14:06 +0300
+Message-Id: <20230112101407.24327-7-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
 References: <20230112101407.24327-1-kirill.shutemov@linux.intel.com>
@@ -68,93 +68,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux TDX guests require that the SEPT_VE_DISABLE "attribute" be set.
-If it is not set, the kernel is theoretically required to handle
-exceptions anywhere that kernel memory is accessed, including places
-like NMI handlers and in the syscall entry gap.
+A "SEPT #VE" occurs when a TDX guest touches memory that is not properly
+mapped into the "secure EPT".  This can be the result of hypervisor
+attacks or bugs, *OR* guest bugs.  Most notably, buggy guests might
+touch unaccepted memory for lots of different memory safety bugs like
+buffer overflows.
 
-Rather than even try to handle these exceptions, the kernel refuses to
-run if SEPT_VE_DISABLE is unset.
+TDX guests do not want to continue in the face of hypervisor attacks or
+hypervisor bugs.  They want to terminate as fast and safely as possible.
+SEPT_VE_DISABLE ensures that TDX guests *can't* continue in the face of
+these kinds of issues.
 
-However, the SEPT_VE_DISABLE detection and refusal code happens very
-early in boot, even before earlyprintk runs.  Calling panic() will
-effectively just hang the system.
+But, that causes a problem.  TDX guests that can't continue can't spit
+out oopses or other debugging info.  In essence SEPT_VE_DISABLE=1 guests
+are not debuggable.
 
-Instead, call a TDX-specific panic() function.  This makes a very simple
-TDVMCALL which gets a short error string out to the hypervisor without
-any console infrastructure.
-
-Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
-can encode message up to 64 bytes in eight registers.
+Relax the SEPT_VE_DISABLE check to warning on debug TD and panic() in
+the #VE handler on EPT-violation on private memory. It will produce
+useful backtrace.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+ arch/x86/coco/tdx/tdx.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 669d9e4f2901..56accf653709 100644
+index 56accf653709..2f4fbb7cd990 100644
 --- a/arch/x86/coco/tdx/tdx.c
 +++ b/arch/x86/coco/tdx/tdx.c
-@@ -22,6 +22,7 @@
+@@ -38,6 +38,7 @@
+ #define VE_GET_PORT_NUM(e)	((e) >> 16)
+ #define VE_IS_IO_STRING(e)	((e) & BIT(4))
  
- /* TDX hypercall Leaf IDs */
- #define TDVMCALL_MAP_GPA		0x10001
-+#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
++#define ATTR_DEBUG		BIT(0)
+ #define ATTR_SEPT_VE_DISABLE	BIT(28)
  
- /* MMIO direction */
- #define EPT_READ	0
-@@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
- }
- EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
- 
-+static void __noreturn tdx_panic(const char *msg)
-+{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
-+		.r12 = 0, /* Error code: 0 is Panic */
-+	};
-+	union {
-+		/* Define register order according to the GHCI */
-+		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
-+
-+		char str[64];
-+	} message;
-+
-+	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
-+	strncpy(message.str, msg, 64);
-+
-+	args.r8  = message.r8;
-+	args.r9  = message.r9;
-+	args.r14 = message.r14;
-+	args.r15 = message.r15;
-+	args.rdi = message.rdi;
-+	args.rsi = message.rsi;
-+	args.rbx = message.rbx;
-+	args.rdx = message.rdx;
-+
-+	/*
-+	 * Keep calling the hypercall in case VMM did not terminated
-+	 * the TD as it must.
-+	 */
-+	while (1) {
-+		__tdx_hypercall(&args, 0);
-+	}
-+}
-+
- static void tdx_parse_tdinfo(u64 *cc_mask)
- {
- 	struct tdx_module_output out;
-@@ -172,7 +208,7 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
+ /* TDX Module call error codes */
+@@ -207,8 +208,15 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
+ 	 * TD-private memory.  Only VMM-shared memory (MMIO) will #VE.
  	 */
  	td_attr = out.rdx;
- 	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
--		panic("TD misconfiguration: SEPT_VE_DISABLE attibute must be set.\n");
-+		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
+-	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
+-		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
++	if (!(td_attr & ATTR_SEPT_VE_DISABLE)) {
++		const char *msg = "TD misconfiguration: SEPT_VE_DISABLE attribute must be set.";
++
++		/* Relax SEPT_VE_DISABLE check for debug TD. */
++		if (td_attr & ATTR_DEBUG)
++			pr_warn("%s\n", msg);
++		else
++			tdx_panic(msg);
++	}
  }
  
  /*
+@@ -664,6 +672,11 @@ static int virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+ 	}
+ }
+ 
++static inline bool is_private_gpa(u64 gpa)
++{
++	return gpa == cc_mkenc(gpa);
++}
++
+ /*
+  * Handle the kernel #VE.
+  *
+@@ -682,6 +695,8 @@ static int virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+ 	case EXIT_REASON_CPUID:
+ 		return handle_cpuid(regs, ve);
+ 	case EXIT_REASON_EPT_VIOLATION:
++		if (is_private_gpa(ve->gpa))
++			panic("Unexpected EPT-violation on private memory.");
+ 		return handle_mmio(regs, ve);
+ 	case EXIT_REASON_IO_INSTRUCTION:
+ 		return handle_io(regs, ve);
 -- 
 2.38.2
 
