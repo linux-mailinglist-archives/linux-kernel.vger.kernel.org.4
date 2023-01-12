@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1002666E04
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53805666E0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 10:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239209AbjALJ0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 04:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S240098AbjALJ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 04:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239532AbjALJ0W (ORCPT
+        with ESMTP id S239884AbjALJ0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 04:26:22 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839DE2F788
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:16:22 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id p188so17961529yba.5
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 01:16:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dJZw00JqIDxZsH6vnh8PN+9M8r5KlwJJ+NaoX/4aFqY=;
-        b=DIk2ZbXAGqxIc98kTjzGTVFpdPsR+Vj+7STCldjr7kKAsQMHIDY6XZuyjF9Ycpq5n+
-         cjIhUcyrpttqhYnUX250OHS59gBEMg+8/n021gZ0xYc2j1lK+frz2V8qycTk6QMDr38o
-         mrMyDdPz6wExrKzN/V6B7S5+DXxaauBFz015mq2I8tk61GytE96CmJoVr4rfhu9g1Jt5
-         X7i+iGPOV/EM3u8+4zRRYkQp3wr9SJI9h7E+8lTSErtrHkGgm/3Ju5T/L0K+3QsXj8Tl
-         lYIaPDLjxw34ipX/x4xh9MpShxkSKemI2PIEMXbD5t2wJvLGWC7k35qCkFUY1kksUM+d
-         reVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dJZw00JqIDxZsH6vnh8PN+9M8r5KlwJJ+NaoX/4aFqY=;
-        b=phLnWC4sMk0D4NYP5CFQnJDmcbDps3Q6aXHK86MDjn6U8O+chW6C4MnLsP9mxlGFDi
-         0roKHD/Z9+M51Pni8r6u2tnFh2EOvZk17XwXymmEFfyrep+0sZGJSB3jROMWu4IKK/v7
-         fRkVcUEUQGjpVOgdhC+D6zhwQa7sJCxGL9QQJ1pbGkVBj7lHW4HQoF0ToJZpT7uifv0x
-         CNmvQt7j/4IrVpo2Qqvj8olmVc50wwYBgBvVGwX5H9ZkJn8VQRDCr6oMykN8Te1y18im
-         i0u9jhyHu8/Gk4Fliq1oMF8BtOzfH97yOxWYB8ZiqVsmDezNWsgjXUO3SbZZEDZnSgGh
-         vO5A==
-X-Gm-Message-State: AFqh2krltrzdIZ/kJrHIkjRcEqqjQabNmyIQHrQzAsEFdxQqeT8jcyjt
-        8UWiEBJtovpLFWaycsBoI/INCJqoKGJYQ7/yHd5l+Kmz7sqZb5vG
-X-Google-Smtp-Source: AMrXdXt2lVd6aozoCXeSt7NSXmiNzaXsWeeyaX9h6lphmB1XW0lYoL40g5Ni8QumcqWq083M2Et4gXna6qIiPWAonH0=
-X-Received: by 2002:a05:6902:1c1:b0:7c9:71e:e241 with SMTP id
- u1-20020a05690201c100b007c9071ee241mr139273ybh.242.1673514981561; Thu, 12 Jan
- 2023 01:16:21 -0800 (PST)
+        Thu, 12 Jan 2023 04:26:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6381AA34;
+        Thu, 12 Jan 2023 01:16:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 738A1B81DBE;
+        Thu, 12 Jan 2023 09:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2DDC433F0;
+        Thu, 12 Jan 2023 09:16:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673514990;
+        bh=DjSUWLCCoHmwa2yENKF2bU4H10yE7Rv4+InOgRsZT5c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=s5TvrV2ioxMpkk8qDko5R4U19/d6DJDQLJIZmFaNXAYEw4lmNVOqcnKweILqD5aer
+         sO/DOVreeS8mQoVqizHAOUCCA7fMF+NdkKHTV08DuKMd44QdE4DWLf4JhMlqw+56OH
+         PiXc7EuO4CjPuMnUbcMKz/6QZKAJO7j3dD3psfAfDM5fknzyeaP/prVReJeSqpRuoA
+         SJ7zMHg6LkC8dM19htGJXRPmBQxjKI/TU+MSSpPtmPWMKQflS75nv8wKrHzVhGHWOt
+         UTOEISTO0gk8YFvMxN+YIYrUu1RPeRCYMuvChIpW5XOUnZZfJfQ9P14DiX8VtrsKRx
+         o4bTgJ3vDtkIQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3 0/3] docs/mm: start filling out new structure
+Date:   Thu, 12 Jan 2023 11:16:13 +0200
+Message-Id: <20230112091616.824565-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <202301020356.dFruA4I5-lkp@intel.com> <aa722a69-8493-b449-c80c-a7cc1cf8a1b6@suse.cz>
- <CAG_fn=XmHKvpev4Gxv=SFOf2Kz0AwiuudXPqPjVJJo2gN=yOcg@mail.gmail.com> <953dda90-5a73-01f0-e5b7-2607e67dec13@suse.cz>
-In-Reply-To: <953dda90-5a73-01f0-e5b7-2607e67dec13@suse.cz>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 12 Jan 2023 10:15:45 +0100
-Message-ID: <CAG_fn=Vz47zvCDoUENX5kH7Giena+w=yifWbMo28ayAUKU7kyQ@mail.gmail.com>
-Subject: Re: mm/kmsan/instrumentation.c:41:26: warning: no previous prototype
- for function '__msan_metadata_ptr_for_load_n'
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Christoph Lameter <cl@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Would it also make sense to exclude KMSAN with CONFIG_SLUB_TINY?
->
-> If the root causes are fixed, then it's not necessary? AFAIK SLUB_TINY on=
-ly
-> indirectly caused KMSAN to be newly enabled in some configs, but there's =
-no
-> fundamental incompatibility that I know of.
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-So far I couldn't manage to boot KMSAN with SLUB_TINY, it just dies
-somewhere very early with the following stacktrace:
+Hi,
 
-#0  0xffffffff9044134a in native_halt () at ./arch/x86/include/asm/irqflags=
-.h:57
-#1  halt () at ./arch/x86/include/asm/irqflags.h:98
-#2  early_fixup_exception (regs=3Dregs@entry=3D0xffffffff8fa03d08,
-trapnr=3Dtrapnr@entry=3D14) at arch/x86/mm/extable.c:340
-#3  0xffffffff903c23db in do_early_exception (regs=3D0xffffffff8fa03d08,
-trapnr=3D14) at arch/x86/kernel/head64.c:424
-#4  0xffffffff903c214f in early_idt_handler_common () at
-arch/x86/kernel/head_64.S:483
-#5  0x0000000000000000 in ?? ()
+Last year at LSF/MM Matthew promptly created the new structure for MM
+documentation, but there still was no patches with content.
 
-The same kernel boots (to some extent) without CONFIG_KMSAN, so my
-guess is that we're instrumenting something that is not supposed to be
-instrumented.
-But SLUB_TINY doesn't add new source files, and it's also unlikely to
-kick in before mm_init(), right?
+I've started to work on it a while ago and I wanted to send it out in a
+more complete form, but I've got distracted and didn't have time to work
+on this.
 
---=20
-Alexander Potapenko
-Software Engineer
+With fast changes around struct page and the threat of Lorenzo's book,
+I've decided to send out what I have till now with a hope that we can
+really make this a collaborative effort with people filling paragraph
+here and there.
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+If somebody does not feel like sending formal patches, just send me the
+"raw" text my way and I'll deal with the rest.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+The text is relatively heavily formatted because I believe the target
+audience will prefer html version.
+
+v3:
+* rephrase ZONE_DMA(32) and ZONE_MOVABLE description (Michal)
+* add cross-reference to DMA API
+
+v2: https://lore.kernel.org/all/20230110152358.2641910-1-rppt@kernel.org
+* rephrase the paragraph inroducing zones (Lorenzo)
+* update formatting (Bagas)
+* add section stubs (Bagas)
+* small fixes here and there
+
+v1: https://lore.kernel.org/all/20230101094523.1522109-1-rppt@kernel.org
+
+Mike Rapoport (IBM) (3):
+  docs/core-api: DMA API: add page label to allow external references
+  docs/mm: Page Reclaim: add page label to allow external references
+  docs/mm: Physical Memory: add structure, introduction and nodes
+    description
+
+ Documentation/core-api/dma-api.rst   |   2 +
+ Documentation/mm/page_reclaim.rst    |   2 +
+ Documentation/mm/physical_memory.rst | 346 +++++++++++++++++++++++++++
+ 3 files changed, 350 insertions(+)
+
+-- 
+2.35.1
+
