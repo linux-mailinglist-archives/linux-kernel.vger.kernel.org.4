@@ -2,80 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C23E666B6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6A9666B6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 08:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235811AbjALHLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 02:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S236436AbjALHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 02:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235894AbjALHL3 (ORCPT
+        with ESMTP id S231268AbjALHNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 02:11:29 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA89630A
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:11:28 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id gz9-20020a17090b0ec900b002290bda1b07so40728pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 11 Jan 2023 23:11:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iPyrg0DtEaf3W1nn9XRn6Wwv8d6QmlMBX2Zvvut2+E=;
-        b=gdRCqJRulQK10XMSXaD5n2XL88L0eEvXNTIDbcSg5qZwi/HhkR3GKbevncdYCvIv8R
-         VBZmm42uZDImXVrIO6Vyod7qxfVyq5kCxucf6tKkxTV4rjzeIjWfBceyHw1CWXl57KT/
-         pvj9D72tjiMZ33wrtsvtxPRRGYAvggmpbgRP4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5iPyrg0DtEaf3W1nn9XRn6Wwv8d6QmlMBX2Zvvut2+E=;
-        b=MaLYhoero61QGUV2DZTa1pIBNzDqQteXM8GbPB8ACZh8rlMUDyp9O+jNVDFnQiGGmc
-         VQKudMa79RPmJnvdJ75MmoLROceyB1GMRHAuad+kfCylrBGLHiHfWx/nGDXG1XDDNE3L
-         /b51zZ8lHTJz2YSzG1nI/LvqapvySPr4nu5t1NlkxGJIPn3YFySjhgm90IFPfWuoSWZS
-         subD21ql95khIqVHNNPfKl6der9IX6h1pgwVhcM8KlXan0lbEUiktPCgRLaHCIY0hKKM
-         HWgmHxNSXCJaCHh7kG2/U5jVs8Nps7A6G5OwhhHeuZYWvg/WsivWPmO4J8eUzfBhQ1vi
-         9tMQ==
-X-Gm-Message-State: AFqh2kqVBnkDTOsrRKFtkxEpAcXopF2Mp30laRQSmqa7zhkRMk/zaT5V
-        AKmyl/4+WRT9+WcdYcgCwEKlqw==
-X-Google-Smtp-Source: AMrXdXvwt775kMrjXQjPrzPgckZnot3BpcRnCqeDcvcDFfzEFZX0ItcYurMciOQ85DNLjhNZoyr5vw==
-X-Received: by 2002:a17:90a:2bcd:b0:225:be4c:2586 with SMTP id n13-20020a17090a2bcd00b00225be4c2586mr68702819pje.45.1673507487855;
-        Wed, 11 Jan 2023 23:11:27 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id ms19-20020a17090b235300b002132f3e71c6sm10240471pjb.52.2023.01.11.23.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 23:11:27 -0800 (PST)
-Date:   Thu, 12 Jan 2023 16:11:23 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCHv2 3/4] zsmalloc: make zspage chain size configurable
-Message-ID: <Y7+ym2gT+XMuL/U5@google.com>
-References: <20230109033838.2779902-1-senozhatsky@chromium.org>
- <20230109033838.2779902-4-senozhatsky@chromium.org>
+        Thu, 12 Jan 2023 02:13:13 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9A0630A;
+        Wed, 11 Jan 2023 23:13:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EzBbLb40QqWwhuvboBeSb4dvP0j2G5ucxsmmwixeaLijxakaTkeE4iK68tB5CjkykxWQj+s6odyAYh9TcD/a/l1j6jLZm5D6temNnfcN/ybwvgOv332pMB1kqEN5XjvR3aHEyeckOStYV96ozOB5XjORMD34Y6R0XqlRpL7OwZusAOLKiO0eG/fk3XXsBA5NgnrQU6YuJgPLxwCu3KaK9Qbz1UcAiqgPMw1Rg5GD2Mj8CYeTzwAOt1em1Ngz0NGZDWnj3qLIsbkig2Ac0cez2Rnt54UmpDZRFyVCPC0dz3hN0oht1MIgBzbx5nuQgKSnL7nFtC/M8W3hXh7ODxC3UA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HvXHBbshstcaq8Bgey3XLTyULNkIUbeFC9M6u5ny3F0=;
+ b=aNGLRy90P/sWWFmXf9WWGyu1sD5yUV7UEe+Me5wtxomRcWJ40Ty8OKKKLj71ISMLfkesGy9yg83ahociEXe55gAqkLvmAdHCLs77dMCJ51EER3lU3ZAbrG7zbU0HAlNE8zY69pAsPFyScE3MCn1GrrhmqEy9k1EULkrZZ1kd8u0T8zLe0Vwbdufy5NcVw6hfr/Xs5PCTx5uClSCDC+8XlirvP+sUHoaH3OfZDurOJFzQx91mnKxisQwr6IO+35OLRAYAMp5LTME91Yt9Dy1YREx7Ck80CLxxlE/PCk7+wz4UgHVP1ogP35pkKKS/dNHkGEZUkMZXYqxUoeS+7x5SAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HvXHBbshstcaq8Bgey3XLTyULNkIUbeFC9M6u5ny3F0=;
+ b=OP+VoNX5FXcaAflt15H/XHGGfY1tDav8bJvxdwDu9vYXt3YVftMwuhjJTDZR5lDveP5OEyWrklfTQYEpurE7tCc//0Atfq45s1teyoqcl9gbZf8kNNjLqJdiBsBs+dgl5e/qxF3DCvJsAls2Kn2XPNksoatSEyUKDQOdRQXskgYuBxf8AZlR+C60IYsoCnYkVfgHuS+T1CwmMbYRwSRT8c241on6Ybs5PQZGl3Vh9ugamBUHGcsI18FqkYzkv6vwc4Zw4gYfCv3aeW3KwiN9fwJXtZLYoUrJAliygChgd15QOHDwa4Yefew8em1dcHby0CRZjpSHXFOxUADdbA04hw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by SN7PR12MB7912.namprd12.prod.outlook.com (2603:10b6:806:341::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
+ 2023 07:13:08 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::8ae8:c68e:57a9:6dae]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::8ae8:c68e:57a9:6dae%3]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
+ 07:13:08 +0000
+Message-ID: <1f1b328d-9324-dac9-a59c-13b5cda0bc8e@nvidia.com>
+Date:   Thu, 12 Jan 2023 12:42:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH V1] PCI/AER: Configure ECRC only AER is native
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, ruscur@russell.cc, oohall@gmail.com,
+        treding@nvidia.com, jonathanh@nvidia.com, mmaddireddy@nvidia.com,
+        kthota@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vsethi@nvidia.com,
+        linuxppc-dev@lists.ozlabs.org, sagar.tv@gmail.com
+References: <20230111231033.GA1714672@bhelgaas>
+ <880c4d3c-86d2-082c-bb58-8212adc67ff3@linux.intel.com>
+ <4ddef2c9-44b6-4a08-dbeb-428cd0864c55@nvidia.com>
+ <de13b6bd-813f-d0bb-3a92-ea1ad3db5d54@linux.intel.com>
+ <4a764544-189f-65e0-7d77-84995299721d@nvidia.com>
+ <0406e96b-56fc-d9bd-6ef8-88157ce64e1f@linux.intel.com>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <0406e96b-56fc-d9bd-6ef8-88157ce64e1f@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA0PR01CA0027.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:b8::20) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109033838.2779902-4-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2900:EE_|SN7PR12MB7912:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2259336a-606c-4579-9c38-08daf46c74cf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rhM04a7w8cpQI7xVJ9qlb8w4gDVEmwoT7+ynhBb417cNvhJDyl28HogO97+XQZfFWJ24uhgwi7E54P1cdFRvK4XhYKXbjFEBTZBI8mu0qOdj9aCycTOgiW26glUoQ/X4JAWwtLqL1E3d/4+6UyQVw0oIovJQkSFkqfxAIX590NLX9G2GJi3l3mm+ISedus5oDO7JQCpJMeMwtkJGgxauseio2cuoT6u0yMNogrheZBJ9dpeWtxasePVhA+34KaIVbcx9yLmWbYgnvBkP1MV2gpxgOLYX+lpRinFgKfgprZchG8j2h3/Mcom+W2Rn90P691Vo2X7RdaMWOX77BXwfamXR5NzUCmy6NuU5jRDejY2zZStI+BPnWl2rjmMcRYblFmf4XroO4Il7eApbEnZTXPqTDulWkVL2/orVQBAbeVgXX2yUDTVDE/wSHAMh6M/hho6GBwBJX4tlIDIZP97XwEGf+4ltXhYVJnrGEchMSkjTupQNC+ALb2PpHKVQaC21d0IqyrjAbWAQUy8u6vGoB39lQJzVeebD+4yj8P+KjuwIdxZPnlzDoNzJbBszCAzLBAlRJZrK05Av7ZSR4pBlryD8DjssAjioJS7MIRYKShboXlkbcLHCCLUJVVCxv5rlRTJ2cemf3nYTYoxxPQ0qrnxWG85ESyFzPyfvQ6BNeJ/1nbntcW9udh7w+BoABgw0KzF8AXCGGS1eeK/A4Z2X5qTxrwzKa1jfWG+3r+K2LxE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199015)(5660300002)(6666004)(2616005)(36756003)(2906002)(6506007)(31696002)(38100700002)(83380400001)(86362001)(6486002)(53546011)(316002)(6512007)(110136005)(186003)(478600001)(26005)(31686004)(8936002)(66946007)(4326008)(8676002)(66476007)(41300700001)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WlhmMEgrTW9VcDZRWXdNOStCZ2JRbCt3UmNRYkVjOExqS0xyQURMMEpQTTBU?=
+ =?utf-8?B?SkRyWnRNUE5HbE1Hd3FFRnNqd09kTVViL2tpRTB4YUU3b1JWM0Q3VVhNSm5a?=
+ =?utf-8?B?TDdQY091Y2ljdEQ2dXBTUTAvc3E2N0dwOXcwVks5MWpsei9KYWhKVkdmcEQ4?=
+ =?utf-8?B?TUdFeEE3UWdZYXJEemJhd0Z5MHppd2RoTGFFcWZWZ3FHNU03MUFuRUJrMHhw?=
+ =?utf-8?B?dVVHZWJYazNwYVlRTUJkSlBZcTJDWmdLL3V4YUp4cTYyMFNvWmxHTUMrNHdF?=
+ =?utf-8?B?QmduY21FN3pQZWN2L0NBQy9YSUh6UEVTMjZMWG5neDliWjJpYkpEaGtHcDFS?=
+ =?utf-8?B?aHRrSjIwZWgwOXVPTTFXSE5kOE55M21jcHAxQnJDZFgrVVV0VDI5bms0dlNM?=
+ =?utf-8?B?dFhMR0EvMTErVHpBRFphV2pKUDJHamNPNzNseStVd21TZi9nVWdQUlNlcWt6?=
+ =?utf-8?B?SVhmSXRNVWc4M1JtSnU3eTVybDFrWEJpYTFTYVFDMXkrSFpidy9VdTJtbkRi?=
+ =?utf-8?B?TTVwdmorSVBBcm00R0RaYzdHVzJ5VC9xaXByb0dzNW10ZFBxS291Kyt1dFlo?=
+ =?utf-8?B?N0crZnNZcE8xMW4zMFNZS01pOFQ5eWUvaThtaGNRLzNuZlNZM2prZ3BuUjFp?=
+ =?utf-8?B?ZG1KMDJPbVRDR0kyM2o3eGd6aC8rYUlsYWIwTUtjMlhIWWNFQ2NnOFRCTExs?=
+ =?utf-8?B?UUpobVpyS2lRd2RIOUZwSVZQU0ZMem1WaGhlOGJBMnB4RHBJdldQUUpxZUIr?=
+ =?utf-8?B?aGtRbUZSUE81Qkx0T3hjMWlaMXAxN3k4N1IzRFc4ZUw1ZVZPY0M0cnB3dkJX?=
+ =?utf-8?B?N3ZPc3g1RnE0b1ZoK3lMZWc5K05Ya2JHQ040cW0xcnZMRWJxdFZTK2lCVG9F?=
+ =?utf-8?B?N0tMOHppMEdBclorTll0WXhqa2xGNXptTEtvckdxU0ZMeVhUREl6VW1oRjkz?=
+ =?utf-8?B?THFMSmF1b1VVRXNtNVgyY1FlSzBsM2pXU3YvejUzYWFLa1V4dDV5RVVIbENs?=
+ =?utf-8?B?RHUrT0RKa29BSVVETENybjJtclBNSHpHWnIwdWs1ckZBQXJqQThVRTdBWkFy?=
+ =?utf-8?B?dXg3R2lLYS9mS0tOdlF5NktHeWxhZVhHLzAwQ3VFd2dtWXNpemdtc2xnanJV?=
+ =?utf-8?B?VnNuS1Z6UG1SQTF0cmFsWGlhMURxSWNmZUxvRkVKRVBBWEdGUXlWZjhnZzNZ?=
+ =?utf-8?B?TGVTOW1oNlROWGFKRFRvOVVZVFJTUXRuUHMvcmVXWUppQmxubUlTME0xYnFI?=
+ =?utf-8?B?UnRDSTYvMmRvY3g1bU1xNWVydzBTdWV2T1RBVTBrVGUyMDcyTGp1cWROQS9w?=
+ =?utf-8?B?SUhGc2trTW51L2FhSnltdWpXYk55MDBlSkJVKzBuQzFqNE5qREpQOWxmUmhP?=
+ =?utf-8?B?ZVRPUE56eFNCdm1GbFRPWXl6eGRqbFlzYmVXQythOTNzanY2VUUwbkZtb2lw?=
+ =?utf-8?B?dU1FYW4zM0pWcW5sZ1NKLy9yeGZQdVJ4NnBSSGV1YjFOYUZKb3V3YlJhaVhC?=
+ =?utf-8?B?QlZSWlZ0bWhScjBWYU9ZeHF3YUtRNEhmSTlnbzBnS2t5M2ZnMllBaWQ5c21E?=
+ =?utf-8?B?ak0xUFBtZlpVRVI5WHpVZHdxdWdMenZENjhtVVlZMjFMZEU3TEtoTWUrK09F?=
+ =?utf-8?B?T2JsV1VlRTQ5OGlWanJmVGZXUmVNemJ1WmhSSmVkVVF0TWc5NFAzdloyaWM0?=
+ =?utf-8?B?a0JRWFFhZ2ZhZzRyazZtcEVudGM3MFU0KzV3WmowVG5qQVEra0RjQUZaTkVX?=
+ =?utf-8?B?bmhYenFLeit3ZGowbTI3V0tFZmFsMUFxaWpwbHFKdUJVK1FadnFibVdvejh1?=
+ =?utf-8?B?K3dnSlBXZFhmaEczd056dkFsSVg5MkhRQ2pFR0h1UFlqbUZXcXF3TXRKMEwy?=
+ =?utf-8?B?T1pGT2hFWjQ5bm9zQWJEWmpWSkcrZWhPMHM0My9MMU5xcS9HaGFPTlMvTWwx?=
+ =?utf-8?B?RmRxVXB0TUkzcENJVjB3S1M5OHBQYVMvRUkwcXQxRm9QUWs1cXJDWmJyUEYv?=
+ =?utf-8?B?dWZaaW16amhnQWhaZFJnWldBSzRyWnNPYXBSMDh5WEZQMXd4RE8wVEZQdHJu?=
+ =?utf-8?B?VTJ1M3lwc0dKcWxDbUljRzlvQXZhdzFEVkYyRUdVaFp4clA0YXliMmxaNEpv?=
+ =?utf-8?Q?MhCzipGsn9vgkJNH8D7J4ZY1k?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2259336a-606c-4579-9c38-08daf46c74cf
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 07:13:08.3348
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NFOm2UyBzq50Nte62n2RBgF9u6yZVZWwYtzk0T0xoeGsxSvfANJm50w+QPLedZl4+yoBdP7B6Kb9iarvNfI5lA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7912
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/01/09 12:38), Sergey Senozhatsky wrote:
-> Remove hard coded limit on the maximum number of physical
-> pages per-zspage.
-> 
-> This will allow tuning of zsmalloc pool as zspage chain
-> size changes `pages per-zspage` and `objects per-zspage`
-> characteristics of size classes which also affects size
-> classes clustering (the way size classes are merged).
 
-Andrew I have small fixup patch (0day build bot failure on
-parisc64). How would you prefer to handle this?
+
+On 1/12/2023 10:36 AM, Sathyanarayanan Kuppuswamy wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 1/11/23 8:59 PM, Vidya Sagar wrote:
+>>
+>>
+>> On 1/12/2023 9:18 AM, Sathyanarayanan Kuppuswamy wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> On 1/11/23 7:33 PM, Vidya Sagar wrote:
+>>>> I think we still need bios option. For example, consider a system where BIOS needs to keep ECRC enabled for integrity reasons but if kernel doesn't want it for perf reasons, then, kernel can always use 'ecrc=off' option.
+>>>
+>>> I agree that "on" and "off" option makes sense. Since the kernel defaults ecrc setting to "bios", why again allow it as a command line option?
+>>
+>> Agree. "on" and "off" are fine but "default" is redundant. Do you want me to push a change to remove that as part of this patch itself? I think
+>> it is more like a cleanup and should go separately.
+> 
+> IMO, the "bios" option cleanup and command line update from Bjorn can be in one patch, and your change could be a separate patch. But it is
+> up to you and Bjorn.
+
+I think Bjorn's command line suggestion should go along with my patch 
+otherwise the ECRC control through command line doesn't work if OS 
+doesn't own the AER. So, it helps to make it explicit that the 'ecrc=' 
+option works only if either kernel has native AER control or 
+'pcie_ports' is set to 'native'
+
+> 
+>>
+>>>
+>>> --
+>>> Sathyanarayanan Kuppuswamy
+>>> Linux Kernel Developer
+> 
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
