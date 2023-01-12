@@ -2,134 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B8266835B
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB8566836F
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 21:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240629AbjALUHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 15:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S241031AbjALUH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 15:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241711AbjALUEo (ORCPT
+        with ESMTP id S241389AbjALUDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 15:04:44 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1EAF02
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 12:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673553720; x=1705089720;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e37VGWZJt5D4i22LVtIZLifzbTAg/lau23PCib3BX/M=;
-  b=bCMvjiTG/ho/kifhzeDmVRehAYdRxFh2ZXcDdv1oqo+7ia5aZ5CfH/qH
-   BR7TLnw4SdEG76BvWX+LxjFj4QlDR2bf2TnGSw6NduG9py4nnjdTbDWJE
-   yMOFOIpyyQCgfbjk/b4LqVhSSVOvC1ja4D3t8nqlwLXXt+eFeToFAEi4V
-   f58xn9rlpYqM1ALoqG5EMwOeskDrDXNwoa6tJZGpKVmu4XRtadTRIEcJF
-   jKdlfIrqUw1WVahJgYQxCFDP5SFV6dinWkINX/H0uqH9qFdi+psSYrjZp
-   UQAbJZmMOLBgioR0B0bGe2akpHdiCbE38fZ8/dkrn262jY9dVIwqcGo9b
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="325867126"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="325867126"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 12:01:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="657959932"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="657959932"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga002.jf.intel.com with ESMTP; 12 Jan 2023 12:01:29 -0800
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     steve.wahl@hpe.com, alexander.antonov@linux.intel.com,
-        ak@linux.intel.com, eranian@google.com, namhyung@kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH RESEND 5/5] perf/x86/uncore: Don't WARN_ON_ONCE() for a broken discovery table
-Date:   Thu, 12 Jan 2023 12:01:05 -0800
-Message-Id: <20230112200105.733466-6-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230112200105.733466-1-kan.liang@linux.intel.com>
-References: <20230112200105.733466-1-kan.liang@linux.intel.com>
+        Thu, 12 Jan 2023 15:03:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4252713E2A;
+        Thu, 12 Jan 2023 12:01:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0FBDB81E62;
+        Thu, 12 Jan 2023 20:01:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28061C433D2;
+        Thu, 12 Jan 2023 20:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673553688;
+        bh=DjplknG/Og42vIVzT/q7FbntQdQMbrnKJqFFsTyhjNM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=EUafdQGi6kPVntwFcsX8dQ++eMfDpAt4hRufXGYp4rn3498p9O5an8Dtzb32f8VZO
+         /0dwxqLx9EiZWyrofGYjXdGydKTREAjzdQvusJ0Ow7D4V0fv83WO6VIMOVK93JIW2S
+         WKNFKVIBv7VwC+kTD5h1WgF5etFBp2YPn8S3ZXmT1Seav9nsmaQ1vhNBslaNNmcYRn
+         zsCLB4TmasZgZxWFa1UpanGfaUnDdJStrP+pk1HardQUH3NiBxgoCCXTezH0ic2ZBw
+         6otuSPV9m9aONvZu3dzL7IfHqeZgMZCL4VALktP1HibdXNi78cOSWjN0jogQQsvptF
+         31XhLFJQie5QQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, stern@rowland.harvard.edu,
+        alexandre.belloni@bootlin.com, brgl@bgdev.pl,
+        damien.lemoal@opensource.wdc.com, dmitry.torokhov@gmail.com,
+        linux@dominikbrodowski.net, balbi@kernel.org,
+        gregkh@linuxfoundation.org, deller@gmx.de, perex@perex.cz,
+        jingoohan1@gmail.com, lee@kernel.org, kernel@wantstofly.org,
+        lgirdwood@gmail.com, linus.walleij@linaro.org,
+        marek.vasut@gmail.com, mkpetch@internode.on.net,
+        miquel.raynal@bootlin.com, lost.distance@yahoo.com,
+        philipp.zabel@gmail.com, linux@armlinux.org.uk, sre@kernel.org,
+        slapin@ossfans.org, s.shtylyov@omp.ru, sudipm.mukherjee@gmail.com,
+        tiwai@suse.com, ulf.hansson@linaro.org, vigneshr@ti.com,
+        viresh.kumar@linaro.org, wsa+renesas@sang-engineering.com,
+        linux-pm@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
+References: <20230105134622.254560-1-arnd@kernel.org>
+Subject: Re: (subset) [PATCH v2 00/27] ARM: pxa: remove all unused boards&drivers
+Message-Id: <167355367885.2500964.3629822486060649314.b4-ty@kernel.org>
+Date:   Thu, 12 Jan 2023 20:01:18 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Thu, 05 Jan 2023 14:45:55 +0100, Arnd Bergmann wrote:
+> Most of the legacy PXA board files were marked as unused in linux-5.19 and
+> can get removed in linux-6.3. There is support for pxa250/pxa270/pxa300
+> using devicetree already, which supports a number of boards, but progress
+> on converting the remaining ones has stalled over the past few years.
+> 
+> The two boards that are left in the tree for now are the three 'sharpsl'
+> variants (spitz/akita/borzoi) and the 'gumstix' family of machines.
+> Both of these are supported by qemu, which can be helpful for completing
+> the DT conversion.
+> 
+> [...]
 
-The kernel warning message is triggered, when SPR MCC is used.
+Applied to
 
-[   17.945331] ------------[ cut here ]------------
-[   17.946305] WARNING: CPU: 65 PID: 1 at
-arch/x86/events/intel/uncore_discovery.c:184
-intel_uncore_has_discovery_tables+0x4c0/0x65c
-[   17.946305] Modules linked in:
-[   17.946305] CPU: 65 PID: 1 Comm: swapper/0 Not tainted
-5.4.17-2136.313.1-X10-2c+ #4
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-It's caused by the broken discovery table of UPI.
+Thanks!
 
-The discovery tables are from hardware. Except for dropping the broken
-information, there is nothing Linux can do. Using WARN_ON_ONCE() is
-overkilled.
+[14/27] ASoC: PXA: make SND_PXA2XX_SOC_AC97 user-selectable
+        commit: 5eab9265759e2fb042aa452931c3d06ab7ab8dae
+[15/27] ASoC: pxa: remove unused board support
+        (no commit info)
 
-Use the pr_info() to replace WARN_ON_ONCE(), and specify what uncore unit
-is dropped and the reason.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/uncore_discovery.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-diff --git a/arch/x86/events/intel/uncore_discovery.c b/arch/x86/events/intel/uncore_discovery.c
-index abb51191f5af..cb488e41807c 100644
---- a/arch/x86/events/intel/uncore_discovery.c
-+++ b/arch/x86/events/intel/uncore_discovery.c
-@@ -128,13 +128,21 @@ uncore_insert_box_info(struct uncore_unit_discovery *unit,
- 	unsigned int *box_offset, *ids;
- 	int i;
- 
--	if (WARN_ON_ONCE(!unit->ctl || !unit->ctl_offset || !unit->ctr_offset))
-+	if (!unit->ctl || !unit->ctl_offset || !unit->ctr_offset) {
-+		pr_info("Invalid address is detected for uncore type %d box %d, "
-+			"Disable the uncore unit.\n",
-+			unit->box_type, unit->box_id);
- 		return;
-+	}
- 
- 	if (parsed) {
- 		type = search_uncore_discovery_type(unit->box_type);
--		if (WARN_ON_ONCE(!type))
-+		if (!type) {
-+			pr_info("A spurious uncore type %d is detected, "
-+				"Disable the uncore type.\n",
-+				unit->box_type);
- 			return;
-+		}
- 		/* Store the first box of each die */
- 		if (!type->box_ctrl_die[die])
- 			type->box_ctrl_die[die] = unit->ctl;
-@@ -169,8 +177,12 @@ uncore_insert_box_info(struct uncore_unit_discovery *unit,
- 		ids[i] = type->ids[i];
- 		box_offset[i] = type->box_offset[i];
- 
--		if (WARN_ON_ONCE(unit->box_id == ids[i]))
-+		if (unit->box_id == ids[i]) {
-+			pr_info("Duplicate uncore type %d box ID %d is detected, "
-+				"Drop the duplicate uncore unit.\n",
-+				unit->box_type, unit->box_id);
- 			goto free_ids;
-+		}
- 	}
- 	ids[i] = unit->box_id;
- 	box_offset[i] = unit->ctl - type->box_ctrl;
--- 
-2.35.1
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
