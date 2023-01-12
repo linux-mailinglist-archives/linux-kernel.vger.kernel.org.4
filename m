@@ -2,105 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9726678F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 648FB667900
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 16:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbjALPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 10:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229800AbjALPWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 10:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbjALPVP (ORCPT
+        with ESMTP id S231934AbjALPWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:21:15 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DB0CD9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:13:55 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id i17so4648706ila.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 07:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lGaCHlOeK+4Xeu53RFKDmMgqs3djpjqDBc2Iko3AJSA=;
-        b=gOyKE6Beuz98CkiYz+AOKP/wt4GwJaVJb5DYlxOAqgTlFjdHyNRhCp8XAzKxRetqa7
-         nWPV/dJxL8n++6pEnI0mi/LVul2YqNlg82HjKqank6/SA/Sx9cJRaKGhUnWTpq+fV+dZ
-         9b7QeuGldoYmGFw33Imdg1LnscE1V3ezAOi/s=
+        Thu, 12 Jan 2023 10:22:12 -0500
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B82D2DB;
+        Thu, 12 Jan 2023 07:14:54 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id e76so18981793ybh.11;
+        Thu, 12 Jan 2023 07:14:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lGaCHlOeK+4Xeu53RFKDmMgqs3djpjqDBc2Iko3AJSA=;
-        b=fmQHPPvu9P12pekfnzE0tadn7jLWlEnNJqsxct+7n+el3bE6A+TmTSyEulU2Xun3eX
-         eSUJDpJ60zjRGxWPTbxpoSuJD6K5D3Q7VK/SJOanNopGKEieZp0Sb5O5StI3bYrJTyug
-         n8C8xGut7wYT4yx6KI2SLUYNF/6nbbWJLmgm+OCFwxqiZJIluFabgAT8HbP+IzsCaRfj
-         HSYgUHdchp9OhLKLPVStGqA61FUPYA2N4SWP6i3r5uiwPj7CFGq83AM89WhjjCY1SJsq
-         hoqSu9VBGcjhUqK1zYH2ETsH4ogWsFMy7eKr6P05WqGpJiBUKfw25LknnKR0+onGo1dP
-         ILSg==
-X-Gm-Message-State: AFqh2kqS99FQhfe0PWOjkjuZbqclb0TbYkR8JrpXKdTz5em8lRr+kGIC
-        tOtnxFgas1rKomNCEl0ATqrgtg==
-X-Google-Smtp-Source: AMrXdXv7AEI45wWpGwkSR5qrc8D6pSJLOn1EhbZ60iPCVQgJGC7n2zM+7uSSAmDuY3KTJHo84yAMWw==
-X-Received: by 2002:a92:ce03:0:b0:30d:bf1a:b174 with SMTP id b3-20020a92ce03000000b0030dbf1ab174mr1109422ilo.1.1673536434448;
-        Thu, 12 Jan 2023 07:13:54 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a14-20020a027a0e000000b0038a5370658bsm5384767jac.6.2023.01.12.07.13.53
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Y6qY7Xi7w4nejlKSxi1fYejKBcc6r8h/6CzmR1L1Uk=;
+        b=cfetF7YgvWZzeA6YsIlEdpbTlNWGHzLPtMw//oNCDwfLtzh6FtXTIP6k66gocUMj2S
+         5J0x4g0XM7m6GWwuIJqzK7nUOUnJbQkXkuSlb4SaKfB/BMJY66/5uCJ+45a1dtpo2+aQ
+         GEV9bpbA8029gGqw1TouUnDLiKSx5/avqDQFPl15ln/MWva2mqVm7MXmSWLl1XkD7Bq8
+         B0zS0aOSG1yo/e860McBKbVa9jP9Ez0CuRNdgmmeOBYIj7OPPJXwfOLSoF8Em7Fy6ImO
+         bsxV8aN/zpLjDwH04YSfv1BPjPhw/H7VHWhQ7HhdLZifjJJmbgKrfYIietCl/iPny3Sd
+         dQbA==
+X-Gm-Message-State: AFqh2kpanpBn8YaF8hA6bKD9F+mWzterFr66FhWwWZS5BcYTDbV5nVeq
+        +2va56hV3AQGMYHCJlLH5oLfa/HOqo9uzA==
+X-Google-Smtp-Source: AMrXdXsWa0RSqrqbDnzDudymKVXjSLCYLCOdQSyE3q0oSko+1ZA/oq04ZzvN+XUHAix3cI40mmoKZg==
+X-Received: by 2002:a25:ce82:0:b0:6fa:392c:78a2 with SMTP id x124-20020a25ce82000000b006fa392c78a2mr69026790ybe.5.1673536493315;
+        Thu, 12 Jan 2023 07:14:53 -0800 (PST)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id c23-20020a05620a269700b006fb11eee465sm11121485qkp.64.2023.01.12.07.14.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 07:13:53 -0800 (PST)
-Message-ID: <4c9a5640-9ebf-db87-fcb0-b076b615e4e4@linuxfoundation.org>
-Date:   Thu, 12 Jan 2023 08:13:52 -0700
+        Thu, 12 Jan 2023 07:14:52 -0800 (PST)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-4bf16baa865so242942587b3.13;
+        Thu, 12 Jan 2023 07:14:51 -0800 (PST)
+X-Received: by 2002:a81:1a16:0:b0:46f:bd6:957d with SMTP id
+ a22-20020a811a16000000b0046f0bd6957dmr1837351ywa.383.1673536491636; Thu, 12
+ Jan 2023 07:14:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: =?UTF-8?Q?Re=3a_kernel_BUG=c2=a0at_mm/usercopy=2ec_when_using_usbip?=
-Content-Language: en-US
-To:     =?UTF-8?B?U29zdGjDqG5lIEd1w6lkb24=?= <sosthene@nitrokey.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robin Krahl <robin@nitrokey.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <aa686f98-c9a3-6225-18e8-7ca57678ce4a@nitrokey.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <aa686f98-c9a3-6225-18e8-7ca57678ce4a@nitrokey.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112133942.58471-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112133942.58471-1-andriy.shevchenko@linux.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 12 Jan 2023 16:14:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXSc-H5TKBGisthv3DH3sZmF3fV_15FuMEt=typwTWUtA@mail.gmail.com>
+Message-ID: <CAMuHMdXSc-H5TKBGisthv3DH3sZmF3fV_15FuMEt=typwTWUtA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: Remove unused and obsoleted irq_to_gpio()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 01:40, Sosthène Guédon wrote:
-> Hi!
-> 
-> I have stumbled upon a bug that is triggered reliably by using usbip.
-> 
-> We are using usbip to test our firmware. usbip attach works, but once `opgpcard-tools` interacts with the firmware through pcscd, a kernel bug happens.
-> Then usbip stops working, and `lsusb` as well as other tools interacting with usb devices hang.
-> The symptoms are similar to https://bugzilla.kernel.org/show_bug.cgi?id=215487 but the kernel bug is not the same (see attached dmesg logs).
-> 
-> The bug can be reproduced on arch (Linux archlinux 6.1.4-arch1-1 #1 SMP PREEMPT_DYNAMIC Sat, 07 Jan 2023 15:10:07 +0000 x86_64 GNU/Linux
-> ) and debian (Linux nitropc 5.10.0-19-amd64 #1 SMP Debian 5.10.149-2 (2022-10-21) x86_64 GNU/Linux), though the reproduction is not minimal.
-> 
-> To reproduce the bug on Arch Linux, with the packages rust, pcsclite, and openpgp-card-tools installed:
-> 
-> - Compile and run the usbip runner from this PR: https://github.com/Nitrokey/nitrokey-3-firmware/pull/149 (`cd nitrokey-3-firmware/runners/usbip && cargo run --features alpha`)
-> - Run `usbip attach -r localhost -b 1-1`
-> - Run `pcscd`
-> - Run `opgpcard status`
-> 
-> The bug should happen.
-> 
+CC greg
 
-Thank you for reporting the problem. I will take a look and
-get back to you with possible fix. Will you be able to test
-fixes?
+On Thu, Jan 12, 2023 at 2:39 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> irq_to_gpio() is legacy and unused API, remove it for good.
+>
+> This leaves gpio_to_irq() as it's used yet in many places.
+> Nevertheless, removal of its counterpart is a good signal
+> to whoever even trying to consider using them that do not.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  Documentation/driver-api/gpio/legacy.rst             |  8 --------
+>  .../translations/zh_CN/driver-api/gpio/legacy.rst    |  7 -------
+>  Documentation/translations/zh_TW/gpio.txt            |  7 -------
+>  arch/m68k/include/asm/gpio.h                         |  7 -------
+>  arch/sh/include/asm/gpio.h                           |  5 -----
+>  include/linux/gpio.h                                 | 12 ------------
+>  6 files changed, 46 deletions(-)
 
-thanks,
--- Shuah
+[...]
+
+> --- a/arch/m68k/include/asm/gpio.h
+> +++ b/arch/m68k/include/asm/gpio.h
+> @@ -66,13 +66,6 @@ static inline int gpio_to_irq(unsigned gpio)
+>                 return __gpio_to_irq(gpio);
+>  }
+>
+> -static inline int irq_to_gpio(unsigned irq)
+> -{
+> -       return (irq >= MCFGPIO_IRQ_VECBASE &&
+> -               irq < (MCFGPIO_IRQ_VECBASE + MCFGPIO_IRQ_MAX)) ?
+> -               irq - MCFGPIO_IRQ_VECBASE : -ENXIO;
+> -}
+> -
+>  static inline int gpio_cansleep(unsigned gpio)
+>  {
+>         return gpio < MCFGPIO_PIN_MAX ? 0 : __gpio_cansleep(gpio);
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
