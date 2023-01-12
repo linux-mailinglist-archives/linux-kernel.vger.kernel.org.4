@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46B26672BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44696672BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 12 Jan 2023 13:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbjALM5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 07:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S232545AbjALM5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 07:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjALM4n (ORCPT
+        with ESMTP id S231582AbjALM4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 07:56:43 -0500
+        Thu, 12 Jan 2023 07:56:46 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51F24914A;
-        Thu, 12 Jan 2023 04:56:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DAADEC9;
+        Thu, 12 Jan 2023 04:56:46 -0800 (PST)
 Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 830346602DB1;
-        Thu, 12 Jan 2023 12:56:41 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF6A36602DBB;
+        Thu, 12 Jan 2023 12:56:44 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673528201;
-        bh=AVEg4DSMK0gqYca27eD54R157QB5YV2sWChYYaBFpmI=;
+        s=mail; t=1673528204;
+        bh=GtQZT2nN8QVz9LN/mUHoZT/CUo6gIVaMFXE6EeZP8+w=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=LM1vgt+pOaabBAJ85FdbLo9wq5mUT0w0x5nAszJ37VGijYHKcIXfdOuoVfBt0gFKM
-         6V0TsNYP9Ceg5NVgCMb5s0IZWo5rZ1dbo1r5fvwCxpo0VEyHldVhngCZ0XpZuXi7cB
-         aNfDgYu++punO6h4oxFkcZ7KjeWXaYxHFhfFxOuq9Le8mNU8nv04VPbmGJwPlU5+L9
-         H+xIH29P1Jx2f8ei32MK42TPAd34QOcwHrFPJGwMZzJFHYJ2kzjYxAbPEAb3fIUCjd
-         6xgX3fHo389Rsu+JdAl860N6hgqDWhXpo04SbF0lJbmDCfInbfMID2Zwd3C7+fJY9z
-         H5eTXOOfjX8wQ==
+        b=f3+wXOfId313ZjMh/uj5YyArXZ6QYSDBTl+YVjkRP7vNA+aP9XlSN7x31pOqpO/i0
+         U3XO5+2Qtclgr/r+hSRfU/AN+LfDrxKmTKLaRJuIt2EUryjNtbN9xgdsOhK7h445kP
+         9FvsvDF8lu94aevG1t2G5NA3coRX2H2u8epSH5srfqlProjYdCGS9eNDwMT2iSdB9l
+         1BJQVrrxC3m+tqhcXg5cESXNUPLHcm/3LfdAyEYwt3VxQXOv7lH85o7SeNe7WSrkmm
+         MCLS5aMFnELvLxFYZq+jkhufKL3Ahp0BsIi7a8uSaCkF3/IrYc/t70/+3uFD2ZFm3S
+         qwQKrW4BVuUHA==
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-Date:   Thu, 12 Jan 2023 13:56:19 +0100
-Subject: [PATCH v2 04/12] staging: media: rkvdec: Block start streaming until
- both queues run
+Date:   Thu, 12 Jan 2023 13:56:20 +0100
+Subject: [PATCH v2 05/12] staging: media: rkvdec: Add SPS structure to
+ internal context
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230101-patch-series-v2-6-2-rc1-v2-4-fa1897efac14@collabora.com>
+Message-Id: <20230101-patch-series-v2-6-2-rc1-v2-5-fa1897efac14@collabora.com>
 References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
 In-Reply-To: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -57,11 +57,11 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         Sebastian Fricke <sebastian.fricke@collabora.com>
 X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673528186; l=1025;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673528186; l=801;
  i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
- bh=AVEg4DSMK0gqYca27eD54R157QB5YV2sWChYYaBFpmI=;
- b=4fInMsBgcT6jf30p/7TvMJW1s4sjmIUMu2MIX6uCwRuxM7iBhvTpC/00Nu4xtEZo2TrulpGwWaVw
- pfVDB17lDTsDfzQFYB1UAn0aetGnBIbCWNnkmQVCdoIqa/IR7mT0
+ bh=GtQZT2nN8QVz9LN/mUHoZT/CUo6gIVaMFXE6EeZP8+w=;
+ b=OjC0Py2sReXxL+AYZYLXHyPGdbsOwyx+uqaYl4Y1kEeTAbxmGZkntvZnq3XKEtOeM85QWw+Ztya4
+ wmZhOV/OBs/BI5WNTao0NajI7uAMZXp/pcpslmQlBD+AoRw3Kxzc
 X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
  pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,32 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that both the CAPTURE and the OUTPUT queue are running (e.g. busy
--> have buffers allocated) before starting the actual streaming process.
+Prepare storing the SPS structure for HEVC & H264 in the internal
+context of the rkvdec instance. This structure is used to figure out
+which capture queue format is appropriate for decoding.
 
 Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/staging/media/rkvdec/rkvdec.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index c849f6c20279..e0e95d06e216 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -562,6 +562,13 @@ static int rkvdec_start_streaming(struct vb2_queue *q, unsigned int count)
- 	if (V4L2_TYPE_IS_CAPTURE(q->type))
- 		return 0;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 633335ebb9c4..332126e7b812 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -105,6 +105,7 @@ struct rkvdec_ctx {
+ 	struct v4l2_ctrl_handler ctrl_hdl;
+ 	struct rkvdec_dev *dev;
+ 	void *priv;
++	void *sps;
+ };
  
-+	/*
-+	 * Make sure that both the output and the capture queue are running
-+	 */
-+	if (rkvdec_queue_busy(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) == 0 ||
-+	    rkvdec_queue_busy(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) == 0)
-+		return -EAGAIN;
-+
- 	desc = ctx->coded_fmt_desc;
- 	if (WARN_ON(!desc))
- 		return -EINVAL;
+ static inline struct rkvdec_ctx *fh_to_rkvdec_ctx(struct v4l2_fh *fh)
 
 -- 
 2.25.1
