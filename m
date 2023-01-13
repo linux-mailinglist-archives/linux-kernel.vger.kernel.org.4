@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97376688E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBA56688EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbjAMBLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S239998AbjAMBM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbjAMBKy (ORCPT
+        with ESMTP id S233365AbjAMBMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:10:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9C103;
-        Thu, 12 Jan 2023 17:10:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C82D4B82033;
-        Fri, 13 Jan 2023 01:10:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E75C433EF;
-        Fri, 13 Jan 2023 01:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673572250;
-        bh=XjG0tJLnw6e6BwzsRY23cqQwSiXN5RtMYzj3WAIhllg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=lx9fvr6FX1p7zN00Cb5+Is5PRX66Sm5W52bWEx7WdhNVLeBrFkejAw4uYXnO1o1pv
-         o/EPR+8+PSWRl1SVjd5dDKlMbglxL2aTUsQayvT4zCEv7psLJ0ku5v4zcBW1vi4nLg
-         ON9zUgI6V416Ly/zDTbI24elwUXvRhoyCffNP0cPlOVnwVDSkHw7i2wWBGRkF+0bB7
-         RRI105FGtkBi27tf6aWzsq9iELQQyGJ2btVr2BElq/Q67KSIt7MEna9s9XYSJpsGDs
-         tN1duGyQlnUl9ip0mRTRxCHS7x2xbHV7wIYNEYZqET1aN4/Xk8g6sM8BshAqzvv/4g
-         QLaKEvIdPgbqA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 186565C1C8C; Thu, 12 Jan 2023 17:10:50 -0800 (PST)
-Date:   Thu, 12 Jan 2023 17:10:50 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH rcu v2 09/20] fs: Remove CONFIG_SRCU
-Message-ID: <20230113011050.GV4028633@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
- <20230113001132.3375334-9-paulmck@kernel.org>
- <2060f8d47dd0fd1999733b87b1919f6642b6e9e1.camel@kernel.org>
+        Thu, 12 Jan 2023 20:12:24 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7235CE2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:12:21 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id g2so10212186ila.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:12:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i3UT/Y1YH16gP2vBsAlIZgN/46hyjtu8955sOLq2zXk=;
+        b=CEtDvhRoqlHH2IjISObtaCW7RbrvpPQfs5d5A1Zr7RrpXHABAaViv2PLgzJcDX9B9q
+         n99D9ZzIrh3GTQgBvXhs9f+mqpF/OOO7pd81Z4FFui0jSQ1B+rqC5b/R4codAvTWe5SO
+         5z1gQiF5IbdlqJiE174Jx1VqAqviKfuYL6nqE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i3UT/Y1YH16gP2vBsAlIZgN/46hyjtu8955sOLq2zXk=;
+        b=7FZd9e9xy02L0opyFkHX7g1m51ecR2qwGhlmCwmyhAI9XtCtIz3bbm2zEjGCTN+efV
+         BTQoPi3HRXLwCg7LAaqklu1nC+3U8Xf2r/mMZdnIpcBW2RG21vnsLl+6IzM1agO8af8j
+         upfRo3bmJpecrq6OyjO43JeqrggBCAakuxtnmwVky1NTXYV4Gv0CbUXZl2IgPgHePXkI
+         2C7PQDXp0fZX9yNeP9omwZHBkapxqvWGMLcJNXgC17UsSQFqG0D+18C+dEA5xUIcZMRj
+         /QmeQi/fz6V5x5V+rMq4nvZS+/KbJF3wJr37YYbluGIT4qL9kL17fpxCUcDAOG+Uxb6r
+         nybw==
+X-Gm-Message-State: AFqh2kqNljpziQCukeysMCcMZiwH5t9pyCg79U4AvfTrIayk4fAFhbtc
+        gjrhaRgUwhDgKYbu0a9NaMitXw==
+X-Google-Smtp-Source: AMrXdXvTNwz4bjP+BUdszRNeD3iupE/PtHp0EJPBt9ClwLR10prNcJZQzDA8KIxlCb22V83T13iPKg==
+X-Received: by 2002:a92:1306:0:b0:30c:4991:2eac with SMTP id 6-20020a921306000000b0030c49912eacmr6276505ilt.0.1673572341143;
+        Thu, 12 Jan 2023 17:12:21 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c3-20020a029603000000b0038ac01fb3bcsm5825882jai.14.2023.01.12.17.12.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 17:12:20 -0800 (PST)
+Message-ID: <74201163-1084-fba3-5bf5-49ee5adaba45@linuxfoundation.org>
+Date:   Thu, 12 Jan 2023 18:12:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2060f8d47dd0fd1999733b87b1919f6642b6e9e1.camel@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230112135524.143670746@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:03:48PM -0500, Jeff Layton wrote:
-> On Thu, 2023-01-12 at 16:11 -0800, Paul E. McKenney wrote:
-> > Now that the SRCU Kconfig option is unconditionally selected, there is
-> > no longer any point in conditional compilation based on CONFIG_SRCU.
-> > Therefore, remove the #ifdef and throw away the #else clause.
-> > 
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: Jeff Layton <jlayton@kernel.org>
-> > Cc: Chuck Lever <chuck.lever@oracle.com>
-> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> > Cc: <linux-fsdevel@vger.kernel.org>
-> > Reviewed-by: John Ogness <john.ogness@linutronix.de>
-> > ---
-> >  fs/locks.c | 25 -------------------------
-> >  1 file changed, 25 deletions(-)
-> > 
-> > diff --git a/fs/locks.c b/fs/locks.c
-> > index 8f01bee177159..1909a9de242c8 100644
-> > --- a/fs/locks.c
-> > +++ b/fs/locks.c
-> > @@ -1889,7 +1889,6 @@ int generic_setlease(struct file *filp, long arg, struct file_lock **flp,
-> >  }
-> >  EXPORT_SYMBOL(generic_setlease);
-> >  
-> > -#if IS_ENABLED(CONFIG_SRCU)
-> >  /*
-> >   * Kernel subsystems can register to be notified on any attempt to set
-> >   * a new lease with the lease_notifier_chain. This is used by (e.g.) nfsd
-> > @@ -1923,30 +1922,6 @@ void lease_unregister_notifier(struct notifier_block *nb)
-> >  }
-> >  EXPORT_SYMBOL_GPL(lease_unregister_notifier);
-> >  
-> > -#else /* !IS_ENABLED(CONFIG_SRCU) */
-> > -static inline void
-> > -lease_notifier_chain_init(void)
-> > -{
-> > -}
-> > -
-> > -static inline void
-> > -setlease_notifier(long arg, struct file_lock *lease)
-> > -{
-> > -}
-> > -
-> > -int lease_register_notifier(struct notifier_block *nb)
-> > -{
-> > -	return 0;
-> > -}
-> > -EXPORT_SYMBOL_GPL(lease_register_notifier);
-> > -
-> > -void lease_unregister_notifier(struct notifier_block *nb)
-> > -{
-> > -}
-> > -EXPORT_SYMBOL_GPL(lease_unregister_notifier);
-> > -
-> > -#endif /* IS_ENABLED(CONFIG_SRCU) */
-> > -
-> >  /**
-> >   * vfs_setlease        -       sets a lease on an open file
-> >   * @filp:	file pointer
+On 1/12/23 06:45, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.163 release.
+> There are 783 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.163-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Thank you!  I will apply this on my next rebase.
+Compiled and booted on my test system. No dmesg regressions.
 
-							Thanx, Paul
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
