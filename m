@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC94C66A419
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1144666A41B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjAMU3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S230305AbjAMUah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjAMU3A (ORCPT
+        with ESMTP id S229813AbjAMUae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:29:00 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508B8857E8;
-        Fri, 13 Jan 2023 12:28:55 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id k44-20020a9d19af000000b00683e176ab01so12824489otk.13;
-        Fri, 13 Jan 2023 12:28:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T6uOIBY2QWdwRY5nTsaJOc8EMrdxEkItzpmSPcJ18uE=;
-        b=qBrD+TTeCBpv0zzPssIQd1zA3xhhilch4WYOvNcyctcKzg5HpXmKZm/X8c24QVAf2/
-         o1AqtEBK9ZCw3GH3lnEJxd2e1vwtkRMUNv1tzEOyYyzho6zI0wK6D1t3ZLtHiK97bmbh
-         TY9PiZeiuLCG83HeG8CRctUbSqfy/+3Na0SGePKiF2I3wgLv11jEv5f/XPelVgvKL1gJ
-         TqRxqdlPdrjQ5cX827Ez5rKdUJLqnhiqa7DfYKcXg2O6NMCfvEJmFjgHv47Ys2GZPPTM
-         LP9pheP9oN/+4BcGgjiGUESczz/Kyd6PfxWH84y+nLX4H5vqgyO8yuPjEmXUGMsO3z8b
-         zGlA==
-X-Gm-Message-State: AFqh2kqC4XI8u5DaJe8BGyUhe4j4mJApcBdfpf3w508JmKSThTTWNpRX
-        IuyDnTF04TTGlS1CPVpw7A==
-X-Google-Smtp-Source: AMrXdXuB9QGO3F1RomRyX28k9iRLhRC6dBkm6YnLhP+cEL6fK3sUhFJXD9Y46j08rn9gza6BJU/mRA==
-X-Received: by 2002:a05:6830:6303:b0:684:a1e5:4f with SMTP id cg3-20020a056830630300b00684a1e5004fmr8228493otb.18.1673641734566;
-        Fri, 13 Jan 2023 12:28:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bt25-20020a05683039d900b0066e80774203sm11182551otb.43.2023.01.13.12.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 12:28:54 -0800 (PST)
-Received: (nullmailer pid 2873785 invoked by uid 1000);
-        Fri, 13 Jan 2023 20:28:53 -0000
-Date:   Fri, 13 Jan 2023 14:28:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: of: Move enum of_gpio_flags to its only
- user
-Message-ID: <167364172860.2873659.6905782483557660702.robh@kernel.org>
-References: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
+        Fri, 13 Jan 2023 15:30:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0CCF580;
+        Fri, 13 Jan 2023 12:30:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 014F162323;
+        Fri, 13 Jan 2023 20:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE60C433D2;
+        Fri, 13 Jan 2023 20:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673641832;
+        bh=ZKBKtD9F64Mm7IQ2EpI4uviTsyGYvqtzNM7Rwk6Om+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vHPh3WmTeCuNCbqzo5Qkv9i6xYBjdliGBhu3g56lE3E9rug4UjRZdKOv8dD2RvG74
+         7M4C+/Np1NRvxpNyRB05orEyL5oZo7pSdWbIASx3OF+yQcJoBLlvfsUhVjBomFLYJR
+         d8Xb1/vpxk/fRFBZec3lqGzwXIoRq9W0etbTvqDECYLbmxgucSVvZCD8PpjcH+U0ff
+         RWSp8je68ef2SV2uPz4G6gC4dZo1o6p9QztUNiHmx0tqzXeybEukXQtH7JX36pQsUQ
+         dsG1eJ4ndoWUZ/frYYdpNcKkryU6RQBeXlYfJWICBUZP5LmmXPAsQb6jsqgk8rI4sP
+         1C+ccoEbLQxwA==
+Date:   Fri, 13 Jan 2023 20:30:26 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: BUG: kernel NULL pointer dereference, address:
+ 0000000000000008 - RIP: 0010:do_wp_page
+Message-ID: <Y8G/Yu22ZfUoQbed@sirena.org.uk>
+References: <CA+G9fYt_b04YNCCv-iTZTtwb5fmNEQ0abiO46qW_-SrA1GQX8w@mail.gmail.com>
+ <Y8Fkjxsq5EOtGiql@casper.infradead.org>
+ <CA+G9fYuahjaNs6ia1UOeF98hUhonAt0Z4YOFGcqOKt3J4tRvTw@mail.gmail.com>
+ <Y8F+iKuJWAFsUg2m@casper.infradead.org>
+ <Y8G0fu7Kpkd8s7DE@sirena.org.uk>
+ <Y8G27N+0Mpr9WmgD@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bxEJuMAsFGomarQ4"
 Content-Disposition: inline
-In-Reply-To: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8G27N+0Mpr9WmgD@casper.infradead.org>
+X-Cookie: I know how to do SPECIAL EFFECTS!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,15 +68,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 12 Jan 2023 16:51:40 +0200, Andy Shevchenko wrote:
-> GPIO library for OF is the only user for enum of_gpio_flags.
-> Move it there.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpiolib-of.c | 15 +++++++++++++++
->  include/linux/of_gpio.h   | 15 ---------------
->  2 files changed, 15 insertions(+), 15 deletions(-)
-> 
+--bxEJuMAsFGomarQ4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Fri, Jan 13, 2023 at 07:54:20PM +0000, Matthew Wilcox wrote:
+> On Fri, Jan 13, 2023 at 07:43:58PM +0000, Mark Brown wrote:
+> > On Fri, Jan 13, 2023 at 03:53:44PM +0000, Matthew Wilcox wrote:
+
+> > > Uh, are you compiling your kernels without debuginfo?  The results
+> > > from syzbot & 0day are much more useful:
+
+> > FWIW here's a decode from arm64 (the boards I sampled all looked very
+> > similar):
+
+> We've identified the bad commit now ... this thread is just about
+> improving the process for next time ;-)
+
+Ah, OK - I missed that thread.
+
+--bxEJuMAsFGomarQ4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPBv2IACgkQJNaLcl1U
+h9ByiAf9HOJILf7LMpdFqRf91m/yZLVnOEqBaQrsTKyLAQtzu0cDOZ6ZXi2+eBU1
+qbUt+Knn9DGxYnfKjLsQ0XWYRwNV9LeJivIAYMhWVCDDaSi78JCzBWauJb9VMVre
+zLRrrMHb3CuBkn/WBLr24/O3wjdNJQmJqqj0pN72Z5fPGh7YdFjKt5WO3XA890TN
+xVRtGUda9doWiJ6T61QJ2vDYZE9l9pGO4kgNG5NLq+momwP87HdvGGVobWq3COF7
+4/w5KFB0Kf80p3eroSnLPzqORklA3A/rf0eEwSUNx4GdBL5V/LSMwrRg1ZzI7ncN
+Xib1OKQErB9UcjlHH/2e/kfLN7bLbA==
+=0P7x
+-----END PGP SIGNATURE-----
+
+--bxEJuMAsFGomarQ4--
