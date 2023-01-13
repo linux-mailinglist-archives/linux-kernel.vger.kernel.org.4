@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636D466A45C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A582766A45D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjAMUqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S231252AbjAMUq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjAMUqB (ORCPT
+        with ESMTP id S231343AbjAMUqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:46:01 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CB86F97C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:46:00 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id q23-20020a17090a065700b002290913a521so5884394pje.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HBi2/qyUC845LFRzXkZZ02iiz+01kFcIC3Wu67immxs=;
-        b=kRx8bFUPs6e81RW6/OJxTlgFo1g1CRAgsbMtDsiYYz1TT8RfZ5L10WQk0D1yMzb6oz
-         1SPZhnB2GsQ9u9XBeFaUxrlxcIU6mAsuURwLUKKIkirlrAt5lGd7cOQJUibEOaodzeu2
-         douiBjk0yrxsKBHiaoNilKGx0iiaJybztmtqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HBi2/qyUC845LFRzXkZZ02iiz+01kFcIC3Wu67immxs=;
-        b=e0jR5sOokWgZF2j+W3RqPOQIp/uonxTRQVp1mSioBMQ8SGA7Q8QZ/2pRPLUq5LRCJC
-         aLtI2Ki2Dj1rDcMbEdDmFkHxJO/Ne56MMLgtbQ/oyWJY9HXu9urxjM/LSr8bdsntJB7B
-         2oX+GQKnlEklZjZVra6tpzC5/X8AfJLRfPtAV7VBkDnOEIy/rrQeTvv3l6BEapfL7klM
-         7wQNnUhqdrrnny9wnli+7s61P40/9FNUuAmdjWKSWJT7+IHdw6l3O1skLvJE55NrGzYQ
-         01SCG/5dLRpeGIFMzf7BbbXAOQ7tjh98+tKNGes+Bepo6RIsFbRxo0oHK69cNqdrfi8a
-         LFGg==
-X-Gm-Message-State: AFqh2kq52hjWF4iht5KeKyxWVy/LMBCBfKbvu9Jm+bgEyVmpXwiE+zLl
-        qAgRAjUsmStMmQVdkjiP60fkow==
-X-Google-Smtp-Source: AMrXdXsf6LhytMMpI9hgTdoKV3tVJYPmL/AlUKNgDNZqknFWYgZVH1aN/OnaJq2PKABVv+k5Fo8pIQ==
-X-Received: by 2002:a17:902:c454:b0:192:b52f:33bb with SMTP id m20-20020a170902c45400b00192b52f33bbmr9843370plm.45.1673642759860;
-        Fri, 13 Jan 2023 12:45:59 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:11a:201:4652:3752:b9b7:29f9])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170902e99500b001945b984341sm4010081plb.100.2023.01.13.12.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 12:45:59 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15.y v2 5/5] phy: qcom-qmp-combo: fix runtime suspend
-Date:   Fri, 13 Jan 2023 12:45:48 -0800
-Message-Id: <20230113204548.578798-6-swboyd@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230113204548.578798-1-swboyd@chromium.org>
-References: <20230113204548.578798-1-swboyd@chromium.org>
+        Fri, 13 Jan 2023 15:46:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C9892C5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:46:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D90B6231C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 20:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4031C433F0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 20:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673642773;
+        bh=7eYc0XhXnQW93GkTSFYdIkOSneTuRRIkHMfKlRT3emM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=S43jiel7jHVWZxXocbPs9onLt6Fmy7xZvOXNcw7RyKIjL9j58y5jmOYd6x9IANi74
+         3cG2ay04GatN2G0GsHHOsl6/ORg+pEG78YEAiCsiXpzOqccOOJsij7CHeM5BTOQo8T
+         6gQiAPkXmVtgAtO4nyEQw/P31IfjQvynNFaove79hMNNpuiMZEpt3Ac1Gm5EEPvtLK
+         uPoN/vq8nTxqn8RljxyKi73zI+0Ws007ZP0FdIpOC/UrFsNx33ShV3wk5m4ifXrtV8
+         cGhxoSWe4KlsYoYRILYfMYYQdKevAbpEsQwsAai2c9o1+ZyHdYVOBgSr4RyjLdFL3/
+         TXe/sNtjKGiPQ==
+Received: by mail-lf1-f48.google.com with SMTP id b3so34726384lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:46:13 -0800 (PST)
+X-Gm-Message-State: AFqh2krrXhLwGTr4e/PYX1VkcYIJGFxpD0RMMx1bVwFOP1LzFnocqkRF
+        KaYL7rHsHzm5DhfYjFjUiV1b+96ZvXPB3QeDVwk=
+X-Google-Smtp-Source: AMrXdXsWvsRzFjpBxH0BYvnhEu1soeJwTK2Zeb8O9icHUx42bdlsXNkEMAldp2aBv5UshwYEi5M+2Ymrr+9EPlHaf4I=
+X-Received: by 2002:a19:640f:0:b0:4b6:e71d:94a6 with SMTP id
+ y15-20020a19640f000000b004b6e71d94a6mr6072221lfb.476.1673642771838; Fri, 13
+ Jan 2023 12:46:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230112214015.1014857-1-namhyung@kernel.org> <20230112214015.1014857-3-namhyung@kernel.org>
+In-Reply-To: <20230112214015.1014857-3-namhyung@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 13 Jan 2023 12:45:59 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5t-9uLXvovdR=wj6o=RZhdaUucj_PkeWqcaSDgbn_q1Q@mail.gmail.com>
+Message-ID: <CAPhsuW5t-9uLXvovdR=wj6o=RZhdaUucj_PkeWqcaSDgbn_q1Q@mail.gmail.com>
+Subject: Re: [PATCH 2/8] perf/core: Add perf_sample_save_callchain() helper
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,68 +66,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+On Thu, Jan 12, 2023 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> When it saves the callchain to the perf sample data, it needs to update
+> the sample flags and the dynamic size.  To make sure this, add the
+> perf_sample_save_callchain() helper and convert all call sites.
+>
+> Cc: x86@kernel.org
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-commit c7b98de745cffdceefc077ad5cf9cda032ef8959 upstream.
-
-Drop the confused runtime-suspend type check which effectively broke
-runtime PM if the DP child node happens to be parsed before the USB
-child node during probe (e.g. due to order of child nodes in the
-devicetree).
-
-Instead use the new driver data USB PHY pointer to access the USB
-configuration and resources.
-
-Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[swboyd@chromium.org: Backport to pre-split driver]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index b8646eaf1767..64a42e28e99f 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -4985,15 +4985,11 @@ static void qcom_qmp_phy_disable_autonomous_mode(struct qmp_phy *qphy)
- static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 
- 	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
- 
--	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
--	if (cfg->type != PHY_TYPE_USB3)
--		return 0;
--
- 	if (!qmp->init_count) {
- 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
- 		return 0;
-@@ -5010,16 +5006,12 @@ static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
- static int __maybe_unused qcom_qmp_phy_runtime_resume(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	int ret = 0;
- 
- 	dev_vdbg(dev, "Resuming QMP phy, mode:%d\n", qphy->mode);
- 
--	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
--	if (cfg->type != PHY_TYPE_USB3)
--		return 0;
--
- 	if (!qmp->init_count) {
- 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
- 		return 0;
--- 
-https://chromeos.dev
-
+Acked-by: Song Liu <song@kernel.org>
