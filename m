@@ -2,127 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C4F6693E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49736693E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbjAMKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 05:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
+        id S239812AbjAMKTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 05:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbjAMKRg (ORCPT
+        with ESMTP id S241039AbjAMKSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 05:17:36 -0500
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340E7183A1;
-        Fri, 13 Jan 2023 02:17:30 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30DAGrIm1867629
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 13 Jan 2023 10:16:54 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30DAGlEi020267
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 13 Jan 2023 11:16:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1673605008; bh=UwgL4KMt3pjnoZk+tNr+CMFYAZq3Cr7X+xqZUA7Ufo0=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=SeoVtk2B2QVOHm8ZcMEo7om8ODX+yJXE7uRF+ratRhcaUxrRmWqUhHUHucsKKZZ8d
-         Z3QTE59AJzj80KDct7UX7pmOmPsnz371cimLbixMvl29ArvU5/LSZ9ZHBR1piPATpn
-         hIJtdH8o5mQFKy/V1NmtB+nUb5yGWghn3Z5ZybWY=
-Received: (nullmailer pid 210628 invoked by uid 1000);
-        Fri, 13 Jan 2023 10:16:47 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Greg KH <greg@kroah.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] r8152; preserve device list format
-Organization: m
-References: <87k01s6tkr.fsf@miraculix.mork.no>
-        <20230112100100.180708-1-bjorn@mork.no> <Y7/dBXrI2QkiBFlW@kroah.com>
-        <87cz7k6ooc.fsf@miraculix.mork.no> <878ri86o6j.fsf@miraculix.mork.no>
-        <Y7/ir/zcJQUVec72@kroah.com>
-Date:   Fri, 13 Jan 2023 11:16:47 +0100
-In-Reply-To: <Y7/ir/zcJQUVec72@kroah.com> (Greg KH's message of "Thu, 12 Jan
-        2023 11:36:31 +0100")
-Message-ID: <874jsu68og.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 13 Jan 2023 05:18:43 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D11A6B596;
+        Fri, 13 Jan 2023 02:18:41 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id m21so30538706edc.3;
+        Fri, 13 Jan 2023 02:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kzDOK1JJgHEyW0UkKAsgNd5XNzteE1HhYTj65aQgafA=;
+        b=flhQ/myVHK6JKteIP002IwYUQ1HLE+TmwKWGqM44yzp/wk8RhnYAAPRjqXegQMU8if
+         d6UkFENK/I2Ko4Cb15fraqKWzsmk3OYAbY+jKgaNgczi/cP/YUAJOpFRBXFEhG/amnDM
+         MKt96Tk+X16N9/QqPHILjSezJSRLF6NKMxI4CbKjK0YPFaPqzaZIQdlh45W4JTxdQe7Q
+         Ujc6FxGNYml+oEhvlLnVApd2aS3tQUewdiS9+lDC7hrYBIVDa5bRcGrhPtD2+i8PajKn
+         Mpe6V3OYsmoY/ds0Lt5Fw2llEK7vENozV9/3+oyJqCSmilDe6yDMCoCbTW9q6xCyyYCT
+         Jy4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kzDOK1JJgHEyW0UkKAsgNd5XNzteE1HhYTj65aQgafA=;
+        b=Fu0SlLUABAV0baO0qzaCj/Wl19GIrg7i2yVI+1XjHQF5xlzvYwpl/jjDUJYN5qvPZM
+         kGC3Tg2VJAYhuSmd94spoRcFXWsv9SFqRUZpXI64hG+PlM0pBgDnMMAijTHITtcuZxsF
+         xaoWf+shoGWSd09IcI3S/IeC8BYWuMkZgsyv8Nw/mAeogWy8ZT3lmPERxbyHPsSOoUmZ
+         PxGOiaMI6m3/HS/XSzPEIf5AIAxFFpOYzhFIEPCzq6bjtz52R23LsRpsS/A+ALMp0Wsu
+         W5FKbO7mY4skp98aQJ+HR5PzBMCmhTaG4MOGZuXFE+2ke+x3Wli0odkYT9Itpn8SSKwl
+         xmiA==
+X-Gm-Message-State: AFqh2kqqiCAQMk5sal9Ch77Zs3tEB9lgZnuUiMszSt6uR7Yxd1AcDSHC
+        KXflTkRaynoVgTAEoDaGKtx2U2UQbHlQoDqXo9Kre3MWAkI=
+X-Google-Smtp-Source: AMrXdXvp/ij2CcKdAeoXa+bxrKAsBQX0J149SYtq9TQsQyh6L5bKkEtpxP6cToqRfrtaE1cNii7nZUYGchM8ODW9oZk=
+X-Received: by 2002:a05:6402:40d3:b0:48e:c1a0:119f with SMTP id
+ z19-20020a05640240d300b0048ec1a0119fmr3971521edb.115.1673605119927; Fri, 13
+ Jan 2023 02:18:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
+References: <20221228120248.GA508080@bhelgaas> <20230112200819.GA1785077@bhelgaas>
+In-Reply-To: <20230112200819.GA1785077@bhelgaas>
+From:   Zeno Davatz <zdavatz@gmail.com>
+Date:   Fri, 13 Jan 2023 11:18:29 +0100
+Message-ID: <CAOkhzLU_F9O0TxUzkb9YdHr357O3muj9V7GLTLsWzHm5mUsr-w@mail.gmail.com>
+Subject: Re: [Bug 216859] New: PCI bridge to bus boot hang at enumeration
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <greg@kroah.com> writes:
-> On Thu, Jan 12, 2023 at 11:29:40AM +0100, Bj=C3=B8rn Mork wrote:
->> Bj=C3=B8rn Mork <bjorn@mork.no> writes:
->> > Greg KH <greg@kroah.com> writes:
->> >
->> >> No need for this, just backport the original change to older kernels =
-and
->> >> all will be fine.
->> >>
->> >> Don't live with stuff you don't want to because of stable kernels,
->> >> that's not how this whole process works at all :)
->> >
->> > OK, thanks.  Will prepare a patch for stable instead then.
->> >
->> > But I guess the original patch is unacceptable for stable as-is? It
->> > changes how Linux react to these devces, and includes a completely new
->> > USB device driver (i.e not interface driver).
->>=20
->> Doh!  I gotta start thinking before I send email.  Will start right
->> after sending this one ;-)
->>=20
->> We cannot backport the device-id table change to stable without taking
->> the rest of the patch. The strategy used by the old driver needs two
->> entries per device ID, which is why the macro was there.
->>=20
->> So the question is: Can commit ec51fbd1b8a2 ("r8152: add USB device
->> driver for config selection") be accepted in stable?
->>=20
->> ( Direct link for convenience since it's not yet in mainline:
->> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/comm=
-it/drivers/net/usb/r8152.c?id=3Dec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
->> )
->>=20
->> This is not within the rules as I read them, but it's your call...
+Dear Bjorn
+
+On Thu, Jan 12, 2023 at 9:08 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Ah, yeah, that's simple enough, I'd take it if you send it to me :)
+> [+cc sound folks]
+>
+> On Wed, Dec 28, 2022 at 06:02:48AM -0600, Bjorn Helgaas wrote:
+> > On Wed, Dec 28, 2022 at 08:37:52AM +0000, bugzilla-daemon@kernel.org wrote:
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=216859
+> >
+> > >            Summary: PCI bridge to bus boot hang at enumeration
+> > >     Kernel Version: 6.1-rc1
+> > > ...
+> >
+> > > With Kernel 6.1-rc1 the enumeration process stopped working for me,
+> > > see attachments.
+> > >
+> > > The enumeration works fine with Kernel 6.0 and below.
+> > >
+> > > Same problem still exists with v6.1. and v6.2.-rc1
+> >
+> > Thank you very much for your report, Zeno!
+> >
+> > v6.0 works, v6.1-rc1 fails.  Would you mind booting v6.1-rc1 with the
+> > "ignore_loglevel initcall_debug" kernel parameters and taking a photo
+> > when it hangs?
+> >
+> > How did you conclude that the hang is related to a PCI bridge?  I see
+> > recent PCI messages in the photo, but it looks like the last message
+> > is from NFS, so I'm wondering if I'm missing some context.  The v6.0
+> > dmesg shows several other ntfs, fuse, JFS, etc messages before more
+> > PCI-related things.  Anyway, the "initcall_debug" might help us narrow
+> > it down a bit.
+>
+> Thanks very much for the bisection (complete log at [1])!
+>
+> The bisection claims the first bad commit is:
+>
+>   833477fce7a1 ("Merge tag 'sound-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound")
+>
+> with parents:
+>
+>   7e6739b9336e ("Merge tag 'drm-next-2022-10-05' of git://anongit.freedesktop.org/drm/drm")
+>   86a4d29e7554 ("Merge tag 'asoc-v6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-linus")
+>
+> Both 7e6739b9336e and 86a4d29e7554 tested "good" during the bisection.
+>
+> There is a minor conflict when merging 86a4d29e7554 into the upstream,
+> but I can't imagine that being resolved incorrectly.
+>
+> Would you mind turning off CONFIG_SOUND in your .config and testing
+> 833477fce7a1 again?  I'm a little skeptical that the hang would be
+> sound-related, but I guess it's a place to start.
+>
+> Bjorn
+>
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=216859#c35
 
-Great!
+Booting without sound into the commit 833477fce7a1 did not help. Same hang.
 
-There is no point backporting to anything older than v5.15 since the
-patch depend on significant driver changes between v5.10 and v5.15.  The
-good news is that those changes also modified the macro in question so
-any device ID patch for v5.10 or older will have to be fixed up in any
-case.  So we don't lose anything by ignoring the older longterm kernels
-here.
-
-IIUC the special netdev stable rules are gone.  But if this is going to
-stable, then I believe it still has to go to "net" first.
-
-David/Jakub - Would you please pick
-
-  ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
-  69649ef84053 ("cdc_ether: no need to blacklist any r8152 devices")
-
-from net-next to net?  With a "CC: stable" preferably.  Or do you prefer
-some other solution?
-
-
-
-Bj=C3=B8rn
+Best
+Zeno
