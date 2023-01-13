@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACA1669E79
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCB7669E7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjAMQnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S229794AbjAMQny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjAMQnO (ORCPT
+        with ESMTP id S230084AbjAMQnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:43:14 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1705E63D0A;
-        Fri, 13 Jan 2023 08:41:43 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id q23-20020a17090a065700b002290913a521so5282477pje.5;
-        Fri, 13 Jan 2023 08:41:43 -0800 (PST)
+        Fri, 13 Jan 2023 11:43:13 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD5A63F44
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:41:39 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x10so29012274edd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:41:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=I15FjO3opbKLh+yZJX3adWH5TdeQq1TbMxByvnF2l8s=;
-        b=fBDi5XKaeCpcq/se1lAYYQ/u6S7Yg3+zGYacUGmEYlyRbWdMvYykl0H+wjo6wF+eyx
-         HyDaGQ8M/WV/LGEzQBEDJ4CjvMnXw+94relc2qx4lMqLbO4SN1ouWf/rpctG70IIyznO
-         mkv33RE0d44R5G9o9iqDhQgJpIjfLVzoPfUIjcXBGpNWc9B1g89mEYcJhYX9AiPk1t0o
-         5+YkQ8SFuB8vXIQ9O1+7yP3Tsk3gb67Yy9a818C9KxYHSdcwbMJ5eQlzG6IST16mIJmr
-         mGpMV9PnyVbEZ6Js6Z6B5UMo3Es9CgRIvYBSAlqKLzSGCm+dY7KrOw+E2BggVgl9srXc
-         aJ0A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BvUGd9NYJS5uJunAJ7mHRF6tpEc2wFqKY/+I40CerDI=;
+        b=johoF20EkGJi5IP8q3AP/5+tpfsjwynFPFGU06tuy4cjoqnq4TyBrAQF6iwI9OaXcY
+         woYpby+d6JiiOwAukbdUr2P7+zsU3I2bBPGIKbTMd++jK4yao7FIuL37ZzegXpQTTd18
+         /yA6wWJn/QmOVNCuh4g4vWKc9vYK4nH9YlzflvJ6+D6xXNurd6SuJXp9xHQwGBd8CAj+
+         JxJUdjlpJOMEq0wV0Th2Qgw5XwMJuhMvQY1505wXh+u492oDQlBQSCsAWxto3TzxE1pj
+         SgbcUiI+GmkS4yP3wJfylYzWB2vwWTfod+J0MPJPq/k+Kwb0yBmbwX8xmVxSGYgw6z/u
+         FRog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I15FjO3opbKLh+yZJX3adWH5TdeQq1TbMxByvnF2l8s=;
-        b=eRALzvL2FSyjv04WOs3UcPkCIVacrIeDREtJ1ecVsUIFb5svL1TvUk7hOyyeGG6xR9
-         W5/GEEui6EYQkF56GW1dD/X2BvDr/jkwG9qXFAo8WlfJdVC8qJF+i7AlfKZOLgsu67XI
-         baYl2bAknGrQtbrFduZHyhBai2qVLNXZ9NdNpHGWJ/v3YXSQhN7Acs8yH8+LQOZtC/B7
-         QcuxERcGN6WHYbKmEjC1Tgypid/7I7A2eIvKdNNAfQKhNTqFsi9+HXmKC6bNKKb3f0eN
-         /mXOplwkUQD0zEfo76YOfcoLngF+WLDTkJYeY1xcEG9DDEBzy5fFJxyrAsNaV4K0/9ow
-         Oe/w==
-X-Gm-Message-State: AFqh2kpaL+3T9lfnjIRD7vV7YQ81sLlnhABGBWdZLfDSg5C72OlvQzF6
-        hLcLd1+gXlio2u2dKdpaCSU6IWXIp0marbH6Q0Y=
-X-Google-Smtp-Source: AMrXdXt0grFmAVAEYwlDj2s3RMzBjbg5Qh411PWc5GYUnj7eSetps2OPKVpFH9FXEDorQjCnH0jqjNVaPtKUtXe5rDE=
-X-Received: by 2002:a17:90a:bf0a:b0:229:2927:ee16 with SMTP id
- c10-20020a17090abf0a00b002292927ee16mr195721pjs.7.1673628102498; Fri, 13 Jan
- 2023 08:41:42 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BvUGd9NYJS5uJunAJ7mHRF6tpEc2wFqKY/+I40CerDI=;
+        b=1DTNo+Wr9wM1oFnCf+gZQOXzEp7xk8VZzS/vyzsQnYcVUR/zD3KliYNsossbi49AtW
+         FrzH3Lfr32zslLy5fzaB8skPfQN/PlSXHBWhLcHPq6KvAw+1+xnNRdR7if6j90akeafo
+         RBkFsOpP9HuvFIrrtnmei/bwReYltaJICxy9keQAzgmxCKqSGjlyxB3gL6Le4AQiJROa
+         6NTdZgK+AE8/8TGWRM8r+i54H7K/ultaDtgiHkXJb1r8ZmwlA2prYlvyyUK6IIm+AL9V
+         lTVaU0VyWjKML+Ul3rfNbac3JXO5lLYQ1iyMbpo2RQHa8kRKppLB1+iEch9BPQTDLq4a
+         aAxA==
+X-Gm-Message-State: AFqh2koronCUKdN1rRbW0KCjmi/lScCgB+N7YHPNIV1X2h+P18vYBYMs
+        nfHwMicz9KmYbFjDc8II8B+JuA==
+X-Google-Smtp-Source: AMrXdXu3YHYR0nLLhyHEkcZgP/DdXUgo9XDCY9cSu8QmopZ789q/sDf1rLNjlzcVF7tBV6j7nmCuWQ==
+X-Received: by 2002:a05:6402:5510:b0:495:fa3d:1d72 with SMTP id fi16-20020a056402551000b00495fa3d1d72mr25256227edb.8.1673628098265;
+        Fri, 13 Jan 2023 08:41:38 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id dk1-20020a0564021d8100b0049be07c9ff5sm1142803edb.4.2023.01.13.08.41.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 08:41:37 -0800 (PST)
+Message-ID: <6d084da5-e96b-1b75-169c-4cf85be5e28a@linaro.org>
+Date:   Fri, 13 Jan 2023 17:41:35 +0100
 MIME-Version: 1.0
-References: <20221116214841.1116735-7-robimarko@gmail.com> <20221117192837.GA1203269@bhelgaas>
- <Y8FdxtCitnBd1c6k@lpieralisi>
-In-Reply-To: <Y8FdxtCitnBd1c6k@lpieralisi>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Fri, 13 Jan 2023 17:41:31 +0100
-Message-ID: <CAOX2RU5HznDP9KcjyO=6MjhrY-cU8dhYiskCiTzLD6jm-pNeRw@mail.gmail.com>
-Subject: Re: [PATCH 7/9] PCI: qcom: add support for IPQ8074 Gen3 port
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        bhelgaas@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org, kw@linux.com,
-        svarbanov@mm-sol.com, shawn.guo@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 4/5] arm64: defconfig: Enable scm download mode config for
+ IPQ9574 SoC.
+Content-Language: en-US
+To:     Poovendhan Selvaraj <quic_poovendh@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, robimarko@gmail.com, quic_gurus@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230113160012.14893-1-quic_poovendh@quicinc.com>
+ <20230113160012.14893-5-quic_poovendh@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113160012.14893-5-quic_poovendh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023 at 14:34, Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
->
-> On Thu, Nov 17, 2022 at 01:28:37PM -0600, Bjorn Helgaas wrote:
-> > Hi Robert,
-> >
-> > If you post a v2 for any reason, capitalize the subject line to match
-> > previous history:
-> >
-> >   PCI: qcom: Rename host-init error label
-> >   PCI: qcom: Drop unused post_deinit callback
-> >   PCI: qcom: Sort device-id table
-> >   PCI: qcom: Clean up IP configurations
-> >   ...
->
-> If he could do that while rebasing on top of my current pci/qcom branch
-> that would be ideal, I tried to cherry-pick patches 5,6,7 but 5 does not
-> apply.
+On 13/01/2023 17:00, Poovendhan Selvaraj wrote:
+> Enables scm download mode config.
 
-Sure, I will send v2 with that now as after cherry-picking the SM8350 commits
-from pci/qcom they all still apply, will fixup the subject capitalization.
+Why?
 
-Regards,
-Robert
->
-> Thanks,
-> Lorenzo
->
-> >
-> > On Wed, Nov 16, 2022 at 10:48:39PM +0100, Robert Marko wrote:
-> > > IPQ8074 has one Gen2 and one Gen3 port, with Gen2 port already supported.
-> > > Add compatible for Gen3 port which uses the same controller as IPQ6018.
-> > >
-> > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > ---
-> > >  drivers/pci/controller/dwc/pcie-qcom.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 77e5dc7b88ad..97e8510c53fb 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -1817,6 +1817,7 @@ static const struct of_device_id qcom_pcie_match[] = {
-> > >     { .compatible = "qcom,pcie-ipq8064", .data = &cfg_2_1_0 },
-> > >     { .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
-> > >     { .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
-> > > +   { .compatible = "qcom,pcie-ipq8074-gen3", .data = &cfg_2_9_0 },
-> > >     { .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
-> > >     { .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
-> > >     { .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
-> > > --
-> > > 2.38.1
-> > >
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Co-developed-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+
+Same question... that's just a config enable. How three people can work
+on one piece of defconfig?
+
+> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+Best regards,
+Krzysztof
+
