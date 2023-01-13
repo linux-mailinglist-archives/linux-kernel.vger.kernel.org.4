@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC166697D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A126697D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbjAMM5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S241671AbjAMM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241497AbjAMM4g (ORCPT
+        with ESMTP id S241310AbjAMM4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:56:36 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B51BBCE3A;
-        Fri, 13 Jan 2023 04:44:44 -0800 (PST)
-Received: from 8bytes.org (p200300c277327f0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7732:7f00:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 13 Jan 2023 07:56:53 -0500
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2AC5FBD
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:44:53 -0800 (PST)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 78CCAA0040;
+        Fri, 13 Jan 2023 13:44:50 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 78CCAA0040
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1673613890; bh=TzCYWekeVeO9uFmb65AitJ1O7hak5JCY5nBfZC0eV1Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=2EgLb8RA/MNOulgcS+OV5eUJHrwhU9C2VKHd17CiF9fB4tkYFCq1Z5t1tj2S6fZOK
+         tP/6usu8adIUGz/VmcFjD1ccQaNU/0a4bAKYIQaYOs+dJU7CqL9Qw7O7TcaxBiW4CW
+         AnbN8H2RPZzlmNvF7su8SpNATtU2yJvByQzN4FBA=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id ED600262340;
-        Fri, 13 Jan 2023 13:44:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1673613884;
-        bh=MscDIF3GsS7zhLNLVm/WiZfXdK2GItkr1gCY7Yuq/gI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPPebLs22xmYECIA08EQJNTrmdxY/5R/5bZCTMtoBcDNUjONEC2f+5UAg8dAZe75+
-         tqE8v/3rLs7mCO3KLHwvNGsPVWQBtuVvqPwY3CkNFofuCjIbjORA2kfOpk1F+SJqHS
-         vu74z7MbR0+vA3ZD6tOFAUFqsWrOHy3641EGSVcGnfOUn2ROmYiifTNyvZaaOZVeup
-         CHaSNd8Wxg0IAfMYSzJLIyNFFsgFkFpLl3vTxK06O5163O32q9h66/GXsfrk9ouli+
-         wblcy2rD81UzrGfIbXJ5pJIvmpHtRjWubRPBGt7+fMH6SD1A1suPCFFH1DEGwtb3oG
-         3OjlH5HQuawEA==
-Date:   Fri, 13 Jan 2023 13:44:42 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Yong Wu <yong.wu@mediatek.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Honghui Zhang <honghui.zhang@mediatek.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] iommu/mediatek-v1: Fix an error handling path in
- mtk_iommu_v1_probe()
-Message-ID: <Y8FSOqUqQpTa+zAU@8bytes.org>
-References: <593e7b7d97c6e064b29716b091a9d4fd122241fb.1671473163.git.christophe.jaillet@wanadoo.fr>
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Fri, 13 Jan 2023 13:44:46 +0100 (CET)
+Message-ID: <abe92f46-d4d7-4d9d-82b3-d8c9e7e26181@perex.cz>
+Date:   Fri, 13 Jan 2023 13:44:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <593e7b7d97c6e064b29716b091a9d4fd122241fb.1671473163.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] ALSA: pcm: Move rwsem lock inside snd_ctl_elem_read to
+ prevent UAF
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org, Clement Lecigne <clecigne@google.com>
+References: <20230113120745.25464-1-tiwai@suse.de>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <20230113120745.25464-1-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 07:06:22PM +0100, Christophe JAILLET wrote:
-> Fixes: b17336c55d89 ("iommu/mediatek: add support for mtk iommu generation one HW")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Another option would be to use devm_clk_get_enabled(). This would save a
-> few LoC in mtk_iommu_v1_hw_init() and in the remove function.
-> However, it would change the order of function calls in the remove function
-> so I leave it as-is.
-> Let me know if it is fine and if you prefer this alternative.
-> ---
->  drivers/iommu/mtk_iommu_v1.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+On 13. 01. 23 13:07, Takashi Iwai wrote:
+> From: Clement Lecigne <clecigne@google.com>
+> 
+> Takes rwsem lock inside snd_ctl_elem_read instead of snd_ctl_elem_read_user
+> like it was done for write in commit 1fa4445f9adf1 ("ALSA: control - introduce
+> snd_ctl_notify_one() helper"). Doing this way we are also fixing the following
+> locking issue happening in the compat path which can be easily triggered and
+> turned into an use-after-free.
+> 
+> 64-bits:
+> snd_ctl_ioctl
+>    snd_ctl_elem_read_user
+>      [takes controls_rwsem]
+>      snd_ctl_elem_read [lock properly held, all good]
+>      [drops controls_rwsem]
+> 
+> 32-bits:
+> snd_ctl_ioctl_compat
+>    snd_ctl_elem_write_read_compat
+>      ctl_elem_write_read
+>        snd_ctl_elem_read [missing lock, not good]
+> 
+> CVE-2023-0266 was assigned for this issue.
+> 
+> Cc: stable@kernel.org # 5.13+
+> Signed-off-by: Clement Lecigne <clecigne@google.com>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-Applied, thanks.
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
