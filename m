@@ -2,87 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B28668821
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 287BE668820
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbjAMALc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S239946AbjAMALZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:11:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbjAMALN (ORCPT
+        with ESMTP id S240184AbjAMALL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:11:13 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6BE5DE50;
-        Thu, 12 Jan 2023 16:11:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 12 Jan 2023 19:11:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3782155650;
+        Thu, 12 Jan 2023 16:11:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtMJm1206z4xFv;
-        Fri, 13 Jan 2023 11:11:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673568664;
-        bh=+2YmlJZdaCngfrReynHEQsvpEbHrVrAfqqyxpJoyi9M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FVwH0lxx8Rpf9rVBVGnilJ3LdbKkQUjtc6JPEO/E4LMpYUYup1W4b2SBDt8w02Osz
-         FEFmfMfkPmrDPr4T3cR/Fec3poJdNfuaGbzJMKRN/gATDgq5CwehoWwip94qqUtyUX
-         Bl9iWizJAv8a4tUqOQDvMjPkuaJT44EgayW5NWby6NwK3hvy8Tigon+nrObGPNLSRu
-         1HTcgwknuJkNRzxyR+5nq1SzNx0CymmEWUid96BMAiiD6GE9GfAhdLLa/mCewxgC+S
-         7RroiegNL72CENDsDAlZcOS4Fn8T3etGzYx7NbrxIDIJy6ySqsGj7eRRGObrSz5Wiy
-         sEtUvKGH+upQg==
-Date:   Fri, 13 Jan 2023 11:11:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the jc_docs tree
-Message-ID: <20230113111102.22a27ae3@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA40D621D7;
+        Fri, 13 Jan 2023 00:11:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39C4AC433EF;
+        Fri, 13 Jan 2023 00:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673568664;
+        bh=bezMuXcUUZ3sIW4oHH2X7S7RAStckOll++aPwBdoMwA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XHf/y9sUekTwOCA8LzYQ7xe4oo3dtHa6pzOnujXLwbXPsoWVhER8h0ZoOFVkP2Gqp
+         SwbkvkBOpeG0JPqr/+1CtzaCSXBzkqskTJdCm9VldAiT5wRb8vt2plXPqa9CQi3CiP
+         PD6SUqkm3OyzvDscVEIhZncAiBrJBjBTKQzDN7/9bkL7WUByhzZKlygTtkawugOelw
+         nW/4PVW7Tw2F+sjMHFFtBpA8oBv/pzKBLGUHM6S2qWnZQmevSWg0M/w9ilEt1ZVc85
+         X9RW2k/npw6xFAI2/XBdAlMAPiQc7vkzlqIbPoN0QvQy4wnYB+Up8u/0iqmkFs085Q
+         FvBjGiB37xerQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C32545C09F1; Thu, 12 Jan 2023 16:11:03 -0800 (PST)
+Date:   Thu, 12 Jan 2023 16:11:03 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org
+Subject: Re: [PATCH rcu 0/27] Unconditionally enable SRCU
+Message-ID: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s2t4ltoAs/nNi7wffYyGNHL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/s2t4ltoAs/nNi7wffYyGNHL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello!
 
-Hi all,
+This v2 series removes Kconfig "select" clauses and #ifdef directives that
+are no longer necessary give that SRCU is now unconditionally enabled,
+courtesy of new-age printk() requirements.  Finally, the SRCU Kconfig
+option is removed entirely.
 
-The following commit is also in the mm-hotfixes tree as a different commit
-(but the same patch):
+1.	arch/x86: Remove "select SRCU".
 
-  ded24dfdddd1 ("Docs/admin-guide/mm/zswap: remove zsmalloc's lack of write=
-back warning")
+2.	drivers/base: Remove CONFIG_SRCU.
 
-(commit 1beb8ae302a0 in the mm-hotfixes tree).
+3.	drivers/cpufreq: Remove "select SRCU".
 
---=20
-Cheers,
-Stephen Rothwell
+4.	drivers/dax: Remove "select SRCU".
 
---Sig_/s2t4ltoAs/nNi7wffYyGNHL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+5.	drivers/hwtracing/stm: Remove "select SRCU".
 
------BEGIN PGP SIGNATURE-----
+6.	drivers/md: Remove "select SRCU".
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAoZcACgkQAVBC80lX
-0GxrWwgAoLbhUI8y3joMj4GtTx/2nTe8qYWzNflob8+1bPg97sMJGFbWcd0ce9ob
-1dQjX8Om88Kif8F14ooNr2cQb5CT+IZyLW5HRcm4WEf8s3j/AArNo6SREs0iYtBz
-menYVWjMTc3Hq2rfbRJB9MF21R3mtZ5FPLYsXa8bNQZufzCVDwK/NAtIvSf6cbzW
-fMqdBxmk3UyT8iHofvvC1sPDSJlUEcoEva4BUaBv8AHcvyDBTFineMUpTUNfcQk1
-3bBRpHPLH1oIcFbN91ikQQPDfqPqL04XvZBe3Fc9OoMo+2VUszlCuXAsSKYAVq3O
-omV4nDFwvCNcS1Uev35oI5Q2FLk0ZQ==
-=roqZ
------END PGP SIGNATURE-----
+7.	drivers/net: Remove "select SRCU".
 
---Sig_/s2t4ltoAs/nNi7wffYyGNHL--
+8.	drivers/pci/controller: Remove "select SRCU".
+
+9.	fs: Remove CONFIG_SRCU.
+
+10.	fs/btrfs: Remove "select SRCU".
+
+11.	fs/dlm: Remove "select SRCU".
+
+12.	fs/notify: Remove "select SRCU".
+
+13.	fs/quota: Remove "select SRCU".
+
+14.	init: Remove "select SRCU".
+
+15.	kernel/notifier: Remove CONFIG_SRCU.
+
+16.	kernel/power: Remove "select SRCU".
+
+17.	kvm: Remove "select SRCU".
+
+18.	mm: Remove "select SRCU".
+
+19.	tomoyo: Remove "select SRCU".
+
+20.	Remove CONFIG_SRCU.
+
+Changes since v1:
+
+o	Added ack and review tags.
+
+o	Dropped patches taken by their maintainers.
+
+o	Combined the KVM-related commits into a single commit, as requested
+	by Sean Christopherson.  Acks received thus far are qualified by
+	the corresponding architecture.
+
+o	Added the tomoyo patch based on feedback from Nick Desaulniers.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ arch/arm64/kvm/Kconfig                                      |    1 
+ arch/mips/kvm/Kconfig                                       |    1 
+ arch/powerpc/kvm/Kconfig                                    |    1 
+ arch/riscv/kvm/Kconfig                                      |    1 
+ arch/s390/kvm/Kconfig                                       |    1 
+ arch/x86/Kconfig                                            |    2 
+ arch/x86/kvm/Kconfig                                        |    1 
+ drivers/base/core.c                                         |   42 ------------
+ drivers/cpufreq/Kconfig                                     |    1 
+ drivers/dax/Kconfig                                         |    1 
+ drivers/hwtracing/stm/Kconfig                               |    1 
+ drivers/md/Kconfig                                          |    1 
+ drivers/net/Kconfig                                         |    1 
+ drivers/pci/controller/Kconfig                              |    2 
+ fs/btrfs/Kconfig                                            |    1 
+ fs/dlm/Kconfig                                              |    1 
+ fs/locks.c                                                  |   25 -------
+ fs/notify/Kconfig                                           |    1 
+ fs/quota/Kconfig                                            |    1 
+ init/Kconfig                                                |    1 
+ kernel/notifier.c                                           |    3 
+ kernel/power/Kconfig                                        |    1 
+ kernel/rcu/Kconfig                                          |    3 
+ mm/Kconfig                                                  |    1 
+ security/tomoyo/Kconfig                                     |    1 
+ tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt |    4 -
+ 26 files changed, 1 insertion(+), 99 deletions(-)
