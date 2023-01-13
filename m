@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B634566924E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F2B669253
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241127AbjAMJIG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 Jan 2023 04:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S240845AbjAMJIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241034AbjAMJHd (ORCPT
+        with ESMTP id S240559AbjAMJIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:07:33 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5981E74594
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:05:35 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-213-8NbXl33pMYu5sfuK1Wbrsw-1; Fri, 13 Jan 2023 09:04:52 +0000
-X-MC-Unique: 8NbXl33pMYu5sfuK1Wbrsw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 13 Jan
- 2023 09:04:50 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 13 Jan 2023 09:04:50 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mel Gorman' <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>
-CC:     Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/7] mm/page_alloc: Treat RT tasks similar to __GFP_HIGH
-Thread-Topic: [PATCH 2/7] mm/page_alloc: Treat RT tasks similar to __GFP_HIGH
-Thread-Index: AQHZJmoXf1CytyX+t0K5Vu0irpkuJa6cCxcQ
-Date:   Fri, 13 Jan 2023 09:04:50 +0000
-Message-ID: <4c169ca43a7b49f1bf61c01181ed585e@AcuMS.aculab.com>
-References: <20230109151631.24923-1-mgorman@techsingularity.net>
- <20230109151631.24923-3-mgorman@techsingularity.net>
- <Y77VYdboKBUsILhD@dhcp22.suse.cz>
- <20230112093623.sl4jpqf6f2ng43w2@techsingularity.net>
-In-Reply-To: <20230112093623.sl4jpqf6f2ng43w2@techsingularity.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 13 Jan 2023 04:08:17 -0500
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132482BF8;
+        Fri, 13 Jan 2023 01:06:04 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id t7so14460366qvv.3;
+        Fri, 13 Jan 2023 01:06:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rncbaboE5XuNcJEvccSGF4MtmLPzXXPeFYp7DWNYN24=;
+        b=Bmwaxm1IT3RQiV0lUIpcCOUMk73Ot1zpdfca+Fx5eTJfJCz7ffXnSw1IXK4O1Sd2G3
+         pSGDj+f8kRcn/BzoA3hlLLJFcotKeZSt8VJdGQJaXqbkX8xKMSIsE1GjNgnDf+lsOYLQ
+         RzW/vZV4axE73Deq+o3fKdEd+qdb9PenSZY/LXbwa20E4WA8NCi/kE/hIIo2pBO9qTv8
+         9amUVOxJcwzeGK0jwUTJuvxyRcCvHOq5GPlKMQIx/FI6yEvRD+2VQ8NFXqCDEUgHPJF3
+         s4IHzOdjd09TsDmxAUr7ixE7o1pasCZSB9tps5yQeHTBI/DCAiTjjnDy3P3+G8kWRngU
+         nCXQ==
+X-Gm-Message-State: AFqh2kpmR3Bg+22rKByUr17rcg+sPsFIdwqXA0OOWasS0tO86E14PsZg
+        Z6pd+QVA6XYyeD9q9QE94lxREKOhiOQ/Bw==
+X-Google-Smtp-Source: AMrXdXtg7/52GUOJylfV8MsFvnvn5ynIQwHrMPceW6UKz0p7aBtC6K2qnkyElhmDyyTXgNpdFmogBQ==
+X-Received: by 2002:a0c:fd87:0:b0:531:bfb3:7eeb with SMTP id p7-20020a0cfd87000000b00531bfb37eebmr12617880qvr.11.1673600722027;
+        Fri, 13 Jan 2023 01:05:22 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id de19-20020a05620a371300b006fa16fe93bbsm12411011qkb.15.2023.01.13.01.05.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 01:05:21 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-4a263c4ddbaso276305977b3.0;
+        Fri, 13 Jan 2023 01:05:21 -0800 (PST)
+X-Received: by 2002:a81:91cc:0:b0:48d:1334:6e38 with SMTP id
+ i195-20020a8191cc000000b0048d13346e38mr494160ywg.316.1673600721025; Fri, 13
+ Jan 2023 01:05:21 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113084516.31888-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20230113084516.31888-1-lukas.bulwahn@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 13 Jan 2023 10:05:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
+Message-ID: <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: rcar: avoid defines prefixed with CONFIG
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mel Gorman
-> Sent: 12 January 2023 09:36
-...
-> Hard realtime tasks should be locking down resources in advance. Even a
-> soft-realtime task like audio or video live decoding which cannot jitter
-> should be allocating both memory and any disk space required up-front
-> before the recording starts instead of relying on reserves. At best,
-> reserve access will only delay the problem by a very short interval.
+Hi Lukas,
 
-Or, at least, ensuring the system isn't memory limited.
+On Fri, Jan 13, 2023 at 9:52 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
+> that are introduced in a Kconfig file.
+>
+> Here, a definition for a bitmask to configure the SEND_ENABLE mode is named
+> CONFIG_SEND_ENABLE.
+>
+> Rename this local definition to CONFIGURE_SEND_ENABLE to avoid defines
+> prefixed with "CONFIG".
+>
+> No functional change.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-The biggest effect on RT task latency/jitter (on a normal kernel)
-is hardware interrupt and softint code 'stealing' the cpu.
-The main 'culprit' being ethernet receive.
- 
-Unfortunately if you are doing RTP audio (UDP data) you absolutely
-need the ethernet receive to run. When the softint code decides
-to drop back to a normal priority kernel worker thread packets
-get lost.
+Thanks for your patch!
 
-(I've been running 10000 RTP streams - with 10k receive UDP sockets.)
+> --- a/drivers/pci/controller/pcie-rcar.h
+> +++ b/drivers/pci/controller/pcie-rcar.h
+> @@ -11,7 +11,7 @@
+>
+>  #define PCIECAR                        0x000010
+>  #define PCIECCTLR              0x000018
+> -#define  CONFIG_SEND_ENABLE    BIT(31)
+> +#define  CONFIGURE_SEND_ENABLE BIT(31)
 
-So I doubt avoiding sleeps in kmalloc() is going to make a
-significant difference.
+The R-Car Gen3 rev. 2.30 Hardware User's Manual calls the bit "CCIE".
 
-	David
+Hence if I would have written the driver, I would have used
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+    #define PCIECCTLR_CCIE     BIT(31)   /* Configuration Send Enable */
 
+>  #define  TYPE0                 (0 << 8)
+>  #define  TYPE1                 BIT(8)
+>  #define PCIECDR                        0x000020
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
