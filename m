@@ -2,140 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48226692ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215E56692DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240980AbjAMJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S241024AbjAMJ2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241025AbjAMJ10 (ORCPT
+        with ESMTP id S232007AbjAMJ1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:27:26 -0500
-Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6314843A1F;
-        Fri, 13 Jan 2023 01:22:49 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRVd_1673601762;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRVd_1673601762)
-          by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 17:22:42 +0800
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v7 9/9] perf vendor events arm64: Add instruction mix metrics for neoverse-n2-v2
-Date:   Fri, 13 Jan 2023 17:22:20 +0800
-Message-Id: <1673601740-122788-10-git-send-email-renyu.zj@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
-References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 13 Jan 2023 04:27:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4560742622;
+        Fri, 13 Jan 2023 01:22:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEDE96111B;
+        Fri, 13 Jan 2023 09:22:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EE5C433D2;
+        Fri, 13 Jan 2023 09:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673601753;
+        bh=5wOHUqZdPBPR+MAuqG1elkco3tdHEJlg27JpPalGysI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tuS/27UqRB6i7SU8m4qaIld44QJkonNnaxmD6AcjmXBtee/d0xFNLXTcQy8SBLQKS
+         ltfmt/ekuyAAFt8/lOVQgYhB22UyjfsnKaSfIZDk7OtV369xk+bQj9uHna3HLPj5JM
+         D4lNvs3E60MSEVkFPYAprvG++dEfKcO0g4GbOSn16kR8EUgPXocs+JLIPoVsodaWcY
+         K08QnA3XAmdKhArYZFa0HMJe2NfLkcZjKf1YEOLOYF632QyAptTNhQ0kojNLSPNHCp
+         lEog2U1QEhYsVZf6VMVQPIp/r4Yq02Joy4DWnOyJ9uvW9q7EV1DR3WqR6YgE3R9sDO
+         xpcnGmqpw6IZA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pGGGc-001SPO-Gv;
+        Fri, 13 Jan 2023 09:22:30 +0000
+Date:   Fri, 13 Jan 2023 09:22:29 +0000
+Message-ID: <86a62mokkq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pascal Paillet <p.paillet@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: [PATCH 3/3] optee core: add irq chip using optee async notification
+In-Reply-To: <20230112145424.3791276-4-etienne.carriere@linaro.org>
+References: <20230112145424.3791276-1-etienne.carriere@linaro.org>
+        <20230112145424.3791276-4-etienne.carriere@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: etienne.carriere@linaro.org, linux-kernel@vger.kernel.org, jens.wiklander@linaro.org, sumit.garg@linaro.org, op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, p.paillet@foss.st.com, fabrice.gasnier@foss.st.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add instruction mix related metrics.
+On Thu, 12 Jan 2023 14:54:24 +0000,
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> 
+> Adds an irq chip in optee driver to generate interrupts from OP-TEE
+> notified interrupt events based on optee async notification. Upon such
+> notification, optee driver invokes OP-TEE to query a pending interrupt
+> event. If an interrupt notification is pending the invocation return
+> OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_IT and optee driver can get the pending
+> interrupt number with SMC function ID OPTEE_SMC_FUNCID_GET_IT_VALUE.
+> 
+> SMC function ID OPTEE_SMC_FUNCID_SET_IT_MASK allows Linux to mask/unmask
+> an interrupt notification services.
+> 
+> The optee irq_chip if flagged IRQCHIP_SKIP_SET_WAKE to skip set_wake
+> as optee interrupt notifications doesn't support the set_wake option.
+> In case a device is using the optee irq and is marked as wakeup source,
+> this result in an "Unbalanced IRQ xx wake disable" backtrace, since:
+> - in irq_set_irq_wake(ON), wake_depth gets incremented, then reset due to
+>   set_irq_wake_real() returns an error (irq_set_wake() isn't implemented)
+> - in irq_set_irq_wake(OFF), wake_depth is always 0, hence the warning
 
-Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
----
- .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+Is this relevant information?
 
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-index 3d6ac0c..8ad15b7 100644
---- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-+++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-@@ -206,5 +206,68 @@
-         "MetricGroup": "PEutilization",
-         "MetricName": "cpu_utilization",
-         "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "LD_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of load instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "load_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "ST_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of store instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "store_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "DP_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of integer data-processing instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "data_process_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "ASE_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of advanced SIMD instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "advanced_simd_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "VFP_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of floating point instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "float_point_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "CRYPTO_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of crypto instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "crypto_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_IMMED_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of branch immediate instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_immed_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_RETURN_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of procedure return instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_return_spec_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "BR_INDIRECT_SPEC / INST_SPEC",
-+        "BriefDescription": "The rate of indirect branch instructions speculatively executed to overall instructions speclatively executed",
-+        "MetricGroup": "InstructionMix",
-+        "MetricName": "branch_indirect_spec_rate",
-+        "ScaleUnit": "100%"
-     }
- ]
+>
+> Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
+> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+> Co-developed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  drivers/tee/optee/optee_private.h |   2 +
+>  drivers/tee/optee/optee_smc.h     |  78 +++++++++++++++-
+>  drivers/tee/optee/smc_abi.c       | 142 ++++++++++++++++++++++++++++--
+>  3 files changed, 216 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> index e5bd3548691f..2a146d884d27 100644
+> --- a/drivers/tee/optee/optee_private.h
+> +++ b/drivers/tee/optee/optee_private.h
+> @@ -112,6 +112,7 @@ struct optee_pcpu {
+>   * @optee_pcpu		per_cpu optee instance for per cpu work or NULL
+>   * @notif_pcpu_wq	workqueue for per cpu aynchronous notification or NULL
+>   * @notif_pcpu_work	work for per cpu asynchronous notification
+> + * @domain		interrupt domain registered by OP-TEE driver
+>   */
+>  struct optee_smc {
+>  	optee_invoke_fn *invoke_fn;
+> @@ -121,6 +122,7 @@ struct optee_smc {
+>  	struct optee_pcpu __percpu *optee_pcpu;
+>  	struct workqueue_struct *notif_pcpu_wq;
+>  	struct work_struct notif_pcpu_work;
+> +	struct irq_domain *domain;
+>  };
+>  
+>  /**
+> diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+> index 73b5e7760d10..0cf83d5a2931 100644
+> --- a/drivers/tee/optee/optee_smc.h
+> +++ b/drivers/tee/optee/optee_smc.h
+> @@ -226,7 +226,8 @@ struct optee_smc_get_shm_config_result {
+>   * a3	Bit[7:0]: Number of parameters needed for RPC to be supplied
+>   *		  as the second MSG arg struct for
+>   *		  OPTEE_SMC_CALL_WITH_ARG
+> - *	Bit[31:8]: Reserved (MBZ)
+> + *	Bit[23:8]: The maximum interrupt event notification number
+> + *	Bit[31:24]: Reserved (MBZ)
+>   * a4-7	Preserved
+>   *
+>   * Error return register usage:
+> @@ -254,6 +255,11 @@ struct optee_smc_get_shm_config_result {
+>  #define OPTEE_SMC_SEC_CAP_ASYNC_NOTIF		BIT(5)
+>  /* Secure world supports pre-allocating RPC arg struct */
+>  #define OPTEE_SMC_SEC_CAP_RPC_ARG		BIT(6)
+> +/* Secure world supports interrupt events notification to normal world */
+> +#define OPTEE_SMC_SEC_CAP_IT_NOTIF		BIT(7)
+> +
+> +#define OPTEE_SMC_SEC_CAP_MAX_NOTIF_IT_MASK	GENMASK(23, 8)
+> +#define OPTEE_SMC_SEC_CAP_MAX_NOTIF_IT_SHIFT	8
+>  
+>  #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES	9
+>  #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
+> @@ -416,6 +422,12 @@ struct optee_smc_disable_shm_cache_result {
+>   */
+>  #define OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_BOTTOM_HALF	0
+>  
+> +/*
+> + * Notification that OP-TEE triggers an interrupt event to Linux kernel
+> + * for an interrupt consumer.
+> + */
+> +#define OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_IT		1
+> +
+>  #define OPTEE_SMC_FUNCID_GET_ASYNC_NOTIF_VALUE	17
+>  #define OPTEE_SMC_GET_ASYNC_NOTIF_VALUE \
+>  	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_GET_ASYNC_NOTIF_VALUE)
+> @@ -426,6 +438,70 @@ struct optee_smc_disable_shm_cache_result {
+>  /* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
+>  #define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG	19
+>  
+> +/*
+> + * Retrieve the interrupt number of the pending interrupt event notified to
+> + * non-secure world since the last call of this function.
+> + *
+> + * OP-TEE keeps a record of all posted interrupt notification events. When the
+> + * async notif interrupt is received by non-secure world, this function should
+> + * be called until all pended interrupt events have been retrieved. When an
+> + * interrupt event is retrieved it is cleared from the record in secure world.
+> + *
+> + * It is expected that this function is called from an interrupt handler
+> + * in normal world.
+> + *
+> + * Call requests usage:
+> + * a0	SMC Function ID, OPTEE_SMC_GET_IT_NOTIF_VALUE
+> + * a1-6	Not used
+> + * a7	Hypervisor Client ID register
+> + *
+> + * Normal return register usage:
+> + * a0	OPTEE_SMC_RETURN_OK
+> + * a1	IT_NOTIF interrupt identifier value
+> + * a2	Bit[0]: OPTEE_SMC_IT_NOTIF_VALID if the value in a1 is
+> + *		valid, else 0 if no interrupt event were pending
+> + * a2	Bit[1]: OPTEE_SMC_IT_NOTIF_PENDING if another interrupt event
+> + *		value is pending, else 0.
+> + *	Bit[31:2]: MBZ
+> + * a3-7	Preserved
+> + *
+> + * Not supported return register usage:
+> + * a0	OPTEE_SMC_RETURN_ENOTAVAIL
+> + * a1-7	Preserved
+> + */
+> +#define OPTEE_SMC_IT_NOTIF_VALID		BIT(0)
+> +#define OPTEE_SMC_IT_NOTIF_PENDING		BIT(1)
+> +
+> +#define OPTEE_SMC_FUNCID_GET_IT_NOTIF_VALUE	20
+> +#define OPTEE_SMC_GET_IT_NOTIF_VALUE \
+> +	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_GET_IT_NOTIF_VALUE)
+> +
+> +/*
+> + * Mask or unmask an interrupt notification event.
+> + *
+> + * It is expected that this function is called from an interrupt handler
+> + * in normal world.
+> + *
+> + * Call requests usage:
+> + * a0	SMC Function ID, OPTEE_SMC_SET_IT_NOTIF_MASK
+> + * a1	Interrupt identifier value
+> + * a2	Bit[0]: 1 if interrupt event is to be masked, 0 if it is to be unmasked
+> + * a2   Bit[31:1] MBZ
+> + * a3-6	Not used
+> + * a7	Hypervisor Client ID register
+> + *
+> + * Normal return register usage:
+> + * a0	OPTEE_SMC_RETURN_OK
+> + * a1-7	Preserved
+> + *
+> + * Not supported return register usage:
+> + * a0	OPTEE_SMC_RETURN_ENOTAVAIL
+> + * a1-7	Preserved
+> + */
+> +#define OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK	21
+> +#define OPTEE_SMC_SET_IT_NOTIF_MASK \
+> +	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
+> +
+>  /*
+>   * Resume from RPC (for example after processing a foreign interrupt)
+>   *
+> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> index 8c2d58d605ac..0360afde119f 100644
+> --- a/drivers/tee/optee/smc_abi.c
+> +++ b/drivers/tee/optee/smc_abi.c
+> @@ -977,6 +977,112 @@ static int optee_smc_stop_async_notif(struct tee_context *ctx)
+>   * 5. Asynchronous notification
+>   */
+>  
+> +static u32 get_it_value(optee_invoke_fn *invoke_fn, bool *value_valid,
+> +			bool *value_pending)
+
+What value? If this is supposed to return a set of pending bits, just
+name the function to reflect that.
+
+Also, at no point do you explain that each PPI is only a mux interrupt
+for a bunch of chained interrupts.
+
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	invoke_fn(OPTEE_SMC_GET_IT_NOTIF_VALUE, 0, 0, 0, 0, 0, 0, 0, &res);
+> +
+> +	if (res.a0)
+> +		return 0;
+> +
+> +	*value_valid = res.a2 & OPTEE_SMC_IT_NOTIF_VALID;
+> +	*value_pending = res.a2 & OPTEE_SMC_IT_NOTIF_PENDING;
+> +	return res.a1;
+> +}
+> +
+> +static u32 set_it_mask(optee_invoke_fn *invoke_fn, u32 it_value, bool mask)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	invoke_fn(OPTEE_SMC_SET_IT_NOTIF_MASK, it_value, mask, 0, 0, 0, 0, 0, &res);
+> +
+> +	if (res.a0)
+> +		return 0;
+> +
+> +	return res.a1;
+> +}
+> +
+> +static int handle_optee_it(struct optee *optee)
+> +{
+> +	bool value_valid;
+> +	bool value_pending;
+> +	u32 it;
+> +
+> +	do {
+> +		struct irq_desc *desc;
+> +
+> +		it = get_it_value(optee->smc.invoke_fn, &value_valid, &value_pending);
+> +		if (!value_valid)
+> +			break;
+> +
+> +		desc = irq_to_desc(irq_find_mapping(optee->smc.domain, it));
+> +		if (!desc) {
+> +			pr_err("no desc for optee IT:%d\n", it);
+> +			return -EIO;
+> +		}
+> +
+> +		handle_simple_irq(desc);
+> +
+
+What is this? Please use generic_handle_domain_irq(), like any other
+driver. Why is the flow handler handle_simple_irq()? You need to
+explain what the signalling is for the secure-provided interrupts.
+
+> +	} while (value_pending);
+> +
+> +	return 0;
+> +}
+> +
+> +static void optee_it_irq_mask(struct irq_data *d)
+> +{
+> +	struct optee *optee = d->domain->host_data;
+> +
+> +	set_it_mask(optee->smc.invoke_fn, d->hwirq, true);
+> +}
+> +
+> +static void optee_it_irq_unmask(struct irq_data *d)
+> +{
+> +	struct optee *optee = d->domain->host_data;
+> +
+> +	set_it_mask(optee->smc.invoke_fn, d->hwirq, false);
+> +}
+> +
+> +static struct irq_chip optee_it_irq_chip = {
+> +	.name = "optee-it",
+> +	.irq_disable = optee_it_irq_mask,
+> +	.irq_enable = optee_it_irq_unmask,
+> +	.flags = IRQCHIP_SKIP_SET_WAKE,
+
+Is it a mask or a disable? These are different beasts.
+
+> +};
+> +
+> +static int optee_it_alloc(struct irq_domain *d, unsigned int virq,
+> +			  unsigned int nr_irqs, void *data)
+> +{
+> +	struct irq_fwspec *fwspec = data;
+> +	irq_hw_number_t hwirq;
+> +
+> +	hwirq = fwspec->param[0];
+> +
+> +	irq_domain_set_hwirq_and_chip(d, virq, hwirq, &optee_it_irq_chip, d->host_data);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops optee_it_irq_domain_ops = {
+> +	.alloc = optee_it_alloc,
+> +	.free = irq_domain_free_irqs_common,
+> +};
+> +
+> +static int optee_irq_domain_init(struct platform_device *pdev, struct optee *optee, u_int max_it)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +
+> +	optee->smc.domain = irq_domain_add_linear(np, max_it, &optee_it_irq_domain_ops, optee);
+> +	if (!optee->smc.domain) {
+> +		dev_err(dev, "Unable to add irq domain\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static u32 get_async_notif_value(optee_invoke_fn *invoke_fn, bool *value_valid,
+>  				 bool *value_pending)
+>  {
+> @@ -1008,13 +1114,15 @@ static irqreturn_t notif_irq_handler(int irq, void *dev_id)
+>  	}
+>  
+>  	do {
+> -		value = get_async_notif_value(optee->smc.invoke_fn,
+> -					      &value_valid, &value_pending);
+> +		value = get_async_notif_value(optee->smc.invoke_fn, &value_valid, &value_pending);
+>  		if (!value_valid)
+>  			break;
+>  
+>  		if (value == OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_BOTTOM_HALF)
+>  			do_bottom_half = true;
+> +		else if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_IT_NOTIF &&
+> +			 value == OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_IT)
+> +			handle_optee_it(optee);
+
+NAK. This isn't how we deal with chained interrupts. Definitely not in
+an interrupt handler.
+
+	M.
+
 -- 
-1.8.3.1
-
+Without deviation from the norm, progress is not possible.
