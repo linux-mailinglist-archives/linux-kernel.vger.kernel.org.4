@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD010669656
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A795D669653
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236486AbjAMMDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S232448AbjAMMDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbjAMMCL (ORCPT
+        with ESMTP id S233218AbjAMMCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:02:11 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A17F82F88;
-        Fri, 13 Jan 2023 03:53:58 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ntfrf65VRz67RRb;
-        Fri, 13 Jan 2023 19:51:14 +0800 (CST)
-Received: from localhost (10.81.201.219) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
- 2023 11:53:55 +0000
-Date:   Fri, 13 Jan 2023 11:53:54 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Robert Richter <rrichter@amd.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] cxl/mbox: Fix Payload Length check for Get Log
- command
-Message-ID: <20230113115354.00003d5a@Huawei.com>
-In-Reply-To: <20230104202954.1163366-1-rrichter@amd.com>
-References: <20230104202954.1163366-1-rrichter@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 13 Jan 2023 07:02:46 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8596E831A1;
+        Fri, 13 Jan 2023 03:54:19 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30DBs0H1018134;
+        Fri, 13 Jan 2023 05:54:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673610840;
+        bh=NjK3ll3K3PU3Y2EKZgN7uX2wCYmbFcRcjDsJF3k/myE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=eD44ySg4bX2VY6nH4Aa3DVwlAyttpcNgMTaU1i2f13sI55/X5EwAYZ5K/3ZWzTlnw
+         FPhSq/NdbbyN1vT1npCdR2xnpP5r66ejhyd6If+IBgRx4JDZd1ew3VYb5PzroN/P2B
+         KKTn54ovdU5m79aIkwTo+n/ArwwBBOoiUspYrbYI=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30DBs05D116596
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 13 Jan 2023 05:54:00 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 13
+ Jan 2023 05:54:00 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 13 Jan 2023 05:54:00 -0600
+Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30DBrvxD029551;
+        Fri, 13 Jan 2023 05:53:57 -0600
+Message-ID: <d109dbf8-ba51-7322-34e7-f688c5a18908@ti.com>
+Date:   Fri, 13 Jan 2023 17:23:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.201.219]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RESEND PATCH V3 2/3] arm64: dts: ti: Add initial support for
+ AM68 SK System on Module
+Content-Language: en-US
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Sinthu Raja <sinthu.raja@ti.com>
+References: <20230110110052.14851-1-sinthu.raja@ti.com>
+ <20230110110052.14851-3-sinthu.raja@ti.com>
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <20230110110052.14851-3-sinthu.raja@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,140 +73,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 Jan 2023 21:29:54 +0100
-Robert Richter <rrichter@amd.com> wrote:
+Hi Sinthu,
 
-> Commit 2aeaf663b85e introduced strict checking for variable length
-> payload size validation. The payload length of received data must
-> match the size of the requested data by the caller except for the case
-> where the min_out value is set.
+On 10/01/23 16:30, Sinthu Raja wrote:
+> From: Sinthu Raja <sinthu.raja@ti.com>
 > 
-> The Get Log command does not have a header with a length field set.
-> The Log size is determined by the Get Supported Logs command (CXL 3.0,
-> 8.2.9.5.1). However, the actual size can be smaller and the number of
-> valid bytes in the payload output must be determined reading the
-> Payload Length field (CXL 3.0, Table 8-36, Note 2).
+> AM68 Starter Kit (SK) is a low cost, small form factor board designed
+> for TI’s AM68 SoC. TI’s AM68 SoC comprises of dual core A72, high
+> performance vision accelerators, hardware accelerators, latest C71x
+> DSP, high bandwidth real-time IPs for capture and display. The SoC is
+> power optimized to provide best in class performance for industrial
+> applications.
 > 
-> Two issues arise: The command can successfully complete with a payload
-> length of zero. And, the valid payload length must then also be
-> consumed by the caller.
+>     AM68 SK supports the following interfaces:
+>       * 16 GB LPDDR4 RAM
+>       * x1 Gigabit Ethernet interface
+>       * x1 USB 3.1 Type-C port
+>       * x2 USB 3.1 Type-A ports
+>       * x1 PCIe M.2 M Key
+>       * 512 Mbit OSPI flash
+>       * x2 CSI2 Camera interface (RPi and TI Camera connector)
+>       * 40-pin Raspberry Pi GPIO header
 > 
-> Change cxl_xfer_log() to pass the number of payload bytes back to the
-> caller to determine the number of log entries. Implement the payload
-> handling as a special case where mbox_cmd->size_out is consulted when
-> cxl_internal_send_cmd() returns -EIO. A WARN_ONCE() is added to check
-> that -EIO is only returned in case of an unexpected output size.
+> SK's System on Module (SoM) contains the SoC and DDR.
+> Therefore, add DT node for the SOC and DDR on the SoM.
 > 
-> Logs can be bigger than the maximum payload length and multiple Get
-> Log commands can be issued. If the received payload size is smaller
-> than the maximum payload size we can assume all valid bytes have been
-> fetched. Stop sending further Get Log commands then.
+> Schematics: https://www.ti.com/lit/zip/SPRR463
+> TRM: http://www.ti.com/lit/pdf/spruj28
 > 
-> On that occasion, change debug messages to also report the opcodes of
-> supported commands.
-> 
-> The variable payload commands GET_LSA and SET_LSA could be also
-> affected by this strict check, but SET_LSA cannot be broken because
-> SET_LSA does not return an output payload, and GET_LSA never expects
-> short reads.
-> 
-> Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-Hi Robert, a few comments inline.
-
-Thanks,
-
-Jonathan
-
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
 > ---
->  drivers/cxl/core/mbox.c | 28 ++++++++++++++++++++--------
->  1 file changed, 20 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index b03fba212799..e93df0d39022 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -170,6 +170,8 @@ int cxl_internal_send_cmd(struct cxl_dev_state *cxlds,
->  	out_size = mbox_cmd->size_out;
->  	min_out = mbox_cmd->min_out;
->  	rc = cxlds->mbox_send(cxlds, mbox_cmd);
-> +	if (WARN_ONCE(rc == -EIO, "Bad return code: -EIO"))
-
-This is unusual. Why the WARN_ONCE?  How can an error code
-be bad?  It may well panic.  Fine to have a dev_err() or similar
-but this seems excessive.
-
-
-> +		return -ENXIO;
->  	if (rc)
->  		return rc;
->  
-> @@ -576,6 +578,17 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
->  		};
->  
->  		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
+> Changes in V3:
+> =============
+> Addressed review comments
+>  - Removed the unused nodes that are disabled by default.
+> OSPI support will be added once the OSPI node is enabled for J721s2/AM68 in main DTSI.
+> 
+> Changes in V2:
+> =============
+> Address review comments
+>  - drop the empty lines.
+> 
+> V1: https://lore.kernel.org/linux-arm-kernel/20221018123849.23695-3-sinthu.raja@ti.com/
+> V2: https://lore.kernel.org/lkml/20221107123852.8063-3-sinthu.raja@ti.com/
+> 
+>  arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi | 31 ++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+> new file mode 100644
+> index 000000000000..c35f81edee8c
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
+> + */
 > +
-> +		/*
-> +		 * The output payload length that indicates the number
-> +		 * of valid bytes can be smaller than the Log buffer
-> +		 * size.
-> +		 */
-> +		if (rc == -EIO && mbox_cmd.size_out < xfer_size) {
-> +			offset += mbox_cmd.size_out;
-> +			break;
-> +		}
+> +/dts-v1/;
 > +
->  		if (rc < 0)
->  			return rc;
->  
-> @@ -584,7 +597,7 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
->  		offset += xfer_size;
->  	}
->  
-> -	return 0;
-> +	return offset;
->  }
->  
->  /**
-> @@ -608,13 +621,11 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
->  		u16 opcode = le16_to_cpu(cel_entry[i].opcode);
->  		struct cxl_mem_command *cmd = cxl_mem_find_command(opcode);
->  
-> -		if (!cmd) {
-> -			dev_dbg(cxlds->dev,
-> -				"Opcode 0x%04x unsupported by driver", opcode);
-> -			continue;
-> -		}
-> +		if (cmd)
-> +			set_bit(cmd->info.id, cxlds->enabled_cmds);
->  
-> -		set_bit(cmd->info.id, cxlds->enabled_cmds);
-> +		dev_dbg(cxlds->dev, "Opcode 0x%04x %ssupported by driver",
-> +			opcode, cmd ? "" : "un");
+> +#include "k3-j721s2.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		/* 16 GB RAM */
+> +		reg = <0x00 0x80000000 0x00 0x80000000>,
+> +		      <0x08 0x80000000 0x03 0x80000000>;
+> +	};
+> +
+> +	/* Reserving memory regions still pending */
 
-Unrelated change so doesn't belong in this patch.   I'd also split the
-dev_dbg into two paths both to reduce modification and because people
-might grep for "unsupported by driver"
+Is this comment needed?
 
+> +	reserved_memory: reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		secure_ddr: optee@9e800000 {
+> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
+> +			alignment = <0x1000>;
 
->  	}
->  }
->  
-> @@ -695,11 +706,12 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
->  		}
->  
->  		rc = cxl_xfer_log(cxlds, &uuid, size, log);
-> -		if (rc) {
-> +		if (rc < 0) {
+Is alignment needed here?
 
-Feels like passing in size as a pointer that is then updated might be cleaner.
+Please see https://lore.kernel.org/lkml/cd5dbbb0-2d9f-8d7d-b051-f8d01d710c62@ti.com/
 
->  			kvfree(log);
->  			goto out;
->  		}
->  
-> +		size = (u32)rc;
->  		cxl_walk_cel(cxlds, size, log);
->  		kvfree(log);
->  
+> +			no-map;
+> +		};
+> +	};
+> +};
 
+-- 
+Regards,
+Vaishnav
