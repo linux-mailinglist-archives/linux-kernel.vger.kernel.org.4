@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393C366A171
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70C866A16F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjAMSDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S230289AbjAMSDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjAMSBi (ORCPT
+        with ESMTP id S230117AbjAMSBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 13:01:38 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E539CE13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:56:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB20DFD9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:56:07 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 218461763;
-        Fri, 13 Jan 2023 09:56:47 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6C9A1764;
+        Fri, 13 Jan 2023 09:56:49 -0800 (PST)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A1543F67D;
-        Fri, 13 Jan 2023 09:56:02 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B7263F67D;
+        Fri, 13 Jan 2023 09:56:05 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
@@ -37,9 +37,9 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
         Jamie Iles <quic_jiles@quicinc.com>,
         Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
-Subject: [PATCH v2 08/18] x86/resctrl: Queue mon_event_read() instead of sending an IPI
-Date:   Fri, 13 Jan 2023 17:54:49 +0000
-Message-Id: <20230113175459.14825-9-james.morse@arm.com>
+Subject: [PATCH v2 09/18] x86/resctrl: Allow resctrl_arch_rmid_read() to sleep
+Date:   Fri, 13 Jan 2023 17:54:50 +0000
+Message-Id: <20230113175459.14825-10-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230113175459.14825-1-james.morse@arm.com>
 References: <20230113175459.14825-1-james.morse@arm.com>
@@ -53,100 +53,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86 is blessed with an abundance of monitors, one per RMID, that can be
-read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
-the number implemented is up to the manufacturer. This means when there are
-fewer monitors than needed, they need to be allocated and freed.
+MPAM's cache occupancy counters can take a little while to settle once
+the monitor has been configured. The maximum settling time is described
+to the driver via a firmware table. The value could be large enough
+that it makes sense to sleep.
 
-Worse, the domain may be broken up into slices, and the MMIO accesses
-for each slice may need performing from different CPUs.
+To avoid exposing this to resctrl, it should be hidden behind MPAM's
+resctrl_arch_rmid_read(). But add_rmid_to_limbo() calls
+resctrl_arch_rmid_read() from a non-preemptible context.
 
-These two details mean MPAMs monitor code needs to be able to sleep, and
-IPI another CPU in the domain to read from a resource that has been sliced.
+add_rmid_to_limbo() is opportunistically reading the L3 occupancy counter
+on this domain to avoid adding the RMID to limbo if this domain's value
+has drifted below resctrl_rmid_realloc_threshold since the limbo handler
+last ran. Determining 'this domain' involves disabling preeption to
+prevent the thread being migrated to CPUs in a different domain between
+the check and resctrl_arch_rmid_read() call. The check is skipped
+for all remote domains.
 
-mon_event_read() already invokes mon_event_count() via IPI, which means
-this isn't possible.
+Instead, call resctrl_arch_rmid_read() for each domain, and get it to
+read the arch specific counter via IPI if its called on a CPU outside
+the target domain. By covering remote domains, this change stops the
+limbo handler from being started unnecessarily.
 
-Change mon_event_read() to schedule mon_event_count() on a remote CPU and
-wait, instead of sending an IPI. This function is only used in response to
-a user-space filesystem request (not the timing sensitive overflow code).
-
-This allows MPAM to hide the slice behaviour from resctrl, and to keep
-the monitor-allocation in monitor.c.
+This also allows resctrl_arch_rmid_read() to sleep.
 
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 7 +++++--
- arch/x86/kernel/cpu/resctrl/internal.h    | 2 +-
- arch/x86/kernel/cpu/resctrl/monitor.c     | 6 ++++--
- 3 files changed, 10 insertions(+), 5 deletions(-)
+The alternative is to remove the counter read from this path altogether,
+and assume user-space would never try to re-allocate the last RMID before
+the limbo handler runs next.
+---
+ arch/x86/kernel/cpu/resctrl/monitor.c | 58 ++++++++++++++++++---------
+ 1 file changed, 38 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-index 1df0e3262bca..4ee3da6dced7 100644
---- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-+++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-@@ -532,8 +532,11 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
- 		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
- 		    int evtid, int first)
- {
-+	/* When picking a cpu from cpu_mask, ensure it can't race with cpuhp */
-+	lockdep_assert_held(&rdtgroup_mutex);
-+
- 	/*
--	 * setup the parameters to send to the IPI to read the data.
-+	 * setup the parameters to pass to mon_event_count() to read the data.
- 	 */
- 	rr->rgrp = rdtgrp;
- 	rr->evtid = evtid;
-@@ -542,7 +545,7 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
- 	rr->val = 0;
- 	rr->first = first;
- 
--	smp_call_function_any(&d->cpu_mask, mon_event_count, rr, 1);
-+	smp_call_on_cpu(cpumask_any(&d->cpu_mask), mon_event_count, rr, false);
- }
- 
- int rdtgroup_mondata_show(struct seq_file *m, void *arg)
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index adae6231324f..1f90a10b75a1 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -514,7 +514,7 @@ void closid_free(int closid);
- int alloc_rmid(u32 closid);
- void free_rmid(u32 closid, u32 rmid);
- int rdt_get_mon_l3_config(struct rdt_resource *r);
--void mon_event_count(void *info);
-+int mon_event_count(void *info);
- int rdtgroup_mondata_show(struct seq_file *m, void *arg);
- void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
- 		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
 diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 190ac183139e..d309b830aeb2 100644
+index d309b830aeb2..d6ae4b713801 100644
 --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -509,10 +509,10 @@ static void mbm_bw_count(u32 closid, u32 rmid, struct rmid_read *rr)
+@@ -206,17 +206,19 @@ static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int width)
+ 	return chunks >> shift;
  }
  
- /*
-- * This is called via IPI to read the CQM/MBM counters
-+ * This is scheduled by mon_event_read() to read the CQM/MBM counters
-  * on a domain.
-  */
--void mon_event_count(void *info)
-+int mon_event_count(void *info)
+-int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
+-			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
+-			   u64 *val)
++struct __rmid_read_arg
  {
- 	struct rdtgroup *rdtgrp, *entry;
- 	struct rmid_read *rr = info;
-@@ -545,6 +545,8 @@ void mon_event_count(void *info)
- 	 */
- 	if (ret == 0)
- 		rr->err = 0;
-+
-+	return 0;
- }
+-	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+-	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
+-	struct arch_mbm_state *am;
+-	u64 msr_val, chunks;
++	u32 rmid;
++	enum resctrl_event_id eventid;
  
- /*
+-	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
+-		return -EINVAL;
++	u64 msr_val;
++};
++
++static void __rmid_read(void *arg)
++{
++	enum resctrl_event_id eventid = ((struct __rmid_read_arg *)arg)->eventid;
++	u32 rmid = ((struct __rmid_read_arg *)arg)->rmid;
++	u64 msr_val;
+ 
+ 	/*
+ 	 * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is configured
+@@ -229,6 +231,28 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
+ 	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
+ 	rdmsrl(MSR_IA32_QM_CTR, msr_val);
+ 
++	((struct __rmid_read_arg *)arg)->msr_val = msr_val;
++}
++
++int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
++			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
++			   u64 *val)
++{
++	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
++	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
++	struct __rmid_read_arg arg;
++	struct arch_mbm_state *am;
++	u64 msr_val, chunks;
++	int err;
++
++	arg.rmid = rmid;
++	arg.eventid = eventid;
++
++	err = smp_call_function_any(&d->cpu_mask, __rmid_read, &arg, true);
++	if (err)
++		return err;
++
++	msr_val = arg.msr_val;
+ 	if (msr_val & RMID_VAL_ERROR)
+ 		return -EIO;
+ 	if (msr_val & RMID_VAL_UNAVAIL)
+@@ -383,23 +407,18 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
+ {
+ 	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+ 	struct rdt_domain *d;
+-	int cpu, err;
+ 	u64 val = 0;
+ 	u32 idx;
++	int err;
+ 
+ 	idx = resctrl_arch_rmid_idx_encode(entry->closid, entry->rmid);
+ 
+ 	entry->busy = 0;
+-	cpu = get_cpu();
+ 	list_for_each_entry(d, &r->domains, list) {
+-		if (cpumask_test_cpu(cpu, &d->cpu_mask)) {
+-			err = resctrl_arch_rmid_read(r, d, entry->closid,
+-						     entry->rmid,
+-						     QOS_L3_OCCUP_EVENT_ID,
+-						     &val);
+-			if (err || val <= resctrl_rmid_realloc_threshold)
+-				continue;
+-		}
++		err = resctrl_arch_rmid_read(r, d, entry->closid, entry->rmid,
++					     QOS_L3_OCCUP_EVENT_ID, &val);
++		if (err || val <= resctrl_rmid_realloc_threshold)
++			continue;
+ 
+ 		/*
+ 		 * For the first limbo RMID in the domain,
+@@ -410,7 +429,6 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
+ 		set_bit(idx, d->rmid_busy_llc);
+ 		entry->busy++;
+ 	}
+-	put_cpu();
+ 
+ 	if (entry->busy)
+ 		rmid_limbo_count++;
 -- 
 2.30.2
 
