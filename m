@@ -2,168 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988D166996F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F76669974
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241434AbjAMOEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S241393AbjAMOFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbjAMOD1 (ORCPT
+        with ESMTP id S241504AbjAMOEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:03:27 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AA410FDF;
-        Fri, 13 Jan 2023 06:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673618533; x=1705154533;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X8yP8ue7Mjwmum3hdTB2a0jxS4tJ1ITCtpEQuehUOg8=;
-  b=YeoyMKE/sWguMTH9nDKeSlXsCU0HA9HMWEnsgmcmHBFbWjQ2aKG/nMUe
-   lVw+9E5q353OLCJBhWCTK+iQdN0gt2kmPP2nUvBTvgUsSh8LVo/sK3XVB
-   qaSKYvAE3oAXonq9XgWVFeZxTLcdE61dxNqLd5EFPqwot73f+ne8mCs8/
-   jYrtgLAV9yA6uaGWmcJxMpiyTkjHyYWSaR8Jcr+MUEETgY8M8ZhSvWXek
-   zxEfRwaQplOv8HPU0EsZBhHlF04+aSPEYIC6x/fOIwhZUqyVUcZShwL3R
-   Q3J7bst04VWNmOgkQK5Gs4kefqKBhMkZEZ6VSdnypHrmTyVY67q9RSl/1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="388492989"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="388492989"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 06:02:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="987008075"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="987008075"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 06:02:09 -0800
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
-        hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH] platform/x86/intel/pmc: core: Add support to show LTR-ignored components
-Date:   Fri, 13 Jan 2023 19:32:12 +0530
-Message-Id: <20230113140212.3905361-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 13 Jan 2023 09:04:55 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637E182F8B;
+        Fri, 13 Jan 2023 06:02:33 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso12289823otn.2;
+        Fri, 13 Jan 2023 06:02:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m7WW2I9csbO+sPBBS6W+BTb2f2LR/DZ2Nm6771eekLw=;
+        b=L6e8noQIA1/1jxwHt3uM+Gt9VMDs87mkpUbV2FmglIF74jIHUVuvvzNs3SbSSOrAgf
+         f/ka5NqOyOo+6F3CpZFffl6D5uxaU0fxZ1OqX8jIlc3B2KoUyv1JNQJrpUzRA1gQN2sj
+         dDoXkJ8/Gggfx6p2NZXNmfPG7OyUH8nhFXQbB1/a+uq+MKaB8Sxjt7cUXPH7nW09KfYf
+         U4IFPqWB0cn89Wo+6C4X8m30G/yM6VbIvu6Uc8zeRPOWtKAXcbsEnq/LYwuLYd/A9fo/
+         eRKmcLoUlkdk/of3iVbAtOssePfnENN6XRycQstlcVKSGcYU2bSiCu6GVvWzki7itwgs
+         b/oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m7WW2I9csbO+sPBBS6W+BTb2f2LR/DZ2Nm6771eekLw=;
+        b=LeMGbDUBFAmH+/4GtxvFGIKZeUPhS10NjIHSB8g1DQLgie7GZnq8TY9Yex73shwx7X
+         wp7Tkuo5dXVWDiN2qRje/t9uuUK6agPhHCLBucI9kGe5RaO0Sbi5vyVQrXTUn5njAB1S
+         tYz4KtRpiN40ek2QVzNNcpdjQd2xKfCMp3R7RM9NL6cS68G5mTAdd3QMoV3RHJ2syGBT
+         xb12FMJntnnbDbAS2uWsQsUzLI7NP7i1hMlcXbLig7E70r+7BvdMoE6iep9FYpsBqhb4
+         zoEmikDaSSR3MolVFHfysJEpNlkkCHFB1SsYQrn2+8fBN7PGyKC/L3XFU3XdheC21QnR
+         y9Yw==
+X-Gm-Message-State: AFqh2kplycTGhrCSEnikJ7hgnnXx0fS+J323GVUxEhuKgUpayryx2zZJ
+        p2rnsSAVsONy+rKjKmiB9n8JcCknPEc=
+X-Google-Smtp-Source: AMrXdXvOTt4AXigd4jHpSeu67/kvX7httT+GIs3dvP1CAowS3j+PgRuAO92Q2enU75cWzmCl4RZOYw==
+X-Received: by 2002:a05:6830:6718:b0:678:3281:61d5 with SMTP id cr24-20020a056830671800b00678328161d5mr44460731otb.4.1673618552630;
+        Fri, 13 Jan 2023 06:02:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v20-20020a05683018d400b00670641eb272sm10514903ote.20.2023.01.13.06.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 06:02:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 13 Jan 2023 06:02:30 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 1/7] dt-bindings: watchdog: qcom-wdt: require fallback
+ for IPQ4019
+Message-ID: <20230113140230.GA1606649@roeck-us.net>
+References: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
+ <20230113103346.29381-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113103346.29381-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
-if there are components whose LTR values have been ignored.
+On Fri, Jan 13, 2023 at 11:33:40AM +0100, Krzysztof Kozlowski wrote:
+> The device specific compatibles ("qcom,kpss-wdt-ipq4019") should be
+> follwed by fallback "qcom,kpss-wdt", which is actually used by Linux
+> driver for binding.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-This patch adds the feature to print out such components, if they exist.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/core.c | 47 ++++++++++++++++++++-------
- 1 file changed, 35 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index a1fe1e0dcf4a..30fff4461807 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -129,6 +129,14 @@ static const struct pmc_bit_map *ext_spt_pfear_map[] = {
- 	NULL
- };
- 
-+struct ltr_entry {
-+	u32 comp_index;
-+	const char *comp_name;
-+	struct list_head node;
-+};
-+
-+static LIST_HEAD(ltr_ignore_list);
-+
- static const struct pmc_bit_map spt_ltr_show_map[] = {
- 	{"SOUTHPORT_A",		SPT_PMC_LTR_SPA},
- 	{"SOUTHPORT_B",		SPT_PMC_LTR_SPB},
-@@ -1327,27 +1335,18 @@ static int pmc_core_pll_show(struct seq_file *s, void *unused)
- }
- DEFINE_SHOW_ATTRIBUTE(pmc_core_pll);
- 
--static int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
-+static void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
- {
- 	const struct pmc_reg_map *map = pmcdev->map;
- 	u32 reg;
--	int err = 0;
- 
- 	mutex_lock(&pmcdev->lock);
- 
--	if (value > map->ltr_ignore_max) {
--		err = -EINVAL;
--		goto out_unlock;
--	}
--
- 	reg = pmc_core_reg_read(pmcdev, map->ltr_ignore_offset);
- 	reg |= BIT(value);
- 	pmc_core_reg_write(pmcdev, map->ltr_ignore_offset, reg);
- 
--out_unlock:
- 	mutex_unlock(&pmcdev->lock);
--
--	return err;
- }
- 
- static ssize_t pmc_core_ltr_ignore_write(struct file *file,
-@@ -1356,6 +1355,8 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
- {
- 	struct seq_file *s = file->private_data;
- 	struct pmc_dev *pmcdev = s->private;
-+	const struct pmc_reg_map *map = pmcdev->map;
-+	struct ltr_entry *entry;
- 	u32 buf_size, value;
- 	int err;
- 
-@@ -1365,13 +1366,35 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
- 	if (err)
- 		return err;
- 
--	err = pmc_core_send_ltr_ignore(pmcdev, value);
-+	if (value > map->ltr_ignore_max)
-+		return -EINVAL;
- 
--	return err == 0 ? count : err;
-+	list_for_each_entry(entry, &ltr_ignore_list, node) {
-+		if (entry->comp_index == value)
-+			return -EEXIST;
-+	}
-+
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	entry->comp_name = map->ltr_show_sts[value].name;
-+	entry->comp_index = value;
-+	list_add_tail(&entry->node, &ltr_ignore_list);
-+
-+	pmc_core_send_ltr_ignore(pmcdev, value);
-+
-+	return count;
- }
- 
- static int pmc_core_ltr_ignore_show(struct seq_file *s, void *unused)
- {
-+	struct ltr_entry *entry;
-+
-+	list_for_each_entry(entry, &ltr_ignore_list, node) {
-+		seq_printf(s, "%s\n", entry->comp_name);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.34.1
-
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Add tag.
+> ---
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index a1f17c9e02db..e76364c52fc7 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -17,6 +17,7 @@ properties:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - qcom,kpss-wdt-ipq4019
+>                - qcom,apss-wdt-msm8994
+>                - qcom,apss-wdt-qcs404
+>                - qcom,apss-wdt-sc7180
+> @@ -35,7 +36,6 @@ properties:
+>                - qcom,kpss-wdt
+>                - qcom,kpss-timer
+>                - qcom,kpss-wdt-apq8064
+> -              - qcom,kpss-wdt-ipq4019
+>                - qcom,kpss-wdt-ipq8064
+>                - qcom,kpss-wdt-msm8960
+>                - qcom,scss-timer
+> -- 
+> 2.34.1
+> 
