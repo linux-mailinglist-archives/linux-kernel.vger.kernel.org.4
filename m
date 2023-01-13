@@ -2,140 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D896366901B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348A2669022
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbjAMIIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:08:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S240378AbjAMIJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjAMIHp (ORCPT
+        with ESMTP id S240795AbjAMIIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:07:45 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6137392FD;
-        Fri, 13 Jan 2023 00:04:37 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 12EE51C000B;
-        Fri, 13 Jan 2023 08:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673597076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvxk6DPDlmeOz1Nn9izcenGUkdQHjs7DPmCAW7HiLUE=;
-        b=Bu0gSlWMgpDnKyBJAhbLPzgDZLvaaTCma7cj46th38QxpH/47+drhybCAiePHomM0aTh83
-        +PXDsWuxQ0Gze0oSdhbIo31xIIwfPwHPP5kCc5Eb0QcCvts6IrrEX6pBoZYt6mPF/snPmq
-        b/DFsQClZhA1dHPWiT9Y+EoRd/xRmZ/MnZQOI5RFkcDPWvXhg88+HqTLhPB/+Twbf/b5xe
-        ODYI5UOQVKp0rZnJ69vWJMU1zopXB+Olug2gjyfbsBe3POdUeDo+TzsYBLOc7qApp71wsr
-        tGND6/XXAbxN3j8QDXt522WDLId2uUazy6oVdOyihsb9hfF4lAIOzbgsfCRwVw==
-Date:   Fri, 13 Jan 2023 09:04:31 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 2/3] ASoC: codecs: Add support for the Renesas IDT821034
- codec
-Message-ID: <20230113090431.7f84c93a@bootlin.com>
-In-Reply-To: <Y774bY4icD8RuMnX@sirena.org.uk>
-References: <20230111134905.248305-1-herve.codina@bootlin.com>
-        <20230111134905.248305-3-herve.codina@bootlin.com>
-        <Y77DKSdZf27qE+xl@sirena.org.uk>
-        <20230111174022.077f6a8c@bootlin.com>
-        <Y774bY4icD8RuMnX@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Fri, 13 Jan 2023 03:08:35 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C29B574E7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:06:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=b2mmceqvtzf6lElFARDVmEM9PLO
+        aKyEwhEvAg0JHMe4=; b=olUth3Axyxf4EdbyG5ZJ/qchr4/HEmEla//d7zUxoL8
+        WkITfnMHWvBJnLh7oy67/MqWffBaMx2AWGBA90Dp49dMH008zWHq4McN2MvGtDYb
+        /0kJ5XTPyGt+Ee6YRQAXnS7zhKVCq+bsECphIJwo4y1XY/PuJaC17iwN7E1iyVNk
+        =
+Received: (qmail 1181036 invoked from network); 13 Jan 2023 09:06:01 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2023 09:06:01 +0100
+X-UD-Smtp-Session: l3s3148p1@vPATtCDypIFehh92
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+Date:   Fri, 13 Jan 2023 09:05:50 +0100
+Message-Id: <20230113080550.1736-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+From: Cong Dang <cong.dang.xn@renesas.com>
 
-On Wed, 11 Jan 2023 17:57:01 +0000
-Mark Brown <broonie@kernel.org> wrote:
+According to the datasheets, the Strobe Timing Adjustment bit (STRTIM)
+setting is different on R-Car SoCs, i.e.
 
-> On Wed, Jan 11, 2023 at 05:40:22PM +0100, Herve Codina wrote:
-> > Mark Brown <broonie@kernel.org> wrote: =20
-> > > On Wed, Jan 11, 2023 at 02:49:04PM +0100, Herve Codina wrote: =20
->=20
-> > > Without knowing why things are written in this way or what it's trying
-> > > to accomplish it's hard to comment in detail on what specifically sho=
-uld
-> > > be done. =20
->=20
-> > Yes, I use regmap to ease the integration of controls and use the
-> > already defined controls macros but the device registers do not fit
-> > well with regmap. =20
->=20
-> If this doesn't fit into regmap then don't try to shoehorn it into
-> regmap, that just makes it incredibly hard to follow what's going on.
->=20
-> > The device registers are not defined as simple as address/value pairs.
-> > Accesses contains one or more bytes and the signification of the
-> > data (and bytes) depends on the first bits.
-> > - 0b10xxxxxx means 'Control register' with some data as xxxxxx
-> >   and one extra byte
-> > - 0b1101yyyy means 'Configuration register, slic mode' with
-> >   some other data as yyyy and one extra byte
-> > - 0b1100zzzz means 'Configuration register, gain mode' with
-> >   some other data as zzzz and two extra bytes =20
->=20
-> So really the device only has three registers, each of different sizes
-> and windowed fields within those registers?  I love innovation,
-> innovation is great and it's good that our hardware design colleagues
-> work so hard to keep us in jobs.  It seems hardly worth it to treat them
-> as registers TBH.  This is so far off a register/value type thing that I
-> just wouldn't even try.
->=20
-> > Of course, I can describe all of these in details.
-> > Where do you want to have this information ? All at the top
-> > of the file ? Each part (low-level, virtual regs, ...) at
-> > the beginning of each part in the code ? =20
->=20
-> I'm not sure what problem it solves to use regmap or have virtual
-> registers in the first place.  I think you would be better off with
-> custom _EXT controls, you almost have that anway just hidden in the
-> middle of the fake register stuff instead of directly there.  My sense
-> is that the result would be much less code.  If you are trying to map
-> things onto registers you probably want comments at every level since
-> you don't know where people are going to end up jumping into the code.
->=20
-> Perhaps it's possible to write some new SND_SOC_ helpers that work with
-> just a value in the device's driver data rather than a regmap and have
-> a callback to trigger a write to the device?  I suspect that'd be
-> generally useful actually...
+R-Car H3 ES1.*  : STRTIM[2:0] is set to 0x0
+R-Car M3 ES1.*  : STRTIM[2:0] is set to 0x6
+other R-Car Gen3: STRTIM[2:0] is set to 0x7
+other R-Car Gen4: STRTIM[3:0] is set to 0xf
 
-Well, I wil try to use my own .put() and .get() for snd_controls.
+To fix this issue, a DT match data was added to specify the setting
+for special use cases.
 
-For DAPM (struct snd_soc_dapm_widget), no kind of .put() and .get()
-are available. I will use some Ids for the 'reg' value and use the
-.write() and .read() hooks available in struct snd_soc_component_driver
-in order to handle these Ids and so perform the accesses.
+Signed-off-by: Cong Dang <cong.dang.xn@renesas.com>
+Signed-off-by: Hai Pham  <hai.pham.ud@renesas.com>
+[wsa: rebased, restructured a little, added Gen4 support]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Do you think this can be the right way (at least for a first try) ?
+This upports a patch from the BSP to handle the ES1.* variants. Turns
+out this is a nice idea to handle Gen3/4 differences as well. Tested on
+an Eagle board (R-Car V3M) and White-Hawk (R-Car V4H). ES1.* handling
+tested by faking the entries to apply for V4H as well.
 
-Best regards,
-Herv=C3=A9
+Prabhakar: could you kindly check if RZ/G2L supports looks okay to you?
 
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ drivers/memory/renesas-rpc-if.c | 61 ++++++++++++++++++++++++++-------
+ include/memory/renesas-rpc-if.h |  6 ++++
+ 2 files changed, 54 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index c36b407851ff..2cbd869ba443 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -15,6 +15,7 @@
+ #include <linux/of_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
++#include <linux/sys_soc.h>
+ 
+ #include <memory/renesas-rpc-if.h>
+ 
+@@ -163,6 +164,36 @@ static const struct regmap_access_table rpcif_volatile_table = {
+ 	.n_yes_ranges	= ARRAY_SIZE(rpcif_volatile_ranges),
+ };
+ 
++static const struct rpcif_info rpcif_info_r8a7795_es1 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 0,
++};
++
++static const struct rpcif_info rpcif_info_r8a7796_es1 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 6,
++};
++
++static const struct rpcif_info rpcif_info_gen3 = {
++	.type = RPCIF_RCAR_GEN3,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_rz_g2l = {
++	.type = RPCIF_RZ_G2L,
++	.strtim = 7,
++};
++
++static const struct rpcif_info rpcif_info_gen4 = {
++	.type = RPCIF_RCAR_GEN4,
++	.strtim = 15,
++};
++
++static const struct soc_device_attribute rpcif_info_match[]  = {
++	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &rpcif_info_r8a7795_es1 },
++	{ .soc_id = "r8a7796", .revision = "ES1.*", .data = &rpcif_info_r8a7796_es1 },
++	{ /* Sentinel. */ }
++};
+ 
+ /*
+  * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
+@@ -256,6 +287,8 @@ static const struct regmap_config rpcif_regmap_config = {
+ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
++	const struct soc_device_attribute *attr;
++	const struct rpcif_info *info;
+ 	struct resource *res;
+ 
+ 	rpc->dev = dev;
+@@ -276,9 +309,14 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+ 	rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(rpc->dirmap))
+ 		return PTR_ERR(rpc->dirmap);
+-	rpc->size = resource_size(res);
+ 
+-	rpc->type = (uintptr_t)of_device_get_match_data(dev);
++	info = of_device_get_match_data(dev);
++	attr = soc_device_match(rpcif_info_match);
++	if (attr)
++		info = attr->data;
++
++	rpc->info = info;
++	rpc->size = resource_size(res);
+ 	rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+ 
+ 	return PTR_ERR_OR_ZERO(rpc->rstc);
+@@ -305,7 +343,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 
+ 	pm_runtime_get_sync(rpc->dev);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L) {
++	if (rpc->info->type == RPCIF_RZ_G2L) {
+ 		int ret;
+ 
+ 		ret = reset_control_reset(rpc->rstc);
+@@ -321,12 +359,9 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 	/* DMA Transfer is not supported */
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_HS, 0);
+ 
+-	if (rpc->type == RPCIF_RCAR_GEN3)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(7), RPCIF_PHYCNT_STRTIM(7));
+-	else if (rpc->type == RPCIF_RCAR_GEN4)
+-		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+-				   RPCIF_PHYCNT_STRTIM(15), RPCIF_PHYCNT_STRTIM(15));
++	regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
++			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim),
++			   RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
+ 
+ 	regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1, RPCIF_PHYOFFSET1_DDRTMG(3),
+ 			   RPCIF_PHYOFFSET1_DDRTMG(3));
+@@ -337,7 +372,7 @@ int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+ 		regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
+ 				   RPCIF_PHYINT_WPVAL, 0);
+ 
+-	if (rpc->type == RPCIF_RZ_G2L)
++	if (rpc->info->type == RPCIF_RZ_G2L)
+ 		regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
+ 				   RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
+ 				   RPCIF_CMNCR_BSZ(3),
+@@ -720,9 +755,9 @@ static int rpcif_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id rpcif_of_match[] = {
+-	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
+-	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = (void *)RPCIF_RCAR_GEN4 },
+-	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
++	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = &rpcif_info_gen3 },
++	{ .compatible = "renesas,rcar-gen4-rpc-if", .data = &rpcif_info_gen4 },
++	{ .compatible = "renesas,rzg2l-rpc-if", .data = &rpcif_info_rz_g2l },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, rpcif_of_match);
+diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
+index 862eff613dc7..75da785a18ff 100644
+--- a/include/memory/renesas-rpc-if.h
++++ b/include/memory/renesas-rpc-if.h
+@@ -63,6 +63,11 @@ enum rpcif_type {
+ 	RPCIF_RZ_G2L,
+ };
+ 
++struct rpcif_info {
++	enum rpcif_type type;
++	u8 strtim;
++};
++
+ struct rpcif {
+ 	struct device *dev;
+ 	void __iomem *base;
+@@ -71,6 +76,7 @@ struct rpcif {
+ 	struct reset_control *rstc;
+ 	size_t size;
+ 	enum rpcif_type type;
++	const struct rpcif_info *info;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
+ 	u8 xfer_size;
+-- 
+2.30.2
+
