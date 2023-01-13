@@ -2,103 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E6966894D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1A866895A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 03:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239769AbjAMB43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S229887AbjAMCE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 21:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbjAMB4Z (ORCPT
+        with ESMTP id S231372AbjAMCEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:56:25 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E49A62F9;
-        Thu, 12 Jan 2023 17:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673574984; x=1705110984;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yvASKDHwILgtst84ENqUbJ1Kti8pnA3VwnnU1NdHEAo=;
-  b=jkoJqhpDEQ6vbIiTS4B0XPDZ4nnEU/L+bnfFQkrdkHMwerBqCgvTlmUw
-   71Zq3VHSU7THdsI+9/W1VwsLUpbzF14PQ65CsjfFd9m0WL5fPVqjxE9Ze
-   PJs6rQG4kRFzvz/pST6gia8l3RclYKLlkH+tC4aP4M3O2nkFG8AqZ+DeA
-   TEI8p/MLSv3uiDC068TTnow5Ij9SER2sM9KjzEDIgrkLS8aF7saNhjrwL
-   6Wef4vfS6ONsgxp6x3L+2P0nSDjlMYnhLn03nKLQZ4NiFXbWLP2JSBPai
-   YGMHFpncdovkol0PO/DxTd/dGv7vtS4crKLPlSS7pl1f1ZMem+DFWiY5B
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="307437823"
-X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="307437823"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:56:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="635606264"
-X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="635606264"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.252.189.78]) ([10.252.189.78])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:56:19 -0800
-Message-ID: <3ae3f5d2-1b58-7498-656d-696182a3589f@linux.intel.com>
-Date:   Fri, 13 Jan 2023 09:56:17 +0800
+        Thu, 12 Jan 2023 21:04:25 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181A9621B0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:04:24 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so14874762ila.13
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:04:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ayK0uCBsQox46J2IE0pM400tXWnCHlDcWCx3CfqtMg4=;
+        b=DwldKgGhhQMljrR0HCmlZvLImfUKSNaf9R8Jk0+tkknVEzq67kRoss5qwSb1pfYZiP
+         /f84YkM22kGhfbro9nhesHUEm7c8nCIU0wqIoiVlqvQgH4eZ9h8EOSwwoqhsoqyHPkTQ
+         3QVxIH7qFeFj9BD9XpmRtRTfFypjiLbmZfuiI0R4lJlnOY99LYE/+p0cDedkmjRf/VnI
+         Uh8ld0R5UIsfxZV9xIdoypEnKn95Uzhaa5e8VSmstKGEvIoGlTrGpXZ/fKFm9RafI5IX
+         hzWhx4Q3v/v9lqz3orQl81MFYkdpdzh3H/d544xeBd+VSn1tDS+1Mlp+m6HErufjhgQ5
+         6mNQ==
+X-Gm-Message-State: AFqh2kooIdTwN57uidOkseG7OnCEYfdXtdMs1WpWM/yVl7KImvy2xZ3a
+        sqt6MViok9H8gA3b/2oV/lWeOu2vXz4qxp2ul4RGtPsC37Jb
+X-Google-Smtp-Source: AMrXdXsKcSRHw8sK4t0XWANe42NYk0I4/oJdtmEBrZdoPzhm0JpvcxnGDQ4Sn8K9sIotqBiDSGtJjPWBqOpkz1le8/IfbiZrzani
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Matt Fagnani <matt.fagnani@bell.net>
-Subject: Re: [PATCH 1/1] PCI: Add translated request only opt-in for
- pci_enable_pasid()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20230112183422.GA1778973@bhelgaas>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230112183422.GA1778973@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:f53:b0:30c:2d97:1a9b with SMTP id
+ y19-20020a056e020f5300b0030c2d971a9bmr5456205ilj.143.1673575463465; Thu, 12
+ Jan 2023 18:04:23 -0800 (PST)
+Date:   Thu, 12 Jan 2023 18:04:23 -0800
+In-Reply-To: <d4f4556c-11ac-7533-f047-cdcfda9bddf8@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000013c3e05f21ba793@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in io_fallback_tw
+From:   syzbot <syzbot+ebcc33c1e81093c9224f@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/13 2:34, Bjorn Helgaas wrote:
-> On Thu, Jan 12, 2023 at 09:25:25PM +0800, Baolu Lu wrote:
->> On 2023/1/12 20:38, Jason Gunthorpe wrote:
->>> On Thu, Jan 12, 2023 at 04:46:29PM +0800, Lu Baolu wrote:
->>>
->>>> -int pci_enable_pasid(struct pci_dev *pdev, int features);
->>>> +int pci_enable_pasid(struct pci_dev *pdev, int features, bool
->>>> transled_only);
->        ^^^^^^^^
-> 
->> + * @flags: device-specific flags
->> + *   - PCI_PASID_TRANSLED_REQ_ONLY: The PCI device only issues PASID
->> + *                                  memory requests of translated type.
->                      ^^^^^^^^
-> 
-> I don't like "transled" since it's not a word itself or an obvious
-> combination of "translated" and something else.
-> 
-> Not sure whether you need to abbreviate it, but if you do, "xlate" is
-> a common shortening of "translate".
+Hello,
 
-Yes. "xlate" looks better. I will replace with it.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-I've updated this patch with a v2.
+Reported-and-tested-by: syzbot+ebcc33c1e81093c9224f@syzkaller.appspotmail.com
 
-https://lore.kernel.org/linux-iommu/20230113014409.752405-1-baolu.lu@linux.intel.com/
+Tested on:
 
-Thank you both for the comments.
+commit:         73f41663 Merge branch 'for-6.3/iter-ubuf' into for-next
+git tree:       git://git.kernel.dk/linux.git for-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16cc1236480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
+dashboard link: https://syzkaller.appspot.com/bug?extid=ebcc33c1e81093c9224f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
---
-Best regards,
-baolu
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.
