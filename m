@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CC6669E3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85225669E3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjAMQgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S230161AbjAMQhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjAMQgM (ORCPT
+        with ESMTP id S230203AbjAMQgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:36:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A0EA83E6;
-        Fri, 13 Jan 2023 08:30:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB6366226E;
-        Fri, 13 Jan 2023 16:30:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC89BC433D2;
-        Fri, 13 Jan 2023 16:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673627432;
-        bh=j52NZSUcbPH04wq22NuEeLM/pe4Wo9omP1Wcc2GeDRk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tMxoK32yQiH3wR0wEpYOfAevbRha36rHH02Gwf6dMMQKX445c/KNCED5XVxbzyH1p
-         cZVF5t2pOLb1VATvIhZiIj7J/xrBmFaj6BbDNNdeK9VLyoPSAYjgSqx71rzc2/ylXX
-         Nf0MSQ8ci05/Fb6k+LziWXY6Ye4bJtNRAIDHAM30HywOdDz3r19ozJfHuiMG1WzTZH
-         IsLmQ4dQcv6j6ekU/3NsxV14hU4xAPWnKz41p8wgsGMKZuLbINEyFKlaEspHssqhVK
-         deO+FKx0GbCSnFzjDLDjUcZIDAA7n8POhuifnavTnfTbdARoyW3HKavsZ/FOLkObMQ
-         Ivfoh9AC3Jbsw==
-Date:   Fri, 13 Jan 2023 17:30:24 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: rcar: avoid defines prefixed with CONFIG
-Message-ID: <Y8GHICwCNRsYCva8@lpieralisi>
-References: <20230113084516.31888-1-lukas.bulwahn@gmail.com>
- <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
+        Fri, 13 Jan 2023 11:36:33 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E4F848F5;
+        Fri, 13 Jan 2023 08:31:30 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 78so15335793pgb.8;
+        Fri, 13 Jan 2023 08:31:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OgCWvW8jX2wErUKxI+z8+BgYAV94/Tfe5mI1Ig8QDC4=;
+        b=qZkE3mLWRTvty5Mxr1y4bHFKSlzRssHJnZyCDg9zv4d61DQ/E99yCB3YTwCXUXo4Iw
+         SDmYOS3sGHBjpsZW7WyXDFPFg9C3blE6Rp0Vnz15GAmY4kjeM/afYaabuKoE5kIYWP7A
+         EC79oB0ZVNqoky4xizSPnYAMWPAZU7N30QDFJI7AYSV302b7rq2whcNlIFZGC4YXXJM2
+         po/SbpKL0d1RyiSKDToGZgSUfacoDyMldFbCtdlA2uOnT/rHSHkbTzg7nrStxvqA3lrb
+         NYGVz0f+AFVEBxfl1higVGDK8XokeRfSvBA6H+vQKPqbMHLebdLPLB+fzmOWJxQQsnqW
+         kplA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OgCWvW8jX2wErUKxI+z8+BgYAV94/Tfe5mI1Ig8QDC4=;
+        b=UwPIhkKsVRYcj4WGDl4oh+MSYzLBugbnyD+jyppaW8Lh/1dueXvuQYtlj6EyxasQxW
+         PIDS5IGo68mvAA4yrH98KWJq42tFPMBI1Ml8di11QdfYogRPNQNHPX6m7AlXtO3BhyZ4
+         mU6DX5eWkQkdpfwSaF/V6YN1MnDromvcWory6oyzZdz9SKe3WM08jY01UAhW3qcdHFdH
+         7cpILbrQY/CsYAaSGVfangkok+qqn13JuV7AAP6M3A/hpid1b6NVq3lcqEKpEhvTE+1n
+         lu8X4bp0RlTTHBfojxHGcdIM9olGrczznKYl1azEsJkMZOhQfV49wFWOcGIUiSclwQO6
+         scjg==
+X-Gm-Message-State: AFqh2ko8zhgcUIhahu6D7xSxh2w//MDhTMMcP0Z/kbqqXYEEOyd3bvVv
+        B7dUyU0ZsAq1khghpVXPeFY=
+X-Google-Smtp-Source: AMrXdXv/TF3ixaHLICwM75AhYPxrA1TJHfw06SvJA5qxr6b/vPoZeiAJ0qe8UV1ZTksYL6UstOEesw==
+X-Received: by 2002:a62:6001:0:b0:582:33b4:4c57 with SMTP id u1-20020a626001000000b0058233b44c57mr10338463pfb.33.1673627489305;
+        Fri, 13 Jan 2023 08:31:29 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id p189-20020a625bc6000000b00580cc63dce8sm11780694pfb.77.2023.01.13.08.31.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:31:27 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 13 Jan 2023 06:31:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the workqueues tree
+Message-ID: <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
+References: <20230113143102.2e94d74f@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113143102.2e94d74f@canb.auug.org.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:05:09AM +0100, Geert Uytterhoeven wrote:
-> Hi Lukas,
+On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Fri, Jan 13, 2023 at 9:52 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> > Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
-> > that are introduced in a Kconfig file.
-> >
-> > Here, a definition for a bitmask to configure the SEND_ENABLE mode is named
-> > CONFIG_SEND_ENABLE.
-> >
-> > Rename this local definition to CONFIGURE_SEND_ENABLE to avoid defines
-> > prefixed with "CONFIG".
-> >
-> > No functional change.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> After merging the workqueues tree, today's linux-next build (x86_64
+> allnoconfig and several others) produced this warning:
 > 
-> Thanks for your patch!
+> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
+>  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
+>       |             ^~~~~~~~~~~~~
 > 
-> > --- a/drivers/pci/controller/pcie-rcar.h
-> > +++ b/drivers/pci/controller/pcie-rcar.h
-> > @@ -11,7 +11,7 @@
-> >
-> >  #define PCIECAR                        0x000010
-> >  #define PCIECCTLR              0x000018
-> > -#define  CONFIG_SEND_ENABLE    BIT(31)
-> > +#define  CONFIGURE_SEND_ENABLE BIT(31)
+> Introduced by commit
 > 
-> The R-Car Gen3 rev. 2.30 Hardware User's Manual calls the bit "CCIE".
-> 
-> Hence if I would have written the driver, I would have used
-> 
->     #define PCIECCTLR_CCIE     BIT(31)   /* Configuration Send Enable */
+>   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
 
-Should I change it when I merge it ? That makes sense actually.
+Valentin, this is caused by rebind_worker() being only used by
+rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
+rebind_worker(). Just fold it back into rebind_workers()?
 
-Thanks,
-Lorenzo
+Thanks.
 
-> >  #define  TYPE0                 (0 << 8)
-> >  #define  TYPE1                 BIT(8)
-> >  #define PCIECDR                        0x000020
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+-- 
+tejun
