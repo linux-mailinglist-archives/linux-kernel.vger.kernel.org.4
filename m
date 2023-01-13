@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A582766A45D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F0366A460
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjAMUq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S230382AbjAMUsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjAMUqj (ORCPT
+        with ESMTP id S231349AbjAMUrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:46:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C9892C5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:46:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D90B6231C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 20:46:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4031C433F0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 20:46:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673642773;
-        bh=7eYc0XhXnQW93GkTSFYdIkOSneTuRRIkHMfKlRT3emM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=S43jiel7jHVWZxXocbPs9onLt6Fmy7xZvOXNcw7RyKIjL9j58y5jmOYd6x9IANi74
-         3cG2ay04GatN2G0GsHHOsl6/ORg+pEG78YEAiCsiXpzOqccOOJsij7CHeM5BTOQo8T
-         6gQiAPkXmVtgAtO4nyEQw/P31IfjQvynNFaove79hMNNpuiMZEpt3Ac1Gm5EEPvtLK
-         uPoN/vq8nTxqn8RljxyKi73zI+0Ws007ZP0FdIpOC/UrFsNx33ShV3wk5m4ifXrtV8
-         cGhxoSWe4KlsYoYRILYfMYYQdKevAbpEsQwsAai2c9o1+ZyHdYVOBgSr4RyjLdFL3/
-         TXe/sNtjKGiPQ==
-Received: by mail-lf1-f48.google.com with SMTP id b3so34726384lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:46:13 -0800 (PST)
-X-Gm-Message-State: AFqh2krrXhLwGTr4e/PYX1VkcYIJGFxpD0RMMx1bVwFOP1LzFnocqkRF
-        KaYL7rHsHzm5DhfYjFjUiV1b+96ZvXPB3QeDVwk=
-X-Google-Smtp-Source: AMrXdXsWvsRzFjpBxH0BYvnhEu1soeJwTK2Zeb8O9icHUx42bdlsXNkEMAldp2aBv5UshwYEi5M+2Ymrr+9EPlHaf4I=
-X-Received: by 2002:a19:640f:0:b0:4b6:e71d:94a6 with SMTP id
- y15-20020a19640f000000b004b6e71d94a6mr6072221lfb.476.1673642771838; Fri, 13
- Jan 2023 12:46:11 -0800 (PST)
+        Fri, 13 Jan 2023 15:47:40 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5695B88DDC;
+        Fri, 13 Jan 2023 12:46:50 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id s124so1815940oif.1;
+        Fri, 13 Jan 2023 12:46:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9OyV33OUJhlI5mwm69sd2O9VmK+PLImRqzdV7apRGPI=;
+        b=Sq3sVIFm9IGjdMMzLwg0/JDW9bOfBEd6kD8j7G2PjWmCIkXik2Kmqa2UOErL1IqUb4
+         NNTEUCrMObdnCqJilrpp+qdRs2ePnTYyT9YeOlDtdtU2pLXDMsKOkf5YtJSNRO+2+l1O
+         0njLW0SsD1bS8lufozGf6Ds1UBcPlwozqXLno9YyY96utDJ8KCNOKzm+TRrun7ZvR8+F
+         Ywk7bVkvrcmlwXrOyl9lQj+cDPKXjtQYdp3miVyUbeXRptvZ0pqATUHD9IulrhCnAR3V
+         lW+6OxvlnP1Bga28mn4m5z8As1VYSvG2PaNoRKDrrCOJ9yGqd2enONWhEYq7YEGaVOYP
+         TfCg==
+X-Gm-Message-State: AFqh2kpqAMhNq4/jsuoXEnJkNgrLW7UUXYrVmU4PQW/1siJEjlZ/xqBQ
+        1/mPTqStGtZeLDHfK8nPPg==
+X-Google-Smtp-Source: AMrXdXvgM0nwUjelEFyWvjA8p6YbDz6iLcaYHxcRZS7w24OHTPmEhdC9mh67Ds8JNlwgfrNKRnuaLw==
+X-Received: by 2002:a05:6808:18aa:b0:35e:1a0f:7dea with SMTP id bi42-20020a05680818aa00b0035e1a0f7deamr47989197oib.12.1673642797896;
+        Fri, 13 Jan 2023 12:46:37 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q10-20020acad90a000000b00354932bae03sm9630099oig.10.2023.01.13.12.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 12:46:37 -0800 (PST)
+Received: (nullmailer pid 2893298 invoked by uid 1000);
+        Fri, 13 Jan 2023 20:46:36 -0000
+Date:   Fri, 13 Jan 2023 14:46:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Melody Olvera <quic_molvera@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6] dt-bindings: soc: qcom,rpmh-rsc: Update to allow for
+ generic nodes
+Message-ID: <167364279598.2893245.18171316624883671372.robh@kernel.org>
+References: <20230112203653.23139-1-quic_molvera@quicinc.com>
 MIME-Version: 1.0
-References: <20230112214015.1014857-1-namhyung@kernel.org> <20230112214015.1014857-3-namhyung@kernel.org>
-In-Reply-To: <20230112214015.1014857-3-namhyung@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 13 Jan 2023 12:45:59 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5t-9uLXvovdR=wj6o=RZhdaUucj_PkeWqcaSDgbn_q1Q@mail.gmail.com>
-Message-ID: <CAPhsuW5t-9uLXvovdR=wj6o=RZhdaUucj_PkeWqcaSDgbn_q1Q@mail.gmail.com>
-Subject: Re: [PATCH 2/8] perf/core: Add perf_sample_save_callchain() helper
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112203653.23139-1-quic_molvera@quicinc.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> When it saves the callchain to the perf sample data, it needs to update
-> the sample flags and the dynamic size.  To make sure this, add the
-> perf_sample_save_callchain() helper and convert all call sites.
->
-> Cc: x86@kernel.org
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Acked-by: Song Liu <song@kernel.org>
+On Thu, 12 Jan 2023 12:36:53 -0800, Melody Olvera wrote:
+> Update the bindings to allow for generic regulator nodes instead of
+> device-specific node names.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
