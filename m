@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551F866A509
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507BD66A50A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjAMVUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
+        id S229978AbjAMVUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjAMVTi (ORCPT
+        with ESMTP id S230251AbjAMVTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:19:38 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79E988DED;
-        Fri, 13 Jan 2023 13:19:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673644777; x=1705180777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7HGXBTJg+LZ/itJ6xK6JijQc5jcuZbLhB2mx9cppSNI=;
-  b=JYqj4Xel3jzO52S0+gXnFkvhpBiVxfYjqd9WbgO9XbS7S8j18qiJRp3D
-   9np5FkBD8Pn41YN6jukuRHE2S9gugCrzm1B80a+MJbaPxRzq5SjXTjhvn
-   EhXgLPyAjh7Xe39RXbVZMwuDK3cuYJ+eWNxtu4+BVxbpZqKqnu0WuadOk
-   J9658xkpSRlL/mXMEqO6NoZESZ+JOt74XPGwJWj9rluKF+dKxofvmaz7e
-   cIsopI6zQS6kOqhBng7hRsFn4kT8Sp9WG0IJYiYpGWyS/tTJ0iQPGpNM2
-   Bk6QEGh3Zl7jS/xbJd++80+EilYG8Hz17lAgcUpL2NbX1yUqbv+at/+zY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="304482241"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="304482241"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 13:19:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="635910766"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="635910766"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2023 13:19:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pGRSW-008r5k-2l;
-        Fri, 13 Jan 2023 23:19:32 +0200
-Date:   Fri, 13 Jan 2023 23:19:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: of: Move enum of_gpio_flags to its only
- user
-Message-ID: <Y8HK5G/htwYyahi0@smile.fi.intel.com>
-References: <20230112145140.67573-1-andriy.shevchenko@linux.intel.com>
- <Y8AzwdCGr4VFjP5X@smile.fi.intel.com>
- <20230113202351.GA2864676-robh@kernel.org>
+        Fri, 13 Jan 2023 16:19:54 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99BF80AEB;
+        Fri, 13 Jan 2023 13:19:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1673644790;
+        bh=1ePr5/9/hpdk8ZNP/fLzQHeSBYrINMgfTNk9jaNeHJo=;
+        h=Date:To:From:Subject:From;
+        b=UcrXebDqr75hEGbA8OgZScDK5rqBtb5/QBKuGsgD0XV0ptggC9HFLuva2FTFY3pZf
+         yaGXO1YejIpMF9r1jiPXCIW8OHrqhORlX31p/MOp9QYRq1E15yeH7Lbt//t+HNZ2Zd
+         +qu0GVC3RYwtsyqPgHQ8xULrxzxyw06qurzqb6UDy4m5v2CFCrXG59pFtPhAF1LFra
+         P0GaMsgC+411+8crWZwuNntoH924WIpGOaP6eIeXAT12F3C+apXIQtre7jk2CKf6Or
+         e1ZgTmbd0OC5IR3q1ebNSdS9/QVifZ5s7yWCKKv8QR+lgUSeLerGd/CyN43h386Flt
+         ZJVWPGUao1OaA==
+Received: from [10.1.0.205] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NtvSk161FzgMN;
+        Fri, 13 Jan 2023 16:19:50 -0500 (EST)
+Message-ID: <d8cf45aa-936c-90e7-61c4-cef6f7fe0006@efficios.com>
+Date:   Fri, 13 Jan 2023 16:20:23 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113202351.GA2864676-robh@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     lttng-dev@lists.lttng.org,
+        diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.12.12 and 2.13.8 (Linux kernel tracer)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 02:23:51PM -0600, Rob Herring wrote:
-> On Thu, Jan 12, 2023 at 06:22:25PM +0200, Andy Shevchenko wrote:
-> > On Thu, Jan 12, 2023 at 04:51:40PM +0200, Andy Shevchenko wrote:
-> > > GPIO library for OF is the only user for enum of_gpio_flags.
-> > > Move it there.
+Hi,
 
-...
+Those are stable release updates of the LTTng modules project.
 
-> > > +/*
-> > > + * This is Linux-specific flags. By default controllers' and Linux' mapping
-> > > + * match, but GPIO controllers are free to translate their own flags to
-> > > + * Linux-specific in their .xlate callback. Though, 1:1 mapping is recommended.
-> > > + */
-> > 
-> > Now that I re-read the comment, I think this can be postponed until we get a
-> > consensus that no new driver is ever should do non 1:1 mapping.
-> > 
-> > If that consensus achieved, we may drop this enum altogether and replace it
-> > with the generic flags..
-> 
-> We don't keep things with no users. We can move this back if there ever 
-> is a user.
+The most relevant change is that the 2.13.8 version introduces
+support for the 6.1 Linux kernel, kernel version ranges updates
+for the RHEL kernels, and a kallsyms wrapper fix on ppc64el.
 
-Yes! But my point to go even deeper and replace this 1:1 mapped bits by
-the generic ones.
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+tracer toolset.
+
+* New in these releases:
+
+2023-01-13 (National Sticker Day) LTTng modules 2.13.8
+         * fix: jbd2: use the correct print format
+         * Fix: in_x32_syscall was introduced in v4.7.0
+         * Explicitly skip tracing x32 system calls
+         * fix: kallsyms wrapper on ppc64el
+         * fix: Adjust ranges for RHEL 8.6 kernels
+         * fix: kvm-x86 requires CONFIG_KALLSYMS_ALL
+         * fix: mm/slab_common: drop kmem_alloc & avoid dereferencing fields when not using (v6.1)
+
+2023-01-13 (National Sticker Day) LTTng modules 2.12.12
+         * fix: jbd2: use the correct print format
+         * Fix: in_x32_syscall was introduced in v4.7.0
+         * Explicitly skip tracing x32 system calls
+         * fix: kallsyms wrapper on ppc64el
+         * fix: Adjust ranges for RHEL 8.6 kernels
+         * fix: kvm-x86 requires CONFIG_KALLSYMS_ALL
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
