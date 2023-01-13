@@ -2,151 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D56F66989F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9F06698B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241571AbjAMNeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S241473AbjAMNfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241733AbjAMNc5 (ORCPT
+        with ESMTP id S241306AbjAMNel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:32:57 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DC354DB0;
-        Fri, 13 Jan 2023 05:26:00 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id v6so9297962ejg.6;
-        Fri, 13 Jan 2023 05:26:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=znAinhBfXuM1PISXQH/gsHh7kwfzvCgAHP3IxVk6mKM=;
-        b=G9sCQ/DnPbVL6zMG7KlNzChe6PyOiJ9BhyAxo2aiw+1Ar0GSuj3HPMN5Q4YGWlC1ol
-         PDOi53YUaFxveXreTEsUWmTxSlKth/wjwkYdPvxSsRhKc98KwbTEAj6JaHQ2MCyMCnvs
-         94+gZ8E4HO6qxpFigiENCAaXGySqTCoH+lE0ydAU/3gM6KpgQ3bFSt97ODAHqUQItzO4
-         sdbUF7aU8Z62V9h58cZ1ZUR0AFOkx2k5a8bXUD7F1f0smNc5wl4x0g7/uumMcB7YLotV
-         zSceJeABLqvsqtBcVnS0c7VNBL3P22+R7LrjN+O5Um1mEeptgzj01QlydbgKsRO3+3mo
-         GX8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=znAinhBfXuM1PISXQH/gsHh7kwfzvCgAHP3IxVk6mKM=;
-        b=PkywSAw3TY1u+GFVOICRdClBDlM/6tbi8GfEa7fMM3Fau1BKCP3/dCmd42ClROTbxj
-         gPmkRmqHbZOMKFUIWNctI6JlaR6g0ooJ8exD47BV0IU8q9cBeiQx3+NHCljSziB4DwHS
-         O6tw6RY72J4J/hTweEYb77a2yEbmQELe309bIVxnBg+gDBI44HTs37mvnMl6jFRkm3jg
-         ts9MyJPrOGE8CN1q0JeujoAQi95bMdoqqH4QFtaXosfwm+y/q2bcsd4b/Q/+ZLxXcVss
-         6qF5nMm3NsJMiqt1uQ/JeuT92fk2l+Dq+5luv0t9c9pFUPOruoxexAjhjGcQUzz35ID0
-         11sw==
-X-Gm-Message-State: AFqh2kqlVMUhZUDMpCstDziLt49x/T+3jI1qBZ/18zMMWSuID0yCv5v0
-        81F2+AWb9iKiec+PuTCLHKE=
-X-Google-Smtp-Source: AMrXdXsbVOH2RORnpbb+Q2BiTjPZ828ljVBVvUB/EGL3gD39yELq5LCD2xSuXPygZEPBrcHSi+6wAw==
-X-Received: by 2002:a17:906:f6c1:b0:7cd:ffd:51f2 with SMTP id jo1-20020a170906f6c100b007cd0ffd51f2mr84180214ejb.57.1673616358808;
-        Fri, 13 Jan 2023 05:25:58 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id q1-20020a17090676c100b007c0d4d3a0c1sm8568288ejn.32.2023.01.13.05.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 05:25:58 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 13 Jan 2023 14:25:55 +0100
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: Re: [PATCHSET 0/8] perf/core: Prepare sample data for BPF
-Message-ID: <Y8Fb45iZ5yp3TUDD@krava>
-References: <20230112214015.1014857-1-namhyung@kernel.org>
+        Fri, 13 Jan 2023 08:34:41 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E10769B38;
+        Fri, 13 Jan 2023 05:27:43 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DDLcph016266;
+        Fri, 13 Jan 2023 13:27:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=+WJUO3ePmvcHVo2nSLw37HwecQkJ8I9m6+fwvm9fcOE=;
+ b=Y1i4LudMS6gyh/s8Kp/L5opPi+kUoDy5etYdCXP1/jROpG19BT4c8D9NR3njxsOzABaY
+ xjkI4jVxfDC0Vg57KaZnj/wVsqZOGDQQB0Zk/Vol6jdhHWhC//agx3NQA/lyV4RZSsyN
+ /rJnrsO1mtQk+QPHmAitrhLDZNtiKOsB0TyqEMr54S2oVrWg+q1rAE7kAxu9MI2OoD38
+ W22nWt9jhN6HFbu3xl0CDpJzmUnyCxEuOjEaqzPVhr3P2dEGByEQf/9wzPy6BciRXb/h
+ N4emfdpp5BlIRStkbPhHeGessEOH4475tu799WUPeuCDmYRj3OdHkBR4pFv4NGSMvDvJ Gg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2hum2wur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 13:27:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DDQUUZ027470
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 13:26:30 GMT
+Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 05:26:21 -0800
+Message-ID: <3a0cb097-36f2-01a5-658c-4ec8294e7ba7@quicinc.com>
+Date:   Fri, 13 Jan 2023 18:56:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112214015.1014857-1-namhyung@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5/7] dt-bindings: qcom: Add ipq9574 bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-6-quic_devipriy@quicinc.com>
+ <8b1848f1-1a26-ff8b-75e9-e336af80743c@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <8b1848f1-1a26-ff8b-75e9-e336af80743c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IXhIrrEvdSrW60IjFIIu9pYxRZ_okc9S
+X-Proofpoint-ORIG-GUID: IXhIrrEvdSrW60IjFIIu9pYxRZ_okc9S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_06,2023-01-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ bulkscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
+ mlxscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130089
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 01:40:07PM -0800, Namhyung Kim wrote:
-> Hello,
-> 
-> The perf_prepare_sample() is to fill the perf sample data and update the
-> header info before sending it to the ring buffer.  But we want to use it
-> for BPF overflow handler so that it can access the sample data to filter
-> relevant ones.
-> 
-> Changes in v2)
->  * the layout change is merged
->  * reduce branches using __cond_set  (PeterZ)
->  * add helpers to set dynamic sample data  (PeterZ)
->  * introduce perf_prepare_header()  (PeterZ)
->  * call perf_prepare_sample() before bpf_overflow_handler unconditionally
-> 
-> This means the perf_prepare_handler() can be called more than once.  To
-> avoid duplicate work, use the data->sample_flags and save the data size.
-> 
-> I also added a few of helpers to set those information accordingly.
-> But it looks some fields like REGS_USER, STACK_USER and AUX are saved in
-> the perf_prepare_sample() so I didn't add the helpers for them.
-> 
-> After than we can just check the filtered_sample_type flags begin zero
-> to determine if it has more work.  In that case, it needs to update the
-> data->type since it's possible to miss when PMU driver sets all required
-> sample flags before calling perf_prepare_sample().
-> 
-> The code is also available at 'perf/prepare-sample-v2' branch in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> Cc: Song Liu <song@kernel.org>
-> Cc: bpf@vger.kernel.org
-> 
-> 
-> Namhyung Kim (8):
->   perf/core: Save the dynamic parts of sample data size
->   perf/core: Add perf_sample_save_callchain() helper
->   perf/core: Add perf_sample_save_raw_data() helper
->   perf/core: Add perf_sample_save_brstack() helper
->   perf/core: Set data->sample_flags in perf_prepare_sample()
->   perf/core: Do not pass header for sample id init
->   perf/core: Introduce perf_prepare_header()
->   perf/core: Call perf_prepare_sample() before running BPF
 
-lgtm, I ran the bpf selftests on top of that and it's ok
 
-jirka
-
+On 1/11/2023 3:09 PM, Krzysztof Kozlowski wrote:
+> On 10/01/2023 13:13, devi priya wrote:
+>> Document the new ipq9574 SOC/board device tree bindings
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> index 27063a045bd0..83102fe2d366 100644
+>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+>> @@ -32,6 +32,7 @@ description: |
+>>           ipq4018
+>>           ipq6018
+>>           ipq8074
+>> +        ipq9574
+>>           mdm9615
+>>           msm8226
+>>           msm8916
+>> @@ -80,6 +81,7 @@ description: |
+>>           hk01
+>>           hk10-c1
+>>           hk10-c2
+>> +        ap-al02-c7
 > 
->  arch/powerpc/perf/core-book3s.c    |   3 +-
->  arch/s390/kernel/perf_cpum_cf.c    |   4 +-
->  arch/s390/kernel/perf_cpum_sf.c    |   3 +-
->  arch/s390/kernel/perf_pai_crypto.c |   4 +-
->  arch/s390/kernel/perf_pai_ext.c    |   4 +-
->  arch/x86/events/amd/core.c         |   6 +-
->  arch/x86/events/amd/ibs.c          |   9 +-
->  arch/x86/events/intel/core.c       |   6 +-
->  arch/x86/events/intel/ds.c         |  24 ++--
->  include/linux/perf_event.h         | 133 +++++++++++++-----
->  kernel/events/core.c               | 207 ++++++++++++++++-------------
->  kernel/trace/bpf_trace.c           |   6 +-
->  12 files changed, 236 insertions(+), 173 deletions(-)
+> 'a' rarely goes after 'h'.
+Sure, will update!
 > 
+>>           idp
+>>           liquid
+>>           mtp
+>> @@ -304,6 +306,11 @@ properties:
+>>                 - qcom,ipq8074-hk10-c2
+>>             - const: qcom,ipq8074
 > 
-> base-commit: 9fcad995c6c52cc9791f7ee9f1386a5684055f9c
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
+> Best regards,
+> Krzysztof
 > 
+Best Regards,
+Devi Priya
