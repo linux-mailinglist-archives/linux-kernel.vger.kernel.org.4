@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D093E66967D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB4C66967E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbjAMMI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
+        id S240751AbjAMMKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240865AbjAMMHi (ORCPT
+        with ESMTP id S240928AbjAMMJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:07:38 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59A1FE0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:59:52 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id mp20so5186067ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:59:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lM60jB5CeQGfmEnmDWStP3rhRDC4AugryFBW67wjBxI=;
-        b=XaEEC5PZdtcHMQ7EV4jsUpXyAKWlZi1l4EUZI2/t0KdEhJEZf2pRJWdFEIkdkcDAWS
-         hNEV7yYATrN8TE65cpXj9S2cI4rY3lprGDk7RPsbQOJksOYrf1rgDlUaMEFheiLIi4OD
-         gWtrHp+p+t2y56+Yea4IE2kMNDXtC70yZeClRBMZlYzJtYebnmDQ4bQhCF1b4G2wsRz/
-         G380H320AapWZ74/58MqNsqQ+fk8UBx12uOW6598WiU94HbxImN/oMGdjBUgiOBt8ayG
-         uhtGX2OEQrV7eSCTy1NKbMMxVouHv2gLlXeJpaDffQ+hpsNJGXloKDm3l4SNRRp/uCGE
-         IvpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lM60jB5CeQGfmEnmDWStP3rhRDC4AugryFBW67wjBxI=;
-        b=TZKsxeV6xUuorf9F8mLdkfFApvRkhQV3lcapIBjTSXyLo79EqtpeiOZ9FHj1sQdCT+
-         kxn5+BFMJmK6BzK29NULRkHs0TXUeh7iemnUeA315n08lWG3kA+U5x12SVVEK+8iOFf1
-         LDlF3jQ3gwAAf0wed/jdOZLErfK5H0ss6ADnTHlU6/lMR2nnpUgkpr3JN3seGnL5j2U+
-         ly/AiwgIgY8U2ZmW7O3qVbdgSlB94nhgEH6Rpg5gyFv/QclCf3WQq0ghnS7+4jXb5FCd
-         jkjqSrpLPKzcyLwfWYNNbec4QDWyyULvAwsEPyshGQFqomv5eAD5BGJVVppZj1e5BCgq
-         +0Bw==
-X-Gm-Message-State: AFqh2ko6r48lNpgF3rsIaUz+XDckWUMID2R0EXJQ1cncougF/G4qejMc
-        TLpuCdaHvN/CwTyZI6iGChZBFQ==
-X-Google-Smtp-Source: AMrXdXvHFuBXHMVk0hBzhEM99tOU+VIvQ/ZKfYPQVI98WQOjRvcco+YhoSpAcYKvIxwXWJifbqXL3g==
-X-Received: by 2002:a17:906:99d1:b0:7c1:12ef:bf52 with SMTP id s17-20020a17090699d100b007c112efbf52mr63943919ejn.3.1673611191261;
-        Fri, 13 Jan 2023 03:59:51 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id kr12-20020a1709079a0c00b0084d44553af9sm6417588ejc.215.2023.01.13.03.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 03:59:50 -0800 (PST)
-Message-ID: <d16ed246-86b3-7837-845d-ba33dd61b482@linaro.org>
-Date:   Fri, 13 Jan 2023 12:59:49 +0100
+        Fri, 13 Jan 2023 07:09:22 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A55736C0;
+        Fri, 13 Jan 2023 04:03:06 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBs2ik021014;
+        Fri, 13 Jan 2023 12:02:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WV1GMeXtHBAkSXAwxixVT2ra972So+jSDMEr/4FiIc0=;
+ b=eqGPxT9dgnpzVQUTssleakiwPWCkmwe5Kde0cseueAZ3r9imfLBWequbgnEujOHp2f9z
+ Yn/FOlMvCyafnjVr1l+q/BfYg7OBMR0KMDQb2DIeMGZ9GxC/ZiSq1GtI+IW/dNV4eVT+
+ vrpOXPlm7bN0vjPh2ZptsDCjRslqXYkmY2d4ZwM0WmF8ygTYID36XqiSPyRtieiq9MKs
+ wQbtxoAu+oJrZpM1oVSdhGTiY2XNP2pqk+Tg6W0TfLV1xAn1CZrGLSR7yD6s4xL5NCg5
+ FtmdOi9TqjfN8tKSMN9nhZUWioCSm/i/1eLguvhnNDDF7Nhd5+er4t1Gw7dshbcEcUmx vA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2k47jn51-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 12:02:54 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DC2qPJ017272
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 12:02:52 GMT
+Received: from [10.216.54.29] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 04:02:49 -0800
+Message-ID: <240e0299-96ca-2703-1339-1c52c4c1582d@quicinc.com>
+Date:   Fri, 13 Jan 2023 17:32:46 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 02/10] dt-bindings: arm: mediatek: mmsys: Add support
- for MT8195 VPPSYS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] pstore/ram: Rework logic for detecting ramoops
 Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230113054304.21841-1-moudy.ho@mediatek.com>
- <20230113054304.21841-3-moudy.ho@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113054304.21841-3-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Kees Cook <keescook@chromium.org>
+CC:     <tony.luck@intel.com>, <gpiccoli@igalia.com>,
+        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1673428065-22356-1-git-send-email-quic_mojha@quicinc.com>
+ <202301121337.B8CCCB6@keescook>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <202301121337.B8CCCB6@keescook>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KtUFqNPyFmQfR45qIlgY16zdOw1gfnCq
+X-Proofpoint-ORIG-GUID: KtUFqNPyFmQfR45qIlgY16zdOw1gfnCq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 clxscore=1015 mlxscore=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 impostorscore=0 lowpriorityscore=0 spamscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301130081
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,31 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 06:42, Moudy Ho wrote:
-> For MT8195, VPPSYS0 and VPPSYS1 are 2 display pipes with
-> hardware differences in power domains, clocks and subsystem counts,
-> which should be determined by compatible names.
+Hi Kees,
+
+Thanks for your comments.
+
+On 1/13/2023 3:09 AM, Kees Cook wrote:
+> On Wed, Jan 11, 2023 at 02:37:45PM +0530, Mukesh Ojha wrote:
+>> The reserved memory region for ramoops is assumed to be at a fixed
+>> and known location when read from the devicetree. This is not desirable
+>> in environments where it is preferred the region to be dynamically
+>> allocated at runtime, as opposed to being fixed at compile time.
+>>
+>> Also, Some of the platforms might be still expecting dedicated
+>> memory region for ramoops node where the region is known
+>> beforehand and platform_get_resource() is used in that case.
+>>
+>> So, Add logic to detect the start and size of the ramoops memory
+>> region by looking up reserved memory region with
+>> of_reserved_mem_lookup() when platform_get_resource() failed.
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        | 2 ++
->  1 file changed, 2 insertions(+)
+> Thanks for the patch! Notes below...
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> index 84de12709323..27d2631d43d3 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> @@ -34,6 +34,8 @@ properties:
->                - mediatek,mt8188-vdosys0
->                - mediatek,mt8192-mmsys
->                - mediatek,mt8365-mmsys
-> +              - mediatek,mt8195-vppsys0
-> +              - mediatek,mt8195-vppsys1
+>> ---
+>>   fs/pstore/ram.c | 19 ++++++++++++++-----
+>>   1 file changed, 14 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
+>> index ade66db..e4bbba1 100644
+>> --- a/fs/pstore/ram.c
+>> +++ b/fs/pstore/ram.c
+>> @@ -20,6 +20,7 @@
+>>   #include <linux/compiler.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_address.h>
+>> +#include <linux/of_reserved_mem.h>
+>>   
+>>   #include "internal.h"
+>>   #include "ram_internal.h"
+>> @@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
+>>   {
+>>   	struct device_node *of_node = pdev->dev.of_node;
+>>   	struct device_node *parent_node;
+>> +	struct reserved_mem *rmem;
+>>   	struct resource *res;
+>>   	u32 value;
+>>   	int ret;
+>> @@ -651,13 +653,20 @@ static int ramoops_parse_dt(struct platform_device *pdev,
+>>   
+>>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>   	if (!res) {
+>> -		dev_err(&pdev->dev,
+>> -			"failed to locate DT /reserved-memory resource\n");
+>> -		return -EINVAL;
+>> +		rmem = of_reserved_mem_lookup(of_node);
+>> +		if (rmem) {
+>> +			pdata->mem_size = rmem->size;
+>> +			pdata->mem_address = rmem->base;
+>> +		} else {
+>> +			dev_err(&pdev->dev,
+>> +				"failed to locate DT /reserved-memory resource\n");
+>> +			return -EINVAL;
+>> +		}
+> 
+> Since the "else" case returns, the traditional code pattern is to leave
+> the other case "inline" (an indented), like so:
+> 
+> 		if (!rmem) {
+> 			dev_err(&pdev->dev,
+> 				"failed to locate DT /reserved-memory resource\n");
+> 			return -EINVAL;
+> 		}
+> 		pdata->mem_size = rmem->size;
+> 		pdata->mem_address = rmem->base;
+> 
 
-That's broken order and I did not ack something like this. What's
-happening with these patches?
+Fixed it in v2.
 
-Best regards,
-Krzysztof
+> 
+>> +	} else {
+>> +		pdata->mem_size = resource_size(res);
+>> +		pdata->mem_address = res->start;
+>>   	}
+> 
+> Since this change the potential interface with DT, can you also update
+> the documentation in:
+> 
+> Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+> 
+> Or maybe my understanding of DT parsing is lacking and this change is
+> doing something slightly different?
+>
 
+Have updated the docs in v2;
+
+-Mukesh
