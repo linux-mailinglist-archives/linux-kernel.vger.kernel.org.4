@@ -2,216 +2,453 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569CE669BBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BFC669BC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjAMPRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S229503AbjAMPRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjAMPQZ (ORCPT
+        with ESMTP id S229985AbjAMPQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:16:25 -0500
-Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5293E7BCE9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:07:12 -0800 (PST)
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72]) by mx-outbound12-28.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 13 Jan 2023 15:07:10 +0000
-Received: by mail-pj1-f72.google.com with SMTP id o36-20020a17090a0a2700b00226b4e9895aso10097822pjo.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HbRGp4p8llZk1W2l8huKtE8ynztaxnnEWZGQtpnZTOI=;
-        b=dGvYv+WYBC50wTVzwAJTgsk5pyoEsceJdZ5OMbvQDoXU4V7Hf4vLyvB7VAezKtAVvp
-         g72OaNcztylGRqgPXeq5Rn7UbFMWQnOq3uR8saS0VYfapBZhfCY1RTzU4c/AY69o8yi4
-         ryPIITSLRq+At6HIGHBXXp6MnvR12GITn5aro=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HbRGp4p8llZk1W2l8huKtE8ynztaxnnEWZGQtpnZTOI=;
-        b=MQCAJw2PZez6d/UyGY4gBqecDCnjO8fGvkFloQvSyZDC3rFrlf9UU8vclTbaGnPAa6
-         NrT5LP4fqTKmSdtg/AVKUgoQZNl1PApOFnaAtmXVPIiVp4o4oM7g9zzasa43GicBauVV
-         VWmljoEaQipoibSI0FPF4d5Wwnl8sl1qfEmSqoRkHLJ2nKeeYWixU70qC0uS9sHwwxpV
-         p/3rNEz48aBRTSzkzAn2B0VKTDYbbjLzQtQe9s4OVi1gyg0njwm2V7rzFSSv9nTJa7ea
-         zYcQ8sY1kQAyezCbtYKoIM8gKrPuKx9QHb3j6g2S8xrW63LXwgvp/NHTUM1dOyBvFrXs
-         l2og==
-X-Gm-Message-State: AFqh2krz7++5DdWdhUIA9yy4KLDckYjYSyroR8TwR6m8igeCbcEisWM5
-        Gacy+8AwyKpUWGb69/PKoEX3n2IpNuBwfYUlCd2C1Tp0BVgBUVtL8KUALnAulYx3yFjODVj+goo
-        R/T0usoPJlBKamLJ17LSicInyEXoG9vAjufpM3w/INs8k7CuHtLT5KeprkWNw
-X-Received: by 2002:a17:902:bb85:b0:189:8ca1:e641 with SMTP id m5-20020a170902bb8500b001898ca1e641mr80498984pls.60.1673622429055;
-        Fri, 13 Jan 2023 07:07:09 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXscZmErgOwVL6tBvKuitY7Ib1z13zgRMu2ttD4v7LZfAmey7RhM9DZ9ozf9VslikARPV/ITGQ==
-X-Received: by 2002:a17:902:bb85:b0:189:8ca1:e641 with SMTP id m5-20020a170902bb8500b001898ca1e641mr80498971pls.60.1673622428746;
-        Fri, 13 Jan 2023 07:07:08 -0800 (PST)
-Received: from LAP568U.mistral.in ([106.51.227.150])
-        by smtp.gmail.com with ESMTPSA id v11-20020a170902f0cb00b00180033438a0sm14325723pla.106.2023.01.13.07.07.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 07:07:08 -0800 (PST)
-From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
-X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
-To:     Roger Quadros <rogerq@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sinthu Raja <sinthu.raja@ti.com>
-Subject: [PATCH V4 2/2] phy: ti: j721e-wiz: Add support to enable LN23 Type-C swap
-Date:   Fri, 13 Jan 2023 20:36:15 +0530
-Message-Id: <20230113150615.19375-3-sinthu.raja@ti.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230113150615.19375-1-sinthu.raja@ti.com>
-References: <20230113150615.19375-1-sinthu.raja@ti.com>
+        Fri, 13 Jan 2023 10:16:57 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E5A84F8A;
+        Fri, 13 Jan 2023 07:08:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673622507; x=1705158507;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=fSzzRkB2qtST/cVbscjlg0cgvmJcg/PP+6UVkv8GtXI=;
+  b=Qi/hzw+Ik6Ijdq8ATzzUtDM/RCcbXtkYK25WcXJ8n3eQ6sxwwWJxvnaC
+   9sVbZvtTk5IHRRzekIl5lchwzOjs95Tt3tBnwPzVZvj2pNEGtwSEnjv4V
+   iq6V8gUIe+ng0w5X8Pv2iXDEsqBOT/dp25GGOJ6x6qr1gqrU/T1wPnSeW
+   yDgjbMbWdDPPH9iTpUfIAw64osxNrdFEJ2A/mk2KSk7281EEk4WsH31nn
+   9K3sGBCftsnyvbq9VTVQGBgle8X+s2I3CLH7INwFT1KSZPo4ngjGCNXWv
+   1b5VlRLD7l6THp4Lot/j5b2sak0SUSLwiC9g73Z1gp9WQxYrFC/txTx5W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="388505773"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="388505773"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:08:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="690533744"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="690533744"
+Received: from akoska-mobl1.ger.corp.intel.com ([10.252.51.98])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:08:21 -0800
+Date:   Fri, 13 Jan 2023 17:08:15 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 09/10] mfd: intel-m10-bmc: Add PMCI driver
+In-Reply-To: <Y8FtRPKvfEcniX9Z@google.com>
+Message-ID: <8ba4963-cd39-4ab7-dd28-65434264443@linux.intel.com>
+References: <20221226175849.13056-1-ilpo.jarvinen@linux.intel.com> <20221226175849.13056-10-ilpo.jarvinen@linux.intel.com> <Y8FtRPKvfEcniX9Z@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1673622429-303100-5446-19125-1
-X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.216.72
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245440 [from 
-        cloudscan13-144.eu-central-1a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-2145620619-1673622504=:1600"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sinthu Raja <sinthu.raja@ti.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The WIZ acts as a wrapper for SerDes and has Lanes 0 and 2 reserved
-for USB for type-C lane swap if Lane 1 and Lane 3 are linked to the
-USB PHY that is integrated into the SerDes IP. The WIZ control register
-has to be configured to support this lane swap feature.
+--8323329-2145620619-1673622504=:1600
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-The support for swapping lanes 2 and 3 is missing and therefore
-add support to configure the control register to swap between
-lanes 2 and 3 if PHY type is USB.
+On Fri, 13 Jan 2023, Lee Jones wrote:
 
-Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
----
+> On Mon, 26 Dec 2022, Ilpo Järvinen wrote:
+> 
+> > Add the mfd driver for the Platform Management Component Interface
+> > (PMCI) based interface of Intel MAX10 BMC controller.
+> > 
+> > PMCI is a software-visible interface, connected to card BMC which
+> > provided the basic functionality of read/write BMC register. The access
+> > to the register is done indirectly via a hardware controller/bridge
+> > that handles read/write/clear commands and acknowledgments for the
+> > commands.
+> > 
+> > Previously, intel-m10-bmc provided sysfs under
+> > /sys/bus/spi/devices/... which is generalized in this change because
+> > not all MAX10 BMC appear under SPI anymore.
+> > 
+> > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
+> >  drivers/mfd/Kconfig                           |  12 +
+> >  drivers/mfd/Makefile                          |   1 +
+> >  drivers/mfd/intel-m10-bmc-pmci.c              | 253 ++++++++++++++++++
+> >  4 files changed, 270 insertions(+), 4 deletions(-)
+> >  create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+> > 
+> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+> > index 9773925138af..a8ab58035c95 100644
+> > --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+> > @@ -1,4 +1,4 @@
+> > -What:		/sys/bus/spi/devices/.../bmc_version
+> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../bmc_version
+> >  Date:		June 2020
+> >  KernelVersion:	5.10
+> >  Contact:	Xu Yilun <yilun.xu@intel.com>
+> > @@ -6,7 +6,7 @@ Description:	Read only. Returns the hardware build version of Intel
+> >  		MAX10 BMC chip.
+> >  		Format: "0x%x".
+> >  
+> > -What:		/sys/bus/spi/devices/.../bmcfw_version
+> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../bmcfw_version
+> >  Date:		June 2020
+> >  KernelVersion:	5.10
+> >  Contact:	Xu Yilun <yilun.xu@intel.com>
+> > @@ -14,7 +14,7 @@ Description:	Read only. Returns the firmware version of Intel MAX10
+> >  		BMC chip.
+> >  		Format: "0x%x".
+> >  
+> > -What:		/sys/bus/spi/devices/.../mac_address
+> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_address
+> >  Date:		January 2021
+> >  KernelVersion:  5.12
+> >  Contact:	Russ Weight <russell.h.weight@intel.com>
+> > @@ -25,7 +25,7 @@ Description:	Read only. Returns the first MAC address in a block
+> >  		space.
+> >  		Format: "%02x:%02x:%02x:%02x:%02x:%02x".
+> >  
+> > -What:		/sys/bus/spi/devices/.../mac_count
+> > +What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_count
+> >  Date:		January 2021
+> >  KernelVersion:  5.12
+> >  Contact:	Russ Weight <russell.h.weight@intel.com>
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index a09d4ac60dc7..82f13614d98a 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -2238,6 +2238,18 @@ config MFD_INTEL_M10_BMC_SPI
+> >            additional drivers must be enabled in order to use the functionality
+> >            of the device.
+> >  
+> > +config MFD_INTEL_M10_BMC_PMCI
+> > +	tristate "Intel MAX 10 Board Management Controller with PMCI"
+> > +	depends on FPGA_DFL
+> > +	select MFD_INTEL_M10_BMC_CORE
+> > +	select REGMAP
+> > +	help
+> > +	  Support for the Intel MAX 10 board management controller via PMCI.
+> > +
+> > +	  This driver provides common support for accessing the device,
+> > +	  additional drivers must be enabled in order to use the functionality
+> > +	  of the device.
+> > +
+> >  config MFD_RSMU_I2C
+> >  	tristate "Renesas Synchronization Management Unit with I2C"
+> >  	depends on I2C && OF
+> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > index 5d1f308ee2a7..c90fb96cad2a 100644
+> > --- a/drivers/mfd/Makefile
+> > +++ b/drivers/mfd/Makefile
+> > @@ -274,6 +274,7 @@ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+> >  
+> >  obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)	+= intel-m10-bmc-core.o
+> >  obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)	+= intel-m10-bmc-spi.o
+> > +obj-$(CONFIG_MFD_INTEL_M10_BMC_PMCI)	+= intel-m10-bmc-pmci.o
+> >  
+> >  obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+> >  obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
+> > diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
+> > new file mode 100644
+> > index 000000000000..63ec0f6aba8b
+> > --- /dev/null
+> > +++ b/drivers/mfd/intel-m10-bmc-pmci.c
+> > @@ -0,0 +1,253 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * MFD driver for Platform Management Component Interface (PMCI) based
+> 
+> Please remove any mention of MFD.
+> 
+> This includes the MODULE_*() macros in all patches please.
+> 
+> Better to use terms like 'core' instead.
+> 
+> > + * interface to MAX10 BMC.
+> > + *
+> > + * Copyright (C) 2020-2022 Intel Corporation.
+> > + */
+> > +
+> > +#include <linux/device.h>
+> > +#include <linux/dfl.h>
+> > +#include <linux/mfd/core.h>
+> > +#include <linux/mfd/intel-m10-bmc.h>
+> > +#include <linux/module.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +#define M10BMC_PMCI_INDIRECT_BASE	0x400
+> > +
+> > +#define M10BMC_N6000_SYS_BASE		0x0
+> > +#define M10BMC_N6000_SYS_END		0xfff
+> > +
+> > +#define M10BMC_N6000_DOORBELL		0x1c0
+> > +#define M10BMC_N6000_AUTH_RESULT	0x1c4
+> > +
+> > +/* Telemetry registers */
+> > +#define M10BMC_N6000_TELEM_START	0x400
+> > +#define M10BMC_N6000_TELEM_END		0x78c
+> > +
+> > +#define M10BMC_N6000_BUILD_VER		0x0
+> > +#define NIOS2_N6000_FW_VERSION		0x4
+> > +#define M10BMC_N6000_MAC_LOW		0x20
+> > +#define M10BMC_N6000_MAC_HIGH		(M10BMC_N6000_MAC_LOW + 4)
+> > +
+> > +/* Addresses for security related data in FLASH */
+> > +#define M10BMC_N6000_BMC_REH_ADDR	0x7ffc004
+> > +#define M10BMC_N6000_BMC_PROG_ADDR	0x7ffc000
+> > +#define M10BMC_N6000_BMC_PROG_MAGIC	0x5746
+> > +
+> > +#define M10BMC_N6000_SR_REH_ADDR	0x7ffd004
+> > +#define M10BMC_N6000_SR_PROG_ADDR	0x7ffd000
+> > +#define M10BMC_N6000_SR_PROG_MAGIC	0x5253
+> > +
+> > +#define M10BMC_N6000_PR_REH_ADDR	0x7ffe004
+> > +#define M10BMC_N6000_PR_PROG_ADDR	0x7ffe000
+> > +#define M10BMC_N6000_PR_PROG_MAGIC	0x5250
+> > +
+> > +#define M10BMC_N6000_STAGING_FLASH_COUNT	0x7ff5000
+> > +
+> > +struct m10bmc_pmci_device {
+> > +	void __iomem *base;
+> > +	struct intel_m10bmc m10bmc;
+> > +};
+> > +
+> > +/*
+> > + * Intel FGPA indirect register access via hardware controller/bridge.
+> > + */
+> > +#define INDIRECT_CMD_OFF	0
+> > +#define INDIRECT_CMD_CLR	0
+> > +#define INDIRECT_CMD_RD		BIT(0)
+> > +#define INDIRECT_CMD_WR		BIT(1)
+> > +#define INDIRECT_CMD_ACK	BIT(2)
+> > +
+> > +#define INDIRECT_ADDR_OFF	0x4
+> > +#define INDIRECT_RD_OFF		0x8
+> > +#define INDIRECT_WR_OFF		0xc
+> > +
+> > +#define INDIRECT_INT_US		1
+> > +#define INDIRECT_TIMEOUT_US	10000
+> > +
+> > +struct indirect_ctx {
+> > +        void __iomem *base;
+> > +        struct device *dev;
+> > +};
+> > +
+> > +static int indirect_clear_cmd(struct indirect_ctx *ctx)
+> > +{
+> > +	unsigned int cmd;
+> > +	int ret;
+> > +
+> > +	writel(INDIRECT_CMD_CLR, ctx->base + INDIRECT_CMD_OFF);
+> > +
+> > +	ret = readl_poll_timeout(ctx->base + INDIRECT_CMD_OFF, cmd,
+> > +				 cmd == INDIRECT_CMD_CLR,
+> > +				 INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
+> > +	if (ret)
+> > +		dev_err(ctx->dev, "timed out waiting clear cmd (residual cmd=0x%x)\n", cmd);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int indirect_reg_read(void *context, unsigned int reg, unsigned int *val)
+> > +{
+> > +	struct indirect_ctx *ctx = context;
+> > +	unsigned int cmd, ack, tmpval;
+> > +	int ret;
+> > +
+> > +	cmd = readl(ctx->base + INDIRECT_CMD_OFF);
+> > +	if (cmd != INDIRECT_CMD_CLR)
+> > +		dev_warn(ctx->dev, "residual cmd 0x%x on read entry\n", cmd);
+> > +
+> > +	writel(reg, ctx->base + INDIRECT_ADDR_OFF);
+> > +	writel(INDIRECT_CMD_RD, ctx->base + INDIRECT_CMD_OFF);
+> > +
+> > +	ret = readl_poll_timeout(ctx->base + INDIRECT_CMD_OFF, ack,
+> > +				 (ack & INDIRECT_CMD_ACK) == INDIRECT_CMD_ACK,
+> > +				 INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
+> > +	if (ret)
+> > +		dev_err(ctx->dev, "read timed out on reg 0x%x ack 0x%x\n", reg, ack);
+> > +	else
+> > +		tmpval = readl(ctx->base + INDIRECT_RD_OFF);
+> > +
+> > +	if (indirect_clear_cmd(ctx)) 
+> 
+> What are the chances of the above readl_poll_timeout() failing, then the
+> subsequent one in indirect_clear_cmd() passing?
 
-Changes in V4:
-============
-- Add Review tag.
-- Fix checkpatch CHECK errors.
- * Remove unnecessary paranthesis.
- * Avoid logical continuations in multiple lines.
+I don't have a good answer to what the chances are but the clear command 
+deals with the indirect controller/bridge so failures aren't necessarily 
+1:1. At worst it just causes wait that is double of the poll timeout which 
+doesn't seem that big problem.
 
-Changes in V3:
-=============
-Address review comments:
-- Update comment to mention the LN23 SWAP along with the LN10
+> As I rule, I tend to dislike calling functions from inside if()
+> statements.  If there is no way to work this hunk around, probably
+> better to place the return value inside another variable or use another
+> variable entirely and call indirect_clear_cmd() in the traditional way,
+> like you do everywhere else.
 
-Changes in V2:
-=============
-Address review comments:
-- Update commit description.
-- Rename enum variable name from wiz_lane_typec_swap_mode to wiz_typec_master_lane.
-- Rename enumerators name specific to list of master lanes used for lane swapping.
-- Add inline comments.
+I can add the second variable for that.
 
- drivers/phy/ti/phy-j721e-wiz.c | 38 +++++++++++++++++++++++++++++-----
- 1 file changed, 33 insertions(+), 5 deletions(-)
+> > +		if (!ret)
+> > +			ret = -ETIMEDOUT;
+> > +		goto out;
+> > +	}
+> > +
+> > +	*val = tmpval;
+> 
+> If readl_poll_timeout() fails and indirect_clear_cmd() succeeds, you'll
+> return, at best, junk.
 
-diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
-index b5c1b82e99a6..1b83c98a78f0 100644
---- a/drivers/phy/ti/phy-j721e-wiz.c
-+++ b/drivers/phy/ti/phy-j721e-wiz.c
-@@ -58,6 +58,14 @@ enum wiz_lane_standard_mode {
- 	LANE_MODE_GEN4,
- };
- 
-+/*
-+ * List of master lanes used for lane swapping
-+ */
-+enum wiz_typec_master_lane {
-+	LANE0 = 0,
-+	LANE2 = 2,
-+};
-+
- enum wiz_refclk_mux_sel {
- 	PLL0_REFCLK,
- 	PLL1_REFCLK,
-@@ -194,6 +202,9 @@ static const struct reg_field p_mac_div_sel1[WIZ_MAX_LANES] = {
- static const struct reg_field typec_ln10_swap =
- 					REG_FIELD(WIZ_SERDES_TYPEC, 30, 30);
- 
-+static const struct reg_field typec_ln23_swap =
-+					REG_FIELD(WIZ_SERDES_TYPEC, 31, 31);
-+
- struct wiz_clk_mux {
- 	struct clk_hw		hw;
- 	struct regmap_field	*field;
-@@ -367,6 +378,7 @@ struct wiz {
- 	struct regmap_field	*mux_sel_field[WIZ_MUX_NUM_CLOCKS];
- 	struct regmap_field	*div_sel_field[WIZ_DIV_NUM_CLOCKS_16G];
- 	struct regmap_field	*typec_ln10_swap;
-+	struct regmap_field	*typec_ln23_swap;
- 	struct regmap_field	*sup_legacy_clk_override;
- 
- 	struct device		*dev;
-@@ -676,6 +688,13 @@ static int wiz_regfield_init(struct wiz *wiz)
- 		return PTR_ERR(wiz->typec_ln10_swap);
- 	}
- 
-+	wiz->typec_ln23_swap = devm_regmap_field_alloc(dev, regmap,
-+						       typec_ln23_swap);
-+	if (IS_ERR(wiz->typec_ln23_swap)) {
-+		dev_err(dev, "LN23_SWAP reg field init failed\n");
-+		return PTR_ERR(wiz->typec_ln23_swap);
-+	}
-+
- 	wiz->phy_en_refclk = devm_regmap_field_alloc(dev, regmap, phy_en_refclk);
- 	if (IS_ERR(wiz->phy_en_refclk)) {
- 		dev_err(dev, "PHY_EN_REFCLK reg field init failed\n");
-@@ -1246,17 +1265,26 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
- 			else
- 				regmap_field_write(wiz->typec_ln10_swap, 0);
- 		} else {
--			/* if no typec-dir gpio was specified and PHY type is
--			 * USB3 with master lane number is '0', set LN10 SWAP
--			 * bit to '1'
-+			/* if no typec-dir gpio is specified and PHY type is USB3
-+			 * with master lane number is '0' or '2', then set LN10 or
-+			 * LN23 SWAP bit to '1' respectively.
- 			 */
- 			u32 num_lanes = wiz->num_lanes;
- 			int i;
- 
- 			for (i = 0; i < num_lanes; i++) {
--				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3)
--					if (wiz->master_lane_num[i] == 0)
-+				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3) {
-+					switch (wiz->master_lane_num[i]) {
-+					case LANE0:
- 						regmap_field_write(wiz->typec_ln10_swap, 1);
-+						break;
-+					case LANE2:
-+						regmap_field_write(wiz->typec_ln23_swap, 1);
-+						break;
-+					default:
-+						break;
-+					}
-+				}
- 			}
- 		}
- 	}
+Thanks, I already fixed this problem once and now managed to reintroduce 
+it myself. :-(
+
+> > +out:
+> > +	return ret;
+> > +}
+> > +
+> > +static int indirect_reg_write(void *context, unsigned int reg, unsigned int val)
+> > +{
+> > +	struct indirect_ctx *ctx = context;
+> > +	unsigned int cmd, ack;
+> > +	int ret;
+> > +
+> > +	cmd = readl(ctx->base + INDIRECT_CMD_OFF);
+> > +	if (cmd != INDIRECT_CMD_CLR)
+> > +		dev_warn(ctx->dev, "residual cmd 0x%x on write entry\n", cmd);
+> > +
+> > +	writel(val, ctx->base + INDIRECT_WR_OFF);
+> > +	writel(reg, ctx->base + INDIRECT_ADDR_OFF);
+> > +	writel(INDIRECT_CMD_WR, ctx->base + INDIRECT_CMD_OFF);
+> > +
+> > +	ret = readl_poll_timeout(ctx->base + INDIRECT_CMD_OFF, ack,
+> > +				 (ack & INDIRECT_CMD_ACK) == INDIRECT_CMD_ACK,
+> > +				 INDIRECT_INT_US, INDIRECT_TIMEOUT_US);
+> > +	if (ret)
+> > +		dev_err(ctx->dev, "write timed out on reg 0x%x ack 0x%x\n", reg, ack);
+> > +
+> > +	if (indirect_clear_cmd(ctx)) {
+> > +		if (!ret)
+> > +			ret = -ETIMEDOUT;
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static const struct regmap_range m10bmc_pmci_regmap_range[] = {
+> > +	regmap_reg_range(M10BMC_N6000_SYS_BASE, M10BMC_N6000_SYS_END),
+> > +};
+> > +
+> > +static const struct regmap_access_table m10bmc_pmci_access_table = {
+> > +	.yes_ranges	= m10bmc_pmci_regmap_range,
+> > +	.n_yes_ranges	= ARRAY_SIZE(m10bmc_pmci_regmap_range),
+> > +};
+> > +
+> > +static struct regmap_config m10bmc_pmci_regmap_config = {
+> > +	.reg_bits = 32,
+> > +	.reg_stride = 4,
+> > +	.val_bits = 32,
+> > +	.wr_table = &m10bmc_pmci_access_table,
+> > +	.rd_table = &m10bmc_pmci_access_table,
+> > +	.reg_read = &indirect_reg_read,
+> > +	.reg_write = &indirect_reg_write,
+> > +	.max_register = M10BMC_N6000_SYS_END,
+> > +};
+> > +
+> > +static struct mfd_cell m10bmc_pmci_n6000_bmc_subdevs[] = {
+> > +	{ .name = "n6000bmc-hwmon" },
+> > +};
+> > +
+> > +static const struct m10bmc_csr_map m10bmc_n6000_csr_map = {
+> > +	.base = M10BMC_N6000_SYS_BASE,
+> > +	.build_version = M10BMC_N6000_BUILD_VER,
+> > +	.fw_version = NIOS2_N6000_FW_VERSION,
+> > +	.mac_low = M10BMC_N6000_MAC_LOW,
+> > +	.mac_high = M10BMC_N6000_MAC_HIGH,
+> > +	.doorbell = M10BMC_N6000_DOORBELL,
+> > +	.auth_result = M10BMC_N6000_AUTH_RESULT,
+> > +	.rsu_status = M10BMC_N6000_AUTH_RESULT,
+> > +	.bmc_prog_addr = M10BMC_N6000_BMC_PROG_ADDR,
+> > +	.bmc_reh_addr = M10BMC_N6000_BMC_REH_ADDR,
+> > +	.bmc_magic = M10BMC_N6000_BMC_PROG_MAGIC,
+> > +	.sr_prog_addr = M10BMC_N6000_SR_PROG_ADDR,
+> > +	.sr_reh_addr = M10BMC_N6000_SR_REH_ADDR,
+> > +	.sr_magic = M10BMC_N6000_SR_PROG_MAGIC,
+> > +	.pr_prog_addr = M10BMC_N6000_PR_PROG_ADDR,
+> > +	.pr_reh_addr = M10BMC_N6000_PR_REH_ADDR,
+> > +	.pr_magic = M10BMC_N6000_PR_PROG_MAGIC,
+> > +	.rsu_update_counter = M10BMC_N6000_STAGING_FLASH_COUNT,
+> > +};
+> > +
+> > +static const struct intel_m10bmc_platform_info m10bmc_pmci_n6000 = {
+> > +	.cells = m10bmc_pmci_n6000_bmc_subdevs,
+> > +	.n_cells = ARRAY_SIZE(m10bmc_pmci_n6000_bmc_subdevs),
+> > +	.csr_map = &m10bmc_n6000_csr_map,
+> > +};
+> > +
+> > +static int m10bmc_pmci_probe(struct dfl_device *ddev)
+> > +{
+> > +	struct device *dev = &ddev->dev;
+> > +	struct m10bmc_pmci_device *pmci;
+> > +	struct indirect_ctx *ctx;
+> > +
+> > +	pmci = devm_kzalloc(dev, sizeof(*pmci), GFP_KERNEL);
+> > +	if (!pmci)
+> > +		return -ENOMEM;
+> > +
+> > +	pmci->m10bmc.dev = dev;
+> > +
+> > +	pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
+> > +	if (IS_ERR(pmci->base))
+> > +		return PTR_ERR(pmci->base);
+> > +
+> > +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+> > +	if (!ctx)
+> > +		return -ENOMEM;
+> > +
+> > +	ctx->base = pmci->base + M10BMC_PMCI_INDIRECT_BASE;
+> > +	ctx->dev = dev;
+> 
+> Why do we need to cache dev twice in two different structures? 
+
+This indirect register access thing is kinda different from this PMCI 
+driver. It's a generic mechanism to access registers in Intel FPGAs. The
+indirect register access code used to be separately among regmap code in 
+the earlier versions of this series but since PMCI driver is currently the 
+only user and lacks in the genericness of the indirect code, it eventually 
+got included into this PMCI driver file.
+
+Do you prefer I use m10bmc_pmci_device instead?
+
 -- 
-2.36.1
+ i.
 
+--8323329-2145620619-1673622504=:1600--
