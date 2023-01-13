@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EDC66A3A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A0066A3A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjAMTsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S229909AbjAMTss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjAMTsD (ORCPT
+        with ESMTP id S230455AbjAMTsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:48:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80649D2FB
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:48:02 -0800 (PST)
+        Fri, 13 Jan 2023 14:48:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE60149E8;
+        Fri, 13 Jan 2023 11:48:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E32DB821D5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 19:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57596C433D2;
-        Fri, 13 Jan 2023 19:47:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E911B821D4;
+        Fri, 13 Jan 2023 19:48:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A91BC433D2;
+        Fri, 13 Jan 2023 19:48:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673639279;
-        bh=MxrRhT/WYvWGZu5rhwM+fbTk91iiJ1dhq93LmwQbfg4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SceHxS8W8zx1CKDpGsM/n/Lm9XgsaOVoTerzlAlDYQNxr/GDpPPKcrcWINDF0PzJu
-         NzSVqaZu/xHg/ZNvfOkmKvNtAlF636MegwQXV8v8QUH+z7faZ0T+7aIZrdlpOZmZop
-         Z1hdcBJSFqnNoY2UTl8SwSD8pmglUYDoEJxsQ1hT67rbsPh3DHdz0OrgkETIynCrHP
-         V2Vr+UvAeGJoF7HOb0h2IS/zoWP3tcZt1Vt6C9BevQgJu0wZgbB7TYpfo+7uiOW5VD
-         pV4FtBClu/RjQP8VaAJea4ESij6Kwp/UjyVyRXn0JdM4wirRtxX1fIgQL7jTbk+PRq
-         3D2XbN6SXBaqQ==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Andreas Schwab <schwab@linux-m68k.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] riscv: Add "Code:" to RISC-V splats
-In-Reply-To: <87h6wutoxh.fsf@igel.home>
-References: <20230113144552.138081-1-bjorn@kernel.org>
- <20230113144552.138081-2-bjorn@kernel.org> <87h6wutoxh.fsf@igel.home>
-Date:   Fri, 13 Jan 2023 20:47:56 +0100
-Message-ID: <87wn5qxllf.fsf@all.your.base.are.belong.to.us>
+        s=k20201202; t=1673639317;
+        bh=dEa1FyCgbAjv9xYhXVkI/5nSgOJkvHr+IX3k5eDJk5I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ur+Z8glLx18dTQfYrZNs4J8kSLQjukrQNxplQqS564D8K6XPIp/bq5IJuzhk8bYr8
+         TxnKyT8AP3hootJ6PENoWOb/PCEBOU1pdQRXnHYbIi3wa6qrzzA7N3YgbtR3bNOIjd
+         zO+jguOf3HPjUoKn76zFJEVEJsta8cX7kNRD2jP7KaFrdkmPIKrR+tszuoPvpCsGDD
+         gN+vtJCNaebhzMSU2CXVKb5zUsD9jBDJqHcWISNp/ir1+7kVRqQqPBWfejnq2Ksor7
+         02LG19UkdAAjBWfcAcWkWk8rK6uwcg0I1t7qMSpj0be7/yxKE3yiMm4+kGYoZbaRtw
+         9p/y79O8kIHew==
+Date:   Fri, 13 Jan 2023 11:48:35 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunhui Cui <cuiyunhui@bytedance.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, kuniyu@amazon.com,
+        xiyou.wangcong@gmail.com, duanxiongchun@bytedance.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dust.li@linux.alibaba.com
+Subject: Re: [PATCH v6] sock: add tracepoint for send recv length
+Message-ID: <20230113114835.33b7db5c@kernel.org>
+In-Reply-To: <20230111065930.1494-1-cuiyunhui@bytedance.com>
+References: <20230111065930.1494-1-cuiyunhui@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,16 +56,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andreas Schwab <schwab@linux-m68k.org> writes:
+On Wed, 11 Jan 2023 14:59:30 +0800 Yunhui Cui wrote:
+> Add 2 tracepoints to monitor the tcp/udp traffic
+> of per process and per cgroup.
+> 
+> Regarding monitoring the tcp/udp traffic of each process, there are two
+> existing solutions, the first one is https://www.atoptool.nl/netatop.php.
+> The second is via kprobe/kretprobe.
 
->> Add "Code:" output to RISC-V splats. Mimic x86-64's byte-for-byte
->> dumps.
->
-> RISC-V insns are organised in 16-bit parcels, it probably make sense to
-> present them that way.
-
-Good point! I'll spin a v2.
-
-
-Thanks for having a look,
-Bj=C3=B6rn
+Applied, thanks!
