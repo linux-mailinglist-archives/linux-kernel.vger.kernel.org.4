@@ -2,373 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD63F669CF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4A1669CF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjAMPwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S229840AbjAMPyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjAMPvz (ORCPT
+        with ESMTP id S230298AbjAMPwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:51:55 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D6959FBA
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:44:28 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id g25so913675uaw.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:44:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=louRFlczbHZKp7oWi8fHTGyEElKoYHfYjEnBI1fU9DA=;
-        b=GlmfmHkbgpbw//xLUj6hA1h1DpPvtz7hnG1zmWoOIR5wsX/dKjQnZHoCIP1flGwxe2
-         1CZmoDoWv5q+nLFSyLDk934BFVxLUxX89dbGAXfBiR5j6Fxhs1qBqX4RO1ZcWwBDx72e
-         6nOlKuAgD6q/V1mxaNseFJLXjK5lbZKKu0zyLJdo8KZU2SqoRN18xNxH+Y0jJPrG693G
-         A4sYqEyMFn4FkW5SCpVc6iwc8CWtaF7s02Hg8JH36dPUoWV1NlO6UND9EonsETkQ3cQG
-         3ue/qUzhb5fZXuV+GzkWEG59s9CPrgG08sJqzPtToA+xamd9uVBfAhpNUhHO+d9WIxWk
-         l1Mw==
+        Fri, 13 Jan 2023 10:52:55 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D66412
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:45:50 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id r6-20020a92cd86000000b00304b2d1c2d7so16146105ilb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:45:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=louRFlczbHZKp7oWi8fHTGyEElKoYHfYjEnBI1fU9DA=;
-        b=sLJX8/1ylhG3SbkdLLriCDVnBaHidtK/ITzHsPzp0HMJT36bAmpfNlCDuJskvVLHxM
-         Mvmaq+1pyL1jbkkCVjxre2sGy3uyAlSIcuU08qQ6RcZzyA9zOqRBU9RyUdk3WBFQYK1C
-         gxCLrXom7cIoWLysSXyw9oejuewQ2kfqVGZGuSNmjtJYq6CJaRU8EOkp8rWByhIOc1cv
-         DE+HdOzZdZW4nDaL+ZCZF2bO/SPohmkmaa6Deimr5KDBh/DzxTgwFq0JcS0XMnWVMFV2
-         gBiM2N7Gy7McWO6Y55H9LVkYrvRcxRwXblmOkbklj3wl8i4bP35BlhWmI/kPAxW9YeYA
-         83hw==
-X-Gm-Message-State: AFqh2kprZmUqXDhl5Ma8+iFbMuFkNKuSZjI8RGmDeJ0MSXpHl6+XDucd
-        0A6d6XxUMcnqXLPSCYIWUcECPIcMUOzUfBwoIPO+gg==
-X-Google-Smtp-Source: AMrXdXub6rc4BX/OLf54aaEu8/kkq9BlswO8nAnrfWnXISGiF9zLh0Ps455WeL0CEfNt9/aKWiE40X4hPqtnkG7bhGw=
-X-Received: by 2002:ab0:251a:0:b0:5d5:d02:8626 with SMTP id
- j26-20020ab0251a000000b005d50d028626mr3273638uan.115.1673624667512; Fri, 13
- Jan 2023 07:44:27 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xu4PeIo+TLi12PFCasLbr+bPgbSXb44XTS6PTkWr8EI=;
+        b=lQRIAdZw5jsTruxkn0T52aIIy/mCKJy5fRaKcyDuvoIuqXcgYBHNoklHuUARUVVak2
+         HVzcL3ZXjSpFNMCl6JdG/gvkXA6b6PNKQZvDIjkk0fkJqtyrBOjjEIn0irDbe/YAd2I/
+         TVoKkfhEJJhQZktsFAsva0LxB6JzGPwt7/CqIhzJIMCpYpndf4k/LLu5lMXijkZKPUyB
+         n8AVWPFMb+0QH2jPUrIioAmBzkN0ipR6hZa0R3Bz9ImkojG8TKlhuszw1fa29avqpLBo
+         REpVC5DYSvjHEJoO4ObT6svH54EY6l+l/Azk1WBXRkP5XSrWrnaZ0LQMf6+VfueLJDAF
+         H5RA==
+X-Gm-Message-State: AFqh2kqI2ux8HpXutx0ufbhOKoe4krVS9/VvxA6tGMzhKj983cM2EJ0q
+        6761fXs8Dp++S2kNu5ZYzO4mJEpU3B5tMLlvgyiyvDMwBeuT
+X-Google-Smtp-Source: AMrXdXuCFap+EJk5ZCRjr4z8qtaMXlxkYnFmRAWetWuHtAHwSvMz54hTDUOGz3PBJiobztFd8/ygmd8+23+VIO1jFS/OYu3Or+5y
 MIME-Version: 1.0
-References: <CA+G9fYt_b04YNCCv-iTZTtwb5fmNEQ0abiO46qW_-SrA1GQX8w@mail.gmail.com>
- <Y8Fkjxsq5EOtGiql@casper.infradead.org>
-In-Reply-To: <Y8Fkjxsq5EOtGiql@casper.infradead.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 13 Jan 2023 21:14:15 +0530
-Message-ID: <CA+G9fYuahjaNs6ia1UOeF98hUhonAt0Z4YOFGcqOKt3J4tRvTw@mail.gmail.com>
-Subject: Re: next: BUG: kernel NULL pointer dereference, address:
- 0000000000000008 - RIP: 0010:do_wp_page
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: multipart/mixed; boundary="000000000000cbe25205f2271b2e"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:620d:0:b0:704:7faa:6fb9 with SMTP id
+ f13-20020a6b620d000000b007047faa6fb9mr558093iog.203.1673624749685; Fri, 13
+ Jan 2023 07:45:49 -0800 (PST)
+Date:   Fri, 13 Jan 2023 07:45:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b146b505f22720c9@google.com>
+Subject: [syzbot] [reiserfs?] INFO: task hung in queue_log_writer
+From:   syzbot <syzbot+d7c9b7185ced98364b13@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bvanassche@acm.org, jack@suse.cz,
+        jlayton@kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org, yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000cbe25205f2271b2e
-Content-Type: text/plain; charset="UTF-8"
+Hello,
 
-Hi Matthew,
+syzbot found the following issue on:
 
-On Fri, 13 Jan 2023 at 19:32, Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Jan 13, 2023 at 06:53:01PM +0530, Naresh Kamboju wrote:
-> > Linux next tag 20230113 boot failed on x86_64, arm64, arm and i386.
->
-> Why are you still not running these stack dumps through
-> scripts/decode_stacktrace.sh ?  That seems like it's much easier for you
-> to do than expecting everybody who might be interested in investigating
-> your reports to pull down enough of the build artifacts to make it work.
+HEAD commit:    c757fc92a3f7 Merge tag 'spi-fix-v6.2-rc3' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a3daea480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
+dashboard link: https://syzkaller.appspot.com/bug?extid=d7c9b7185ced98364b13
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Hope this will help you.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-# ./scripts/decode_stacktrace.sh vmlinux  < input.txt > output.txt
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/83ba79e6cb20/disk-c757fc92.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e980be3e55fc/vmlinux-c757fc92.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/325d4d480267/bzImage-c757fc92.xz
 
-stack dumps:
-------------------
-[   15.945626] BUG: kernel NULL pointer dereference, address: 0000000000000008
-[   15.952588] #PF: supervisor read access in kernel mode
-[   15.957720] #PF: error_code(0x0000) - not-present page
-[   15.962850] PGD 8000000103213067 P4D 8000000103213067 PUD 103212067 PMD 0
-[   15.969724] Oops: 0000 [#1] PREEMPT SMP PTI
-[   15.973909] CPU: 3 PID: 1 Comm: init Not tainted 6.2.0-rc3-next-20230113 #1
-[   15.980869] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.0b 07/27/2017
-[   15.988336] RIP: 0010:do_wp_page (memory.c:?)
-[ 15.992611] Code: 83 ea 01 49 89 d7 48 85 d2 0f 85 00 ff ff ff 49 8b
-7c 24 60 e8 0b f2 e9 00 41 8b 44 24 28 4d 8b 74 24 50 4d 8b 2c 24 89
-45 88 <49> 8b 46 08 49 8b 5d 10 a8 01 0f 85 78 02 00 00 0f 1f 44 00 00
-4c
-All code
-========
-   0: 83 ea 01              sub    $0x1,%edx
-   3: 49 89 d7              mov    %rdx,%r15
-   6: 48 85 d2              test   %rdx,%rdx
-   9: 0f 85 00 ff ff ff    jne    0xffffffffffffff0f
-   f: 49 8b 7c 24 60        mov    0x60(%r12),%rdi
-  14: e8 0b f2 e9 00        callq  0xe9f224
-  19: 41 8b 44 24 28        mov    0x28(%r12),%eax
-  1e: 4d 8b 74 24 50        mov    0x50(%r12),%r14
-  23: 4d 8b 2c 24          mov    (%r12),%r13
-  27: 89 45 88              mov    %eax,-0x78(%rbp)
-  2a:* 49 8b 46 08          mov    0x8(%r14),%rax <-- trapping instruction
-  2e: 49 8b 5d 10          mov    0x10(%r13),%rbx
-  32: a8 01                test   $0x1,%al
-  34: 0f 85 78 02 00 00    jne    0x2b2
-  3a: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)
-  3f: 4c                    rex.WR
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d7c9b7185ced98364b13@syzkaller.appspotmail.com
 
-Code starting with the faulting instruction
-===========================================
-   0: 49 8b 46 08          mov    0x8(%r14),%rax
-   4: 49 8b 5d 10          mov    0x10(%r13),%rbx
-   8: a8 01                test   $0x1,%al
-   a: 0f 85 78 02 00 00    jne    0x288
-  10: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)
-  15: 4c                    rex.WR
-[   16.011356] RSP: 0000:ffffb3f640027d18 EFLAGS: 00010286
-[   16.016583] RAX: 0000000000000a55 RBX: 0400000000000080 RCX: 0000000000000000
-[   16.023715] RDX: 0000000000000000 RSI: ffffffff8d3d2bd5 RDI: ffffffff8e271dfa
-[   16.030838] RBP: ffffb3f640027db0 R08: 8000000432ee9225 R09: ffff8ac3431e3100
-[   16.037962] R10: 0000000000000000 R11: 00007fe169f2f598 R12: ffffb3f640027de0
-[   16.045087] R13: ffff8ac3431e2000 R14: 0000000000000000 R15: 0400000000000000
-[   16.052211] FS:  00007fe16973e800(0000) GS:ffff8ac69fd80000(0000)
-knlGS:0000000000000000
-[   16.060319] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   16.066060] CR2: 0000000000000008 CR3: 00000001008d4002 CR4: 00000000003706e0
-[   16.073183] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   16.080322] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   16.087446] Call Trace:
-[   16.089893]  <TASK>
-[   16.091991] ? trace_preempt_off (??:?)
-[   16.096087] ? __handle_mm_fault (memory.c:?)
-[   16.100439] __handle_mm_fault (memory.c:?)
-[   16.104617] handle_mm_fault (??:?)
-[   16.108457] do_user_addr_fault (fault.c:?)
-[   16.112642] exc_page_fault (??:?)
-[   16.116394] asm_exc_page_fault (??:?)
-[   16.120408] RIP: 0033:0x7fe169dbf31e
-[ 16.123986] Code: ba ff ff ff ff 0f 9f c0 0f b6 c0 0f 4c c2 c3 66 2e
-0f 1f 84 00 00 00 00 00 0f 1f 00 41 54 31 c0 ba ff ff ff ff 53 48 83
-ec 08 <f0> 0f b1 15 72 02 17 00 83 f8 ff 74 35 41 89 c4 85 c0 75 21 31
-c0
-All code
-========
-   0: ba ff ff ff ff        mov    $0xffffffff,%edx
-   5: 0f 9f c0              setg   %al
-   8: 0f b6 c0              movzbl %al,%eax
-   b: 0f 4c c2              cmovl  %edx,%eax
-   e: c3                    retq
-   f: 66 2e 0f 1f 84 00 00 nopw   %cs:0x0(%rax,%rax,1)
-  16: 00 00 00
-  19: 0f 1f 00              nopl   (%rax)
-  1c: 41 54                push   %r12
-  1e: 31 c0                xor    %eax,%eax
-  20: ba ff ff ff ff        mov    $0xffffffff,%edx
-  25: 53                    push   %rbx
-  26: 48 83 ec 08          sub    $0x8,%rsp
-  2a:* f0 0f b1 15 72 02 17 lock cmpxchg %edx,0x170272(%rip)        #
-0x1702a4 <-- trapping instruction
-  31: 00
-  32: 83 f8 ff              cmp    $0xffffffff,%eax
-  35: 74 35                je     0x6c
-  37: 41 89 c4              mov    %eax,%r12d
-  3a: 85 c0                test   %eax,%eax
-  3c: 75 21                jne    0x5f
-  3e: 31 c0                xor    %eax,%eax
+INFO: task kworker/u4:11:5357 blocked for more than 143 seconds.
+      Not tainted 6.2.0-rc3-syzkaller-00060-gc757fc92a3f7 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:11   state:D stack:26224 pid:5357  ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:1)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ queue_log_writer+0x293/0x2f0 fs/reiserfs/journal.c:2980
+ do_journal_begin_r+0x988/0x10e0 fs/reiserfs/journal.c:3103
+ journal_begin+0x166/0x400 fs/reiserfs/journal.c:3255
+ reiserfs_write_inode+0x1f4/0x2d0 fs/reiserfs/inode.c:1777
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0xcfc/0x1440 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x54d/0xf90 fs/fs-writeback.c:1889
+ wb_writeback+0x2c5/0xd70 fs/fs-writeback.c:2063
+ wb_do_writeback fs/fs-writeback.c:2206 [inline]
+ wb_workfn+0x2e0/0x12f0 fs/fs-writeback.c:2246
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task syz-executor.1:5768 blocked for more than 143 seconds.
+      Not tainted 6.2.0-rc3-syzkaller-00060-gc757fc92a3f7 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.1  state:D stack:24760 pid:5768  ppid:5109   flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ bit_wait+0x16/0xe0 kernel/sched/wait_bit.c:199
+ __wait_on_bit+0x64/0x180 kernel/sched/wait_bit.c:49
+ __inode_wait_for_writeback+0x153/0x1f0 fs/fs-writeback.c:1472
+ inode_wait_for_writeback+0x26/0x40 fs/fs-writeback.c:1484
+ evict+0x2b7/0x6b0 fs/inode.c:661
+ iput_final fs/inode.c:1747 [inline]
+ iput.part.0+0x59b/0x880 fs/inode.c:1773
+ iput+0x5c/0x80 fs/inode.c:1763
+ dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
+ d_delete fs/dcache.c:2565 [inline]
+ d_delete+0x16f/0x1c0 fs/dcache.c:2554
+ xattr_unlink+0x139/0x190 fs/reiserfs/xattr.c:96
+ lookup_and_delete_xattr fs/reiserfs/xattr.c:494 [inline]
+ reiserfs_xattr_set_handle+0x83c/0xb00 fs/reiserfs/xattr.c:529
+ reiserfs_xattr_set+0x454/0x5b0 fs/reiserfs/xattr.c:633
+ trusted_set+0xa7/0xd0 fs/reiserfs/xattr_trusted.c:31
+ __vfs_removexattr+0x155/0x1c0 fs/xattr.c:497
+ __vfs_removexattr_locked+0x1b0/0x440 fs/xattr.c:532
+ vfs_removexattr+0xcf/0x260 fs/xattr.c:554
+ ovl_do_removexattr fs/overlayfs/overlayfs.h:272 [inline]
+ ovl_removexattr fs/overlayfs/overlayfs.h:280 [inline]
+ ovl_make_workdir fs/overlayfs/super.c:1361 [inline]
+ ovl_get_workdir fs/overlayfs/super.c:1444 [inline]
+ ovl_fill_super+0x20ba/0x6330 fs/overlayfs/super.c:2000
+ mount_nodev+0x64/0x120 fs/super.c:1405
+ legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
+ do_new_mount fs/namespace.c:3145 [inline]
+ path_mount+0x132a/0x1e20 fs/namespace.c:3475
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount fs/namespace.c:3674 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff5f6c8c0c9
+RSP: 002b:00007ff5f7993168 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ff5f6dabf80 RCX: 00007ff5f6c8c0c9
+RDX: 0000000020000080 RSI: 00000000200000c0 RDI: 0000000000000000
+RBP: 00007ff5f6ce7ae9 R08: 0000000020000480 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd299fb68f R14: 00007ff5f7993300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.1:5787 blocked for more than 144 seconds.
+      Not tainted 6.2.0-rc3-syzkaller-00060-gc757fc92a3f7 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.1  state:D stack:26120 pid:5787  ppid:5109   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ sync_inodes_sb+0x1aa/0x9e0 fs/fs-writeback.c:2725
+ sync_filesystem.part.0+0xe6/0x1d0 fs/sync.c:64
+ sync_filesystem+0x8f/0xc0 fs/sync.c:43
+ reiserfs_remount+0x129/0x1540 fs/reiserfs/super.c:1445
+ legacy_reconfigure+0x119/0x180 fs/fs_context.c:633
+ reconfigure_super+0x40c/0xa30 fs/super.c:935
+ do_remount fs/namespace.c:2807 [inline]
+ path_mount+0x1830/0x1e20 fs/namespace.c:3467
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount fs/namespace.c:3674 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff5f6c8d5fa
+RSP: 002b:00007ff5f7971f88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff5f6c8d5fa
+RDX: 00000000200000c0 RSI: 0000000020000100 RDI: 0000000000000000
+RBP: 00007ff5f7972020 R08: 00007ff5f7972020 R09: 0000000001a484bc
+R10: 0000000001a484bc R11: 0000000000000206 R12: 00000000200000c0
+R13: 0000000020000100 R14: 00007ff5f7971fe0 R15: 00000000200007c0
+ </TASK>
 
-Code starting with the faulting instruction
-===========================================
-   0: f0 0f b1 15 72 02 17 lock cmpxchg %edx,0x170272(%rip)        # 0x17027a
-   7: 00
-   8: 83 f8 ff              cmp    $0xffffffff,%eax
-   b: 74 35                je     0x42
-   d: 41 89 c4              mov    %eax,%r12d
-  10: 85 c0                test   %eax,%eax
-  12: 75 21                jne    0x35
-  14: 31 c0                xor    %eax,%eax
-[   16.142724] RSP: 002b:00007ffcd0edec80 EFLAGS: 00010202
-[   16.147948] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000555bd8
-[   16.155074] RDX: 00000000ffffffff RSI: 00007ffcd0edefa8 RDI: 0000000000000001
-[   16.162198] RBP: 00007ffcd0edefa8 R08: 00007fe169bc5a10 R09: 00007fe169f37a10
-[   16.169319] R10: 00007fe169adf3ee R11: 0000000000000246 R12: 00007ffcd0edefa8
-[   16.176445] R13: 000000000041b9a0 R14: 0000000000555bd8 R15: 00007fe169f69000
-[   16.183569]  </TASK>
-[   16.185752] Modules linked in:
-[   16.188803] CR2: 0000000000000008
-[   16.192114] ---[ end trace 0000000000000000 ]---
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8c790f30 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8c790c30 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c791a80 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x57/0x264 kernel/locking/lockdep.c:6494
+5 locks held by kworker/u4:3/46:
+ #0: ffff8880b983b598 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:537
+ #1: ffff8880b98287c8 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x2de/0x930 kernel/sched/psi.c:976
+ #2: ffff8880b9829618 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:999
+ #3: ffffffff91dee210 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x132/0x3e0 lib/debugobjects.c:665
+ #4: ffff8880b98293f0 (krc.lock){..-.}-{2:2}, at: krc_this_cpu_lock kernel/rcu/tree.c:2977 [inline]
+ #4: ffff8880b98293f0 (krc.lock){..-.}-{2:2}, at: add_ptr_to_bulk_krc_lock kernel/rcu/tree.c:3286 [inline]
+ #4: ffff8880b98293f0 (krc.lock){..-.}-{2:2}, at: kvfree_call_rcu+0xe2/0x8f0 kernel/rcu/tree.c:3377
+2 locks held by getty/4747:
+ #0: ffff88802baab098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015b02f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2177
+2 locks held by kworker/u4:11/5357:
+ #0: ffff888140858138 ((wq_completion)writeback){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888140858138 ((wq_completion)writeback){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888140858138 ((wq_completion)writeback){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888140858138 ((wq_completion)writeback){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888140858138 ((wq_completion)writeback){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888140858138 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc90005117da8 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
+4 locks held by syz-executor.1/5768:
+ #0: ffff88807b9320e0 (&type->s_umount_key#47/1){+.+.}-{3:3}, at: alloc_super+0x22e/0xb60 fs/super.c:228
+ #1: ffff88807c650460 (sb_writers#15){.+.+}-{0:0}, at: ovl_make_workdir fs/overlayfs/super.c:1290 [inline]
+ #1: ffff88807c650460 (sb_writers#15){.+.+}-{0:0}, at: ovl_get_workdir fs/overlayfs/super.c:1444 [inline]
+ #1: ffff88807c650460 (sb_writers#15){.+.+}-{0:0}, at: ovl_fill_super+0x19d6/0x6330 fs/overlayfs/super.c:2000
+ #2: ffff88807332e640 (&type->i_mutex_dir_key#9){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #2: ffff88807332e640 (&type->i_mutex_dir_key#9){++++}-{3:3}, at: vfs_removexattr+0xbb/0x260 fs/xattr.c:553
+ #3: ffff88808791dfa0 (&type->i_mutex_dir_key#9/3){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:791 [inline]
+ #3: ffff88808791dfa0 (&type->i_mutex_dir_key#9/3){+.+.}-{3:3}, at: lookup_and_delete_xattr fs/reiserfs/xattr.c:486 [inline]
+ #3: ffff88808791dfa0 (&type->i_mutex_dir_key#9/3){+.+.}-{3:3}, at: reiserfs_xattr_set_handle+0x7ab/0xb00 fs/reiserfs/xattr.c:529
+2 locks held by syz-executor.1/5787:
+ #0: ffff88807c6500e0 (&type->s_umount_key#53){++++}-{3:3}, at: do_remount fs/namespace.c:2804 [inline]
+ #0: ffff88807c6500e0 (&type->s_umount_key#53){++++}-{3:3}, at: path_mount+0x13e0/0x1e20 fs/namespace.c:3467
+ #1: ffff88801e4b27d0 (&bdi->wb_switch_rwsem){+.+.}-{3:3}, at: bdi_down_write_wb_switch_rwsem fs/fs-writeback.c:364 [inline]
+ #1: ffff88801e4b27d0 (&bdi->wb_switch_rwsem){+.+.}-{3:3}, at: sync_inodes_sb+0x190/0x9e0 fs/fs-writeback.c:2723
+2 locks held by kworker/u4:14/8107:
+ #0: ffff8880b983b598 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:537
+ #1: ffff8880b98287c8 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x216/0x930 kernel/sched/psi.c:964
+1 lock held by syz-executor.5/8770:
+ #0: ffff88807c6500e0 (&type->s_umount_key#53){++++}-{3:3}, at: iterate_supers+0xdf/0x2a0 fs/super.c:722
 
-ref:
-https://lore.kernel.org/linux-next/CA+G9fYt_b04YNCCv-iTZTtwb5fmNEQ0abiO46qW_-SrA1GQX8w@mail.gmail.com/
+=============================================
 
-- Naresh
+NMI backtrace for cpu 1
+CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.2.0-rc3-syzkaller-00060-gc757fc92a3f7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x24/0x18a lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x333/0x3c0 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xc75/0xfc0 kernel/hung_task.c:377
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 8154 Comm: kworker/u4:16 Not tainted 6.2.0-rc3-syzkaller-00060-gc757fc92a3f7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: phy4 ieee80211_iface_work
+RIP: 0010:virt_to_folio include/linux/mm.h:958 [inline]
+RIP: 0010:virt_to_slab mm/slab.h:185 [inline]
+RIP: 0010:kmem_cache_free+0x6b/0x5c0 mm/slub.c:3809
+Code: 8b 05 45 9b 34 7e 3b 05 f3 c6 a3 0c 0f 83 bf 02 00 00 89 c0 48 0f a3 05 f3 c4 a3 0c 0f 82 45 02 00 00 48 89 df 4c 8b 6c 24 60 <e8> 60 66 6a ff 48 c1 e8 0c 49 89 c4 48 b8 00 00 00 00 00 ea ff ff
+RSP: 0018:ffffc9001477fbf0 EFLAGS: 00000286
+RAX: 0000000000000001 RBX: ffff88807dd51780 RCX: 0000000000000001
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff88807dd51780
+RBP: ffff88801271e280 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000094001 R12: 0000000000000000
+R13: ffffffff87c1e69f R14: ffffffff8945abc7 R15: ffff888025de5878
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c00f8e7000 CR3: 0000000020d2d000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:874
+ __kfree_skb net/core/skbuff.c:931 [inline]
+ kfree_skb_reason+0x1b8/0x4f0 net/core/skbuff.c:956
+ kfree_skb include/linux/skbuff.h:1218 [inline]
+ ieee80211_iface_work+0x357/0xd70 net/mac80211/iface.c:1637
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
---000000000000cbe25205f2271b2e
-Content-Type: text/plain; charset="US-ASCII"; name="output.txt"
-Content-Disposition: attachment; filename="output.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lcuotkxh0>
-X-Attachment-Id: f_lcuotkxh0
 
-WyAgIDE1Ljk0NTYyNl0gQlVHOiBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlLCBhZGRy
-ZXNzOiAwMDAwMDAwMDAwMDAwMDA4ClsgICAxNS45NTI1ODhdICNQRjogc3VwZXJ2aXNvciByZWFk
-IGFjY2VzcyBpbiBrZXJuZWwgbW9kZQpbICAgMTUuOTU3NzIwXSAjUEY6IGVycm9yX2NvZGUoMHgw
-MDAwKSAtIG5vdC1wcmVzZW50IHBhZ2UKWyAgIDE1Ljk2Mjg1MF0gUEdEIDgwMDAwMDAxMDMyMTMw
-NjcgUDREIDgwMDAwMDAxMDMyMTMwNjcgUFVEIDEwMzIxMjA2NyBQTUQgMApbICAgMTUuOTY5NzI0
-XSBPb3BzOiAwMDAwIFsjMV0gUFJFRU1QVCBTTVAgUFRJClsgICAxNS45NzM5MDldIENQVTogMyBQ
-SUQ6IDEgQ29tbTogaW5pdCBOb3QgdGFpbnRlZCA2LjIuMC1yYzMtbmV4dC0yMDIzMDExMyAjMQpb
-ICAgMTUuOTgwODY5XSBIYXJkd2FyZSBuYW1lOiBTdXBlcm1pY3JvIFNZUy01MDE5Uy1NTC9YMTFT
-U0gtRiwgQklPUyAyLjBiIDA3LzI3LzIwMTcKWyAgIDE1Ljk4ODMzNl0gUklQOiAwMDEwOmRvX3dw
-X3BhZ2UgKG1lbW9yeS5jOj8pIApbIDE1Ljk5MjYxMV0gQ29kZTogODMgZWEgMDEgNDkgODkgZDcg
-NDggODUgZDIgMGYgODUgMDAgZmYgZmYgZmYgNDkgOGIgN2MgMjQgNjAgZTggMGIgZjIgZTkgMDAg
-NDEgOGIgNDQgMjQgMjggNGQgOGIgNzQgMjQgNTAgNGQgOGIgMmMgMjQgODkgNDUgODggPDQ5PiA4
-YiA0NiAwOCA0OSA4YiA1ZCAxMCBhOCAwMSAwZiA4NSA3OCAwMiAwMCAwMCAwZiAxZiA0NCAwMCAw
-MCA0YwpBbGwgY29kZQo9PT09PT09PQogICAwOgk4MyBlYSAwMSAgICAgICAgICAgICAJc3ViICAg
-ICQweDEsJWVkeAogICAzOgk0OSA4OSBkNyAgICAgICAgICAgICAJbW92ICAgICVyZHgsJXIxNQog
-ICA2Ogk0OCA4NSBkMiAgICAgICAgICAgICAJdGVzdCAgICVyZHgsJXJkeAogICA5OgkwZiA4NSAw
-MCBmZiBmZiBmZiAgICAJam5lICAgIDB4ZmZmZmZmZmZmZmZmZmYwZgogICBmOgk0OSA4YiA3YyAy
-NCA2MCAgICAgICAJbW92ICAgIDB4NjAoJXIxMiksJXJkaQogIDE0OgllOCAwYiBmMiBlOSAwMCAg
-ICAgICAJY2FsbHEgIDB4ZTlmMjI0CiAgMTk6CTQxIDhiIDQ0IDI0IDI4ICAgICAgIAltb3YgICAg
-MHgyOCglcjEyKSwlZWF4CiAgMWU6CTRkIDhiIDc0IDI0IDUwICAgICAgIAltb3YgICAgMHg1MCgl
-cjEyKSwlcjE0CiAgMjM6CTRkIDhiIDJjIDI0ICAgICAgICAgIAltb3YgICAgKCVyMTIpLCVyMTMK
-ICAyNzoJODkgNDUgODggICAgICAgICAgICAgCW1vdiAgICAlZWF4LC0weDc4KCVyYnApCiAgMmE6
-Kgk0OSA4YiA0NiAwOCAgICAgICAgICAJbW92ICAgIDB4OCglcjE0KSwlcmF4CQk8LS0gdHJhcHBp
-bmcgaW5zdHJ1Y3Rpb24KICAyZToJNDkgOGIgNWQgMTAgICAgICAgICAgCW1vdiAgICAweDEwKCVy
-MTMpLCVyYngKICAzMjoJYTggMDEgICAgICAgICAgICAgICAgCXRlc3QgICAkMHgxLCVhbAogIDM0
-OgkwZiA4NSA3OCAwMiAwMCAwMCAgICAJam5lICAgIDB4MmIyCiAgM2E6CTBmIDFmIDQ0IDAwIDAw
-ICAgICAgIAlub3BsICAgMHgwKCVyYXgsJXJheCwxKQogIDNmOgk0YyAgICAgICAgICAgICAgICAg
-ICAJcmV4LldSCgpDb2RlIHN0YXJ0aW5nIHdpdGggdGhlIGZhdWx0aW5nIGluc3RydWN0aW9uCj09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgMDoJNDkgOGIgNDYg
-MDggICAgICAgICAgCW1vdiAgICAweDgoJXIxNCksJXJheAogICA0Ogk0OSA4YiA1ZCAxMCAgICAg
-ICAgICAJbW92ICAgIDB4MTAoJXIxMyksJXJieAogICA4OglhOCAwMSAgICAgICAgICAgICAgICAJ
-dGVzdCAgICQweDEsJWFsCiAgIGE6CTBmIDg1IDc4IDAyIDAwIDAwICAgIAlqbmUgICAgMHgyODgK
-ICAxMDoJMGYgMWYgNDQgMDAgMDAgICAgICAgCW5vcGwgICAweDAoJXJheCwlcmF4LDEpCiAgMTU6
-CTRjICAgICAgICAgICAgICAgICAgIAlyZXguV1IKWyAgIDE2LjAxMTM1Nl0gUlNQOiAwMDAwOmZm
-ZmZiM2Y2NDAwMjdkMTggRUZMQUdTOiAwMDAxMDI4NgpbICAgMTYuMDE2NTgzXSBSQVg6IDAwMDAw
-MDAwMDAwMDBhNTUgUkJYOiAwNDAwMDAwMDAwMDAwMDgwIFJDWDogMDAwMDAwMDAwMDAwMDAwMApb
-ICAgMTYuMDIzNzE1XSBSRFg6IDAwMDAwMDAwMDAwMDAwMDAgUlNJOiBmZmZmZmZmZjhkM2QyYmQ1
-IFJESTogZmZmZmZmZmY4ZTI3MWRmYQpbICAgMTYuMDMwODM4XSBSQlA6IGZmZmZiM2Y2NDAwMjdk
-YjAgUjA4OiA4MDAwMDAwNDMyZWU5MjI1IFIwOTogZmZmZjhhYzM0MzFlMzEwMApbICAgMTYuMDM3
-OTYyXSBSMTA6IDAwMDAwMDAwMDAwMDAwMDAgUjExOiAwMDAwN2ZlMTY5ZjJmNTk4IFIxMjogZmZm
-ZmIzZjY0MDAyN2RlMApbICAgMTYuMDQ1MDg3XSBSMTM6IGZmZmY4YWMzNDMxZTIwMDAgUjE0OiAw
-MDAwMDAwMDAwMDAwMDAwIFIxNTogMDQwMDAwMDAwMDAwMDAwMApbICAgMTYuMDUyMjExXSBGUzog
-IDAwMDA3ZmUxNjk3M2U4MDAoMDAwMCkgR1M6ZmZmZjhhYzY5ZmQ4MDAwMCgwMDAwKSBrbmxHUzow
-MDAwMDAwMDAwMDAwMDAwClsgICAxNi4wNjAzMTldIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAw
-MCBDUjA6IDAwMDAwMDAwODAwNTAwMzMKWyAgIDE2LjA2NjA2MF0gQ1IyOiAwMDAwMDAwMDAwMDAw
-MDA4IENSMzogMDAwMDAwMDEwMDhkNDAwMiBDUjQ6IDAwMDAwMDAwMDAzNzA2ZTAKWyAgIDE2LjA3
-MzE4M10gRFIwOiAwMDAwMDAwMDAwMDAwMDAwIERSMTogMDAwMDAwMDAwMDAwMDAwMCBEUjI6IDAw
-MDAwMDAwMDAwMDAwMDAKWyAgIDE2LjA4MDMyMl0gRFIzOiAwMDAwMDAwMDAwMDAwMDAwIERSNjog
-MDAwMDAwMDBmZmZlMGZmMCBEUjc6IDAwMDAwMDAwMDAwMDA0MDAKWyAgIDE2LjA4NzQ0Nl0gQ2Fs
-bCBUcmFjZToKWyAgIDE2LjA4OTg5M10gIDxUQVNLPgpbICAgMTYuMDkxOTkxXSA/IHRyYWNlX3By
-ZWVtcHRfb2ZmICg/Pzo/KSAKWyAgIDE2LjA5NjA4N10gPyBfX2hhbmRsZV9tbV9mYXVsdCAobWVt
-b3J5LmM6PykgClsgICAxNi4xMDA0MzldIF9faGFuZGxlX21tX2ZhdWx0IChtZW1vcnkuYzo/KSAK
-WyAgIDE2LjEwNDYxN10gaGFuZGxlX21tX2ZhdWx0ICg/Pzo/KSAKWyAgIDE2LjEwODQ1N10gZG9f
-dXNlcl9hZGRyX2ZhdWx0IChmYXVsdC5jOj8pIApbICAgMTYuMTEyNjQyXSBleGNfcGFnZV9mYXVs
-dCAoPz86PykgClsgICAxNi4xMTYzOTRdIGFzbV9leGNfcGFnZV9mYXVsdCAoPz86PykgClsgICAx
-Ni4xMjA0MDhdIFJJUDogMDAzMzoweDdmZTE2OWRiZjMxZQpbIDE2LjEyMzk4Nl0gQ29kZTogYmEg
-ZmYgZmYgZmYgZmYgMGYgOWYgYzAgMGYgYjYgYzAgMGYgNGMgYzIgYzMgNjYgMmUgMGYgMWYgODQg
-MDAgMDAgMDAgMDAgMDAgMGYgMWYgMDAgNDEgNTQgMzEgYzAgYmEgZmYgZmYgZmYgZmYgNTMgNDgg
-ODMgZWMgMDggPGYwPiAwZiBiMSAxNSA3MiAwMiAxNyAwMCA4MyBmOCBmZiA3NCAzNSA0MSA4OSBj
-NCA4NSBjMCA3NSAyMSAzMSBjMApBbGwgY29kZQo9PT09PT09PQogICAwOgliYSBmZiBmZiBmZiBm
-ZiAgICAgICAJbW92ICAgICQweGZmZmZmZmZmLCVlZHgKICAgNToJMGYgOWYgYzAgICAgICAgICAg
-ICAgCXNldGcgICAlYWwKICAgODoJMGYgYjYgYzAgICAgICAgICAgICAgCW1vdnpibCAlYWwsJWVh
-eAogICBiOgkwZiA0YyBjMiAgICAgICAgICAgICAJY21vdmwgICVlZHgsJWVheAogICBlOgljMyAg
-ICAgICAgICAgICAgICAgICAJcmV0cSAgIAogICBmOgk2NiAyZSAwZiAxZiA4NCAwMCAwMCAJbm9w
-dyAgICVjczoweDAoJXJheCwlcmF4LDEpCiAgMTY6CTAwIDAwIDAwIAogIDE5OgkwZiAxZiAwMCAg
-ICAgICAgICAgICAJbm9wbCAgICglcmF4KQogIDFjOgk0MSA1NCAgICAgICAgICAgICAgICAJcHVz
-aCAgICVyMTIKICAxZToJMzEgYzAgICAgICAgICAgICAgICAgCXhvciAgICAlZWF4LCVlYXgKICAy
-MDoJYmEgZmYgZmYgZmYgZmYgICAgICAgCW1vdiAgICAkMHhmZmZmZmZmZiwlZWR4CiAgMjU6CTUz
-ICAgICAgICAgICAgICAgICAgIAlwdXNoICAgJXJieAogIDI2Ogk0OCA4MyBlYyAwOCAgICAgICAg
-ICAJc3ViICAgICQweDgsJXJzcAogIDJhOioJZjAgMGYgYjEgMTUgNzIgMDIgMTcgCWxvY2sgY21w
-eGNoZyAlZWR4LDB4MTcwMjcyKCVyaXApICAgICAgICAjIDB4MTcwMmE0CQk8LS0gdHJhcHBpbmcg
-aW5zdHJ1Y3Rpb24KICAzMToJMDAgCiAgMzI6CTgzIGY4IGZmICAgICAgICAgICAgIAljbXAgICAg
-JDB4ZmZmZmZmZmYsJWVheAogIDM1Ogk3NCAzNSAgICAgICAgICAgICAgICAJamUgICAgIDB4NmMK
-ICAzNzoJNDEgODkgYzQgICAgICAgICAgICAgCW1vdiAgICAlZWF4LCVyMTJkCiAgM2E6CTg1IGMw
-ICAgICAgICAgICAgICAgIAl0ZXN0ICAgJWVheCwlZWF4CiAgM2M6CTc1IDIxICAgICAgICAgICAg
-ICAgIAlqbmUgICAgMHg1ZgogIDNlOgkzMSBjMCAgICAgICAgICAgICAgICAJeG9yICAgICVlYXgs
-JWVheAoKQ29kZSBzdGFydGluZyB3aXRoIHRoZSBmYXVsdGluZyBpbnN0cnVjdGlvbgo9PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgIDA6CWYwIDBmIGIxIDE1IDcy
-IDAyIDE3IAlsb2NrIGNtcHhjaGcgJWVkeCwweDE3MDI3MiglcmlwKSAgICAgICAgIyAweDE3MDI3
-YQogICA3OgkwMCAKICAgODoJODMgZjggZmYgICAgICAgICAgICAgCWNtcCAgICAkMHhmZmZmZmZm
-ZiwlZWF4CiAgIGI6CTc0IDM1ICAgICAgICAgICAgICAgIAlqZSAgICAgMHg0MgogICBkOgk0MSA4
-OSBjNCAgICAgICAgICAgICAJbW92ICAgICVlYXgsJXIxMmQKICAxMDoJODUgYzAgICAgICAgICAg
-ICAgICAgCXRlc3QgICAlZWF4LCVlYXgKICAxMjoJNzUgMjEgICAgICAgICAgICAgICAgCWpuZSAg
-ICAweDM1CiAgMTQ6CTMxIGMwICAgICAgICAgICAgICAgIAl4b3IgICAgJWVheCwlZWF4ClsgICAx
-Ni4xNDI3MjRdIFJTUDogMDAyYjowMDAwN2ZmY2QwZWRlYzgwIEVGTEFHUzogMDAwMTAyMDIKWyAg
-IDE2LjE0Nzk0OF0gUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogMDAwMDAwMDAwMDAwMDAwMCBS
-Q1g6IDAwMDAwMDAwMDA1NTViZDgKWyAgIDE2LjE1NTA3NF0gUkRYOiAwMDAwMDAwMGZmZmZmZmZm
-IFJTSTogMDAwMDdmZmNkMGVkZWZhOCBSREk6IDAwMDAwMDAwMDAwMDAwMDEKWyAgIDE2LjE2MjE5
-OF0gUkJQOiAwMDAwN2ZmY2QwZWRlZmE4IFIwODogMDAwMDdmZTE2OWJjNWExMCBSMDk6IDAwMDA3
-ZmUxNjlmMzdhMTAKWyAgIDE2LjE2OTMxOV0gUjEwOiAwMDAwN2ZlMTY5YWRmM2VlIFIxMTogMDAw
-MDAwMDAwMDAwMDI0NiBSMTI6IDAwMDA3ZmZjZDBlZGVmYTgKWyAgIDE2LjE3NjQ0NV0gUjEzOiAw
-MDAwMDAwMDAwNDFiOWEwIFIxNDogMDAwMDAwMDAwMDU1NWJkOCBSMTU6IDAwMDA3ZmUxNjlmNjkw
-MDAKWyAgIDE2LjE4MzU2OV0gIDwvVEFTSz4KWyAgIDE2LjE4NTc1Ml0gTW9kdWxlcyBsaW5rZWQg
-aW46ClsgICAxNi4xODg4MDNdIENSMjogMDAwMDAwMDAwMDAwMDAwOApbICAgMTYuMTkyMTE0XSAt
-LS1bIGVuZCB0cmFjZSAwMDAwMDAwMDAwMDAwMDAwIF0tLS0K
---000000000000cbe25205f2271b2e
-Content-Type: text/plain; charset="US-ASCII"; name="input.txt"
-Content-Disposition: attachment; filename="input.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lcuotkxm1>
-X-Attachment-Id: f_lcuotkxm1
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-WyAgIDE1Ljk0NTYyNl0gQlVHOiBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlLCBhZGRy
-ZXNzOiAwMDAwMDAwMDAwMDAwMDA4ClsgICAxNS45NTI1ODhdICNQRjogc3VwZXJ2aXNvciByZWFk
-IGFjY2VzcyBpbiBrZXJuZWwgbW9kZQpbICAgMTUuOTU3NzIwXSAjUEY6IGVycm9yX2NvZGUoMHgw
-MDAwKSAtIG5vdC1wcmVzZW50IHBhZ2UKWyAgIDE1Ljk2Mjg1MF0gUEdEIDgwMDAwMDAxMDMyMTMw
-NjcgUDREIDgwMDAwMDAxMDMyMTMwNjcgUFVEIDEwMzIxMjA2NyBQTUQgMCAKWyAgIDE1Ljk2OTcy
-NF0gT29wczogMDAwMCBbIzFdIFBSRUVNUFQgU01QIFBUSQpbICAgMTUuOTczOTA5XSBDUFU6IDMg
-UElEOiAxIENvbW06IGluaXQgTm90IHRhaW50ZWQgNi4yLjAtcmMzLW5leHQtMjAyMzAxMTMgIzEK
-WyAgIDE1Ljk4MDg2OV0gSGFyZHdhcmUgbmFtZTogU3VwZXJtaWNybyBTWVMtNTAxOVMtTUwvWDEx
-U1NILUYsIEJJT1MgMi4wYiAwNy8yNy8yMDE3ClsgICAxNS45ODgzMzZdIFJJUDogMDAxMDpkb193
-cF9wYWdlKzB4MjM2LzB4ZWYwClsgICAxNS45OTI2MTFdIENvZGU6IDgzIGVhIDAxIDQ5IDg5IGQ3
-IDQ4IDg1IGQyIDBmIDg1IDAwIGZmIGZmIGZmIDQ5IDhiIDdjIDI0IDYwIGU4IDBiIGYyIGU5IDAw
-IDQxIDhiIDQ0IDI0IDI4IDRkIDhiIDc0IDI0IDUwIDRkIDhiIDJjIDI0IDg5IDQ1IDg4IDw0OT4g
-OGIgNDYgMDggNDkgOGIgNWQgMTAgYTggMDEgMGYgODUgNzggMDIgMDAgMDAgMGYgMWYgNDQgMDAg
-MDAgNGMKWyAgIDE2LjAxMTM1Nl0gUlNQOiAwMDAwOmZmZmZiM2Y2NDAwMjdkMTggRUZMQUdTOiAw
-MDAxMDI4NgpbICAgMTYuMDE2NTgzXSBSQVg6IDAwMDAwMDAwMDAwMDBhNTUgUkJYOiAwNDAwMDAw
-MDAwMDAwMDgwIFJDWDogMDAwMDAwMDAwMDAwMDAwMApbICAgMTYuMDIzNzE1XSBSRFg6IDAwMDAw
-MDAwMDAwMDAwMDAgUlNJOiBmZmZmZmZmZjhkM2QyYmQ1IFJESTogZmZmZmZmZmY4ZTI3MWRmYQpb
-ICAgMTYuMDMwODM4XSBSQlA6IGZmZmZiM2Y2NDAwMjdkYjAgUjA4OiA4MDAwMDAwNDMyZWU5MjI1
-IFIwOTogZmZmZjhhYzM0MzFlMzEwMApbICAgMTYuMDM3OTYyXSBSMTA6IDAwMDAwMDAwMDAwMDAw
-MDAgUjExOiAwMDAwN2ZlMTY5ZjJmNTk4IFIxMjogZmZmZmIzZjY0MDAyN2RlMApbICAgMTYuMDQ1
-MDg3XSBSMTM6IGZmZmY4YWMzNDMxZTIwMDAgUjE0OiAwMDAwMDAwMDAwMDAwMDAwIFIxNTogMDQw
-MDAwMDAwMDAwMDAwMApbICAgMTYuMDUyMjExXSBGUzogIDAwMDA3ZmUxNjk3M2U4MDAoMDAwMCkg
-R1M6ZmZmZjhhYzY5ZmQ4MDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwClsgICAxNi4w
-NjAzMTldIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMK
-WyAgIDE2LjA2NjA2MF0gQ1IyOiAwMDAwMDAwMDAwMDAwMDA4IENSMzogMDAwMDAwMDEwMDhkNDAw
-MiBDUjQ6IDAwMDAwMDAwMDAzNzA2ZTAKWyAgIDE2LjA3MzE4M10gRFIwOiAwMDAwMDAwMDAwMDAw
-MDAwIERSMTogMDAwMDAwMDAwMDAwMDAwMCBEUjI6IDAwMDAwMDAwMDAwMDAwMDAKWyAgIDE2LjA4
-MDMyMl0gRFIzOiAwMDAwMDAwMDAwMDAwMDAwIERSNjogMDAwMDAwMDBmZmZlMGZmMCBEUjc6IDAw
-MDAwMDAwMDAwMDA0MDAKWyAgIDE2LjA4NzQ0Nl0gQ2FsbCBUcmFjZToKWyAgIDE2LjA4OTg5M10g
-IDxUQVNLPgpbICAgMTYuMDkxOTkxXSAgPyB0cmFjZV9wcmVlbXB0X29mZisweDJkLzB4ZDAKWyAg
-IDE2LjA5NjA4N10gID8gX19oYW5kbGVfbW1fZmF1bHQrMHg3ZWUvMHgxMmYwClsgICAxNi4xMDA0
-MzldICBfX2hhbmRsZV9tbV9mYXVsdCsweGFiZi8weDEyZjAKWyAgIDE2LjEwNDYxN10gIGhhbmRs
-ZV9tbV9mYXVsdCsweGY4LzB4MzIwClsgICAxNi4xMDg0NTddICBkb191c2VyX2FkZHJfZmF1bHQr
-MHgxZDkvMHg2NTAKWyAgIDE2LjExMjY0Ml0gIGV4Y19wYWdlX2ZhdWx0KzB4NmIvMHgxNzAKWyAg
-IDE2LjExNjM5NF0gIGFzbV9leGNfcGFnZV9mYXVsdCsweDJiLzB4MzAKWyAgIDE2LjEyMDQwOF0g
-UklQOiAwMDMzOjB4N2ZlMTY5ZGJmMzFlClsgICAxNi4xMjM5ODZdIENvZGU6IGJhIGZmIGZmIGZm
-IGZmIDBmIDlmIGMwIDBmIGI2IGMwIDBmIDRjIGMyIGMzIDY2IDJlIDBmIDFmIDg0IDAwIDAwIDAw
-IDAwIDAwIDBmIDFmIDAwIDQxIDU0IDMxIGMwIGJhIGZmIGZmIGZmIGZmIDUzIDQ4IDgzIGVjIDA4
-IDxmMD4gMGYgYjEgMTUgNzIgMDIgMTcgMDAgODMgZjggZmYgNzQgMzUgNDEgODkgYzQgODUgYzAg
-NzUgMjEgMzEgYzAKWyAgIDE2LjE0MjcyNF0gUlNQOiAwMDJiOjAwMDA3ZmZjZDBlZGVjODAgRUZM
-QUdTOiAwMDAxMDIwMgpbICAgMTYuMTQ3OTQ4XSBSQVg6IDAwMDAwMDAwMDAwMDAwMDAgUkJYOiAw
-MDAwMDAwMDAwMDAwMDAwIFJDWDogMDAwMDAwMDAwMDU1NWJkOApbICAgMTYuMTU1MDc0XSBSRFg6
-IDAwMDAwMDAwZmZmZmZmZmYgUlNJOiAwMDAwN2ZmY2QwZWRlZmE4IFJESTogMDAwMDAwMDAwMDAw
-MDAwMQpbICAgMTYuMTYyMTk4XSBSQlA6IDAwMDA3ZmZjZDBlZGVmYTggUjA4OiAwMDAwN2ZlMTY5
-YmM1YTEwIFIwOTogMDAwMDdmZTE2OWYzN2ExMApbICAgMTYuMTY5MzE5XSBSMTA6IDAwMDA3ZmUx
-NjlhZGYzZWUgUjExOiAwMDAwMDAwMDAwMDAwMjQ2IFIxMjogMDAwMDdmZmNkMGVkZWZhOApbICAg
-MTYuMTc2NDQ1XSBSMTM6IDAwMDAwMDAwMDA0MWI5YTAgUjE0OiAwMDAwMDAwMDAwNTU1YmQ4IFIx
-NTogMDAwMDdmZTE2OWY2OTAwMApbICAgMTYuMTgzNTY5XSAgPC9UQVNLPgpbICAgMTYuMTg1NzUy
-XSBNb2R1bGVzIGxpbmtlZCBpbjoKWyAgIDE2LjE4ODgwM10gQ1IyOiAwMDAwMDAwMDAwMDAwMDA4
-ClsgICAxNi4xOTIxMTRdIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQo=
---000000000000cbe25205f2271b2e--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
