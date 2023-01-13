@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00715669542
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF65669518
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241442AbjAMLPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S240768AbjAMLNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241102AbjAMLMk (ORCPT
+        with ESMTP id S240463AbjAMLMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:12:40 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0A0564D3;
-        Fri, 13 Jan 2023 03:07:35 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4F9F26602A65;
-        Fri, 13 Jan 2023 11:07:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673608054;
-        bh=OR96jyfG6jmlGtj7KrVYH6mHMab9y7sfZFD/VnKDl1k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5+8FSGTCLUJQnG1Of1fWBSzc1RKou1ZivE0+Nd99L83XIGMENM7yhYAhDJ+2KmjN
-         h0a9wm+vvFtHXJLEL1qVrTZlAsDWJ2UZfZ6nQ1SRU4B/h4j7w1LU/TE/m+3l/jQsyI
-         j6z8XATxvDJda/xepGBfp9JDcGtrTh+A8oLJcyGAoWdBNU1OGVYkgNL+usceEWFojl
-         u+2TpWrZZAIctUV20cLNAizKWatfFIuVXk5eGgp+WvH5TBDhSg5JaR+rXaIYz1i7nt
-         /jvSkWKsnT9v3EIXoTWmwJ4PXTdJ1PpdP3OKcJjgoQFtP+5F/YsFwr06RDW5yXt0i3
-         /k3s8ZwDqoiFA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v3 23/23] clk: mediatek: clk-mt7986-topckgen: Migrate to mtk_clk_simple_probe()
-Date:   Fri, 13 Jan 2023 12:06:16 +0100
-Message-Id: <20230113110616.111001-24-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113110616.111001-1-angelogioacchino.delregno@collabora.com>
-References: <20230113110616.111001-1-angelogioacchino.delregno@collabora.com>
+        Fri, 13 Jan 2023 06:12:39 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ECA167FE
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:06:29 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso12746945wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=baUaOu9qP5RXCY+qNKVUaTtZhgFMNu4zdAgDA96eroc=;
+        b=ALtzJ+I3+Muk1YK3hL0wvctWAGMfq3YL1bXKFM4wRo2Xp1DyByr4pYxbEoReVRDhER
+         AuTUaPjEBGaNH0keGjK3RmgQzxOJtjdUM8Tw9v8mhOEetCV5G7AREtaasHFibidNcdoz
+         GoYgDC1ox99KIxbYC8myPW/LJBNQ4t2FT1/OCDBBuW9CCM3kIcUGaAcwmmbYQ4LzWmEv
+         2TFqePHhKgDJy1/BmLT4Uiczv46mKz5UE49DX2FAnhwklmqSH6W0EuhekQNMTIosWwZG
+         ZPT/Po7birPfRabkdf9sk3axZq7i4VAQJhUgbv5KHoXxj+rcwxTKYmzkOrq/wvYuzB8U
+         /IYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=baUaOu9qP5RXCY+qNKVUaTtZhgFMNu4zdAgDA96eroc=;
+        b=y3Q2A0aWeMSzsJe23qiQqGeGrpdKRCHChyOoZcyLWMt0z2tHmLJz/tf4U0vigf6WTB
+         yGbKxuoCikRdinXkjthQBChYLUqsF/vPCPrFFS46uUGxxtTvRBfxYazxDQg8cq2blW/V
+         wKTsZs2uk3aYXfp4pdW98fcdJhJZ2Y+teBMaRRHTVdox/Nwtns0FlFDqKmr21m2YunrN
+         LUPfVO84HhSsqv8RpzpkEIJoqYQD4ir4LFCMdUqtGyMLXB/pp7aRRLmvW5tsB/k5UmZt
+         d/gH7bqsRda0a40SOEX0aZSzb6d9qVrWRva934gHo1/2hxJMGu+BXIjiWWk5u/WIYoQO
+         SghA==
+X-Gm-Message-State: AFqh2kqnDGtDIEsohvlO5S6mDu6l0W1XdUppgxCupa3GjfdiPL8AGjLL
+        YxMuSo/xeiwD1smRghImv3g=
+X-Google-Smtp-Source: AMrXdXs9NaNsyb4zGRdAf7rmsXjTJE347Gie0wJOE/NQTFjr4ARkg1Igb7ii7i5eTLK0gDgZNJnRuw==
+X-Received: by 2002:a05:600c:3550:b0:3d9:ed30:6a73 with SMTP id i16-20020a05600c355000b003d9ed306a73mr15217554wmq.9.1673607987538;
+        Fri, 13 Jan 2023 03:06:27 -0800 (PST)
+Received: from [0.0.0.0] ([134.134.139.85])
+        by smtp.googlemail.com with ESMTPSA id j18-20020a05600c191200b003d9dee823a3sm26796714wmq.5.2023.01.13.03.06.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 03:06:27 -0800 (PST)
+Message-ID: <cb28a1e1-b9fb-a4a2-9b03-47bb34b16aa1@gmail.com>
+Date:   Fri, 13 Jan 2023 13:06:18 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Reply-To: juhapekka.heikkila@gmail.com
+Subject: Re: [Intel-gfx] [PATCH] drm/i915/display: Check source height is > 0
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Drew Davenport <ddavenport@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Juha-Pekka_Heikkil=c3=a4?= 
+        <juha-pekka.heikkila@intel.com>
+References: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
+ <Y8BRUwiznxA/tns7@intel.com>
+Content-Language: en-US
+From:   Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>
+In-Reply-To: <Y8BRUwiznxA/tns7@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no more non-common calls in clk_mt7986_topckgen_probe():
-migrate this driver to mtk_clk_simple_probe().
+On 12.1.2023 20.28, Ville Syrjälä wrote:
+> On Mon, Dec 26, 2022 at 10:53:24PM -0700, Drew Davenport wrote:
+>> The error message suggests that the height of the src rect must be at
+>> least 1. Reject source with height of 0.
+>>
+>> Signed-off-by: Drew Davenport <ddavenport@chromium.org>
+>>
+>> ---
+>> I was investigating some divide-by-zero crash reports on ChromeOS which
+>> pointed to the intel_adjusted_rate function. Further prodding showed
+>> that I could reproduce this in a simple test program if I made src_h
+>> some value less than 1 but greater than 0.
+>>
+>> This seemed to be a sensible place to check that the source height is at
+>> least 1. I tried to repro this issue on an amd device I had on hand, and
+>> the configuration was rejected.
+>>
+>> Would it make sense to add a check that source dimensions are at least 1
+>> somewhere in core, like in drm_atomic_plane_check? Or is that a valid
+>> use case on some devices, and thus any such check should be done on a
+>> per-driver basis?
+>>
+>> Thanks.
+>>
+>>   drivers/gpu/drm/i915/display/skl_universal_plane.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/drivers/gpu/drm/i915/display/skl_universal_plane.c
+>> index 4b79c2d2d6177..9b172a1e90deb 100644
+>> --- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
+>> +++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
+>> @@ -1627,7 +1627,7 @@ static int skl_check_main_surface(struct intel_plane_state *plane_state)
+>>   	u32 offset;
+>>   	int ret;
+>>   
+>> -	if (w > max_width || w < min_width || h > max_height) {
+>> +	if (w > max_width || w < min_width || h > max_height || h < 1) {
+> 
+> I liked this one best so pushed to drm-intel-next with cc:stable. Thanks.
+> 
+> In the future we might want to move some of these checks to an earlier
+> spot to make sure we don't hit any other weird issues in some other
+> code, but for the moment I think this will do.
+> 
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/clk/mediatek/clk-mt7986-topckgen.c | 55 +++++-----------------
- 1 file changed, 13 insertions(+), 42 deletions(-)
+Look ok to me. Tests which I had written to try different ways to cause 
+this issue are now returning einval as expected. I'll polish my igt test 
+for this issue and send it out bit later.
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-topckgen.c b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-index 36553f0c13fe..dff9976fa689 100644
---- a/drivers/clk/mediatek/clk-mt7986-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-@@ -290,53 +290,24 @@ static const struct mtk_mux top_muxes[] = {
- 			     0x1C4, 5),
- };
- 
--static int clk_mt7986_topckgen_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
--	int r;
--	void __iomem *base;
--	int nr = ARRAY_SIZE(top_fixed_clks) + ARRAY_SIZE(top_divs) +
--		 ARRAY_SIZE(top_muxes);
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return -ENOMEM;
--	}
--
--	clk_data = mtk_alloc_clk_data(nr);
--	if (!clk_data)
--		return -ENOMEM;
--
--	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
--				    clk_data);
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_register_muxes(&pdev->dev, top_muxes,
--			       ARRAY_SIZE(top_muxes), node,
--			       &mt7986_clk_lock, clk_data);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--
--	if (r) {
--		pr_err("%s(): could not register clock provider: %d\n",
--		       __func__, r);
--		goto free_topckgen_data;
--	}
--	return r;
--
--free_topckgen_data:
--	mtk_free_clk_data(clk_data);
--	return r;
--}
-+static const struct mtk_clk_desc topck_desc = {
-+	.fixed_clks = top_fixed_clks,
-+	.num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.mux_clks = top_muxes,
-+	.num_mux_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt7986_clk_lock,
-+};
- 
- static const struct of_device_id of_match_clk_mt7986_topckgen[] = {
--	{ .compatible = "mediatek,mt7986-topckgen", },
--	{}
-+	{ .compatible = "mediatek,mt7986-topckgen", .data = &topck_desc },
-+	{ /* sentinel */ }
- };
- 
- static struct platform_driver clk_mt7986_topckgen_drv = {
--	.probe = clk_mt7986_topckgen_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt7986-topckgen",
- 		.of_match_table = of_match_clk_mt7986_topckgen,
--- 
-2.39.0
+/Juha-pekka
+
+>>   		drm_dbg_kms(&dev_priv->drm,
+>>   			    "requested Y/RGB source size %dx%d outside limits (min: %dx1 max: %dx%d)\n",
+>>   			    w, h, min_width, max_width, max_height);
+>> -- 
+>> 2.39.0.314.g84b9a713c41-goog
+> 
 
