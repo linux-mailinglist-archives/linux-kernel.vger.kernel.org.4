@@ -2,336 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E660669863
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678AC669867
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241536AbjAMNV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S240927AbjAMNWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240865AbjAMNVb (ORCPT
+        with ESMTP id S235451AbjAMNVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:21:31 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD3F2F3;
-        Fri, 13 Jan 2023 05:12:46 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30DDCZEV033656;
-        Fri, 13 Jan 2023 07:12:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673615555;
-        bh=q9B3trWLFL5+YhuzqApg2PkpZCMfdCjP4bb979yF53M=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=XHgbG/rjcuY8Ek+BlIwWnRNN3KU06AczD5u+MEMk/45C0Vee+gY/X34ntEHCTZRiq
-         YdtJXwkffgzhmsnKTpGD245OMkQw0av/ImqPPxhl7xvHrkWd1Jq+F4uPaHcPuOy+6D
-         UBsgwGG01DBNIhQAPjxgVlPig+fdP9f5+dXp1Jz8=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30DDCYnN064792
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 13 Jan 2023 07:12:35 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 13
- Jan 2023 07:12:34 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 13 Jan 2023 07:12:34 -0600
-Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30DDCUYR029871;
-        Fri, 13 Jan 2023 07:12:31 -0600
-Message-ID: <d2a948ae-5e91-6e45-0c66-44c4c741e93a@ti.com>
-Date:   Fri, 13 Jan 2023 18:42:30 +0530
+        Fri, 13 Jan 2023 08:21:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DCC59D10;
+        Fri, 13 Jan 2023 05:13:06 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:299b:2170:fef0:26ee])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5AC446600010;
+        Fri, 13 Jan 2023 13:13:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673615584;
+        bh=VqwCudtI0SZq/0MSnI5aLFMDHO/pDPFpBRABocGAm/U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XORmRfmsoTn5+QUnYMG2x5nCRbwnhDMUDwbHCpTRWvktJKvxLxLmJewLOS1qNajLN
+         GP9ylqVDfTh9PgW6GOcCeynDvykGqcBZaP4yqnLFidb3q1s4Dtl9IaTGHPZ0fOzpSc
+         1bLKJiluz/7V50w+QRBUu9wUGZ3eS1IFZOm9HKE7yv0hIZxX+P7RpKeP51wYUjJMIG
+         soNhxIdsv+v8/0StYwKuprfj3mOdTMkrBfdrxcamZVrvezgbdm+W3Z1j18/gC8QMsz
+         XSoSOisiZkKk0IyeYmOLQLY0L0ItwY5J6lmlstrmJ6cCwmsZcjT3fFWIj5IQsqI1Kt
+         mn1tZyQUnpV8A==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v2] media: verisilicon: HEVC: Only propose 10 bits compatible pixels formats
+Date:   Fri, 13 Jan 2023 14:12:57 +0100
+Message-Id: <20230113131257.661079-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 4/4] arm64: dts: ti: Add support for J784S4 EVM board
-Content-Language: en-US
-To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Hari Nagalla <hnagalla@ti.com>
-References: <20230112142725.77785-1-a-nandan@ti.com>
- <20230112142725.77785-5-a-nandan@ti.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <20230112142725.77785-5-a-nandan@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When decoding a 10bits bitstreams HEVC driver should only expose
+10bits pixel formats.
+To fulfill this requirement it is needed to call hantro_reset_raw_fmt()
+when bit depth change and to correctly set match_depth in pixel formats
+enumeration.
 
+Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
 
-On 12/01/23 19:57, Apurva Nandan wrote:
-> J784S4 EVM board is designed for TI J784S4 SoC. It supports the following
-> interfaces:
-> * 32 GB DDR4 RAM
-> * x2 Gigabit Ethernet interfaces capable of working in Switch and MAC mode
-> * x1 Input Audio Jack, x1 Output Audio Jack
-> * x1 USB2.0 Hub with two Type A host and x1 USB 3.1 Type-C Port
-> * x2 4L PCIe connector
-> * x1 UHS-1 capable micro-SD card slot
-> * 512 Mbit OSPI flash, 1 Gbit Octal NAND flash, 512 Mbit QSPI flash,
->   UFS flash.
-> * x6 UART through UART-USB bridge
-> * XDS110 for onboard JTAG debug using USB
-> * Temperature sensors, user push buttons and LEDs
-> * 40-pin User Expansion Connector
-> * x2 ENET Expansion Connector, x1 GESI expander, x2 Display connector
-> * x1 15-pin CSI header
-> * x6 MCAN instances
-> 
-> Add basic support for J784S4-EVM.
-> 
-> Schematics: https://www.ti.com/lit/zip/sprr458
-> 
-> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-> Tested-by: Manorit Chawdhry <m-chawdhry@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/Makefile          |   2 +
->  arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 196 +++++++++++++++++++++++
->  2 files changed, 198 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index cf7c509538a4..27b2e1f5555e 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -20,6 +20,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
->  
->  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
->  
-> +dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
-> +
->  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
->  
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> new file mode 100644
-> index 000000000000..8cd4a7ecc121
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-> @@ -0,0 +1,196 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + *
-> + * EVM Board Schematics: https://www.ti.com/lit/zip/sprr458
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/net/ti-dp83867.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include "k3-j784s4.dtsi"
-> +
-> +/ {
-> +	compatible = "ti,j784s4-evm", "ti,j784s4";
-> +	model = "Texas Instruments J784S4 EVM";
-> +
-> +	chosen {
-> +		stdout-path = "serial2:115200n8";
-> +	};
-> +
-> +	aliases {
-> +		serial2 = &main_uart8;
-> +		mmc1 = &main_sdhci1;
-> +		i2c0 = &main_i2c0;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		/* 32G RAM */
-> +		reg = <0x00 0x80000000 0x00 0x80000000>,
-> +		      <0x08 0x80000000 0x07 0x80000000>;
-> +	};
-> +
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		secure_ddr: optee@9e800000 {
-> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
-> +			no-map;
-> +		};
-> +	};
-> +
-> +	evm_12v0: regulator-evm12v0 {
-> +		/* main supply */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "evm_12v0";
-> +		regulator-min-microvolt = <12000000>;
-> +		regulator-max-microvolt = <12000000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vsys_3v3: regulator-vsys3v3 {
-> +		/* Output of LM5140 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vsys_3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&evm_12v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vsys_5v0: regulator-vsys5v0 {
-> +		/* Output of LM5140 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vsys_5v0";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&evm_12v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	vdd_mmc1: regulator-sd {
-> +		/* Output of TPS22918 */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vdd_mmc1";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		enable-active-high;
-> +		vin-supply = <&vsys_3v3>;
-> +		gpio = <&exp2 2 GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	vdd_sd_dv: regulator-TLV71033 {
-> +		/* Output of TLV71033 */
-> +		compatible = "regulator-gpio";
-> +		regulator-name = "tlv71033";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		vin-supply = <&vsys_5v0>;
-> +		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
-> +		states = <1800000 0x0>,
-> +			 <3300000 0x1>;
-> +	};
-> +};
-> +
-> +&main_pmx0 {
-> +	main_uart8_pins_default: main-uart8-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x040, PIN_INPUT, 14) /* (AF37) MCASP0_AXR0.UART8_CTSn */
-> +			J784S4_IOPAD(0x044, PIN_OUTPUT, 14) /* (AG37) MCASP0_AXR1.UART8_RTSn */
-> +			J784S4_IOPAD(0x0d0, PIN_INPUT, 11) /* (AP38) SPI0_CS1.UART8_RXD */
-> +			J784S4_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AN38) SPI0_CLK.UART8_TXD */
-> +		>;
-> +	};
-> +
-> +	main_i2c0_pins_default: main-i2c0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x0e0, PIN_INPUT_PULLUP, 0) /* (AN36) I2C0_SCL */
-> +			J784S4_IOPAD(0x0e4, PIN_INPUT_PULLUP, 0) /* (AP37) I2C0_SDA */
-> +		>;
-> +	};
-> +
-> +	main_mmc1_pins_default: main-mmc1-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x104, PIN_INPUT, 0) /* (AB38) MMC1_CLK */
-> +			J784S4_IOPAD(0x108, PIN_INPUT, 0) /* (AB36) MMC1_CMD */
-> +			J784S4_IOPAD(0x100, PIN_INPUT, 0) /* (No Pin) MMC1_CLKLB */
-> +			J784S4_IOPAD(0x0fc, PIN_INPUT, 0) /* (AA33) MMC1_DAT0 */
-> +			J784S4_IOPAD(0x0f8, PIN_INPUT, 0) /* (AB34) MMC1_DAT1 */
-> +			J784S4_IOPAD(0x0f4, PIN_INPUT, 0) /* (AA32) MMC1_DAT2 */
-> +			J784S4_IOPAD(0x0f0, PIN_INPUT, 0) /* (AC38) MMC1_DAT3 */
-> +			J784S4_IOPAD(0x0e8, PIN_INPUT, 8) /* (AR38) TIMER_IO0.MMC1_SDCD */
-> +		>;
-> +	};
-> +
-> +	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-> +		pinctrl-single,pins = <
-> +			J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
-> +		>;
-> +	};
-> +};
-> +
-> +&main_uart8 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_uart8_pins_default>;
-> +};
-> +
-> +&main_i2c0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_i2c0_pins_default>;
-> +
-> +	clock-frequency = <400000>;
-> +
-> +	exp1: gpio@20 {
-> +		compatible = "ti,tca6416";
-> +		reg = <0x20>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names = "PCIE1_2L_MODE_SEL", "PCIE1_4L_PERSTZ", "PCIE1_2L_RC_RSTZ",
-> +				  "PCIE1_2L_EP_RST_EN", "PCIE0_4L_MODE_SEL", "PCIE0_4L_PERSTZ",
-> +				  "PCIE0_4L_RC_RSTZ", "PCIE0_4L_EP_RST_EN", "PCIE1_4L_PRSNT#",
-> +				  "PCIE0_4L_PRSNT#", "CDCI1_OE1/OE4", "CDCI1_OE2/OE3",
-> +				  "AUDIO_MUX_SEL", "EXP_MUX2", "EXP_MUX3", "GESI_EXP_PHY_RSTZ";
-> +	};
-> +
-> +	exp2: gpio@22 {
-> +		compatible = "ti,tca6424";
-> +		reg = <0x22>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names = "R_GPIO_RGMII1_RST", "ENET2_I2CMUX_SEL", "GPIO_USD_PWR_EN",
-> +				  "USBC_PWR_EN", "USBC_MODE_SEL1", "USBC_MODE_SEL0",
-> +				  "GPIO_LIN_EN", "R_CAN_STB", "CTRL_PM_I2C_OE#",
-> +				  "ENET2_EXP_PWRDN", "ENET2_EXP_SPARE2", "CDCI2_RSTZ",
-> +				  "USB2.0_MUX_SEL", "CANUART_MUX_SEL0", "CANUART_MUX2_SEL1",
-> +				  "CANUART_MUX1_SEL1", "ENET1_EXP_PWRDN", "ENET1_EXP_RESETZ",
-> +				  "ENET1_I2CMUX_SEL", "ENET1_EXP_SPARE2", "ENET2_EXP_RESETZ",
-> +				  "USER_INPUT1", "USER_LED1", "USER_LED2";
-> +	};
-> +};
-> +
-> +&main_sdhci1 {
-> +	/* SD card */
-> +	status = "okay";
-> +	pinctrl-0 = <&main_mmc1_pins_default>;
-> +	pinctrl-names = "default";
-> +	disable-wp;
-> +	vmmc-supply = <&vdd_mmc1>;
-> +	vqmmc-supply = <&vdd_sd_dv>;
-> +};
-> +
-> +&main_gpio0 {
-> +	status = "okay";
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+version 2:
+- Also remove struct hantro_ctx *ctx variable in hantro_try_ctrl()
 
-Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
+ .../media/platform/verisilicon/hantro_drv.c   | 40 +++++++++++++++----
+ .../media/platform/verisilicon/hantro_v4l2.c  |  2 +-
+ .../media/platform/verisilicon/hantro_v4l2.h  |  1 +
+ .../media/platform/verisilicon/imx8m_vpu_hw.c |  2 +
+ 4 files changed, 36 insertions(+), 9 deletions(-)
 
-Also, boot logs during my testing of the latest series on J784S4 EVM :
-
-https://gist.github.com/vaishnavachath/2b845d82a3fd44ca70565f6337b0e5ab
-
-> +};
-
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index 8cb4a68c9119..e824e87618db 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -251,11 +251,6 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+ 
+ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+ {
+-	struct hantro_ctx *ctx;
+-
+-	ctx = container_of(ctrl->handler,
+-			   struct hantro_ctx, ctrl_handler);
+-
+ 	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+ 		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+ 
+@@ -274,8 +269,6 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+ 		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
+ 			/* Only 8-bit and 10-bit are supported */
+ 			return -EINVAL;
+-
+-		ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
+ 	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+ 		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
+ 
+@@ -286,6 +279,32 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+ 	return 0;
+ }
+ 
++static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct hantro_ctx *ctx;
++
++	ctx = container_of(ctrl->handler,
++			   struct hantro_ctx, ctrl_handler);
++
++	vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
++
++	switch (ctrl->id) {
++	case V4L2_CID_STATELESS_HEVC_SPS:
++		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
++		int bit_depth = sps->bit_depth_luma_minus8 + 8;
++
++		if (ctx->bit_depth != bit_depth) {
++			ctx->bit_depth = bit_depth;
++			hantro_reset_raw_fmt(ctx);
++		}
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct hantro_ctx *ctx;
+@@ -328,6 +347,11 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+ 	.try_ctrl = hantro_try_ctrl,
+ };
+ 
++static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
++	.s_ctrl = hantro_hevc_s_ctrl,
++	.try_ctrl = hantro_try_ctrl,
++};
++
+ static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
+ 	.s_ctrl = hantro_jpeg_s_ctrl,
+ };
+@@ -470,7 +494,7 @@ static const struct hantro_ctrl controls[] = {
+ 		.codec = HANTRO_HEVC_DECODER,
+ 		.cfg = {
+ 			.id = V4L2_CID_STATELESS_HEVC_SPS,
+-			.ops = &hantro_ctrl_ops,
++			.ops = &hantro_hevc_ctrl_ops,
+ 		},
+ 	}, {
+ 		.codec = HANTRO_HEVC_DECODER,
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index 2c7a805289e7..0025e049dd26 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -398,7 +398,7 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
+ 		hantro_set_fmt_out(ctx, fmt);
+ }
+ 
+-static void
++void
+ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
+ {
+ 	const struct hantro_fmt *raw_vpu_fmt;
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.h b/drivers/media/platform/verisilicon/hantro_v4l2.h
+index 64f6f57e9d7a..f642560aed93 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.h
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.h
+@@ -21,6 +21,7 @@
+ extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
+ extern const struct vb2_ops hantro_queue_ops;
+ 
++void hantro_reset_raw_fmt(struct hantro_ctx *ctx);
+ void hantro_reset_fmts(struct hantro_ctx *ctx);
+ int hantro_get_format_depth(u32 fourcc);
+ const struct hantro_fmt *
+diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+index b390228fd3b4..f850d8bddef6 100644
+--- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
++++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+@@ -152,6 +152,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_NV12,
+ 		.codec_mode = HANTRO_MODE_NONE,
++		.match_depth = true,
+ 		.postprocessed = true,
+ 		.frmsize = {
+ 			.min_width = FMT_MIN_WIDTH,
+@@ -165,6 +166,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_P010,
+ 		.codec_mode = HANTRO_MODE_NONE,
++		.match_depth = true,
+ 		.postprocessed = true,
+ 		.frmsize = {
+ 			.min_width = FMT_MIN_WIDTH,
 -- 
-Regards,
-Vaishnav
+2.34.1
+
