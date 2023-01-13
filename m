@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D976690C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 493776690CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240652AbjAMI1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S240797AbjAMI1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236408AbjAMI0j (ORCPT
+        with ESMTP id S240770AbjAMI1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:26:39 -0500
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469C354720;
-        Fri, 13 Jan 2023 00:26:38 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id fa5so13160786qtb.11;
-        Fri, 13 Jan 2023 00:26:38 -0800 (PST)
+        Fri, 13 Jan 2023 03:27:30 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C69048287
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:27:08 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id a184so15643702pfa.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:27:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G3rqt8U/fmU9xdq4C5+W4HE9DlCGSdVe4EIC0wcKppU=;
+        b=yzrVwWu7C3NSCFGCHVk5Hyc+CUi0GnXALmrCmXsGOx+12/p+tc8QUorV6ZPdrkBahB
+         T7B3KJQCt14brVLptUmUsM6bdnx8XbaTWg+U3fmsFvEp/2V06D0lKjHqLfusm+DJZ9av
+         ky2Hog1hhK04nZZHrSlbRMfvdTBzeanwDhv+WQPMFJ1/66t5LJV2cid+QFRzzz5Pkz/y
+         ZnzqcVBozQ9xvUR4tlDyA9Anl0tjJ8Jt4gbTxqBmSCebxrBIbFQ8AAY4yqjCntrf/fVD
+         hQHHi2pVaOb7O5/LILuh+EakQMJObwmbwvQpgOW3iJZLoC22aotoKZhP2kj5t5NYvud3
+         Gnlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IGwwX1FWc34aVprY9nV8lSjSaarIXrtB/QPl3dMA44o=;
-        b=OrBkA4O+sdQHPVGLv9QcAtvIvznY+EGGznQc5W0bTyWkp2OTvaHsKpMVX3qGW1Km4p
-         crT+1gToCalQ+RmJ17XDjzdGCnkT9AuEtGdp0JrKhUStjt6T8EDF0JR0rHmr4Ku/WCcE
-         hiYBtq/ITL/Y55K3wLv2rkn1jwa4LTpg12581d135NToqljp/txHTkooefmrpq7k5zLl
-         h+tdhx/1GBdIY+9jsDej0vggdV9Txf8DMRyoSnYz6SaH7vDu/ksyrH3ROEoZB0x0wmOQ
-         DTwptN0akfuakj9tMxAuIge1aIfeIBGXuz8Vy/IxhhJltxwo7t0Yh4DlZKU5xuGHq5f9
-         KkaA==
-X-Gm-Message-State: AFqh2kp8n91rm+VJ8dh441RedMH1e7dl5ItueXtgIuHk9v/S4wHqpuxV
-        9ZO/uqGXlJVi8l3uW0/ysTqR81QUolPfHg==
-X-Google-Smtp-Source: AMrXdXsI1f7si/IK4pBGwX1g5ZCcbE0uL3G3n+rXVsKaK42NeEsUXSU8qYMrQi2bt3777QW8XztbPA==
-X-Received: by 2002:a05:622a:6011:b0:3a9:8561:429a with SMTP id he17-20020a05622a601100b003a98561429amr17639336qtb.26.1673598396801;
-        Fri, 13 Jan 2023 00:26:36 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id bk25-20020a05620a1a1900b006ff8ac9acfdsm12401133qkb.49.2023.01.13.00.26.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:26:35 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id g4so21534409ybg.7;
-        Fri, 13 Jan 2023 00:26:35 -0800 (PST)
-X-Received: by 2002:a25:7:0:b0:7c1:b2e9:7e71 with SMTP id 7-20020a250007000000b007c1b2e97e71mr830819yba.604.1673598394939;
- Fri, 13 Jan 2023 00:26:34 -0800 (PST)
+        bh=G3rqt8U/fmU9xdq4C5+W4HE9DlCGSdVe4EIC0wcKppU=;
+        b=Ibh+RcHXkeu0z8yhueOYFq+G9sE8zAs/PiSMn3zgyHl+uW/78oCvNjgwWyBmdyikuP
+         Y9vYQPUcCN5a/1I0hue+jFG5fmc/2Fnzm8OZ/ixq2/5wHHYxIXGpGItOH3FYnGzd/9nQ
+         RgeY98GF0IeX9SHUQtx5QKsCE6jyhtP5LggUhuc49jpO9NM/mj6pct1HtSTRd5LbMRq3
+         HHL1LREPrj3qKTMHyfRJg0DgPfQKwik4WSOe4+/3Q9XQWFTXRHk2Nh8kXPrKIiaSUvs5
+         9Bh6VYpkSgy/JtCs0YpHFBHA58X6/jXwsRr2eUE7BMPgjvHf5enaWOHrb0HXIrUdO/ns
+         bGEw==
+X-Gm-Message-State: AFqh2kq5doNordtTxLwh88HG6q8Frb8H62kbcGvqBaBfNT5O8aX+PgmI
+        MBHG6tGygSrZD5/m3TJJqo5ICw==
+X-Google-Smtp-Source: AMrXdXvfTi6zQScrQ5bOmQy6GI4Kn/U9O40ztqvFG1UjTLpDUc64K7zHvwp9nvavQhVnnuaAOg2+Hw==
+X-Received: by 2002:a05:6a00:d4e:b0:581:a2b6:df19 with SMTP id n14-20020a056a000d4e00b00581a2b6df19mr52218940pfv.14.1673598427671;
+        Fri, 13 Jan 2023 00:27:07 -0800 (PST)
+Received: from GL4FX4PXWL.bytedance.net ([139.177.225.251])
+        by smtp.gmail.com with ESMTPSA id l123-20020a622581000000b005818d429d98sm13092738pfl.136.2023.01.13.00.27.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 13 Jan 2023 00:27:07 -0800 (PST)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     rppt@kernel.org, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [PATCH 0/3] Some small improvements for memblock.
+Date:   Fri, 13 Jan 2023 16:26:56 +0800
+Message-Id: <20230113082659.65276-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-In-Reply-To: <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 09:26:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
-Message-ID: <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
-Subject: Re: remove arch/sh
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 9:10 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On 1/13/23 07:23, Christoph Hellwig wrote:
-> > arch/sh has been a long drag because it supports a lot of SOCs, and most
-> > of them haven't even been converted to device tree infrastructure.  These
-> > SOCs are generally obsolete as well, and all of the support has been barely
-> > maintained for almost 10 years, and not at all for more than 1 year.
-> >
-> > Drop arch/sh and everything that depends on it.
->
-> I'm still maintaining and using this port in Debian.
->
-> It's a bit disappointing that people keep hammering on it. It works fine for me.
+Hi,
+I found some small optimizations while reading the code of memblock.
+Please help to review. Thanks.
 
-Indeed.  The main issue is not the lack of people sending patches and
-fixes, but those patches never being applied by the maintainers.
-Perhaps someone is willing to stand up to take over maintainership?
+Peng Zhang (3):
+  memblock: Make a boundary tighter in memblock_add_range().
+  memblock: Make finding index faster when modify regions.
+  memblock: Avoid useless checks in memblock_merge_regions().
 
-Thanks!
+ mm/memblock.c | 71 +++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 54 insertions(+), 17 deletions(-)
 
-Gr{oetje,eeting}s,
+-- 
+2.20.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
