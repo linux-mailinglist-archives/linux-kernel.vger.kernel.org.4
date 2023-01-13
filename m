@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D10669A4C
+	by mail.lfdr.de (Postfix) with ESMTP id E3BE4669A4D
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjAMOdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S229772AbjAMOdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjAMOcC (ORCPT
+        with ESMTP id S229656AbjAMOcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 09:32:02 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDE660E3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:25:33 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v10so30173799edi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:25:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YEUcQJgo4nd7YRU9VbAj1BQarAeAhdaCCvt7HZueth4=;
-        b=k6r9nxffwxxByM++kGiGb1vHHyRXAE938BBi8hokhVcsx9RQWHVSsX/cqY4Pc6ObvP
-         Fl/uwzCHjMccvMnIfnDa0Bs4yN7HT1OdK+AxVzTnxnDh8AFQh3CLtN5W+YsKXUXG34K1
-         vUBV3KfCaTR5NqkFXScK8219n0P0mlxC8eg5Ab68JYMIIeQ28blbm8Od/N2C2V2cQxf0
-         bgqb8ORnhcs+vourTXKeoCNZOdzLiPaJQ9anjnOjinn7XNJQ8Z5gpXQ32Xpuq/40DqvP
-         AC2pJ1lYVnlQU7fqLKePJVO/GF7jyt9NXRi3UbRjAqK3CkssoaFX4SDICxjJjyFXO6uD
-         L2GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YEUcQJgo4nd7YRU9VbAj1BQarAeAhdaCCvt7HZueth4=;
-        b=4OhD/RMlpNDU6E/Iu++8Wadlu5Y9B05eZzILtNtSBmrs/NEYEITBFXJf/aG4mJFXEL
-         n1ECggqVMhz5Hi7INCeDXG1jqcsjsdXH9eJZA30xhvnbBlgiZOo5NMoU8TvauQm61TaN
-         d3ZBNccdJxosY4TBDbZpDMIyEq4A7DoJPCB9dPWaX6fR3qEJsjl9fCPBCTOzoERswhj8
-         WVV97pK+IKcDrwDhgmnaciTYTDWVPGYFayHmmlwyzxE4FN1DlnOztBqv2HbZW+8tbMrB
-         e5mWH+8r5HGQcFnMMUZTuXqk8MR0Y7n+ATqT9fAvVGxk/LwY2HLmcbFU4IEzb5aRRL2Z
-         tFGw==
-X-Gm-Message-State: AFqh2ko8hrZZg13i0MbU1ZIHtAGXn8FIYZJROSFq0FMF+dUzKaSyxhfN
-        TzYbyLUgxBJNmY25G58Bivntg8kHrU9YhWEYA3mp1A==
-X-Google-Smtp-Source: AMrXdXulmidvZ1oMRAo6JmZyF47HXbfqDleSFL/Eiv4c6UJxSDGmEO8n3WxUW+wsM7qr+H6GXfGk9iaQMny1qwxvTPo=
-X-Received: by 2002:a05:6402:4013:b0:49a:b8ee:ef4b with SMTP id
- d19-20020a056402401300b0049ab8eeef4bmr787211eda.143.1673619932279; Fri, 13
- Jan 2023 06:25:32 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEECC2675;
+        Fri, 13 Jan 2023 06:25:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00EEA61EEC;
+        Fri, 13 Jan 2023 14:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DA2C433D2;
+        Fri, 13 Jan 2023 14:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673619926;
+        bh=1pZBYp1XzZda5BFRWCG19b48xYjRl0QwW3PCvy5dCgE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OjLb9b1eE9wS0eoLqvu7ZMjLTvH1hAGXXwECuE/dLadjS/HIcs6XAJXUUN6DkgqDY
+         tJZALLc/MrgYJhJoCeHG5/TvOIBfHvjc6zMklxhdFUSd8PI/a58zB8XXsKks6Wy5i1
+         oQOWg0nPQjKBV7h78ug4XotrRfF1PprOJ5WYr2aMdUYgbsyw0Joplmolf3pyZ1YoTp
+         VX+4u8o8wts9idIbu4VlIPdX+cXcORn5EYVct7tYXgoTdPGv+joCPaioCbKaUKTlzS
+         iO5zSh32asg931jtKi0LDZo9rzjDrD/mWD/OLAwFg8EPpZHaqe/zZ6Aw551WIwy+in
+         ztYb0kuOw9M2Q==
+Message-ID: <64bf2456-e1cb-3b4a-af19-454cf0bb86aa@kernel.org>
+Date:   Fri, 13 Jan 2023 16:25:20 +0200
 MIME-Version: 1.0
-References: <20230112152855.216072-1-bchihi@baylibre.com> <20230112152855.216072-7-bchihi@baylibre.com>
- <daed4793-3aae-f927-5634-cfb876709f93@gmail.com>
-In-Reply-To: <daed4793-3aae-f927-5634-cfb876709f93@gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Fri, 13 Jan 2023 15:24:55 +0100
-Message-ID: <CAGuA+orPcSkztt_9vUmrSD8R0tifAtdHt=KsKVebJFXpe6zBzA@mail.gmail.com>
-Subject: Re: [PATCH v10 6/6] arm64/dts/mt8195: Add temperature mitigation threshold
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
+ release action
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, linux@armlinux.org.uk,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
+References: <20230113104816.132815-1-s-vadapalli@ti.com>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230113104816.132815-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 12:49 PM Matthias Brugger
-<matthias.bgg@gmail.com> wrote:
->
->
->
-> On 12/01/2023 16:28, bchihi@baylibre.com wrote:
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > The mt8195 board has several hotspots around the CPUs. Specify the
-> > targeted temperature threshold when to apply the mitigation and define
-> > the associated cooling devices.
-> >
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 153 ++++++++++++++++++++---
-> >   1 file changed, 137 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > index 683e5057d68d..0d6642603095 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > @@ -14,6 +14,7 @@
-> >   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
-> >   #include <dt-bindings/power/mt8195-power.h>
-> >   #include <dt-bindings/reset/mt8195-resets.h>
-> > +#include <dt-bindings/thermal/thermal.h>
-> >   #include <dt-bindings/thermal/mediatek-lvts.h>
-> >
-> >   / {
-> > @@ -2413,107 +2414,227 @@ dp_tx: dp-tx@1c600000 {
-> >
-> >       thermal_zones: thermal-zones {
-> >               cpu0-thermal {
-> > -                     polling-delay = <0>;
-> > -                     polling-delay-passive = <0>;
-> > +                     polling-delay = <1000>;
-> > +                     polling-delay-passive = <250>;
-> >                       thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU0>;
->
-> New line here please.
->
-> >                       trips {
-> > +                             cpu0_alert: trip-alert {
-> > +                                     temperature = <85000>;
-> > +                                     hysteresis = <2000>;
-> > +                                     type = "passive";
-> > +                             };
->
-> New line here please and on other trip point definitions.
->
 
-Hi Matthias,
 
-Thank you for the feedback!
-It will be added in the next version.
+On 13/01/2023 12:48, Siddharth Vadapalli wrote:
+> The am65_cpts_release() function is registered as a devm_action in the
+> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
+> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
+> actions associated with the am65-cpsw driver's device.
+> 
+> In the event of probe failure or probe deferral, the platform_drv_probe()
+> function invokes dev_pm_domain_detach() which powers off the CPSW and the
+> CPSW's CPTS hardware, both of which share the same power domain. Since the
+> am65_cpts_disable() function invoked by the am65_cpts_release() function
+> attempts to reset the CPTS hardware by writing to its registers, the CPTS
+> hardware is assumed to be powered on at this point. However, the hardware
+> is powered off before the devm actions are executed.
+> 
+> Fix this by getting rid of the devm action for am65_cpts_release() and
+> invoking it directly on the cleanup and exit paths.
+> 
+> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-Best regards,
-Balsam
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
-> Regards,
-> Matthias
+cheers,
+-roger
