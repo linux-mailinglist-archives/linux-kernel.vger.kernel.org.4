@@ -2,240 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE9C669329
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E3666932F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241270AbjAMJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S232707AbjAMJoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbjAMJm0 (ORCPT
+        with ESMTP id S240887AbjAMJmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:42:26 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA035792A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:31:48 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9023B4EE24;
-        Fri, 13 Jan 2023 09:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673602306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tovvpvHeaV22GvURx3gvEqzAQ4TD9yfJURji8yDl97o=;
-        b=0lc80+7EUA6D7uxhIZlEEl0jeu+l4dQ10E2Ta3uQR0990JUx5UvYUoUPvOSSU4Vlx2suVU
-        czSoFFUdkb0bDQ1UO+8MqBvhStIVC6BvyAPkxhq+B3OGrhSvkJ8D10VvHChFf20i/yjbXE
-        ToOaDkTA5NYzm/9I8snyVw6zI/Br8T4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673602306;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tovvpvHeaV22GvURx3gvEqzAQ4TD9yfJURji8yDl97o=;
-        b=jjMM1CT8fsep7K+rpz2c2M04gZYltkmxzyh68mA4Gt+PxbLf37LVqRLoXSN/I2pHZhSoZC
-        e2iC9e4WcbMabfDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 675AE1358A;
-        Fri, 13 Jan 2023 09:31:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id U9tJGAIlwWNxdwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 13 Jan 2023 09:31:46 +0000
-Message-ID: <42450da5-eb1c-b093-daf7-67a4e64b9a22@suse.de>
-Date:   Fri, 13 Jan 2023 10:31:45 +0100
+        Fri, 13 Jan 2023 04:42:38 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F0B2BE9;
+        Fri, 13 Jan 2023 01:32:59 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id g14so21862324ljh.10;
+        Fri, 13 Jan 2023 01:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IhvS2SqXq2pUb5bw9UmK0RbvOS1oQlX0IkkKZEx5NFM=;
+        b=CBqlFaIBC0G7av3u0uMubjgvwCE+3snsBVqJ1TYFHhidDSVNkcd82zRHGMI71MXZo+
+         KKYmiXmb5Qv16y8WLSwFq4DEJ8Vbr8smeS7FeOvR6X0Qn+/3KzSvH/Gy22xyqIHW/CIo
+         AuoswzlvroJxCeH+3GDZSRVw9RMh33csfCTim5yR8/U6/A0T6PSftl+e68MujXS7E4jy
+         gnG0ZES++k594kDSjFOrpWjLQwuavnbCi3eOeS5kwzjnhnr+8c0QSH/e/36XZBafQEFH
+         llx0GWROwR8Uu/7b0RtDuWAHE6kIa696xAFPzltXS/BAUhXz786H/YppNwV3hl3vNeMX
+         uKmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IhvS2SqXq2pUb5bw9UmK0RbvOS1oQlX0IkkKZEx5NFM=;
+        b=23/U4KvuuTw6iNkMOgGZsJWOoBK0K3q4pmLTXjxRI3LckRVARhkek69TogJ1Ajasvx
+         MDWG6H9oxDKt7InXJ3GC6AEJiZ/duZPuBkOTTZ44+TLXIlZpb10ct1ZLdPZmyCIDkvoA
+         2C/DLoWgX58PpOfFobpA6eFX2rRBe+G4bYQ8EyMGipBPphkwu0n7YengWcvvkmntgVSY
+         E2tmu140KtGHXpMIGmDbk78jObzN/HvsdElLmxVhnsqS943I6jyk0EqXpH6UQ0m5O+Vp
+         OzBVvrdJa5b8jorWCNPamEQ1SpRrHJMe76hghNdOah6RPSYlLfXTgGwykQQP3ltKwnnE
+         AoGg==
+X-Gm-Message-State: AFqh2kpJkxd2OqyRKNgdwqosNCOneMr8XsOSDnfa1ze6Z3BKHAo0bH2Y
+        3VUt1nuyDgf7WBKWVopVZXSoyzfjc5VxMchHJbzvNvyIwMdcjw==
+X-Google-Smtp-Source: AMrXdXtwzl8z/0Lxv2na7K6vS50uGe2dnCxzR7Kv6IK+2QbrcNF6fvIkWngRqXuYlsBZ86gZWADO648RkqrtG7Ire9U=
+X-Received: by 2002:a2e:bf19:0:b0:27f:ae14:6ac9 with SMTP id
+ c25-20020a2ebf19000000b0027fae146ac9mr3293081ljr.300.1673602377606; Fri, 13
+ Jan 2023 01:32:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
- drivers(tdfx, mga, i810, savage, r128, sis, via)
-Content-Language: en-US
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Danilo Krummrich <dakr@redhat.com>,
-        Borislav Petkov <bp@suse.de>
-References: <20221203102502.3185-1-cai.huoqing@linux.dev>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221203102502.3185-1-cai.huoqing@linux.dev>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Zyik608rO7UMP9x3Rjzvi0P9"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230107012324.30698-1-zhanghongchen@loongson.cn> <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn>
+In-Reply-To: <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 13 Jan 2023 10:32:19 +0100
+Message-ID: <CA+icZUU3-t0+NhdMQ39OeuwR13eMVOKVhLwS31WTHQ1ksaWgNg@mail.gmail.com>
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Zyik608rO7UMP9x3Rjzvi0P9
-Content-Type: multipart/mixed; boundary="------------zlu00uMo0z04vFhvjkRGR10E";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Cai Huoqing <cai.huoqing@linux.dev>
-Cc: Sam Ravnborg <sam@ravnborg.org>, Randy Dunlap <rdunlap@infradead.org>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Danilo Krummrich <dakr@redhat.com>, Borislav Petkov <bp@suse.de>
-Message-ID: <42450da5-eb1c-b093-daf7-67a4e64b9a22@suse.de>
-Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
- drivers(tdfx, mga, i810, savage, r128, sis, via)
-References: <20221203102502.3185-1-cai.huoqing@linux.dev>
-In-Reply-To: <20221203102502.3185-1-cai.huoqing@linux.dev>
+On Fri, Jan 13, 2023 at 4:19 AM Hongchen Zhang
+<zhanghongchen@loongson.cn> wrote:
+>
+> Hi All,
+> any question about this patch, can it be merged?
+>
+> Thanks
+> On 2023/1/7 am 9:23, Hongchen Zhang wrote:
+> > Use spinlock in pipe_read/write cost too much time,IMO
+> > pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> > On the other hand, we can use __pipe_{lock,unlock} to protect
+> > the pipe->{head,tail} in pipe_resize_ring and
+> > post_one_notification.
+> >
+> > Reminded by Matthew, I tested this patch using UnixBench's pipe
+> > test case on a x86_64 machine,and get the following data:
+> > 1) before this patch
+> > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> > Pipe Throughput                   12440.0     493023.3    396.3
+> >                                                          ========
+> > System Benchmarks Index Score (Partial Only)              396.3
+> >
+> > 2) after this patch
+> > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> > Pipe Throughput                   12440.0     507551.4    408.0
+> >                                                          ========
+> > System Benchmarks Index Score (Partial Only)              408.0
+> >
+> > so we get ~3% speedup.
+> >
+> > Reminded by Andrew, I tested this patch with the test code in
+> > Linus's 0ddad21d3e99 add get following result:
 
---------------zlu00uMo0z04vFhvjkRGR10E
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Happy new 2023 Hongchen Zhang,
 
-TWVyZ2VkIGludG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtzIGEgbG90Lg0KDQpBbSAwMy4xMi4y
-MiB1bSAxMToyMiBzY2hyaWViIENhaSBIdW9xaW5nOg0KPiBDb21taXQgMzk5NTE2YWIwZmVl
-ICgiTUFJTlRBSU5FUlM6IEFkZCBhIGJ1bmNoIG9mIGxlZ2FjeSAoVU1TKSBEUk0gZHJpdmVy
-cyIpDQo+IG1hcmtlZCB0aGVzZSBkcml2ZXJzIG9ic29sZXRlIDcgeWVhcnMgYWdvLg0KPiBB
-bmQgdGhlIG1lc2EgVU1EIG9mIHRoZXNlIGRybSBkcml2ZXJzIGFscmVhZHkgaW4gZGVwcmVj
-YXRlZCBsaXN0DQo+IGluIHRoZSBsaW5rOiBodHRwczovL2RvY3MubWVzYTNkLm9yZy9zeXN0
-ZW1zLmh0bWwNCj4gDQo+IDNkZnggR2xpZGUtLT5kcml2ZXIvZ3B1L2RybS90ZGZ4DQo+IE1h
-dHJveC0tPmRyaXZlci9ncHUvZHJtL21nYQ0KPiBJbnRlbCBpODEwLS0+ZHJpdmVyL2dwdS9k
-cm0vaTgxMA0KPiBTMyBTYXZhZ2UtLT5kcml2ZXJzL2dwdS9kcm0vc2F2YWdlDQo+IEFUSSBS
-YWdlIDEyOC0+ZHJpdmVycy9ncHUvZHJtL3IxMjgNCj4gU2lsaWNvbiBJbnRlZ3JhdGVkIFN5
-c3RlbXMtPmRyaXZlcnMvZ3B1L2RybS9zaXMNCj4gVklBIFVuaWNocm9tZS0+ZHJpdmVycy9n
-cHUvZHJtL3ZpYQ0KPiANCj4gdjEtPnYyOg0KPiAxLkFkZCBkcm0gdmlhIGRyaXZlciB0byB0
-aGUgcGF0Y2hzZXQuDQo+IDIuUmVtb3ZlIHJlbGF0ZWQgZHJtX3BjaWlkcy4NCj4gMy5SZW1v
-dmUgcmVsYXRlZCBkcm0gdWFwaSBoZWFkZXIgZmlsZXMuDQo+IDQuc3BsaXQgdG8gc2VyaWVz
-IGF2b2lkIGxhcmdlIHBhdGNoIGVtYWlsLg0KPiANCj4gQ2FpIEh1b3FpbmcgKDEwKToNCj4g
-ICAgZHJtOiBSZW1vdmUgdGhlIG9ic29sZXRlIGRyaXZlci1pODEwDQo+ICAgIGRybTogUmVt
-b3ZlIHRoZSBvYnNvbGV0ZSBkcml2ZXItbWdhDQo+ICAgIGRybTogUmVtb3ZlIHRoZSBvYnNv
-bGV0ZSBkcml2ZXItcjEyOA0KPiAgICBkcm06IFJlbW92ZSB0aGUgb2Jzb2xldGUgZHJpdmVy
-LXNhdmFnZQ0KPiAgICBkcm06IFJlbW92ZSB0aGUgb2Jzb2xldGUgZHJpdmVyLXNpcw0KPiAg
-ICBkcm06IFJlbW92ZSB0aGUgb2Jzb2xldGUgZHJpdmVyLXRkZngNCj4gICAgZHJtOiBSZW1v
-dmUgdGhlIG9ic29sZXRlIGRyaXZlci12aWENCj4gICAgZHJtOiBBZGQgY29tbWVudHMgdG8g
-S2NvbmZpZw0KPiAgICBkcm06IFJlbW92ZSBzb21lIG9ic29sZXRlIGRybSBwY2lpZHModGRm
-eCwgbWdhLCBpODEwLCBzYXZhZ2UsIHIxMjgsDQo+ICAgICAgc2lzLCB2aWEpDQo+ICAgIE1B
-SU5UQUlORVJTOiBSZW1vdmUgc29tZSBvYnNvbGV0ZSBkcml2ZXJzIGluZm8odGRmeCwgbWdh
-LCBpODEwLA0KPiAgICAgIHNhdmFnZSwgcjEyOCwgc2lzKQ0KPiANCj4gICBNQUlOVEFJTkVS
-UyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyOSAtDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL0tjb25maWcgICAgICAgICAgICAgICB8ICAgNTkgKy0NCj4gICBkcml2ZXJzL2dwdS9k
-cm0vTWFrZWZpbGUgICAgICAgICAgICAgIHwgICAgNyAtDQo+ICAgZHJpdmVycy9ncHUvZHJt
-L2k4MTAvTWFrZWZpbGUgICAgICAgICB8ICAgIDggLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9p
-ODEwL2k4MTBfZG1hLmMgICAgICAgfCAxMjY2IC0tLS0tLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
-L2RybS9pODEwL2k4MTBfZHJ2LmMgICAgICAgfCAgMTAxIC0NCj4gICBkcml2ZXJzL2dwdS9k
-cm0vaTgxMC9pODEwX2Rydi5oICAgICAgIHwgIDI0NiAtLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
-bS9tZ2EvTWFrZWZpbGUgICAgICAgICAgfCAgIDExIC0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
-bWdhL21nYV9kbWEuYyAgICAgICAgIHwgMTE2OCAtLS0tLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
-L2RybS9tZ2EvbWdhX2Rydi5jICAgICAgICAgfCAgMTA0IC0NCj4gICBkcml2ZXJzL2dwdS9k
-cm0vbWdhL21nYV9kcnYuaCAgICAgICAgIHwgIDY4NSAtLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
-L2RybS9tZ2EvbWdhX2lvYzMyLmMgICAgICAgfCAgMTk3IC0tDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL21nYS9tZ2FfaXJxLmMgICAgICAgICB8ICAxNjkgLS0NCj4gICBkcml2ZXJzL2dwdS9k
-cm0vbWdhL21nYV9zdGF0ZS5jICAgICAgIHwgMTA5OSAtLS0tLS0tLQ0KPiAgIGRyaXZlcnMv
-Z3B1L2RybS9tZ2EvbWdhX3dhcnAuYyAgICAgICAgfCAgMTY3IC0tDQo+ICAgZHJpdmVycy9n
-cHUvZHJtL3IxMjgvTWFrZWZpbGUgICAgICAgICB8ICAgMTAgLQ0KPiAgIGRyaXZlcnMvZ3B1
-L2RybS9yMTI4L2F0aV9wY2lnYXJ0LmMgICAgfCAgMjI4IC0tDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL3IxMjgvYXRpX3BjaWdhcnQuaCAgICB8ICAgMzEgLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
-bS9yMTI4L3IxMjhfY2NlLmMgICAgICAgfCAgOTQ0IC0tLS0tLS0NCj4gICBkcml2ZXJzL2dw
-dS9kcm0vcjEyOC9yMTI4X2Rydi5jICAgICAgIHwgIDExNiAtDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL3IxMjgvcjEyOF9kcnYuaCAgICAgICB8ICA1NDQgLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
-L2RybS9yMTI4L3IxMjhfaW9jMzIuYyAgICAgfCAgMTk5IC0tDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL3IxMjgvcjEyOF9pcnEuYyAgICAgICB8ICAxMTggLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
-bS9yMTI4L3IxMjhfc3RhdGUuYyAgICAgfCAxNjQxIC0tLS0tLS0tLS0tDQo+ICAgZHJpdmVy
-cy9ncHUvZHJtL3NhdmFnZS9NYWtlZmlsZSAgICAgICB8ICAgIDkgLQ0KPiAgIGRyaXZlcnMv
-Z3B1L2RybS9zYXZhZ2Uvc2F2YWdlX2JjaS5jICAgfCAxMDgyIC0tLS0tLS0tDQo+ICAgZHJp
-dmVycy9ncHUvZHJtL3NhdmFnZS9zYXZhZ2VfZHJ2LmMgICB8ICAgOTEgLQ0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS9zYXZhZ2Uvc2F2YWdlX2Rydi5oICAgfCAgNTgwIC0tLS0NCj4gICBkcml2
-ZXJzL2dwdS9kcm0vc2F2YWdlL3NhdmFnZV9zdGF0ZS5jIHwgMTE2OSAtLS0tLS0tLQ0KPiAg
-IGRyaXZlcnMvZ3B1L2RybS9zaXMvTWFrZWZpbGUgICAgICAgICAgfCAgIDEwIC0NCj4gICBk
-cml2ZXJzL2dwdS9kcm0vc2lzL3Npc19kcnYuYyAgICAgICAgIHwgIDE0MyAtDQo+ICAgZHJp
-dmVycy9ncHUvZHJtL3Npcy9zaXNfZHJ2LmggICAgICAgICB8ICAgODAgLQ0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS9zaXMvc2lzX21tLmMgICAgICAgICAgfCAgMzYzIC0tLQ0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS90ZGZ4L01ha2VmaWxlICAgICAgICAgfCAgICA4IC0NCj4gICBkcml2ZXJz
-L2dwdS9kcm0vdGRmeC90ZGZ4X2Rydi5jICAgICAgIHwgICA5MCAtDQo+ICAgZHJpdmVycy9n
-cHUvZHJtL3RkZngvdGRmeF9kcnYuaCAgICAgICB8ICAgNDcgLQ0KPiAgIGRyaXZlcnMvZ3B1
-L2RybS92aWEvTWFrZWZpbGUgICAgICAgICAgfCAgICA4IC0NCj4gICBkcml2ZXJzL2dwdS9k
-cm0vdmlhL3ZpYV8zZF9yZWcuaCAgICAgIHwgMTc3MSAtLS0tLS0tLS0tLS0NCj4gICBkcml2
-ZXJzL2dwdS9kcm0vdmlhL3ZpYV9kcmkxLmMgICAgICAgIHwgMzYzMCAtLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tDQo+ICAgaW5jbHVkZS9kcm0vZHJtX3BjaWlkcy5oICAgICAgICAgICAg
-ICB8ICAxMTIgLQ0KPiAgIGluY2x1ZGUvdWFwaS9kcm0vaTgxMF9kcm0uaCAgICAgICAgICAg
-fCAgMjkyIC0tDQo+ICAgaW5jbHVkZS91YXBpL2RybS9tZ2FfZHJtLmggICAgICAgICAgICB8
-ICA0MjkgLS0tDQo+ICAgaW5jbHVkZS91YXBpL2RybS9yMTI4X2RybS5oICAgICAgICAgICB8
-ICAzMzYgLS0tDQo+ICAgaW5jbHVkZS91YXBpL2RybS9zYXZhZ2VfZHJtLmggICAgICAgICB8
-ICAyMjAgLS0NCj4gICBpbmNsdWRlL3VhcGkvZHJtL3Npc19kcm0uaCAgICAgICAgICAgIHwg
-ICA3NyAtDQo+ICAgaW5jbHVkZS91YXBpL2RybS92aWFfZHJtLmggICAgICAgICAgICB8ICAy
-ODIgLS0NCj4gICA0NiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMTk5NzUgZGVs
-ZXRpb25zKC0pDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9pODEw
-L01ha2VmaWxlDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9pODEw
-L2k4MTBfZG1hLmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL2k4
-MTAvaTgxMF9kcnYuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0v
-aTgxMC9pODEwX2Rydi5oDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2Ry
-bS9tZ2EvTWFrZWZpbGUNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
-L21nYS9tZ2FfZG1hLmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
-L21nYS9tZ2FfZHJ2LmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
-L21nYS9tZ2FfZHJ2LmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
-L21nYS9tZ2FfaW9jMzIuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9k
-cm0vbWdhL21nYV9pcnEuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9k
-cm0vbWdhL21nYV9zdGF0ZS5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
-L2RybS9tZ2EvbWdhX3dhcnAuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
-dS9kcm0vcjEyOC9NYWtlZmlsZQ0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
-dS9kcm0vcjEyOC9hdGlfcGNpZ2FydC5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZl
-cnMvZ3B1L2RybS9yMTI4L2F0aV9wY2lnYXJ0LmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQg
-ZHJpdmVycy9ncHUvZHJtL3IxMjgvcjEyOF9jY2UuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0
-NCBkcml2ZXJzL2dwdS9kcm0vcjEyOC9yMTI4X2Rydi5jDQo+ICAgZGVsZXRlIG1vZGUgMTAw
-NjQ0IGRyaXZlcnMvZ3B1L2RybS9yMTI4L3IxMjhfZHJ2LmgNCj4gICBkZWxldGUgbW9kZSAx
-MDA2NDQgZHJpdmVycy9ncHUvZHJtL3IxMjgvcjEyOF9pb2MzMi5jDQo+ICAgZGVsZXRlIG1v
-ZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9yMTI4L3IxMjhfaXJxLmMNCj4gICBkZWxldGUg
-bW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3IxMjgvcjEyOF9zdGF0ZS5jDQo+ICAgZGVs
-ZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9zYXZhZ2UvTWFrZWZpbGUNCj4gICBk
-ZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3NhdmFnZS9zYXZhZ2VfYmNpLmMN
-Cj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3NhdmFnZS9zYXZhZ2Vf
-ZHJ2LmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3NhdmFnZS9z
-YXZhZ2VfZHJ2LmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3Nh
-dmFnZS9zYXZhZ2Vfc3RhdGUuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
-dS9kcm0vc2lzL01ha2VmaWxlDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
-L2RybS9zaXMvc2lzX2Rydi5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
-L2RybS9zaXMvc2lzX2Rydi5oDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
-L2RybS9zaXMvc2lzX21tLmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUv
-ZHJtL3RkZngvTWFrZWZpbGUNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUv
-ZHJtL3RkZngvdGRmeF9kcnYuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
-dS9kcm0vdGRmeC90ZGZ4X2Rydi5oDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMv
-Z3B1L2RybS92aWEvTWFrZWZpbGUNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9n
-cHUvZHJtL3ZpYS92aWFfM2RfcmVnLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVy
-cy9ncHUvZHJtL3ZpYS92aWFfZHJpMS5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGluY2x1
-ZGUvdWFwaS9kcm0vaTgxMF9kcm0uaA0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBpbmNsdWRl
-L3VhcGkvZHJtL21nYV9kcm0uaA0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3Vh
-cGkvZHJtL3IxMjhfZHJtLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBp
-L2RybS9zYXZhZ2VfZHJtLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBp
-L2RybS9zaXNfZHJtLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBpL2Ry
-bS92aWFfZHJtLmgNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
-aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
-TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
-RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+Thanks for the update and sorry for the late response.
 
---------------zlu00uMo0z04vFhvjkRGR10E--
+Should be "...s/add/and get following result:"
 
---------------Zyik608rO7UMP9x3Rjzvi0P9
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+I cannot say much about the patch itself or tested it in my build-environment.
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-Sedat-
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPBJQIFAwAAAAAACgkQlh/E3EQov+Be
-qg/+Pfl62kSUWrpI0VXaaqcXr5ro/ewN5YNfIWx7warNuXDUlYZZarvrFOa6XF5edpPq7UDwm6Un
-T3kqlEOr3rf3d6ZpG8LbM+G8Vfs0TzW0U4vkRd7UjD5qFmKQ3vQ7NZ/yFlX1aPXlyQTeSClCilfR
-V2Oz3gTTPLA/mSuhSdJnmsn28dcuCE+Q0JH4ENE9J37xL/pp5bCXWtfqvaXHl/Ibx8YoOMNZJXi+
-hOjmGWz5udPWBvp33HG4m/2aipHeAgQ9oQBNvQghmqPD+VOJWzKTlTu7efzXtqC166QcIFmY+aFr
-DbYHyR44d0ELU3RSOc0llU0c/3SZmV70HUIa7Q+bTfiD38kE/wOhmS+ckQlaj8sz39QkrtgzMiT3
-QJicaAtWXdeD6IYGqYkD8p95kV/OxAVPNfJlk6GVTdh7u66FGye7/zDPq6hUsqdCYy8SjXmDbnXP
-aoGNn5ZlXShhMIl/3U1gsyeDd+B84fizYE/nJW8IcCPJnydt5moJ3UuccUWsXJs6cjlubfL+iVvS
-Wo/Y3xZkFXinuhKhMhcmd8ph5ln0SyGRb+S9CUosNfTDRqFnsImbk7NSG6ZgVTMmmG0R1B6otNAa
-oPASpeKcFfysHTTgLJ6snqLcGJ1SgUJLJEbgZGt0yrvgvM9/txkGflBIi/iPUNoQebX6xTAu4pUF
-cSg=
-=GaRK
------END PGP SIGNATURE-----
-
---------------Zyik608rO7UMP9x3Rjzvi0P9--
+> > 1) before this patch
+> >           13,136.54 msec task-clock           #    3.870 CPUs utilized
+> >           1,186,779      context-switches     #   90.342 K/sec
+> >             668,867      cpu-migrations       #   50.917 K/sec
+> >                 895      page-faults          #   68.131 /sec
+> >      29,875,711,543      cycles               #    2.274 GHz
+> >      12,372,397,462      instructions         #    0.41  insn per cycle
+> >       2,480,235,723      branches             #  188.804 M/sec
+> >          47,191,943      branch-misses        #    1.90% of all branches
+> >
+> >         3.394806886 seconds time elapsed
+> >
+> >         0.037869000 seconds user
+> >         0.189346000 seconds sys
+> >
+> > 2) after this patch
+> >
+> >           12,395.63 msec task-clock          #    4.138 CPUs utilized
+> >           1,193,381      context-switches    #   96.274 K/sec
+> >             585,543      cpu-migrations      #   47.238 K/sec
+> >               1,063      page-faults         #   85.756 /sec
+> >      27,691,587,226      cycles              #    2.234 GHz
+> >      11,738,307,999      instructions        #    0.42  insn per cycle
+> >       2,351,299,522      branches            #  189.688 M/sec
+> >          45,404,526      branch-misses       #    1.93% of all branches
+> >
+> >         2.995280878 seconds time elapsed
+> >
+> >         0.010615000 seconds user
+> >         0.206999000 seconds sys
+> > After adding this patch, the time used on this test program becomes less.
+> >
+> > Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+> >
+> > v3:
+> >    - fixes the error reported by kernel test robot <oliver.sang@intel.com>
+> >      Link: https://lore.kernel.org/oe-lkp/202301061340.c954d61f-oliver.sang@intel.com
+> >    - add perf stat data for the test code in Linus's 0ddad21d3e99 in
+> >      commit message.
+> > v2:
+> >    - add UnixBench test data in commit message
+> >    - fixes the test error reported by kernel test robot <lkp@intel.com>
+> >      by adding the missing fs.h header file.
+> > ---
+> >   fs/pipe.c                 | 22 +---------------------
+> >   include/linux/pipe_fs_i.h | 12 ++++++++++++
+> >   kernel/watch_queue.c      |  8 ++++----
+> >   3 files changed, 17 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/fs/pipe.c b/fs/pipe.c
+> > index 42c7ff41c2db..4355ee5f754e 100644
+> > --- a/fs/pipe.c
+> > +++ b/fs/pipe.c
+> > @@ -98,16 +98,6 @@ void pipe_unlock(struct pipe_inode_info *pipe)
+> >   }
+> >   EXPORT_SYMBOL(pipe_unlock);
+> >
+> > -static inline void __pipe_lock(struct pipe_inode_info *pipe)
+> > -{
+> > -     mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+> > -}
+> > -
+> > -static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+> > -{
+> > -     mutex_unlock(&pipe->mutex);
+> > -}
+> > -
+> >   void pipe_double_lock(struct pipe_inode_info *pipe1,
+> >                     struct pipe_inode_info *pipe2)
+> >   {
+> > @@ -253,8 +243,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+> >        */
+> >       was_full = pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+> >       for (;;) {
+> > -             /* Read ->head with a barrier vs post_one_notification() */
+> > -             unsigned int head = smp_load_acquire(&pipe->head);
+> > +             unsigned int head = pipe->head;
+> >               unsigned int tail = pipe->tail;
+> >               unsigned int mask = pipe->ring_size - 1;
+> >
+> > @@ -322,14 +311,12 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+> >
+> >                       if (!buf->len) {
+> >                               pipe_buf_release(pipe, buf);
+> > -                             spin_lock_irq(&pipe->rd_wait.lock);
+> >   #ifdef CONFIG_WATCH_QUEUE
+> >                               if (buf->flags & PIPE_BUF_FLAG_LOSS)
+> >                                       pipe->note_loss = true;
+> >   #endif
+> >                               tail++;
+> >                               pipe->tail = tail;
+> > -                             spin_unlock_irq(&pipe->rd_wait.lock);
+> >                       }
+> >                       total_len -= chars;
+> >                       if (!total_len)
+> > @@ -506,16 +493,13 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+> >                        * it, either the reader will consume it or it'll still
+> >                        * be there for the next write.
+> >                        */
+> > -                     spin_lock_irq(&pipe->rd_wait.lock);
+> >
+> >                       head = pipe->head;
+> >                       if (pipe_full(head, pipe->tail, pipe->max_usage)) {
+> > -                             spin_unlock_irq(&pipe->rd_wait.lock);
+> >                               continue;
+> >                       }
+> >
+> >                       pipe->head = head + 1;
+> > -                     spin_unlock_irq(&pipe->rd_wait.lock);
+> >
+> >                       /* Insert it into the buffer array */
+> >                       buf = &pipe->bufs[head & mask];
+> > @@ -1260,14 +1244,12 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+> >       if (unlikely(!bufs))
+> >               return -ENOMEM;
+> >
+> > -     spin_lock_irq(&pipe->rd_wait.lock);
+> >       mask = pipe->ring_size - 1;
+> >       head = pipe->head;
+> >       tail = pipe->tail;
+> >
+> >       n = pipe_occupancy(head, tail);
+> >       if (nr_slots < n) {
+> > -             spin_unlock_irq(&pipe->rd_wait.lock);
+> >               kfree(bufs);
+> >               return -EBUSY;
+> >       }
+> > @@ -1303,8 +1285,6 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+> >       pipe->tail = tail;
+> >       pipe->head = head;
+> >
+> > -     spin_unlock_irq(&pipe->rd_wait.lock);
+> > -
+> >       /* This might have made more room for writers */
+> >       wake_up_interruptible(&pipe->wr_wait);
+> >       return 0;
+> > diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+> > index 6cb65df3e3ba..f5084daf6eaf 100644
+> > --- a/include/linux/pipe_fs_i.h
+> > +++ b/include/linux/pipe_fs_i.h
+> > @@ -2,6 +2,8 @@
+> >   #ifndef _LINUX_PIPE_FS_I_H
+> >   #define _LINUX_PIPE_FS_I_H
+> >
+> > +#include <linux/fs.h>
+> > +
+> >   #define PIPE_DEF_BUFFERS    16
+> >
+> >   #define PIPE_BUF_FLAG_LRU   0x01    /* page is on the LRU */
+> > @@ -223,6 +225,16 @@ static inline void pipe_discard_from(struct pipe_inode_info *pipe,
+> >   #define PIPE_SIZE           PAGE_SIZE
+> >
+> >   /* Pipe lock and unlock operations */
+> > +static inline void __pipe_lock(struct pipe_inode_info *pipe)
+> > +{
+> > +     mutex_lock_nested(&pipe->mutex, I_MUTEX_PARENT);
+> > +}
+> > +
+> > +static inline void __pipe_unlock(struct pipe_inode_info *pipe)
+> > +{
+> > +     mutex_unlock(&pipe->mutex);
+> > +}
+> > +
+> >   void pipe_lock(struct pipe_inode_info *);
+> >   void pipe_unlock(struct pipe_inode_info *);
+> >   void pipe_double_lock(struct pipe_inode_info *, struct pipe_inode_info *);
+> > diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+> > index a6f9bdd956c3..92e46cfe9419 100644
+> > --- a/kernel/watch_queue.c
+> > +++ b/kernel/watch_queue.c
+> > @@ -108,7 +108,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
+> >       if (!pipe)
+> >               return false;
+> >
+> > -     spin_lock_irq(&pipe->rd_wait.lock);
+> > +     __pipe_lock(pipe);
+> >
+> >       mask = pipe->ring_size - 1;
+> >       head = pipe->head;
+> > @@ -135,17 +135,17 @@ static bool post_one_notification(struct watch_queue *wqueue,
+> >       buf->offset = offset;
+> >       buf->len = len;
+> >       buf->flags = PIPE_BUF_FLAG_WHOLE;
+> > -     smp_store_release(&pipe->head, head + 1); /* vs pipe_read() */
+> > +     pipe->head = head + 1;
+> >
+> >       if (!test_and_clear_bit(note, wqueue->notes_bitmap)) {
+> > -             spin_unlock_irq(&pipe->rd_wait.lock);
+> > +             __pipe_unlock(pipe);
+> >               BUG();
+> >       }
+> >       wake_up_interruptible_sync_poll_locked(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
+> >       done = true;
+> >
+> >   out:
+> > -     spin_unlock_irq(&pipe->rd_wait.lock);
+> > +     __pipe_unlock(pipe);
+> >       if (done)
+> >               kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+> >       return done;
+> >
+> > base-commit: c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
+> >
+>
