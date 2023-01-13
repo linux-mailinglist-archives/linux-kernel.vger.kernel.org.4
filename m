@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58AA669645
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117B46695BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241439AbjAML5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:57:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S241371AbjAMLhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241313AbjAML5R (ORCPT
+        with ESMTP id S233109AbjAMLgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:57:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD9954737
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:51:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673610705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0dzPxknbDeycONq8q91XK21adsaXcGOaKeXyc86TDPM=;
-        b=XZUHIgy3ye0sEW+Cg+k7R2ALIEA2CHD3rRIl2apQYDdigukCC3pALewnMHZrulV872CgOF
-        EiHZWwLWsCh3+6U7VFtuyVK8s8IPtBtPrFLviEcj4IAWt0Sh/R954g5XZi2+2XRdv7rxiv
-        Sgure/kjBMSVFJ1uXaVYJoyViSdSYUQ=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-594-JRHysNvvP7y6yo1V1_3A4w-1; Fri, 13 Jan 2023 06:51:44 -0500
-X-MC-Unique: JRHysNvvP7y6yo1V1_3A4w-1
-Received: by mail-qk1-f200.google.com with SMTP id s7-20020a05620a0bc700b006e08208eb31so14989562qki.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:51:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0dzPxknbDeycONq8q91XK21adsaXcGOaKeXyc86TDPM=;
-        b=YyZVXkNy8EguwNZrM3DJWDMmF3U8lUXE0fgQPfqFi/r+NZdOmZaKODU6pFUFDcLosc
-         56GeMTaNi5GnrL6LhLvpSL8UcLOFI/DSAA4rFxpLBlpe9inVXQ7zF6cHw2TzXsZjrbh+
-         7hbJlrRuEvM5672RdIgtnoKE5DiCDPOp+d9Ty1p9R+HSZGOOVs9Lujom/EpU9BXd2coQ
-         tSn37Z4eAaMvSBjq9aD+Ok47ABB4SjDni5jJvVvhtPRuU49KTEWS16dP44ghV5H5sJhU
-         JwZKiLRZB30VMrcaKA6IBbhv7ufX39RxAFpsmro1QMbDujGFFmKCwWu+U34ZbBTwOz0k
-         10gQ==
-X-Gm-Message-State: AFqh2kpyZ3qbuRo4J2q+1NegQNk+k0u3VKvDTBSgmod8zUIqOwre9sOJ
-        B+PCVUZopvog6RNo2O18Uo5Ip936pXCM9sXZHW1u2jCfbib1Pzx71mSpIqOmZBSnoU1kK1lcSKg
-        CTSLD6vuH49hE9ayAtE73N7LL
-X-Received: by 2002:a0c:b292:0:b0:534:7dbc:1748 with SMTP id r18-20020a0cb292000000b005347dbc1748mr3706566qve.36.1673610703832;
-        Fri, 13 Jan 2023 03:51:43 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsxU92iBsFxEYAqdlYG3wkOiJ5infP2DAZf/e7Dbfb6JldHMAl3LPJR+kNYczlt9fxshfTrWw==
-X-Received: by 2002:a0c:b292:0:b0:534:7dbc:1748 with SMTP id r18-20020a0cb292000000b005347dbc1748mr3706551qve.36.1673610703631;
-        Fri, 13 Jan 2023 03:51:43 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-183.dyn.eolo.it. [146.241.113.183])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05620a2a0500b006f9e103260dsm12733220qkp.91.2023.01.13.03.51.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 03:51:43 -0800 (PST)
-Message-ID: <397b05375f57ec5dc0f084315b995bfda4527d95.camel@redhat.com>
-Subject: Re: Patch "net/ulp: prevent ULP without clone op from entering the
- LISTEN status" has been added to the 5.4-stable tree
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>, slipper.alive@gmail.com,
-        stable-commits@vger.kernel.org
-Date:   Fri, 13 Jan 2023 12:51:40 +0100
-In-Reply-To: <Y8FDhdy3s1z/JxAi@kroah.com>
-References: <16735310493146@kroah.com> <Y8AP6Lqo9sfX9Bb8@kroah.com>
-         <20230112105731.0da81d58@kernel.org> <Y8BZboDOQ1I+VTAC@kroah.com>
-         <Y8FDhdy3s1z/JxAi@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 13 Jan 2023 06:36:47 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347081C25;
+        Fri, 13 Jan 2023 03:23:47 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NtfDq0TWrz4f4bmv;
+        Fri, 13 Jan 2023 19:23:39 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgBXwLM6P8Fj7hGXBg--.28092S4;
+        Fri, 13 Jan 2023 19:23:40 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     linux-cachefs@redhat.com
+Cc:     David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>, houtao1@huawei.com
+Subject: [PATCH v3 0/2] Fixes for fscache volume operations
+Date:   Fri, 13 Jan 2023 19:52:09 +0800
+Message-Id: <20230113115211.2895845-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBXwLM6P8Fj7hGXBg--.28092S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xry7Zr1fWF1kJrWfur43Awb_yoW8Jr1kpr
+        W3CrsxKFW8G3sxtws7Xw47Z3409FWkta9rWr15Aw1UAr45ZFWjqayUKw1Y9a42y395Aayx
+        XF1Utw4fZryUAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-On Fri, 2023-01-13 at 12:41 +0100, Greg KH wrote:
-> On Thu, Jan 12, 2023 at 08:03:10PM +0100, Greg KH wrote:
-> > On Thu, Jan 12, 2023 at 10:57:31AM -0800, Jakub Kicinski wrote:
-> > > On Thu, 12 Jan 2023 14:49:28 +0100 Greg KH wrote:
-> > > > On Thu, Jan 12, 2023 at 02:44:09PM +0100, gregkh@linuxfoundation.org wrote:
-> > > > > 
-> > > > > This is a note to let you know that I've just added the patch titled
-> > > > > 
-> > > > >     net/ulp: prevent ULP without clone op from entering the LISTEN status
-> > > > > 
-> > > > > to the 5.4-stable tree which can be found at:
-> > > > >     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary  
-> > > > 
-> > > > Oops, nope, this broke the build for 5.4 and older kernels, now
-> > > > dropping.
-> > > 
-> > > There's no clone op, right?
-> > 
-> > Correct.
-> > 
-> > > If you're willing to futz with it I think
-> > > you just need to remove the "and the ops don't have ->clone" part of
-> > > the conditions. Any presence of ops on older kernels should make us
-> > > bail.
-> 
-> Ok, I've queued up the following patch for 5.4. and older.  Let me know
-> if I've messed anything up here, but it at least builds for me :)
+From: Hou Tao <houtao1@huawei.com>
 
-The backport patch LGTM, thanks!
+Hi,
 
-Paolo
+The patchset includes two fixes for fscache volume operations: patch 1
+fixes the hang problem during volume acquisition when the volume
+acquisition process waits for the freeing of relinquished volume, patch
+2 adds the missing memory barrier in fscache_create_volume_work() and it
+is spotted through code review when checking whether or not these is
+missing smp_mb() before invoking wake_up_bit().
+
+Comments are always welcome.
+
+Chang Log:
+v3:
+ * Use clear_and_wake_up_bit() helper (Suggested by Jingbo Xu)
+ * Tidy up commit message and add Reviewed-by tag
+
+v2: https://listman.redhat.com/archives/linux-cachefs/2022-December/007402.html
+ * rebased on v6.1-rc1
+ * Patch 1: use wait_on_bit() instead (Suggested by David)
+ * Patch 2: add the missing smp_mb() in fscache_create_volume_work()
+
+v1: https://listman.redhat.com/archives/linux-cachefs/2022-December/007384.html
+
+
+Hou Tao (2):
+  fscache: Use wait_on_bit() to wait for the freeing of relinquished
+    volume
+  fscache: Use clear_and_wake_up_bit() in fscache_create_volume_work()
+
+ fs/fscache/volume.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+-- 
+2.29.2
 
