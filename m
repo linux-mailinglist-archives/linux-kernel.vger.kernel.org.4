@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FDB668F67
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495C7668F6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236408AbjAMHnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S238379AbjAMHoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240334AbjAMHnF (ORCPT
+        with ESMTP id S235540AbjAMHoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:43:05 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF341B9E6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:43:03 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id tz12so50355538ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9fmIJc68vb/dpe2aUgc9GwKKtWf/YipuVliNTzq4hAE=;
-        b=Jg+ThatndKiwgz9RECLXAFxz1B0/L46pWmp/CErwVAAzUS+FUbCBQWzXqekxS7kT5Y
-         sZV9e4dBjMaFUQakfhSnbXE6PUVZ9gtdVRjSgFuRZ7UVIx/B1kuVIG/mTLlRxW439/X1
-         Fj+pluC9o3bz5iYIZgCPxF2dgw5H0/gbC7m2sdwS2iwF0wwwA2hhBCuE2o0fUk8M9MCN
-         jQDW0OXem87Qzyd3/IrB+JExIxBA+sOx2tkITyUkbJVk41L+fjOFRR5hxsosN4eVUjpJ
-         gKZHDPe7R2+SDUfMDR1nCGFCnXW6k4TNMaqdv/yxCbBR2Dt5YYyE3VMnwTT5jzZ6ICHy
-         HkAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9fmIJc68vb/dpe2aUgc9GwKKtWf/YipuVliNTzq4hAE=;
-        b=YVRShVdHF81YpUj1arCA6eQ1IeWwGPfFVkoOig0PE6oI4hxsGK+WBEgyKvW5bLPcjC
-         5vQOlNOgjQtacvCpr4WpNJT/Gza6FQPrkIyvq4LKRMlCaR15C4UG1AsvZ7uEHgKbDEmU
-         SKreZAHOOj9nIV3XkMRfpLQPUDGyorDBhW1OC7ZTd4QEcaY9h+Pue+1nMrygX7u+ainT
-         JyCsEyu4MwUpbTf8EqB4PBqzCEcQYNIx4SJ64e+HMuswijqHFjZIs5VT/yrupsYL8Xn0
-         qeWHz9hIcyTNbMJoYD6AjDGZZ4lktaT0JE+jEOyy/VZIzeTbh0qme2GyaVvsRCmPAjs4
-         oc/Q==
-X-Gm-Message-State: AFqh2kqSgjsJacr9alFYnN3AoeP57aVTxCdpOSxfBj0zCAMd9dZD3GGd
-        FMEKtipebdOu0gcKZDsbcIw5dA==
-X-Google-Smtp-Source: AMrXdXtsKwRdrzZmYjZPVOJhVqAxfq7Od77kmMoSQ/3P2/S/WxytDSSYO8UY2hBmYbdv2d+ya3bo+w==
-X-Received: by 2002:a17:907:d311:b0:86a:2c18:e422 with SMTP id vg17-20020a170907d31100b0086a2c18e422mr1931559ejc.77.1673595782407;
-        Thu, 12 Jan 2023 23:43:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b007a4e02e32ffsm8290030ejc.60.2023.01.12.23.43.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 23:43:01 -0800 (PST)
-Message-ID: <8109445e-a21c-3159-1182-5be45fa0ce8e@linaro.org>
-Date:   Fri, 13 Jan 2023 08:43:00 +0100
+        Fri, 13 Jan 2023 02:44:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0E88FD9;
+        Thu, 12 Jan 2023 23:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=h4SIO5Vhg+nTG28cL2ItMex6tptSMIIoaPuTXiy4QRY=; b=X9WRD1uFZ8GM08dcnkEzGBIUBN
+        AlHf4sXA0RwDUqEtwvnIEV6F1JWlqzUuE9eq6hCfKdjLqHfK8uI7uidsA+LJIq93RXB89wFjqvDZe
+        3thF2e7e67FcXGhav2n9feqEajMB6759/BzWPlkbPieZOSJyAM5pWP3s4oHvV5c4FGvtbZZSLWN8g
+        lsLSLECcGl6NxtEK1WlWg0tw5PSHmjE1UymF9rL+c4rBFdQ0bspB32c0FDcU/vAM44QIde7sZ41lj
+        e/mV1ccduLSmEJ9fyQlAdzUB74xIYAyfqAnrQ26CLwar4xW03t3FF/+XDz/p5HzzgBe7cBsEJKLTG
+        xF1rLNmA==;
+Received: from [2601:1c2:d80:3110::9307]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pGEjJ-0011YO-NV; Fri, 13 Jan 2023 07:44:01 +0000
+Message-ID: <3311cea3-3a1f-3c2d-d167-6bfe85b2ae84@infradead.org>
+Date:   Thu, 12 Jan 2023 23:44:01 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: add display port audio
+Subject: Re: [PATCH] ata: Don't build PATA_CS5535 on UML
+To:     Peter Foley <pefoley2@pefoley.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
 Content-Language: en-US
-To:     Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20221221071734.2887901-1-judyhsiao@chromium.org>
- <afd7851b-0846-c21f-a769-10fb920c7c80@linaro.org>
- <CAJXt+b8eez8KTocoAi0WP8qC3YdA9bfOTPbY8ZGfXNb-MNaT-Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAJXt+b8eez8KTocoAi0WP8qC3YdA9bfOTPbY8ZGfXNb-MNaT-Q@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 02:24, Judy Hsiao wrote:
->> Why do you change link@1 from DP to ALC?
-> Because I want make the order to be consistent with the 3 mic version. Thanks!
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi
+Hi--
 
-You cut entire context. I don't know what is this about.
+On 1/12/23 20:37, Peter Foley wrote:
+> This driver uses MSR functions that aren't implemented under UML.
+> Avoid building it to prevent tripping up allyesconfig.
+> 
+> e.g.
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3a3): undefined reference to `__tracepoint_read_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3d2): undefined reference to `__tracepoint_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x457): undefined reference to `__tracepoint_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x481): undefined reference to `do_trace_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4d5): undefined reference to `do_trace_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4f5): undefined reference to `do_trace_read_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x51c): undefined reference to `do_trace_write_msr'
+> 
+> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
 
-Best regards,
-Krzysztof
+I have a similar patch on my system that I have never sent.
+I think that PATA_CS5536 needs the same treatment.
 
+Anyway:
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  drivers/ata/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index eceaec33af65..9695c4404e26 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -640,6 +640,7 @@ config PATA_CS5530
+>  config PATA_CS5535
+>  	tristate "CS5535 PATA support (Experimental)"
+>  	depends on PCI && (X86_32 || (X86_64 && COMPILE_TEST))
+> +	depends on !UML
+>  	help
+>  	  This option enables support for the NatSemi/AMD CS5535
+>  	  companion chip used with the Geode processor family.
+> 
+> ---
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> change-id: 20230112-umide-18c116111232
+> 
+> Best regards,
+
+-- 
+~Randy
