@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3586668F7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E8E668F89
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbjAMHrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S235540AbjAMHtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238828AbjAMHqx (ORCPT
+        with ESMTP id S232051AbjAMHtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:46:53 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233B91B9E6;
-        Thu, 12 Jan 2023 23:46:50 -0800 (PST)
-Received: from pendragon.ideasonboard.com (85-76-5-15-nat.elisa-mobile.fi [85.76.5.15])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2CD9D4D4;
-        Fri, 13 Jan 2023 08:46:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673596008;
-        bh=wltYQdcEAMz3UcFF0QVHXXUKY2mcn2dIbJ+Vsno/G9o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LPk9GDnJb8yIAG/qZw7j85ZzRhjxe0eUQN+NAsK+9uT/7opY3bx+SaNPEdtJt/mLy
-         7ehj3skE2f1g4W6IvOyNfZJFjCDi/ZIYJt389ghohYbhf6hpvDv0vqO0a1KKztGEE2
-         l1/4JdyjqER4jRCS7n87hgkuZ+xUKmlP2i0l0lNc=
-Date:   Fri, 13 Jan 2023 09:46:47 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: [PATCH 01/22] gpu/drm: remove the shmobile drm driver
-Message-ID: <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com>
-References: <20230113062339.1909087-1-hch@lst.de>
- <20230113062339.1909087-2-hch@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230113062339.1909087-2-hch@lst.de>
+        Fri, 13 Jan 2023 02:49:42 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8DF1A822;
+        Thu, 12 Jan 2023 23:49:41 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id l22so20663095eja.12;
+        Thu, 12 Jan 2023 23:49:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ki/D1WUy5ryn68f131sCexKZ8Uw0CRINUHMpMThw1h4=;
+        b=MrZqIjlJU54cg2457lOD+lg384HK6gA1Nb9CBdGUiKfgYsB14QaQX61r9OtNwotQKB
+         THMs47B1dqPWxYTr7sgoDSVTHBgACpbIVVlRD715H+brWuzh91B9W8j1cR3TIFJgGVk4
+         lq4oEcRbrZIjFGCgcACACa7pmQA9hjXwKnhpL4wZ7lvSSniEIcS50+UyxUdlpY/+nx/K
+         niXvF292CD8sS4XkYXPBxMNf2xgeYY9W3FderhTHx6nJkpsr75YA78XAgzXB+Ku21Cdn
+         729M2KRBmulaAjdScbAqLBaR2faFc9g0J8W7vjpqnHrrQcHe8m71av87l8YRblaxALpj
+         IxAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ki/D1WUy5ryn68f131sCexKZ8Uw0CRINUHMpMThw1h4=;
+        b=YN8T2x9KkPCciKokUiSYgsfc1LLsytuWb9PdalQ8aPaoAf1G2TEiueIOrPYxLo/AXB
+         qScAIKA4kiuf+d+Es6XTeMV18BC7Hcy6mRLXURwvrKKidq9gPGC4X8DAMOMstkWi/ogJ
+         di/P6B6dRUvRl+voK6OuywHFCF0UWU98A9eNbKM9DPmKOL0K2D9oT8nN+7VxE53LWpNw
+         zSZ6KN097I8mL5wj5n5xfAQs2Mm7qet8gCpUVP+7ti0A78UTGd3a1EvFyh40KHS/qer7
+         RmO9v7x/avwBlmWANpr43FXcf2AJIXt1ue2XUeH4dU7DCNe2zz5dpu5SzN6DO52OpDzY
+         +3Hw==
+X-Gm-Message-State: AFqh2kpX266Z54lfjM9XKKKDkP9U5DnsE8PtmvyBrQNxoxEffTFWdI3f
+        WN/dqbhlOAz0hn1rGwDuQc8=
+X-Google-Smtp-Source: AMrXdXvpYNAJ1hb/R8RykYrpD9NO6MRCwedsK48BgHEkt6XdgGobwficLiSe7Qyl0u7bzBTsagaFdA==
+X-Received: by 2002:a17:907:c48d:b0:7c0:aafa:6dc0 with SMTP id tp13-20020a170907c48d00b007c0aafa6dc0mr52745239ejc.25.1673596179964;
+        Thu, 12 Jan 2023 23:49:39 -0800 (PST)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906319200b007c1651aeeacsm8246555ejy.181.2023.01.12.23.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 23:49:39 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] crypto: atmel-i2c - avoid defines prefixed with CONFIG
+Date:   Fri, 13 Jan 2023 08:47:15 +0100
+Message-Id: <20230113074715.32016-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
+that are introduced in a Kconfig file.
 
-Thank you for the patch.
+Here, a definition for the driver's configuration zone is named
+CONFIG_ZONE. Rename this local definition to CONFIGURATION_ZONE to avoid
+defines prefixed with "CONFIG".
 
-On Fri, Jan 13, 2023 at 07:23:18AM +0100, Christoph Hellwig wrote:
-> This driver depends on ARM && ARCH_SHMOBILE, but ARCH_SHMOBILE can only be
-> set for each/sh, making the driver dead code except for the COMPILE_TEST
-> case.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+No functional change.
 
-No objection from me.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Herbert, David, please pick this clean-up work into your crypto tree. Thanks.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ drivers/crypto/atmel-i2c.c | 2 +-
+ drivers/crypto/atmel-i2c.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  drivers/gpu/drm/Kconfig                       |   2 -
->  drivers/gpu/drm/Makefile                      |   1 -
->  drivers/gpu/drm/shmobile/Kconfig              |  12 -
->  drivers/gpu/drm/shmobile/Makefile             |   8 -
->  .../gpu/drm/shmobile/shmob_drm_backlight.c    |  82 ---
->  .../gpu/drm/shmobile/shmob_drm_backlight.h    |  19 -
->  drivers/gpu/drm/shmobile/shmob_drm_crtc.c     | 683 ------------------
->  drivers/gpu/drm/shmobile/shmob_drm_crtc.h     |  55 --
->  drivers/gpu/drm/shmobile/shmob_drm_drv.c      | 303 --------
->  drivers/gpu/drm/shmobile/shmob_drm_drv.h      |  42 --
->  drivers/gpu/drm/shmobile/shmob_drm_kms.c      | 150 ----
->  drivers/gpu/drm/shmobile/shmob_drm_kms.h      |  29 -
->  drivers/gpu/drm/shmobile/shmob_drm_plane.c    | 261 -------
->  drivers/gpu/drm/shmobile/shmob_drm_plane.h    |  19 -
->  drivers/gpu/drm/shmobile/shmob_drm_regs.h     | 310 --------
->  15 files changed, 1976 deletions(-)
->  delete mode 100644 drivers/gpu/drm/shmobile/Kconfig
->  delete mode 100644 drivers/gpu/drm/shmobile/Makefile
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_backlight.c
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_backlight.h
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_crtc.c
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_crtc.h
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_drv.c
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_drv.h
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_kms.c
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_kms.h
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_plane.c
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_plane.h
->  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_regs.h
-
+diff --git a/drivers/crypto/atmel-i2c.c b/drivers/crypto/atmel-i2c.c
+index 55bff1e13142..66e27f71e37e 100644
+--- a/drivers/crypto/atmel-i2c.c
++++ b/drivers/crypto/atmel-i2c.c
+@@ -59,7 +59,7 @@ void atmel_i2c_init_read_cmd(struct atmel_i2c_cmd *cmd)
+ 	 * Read the word from Configuration zone that contains the lock bytes
+ 	 * (UserExtra, Selector, LockValue, LockConfig).
+ 	 */
+-	cmd->param1 = CONFIG_ZONE;
++	cmd->param1 = CONFIGURATION_ZONE;
+ 	cmd->param2 = cpu_to_le16(DEVICE_LOCK_ADDR);
+ 	cmd->count = READ_COUNT;
+ 
+diff --git a/drivers/crypto/atmel-i2c.h b/drivers/crypto/atmel-i2c.h
+index 35f7857a7f7c..c1fdc04eac07 100644
+--- a/drivers/crypto/atmel-i2c.h
++++ b/drivers/crypto/atmel-i2c.h
+@@ -63,7 +63,7 @@ struct atmel_i2c_cmd {
+ #define STATUS_WAKE_SUCCESSFUL		0x11
+ 
+ /* Definitions for eeprom organization */
+-#define CONFIG_ZONE			0
++#define CONFIGURATION_ZONE		0
+ 
+ /* Definitions for Indexes common to all commands */
+ #define RSP_DATA_IDX			1 /* buffer index of data in response */
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart
