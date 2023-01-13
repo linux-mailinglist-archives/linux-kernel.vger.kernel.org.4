@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBA56688EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46ED66893D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239998AbjAMBM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S229887AbjAMBms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjAMBMY (ORCPT
+        with ESMTP id S239769AbjAMBmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:12:24 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7235CE2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:12:21 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id g2so10212186ila.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i3UT/Y1YH16gP2vBsAlIZgN/46hyjtu8955sOLq2zXk=;
-        b=CEtDvhRoqlHH2IjISObtaCW7RbrvpPQfs5d5A1Zr7RrpXHABAaViv2PLgzJcDX9B9q
-         n99D9ZzIrh3GTQgBvXhs9f+mqpF/OOO7pd81Z4FFui0jSQ1B+rqC5b/R4codAvTWe5SO
-         5z1gQiF5IbdlqJiE174Jx1VqAqviKfuYL6nqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i3UT/Y1YH16gP2vBsAlIZgN/46hyjtu8955sOLq2zXk=;
-        b=7FZd9e9xy02L0opyFkHX7g1m51ecR2qwGhlmCwmyhAI9XtCtIz3bbm2zEjGCTN+efV
-         BTQoPi3HRXLwCg7LAaqklu1nC+3U8Xf2r/mMZdnIpcBW2RG21vnsLl+6IzM1agO8af8j
-         upfRo3bmJpecrq6OyjO43JeqrggBCAakuxtnmwVky1NTXYV4Gv0CbUXZl2IgPgHePXkI
-         2C7PQDXp0fZX9yNeP9omwZHBkapxqvWGMLcJNXgC17UsSQFqG0D+18C+dEA5xUIcZMRj
-         /QmeQi/fz6V5x5V+rMq4nvZS+/KbJF3wJr37YYbluGIT4qL9kL17fpxCUcDAOG+Uxb6r
-         nybw==
-X-Gm-Message-State: AFqh2kqNljpziQCukeysMCcMZiwH5t9pyCg79U4AvfTrIayk4fAFhbtc
-        gjrhaRgUwhDgKYbu0a9NaMitXw==
-X-Google-Smtp-Source: AMrXdXvTNwz4bjP+BUdszRNeD3iupE/PtHp0EJPBt9ClwLR10prNcJZQzDA8KIxlCb22V83T13iPKg==
-X-Received: by 2002:a92:1306:0:b0:30c:4991:2eac with SMTP id 6-20020a921306000000b0030c49912eacmr6276505ilt.0.1673572341143;
-        Thu, 12 Jan 2023 17:12:21 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c3-20020a029603000000b0038ac01fb3bcsm5825882jai.14.2023.01.12.17.12.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 17:12:20 -0800 (PST)
-Message-ID: <74201163-1084-fba3-5bf5-49ee5adaba45@linuxfoundation.org>
-Date:   Thu, 12 Jan 2023 18:12:19 -0700
+        Thu, 12 Jan 2023 20:42:45 -0500
+X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 17:42:42 PST
+Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D569E389D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:42:42 -0800 (PST)
+Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
+        by 156.147.23.53 with ESMTP; 13 Jan 2023 10:12:41 +0900
+X-Original-SENDERIP: 156.147.1.125
+X-Original-MAILFROM: chanho.min@lge.com
+Received: from unknown (HELO ?10.178.36.63?) (10.178.36.63)
+        by 156.147.1.125 with ESMTP; 13 Jan 2023 10:12:41 +0900
+X-Original-SENDERIP: 10.178.36.63
+X-Original-MAILFROM: chanho.min@lge.com
+From:   Chanho Min <chanho.min@lge.com>
+Subject: Re: Re: [PATCH v2 10/23] arm64: dts: Update cache properties for lg
+To:     Pierre Gondois <pierre.gondois@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Lee Gunho <gunho.lee@lge.com>
+References: <20221107155825.1644604-1-pierre.gondois@arm.com>
+ <20221107155825.1644604-11-pierre.gondois@arm.com>
+ <0fc92ab1-144a-47dd-e5c4-a165a82d385d@arm.com>
+Message-ID: <1e36270f-237e-7069-ffe7-3086216b9d6b@lge.com>
+Date:   Fri, 13 Jan 2023 10:12:41 +0900
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
+In-Reply-To: <0fc92ab1-144a-47dd-e5c4-a165a82d385d@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230112135524.143670746@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 06:45, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.163 release.
-> There are 783 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+23. 1. 12. 오후 5:34에 Pierre Gondois 이(가) 쓴 글:
+> (subset for cc list)
+> Hello,
+> Just a reminder in case the patch was forgotten,
+> Regards,
+> Pierre
 > 
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.163-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> On 11/7/22 16:57, Pierre Gondois wrote:
+>> The DeviceTree Specification v0.3 specifies that the cache node
+>> 'compatible' and 'cache-level' properties are 'required'. Cf.
+>> s3.8 Multi-level and Shared Cache Nodes
+>> The 'cache-unified' property should be present if one of the
+>> properties for unified cache is present ('cache-size', ...).
+>>
+>> Update the Device Trees accordingly.
+>>
+>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Acked-by: Chanho Min <chanho.min@lge.com>
+>> ---
+>>   arch/arm64/boot/dts/lg/lg1312.dtsi | 1 +
+>>   arch/arm64/boot/dts/lg/lg1313.dtsi | 1 +
+>>   2 files changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/lg/lg1312.dtsi 
+>> b/arch/arm64/boot/dts/lg/lg1312.dtsi
+>> index 78ae73d0cf36..25ed9aeee2dc 100644
+>> --- a/arch/arm64/boot/dts/lg/lg1312.dtsi
+>> +++ b/arch/arm64/boot/dts/lg/lg1312.dtsi
+>> @@ -48,6 +48,7 @@ cpu3: cpu@3 {
+>>           };
+>>           L2_0: l2-cache0 {
+>>               compatible = "cache";
+>> +            cache-level = <2>;
+>>           };
+>>       };
+>> diff --git a/arch/arm64/boot/dts/lg/lg1313.dtsi 
+>> b/arch/arm64/boot/dts/lg/lg1313.dtsi
+>> index 2173316573be..db82fd4cc759 100644
+>> --- a/arch/arm64/boot/dts/lg/lg1313.dtsi
+>> +++ b/arch/arm64/boot/dts/lg/lg1313.dtsi
+>> @@ -48,6 +48,7 @@ cpu3: cpu@3 {
+>>           };
+>>           L2_0: l2-cache0 {Re: Re: [PATCH v2 10/23] arm64: dts: Update cache properties for lg
+>>               compatible = "cache";
+>> +            cache-leveRe: Re: [PATCH v2 10/23] arm64: dts: Update cache properties for lgl = <2>;
+>>           };
+>>       };
