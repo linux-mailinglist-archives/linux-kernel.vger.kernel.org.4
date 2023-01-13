@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE39668AEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00FE668B00
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjAMEh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 23:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S231400AbjAMEtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 23:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjAMEhT (ORCPT
+        with ESMTP id S230473AbjAMEtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 23:37:19 -0500
+        Thu, 12 Jan 2023 23:49:17 -0500
 Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDECA1D2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:37:17 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id o17so14128123qvn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:37:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE7448282
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:49:15 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id t7so14162763qvv.3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:49:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pefoley.com; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPm2cDob64PHi+nW3IeZECmXVT/SwFopaoWwfdNRye0=;
-        b=BLpRYQgjOeaSOzpLq9w9Aze82Npz+TR8bofK5jRsT9mhfJ2LbAp3rKHZT8MpUwcWJx
-         clCtjEksgGfakcqxrG3QZC4vDzfZnzxPYBPo5rw5lWh4sTIdVopQ671T9TgwR+h0Z4EC
-         U/zNKX4YnNopUciFbKh1SGt5uYz7Ub1sVPGs8=
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGX3VGymQGp8GLR/8ell86Z6rupR3s1Pq8aI6kKwcEE=;
+        b=uF3qGo1TN8n3B6fNlpBQMxkO9ioZdY68UVSs4+j877qiAZxgtnB70ARzy7dGpI+oCU
+         ijDatCGMwHrL/cjxYRwdhH6xZPdy80v2jzTFWxcFJe8cpWMDgM6GRwrpNl/1jvLn2jWF
+         /I/SSsO6yvxA3iftmgituaoFiU28YHNsUa/ww=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lPm2cDob64PHi+nW3IeZECmXVT/SwFopaoWwfdNRye0=;
-        b=izj8MTw3LPC4Xm9fMipg6eDs/A9ux2bJXqMK9HtLkfy1SUJwZ53o1Hh8xmXIYYIlVF
-         QjdtnOTHUn2+Z8j/qVYwKgfHCsvYJAMf+EddzDQrlSyuwNzsjI6VH7zGULKfQ6UNYeRR
-         9NeBuMMllDCw59Coml/Mv9rEhb/AX5mDyuNygyLoHtrjLq640AkdBCRWt5jebg+/Ekul
-         BaDIE1ranwdFMcjo5r3ouLrZM8HN2LqmO/K9xZk52uWzcq69hQb/GAqMTvzhK3lsMk2C
-         sE0lcyOjfT35BtNwSwJkc+TFoKYWCw6wEygIJHZEUgC5vGSoVHhYfqAbVDA7UezorI1O
-         SXGw==
-X-Gm-Message-State: AFqh2kowa5ND7Ox6r9qP6cwTx2cutBBPf84tWOR7ukMK3FQBrrKXWi6+
-        9dRtYvId8grUJA8sbeaEoe/WUQ==
-X-Google-Smtp-Source: AMrXdXvZC03LqMiePLnWj6MotTeke3pWqpdvKcBQhpkVjCmlrhc4na1nxCifEG61lNj8bV4498iejg==
-X-Received: by 2002:a0c:cdcd:0:b0:532:f87:753c with SMTP id a13-20020a0ccdcd000000b005320f87753cmr43721182qvn.4.1673584636690;
-        Thu, 12 Jan 2023 20:37:16 -0800 (PST)
+        bh=BGX3VGymQGp8GLR/8ell86Z6rupR3s1Pq8aI6kKwcEE=;
+        b=pPcMZySgSYW9t6JrCeeAeyO8gMrSNa4VNzAMgTGFMi1S6Zg/A1Cu00ohmGtOvcWtel
+         ra1LUHNhRtG9k2S1qtwX2l4nhw7tCMZP9f0neyj+5MIaLVDTiBNTeTSOiWWzTHbfBPzL
+         ilZXVFwrL7a14omKij/KUZ47fjRTcQl9jvNDYqhS4+N5aDGi0u8rNnJh3J/Cp7WEQ6v+
+         vQdoEtw3VG1rZmMTR7EBH/uDPV6IUXd71+22babFbFCgD28VPCAyprrHLm91hRel5phD
+         L706xUfPiH2k1Mlp81JZO5EbaH6ivgDJBSlCl/CAut765hON3Jo11a4AVscWJX0P6cFE
+         Pq7g==
+X-Gm-Message-State: AFqh2kpNtT//DgkhQptwP7SwDEwZjJHTy4KpOK7oVBk3eLufNbl3c9mH
+        ziA/6FA7gPAvn85pfl54msvtLY/RA7IHpzmmqHM=
+X-Google-Smtp-Source: AMrXdXsu3oBNYKR2YZHqs31dWkamf6/T9JzfFf4OZZjRB0LIKRdSLgYuAO24BqnHnm+JSVh/NtxbUw==
+X-Received: by 2002:a0c:c586:0:b0:532:236d:3340 with SMTP id a6-20020a0cc586000000b00532236d3340mr33594903qvj.51.1673585354708;
+        Thu, 12 Jan 2023 20:49:14 -0800 (PST)
 Received: from [192.168.1.3] ([2600:4040:29fb:d300:887b:7eff:fe74:68b2])
-        by smtp.gmail.com with ESMTPSA id q5-20020a05620a0d8500b006eee3a09ff3sm12087761qkl.69.2023.01.12.20.37.16
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b00704a9942708sm12099472qki.73.2023.01.12.20.49.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 20:37:16 -0800 (PST)
+        Thu, 12 Jan 2023 20:49:14 -0800 (PST)
 From:   Peter Foley <pefoley2@pefoley.com>
-Date:   Thu, 12 Jan 2023 23:37:06 -0500
-Subject: [PATCH] ata: Don't build PATA_CS5535 on UML
+Subject: [PATCH 0/4] um: Various build fixes for allyesconfig
+Date:   Thu, 12 Jan 2023 23:49:07 -0500
+Message-Id: <20230112-um-v1-0-6bec9e97ad13@pefoley.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
-X-B4-Tracking: v=1; b=H4sIAPLfwGMC/x2NQQqAMAwEvyI5WzAVRPyKeKg12hyskqgIxb9bP
- c7swCZQEiaFrkggdLHyFjNgWYAPLi5keMoMtrJ1hWjNufJEBluP2GAWtYXcjk7JjOKiD1+9Oj1I
- vmEXmvn+D/rheV6HLd/UcAAAAA==
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+X-B4-Tracking: v=1; b=H4sIAMPiwGMC/x2MQQqAIBBFrxKzTlCDFl0lWmhNOQstZioC6e5pf
+ /f4j5dBkAkFhiYD401Ceypg2gbm4NKGipbCYLXttDFWXVF1q+698XUaiuidoPLs0hyqGp2cyPU4
+ GFd6/vo4ve8HRX1ux20AAAA=
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
         Peter Foley <pefoley2@pefoley.com>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673584636; l=1936;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673585354; l=1042;
  i=pefoley2@pefoley.com; s=20230111; h=from:subject:message-id;
- bh=2wIRUjf5hTGwjbx7HQnUhS+/nYxNZeMVIcHB4lIPfKc=;
- b=fdUZlUPj5Ky5rwzT8s0TyDCN3U6SNivmS/z/aZYkVxKo4o8KhkaJyqXYOoxRVArndWAHSa2oa8+z
- SVZCKixsCpAwYBm/oCP/ORTmYT8esrrttvb+4EX4iz90pSmUQ75k
+ bh=Pj+bhJnt9Vzw44uU8oe3PGVTrfvQfgKSmUU7jQWh2Ko=;
+ b=t26ey9F18MEelti8Q2CNfi4eauyJ6tavJeEqsXXNQwwbkNKoBktxXTaXD73uyFNvmuTQVg4iFjez
+ ysAQ54D6AkRDZJSsJcQxL7FANZ9UPfB1bHGpr4ZieQP2d7YiAeya
 X-Developer-Key: i=pefoley2@pefoley.com; a=ed25519;
  pk=DCQqIdN6rHnvfQH58WQiQzJFfGUo1HyWSvdYG8vnO5o=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,39 +78,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver uses MSR functions that aren't implemented under UML.
-Avoid building it to prevent tripping up allyesconfig.
+Fix some build failures I ran across when trying to build an allyesconfig
+kernel for ARCH=um.
 
-e.g.
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3a3): undefined reference to `__tracepoint_read_msr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3d2): undefined reference to `__tracepoint_write_msr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x457): undefined reference to `__tracepoint_write_msr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x481): undefined reference to `do_trace_write_msr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4d5): undefined reference to `do_trace_write_msr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4f5): undefined reference to `do_trace_read_msr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x51c): undefined reference to `do_trace_write_msr'
-
+To: Richard Weinberger <richard@nod.at>
+To: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: linux-um@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Peter Foley <pefoley2@pefoley.com>
----
- drivers/ata/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index eceaec33af65..9695c4404e26 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -640,6 +640,7 @@ config PATA_CS5530
- config PATA_CS5535
- 	tristate "CS5535 PATA support (Experimental)"
- 	depends on PCI && (X86_32 || (X86_64 && COMPILE_TEST))
-+	depends on !UML
- 	help
- 	  This option enables support for the NatSemi/AMD CS5535
- 	  companion chip used with the Geode processor family.
 
 ---
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230112-umide-18c116111232
+Peter Foley (4):
+      um: Make the definition of cpu_data more compatible
+      um: Avoid pcap multiple definition errors
+      um: Prevent building modules incompatible with MODVERSIONS
+      um: Use CFLAGS_vmlinux
+
+ arch/um/Makefile                        | 3 +--
+ arch/um/drivers/Kconfig                 | 2 ++
+ arch/um/drivers/pcap_kern.c             | 4 ++--
+ arch/um/include/asm/processor-generic.h | 2 +-
+ arch/um/kernel/um_arch.c                | 2 +-
+ 5 files changed, 7 insertions(+), 6 deletions(-)
+---
+base-commit: d9fc1511728c15df49ff18e49a494d00f78b7cd4
+change-id: 20230112-um-3f06b1bbbbb0
 
 Best regards,
 -- 
