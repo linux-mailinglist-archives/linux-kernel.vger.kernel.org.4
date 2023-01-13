@@ -2,174 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9740669342
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD93669348
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240806AbjAMJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:49:14 -0500
+        id S241258AbjAMJuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:50:21 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240922AbjAMJr5 (ORCPT
+        with ESMTP id S241263AbjAMJtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:47:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B968143E42;
-        Fri, 13 Jan 2023 01:39:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 348A460B1B;
-        Fri, 13 Jan 2023 09:39:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88583C433D2;
-        Fri, 13 Jan 2023 09:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673602762;
-        bh=VfAdCPcysVT/3jW83ODpVi1gcLL1NcM8uhMQlELECPE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CwHnAZ/hDQ3CyGL5y9IFOTkJ0YRLPA7CyI3xuAS6yP2KQ+YXy5xW95h/cPvm5nVJP
-         Kcn7l8Ev0CmXTgPaHPaxErwv2V49MIeTaMpPU05imaC4gGKt89C+OgK9lsclxrN6iq
-         KBg5KddP1c479Svp6CFSQHZfnuSeF03zJbl6Q9QbFJhwvZbQkDpXZzC5R1ROvflZ5/
-         8Ko85a8OsG6FYorPRH6uWqa38GQdznlnWTRJgbY45XC5ZIR3mVfOZLMVfsZsfj3HxO
-         hNXPmSwQ7ADu47qtCmImEffoCSmE9ZhQHs4gv9lZJfvbp0kynYJLI0Du+Ize8iinaJ
-         H6KZOlUIMEb5g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        Fri, 13 Jan 2023 04:49:07 -0500
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88938183B4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:41:05 -0800 (PST)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 288AA801F680
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:41:05 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 111BA10048A9A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:41:03 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id GGYZpkNXnNX2aGGYZpYlpB; Fri, 13 Jan 2023 09:41:03 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=63c1272f
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=uJXoyXs2SWzOjiTBKGkA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mxW8uGqGMuSrm9VAd4TzJRjnrvQElaUGGwjOOM2nzVg=; b=mG0LQp7LNTzoUYm8KeHBL72TaI
+        buyuNWMjEt5+HzmAcTsie8vzVPBOQ3TC/aKTQkoI98O8tVKkCLaz0VdeXOytDr3N1R+piJjxRgQ+X
+        jf4xt+lP8CWKyC4TF+8svzAO0TD+VyL4vMvET3VNxbcPvfEX7WmP4tdoQqedN0s2PMmSTnSshmzCq
+        iB2Rx0T8gnX8hwoZYcz4war1SJoVyXRqepJ5yTJNLwOXsVQ9NM/XPVF5tXxc6/Zwgw7cLvRiOsKMc
+        vk0MbBmZJkcI7x9Kz54ixttj089b29I1e2qxQ7S2A6NgLtfFkE/ay//IYyWxwNlJGqYOt8x6vQVb0
+        SBN2jguw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51314 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pGGWs-001SiU-9t;
-        Fri, 13 Jan 2023 09:39:18 +0000
-Date:   Fri, 13 Jan 2023 09:39:17 +0000
-Message-ID: <868ri6ojsq.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] irqchip/riscv-intc: Add support for RISC-V AIA
-In-Reply-To: <20230103141409.772298-4-apatel@ventanamicro.com>
-References: <20230103141409.772298-1-apatel@ventanamicro.com>
-        <20230103141409.772298-4-apatel@ventanamicro.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        (envelope-from <re@w6rz.net>)
+        id 1pGGYX-002Owm-MJ;
+        Fri, 13 Jan 2023 02:41:01 -0700
+Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230112135326.981869724@linuxfoundation.org>
+In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <de70b4e2-59c5-df8e-e929-c97e1b2438f3@w6rz.net>
+Date:   Fri, 13 Jan 2023 01:40:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pGGYX-002Owm-MJ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51314
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 03 Jan 2023 14:14:03 +0000,
-Anup Patel <apatel@ventanamicro.com> wrote:
-> 
-> The RISC-V advanced interrupt architecture (AIA) extends the per-HART
-> local interrupts in following ways:
-> 1. Minimum 64 local interrupts for both RV32 and RV64
-> 2. Ability to process multiple pending local interrupts in same
->    interrupt handler
-> 3. Priority configuration for each local interrupts
-> 4. Special CSRs to configure/access the per-HART MSI controller
-> 
-> This patch adds support for RISC-V AIA in the RISC-V intc driver.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  drivers/irqchip/irq-riscv-intc.c | 37 ++++++++++++++++++++++++++------
->  1 file changed, 31 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-> index f229e3e66387..880d1639aadc 100644
-> --- a/drivers/irqchip/irq-riscv-intc.c
-> +++ b/drivers/irqchip/irq-riscv-intc.c
-> @@ -16,6 +16,7 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/smp.h>
-> +#include <asm/hwcap.h>
->  
->  static struct irq_domain *intc_domain;
->  
-> @@ -29,6 +30,15 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
->  	generic_handle_domain_irq(intc_domain, cause);
->  }
->  
-> +static asmlinkage void riscv_intc_aia_irq(struct pt_regs *regs)
+On 1/12/23 5:56 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.6 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-What does "static asmlinkage" in a C file even mean? And clearly, this
-isn't the only instance in this file...
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> +{
-> +	unsigned long topi;
-> +
-> +	while ((topi = csr_read(CSR_TOPI)))
-> +		generic_handle_domain_irq(intc_domain,
-> +					  topi >> TOPI_IID_SHIFT);
-> +}
-> +
->  /*
->   * On RISC-V systems local interrupts are masked or unmasked by writing
->   * the SIE (Supervisor Interrupt Enable) CSR.  As CSRs can only be written
-> @@ -38,12 +48,18 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
->  
->  static void riscv_intc_irq_mask(struct irq_data *d)
->  {
-> -	csr_clear(CSR_IE, BIT(d->hwirq));
-> +	if (d->hwirq < BITS_PER_LONG)
+Tested-by: Ron Economos <re@w6rz.net>
 
-And what if BIT_PER_LONG is 32, as I expect it to be on 32bit, which
-the commit message says is supported?
-
-> +		csr_clear(CSR_IE, BIT(d->hwirq));
-> +	else
-> +		csr_clear(CSR_IEH, BIT(d->hwirq - BITS_PER_LONG));
->  }
->  
->  static void riscv_intc_irq_unmask(struct irq_data *d)
->  {
-> -	csr_set(CSR_IE, BIT(d->hwirq));
-> +	if (d->hwirq < BITS_PER_LONG)
-> +		csr_set(CSR_IE, BIT(d->hwirq));
-> +	else
-> +		csr_set(CSR_IEH, BIT(d->hwirq - BITS_PER_LONG));
->  }
->  
->  static void riscv_intc_irq_eoi(struct irq_data *d)
-> @@ -115,7 +131,7 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
->  static int __init riscv_intc_init(struct device_node *node,
->  				  struct device_node *parent)
->  {
-> -	int rc;
-> +	int rc, nr_irqs;
->  	unsigned long hartid;
->  
->  	rc = riscv_of_parent_hartid(node, &hartid);
-> @@ -133,14 +149,21 @@ static int __init riscv_intc_init(struct device_node *node,
->  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
->  		return 0;
->  
-> -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> +	nr_irqs = BITS_PER_LONG;
-> +	if (riscv_isa_extension_available(NULL, SxAIA) && BITS_PER_LONG == 32)
-> +		nr_irqs = nr_irqs * 2;
-
-Really, please drop this BITS_PER_LONG stuff. Use explicit numbers.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
