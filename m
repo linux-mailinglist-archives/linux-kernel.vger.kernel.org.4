@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B08668F8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25317668F91
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240221AbjAMHuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S235307AbjAMHvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:51:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbjAMHtr (ORCPT
+        with ESMTP id S230385AbjAMHvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:49:47 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE0F1B9E6;
-        Thu, 12 Jan 2023 23:49:45 -0800 (PST)
-Received: from kwepemm600006.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NtYNN6vt6zqVJB;
-        Fri, 13 Jan 2023 15:44:52 +0800 (CST)
-Received: from [10.110.53.113] (10.110.53.113) by
- kwepemm600006.china.huawei.com (7.193.23.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 13 Jan 2023 15:49:35 +0800
-Message-ID: <f4424d36-b18e-d801-8657-85565817554b@huawei.com>
-Date:   Fri, 13 Jan 2023 15:49:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] uprobes: list all active uprobes in the system
-To:     Ravi Bangoria <ravi.bangoria@amd.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sangyan@huawei.com>, <luanjianhai@huawei.com>,
-        <zhuling8@huawei.com>, <lizongwu@huawei.com>,
-        <luolongjuna@gmail.com>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <oleg@redhat.com>
-References: <20230111104825.1945418-1-luolongjun@huawei.com>
- <b4109593-1aa9-bf7a-cb1b-3ccd586f31d6@amd.com>
-From:   Longjun Luo <luolongjun@huawei.com>
-In-Reply-To: <b4109593-1aa9-bf7a-cb1b-3ccd586f31d6@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.110.53.113]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600006.china.huawei.com (7.193.23.105)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 02:51:00 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0575F75;
+        Thu, 12 Jan 2023 23:50:55 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NtYWL1bQDz6FK2T;
+        Fri, 13 Jan 2023 15:50:54 +0800 (CST)
+Received: from szxlzmapp06.zte.com.cn ([10.5.230.252])
+        by mse-fl1.zte.com.cn with SMTP id 30D7ohY7091613;
+        Fri, 13 Jan 2023 15:50:43 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Fri, 13 Jan 2023 15:50:45 +0800 (CST)
+Date:   Fri, 13 Jan 2023 15:50:45 +0800 (CST)
+X-Zmail-TransId: 2b0363c10d55ffffffffcfca5f18
+X-Mailer: Zmail v1.0
+Message-ID: <202301131550455361823@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
+        <willy@infradead.org>
+Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <iamjoonsoo.kim@lge.com>,
+        <yang.yang29@zte.com.cn>, <ran.xiaokai@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHN3YXBfc3RhdGU6IHVwZGF0ZSBzaGFkb3dfbm9kZXMgZm9yIGFub255bW91cyBwYWdl?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30D7ohY7091613
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63C10D5E.000 by FangMail milter!
+X-FangMail-Envelope: 1673596254/4NtYWL1bQDz6FK2T/63C10D5E.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63C10D5E.000/4NtYWL1bQDz6FK2T
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-在 1/13/2023 12:03 PM, Ravi Bangoria 写道:
-> +cc: Steven, Oleg, Masami
->
-> On 11-Jan-23 4:18 PM, luolongjun@huawei.com wrote:
->> From: Longjun Luo <luolongjun@huawei.com>
->>
->> Since uprobes will replace instructions in the process
->> memory, it is necessary to provide one way to list
->> all active uprobes. One can access this file through
->> /sys/kernel/debug/uprobes/list.
->>
->> Output looks like this
->> =====================
->> inode+offset/ref_ctr_offset    4160760670+0x30a10/0x0
->>      ref                        1
->>      register_rwsem             (unlocked)
->>      consumer_rwsem             (unlocked)
->>      consumers-1
->>          handler                0xffffffffc03ee02e(handler) uprobe
->>          ret_handler            0x0000000000000000( )
->>          filter                 0xffffffffc03ee010(filter) uprobe
->>      consumers-2
->>          handler                0xffffffffc03e902e(handler_1) uprobe_1
->>          ret_handler            0x0000000000000000( )
->>          filter                 0xffffffffc03e9010(filter_1) uprobe_1
-> You can list uprobes via /sys/kernel/tracing/uprobe_events. Any specific reason
-> to introduce another way?
->
-> Thanks,
-> Ravi
+Shadow_nodes is for shadow nodes reclaiming of workingset handling,
+it is updated when page cache add or delete since long time ago
+workingset only supported page cache. But when workingset supports
+anonymous page detection, we missied updating shadow nodes for
+it. This caused that shadow nodes of anonymous page will never be
+reclaimd by scan_shadow_nodes() even they use much memory and
+system memory is tense.
 
-/sys/kernel/tracing/uprobe_events only lists tracing events, not all uprobe events.
-For example, if I write a kernel module to call the uprobe_register to add a new uprobe event, it will not be listed by /sys/kernel/tracing/uprobe_events.
+This patch updates shadow_nodes of anonymous page when swap
+cache is add or delete.
 
-Compare it with the kprobe is like:
-/sys/kernel/tracing/uprobe_events -> /sys/kernel/tracing/kprobe_events
-/sys/kernel/debug/uprobes/list -> /sys/kernel/debug/kprobes/list
+Fixes: aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+---
+change for v2
+- Include a description of the user-visible effect. Add fixes tag. Modify comments.
+Also call workingset_update_node() in clear_shadow_from_swap_cache(). Thanks
+to Matthew Wilcox.
+---
+include/linux/xarray.h | 3 ++-
+ mm/swap_state.c        | 6 ++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-Nowadays, only the trace system uses the uprobe, so /sys/kernel/tracing/uprobe_events is enough.
+diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+index 44dd6d6e01bc..5cc1f718fec9 100644
+--- a/include/linux/xarray.h
++++ b/include/linux/xarray.h
+@@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
+  * @update: Function to call when updating a node.
+  *
+  * The XArray can notify a caller after it has updated an xa_node.
+- * This is advanced functionality and is only needed by the page cache.
++ * This is advanced functionality and is only needed by the page cache
++ * and swap cache.
+  */
+ static inline void xas_set_update(struct xa_state *xas, xa_update_node_t update)
+ {
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index cb9aaa00951d..7a003d8abb37 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -94,6 +94,8 @@ int add_to_swap_cache(struct folio *folio, swp_entry_t entry,
+ 	unsigned long i, nr = folio_nr_pages(folio);
+ 	void *old;
 
-But we try to extend the usage of the uprobe, and we add many uprobe events by calling the uprobe_register.
++	xas_set_update(&xas, workingset_update_node);
++
+ 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+ 	VM_BUG_ON_FOLIO(folio_test_swapcache(folio), folio);
+ 	VM_BUG_ON_FOLIO(!folio_test_swapbacked(folio), folio);
+@@ -145,6 +147,8 @@ void __delete_from_swap_cache(struct folio *folio,
+ 	pgoff_t idx = swp_offset(entry);
+ 	XA_STATE(xas, &address_space->i_pages, idx);
 
-For this situation, we need a approach to see all the uprobe events in the kernel.
++	xas_set_update(&xas, workingset_update_node);
++
+ 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+ 	VM_BUG_ON_FOLIO(!folio_test_swapcache(folio), folio);
+ 	VM_BUG_ON_FOLIO(folio_test_writeback(folio), folio);
+@@ -252,6 +256,8 @@ void clear_shadow_from_swap_cache(int type, unsigned long begin,
+ 		struct address_space *address_space = swap_address_space(entry);
+ 		XA_STATE(xas, &address_space->i_pages, curr);
 
++		xas_set_update(&xas, workingset_update_node);
++
+ 		xa_lock_irq(&address_space->i_pages);
+ 		xas_for_each(&xas, old, end) {
+ 			if (!xa_is_value(old))
+-- 
+2.15.2
