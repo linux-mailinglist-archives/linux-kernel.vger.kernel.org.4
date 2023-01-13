@@ -2,86 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E996694A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AC86694B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbjAMKuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 05:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S240890AbjAMKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 05:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241255AbjAMKuW (ORCPT
+        with ESMTP id S241224AbjAMKvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 05:50:22 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76F376EC1;
-        Fri, 13 Jan 2023 02:49:41 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id az20so32314436ejc.1;
-        Fri, 13 Jan 2023 02:49:41 -0800 (PST)
+        Fri, 13 Jan 2023 05:51:40 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B556084E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 02:50:24 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id az20so32318394ejc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 02:50:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9cvZXpcS72IMKj5Po+HwuzOX75feGFTUqZYMrZfX80U=;
-        b=el8QkHzE6jaEwCGMzGnJzCRxCUmBp2JeHr0CsO2oJwuZKeb8AOHBvvN1oClCjQqjLy
-         Pvdy2UTN/1TN61BnSyPHm+YNzDuZslbEY6eNM2bAj4pGqM4tUgQ8bZ6OREX8XoM4ANZV
-         RSBrnTdrmOgsvY1Kskoe6TK9ma9REsg2zxE8509CvD/Yfwdf8vK0+ljhPDY+6eZ1moe6
-         /RR9CkL3mW1xJgcq1+R6+FaOxsrCcXtQjy2EAcABCelopdoEiFm56ioSLKNu6QxYtGMx
-         5I2aVPqgDRJrmWnpXxaGpDSg271mieWBRlA2I+fCGbmKHFs//DRVE2Mtla6vcRX05Ewz
-         ZIgw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EgWST+bwv5L5giN822jBmcvfyL+5kJcquAhQUbMjB7Y=;
+        b=j2toRYjNGcst667IqisPfGaT8IDgXp6RU67lFR6kEKBVJHQ5Lp0jQmbZvHbKEdiqYc
+         sqB+FNGjj5VQ/+djIw6wfRm6DmHayhbUIeAKqpR/9CfUZAHezjB7XRyhU8BSStArKs9t
+         k9LR+T391vRYlcJ8OfDi86eoGVKB+Y5bYThvQ9eau1Pn0yyVeZC3dKuriKDlWCHdSVY1
+         VioMNBbhmUVaAH9oWPsdJIa07nlbaqkJPqj1c+wVe6eWv9iOT7+LEeraa7XiA4HA1Ksh
+         r45oYleOFWLbQ3hS8nOme/Dnw+Wk8lEEsflPrqSxVE+RvYZAbzi6dDWJyY/WxgDI78It
+         GMrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9cvZXpcS72IMKj5Po+HwuzOX75feGFTUqZYMrZfX80U=;
-        b=g9c047MW8mf2B8EZqfzSEKb9bZAEtx8m9psNtlEMMdrlrBB8nQlrvEdsXaIZXqIayB
-         STiVqZanv2YVJYVwu06VIT36MhSvXs4v3n1ThlB6ItdLf4ahcXQ1dcNIRyXaP/gXKN/g
-         g1AY2Dl3CNmM5hGJ3+uAy6SnUnfIimcZvvdTli8AYYmK++mw89ANfIyNqaHEXI9rhxAb
-         lkkM9SkzBr9UHPGLFga/WC3uIALi95Kq3avfS0JUtpk7uYbMrgkKaGeKy9us+ZKRUB9J
-         8h5YxLkF7V3SxOEr7nBDxtNeiBIXkDq/OSF1BfpJ8uipHj1Awbo/p4o943FohJB8BVPl
-         kmlg==
-X-Gm-Message-State: AFqh2kq+6l8aclWKgoiNlQFVbZfSLJemxhORr9+rsK2HR0vaOhPuFF4m
-        OSemycptHePwCHdEoR2/b9s=
-X-Google-Smtp-Source: AMrXdXt//PbqJoUmQbTpBnWsDD75TA0X1gO8kdqA9gSdJX3Fng2j1Gidi9g4TmDRrgBszKtVhwCTaA==
-X-Received: by 2002:a17:906:24db:b0:7c1:5b5e:4d78 with SMTP id f27-20020a17090624db00b007c15b5e4d78mr2703342ejb.51.1673606980176;
-        Fri, 13 Jan 2023 02:49:40 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id wd3-20020a170907d60300b0078ddb518a90sm8404057ejc.223.2023.01.13.02.49.39
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EgWST+bwv5L5giN822jBmcvfyL+5kJcquAhQUbMjB7Y=;
+        b=vp37WY1zgo5JXDif9GvQFLkccQuiXmgRwIEJSPYBMYK/lf9L6UyAvHM6RrG67t/q8S
+         I1Om+45rmCbV4iTlfeaNbI8wt7xO5EiyriwijCttI1yxbaBYp4SnM6azx2cTD8Cr8Jh+
+         tCI1d+LR5ZWsbLcq3ZvG4azualwffB8h9gWpuy4e+Z291Q7+7IpvA+APoy2tyDpkySMs
+         sd0HUZMfte7ERFREBnMv7U6kV/llNWvtDkJOXs1JDiZRjaOwxP0D/m3+YsUTJLe7nQTr
+         /4oBYSfEpPohODL2TkytZ8+KMmXtRAzdyLmFSBOwvmsyoWhGZnpYl6pZKhgDUlxeJhvG
+         Y8fw==
+X-Gm-Message-State: AFqh2koz8s/ptJtQVHP10LRic8PDjp6TzL/3mhcClQCN7VmGOB1xOxRb
+        kL99rtZBjgddNKPgJoW+I2h4hg==
+X-Google-Smtp-Source: AMrXdXvcm+ayFgHwwqO680wksafu1nympGj2N8nXWmvj+8APoTQ2w3f+ZZBoJV2z16w75FgnlXFDKQ==
+X-Received: by 2002:a17:907:d389:b0:7c1:5a37:825 with SMTP id vh9-20020a170907d38900b007c15a370825mr85839001ejc.34.1673607022726;
+        Fri, 13 Jan 2023 02:50:22 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm8348581ejf.210.2023.01.13.02.50.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 02:49:39 -0800 (PST)
-Date:   Fri, 13 Jan 2023 12:49:37 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20230113104937.75umsf4avujoxbaq@skbuf>
-References: <20230106101651.1137755-1-lukma@denx.de>
- <Y7gdNlrKkfi2JvQk@lunn.ch>
- <20230113113908.5e92b3a5@wsk>
+        Fri, 13 Jan 2023 02:50:22 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        devicetree@vger.kernel.org, Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: (subset) [PATCH 1/9] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: correct pins pattern
+Date:   Fri, 13 Jan 2023 11:50:12 +0100
+Message-Id: <167360698782.32701.3957478926329730241.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221230135645.56401-1-krzysztof.kozlowski@linaro.org>
+References: <20221230135645.56401-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113113908.5e92b3a5@wsk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:39:08AM +0100, Lukasz Majewski wrote:
-> Are there any more comments, or is this patch set eligible for pulling
-> into net-next tree?
+On Fri, 30 Dec 2022 14:56:37 +0100, Krzysztof Kozlowski wrote:
+> SC8280XP LPASS LPI pin controller has GPIO 0-18:
+> 
+>   sa8540p-ride.dtb: pinctrl@33c0000: tx-swr-default-state: 'oneOf' conditional failed, one must be fixed:
+>     'pins' is a required property
+>     'function' is a required property
+>     'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
+>     'bias-bus-hold' does not match any of the regexes: 'pinctrl-[0-9]+'
+>     'gpio2' does not match '^gpio([0-1]|1[0-8])$'
+> 
+> [...]
 
-How about responding to the comment that was already posted first?
+Applied, thanks!
+
+[1/9] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: correct pins pattern
+      https://git.kernel.org/krzk/linux-dt/c/3c90b1ba8cc49b3c485e4477b9977e52a16509d3
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
