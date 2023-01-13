@@ -2,222 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA46F668945
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DEC668942
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbjAMBwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S240368AbjAMBrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238392AbjAMBwL (ORCPT
+        with ESMTP id S232726AbjAMBrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:52:11 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004056144B;
-        Thu, 12 Jan 2023 17:52:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673574730; x=1705110730;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fB0iGXDWuyL8rchNy46SKRF6kk1f2kOIhvmNTUPvuVY=;
-  b=UyEuHR+uQ3a49y2VOXIc/aE0oHK4D2zxYR1Qft5PtmPKwTutkDakiKzt
-   imw4MORxSyetpHz26APCEV80a17LOBT0rxdECcJn72X3PLlW1xwJBO4zj
-   M29ehhOJuigulUgkcCjCUK3EIMNxiyKkQ1DGdy3MYej5Upq4WKdBb4hQy
-   zPM6wEw+h8riqc3EBOl4VH/s7sf12MhU/LTSroW1LVRUCMSQ1BxvJU8mM
-   qSNyaq0e+I8zBaq/Df9xn4Q/jLobLo8x+yxaZmeIXzL25UQ27OYNJ3nRa
-   23JVWrd5OM8k/EQOC2btFtRF86Mt1db8lTZSDPePBesP5ng7WK1n39gdn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="311742622"
-X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="311742622"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:52:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="658060007"
-X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="658060007"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga002.jf.intel.com with ESMTP; 12 Jan 2023 17:52:05 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>, Joerg Roedel <jroedel@suse.de>
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Matt Fagnani <matt.fagnani@bell.net>
-Subject: [PATCH v2 1/1] PCI: Add translated request only flag for pci_enable_pasid()
-Date:   Fri, 13 Jan 2023 09:44:09 +0800
-Message-Id: <20230113014409.752405-1-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 12 Jan 2023 20:47:09 -0500
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9608E61308
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:47:06 -0800 (PST)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 30D1kQS3042337;
+        Fri, 13 Jan 2023 09:46:26 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from BJMBX01.spreadtrum.com (10.0.64.7) by BJMBX01.spreadtrum.com
+ (10.0.64.7) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Fri, 13 Jan
+ 2023 09:46:24 +0800
+Received: from BJMBX01.spreadtrum.com ([fe80::54e:9a:129d:fac7]) by
+ BJMBX01.spreadtrum.com ([fe80::54e:9a:129d:fac7%16]) with mapi id
+ 15.00.1497.023; Fri, 13 Jan 2023 09:46:24 +0800
+From:   =?utf-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
+        <zhaoyang.huang@unisoc.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: =?utf-8?B?562U5aSNOiBJTkZPOiBbQklTRUNURURdIFJlZ3Jlc3Npb246IEEgUHJvYmxl?=
+ =?utf-8?B?bSB3aXRoIC9zeXMva2VybmVsL2RlYnVnL2ttZW1sZWFrIG91dHB1dDogYmFj?=
+ =?utf-8?Q?ktrace_not_printed_since_6.2.0-rc1?=
+Thread-Topic: INFO: [BISECTED] Regression: A Problem with
+ /sys/kernel/debug/kmemleak output: backtrace not printed since 6.2.0-rc1
+Thread-Index: AQHZJs/i0HowfIUVfkih2BYSc4TXiK6bk7/A
+Date:   Fri, 13 Jan 2023 01:46:23 +0000
+Message-ID: <e5314ea0281d490d9c4952369e1a427e@BJMBX01.spreadtrum.com>
+References: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
+ <4c467851-8080-44d3-d017-b0e283896119@alu.unizg.hr>
+ <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
+ <3ba5f8ee-d9bd-69ae-bb3a-c61e47020e2c@alu.unizg.hr>
+In-Reply-To: <3ba5f8ee-d9bd-69ae-bb3a-c61e47020e2c@alu.unizg.hr>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.0.93.65]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MAIL: SHSQR01.spreadtrum.com 30D1kQS3042337
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PCIe fabric routes Memory Requests based on the TLP address, ignoring
-the PASID. In order to ensure system integrity, commit 201007ef707a ("PCI:
-Enable PASID only when ACS RR & UF enabled on upstream path") requires
-some ACS features being supported on device's upstream path when enabling
-PCI/PASID.
-
-One alternative is ATS which lets the device resolve the PASID+addr pair
-before a memory request is made into a routeable TLB address through the
-TA. Those resolved addresses are then cached on the device instead of
-in the IOMMU TLB and the device always sets the translated bit for PASID.
-One example of those devices are AMD graphic devices that always have ACS
-or ATS enabled together with PASID.
-
-This adds a flag parameter in the pci_enable_pasid() helper, with which
-the device driver could opt-in the fact that device always sets the
-translated bit for PASID.
-
-It also applies this opt-in for AMD graphic devices. Without this change,
-kernel boots to black screen on a system with below AMD graphic device:
-
-00:01.0 VGA compatible controller: Advanced Micro Devices, Inc.
-        [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca)
-        (prog-if 00 [VGA controller])
-	DeviceName: ATI EG BROADWAY
-	Subsystem: Hewlett-Packard Company Device 8332
-
-At present, it is a common practice to enable/disable PCI PASID in the
-iommu drivers. Considering that the device driver knows more about the
-specific device, we will follow up by moving pci_enable_pasid() into
-the specific device drivers.
-
-Fixes: 201007ef707a ("PCI: Enable PASID only when ACS RR & UF enabled on upstream path")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216865
-Reported-by: Matt Fagnani <matt.fagnani@bell.net>
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Suggested-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- include/linux/pci-ats.h                     | 6 ++++--
- drivers/iommu/amd/iommu.c                   | 2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
- drivers/iommu/intel/iommu.c                 | 3 ++-
- drivers/pci/ats.c                           | 8 ++++++--
- 5 files changed, 14 insertions(+), 7 deletions(-)
-
-Change log:
-v2:
- - Convert the bool to a named flag;
- - Convert TRANSLED to XLATED.
-
-v1:
- - https://lore.kernel.org/linux-iommu/20230112084629.737653-1-baolu.lu@linux.intel.com/
-
-diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
-index df54cd5b15db..750fca736ef4 100644
---- a/include/linux/pci-ats.h
-+++ b/include/linux/pci-ats.h
-@@ -4,6 +4,8 @@
- 
- #include <linux/pci.h>
- 
-+#define PCI_PASID_XLATED_REQ_ONLY	BIT(0)
-+
- #ifdef CONFIG_PCI_ATS
- /* Address Translation Service */
- bool pci_ats_supported(struct pci_dev *dev);
-@@ -35,12 +37,12 @@ static inline bool pci_pri_supported(struct pci_dev *pdev)
- #endif /* CONFIG_PCI_PRI */
- 
- #ifdef CONFIG_PCI_PASID
--int pci_enable_pasid(struct pci_dev *pdev, int features);
-+int pci_enable_pasid(struct pci_dev *pdev, int features, int flags);
- void pci_disable_pasid(struct pci_dev *pdev);
- int pci_pasid_features(struct pci_dev *pdev);
- int pci_max_pasids(struct pci_dev *pdev);
- #else /* CONFIG_PCI_PASID */
--static inline int pci_enable_pasid(struct pci_dev *pdev, int features)
-+static inline int pci_enable_pasid(struct pci_dev *pdev, int features, int flags)
- { return -EINVAL; }
- static inline void pci_disable_pasid(struct pci_dev *pdev) { }
- static inline int pci_pasid_features(struct pci_dev *pdev)
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index cbeaab55c0db..64a8c03d7dfa 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -1700,7 +1700,7 @@ static int pdev_pri_ats_enable(struct pci_dev *pdev)
- 	int ret;
- 
- 	/* Only allow access to user-accessible pages */
--	ret = pci_enable_pasid(pdev, 0);
-+	ret = pci_enable_pasid(pdev, 0, PCI_PASID_XLATED_REQ_ONLY);
- 	if (ret)
- 		goto out_err;
- 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index ab160198edd6..891bf53c45dc 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -2350,7 +2350,7 @@ static int arm_smmu_enable_pasid(struct arm_smmu_master *master)
- 	if (num_pasids <= 0)
- 		return num_pasids;
- 
--	ret = pci_enable_pasid(pdev, features);
-+	ret = pci_enable_pasid(pdev, features, 0);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Failed to enable PASID\n");
- 		return ret;
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 59df7e42fd53..5cc13f02a5ac 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1425,7 +1425,8 @@ static void iommu_enable_pci_caps(struct device_domain_info *info)
- 	   undefined. So always enable PASID support on devices which
- 	   have it, even if we can't yet know if we're ever going to
- 	   use it. */
--	if (info->pasid_supported && !pci_enable_pasid(pdev, info->pasid_supported & ~1))
-+	if (info->pasid_supported &&
-+	    !pci_enable_pasid(pdev, info->pasid_supported & ~1, 0))
- 		info->pasid_enabled = 1;
- 
- 	if (info->pri_supported &&
-diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
-index f9cc2e10b676..3a2d9e0ba1d8 100644
---- a/drivers/pci/ats.c
-+++ b/drivers/pci/ats.c
-@@ -353,12 +353,15 @@ void pci_pasid_init(struct pci_dev *pdev)
-  * pci_enable_pasid - Enable the PASID capability
-  * @pdev: PCI device structure
-  * @features: Features to enable
-+ * @flags: device-specific flags
-+ *   - PCI_PASID_XLATED_REQ_ONLY: The PCI device only issues PASID
-+ *                                memory requests of translated type.
-  *
-  * Returns 0 on success, negative value on error. This function checks
-  * whether the features are actually supported by the device and returns
-  * an error if not.
-  */
--int pci_enable_pasid(struct pci_dev *pdev, int features)
-+int pci_enable_pasid(struct pci_dev *pdev, int features, int flags)
- {
- 	u16 control, supported;
- 	int pasid = pdev->pasid_cap;
-@@ -382,7 +385,8 @@ int pci_enable_pasid(struct pci_dev *pdev, int features)
- 	if (!pasid)
- 		return -EINVAL;
- 
--	if (!pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR | PCI_ACS_UF))
-+	if (!(flags & PCI_PASID_XLATED_REQ_ONLY) &&
-+	    !pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR | PCI_ACS_UF))
- 		return -EINVAL;
- 
- 	pci_read_config_word(pdev, pasid + PCI_PASID_CAP, &supported);
--- 
-2.34.1
-
+DQo+T24gMTIuIDAxLiAyMDIzLiAyMDo1MCwgTWlyc2FkIFRvZG9yb3ZhYyB3cm90ZToNCj4+IEhp
+IGFsbCwNCj4+DQo+PiB0aGVyZSBzZWVtcyB0byBiZSBhIHByb2JsZW0gd2l0aCB0aGUgb3V0cHV0
+IG9mDQo+L3N5cy9rZXJuZWwvZGVidWcva21lbWxlYWs6DQo+Pg0KPj4gW3Jvb3RAcGMtbXRvZG9y
+b3Ygfl0jIGNhdCAvc3lzL2tlcm5lbC9kZWJ1Zy9rbWVtbGVhayB1bnJlZmVyZW5jZWQNCj4+IG9i
+amVjdCAweGZmZmY5NTFjMTE4NTY4YjAgKHNpemUgMTYpOg0KPj4gICBjb21tICJrd29ya2VyL3Ux
+MjoyIiwgcGlkIDU2LCBqaWZmaWVzIDQyOTQ4OTM5NTIgKGFnZSA0MzU2LjU0OHMpDQo+PiAgIGhl
+eCBkdW1wIChmaXJzdCAxNiBieXRlcyk6DQo+PiAgICAgNmQgNjUgNmQgNzMgNzQgNjkgNjMgNmIg
+MzAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgbWVtc3RpY2swLi4uLi4uLg0KPj4gICBiYWNrdHJhY2U6
+DQo+PiBbcm9vdEBwYy1tdG9kb3JvdiB+XSMNCj4+DQo+PiBBcHBhcmVudGx5LCBiYWNrdHJhY2Ug
+b2YgY2FsbGVkIGZ1bmN0aW9ucyBvbiB0aGUgc3RhY2sgaXMgbm8gbG9uZ2VyIHByaW50ZWQNCj53
+aXRoIHRoZSBsaXN0IG9mIG1lbW9yeSBsZWFrcy4NCj4+DQo+PiBUaGlzIGFwcGVhcmVkIG9uIExl
+bm92byBkZXNrdG9wIDEwVFgwMDBWQ1IsIHdpdGggQWxtYUxpbnV4IDguNyBhbmQNCj4+IEJJT1Mg
+dmVyc2lvbiBNMjJLVDQ5QSAoMTEvMTAvMjAyMikgYW5kIDYuMi1yYzEgYW5kIDYuMi1yYzIgYnVp
+bGRzLg0KPj4NCj4+IFRoaXMgd29ya2VkIG9uIDYuMSB3aXRoIHRoZSBzYW1lIENPTkZJR19LTUVN
+TEVBSz15IGFuZCBNR0xSVQ0KPmVuYWJsZWQNCj4+IG9uIGEgdmFuaWxsYSBtYWluc3RyZWFtIGtl
+cm5lbCBmcm9tIE1yLiBUb3J2YWxkcycgdHJlZS4gSSBkb24ndCBrbm93IGlmIHRoaXMgaXMNCj5k
+ZWxpYmVyYXRlIGZlYXR1cmUgZm9yIHNvbWUgcmVhc29uIG9yIGEgYnVnLg0KPj4NCj4+IFBsZWFz
+ZSBmaW5kIGF0dGFjaGVkIHRoZSBjb25maWcsIGxzaHcgYW5kIGttZW1sZWFrIG91dHB1dC4NCj4+
+DQo+PiBUaGUgYmlzZWN0aW9uIGdhdmUgdGhpcyBjb21taXQgYXMgdGhlIGN1bHByaXQgZm9yIHRo
+ZSBzZXZlcmVkIHN0YWNrDQo+PiBiYWNrdHJhY2UgcHJpbnQgaW4gL3N5cy9rZXJuZWwvZGVidWcv
+a21lbWxlYWs6DQo+Pg0KPj4gbXRvZG9yb3ZAZG9tYWM6fi9saW51eC9rZXJuZWwvbGludXhfdG9y
+dmFsZHMkIGdpdCBiaXNlY3QgZ29vZA0KPj4gNTZhNjE2MTdkZDIyNzZjYmM1NmE2Yzg2ODU5OTcx
+NjM4NmQ3MDA0MSBpcyB0aGUgZmlyc3QgYmFkIGNvbW1pdA0KPj4gY29tbWl0IDU2YTYxNjE3ZGQy
+Mjc2Y2JjNTZhNmM4Njg1OTk3MTYzODZkNzAwNDENCj4+IEF1dGhvcjogWmhhb3lhbmcgSHVhbmcg
+PHpoYW95YW5nLmh1YW5nQHVuaXNvYy5jb20+DQo+PiBEYXRlOiAgIFRodSBPY3QgMjcgMTc6NTA6
+MjQgMjAyMiArMDgwMA0KPj4NCj4+ICAgICBtbTogdXNlIHN0YWNrX2RlcG90IGZvciByZWNvcmRp
+bmcga21lbWxlYWsncyBiYWNrdHJhY2UNCj4+DQo+PiAgICAgVXNpbmcgc3RhY2tfZGVwb3QgdG8g
+cmVjb3JkIGttZW1sZWFrJ3MgYmFja3RyYWNlIHdoaWNoIGhhcyBiZWVuDQo+PiAgICAgaW1wbGVt
+ZW50ZWQgb24gc2x1YiBmb3IgcmVkdWNpbmcgcmVkdW5kYW50IGluZm9ybWF0aW9uLg0KPj4NCj4+
+IFRoZSBjb21wbGV0ZSBiaXNlY3QgbG9nIGlzOg0KPj4NCj4+IG10b2Rvcm92QGRvbWFjOn4vbGlu
+dXgva2VybmVsL2xpbnV4X3RvcnZhbGRzJCBnaXQgYmlzZWN0IGxvZyBnaXQNCj4+IGJpc2VjdCBz
+dGFydCAnLS0nICdtbScNCj4+ICMgZ29vZDogWzgzMGIzYzY4YzFmYjFlOTE3NjAyOGQwMmVmODZm
+M2NmNzZhYTI0NzZdIExpbnV4IDYuMSBnaXQNCj4+IGJpc2VjdCBnb29kIDgzMGIzYzY4YzFmYjFl
+OTE3NjAyOGQwMmVmODZmM2NmNzZhYTI0NzYNCj4+ICMgYmFkOiBbMWI5MjljMDJhZmQzNzg3MWQ1
+YWZiOWQ0OTg0MjZmODM0MzJlNzFjMl0gTGludXggNi4yLXJjMSBnaXQNCj4+IGJpc2VjdCBiYWQg
+MWI5MjljMDJhZmQzNzg3MWQ1YWZiOWQ0OTg0MjZmODM0MzJlNzFjMg0KPj4gIyBnb29kOiBbOGI5
+ZWQ3OWMyZDU4N2JlYzVmNjAzZDY2ODAxNDc4YTVhZjlhZjg0Ml0gTWVyZ2UgdGFnDQo+PiAneDg2
+X2FzbV9mb3JfdjYuMicgb2YNCj4+IGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
+a2VybmVsL2dpdC90aXAvdGlwDQo+PiBnaXQgYmlzZWN0IGdvb2QgOGI5ZWQ3OWMyZDU4N2JlYzVm
+NjAzZDY2ODAxNDc4YTVhZjlhZjg0Mg0KPj4gIyBnb29kOiBbZTgzYjM5ZDZiYmRiNmQyNWJkNmY1
+YzI1ODgzMjc3NDYzNWQyOWI0N10gbW06IG1ha2UNCj4+IGRyb3BfY2FjaGVzIGtlZXAgcmVjbGFp
+bWluZyBvbiBhbGwgbm9kZXMgZ2l0IGJpc2VjdCBnb29kDQo+PiBlODNiMzlkNmJiZGI2ZDI1YmQ2
+ZjVjMjU4ODMyNzc0NjM1ZDI5YjQ3DQo+PiAjIGdvb2Q6IFs5OTk3YmMwMTc1NDlhY2Q2NDI1ZTMy
+MzAwZWZmMjg0MjRmZmVlYjZiXSB6c21hbGxvYzoNCj5pbXBsZW1lbnQNCj4+IHdyaXRlYmFjayBt
+ZWNoYW5pc20gZm9yIHpzbWFsbG9jIGdpdCBiaXNlY3QgZ29vZA0KPj4gOTk5N2JjMDE3NTQ5YWNk
+NjQyNWUzMjMwMGVmZjI4NDI0ZmZlZWI2Yg0KPj4gIyBnb29kOiBbNjI4N2I3ZGFlODA5NDRiZmEz
+Nzc4NGE4ZjlkNjg2MWE0ZmFjYWE2ZV0gbW0sdGhwLHJtYXA6IGZpeA0KPj4gcmFjZXMgYmV0d2Vl
+biB1cGRhdGVzIG9mIHN1YnBhZ2VzX21hcGNvdW50IGdpdCBiaXNlY3QgZ29vZA0KPj4gNjI4N2I3
+ZGFlODA5NDRiZmEzNzc4NGE4ZjlkNjg2MWE0ZmFjYWE2ZQ0KPj4gIyBnb29kOiBbOGZhNTkwYmYz
+NDQ4MTZjOTI1ODEwMzMxZWVhODM4NzYyN2JiZWI0MF0gTWVyZ2UgdGFnDQo+PiAnZm9yLWxpbnVz
+JyBvZiBnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL3ZpcnQva3ZtL2t2bQ0KPj4gZ2l0IGJp
+c2VjdCBnb29kIDhmYTU5MGJmMzQ0ODE2YzkyNTgxMDMzMWVlYTgzODc2MjdiYmViNDANCj4+ICMg
+Z29vZDogWzRmMjkyYzRkZTRmNmZiODM3NzZjMGZmMjI2NzQxMjFlYjZkZGZhMmZdIE1lcmdlIHRh
+Zw0KPj4gJ3g4Nl9tbV9mb3JfNi4yX3YyJyBvZg0KPj4gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHVi
+L3NjbS9saW51eC9rZXJuZWwvZ2l0L3RpcC90aXANCj4+IGdpdCBiaXNlY3QgZ29vZCA0ZjI5MmM0
+ZGU0ZjZmYjgzNzc2YzBmZjIyNjc0MTIxZWI2ZGRmYTJmDQo+PiAjIGJhZDogWzFlYTlkMzMzYmE0
+NzUwNDFlZmU0M2Q5ZDliYzMyZTY0YWVhMmVhMmJdIE1lcmdlIHRhZw0KPj4gJ21tLXN0YWJsZS0y
+MDIyLTEyLTE3LTInIG9mDQo+PiBnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tl
+cm5lbC9naXQvYWtwbS9tbQ0KPj4gZ2l0IGJpc2VjdCBiYWQgMWVhOWQzMzNiYTQ3NTA0MWVmZTQz
+ZDlkOWJjMzJlNjRhZWEyZWEyYg0KPj4gIyBiYWQ6IFs1NmE2MTYxN2RkMjI3NmNiYzU2YTZjODY4
+NTk5NzE2Mzg2ZDcwMDQxXSBtbTogdXNlDQo+c3RhY2tfZGVwb3QNCj4+IGZvciByZWNvcmRpbmcg
+a21lbWxlYWsncyBiYWNrdHJhY2UgZ2l0IGJpc2VjdCBiYWQNCj4+IDU2YTYxNjE3ZGQyMjc2Y2Jj
+NTZhNmM4Njg1OTk3MTYzODZkNzAwNDENCj4+ICMgZ29vZDogWzYxYjk2M2I1MmY1OTUyNGUyNzY5
+MmJjMWMxNGJmYjI0NTllMzJlYjNdIG1tL2d1cF90ZXN0Og0KPmZyZWUNCj4+IG1lbW9yeSBhbGxv
+Y2F0ZWQgdmlhIGt2Y2FsbG9jKCkgdXNpbmcga3ZmcmVlKCkgZ2l0IGJpc2VjdCBnb29kDQo+PiA2
+MWI5NjNiNTJmNTk1MjRlMjc2OTJiYzFjMTRiZmIyNDU5ZTMyZWIzDQo+PiAjIGZpcnN0IGJhZCBj
+b21taXQ6IFs1NmE2MTYxN2RkMjI3NmNiYzU2YTZjODY4NTk5NzE2Mzg2ZDcwMDQxXSBtbToNCj51
+c2UNCj4+IHN0YWNrX2RlcG90IGZvciByZWNvcmRpbmcga21lbWxlYWsncyBiYWNrdHJhY2UgIyBn
+b29kOg0KPj4gWzkxMDJiNzhiNmY2YWU2YWYzNTU3MTE0YzI2NWMyNjZiMzEyYzEzMTldIG1hcGxl
+X3RyZWU6IHVwZGF0ZQ0KPj4gY29weXJpZ2h0IGRhdGVzIGZvciB0ZXN0IGNvZGUgZ2l0IGJpc2Vj
+dCBnb29kDQo+PiA5MTAyYjc4YjZmNmFlNmFmMzU1NzExNGMyNjVjMjY2YjMxMmMxMzE5DQo+PiAj
+IGZpcnN0IGJhZCBjb21taXQ6IFs1NmE2MTYxN2RkMjI3NmNiYzU2YTZjODY4NTk5NzE2Mzg2ZDcw
+MDQxXSBtbToNCj51c2UNCj4+IHN0YWNrX2RlcG90IGZvciByZWNvcmRpbmcga21lbWxlYWsncyBi
+YWNrdHJhY2UgWW91IGhhdmUgbWFpbCBpbg0KPj4gL3Zhci9tYWlsL210b2Rvcm92IG10b2Rvcm92
+QGRvbWFjOn4vbGludXgva2VybmVsL2xpbnV4X3RvcnZhbGRzJA0KPj4NCj4+IFRoZSBwbGF0Zm9y
+bSBpcyAxMFRYMDAwVkNSDQo+KExFTk9WT19NVF8xMFRYX0JVX0xlbm92b19GTV9WNTMwUy0wN0lD
+QikNCj4+IHJ1bm5pbmcgQWxtYUxpbnV4IDguNyAoQ2VudE9TIGNsb25lKSBhbmQgQklPUyBNMjJL
+VDQ5QS4NCj4+DQo+PiBHQ0MgdXNlZCB3YXM6DQo+Pg0KPj4gbXRvZG9yb3ZAZG9tYWM6fi9saW51
+eC9rZXJuZWwvbGludXhfdG9ydmFsZHMkIGdjYyAtLXZlcnNpb24gZ2NjDQo+PiAoRGViaWFuIDgu
+My4wLTYpIDguMy4wIENvcHlyaWdodCAoQykgMjAxOCBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24s
+DQo+PiBJbmMuDQo+PiBUaGlzIGlzIGZyZWUgc29mdHdhcmU7IHNlZSB0aGUgc291cmNlIGZvciBj
+b3B5aW5nIGNvbmRpdGlvbnMuICBUaGVyZQ0KPj4gaXMgTk8gd2FycmFudHk7IG5vdCBldmVuIGZv
+ciBNRVJDSEFOVEFCSUxJVFkgb3IgRklUTkVTUyBGT1IgQQ0KPlBBUlRJQ1VMQVIgUFVSUE9TRS4N
+Cj4+IG10b2Rvcm92QGRvbWFjOn4vbGludXgva2VybmVsL2xpbnV4X3RvcnZhbGRzJA0KPj4NCj4+
+IEhvcGUgdGhpcyBoZWxwcy4NCj4+DQo+PiBJIGxhY2sgdGhlIGluc2lnaHQgdG8gcGlucG9pbnQg
+dGhlIGV4YWN0IGZhdWx0IGluIHRoZSBwYXRjaC4NCj4NCj5QLlMuDQo+DQo+VG8gZnVydGhlciBj
+b21wbGljYXRlIHRoaW5ncywgb24gVWJ1bnR1IDIyLjEwIExlbm92byBJZGVhcGFkIDMgMTVJVEw2
+IGxhcHRvcA0KPnRoZSBrbWVtbGVhayBzdGFjayBiYWNrdHJhY2UgaXMgcHJpbnRlZCBjb3JyZWN0
+bHkgd2l0aCB0aGUgc2FtZSBrZXJuZWxzDQo+KGJ1dCAuZGViIGluc3RlYWQgb2YgLnJwbSBmb3Ig
+dGhlIHNhbWUgYnVpbGQpOg0KPg0KPnVucmVmZXJlbmNlZCBvYmplY3QgMHhmZmZmOTRjYTg4ZTA0
+MmQwIChzaXplIDgwKToNCj4gIGNvbW0gInRoZXJtYWxkIiwgcGlkIDc2OCwgamlmZmllcyA0Mjk0
+ODkzNTkyIChhZ2UgNzg1ODEuNTA0cykNCj4gIGhleCBkdW1wIChmaXJzdCAzMiBieXRlcyk6DQo+
+ICAgIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDBkIDAxIDJkIDAwIDAwIDAwIDAwIDAwICAuLi4u
+Li4uLi4uLS4uLi4uDQo+ICAgIGFmIDA3IDAxIDgwIGZkIGFjIGZmIGZmIDAwIDAwIDAwIDAwIDAw
+IDAwIDAwIDAwICAuLi4uLi4uLi4uLi4uLi4uDQo+ICBiYWNrdHJhY2U6DQo+ICAgIFs8ZmZmZmZm
+ZmZhMGRjYjkyMT5dIHNsYWJfcG9zdF9hbGxvY19ob29rKzB4OTEvMHgzMjANCj4gICAgWzxmZmZm
+ZmZmZmEwZGNmYjc5Pl0ga21lbV9jYWNoZV9hbGxvYysweDE2OS8weDJmMA0KPiAgICBbPGZmZmZm
+ZmZmYTEyYjFkZWY+XSBhY3BpX29zX2FjcXVpcmVfb2JqZWN0KzB4MmMvMHgzMg0KPiAgICBbPGZm
+ZmZmZmZmYTEyYjFlYTI+XSBhY3BpX3BzX2FsbG9jX29wKzB4NGEvMHg5OQ0KPiAgICBbPGZmZmZm
+ZmZmYTEyYWY1Yzg+XSBhY3BpX3BzX2dldF9uZXh0X2FyZysweDYxMS8weDc2MQ0KPiAgICBbPGZm
+ZmZmZmZmYTEyYWZiYmM+XSBhY3BpX3BzX3BhcnNlX2xvb3ArMHg0OTQvMHg4ZDcNCj4gICAgWzxm
+ZmZmZmZmZmExMmIxNDM0Pl0gYWNwaV9wc19wYXJzZV9hbWwrMHgxYmIvMHg1NjENCj4gICAgWzxm
+ZmZmZmZmZmExMmIyNGM4Pl0gYWNwaV9wc19leGVjdXRlX21ldGhvZCsweDIwZi8weDJkNQ0KPiAg
+ICBbPGZmZmZmZmZmYTEyYTdhY2Y+XSBhY3BpX25zX2V2YWx1YXRlKzB4MzRkLzB4NGYzDQo+ICAg
+IFs8ZmZmZmZmZmZhMTJhZDZhMz5dIGFjcGlfZXZhbHVhdGVfb2JqZWN0KzB4MTgwLzB4M2FlDQo+
+ICAgIFs8ZmZmZmZmZmZhMTI2OWNhOD5dIGFjcGlfcnVuX29zYysweDEyOC8weDI1MA0KPiAgICBb
+PGZmZmZmZmZmYzBiYmIxNGY+XSBpbnQzNDAwX3RoZXJtYWxfcnVuX29zYysweDZmLzB4YzANCj5b
+aW50MzQwMF90aGVybWFsXQ0KPiAgICBbPGZmZmZmZmZmYzBiYmIyOTM+XSBjdXJyZW50X3V1aWRf
+c3RvcmUrMHhlMy8weDEyMCBbaW50MzQwMF90aGVybWFsXQ0KPiAgICBbPGZmZmZmZmZmYTEzYjhl
+ZDQ+XSBkZXZfYXR0cl9zdG9yZSsweDE0LzB4MzANCj4gICAgWzxmZmZmZmZmZmEwZWUwNDU4Pl0g
+c3lzZnNfa2Zfd3JpdGUrMHgzOC8weDUwDQo+ICAgIFs8ZmZmZmZmZmZhMGVkZjUxNj5dIGtlcm5m
+c19mb3Bfd3JpdGVfaXRlcisweDE0Ni8weDFkMCBZb3UgaGF2ZSBuZXcNCj5tYWlsIGluIC92YXIv
+bWFpbC9yb290IHJvb3RAbWFydmluLUlkZWFQYWQtMy0xNUlUTDY6L2hvbWUvbWFydmluIw0KPg0K
+PlJlZ2FyZHMsDQo+TWlyc2FkDQoNCnRoYW5rcyBmb3IgaGVhZCB1cC4gQ291bGQgeW91IHBsZWFz
+ZSBoZWxwIHRvIGNoZWNrIElmIENPTkZJR19TVEFDS1RSQUNFIGFuZCBDT05GSUdfU1RBQ0tERVBP
+VCBpcyBlbmFibGVkIG9uIHRoZSBmYXVsdCBrZXJuZWw/DQo+DQo+LS0NCj5NaXJzYWQgR29yYW4g
+VG9kb3JvdmFjDQo+U2lzdGVtIGluxb5lbmplcg0KPkdyYWZpxI1raSBmYWt1bHRldCB8IEFrYWRl
+bWlqYSBsaWtvdm5paCB1bWpldG5vc3RpIFN2ZXXEjWlsacWhdGUgdSBaYWdyZWJ1DQo+DQo+U3lz
+dGVtIGVuZ2luZWVyDQo+RmFjdWx0eSBvZiBHcmFwaGljIEFydHMgfCBBY2FkZW15IG9mIEZpbmUg
+QXJ0cyBVbml2ZXJzaXR5IG9mIFphZ3JlYiwgUmVwdWJsaWMgb2YNCj5Dcm9hdGlhIFRoZSBFdXJv
+cGVhbiBVbmlvbg0KDQo=
