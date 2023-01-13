@@ -2,118 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EB1669258
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A732E66928A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjAMJKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S240805AbjAMJMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbjAMJJ2 (ORCPT
+        with ESMTP id S240987AbjAMJMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:09:28 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74141CB2E;
-        Fri, 13 Jan 2023 01:07:03 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id a25so11443883qto.10;
-        Fri, 13 Jan 2023 01:07:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RyDICis6TMtpYbxnbEUxD/J66AveFuMFSuvndGIvxTA=;
-        b=eaM1Y2rEA5oMh8Yq7/LQ+pEhBboeNIJdCjzbjdUNKQCMRtJgIY46wnj0Huqz52gUfk
-         rMntPBbgMV44HviMcgF8kClLAuLEp0z2xpIkqnYMjx93quW44M7VnkmDN7ZqB/U1RRC1
-         3kiZFWmdYWmaQmhl5q9niCsqYE9NmockIs1mEP5kgrTigAiBIbCIbvR5SsB2oA64fs41
-         1bno/9gB15kYFbbzBRe19/kxFghOmNfpZYy0+1phSCDS6c9zN6bU7rlVbemXwbwbGsBH
-         uF2WI73iSr+yCqkLSmFREGm1upEY/JBn1ibvr8uoO1S0O9NcXu09WN0W59xMh7VtxaJu
-         o+fA==
-X-Gm-Message-State: AFqh2kr5vmPSWOM6sjkS233KpMzP2GjxNY3N1r/ITEyt6GRDs69H49uU
-        QY7o7E1JRF2Njw/XuXIj5ju65qWNYSeLwQ==
-X-Google-Smtp-Source: AMrXdXsOjaPqSvnVCeToCh6Nbex/Y412O0T6mH60se0C7EC+zNd83nU9Wz0VaxD5GNjW8+44U/eM1Q==
-X-Received: by 2002:ac8:7205:0:b0:3ad:841d:e65b with SMTP id a5-20020ac87205000000b003ad841de65bmr25096777qtp.7.1673600796323;
-        Fri, 13 Jan 2023 01:06:36 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id u8-20020a05620a454800b006fc7302cf89sm12473249qkp.28.2023.01.13.01.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 01:06:35 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-4c24993965eso269397537b3.12;
-        Fri, 13 Jan 2023 01:06:35 -0800 (PST)
-X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
- bg19-20020a05690c031300b0037e6806a5f9mr3504559ywb.47.1673600795403; Fri, 13
- Jan 2023 01:06:35 -0800 (PST)
+        Fri, 13 Jan 2023 04:12:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F8B633E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:09:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673600985;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=X4OMapMn4DPgQ6a+VqmEJlLUwkXj3/OngbIshLVda8U=;
+        b=TtUVPtWnnN87PUcIZ0SOYL4gWxqHv2dHdAuokZm34KTtXQ7uKhmj/ZkFb5dGJNVa5yFY4s
+        rCbSxw3Bjri1pDy/tLU+BKecQfIUXNpdZxskAzUgutVh8RfP1d1N5eaiNXlACoDoHU4s+n
+        wFA49rG7zyAAV83r/agZVtny4jyJ/W4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-hrpH9WwZOmmcyoABtpkYUQ-1; Fri, 13 Jan 2023 04:09:40 -0500
+X-MC-Unique: hrpH9WwZOmmcyoABtpkYUQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA3C6858F0E;
+        Fri, 13 Jan 2023 09:09:39 +0000 (UTC)
+Received: from plouf.redhat.com (ovpn-193-50.brq.redhat.com [10.40.193.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 529D11121314;
+        Fri, 13 Jan 2023 09:09:37 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH HID for-next v2 0/9] HID-BPF LLVM fixes, no more hacks
+Date:   Fri, 13 Jan 2023 10:09:26 +0100
+Message-Id: <20230113090935.1763477-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-References: <20230113084516.31888-1-lukas.bulwahn@gmail.com> <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdX_TPgXO2KYNdD5rRzuE9m6_JxfW-otWzw7r7Wptq_rOQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 10:06:24 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV8r58Daj0sjFgumx+RwzPM04h71XXeA37ZQSM=D99eYg@mail.gmail.com>
-Message-ID: <CAMuHMdV8r58Daj0sjFgumx+RwzPM04h71XXeA37ZQSM=D99eYg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: rcar: avoid defines prefixed with CONFIG
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:05 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Fri, Jan 13, 2023 at 9:52 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> > Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
-> > that are introduced in a Kconfig file.
-> >
-> > Here, a definition for a bitmask to configure the SEND_ENABLE mode is named
-> > CONFIG_SEND_ENABLE.
-> >
-> > Rename this local definition to CONFIGURE_SEND_ENABLE to avoid defines
-> > prefixed with "CONFIG".
-> >
-> > No functional change.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
->
-> Thanks for your patch!
->
-> > --- a/drivers/pci/controller/pcie-rcar.h
-> > +++ b/drivers/pci/controller/pcie-rcar.h
-> > @@ -11,7 +11,7 @@
-> >
-> >  #define PCIECAR                        0x000010
-> >  #define PCIECCTLR              0x000018
-> > -#define  CONFIG_SEND_ENABLE    BIT(31)
-> > +#define  CONFIGURE_SEND_ENABLE BIT(31)
->
-> The R-Car Gen3 rev. 2.30 Hardware User's Manual calls the bit "CCIE".
->
-> Hence if I would have written the driver, I would have used
->
->     #define PCIECCTLR_CCIE     BIT(31)   /* Configuration Send Enable */
+Hi,
 
-Regardless:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+So this is the fix for the bug that actually prevented me to integrate
+HID-BPF in v6.2.
 
-Gr{oetje,eeting}s,
+While testing the code base with LLVM, I realized that clang was smarter
+than I expected it to be, and it sometimes inlined a function or not
+depending on the branch. This lead to segfaults because my current code
+in linux-next is messing up the bpf programs refcounts assuming that I
+had enough observability over the kernel.
 
-                        Geert
+So I came back to the drawing board and realized that what I was missing
+was exactly a bpf_link, to represent the attachment of a bpf program to
+a HID device. This is the bulk of the series, in patch 6/9.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+The other patches are cleanups, tests, and also the addition of the
+vmtests.sh script I run locally, largely inspired by the one in the bpf
+selftests dir. This allows very fast development of HID-BPF, assuming we
+have tests that cover the bugs :)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+changes in v2:
+- took Alexei's remarks into account and renamed the indexes into
+  prog_table_index and hid_table_index
+- fixed unused function as reported by the Intel kbuild bot
+
+
+Cheers,
+Benjamin
+
+
+Benjamin Tissoires (9):
+  selftests: hid: add vmtest.sh
+  selftests: hid: allow to compile hid_bpf with LLVM
+  selftests: hid: attach/detach 2 bpf programs, not just one
+  selftests: hid: ensure the program is correctly pinned
+  selftests: hid: prepare tests for HID_BPF API change
+  HID: bpf: rework how programs are attached and stored in the kernel
+  selftests: hid: enforce new attach API
+  HID: bpf: clean up entrypoint
+  HID: bpf: reorder BPF registration
+
+ Documentation/hid/hid-bpf.rst                 |  12 +-
+ drivers/hid/bpf/entrypoints/entrypoints.bpf.c |   9 -
+ .../hid/bpf/entrypoints/entrypoints.lskel.h   | 188 ++++--------
+ drivers/hid/bpf/hid_bpf_dispatch.c            |  28 +-
+ drivers/hid/bpf/hid_bpf_dispatch.h            |   3 -
+ drivers/hid/bpf/hid_bpf_jmp_table.c           | 129 ++++----
+ include/linux/hid_bpf.h                       |   7 +
+ tools/testing/selftests/hid/.gitignore        |   1 +
+ tools/testing/selftests/hid/Makefile          |  10 +-
+ tools/testing/selftests/hid/config.common     | 241 +++++++++++++++
+ tools/testing/selftests/hid/config.x86_64     |   4 +
+ tools/testing/selftests/hid/hid_bpf.c         |  32 +-
+ tools/testing/selftests/hid/progs/hid.c       |  13 +
+ tools/testing/selftests/hid/vmtest.sh         | 284 ++++++++++++++++++
+ 14 files changed, 728 insertions(+), 233 deletions(-)
+ create mode 100644 tools/testing/selftests/hid/config.common
+ create mode 100644 tools/testing/selftests/hid/config.x86_64
+ create mode 100755 tools/testing/selftests/hid/vmtest.sh
+
+-- 
+2.38.1
+
