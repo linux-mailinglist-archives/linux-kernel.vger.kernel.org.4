@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F18669BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC9B669BE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjAMPYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S230029AbjAMPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjAMPXM (ORCPT
+        with ESMTP id S230003AbjAMPYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:23:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CD781411;
-        Fri, 13 Jan 2023 07:15:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E60A5620D1;
-        Fri, 13 Jan 2023 15:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13542C433D2;
-        Fri, 13 Jan 2023 15:15:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673622943;
-        bh=/i225Z+ElpatprCFkJPY3vtqP6zLi6PlpzzoTbD8vGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A2CAlnM+iUK9asyhy0Gf5t68f1LGrghaMnoz/OAA1VMTrsqAdjN5VRrJzesZfUWGh
-         SxGRfEQsiJOrcIPn2iOu+lzaLy9UacyWY17hoPyABR//K9oSiFo7doYMOB5hRA60HY
-         YjajUD72zljgv1/R+NqcAgWFdOEGl57GpVsPW3imHpicGHJgJj0w/QeTtlj8amzW9D
-         aaD79kcbjBogov+62Ya9jxEA4xr7VOix4+XhJzzRyN3bGSWBRaRy43kJUkEv9aTJq0
-         3gTTPgy+LJ59O2CbQlp8fxujyQz6S5Z10Bn56S/xnkGEEKvnKtvfGLVeY3ZC1+9EUL
-         Tcyizu/CByvsQ==
-Date:   Fri, 13 Jan 2023 16:15:34 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, mani@kernel.org,
-        Sergey.Semin@baikalelectronics.ru, ffclaire1224@gmail.com,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V3 04/21] PCI: tegra194: Handle errors in BPMP response
-Message-ID: <Y8F1ljVyVST+aSu4@lpieralisi>
-References: <20221013183854.21087-1-vidyas@nvidia.com>
- <20221013183854.21087-5-vidyas@nvidia.com>
+        Fri, 13 Jan 2023 10:24:23 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9317CA7028
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:16:16 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d3so23705759plr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:16:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ov0kEaQNguNvqY5BkFVlQt5XzWOzffj5cGq6JbJigsY=;
+        b=EkQbiCciY7CEom4dx4NCNEUrD4IZHnF+SodCk3McvKZYAE9h+jcKa0fHA8u9P6DIM6
+         XQb2NpbYUs0RPLteQBO+HTjLyeUcWUCCsAAiUeCVKmUmBi6IXcPUBXrD8CZzW+MLev63
+         vrgueCTaLoLFAm1c/Z6aU9pANWPchjLC+sa+/yRaROfFLZ9GK4UCBMj+iXooj/lXhcSY
+         lOlZgoxlBVPH3OExJJ5j9KUoTtDnbn0vA8+TKELgS5ezfSpagwq0qKoafNiecAArV97E
+         +Akzf1uMbo6o63ksGCLoMMlcEWgovvvjJBeskRUrcxZxaLWttsNuH0A0UO7nQsxbrjGb
+         F/OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ov0kEaQNguNvqY5BkFVlQt5XzWOzffj5cGq6JbJigsY=;
+        b=vVKKWLKdXlPN6adylFvGKt6zo16M2jiUh4dB1r85zu+/GDpuMhDoQzvuGbACDkcjW9
+         NnqA1lAR3dtdyMWgR1FqlAMcFvWDfEukEu4VjpNzSIFNh9YCw8P5o8Ez/nzizQwPb+4U
+         80tm+Soz/L7tVH0zlTcZluzHraX2VW9krxONPZ3/TgxhLFXiVGRAOGX4xjsVTbtOcYZ/
+         T+49aRhSaW3x1WQpVOnxoXX4J7jGcnFEQfq6NUc3bKRv9WSi8QHISPPrdNl+vSeyRaGe
+         uXjw0SauCG4tT+WQ72N/NAwTpYUkPIkn3jy3HiPdcErmpfL9zHmM4KdJ+TB5OSn5FlGF
+         Ndbg==
+X-Gm-Message-State: AFqh2krpRu57MBdaYg7CF/V29LiJDALTcaARwGfI6cY9Rkq9qeqzEyF5
+        9UgX6P2H7672HF0BbFU/yDS+PQ==
+X-Google-Smtp-Source: AMrXdXsBFPCbqRyGPf0+Mba/4CiLcRkqUldtijkhu4uthoaKZXRE9c6KenZasCYhDsC8a+DERPCCzQ==
+X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr1519514plg.1.1673622972593;
+        Fri, 13 Jan 2023 07:16:12 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170903234a00b00188f6cbd950sm14265615plh.226.2023.01.13.07.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:16:11 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:16:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8F1uPsW56fVdhmC@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
+ <20230113151258.00006a6d@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013183854.21087-5-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113151258.00006a6d@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 12:08:37AM +0530, Vidya Sagar wrote:
-> The return value from tegra_bpmp_transfer indicates the success or
-> failure of the IPC transaction with BPMP. If the transaction
-> succeeded, we also need to check the actual command's result code.
-> Add code to do this.
-> 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
-> V3:
-> * None
-> 
-> V2:
-> * None
-> 
->  drivers/pci/controller/dwc/pcie-tegra194.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-> index 685aee378c93..ae7e0d8f693b 100644
-> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
-> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-> @@ -1260,6 +1260,7 @@ static int tegra_pcie_bpmp_set_ctrl_state(struct tegra_pcie_dw *pcie,
->  	struct mrq_uphy_response resp;
->  	struct tegra_bpmp_message msg;
->  	struct mrq_uphy_request req;
-> +	int err;
->  
->  	/*
->  	 * Controller-5 doesn't need to have its state set by BPMP-FW in
-> @@ -1282,7 +1283,13 @@ static int tegra_pcie_bpmp_set_ctrl_state(struct tegra_pcie_dw *pcie,
->  	msg.rx.data = &resp;
->  	msg.rx.size = sizeof(resp);
->  
-> -	return tegra_bpmp_transfer(pcie->bpmp, &msg);
-> +	err = tegra_bpmp_transfer(pcie->bpmp, &msg);
-> +	if (err)
-> +		return err;
-> +	if (msg.rx.ret)
-> +		return -EINVAL;
-> +
-> +	return 0;
->  }
->  
->  static int tegra_pcie_bpmp_set_pll_state(struct tegra_pcie_dw *pcie,
-> @@ -1291,6 +1298,7 @@ static int tegra_pcie_bpmp_set_pll_state(struct tegra_pcie_dw *pcie,
->  	struct mrq_uphy_response resp;
->  	struct tegra_bpmp_message msg;
->  	struct mrq_uphy_request req;
-> +	int err;
->  
->  	memset(&req, 0, sizeof(req));
->  	memset(&resp, 0, sizeof(resp));
-> @@ -1310,7 +1318,13 @@ static int tegra_pcie_bpmp_set_pll_state(struct tegra_pcie_dw *pcie,
->  	msg.rx.data = &resp;
->  	msg.rx.size = sizeof(resp);
->  
-> -	return tegra_bpmp_transfer(pcie->bpmp, &msg);
-> +	err = tegra_bpmp_transfer(pcie->bpmp, &msg);
-> +	if (err)
-> +		return err;
-> +	if (msg.rx.ret)
-> +		return -EINVAL;
+On Fri, Jan 13, 2023, Zhi Wang wrote:
+> On Thu, 12 Jan 2023 08:31:26 -0800 isaku.yamahata@intel.com wrote:
+> > +static void tdx_reclaim_td_page(unsigned long td_page_pa)
+> > +{
+> > +	if (!td_page_pa)
+> > +		return;
+> > +	/*
+> > +	 * TDCX are being reclaimed.  TDX module maps TDCX with HKID
+> > +	 * assigned to the TD.  Here the cache associated to the TD
+> > +	 * was already flushed by TDH.PHYMEM.CACHE.WB before here, So
+> > +	 * cache doesn't need to be flushed again.
+> > +	 */
+> > +	if (WARN_ON(tdx_reclaim_page(td_page_pa, false, 0)))
 
-I wonder whether you can embed the return value check within
-the function itself.
+The WARN_ON() can go, tdx_reclaim_page() has WARN_ON_ONCE() + pr_tdx_error() in
+all error paths.
 
-Lorenzo
+> > +		/* If reclaim failed, leak the page. */
+> 
+> Better add a FIXME: here as this has to be fixed later.
 
-> +
-> +	return 0;
->  }
->  
->  static void tegra_pcie_downstream_dev_to_D0(struct tegra_pcie_dw *pcie)
-> -- 
-> 2.17.1
-> 
-> 
-> -- 
-> linux-phy mailing list
-> linux-phy@lists.infradead.org
-> https://lists.infradead.org/mailman/listinfo/linux-phy
+No, leaking the page is all KVM can reasonably do here.  An improved comment would
+be helpful, but no code change is required.  tdx_reclaim_page() returns an error
+if and only if there's an unexpected, fatal error, e.g. a SEAMCALL with bad params,
+incorrect concurrency in KVM, a TDX Module bug, etc.  Retrying at a later point is
+highly unlikely to be successful.
