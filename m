@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BE4669A4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C85669A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjAMOdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S229829AbjAMOdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjAMOcC (ORCPT
+        with ESMTP id S229684AbjAMOcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 09:32:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEECC2675;
-        Fri, 13 Jan 2023 06:25:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00EEA61EEC;
-        Fri, 13 Jan 2023 14:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DA2C433D2;
-        Fri, 13 Jan 2023 14:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673619926;
-        bh=1pZBYp1XzZda5BFRWCG19b48xYjRl0QwW3PCvy5dCgE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OjLb9b1eE9wS0eoLqvu7ZMjLTvH1hAGXXwECuE/dLadjS/HIcs6XAJXUUN6DkgqDY
-         tJZALLc/MrgYJhJoCeHG5/TvOIBfHvjc6zMklxhdFUSd8PI/a58zB8XXsKks6Wy5i1
-         oQOWg0nPQjKBV7h78ug4XotrRfF1PprOJ5WYr2aMdUYgbsyw0Joplmolf3pyZ1YoTp
-         VX+4u8o8wts9idIbu4VlIPdX+cXcORn5EYVct7tYXgoTdPGv+joCPaioCbKaUKTlzS
-         iO5zSh32asg931jtKi0LDZo9rzjDrD/mWD/OLAwFg8EPpZHaqe/zZ6Aw551WIwy+in
-         ztYb0kuOw9M2Q==
-Message-ID: <64bf2456-e1cb-3b4a-af19-454cf0bb86aa@kernel.org>
-Date:   Fri, 13 Jan 2023 16:25:20 +0200
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296802DDD
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lZ2zHRVtRuDz4SYlt/Zs3M9lTXrjN27bEpPx9owSDqs=; b=QDUKC0CyMRKg9WggcYRD51Tffm
+        mdO9IqNwyevHpGZg/MSewgV9rxX8fn6Asior+lKkiYfn9zr5lhEbvMIDMfrgw5l1chjE1DOWqcJuV
+        oV931nGyxJXJj9q4JWZM3l5aUQ9UjBbV20fOXbC/yNKLH7FaqEZbbCz5hqr6ti+3PYMxSAqJQFREQ
+        p5AcdJ5X37762m4rx/Ldbr+oc0Dl/Kde4a3vwlLI6a/qnIwQAPSr3wdMMjkZ6GUscsfnZorpy2tgJ
+        QiYQlmVS182iBZMqnt8F7IbJjMzWlV8GnulbMzDrgumBzLZfT1MHxm4aeDIFrn/E66W5PcZ/vx1Ft
+        ywnSsQmA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pGKzx-006AIQ-8y; Fri, 13 Jan 2023 14:25:37 +0000
+Date:   Fri, 13 Jan 2023 14:25:37 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 1/7] mm: huge_memory: make
+ __do_huge_pmd_anonymous_page() to take a folio
+Message-ID: <Y8Fp4UBvO/i8/PYf@casper.infradead.org>
+References: <20230112083006.163393-1-wangkefeng.wang@huawei.com>
+ <20230112083006.163393-2-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
- release action
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux@armlinux.org.uk,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
-References: <20230113104816.132815-1-s-vadapalli@ti.com>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230113104816.132815-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112083006.163393-2-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 04:30:00PM +0800, Kefeng Wang wrote:
+> Let's __do_huge_pmd_anonymous_page() take a folio and convert related
+> functions to use folios.
 
+No, this is actively wrong!  Andrew, please drop this patch.
 
-On 13/01/2023 12:48, Siddharth Vadapalli wrote:
-> The am65_cpts_release() function is registered as a devm_action in the
-> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
-> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
-> actions associated with the am65-cpsw driver's device.
-> 
-> In the event of probe failure or probe deferral, the platform_drv_probe()
-> function invokes dev_pm_domain_detach() which powers off the CPSW and the
-> CPSW's CPTS hardware, both of which share the same power domain. Since the
-> am65_cpts_disable() function invoked by the am65_cpts_release() function
-> attempts to reset the CPTS hardware by writing to its registers, the CPTS
-> hardware is assumed to be powered on at this point. However, the hardware
-> is powered off before the devm actions are executed.
-> 
-> Fix this by getting rid of the devm action for am65_cpts_release() and
-> invoking it directly on the cleanup and exit paths.
-> 
-> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+If we want to support folio sizes larger than PMD size (and I think we
+do), we need to be able to specify precisely which page in the folio
+is to be stored at this PTE.  The *interface* must remain struct page.
+We can convert from page to folio within the function, but we *MUST NOT*
+go the other way.
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>  static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
+> -			struct page *page, gfp_t gfp)
+> +			struct folio *folio, gfp_t gfp)
+>  {
+>  	struct vm_area_struct *vma = vmf->vma;
+> +	struct page *page = &folio->page;
 
-cheers,
--roger
+... ie this is bad and wrong.
+
+> @@ -834,7 +835,7 @@ vm_fault_t do_huge_pmd_anonymous_page(struct vm_fault *vmf)
+>  		count_vm_event(THP_FAULT_FALLBACK);
+>  		return VM_FAULT_FALLBACK;
+>  	}
+> -	return __do_huge_pmd_anonymous_page(vmf, &folio->page, gfp);
+> +	return __do_huge_pmd_anonymous_page(vmf, folio, gfp);
+>  }
+>  
+>  static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
+
+A reasonable person might ask "But Matthew, you allocated a folio here,
+then you're converting back to a struct page to call
+__do_huge_pmd_anonymous_page() so isn't this a sensible patch?"
+
+And I would say "still no".  This is a question of interfaces, and
+even though __do_huge_pmd_anonymous_page() is static and has precisely
+one caller today that always allocates a folio of precisely PMD size,
+I suspect it will need to be more visible in the future and the
+conversion of the interface from page to folio misleads people.
