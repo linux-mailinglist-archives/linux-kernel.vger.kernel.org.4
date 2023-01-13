@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658266692E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A61F6692E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjAMJ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S230469AbjAMJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240986AbjAMJ1V (ORCPT
+        with ESMTP id S241028AbjAMJ1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:27:21 -0500
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A389B4318C;
-        Fri, 13 Jan 2023 01:22:44 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRTd_1673601755;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRTd_1673601755)
+        Fri, 13 Jan 2023 04:27:22 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8B4319C;
+        Fri, 13 Jan 2023 01:22:45 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRU7_1673601756;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRU7_1673601756)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 17:22:36 +0800
+          Fri, 13 Jan 2023 17:22:37 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Ian Rogers <irogers@google.com>
@@ -40,9 +40,9 @@ Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
         Shuai Xue <xueshuai@linux.alibaba.com>,
         Zhuo Song <zhuo.song@linux.alibaba.com>,
         Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v7 3/9] perf vendor events arm64: Add common topdown L1 metrics
-Date:   Fri, 13 Jan 2023 17:22:14 +0800
-Message-Id: <1673601740-122788-4-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH v7 4/9] perf vendor events arm64: Add topdown L1 metrics for neoverse-n2-v2
+Date:   Fri, 13 Jan 2023 17:22:15 +0800
+Message-Id: <1673601740-122788-5-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
 References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
@@ -55,52 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The metrics of topdown L1 are from ARM sbsa7.0 platform design doc[0],
-D37-38, which are standard. So put them in the common file sbsa.json of
-arm64, so that other cores besides n2/v2 can also be reused.
+Add general topdown L1 metrics for neoverse-n2-v2. Due to the wrong
+count of stall_slot and stall_slot_frontend on neoverse-n2, the real
+stall_slot and real stall_slot_frontend need to subtract cpu_cycles,
+so overwrite the "MetricExpr" for neoverse-n2 which slots are 5.
+Reference from ARM neoverse-n2 errata notice [0], D117.
 
-[0] https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+Since neoverse-n2/neoverse-v2 does not yet support topdown L2, metric
+groups such as Cache, TLB, Branch, InstructionsMix and PEutilization
+will be added to further analysis of performance bottlenecks in the
+following patches. Reference from ARM PMU guide [1][2].
+
+[0] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
+[1] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
+[2] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
 
 Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 ---
- tools/perf/pmu-events/arch/arm64/sbsa.json | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/sbsa.json
+ .../arch/arm64/arm/neoverse-n2-v2/metrics.json          | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
 
-diff --git a/tools/perf/pmu-events/arch/arm64/sbsa.json b/tools/perf/pmu-events/arch/arm64/sbsa.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
 new file mode 100644
-index 0000000..f678c37e
+index 0000000..4e7417f
 --- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/sbsa.json
-@@ -0,0 +1,30 @@
++++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
+@@ -0,0 +1,17 @@
 +[
 +    {
-+        "MetricExpr": "stall_slot_frontend / (#slots * cpu_cycles)",
-+        "BriefDescription": "Frontend bound L1 topdown metric",
-+        "MetricGroup": "TopdownL1",
-+        "MetricName": "frontend_bound",
-+        "ScaleUnit": "100%"
++        "ArchStdEvent": "FRONTEND_BOUND",
++        "MetricExpr": "((stall_slot_frontend) if (#slots - 5) else (stall_slot_frontend - cpu_cycles)) / (#slots * cpu_cycles)"
 +    },
 +    {
-+        "MetricExpr": "(1 - op_retired / op_spec) * (1 - stall_slot / (#slots * cpu_cycles))",
-+        "BriefDescription": "Bad speculation L1 topdown metric",
-+        "MetricGroup": "TopdownL1",
-+        "MetricName": "bad_speculation",
-+        "ScaleUnit": "100%"
++        "ArchStdEvent": "BAD_SPECULATION",
++        "MetricExpr": "(1 - op_retired / op_spec) * (1 - (stall_slot if (#slots - 5) else (stall_slot - cpu_cycles)) / (#slots * cpu_cycles))"
 +    },
 +    {
-+        "MetricExpr": "(op_retired / op_spec) * (1 - stall_slot / (#slots * cpu_cycles))",
-+        "BriefDescription": "Retiring L1 topdown metric",
-+        "MetricGroup": "TopdownL1",
-+        "MetricName": "retiring",
-+        "ScaleUnit": "100%"
++        "ArchStdEvent": "RETIRING",
++        "MetricExpr": "(op_retired / op_spec) * (1 - (stall_slot if (#slots - 5) else (stall_slot - cpu_cycles)) / (#slots * cpu_cycles))"
 +    },
 +    {
-+        "MetricExpr": "stall_slot_backend / (#slots * cpu_cycles)",
-+        "BriefDescription": "Backend Bound L1 topdown metric",
-+        "MetricGroup": "TopdownL1",
-+        "MetricName": "backend_bound",
-+        "ScaleUnit": "100%"
++        "ArchStdEvent": "BACKEND_BOUND"
 +    }
 +]
 -- 
