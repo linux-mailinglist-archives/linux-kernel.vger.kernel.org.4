@@ -2,163 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44B1669C32
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE56B669C38
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjAMP3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S230238AbjAMPam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjAMP22 (ORCPT
+        with ESMTP id S230242AbjAMP3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:28:28 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C4CA678250
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:22:21 -0800 (PST)
-Received: (qmail 22532 invoked by uid 1000); 13 Jan 2023 10:22:20 -0500
-Date:   Fri, 13 Jan 2023 10:22:20 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
- <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
- <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+        Fri, 13 Jan 2023 10:29:50 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423F47EC97
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:22:38 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id f34so33576989lfv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:22:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANsyJifEncSP92lLk3miSuvqvxDpZXt5DLlwH0kSeYg=;
+        b=WIXZCl3srJseLgQX9neHOCK7tyE77OWiZNrNYCUffzMHjMR1Ubr+HyPObwJ6K+l7th
+         4YLcHeG1/m9TqNpnqCxbkoaN6ITL4NeRHYHZ4U8UNXg7qN+tniRChAW6BZgDVNCDqbre
+         82Wke+fhJXldtTPBrUh4glO52u5jdprrihNBY5c+c2LzdyKeBqkxTceEZUYgVxtfCNKp
+         nSZJNk/2tiztZSXnpVa4CmxIB4wEDOncttA1EqOn/1cuPBCUaL9XPCYFahgRi6GXMrKQ
+         cadAwiKnKmU5v2Ph86s5TuH3oxfzbQC6/zDUHS+oZLEJKP6Jcr/MSWfsh0tYw3Fr1MoQ
+         hANQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ANsyJifEncSP92lLk3miSuvqvxDpZXt5DLlwH0kSeYg=;
+        b=5+qyle6dwrARl12PriF/2kIIGrN4OVth6eXuf93gpREyRIdiZdnyN+Y2i6BPgs1Hn2
+         rgL55dDnGkx1IWV9EHXBfDRRriOpQPfPzel/robPqWRM53zs61Wls+nx4GLyZ+04fsD6
+         q2ogQOL1VxyvTapO6+K2+jBPgwf6yAzQq/XtpNThXeLx1wvahqFR7lhQ3AsVfAarr+Sj
+         zU2cH+s6Z2BfOz++Ah2MPrW8GIx9s/JfL3jUSF4VgHBF7zoFmmePJ9ftOvwzv6kyOA/f
+         RA4kcDhV7U0H+GWn6nI8GP2ErWHPRjf33EdqD/z+IXQHl/Badb5abSjg2bBnds0kYoD0
+         /6WA==
+X-Gm-Message-State: AFqh2koTrcPcCJwpocUyfAnYVbIlINoSna7esPNhGCIxj3RCPNnDdzkI
+        qybLzqO981jAQn3Clj0D60yyfA==
+X-Google-Smtp-Source: AMrXdXuvRKKfnLv0K6fkFCJ+VqdzGZXYnnyMmAWDagBwdzXXeg47jDWiaaCTc9oqRgG8p7X7oLxWrA==
+X-Received: by 2002:a05:6512:e86:b0:4b5:b87a:3262 with SMTP id bi6-20020a0565120e8600b004b5b87a3262mr25559492lfb.28.1673623356522;
+        Fri, 13 Jan 2023 07:22:36 -0800 (PST)
+Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id c19-20020a056512325300b004cb3d77a936sm3875440lfr.46.2023.01.13.07.22.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:22:35 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] Revert "soc: qcom: rpmpd: Add SM4250 support"
+Date:   Fri, 13 Jan 2023 16:22:31 +0100
+Message-Id: <20230113152232.2624545-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
-> Hi all,
-> 
-> FWIW, here are two more broken address dependencies, both very similar to the
-> one discussed in this thread. From what I can tell, both are protected by a
-> lock, so, again, nothing to worry about right now? Would you agree?
+SM4250 and SM6115 use a shared device tree and the RPMPDs are
+identical. There's no need for a separate entry, so remove it.
 
-FWIW, my opinion is that in both cases the broken dependency can be 
-removed entirely.
+This reverts commit 5b617b1b10c1c6a4365d8f956032e95c53b8e388.
 
-> Comments marked with "AD:" were added by me for readability.
-> 
-> 1. drivers/hwtracing/stm/core.c::1050 - 1085
-> 
->         /**
->          * __stm_source_link_drop() - detach stm_source from an stm device
->          * @src:	stm_source device
->          * @stm:	stm device
->          *
->          * If @stm is @src::link, disconnect them from one another and put the
->          * reference on the @stm device.
->          *
->          * Caller must hold stm::link_mutex.
->          */
->         static int __stm_source_link_drop(struct stm_source_device *src,
->                                           struct stm_device *stm)
->         {
->                 struct stm_device *link;
->                 int ret = 0;
-> 
->                 lockdep_assert_held(&stm->link_mutex);
-> 
->                 /* for stm::link_list modification, we hold both mutex and spinlock */
->                 spin_lock(&stm->link_lock);
->                 spin_lock(&src->link_lock);
-> 
->                 /* AD: Beginning of the address dependency. */
->                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
-> 
->                 /*
->                  * The linked device may have changed since we last looked, because
->                  * we weren't holding the src::link_lock back then; if this is the
->                  * case, tell the caller to retry.
->                  */
->                 if (link != stm) {
->                         ret = -EAGAIN;
->                         goto unlock;
->                 }
-> 
->                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
->                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
-> 
->                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
->                 pm_runtime_mark_last_busy(&link->dev);
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/soc/qcom/rpmpd.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-In both of these statements, link can safely be replaced by stm.
+diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
+index f0db6a10cf4e..337b1ad1cd3b 100644
+--- a/drivers/soc/qcom/rpmpd.c
++++ b/drivers/soc/qcom/rpmpd.c
+@@ -471,23 +471,6 @@ static const struct rpmpd_desc qcm2290_desc = {
+ 	.max_state = RPM_SMD_LEVEL_TURBO_NO_CPR,
+ };
+ 
+-static struct rpmpd *sm4250_rpmpds[] = {
+-	[SM4250_VDDCX] = &sm6115_vddcx,
+-	[SM4250_VDDCX_AO] = &sm6115_vddcx_ao,
+-	[SM4250_VDDCX_VFL] = &sm6115_vddcx_vfl,
+-	[SM4250_VDDMX] = &sm6115_vddmx,
+-	[SM4250_VDDMX_AO] = &sm6115_vddmx_ao,
+-	[SM4250_VDDMX_VFL] = &sm6115_vddmx_vfl,
+-	[SM4250_VDD_LPI_CX] = &sm6115_vdd_lpi_cx,
+-	[SM4250_VDD_LPI_MX] = &sm6115_vdd_lpi_mx,
+-};
+-
+-static const struct rpmpd_desc sm4250_desc = {
+-	.rpmpds = sm4250_rpmpds,
+-	.num_pds = ARRAY_SIZE(sm4250_rpmpds),
+-	.max_state = RPM_SMD_LEVEL_TURBO_NO_CPR,
+-};
+-
+ static const struct of_device_id rpmpd_match_table[] = {
+ 	{ .compatible = "qcom,mdm9607-rpmpd", .data = &mdm9607_desc },
+ 	{ .compatible = "qcom,msm8226-rpmpd", .data = &msm8226_desc },
+@@ -502,7 +485,6 @@ static const struct of_device_id rpmpd_match_table[] = {
+ 	{ .compatible = "qcom,qcm2290-rpmpd", .data = &qcm2290_desc },
+ 	{ .compatible = "qcom,qcs404-rpmpd", .data = &qcs404_desc },
+ 	{ .compatible = "qcom,sdm660-rpmpd", .data = &sdm660_desc },
+-	{ .compatible = "qcom,sm4250-rpmpd", .data = &sm4250_desc },
+ 	{ .compatible = "qcom,sm6115-rpmpd", .data = &sm6115_desc },
+ 	{ .compatible = "qcom,sm6125-rpmpd", .data = &sm6125_desc },
+ 	{ .compatible = "qcom,sm6375-rpmpd", .data = &sm6375_desc },
+-- 
+2.39.0
 
-(There's also a control dependency which the LKMM isn't aware of.  This 
-makes it all the more safe.)
-
-> 2. kernel/locking/lockdep.c::6319 - 6348
-> 
->         /*
->          * Unregister a dynamically allocated key.
->          *
->          * Unlike lockdep_register_key(), a search is always done to find a matching
->          * key irrespective of debug_locks to avoid potential invalid access to freed
->          * memory in lock_class entry.
->          */
->         void lockdep_unregister_key(struct lock_class_key *key)
->         {
->                 struct hlist_head *hash_head = keyhashentry(key);
->                 struct lock_class_key *k;
->                 struct pending_free *pf;
->                 unsigned long flags;
->                 bool found = false;
-> 
->                 might_sleep();
-> 
->                 if (WARN_ON_ONCE(static_obj(key)))
->                         return;
-> 
->                 raw_local_irq_save(flags);
->                 lockdep_lock();
-> 
->                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
->                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
->                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
->                         if (k == key) {
->                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
->                                 hlist_del_rcu(&k->hash_entry);
-
-And here k could safely be replaced with key.  (And again there is a 
-control dependency, but this is one that the LKMM would detect.)
-
-Alan Stern
-
->                                 found = true;
->                                 break;
->                         }
->                 }
-> 
-> Many thanks,
-> Paul
