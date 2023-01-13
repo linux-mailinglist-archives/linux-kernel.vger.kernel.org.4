@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495C7668F6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB7A668F53
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238379AbjAMHoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S232051AbjAMHjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbjAMHoE (ORCPT
+        with ESMTP id S230473AbjAMHjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:44:04 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0E88FD9;
-        Thu, 12 Jan 2023 23:44:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=h4SIO5Vhg+nTG28cL2ItMex6tptSMIIoaPuTXiy4QRY=; b=X9WRD1uFZ8GM08dcnkEzGBIUBN
-        AlHf4sXA0RwDUqEtwvnIEV6F1JWlqzUuE9eq6hCfKdjLqHfK8uI7uidsA+LJIq93RXB89wFjqvDZe
-        3thF2e7e67FcXGhav2n9feqEajMB6759/BzWPlkbPieZOSJyAM5pWP3s4oHvV5c4FGvtbZZSLWN8g
-        lsLSLECcGl6NxtEK1WlWg0tw5PSHmjE1UymF9rL+c4rBFdQ0bspB32c0FDcU/vAM44QIde7sZ41lj
-        e/mV1ccduLSmEJ9fyQlAdzUB74xIYAyfqAnrQ26CLwar4xW03t3FF/+XDz/p5HzzgBe7cBsEJKLTG
-        xF1rLNmA==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGEjJ-0011YO-NV; Fri, 13 Jan 2023 07:44:01 +0000
-Message-ID: <3311cea3-3a1f-3c2d-d167-6bfe85b2ae84@infradead.org>
-Date:   Thu, 12 Jan 2023 23:44:01 -0800
+        Fri, 13 Jan 2023 02:39:16 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ED32642
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:39:16 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id z4-20020a17090a170400b00226d331390cso23574022pjd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nem0KGVeWs0u59oN+VKYDUtx5w3BXdJrIOfqnvfQKls=;
+        b=ak2mIBtmvgLjfoPMJpoGvFi8qhD9y0nqnJ8JDCF3itBst44IJhPv8whUVxrA5BeEbN
+         2mTELUcwuFXFX3H3ZeEf4wljJGbokkEEGkkQ/eNJ8LeuIAVnNl1becbZ4fmKEdttA8Dh
+         ZKchQpHg8shcoQ1amIEEGbbom3oz0vMY83dX0knUDLVYbEsCBu9fiaxKYcA3V03O/OXW
+         Bg5oqPlKkqJlnEbIrSfcyWNsqXigy49GALRWRaxADMU5w2ZlB1ErDzyLCkeDQNJ/DSI9
+         sL6qnvcctsH6Efus2B+NB/3Q3Ry643m7IaNcyyt7iAY0D+Fr782GIJXHx25eEMHcBzFH
+         QzLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nem0KGVeWs0u59oN+VKYDUtx5w3BXdJrIOfqnvfQKls=;
+        b=tlVmzOPMavvtNE+JmvmuTbFCf15HGQPkuLzuIh26+EIhoF448JT4V8Hrk2xfE0uTZi
+         3cXrKY0VFwChUbttpG4PmTFKllj14fzX74o3KwdW8rCUBWad4PIFmM4GVatw1wc6ra53
+         orvMd85aS30y7JzbaMY7h80vf3Vrr710P/ggQiJHLexbwnBbErF2jM4m1OJIJ4NRZqcX
+         TUEemwUYNcl+EWYNpJ97lkcyXwvroZZoCoXhYVhpxcOw0qVXcnsQLVZuRyXkASmzVuyC
+         Zv8qivkUezorT8GHEyYilUR0Xg6xC98twrd9HTigbidPDuIxw1N798i8HgFcRU7hoTL8
+         3FXw==
+X-Gm-Message-State: AFqh2krGqQGf7zRlIDaYQb6t8Teg9HFfx0PX+WZRiEkwX8CF7UlNg9Cy
+        h931ZXAW8jJpOTgQXusST6Y=
+X-Google-Smtp-Source: AMrXdXtK4onV1NMvixLT7yn/U/dySVbMGDiBAjiVN+dgrZw6ihHmwHUcpqaY1TB6iXu9+52fEo+2zg==
+X-Received: by 2002:a17:902:d587:b0:194:457d:6dca with SMTP id k7-20020a170902d58700b00194457d6dcamr12306423plh.44.1673595555559;
+        Thu, 12 Jan 2023 23:39:15 -0800 (PST)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b00186b8752a78sm13488176plf.80.2023.01.12.23.39.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 12 Jan 2023 23:39:15 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:44:27 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com
+Subject: Re: [PATCH 2/2] erofs: remove linux/buffer_head.h dependency
+Message-ID: <20230113154427.000053dd.zbestahu@gmail.com>
+In-Reply-To: <20230113065226.68801-2-hsiangkao@linux.alibaba.com>
+References: <20230113065226.68801-1-hsiangkao@linux.alibaba.com>
+        <20230113065226.68801-2-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ata: Don't build PATA_CS5535 on UML
-To:     Peter Foley <pefoley2@pefoley.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Fri, 13 Jan 2023 14:52:26 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-On 1/12/23 20:37, Peter Foley wrote:
-> This driver uses MSR functions that aren't implemented under UML.
-> Avoid building it to prevent tripping up allyesconfig.
+> EROFS actually never uses buffer heads, therefore just get rid of
+> BH_xxx definitions and linux/buffer_head.h inclusive.
 > 
-> e.g.
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3a3): undefined reference to `__tracepoint_read_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3d2): undefined reference to `__tracepoint_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x457): undefined reference to `__tracepoint_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x481): undefined reference to `do_trace_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4d5): undefined reference to `do_trace_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4f5): undefined reference to `do_trace_read_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x51c): undefined reference to `do_trace_write_msr'
-> 
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-I have a similar patch on my system that I have never sent.
-I think that PATA_CS5536 needs the same treatment.
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
 
-Anyway:
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  drivers/ata/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-> index eceaec33af65..9695c4404e26 100644
-> --- a/drivers/ata/Kconfig
-> +++ b/drivers/ata/Kconfig
-> @@ -640,6 +640,7 @@ config PATA_CS5530
->  config PATA_CS5535
->  	tristate "CS5535 PATA support (Experimental)"
->  	depends on PCI && (X86_32 || (X86_64 && COMPILE_TEST))
-> +	depends on !UML
->  	help
->  	  This option enables support for the NatSemi/AMD CS5535
->  	  companion chip used with the Geode processor family.
-> 
-> ---
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> change-id: 20230112-umide-18c116111232
-> 
-> Best regards,
-
--- 
-~Randy
