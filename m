@@ -2,136 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD376688B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9186688C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238082AbjAMAyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        id S240026AbjAMA5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239596AbjAMAyP (ORCPT
+        with ESMTP id S232377AbjAMA5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:54:15 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A483E2A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:54:14 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so25385188pjk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6wTahgPOn0LySuA1i9bASDFyi3Ueigx8xRo8Xbilw4I=;
-        b=U+sQqif0/Muwdc6NYnuRVJ/j6zAussnLylJFzP3+XGWl1klHVC4kb2atu717aEslzA
-         NqVodkM/ROdq5D0SYpKOyR74tTv0KKYlk+jtzkRmuOtN353d1p2bmajYiizRUFMhI13H
-         JeyHme9Xr/xYbipOCXs3Fmvj0rBMaCC5vHuhA=
+        Thu, 12 Jan 2023 19:57:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2351EADA
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:56:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673571413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XG7oCthi1cz9qA5sCXs+Yfwmmh8peH0gCPI3GPwykJs=;
+        b=JvzreIi9alzklcFGDRo5do/TjaanqVRFieRK+1vcvdF4hQc2FinhJ6JljbyeHcsahp9I3X
+        cBusJ9zsSZhTE7Pjqn/8vdKmL/8UOqEFu9sgFYoWuee55JjsKmt7cIZn3spoyWM64yZ1Tj
+        w6X57Ufu0FRPQalsckXK1UPljTzkQo4=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-315-EmRVwjhPP6-_C4YdLqmBGA-1; Thu, 12 Jan 2023 19:56:52 -0500
+X-MC-Unique: EmRVwjhPP6-_C4YdLqmBGA-1
+Received: by mail-il1-f200.google.com with SMTP id l14-20020a056e02066e00b0030bff7a1841so14965450ilt.23
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:56:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6wTahgPOn0LySuA1i9bASDFyi3Ueigx8xRo8Xbilw4I=;
-        b=4Cieok60aHkChPA9gn4w+lBxISblwUxswCcJS43WD6LyEhQFVHO/scNXDEp57evTPt
-         ta1lMYCrwiEX6hiavKJSYh3MD0ATUpFH0tkW4PhyjxcmCJ+wRDQXLYyxL+F8G1dqejuu
-         G7ZqcHOAmxl98RCSSCCSNRatH6oMlt9dOFa9CsGoF0K1Pk9naMS1ZRcvaEh2buunRGzu
-         z+q+HARbXbde9I3/XeN0o5mfEn/Q5lkM8J1eFVYYUR/f5Eoc2U+8I4YQ1xT5AIW2VvQW
-         HveNjNoXEV1e9frbDjpLaEHThrxSaH7UNakIBv/kFD/I7bZ51vr5GErjmEEL6AY3Tc2T
-         N26w==
-X-Gm-Message-State: AFqh2kq8Y6KOzwM3bRMPrzykP7nC3NQWnhdksYHIPZBkfyMt/kJRj9uw
-        s9Dyv6RYlzErqzN8eplEw548fw==
-X-Google-Smtp-Source: AMrXdXuFP3bnEy2rZYHKu3/UtPStVpANsmmC7JzX1z4v5Zlv4YYFYFbBwTG8gZF1b7urQ8yQc5GpUw==
-X-Received: by 2002:a05:6a20:548e:b0:9d:efd3:66ca with SMTP id i14-20020a056a20548e00b0009defd366camr110139183pzk.17.1673571253651;
-        Thu, 12 Jan 2023 16:54:13 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:11a:201:4652:3752:b9b7:29f9])
-        by smtp.gmail.com with ESMTPSA id u11-20020a6540cb000000b0046ff3634a78sm10676614pgp.71.2023.01.12.16.54.12
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XG7oCthi1cz9qA5sCXs+Yfwmmh8peH0gCPI3GPwykJs=;
+        b=wmScv/4jzBR4fPqpGR8HM14ImfWCExin1Go0rA+u8wrSVo6KcCaNH1TVJ9YT0qzsd+
+         wu83CjwUaYHeYq94FyKM5HOHcGDD64TrJw2Im/izX0sZxZnmiFqTYWyeY2V/oElPs1dD
+         Bdbx1Iz0KVmaeZVJD+4IkFr/wu2NVGdAVm/GvDjnfJY6JQLWDegg6LLVwyfy8TfxaH+m
+         ZRxA3u+SJRxZd7pGRB9fHIxioTlpki4nq7y+bqK5bN5YZfJfEnMP6AGdfxsvMMT4orNN
+         VqL2JO9oTPtLgVFy/GDQ8oVoydZxHmzPWU2BQeSEXQsI400Qb6MANqIeP09Kk216mSAd
+         c8kA==
+X-Gm-Message-State: AFqh2kp6fbU5HmOUeAlnTH3z7iik2fpvq3WeZoD5U+FemsMO/yQcuYGL
+        zCStExW0ULJRE0+oBrQNKG4pOl8C2Nvo/s20Gc5PlLnZLK7Jq08s3ukngi5pL4uPdFOuAvKe/ee
+        67UXeXwKO+bMdgPZU6yDb8aea
+X-Received: by 2002:a5d:8c88:0:b0:6f1:f493:7240 with SMTP id g8-20020a5d8c88000000b006f1f4937240mr6277486ion.3.1673571411476;
+        Thu, 12 Jan 2023 16:56:51 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvsA3h8dnBWYocee5XN2BqUQKDNeUrvNWtFiPzDqbJBlxeKo+IUAua2OcaVeTDIIuJpIjdmug==
+X-Received: by 2002:a5d:8c88:0:b0:6f1:f493:7240 with SMTP id g8-20020a5d8c88000000b006f1f4937240mr6277474ion.3.1673571411216;
+        Thu, 12 Jan 2023 16:56:51 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id e18-20020a022112000000b0039e048ad8e7sm5624918jaa.59.2023.01.12.16.56.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 16:54:13 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15.y 4/4] phy: qcom-qmp-combo: fix runtime suspend
-Date:   Thu, 12 Jan 2023 16:54:05 -0800
-Message-Id: <20230113005405.3992011-5-swboyd@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230113005405.3992011-1-swboyd@chromium.org>
-References: <20230113005405.3992011-1-swboyd@chromium.org>
+        Thu, 12 Jan 2023 16:56:50 -0800 (PST)
+Date:   Thu, 12 Jan 2023 17:56:48 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, pbonzini@redhat.com,
+        jgg@nvidia.com, cohuck@redhat.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com,
+        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vfio: fix potential deadlock on vfio group lock
+Message-ID: <20230112175648.158dca5f.alex.williamson@redhat.com>
+In-Reply-To: <Y8CX8YwT/T9v4U/D@google.com>
+References: <20230112203844.41179-1-mjrosato@linux.ibm.com>
+        <20230112140517.6db5b346.alex.williamson@redhat.com>
+        <bce7912a-f904-b5a3-d234-c3e2c42d9e54@linux.ibm.com>
+        <Y8CX8YwT/T9v4U/D@google.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+On Thu, 12 Jan 2023 23:29:53 +0000
+Sean Christopherson <seanjc@google.com> wrote:
 
-commit c7b98de745cffdceefc077ad5cf9cda032ef8959 upstream.
+> On Thu, Jan 12, 2023, Matthew Rosato wrote:
+> > On 1/12/23 4:05 PM, Alex Williamson wrote:  
+> > > On Thu, 12 Jan 2023 15:38:44 -0500
+> > > Matthew Rosato <mjrosato@linux.ibm.com> wrote:  
+> > >> @@ -344,6 +345,35 @@ static bool vfio_assert_device_open(struct vfio_device *device)
+> > >>  	return !WARN_ON_ONCE(!READ_ONCE(device->open_count));
+> > >>  }
+> > >>  
+> > >> +static bool vfio_kvm_get_kvm_safe(struct kvm *kvm)
+> > >> +{
+> > >> +	bool (*fn)(struct kvm *kvm);
+> > >> +	bool ret;
+> > >> +
+> > >> +	fn = symbol_get(kvm_get_kvm_safe);
+> > >> +	if (WARN_ON(!fn))  
+> 
+> In a related vein to Alex's comments about error handling, this should not WARN.
+> WARNing during vfio_kvm_put_kvm() makes sense, but the "get" is somewhat blind.
 
-Drop the confused runtime-suspend type check which effectively broke
-runtime PM if the DP child node happens to be parsed before the USB
-child node during probe (e.g. due to order of child nodes in the
-devicetree).
+It's not exactly blind though, we wouldn't have a kvm pointer if the
+kvm-vfio device hadn't stuffed one into the group.  We only call into
+here if we have a non-NULL pointer, so it wouldn't simply be that the
+kvm module isn't available for this to fire, but more that we have an
+API change to make the symbol no longer exist.  A WARN for that doesn't
+seem unreasonable.  Thanks,
 
-Instead use the new driver data USB PHY pointer to access the USB
-configuration and resources.
+Alex
 
-Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[swboyd@chromium.org: Backport to pre-split driver]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index 9fda6d283f20..d928afe2ebba 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -4985,15 +4985,11 @@ static void qcom_qmp_phy_disable_autonomous_mode(struct qmp_phy *qphy)
- static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 
- 	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
- 
--	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
--	if (cfg->type != PHY_TYPE_USB3)
--		return 0;
--
- 	if (!qmp->init_count) {
- 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
- 		return 0;
-@@ -5010,16 +5006,12 @@ static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
- static int __maybe_unused qcom_qmp_phy_runtime_resume(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
--	struct qmp_phy *qphy = qmp->phys[0];
-+	struct qmp_phy *qphy = qmp->usb_phy;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	int ret = 0;
- 
- 	dev_vdbg(dev, "Resuming QMP phy, mode:%d\n", qphy->mode);
- 
--	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
--	if (cfg->type != PHY_TYPE_USB3)
--		return 0;
--
- 	if (!qmp->init_count) {
- 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
- 		return 0;
--- 
-https://chromeos.dev
+> > >> +		return false;
+> > >> +
+> > >> +	ret = fn(kvm);
+> > >> +
+> > >> +	symbol_put(kvm_get_kvm_safe);
+> > >> +
+> > >> +	return ret;
+> > >> +}
+> > >> +
+> > >> +static void vfio_kvm_put_kvm(struct kvm *kvm)
+> > >> +{
+> > >> +	void (*fn)(struct kvm *kvm);
+> > >> +
+> > >> +	fn = symbol_get(kvm_put_kvm);
+> > >> +	if (WARN_ON(!fn))
+> > >> +		return;
+> > >> +
+> > >> +	fn(kvm);
+> > >> +
+> > >> +	symbol_put(kvm_put_kvm);
+> > >> +}  
+> 
 
