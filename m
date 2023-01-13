@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDA4669C79
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A44669C7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjAMPeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S230036AbjAMPek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjAMPdw (ORCPT
+        with ESMTP id S230267AbjAMPeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:33:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669B690271;
-        Fri, 13 Jan 2023 07:27:27 -0800 (PST)
+        Fri, 13 Jan 2023 10:34:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EB39B281;
+        Fri, 13 Jan 2023 07:27:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1D6AB8217E;
-        Fri, 13 Jan 2023 15:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D676C433EF;
-        Fri, 13 Jan 2023 15:27:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBD12B8212E;
+        Fri, 13 Jan 2023 15:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA7AC433EF;
+        Fri, 13 Jan 2023 15:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673623644;
-        bh=3oW+bJL4a6uki2bL5hsD7AU5oGF1aSENnaNKozJNznQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=KzgC60FP9gFQhETHYZBxpqbqkdH+Bd0fYRcifzQ0RJllad+tkDmjOj7mk4JjUzbX8
-         UFqau6HIZ+vqj1Yp59Dg5D7WGRBkZ/TIaD4OSWdOKt30s5zQ+kwl6dSXAMCYWMCeWH
-         +IiGfaIIghrWL/xeRwjWfU1n02e9c8TXIdcSK9zbb3injlS6bXTn40OVnUdHYfSsmy
-         jUPn+s3jt/8LxQXe6KVD1r47Kzvw8mU9i9b4xAN2ycNX9nf0pMARQ8QkY7a6oqzuc0
-         NRHOuJLNAWjs661BKT6OyVx8yrcMefoOvuj8d0toHiwzr4ZYaOxt6dlpBrmGFbagB2
-         B9CdfB5jUVDIQ==
-Message-ID: <445ebed318067cd31f5df17d8f5a52963f49fc04.camel@kernel.org>
-Subject: Re: [PATCH v3 1/2] fscache: Use wait_on_bit() to wait for the
- freeing of relinquished volume
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Hou Tao <houtao@huaweicloud.com>, linux-cachefs@redhat.com
-Cc:     David Howells <dhowells@redhat.com>, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, houtao1@huawei.com
-Date:   Fri, 13 Jan 2023 10:27:22 -0500
-In-Reply-To: <20230113115211.2895845-2-houtao@huaweicloud.com>
-References: <20230113115211.2895845-1-houtao@huaweicloud.com>
-         <20230113115211.2895845-2-houtao@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        s=k20201202; t=1673623653;
+        bh=mdjjde/kpGhKz7LWQy4Ha4KJulKpEmB/IfM4LXUBeF8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZOy91bzf8j+p7kuD/QdLpI/BRf8Ov+HaJmoNbgd1BIPqdKVYjAyqpFdKsBjx660nS
+         894QZSriFopWyVtoQxIDNcKuaNdDLXwpAY8LJP/H1CUqs9lDjDnvtCrBxV0EKdHa1l
+         Xh9GQhh83MYfUCioCwHdlsybkUKDVZY5rLusl6CtXAuRDHNW9vxOXzVzt1poxbM+kN
+         BeevhEBmWFEaQJCjDw6J6Afv/1y0/fEE1M4yoM1A+YCmG/NAmLOEUJbegY56WUMgRY
+         mcgQai03dVt7lr/PfaPfCHBiV07HqIp0oIitFEpZU4lYDM+IOGc8wrrhModu/RzUBd
+         Dw8q47b8VF2fw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1FF1B5C0964; Fri, 13 Jan 2023 07:27:33 -0800 (PST)
+Date:   Fri, 13 Jan 2023 07:27:33 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rcu: Fix the start_poll_synchronize_rcu_expedited()
+ be invoked very early
+Message-ID: <20230113152733.GZ4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230112075629.1661429-1-qiang1.zhang@intel.com>
+ <20230112190656.GR4028633@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB588074A87AC454A7F0E42A5ADAC29@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB588008A9BBAFA6BEEC8685ABDAC29@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20230113144919.GY4028633@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB588004418C299781FE6738BFDAC29@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR11MB588004418C299781FE6738BFDAC29@PH0PR11MB5880.namprd11.prod.outlook.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,95 +66,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-01-13 at 19:52 +0800, Hou Tao wrote:
-> From: Hou Tao <houtao1@huawei.com>
->=20
-> The freeing of relinquished volume will wake up the pending volume
-> acquisition by using wake_up_bit(), however it is mismatched with
-> wait_var_event() used in fscache_wait_on_volume_collision() and it will
-> never wake up the waiter in the wait-queue because these two functions
-> operate on different wait-queues.
->=20
-> According to the implementation in fscache_wait_on_volume_collision(),
-> if the wake-up of pending acquisition is delayed longer than 20 seconds
-> (e.g., due to the delay of on-demand fd closing), the first
-> wait_var_event_timeout() will timeout and the following wait_var_event()
-> will hang forever as shown below:
->=20
->  FS-Cache: Potential volume collision new=3D00000024 old=3D00000022
->  ......
->  INFO: task mount:1148 blocked for more than 122 seconds.
->        Not tainted 6.1.0-rc6+ #1
->  task:mount           state:D stack:0     pid:1148  ppid:1
->  Call Trace:
->   <TASK>
->   __schedule+0x2f6/0xb80
->   schedule+0x67/0xe0
->   fscache_wait_on_volume_collision.cold+0x80/0x82
->   __fscache_acquire_volume+0x40d/0x4e0
->   erofs_fscache_register_volume+0x51/0xe0 [erofs]
->   erofs_fscache_register_fs+0x19c/0x240 [erofs]
->   erofs_fc_fill_super+0x746/0xaf0 [erofs]
->   vfs_get_super+0x7d/0x100
->   get_tree_nodev+0x16/0x20
->   erofs_fc_get_tree+0x20/0x30 [erofs]
->   vfs_get_tree+0x24/0xb0
->   path_mount+0x2fa/0xa90
->   do_mount+0x7c/0xa0
->   __x64_sys_mount+0x8b/0xe0
->   do_syscall_64+0x30/0x60
->   entry_SYSCALL_64_after_hwframe+0x46/0xb0
->=20
-> Considering that wake_up_bit() is more selective, so fix it by using
-> wait_on_bit() instead of wait_var_event() to wait for the freeing of
-> relinquished volume. In addition because waitqueue_active() is used in
-> wake_up_bit() and clear_bit() doesn't imply any memory barrier, use
-> clear_and_wake_up_bit() to add the missing memory barrier between
-> cursor->flags and waitqueue_active().
->=20
-> Fixes: 62ab63352350 ("fscache: Implement volume registration")
-> Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
-> ---
->  fs/fscache/volume.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->=20
-> diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
-> index ab8ceddf9efa..903af9d85f8b 100644
-> --- a/fs/fscache/volume.c
-> +++ b/fs/fscache/volume.c
-> @@ -141,13 +141,14 @@ static bool fscache_is_acquire_pending(struct fscac=
-he_volume *volume)
->  static void fscache_wait_on_volume_collision(struct fscache_volume *cand=
-idate,
->  					     unsigned int collidee_debug_id)
->  {
-> -	wait_var_event_timeout(&candidate->flags,
-> -			       !fscache_is_acquire_pending(candidate), 20 * HZ);
-> +	wait_on_bit_timeout(&candidate->flags, FSCACHE_VOLUME_ACQUIRE_PENDING,
-> +			    TASK_UNINTERRUPTIBLE, 20 * HZ);
->  	if (fscache_is_acquire_pending(candidate)) {
->  		pr_notice("Potential volume collision new=3D%08x old=3D%08x",
->  			  candidate->debug_id, collidee_debug_id);
->  		fscache_stat(&fscache_n_volumes_collision);
-> -		wait_var_event(&candidate->flags, !fscache_is_acquire_pending(candidat=
-e));
-> +		wait_on_bit(&candidate->flags, FSCACHE_VOLUME_ACQUIRE_PENDING,
-> +			    TASK_UNINTERRUPTIBLE);
->  	}
->  }
-> =20
-> @@ -347,8 +348,8 @@ static void fscache_wake_pending_volume(struct fscach=
-e_volume *volume,
->  	hlist_bl_for_each_entry(cursor, p, h, hash_link) {
->  		if (fscache_volume_same(cursor, volume)) {
->  			fscache_see_volume(cursor, fscache_volume_see_hash_wake);
-> -			clear_bit(FSCACHE_VOLUME_ACQUIRE_PENDING, &cursor->flags);
-> -			wake_up_bit(&cursor->flags, FSCACHE_VOLUME_ACQUIRE_PENDING);
-> +			clear_and_wake_up_bit(FSCACHE_VOLUME_ACQUIRE_PENDING,
-> +					      &cursor->flags);
->  			return;
->  		}
->  	}
+On Fri, Jan 13, 2023 at 03:02:54PM +0000, Zhang, Qiang1 wrote:
+> On Fri, Jan 13, 2023 at 12:10:47PM +0000, Zhang, Qiang1 wrote:
+> > 
+> > > Currently, the start_poll_synchronize_rcu_expedited() can be invoked
+> > > very early. before rcu_init(), the rcu_data structure's->mynode is not
+> > > initialized, if invoke start_poll_synchronize_rcu_expedited() before
+> > > rcu_init(), will trigger a null rcu_node structure's->exp_seq_poll access.
+> > > 
+> > > This commit add boot_exp_seq_poll_rq member to rcu_state structure to
+> > > store seq number return by invoke start_poll_synchronize_rcu_expedited()
+> > > very early.
+> > > 
+> > > Fixes: d96c52fe4907 ("rcu: Add polled expedited grace-period primitives")
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > >
+> > >First off, excellent catch, Zqiang!!!
+> > >
+> > >And thank you for Frederic and Joel for your reviews.
+> > >	
+> > >But I believe that this can be simplified, for example, as shown in
+> > >the (untested) patch below.
+> > >
+> > >Thoughts?
+> > >
+> > >Agree, thanks for wordsmithed  😊.
+> > >
+> > >
+> > >And yes, I did presumptuously add Frederic's and Joel's reviews.
+> > >Please let me know if you disagree, and if so what different approach
+> > >you would prefer.  (Though of course simple disagreement is sufficient
+> > >for me to remove your tag.  Not holding you hostage for improvements,
+> > >not yet, anyway!)
+> > >
+> > >							Thanx, Paul
+> > >
+> > >------------------------------------------------------------------------
+> > >
+> > >commit e05af5cb3858e669c9e6b70e0aca708cc70457da
+> > >Author: Zqiang <qiang1.zhang@intel.com>
+> > >Date:   Thu Jan 12 10:48:29 2023 -0800
+> > >
+> > >    rcu: Permit start_poll_synchronize_rcu_expedited() to be invoked early
+> > >    
+> > >    According to the commit log of the patch that added it to the kernel,
+> > >    start_poll_synchronize_rcu_expedited() can be invoked very early, as
+> > >    in long before rcu_init() has been invoked.  But before rcu_init(),
+> > >    the rcu_data structure's ->mynode field has not yet been initialized.
+> > >    This means that the start_poll_synchronize_rcu_expedited() function's
+> > >    attempt to set the CPU's leaf rcu_node structure's ->exp_seq_poll_rq
+> > >    field will result in a segmentation fault.
+> > >    
+> > >    This commit therefore causes start_poll_synchronize_rcu_expedited() to
+> > >    set ->exp_seq_poll_rq only after rcu_init() has initialized all CPUs'
+> > >    rcu_data structures' ->mynode fields.  It also removes the check from
+> > >    the rcu_init() function so that start_poll_synchronize_rcu_expedited(
+> > >    is unconditionally invoked.  Yes, this might result in an unnecessary
+> > >    boot-time grace period, but this is down in the noise.  Besides, there
+> > >    only has to be one call_rcu() invoked prior to scheduler initialization
+> > >    to make this boot-time grace period necessary.
+> > 
+> > A little confused, why  call_rcu() invoked prior to scheduler initialization to make this boot-time
+> > grace period necessary 😊?
+> >
+> >Because then there will be a callback queued that will require a grace
+> >period to run anyway.
+> >
+> >Or maybe you are asking if those callbacks will really be able to use
+> >that first grace period?
+> 
+> Yes, because even if we queue work to rcu_gp_wq workqueue, this also requires us to wait until
+> the workqueue_init() is invoked, our work can be execute. and also need to wait for the
+> rcu_gp kthread to be created, after this, our first grace period can begin, the callbacks has the
+> opportunity to be called.  the call_rcu() require a grace period, but we require is expedited grace period.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Good catch, thank you!  I will update the commit log accordingly.
+
+							Thanx, Paul
+
+> Thanks
+> Zqiang
+> 
+> >
+> >							Thanx, Paul
+> 
+> > Thanks
+> > Zqiang
+> > 
+> > 
+> > >    
+> > >    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > >    Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> > >    Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > >    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > >
+> > >diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > >index 63545d79da51c..f2e3a23778c06 100644
+> > >--- a/kernel/rcu/tree.c
+> > >+++ b/kernel/rcu/tree.c
+> > >@@ -4937,9 +4937,8 @@ void __init rcu_init(void)
+> > > 	else
+> > > 		qovld_calc = qovld;
+> > > 
+> > >-	// Kick-start any polled grace periods that started early.
+> > >-	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
+> > >-		(void)start_poll_synchronize_rcu_expedited();
+> > >+	// Kick-start in case any polled grace periods started early.
+> > >+	(void)start_poll_synchronize_rcu_expedited();
+> > > 
+> > > 	rcu_test_sync_prims();
+> > > }
+> > >diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > >index 956cd459ba7f3..3b7abb58157df 100644
+> > >--- a/kernel/rcu/tree_exp.h
+> > >+++ b/kernel/rcu/tree_exp.h
+> > >@@ -1068,9 +1068,10 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
+> > > 	if (rcu_init_invoked())
+> > > 		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+> > > 	if (!poll_state_synchronize_rcu(s)) {
+> > >-		rnp->exp_seq_poll_rq = s;
+> > >-		if (rcu_init_invoked())
+> > >+		if (rcu_init_invoked()) {
+> > >+			rnp->exp_seq_poll_rq = s;
+> > > 			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+> > >+		}
+> > > 	}
+> > > 	if (rcu_init_invoked())
+> > > 		raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
