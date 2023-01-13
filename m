@@ -2,68 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841FE669D09
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 063C9669D15
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjAMP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        id S230368AbjAMQBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjAMP6S (ORCPT
+        with ESMTP id S229723AbjAMQA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:58:18 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523F4D4A6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DfT9q9lHXCcgDHj3l3lHi+8c/GVJ6aWRtQZ+lLWf7NY=; b=X9t2JmdQaeUH4e+OTEXdJApJ2c
-        H8l5getZ8VtJbbGhMqAZHqAUgILjmF2UCOp40bGNbTiMVSmPn6pNzXaY+sHTHHQRMeiOXEiHHfrX8
-        SL1zzfDhfX8AWeh5yJnhIbLPqmjTi7e/Pd+VnmrGK8iV3usDOqP0OtrZLqk3scBdv1vxrbv1vizif
-        kK9cu8Ty8sywVbbaTx1xZjWfrrbdsLGWmj2rFGxW1Xa4tSq3W0gEZsrzm4n379gkUKanC2A+NLCZl
-        OEHVCMVVTtQQCOtoKDPyRCEe/lwZbOupiMMO3iHDsDjnK5YR56tkTJtAwEh34m1ux6/sJROJLvStu
-        n2GneenA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGMJg-006DgR-BH; Fri, 13 Jan 2023 15:50:04 +0000
-Date:   Fri, 13 Jan 2023 15:50:04 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next 7/7] mm: swap: remove unneeded
- cgroup_throttle_swaprate()
-Message-ID: <Y8F9rHVHu7XsBg49@casper.infradead.org>
-References: <20230112083006.163393-1-wangkefeng.wang@huawei.com>
- <20230112083006.163393-8-wangkefeng.wang@huawei.com>
+        Fri, 13 Jan 2023 11:00:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C469A96764;
+        Fri, 13 Jan 2023 07:51:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A9B6223C;
+        Fri, 13 Jan 2023 15:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFED9C433EF;
+        Fri, 13 Jan 2023 15:51:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673625081;
+        bh=wOWtrdSlhbszE+tN7qXeYBL750xu36ZW+cH1OVBcLPM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WJvifSfl5C1QvFNKgAkIvS79KuZ0lCos/no9zHPrzgxldsRNFC7iRUOIL/Ck7nlUV
+         SfYlVqFPnXWD91UHyVDPFUnPulYambSP5SLC7FkDrhrPSqx4nnz/8LnAU4thz5I+jT
+         Yx8P1MChqhyTvO1e53BbGrXPCEqT5wR7KDxqozaw4fKcI9ehJ6F78szii6ctwQus0F
+         pJKKPZ0OYOtVF9WXfH1nDInC+95KHprnl6odXS1JAdsjcz/FHmel9hr1wxnYgBz6Hc
+         NVzvxGMnfiQLpVtWIswyyQYqpPKHx0Imeczlai4RQsiPBp2aSUJ1P36M9O/DKA0hM+
+         Eb0cNG4yaclpQ==
+Date:   Fri, 13 Jan 2023 16:51:13 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] PCI: qcom: Add support for modular builds
+Message-ID: <Y8F98UTZNgQpX6UG@lpieralisi>
+References: <20221017114705.8277-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230112083006.163393-8-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221017114705.8277-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 04:30:06PM +0800, Kefeng Wang wrote:
-> All the callers of cgroup_throttle_swaprate() are converted to
-> folio_throttle_swaprate(), so make __cgroup_throttle_swaprate()
-> to take a folio, and drop unused cgroup_throttle_swaprate().
+On Mon, Oct 17, 2022 at 01:47:03PM +0200, Johan Hovold wrote:
+> Allow the Qualcomm PCIe controller driver to be built as a module, which
+> is useful for multi-platform kernels as well as during development.
+> 
+> There's no rush with this, but I figured I'd send an updated version
+> that has been rebased on 6.1-rc1 (where post_deinit() has been removed).
+> 
+> I also broke out the qcom_pcie_host_deinit() handler in a separate patch
+> as the host_deinit() callback has now been added to dwc core and can be
+> used to fixes some late-probe error handling.
 
-Shouldn't __cgroup_throttle_swaprate() then be called
-__folio_throttle_swaprate()?
+Waiting for the dust to settle on patch 2, does it make sense to
+merge patch 1 on its own ?
 
-> +extern void __cgroup_throttle_swaprate(struct folio *folio, gfp_t gfp_mask);
+Thanks,
+Lorenzo
 
-Also you can drop the 'extern'.
-
-> +static inline void folio_throttle_swaprate(struct folio *folio, gfp_t gfp_mask)
-
-And it's not a gfp mask.  It's gfp_flags (we have this mistake all
-through the mm).  Or you can just call it 'gfp'.
-
+> Johan
+> 
+> 
+> Changes in v3
+>  - rebase on 6.1-rc1 where post_deinit() has been removed
+>  - split out host-init error handling
+>  - add Stan's ack
+> 
+> Changes in v2
+>  - rebase on next-20220720 (adjust context)
+>  - add Rob and Mani's reviewed-by tags
+> 
+> 
+> Johan Hovold (2):
+>   PCI: qcom: Fix host-init error handling
+>   PCI: qcom: Add support for modular builds
+> 
+>  drivers/pci/controller/dwc/Kconfig     |  2 +-
+>  drivers/pci/controller/dwc/pcie-qcom.c | 39 +++++++++++++++++++++++---
+>  2 files changed, 36 insertions(+), 5 deletions(-)
+> 
+> -- 
+> 2.37.3
+> 
