@@ -2,82 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA6066A0FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E2266A0FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjAMRps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S229924AbjAMRqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjAMRo5 (ORCPT
+        with ESMTP id S229853AbjAMRpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:44:57 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB84B88DCB
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:32:40 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id dw9so21662207pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:32:40 -0800 (PST)
+        Fri, 13 Jan 2023 12:45:14 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2779152E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:32:58 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id z190so10501892vka.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:32:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bn2AcuBT0fvJkrgHTd2c/hoZ5Zj/kmgAMB/+z6YAX20=;
-        b=pWCur2rpr+gspyvTGpRl88k+TALS1FegKvKEk5jy/bubgZifooV2E8xf0QwIy++02H
-         S6m6UDBMUkp29rQf5givNCDICZRrcuSYnr5JWNQwoofCzkPg27lB3WM8iemjZkiegent
-         gZbScAP0cVBjTXPsZSjZaMuUINSbBzaW4GoWO6YB2tYc0tsAGUFkPISV4xPbIpahnytZ
-         zyXkF3BdXK7ma9zdKYDJAn9w7aQ2Y6slaX4IZXxsd0/OTun3Y5snuWmt7nyPhnRhWFmi
-         2s4lKfwsbkPOlLighLxRNzpygU9yZ+0+C6Sm1Cjs4gI+jYXFnc+xzn0DpN4D6096Qusl
-         OMSw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3d0L9EXeSI2xa3z2QyuDWU/GW2S6z4vkLQnF3O+530=;
+        b=OnIoo9VUst637PaD3GIGw+8rqKwnkQLsUdbTvqYBTm4qQSS43PvGy96ENnv07t7th9
+         xuw99hglKZn282xWmPZ8NLUPi0eeog0mBAouU8QIjMzhcKJwdeQg1x9pq7Z9sDyvRh+X
+         B/T4naIBWhijaV1Z9nqPex9nz221WvdDsLkjyHvOjPxlITEPSM5vOtKSU++6UI8qTcEy
+         p53PYTGQOLK1Yda9yfp+DFHADAEl9aPTTUgVFvFJ9g53XXTQehKJmunG+gay+ZHnUAhv
+         ELxHmy37t/N3j8K3UW3/SMnN8dKSdWGA0f+3dmA4wJR5bGTuYBmupLM2mef25oYMFoti
+         eUmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Bn2AcuBT0fvJkrgHTd2c/hoZ5Zj/kmgAMB/+z6YAX20=;
-        b=d6iz/4ViCw1XRSbGtaPODFUtP3YWr6QddcqDsaQDZoQRHBlz7hI49fo2v8youZslGi
-         cMDQHoZuyBG/cYVwC7DDCdh5cm6UPnttugQPdcJNow3oXC8vCd8ahVrGFOeIKNcGXTrk
-         vc1TO7l7ywHk/gSlVhDaQBYKE0iTkNxr33gqaV0RwD+HJjXVRJErwEfi4AcFAipYo/6G
-         Jt2yJU5R9JTJE6DGLg57zQb3MESXvfAcGntjF9JWmV7fHX8A3kEuFsvFiT8WY3a4tJ1R
-         KNt5vNoyvFytrk5cJxSSB6N9AsZf+vhA4RGWiRp9397TDFrPHAGZgw2DsZmQFRNtGwGH
-         HCwQ==
-X-Gm-Message-State: AFqh2kqm690WOsGd+9je8wFSJ4r9+jHO4gZxzN4TbzoH8lkHvGdyL1R1
-        Z8Gf7iBQ9e1FDmwJNnrfEpY=
-X-Google-Smtp-Source: AMrXdXv/EdPX34pA5zO0RTZuyu1n6F4/TQCx3YkCTc9rmvcyVe4fHb7p9n7LK9vx+26KcpLsrVhXVg==
-X-Received: by 2002:a17:903:2605:b0:194:799b:858 with SMTP id jd5-20020a170903260500b00194799b0858mr492364plb.10.1673631160327;
-        Fri, 13 Jan 2023 09:32:40 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:2e4e:fba:501b:3a8c])
-        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b0019276616eb0sm14457459plb.83.2023.01.13.09.32.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 09:32:39 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 13 Jan 2023 09:32:38 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 2/4] zsmalloc: skip chain size calculation for pow_of_2
- classes
-Message-ID: <Y8GVtrmG1C04c0gA@google.com>
-References: <20230109033838.2779902-1-senozhatsky@chromium.org>
- <20230109033838.2779902-3-senozhatsky@chromium.org>
+        bh=E3d0L9EXeSI2xa3z2QyuDWU/GW2S6z4vkLQnF3O+530=;
+        b=fE12MV3rVCA1mXdMenl49A0v4DlHn33ks62BFrNBZugmd+ZFrB5xRgJBjmHrcTw5Wc
+         9mN3cw4IQv4dDf3k47RNXUh8rwbgJmp5VQ6q4/R7YVnw9I+MkqovBEnHVPOcJquv8nJU
+         kcqof6BVpo5XTri8fXHVcsBAufskaRWyJdTQDGESKzSRY8BnpSSXF/ngedKOfrQP6Joe
+         IeYahrswqxU8tuNKC3qzCYycRDmzFVZuQFSLcb+BxwA5cQxMfv+Uugyoz5AJsf6yaz10
+         Y4vXER4tXWTUXfaPhN1GyeXuhcwBU2pXgEZDiNxFz3m4QViGf9Hifi4rqP4nkYodP46L
+         d7jg==
+X-Gm-Message-State: AFqh2koG15bNVsDD2HLZSUrgC+AQC7H6S5vrq/LXOGrjeXKLQsKcbEQX
+        O1k4IQki8fXVaS4FqWAnmQGElbSSSKKTmIGINhLh0A==
+X-Google-Smtp-Source: AMrXdXstM05aG5ZJ1+4SwdzPR7faL+HVwyRkbnLgjVAkWQ3RO1tj8uFpevrmAq5Yn0yPIfIA1D9zoiwHkDdEjzqcwF0=
+X-Received: by 2002:a1f:3215:0:b0:3d5:86ff:6638 with SMTP id
+ y21-20020a1f3215000000b003d586ff6638mr8249719vky.30.1673631177317; Fri, 13
+ Jan 2023 09:32:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109033838.2779902-3-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230112135326.981869724@linuxfoundation.org>
+In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 13 Jan 2023 23:02:45 +0530
+Message-ID: <CA+G9fYukcyTgt2xavZqcxv55vC5vn2havo9A+wCjo9aVBpzR6g@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 12:38:36PM +0900, Sergey Senozhatsky wrote:
-> If a class size is power of 2 then it wastes no memory
-> and the best configuration is 1 physical page per-zspage.
-> 
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Acked-by: Minchan Kim <minchan@kernel.org>
+On Thu, 12 Jan 2023 at 19:26, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.6 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.6-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.1.6-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 5eedeabf82ee83045c63fd32b2473e1d61885204
+* git describe: v6.1.5-11-g5eedeabf82ee
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.5=
+-11-g5eedeabf82ee
+
+## Test Regressions (compared to v6.1.4-160-g06bcfb15cd3b)
+
+## Metric Regressions (compared to v6.1.4-160-g06bcfb15cd3b)
+
+## Test Fixes (compared to v6.1.4-160-g06bcfb15cd3b)
+
+## Metric Fixes (compared to v6.1.4-160-g06bcfb15cd3b)
+
+## Test result summary
+total: 183886, pass: 153292, fail: 5185, skip: 25382, xfail: 27
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 51 total, 50 passed, 1 failed
+* i386: 39 total, 36 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 44 total, 44 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
