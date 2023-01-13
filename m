@@ -2,103 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76422668AC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E968B668AC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjAMESK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 23:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S235879AbjAMEUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 23:20:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjAMEQs (ORCPT
+        with ESMTP id S230161AbjAMET6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 23:16:48 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E353687B7;
-        Thu, 12 Jan 2023 20:13:35 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pGBRM-00H5Jc-38; Fri, 13 Jan 2023 12:13:17 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 13 Jan 2023 12:13:16 +0800
-Date:   Fri, 13 Jan 2023 12:13:16 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v5 0/4] Add Aspeed ACRY driver for hardware acceleration
-Message-ID: <Y8DaXA9X5Rp+3jCA@gondor.apana.org.au>
-References: <20230104013436.203427-1-neal_liu@aspeedtech.com>
+        Thu, 12 Jan 2023 23:19:58 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B3B6535E;
+        Thu, 12 Jan 2023 20:15:25 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso25833133pjt.0;
+        Thu, 12 Jan 2023 20:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=owGrdmD6M5GkWkPONhYAnjTsh6hbHgml7pZ6gSujKuw=;
+        b=EE/ouegsY6Ipuhx5f8V5bwezV4hjMFmr2EvwSqRrP79fiFqTnxPYmzKBpPu8s+1Ll8
+         lW0pcs833q5DjLgyoWDRuXhfi6ZSRuZKi8kZfIlqUSSoMSqmIft4mW6ygrKCm69iSwXL
+         PCUj81A+jXvKlxkOikMbvc8Ynq6EHHEmoy2MTaxMUoX+axArK402EZRKvs49WKPR62Hp
+         h7ZHk62lF/U4UZZ77c0BZKfNymRF8tN88H7vqP9hfWCSKwW0GzwIBQLum9C9Weh7hT3X
+         EGXe2qg6XZ+b6DFuprWdVKTGXWQgm3sGYSgsrpASKc8EJVYw0hUOumNFVAnrTKX5lpde
+         QvVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=owGrdmD6M5GkWkPONhYAnjTsh6hbHgml7pZ6gSujKuw=;
+        b=2QerWavxZC9H/XLfFuuUOcY+PmsrNDoU+YTz1YM8TmPQ5KtX1oUIH7Pd7DKkswq2ny
+         F+noCQy1ubec281cA+gBPXuMBYRJEIpxLvRXIXYH9ttu4RmoMV5ziIlam8BYv4636a0K
+         uoWg/u3n+LydbpscumDt7Gjau4WxJ1xHxQB9sUWYiIEViaOve18/HlkiJuBgQd+FvIzn
+         xS0n81AZCPk8Xu5mpOOpHZ6LucRXaDizNZJS4aQPYMYP1vjqYkY5bNKsUDuh08yZk3c+
+         IwJokSIUTSUR2GSA/w0ufQtsQDP7SgK6mTSIkDo39Z62UzezhWGZwICT7exsZozWV3YC
+         nTtw==
+X-Gm-Message-State: AFqh2koQs0wb54ZvQICz+PwHbEV/Ch/6HaiQgnjoF2Q4qx4VhuI9ERTx
+        bJH4L7zpAQREy+sbRDhF+Pk=
+X-Google-Smtp-Source: AMrXdXs2lDdkOntcs6E+HrRmEt8fujkeEJ2OP1c6TmntKOMz1NsdpbYm/P55TzkysVtlxQE1iAdBRg==
+X-Received: by 2002:a17:902:8b88:b0:192:b2d3:4fc8 with SMTP id ay8-20020a1709028b8800b00192b2d34fc8mr9136045plb.1.1673583324917;
+        Thu, 12 Jan 2023 20:15:24 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-19.three.co.id. [180.214.233.19])
+        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b0019276616eb0sm13024781plb.83.2023.01.12.20.15.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 20:15:24 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 221E7104A90; Fri, 13 Jan 2023 11:15:21 +0700 (WIB)
+Date:   Fri, 13 Jan 2023 11:15:20 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/10] 5.15.88-rc1 review
+Message-ID: <Y8Da2By1yzk/5rs9@debian.me>
+References: <20230112135326.689857506@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v+IuJdQt9LwIUu9M"
 Content-Disposition: inline
-In-Reply-To: <20230104013436.203427-1-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112135326.689857506@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 09:34:32AM +0800, Neal Liu wrote:
-> Aspeed ACRY engine is designed to accelerate the throughput of
-> ECDSA/RSA signature and verification.
-> 
-> These patches aim to add Aspeed ACRY RSA driver support.
-> This driver also pass the run-time self tests that take place at
-> algorithm registration on both big-endian/little-endian system
-> in AST2600 evaluation board .
-> 
-> Tested-by below configs:
-> - CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
-> - CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
-> - CONFIG_DMA_API_DEBUG=y
-> - CONFIG_DMA_API_DEBUG_SG=y
-> - CONFIG_CPU_BIG_ENDIAN=y
-> 
-> Change since v4:
-> - Remove GFP_DMA flag since it's unnecessary.
-> 
-> Change since v3:
-> - Revise aspeed,ast2600-ahbc.yaml dt-bindings description.
-> 
-> Change since v2:
-> - Fix format and uninitialized warning.
-> - Revise binding description.
-> 
-> Change since v1:
-> - Fix dt-bindings description.
-> - Refine the Makefile which has been addressed.
-> 
-> Neal Liu (4):
->   crypto: aspeed: Add ACRY RSA driver
->   ARM: dts: aspeed: Add ACRY/AHBC device controller node
->   dt-bindings: crypto: add documentation for Aspeed ACRY
->   dt-bindings: bus: add documentation for Aspeed AHBC
-> 
->  .../bindings/bus/aspeed,ast2600-ahbc.yaml     |  37 +
->  .../bindings/crypto/aspeed,ast2600-acry.yaml  |  49 ++
->  MAINTAINERS                                   |   2 +-
->  arch/arm/boot/dts/aspeed-g6.dtsi              |  13 +
->  drivers/crypto/aspeed/Kconfig                 |  11 +
->  drivers/crypto/aspeed/Makefile                |   2 +
->  drivers/crypto/aspeed/aspeed-acry.c           | 828 ++++++++++++++++++
->  7 files changed, 941 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
->  create mode 100644 Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
->  create mode 100644 drivers/crypto/aspeed/aspeed-acry.c
-> 
-> -- 
-> 2.25.1
 
-All applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+--v+IuJdQt9LwIUu9M
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jan 12, 2023 at 02:56:37PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.88 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--v+IuJdQt9LwIUu9M
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8Da0QAKCRD2uYlJVVFO
+o1XqAP9ODDgyzKJbSBYvnY3h+M8uXFioTwKcYYOWrKQJNo1zywD8DzaL64rLDIMS
+tYr5sI/wIdokXkcn6F2ci46+02TKbgE=
+=5AkB
+-----END PGP SIGNATURE-----
+
+--v+IuJdQt9LwIUu9M--
