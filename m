@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB0766A23E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2704F66A241
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjAMSlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S229889AbjAMSlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:41:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjAMSlK (ORCPT
+        with ESMTP id S230022AbjAMSlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:41:10 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3961ADBC
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:41:03 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id dw9so21836310pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:41:03 -0800 (PST)
+        Fri, 13 Jan 2023 13:41:45 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9743D1DA
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:41:42 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id jn22so24264923plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:41:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=c0+Sdo0KEI7o1bohHc1jHwiM206A+991wKrqsl42gBA=;
-        b=PBjE6fpa3XZ0R5lmeJaHS88HKwQd9U/loRunVFiGhmLwRqhpknZ9+P6RbsMgk3PDL1
-         PgLj8+ehJmtj4zrs/d19QRniRQHhylp9ECRge3nOAok3HgG/eSF5Ym1Nqq+DUSeyVh9J
-         GXuA9hPbl/TGZTbC4iwiqwta7/olfZdvm9dJ4=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=godItNTiu1hFRNSRzyHDiQ09s/Iir0TYSKsoCsWjnBI=;
+        b=ETvBwnoWQjAy4YvByjEGST2SfwtwOTHrXBkGCH7CY6CS5ocaYNVmsxWzl03UwSz2vl
+         x3+YtwG7slgYRTPbz7quPAROdVldSPr1rg8X1IIdhN4n9G1uHeKtc47dPm+kAYJkPw3/
+         kfkgfQzlVLeF9ptQAC+MyzOyCvW28G+mN0j7yVqDXuMtSAYzpwMUfS+AeQO6WXsuJ3So
+         cVwE1PVqO4EJIW81fT4RocCow5Iwk5FO85cu18YG/g0KwtMkMYxLQBqTzd5cG27Jnv3+
+         u0HagV3CDWxT8onavImXo6uH0GaE1U50G5ghTh6KRwvyRfoYIjhim2uPN4VsNuF/V4Wc
+         oy+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c0+Sdo0KEI7o1bohHc1jHwiM206A+991wKrqsl42gBA=;
-        b=Gil4vlJ/UJoe3kcjn+iqrGBPs5A2nCcmp2Jfi9y5Qd0vqYd3f97DYck1SbZYPgXI/A
-         PGivjM/0K7pCu0jvHGKenz6AwbyEmEAVpi7d6MArb+q2rK86maHlBgk4Wdvm40CY2ziR
-         NY9bAc+moV2VSn4res9Ou4TJqoPc92c7Jyavwv7mSKfX2YLGGtJAiXoHUTAHx9Y1RCiu
-         LYGGvaSQAEVzRXS5H9xt+wEZHkBXUEvMSolrmyqzY4H/wYAZO6GT7gRrkeMivwgCzeke
-         J5kGGmHtpxAFhzZdJvhpoIE4dNCdalAJJegl/T6AtkDU6+lcMoAD6C52yWKrS+xF0aEw
-         xrtQ==
-X-Gm-Message-State: AFqh2kqEWb90FXPKZtifDvgLc4nwyRf9bXz2uMcSlklOgmevMoIBfzBh
-        cxL2VW/K1cjfoieZ4WWAxtYKSA==
-X-Google-Smtp-Source: AMrXdXtp0c0JUJUWnsyKvdP7j8ZaYi2JqXlPXCfJ6A2WBcV5A5fqLTp0v6thjvEtH6OYKXj/pGtg1g==
-X-Received: by 2002:a17:90a:7e14:b0:219:eeb9:943f with SMTP id i20-20020a17090a7e1400b00219eeb9943fmr82718118pjl.49.1673635262948;
-        Fri, 13 Jan 2023 10:41:02 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w1-20020a17090a1b8100b0022721df27e9sm1724684pjc.11.2023.01.13.10.41.02
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=godItNTiu1hFRNSRzyHDiQ09s/Iir0TYSKsoCsWjnBI=;
+        b=v2979Y92Xa4gvwCcso6hcUkxPS97Zg1pzZXeKOd5eqU5Y+t6lgsdRG25/hhBuIAPGN
+         6Db70vBIWTQLb1vnIX49H08IVgqVsij97ew8jopfFjn0OXFsomvy7LimQLcMyW2QB+gD
+         OOJaMIGjWvYtvrnb+r6cb3P5HLb/Ep16zw6c8RHdWM3fTSX4s8XT1AFDuT6D3Tf83o1d
+         bmf/VTz/jVjqShtv2Oxhvl82mUecsP9n7OdyylZj4dol8ERZV0ly5Auj6ddudonqlaKj
+         alhYNHp0hTEyIbKEZIB5RlTIy9I3/fVI+nU0Dk7yZmfw2Vs6Cl8alsmFrMYBypuLXFfC
+         omEg==
+X-Gm-Message-State: AFqh2kpJzu5+HTsrYL1b4wp57X/b47YO8NoRfePHZpIeVeQ2ju5IJXXL
+        7Sgl5nLonQWzNwpTjzndf3Youw==
+X-Google-Smtp-Source: AMrXdXvRij7in5oNpdpmDfXW61gvt60eWr/Gx1OLt9EPk0FAutZuxDCB4HdkixgaoHQ2ouBVgm2OKQ==
+X-Received: by 2002:a17:90a:d148:b0:229:1e87:365f with SMTP id t8-20020a17090ad14800b002291e87365fmr495333pjw.2.1673635301522;
+        Fri, 13 Jan 2023 10:41:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090ad71700b0022910fa4d1csm2619706pju.46.2023.01.13.10.41.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 10:41:02 -0800 (PST)
-Date:   Fri, 13 Jan 2023 10:41:01 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Yupeng Li <liyupeng@zbhlos.com>, tariqt@nvidia.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Caicai <caizp2008@163.com>
-Subject: Re: [PATCH 1/1] net/mlx4: Fix build error use array_size() helper in
- copy_to_user()
-Message-ID: <202301131039.7354AD35CF@keescook>
-References: <20230107072725.673064-1-liyupeng@zbhlos.com>
- <Y7wb1hCpJiGEdbav@ziepe.ca>
+        Fri, 13 Jan 2023 10:41:41 -0800 (PST)
+Date:   Fri, 13 Jan 2023 18:41:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Orr <marcorr@google.com>, Ben Gardon <bgardon@google.com>,
+        Venkatesh Srinivas <venkateshs@chromium.org>
+Subject: Re: [PATCH 0/6] KVM: x86: x2APIC reserved bits/regs fixes
+Message-ID: <Y8Gl4ZI3HsFGlALe@google.com>
+References: <20230107011025.565472-1-seanjc@google.com>
+ <674ac894-12a2-c15f-72c5-878558a8005d@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7wb1hCpJiGEdbav@ziepe.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <674ac894-12a2-c15f-72c5-878558a8005d@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 09:51:18AM -0400, Jason Gunthorpe wrote:
-> On Sat, Jan 07, 2023 at 03:27:25PM +0800, Yupeng Li wrote:
-> > When CONFIG_64BIT was disabled, check_copy_size() was declared with
-> > attribute error: copy source size is too small, array_size() for 32BIT
-> > was wrong size, some compiled msg with error like:
+On Fri, Jan 13, 2023, Paolo Bonzini wrote:
+> On 1/7/23 02:10, Sean Christopherson wrote:
+> > Fixes for edge cases where KVM mishandles reserved bits/regs checks when
+> > the vCPU is in x2APIC mode.
 > > 
-> >   CALL    scripts/checksyscalls.sh
-> >   CC [M]  drivers/net/ethernet/mellanox/mlx4/cq.o
-> > In file included from ./arch/x86/include/asm/preempt.h:7,
-> >                  from ./include/linux/preempt.h:78,
-> >                  from ./include/linux/percpu.h:6,
-> >                  from ./include/linux/context_tracking_state.h:5,
-> >                  from ./include/linux/hardirq.h:5,
-> >                  from drivers/net/ethernet/mellanox/mlx4/cq.c:37:
-> > In function ‘check_copy_size’,
-> >     inlined from ‘copy_to_user’ at ./include/linux/uaccess.h:168:6,
-> >     inlined from ‘mlx4_init_user_cqes’ at drivers/net/ethernet/mellanox/mlx4/cq.c:317:9,
-> >     inlined from ‘mlx4_cq_alloc’ at drivers/net/ethernet/mellanox/mlx4/cq.c:394:10:
-> > ./include/linux/thread_info.h:228:4: error: call to ‘__bad_copy_from’ declared with attribute error: copy source size is too small
-> >   228 |    __bad_copy_from();
-> >       |    ^~~~~~~~~~~~~~~~~
-> > make[6]: *** [scripts/Makefile.build:250：drivers/net/ethernet/mellanox/mlx4/cq.o] 错误 1
-> > make[5]: *** [scripts/Makefile.build:500：drivers/net/ethernet/mellanox/mlx4] 错误 2
-> > make[5]: *** 正在等待未完成的任务....
-> > make[4]: *** [scripts/Makefile.build:500：drivers/net/ethernet/mellanox] 错误 2
-> > make[3]: *** [scripts/Makefile.build:500：drivers/net/ethernet] 错误 2
-> > make[3]: *** 正在等待未完成的任务....
-> > make[2]: *** [scripts/Makefile.build:500：drivers/net] 错误 2
-> > make[2]: *** 正在等待未完成的任务....
-> > make[1]: *** [scripts/Makefile.build:500：drivers] 错误 2
-> > make: *** [Makefile:1992：.] 错误 2
+> > The first two patches were previously posted[*], but both patches were
+> > broken (as posted against upstream), hence I took full credit for doing
+> > the work and changed Marc to a reporter.
 > > 
-> > Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-> > Reviewed-by: Caicai <caizp2008@163.com>
-> > ---
-> >  drivers/net/ethernet/mellanox/mlx4/cq.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> > The VMX APICv fixes are for bugs found when writing tests.  *sigh*
+> > I didn't Cc those to stable as the odds of breaking something when touching
+> > the MSR bitmaps seemed higher than someone caring about a 10 year old bug.
 > > 
-> > diff --git a/drivers/net/ethernet/mellanox/mlx4/cq.c b/drivers/net/ethernet/mellanox/mlx4/cq.c
-> > index 4d4f9cf9facb..7dadd7227480 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx4/cq.c
-> > +++ b/drivers/net/ethernet/mellanox/mlx4/cq.c
-> > @@ -315,7 +315,11 @@ static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
-> >  		}
-> >  	} else {
-> >  		err = copy_to_user((void __user *)buf, init_ents,
-> > +#ifdef CONFIG_64BIT
-> >  				   array_size(entries, cqe_size)) ?
-> > +#else
-> > +				   entries * cqe_size) ?
-> > +#endif
-> >  			-EFAULT : 0;
+> > AMD x2AVIC support may or may not suffer similar interception bugs, but I
+> > don't have hardware to test and this already snowballed further than
+> > expected...
+> > 
+> > [*] https://lore.kernel.org/kvm/20220525173933.1611076-1-venkateshs@chromium.org
 > 
-> This can't possibly make sense, Kees?
+> Looks good; please feel free to start gathering this in your tree for 6.3.
 
-Uuuuh, that's really weird. What compiler version and arch? I'll see if
-I can reproduce this.
+Thanks!
 
--- 
-Kees Cook
+> Next week I'll go through Ben's series as well as Aaron's "Clean up the
+> supported xfeatures" and others.
+> 
+> Let me know if you would like me to queue anything of these instead, and
+> please remember to set up the tree in linux-next. :)
+
+Ya, next week is going to be dedicated to sorting out maintenance mechanics.
