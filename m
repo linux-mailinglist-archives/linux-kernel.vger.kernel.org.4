@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A568466938F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46507669390
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjAMJ6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S240048AbjAMJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbjAMJ5o (ORCPT
+        with ESMTP id S235485AbjAMJ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 04:57:44 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B29B856;
-        Fri, 13 Jan 2023 01:55:40 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id z11so30495535ede.1;
-        Fri, 13 Jan 2023 01:55:40 -0800 (PST)
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFC0193C7;
+        Fri, 13 Jan 2023 01:55:41 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id v6so8060604ejg.6;
+        Fri, 13 Jan 2023 01:55:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=to:references:message-id:content-transfer-encoding:cc:date
@@ -35,21 +35,21 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
          :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=FL1qa9NWBiFahqVS7uPrQLa9p2D4H1P5I2LTXryXQM8=;
-        b=VXLGY/puv1aYRfFcURn4haqJZE24de5/K3Hlrz4KMrLkXr89OwG2MLEIy8qWRXEzTM
-         SfpzMkQ9LCDu6vK1if15SNoF7fRaJyGJYhOxnxnTQfq32Y6ABX4xBrCWdaxCrabUpNKN
-         5BnWTHInhVo5g8BtqYLw/79OWQe5twpd4MxdwXEY/HTB+A1mV3+pzUzgd1wcoWfJUERS
-         4J1mpNFGsCF0tjRRcQwglajGk0ql8HuUULSX5n7ytutuZdP/GDQ9dRdQ9aZNOa1ynvu8
-         ozidYxFXNUDUov85DdSYIjI/kuX+0yYkHCRpPaw1DL5BIXuaf7n8rp4UcRPyj8tP70o9
-         iMUA==
-X-Gm-Message-State: AFqh2kq7EF9TeTC35s7I1c9JEYc3oU9qcFXlrdP8Iz3qpHvqlal1DRMU
-        tZgu0nd6GBmKi6RPCzV1ko0=
-X-Google-Smtp-Source: AMrXdXvS+jngj72AsU1IPkwGiu+Kshv5B4H/Occn2QentEnULt1SpjMjzOl/s4hGDlAIxUOuIbsLXw==
-X-Received: by 2002:a05:6402:3894:b0:48f:68b1:db4e with SMTP id fd20-20020a056402389400b0048f68b1db4emr30375839edb.27.1673603739011;
+        b=xu6/pdsUdbyUDLLXNgi4mPLHw8amU2wtVo02QC1eUcO8CpsNndqHA6ZbtH4gWlqlTE
+         3kEcTgdQ0q6RVtstbIS0Jz/CS/6ezK1I1An/0pZFvBmK3SzhouWPP2+pasf0vmivDiWj
+         WdtriVBRKC5EY8b0cw0giEiev+/X8XaQ7p/IACy71WzchYtDhbYtGdwEENR3FYvADTD6
+         OI0gZIhDih847vbWgnyywIa08K416m4TyPjc6tCU8TE4Uq129J8zVPOAYs/aWqN3L82N
+         P1WdGfWPQqaTuHJMyzzzAivlS1weoPznGETIntYXIQQKifpQlTq5uus4/57InDQq4yRE
+         8qEg==
+X-Gm-Message-State: AFqh2kpn8AmEvn1eQEIG2kg2eh1gq1mOg3b7Brh1jaICncK8YRSO/u8r
+        NHPSPcY30QayWPGF9Z6TZKQ=
+X-Google-Smtp-Source: AMrXdXuj5XJOhPHsKzoACyEDJti0gCLosbzWmCdInDsoLH9B1rfLQX43QL0LXpu+6bLc+WyWRIRTUg==
+X-Received: by 2002:a17:906:fd54:b0:859:5541:f3ff with SMTP id wi20-20020a170906fd5400b008595541f3ffmr9518651ejb.32.1673603739589;
         Fri, 13 Jan 2023 01:55:39 -0800 (PST)
 Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id v15-20020a056402184f00b0046c5baa1f58sm7949072edy.97.2023.01.13.01.55.38
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906218a00b0073d796a1043sm8224538eju.123.2023.01.13.01.55.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 13 Jan 2023 01:55:38 -0800 (PST)
+        Fri, 13 Jan 2023 01:55:39 -0800 (PST)
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
@@ -67,7 +67,7 @@ To:     Bagas Sanjaya <bagasdotme@gmail.com>
 X-Mailer: Apple Mail (2.3731.300.101.1.3)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
