@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D365668835
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9612166883C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240676AbjAMAMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S240752AbjAMAMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240159AbjAMALl (ORCPT
+        with ESMTP id S240224AbjAMALn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:11:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4B05D6BF;
-        Thu, 12 Jan 2023 16:11:37 -0800 (PST)
+        Thu, 12 Jan 2023 19:11:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620305DE45;
+        Thu, 12 Jan 2023 16:11:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46976621EE;
-        Fri, 13 Jan 2023 00:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50897C43321;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08AE8B82040;
+        Fri, 13 Jan 2023 00:11:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53217C43322;
         Fri, 13 Jan 2023 00:11:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673568695;
-        bh=u2HBlljfPn8Ri/yAwyLtuZNtCtHOAcW5KH7Mkb084Zc=;
+        bh=72gsX++wxmeErw7ndj3rGwNCVseeQh9C5570FRccUS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S02HWytAsHZnBWpX/Nh0sql12ycvEfPCpERqe0tpOjZIIDAMeQNTh1pm3WADHpvAZ
-         FiQUlMf7+D1alQORWKjoq3oeIvZr/Z0w43a2ufpRap5JtP6a1N68p4sfxiFWRfIWkK
-         74vIMqj5WxmIw27fVl6MuocLZG94SH/wtagiYay6G4P8vi/J63WaebjJN9ZtqtSjD1
-         RDuTNYZT0YRktzdxf1F2rU+nSVZFmaTFFulGljSVXpAnS35W8VD/hS0QcQsthe8bby
-         7vPavA/Q0YmIPASeNMOtG3YGAtuwrcrmkOFH/y6/Jw6LYr4wEmlNbw8PanyJuyDx29
-         ZUI2a7n96oAeQ==
+        b=Z+/a1vhY7SZ+TndOVS8pLfR2WIZBPXxo1LJm3s34Aa8HHINjeOCM+WZxDolkgOAT7
+         vgHH5nvpoeWkVyPMpixJKe3XfB69O060tRbi4JitrajwqRLsY9cMpLtQAjepa/SiWg
+         ojYmgd700WPRrhmxpzyHlZrm11M5rxRwiStAeZWfTq/tcMJ+E7WFBJJHS8+A9+Ti7b
+         OOW3a6WWaZ2/9cVfo+A8OIDIs2YNAX8/T3yTMlBrSJ4GWax33l5mqTzuf/PSzEJUCs
+         v0TkfiB8xRP+jjSF/XfFbINC+ZqCmymX+zEeIejMNrYzpPmh/1J++xjU4Tdd0Izuvt
+         +ogIrvtRX0xeQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A84175C1931; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
+        id AABED5C1C63; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        Qu Wenruo <wqu@suse.com>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
+        Anup Patel <anup@brainfault.org>,
         John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH rcu v2 10/20] fs/btrfs: Remove "select SRCU"
-Date:   Thu, 12 Jan 2023 16:11:22 -0800
-Message-Id: <20230113001132.3375334-10-paulmck@kernel.org>
+Subject: [PATCH rcu v2 11/20] fs/dlm: Remove "select SRCU"
+Date:   Thu, 12 Jan 2023 16:11:23 -0800
+Message-Id: <20230113001132.3375334-11-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
 References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
@@ -64,29 +64,27 @@ no longer any point in selecting it.  Therefore, remove the "select SRCU"
 Kconfig statements.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Chris Mason <clm@fb.com>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: David Sterba <dsterba@suse.com>
-Cc: <linux-btrfs@vger.kernel.org>
-Acked-by: David Sterba <dsterba@suse.com>
-Reviewed-by: Qu Wenruo <wqu@suse.com>
+Cc: Christine Caulfield <ccaulfie@redhat.com>
+Cc: David Teigland <teigland@redhat.com>
+Cc: <cluster-devel@redhat.com>
+Acked-by: Anup Patel <anup@brainfault.org>
 Reviewed-by: John Ogness <john.ogness@linutronix.de>
 ---
- fs/btrfs/Kconfig | 1 -
+ fs/dlm/Kconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/fs/btrfs/Kconfig b/fs/btrfs/Kconfig
-index 183e5c4aed348..37b6bab90c835 100644
---- a/fs/btrfs/Kconfig
-+++ b/fs/btrfs/Kconfig
-@@ -17,7 +17,6 @@ config BTRFS_FS
- 	select FS_IOMAP
- 	select RAID6_PQ
- 	select XOR_BLOCKS
+diff --git a/fs/dlm/Kconfig b/fs/dlm/Kconfig
+index 1105ce3c80cbd..b3b86dbdc1878 100644
+--- a/fs/dlm/Kconfig
++++ b/fs/dlm/Kconfig
+@@ -4,7 +4,6 @@ menuconfig DLM
+ 	depends on INET
+ 	depends on SYSFS && CONFIGFS_FS && (IPV6 || IPV6=n)
+ 	select IP_SCTP
 -	select SRCU
- 	depends on PAGE_SIZE_LESS_THAN_256KB
- 
  	help
+ 	A general purpose distributed lock manager for kernel or userspace
+ 	applications.
 -- 
 2.31.1.189.g2e36527f23
 
