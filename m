@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0CB669E1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176CB669E19
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjAMQ31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S229446AbjAMQ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjAMQ2R (ORCPT
+        with ESMTP id S229723AbjAMQ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:28:17 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA97FC9C;
-        Fri, 13 Jan 2023 08:22:51 -0800 (PST)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pGMp4-000DRc-S9; Fri, 13 Jan 2023 17:22:30 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pGMp4-000Dff-6W; Fri, 13 Jan 2023 17:22:30 +0100
-Subject: Re: [PATCH] bpf: Fix pointer-leak due to insufficient speculative
- store bypass mitigation
-To:     Luis Gerhorst <gerhorst@cs.fau.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Piotr Krysiuk <piotras@gmail.com>,
-        Benedict Schlueter <benedict.schlueter@rub.de>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     stefan.saecherl@use.startmail.com,
-        Henriette Hofmeier <henriette.hofmeier@rub.de>
-References: <20230109150544.41465-1-gerhorst@cs.fau.de>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b643a86c-87cd-348c-8695-e14c7670871b@iogearbox.net>
-Date:   Fri, 13 Jan 2023 17:22:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 13 Jan 2023 11:28:16 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D47F47A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:22:50 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id v6so10470224ejg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:22:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/o3cDhl1VDCIhimkK4z4B4fUtw4xpL6u2a+ZhDH/qY=;
+        b=q5bwqIYKcVlpXQx7yfIVzB2kWsP0AsMOz3CSBAyQxwpf63kGPfnklzoPexGpbe7m9t
+         x9dx7vHCHobX2zhyhx22gqU3++27hxNy6YWX+2qyd22/Q7IL1a6Xaa70K3LHYEbdyu4h
+         QGHfjd5vky6vaFzz311KgJErqqKrAH+UUgvo5Mq1CAZenMx5zhPpjFRsZRGtskuTRONo
+         O7LhS6Fy/ywaNxCgCrhCAZHUO/olRMi5nwLHpyfLS7oOchL3MccQ0KOKNz7fzqjsYAE4
+         6ywV3i/mMz4iMhDvokA3CAZWblcWAS4ATYVRFhJvl8Hpg4/Icagy8mlTuWmGSsM9Hwfb
+         H46A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U/o3cDhl1VDCIhimkK4z4B4fUtw4xpL6u2a+ZhDH/qY=;
+        b=IH+XYDELrDlA46F7OgAxVY0EMJpAMVCcIETCwMEOtWgBnmhYDrMcfJACrS99TamFIX
+         ASxsielpouBZWGRqa2SS1fUFZMyNnJIch3Wqhni4TvqkwoJ7i+1T9OoUReNxt0ZrFUDd
+         vtNSxrmvbaPQcsYIL+IyAuCfhcujqj4Dl7tdHAtk5uLwecIoQ5Jrf8U6mMFa6D4UaSFt
+         kiRTNN2LTE3SE2GbpynusLpm2A7xoPy1A10H8sp4HvZgtfG08b81d8yNMullJAbNwAOh
+         titLTnY1c3ZM/M8km4aijKKOHB61tWacp8iC2Lfnktk0SwfJSmVBlm9Pl7ABmsp7gDLx
+         wuCA==
+X-Gm-Message-State: AFqh2koxKS9sq8NULZiiDirzhNv6BqTjVsNY9RnEK7xikTG1v6/t8wVh
+        wZQKO/AuvBvGskdauKVPTXMvKw==
+X-Google-Smtp-Source: AMrXdXsEB9DBeXGM8m6kmN4csDLoYQGbHXzkjVvECMuguflfw8lprXbS7Ov+fnTmjSUMOZSUi0obEg==
+X-Received: by 2002:a17:906:b00c:b0:7c4:fa17:7202 with SMTP id v12-20020a170906b00c00b007c4fa177202mr68035056ejy.33.1673626968525;
+        Fri, 13 Jan 2023 08:22:48 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q1-20020a17090676c100b007c0d4d3a0c1sm8739479ejn.32.2023.01.13.08.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:22:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/6] arm64: dts: qcom: sm8250: drop unused clock-frequency from rx-macro
+Date:   Fri, 13 Jan 2023 17:22:40 +0100
+Message-Id: <20230113162245.117324-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20230109150544.41465-1-gerhorst@cs.fau.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26780/Fri Jan 13 09:37:02 2023)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/23 4:05 PM, Luis Gerhorst wrote:
-> To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
-> insufficient speculative store bypass mitigation") inserts lfence
-> instructions after 1) initializing a stack slot and 2) spilling a
-> pointer to the stack.
-> 
-> However, this does not cover cases where a stack slot is first
-> initialized with a pointer (subject to sanitization) but then
-> overwritten with a scalar (not subject to sanitization because the slot
-> was already initialized). In this case, the second write may be subject
-> to speculative store bypass (SSB) creating a speculative
-> pointer-as-scalar type confusion. This allows the program to
-> subsequently leak the numerical pointer value using, for example, a
-> branch-based cache side channel.
-> 
-> To fix this, also sanitize scalars if they write a stack slot that
-> previously contained a pointer. Assuming that pointer-spills are only
-> generated by LLVM on register-pressure, the performance impact on most
-> real-world BPF programs should be small.
-> 
-> The following unprivileged BPF bytecode drafts a minimal exploit and the
-> mitigation:
-> 
->    [...]
->    // r6 = 0 or 1 (skalar, unknown user input)
->    // r7 = accessible ptr for side channel
->    // r10 = frame pointer (fp), to be leaked
->    //
->    r9 = r10 # fp alias to encourage ssb
->    *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
->    // lfence added here because of pointer spill to stack.
->    //
->    // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
->    // for no r9-r10 dependency.
->    //
->    *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
->    // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
->    // store may be subject to SSB
->    //
->    // fix: also add an lfence when the slot contained a ptr
->    //
->    r8 = *(u64 *)(r9 - 8)
->    // r8 = architecturally a scalar, speculatively a ptr
->    //
->    // leak ptr using branch-based cache side channel:
->    r8 &= 1 // choose bit to leak
->    if r8 == 0 goto SLOW // no mispredict
->    // architecturally dead code if input r6 is 0,
->    // only executes speculatively iff ptr bit is 1
->    r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
-> SLOW:
->    [...]
-> 
-> After running this, the program can time the access to *(r7 + 0) to
-> determine whether the chosen pointer bit was 0 or 1. Repeat this 64
-> times to recover the whole address on amd64.
-> 
-> In summary, sanitization can only be skipped if one scalar is
-> overwritten with another scalar. Scalar-confusion due to speculative
-> store bypass can not lead to invalid accesses because the pointer bounds
-> deducted during verification are enforced using branchless logic. See
-> 979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
-> arithmetic") for details.
-> 
-> Do not make the mitigation depend on
-> !env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
-> likely unexpected if these were enabled. For example, leaking the
-> address to a protected log file may be acceptable while disabling the
-> mitigation might unintentionally leak the address into the cached-state
-> of a map that is accessible to unprivileged processes.
-> 
-> Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
-> Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
-> Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
+Neither qcom,sm8250-lpass-rx-macro bindings nor the driver use
+"clock-frequency" property.
 
-This looks good to me, thank you for the research on this topic! Applied
-to bpf tree. (I've also added a link tag to your other mail.)
+  sm8250-mtp.dtb: rxmacro@3200000: Unevaluated properties are not allowed ('clock-frequency' was unexpected)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=e4f4db47794c9f474b184ee1418f42e6a07412b6
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks,
-Daniel
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index f614992709d2..b22569101314 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -2301,7 +2301,6 @@ rxmacro: rxmacro@3200000 {
+ 			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
+ 
+ 			#clock-cells = <0>;
+-			clock-frequency = <9600000>;
+ 			clock-output-names = "mclk";
+ 			#sound-dai-cells = <1>;
+ 		};
+-- 
+2.34.1
+
