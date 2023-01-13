@@ -2,173 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938D3669870
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEEE669875
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241320AbjAMN0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
+        id S233155AbjAMN1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241458AbjAMN0H (ORCPT
+        with ESMTP id S241062AbjAMN1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:26:07 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDBB869E0;
-        Fri, 13 Jan 2023 05:17:13 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id y5so16152812pfe.2;
-        Fri, 13 Jan 2023 05:17:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Mo3K/eJ+MOGHbzScK4gvAZcKJcl3HKiS2vGsLSsm5o=;
-        b=RZb/oYVUHQr0QkBGuJCMAUQG/oHKZ83adLHe54LBsNcDcyrI9kxnFmQytvzgOUGJvn
-         iEhnXpokKGKrgKQR2I56zW+qFCVxTw6eNOMyoiNoByah/UyeK7Xho8RoMKtIBa/RvyNw
-         +jjDFl2+lXUs6mSUOq84smmffQQCjSycf8WZFIDn2+qlLig1GBOhe6QVjx9sd/ZsKLWn
-         2jXJ9NMTg1aam5n97s0UZvhelsCztEtgWbEDbpeBl9faLSJW6nZvPegYFsrRSZnhuz6Z
-         DJHNZgb4yT935cQ3EaWzSOikf/gMWOtmaZ61smDDm8WQ2dLT+XK0w1iAgyAlbjnhuJRg
-         F8lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Mo3K/eJ+MOGHbzScK4gvAZcKJcl3HKiS2vGsLSsm5o=;
-        b=cLgOvf8diDwFSTJ2cD0y2tGaCdvRHduZdVGnpzgA36iOWKC2yxLagvNnrjZGoMnzNP
-         R5fbPBF4y5K/8P4HNVTr0k2s3/mV44CtaiLgFzdibbkxHbZQBt5yfdCSLc0Qubaj6vgM
-         CfSToR8O0cH/5ePj6gggQaYFyTbkRExbtFOYdUTb18Z1HIivo+z9WySXVRj7MUCHvBwk
-         rzHRzO5wjXrAY/6f+RkONzE8gzawY96Um8l8+7i/4SBiyOJgQdpdjfcu83f/+tjfgVmT
-         WbuJYXLlZBtmfTXfOMsknWqdIB2nvcVjwNYcOV6yF+iNhlym1ZURAhhD3EJ9RSmPgPip
-         WKUQ==
-X-Gm-Message-State: AFqh2krV9AnG71DreoKsJsX0vFhVn9Zfc1uOPUuAugE6j2oqOCGabLpf
-        9iKWjR8xQS+Ok1FsZ/A7PbFKpEetLXG3KIcnt9xOgSK5800=
-X-Google-Smtp-Source: AMrXdXumwJEytEx1P4rpyQVMzmY8+DFigwS5ZEJvLOHgMvDjPP5aOq+j5mfdHOQmLC4SLGQxConZMxxi8z6gZEV3FXE=
-X-Received: by 2002:a05:6a00:1796:b0:58b:9f0a:f87f with SMTP id
- s22-20020a056a00179600b0058b9f0af87fmr705608pfg.81.1673615832252; Fri, 13 Jan
- 2023 05:17:12 -0800 (PST)
+        Fri, 13 Jan 2023 08:27:03 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A10718B8;
+        Fri, 13 Jan 2023 05:18:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g1Prq/kilpXSQodgxXgIgMmrECw8uHmFFV19ZOrjbv6Tf8XLQxAxE6JePVsPyW6T5FHHCqVhNgByIVtjWYAs0SoB/vv/BS4RvPvX8YfMp/bSX0HMsCGIdXY8Jtz2ooi8YvXT8kK3/flXbkxOdLs5teSw05zPYCPcXUxa4/Q9QgHncnsZBjRo7Db5X5h/f9dYO0KTHS27NszEoOliP9z3Rk5nwMFRWEoHgdAR3hxEUAbVOVODXTlOJ+yfnFSs2DQNYhMuDqAdyFz3vHnkoHr7Fxy8HuiSlQyJYKp5Hy3wua51QfkLDEb04xZkAYCqmAmUajb8j8YKIYt5jB7SH6OwqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cu7AWxQ1G1PleCN36FNclGiL5hHA24jl0q5xM7ja9Cs=;
+ b=ne8xm/0rm4svbphG/gJd/sgF/Bhw1rSE7KU58Mv7haRGSQJqS0d52Bkir3ypFi0iojeXWRReG+f/cE/yKHNmDxb6g5mALyXiZ4eznMVFnVtgOAqeZnTJFzBCc1DgmmfyZORpnmIV1aKFPs8y3xj7/0D4euU523XSLP+AqI2MSkP/k1Ee2+BWB3tvEzWwxIDsirnrfsOD4V2KOj8600onsIPjMhN66JAZTYcJ2kds0dG+dccVYqxgj/IPUq+OhnFalGPMD+KftgejNdQO3OtGysRRuiAHqwql5w76OhVRxLkoP6GEYoOSMrE4bScAOSdU1z8e/leLnveFCZ1KP2UaFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cu7AWxQ1G1PleCN36FNclGiL5hHA24jl0q5xM7ja9Cs=;
+ b=qWmRAViFD2ZXYV4ZeceVMbCtgqgPRgj3Kpm+6x5Tp5+BJZxYj8sPtAKnNMax+kWurK0LOuf1vMBpxkU7VPqjqylHzFZ4hlC4z0xEoutnNEf0Zl5IhkPJK+QRkOfYPrRa3IG/5auiExb9Kg0iZ19Vh5vYP1Iz7gc8Zv88MU5kV6bZqnJeKIO3SPmpviRBOnoSHDL5jhh0lxHS6b74/01q1JhhOVmmIuI59KW7lnGmjxCjYUUiDjHotyeywnLcFAqcQTOLsFpFEOQEdYwoDAyLjmbc3eUAaFPSobW0Too/beVSPzok6NDTvMmzOF6YcXFQqgsUClexEsWmUW610n6tUA==
+Received: from DM6PR02CA0112.namprd02.prod.outlook.com (2603:10b6:5:1b4::14)
+ by PH8PR12MB7159.namprd12.prod.outlook.com (2603:10b6:510:229::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Fri, 13 Jan
+ 2023 13:18:16 +0000
+Received: from CY4PEPF0000B8EF.namprd05.prod.outlook.com
+ (2603:10b6:5:1b4:cafe::10) by DM6PR02CA0112.outlook.office365.com
+ (2603:10b6:5:1b4::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
+ Transport; Fri, 13 Jan 2023 13:18:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ CY4PEPF0000B8EF.mail.protection.outlook.com (10.167.241.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6023.4 via Frontend Transport; Fri, 13 Jan 2023 13:18:15 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 05:18:02 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 13 Jan 2023 05:18:02 -0800
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Fri, 13 Jan 2023 05:18:02 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
+In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
+References: <20230112135524.143670746@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20230104141245.8407-1-aford173@gmail.com> <CAMuHMdWuE4L6K4ULdVLZKeLwd3xYfzkyBNrf6s7Qc2kf9b-_Cg@mail.gmail.com>
- <CAHCN7xKJRE7mrRgpKiEEgpkH1NLR8uGcc3mr5Khp3sWjxEtbdQ@mail.gmail.com>
-In-Reply-To: <CAHCN7xKJRE7mrRgpKiEEgpkH1NLR8uGcc3mr5Khp3sWjxEtbdQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 13 Jan 2023 07:17:00 -0600
-Message-ID: <CAHCN7xLSgrzxL0W0ue7wi8DBCH-EB574QtS6wsyrVNpHDFiE6Q@mail.gmail.com>
-Subject: Re: [PATCH 1/4] arm64: dts: beacon-renesom: Fix gpio expander reference
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <5f0d06c7-9da8-4406-b205-8547f5094e90@drhqmail201.nvidia.com>
+Date:   Fri, 13 Jan 2023 05:18:02 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8EF:EE_|PH8PR12MB7159:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5c273fb-c9ad-4d86-d79d-08daf568a10f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5vUSLsq8+8JHZu+i9sAfdufOiuLhKp+U5lFahC/CTB0yYTF6t1+4cut0hzV/GIqOPrJgBFAbrcDkotD0HEOfOqKBV+oe4tUiFwy7DLQKWKhGjW4dkq9ZXCGeXog8bq/B7w/zkqnszD7ywyzuK4v8V/44abO6vU89gC7peEuVzdi/pnP+BESOQe5MLMEG1CdGa+xVMwXElBtfWIeASVBmXoLH7btgdvipk4vZm6Mp8sY6K9ulvJPHcHiDSpWyV23YatsF7ckdeHv7oshgoIMOThZpIXGgK0LGPuVBrANk3n7PoYUxPyU9XYT9yYzZeFr8m4UBu0h4onpvbggk7jcnDx03jKSndA7leNqUzcW+JIDwWzpQtaJoEVxsV30KaJX0U0OlbAlDgr5x0pc4AEr7etqjkXgbFGPs0bVZo4C4F925XLXJDGza0zDMY8A+l0w4osa2gpnQTxB8fOKq0igjxS2xYESGsgn2uJRguV0XsaymvSuuXAza3/95b0GJajito9wxOqty/7Jt1tlQI8d8bvnvEN5r84xuemJ2m4EElgjQ2yi+cFnqfNnBPxQ8ODoVpDvoxQareQQewJ9maSkF4R5LvNlesKcv5fnrtPMzWaFasNkxHk8Q1W7lEqXv8IEpv/svBO2ziKnfEZ92AMa7dUYGmKcn9raKcOOmB6AZJIEUSJgaofOdrD49S2HXSDD8l8C9wX79XDtgJuiPBUBAPiZcm1oZsrX2yuxDZERm0UozNBeqvrBbaQBiwaxkODvzrvNsCWRq3Nx6hAA0h+6KDJcJVofl5V9Ku63gkAN9+vI=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(396003)(136003)(451199015)(46966006)(36840700001)(40470700004)(2906002)(40460700003)(5660300002)(7416002)(316002)(54906003)(82310400005)(36860700001)(336012)(426003)(47076005)(31696002)(966005)(86362001)(26005)(40480700001)(356005)(186003)(7636003)(82740400003)(478600001)(31686004)(8936002)(4326008)(6916009)(8676002)(70586007)(41300700001)(70206006);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 13:18:15.2826
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5c273fb-c9ad-4d86-d79d-08daf568a10f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8EF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7159
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 11:05 AM Adam Ford <aford173@gmail.com> wrote:
->
-> On Wed, Jan 11, 2023 at 10:29 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> >
-> > Hi Adam,
-> >
-> > On Wed, Jan 4, 2023 at 3:12 PM Adam Ford <aford173@gmail.com> wrote:
-> > > The board used to originally introduce the Beacon Embedded
-> > > RZ/G2[M/N/H] boards had a GPIO expander with address 20, but
-> > > this was change when the final board went to production.
-> > >
-> > > The production boards changed both the part itself and
-> > > the address.  With the incorrect address, the LCD cannot
-> > > come up.  If the LCD fails, the rcar-du driver fails to come up,
-> > > and that also breaks HDMI.
-> > >
-> > > Pre-release board were not shipped to the general public, so it
-> > > should be safe to push this as a fix.  Anyone with a production
-> > > board would have video fail due to this GPIO expander change.
-> > >
-> > > Fixes: a1d8a344f1ca ("arm64: dts: renesas: Introduce r8a774a1-beacon-rzg2m-kit")
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> >
-> > Thanks for your patch!
-> >
-> > > --- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> > > +++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-> > > @@ -437,20 +437,6 @@ wm8962_endpoint: endpoint {
-> > >                 };
-> > >         };
-> > >
-> > > -       /* 0 - lcd_reset */
-> > > -       /* 1 - lcd_pwr */
-> > > -       /* 2 - lcd_select */
-> > > -       /* 3 - backlight-enable */
-> > > -       /* 4 - Touch_shdwn */
-> > > -       /* 5 - LCD_H_pol */
-> > > -       /* 6 - lcd_V_pol */
-> > > -       gpio_exp1: gpio@20 {
-> > > -               compatible = "onnn,pca9654";
-> > > -               reg = <0x20>;
-> > > -               gpio-controller;
-> > > -               #gpio-cells = <2>;
-> > > -       };
-> > > -
-> > >         touchscreen@26 {
-> > >                 compatible = "ilitek,ili2117";
-> > >                 reg = <0x26>;
-> > > @@ -482,6 +468,21 @@ hd3ss3220_out_ep: endpoint {
-> > >                         };
-> > >                 };
-> > >         };
-> > > +
-> > > +       gpio_exp1: gpio@70 {
-> > > +               compatible = "onnn,pca9654";
-> >
-> > According to the patch description, the actual part was changed, too?
+On Thu, 12 Jan 2023 14:45:16 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.163 release.
+> There are 783 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.163-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-After a bit of some investigation, the part was changed to
-nxp,pca9538.  It appears to be the same driver and the same ".data"
-structure is used.  This probably explains why I didn't see any issues
-when I was testing this.  Unfortunately, the hardware engineer who
-made this hardware change is not around to ask why the change was
-made.    I'll do a V2 since, I don't see this in renesas-devel.
+All tests passing for Tegra ...
 
-adam
->
-> humm.. I was under the impression it was after talking with one of the
-> hardware developers, but clearly it's using the same compatible name.
-> I will investigate this further.  One way or the other, I'll redo the
-> commit message.
->
-> adam
-> >
-> > > +               reg = <0x70>;
-> > > +               gpio-controller;
-> > > +               #gpio-cells = <2>;
-> > > +               gpio-line-names =
-> > > +                       "lcd_reset",
-> > > +                       "lcd_pwr",
-> > > +                       "lcd_select",
-> > > +                       "backlight-enable",
-> > > +                       "Touch_shdwn",
-> > > +                       "LCD_H_pol",
-> > > +                       "lcd_V_pol";
-> > > +       };
-> > >  };
-> >
-> > The rest LGTM.
-> >
-> > Gr{oetje,eeting}s,
-> >
-> >                         Geert
-> >
-> > --
-> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> >
-> > In personal conversations with technical people, I call myself a hacker. But
-> > when I'm talking to journalists I just say "programmer" or something like that.
-> >                                 -- Linus Torvalds
+Test results for stable-v5.10:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    75 tests:	75 pass, 0 fail
+
+Linux version:	5.10.163-rc1-gd33d55703c78
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
+
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+
+Jon
