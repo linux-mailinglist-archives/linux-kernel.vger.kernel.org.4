@@ -2,92 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2C366A3D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF25766A3DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjAMUEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S229631AbjAMUHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjAMUEi (ORCPT
+        with ESMTP id S229712AbjAMUHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:04:38 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA2685C85
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:04:37 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id x37so23561710ljq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pn/bUQqTAlACXsw2QFf1F1nB2X4q2bNMOyvZ55+9yP4=;
-        b=Tr6VgupPvHBPkf9jtufKm+A27vFwaSYnsjcszGJP6IBI2qUNT2ZjMKC3evDBThaPTt
-         NDh+pJGetVKcZxgpqrN4Egt5C9/fbftrgp2NmGzf/XYJr+GEh2BJBZfb8Au84H7RN/iq
-         rNHLuEQVEZ/gODcLlT7B/nPWwOR/8Rw6AW/+s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pn/bUQqTAlACXsw2QFf1F1nB2X4q2bNMOyvZ55+9yP4=;
-        b=xw0HTISIKwD/bOX1+3bh/9A2hrtSWhpAHWTU1B5DzcXdvRRfSgfofRJmYlNMMUERJm
-         ooOEKsb62zTOWN395hMfIYmpiT1ohu7d4QFZYbZqjvSy5ecrcxSQyZLRsEbQpYVU7Uhw
-         CjSmabv2ddqsMGjMPHJZvUbXuM8PDncII+ohrqY9FdugUv6NKRJo7Xf79euDlYZ0wEDD
-         EiGW0ko8Y+BI8R4XaNYBZK9yZ3kmwesbh0/O0/RpPm9auqoythKioz0yOu7NIYmbPVJy
-         In218nDbKcuyQ6+r4fwgPSNvVyELWrrUfKUO7ANB3U3v8BTYTrThU8jEn9Q6PxgMWP8E
-         PYbw==
-X-Gm-Message-State: AFqh2kro8um1IiVF2Tpqzwpu1vQh/Z+0BowCjFGe9rpfearS3RcXg+ZE
-        1/JGUaJ74zVlbgOBv3I73iLIMR1eRAVkOL+YXb2xWA==
-X-Google-Smtp-Source: AMrXdXuxNP3qxjyfKL7UUHKMWbAhG7+AZ5pGsKgsViDpwuAAelWCvLAprFzP+G20mze9LfyTHRB9PaqUYqRLWMQPSzo=
-X-Received: by 2002:a05:651c:332:b0:28b:62f7:5b6d with SMTP id
- b18-20020a05651c033200b0028b62f75b6dmr406063ljp.39.1673640275607; Fri, 13 Jan
- 2023 12:04:35 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 13 Jan 2023 14:04:35 -0600
+        Fri, 13 Jan 2023 15:07:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B844551F9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:07:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A1094CE213C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 20:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FF5C433F0;
+        Fri, 13 Jan 2023 20:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673640426;
+        bh=tm60MhR2Yu73Egi7j3XIvH++TiMLajjoI0UVb1QTUQY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GYHe0e/j73QWRE85kmHzqwtYEC5q0b7EB2QwekFjCMe6oVrmekPJL/1dRH49TPP8I
+         Szgg1ISPmq1LHDl7L/HnLqk1/YmXzdl+a2pDbQ1U5+BZO8TbrDKjmQSiYAxhQuzF4f
+         ZvE2izqMhzWZfbxMCc5HGVcZ16qWSAlGofZupopRn66ANqECsyt1roNG0mZjb5EdTy
+         YNzQeGCWwVvNVu6xanb2JZ8g8Hl65Syar1+OROK35/cOzytogPymSDYduxn82WcxPL
+         uObE5AdOHsTnhWzol1qzvQeAIK5RVAj9Vcp5dnwaJRmLwZChgSNIoZYM8vlilYIvnt
+         tUww6BqOl70cg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6B9065C06D0; Fri, 13 Jan 2023 12:07:06 -0800 (PST)
+Date:   Fri, 13 Jan 2023 12:07:06 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230113200706.GI4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <Y77QbG9lVXX9/B87@rowland.harvard.edu>
+ <4c1abc7733794519ad7c5153ae8b58f9@huawei.com>
+ <Y8GGmstFlgg91RMp@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <Y8ERv0712EfPJWtF@hovoldconsulting.com>
-References: <20230113005405.3992011-1-swboyd@chromium.org> <20230113005405.3992011-5-swboyd@chromium.org>
- <Y8ERv0712EfPJWtF@hovoldconsulting.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 13 Jan 2023 14:04:35 -0600
-Message-ID: <CAE-0n50bbUJGfdXLhD2FP6-dwZEn_AqyB-fCTxgnZ=YBUQdUAw@mail.gmail.com>
-Subject: Re: [PATCH 5.15.y 4/4] phy: qcom-qmp-combo: fix runtime suspend
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8GGmstFlgg91RMp@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Johan Hovold (2023-01-13 00:09:35)
-> On Thu, Jan 12, 2023 at 04:54:05PM -0800, Stephen Boyd wrote:
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> > index 9fda6d283f20..d928afe2ebba 100644
-> > --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> > @@ -4985,15 +4985,11 @@ static void qcom_qmp_phy_disable_autonomous_mode(struct qmp_phy *qphy)
-> >  static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
-> >  {
-> >       struct qcom_qmp *qmp = dev_get_drvdata(dev);
-> > -     struct qmp_phy *qphy = qmp->phys[0];
-> > +     struct qmp_phy *qphy = qmp->usb_phy;
-> >       const struct qmp_phy_cfg *cfg = qphy->cfg;
-> >
-> >       dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
->
-> So this doesn't work currently either as the usb_phy pointer is not set
-> for PCIe and UFS PHYs.
+On Fri, Jan 13, 2023 at 11:28:10AM -0500, Alan Stern wrote:
+> Sorry for not replying earlier.  Yesterday was an extremely busy day,
+> and while I was working on a reply late at night, a network outage led
+> to all I had written getting lost.  :-(
+> 
+> Here's what I wanted to say, more or less.  (And I will also ignore the
+> difference between gp and rcu-gp.)
+> 
+> On Thu, Jan 12, 2023 at 01:48:26PM +0000, Jonas Oberhauser wrote:
+> > 
+> > 
+> > -----Original Message-----
+> > From: Alan Stern [mailto:stern@rowland.harvard.edu] 
+> > Sent: Wednesday, January 11, 2023 4:06 PM
+> > > Maybe we need a different word from "order".  Or maybe rcu-order should be renamed.
+> > 
+> > Alright, I've spent some time reading the rcu relations.
+> > If I understand correctly, there are the -rscs relations which "parse" the balanced and nested lock-unlock critical sections (e.g., in L1  L2 U2 U1,  it links L1 to U1 and L2 to U2).
+> > In those relations the equation
+> > 	matched = matched | (unmatched-locks-to-unlocks \
+> > 		(unmatched-po ; unmatched-po))
+> > confused me for a second because it has multiple solutions, but I assume it should be read as producing the fixed point one gets by starting from the empty set and iteratively applying the map until one reaches a fixed point.
+> 
+> Yes; cat uses least-fixed-point definitions.
+> 
+> > Next, rcu-link is the normal hb/pb happens-before relation, enclosed by po; .. ; po?.
+> 
+> Here's how I think about rcu-link.  rcu-fence will end up functioning
+> as kind of a super "cross-CPU" strong fence, so first consider the
+> restrictions we already have on strong fences.  In particular,
+> consider a cycle of the sort ruled out by the propagation axiom
+> (I have expanded out the initial pb link):
+> 
+> 	A ->prop B ->strong-fence C ->hb* D ->pb* A
+> 
+> The part of the cycle running from C to B is:
+> 
+> 	C ->hb* D ->pb* A ->prop B
+> 
+> which is rcu-link aside from lacking the po? and po at the beginning
+> and end.  Thus, it is easy to see that cycles of the form
+> 
+> 	(rcu-link ; strong-fence)+
+> 
+> are forbidden by the propagation axiom.  We will want similar cycles
+> to be forbidden when the strong-fence is replaced by appropriate
+> RCU-specific relations.  Hence the use of rcu-link to connect the
+> RCU-specific items.
+> 
+> > Then rcu-order links rcu events (grace periods and read-side critical sections) in a kind of rcu happens-before order. The basic idea is that if a grace period happens before an unlock, it must also happen before the matching lock since otherwise the grace period would be fully spanned by the critical section; analogously, if a lock happens before the grace period, the matching unlock must also happen before the grace period.
+> 
+> IMO it's generally better to think of grace periods as not being
+> instantaneous but as occurring over a prolonged period of time.  Thus
+> we should say: If a grace period ends before an unlock occurs, it must
+> start before the corresponding lock.  And contrapositively, if a lock
+> occurs before a grace period starts, the corresponding unlock must
+> occur before the grace period ends.
 
-Cool, setting usb_phy for pcie and ufs fixes this.
+What Alan said!  You could even have distinct partially overlapping
+grace periods, as the Linux kernel actually does have courtesy of normal
+grace periods via synchronize_rcu() and expedited grace periods via
+synchronize_rcu_expedited().
+
+> There's a little more to it, because rcu-fence also has implications
+> about stores propagating from one CPU to another in a particular
+> order, just like strong-fence, but that's the basic idea.
+> 
+> > This is made tricky by the fact that there's a distinction between the hb/pb happens-before and the rcu happens-before relations.
+> > As far as I understand, the current way to resolve this in LKMM is to count the number of critical sections and grace periods and analyzing that if the number of the latter is not less, then even nested and all kind of other weird cases will be ordered by applying this logic recursively when relying only on rcu-link (i.e., hb/pb happens-before).
+> 
+> We included a mathematical proof of this in the supplemental material
+> to our ASPLOS paper.
+> 
+> > But if I look at it through a lense of a unified notion of happens-before (let's call it rcu-link'), I would think of a definition in the direction of
+> >     idealized-rcu-order = rcu-rscs^-1 ; rcu-link' ; gp | gp ; rcu-link' ; rcu-rscs^-1
+> > where rcu-order can itself contribute to rcu-link', in the sense that it extends any rcu-link
+> >    rcu-link' = rcu-link | rcu-link' ; idealized-rcu-order 
+> 
+> Not quite; there needs to be another "; rcu-link'" at the end.
+> 
+> > After thinking about it for a while, I came up with the following (ignoring the srcu cases since I don't understand them yet):
+> 
+> SRCU is exactly like RCU except for one aspect: The SRCU primitives
+> (synchronize_srcu(), srcu_lock(), and srcu_unlock()) each take an
+> argument, a pointer to an srcu structure.  The ordering restrictions
+> apply only in cases where the arguments to the corresponding
+> primitives point to the _same_ srcu structure.  That's why you see all
+> those "& loc" expressions sprinkled throughout the definitions of
+> srcu-rscs and rcu-order.
+
+In addition, the actual Linux-kernel SRCU has srcu_read_lock() return a
+value that must be passed to srcu_read_unlock().  This means that SRCU
+can have distinct overlapping SRCU read-side critical sections within
+the confines of a given process.
+
+Worse yet, the upcoming addition of srcu_down_read() and srcu_up_read()
+means that a given SRCU read-side critical section might begin on one
+process and end on another.  Thus srcu_down_read() is to srcu_read_lock()
+as down_sema() is to mutex_lock(), more or less.
+
+Making LKMM correctly model all of this has been on my todo list for an
+embarrassingly long time.
+
+> >   let rec rcu-extend = rcu-rscs^-1 ; rcu-link' ; gp | gp ; rcu-link' ; rcu-rscs^-1 | gp
+> >    	and rcu-link' = rcu-link ; (rcu-extend ; rcu-link)*
+> > which I think satisfies
+> >    rcu-extend <= rcu-order   (use the helpful lemma rcu-order ; (rcu-link ; rcu-order)* <= rcu-order)
+> >    rcu-order = rcu-extend ; (rcu-link ; rcu-extend)*
+> > (I've attached my proof sketch, but I'm not sure it's readable.)
+> 
+> Yes, this is a more succinct way of expressing the same definition, by
+> factoring out a common sub-relation and then performing simultaneous
+> recursion on two relations rather than one.
+> 
+> > If this is true, defining rcu-order like this cuts away roughly half of the cases (ignoring srcu, rcu-order has 6 cases and rcu-extend has 3),
+> 
+> The definition of rcu-link' should count as a case, so you have only
+> eliminated one-third of the cases.  :-)
+> 
+> >  and I believe makes the argument for why the relation works much clearer: It's essentially just the argument from above, that a grace period can't happen between a lock and unlock and thus if something happens before a grace period that happens before an unlock, it must also happen before the lock, and analogously if something happens after a grace period that happens after a lock, it must also happen after the unlock. 
+> > In a sense I suppose that by splitting the recursion over two relations, the argument becomes disentangled into two simple arguments: firstly, rcu-link' can just be thought of as a kind of happens-before that is used to define rcu-extend, and secondly, rcu-extend can be used to extend rcu-link's happens-before. 
+> 
+> Clarity is in the eye of the beholder.  But I agree your definition is
+> shorter and easier to read, although perhaps grasping its full
+> implications is a little harder.
+> 
+> > The only thing that bothers me about it is the gp. It looks quite foreign here and besides, gp is already a strong fence and implies happens-before in its own right.
+> 
+> The lone gp is present in the definition of rcu-order because I wanted
+> to express explicitly the condition that the number of grace periods
+> in a cycle must be _at least_ as large as the number of critical
+> sections.  There can be more grace periods, meaning that some of them
+> need not be paired with a critical section.
+> 
+> However, it's true that (rcu-link ; gp ; rcu-link) is a sub-relation
+> of rcu-link.  Hence the only need for a lone gp in these definitions
+> is to cover the case where there are no critical sections at all in
+> the cycle (which I would like be to be forbidden by the rcu axiom,
+> even if it's already forbidden by the propagation axiom).
+> 
+> > So to clarify, I'm thinking something in the direction of 
+> > 	rcu-extend = rcu-rscs^-1 ; rcu-link' ; gp | gp ; rcu-link' ; rcu-rscs^-1    (* no gp! *)
+> > 	(* recursion like before... (omitted) *)
+> > 	rb = prop ; rcu-extend ; ...
+> > and relying on the hb-ordering provided by lonely po;gp;po? to give the ordering ostensibly lost by not including the full rcu-order relation here.
+> > And then drop the old rcu-order and rename rcu-extend into rcu-order.
+> > But I haven't had time to think about this direction deeply yet.
+> > 
+> > Let me know if I'm on the right track towards understanding rcu-order.
+> 
+> I think you are.
+> 
+> Alan
+> 
+> PS: I have no idea why the mailing list isn't accepting your emails.
+
+The gmail service also doesn't like them.  I forgot to look at the reason
+this time, but last time it was that gmail couldn't prove to itself that
+your email really came from huawei.com.
+
+You are not the only one.  So much so that I keep a browser window
+open to my gmail spam folder at all times.  :-/
+
+							Thaxn, Paul
