@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44529668BFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7443E668C00
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbjAMF6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 00:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S235576AbjAMF7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 00:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240302AbjAMF5R (ORCPT
+        with ESMTP id S238166AbjAMF5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 00:57:17 -0500
-Received: from out29-223.mail.aliyun.com (out29-223.mail.aliyun.com [115.124.29.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2BA6D50F;
-        Thu, 12 Jan 2023 21:53:28 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.06712911|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0138118-0.000527575-0.985661;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047204;MF=wangweidong.a@awinic.com;NM=1;PH=DS;RN=23;RT=23;SR=0;TI=SMTPD_---.QrY0tXY_1673589192;
-Received: from ubuntu-VirtualBox..(mailfrom:wangweidong.a@awinic.com fp:SMTPD_---.QrY0tXY_1673589192)
+        Fri, 13 Jan 2023 00:57:41 -0500
+Received: from out29-154.mail.aliyun.com (out29-154.mail.aliyun.com [115.124.29.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6796D51E;
+        Thu, 12 Jan 2023 21:53:30 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.06712911|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0105628-0.000271216-0.989166;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=wangweidong.a@awinic.com;NM=1;PH=DS;RN=23;RT=23;SR=0;TI=SMTPD_---.QrY0tZl_1673589195;
+Received: from ubuntu-VirtualBox..(mailfrom:wangweidong.a@awinic.com fp:SMTPD_---.QrY0tZl_1673589195)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 13:53:15 +0800
+          Fri, 13 Jan 2023 13:53:18 +0800
 From:   wangweidong.a@awinic.com
 To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
@@ -30,9 +30,9 @@ To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
         ryan.lee.analog@gmail.com, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     liweilei@awinic.com, yijiangtao@awinic.com, zhaolei@awinic.com
-Subject: [PATCH V10 1/5] ASoC: codecs: Add i2c and codec registration for aw88395 and their associated operation functions
-Date:   Fri, 13 Jan 2023 13:52:57 +0800
-Message-Id: <20230113055301.189541-2-wangweidong.a@awinic.com>
+Subject: [PATCH V10 2/5] ASoC: codecs: ACF bin parsing and check library file for aw88395
+Date:   Fri, 13 Jan 2023 13:52:58 +0800
+Message-Id: <20230113055301.189541-3-wangweidong.a@awinic.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230113055301.189541-1-wangweidong.a@awinic.com>
 References: <20230113055301.189541-1-wangweidong.a@awinic.com>
@@ -57,659 +57,1179 @@ Signed-off-by: Nick Li <liweilei@awinic.com>
 Signed-off-by: Bruce zhao <zhaolei@awinic.com>
 Signed-off-by: Weidong Wang <wangweidong.a@awinic.com>
 ---
- sound/soc/codecs/aw88395/aw88395.c | 580 +++++++++++++++++++++++++++++
- sound/soc/codecs/aw88395/aw88395.h |  58 +++
- 2 files changed, 638 insertions(+)
- create mode 100644 sound/soc/codecs/aw88395/aw88395.c
- create mode 100644 sound/soc/codecs/aw88395/aw88395.h
+ sound/soc/codecs/aw88395/aw88395_lib.c | 1066 ++++++++++++++++++++++++
+ sound/soc/codecs/aw88395/aw88395_lib.h |   92 ++
+ 2 files changed, 1158 insertions(+)
+ create mode 100644 sound/soc/codecs/aw88395/aw88395_lib.c
+ create mode 100644 sound/soc/codecs/aw88395/aw88395_lib.h
 
-diff --git a/sound/soc/codecs/aw88395/aw88395.c b/sound/soc/codecs/aw88395/aw88395.c
+diff --git a/sound/soc/codecs/aw88395/aw88395_lib.c b/sound/soc/codecs/aw88395/aw88395_lib.c
 new file mode 100644
-index 000000000000..bce403744c1a
+index 000000000000..3cbaf8f4cd40
 --- /dev/null
-+++ b/sound/soc/codecs/aw88395/aw88395.c
-@@ -0,0 +1,580 @@
++++ b/sound/soc/codecs/aw88395/aw88395_lib.c
+@@ -0,0 +1,1066 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +//
-+// aw88395.c --  ALSA SoC AW88395 codec support
++// aw88395_lib.c  -- ACF bin parsing and check library file for aw88395
 +//
 +// Copyright (c) 2022-2023 AWINIC Technology CO., LTD
 +//
 +// Author: Bruce zhao <zhaolei@awinic.com>
-+// Author: Weidong Wang <wangweidong.a@awinic.com>
 +//
 +
++#include <linux/crc8.h>
 +#include <linux/i2c.h>
-+#include <linux/firmware.h>
-+#include <linux/of_gpio.h>
-+#include <linux/regmap.h>
-+#include <sound/soc.h>
-+#include "aw88395.h"
-+#include "aw88395_device.h"
 +#include "aw88395_lib.h"
-+#include "aw88395_reg.h"
++#include "aw88395_device.h"
 +
-+static const struct regmap_config aw88395_remap_config = {
-+	.val_bits = 16,
-+	.reg_bits = 8,
-+	.max_register = AW88395_REG_MAX - 1,
-+	.reg_format_endian = REGMAP_ENDIAN_LITTLE,
-+	.val_format_endian = REGMAP_ENDIAN_BIG,
++#define AW88395_CRC8_POLYNOMIAL 0x8C
++DECLARE_CRC8_TABLE(aw_crc8_table);
++
++static char *profile_name[AW88395_PROFILE_MAX] = {
++	"Music", "Voice", "Voip", "Ringtone",
++	"Ringtone_hs", "Lowpower", "Bypass",
++	"Mmi", "Fm", "Notification", "Receiver"
 +};
 +
-+static void aw88395_start_pa(struct aw88395 *aw88395)
-+{
-+	int ret, i;
++static int aw_parse_bin_header(struct aw_device *aw_dev, struct aw_bin *bin);
 +
-+	for (i = 0; i < AW88395_START_RETRIES; i++) {
-+		ret = aw88395_dev_start(aw88395->aw_pa);
-+		if (ret) {
-+			dev_err(aw88395->aw_pa->dev, "aw88395 device start failed. retry = %d", i);
-+			ret = aw88395_dev_fw_update(aw88395->aw_pa, AW88395_DSP_FW_UPDATE_ON, true);
-+			if (ret < 0) {
-+				dev_err(aw88395->aw_pa->dev, "fw update failed");
-+				continue;
++static int aw_check_sum(struct aw_device *aw_dev, struct aw_bin *bin, int bin_num)
++{
++	unsigned char *p_check_sum;
++	unsigned int sum_data = 0;
++	unsigned int check_sum;
++	unsigned int i, len;
++
++	p_check_sum = &(bin->info.data[(bin->header_info[bin_num].valid_data_addr -
++						bin->header_info[bin_num].header_len)]);
++	len = bin->header_info[bin_num].bin_data_len + bin->header_info[bin_num].header_len;
++	check_sum = le32_to_cpup((void *)p_check_sum);
++
++	for (i = 4; i < len; i++)
++		sum_data += *(p_check_sum + i);
++
++	dev_dbg(aw_dev->dev, "%s -- check_sum = %p, check_sum = 0x%x, sum_data = 0x%x",
++					__func__, p_check_sum, check_sum, sum_data);
++	if (sum_data != check_sum) {
++		dev_err(aw_dev->dev, "%s. CheckSum Fail.bin_num=%d, CheckSum:0x%x, SumData:0x%x",
++				__func__, bin_num, check_sum, sum_data);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int aw_check_data_version(struct aw_device *aw_dev, struct aw_bin *bin, int bin_num)
++{
++	if (bin->header_info[bin_num].bin_data_ver < DATA_VERSION_V1 ||
++		bin->header_info[bin_num].bin_data_ver > DATA_VERSION_MAX) {
++		dev_err(aw_dev->dev, "aw_bin_parse Unrecognized this bin data version\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int aw_check_register_num(struct aw_device *aw_dev, struct aw_bin *bin, int bin_num)
++{
++	struct bin_header_info temp_info = bin->header_info[bin_num];
++	unsigned int check_register_num, parse_register_num;
++	unsigned char *p_check_sum;
++
++	p_check_sum = &(bin->info.data[(temp_info.valid_data_addr)]);
++
++	parse_register_num = le32_to_cpup((void *)p_check_sum);
++	check_register_num = (bin->header_info[bin_num].bin_data_len - CHECK_REGISTER_NUM_OFFSET) /
++				(bin->header_info[bin_num].reg_byte_len +
++				bin->header_info[bin_num].data_byte_len);
++	dev_dbg(aw_dev->dev, "%s,parse_register_num = 0x%x,check_register_num = 0x%x\n",
++				__func__, parse_register_num, check_register_num);
++	if (parse_register_num != check_register_num) {
++		dev_err(aw_dev->dev, "%s parse_register_num = 0x%x,check_register_num = 0x%x\n",
++				__func__, parse_register_num, check_register_num);
++		return -EINVAL;
++	}
++
++	bin->header_info[bin_num].reg_num = parse_register_num;
++	bin->header_info[bin_num].valid_data_len = temp_info.bin_data_len - VALID_DATA_LEN;
++	bin->header_info[bin_num].valid_data_addr = temp_info.valid_data_addr + VALID_DATA_ADDR;
++
++	return 0;
++}
++
++static int aw_check_dsp_reg_num(struct aw_device *aw_dev, struct aw_bin *bin, int bin_num)
++{
++	struct bin_header_info temp_info = bin->header_info[bin_num];
++	unsigned int check_dsp_reg_num, parse_dsp_reg_num;
++	unsigned char *p_check_sum;
++
++	p_check_sum = &(bin->info.data[(temp_info.valid_data_addr)]);
++
++	parse_dsp_reg_num = le32_to_cpup((void *)(p_check_sum + PARSE_DSP_REG_NUM));
++	bin->header_info[bin_num].reg_data_byte_len =
++			le32_to_cpup((void *)(p_check_sum + REG_DATA_BYTP_LEN));
++	check_dsp_reg_num = (bin->header_info[bin_num].bin_data_len - CHECK_DSP_REG_NUM) /
++				bin->header_info[bin_num].reg_data_byte_len;
++	dev_dbg(aw_dev->dev, "%s bin_num = %d, parse_dsp_reg_num = 0x%x, check_dsp_reg_num = 0x%x",
++					__func__, bin_num, check_dsp_reg_num, check_dsp_reg_num);
++	if (parse_dsp_reg_num != check_dsp_reg_num) {
++		dev_err(aw_dev->dev, "aw_bin_parse check dsp reg num error\n");
++		dev_err(aw_dev->dev, "%s parse_dsp_reg_num = 0x%x, check_dsp_reg_num = 0x%x",
++					__func__, check_dsp_reg_num, check_dsp_reg_num);
++		return -EINVAL;
++	}
++
++	bin->header_info[bin_num].download_addr = le32_to_cpup((void *)p_check_sum);
++	bin->header_info[bin_num].reg_num = parse_dsp_reg_num;
++	bin->header_info[bin_num].valid_data_len = temp_info.bin_data_len - DSP_VALID_DATA_LEN;
++	bin->header_info[bin_num].valid_data_addr = temp_info.valid_data_addr +
++								DSP_VALID_DATA_ADDR;
++
++	return 0;
++}
++
++static int aw_check_soc_app_num(struct aw_device *aw_dev, struct aw_bin *bin, int bin_num)
++{
++	struct bin_header_info temp_info = bin->header_info[bin_num];
++	unsigned int check_soc_app_num, parse_soc_app_num;
++	unsigned char *p_check_sum;
++
++	p_check_sum = &(bin->info.data[(temp_info.valid_data_addr)]);
++
++	bin->header_info[bin_num].app_version = le32_to_cpup((void *)p_check_sum);
++	parse_soc_app_num = le32_to_cpup((void *)(p_check_sum + PARSE_SOC_APP_NUM));
++	check_soc_app_num = bin->header_info[bin_num].bin_data_len - CHECK_SOC_APP_NUM;
++	dev_dbg(aw_dev->dev, "%s bin_num = %d, parse_soc_app_num=0x%x, check_soc_app_num = 0x%x\n",
++					__func__, bin_num, parse_soc_app_num, check_soc_app_num);
++	if (parse_soc_app_num != check_soc_app_num) {
++		dev_err(aw_dev->dev, "%s parse_soc_app_num=0x%x, check_soc_app_num = 0x%x\n",
++					__func__, parse_soc_app_num, check_soc_app_num);
++		return -EINVAL;
++	}
++
++	bin->header_info[bin_num].reg_num = parse_soc_app_num;
++	bin->header_info[bin_num].download_addr = le32_to_cpup((void *)(p_check_sum +
++								APP_DOWNLOAD_ADDR));
++	bin->header_info[bin_num].valid_data_len = temp_info.bin_data_len - APP_VALID_DATA_LEN;
++	bin->header_info[bin_num].valid_data_addr = temp_info.valid_data_addr +
++								APP_VALID_DATA_ADDR;
++
++	return 0;
++}
++
++static void aw_get_single_bin_header(struct aw_bin *bin)
++{
++	memcpy((void *)&bin->header_info[bin->all_bin_parse_num], bin->p_addr, DATA_LEN);
++
++	bin->header_info[bin->all_bin_parse_num].header_len = HEADER_LEN;
++	bin->all_bin_parse_num += 1;
++}
++
++static int aw_parse_one_of_multi_bins(struct aw_device *aw_dev, unsigned int bin_num,
++					int bin_serial_num, struct aw_bin *bin)
++{
++	struct bin_header_info aw_bin_header_info;
++	unsigned int bin_start_addr;
++	unsigned int valid_data_len;
++
++	if (bin->info.len < sizeof(struct bin_header_info)) {
++		dev_err(aw_dev->dev, "bin_header_info size[%d] overflow file size[%d]\n",
++				(int)sizeof(struct bin_header_info), bin->info.len);
++		return -EINVAL;
++	}
++
++	aw_bin_header_info = bin->header_info[bin->all_bin_parse_num - 1];
++	if (!bin_serial_num) {
++		bin_start_addr = le32_to_cpup((void *)(bin->p_addr + START_ADDR_OFFSET));
++		bin->p_addr += (HEADER_LEN + bin_start_addr);
++		bin->header_info[bin->all_bin_parse_num].valid_data_addr =
++			aw_bin_header_info.valid_data_addr + VALID_DATA_ADDR + 8 * bin_num +
++			VALID_DATA_ADDR_OFFSET;
++	} else {
++		valid_data_len = aw_bin_header_info.bin_data_len;
++		bin->p_addr += (HDADER_LEN + valid_data_len);
++		bin->header_info[bin->all_bin_parse_num].valid_data_addr =
++		    aw_bin_header_info.valid_data_addr + aw_bin_header_info.bin_data_len +
++		    VALID_DATA_ADDR_OFFSET;
++	}
++
++	return aw_parse_bin_header(aw_dev, bin);
++}
++
++static int aw_get_multi_bin_header(struct aw_device *aw_dev, struct aw_bin *bin)
++{
++	unsigned int bin_num, i;
++	int ret;
++
++	bin_num = le32_to_cpup((void *)(bin->p_addr + VALID_DATA_ADDR_OFFSET));
++	if (bin->multi_bin_parse_num == 1)
++		bin->header_info[bin->all_bin_parse_num].valid_data_addr =
++							VALID_DATA_ADDR_OFFSET;
++
++	aw_get_single_bin_header(bin);
++
++	for (i = 0; i < bin_num; i++) {
++		dev_dbg(aw_dev->dev, "aw_bin_parse enter multi bin for is %d\n", i);
++		ret = aw_parse_one_of_multi_bins(aw_dev, bin_num, i, bin);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int aw_parse_bin_header(struct aw_device *aw_dev, struct aw_bin *bin)
++{
++	unsigned int bin_data_type;
++
++	if (bin->info.len < sizeof(struct bin_header_info)) {
++		dev_err(aw_dev->dev, "bin_header_info size[%d] overflow file size[%d]\n",
++				(int)sizeof(struct bin_header_info), bin->info.len);
++		return -EINVAL;
++	}
++
++	bin_data_type = le32_to_cpup((void *)(bin->p_addr + BIN_DATA_TYPE_OFFSET));
++	dev_dbg(aw_dev->dev, "aw_bin_parse bin_data_type 0x%x\n", bin_data_type);
++	switch (bin_data_type) {
++	case DATA_TYPE_REGISTER:
++	case DATA_TYPE_DSP_REG:
++	case DATA_TYPE_SOC_APP:
++		bin->single_bin_parse_num += 1;
++		dev_dbg(aw_dev->dev, "%s bin->single_bin_parse_num is %d\n", __func__,
++						bin->single_bin_parse_num);
++		if (!bin->multi_bin_parse_num)
++			bin->header_info[bin->all_bin_parse_num].valid_data_addr =
++								VALID_DATA_ADDR_OFFSET;
++		aw_get_single_bin_header(bin);
++		return 0;
++	case DATA_TYPE_MULTI_BINS:
++		bin->multi_bin_parse_num += 1;
++		dev_dbg(aw_dev->dev, "%s bin->multi_bin_parse_num is %d\n", __func__,
++						bin->multi_bin_parse_num);
++		return aw_get_multi_bin_header(aw_dev, bin);
++	default:
++		dev_dbg(aw_dev->dev, "%s There is no corresponding type\n", __func__);
++		return 0;
++	}
++}
++
++static int aw_check_bin_header_version(struct aw_device *aw_dev, struct aw_bin *bin)
++{
++	unsigned int header_version;
++
++	header_version = le32_to_cpup((void *)(bin->p_addr + HEADER_VERSION_OFFSET));
++	dev_dbg(aw_dev->dev, "aw_bin_parse header_version 0x%x\n", header_version);
++
++	switch (header_version) {
++	case HEADER_VERSION_V1:
++		return aw_parse_bin_header(aw_dev, bin);
++	default:
++		dev_err(aw_dev->dev, "aw_bin_parse Unrecognized this bin header version\n");
++		return -EINVAL;
++	}
++}
++
++static int aw_parsing_bin_file(struct aw_device *aw_dev, struct aw_bin *bin)
++{
++	int ret = -EINVAL;
++	int i;
++
++	if (!bin) {
++		dev_err(aw_dev->dev, "aw_bin_parse bin is NULL\n");
++		return ret;
++	}
++	bin->p_addr = bin->info.data;
++	bin->all_bin_parse_num = 0;
++	bin->multi_bin_parse_num = 0;
++	bin->single_bin_parse_num = 0;
++
++	ret = aw_check_bin_header_version(aw_dev, bin);
++	if (ret < 0) {
++		dev_err(aw_dev->dev, "aw_bin_parse check bin header version error\n");
++		return ret;
++	}
++
++	for (i = 0; i < bin->all_bin_parse_num; i++) {
++		ret = aw_check_sum(aw_dev, bin, i);
++		if (ret < 0) {
++			dev_err(aw_dev->dev, "aw_bin_parse check sum data error\n");
++			return ret;
++		}
++		ret = aw_check_data_version(aw_dev, bin, i);
++		if (ret < 0) {
++			dev_err(aw_dev->dev, "aw_bin_parse check data version error\n");
++			return ret;
++		}
++		if (bin->header_info[i].bin_data_ver == DATA_VERSION_V1) {
++			switch (bin->header_info[i].bin_data_type) {
++			case DATA_TYPE_REGISTER:
++				ret = aw_check_register_num(aw_dev, bin, i);
++				break;
++			case DATA_TYPE_DSP_REG:
++				ret = aw_check_dsp_reg_num(aw_dev, bin, i);
++				break;
++			case DATA_TYPE_SOC_APP:
++				ret = aw_check_soc_app_num(aw_dev, bin, i);
++				break;
++			default:
++				bin->header_info[i].valid_data_len =
++						bin->header_info[i].bin_data_len;
++				ret = 0;
++				break;
 +			}
-+		} else {
-+			dev_info(aw88395->aw_pa->dev, "start success\n");
++			if (ret < 0)
++				return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int aw_dev_parse_raw_reg(unsigned char *data, unsigned int data_len,
++		struct aw_prof_desc *prof_desc)
++{
++	prof_desc->sec_desc[AW88395_DATA_TYPE_REG].data = data;
++	prof_desc->sec_desc[AW88395_DATA_TYPE_REG].len = data_len;
++
++	prof_desc->prof_st = AW88395_PROFILE_OK;
++
++	return 0;
++}
++
++static int aw_dev_parse_raw_dsp_cfg(unsigned char *data, unsigned int data_len,
++		struct aw_prof_desc *prof_desc)
++{
++	if (data_len & 0x01)
++		return -EINVAL;
++
++	swab16_array((u16 *)data, data_len >> 1);
++
++	prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_CFG].data = data;
++	prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_CFG].len = data_len;
++
++	prof_desc->prof_st = AW88395_PROFILE_OK;
++
++	return 0;
++}
++
++static int aw_dev_parse_raw_dsp_fw(unsigned char *data,	unsigned int data_len,
++		struct aw_prof_desc *prof_desc)
++{
++	if (data_len & 0x01)
++		return -EINVAL;
++
++	swab16_array((u16 *)data, data_len >> 1);
++
++	prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_FW].data = data;
++	prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_FW].len = data_len;
++
++	prof_desc->prof_st = AW88395_PROFILE_OK;
++
++	return 0;
++}
++
++static int aw_dev_prof_parse_multi_bin(struct aw_device *aw_dev, unsigned char *data,
++				unsigned int data_len, struct aw_prof_desc *prof_desc)
++{
++	struct aw_bin *aw_bin;
++	int ret;
++	int i;
++
++	aw_bin = devm_kzalloc(aw_dev->dev, data_len + sizeof(struct aw_bin), GFP_KERNEL);
++	if (!aw_bin)
++		return -ENOMEM;
++
++	aw_bin->info.len = data_len;
++	memcpy(aw_bin->info.data, data, data_len);
++
++	ret = aw_parsing_bin_file(aw_dev, aw_bin);
++	if (ret < 0) {
++		dev_err(aw_dev->dev, "parse bin failed");
++		goto parse_bin_failed;
++	}
++
++	for (i = 0; i < aw_bin->all_bin_parse_num; i++) {
++		switch (aw_bin->header_info[i].bin_data_type) {
++		case DATA_TYPE_REGISTER:
++			prof_desc->sec_desc[AW88395_DATA_TYPE_REG].len =
++					aw_bin->header_info[i].valid_data_len;
++			prof_desc->sec_desc[AW88395_DATA_TYPE_REG].data =
++					data + aw_bin->header_info[i].valid_data_addr;
++			break;
++		case DATA_TYPE_DSP_REG:
++			if (aw_bin->header_info[i].valid_data_len & 0x01) {
++				ret = -EINVAL;
++				goto parse_bin_failed;
++			}
++
++			swab16_array((u16 *)(data + aw_bin->header_info[i].valid_data_addr),
++					aw_bin->header_info[i].valid_data_len >> 1);
++
++			prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_CFG].len =
++					aw_bin->header_info[i].valid_data_len;
++			prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_CFG].data =
++					data + aw_bin->header_info[i].valid_data_addr;
++			break;
++		case DATA_TYPE_DSP_FW:
++		case DATA_TYPE_SOC_APP:
++			if (aw_bin->header_info[i].valid_data_len & 0x01) {
++				ret = -EINVAL;
++				goto parse_bin_failed;
++			}
++
++			swab16_array((u16 *)(data + aw_bin->header_info[i].valid_data_addr),
++					aw_bin->header_info[i].valid_data_len >> 1);
++
++			prof_desc->fw_ver = aw_bin->header_info[i].app_version;
++			prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_FW].len =
++					aw_bin->header_info[i].valid_data_len;
++			prof_desc->sec_desc[AW88395_DATA_TYPE_DSP_FW].data =
++					data + aw_bin->header_info[i].valid_data_addr;
++			break;
++		default:
++			dev_dbg(aw_dev->dev, "bin_data_type not found");
 +			break;
 +		}
 +	}
++	prof_desc->prof_st = AW88395_PROFILE_OK;
++	ret =  0;
++
++parse_bin_failed:
++	devm_kfree(aw_dev->dev, aw_bin);
++	return ret;
 +}
 +
-+static void aw88395_startup_work(struct work_struct *work)
++static int aw_dev_parse_data_by_sec_type(struct aw_device *aw_dev, struct aw_cfg_hdr *cfg_hdr,
++			struct aw_cfg_dde *cfg_dde, struct aw_prof_desc *scene_prof_desc)
 +{
-+	struct aw88395 *aw88395 =
-+		container_of(work, struct aw88395, start_work.work);
-+
-+	mutex_lock(&aw88395->lock);
-+	aw88395_start_pa(aw88395);
-+	mutex_unlock(&aw88395->lock);
-+}
-+
-+static void aw88395_start(struct aw88395 *aw88395, bool sync_start)
-+{
-+	int ret;
-+
-+	if (aw88395->aw_pa->fw_status != AW88395_DEV_FW_OK)
-+		return;
-+
-+	if (aw88395->aw_pa->status == AW88395_DEV_PW_ON)
-+		return;
-+
-+	ret = aw88395_dev_fw_update(aw88395->aw_pa, AW88395_DSP_FW_UPDATE_OFF, true);
-+	if (ret < 0) {
-+		dev_err(aw88395->aw_pa->dev, "fw update failed.");
-+		return;
-+	}
-+
-+	if (sync_start == AW88395_SYNC_START)
-+		aw88395_start_pa(aw88395);
-+	else
-+		queue_delayed_work(system_wq,
-+			&aw88395->start_work,
-+			AW88395_START_WORK_DELAY_MS);
-+}
-+
-+static struct snd_soc_dai_driver aw88395_dai[] = {
-+	{
-+		.name = "aw88395-aif",
-+		.id = 1,
-+		.playback = {
-+			.stream_name = "Speaker_Playback",
-+			.channels_min = 1,
-+			.channels_max = 2,
-+			.rates = AW88395_RATES,
-+			.formats = AW88395_FORMATS,
-+		},
-+		.capture = {
-+			.stream_name = "Speaker_Capture",
-+			.channels_min = 1,
-+			.channels_max = 2,
-+			.rates = AW88395_RATES,
-+			.formats = AW88395_FORMATS,
-+		},
-+	},
-+};
-+
-+static int aw88395_get_fade_in_time(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(component);
-+	struct aw_device *aw_dev = aw88395->aw_pa;
-+
-+	ucontrol->value.integer.value[0] = aw_dev->fade_in_time;
-+
-+	return 0;
-+}
-+
-+static int aw88395_set_fade_in_time(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(component);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	struct aw_device *aw_dev = aw88395->aw_pa;
-+	int time;
-+
-+	time = ucontrol->value.integer.value[0];
-+
-+	if (time < mc->min || time > mc->max)
-+		return -EINVAL;
-+
-+	if (time != aw_dev->fade_in_time) {
-+		aw_dev->fade_in_time = time;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int aw88395_get_fade_out_time(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(component);
-+	struct aw_device *aw_dev = aw88395->aw_pa;
-+
-+	ucontrol->value.integer.value[0] = aw_dev->fade_out_time;
-+
-+	return 0;
-+}
-+
-+static int aw88395_set_fade_out_time(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(component);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	struct aw_device *aw_dev = aw88395->aw_pa;
-+	int time;
-+
-+	time = ucontrol->value.integer.value[0];
-+	if (time < mc->min || time > mc->max)
-+		return -EINVAL;
-+
-+	if (time != aw_dev->fade_out_time) {
-+		aw_dev->fade_out_time = time;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int aw88395_profile_info(struct snd_kcontrol *kcontrol,
-+			 struct snd_ctl_elem_info *uinfo)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	const char *prof_name;
-+	char *name;
-+	int count;
-+
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_ENUMERATED;
-+	uinfo->count = 1;
-+
-+	count = aw88395_dev_get_profile_count(aw88395->aw_pa);
-+	if (count <= 0) {
-+		uinfo->value.enumerated.items = 0;
-+		return 0;
-+	}
-+
-+	uinfo->value.enumerated.items = count;
-+
-+	if (uinfo->value.enumerated.item >= count)
-+		uinfo->value.enumerated.item = count - 1;
-+
-+	name = uinfo->value.enumerated.name;
-+	count = uinfo->value.enumerated.item;
-+
-+	prof_name = aw88395_dev_get_prof_name(aw88395->aw_pa, count);
-+	if (!prof_name) {
-+		strscpy(uinfo->value.enumerated.name, "null",
-+						strlen("null") + 1);
-+		return 0;
-+	}
-+
-+	strscpy(name, prof_name, sizeof(uinfo->value.enumerated.name));
-+
-+	return 0;
-+}
-+
-+static int aw88395_profile_get(struct snd_kcontrol *kcontrol,
-+			struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.integer.value[0] = aw88395_dev_get_profile_index(aw88395->aw_pa);
-+
-+	return 0;
-+}
-+
-+static int aw88395_profile_set(struct snd_kcontrol *kcontrol,
-+		struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	int ret;
-+
-+	/* pa stop or stopping just set profile */
-+	mutex_lock(&aw88395->lock);
-+	ret = aw88395_dev_set_profile_index(aw88395->aw_pa, ucontrol->value.integer.value[0]);
-+	if (ret < 0) {
-+		dev_dbg(codec->dev, "profile index does not change");
-+		mutex_unlock(&aw88395->lock);
-+		return 0;
-+	}
-+
-+	if (aw88395->aw_pa->status) {
-+		aw88395_dev_stop(aw88395->aw_pa);
-+		aw88395_start(aw88395, AW88395_SYNC_START);
-+	}
-+
-+	mutex_unlock(&aw88395->lock);
-+
-+	return 1;
-+}
-+
-+static int aw88395_volume_get(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	struct aw_volume_desc *vol_desc = &aw88395->aw_pa->volume_desc;
-+
-+	ucontrol->value.integer.value[0] = vol_desc->ctl_volume;
-+
-+	return 0;
-+}
-+
-+static int aw88395_volume_set(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	struct aw_volume_desc *vol_desc = &aw88395->aw_pa->volume_desc;
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	int value;
-+
-+	value = ucontrol->value.integer.value[0];
-+	if (value < mc->min || value > mc->max)
-+		return -EINVAL;
-+
-+	if (vol_desc->ctl_volume != value) {
-+		vol_desc->ctl_volume = value;
-+		aw88395_dev_set_volume(aw88395->aw_pa, vol_desc->ctl_volume);
-+
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int aw88395_get_fade_step(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.integer.value[0] = aw88395->aw_pa->fade_step;
-+
-+	return 0;
-+}
-+
-+static int aw88395_set_fade_step(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	int value;
-+
-+	value = ucontrol->value.integer.value[0];
-+	if (value < mc->min || value > mc->max)
-+		return -EINVAL;
-+
-+	if (aw88395->aw_pa->fade_step != value) {
-+		aw88395->aw_pa->fade_step = value;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int aw88395_re_get(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	struct aw_device *aw_dev = aw88395->aw_pa;
-+
-+	ucontrol->value.integer.value[0] = aw_dev->cali_desc.cali_re;
-+
-+	return 0;
-+}
-+
-+static int aw88395_re_set(struct snd_kcontrol *kcontrol,
-+				struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(codec);
-+	struct soc_mixer_control *mc =
-+		(struct soc_mixer_control *)kcontrol->private_value;
-+	struct aw_device *aw_dev = aw88395->aw_pa;
-+	int value;
-+
-+	value = ucontrol->value.integer.value[0];
-+	if (value < mc->min || value > mc->max)
-+		return -EINVAL;
-+
-+	if (aw_dev->cali_desc.cali_re != value) {
-+		aw_dev->cali_desc.cali_re = value;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct snd_kcontrol_new aw88395_controls[] = {
-+	SOC_SINGLE_EXT("PCM Playback Volume", AW88395_SYSCTRL2_REG,
-+		6, AW88395_MUTE_VOL, 0, aw88395_volume_get,
-+		aw88395_volume_set),
-+	SOC_SINGLE_EXT("Fade Step", 0, 0, AW88395_MUTE_VOL, 0,
-+		aw88395_get_fade_step, aw88395_set_fade_step),
-+	SOC_SINGLE_EXT("Volume Ramp Up Step", 0, 0, FADE_TIME_MAX, FADE_TIME_MIN,
-+		aw88395_get_fade_in_time, aw88395_set_fade_in_time),
-+	SOC_SINGLE_EXT("Volume Ramp Down Step", 0, 0, FADE_TIME_MAX, FADE_TIME_MIN,
-+		aw88395_get_fade_out_time, aw88395_set_fade_out_time),
-+	SOC_SINGLE_EXT("Calib", 0, 0, 100, 0,
-+		aw88395_re_get, aw88395_re_set),
-+	AW88395_PROFILE_EXT("Profile Set", aw88395_profile_info,
-+		aw88395_profile_get, aw88395_profile_set),
-+};
-+
-+static int aw88395_plack_event(struct snd_soc_dapm_widget *w,
-+				struct snd_kcontrol *k, int event)
-+{
-+	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(component);
-+
-+	mutex_lock(&aw88395->lock);
-+	switch (event) {
-+	case SND_SOC_DAPM_PRE_PMU:
-+		aw88395_start(aw88395, AW88395_ASYNC_START);
++	switch (cfg_dde->data_type) {
++	case ACF_SEC_TYPE_REG:
++		return aw_dev_parse_raw_reg((u8 *)cfg_hdr + cfg_dde->data_offset,
++				cfg_dde->data_size, scene_prof_desc);
++	case ACF_SEC_TYPE_DSP_CFG:
++		return aw_dev_parse_raw_dsp_cfg((u8 *)cfg_hdr + cfg_dde->data_offset,
++				cfg_dde->data_size, scene_prof_desc);
++	case ACF_SEC_TYPE_DSP_FW:
++		return aw_dev_parse_raw_dsp_fw(
++				(u8 *)cfg_hdr + cfg_dde->data_offset,
++				cfg_dde->data_size, scene_prof_desc);
++	case ACF_SEC_TYPE_MULTIPLE_BIN:
++		return aw_dev_prof_parse_multi_bin(
++				aw_dev, (u8 *)cfg_hdr + cfg_dde->data_offset,
++				cfg_dde->data_size, scene_prof_desc);
++	default:
++		dev_err(aw_dev->dev, "%s cfg_dde->data_type = %d\n", __func__, cfg_dde->data_type);
 +		break;
-+	case SND_SOC_DAPM_POST_PMD:
-+		aw88395_dev_stop(aw88395->aw_pa);
++	}
++
++	return 0;
++}
++
++static int aw_dev_parse_dev_type(struct aw_device *aw_dev,
++		struct aw_cfg_hdr *prof_hdr, struct aw_all_prof_info *all_prof_info)
++{
++	struct aw_cfg_dde *cfg_dde =
++		(struct aw_cfg_dde *)((char *)prof_hdr + prof_hdr->hdr_offset);
++	int sec_num = 0;
++	int ret, i;
++
++	for (i = 0; i < prof_hdr->ddt_num; i++) {
++		if ((aw_dev->i2c->adapter->nr == cfg_dde[i].dev_bus) &&
++		    (aw_dev->i2c->addr == cfg_dde[i].dev_addr) &&
++		    (cfg_dde[i].type == AW88395_DEV_TYPE_ID) &&
++		    (cfg_dde[i].data_type != ACF_SEC_TYPE_MONITOR)) {
++			if (cfg_dde[i].dev_profile >= AW88395_PROFILE_MAX) {
++				dev_err(aw_dev->dev, "dev_profile [%d] overflow",
++							cfg_dde[i].dev_profile);
++				return -EINVAL;
++			}
++
++			ret = aw_dev_parse_data_by_sec_type(aw_dev, prof_hdr, &cfg_dde[i],
++					&all_prof_info->prof_desc[cfg_dde[i].dev_profile]);
++			if (ret < 0) {
++				dev_err(aw_dev->dev, "parse failed");
++				return ret;
++			}
++			sec_num++;
++		}
++	}
++
++	if (sec_num == 0) {
++		dev_dbg(aw_dev->dev, "get dev type num is %d, please use default", sec_num);
++		return AW88395_DEV_TYPE_NONE;
++	}
++
++	return AW88395_DEV_TYPE_OK;
++}
++
++static int aw_dev_parse_dev_default_type(struct aw_device *aw_dev,
++		struct aw_cfg_hdr *prof_hdr, struct aw_all_prof_info *all_prof_info)
++{
++	struct aw_cfg_dde *cfg_dde =
++		(struct aw_cfg_dde *)((char *)prof_hdr + prof_hdr->hdr_offset);
++	int sec_num = 0;
++	int ret, i;
++
++	for (i = 0; i < prof_hdr->ddt_num; i++) {
++		if ((aw_dev->channel == cfg_dde[i].dev_index) &&
++		    (cfg_dde[i].type == AW88395_DEV_DEFAULT_TYPE_ID) &&
++		    (cfg_dde[i].data_type != ACF_SEC_TYPE_MONITOR)) {
++			if (cfg_dde[i].dev_profile >= AW88395_PROFILE_MAX) {
++				dev_err(aw_dev->dev, "dev_profile [%d] overflow",
++					cfg_dde[i].dev_profile);
++				return -EINVAL;
++			}
++			ret = aw_dev_parse_data_by_sec_type(aw_dev, prof_hdr, &cfg_dde[i],
++					&all_prof_info->prof_desc[cfg_dde[i].dev_profile]);
++			if (ret < 0) {
++				dev_err(aw_dev->dev, "parse failed");
++				return ret;
++			}
++			sec_num++;
++		}
++	}
++
++	if (sec_num == 0) {
++		dev_err(aw_dev->dev, "get dev default type failed, get num[%d]", sec_num);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int aw_dev_cfg_get_valid_prof(struct aw_device *aw_dev,
++				struct aw_all_prof_info all_prof_info)
++{
++	struct aw_prof_desc *prof_desc = all_prof_info.prof_desc;
++	struct aw_prof_info *prof_info = &aw_dev->prof_info;
++	struct aw_sec_data_desc *sec_desc;
++	int num = 0;
++	int i;
++
++	for (i = 0; i < AW88395_PROFILE_MAX; i++) {
++		if (prof_desc[i].prof_st == AW88395_PROFILE_OK) {
++			sec_desc = prof_desc[i].sec_desc;
++			if ((sec_desc[AW88395_DATA_TYPE_REG].data != NULL) &&
++			    (sec_desc[AW88395_DATA_TYPE_REG].len != 0) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_CFG].data != NULL) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_CFG].len != 0) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_FW].data != NULL) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_FW].len != 0))
++				prof_info->count++;
++		}
++	}
++
++	dev_dbg(aw_dev->dev, "get valid profile:%d", aw_dev->prof_info.count);
++
++	if (!prof_info->count) {
++		dev_err(aw_dev->dev, "no profile data");
++		return -EPERM;
++	}
++
++	prof_info->prof_desc = devm_kcalloc(aw_dev->dev,
++					prof_info->count, sizeof(struct aw_prof_desc),
++					GFP_KERNEL);
++	if (!prof_info->prof_desc)
++		return -ENOMEM;
++
++	for (i = 0; i < AW88395_PROFILE_MAX; i++) {
++		if (prof_desc[i].prof_st == AW88395_PROFILE_OK) {
++			sec_desc = prof_desc[i].sec_desc;
++			if ((sec_desc[AW88395_DATA_TYPE_REG].data != NULL) &&
++			    (sec_desc[AW88395_DATA_TYPE_REG].len != 0) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_CFG].data != NULL) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_CFG].len != 0) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_FW].data != NULL) &&
++			    (sec_desc[AW88395_DATA_TYPE_DSP_FW].len != 0)) {
++				if (num >= prof_info->count) {
++					dev_err(aw_dev->dev, "overflow count[%d]",
++							prof_info->count);
++					return -EINVAL;
++				}
++				prof_info->prof_desc[num] = prof_desc[i];
++				prof_info->prof_desc[num].id = i;
++				num++;
++			}
++		}
++	}
++
++	return 0;
++}
++
++static int aw_dev_load_cfg_by_hdr(struct aw_device *aw_dev,
++		struct aw_cfg_hdr *prof_hdr)
++{
++	struct aw_all_prof_info *all_prof_info;
++	int ret;
++
++	all_prof_info = devm_kzalloc(aw_dev->dev, sizeof(struct aw_all_prof_info), GFP_KERNEL);
++	if (!all_prof_info)
++		return -ENOMEM;
++
++	ret = aw_dev_parse_dev_type(aw_dev, prof_hdr, all_prof_info);
++	if (ret < 0) {
++		goto exit;
++	} else if (ret == AW88395_DEV_TYPE_NONE) {
++		dev_dbg(aw_dev->dev, "get dev type num is 0, parse default dev");
++		ret = aw_dev_parse_dev_default_type(aw_dev, prof_hdr, all_prof_info);
++		if (ret < 0)
++			goto exit;
++	}
++
++	ret = aw_dev_cfg_get_valid_prof(aw_dev, *all_prof_info);
++	if (ret < 0)
++		goto exit;
++
++	aw_dev->prof_info.prof_name_list = profile_name;
++
++exit:
++	devm_kfree(aw_dev->dev, all_prof_info);
++	return ret;
++}
++
++static int aw_dev_create_prof_name_list_v1(struct aw_device *aw_dev)
++{
++	struct aw_prof_info *prof_info = &aw_dev->prof_info;
++	struct aw_prof_desc *prof_desc = prof_info->prof_desc;
++	int i;
++
++	if (!prof_desc) {
++		dev_err(aw_dev->dev, "prof_desc is NULL");
++		return -EINVAL;
++	}
++
++	prof_info->prof_name_list = devm_kzalloc(aw_dev->dev,
++					prof_info->count * PROFILE_STR_MAX,
++					GFP_KERNEL);
++	if (!prof_info->prof_name_list)
++		return -ENOMEM;
++
++	for (i = 0; i < prof_info->count; i++) {
++		prof_desc[i].id = i;
++		prof_info->prof_name_list[i] = prof_desc[i].prf_str;
++		dev_dbg(aw_dev->dev, "prof name is %s", prof_info->prof_name_list[i]);
++	}
++
++	return 0;
++}
++
++static int aw_get_dde_type_info(struct aw_device *aw_dev, struct aw_container *aw_cfg)
++{
++	struct aw_cfg_hdr *cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++	struct aw_cfg_dde_v1 *cfg_dde =
++		(struct aw_cfg_dde_v1 *)(aw_cfg->data + cfg_hdr->hdr_offset);
++	int default_num = 0;
++	int dev_num = 0;
++	unsigned int i;
++
++	for (i = 0; i < cfg_hdr->ddt_num; i++) {
++		if (cfg_dde[i].type == AW88395_DEV_TYPE_ID)
++			dev_num++;
++
++		if (cfg_dde[i].type == AW88395_DEV_DEFAULT_TYPE_ID)
++			default_num++;
++	}
++
++	if (dev_num != 0) {
++		aw_dev->prof_info.prof_type = AW88395_DEV_TYPE_ID;
++	} else if (default_num != 0) {
++		aw_dev->prof_info.prof_type = AW88395_DEV_DEFAULT_TYPE_ID;
++	} else {
++		dev_err(aw_dev->dev, "can't find scene");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int aw_get_dev_scene_count_v1(struct aw_device *aw_dev, struct aw_container *aw_cfg,
++						unsigned int *scene_num)
++{
++	struct aw_cfg_hdr *cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++	struct aw_cfg_dde_v1 *cfg_dde =
++		(struct aw_cfg_dde_v1 *)(aw_cfg->data + cfg_hdr->hdr_offset);
++	unsigned int i;
++
++	for (i = 0; i < cfg_hdr->ddt_num; ++i) {
++		if ((cfg_dde[i].data_type == ACF_SEC_TYPE_MULTIPLE_BIN) &&
++		    (aw_dev->chip_id == cfg_dde[i].chip_id) &&
++		    (aw_dev->i2c->adapter->nr == cfg_dde[i].dev_bus) &&
++		    (aw_dev->i2c->addr == cfg_dde[i].dev_addr))
++			(*scene_num)++;
++	}
++
++	return 0;
++}
++
++static int aw_get_default_scene_count_v1(struct aw_device *aw_dev,
++						struct aw_container *aw_cfg,
++						unsigned int *scene_num)
++{
++	struct aw_cfg_hdr *cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++	struct aw_cfg_dde_v1 *cfg_dde =
++		(struct aw_cfg_dde_v1 *)(aw_cfg->data + cfg_hdr->hdr_offset);
++	unsigned int i;
++
++	for (i = 0; i < cfg_hdr->ddt_num; ++i) {
++		if ((cfg_dde[i].data_type == ACF_SEC_TYPE_MULTIPLE_BIN) &&
++		    (aw_dev->chip_id == cfg_dde[i].chip_id) &&
++		    (aw_dev->channel == cfg_dde[i].dev_index))
++			(*scene_num)++;
++	}
++
++	return 0;
++}
++
++static int aw_dev_parse_scene_count_v1(struct aw_device *aw_dev,
++							struct aw_container *aw_cfg,
++							unsigned int *count)
++{
++	int ret;
++
++	ret = aw_get_dde_type_info(aw_dev, aw_cfg);
++	if (ret < 0)
++		return ret;
++
++	switch (aw_dev->prof_info.prof_type) {
++	case AW88395_DEV_TYPE_ID:
++		ret = aw_get_dev_scene_count_v1(aw_dev, aw_cfg, count);
++		break;
++	case AW88395_DEV_DEFAULT_TYPE_ID:
++		ret = aw_get_default_scene_count_v1(aw_dev, aw_cfg, count);
 +		break;
 +	default:
++		dev_err(aw_dev->dev, "unsupported prof_type[%x]", aw_dev->prof_info.prof_type);
++		ret = -EINVAL;
 +		break;
 +	}
-+	mutex_unlock(&aw88395->lock);
++
++	return ret;
++}
++
++static int aw_dev_parse_data_by_sec_type_v1(struct aw_device *aw_dev,
++							struct aw_cfg_hdr *prof_hdr,
++							struct aw_cfg_dde_v1 *cfg_dde,
++							int *cur_scene_id)
++{
++	struct aw_prof_info *prof_info = &aw_dev->prof_info;
++	int ret;
++
++	switch (cfg_dde->data_type) {
++	case ACF_SEC_TYPE_MULTIPLE_BIN:
++		ret = aw_dev_prof_parse_multi_bin(aw_dev, (u8 *)prof_hdr + cfg_dde->data_offset,
++					cfg_dde->data_size, &prof_info->prof_desc[*cur_scene_id]);
++		if (ret < 0) {
++			dev_err(aw_dev->dev, "parse multi bin failed");
++			return ret;
++		}
++		prof_info->prof_desc[*cur_scene_id].prf_str = cfg_dde->dev_profile_str;
++		prof_info->prof_desc[*cur_scene_id].id = cfg_dde->dev_profile;
++		(*cur_scene_id)++;
++		break;
++	default:
++		dev_err(aw_dev->dev, "unsupported SEC_TYPE [%d]", cfg_dde->data_type);
++		return -EINVAL;
++	}
 +
 +	return 0;
 +}
 +
-+static const struct snd_soc_dapm_widget aw88395_dapm_widgets[] = {
-+	 /* playback */
-+	SND_SOC_DAPM_AIF_IN_E("AIF_RX", "Speaker_Playback", 0, 0, 0, 0,
-+					aw88395_plack_event,
-+					SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
-+	SND_SOC_DAPM_OUTPUT("DAC Output"),
-+
-+	/* capture */
-+	SND_SOC_DAPM_AIF_OUT("AIF_TX", "Speaker_Capture", 0, SND_SOC_NOPM, 0, 0),
-+	SND_SOC_DAPM_INPUT("ADC Input"),
-+};
-+
-+static const struct snd_soc_dapm_route aw88395_audio_map[] = {
-+	{"DAC Output", NULL, "AIF_RX"},
-+	{"AIF_TX", NULL, "ADC Input"},
-+};
-+
-+static int aw88395_codec_probe(struct snd_soc_component *component)
++static int aw_dev_parse_dev_type_v1(struct aw_device *aw_dev,
++		struct aw_cfg_hdr *prof_hdr)
 +{
-+	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(component);
++	struct aw_cfg_dde_v1 *cfg_dde =
++		(struct aw_cfg_dde_v1 *)((char *)prof_hdr + prof_hdr->hdr_offset);
++	int cur_scene_id;
++	unsigned int i;
 +	int ret;
 +
-+	INIT_DELAYED_WORK(&aw88395->start_work, aw88395_startup_work);
++	for (i = 0; i < prof_hdr->ddt_num; i++) {
++		if ((aw_dev->i2c->adapter->nr == cfg_dde[i].dev_bus) &&
++		    (aw_dev->i2c->addr == cfg_dde[i].dev_addr) &&
++		    (aw_dev->chip_id == cfg_dde[i].chip_id)) {
++			ret = aw_dev_parse_data_by_sec_type_v1(aw_dev, prof_hdr,
++							&cfg_dde[i], &cur_scene_id);
++			if (ret < 0) {
++				dev_err(aw_dev->dev, "parse failed");
++				return ret;
++			}
++		}
++	}
 +
-+	/* add widgets */
-+	ret = snd_soc_dapm_new_controls(dapm, aw88395_dapm_widgets,
-+							ARRAY_SIZE(aw88395_dapm_widgets));
-+	if (ret < 0)
-+		return ret;
++	if (cur_scene_id == 0) {
++		dev_err(aw_dev->dev, "get dev type failed, get num [%d]", cur_scene_id);
++		return -EINVAL;
++	}
 +
-+	/* add route */
-+	ret = snd_soc_dapm_add_routes(dapm, aw88395_audio_map,
-+							ARRAY_SIZE(aw88395_audio_map));
-+	if (ret < 0)
-+		return ret;
++	return 0;
++}
 +
-+	ret = snd_soc_add_component_controls(component, aw88395_controls,
-+							ARRAY_SIZE(aw88395_controls));
++static int aw_dev_parse_default_type_v1(struct aw_device *aw_dev,
++		struct aw_cfg_hdr *prof_hdr)
++{
++	struct aw_cfg_dde_v1 *cfg_dde =
++		(struct aw_cfg_dde_v1 *)((char *)prof_hdr + prof_hdr->hdr_offset);
++	int cur_scene_id = 0;
++	unsigned int i;
++	int ret;
++
++	for (i = 0; i < prof_hdr->ddt_num; i++) {
++		if ((aw_dev->channel == cfg_dde[i].dev_index) &&
++			(aw_dev->chip_id == cfg_dde[i].chip_id)) {
++			ret = aw_dev_parse_data_by_sec_type_v1(aw_dev, prof_hdr,
++							&cfg_dde[i], &cur_scene_id);
++			if (ret < 0) {
++				dev_err(aw_dev->dev, "parse failed");
++				return ret;
++			}
++		}
++	}
++
++	if (cur_scene_id == 0) {
++		dev_err(aw_dev->dev, "get dev default type failed, get num[%d]", cur_scene_id);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int aw_dev_parse_by_hdr_v1(struct aw_device *aw_dev,
++		struct aw_cfg_hdr *cfg_hdr)
++{
++	int ret;
++
++	switch (aw_dev->prof_info.prof_type) {
++	case AW88395_DEV_TYPE_ID:
++		ret = aw_dev_parse_dev_type_v1(aw_dev, cfg_hdr);
++		break;
++	case AW88395_DEV_DEFAULT_TYPE_ID:
++		ret = aw_dev_parse_default_type_v1(aw_dev, cfg_hdr);
++		break;
++	default:
++		dev_err(aw_dev->dev, "prof type matched failed, get num[%d]",
++			aw_dev->prof_info.prof_type);
++		ret =  -EINVAL;
++		break;
++	}
 +
 +	return ret;
 +}
 +
-+static void aw88395_codec_remove(struct snd_soc_component *aw_codec)
++static int aw_dev_load_cfg_by_hdr_v1(struct aw_device *aw_dev,
++						struct aw_container *aw_cfg)
 +{
-+	struct aw88395 *aw88395 = snd_soc_component_get_drvdata(aw_codec);
-+
-+	cancel_delayed_work_sync(&aw88395->start_work);
-+}
-+
-+static const struct snd_soc_component_driver soc_codec_dev_aw88395 = {
-+	.probe = aw88395_codec_probe,
-+	.remove = aw88395_codec_remove,
-+};
-+
-+static struct aw88395 *aw88395_malloc_init(struct i2c_client *i2c)
-+{
-+	struct aw88395 *aw88395 = devm_kzalloc(&i2c->dev,
-+			sizeof(struct aw88395), GFP_KERNEL);
-+	if (!aw88395)
-+		return NULL;
-+
-+	mutex_init(&aw88395->lock);
-+
-+	return aw88395;
-+}
-+
-+static void aw88395_hw_reset(struct aw88395 *aw88395)
-+{
-+	if (aw88395->reset_gpio) {
-+		gpiod_set_value_cansleep(aw88395->reset_gpio, 0);
-+		usleep_range(AW88395_1000_US, AW88395_1000_US + 10);
-+		gpiod_set_value_cansleep(aw88395->reset_gpio, 1);
-+		usleep_range(AW88395_1000_US, AW88395_1000_US + 10);
-+	} else {
-+		dev_err(aw88395->aw_pa->dev, "%s failed", __func__);
-+	}
-+}
-+
-+static int aw88395_request_firmware_file(struct aw88395 *aw88395)
-+{
-+	const struct firmware *cont = NULL;
++	struct aw_cfg_hdr *cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++	struct aw_prof_info *prof_info = &aw_dev->prof_info;
 +	int ret;
 +
-+	aw88395->aw_pa->fw_status = AW88395_DEV_FW_FAILED;
-+
-+	ret = request_firmware(&cont, AW88395_ACF_FILE, aw88395->aw_pa->dev);
-+	if ((ret < 0) || (!cont)) {
-+		dev_err(aw88395->aw_pa->dev, "load [%s] failed!", AW88395_ACF_FILE);
++	ret = aw_dev_parse_scene_count_v1(aw_dev, aw_cfg, &prof_info->count);
++	if (ret < 0) {
++		dev_err(aw_dev->dev, "get scene count failed");
 +		return ret;
 +	}
 +
-+	dev_info(aw88395->aw_pa->dev, "loaded %s - size: %zu\n",
-+			AW88395_ACF_FILE, cont ? cont->size : 0);
-+
-+	aw88395->aw_cfg = devm_kzalloc(aw88395->aw_pa->dev, cont->size + sizeof(int), GFP_KERNEL);
-+	if (!aw88395->aw_cfg) {
-+		release_firmware(cont);
++	prof_info->prof_desc = devm_kcalloc(aw_dev->dev,
++					prof_info->count, sizeof(struct aw_prof_desc),
++					GFP_KERNEL);
++	if (!prof_info->prof_desc)
 +		return -ENOMEM;
-+	}
-+	aw88395->aw_cfg->len = (int)cont->size;
-+	memcpy(aw88395->aw_cfg->data, cont->data, cont->size);
-+	release_firmware(cont);
 +
-+	ret = aw88395_dev_load_acf_check(aw88395->aw_pa, aw88395->aw_cfg);
++	ret = aw_dev_parse_by_hdr_v1(aw_dev, cfg_hdr);
 +	if (ret < 0) {
-+		dev_err(aw88395->aw_pa->dev, "Load [%s] failed ....!", AW88395_ACF_FILE);
++		dev_err(aw_dev->dev, "parse hdr failed");
 +		return ret;
 +	}
 +
-+	dev_dbg(aw88395->aw_pa->dev, "%s : bin load success\n", __func__);
-+
-+	mutex_lock(&aw88395->lock);
-+	/* aw device init */
-+	ret = aw88395_dev_init(aw88395->aw_pa, aw88395->aw_cfg);
-+	if (ret < 0)
-+		dev_err(aw88395->aw_pa->dev, "dev init failed");
-+	mutex_unlock(&aw88395->lock);
-+
-+	return ret;
-+}
-+
-+static int aw88395_i2c_probe(struct i2c_client *i2c)
-+{
-+	struct aw88395 *aw88395;
-+	int ret;
-+
-+	if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
-+		dev_err(&i2c->dev, "check_functionality failed");
-+		return -EIO;
-+	}
-+
-+	aw88395 = aw88395_malloc_init(i2c);
-+	if (!aw88395) {
-+		dev_err(&i2c->dev, "malloc aw88395 failed");
-+		return -ENOMEM;
-+	}
-+	i2c_set_clientdata(i2c, aw88395);
-+
-+	aw88395->reset_gpio = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_LOW);
-+	if (IS_ERR(aw88395->reset_gpio))
-+		dev_info(&i2c->dev, "reset gpio not defined\n");
-+
-+	/* hardware reset */
-+	aw88395_hw_reset(aw88395);
-+
-+	aw88395->regmap = devm_regmap_init_i2c(i2c, &aw88395_remap_config);
-+	if (IS_ERR(aw88395->regmap)) {
-+		ret = PTR_ERR(aw88395->regmap);
-+		dev_err(&i2c->dev, "Failed to init regmap: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* aw pa init */
-+	ret = aw88395_init(&aw88395->aw_pa, i2c, aw88395->regmap);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = aw88395_request_firmware_file(aw88395);
++	ret = aw_dev_create_prof_name_list_v1(aw_dev);
 +	if (ret < 0) {
-+		dev_err(&i2c->dev, "%s failed\n", __func__);
-+		return ret;
-+	}
-+
-+	ret = devm_snd_soc_register_component(&i2c->dev,
-+			&soc_codec_dev_aw88395,
-+			aw88395_dai, ARRAY_SIZE(aw88395_dai));
-+	if (ret < 0) {
-+		dev_err(&i2c->dev, "failed to register aw88395: %d", ret);
++		dev_err(aw_dev->dev, "create prof name list failed");
 +		return ret;
 +	}
 +
 +	return 0;
 +}
 +
-+static const struct i2c_device_id aw88395_i2c_id[] = {
-+	{ AW88395_I2C_NAME, 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, aw88395_i2c_id);
++int aw88395_dev_cfg_load(struct aw_device *aw_dev, struct aw_container *aw_cfg)
++{
++	struct aw_cfg_hdr *cfg_hdr;
++	int ret;
 +
-+static struct i2c_driver aw88395_i2c_driver = {
-+	.driver = {
-+		.name = AW88395_I2C_NAME,
-+		.owner = THIS_MODULE,
-+	},
-+	.probe_new = aw88395_i2c_probe,
-+	.id_table = aw88395_i2c_id,
-+};
-+module_i2c_driver(aw88395_i2c_driver);
++	cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
 +
-+MODULE_DESCRIPTION("ASoC AW88395 Smart PA Driver");
++	switch (cfg_hdr->hdr_version) {
++	case AW88395_CFG_HDR_VER:
++		ret = aw_dev_load_cfg_by_hdr(aw_dev, cfg_hdr);
++		if (ret < 0) {
++			dev_err(aw_dev->dev, "hdr_cersion[0x%x] parse failed",
++						cfg_hdr->hdr_version);
++			return ret;
++		}
++		break;
++	case AW88395_CFG_HDR_VER_V1:
++		ret = aw_dev_load_cfg_by_hdr_v1(aw_dev, aw_cfg);
++		if (ret < 0) {
++			dev_err(aw_dev->dev, "hdr_cersion[0x%x] parse failed",
++						cfg_hdr->hdr_version);
++			return ret;
++		}
++		break;
++	default:
++		dev_err(aw_dev->dev, "unsupported hdr_version [0x%x]", cfg_hdr->hdr_version);
++		return -EINVAL;
++	}
++	aw_dev->fw_status = AW88395_DEV_FW_OK;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(aw88395_dev_cfg_load);
++
++static int aw_dev_check_cfg_by_hdr(struct aw_device *aw_dev, struct aw_container *aw_cfg)
++{
++	unsigned int end_data_offset;
++	struct aw_cfg_hdr *cfg_hdr;
++	struct aw_cfg_dde *cfg_dde;
++	unsigned int act_data = 0;
++	unsigned int hdr_ddt_len;
++	unsigned int i;
++	u8 act_crc8;
++
++	cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++	/* check file type id is awinic acf file */
++	if (cfg_hdr->id != ACF_FILE_ID) {
++		dev_err(aw_dev->dev, "not acf type file");
++		return -EINVAL;
++	}
++
++	hdr_ddt_len = cfg_hdr->hdr_offset + cfg_hdr->ddt_size;
++	if (hdr_ddt_len > aw_cfg->len) {
++		dev_err(aw_dev->dev, "hdrlen with ddt_len [%d] overflow file size[%d]",
++		cfg_hdr->hdr_offset, aw_cfg->len);
++		return -EINVAL;
++	}
++
++	/* check data size */
++	cfg_dde = (struct aw_cfg_dde *)((char *)aw_cfg->data + cfg_hdr->hdr_offset);
++	act_data += hdr_ddt_len;
++	for (i = 0; i < cfg_hdr->ddt_num; i++)
++		act_data += cfg_dde[i].data_size;
++
++	if (act_data != aw_cfg->len) {
++		dev_err(aw_dev->dev, "act_data[%d] not equal to file size[%d]!",
++			act_data, aw_cfg->len);
++		return -EINVAL;
++	}
++
++	for (i = 0; i < cfg_hdr->ddt_num; i++) {
++		/* data check */
++		end_data_offset = cfg_dde[i].data_offset + cfg_dde[i].data_size;
++		if (end_data_offset > aw_cfg->len) {
++			dev_err(aw_dev->dev, "ddt_num[%d] end_data_offset[%d] overflow size[%d]",
++				i, end_data_offset, aw_cfg->len);
++			return -EINVAL;
++		}
++
++		/* crc check */
++		act_crc8 = crc8(aw_crc8_table, aw_cfg->data + cfg_dde[i].data_offset,
++							cfg_dde[i].data_size, 0);
++		if (act_crc8 != cfg_dde[i].data_crc) {
++			dev_err(aw_dev->dev, "ddt_num[%d] act_crc8:0x%x != data_crc:0x%x",
++				i, (u32)act_crc8, cfg_dde[i].data_crc);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++static int aw_dev_check_acf_by_hdr_v1(struct aw_device *aw_dev, struct aw_container *aw_cfg)
++{
++	struct aw_cfg_dde_v1 *cfg_dde;
++	unsigned int end_data_offset;
++	struct aw_cfg_hdr *cfg_hdr;
++	unsigned int act_data = 0;
++	unsigned int hdr_ddt_len;
++	u8 act_crc8;
++	int i;
++
++	cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++
++	/* check file type id is awinic acf file */
++	if (cfg_hdr->id != ACF_FILE_ID) {
++		dev_err(aw_dev->dev, "not acf type file");
++		return -EINVAL;
++	}
++
++	hdr_ddt_len = cfg_hdr->hdr_offset + cfg_hdr->ddt_size;
++	if (hdr_ddt_len > aw_cfg->len) {
++		dev_err(aw_dev->dev, "hdrlen with ddt_len [%d] overflow file size[%d]",
++		cfg_hdr->hdr_offset, aw_cfg->len);
++		return -EINVAL;
++	}
++
++	/* check data size */
++	cfg_dde = (struct aw_cfg_dde_v1 *)((char *)aw_cfg->data + cfg_hdr->hdr_offset);
++	act_data += hdr_ddt_len;
++	for (i = 0; i < cfg_hdr->ddt_num; i++)
++		act_data += cfg_dde[i].data_size;
++
++	if (act_data != aw_cfg->len) {
++		dev_err(aw_dev->dev, "act_data[%d] not equal to file size[%d]!",
++			act_data, aw_cfg->len);
++		return -EINVAL;
++	}
++
++	for (i = 0; i < cfg_hdr->ddt_num; i++) {
++		/* data check */
++		end_data_offset = cfg_dde[i].data_offset + cfg_dde[i].data_size;
++		if (end_data_offset > aw_cfg->len) {
++			dev_err(aw_dev->dev, "ddt_num[%d] end_data_offset[%d] overflow size[%d]",
++				i, end_data_offset, aw_cfg->len);
++			return -EINVAL;
++		}
++
++		/* crc check */
++		act_crc8 = crc8(aw_crc8_table, aw_cfg->data + cfg_dde[i].data_offset,
++									cfg_dde[i].data_size, 0);
++		if (act_crc8 != cfg_dde[i].data_crc) {
++			dev_err(aw_dev->dev, "ddt_num[%d] act_crc8:0x%x != data_crc 0x%x",
++				i, (u32)act_crc8, cfg_dde[i].data_crc);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++int aw88395_dev_load_acf_check(struct aw_device *aw_dev, struct aw_container *aw_cfg)
++{
++	struct aw_cfg_hdr *cfg_hdr;
++
++	if (!aw_cfg) {
++		dev_err(aw_dev->dev, "aw_prof is NULL");
++		return -EINVAL;
++	}
++
++	if (aw_cfg->len < sizeof(struct aw_cfg_hdr)) {
++		dev_err(aw_dev->dev, "cfg hdr size[%d] overflow file size[%d]",
++			aw_cfg->len, (int)sizeof(struct aw_cfg_hdr));
++		return -EINVAL;
++	}
++
++	crc8_populate_lsb(aw_crc8_table, AW88395_CRC8_POLYNOMIAL);
++
++	cfg_hdr = (struct aw_cfg_hdr *)aw_cfg->data;
++	switch (cfg_hdr->hdr_version) {
++	case AW88395_CFG_HDR_VER:
++		return aw_dev_check_cfg_by_hdr(aw_dev, aw_cfg);
++	case AW88395_CFG_HDR_VER_V1:
++		return aw_dev_check_acf_by_hdr_v1(aw_dev, aw_cfg);
++	default:
++		dev_err(aw_dev->dev, "unsupported hdr_version [0x%x]", cfg_hdr->hdr_version);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(aw88395_dev_load_acf_check);
++
++MODULE_DESCRIPTION("AW88395 ACF File Parsing Lib");
 +MODULE_LICENSE("GPL v2");
-diff --git a/sound/soc/codecs/aw88395/aw88395.h b/sound/soc/codecs/aw88395/aw88395.h
+diff --git a/sound/soc/codecs/aw88395/aw88395_lib.h b/sound/soc/codecs/aw88395/aw88395_lib.h
 new file mode 100644
-index 000000000000..8036ba27f68d
+index 000000000000..98b24cdbff60
 --- /dev/null
-+++ b/sound/soc/codecs/aw88395/aw88395.h
-@@ -0,0 +1,58 @@
++++ b/sound/soc/codecs/aw88395/aw88395_lib.h
+@@ -0,0 +1,92 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +//
-+// aw88395.h --  ALSA SoC AW88395 codec support
++// aw88395_lib.h  -- ACF bin parsing and check library file for aw88395
 +//
 +// Copyright (c) 2022-2023 AWINIC Technology CO., LTD
 +//
 +// Author: Bruce zhao <zhaolei@awinic.com>
 +//
 +
-+#ifndef __AW88395_H__
-+#define __AW88395_H__
++#ifndef __AW88395_LIB_H__
++#define __AW88395_LIB_H__
 +
-+#define AW88395_CHIP_ID_REG			(0x00)
-+#define AW88395_START_RETRIES			(5)
-+#define AW88395_START_WORK_DELAY_MS		(0)
++#define CHECK_REGISTER_NUM_OFFSET	(4)
++#define VALID_DATA_LEN			(4)
++#define VALID_DATA_ADDR		(4)
++#define PARSE_DSP_REG_NUM		(4)
++#define REG_DATA_BYTP_LEN		(8)
++#define CHECK_DSP_REG_NUM		(12)
++#define DSP_VALID_DATA_LEN		(12)
++#define DSP_VALID_DATA_ADDR		(12)
++#define PARSE_SOC_APP_NUM		(8)
++#define CHECK_SOC_APP_NUM		(12)
++#define APP_DOWNLOAD_ADDR		(4)
++#define APP_VALID_DATA_LEN		(12)
++#define APP_VALID_DATA_ADDR		(12)
++#define BIN_NUM_MAX			(100)
++#define HEADER_LEN			(60)
++#define BIN_DATA_TYPE_OFFSET		(8)
++#define DATA_LEN			(44)
++#define VALID_DATA_ADDR_OFFSET		(60)
++#define START_ADDR_OFFSET		(64)
 +
-+#define AW88395_DSP_16_DATA_MASK		(0x0000ffff)
++#define AW88395_FW_CHECK_PART		(10)
++#define HDADER_LEN			(60)
 +
-+#define AW88395_I2C_NAME			"aw88395_smartpa"
++#define HEADER_VERSION_OFFSET		(4)
 +
-+#define AW88395_RATES (SNDRV_PCM_RATE_8000_48000 | \
-+			SNDRV_PCM_RATE_96000)
-+#define AW88395_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | \
-+			SNDRV_PCM_FMTBIT_S24_LE | \
-+			SNDRV_PCM_FMTBIT_S32_LE)
-+
-+#define FADE_TIME_MAX			100000
-+#define FADE_TIME_MIN			0
-+
-+#define AW88395_PROFILE_EXT(xname, profile_info, profile_get, profile_set) \
-+{ \
-+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, \
-+	.name = xname, \
-+	.info = profile_info, \
-+	.get = profile_get, \
-+	.put = profile_set, \
-+}
-+
-+enum {
-+	AW88395_SYNC_START = 0,
-+	AW88395_ASYNC_START,
++enum bin_header_version_enum {
++	HEADER_VERSION_V1 = 0x01000000,
 +};
 +
-+enum {
-+	AW88395_STREAM_CLOSE = 0,
-+	AW88395_STREAM_OPEN,
++enum data_type_enum {
++	DATA_TYPE_REGISTER   = 0x00000000,
++	DATA_TYPE_DSP_REG    = 0x00000010,
++	DATA_TYPE_DSP_CFG    = 0x00000011,
++	DATA_TYPE_SOC_REG    = 0x00000020,
++	DATA_TYPE_SOC_APP    = 0x00000021,
++	DATA_TYPE_DSP_FW     = 0x00000022,
++	DATA_TYPE_MULTI_BINS = 0x00002000,
 +};
 +
-+struct aw88395 {
-+	struct aw_device *aw_pa;
-+	struct mutex lock;
-+	struct gpio_desc *reset_gpio;
-+	struct delayed_work start_work;
-+	struct regmap *regmap;
-+	struct aw_container *aw_cfg;
++enum data_version_enum {
++	DATA_VERSION_V1 = 0x00000001,
++	DATA_VERSION_MAX,
++};
++
++struct bin_header_info {
++	unsigned int check_sum;
++	unsigned int header_ver;
++	unsigned int bin_data_type;
++	unsigned int bin_data_ver;
++	unsigned int bin_data_len;
++	unsigned int ui_ver;
++	unsigned char chip_type[8];
++	unsigned int reg_byte_len;
++	unsigned int data_byte_len;
++	unsigned int device_addr;
++	unsigned int valid_data_len;
++	unsigned int valid_data_addr;
++
++	unsigned int reg_num;
++	unsigned int reg_data_byte_len;
++	unsigned int download_addr;
++	unsigned int app_version;
++	unsigned int header_len;
++};
++
++struct bin_container {
++	unsigned int len;
++	unsigned char data[];
++};
++
++struct aw_bin {
++	unsigned char *p_addr;
++	unsigned int all_bin_parse_num;
++	unsigned int multi_bin_parse_num;
++	unsigned int single_bin_parse_num;
++	struct bin_header_info header_info[BIN_NUM_MAX];
++	struct bin_container info;
 +};
 +
 +#endif
