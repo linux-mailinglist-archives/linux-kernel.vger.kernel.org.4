@@ -2,164 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89326696FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E586696FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240830AbjAMM32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S240802AbjAMM3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:29:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241497AbjAMM2k (ORCPT
+        with ESMTP id S241589AbjAMM2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:28:40 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on20622.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::622])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC466CFF8;
-        Fri, 13 Jan 2023 04:26:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d6UWTnMLhj0/EZRFFkjO4GNG3KZrXI1yxBfAvMsTMg5+LWgLsSfXTlKNkugGSzg/ZD67boeZRmZ+hPgQzA3+Fmy9ZKzyc6p7NGivpzNL4RlHhMNqF+WxSX9aR1UToZUvtso4y06EMQ4kwpn8w/00ftfLAAvqy3rl9kKsc2Tb4ALOnhAcj5ICr4bcejueqozniWVXyFFxtogBY+3Jxo7mpup6lK2rGTNSDhTJH1xF3IgPLBCxPuwhfYGXzudWxSofLMLB8Dc5++OIULRbDFwt/65UN/7VNSPaLqmHwO8UJ9NiLYI0MtxiHe5FuVyxNOHThxR5iZIhNhyaONUaojY30w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lu4CEIWktROaZIQN16YYuxvX8E49dULfYy+ILk9hrsM=;
- b=JUPnj8ibdHXidhWdcWptsoFqUb6Iio5OqKZlAScePrQGu3dDzSQaYOl/IGyY5jWJsOz6su9YTBnMli1U7zjZ3YrqjDPGMukXn8LAd4UKMd22ip53cr9tF3tfDtfYLmuHdyIE+8nJfDawZEMdWiHvNo1qOd6NzNbYT5AGwElf4EnYlDPd3t3PyLj4jIhnDa94Q9L1WXgjZzduCssRg1Fz0OOb0+PnTCPeZDXnDdH/RFdYw9p6adAN9ZDNNM5qhgDt6P5PaoU9iq3YZSs2lUGkSHFp3RseMcfl37j/3EeMnno3R9GQDls+hhSp9VW1CKH2w2cskYHq1B5SjTF/ueFSAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lu4CEIWktROaZIQN16YYuxvX8E49dULfYy+ILk9hrsM=;
- b=KRjd88K2sPjSgtkdvkXdahqseoTA3zSf1ioELcIJOQeOUvcRJ3iB+2hQ7f3oA2a2bqajwmrmImKpJSnTqR/XbfuafefJEJaH5V4QaGycYS+hm+fB5LiQAIjV/MrYc7SQxk6KYgNmX6z1uWW/CBZGsTO+DaZaha+8LjHiNiNu+j1X3bPdkHgZxg++V0ZefDT1RlfWd+95rUNlY1mt5UODoo+v8xhZgN/GzEgKJPWkb2ns9rJNf8lQLWgJ3AZyxCovXKzEhMbELZGoLH4YeQgVHA31okDtUnWvaE+1ImqfQosvh8mBB2tLFbXWZPSdIZy4O4sHJD7QDE4v5VPMwg6gXA==
-Received: from DM6PR08CA0043.namprd08.prod.outlook.com (2603:10b6:5:1e0::17)
- by IA1PR12MB7614.namprd12.prod.outlook.com (2603:10b6:208:429::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Fri, 13 Jan
- 2023 12:26:04 +0000
-Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1e0:cafe::b0) by DM6PR08CA0043.outlook.office365.com
- (2603:10b6:5:1e0::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
- Transport; Fri, 13 Jan 2023 12:26:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 12:26:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 04:25:51 -0800
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 04:25:47 -0800
-Message-ID: <0b2712ff-d4d3-3a7a-aebf-6b56774fc0fc@nvidia.com>
-Date:   Fri, 13 Jan 2023 17:55:44 +0530
+        Fri, 13 Jan 2023 07:28:53 -0500
+Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37B273E2E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:26:59 -0800 (PST)
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198]) by mx-outbound12-28.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 13 Jan 2023 12:26:57 +0000
+Received: by mail-lj1-f198.google.com with SMTP id x32-20020a2ea9a0000000b0027b52e5e56cso5540997ljq.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:26:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mistralsolutions.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UDFsrgP+UTMw5z9pb449CNH7n7E9Y9IltvGCSddi/5w=;
+        b=EO8NxMX88fPbExgxNk6XuqUKwkuFa0Is3uIrvbBK4TxldK6GS1BrF6qmi4QSaOSt35
+         Txh5Y6k5QpjRJJdX6CoA3OhdhtsPiab+lNQ3vTkIYpjZKfPpu+HQvKx3uqy/v8RsnKge
+         7WZRyv+cUrBJAbl19B0XTfmVjHq4FbdHvfv6g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UDFsrgP+UTMw5z9pb449CNH7n7E9Y9IltvGCSddi/5w=;
+        b=Hs5VbRf+D4/sNWHeaqgZ18FX2HS0Eu7kxDv3tx6Su0QCKC1chQ20kT5uCp9zbPtx4a
+         zB5R6mNH3tTdIwtPFJ0lIEO6SeGnyPOAHb+8qbo4dttO7N4JOLmlvkWNb2TVCf3vyATv
+         EgQsjln4fdE1KnjxJru1b+3OLB8fpPrE00hKqn49Lm4ZvnTV7EUVvaTZ61teZn15ildb
+         vof3rIucctEDQDtT0yC5Os0yK+foWM66D1NHU6BMBCxj75GUQ5Bi99R1Mo6KsQsU9OCI
+         7LE1mh1IeX2ruAM+VtETI9RXpzYAZOkVBV7PUlrpabMyS2G2S9k5+3Tvglo3V4OgmgSO
+         pkeQ==
+X-Gm-Message-State: AFqh2krW9WiBgWgQgQO1W6NYY9sVajZFCU44QBztg2dn+SicWBRJh5Ly
+        22ZELipAgC+9MgDWpsj3q0zTujQD4KMj+YPj+Eid5otK5g0jRdSwy4I4EKdO0io432mQl34uJJ0
+        M98o8+QDCkHX0Bs3LE6LtPVrWZF3EXImnDr5+/RqtTXoIBT6it5g4acmrAOC3Q1GmsjdmYp06CU
+        XZ
+X-Received: by 2002:ac2:4e09:0:b0:4b7:2a7:1242 with SMTP id e9-20020ac24e09000000b004b702a71242mr3684400lfr.44.1673612816405;
+        Fri, 13 Jan 2023 04:26:56 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtlhhvz/AEGbD+d5MQLbG9BJLg5Esd0lxrUsJGS0B/TWsuMp7nNxthAKToaDTWJaGkXXprtGb8nhKLAx0f2MxU=
+X-Received: by 2002:ac2:4e09:0:b0:4b7:2a7:1242 with SMTP id
+ e9-20020ac24e09000000b004b702a71242mr3684399lfr.44.1673612816118; Fri, 13 Jan
+ 2023 04:26:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
-        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
- <8641fad2-7170-4c0c-fbd6-6e2e784b3106@gmail.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <8641fad2-7170-4c0c-fbd6-6e2e784b3106@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT101:EE_|IA1PR12MB7614:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34bb9ab6-4188-4429-a08d-08daf56156a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cy7nKjFb261cxS6ZVJNSRMUUaQsR6KZv20f67ineAyNO3X+9avbNZmsVzQLBiqu7FFnqYNmBBynR5C9Nc3IISOXIg391dfDe7dztWh3dw9dtqudrrYGwsLrMLVTzRcVXGYb7QfgvdyFUndgOy+hgKws0A2CmOcHT7ZhLWiIVztgvYxPneaQj3oOowx8FcnWNYD/xDbXm+MU6GywzwjL75kExfrrH2nH06udoUdqLOaGFrYmqTnF7GQ0xKJJLWDaG+t82XVGLKpth2733a1dtQ9c1haA8atX04E2vwKzoETaZoUDNa1H9YXbTOGaf9GvQEaPf7UoLfPV09VQt038mk8cvt5vRxOB/rRX+QPSvLd0dKGs9lufmkl1N4EuoVTmv9YBJ1Jf8vC8N7VPpNTUGAossX6s/NYdWKmXKJgUzFuZWFb+J/hEVl6SIBP/exXVjrIz1e9VkXb6KbdTP2Mrxega3DtDc/w9pULHy7oM71HytUn5dXZT5Pb8gA7hlN3Rty1aGyprVbBj+le0wmrxVjFGbc0cKet6CRKd0EgmdzkspDuSu03tPFfApNfLbSgex4cAcqviB/ZXO7Ufel33iXPjJx3QhX2dmlompgm7Q6fiLkqWhqr2I8KWeALAfQkTBEWQpAUhEqWoliVI3ntX47m8yxZ3akU8LckpjC7UR7zyDMaQbgj27E0rwftpdoSbDVug/Vqv7lfCjFzcdV2BXa0RMuDdC2u9iSIm1555iowmT7IsaxeshUTtpR3T1vvex
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199015)(46966006)(40470700004)(36840700001)(8936002)(5660300002)(7416002)(83380400001)(86362001)(41300700001)(426003)(47076005)(7636003)(82740400003)(82310400005)(921005)(36756003)(40460700003)(356005)(2906002)(40480700001)(31696002)(36860700001)(31686004)(478600001)(26005)(186003)(16526019)(8676002)(336012)(4326008)(70206006)(16576012)(53546011)(316002)(110136005)(54906003)(107886003)(6666004)(2616005)(70586007)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 12:26:03.8784
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34bb9ab6-4188-4429-a08d-08daf56156a0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7614
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230110110052.14851-1-sinthu.raja@ti.com> <20230110110052.14851-3-sinthu.raja@ti.com>
+ <d109dbf8-ba51-7322-34e7-f688c5a18908@ti.com>
+In-Reply-To: <d109dbf8-ba51-7322-34e7-f688c5a18908@ti.com>
+From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
+Date:   Fri, 13 Jan 2023 17:56:44 +0530
+Message-ID: <CAEd-yTQ9eEz_Q6ncNP3vc9oerqiXfhrGK7DvsAnm21OZzYUe2w@mail.gmail.com>
+Subject: Re: [RESEND PATCH V3 2/3] arm64: dts: ti: Add initial support for
+ AM68 SK System on Module
+To:     Vaishnav Achath <vaishnav.a@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-BESS-ID: 1673612817-303100-5448-10899-1
+X-BESS-VER: 2019.1_20221214.2106
+X-BESS-Apparent-Source-IP: 209.85.208.198
+X-BESS-Outbound-Spam-Score: 0.40
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245438 [from 
+        cloudscan16-215.eu-central-1b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+        0.40 BSF_SC0_SA085b         META: Custom Rule SA085b 
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+X-BESS-Outbound-Spam-Status: SCORE=0.40 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_SC0_SA085b, BSF_BESS_OUTBOUND
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 13, 2023 at 5:24 PM Vaishnav Achath <vaishnav.a@ti.com> wrote:
+>
+> Hi Sinthu,
+>
+> On 10/01/23 16:30, Sinthu Raja wrote:
+> > From: Sinthu Raja <sinthu.raja@ti.com>
+> >
+> > AM68 Starter Kit (SK) is a low cost, small form factor board designed
+> > for TI=E2=80=99s AM68 SoC. TI=E2=80=99s AM68 SoC comprises of dual core=
+ A72, high
+> > performance vision accelerators, hardware accelerators, latest C71x
+> > DSP, high bandwidth real-time IPs for capture and display. The SoC is
+> > power optimized to provide best in class performance for industrial
+> > applications.
+> >
+> >     AM68 SK supports the following interfaces:
+> >       * 16 GB LPDDR4 RAM
+> >       * x1 Gigabit Ethernet interface
+> >       * x1 USB 3.1 Type-C port
+> >       * x2 USB 3.1 Type-A ports
+> >       * x1 PCIe M.2 M Key
+> >       * 512 Mbit OSPI flash
+> >       * x2 CSI2 Camera interface (RPi and TI Camera connector)
+> >       * 40-pin Raspberry Pi GPIO header
+> >
+> > SK's System on Module (SoM) contains the SoC and DDR.
+> > Therefore, add DT node for the SOC and DDR on the SoM.
+> >
+> > Schematics: https://www.ti.com/lit/zip/SPRR463
+> > TRM: http://www.ti.com/lit/pdf/spruj28
+> >
+> > Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> > ---
+> >
+> > Changes in V3:
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > Addressed review comments
+> >  - Removed the unused nodes that are disabled by default.
+> > OSPI support will be added once the OSPI node is enabled for J721s2/AM6=
+8 in main DTSI.
+> >
+> > Changes in V2:
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > Address review comments
+> >  - drop the empty lines.
+> >
+> > V1: https://lore.kernel.org/linux-arm-kernel/20221018123849.23695-3-sin=
+thu.raja@ti.com/
+> > V2: https://lore.kernel.org/lkml/20221107123852.8063-3-sinthu.raja@ti.c=
+om/
+> >
+> >  arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi | 31 ++++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi b/arch/arm64/bo=
+ot/dts/ti/k3-am68-sk-som.dtsi
+> > new file mode 100644
+> > index 000000000000..c35f81edee8c
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+> > @@ -0,0 +1,31 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.=
+com/
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "k3-j721s2.dtsi"
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +
+> > +/ {
+> > +     memory@80000000 {
+> > +             device_type =3D "memory";
+> > +             /* 16 GB RAM */
+> > +             reg =3D <0x00 0x80000000 0x00 0x80000000>,
+> > +                   <0x08 0x80000000 0x03 0x80000000>;
+> > +     };
+> > +
+> > +     /* Reserving memory regions still pending */
+>
+> Is this comment needed?
+>
+> > +     reserved_memory: reserved-memory {
+> > +             #address-cells =3D <2>;
+> > +             #size-cells =3D <2>;
+> > +             ranges;
+> > +
+> > +             secure_ddr: optee@9e800000 {
+> > +                     reg =3D <0x00 0x9e800000 0x00 0x01800000>;
+> > +                     alignment =3D <0x1000>;
+>
+> Is alignment needed here?
+This is used to mention the address boundary. Removing this will
+affect memory allocation. Isn't so?
+>
+>
+> Please see https://lore.kernel.org/lkml/cd5dbbb0-2d9f-8d7d-b051-f8d01d710=
+c62@ti.com/
+>
+> > +                     no-map;
+> > +             };
+> > +     };
+> > +};
+>
+> --
+> Regards,
+> Vaishnav
 
 
-On 21/12/22 22:24, Dmitry Osipenko wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> 20.12.2022 19:02, Sumit Gupta пишет:
->>   static int tegra186_emc_probe(struct platform_device *pdev)
->>   {
->>        struct mrq_emc_dvfs_latency_response response;
->>        struct tegra_bpmp_message msg;
->>        struct tegra186_emc *emc;
->> +     struct tegra_mc *mc;
->>        unsigned int i;
->>        int err;
->>
->> @@ -158,6 +307,9 @@ static int tegra186_emc_probe(struct platform_device *pdev)
->>        if (!emc)
->>                return -ENOMEM;
->>
->> +     platform_set_drvdata(pdev, emc);
->> +     emc->dev = &pdev->dev;
->> +
->>        emc->bpmp = tegra_bpmp_get(&pdev->dev);
->>        if (IS_ERR(emc->bpmp))
->>                return dev_err_probe(&pdev->dev, PTR_ERR(emc->bpmp), "failed to get BPMP\n");
->> @@ -236,6 +388,19 @@ static int tegra186_emc_probe(struct platform_device *pdev)
->>        debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, emc->debugfs.root,
->>                            emc, &tegra186_emc_debug_max_rate_fops);
->>
->> +     mc = dev_get_drvdata(emc->dev->parent);
->> +     if (mc && mc->soc->icc_ops) {
->> +             if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
->> +                     err = tegra_emc_interconnect_init(emc);
->> +                     if (!err)
->> +                             return err;
->> +                     dev_err(&pdev->dev, "tegra_emc_interconnect_init failed:%d\n", err);
->> +                     goto put_bpmp;
->> +             } else {
->> +                     dev_info(&pdev->dev, "MRQ_BWMGR_INT not present\n");
->> +             }
-> 
-> If there is no MRQ_BWMGR_INT, then device drivers using ICC won't probe.
-> This is either a error condition, or ICC should inited and then ICC
-> changes should be skipped.
-> 
 
-If the MRQ_BW_MGR is not supported by a BPMP-FW binary, then the MC & 
-EMC drivers will still probe successfully and scaling will be disabled.
+--=20
+With Regards
+Sinthu Raja
