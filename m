@@ -2,133 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1716966933E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095D166933D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240818AbjAMJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S241051AbjAMJsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240722AbjAMJrf (ORCPT
+        with ESMTP id S239619AbjAMJrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:47:35 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE6A6B1BF;
-        Fri, 13 Jan 2023 01:36:59 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Ntbsj6HXgz8RTZH;
-        Fri, 13 Jan 2023 17:36:57 +0800 (CST)
-Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
-        by mse-fl2.zte.com.cn with SMTP id 30D9agSE049932;
-        Fri, 13 Jan 2023 17:36:42 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Fri, 13 Jan 2023 17:36:45 +0800 (CST)
-Date:   Fri, 13 Jan 2023 17:36:45 +0800 (CST)
-X-Zmail-TransId: 2b0363c1262d2bddc3a3
-X-Mailer: Zmail v1.0
-Message-ID: <202301131736452546903@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
-        <willy@infradead.org>, <bagasdotme@gmail.com>
-Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <iamjoonsoo.kim@lge.com>,
-        <ran.xiaokai@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjNdIHN3YXBfc3RhdGU6IHVwZGF0ZSBzaGFkb3dfbm9kZXMgZm9yIGFub255bW91cyBwYWdl?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 30D9agSE049932
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63C12639.000 by FangMail milter!
-X-FangMail-Envelope: 1673602617/4Ntbsj6HXgz8RTZH/63C12639.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C12639.000/4Ntbsj6HXgz8RTZH
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 04:47:32 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D6A69B10;
+        Fri, 13 Jan 2023 01:36:57 -0800 (PST)
+Date:   Fri, 13 Jan 2023 09:36:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673602616;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kXuL1K66hVbbl9oh0JbPD/eGxNZzYXrhlx9eaWy4U8I=;
+        b=y2e+r1z/cqcPUoWXtGQeq+zFge5v/TfLp7Rzbgh92sI1uNdJEVJl657Sv62XMBV6u1Fbul
+        f8A/dl/IbQqFagqv/h41yeDmr8VVVMpOqBomTOt4HWn7zunkYTsyj9BOAX9qwGOZErCQ3Q
+        B8n8civBxxHSWW7RafznrXCNXa+Xvgb98dFFZpFOn9xqxjxGdqw8/yPVaE+7zbPaoDh7MG
+        LJFyAMsJj1euqH5lkNdp8AMSSKV7L1uxzAABVXNbkVWnWWG3HZD73CGLM/iTYxrF4T6Mko
+        VBm3VrPwJU+agYmMlq4RWTen50a7czOKG6ZPGBrChlmrbHcL2MOUNcGG6BKPHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673602616;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kXuL1K66hVbbl9oh0JbPD/eGxNZzYXrhlx9eaWy4U8I=;
+        b=54cZ1Z8JGlCzBYnaPnskvMgbrVBTDUsjBPjNdVREMh9sgn553DHY4FBjNW05AiGtKnF5+f
+        VHf6C7RPe+TT9fBw==
+From:   "tip-bot2 for H. Peter Anvin (Intel)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/gsseg: Use the LKGS instruction if available for
+ load_gs_index()
+Cc:     "H. Peter Anvin (Intel)" <hpa@zytor.com>,
+        Xin Li <xin3.li@intel.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230112072032.35626-6-xin3.li@intel.com>
+References: <20230112072032.35626-6-xin3.li@intel.com>
+MIME-Version: 1.0
+Message-ID: <167360261521.4906.1537966381271124611.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+The following commit has been merged into the x86/cpu branch of tip:
 
-Shadow_nodes is for shadow nodes reclaiming of workingset handling,
-it is updated when page cache add or delete since long time ago
-workingset only supported page cache. But when workingset supports
-anonymous page detection, we missied updating shadow nodes for
-it. This caused that shadow nodes of anonymous page will never be
-reclaimd by scan_shadow_nodes() even they use much memory and
-system memory is tense.
+Commit-ID:     92cbbadf73f45c5d8bb26ed8668ff59671ff21e6
+Gitweb:        https://git.kernel.org/tip/92cbbadf73f45c5d8bb26ed8668ff59671ff21e6
+Author:        H. Peter Anvin (Intel) <hpa@zytor.com>
+AuthorDate:    Wed, 11 Jan 2023 23:20:32 -08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Fri, 13 Jan 2023 10:07:27 +01:00
 
-So update shadow_nodes of anonymous page when swap cache is
-add or delete by calling  xas_set_update(..workingset_update_node).
+x86/gsseg: Use the LKGS instruction if available for load_gs_index()
 
-Fixes: aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+The LKGS instruction atomically loads a segment descriptor into the
+%gs descriptor registers, *except* that %gs.base is unchanged, and the
+base is instead loaded into MSR_IA32_KERNEL_GS_BASE, which is exactly
+what we want this function to do.
+
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Xin Li <xin3.li@intel.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20230112072032.35626-6-xin3.li@intel.com
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
-change for v3
-- Modify git log of explain of this patch do in imperative mood. Thanks to
-Bagas Sanjaya.
-change for v2
-- Include a description of the user-visible effect. Add fixes tag. Modify comments.
-Also call workingset_update_node() in clear_shadow_from_swap_cache(). Thanks
-to Matthew Wilcox.
----
- include/linux/xarray.h | 3 ++-
- mm/swap_state.c        | 6 ++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/gsseg.h | 33 +++++++++++++++++++++++++++++----
+ arch/x86/kernel/cpu/common.c |  1 +
+ arch/x86/xen/enlighten_pv.c  |  1 +
+ 3 files changed, 31 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-index 44dd6d6e01bc..5cc1f718fec9 100644
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
-  * @update: Function to call when updating a node.
-  *
-  * The XArray can notify a caller after it has updated an xa_node.
-- * This is advanced functionality and is only needed by the page cache.
-+ * This is advanced functionality and is only needed by the page cache
-+ * and swap cache.
-  */
- static inline void xas_set_update(struct xa_state *xas, xa_update_node_t update)
+diff --git a/arch/x86/include/asm/gsseg.h b/arch/x86/include/asm/gsseg.h
+index d15577c..ab6a595 100644
+--- a/arch/x86/include/asm/gsseg.h
++++ b/arch/x86/include/asm/gsseg.h
+@@ -14,17 +14,42 @@
+ 
+ extern asmlinkage void asm_load_gs_index(u16 selector);
+ 
++/* Replace with "lkgs %di" once binutils support LKGS instruction */
++#define LKGS_DI _ASM_BYTES(0xf2,0x0f,0x00,0xf7)
++
++static inline void native_lkgs(unsigned int selector)
++{
++	u16 sel = selector;
++	asm_inline volatile("1: " LKGS_DI
++			    _ASM_EXTABLE_TYPE_REG(1b, 1b, EX_TYPE_ZERO_REG, %k[sel])
++			    : [sel] "+D" (sel));
++}
++
+ static inline void native_load_gs_index(unsigned int selector)
  {
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index cb9aaa00951d..7a003d8abb37 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -94,6 +94,8 @@ int add_to_swap_cache(struct folio *folio, swp_entry_t entry,
- 	unsigned long i, nr = folio_nr_pages(folio);
- 	void *old;
-
-+	xas_set_update(&xas, workingset_update_node);
+-	unsigned long flags;
++	if (cpu_feature_enabled(X86_FEATURE_LKGS)) {
++		native_lkgs(selector);
++	} else {
++		unsigned long flags;
+ 
+-	local_irq_save(flags);
+-	asm_load_gs_index(selector);
+-	local_irq_restore(flags);
++		local_irq_save(flags);
++		asm_load_gs_index(selector);
++		local_irq_restore(flags);
++	}
+ }
+ 
+ #endif /* CONFIG_X86_64 */
+ 
++static inline void __init lkgs_init(void)
++{
++#ifdef CONFIG_PARAVIRT_XXL
++#ifdef CONFIG_X86_64
++	if (cpu_feature_enabled(X86_FEATURE_LKGS))
++		pv_ops.cpu.load_gs_index = native_lkgs;
++#endif
++#endif
++}
 +
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(folio_test_swapcache(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_swapbacked(folio), folio);
-@@ -145,6 +147,8 @@ void __delete_from_swap_cache(struct folio *folio,
- 	pgoff_t idx = swp_offset(entry);
- 	XA_STATE(xas, &address_space->i_pages, idx);
-
-+	xas_set_update(&xas, workingset_update_node);
-+
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_swapcache(folio), folio);
- 	VM_BUG_ON_FOLIO(folio_test_writeback(folio), folio);
-@@ -252,6 +256,8 @@ void clear_shadow_from_swap_cache(int type, unsigned long begin,
- 		struct address_space *address_space = swap_address_space(entry);
- 		XA_STATE(xas, &address_space->i_pages, curr);
-
-+		xas_set_update(&xas, workingset_update_node);
-+
- 		xa_lock_irq(&address_space->i_pages);
- 		xas_for_each(&xas, old, end) {
- 			if (!xa_is_value(old))
--- 
-2.15.2
+ #ifndef CONFIG_PARAVIRT_XXL
+ 
+ static inline void load_gs_index(unsigned int selector)
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 9cfca3d..b7ac85a 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1960,6 +1960,7 @@ void __init identify_boot_cpu(void)
+ 	setup_cr_pinning();
+ 
+ 	tsx_init();
++	lkgs_init();
+ }
+ 
+ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 5b13796..ce2f19e 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -276,6 +276,7 @@ static void __init xen_init_capabilities(void)
+ 	setup_clear_cpu_cap(X86_FEATURE_ACC);
+ 	setup_clear_cpu_cap(X86_FEATURE_X2APIC);
+ 	setup_clear_cpu_cap(X86_FEATURE_SME);
++	setup_clear_cpu_cap(X86_FEATURE_LKGS);
+ 
+ 	/*
+ 	 * Xen PV would need some work to support PCID: CR3 handling as well
