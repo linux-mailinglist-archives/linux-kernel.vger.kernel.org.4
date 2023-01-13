@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B1A6690AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FC46690B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbjAMIYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S238828AbjAMI0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240887AbjAMIXY (ORCPT
+        with ESMTP id S232730AbjAMI0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:23:24 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB9056882;
-        Fri, 13 Jan 2023 00:23:21 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id f3so14503094pgc.2;
-        Fri, 13 Jan 2023 00:23:21 -0800 (PST)
+        Fri, 13 Jan 2023 03:26:11 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD9F1C135
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:26:06 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i1so597371pfk.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:26:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1/ckMgmFgbi3RU+07o59Ls7nkdE9iDSwV58pHA1aAc=;
-        b=LNX0ai1rLm3fxqQ/NI7qaXnw/F7ipPtQsMXhz3rCQNMC7IgkUb0gDM4adZ0NM0/kLM
-         VJrEEzv2FcxWqPlMwO5Q5HuwQOTjRS513qbIUHv3KpdiiFcYe3ACKsHnPDF6MwBYwpAJ
-         DT4wvzobmqr9easaK+FI+ooDV1vEAAm0ELTUIPNjQiJhHwWBkuc5qiQFuwAI8c3QaiZW
-         J7ndLP0E0zyIvzVkpqjP1PfPTc4eRf2303ob4d78JXoYft7V2tbSzbW2HBK+vIqPLPdu
-         51MWkthm5PQNGJ9bc/hwEnwH/NTTNBmuGw78i2pfvjbX0AvkCOXiTznowiLKRAC6eOKj
-         lSKA==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HCiFP9JVqQYcltnhJxOwMzt0TI6SjVJUyNuyOtFokuQ=;
+        b=e/UJMPBniTVg2GO6GZVo02MR6qRIoVE3kwcoylx1CAZ4skOPbDYphENuDrlumE9hF1
+         9EdMGgoZN+FRJQng9AXQHTxO7ELGAEllUe91V4zzb9VIkZOvhKySWb9pYzzbY5Ge3zco
+         e1eQO+uaXuGth6A4ouvTknEZzjyUQw5y9kMQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k1/ckMgmFgbi3RU+07o59Ls7nkdE9iDSwV58pHA1aAc=;
-        b=jFO9vxXp++SbEE8TDsC0yuvHcnVdaGwPisV29CHGA6SqRA1rhC+MO7whfEA6/X2zdJ
-         wrUj+d+XI7FLwHNZUVB2j5wd9TICag6dhMaerFot1mfrfWmFiU694h7o3o+tsUC276Yb
-         wP2sSVr1GFsVBpxPixWL+Bx00bng0bQeE1dLbfyKUAO5jaUUurOlAjdJUwNh+adN4fkO
-         wof3TL47nWAEnpJymUj2WwZFhdywdESfvQ08ifmZWIvrPq08q6p9F00GmNy7end13We9
-         LLslhEKKON0JxYsRX+UVQRpi7IwnEQnLpf6mHuSuyYlDW7fXUJ1wydOzq8xrMC0x5fk5
-         89fw==
-X-Gm-Message-State: AFqh2kpuhfHotcYlahiht3BZL14KivXKrbmiwwJi05+zSurnzygfUjuB
-        z3gyfHNop3ui6s+zF+KSFzQ=
-X-Google-Smtp-Source: AMrXdXtjEMLe0axPeiVK01K1WQ+V9oS52ksqegIQMgcvtYoxpifgHLVYWLsPRxG1Rokq1tqvOetaAQ==
-X-Received: by 2002:a62:30c2:0:b0:580:ccae:291c with SMTP id w185-20020a6230c2000000b00580ccae291cmr65233933pfw.24.1673598200804;
-        Fri, 13 Jan 2023 00:23:20 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
-        by smtp.gmail.com with ESMTPSA id y29-20020aa793dd000000b0056c2e497b02sm13553641pff.173.2023.01.13.00.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 00:23:20 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id C7EFC104A90; Fri, 13 Jan 2023 15:23:17 +0700 (WIB)
-Date:   Fri, 13 Jan 2023 15:23:17 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org
-Subject: Re: [PATCH v2 net-next 1/1] plca.c: fix obvious mistake in checking
- retval
-Message-ID: <Y8EU9bCLj6UOz7g8@debian.me>
-References: <df38c69a85bf528f3e6e672f00be4dc9cdd6298e.1673538908.git.piergiorgio.beruto@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HCiFP9JVqQYcltnhJxOwMzt0TI6SjVJUyNuyOtFokuQ=;
+        b=FkEOtdOC4k5dZL3tTAzAyV1EM298OX42jsR+kvqtpG2L3TamuMjlbkDXXW6w/RXoCh
+         fu8E/bz0IYpMcATD9HSzIj95CNom7vEdWcpCBY5UumyaXHJSCJWXCGAXAZ6VExzuX1dz
+         mXQmynnxRQg8H8iYo08NUeUdoNM1LXZpCgCuM39NH7LAppCR2uJsd/9O9ygrhE7IJFfs
+         sv7hAFA0yV9rUTRIBoxoYE0MKkOQ8hEnscuaDCS7tdvtoqAUlIdLoS8EvgPFe+lpsUDi
+         RV9EApf1sQWXicO5zBYLbtQbmvTZZRLtpxWTPSUaTvA2WcYpBxChsjx2NUgXF3p2jslR
+         3qew==
+X-Gm-Message-State: AFqh2kqOZL1vjBtuAZBY00Ap3xbHvIABctPZHDO1EYttAfo59iw7I0fz
+        a8lOWkkEoyFkf4MO4WDspXT2AQFfiFRvN7uz
+X-Google-Smtp-Source: AMrXdXvtMNodEJmEFeruNUnXHk/YyZh/XWZAjAI2pUx42KRw0NTleoQCQnULQcv0gGtIEAXAD8bZMQ==
+X-Received: by 2002:aa7:8d09:0:b0:577:3944:aa78 with SMTP id j9-20020aa78d09000000b005773944aa78mr69008488pfe.0.1673598365925;
+        Fri, 13 Jan 2023 00:26:05 -0800 (PST)
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com. [209.85.215.172])
+        by smtp.gmail.com with ESMTPSA id s2-20020a625e02000000b0057ef155103asm11584441pfb.155.2023.01.13.00.26.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 00:26:04 -0800 (PST)
+Received: by mail-pg1-f172.google.com with SMTP id f3so14506771pgc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:26:04 -0800 (PST)
+X-Received: by 2002:a62:1501:0:b0:589:8362:c7ce with SMTP id
+ 1-20020a621501000000b005898362c7cemr1385816pfv.21.1673598363988; Fri, 13 Jan
+ 2023 00:26:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VIr47Z0aK9LAgJcZ"
-Content-Disposition: inline
-In-Reply-To: <df38c69a85bf528f3e6e672f00be4dc9cdd6298e.1673538908.git.piergiorgio.beruto@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230111-uvc_privacy_subdev-v1-0-f859ac9a01e3@chromium.org>
+In-Reply-To: <20230111-uvc_privacy_subdev-v1-0-f859ac9a01e3@chromium.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 13 Jan 2023 09:25:52 +0100
+X-Gmail-Original-Message-ID: <CANiDSCuq483Eha-KfUM_1y4zb0sC8rNgf-yki5SjiUo3czaKBw@mail.gmail.com>
+Message-ID: <CANiDSCuq483Eha-KfUM_1y4zb0sC8rNgf-yki5SjiUo3czaKBw@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] meida: uvcvideo: reimplement privacy gpio as a
+ separate subdevice
+To:     Yunke Cao <yunkec@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yunke
 
---VIr47Z0aK9LAgJcZ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you very much for the patchset :)
 
-On Thu, Jan 12, 2023 at 04:56:11PM +0100, Piergiorgio Beruto wrote:
-> This patch addresses a wrong fix that was done during the review
-> process. The intention was to substitute "if(ret < 0)" with
-> "if(ret)". Unfortunately, in this specific file the intended fix did not
-> meet the code. After additional review, it seems like if(ret < 0) was
-> actually the right thing to do. So this patch reverts those changes.
+On Wed, 11 Jan 2023 at 09:52, Yunke Cao <yunkec@chromium.org> wrote:
+>
+> privacy_gpio in uvc were added as V4L2_CID_PRIVACY in uvc video node in
+> https://lore.kernel.org/all/20201223133528.55014-1-ribalda@chromium.org/
+>
+> Userspace applications often require to constantly poll privacy control.
+> Currently, polling privacy control requires keeping the video node open,
+> which prevents the camera from autosuspending.
+>
+> This patchset adds a separate v4l2 subdevice. Userspace access the gpio
+> via V4L2_CID_PRIVACY in the new subdevice. Applications can poll the
+> privacy control status without opening the video node and activate the
+> camera.
+>
+> The non-gpio V4L2_CID_PRIVACY in uvc is not affected.
 
-Try to reword the patch description without writing "This patch does foo"
-(prefer imperative mood over descriptive one).
+Since this is a RFC, lets focus on the idea and not on the code itself.
 
-Thanks.
+- I am missing a reference to the subdevice from the media device. How
+will a user figure out that /dev/v4l-subdev0 is the privacy gpio of
+/dev/media0 and not /dev/media1?. Thake a look to the "ancillary
+links"
+- We have already exposed the control as part of the main video
+device, that means that we need to keep that API. The control on
+/dev/v4l-subdev0 should "mirror" the control on /dev/video0
+- There is no need to v4l2_ctrl_fill_event(), if you modify the
+control with a set controll function, the media controller should take
+care of everything
 
---=20
-An old man doll... just what I always wanted! - Clara
+@Sakari Ailus @Hans Verkuil : Assuming a correct implementation, how
+would you feel about exposing a privacy gpio as a subdevice?
 
---VIr47Z0aK9LAgJcZ
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Thanks!!!
 
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8EU9QAKCRD2uYlJVVFO
-o2pEAQC26U9ol2XV4h5cE+CG9W83NqjHtLfHUUfsguzqUgGkTQEAk9e5Q7GLjpk2
-E1kp0cXI/VTE7qrrqtdlKr8ZxCcMLA8=
-=ZTq0
------END PGP SIGNATURE-----
 
---VIr47Z0aK9LAgJcZ--
+>
+> Suggested-by: Ricardo Ribalda <ribalda@chromium.org>
+> Signed-off-by: Yunke Cao <yunkec@chromium.org>
+> ---
+> Yunke Cao (3):
+>       media: v4l2-ctrls: Expose v4l2_ctrl_fill_event()
+>       media: uvcvideo: remove entity privacy control in the uvc video node
+>       media: uvcvideo: reimplement privacy GPIO as a separate subdevice
+>
+>  drivers/media/usb/uvc/uvc_ctrl.c          | 17 -------
+>  drivers/media/usb/uvc/uvc_driver.c        | 44 ++----------------
+>  drivers/media/usb/uvc/uvc_entity.c        | 76 +++++++++++++++++++++++++++++++
+>  drivers/media/usb/uvc/uvcvideo.h          | 19 +++++---
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c |  9 ++--
+>  include/media/v4l2-ctrls.h                | 12 +++++
+>  6 files changed, 111 insertions(+), 66 deletions(-)
+> ---
+> base-commit: 7dd4b804e08041ff56c88bdd8da742d14b17ed25
+> change-id: 20230111-uvc_privacy_subdev-1e7a167e86eb
+>
+> Best regards,
+> --
+> Yunke Cao <yunkec@chromium.org>
+
+
+
+-- 
+Ricardo Ribalda
