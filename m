@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BAB668923
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F94668922
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240516AbjAMB3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S229887AbjAMB3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239995AbjAMB3X (ORCPT
+        with ESMTP id S240290AbjAMB3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 20:29:23 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BC15D8B2
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30873E0E
         for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:29:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1673573362; x=1705109362;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=OHUcCdetloL8yXlR/LtCohMn3tBrcJwkpfwskBg2NPs=;
-  b=Ela0oljRGNIsK24RchimI2JiczVLZ8tBc5i8I5rzS1k07vCcXM5/jYKq
-   7dkvVejaLEdDr4ocyKkLRbInZ02C6Lt9/bijvRoXyY2jvqrVJ88zf9TAU
-   ny4If8/3Dtwhkb+Sf4Mkam1dljcOVLf5VJZQcit0zhZGrLycXICxo+LF8
-   64rfK/Nzg026PrmBUdcby1xojhKQE9qmAnEwnji9xkzTvvtx0V+I+dMvz
-   +rTDq2qFwG+Qq64CXLWpmXcKksmkcvVxbUz05ILOD7YdSWaGy6Xq7Muxt
-   NI6Idph2ewoh7wLfvuTe7sgIGb9ORaDdKVOfnq6dYPXjL7gU6O80otK7n
+  bh=6wqh//5mc60tJPJElvRxBd5bTwLbon6mT4Tdb7QJfaw=;
+  b=Bjspu5WZLqQn+xGNazzNLc/cELGkrzUABFDhljwmLBDfPDrZUgEOI6Ty
+   kNQu01itrYTArznvrONtoytToVC4lXFkrAHXJf9khblk4TlT40dHEtIqm
+   jeJ1NKRW1/kCc1VZT0Bv3LsK1wl1yobvEp9K6fh7DcZSHp21KYgiy4sP7
+   7UkT7TQC8ZvPix8zANZcFFkEEYQE6vfALs48VqG5o+vwhi+7x9uAt1DM5
+   KRsAAE7ozCkCmKEPeDHkLjJLegwqq9LeHtChj08MkVO7ZGdmwo7RJybj1
+   usJATqF6gNhtFVx6XapNBTab8Mn0Lb1FdvTNA0Ig0bVqazlSI/1AXheYU
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="323943940"
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388379953"
 X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="323943940"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:29:21 -0800
+   d="scan'208";a="388379953"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:29:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="746763778"
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="608005799"
 X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="746763778"
+   d="scan'208";a="608005799"
 Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Jan 2023 17:29:20 -0800
+  by orsmga003.jf.intel.com with ESMTP; 12 Jan 2023 17:29:20 -0800
 Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pG8sc-000AbA-33;
+        id 1pG8sc-000Ab8-2u;
         Fri, 13 Jan 2023 01:29:14 +0000
-Date:   Fri, 13 Jan 2023 09:28:44 +0800
+Date:   Fri, 13 Jan 2023 09:28:48 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- ae53fa18703000f507107df43efd1168a0365361
-Message-ID: <63c0b3cc.zrlIqc6RzglJDVNr%lkp@intel.com>
+Subject: [tip:master] BUILD SUCCESS
+ 66f3c4b916b5e978fb1c064ad49c9c4e820642c4
+Message-ID: <63c0b3d0.UDnTBia8TMHZ0b63%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -63,13 +63,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: ae53fa18703000f507107df43efd1168a0365361  x86/gsseg: Move load_gs_index() to its own new header file
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 66f3c4b916b5e978fb1c064ad49c9c4e820642c4  Merge branch 'x86/cpu'
 
-elapsed time: 723m
+elapsed time: 724m
 
-configs tested: 93
-configs skipped: 5
+configs tested: 82
+configs skipped: 4
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -125,15 +125,6 @@ x86_64                                  kexec
 powerpc                      mgcoge_defconfig
 sh                          urquell_defconfig
 sh                           se7712_defconfig
-arm                          pxa3xx_defconfig
-sh                         ap325rxa_defconfig
-sh                         microdev_defconfig
-arm                           h3600_defconfig
-arm                               allnoconfig
-alpha                            alldefconfig
-arc                              alldefconfig
-sparc                       sparc64_defconfig
-sh                        apsh4ad0a_defconfig
 nios2                            allyesconfig
 nios2                               defconfig
 parisc                              defconfig
@@ -142,13 +133,15 @@ parisc                           allyesconfig
 x86_64                        randconfig-a011
 x86_64                        randconfig-a013
 x86_64                        randconfig-a015
-sh                        edosk7760_defconfig
-arc                      axs103_smp_defconfig
 mips                     decstation_defconfig
 powerpc                        cell_defconfig
 sh                           se7705_defconfig
 powerpc                 mpc834x_mds_defconfig
 arm                           viper_defconfig
+powerpc                  iss476-smp_defconfig
+ia64                             alldefconfig
+mips                         rt305x_defconfig
+arm                          lpd270_defconfig
 
 clang tested configs:
 x86_64                        randconfig-a005
@@ -166,10 +159,6 @@ i386                          randconfig-a002
 i386                          randconfig-a006
 i386                          randconfig-a004
 x86_64                          rhel-8.3-rust
-x86_64                        randconfig-k001
-powerpc                      walnut_defconfig
-s390                             alldefconfig
-mips                       rbtx49xx_defconfig
 
 -- 
 0-DAY CI Kernel Test Service
