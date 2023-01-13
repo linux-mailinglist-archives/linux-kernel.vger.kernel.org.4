@@ -2,141 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DF0669351
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5666669353
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240987AbjAMJw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S238573AbjAMJwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240988AbjAMJv7 (ORCPT
+        with ESMTP id S234084AbjAMJv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 04:51:59 -0500
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEC33AAB7;
-        Fri, 13 Jan 2023 01:46:19 -0800 (PST)
-Received: by mail-ej1-f50.google.com with SMTP id ss4so43760554ejb.11;
-        Fri, 13 Jan 2023 01:46:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jLI7E18nq2NI0CRNNCvmAghIfM0C0xJwAK1q64EV0cA=;
-        b=gRm7TgaeZsD25AJRra5g81mwll6LjAFXZai0wulpFo9Qee43u/N1JBHa2ZKRI6dQEb
-         wGnXnEh2rpCQ5zgJc0CJoAek+S2ZqdkBZ9nfu0LgWtw+TkxZ1RUouK5nTsHJu6+W68jv
-         VVqdkYnjrJMVThAzWlIx4P216UhMaNYs8pPn/+uLQQyaa8dHqhZ4FgRIf8ndf8rwIwOw
-         oSQzZb+QMSuGemlnry8C3Q9ljT9VCcdNFaoRa+OXNe6sZ14rNZPcwbvefGngTbyg1HWu
-         aHcygAXHcuEW79PKj8oQas5UYfE1whmQOg5N6Q7lTw0J9KYoXJHbWuGSOLOpcwW69gre
-         L5qw==
-X-Gm-Message-State: AFqh2kq5s7Sa9PK8FHmO6+m7jyGd72BMTUGHICZ9zehGSRLBukypI5zN
-        4ZJbYrVgcFwGFCVf1dQoT16faYeoC2S7k0JlKIY=
-X-Google-Smtp-Source: AMrXdXsTUDwFT6STEAFjHKpztlFtilSPG/b2RMjFC+hvEcjuYWB5klvDRR6SSG7yE55p2jbEYoefPpLJP/3AzGXpS4w=
-X-Received: by 2002:a17:907:c203:b0:867:77a9:db77 with SMTP id
- ti3-20020a170907c20300b0086777a9db77mr536071ejc.209.1673603178410; Fri, 13
- Jan 2023 01:46:18 -0800 (PST)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B565465AF2;
+        Fri, 13 Jan 2023 01:46:31 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 755A0221F8;
+        Fri, 13 Jan 2023 09:46:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673603189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wuNY130VcsaJBRLFnePwzZuLqGqTZv2d6U87GrUaNAQ=;
+        b=hgoGZy+TXMw0Ixd2Wx2SrsMRpA8HVurYPTWkvMq3oFytcppYp8DBAU2G2wYaxZVbpeEdtA
+        IlCXuLkTK1IsWsySsb2YNY9XQmgAHknmcO6wQoRCaSBIXfWXe5S8/m6OMf407WttQPct57
+        J87uoo4ZwLiGvpIRr3XffsCPEVQdGkI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673603189;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wuNY130VcsaJBRLFnePwzZuLqGqTZv2d6U87GrUaNAQ=;
+        b=IgP2UMdc5EjtUBbApQmhvYatY+seHiqNjbAUkIBBeS8d53XQXHP/orci1x1jWSNtM0p7PV
+        395NK7p3ubUm7vCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 630CB1358A;
+        Fri, 13 Jan 2023 09:46:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QfohGHUowWP8fgAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 13 Jan 2023 09:46:29 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D66A0A0744; Fri, 13 Jan 2023 10:46:28 +0100 (CET)
+Date:   Fri, 13 Jan 2023 10:46:28 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org, shinichiro.kawasaki@wdc.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+Message-ID: <20230113094628.foepphisccxjligo@quack3>
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1> <20230113001132.3375334-2-paulmck@kernel.org>
-In-Reply-To: <20230113001132.3375334-2-paulmck@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 13 Jan 2023 10:46:06 +0100
-Message-ID: <CAJZ5v0gX9aseKnx1YOS_+=qtNGyM81qC2NjmdC1N0eMr=QaVZw@mail.gmail.com>
-Subject: Re: [PATCH rcu v2 02/20] drivers/base: Remove CONFIG_SRCU
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113094410.2907223-1-yukuai3@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 1:11 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in conditional compilation based on CONFIG_SRCU.
-> Therefore, remove the #ifdef and throw away the #else clause.
->
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: John Ogness <john.ogness@linutronix.de>
+On Fri 13-01-23 17:44:10, Yu Kuai wrote:
+> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
+> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+> bic->bfqq will be freed first, and bic_set_bfqq() is called with the freed
+> bic->bfqq.
+> 
+> Fix the problem by always freeing bfqq after bic_set_bfqq().
+> 
+> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+> Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Looks good, thanks for the fix! Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
 
 > ---
->  drivers/base/core.c | 42 ------------------------------------------
->  1 file changed, 42 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index a3e14143ec0cf..bb36aca8d1b7a 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -181,7 +181,6 @@ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
+>  block/bfq-cgroup.c  | 2 +-
+>  block/bfq-iosched.c | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index a6e8da5f5cfd..feb13ac25557 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -749,8 +749,8 @@ static void bfq_sync_bfqq_move(struct bfq_data *bfqd,
+>  		 * old cgroup.
+>  		 */
+>  		bfq_put_cooperator(sync_bfqq);
+> -		bfq_release_process_ref(bfqd, sync_bfqq);
+>  		bic_set_bfqq(bic, NULL, true, act_idx);
+> +		bfq_release_process_ref(bfqd, sync_bfqq);
+>  	}
 >  }
->  EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
->
-> -#ifdef CONFIG_SRCU
->  static DEFINE_MUTEX(device_links_lock);
->  DEFINE_STATIC_SRCU(device_links_srcu);
->
-> @@ -220,47 +219,6 @@ static void device_link_remove_from_lists(struct device_link *link)
->         list_del_rcu(&link->s_node);
->         list_del_rcu(&link->c_node);
->  }
-> -#else /* !CONFIG_SRCU */
-> -static DECLARE_RWSEM(device_links_lock);
-> -
-> -static inline void device_links_write_lock(void)
-> -{
-> -       down_write(&device_links_lock);
-> -}
-> -
-> -static inline void device_links_write_unlock(void)
-> -{
-> -       up_write(&device_links_lock);
-> -}
-> -
-> -int device_links_read_lock(void)
-> -{
-> -       down_read(&device_links_lock);
-> -       return 0;
-> -}
-> -
-> -void device_links_read_unlock(int not_used)
-> -{
-> -       up_read(&device_links_lock);
-> -}
-> -
-> -#ifdef CONFIG_DEBUG_LOCK_ALLOC
-> -int device_links_read_lock_held(void)
-> -{
-> -       return lockdep_is_held(&device_links_lock);
-> -}
-> -#endif
-> -
-> -static inline void device_link_synchronize_removal(void)
-> -{
-> -}
-> -
-> -static void device_link_remove_from_lists(struct device_link *link)
-> -{
-> -       list_del(&link->s_node);
-> -       list_del(&link->c_node);
-> -}
-> -#endif /* !CONFIG_SRCU */
->
->  static bool device_is_ancestor(struct device *dev, struct device *target)
->  {
-> --
-> 2.31.1.189.g2e36527f23
->
+>  
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 815b884d6c5a..2ddf831221c4 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -5581,9 +5581,11 @@ static void bfq_check_ioprio_change(struct bfq_io_cq *bic, struct bio *bio)
+>  
+>  	bfqq = bic_to_bfqq(bic, false, bfq_actuator_index(bfqd, bio));
+>  	if (bfqq) {
+> -		bfq_release_process_ref(bfqd, bfqq);
+> +		struct bfq_queue *old_bfqq = bfqq;
+> +
+>  		bfqq = bfq_get_queue(bfqd, bio, false, bic, true);
+>  		bic_set_bfqq(bic, bfqq, false, bfq_actuator_index(bfqd, bio));
+> +		bfq_release_process_ref(bfqd, old_bfqq);
+>  	}
+>  
+>  	bfqq = bic_to_bfqq(bic, true, bfq_actuator_index(bfqd, bio));
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
