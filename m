@@ -2,275 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1A366A626
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4281C66A628
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjAMWoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 17:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        id S231372AbjAMWo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 17:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjAMWof (ORCPT
+        with ESMTP id S231317AbjAMWou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 17:44:35 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56157814E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:44:34 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso25828914pjf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:44:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsXcrt0dsEzR/+pYFsFusq6CHpnVWbUri9q3pTXoUpc=;
-        b=kzBLf0zyrJ0S9DnoDxxCJzIxLFuBn5Nc11m7pIilbQRGBA4EGG4xyxmW903T9u5d4B
-         vieknMz1rKNfYRRjaSi6uO5ew+H7oKkwMMYmjeBJ5DO59KaMe1OUjGDEhQ5XxvjkTTS6
-         8ZpgeR/74LyDm3zUnsdbnAymdoG1pRBviLXDI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wsXcrt0dsEzR/+pYFsFusq6CHpnVWbUri9q3pTXoUpc=;
-        b=XeQyax5FylbszyAuoevNwQQG1poTnzMaBtI69SSgIjU2dgdJ+DeD2qQaNZ2iZl1A8w
-         7akd6y6OTPrarbpdd13Tb5rBO/XnCspVaV1aQAwFytQ0R+mrt3r2Xo8HpebiVcxcA9GK
-         bEPng2j00e5GUI2OWEWIKGru1SOWjYIwfe7a4HAIh7QhZ8S8ICnO2O2hkAk9bnJNyUXj
-         LF/54DCJXlZ/cVCh/T/WhZv/bkq//1vLXBnxIZ9Ui/mDHZqcmMXxS8guK5xef58Q8jfx
-         ZoaKjNqyzK0+kpCuTxQT+MXLr9C1v4rTM2PdJe4daFLuvCNUjlxqZu75VZm/vF+HYTkb
-         vccw==
-X-Gm-Message-State: AFqh2krdelrvz9AW1JK/oGhqQ9BwpcNVU3+2ohsXCyEetFDxztfeXdIY
-        s3NEMOCe9qGHm6tkF9SpGLy/nA==
-X-Google-Smtp-Source: AMrXdXv62Ov1kdHtrFHfvRTxiZut/kkJH/iEliksst2Md32FuzN3Om+eA5OI0DoqKT4oF5UulmKYgQ==
-X-Received: by 2002:a05:6a20:8e10:b0:a4:a73e:d1e2 with SMTP id y16-20020a056a208e1000b000a4a73ed1e2mr118115871pzj.57.1673649874224;
-        Fri, 13 Jan 2023 14:44:34 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h4-20020aa79f44000000b0056d7cc80ea4sm303214pfr.110.2023.01.13.14.44.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 14:44:33 -0800 (PST)
-Date:   Fri, 13 Jan 2023 14:44:32 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Michael Chan <michael.chan@broadcom.com>
-Subject: Re: linux-next - bnxt buffer overflow in strnlen
-Message-ID: <202301131415.6E0C3BF328@keescook>
-References: <20220920192202.190793-1-keescook@chromium.org>
- <20220920192202.190793-5-keescook@chromium.org>
- <Y8F/1w1AZTvLglFX@x1-carbon>
- <Y8GB9DMtcSP/8e/i@x1-carbon>
+        Fri, 13 Jan 2023 17:44:50 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B788576AE9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:44:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1673649883; x=1705185883;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eBHvLdmdEqZp7wzKBhxjpIb9vAX0WonjjojON8von1o=;
+  b=F/JLVVWRAJQZw88OwKtsyF1+8F3y0ZjRAvf3wzbwJmbs8uyOKt5rePTa
+   +wkctw2Tw8rr1CeaczlkEQabrhpGOwRI+IsuO8Hi3ZWd7UHYZFdd2Dc8Z
+   Xn0oxY76qcltUGCVzeaBir9NDce2tz3MLn61YDv9/kF4KX1dKYy00lHrc
+   TsIQhRuLBU71qMBmVOcmlprYUetSw3RmnnIX8k/MIsz7ujSYzMiXAV223
+   JUfH/IYf+Db+1BvIwkanBLELSseh4XwBm+4jz+lCYnjFMaNDFOjC2TdDY
+   K1pPTp4uUaBUVxBhbIh/Et4km/0/bm1bUunvdvPpbrWOqCMR617TQ1b9X
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,215,1669046400"; 
+   d="scan'208";a="332771926"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Jan 2023 06:44:43 +0800
+IronPort-SDR: f6fvtnyMXra4RvuVXH66RfkhoQyljJ0yR4h+1zHC7IbjFojVhnvqdkORBIDYBPVJw+SQw5bcQE
+ Q+Crcc91k68gZkmPbBELrhpUz49JYfdMPNngPE1E09IpTpfRviMpvoJDfC3UH+BsBOqa6K0oHK
+ gvoZnpIOEVOLPa4S8A75ykvA86ZMmYkM1Cq0bfjdKK8sGOTAqPQXXJj56UTPFgoX7+T07vScXa
+ BBycqHlgt1u8Nb2/K5x3TL5LqgL130HSnHUyRmZmhsWkfQ/IOCXgonPqhecKYM8As1pZoGCUny
+ 9dU=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jan 2023 14:02:28 -0800
+IronPort-SDR: ESOaaBL0BVbemqbunwNMaDEFBIXiitnLeP5A82bPNj1IquSgVeoBSlYeHHrmopWPtkZW0bGF3N
+ 85JUbWkibgUN+lpcmi/mci67ZvmBEAYkFcTEMAujTubsP2SEpLtH3y0Lfax8fdETCLoceagE+Z
+ wHgZ6BELtgfyQoOpQePS7MsxPllhaXtZ05GjI/Y/PKqrxg4s9R5limsp+xopQmQ4k5VkuWxid2
+ 4t0Wn9VX/umHXnlR/YFRrT+UGbskhAmg8VPABvWmNxYMCKzP/Q9N/KFxGdZHCP/DQZlh4PAmxy
+ 8zw=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jan 2023 14:44:43 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NtxLf5pHKz1RvTr
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:44:42 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1673649882; x=1676241883; bh=eBHvLdmdEqZp7wzKBhxjpIb9vAX0Wonjjoj
+        ON8von1o=; b=G5+1uxPSZXiJqDV6/5jXuM/M+u4VUC5IAL9ilNbq5Ubiyz2+Hnk
+        GPFMlYXvDR4teG5oZvNuYLrCkyAisBAZof9niKpKIpGOkyScLxlRzuMYvU7xMC1r
+        fCqonayPbhrBJUZI6/kSHrB59Toq6ZtbEpDG8ZK/F98J+dj51D48KfQAWIW38Rib
+        AypzEjLhgu9JvXbeOUFVeDVzrui/emjjs7SaRvnDhgta3BTK1j/P5yVg9MsMIX1R
+        9VuEUqoKeF3Tvq28LMZUDU/9KveqJYQuDPZp+ZT+PUn94epRrMp78B+KLW1tukY3
+        XiKNA1vKFg8yp5RFE9FtCvuAoa7XftG2png==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id slmrM55hM_DF for <linux-kernel@vger.kernel.org>;
+        Fri, 13 Jan 2023 14:44:42 -0800 (PST)
+Received: from [10.225.163.30] (unknown [10.225.163.30])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NtxLd6sGBz1RvLy;
+        Fri, 13 Jan 2023 14:44:41 -0800 (PST)
+Message-ID: <c2ad2551-e179-f0fc-28dc-8e3871b4d06b@opensource.wdc.com>
+Date:   Sat, 14 Jan 2023 07:44:40 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8GB9DMtcSP/8e/i@x1-carbon>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] ata: Don't build PATA_CS5535 on UML
+To:     Peter Foley <pefoley2@pefoley.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 04:08:21PM +0000, Niklas Cassel wrote:
-> On Fri, Jan 13, 2023 at 04:59:19PM +0100, Niklas Cassel wrote:
-> > On Tue, Sep 20, 2022 at 12:22:02PM -0700, Kees Cook wrote:
-> > > Since the commits starting with c37495d6254c ("slab: add __alloc_size
-> > > attributes for better bounds checking"), the compilers have runtime
-> > > allocation size hints available in some places. This was immediately
-> > > available to CONFIG_UBSAN_BOUNDS, but CONFIG_FORTIFY_SOURCE needed
-> > > updating to explicitly make use the hints via the associated
-> > > __builtin_dynamic_object_size() helper. Detect and use the builtin when
-> > > it is available, increasing the accuracy of the mitigation. When runtime
-> > > sizes are not available, __builtin_dynamic_object_size() falls back to
-> > > __builtin_object_size(), leaving the existing bounds checking unchanged.
-> > > [...]
-> > Hello Kees,
-> > 
-> > Unfortunately, this commit introduces a crash in the bnxt
-> > ethernet driver when booting linux-next.
+On 1/13/23 13:37, Peter Foley wrote:
+> This driver uses MSR functions that aren't implemented under UML.
+> Avoid building it to prevent tripping up allyesconfig.
+> 
+> e.g.
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3a3): undefined reference to `__tracepoint_read_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3d2): undefined reference to `__tracepoint_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x457): undefined reference to `__tracepoint_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x481): undefined reference to `do_trace_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4d5): undefined reference to `do_trace_write_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4f5): undefined reference to `do_trace_read_msr'
+> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x51c): undefined reference to `do_trace_write_msr'
+> 
+> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
 
-Hi! Thanks for the report. Notes below...
-
-> > I haven't looked at the code in the bnxt ethernet driver,
-> > I simply know that machine boots fine on v6.2.0-rc3,
-> > but fails to boot with linux-next.
-> > 
-> > So I started an automatic git bisect, which returned:
-> > 439a1bcac648 ("fortify: Use __builtin_dynamic_object_size() when available")
-> > 
-> > $ grep CC_VERSION .config
-> > CONFIG_CC_VERSION_TEXT="gcc (GCC) 12.2.1 20221121 (Red Hat 12.2.1-4)"
-> > CONFIG_GCC_VERSION=120201
-> > 
-> > $ grep FORTIFY .config
-> > CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
-> > CONFIG_FORTIFY_SOURCE=y
-> > 
-> > 
-> > dmesg output:
-> > 
-> > <0>[   10.805253] detected buffer overflow in strnlen
-> [...]
-> > <4>[   10.931470] Call Trace:
-> > <6>[   10.936317] ata9: SATA link down (SStatus 0 SControl 300)
-> > <4>[   10.936745]  <TASK>
-> > <4>[   10.936745]  bnxt_ethtool_init.cold+0x18/0x18
-
-Are you able to run:
-
-$ ./scripts/faddr2line vmlinux bnxt_ethtool_init.cold+0x18/0x18
-
-to find the exact line it's failing on, just to be sure we're looking in
-the right place?
-
-There are a bunch of string functions being used in a loop
-bnxt_ethtool_init(). Here's the code:
-
-        if (bp->num_tests > BNXT_MAX_TEST)
-                bp->num_tests = BNXT_MAX_TEST;
-	...
-        for (i = 0; i < bp->num_tests; i++) {
-                char *str = test_info->string[i];
-                char *fw_str = resp->test0_name + i * 32;
-
-                if (i == BNXT_MACLPBK_TEST_IDX) {
-                        strcpy(str, "Mac loopback test (offline)");
-                } else if (i == BNXT_PHYLPBK_TEST_IDX) {
-                        strcpy(str, "Phy loopback test (offline)");
-                } else if (i == BNXT_EXTLPBK_TEST_IDX) {
-                        strcpy(str, "Ext loopback test (offline)");
-                } else if (i == BNXT_IRQ_TEST_IDX) {
-                        strcpy(str, "Interrupt_test (offline)");
-                } else {
-                        strscpy(str, fw_str, ETH_GSTRING_LEN);
-                        strncat(str, " test", ETH_GSTRING_LEN - strlen(str));
-                        if (test_info->offline_mask & (1 << i))
-                                strncat(str, " (offline)",
-                                        ETH_GSTRING_LEN - strlen(str));
-                        else
-                                strncat(str, " (online)",
-                                        ETH_GSTRING_LEN - strlen(str));
-                }
-        }
-
-The hardened strnlen() is used internally to the hardened strcpy() and
-strscpy()'s source argument, and strncat()'s dest and source arguments.
-The only non-literal source argument is fw_str.
-
-The destination in this loop is always "str", which is test_info->string[i].
-I'd expect "str" to always be processed as fixed size:
-
-struct bnxt_test_info {
-        u8 offline_mask;
-        u16 timeout;
-        char string[BNXT_MAX_TEST][ETH_GSTRING_LEN];
-};
-
-#define ETH_GSTRING_LEN         32
-#define BNXT_MAX_TEST   8
-
-And the allocation matches that size:
-
-test_info = kzalloc(sizeof(*bp->test_info), GFP_KERNEL);
-
-(bp->test_info is, indeed struct bnxt_test_info too.)
-
-The loop cannot reach BNXT_MAX_TEST. It looks like fw_str's size isn't
-known dynamically, so that shouldn't be a change. (It's assigned from
-a void * return.) So I suspect "str" ran off the end of the allocation,
-which implies that "fw_str" must be >= ETH_GSTRING_LEN. This line looks
-very suspicious:
-
-                char *fw_str = resp->test0_name + i * 32;
-
-I also note that the return value of strscpy() is not checked...
-
-Let's see...
-
-struct hwrm_selftest_qlist_output {
-	...
-        char    test0_name[32];
-        char    test1_name[32];
-        char    test2_name[32];
-        char    test3_name[32];
-        char    test4_name[32];
-        char    test5_name[32];
-        char    test6_name[32];
-        char    test7_name[32];
-	...
-};
-
-Ew. So, yes, it's specifically reach past the end of the test0_name[]
-array, *and* is may overflow the heap. Does this patch solve it for you?
-
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-index cbf17fcfb7ab..ec573127b707 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-@@ -3969,7 +3969,7 @@ void bnxt_ethtool_init(struct bnxt *bp)
- 		test_info->timeout = HWRM_CMD_TIMEOUT;
- 	for (i = 0; i < bp->num_tests; i++) {
- 		char *str = test_info->string[i];
--		char *fw_str = resp->test0_name + i * 32;
-+		char *fw_str = resp->test_name[i];
- 
- 		if (i == BNXT_MACLPBK_TEST_IDX) {
- 			strcpy(str, "Mac loopback test (offline)");
-@@ -3980,14 +3980,9 @@ void bnxt_ethtool_init(struct bnxt *bp)
- 		} else if (i == BNXT_IRQ_TEST_IDX) {
- 			strcpy(str, "Interrupt_test (offline)");
- 		} else {
--			strscpy(str, fw_str, ETH_GSTRING_LEN);
--			strncat(str, " test", ETH_GSTRING_LEN - strlen(str));
--			if (test_info->offline_mask & (1 << i))
--				strncat(str, " (offline)",
--					ETH_GSTRING_LEN - strlen(str));
--			else
--				strncat(str, " (online)",
--					ETH_GSTRING_LEN - strlen(str));
-+			snprintf(str, ETH_GSTRING_LEN, "%s test (%s)",
-+				 fw_str, test_info->offline_mask & (1 << i) ?
-+					"offline" : "online");
- 		}
- 	}
- 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-index 2686a714a59f..a5408879e077 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_hsi.h
-@@ -10249,14 +10249,7 @@ struct hwrm_selftest_qlist_output {
- 	u8	unused_0;
- 	__le16	test_timeout;
- 	u8	unused_1[2];
--	char	test0_name[32];
--	char	test1_name[32];
--	char	test2_name[32];
--	char	test3_name[32];
--	char	test4_name[32];
--	char	test5_name[32];
--	char	test6_name[32];
--	char	test7_name[32];
-+	char	test_name[8][32];
- 	u8	eyescope_target_BER_support;
- 	#define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E8_SUPPORTED  0x0UL
- 	#define SELFTEST_QLIST_RESP_EYESCOPE_TARGET_BER_SUPPORT_BER_1E9_SUPPORTED  0x1UL
-
-
-
-
+Applied to for-6.2-fixes with a slightly tweaked commit title.
+Thanks !
 
 -- 
-Kees Cook
+Damien Le Moal
+Western Digital Research
+
