@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28DB6695A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0F66695B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjAMLdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
+        id S241362AbjAMLeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240603AbjAMLc5 (ORCPT
+        with ESMTP id S232500AbjAMLdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:32:57 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEE74D486;
-        Fri, 13 Jan 2023 03:07:31 -0800 (PST)
+        Fri, 13 Jan 2023 06:33:04 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EAA5471F;
+        Fri, 13 Jan 2023 03:07:32 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D5FF86602DCD;
-        Fri, 13 Jan 2023 11:07:28 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5C0C76602DCF;
+        Fri, 13 Jan 2023 11:07:30 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673608050;
-        bh=8wZXrCMxoQHMeYBZ5eexWDTOyOVhEpLHJc+v3nva7D4=;
+        s=mail; t=1673608051;
+        bh=mSaL+tk5NnlZ0CFxycF9bNaEJv21sxA1ml6TJybXbpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NGEVupYDbUPCM/5tqt0xt1DAq5HZZeeT448Z5c3ntRk1LCdRhu4wRwcmZcH8N8RFD
-         f5bNbA/blOyIfrH0g3WDndT9CQMLn2sK4t+8G1s4NoQu2J1z/Vg0lnosKpQKcbwpHM
-         YsyLFihyqxt2zRVQXi7nY29FXA+7NnW7nGWk7rCyqseTsxCcEza9VhMqgH7aYC5bq3
-         ALyHbmPCRd3GfZO6+Xe5VmIQM62O/4DlvDz3JfWshMogiiNulEks9wnrikYyiKxG/t
-         3hqheA9z2NXpiduvioGutsvyzOYSsalsIxpgW3Aq8BwzTAaWe/XdO1t8uKPernEsua
-         xFSwvn/d3UtHw==
+        b=Tj7cifsqoyXS5yFVAziu5iWTV5G+/IS6CCnGSpUMlN20+zwtlCQRoAx+Wi8Ot1W5Q
+         rVdzzsAWOiYLE9vewdrGZ1n7yfhGmW5IgeMrYDAIJGvtwpgUpMjadTSYeshoYE90Ue
+         GMQWQn9Q+PZYWg/lwCO6csHFfiwlKZMTrmmxoBjVLp1esGxelH7UyNU1M4bxayjUkY
+         ky7XkyTmkZ4IwOqz6852msffvvaJ5SJVc9fz4rJWGn3o8cR7+aTWPBp2J8Oj1jyYh+
+         jt9WmtGGgkE+yBjtiGG6KuIyH79DvGNe93uBwsj6NlF9mTzMG3x2PXsZsPkTuuF5Tw
+         JCq2GnKBY+LDA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     mturquette@baylibre.com
@@ -49,9 +49,9 @@ Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         kernel@collabora.com
-Subject: [PATCH v3 20/23] clk: mediatek: clk-mt8186-topckgen: Migrate to mtk_clk_simple_probe()
-Date:   Fri, 13 Jan 2023 12:06:13 +0100
-Message-Id: <20230113110616.111001-21-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 21/23] clk: mediatek: clk-mt6795-topckgen: Migrate to mtk_clk_simple_probe()
+Date:   Fri, 13 Jan 2023 12:06:14 +0100
+Message-Id: <20230113110616.111001-22-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230113110616.111001-1-angelogioacchino.delregno@collabora.com>
 References: <20230113110616.111001-1-angelogioacchino.delregno@collabora.com>
@@ -66,140 +66,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As done with MT8192, migrate MT8186 topckgen away from a custom probe
-function and use mtk_clk_simple_{probe, remove}().
+Migrate away from custom probe functions and use the commonized
+mtk_clk_simple_{probe, remove}().
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/clk/mediatek/clk-mt8186-topckgen.c | 103 ++++-----------------
- 1 file changed, 19 insertions(+), 84 deletions(-)
+ drivers/clk/mediatek/clk-mt6795-topckgen.c | 86 ++++------------------
+ 1 file changed, 14 insertions(+), 72 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8186-topckgen.c b/drivers/clk/mediatek/clk-mt8186-topckgen.c
-index c1107b2b614c..c6786c8b315f 100644
---- a/drivers/clk/mediatek/clk-mt8186-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt8186-topckgen.c
-@@ -681,11 +681,6 @@ static struct mtk_composite top_muxes[] = {
- 			0x0320, 4, 0x0334, 8, 0),
+diff --git a/drivers/clk/mediatek/clk-mt6795-topckgen.c b/drivers/clk/mediatek/clk-mt6795-topckgen.c
+index 65fd8aa69afd..e80fa588e309 100644
+--- a/drivers/clk/mediatek/clk-mt6795-topckgen.c
++++ b/drivers/clk/mediatek/clk-mt6795-topckgen.c
+@@ -523,88 +523,30 @@ static struct mtk_composite top_aud_divs[] = {
+ 	DIV_GATE(CLK_TOP_APLL2_DIV5, "apll2_div5", "apll2_div4", 0x12c, 21, 0x12c, 4, 4),
  };
  
--static const struct of_device_id of_match_clk_mt8186_topck[] = {
--	{ .compatible = "mediatek,mt8186-topckgen", },
--	{}
--};
--
- /* Register mux notifier for MFG mux */
- static int clk_mt8186_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
- {
-@@ -708,88 +703,28 @@ static int clk_mt8186_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
- 	return devm_mtk_clk_mux_notifier_register(dev, clk, mfg_mux_nb);
- }
++static const struct mtk_clk_desc topck_desc = {
++	.fixed_clks = fixed_clks,
++	.num_fixed_clks = ARRAY_SIZE(fixed_clks),
++	.factor_clks = top_divs,
++	.num_factor_clks = ARRAY_SIZE(top_divs),
++	.mux_clks = top_muxes,
++	.num_mux_clks = ARRAY_SIZE(top_muxes),
++	.composite_clks = top_aud_divs,
++	.num_composite_clks = ARRAY_SIZE(top_aud_divs),
++	.clk_lock = &mt6795_top_clk_lock,
++};
  
--static int clk_mt8186_topck_probe(struct platform_device *pdev)
+ static const struct of_device_id of_match_clk_mt6795_topckgen[] = {
+-	{ .compatible = "mediatek,mt6795-topckgen" },
++	{ .compatible = "mediatek,mt6795-topckgen", .data = &topck_desc },
+ 	{ /* sentinel */ }
+ };
+ 
+-static int clk_mt6795_topckgen_probe(struct platform_device *pdev)
 -{
 -	struct clk_hw_onecell_data *clk_data;
 -	struct device_node *node = pdev->dev.of_node;
--	int r;
 -	void __iomem *base;
+-	int ret;
+-
+-	base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(base))
+-		return PTR_ERR(base);
 -
 -	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
 -	if (!clk_data)
 -		return -ENOMEM;
 -
--	base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(base)) {
--		r = PTR_ERR(base);
--		goto free_top_data;
--	}
+-	ret = mtk_clk_register_fixed_clks(fixed_clks, ARRAY_SIZE(fixed_clks), clk_data);
+-	if (ret)
+-		goto free_clk_data;
 -
--	r = mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
--					clk_data);
--	if (r)
--		goto free_top_data;
--
--	r = mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	if (r)
+-	ret = mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
+-	if (ret)
 -		goto unregister_fixed_clks;
 -
--	r = mtk_clk_register_muxes(&pdev->dev, top_mtk_muxes,
--				   ARRAY_SIZE(top_mtk_muxes), node,
--				   &mt8186_clk_lock, clk_data);
--	if (r)
+-	ret = mtk_clk_register_muxes(&pdev->dev, top_muxes,
+-				     ARRAY_SIZE(top_muxes), node,
+-				     &mt6795_top_clk_lock, clk_data);
+-	if (ret)
 -		goto unregister_factors;
 -
--	r = mtk_clk_register_composites(&pdev->dev, top_muxes,
--					ARRAY_SIZE(top_muxes), base,
--					&mt8186_clk_lock, clk_data);
--	if (r)
+-	ret = mtk_clk_register_composites(&pdev->dev, top_aud_divs,
+-					  ARRAY_SIZE(top_aud_divs), base,
+-					  &mt6795_top_clk_lock, clk_data);
+-	if (ret)
 -		goto unregister_muxes;
 -
--	r = clk_mt8186_reg_mfg_mux_notifier(&pdev->dev,
--					    clk_data->hws[CLK_TOP_MFG]->clk);
--	if (r)
--		goto unregister_composite_muxes;
+-	ret = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+-	if (ret)
+-		goto unregister_composites;
 -
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		goto unregister_composite_muxes;
+-	return 0;
 -
--	platform_set_drvdata(pdev, clk_data);
--
--	return r;
--
--unregister_composite_muxes:
--	mtk_clk_unregister_composites(top_muxes, ARRAY_SIZE(top_muxes), clk_data);
+-unregister_composites:
+-	mtk_clk_unregister_composites(top_aud_divs, ARRAY_SIZE(top_aud_divs), clk_data);
 -unregister_muxes:
--	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), clk_data);
+-	mtk_clk_unregister_muxes(top_muxes, ARRAY_SIZE(top_muxes), clk_data);
 -unregister_factors:
 -	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
 -unregister_fixed_clks:
--	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), clk_data);
--free_top_data:
+-	mtk_clk_unregister_fixed_clks(fixed_clks, ARRAY_SIZE(fixed_clks), clk_data);
+-free_clk_data:
 -	mtk_free_clk_data(clk_data);
--	return r;
+-	return ret;
 -}
 -
--static int clk_mt8186_topck_remove(struct platform_device *pdev)
+-static int clk_mt6795_topckgen_remove(struct platform_device *pdev)
 -{
--	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
 -	struct device_node *node = pdev->dev.of_node;
+-	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
 -
 -	of_clk_del_provider(node);
--	mtk_clk_unregister_composites(top_muxes, ARRAY_SIZE(top_muxes), clk_data);
--	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), clk_data);
+-	mtk_clk_unregister_composites(top_aud_divs, ARRAY_SIZE(top_aud_divs), clk_data);
+-	mtk_clk_unregister_muxes(top_muxes, ARRAY_SIZE(top_muxes), clk_data);
 -	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), clk_data);
+-	mtk_clk_unregister_fixed_clks(fixed_clks, ARRAY_SIZE(fixed_clks), clk_data);
 -	mtk_free_clk_data(clk_data);
-+static const struct mtk_clk_desc topck_desc = {
-+	.fixed_clks = top_fixed_clks,
-+	.num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.mux_clks = top_mtk_muxes,
-+	.num_mux_clks = ARRAY_SIZE(top_mtk_muxes),
-+	.composite_clks = top_muxes,
-+	.num_composite_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt8186_clk_lock,
-+	.clk_notifier_func = clk_mt8186_reg_mfg_mux_notifier,
-+	.mfg_clk_idx = CLK_TOP_MFG,
-+};
- 
+-
 -	return 0;
 -}
-+static const struct of_device_id of_match_clk_mt8186_topck[] = {
-+	{ .compatible = "mediatek,mt8186-topckgen", .data = &topck_desc },
-+	{ /* sentinel */ }
-+};
- 
- static struct platform_driver clk_mt8186_topck_drv = {
--	.probe = clk_mt8186_topck_probe,
--	.remove = clk_mt8186_topck_remove,
+-
+ static struct platform_driver clk_mt6795_topckgen_drv = {
+ 	.driver = {
+ 		.name = "clk-mt6795-topckgen",
+ 		.of_match_table = of_match_clk_mt6795_topckgen,
+ 	},
+-	.probe = clk_mt6795_topckgen_probe,
+-	.remove = clk_mt6795_topckgen_remove,
 +	.probe = mtk_clk_simple_probe,
 +	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8186-topck",
- 		.of_match_table = of_match_clk_mt8186_topck,
+ };
+ module_platform_driver(clk_mt6795_topckgen_drv);
+ 
 -- 
 2.39.0
 
