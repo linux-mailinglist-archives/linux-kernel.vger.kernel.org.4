@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EF16695B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FCC6695C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbjAMLfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S234982AbjAMLhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241252AbjAMLfI (ORCPT
+        with ESMTP id S238700AbjAMLgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:35:08 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03867FEF6;
-        Fri, 13 Jan 2023 03:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3vRfHiLfrkhVRWh8Q836T2oAvikTr6SSM9QK64azLu0=; b=oCsjbMHx33bOAX4Tv4zwpoNCZ6
-        ovcZmpwpYf3viEaCmWRW1NjHS5BElLNn1CYHwWZWXf3pTtgLXKIu8GwzSuaV09b6XBhOyrMKufQQk
-        yRIRjZX3u8LpQjJInVH763XEP5XYL1JljGVBD3AkCYeY8uj2JsFHPaslEQQajitHyRv0M5HnahN+d
-        yyXUqPZWC+AqB4hukGLV9YpXDWYQIG/8L2vMIStio0Ur1lLnUYE0bsCmJdgxVriPy/x5zg+ohZ/py
-        nD83bKZoyz2MtKvMX5iEGtVOOxRCMKi/i4afyUhvUnmfmtSN+Ko8vy2tsG+dStL9dYZ9hWCbGfbnT
-        CmC1ij5w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGI7f-0062lE-Ma; Fri, 13 Jan 2023 11:21:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 65E413001F7;
-        Fri, 13 Jan 2023 12:21:10 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 564F62CCEBAD8; Fri, 13 Jan 2023 12:21:10 +0100 (CET)
-Date:   Fri, 13 Jan 2023 12:21:10 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: Re: [PATCHSET 0/8] perf/core: Prepare sample data for BPF
-Message-ID: <Y8E+phvLQZ5+kSOq@hirez.programming.kicks-ass.net>
-References: <20230112214015.1014857-1-namhyung@kernel.org>
+        Fri, 13 Jan 2023 06:36:52 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4D65C92A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:24:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4869FCE2075
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:24:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52084C433D2;
+        Fri, 13 Jan 2023 11:24:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673609066;
+        bh=iL9l6JwSjCPcNTnpmJcqomx1Gqn9VzoUcjYg29IUaJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uRJgp36snp9hlTLHxlBNZiXqptbqDJ4+l2drV+yTddyw+6Zinfrs32Px3Vg0kQN3U
+         zmwnRjqfkx5n1wRWN/cF2P+CbK+kER91BzZ8PZiTiYmeSdLBLEBiPjw7LlwEt6sW5c
+         5aC9Xm+Yf0mG7NMiuK45XT4MS7iLcsto6DFlXwnU=
+Date:   Fri, 13 Jan 2023 12:24:19 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kris Chaplin <kris.chaplin@amd.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Simek <michal.simek@amd.com>
+Subject: Re: Reg the next LTS kernel (6.1?)
+Message-ID: <Y8E/Y5sRN/DOpvbi@kroah.com>
+References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+ <Yz/ZWBeNZvKenEVM@kroah.com>
+ <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
+ <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
+ <Y53BputYK+3djDME@kroah.com>
+ <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230112214015.1014857-1-namhyung@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 01:40:07PM -0800, Namhyung Kim wrote:
+On Thu, Jan 12, 2023 at 12:23:46PM +0000, Kris Chaplin wrote:
+> Hello Greg,
+> 
+> > You tell me please.  How has your testing gone for 6.1 so far?  Does it
+> > work properly for you?  Are you and/or your company willing to test out
+> > the -rc releases and provide feedback if it works or not for your
+> > systems?  Do you have problems with 6.1.y vs. older kernels?  Is there
+> > anything missing in it that you feel needs to be addressed with a newer
+> > kernel instead?
+> 
+> We have been integrating and testing 6.1 on the Microblaze, ARM32 and
+> ARM64-bit architectures over the past few weeks.  These builds have
+> been successful and we are able to run our regression tests on hardware
+> targeting our FPGA SoC devices.
+> 
+> We're continuing our tests as new updates to the 6.1 kernel series
+> appear.
+> 
+> Hope that information is of use.
 
-> Namhyung Kim (8):
->   perf/core: Save the dynamic parts of sample data size
->   perf/core: Add perf_sample_save_callchain() helper
->   perf/core: Add perf_sample_save_raw_data() helper
->   perf/core: Add perf_sample_save_brstack() helper
->   perf/core: Set data->sample_flags in perf_prepare_sample()
->   perf/core: Do not pass header for sample id init
->   perf/core: Introduce perf_prepare_header()
->   perf/core: Call perf_prepare_sample() before running BPF
+It is very much so, thanks!  And if you can provide "tested-by" results
+for the -rc releases, that would help even more to verify that we aren't
+breaking anything over time.
 
-Aside from a few small niggles, this looks really good, Thanks!
+greg k-h
