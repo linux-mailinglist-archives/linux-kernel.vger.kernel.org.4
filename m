@@ -2,123 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195D26692F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A616692F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjAMJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S240759AbjAMJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239903AbjAMJ1z (ORCPT
+        with ESMTP id S229887AbjAMJ15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:27:55 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB61938A1;
-        Fri, 13 Jan 2023 01:23:44 -0800 (PST)
+        Fri, 13 Jan 2023 04:27:57 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4892DDF;
+        Fri, 13 Jan 2023 01:23:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673601824; x=1705137824;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673601837; x=1705137837;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/xAKBZhyJ8HlMGnG8R+tnMoMY4Yw1acK1pUdd5RRh4A=;
-  b=aL9IGJlM/FkVtktAgqFV5JNzy5wCIqDOo4aDTMbZIJRQPSTeNlHZLGe3
-   su6VOUdi5auzDPcSeXwX45tyW43lYRtzzAaFSpciTQBpauXEmQCy38X/c
-   /AeHgl0WgJg1Ffn16psXZpj3r1ykEM5Fev7VdCMjGBbcRrGu0Rrpow77M
-   uMrUREkVI1OSY8BFCl3OTkRQ8DvM9vBUr3JVRAyAZ0zYqfSMzsEFm3nXa
-   VcHs2JkSP/121k57/dlTcxVtt7OPpqYDrTCe4tJjRlGXLhZ+JymAnIvGZ
-   kWCO7uPUWcm4rFwROd2jLNq609jqqZcXzACl3MpNC16L4+n/VwJCwxFl+
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,213,1669100400"; 
-   d="asc'?scan'208";a="195624611"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2023 02:23:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 13 Jan 2023 02:23:40 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 13 Jan 2023 02:23:36 -0700
-Date:   Fri, 13 Jan 2023 09:23:14 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <guoren@kernel.org>
-CC:     <arnd@arndb.de>, <palmer@rivosinc.com>, <tglx@linutronix.de>,
-        <peterz@infradead.org>, <luto@kernel.org>, <heiko@sntech.de>,
-        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
-        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
-        <atishp@atishpatra.org>, <mark.rutland@arm.com>,
-        <ben@decadent.org.uk>, <bjorn@kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
-Subject: Re: [PATCH -next V14 4/7] riscv: entry: Convert to generic entry
-Message-ID: <Y8EjAt3DC4WC062n@wendy>
-References: <20230112095848.1464404-1-guoren@kernel.org>
- <20230112095848.1464404-5-guoren@kernel.org>
+  bh=/Jt/SJgZBfDi5YiCSTowtw0y3MUjbXVipBqspyh2wUk=;
+  b=E7jb1yL7PN5gf7K6q7c81qjbvm/9U6kLr3whS9bEacM3f8pwnZvBpO5h
+   amuP+0tTMiAcc06SlKd7YqVeSeUD2NX1V6a8mbk5wkCMVMbORtra+PxVY
+   UNF5HsWezyKCmlpSefk/AFI59JTfW2iVhQ1VupbK/VyA/i/CSP4D/YDUu
+   iGKE/wq1ZNohATZ9Mja51aUBsW4Ir8NzjCvw3Q0WsqGIqeVoY9auYuGeN
+   wKHTamg/PmakaGUrHH0zPFTxmHR7W8Ofy8HqkZ+nllUilaMK9is4sjnws
+   gfczJd82TvFdgupCJsN2hajhORSFm2etaPsQ++0Ak4hj6s2x4+GcZ6BAI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="311807791"
+X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
+   d="scan'208";a="311807791"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 01:23:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800544184"
+X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
+   d="scan'208";a="800544184"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 13 Jan 2023 01:23:45 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 13 Jan 2023 11:23:44 +0200
+Date:   Fri, 13 Jan 2023 11:23:44 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
+        Xin Ji <xji@analogixsemi.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: Re: [PATCH v10 3/9] drm/display: Add Type-C switch helpers
+Message-ID: <Y8EjIKEHqcj3htqC@kuha.fi.intel.com>
+References: <20230112042104.4107253-1-treapking@chromium.org>
+ <20230112042104.4107253-4-treapking@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Tn016RnVhEUTOGe2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230112095848.1464404-5-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230112042104.4107253-4-treapking@chromium.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Tn016RnVhEUTOGe2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hey Guo Ren,
+On Thu, Jan 12, 2023 at 12:20:58PM +0800, Pin-yen Lin wrote:
+> Add helpers to register and unregister Type-C "switches" for bridges
+> capable of switching their output between two downstream devices.
+> 
+> The helper registers USB Type-C mode switches when the "mode-switch"
+> and the "data-lanes" properties are available in Device Tree.
 
-On Thu, Jan 12, 2023 at 04:58:45AM -0500, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->=20
-> This patch converts riscv to use the generic entry infrastructure from
-> kernel/entry/*. The generic entry makes maintainers' work easier and
-> codes more elegant. Here are the changes:
->=20
->  - More clear entry.S with handle_exception and ret_from_exception
->  - Get rid of complex custom signal implementation
->  - Move syscall procedure from assembly to C, which is much more
->    readable.
->  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
->  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
->  - Use the standard preemption code instead of custom
->=20
-> Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> Reviewed-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
-> Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Ben Hutchings <ben@decadent.org.uk>
+Let's not make this kind of helpers DT only, please. See below ...
 
-Unfortunately from this patch onwards, the !MMU build is broken.
-Should be able to reproduce it with nommu_virt_defconfig.
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> ---
+> 
+> Changes in v10:
+> - Collected Reviewed-by and Tested-by tags
+> - Replaced "void *" with "typec_mux_set_fn_t" for mux_set callbacks
+> - Print out the node name when errors on parsing DT
+> - Use dev_dbg instead of dev_warn when no Type-C switch nodes available
+> - Made the return path of drm_dp_register_mode_switch clearer
+> 
+> Changes in v8:
+> - Fixed the build issue when CONFIG_TYPEC=m
+> - Fixed some style issues
+> 
+> Changes in v7:
+> - Extracted the common codes to a helper function
+> - New in v7
+> 
+>  drivers/gpu/drm/display/drm_dp_helper.c | 134 ++++++++++++++++++++++++
+>  include/drm/display/drm_dp_helper.h     |  17 +++
+>  2 files changed, 151 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
+> index 16565a0a5da6..a2ec40a621cb 100644
+> --- a/drivers/gpu/drm/display/drm_dp_helper.c
+> +++ b/drivers/gpu/drm/display/drm_dp_helper.c
+> @@ -30,11 +30,13 @@
+>  #include <linux/sched.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/string_helpers.h>
+> +#include <linux/usb/typec_mux.h>
+>  #include <linux/dynamic_debug.h>
+>  
+>  #include <drm/display/drm_dp_helper.h>
+>  #include <drm/display/drm_dp_mst_helper.h>
+>  #include <drm/drm_edid.h>
+> +#include <drm/drm_of.h>
+>  #include <drm/drm_print.h>
+>  #include <drm/drm_vblank.h>
+>  #include <drm/drm_panel.h>
+> @@ -3891,3 +3893,135 @@ int drm_panel_dp_aux_backlight(struct drm_panel *panel, struct drm_dp_aux *aux)
+>  EXPORT_SYMBOL(drm_panel_dp_aux_backlight);
+>  
+>  #endif
+> +
+> +#if IS_REACHABLE(CONFIG_TYPEC)
 
-Thanks,
-Conor.
+I think Jani already pointed out that that is wrong. Just move these
+into a separate file and enable them silently in the Makefile when
+TYPEC is enabled - so no separate Kconfig option.
+
+> +static int drm_dp_register_mode_switch(struct device *dev, struct device_node *node,
+
+static int drm_dp_register_mode_switch(struct device *dev, struct fwnode_handle *fwnode,
+
+> +				       struct drm_dp_typec_switch_desc *switch_desc,
+> +				       void *data, typec_mux_set_fn_t mux_set)
+> +{
+> +	struct drm_dp_typec_port_data *port_data;
+> +	struct typec_mux_desc mux_desc = {};
+> +	char name[32];
+> +	u32 dp_lanes[2];
+> +	int ret, num_lanes, port_num = -1;
+> +
+> +	num_lanes = drm_of_get_data_lanes_count(node, 0, 2);
+> +	if (num_lanes <= 0) {
+
+        num_lanes = fwnode_property_read_u32_array(fwnode, "data-lanes", NULL, 0);
+        if (num_lanes <= 0 || num_lanes > 2)
+
+> +		dev_err(dev, "Error on getting data lanes count from %s: %d\n",
+> +			node->name, num_lanes);
+> +		return num_lanes;
+> +	}
+> +
+> +	ret = of_property_read_u32_array(node, "data-lanes", dp_lanes, num_lanes);
+
+        ret = fwnode_property_read_u32_array(fwnode, "data-lanes", dp_lanes, num_lanes);
+
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read the data-lanes variable from %s: %d\n",
+> +			node->name, ret);
+
+			fwnode_get_name(fwnode), ret);
+
+> +		return ret;
+> +	}
+> +
+> +	port_num = dp_lanes[0] / 2;
+> +
+> +	port_data = &switch_desc->typec_ports[port_num];
+> +	port_data->data = data;
+> +	mux_desc.fwnode = &node->fwnode;
+
+        mux_desc.fwnode = fwnode;
+
+> +	mux_desc.drvdata = port_data;
+> +	snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
+
+	snprintf(name, sizeof(name), "%s-%u", fwnode_get_name(fwnode), port_num);
+
+> +	mux_desc.name = name;
+> +	mux_desc.set = mux_set;
+> +
+> +	port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+> +	if (IS_ERR(port_data->typec_mux)) {
+> +		ret = PTR_ERR(port_data->typec_mux);
+> +		dev_err(dev, "Mode switch register for port %d failed: %d\n",
+> +			port_num, ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * drm_dp_register_typec_switches() - register Type-C switches
+> + * @dev: Device that registers Type-C switches
+> + * @port: Device node for the switch
+> + * @switch_desc: A Type-C switch descriptor
+> + * @data: Private data for the switches
+> + * @mux_set: Callback function for typec_mux_set
+> + *
+> + * This function registers USB Type-C switches for DP bridges that can switch
+> + * the output signal between their output pins.
+> + *
+> + * Currently only mode switches are implemented, and the function assumes the
+> + * given @port device node has endpoints with "mode-switch" property.
+> + * Register the endpoint as port 0 if the "data-lanes" property falls in 0/1,
+> + * and register it as port 1 if "data-lanes" falls in 2/3.
+> + */
+> +int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
+
+int drm_dp_register_typec_switches(struct device *dev, struct fwnode_handle *port,
+
+> +				   struct drm_dp_typec_switch_desc *switch_desc,
+> +				   void *data, typec_mux_set_fn_t mux_set)
+> +{
+> +	struct device_node *sw;
+
+        struct fwnode_handle *sw;
+
+> +	int ret;
+> +
+> +	for_each_child_of_node(port, sw) {
+> +		if (of_property_read_bool(sw, "mode-switch"))
+> +			switch_desc->num_typec_switches++;
+> +	}
+
+        fwnode_for_each_child_node(port, sw)
+                if (fwnode_property_present(sw, "mode-switch"))
+			switch_desc->num_typec_switches++;
+
+> +	if (!switch_desc->num_typec_switches) {
+> +		dev_dbg(dev, "No Type-C switches node found\n");
+> +		return 0;
+> +	}
+> +
+> +	switch_desc->typec_ports = devm_kcalloc(
+> +		dev, switch_desc->num_typec_switches,
+> +		sizeof(struct drm_dp_typec_port_data), GFP_KERNEL);
+> +
+> +	if (!switch_desc->typec_ports)
+> +		return -ENOMEM;
+> +
+> +	/* Register switches for each connector. */
+> +	for_each_child_of_node(port, sw) {
+> +		if (!of_property_read_bool(sw, "mode-switch"))
+
+        fwnode_for_each_child_node(port, sw) {
+                if (!fwnode_property_present(sw, "mode-switch"))
+
+> +			continue;
+> +		ret = drm_dp_register_mode_switch(dev, sw, switch_desc, data, mux_set);
+> +		if (ret)
+> +			goto err_unregister_typec_switches;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_unregister_typec_switches:
+> +	of_node_put(sw);
+> +	drm_dp_unregister_typec_switches(switch_desc);
+> +	dev_err(dev, "Failed to register mode switch: %d\n", ret);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(drm_dp_register_typec_switches);
+> +
+> +/**
+> + * drm_dp_unregister_typec_switches() - unregister Type-C switches
+> + * @switch_desc: A Type-C switch descriptor
+> + */
+> +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < switch_desc->num_typec_switches; i++)
+> +		typec_mux_unregister(switch_desc->typec_ports[i].typec_mux);
+> +}
+> +EXPORT_SYMBOL(drm_dp_unregister_typec_switches);
+> +#else
+> +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc)
+> +{
+> +}
+> +EXPORT_SYMBOL(drm_dp_register_typec_switches);
+> +int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
+> +				   struct drm_dp_typec_switch_desc *switch_desc,
+> +				   void *data, typec_mux_set_fn_t mux_set)
+> +{
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(drm_dp_unregister_typec_switches);
+> +#endif
+> diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
+> index ab55453f2d2c..5a3824f13b4e 100644
+> --- a/include/drm/display/drm_dp_helper.h
+> +++ b/include/drm/display/drm_dp_helper.h
+> @@ -25,6 +25,7 @@
+>  
+>  #include <linux/delay.h>
+>  #include <linux/i2c.h>
+> +#include <linux/usb/typec_mux.h>
+>  
+>  #include <drm/display/drm_dp.h>
+>  #include <drm/drm_connector.h>
+> @@ -763,4 +764,20 @@ bool drm_dp_downstream_rgb_to_ycbcr_conversion(const u8 dpcd[DP_RECEIVER_CAP_SIZ
+>  					       const u8 port_cap[4], u8 color_spc);
+>  int drm_dp_pcon_convert_rgb_to_ycbcr(struct drm_dp_aux *aux, u8 color_spc);
+>  
+> +struct drm_dp_typec_port_data {
+> +	struct typec_mux_dev *typec_mux;
+> +	void *data;
+> +	bool dp_connected;
+> +};
+> +
+> +struct drm_dp_typec_switch_desc {
+> +	int num_typec_switches;
+> +	struct drm_dp_typec_port_data *typec_ports;
+> +};
+> +
+> +void drm_dp_unregister_typec_switches(struct drm_dp_typec_switch_desc *switch_desc);
+> +int drm_dp_register_typec_switches(struct device *dev, struct device_node *port,
+> +				   struct drm_dp_typec_switch_desc *switch_desc,
+> +				   void *data, typec_mux_set_fn_t mux_set);
+> +
+>  #endif /* _DRM_DP_HELPER_H_ */
+
+The function stubs go here if they are needed.
 
 
---Tn016RnVhEUTOGe2
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8Ei5AAKCRB4tDGHoIJi
-0hgHAP4zxYtVsZMV6BCEppbmfxRxpMW9oFKnWUOgUmHwNcSrhwD9Ff6CTDLxoiy3
-sCNkTcezQudksEUbdB5Noc0qY6RioA0=
-=OVvh
------END PGP SIGNATURE-----
-
---Tn016RnVhEUTOGe2--
+-- 
+heikki
