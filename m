@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324AC66A708
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997A166A709
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjAMX0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S231440AbjAMX1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjAMX0j (ORCPT
+        with ESMTP id S231184AbjAMX1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:26:39 -0500
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEB88A213
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:26:37 -0800 (PST)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 37AB810048F91
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 23:26:37 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id GTRVpuRhGNX2aGTRVpil5a; Fri, 13 Jan 2023 23:26:37 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=63c1e8ad
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=uJXoyXs2SWzOjiTBKGkA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wHGbrhCQsYGBvnsMDI9Sc8XtN0LjMmgv6I4KTkqII/Q=; b=r0r4CG2TTmT9lusgtrd/RylcSx
-        nnC5EraDyh1bCg83gOe5WN0dhEWAFeqFYjnaCxUB3Lx08qzDBxyvp4usO/2KDRXc5zbxHnW3j0S53
-        vW1v//ItAUhUgDWAIDAtAtw0scLeEAvrtShAND7ALW0BlyXyZ/Gp2OEaVpPyvGnL3oOFiP+ZZ6GaQ
-        s41FcXeCk6MhCaX2Ra3ZxFTw+Bzh5gUe1Ljhlv6F0G9Em+v0LlUdXu5pC15C/necIi6oNg8UbaZCb
-        mpdSbA6wc+M3R7dSH4erc/4iYro2bL5h8HA99gXsoclutOspuzOqigIyLXRk9Iu8UR23MhQsetwW+
-        2TUXk1Sw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51374 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pGTRT-003UAp-Sf;
-        Fri, 13 Jan 2023 16:26:35 -0700
-Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230112135524.143670746@linuxfoundation.org>
-In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <1e9676f3-e436-3f69-ddff-abfc6ba5804d@w6rz.net>
-Date:   Fri, 13 Jan 2023 15:26:29 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 13 Jan 2023 18:27:07 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3E18A213
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:27:07 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id p24so24913073plw.11
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QeiJHvrswqLFEJEjzaUv7SNJ90rY7sOx4dR9LZd7H2E=;
+        b=DuqQQVG5xVrKMgjEw0hjJ9MguBiRIpWq1NyyBjNbv2+ESrZQPti6WbySPmR4WRj/cg
+         pR/DACzXpZET9vv+RCNgTa02tSyRReJqJl2vDrNc5GhJjcaQYdH6BhKrDinJm53Iuk7P
+         MKB14bcVCKcNYXjForPiwJ1N8J3HioI9efTEs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QeiJHvrswqLFEJEjzaUv7SNJ90rY7sOx4dR9LZd7H2E=;
+        b=YcdOcnO6Fy7gMurmrpEeWraV9G2OhjhAaG+MV9KakRurP55uOVgJKflQcN3rTIGYKB
+         ldzLoxck0nX0frgX3ITifIKuavoi0iM6fx5aUtEJzjf2cP90Qk7t7mpwmvMpwVVZ6aoE
+         RPXaezpGywPhV03HTjbntoAnDN5w6yvJI4bwLI5AdYir+O+8QGBV8QI1vLwdwe9syhiX
+         VS3t1wG9yc1YdYRlO/LXkZfJCkSE/9gLHR5XMbrsoqnjgSoF4XwLeTw2l7WVmQdtjDNB
+         hrRTaewIa3bo3c3tK9FXB9j//P2Fo8xk1NzH21JQqlg5L8nNsSHOijQt371qD7z6jdz4
+         3Dow==
+X-Gm-Message-State: AFqh2kqynjWQ0s9w3HAis1UAJBXrXt3gy/LZhWgXLS7Arpo3OyT/4FVo
+        1M30vRxrhfKETWn6ySODecYPlQ==
+X-Google-Smtp-Source: AMrXdXsDMheL/IO0a+uJkPxWNIoWsClmDoGmLb3/qltk/bmQk14iAy/bo+Gr8FI23b07uGkLj8h8Sg==
+X-Received: by 2002:a17:902:b085:b0:192:d5dc:c84b with SMTP id p5-20020a170902b08500b00192d5dcc84bmr38212483plr.50.1673652426625;
+        Fri, 13 Jan 2023 15:27:06 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x3-20020a170902a38300b0018997f6fc88sm14682715pla.34.2023.01.13.15.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 15:27:06 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:27:05 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jack Rosenthal <jrosenth@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: [GIT PULL] kernel hardening fixes for v6.2-rc4
+Message-ID: <202301131526.28719A40@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pGTRT-003UAp-Sf
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51374
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 5:45 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.163 release.
-> There are 783 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.163-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Linus,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Please pull these two kernel hardening fixes for v6.2-rc4.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Thanks!
 
+-Kees
+
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.2-rc4
+
+for you to fetch changes up to 42633ed852deadc14d44660ad71e2f6640239120:
+
+  kbuild: Fix CFI hash randomization with KASAN (2023-01-13 15:22:03 -0800)
+
+----------------------------------------------------------------
+kernel hardening fixes for v6.2-rc4
+
+- Fix CFI hash randomization with KASAN (Sami Tolvanen)
+
+- Check size of coreboot table entry and use flex-array
+
+----------------------------------------------------------------
+Kees Cook (1):
+      firmware: coreboot: Check size of table entry and use flex-array
+
+Sami Tolvanen (1):
+      kbuild: Fix CFI hash randomization with KASAN
+
+ drivers/firmware/google/coreboot_table.c | 9 +++++++--
+ drivers/firmware/google/coreboot_table.h | 1 +
+ init/Makefile                            | 1 +
+ scripts/Makefile.vmlinux                 | 1 +
+ 4 files changed, 10 insertions(+), 2 deletions(-)
+
+-- 
+Kees Cook
