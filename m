@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507956689D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 04:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723D1668A63
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 04:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240196AbjAMDAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 22:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S230161AbjAMDrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 22:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240194AbjAMDAt (ORCPT
+        with ESMTP id S235522AbjAMDr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 22:00:49 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D003054D8D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:00:47 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ss4so42015482ejb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=futuring-girl-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O4qDazh6QwMY3LvG+D+8H3mKX/MyNkX+etoMzkezwE8=;
-        b=pYTE8kAoX/zWZB4SBkbDjTTBh9UWIFd+P6SC5jQkDEeDj7PdVlns9VanBfpC7qY5kO
-         MiGmJTQ7FQnjxnzX6GW5X28SLY8Q3CMu+fFKhPhJ3ItVJa0BivOqTLXojoCrL+IjSgGn
-         5Pa6324U9cLfYcL+Csd2ytA4CDUMZ+D+3GkubrvDJFdkcX3m4/o5hQ0D8s1LKCIMS7mV
-         H9ZEgSXw+J/DMm1ojfv4nYY8stBifqXGnU/lYH+GGkwCCji7nxKvLSSx4VpPL9QbRy/m
-         D7QCeR+kr056reSnTMDH8uD34/UwFZwHU9Hu63SSd4eTfpWLyFlHWs7OvOgtkd5RytIX
-         Kosw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O4qDazh6QwMY3LvG+D+8H3mKX/MyNkX+etoMzkezwE8=;
-        b=CTvQMkk3z1QrDfZUXszmJvP/6BRrv3tatneh5ZYqrniYgLXYtxOHPqAoKvsBwSxHWS
-         nrk7b2HYUR9CE56p2r0+iEGJQwhLvH1PnxuA4L8F/1bgAuK2zT2jDQ+h+I2moVk+cS0T
-         +we46kKcuofx88IzqRS8puGweCspNeNRwawqNrwyJ8wantUFVeg4WYmfSiCYtwAkmPsW
-         O84HKiM29PCxgaPIT852NN80GDfWDX/HqLuaZ/VW/4gI5AM7IXsxC1rlJsA3KdOs/VjH
-         Mov7JEKAZpCX5H/1MI9Rq51zTIq9dMHX2bbmnYpD/gFTTAs0fN+aTg2bcRpVi985erjE
-         K1kg==
-X-Gm-Message-State: AFqh2kojCQKquWHHY+6J5SKrSJZzE2ooJLQ2J57mSkbQlS3qegrDjt9n
-        8m+S6fArN5RdyaPA2pYMI6NeJ5lmkmr8FWgQJfWhsQ==
-X-Google-Smtp-Source: AMrXdXsbh24iYUuFadTTe1PMFifWTOQcuum+A9Uz95nsAZ60lsYQu66zxBEUz4ouiTYVDeR6nqEhn+NNkGF3JuYlD0s=
-X-Received: by 2002:a17:906:3b5a:b0:82c:356c:c4c8 with SMTP id
- h26-20020a1709063b5a00b0082c356cc4c8mr4396513ejf.649.1673578846300; Thu, 12
- Jan 2023 19:00:46 -0800 (PST)
+        Thu, 12 Jan 2023 22:47:29 -0500
+X-Greylist: delayed 976 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 19:47:20 PST
+Received: from mx.meteo.gov.ua (mx.meteo.gov.ua [91.216.232.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09BFA1DF20
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:47:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=meteo.gov.ua; s=hostmaster; c=relaxed/simple;
+        q=dns/txt; i=@meteo.gov.ua; t=1673575526; x=1759975526;
+        h=From:Attention;
+        bh=VrJeq7SRLVbMHKaIV+ZaFg4obUoRuGqFhvh3ueAtLkA=;
+        b=hF8aG2db2DHDd+iNEhBE6n3A67hWK1rv2WPktK4BUV2DrZ/XHWijGH4IjO9Lwq/C
+        vveD7iECrvyHTlsb2QNiHlMZczsAYre+A7vCKG509EeJytEqvOe7O0m/EpmOdiy0
+        vOQgXeTVYwHNQZ9IPezfoDJi29Lk7d64cLJ4IW7rEnY=;
+X-AuditID: 5bd8e814-afbc57000000210c-28-63c0bc66f969
+Received: from mail.meteo.gov.ua (mail.meteo.gov.ua [91.216.232.17])
+        by mx.meteo.gov.ua (SMG) with SMTP id C2.E8.08460.66CB0C36; Fri, 13 Jan 2023 04:05:26 +0200 (EET)
+To:     undisclosed-recipients:;
+Received: from localhost (localhost [127.0.0.1])
+        by mail.meteo.gov.ua (Postfix) with ESMTP id 56C7E247D8B;
+        Fri, 13 Jan 2023 02:23:53 +0200 (EET)
+Received: from mail.meteo.gov.ua ([127.0.0.1])
+        by localhost (mail.meteo.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 4NTM9b7vEKh1; Fri, 13 Jan 2023 02:23:53 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.meteo.gov.ua (Postfix) with ESMTP id CAAA2247D43;
+        Fri, 13 Jan 2023 02:23:40 +0200 (EET)
+X-Virus-Scanned: amavisd-new at mail.meteo.gov.ua
+Received: from mail.meteo.gov.ua ([127.0.0.1])
+        by localhost (mail.meteo.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id YvCCD-KrbzlM; Fri, 13 Jan 2023 02:23:40 +0200 (EET)
+Received: from mail.meteo.gov.ua (mail.meteo.gov.ua [91.216.232.17])
+        by mail.meteo.gov.ua (Postfix) with ESMTP id 0C595247CF1;
+        Fri, 13 Jan 2023 02:23:29 +0200 (EET)
+Date:   Fri, 13 Jan 2023 02:23:29 +0200 (GMT+02:00)
+From:   JANICE LAWSON <askododesa@meteo.gov.ua>
+Reply-To: JANICE LAWSON <janicelawson556@gmail.com>
+Message-ID: <2085498293.687866.1673569409021.JavaMail.zimbra@meteo.gov.ua>
+Subject: BABY PIANO GIVEAWAY
 MIME-Version: 1.0
-References: <20230112135326.981869724@linuxfoundation.org>
-In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
-From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
-Date:   Fri, 13 Jan 2023 12:02:42 +0900
-Message-ID: <CAKL4bV6F5KmT0iE4MLVVW0o_SMyFN1dj-Y+Rt6xN63yAhXtAXA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [91.216.232.17]
+X-Mailer: Zimbra 8.8.15_GA_4464 (ZimbraWebClient - GC108 (Win)/8.8.15_GA_4468)
+Thread-Index: a1X1MMjCIS7/quLbPp/eJ78Nz2WMig==
+Thread-Topic: BABY PIANO GIVEAWAY
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTdxTH87u/9raSMWuH2ZWNGIhuBEedjs0zsyzL5saNGkfmYuaYGUUu
+        SIpiChKdYSuMCuMhCFqlFPDRRh6pQqFroUi7tm5simVFyhAsCM2mhQGCgjy6rXC3hf8+Od/H
+        75zkx8fCEjKYn3wknZEeEaeEkQGc2N8erolMbLMcfP2CNgQ67M8wdOT+woPzit1wLqucAPuD
+        IQKGyucRTOpzCDjbZ+PAU1M2hrLOczy47PIgGG6+hUA3LeeCy+UhwNA8h6DN8hOGwrw8HjgK
+        +0m43W3jwu9nXAi8VQI409NEgu6RmgemOx0kyJ+WEZD1JIuAu01jBHS3qkhoLu32p779HoHL
+        cgpD5+wghtKFSDAbswmorHlIgnd2K7irDRhOtVznQG+fggdP7LUkqBTdCEqLFQiuFNu5MFK9
+        wIHax40IZH+UcEBhtBNQNKYmYLyqgAt95n703lb6/NV5TPc4phGdV1BC0A0DGoLWOfMx3T7g
+        Jul5xTbaMejj0U6nG9NGhYNHO3KHEF0zIkd09mkLphtHW7l0ta4e07VafsyGzwPeSWBSkjMY
+        6eZ34wIOGcwz3KMa4vjfdXMcGbqP8tEqPiWIosb1ViIfBfCFghpETWu8nCUhSPAyVVkxwmWF
+        s4iqr9EuJ4QCE6K0P6b9L1SYS7hs1RZKe3fq34Tf9Pj+MI9N+HuvLW5bYo7fZClykktMCiIp
+        Q6kes543KJu9ePnpQMFOyl5Xucwv+Nfo9epIdr6G+rncszzHglepxSonZnk9ZfhThdklQqmB
+        KQ+P5T3UsNxLsOeIqM7+eyTLoZShRYZL0FrlilrlilrlitqLCNeh1YePiw4z6UyqKCk1Q3RM
+        rEPspw0yopmb4yIrIvjIiig+DgsKbLtpPigMTBCf+IqRpn4pPZbCpFnRS3xO2IuB8Sca4oWC
+        JHE6I2GYo4z0P5XgrwqWEeZAy8mk7eui0x5lNkcO7m+97J3MnI0rHbx648an7tHnxC7PZ7Ig
+        vWv+yo7q0SGVdeL615LQGO3b3sTa6QXjBmnw2tXhb2o2db2SOKPvlJSdDMkJz63fZVNusnbH
+        Dp+2EOsutEeVSbtM976x0WSCQ1URcWefeyp6YXt6BBNne/C8QH2pabdrZq4xU6NMvFZR9aEm
+        ZHbzR68pe3eo4wveT5YYIz5G+33hP/hSoz5xEgEb/3qW1J4j3Le3WeMO9mmKujIa3vJN7hTl
+        S7JkXg2e2Phd4aS7xXprTxj5qzw2W//FgUVG1G5sjbk9MNZjmmmZxJWeCfXggYYPUnMW1kdf
+        VPHDOGmHxFsisDRN/A/guRNaIwQAAA==
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+Hello,
 
-> This is the start of the stable review cycle for the 6.1.6 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+I hope you are doing well.
 
-6.1.6-rc1 tested.
 
-x86_64
+I am looking to give away my late husband's Yamaha baby grand piano to a passionate instrument lover, so let me know if you will take it or have someone who will care for it.
 
-build successfully completed
-boot successfully completed
 
-Lenovo ThinkPad X1 Nano Gen1(Intel i5-1130G7, arch linux)
+Email: janicelawson556@gmail.com
 
-Thanks
 
-Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
+Regards,
+
+
+Mrs Janice Lawson
