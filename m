@@ -2,342 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECE466915F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACD1669163
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240806AbjAMIls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S234982AbjAMIms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240730AbjAMIlY (ORCPT
+        with ESMTP id S230079AbjAMImo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:41:24 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97525B16D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:41:11 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id EF77E604FC;
-        Fri, 13 Jan 2023 09:41:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673599268; bh=JtWdty7Ep6O5ZrJGhOIoCVCdUQYdp19mGcP2WzzMLkQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hYuFzhPhnqP+3nznK2/+qE7ow3+MJMcM0SEfGiM8Z6LKN5CE7nS0+DY0/ft8Yj35R
-         OAMp1GrT8kKjvR0nl/j/za+oGuRn46VV1xaSKvjZ4DRjn7PCCgKYhbRRoYhwkASgNR
-         qXkWWCTR6PyaHxET4K3umiCr0zWunzpXgAIv/AmcNB0pwkUihhhdUhZoUC8CM48KQz
-         TIPiYCyqXyB2SRO/fEOtpdIE21o4YntsmWJCUz0e4ie7/tuvylwcWqQrN34rp2T61H
-         Y/cd6ia01LxSxznBA0TvIYlvkQpi4d5k+gP8QGhJLPQflHnMHIp7hayupYQsrY0nSk
-         77TrJQe+J9f5A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fbC26UwPkoBq; Fri, 13 Jan 2023 09:41:06 +0100 (CET)
-Received: from [161.53.83.51] (pc-mtodorov.grf.hr [161.53.83.51])
-        by domac.alu.hr (Postfix) with ESMTPSA id ABF6B604FA;
-        Fri, 13 Jan 2023 09:41:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673599266; bh=JtWdty7Ep6O5ZrJGhOIoCVCdUQYdp19mGcP2WzzMLkQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QD56bSbraPZrW9tBL67DfRCXbEUTtP4vrleOe1mgBFImOxk6cIULL5vl95IW7jHsX
-         uhtj9IThuhPcogUNvUXOBZpABERP338hwBHgj/dKhxogdsaEfLzTrlxoC3j5URtS2n
-         uQImn5UOMQhBPjGxb1Ua0+efcCqIXQPotVNvdYM+dqph2wUDoJU9soeQBT8KjTlCXl
-         SnBpakOkRTvs01pmoI7kah6MZBWhdNmtcz6Z1ZvHn7KHdqRemDUiq+jHMUxoWGGuZ2
-         oo5tIlM4hD/UOeXc3hmM3FDEzG/zF70fpho1ug5WkVieyXT9BVClevCAX63ObEyuGr
-         IsinaJUve/vPA==
-Message-ID: <c26ecfcf-383c-2f51-6641-2b7b30a76b62@alu.unizg.hr>
-Date:   Fri, 13 Jan 2023 09:41:05 +0100
+        Fri, 13 Jan 2023 03:42:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A03F440;
+        Fri, 13 Jan 2023 00:42:43 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 194845F9CE;
+        Fri, 13 Jan 2023 08:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673599361; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tn3pIfSFHMAaGKQ0wQUSfqNv0AGtcMDyvx2yhx14BF0=;
+        b=MBsoXy0wcYRuu5Kue6BMjCgXARbLAQJk/VqHt/iRhBK/bRgiyNe3k4gp7pxwcWeA9Prop8
+        0LWEQCTjczPkK6TNNGra7mg+eBfY55utQL9Jn6L51VSgQbXfGxhIbgKJVvsCSotb6xj7PO
+        MzBrd1PP9y6Cw1gLuSs/QaesbmCQqdM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673599361;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tn3pIfSFHMAaGKQ0wQUSfqNv0AGtcMDyvx2yhx14BF0=;
+        b=KMHxhaL8EgbXJidfcT6tY9VYHXtg6yeHkf4K0/qQRdT4IXh1TR+M3BSMDznQC/FV3qw32A
+        SabK8ITT6F9QxHBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F046713913;
+        Fri, 13 Jan 2023 08:42:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8zonOoAZwWMhXQAAMHmgww
+        (envelope-from <cahu@suse.de>); Fri, 13 Jan 2023 08:42:40 +0000
+Message-ID: <5ab09d55233d1ba5969bd6a02214046c24145527.camel@suse.de>
+Subject: Re: [PATCH] rndis_wlan: Prevent buffer overflow in rndis_query_oid
+From:   cahu <cahu@suse.de>
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>, kvalo@kernel.org,
+        jussi.kivilinna@iki.fi, davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 13 Jan 2023 09:42:40 +0100
+In-Reply-To: <20230110173007.57110-1-szymon.heidrich@gmail.com>
+References: <20230110173007.57110-1-szymon.heidrich@gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-VPz1AUbM/19UkYX6m/ao"
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: =?UTF-8?B?UmU6IOetlOWkjTogSU5GTzogW0JJU0VDVEVEXSBSZWdyZXNzaW9uOiBB?=
- =?UTF-8?Q?_Problem_with_/sys/kernel/debug/kmemleak_output=3a_backtrace_not_?=
- =?UTF-8?Q?printed_since_6=2e2=2e0-rc1?=
-Content-Language: en-US
-To:     =?UTF-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
-        <zhaoyang.huang@unisoc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-References: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
- <4c467851-8080-44d3-d017-b0e283896119@alu.unizg.hr>
- <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
- <3ba5f8ee-d9bd-69ae-bb3a-c61e47020e2c@alu.unizg.hr>
- <314a477e7f0644fbaf8fc607daefe70e@BJMBX01.spreadtrum.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <314a477e7f0644fbaf8fc607daefe70e@BJMBX01.spreadtrum.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.1.2023. 7:20, 黄朝阳 (Zhaoyang Huang) wrote:
->> /sys/kernel/debug/kmemleak output: backtrace not printed since 6.2.0-rc1
->>
->>
->>> On 12. 01. 2023. 20:50, Mirsad Todorovac wrote:
->>>> Hi all,
->>>>
->>>> there seems to be a problem with the output of
->>> /sys/kernel/debug/kmemleak:
->>>>
->>>> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak unreferenced
->>>> object 0xffff951c118568b0 (size 16):
->>>>    comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
->>>>    hex dump (first 16 bytes):
->>>>      6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
->>>>    backtrace:
->>>> [root@pc-mtodorov ~]#
->>>>
->>>> Apparently, backtrace of called functions on the stack is no longer
->>>> printed
->>> with the list of memory leaks.
->>>>
->>>> This appeared on Lenovo desktop 10TX000VCR, with AlmaLinux 8.7 and
->>>> BIOS version M22KT49A (11/10/2022) and 6.2-rc1 and 6.2-rc2 builds.
->>>>
->>>> This worked on 6.1 with the same CONFIG_KMEMLEAK=y and MGLRU
->>> enabled
->>>> on a vanilla mainstream kernel from Mr. Torvalds' tree. I don't know
->>>> if this is
->>> deliberate feature for some reason or a bug.
->>>>
->>>> Please find attached the config, lshw and kmemleak output.
->>>>
->>>> The bisection gave this commit as the culprit for the severed stack
->>>> backtrace print in /sys/kernel/debug/kmemleak:
->>>>
->>>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect good
->>>> 56a61617dd2276cbc56a6c868599716386d70041 is the first bad commit
->>>> commit 56a61617dd2276cbc56a6c868599716386d70041
->>>> Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->>>> Date:   Thu Oct 27 17:50:24 2022 +0800
->>>>
->>>>      mm: use stack_depot for recording kmemleak's backtrace
->>>>
->>>>      Using stack_depot to record kmemleak's backtrace which has been
->>>>      implemented on slub for reducing redundant information.
->>>>
->>>> The complete bisect log is:
->>>>
->>>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log git
->>>> bisect start '--' 'mm'
->>>> # good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1 git
->>>> bisect good 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
->>>> # bad: [1b929c02afd37871d5afb9d498426f83432e71c2] Linux 6.2-rc1 git
->>>> bisect bad 1b929c02afd37871d5afb9d498426f83432e71c2
->>>> # good: [8b9ed79c2d587bec5f603d66801478a5af9af842] Merge tag
->>>> 'x86_asm_for_v6.2' of
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->>>> git bisect good 8b9ed79c2d587bec5f603d66801478a5af9af842
->>>> # good: [e83b39d6bbdb6d25bd6f5c258832774635d29b47] mm: make
->>>> drop_caches keep reclaiming on all nodes git bisect good
->>>> e83b39d6bbdb6d25bd6f5c258832774635d29b47
->>>> # good: [9997bc017549acd6425e32300eff28424ffeeb6b] zsmalloc:
->>> implement
->>>> writeback mechanism for zsmalloc git bisect good
->>>> 9997bc017549acd6425e32300eff28424ffeeb6b
->>>> # good: [6287b7dae80944bfa37784a8f9d6861a4facaa6e] mm,thp,rmap: fix
->>>> races between updates of subpages_mapcount git bisect good
->>>> 6287b7dae80944bfa37784a8f9d6861a4facaa6e
->>>> # good: [8fa590bf344816c925810331eea8387627bbeb40] Merge tag
->>>> 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm
->>>> git bisect good 8fa590bf344816c925810331eea8387627bbeb40
->>>> # good: [4f292c4de4f6fb83776c0ff22674121eb6ddfa2f] Merge tag
->>>> 'x86_mm_for_6.2_v2' of
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->>>> git bisect good 4f292c4de4f6fb83776c0ff22674121eb6ddfa2f
->>>> # bad: [1ea9d333ba475041efe43d9d9bc32e64aea2ea2b] Merge tag
->>>> 'mm-stable-2022-12-17-2' of
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>>> git bisect bad 1ea9d333ba475041efe43d9d9bc32e64aea2ea2b
->>>> # bad: [56a61617dd2276cbc56a6c868599716386d70041] mm: use
->>> stack_depot
->>>> for recording kmemleak's backtrace git bisect bad
->>>> 56a61617dd2276cbc56a6c868599716386d70041
->>>> # good: [61b963b52f59524e27692bc1c14bfb2459e32eb3] mm/gup_test:
->>> free
->>>> memory allocated via kvcalloc() using kvfree() git bisect good
->>>> 61b963b52f59524e27692bc1c14bfb2459e32eb3
->>>> # first bad commit: [56a61617dd2276cbc56a6c868599716386d70041] mm:
->>> use
->>>> stack_depot for recording kmemleak's backtrace # good:
->>>> [9102b78b6f6ae6af3557114c265c266b312c1319] maple_tree: update
->>>> copyright dates for test code git bisect good
->>>> 9102b78b6f6ae6af3557114c265c266b312c1319
->>>> # first bad commit: [56a61617dd2276cbc56a6c868599716386d70041] mm:
->>> use
->>>> stack_depot for recording kmemleak's backtrace You have mail in
->>>> /var/mail/mtodorov mtodorov@domac:~/linux/kernel/linux_torvalds$
->>>>
->>>> The platform is 10TX000VCR
->>> (LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB)
->>>> running AlmaLinux 8.7 (CentOS clone) and BIOS M22KT49A.
->>>>
->>>> GCC used was:
->>>>
->>>> mtodorov@domac:~/linux/kernel/linux_torvalds$ gcc --version gcc
->>>> (Debian 8.3.0-6) 8.3.0 Copyright (C) 2018 Free Software Foundation,
->>>> Inc.
->>>> This is free software; see the source for copying conditions.  There
->>>> is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
->>> PARTICULAR PURPOSE.
->>>> mtodorov@domac:~/linux/kernel/linux_torvalds$
->>>>
->>>> Hope this helps.
->>>>
->>>> I lack the insight to pinpoint the exact fault in the patch.
->>>
->>> P.S.
->>>
->>> To further complicate things, on Ubuntu 22.10 Lenovo Ideapad 3 15ITL6
->>> laptop the kmemleak stack backtrace is printed correctly with the same
->>> kernels (but .deb instead of .rpm for the same build):
->>>
->>> unreferenced object 0xffff94ca88e042d0 (size 80):
->>>   comm "thermald", pid 768, jiffies 4294893592 (age 78581.504s)
->>>   hex dump (first 32 bytes):
->>>     00 00 00 00 00 00 00 00 0d 01 2d 00 00 00 00 00  ..........-.....
->>>     af 07 01 80 fd ac ff ff 00 00 00 00 00 00 00 00  ................
->>>   backtrace:
->>>     [<ffffffffa0dcb921>] slab_post_alloc_hook+0x91/0x320
->>>     [<ffffffffa0dcfb79>] kmem_cache_alloc+0x169/0x2f0
->>>     [<ffffffffa12b1def>] acpi_os_acquire_object+0x2c/0x32
->>>     [<ffffffffa12b1ea2>] acpi_ps_alloc_op+0x4a/0x99
->>>     [<ffffffffa12af5c8>] acpi_ps_get_next_arg+0x611/0x761
->>>     [<ffffffffa12afbbc>] acpi_ps_parse_loop+0x494/0x8d7
->>>     [<ffffffffa12b1434>] acpi_ps_parse_aml+0x1bb/0x561
->>>     [<ffffffffa12b24c8>] acpi_ps_execute_method+0x20f/0x2d5
->>>     [<ffffffffa12a7acf>] acpi_ns_evaluate+0x34d/0x4f3
->>>     [<ffffffffa12ad6a3>] acpi_evaluate_object+0x180/0x3ae
->>>     [<ffffffffa1269ca8>] acpi_run_osc+0x128/0x250
->>>     [<ffffffffc0bbb14f>] int3400_thermal_run_osc+0x6f/0xc0
->>> [int3400_thermal]
->>>     [<ffffffffc0bbb293>] current_uuid_store+0xe3/0x120 [int3400_thermal]
->>>     [<ffffffffa13b8ed4>] dev_attr_store+0x14/0x30
->>>     [<ffffffffa0ee0458>] sysfs_kf_write+0x38/0x50
->>>     [<ffffffffa0edf516>] kernfs_fop_write_iter+0x146/0x1d0 You have new
->>> mail in /var/mail/root root@marvin-IdeaPad-3-15ITL6:/home/marvin#
->>>
->>> Regards,
->>> Mirsad
->>
->> thanks for head up. Could you please help to check If CONFIG_STACKTRACE
->> and CONFIG_STACKDEPOT is enabled on the fault kernel?
-> Please try the patch below if the configs are right. I think it should be caused by the late ready for kmemleak
-> 
-> commit 556eb1927da99ab366e370d593fc32da946768c3
-> Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> Date:   Fri Jan 13 14:13:39 2023 +0800
-> 
->      mm: instroduce a flag to indicate stack_depot's ready
->      
->      try to solve the kmemleak's late ready issue.
-> 
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c index 762b91f..7eb24bc 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -216,6 +216,7 @@ struct kmemleak_object {  static int kmemleak_warning;
->   /* set if a fatal kmemleak error has occurred */  static int kmemleak_error;
-> +static int kmemleak_stadep_initialized;
->   
->   /* minimum and maximum address that may be valid pointers */  static unsigned long min_addr = ULONG_MAX; @@ -601,7 +602,7 @@ static noinline depot_stack_handle_t set_track_prepare(void)
->          unsigned long entries[MAX_TRACE];
->          unsigned int nr_entries;
->   
-> -       if (!kmemleak_initialized)
-> +       if (!kmemleak_stadep_initialized)
->                  return 0;
->          nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
->          trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT); @@ -2110,6 +2111,7 @@ void __init kmemleak_init(void)
->                  create_object((unsigned long)__start_ro_after_init,
->                                __end_ro_after_init - __start_ro_after_init,
->                                KMEMLEAK_GREY, GFP_ATOMIC);
-> +       kmemleak_stadep_initialized = 1;
->   }
 
-Hi, Zhaoyang,
+--=-VPz1AUbM/19UkYX6m/ao
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-Sorry, applied the patch and rebuilt, but it didn't work for me:
+TWl0cmUgYXNzaWduZWQgQ1ZFLTIwMjMtMjM1NTkgZm9yIHRoaXMuCgpPbiBUdWUsIDIwMjMtMDEt
+MTAgYXQgMTg6MzAgKzAxMDAsIFN6eW1vbiBIZWlkcmljaCB3cm90ZToKPiBTaW5jZSByZXNwbGVu
+IGFuZCByZXNwb2ZmcyBhcmUgc2lnbmVkIGludGVnZXJzIHN1ZmZpY2llbnRseQo+IGxhcmdlIHZh
+bHVlcyBvZiB1bnNpZ25lZCBpbnQgbGVuIGFuZCBvZmZzZXQgbWVtYmVycyBvZiBSTkRJUwo+IHJl
+c3BvbnNlIHdpbGwgcmVzdWx0IGluIG5lZ2F0aXZlIHZhbHVlcyBvZiBwcmlvciB2YXJpYWJsZXMu
+Cj4gVGhpcyBtYXkgYmUgdXRpbGl6ZWQgdG8gYnlwYXNzIGltcGxlbWVudGVkIHNlY3VyaXR5IGNo
+ZWNrcwo+IHRvIGVpdGhlciBleHRyYWN0IG1lbW9yeSBjb250ZW50cyBieSBtYW5pcHVsYXRpbmcg
+b2Zmc2V0IG9yCj4gb3ZlcmZsb3cgdGhlIGRhdGEgYnVmZmVyIHZpYSBtZW1jcHkgYnkgbWFuaXB1
+bGF0aW5nIGJvdGgKPiBvZmZzZXQgYW5kIGxlbi4KPiAKPiBBZGRpdGlvbmFsbHkgYXNzdXJlIHRo
+YXQgc3VtIG9mIHJlc3BsZW4gYW5kIHJlc3BvZmZzIGRvZXMgbm90Cj4gb3ZlcmZsb3cgc28gYnVm
+ZmVyIGJvdW5kYXJpZXMgYXJlIGtlcHQuCj4gCj4gRml4ZXM6IDgwZjhjNWI0MzRmOSAoInJuZGlz
+X3dsYW46IGNvcHkgb25seSB1c2VmdWwgZGF0YSBmcm9tCj4gcm5kaXNfY29tbWFuZCByZXNwb25k
+IikKPiBTaWduZWQtb2ZmLWJ5OiBTenltb24gSGVpZHJpY2ggPHN6eW1vbi5oZWlkcmljaEBnbWFp
+bC5jb20+Cj4gLS0tCj4gwqBkcml2ZXJzL25ldC93aXJlbGVzcy9ybmRpc193bGFuLmMgfCA0ICsr
+LS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4g
+Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JuZGlzX3dsYW4uYwo+IGIvZHJp
+dmVycy9uZXQvd2lyZWxlc3Mvcm5kaXNfd2xhbi5jCj4gaW5kZXggODJhNzQ1OGUwLi5kN2ZjMDUz
+MjggMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3Mvcm5kaXNfd2xhbi5jCj4gKysr
+IGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mvcm5kaXNfd2xhbi5jCj4gQEAgLTY5Nyw3ICs2OTcsNyBA
+QCBzdGF0aWMgaW50IHJuZGlzX3F1ZXJ5X29pZChzdHJ1Y3QgdXNibmV0ICpkZXYsCj4gdTMyIG9p
+ZCwgdm9pZCAqZGF0YSwgaW50ICpsZW4pCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBzdHJ1Y3Qgcm5kaXNfcXVlcnlfY8KgwqDCoMKgKmdldF9jOwo+IMKgwqDCoMKgwqDCoMKgwqB9
+IHU7Cj4gwqDCoMKgwqDCoMKgwqDCoGludCByZXQsIGJ1ZmxlbjsKPiAtwqDCoMKgwqDCoMKgwqBp
+bnQgcmVzcGxlbiwgcmVzcG9mZnMsIGNvcHlsZW47Cj4gK8KgwqDCoMKgwqDCoMKgdTMyIHJlc3Bs
+ZW4sIHJlc3BvZmZzLCBjb3B5bGVuOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGJ1ZmxlbiA9ICps
+ZW4gKyBzaXplb2YoKnUuZ2V0KTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKGJ1ZmxlbiA8IENPTlRS
+T0xfQlVGRkVSX1NJWkUpCj4gQEAgLTc0MCw3ICs3NDAsNyBAQCBzdGF0aWMgaW50IHJuZGlzX3F1
+ZXJ5X29pZChzdHJ1Y3QgdXNibmV0ICpkZXYsCj4gdTMyIG9pZCwgdm9pZCAqZGF0YSwgaW50ICps
+ZW4pCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290
+byBleGl0X3VubG9jazsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KPiDCoAo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoKHJlc3BsZW4gKyByZXNwb2Zmcykg
+PiBidWZsZW4pIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJlc3BsZW4g
+PiAoYnVmbGVuIC0gcmVzcG9mZnMpKSB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgLyogRGV2aWNlIHdvdWxkIGhhdmUgcmV0dXJuZWQgbW9yZSBkYXRh
+IGlmCj4gYnVmZmVyIHdvdWxkCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgICogaGF2ZSBiZWVuIGJpZyBlbm91Z2guIENvcHkganVzdCB0aGUgYml0cwo+
+IHRoYXQgd2UgZ290Lgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAqLwoK
 
-[root@pc-mtodorov marvin]# uname -rms
-Linux 6.2.0-rc3-mglru-kmemlk-patch-zhaoyang1+ x86_64
-[root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak
-[root@pc-mtodorov marvin]# echo scan | tee !$
-echo scan | tee /sys/kernel/debug/kmemleak
-scan
-[root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak
-unreferenced object 0xffff98938fed1ee0 (size 16):
-   comm "kworker/u12:2", pid 57, jiffies 4294894053 (age 66.616s)
-   hex dump (first 16 bytes):
-     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00  memstick0.......
-   backtrace:
-[root@pc-mtodorov marvin]#
 
-Still the stack backtrace list is severed.
-CONFIG_STACKDEPOT and CONFIG_STACKTRACE are both "=y":
+--=-VPz1AUbM/19UkYX6m/ao
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
-[root@pc-mtodorov marvin]# grep -E 'CONFIG_(STACKTRACE|STACKDEPOT)' /boot/config-6.2.0-rc3-mglru-kmemlk-patch-zhaoyang1+
-CONFIG_STACKTRACE_SUPPORT=y
-CONFIG_STACKDEPOT=y
-# CONFIG_STACKTRACE_BUILD_ID is not set
-CONFIG_STACKTRACE=y
-[root@pc-mtodorov marvin]#
+-----BEGIN PGP SIGNATURE-----
 
-Your patch was successfully applied (after some tweaks):
+iQIzBAABCAAdFiEEWHPP0YwOptScu/bEBioQFhUFoIoFAmPBGYAACgkQBioQFhUF
+oIq8Fw/7B0kVO8rQxfWzvp1yuDw5oZzC7LfD+HqZA+YuXPFVXN14QADsJ3In8pqY
+xm212/XkTvexbrERAn/G9YsdaBTqLd8ewZu26Jv8qX2dsCv/TB2+3bNcmNd4LjBI
+zE3IQkHZ2qfNHjjfJE4smlvB0xzdlDCzTSHsFMvWVkhDbsxmKtzT5nMUhBKLLTxi
+xa+MBrBDk6D+O/XVo1K0iqAQ1yYBa+gja3Eri1Grr94KlIZV4WndqjzhuBGNRqH3
+qDxtimX02jtO8hNuIAVHBOlVsrR5HhDLNf98LPynmoNP6e+q7grKSzS2AeXxCJpc
+UfTy1x4ble2rQSluMQMvQsV8ljp5Gq1ZD5hZF3xWn+t4UV8zVWeekTXdIvpCQkWL
+MlcBnRhKpTeq8QB/jlHMb9ca/IbYb6/TQcOUaEjl2ArZS9/hmPfbpZsUqnqaj/gF
+AlMejXU9jJvGjv9K/30lRwwc0suRvx74RE80/2OaPHtDulIQNQcZ/oykPFlucHNa
++/tE8+GANHzZMbd0FeW4UTeiqPC1UeiBnu0le/zyRaxoOWBAH4se2iJ4Ze/nDUi/
+JW6v0AfY5JZjV0P39PZ8e7E8eouZkIf/9/E3iSbNyol+VtqzyInGjo+9IwVZXzo+
+U4XL9M2JdBl5LxISS0YW3UwUWB8Muurts2oqaV/ZCaPnC6Kazhk=
+=ktM3
+-----END PGP SIGNATURE-----
 
-mtodorov@domac:~/linux/kernel/linux_torvalds$ git diff mm
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 92f670edbf51..78fd3b89b057 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -216,6 +216,7 @@ static int kmemleak_initialized;
-  static int kmemleak_warning;
-  /* set if a fatal kmemleak error has occurred */
-  static int kmemleak_error;
-+static int kmemleak_stadep_initialized;
-
-  /* minimum and maximum address that may be valid pointers */
-  static unsigned long min_addr = ULONG_MAX;
-@@ -601,7 +602,7 @@ static noinline depot_stack_handle_t set_track_prepare(void)
-         unsigned long entries[MAX_TRACE];
-         unsigned int nr_entries;
-
--       if (!kmemleak_initialized)
-+       if (!kmemleak_stadep_initialized)
-                 return 0;
-         nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
-         trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
-@@ -2110,6 +2111,7 @@ void __init kmemleak_init(void)
-                 create_object((unsigned long)__start_ro_after_init,
-                               __end_ro_after_init - __start_ro_after_init,
-                               KMEMLEAK_GREY, GFP_ATOMIC);
-+       kmemleak_stadep_initialized = 1;
-  }
-
-  /*
-mtodorov@domac:~/linux/kernel/linux_torvalds$
-
-Please verify that the above is correct.
-
-Regards,
-Mirsad
-
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
---
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+--=-VPz1AUbM/19UkYX6m/ao--
