@@ -2,242 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8AA66A746
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7868166A749
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjAMX4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S231217AbjAMX5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjAMX4h (ORCPT
+        with ESMTP id S231142AbjAMX5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:56:37 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CEE7466F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:56:36 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 141so16041572pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:56:36 -0800 (PST)
+        Fri, 13 Jan 2023 18:57:38 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46011869DC;
+        Fri, 13 Jan 2023 15:57:37 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id fd15so10494091qtb.9;
+        Fri, 13 Jan 2023 15:57:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HBRAbkUwcVHYnpIoYhFS8Gcgp00+RQqgzwfjMcTRfn8=;
-        b=CBsLcSyAmbSqlhmELttzLHiRFV0Pbee815YWapJN6gF0sd2nxMN5ceXTUwfPWY1vb6
-         tQQUO8D+NzkbrARK/MSF+73CIpPAtT7QqL2Di6XBOZcjUCUevQh67WapL9qMwFjKqkIJ
-         ZHcoRYRPJ2BuMgAhKxtLI4kUOmqUNo1orQW1k=
+         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=04WipWzvi3fgLXeN3WQIiUmtsXJgHxnpbmFiZjQ6EeQ=;
+        b=QBxD6UJhEwCxoDKZHBBFwJseq/TT/58ZrBsDNTfB8TXXX28Tuj328/Z2O1fxlpawwH
+         2ihQbx9jlf3Y/qBAS3f+Dv6WbLc16s3OqYHBZiq5U0cQUVCGcF2pAYsStqHBUhQq+xiR
+         ypkQxW5NXD1p5hjXXTApSd8kZuABF6v2Ulgpa6OvARuQcqbcBaV4y9ruz9EnVjUTJAXC
+         5QEhd1x8mr8KKPBK6bW4K7Pz6hR1ASB0GMr5NXSZDF2vDfNTC3cC10L5oBLNrg5xV5yQ
+         BnW+AZF4jHQbFKWgypUlv5hgWpgYQc2d4iWO9UHSXWEgX5/ugL0Xkze0QWCsRjDSAeg+
+         RYLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HBRAbkUwcVHYnpIoYhFS8Gcgp00+RQqgzwfjMcTRfn8=;
-        b=jUn2Vvf2kDAN53FIMDjsaYE5SvqgiYYGWwl5IK9GoGXz+JwS/u4WyfWdKNPyNWImNF
-         f8dt/iOggA5CzF6GWTxvjCcbw9EyZe4C7j8qw81WferVsUTkUjK71zRyCyqu702ZSmfr
-         3r+qSaDPMboLALHF6+TkOO+sxY6rr+tKxjee4W8OoFqDbrsvsMGZ485r3dY53Y5ArW7J
-         uT+k3AKFjo7orqpM3wF5905Z2qsRnTEbooIoT4rdqmJxw2ez+cLSyOkQidLqsgjZuJ0F
-         l2DDZHK+UefRrMm9BAM69NwfeXI/HiO0Kxn5ePKQEs0U4LLvqycJZgmgIQk8nFyJuQAT
-         v73A==
-X-Gm-Message-State: AFqh2kpstvfX1fIR0T/7IaC2g3BBcK4y8zLNOuxw2QdlbvtgmEKopJAg
-        GyCjRP37Eksd3Yy/rOsi51IVW7uC0Je++XFh
-X-Google-Smtp-Source: AMrXdXuomsdDatJcgff6JJQdXFgh43w+wzL4U0XQAyLogqR8FHf1P6mgKPSLl8kF4/dLARQ97ol6+w==
-X-Received: by 2002:a62:1693:0:b0:583:9b05:d1f0 with SMTP id 141-20020a621693000000b005839b05d1f0mr25361391pfw.33.1673654196266;
-        Fri, 13 Jan 2023 15:56:36 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:b4ad:3c49:1195:a01e])
-        by smtp.gmail.com with ESMTPSA id f10-20020aa79d8a000000b005823b7da05asm10002737pfq.122.2023.01.13.15.56.34
+         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=04WipWzvi3fgLXeN3WQIiUmtsXJgHxnpbmFiZjQ6EeQ=;
+        b=DIeARyEQkPBa4gRl4FdOfwXCRNTxwHwnij8PAWfO+M9b3M3/+BRjd45m6AUwTHUx8Y
+         Z6ncx+qHUnYjayOeyoHjJQZMN9NT9gsqt7O7fzG+PpUHeHZrNgnkQX5X01mLpVUAhB7x
+         mKcvFhwmyLoIHxF34Kc6lMUmG2iJMgNN9um7F/VzepWZ7AnKfCmwRtZT1+JcNK8IGhTM
+         bvm2xzExalZjNmKGzEQ7HApdfimWHOck827k9cNCEuJjSHLR6kmM8CQAorNa0PbQr7El
+         FmyKSZwKXd4nfqFcIrl8vwsxxh6skozGnXupynOsQt2LuyIBR79qM/JjOCeDfuwfVaVo
+         QR2A==
+X-Gm-Message-State: AFqh2kpb/X/ZTU713wO/Y43ghk1bDMt5rgmW4/QMnAsk8H9DyVguFDhU
+        giuUeTpE2KU42QCaUXkc7eU=
+X-Google-Smtp-Source: AMrXdXu4QLs5zM7t68JijViTTXpRKsMlqQVVej1K4Dq7BJ1vqtn9igYcToVOW9xPrM3isTtKzkFypQ==
+X-Received: by 2002:ac8:6755:0:b0:3b1:546e:e6b6 with SMTP id n21-20020ac86755000000b003b1546ee6b6mr12854568qtp.35.1673654256400;
+        Fri, 13 Jan 2023 15:57:36 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id d12-20020a05620a240c00b006fcc3858044sm13953432qkn.86.2023.01.13.15.57.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 15:56:35 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [RFT PATCH 2/2] drm/msm/dsi: Stop unconditionally powering up DSI hosts at modeset
-Date:   Fri, 13 Jan 2023 15:56:04 -0800
-Message-Id: <20230113155547.RFT.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230113155547.RFT.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
-References: <20230113155547.RFT.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
+        Fri, 13 Jan 2023 15:57:33 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0873E27C0054;
+        Fri, 13 Jan 2023 18:57:32 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 13 Jan 2023 18:57:33 -0500
+X-ME-Sender: <xms:7O_BY51Ue0qj6M9-j2f1LMSILgt4pQhNnz8yFA_Vf9l6datDtMNgFw>
+    <xme:7O_BYwExOvNVe9InD66U0vRt2OyXxqkcxZOuGEPUwCyhBCCboEZ-GvaApXY2WKyTX
+    tSbWTelUSG3y3MKKg>
+X-ME-Received: <xmr:7O_BY54bGtpisgWMPl6sjDUR4e-wG9fNSNgjU-XmG0J4Eda6UeKUlhzBeOo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleelgddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepgeeljeeitdehvdehgefgjeevfeejjeekgfevffeiueejhfeuiefggeeuheeg
+    gefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:7O_BY20ieRCA9QSFYbShpwdK2QmiAFFTv38axVVArepg0IxcwvFDBA>
+    <xmx:7O_BY8FaQVeEolybmZaOOjrOyKocQTDauvw7EVxbIPuA0ldiyIAXTQ>
+    <xmx:7O_BY3-mL2fj1rHtfW9Ituc3WxKr2YPM9E_cO9B-ma5DXSlAzL1THQ>
+    <xmx:7O_BYxKyRk9Vixay-ess8fIBrdss39flZdvTB9yUJOuWsS-huTB-XA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Jan 2023 18:57:31 -0500 (EST)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH 4/3] locking/lockdep: Improve the deadlock scenario print for sync and read lock
+Date:   Fri, 13 Jan 2023 15:57:22 -0800
+Message-Id: <20230113235722.1226525-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230113065955.815667-1-boqun.feng@gmail.com>
+References: <20230113065955.815667-1-boqun.feng@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
-time"), we moved powering up DSI hosts to modeset time. This wasn't
-because it was an elegant design, but there were no better options.
+Lock scenario print is always a weak spot of lockdep splats. Improvement
+can be made if we rework the dependency search and the error printing.
 
-That commit actually ended up breaking ps8640, and thus was born
-commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time for
-parade-ps8640") as a temporary hack to un-break ps8640 by moving it to
-the old way of doing things. It turns out that ps8640 _really_ doesn't
-like its pre_enable() function to be called after
-dsi_mgr_bridge_power_on(). Specifically (from experimentation, not
-because I have any inside knowledge), it looks like the assertion of
-"RST#" in the ps8640 runtime resume handler seems like it's not
-allowed to happen after dsi_mgr_bridge_power_on()
+However without touching the graph search, we can improve a little for
+the circular deadlock case, since we have the to-be-added lock
+dependency, and know whether these two locks are read/write/sync.
 
-Recently, Dave Stevenson's series landed allowing bridges some control
-over pre_enable ordering. The meaty commit for our purposes is commit
-4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter
-bridge init order"). As documented by that series, if a bridge doesn't
-set "pre_enable_prev_first" then we should use the old ordering.
+In order to know whether a held_lock is sync or not, a bit was
+"stolen" from ->references, which reduce our limit for the same lock
+class nesting from 2^12 to 2^11, and it should still be good enough.
 
-Now that we have the commit ("drm/bridge: tc358762: Set
-pre_enable_prev_first") we can go back to the old ordering, which also
-allows us to remove the ps8640 special case.
+Besides, since we now have bit in held_lock for sync, we don't need the
+"hardirqoffs being 1" trick, and also we can avoid the __lock_release()
+if we jump out of __lock_acquire() before the held_lock stored.
 
-One last note is that even without reverting commit 7d8e9a90509f
-("drm/msm/dsi: move DSI host powerup to modeset time"), if you _just_
-revert the ps8640 special case and try it out then it doesn't seem to
-fail anymore. I spent time bisecting / debugging this and it turns out
-to be mostly luck, so we still want this patch to make sure it's
-solid. Specifically the reason it sorta works these days is because
-we implemented wait_hpd_asserted() in ps8640 now, plus the magic of
-"pm_runtime" autosuspend. The fact that we have wait_hpd_asserted()
-implemented means that we actually power the bridge chip up just a wee
-bit earlier and then the bridge happens to stay on because of
-autosuspend and thus ends up powered before dsi_mgr_bridge_power_on().
+With these changes, a deadlock case evolved with read lock and sync gets
+a better print-out from:
 
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+	[...]  Possible unsafe locking scenario:
+	[...]
+	[...]        CPU0                    CPU1
+	[...]        ----                    ----
+	[...]   lock(srcuA);
+	[...]                                lock(srcuB);
+	[...]                                lock(srcuA);
+	[...]   lock(srcuB);
+
+to
+
+	[...]  Possible unsafe locking scenario:
+	[...]
+	[...]        CPU0                    CPU1
+	[...]        ----                    ----
+	[...]   rlock(srcuA);
+	[...]                                lock(srcuB);
+	[...]                                lock(srcuA);
+	[...]   sync(srcuB);
+
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
+ include/linux/lockdep.h  |  3 ++-
+ kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
+ 2 files changed, 34 insertions(+), 17 deletions(-)
 
- drivers/gpu/drm/msm/dsi/dsi_manager.c | 68 +++++----------------------
- 1 file changed, 11 insertions(+), 57 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-index 3a1417397283..5e6b8d423b96 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-@@ -34,32 +34,6 @@ static struct msm_dsi_manager msm_dsim_glb;
- #define IS_SYNC_NEEDED()	(msm_dsim_glb.is_sync_needed)
- #define IS_MASTER_DSI_LINK(id)	(msm_dsim_glb.master_dsi_link_id == id)
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index ba09df6a0872..febd7ecc225c 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -134,7 +134,8 @@ struct held_lock {
+ 	unsigned int read:2;        /* see lock_acquire() comment */
+ 	unsigned int check:1;       /* see lock_acquire() comment */
+ 	unsigned int hardirqs_off:1;
+-	unsigned int references:12;					/* 32 bits */
++	unsigned int sync:1;
++	unsigned int references:11;					/* 32 bits */
+ 	unsigned int pin_count;
+ };
  
--#ifdef CONFIG_OF
--static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
--{
--	struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
--
--	/*
--	 * If the next bridge in the chain is the Parade ps8640 bridge chip
--	 * then don't power on early since it seems to violate the expectations
--	 * of the firmware that the bridge chip is running.
--	 *
--	 * NOTE: this is expected to be a temporary special case. It's expected
--	 * that we'll eventually have a framework that allows the next level
--	 * bridge to indicate whether it needs us to power on before it or
--	 * after it. When that framework is in place then we'll use it and
--	 * remove this special case.
--	 */
--	return !(next_bridge && next_bridge->of_node &&
--		 of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
--}
--#else
--static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
--{
--	return true;
--}
--#endif
--
- static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
- {
- 	return msm_dsim_glb.dsi[id];
-@@ -254,7 +228,7 @@ static void msm_dsi_manager_set_split_display(u8 id)
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index cffa026a765f..4031d87f6829 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -1880,6 +1880,8 @@ print_circular_lock_scenario(struct held_lock *src,
+ 	struct lock_class *source = hlock_class(src);
+ 	struct lock_class *target = hlock_class(tgt);
+ 	struct lock_class *parent = prt->class;
++	int src_read = src->read;
++	int tgt_read = tgt->read;
+ 
+ 	/*
+ 	 * A direct locking problem where unsafe_class lock is taken
+@@ -1907,7 +1909,10 @@ print_circular_lock_scenario(struct held_lock *src,
+ 	printk(" Possible unsafe locking scenario:\n\n");
+ 	printk("       CPU0                    CPU1\n");
+ 	printk("       ----                    ----\n");
+-	printk("  lock(");
++	if (tgt_read != 0)
++		printk("  rlock(");
++	else
++		printk("  lock(");
+ 	__print_lock_name(target);
+ 	printk(KERN_CONT ");\n");
+ 	printk("                               lock(");
+@@ -1916,7 +1921,12 @@ print_circular_lock_scenario(struct held_lock *src,
+ 	printk("                               lock(");
+ 	__print_lock_name(target);
+ 	printk(KERN_CONT ");\n");
+-	printk("  lock(");
++	if (src_read != 0)
++		printk("  rlock(");
++	else if (src->sync)
++		printk("  sync(");
++	else
++		printk("  lock(");
+ 	__print_lock_name(source);
+ 	printk(KERN_CONT ");\n");
+ 	printk("\n *** DEADLOCK ***\n\n");
+@@ -4530,7 +4540,13 @@ mark_usage(struct task_struct *curr, struct held_lock *hlock, int check)
+ 					return 0;
+ 		}
  	}
- }
- 
--static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
-+static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
+-	if (!hlock->hardirqs_off) {
++
++	/*
++	 * For lock_sync(), don't mark the ENABLED usage, since lock_sync()
++	 * creates no critical section and no extra dependency can be introduced
++	 * by interrupts
++	 */
++	if (!hlock->hardirqs_off && !hlock->sync) {
+ 		if (hlock->read) {
+ 			if (!mark_lock(curr, hlock,
+ 					LOCK_ENABLED_HARDIRQ_READ))
+@@ -4909,7 +4925,7 @@ static int __lock_is_held(const struct lockdep_map *lock, int read);
+ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+ 			  int trylock, int read, int check, int hardirqs_off,
+ 			  struct lockdep_map *nest_lock, unsigned long ip,
+-			  int references, int pin_count)
++			  int references, int pin_count, int sync)
  {
- 	int id = dsi_mgr_bridge_get_id(bridge);
- 	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
-@@ -300,36 +274,10 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
- 	if (is_bonded_dsi && msm_dsi1)
- 		msm_dsi_host_enable_irq(msm_dsi1->host);
+ 	struct task_struct *curr = current;
+ 	struct lock_class *class = NULL;
+@@ -4960,7 +4976,8 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
  
--	return;
--
--host1_on_fail:
--	msm_dsi_host_power_off(host);
--host_on_fail:
--	dsi_mgr_phy_disable(id);
--phy_en_fail:
--	return;
--}
--
--static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
--{
--	int id = dsi_mgr_bridge_get_id(bridge);
--	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
--	struct msm_dsi *msm_dsi1 = dsi_mgr_get_dsi(DSI_1);
--	struct mipi_dsi_host *host = msm_dsi->host;
--	bool is_bonded_dsi = IS_BONDED_DSI();
--	int ret;
--
--	DBG("id=%d", id);
--	if (!msm_dsi_device_connected(msm_dsi))
--		return;
--
- 	/* Do nothing with the host if it is slave-DSI in case of bonded DSI */
- 	if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
- 		return;
+ 	class_idx = class - lock_classes;
  
--	if (!dsi_mgr_power_on_early(bridge))
--		dsi_mgr_bridge_power_on(bridge);
--
- 	ret = msm_dsi_host_enable(host);
- 	if (ret) {
- 		pr_err("%s: enable host %d failed, %d\n", __func__, id, ret);
-@@ -349,7 +297,16 @@ static void dsi_mgr_bridge_pre_enable(struct drm_bridge *bridge)
- host1_en_fail:
- 	msm_dsi_host_disable(host);
- host_en_fail:
--
-+	msm_dsi_host_disable_irq(host);
-+	if (is_bonded_dsi && msm_dsi1) {
-+		msm_dsi_host_disable_irq(msm_dsi1->host);
-+		msm_dsi_host_power_off(msm_dsi1->host);
-+	}
-+host1_on_fail:
-+	msm_dsi_host_power_off(host);
-+host_on_fail:
-+	dsi_mgr_phy_disable(id);
-+phy_en_fail:
- 	return;
+-	if (depth) { /* we're holding locks */
++	if (depth && !sync) {
++		/* we're holding locks and the new held lock is not a sync */
+ 		hlock = curr->held_locks + depth - 1;
+ 		if (hlock->class_idx == class_idx && nest_lock) {
+ 			if (!references)
+@@ -4994,6 +5011,7 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+ 	hlock->trylock = trylock;
+ 	hlock->read = read;
+ 	hlock->check = check;
++	hlock->sync = !!sync;
+ 	hlock->hardirqs_off = !!hardirqs_off;
+ 	hlock->references = references;
+ #ifdef CONFIG_LOCK_STAT
+@@ -5055,6 +5073,10 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+ 	if (!validate_chain(curr, hlock, chain_head, chain_key))
+ 		return 0;
+ 
++	/* For lock_sync(), we are done here since no actual critical section */
++	if (hlock->sync)
++		return 1;
++
+ 	curr->curr_chain_key = chain_key;
+ 	curr->lockdep_depth++;
+ 	check_chain_key(curr);
+@@ -5196,7 +5218,7 @@ static int reacquire_held_locks(struct task_struct *curr, unsigned int depth,
+ 				    hlock->read, hlock->check,
+ 				    hlock->hardirqs_off,
+ 				    hlock->nest_lock, hlock->acquire_ip,
+-				    hlock->references, hlock->pin_count)) {
++				    hlock->references, hlock->pin_count, 0)) {
+ 		case 0:
+ 			return 1;
+ 		case 1:
+@@ -5666,7 +5688,7 @@ void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+ 
+ 	lockdep_recursion_inc();
+ 	__lock_acquire(lock, subclass, trylock, read, check,
+-		       irqs_disabled_flags(flags), nest_lock, ip, 0, 0);
++		       irqs_disabled_flags(flags), nest_lock, ip, 0, 0, 0);
+ 	lockdep_recursion_finish();
+ 	raw_local_irq_restore(flags);
  }
+@@ -5699,11 +5721,6 @@ EXPORT_SYMBOL_GPL(lock_release);
+  * APIs are used to wait for one or multiple critical sections (on other CPUs
+  * or threads), and it means that calling these APIs inside these critical
+  * sections is potential deadlock.
+- *
+- * This annotation acts as an acqurie+release anontation pair with hardirqoff
+- * being 1. Since there's no critical section, no interrupt can create extra
+- * dependencies "inside" the annotation, hardirqoff == 1 allows us to avoid
+- * false positives.
+  */
+ void lock_sync(struct lockdep_map *lock, unsigned subclass, int read,
+ 	       int check, struct lockdep_map *nest_lock, unsigned long ip)
+@@ -5717,10 +5734,9 @@ void lock_sync(struct lockdep_map *lock, unsigned subclass, int read,
+ 	check_flags(flags);
  
-@@ -438,9 +395,6 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
- 	msm_dsi_host_set_display_mode(host, adjusted_mode);
- 	if (is_bonded_dsi && other_dsi)
- 		msm_dsi_host_set_display_mode(other_dsi->host, adjusted_mode);
+ 	lockdep_recursion_inc();
+-	__lock_acquire(lock, subclass, 0, read, check, 1, nest_lock, ip, 0, 0);
 -
--	if (dsi_mgr_power_on_early(bridge))
--		dsi_mgr_bridge_power_on(bridge);
+-	if (__lock_release(lock, ip))
+-		check_chain_key(current);
++	__lock_acquire(lock, subclass, 0, read, check,
++		       irqs_disabled_flags(flags), nest_lock, ip, 0, 0, 1);
++	check_chain_key(current);
+ 	lockdep_recursion_finish();
+ 	raw_local_irq_restore(flags);
  }
- 
- static enum drm_mode_status dsi_mgr_bridge_mode_valid(struct drm_bridge *bridge,
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.38.1
 
