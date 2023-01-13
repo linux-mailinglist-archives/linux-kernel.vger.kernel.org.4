@@ -2,60 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5FA66A582
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C7066A58C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjAMV4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S231182AbjAMWBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 17:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjAMV4t (ORCPT
+        with ESMTP id S230303AbjAMWBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:56:49 -0500
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21798892CD;
-        Fri, 13 Jan 2023 13:56:49 -0800 (PST)
-Received: by mail-vk1-f180.google.com with SMTP id q141so8201821vkb.13;
-        Fri, 13 Jan 2023 13:56:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cn5WaIR2kYHfvSAn6aGjThopDJINdcdLaEEO7lYUz7s=;
-        b=jt3l9jzeq4haX5c4B8Vtb7v7kpt2w3BctPHaRmBcSCqTdwF2h7ZilY696eylJx0Rr8
-         o3SOOgmAjWnGtJij2Q9aEmERh656Liz2UYVxM0hHkSVoRm/VYnOEW5A2JpMRc7ajkEuc
-         YIlFevLxxUnEUr3hnygom6EziZUX16lDj687SlSdrJnmF9oE6FSqrqVyZFw167N2kWtu
-         KMc+wluMwt3aDeY/wmmIiluO7nK+Vf54T1MQ35qjsWOU/zVlrFaPkvRmqvghmOgDPbVy
-         HdewqsS+u9zIOHgqxVw41FOO8zkPDB+fMDE+oukXJA4UrvO0J3RiIhEEka2Nd08ZNls0
-         SrSw==
-X-Gm-Message-State: AFqh2kqfewquwT0J+AtyW+WXNpcii1DOwoqitYFxMj0UH4UsK+Dref0d
-        PJR6vlZIbcW3qmpUVfZ/+lALfrxvNiC21MWFmoF+pDwg
-X-Google-Smtp-Source: AMrXdXsyz01JvYnrA7ongeX2V/NY8FwJtxhNN6Gq7WoTmKfST4Yz2gOETp14D6rsA56A9zPBSZXYdfUuKmK5T9r+8Z4=
-X-Received: by 2002:a05:6122:d9e:b0:3d5:3ee8:6603 with SMTP id
- bc30-20020a0561220d9e00b003d53ee86603mr9014889vkb.7.1673647008141; Fri, 13
- Jan 2023 13:56:48 -0800 (PST)
+        Fri, 13 Jan 2023 17:01:47 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D908EE33;
+        Fri, 13 Jan 2023 14:01:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VUf3Fxi5zWHcblZuzg5+7dLwG7dZ1Rk2GClCH2GsdnJsN3YYxKD+idAAi+gRuJrG+uVEFdMOldvq3fGAl1+57MApqrQ9xvVt6iCinvCqlaefIFCUYUFY91Y5Y6bPSVDp9Ro2O6RPsqO80RsRNJMSYmsGBd8fjRz0b/HzglRF3BM3OaMOHXYtTD60xWCLvHMmg6EgBN3GT7M8AAkLO+J/AyAbzHWrBfJSvxav/6+D8JxXgfyKITcXBluVel6qARJDmevZVwudFvfs0rjQiBOPhON/4bKHY588P4kNq7ugjszjl79YmxFVUxwLbhbjCu5fsfdML3tHZT7hc/9wvTLrnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=umEPoImhx6JKpXbCpuifViAM++7+QEfHv252ZYY+oLw=;
+ b=Gqa6sZZD8I/+8lJ5j35AKvnqG+4J3dR1PPfckg2rPNotUzTpSr6edHp8YnK9+KNkYYErTc3pig9TcM3Onw+yl+7yhqhrOlaD4jAjUnrhqWgTl8r3SLa8U2EWbDK1t4p2VJ6VYEGSauiZCwHkzBFsDS7XxGku+YkQAnV7XPBAWMOX9Tb724b0oWiTJe9F0/qgqA1Yd9FwgierrOnv1kf9CefD1i5bFQgOPAkfjrpSHqBniZU4opb+ZIAqjFVeEJgEVFTXWZrzytmW5HIbDD/PRznDvS6TMK2UCPK5sciGKt8idhX9CJh3vt5WBX6lmW7y/kZ64DiYYK+FKV5Q+Al1fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=umEPoImhx6JKpXbCpuifViAM++7+QEfHv252ZYY+oLw=;
+ b=pSozt6YPYsNiSN9Q4zGXitaXC0VQs9dPD/B6WLGYTkzhx8EdEe1RPK8mt6MApR2B7VjTfZW9KUS8Jdw6Xn+k8aKnGo1rlflcoru+M7qVFKVFHHpCVAtJz0yjamQktfB5NubZTzJkzOGsRq+cMF80cn0RixKSoSI9OVp1lPpWqy0M6YNq/2oURiC+AS7p0ygb29yxyCWvPR6nkxXuZA++9oaB9nBuq8qObOwJSJ/SEZr3jWKNrX5RCU8ujuqCSyh/CU9Lt15FDyqYA8ZogPuhr+Aq1ryTbheQdCCLTOhLs9OKcmh5CQHAfaIN+01+/eYtNoR8qQkFylQy751n44MA5w==
+Received: from DM6PR01CA0004.prod.exchangelabs.com (2603:10b6:5:296::9) by
+ MW4PR12MB5642.namprd12.prod.outlook.com (2603:10b6:303:187::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5986.18; Fri, 13 Jan 2023 22:01:43 +0000
+Received: from DM6NAM11FT087.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:296:cafe::59) by DM6PR01CA0004.outlook.office365.com
+ (2603:10b6:5:296::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.16 via Frontend
+ Transport; Fri, 13 Jan 2023 22:01:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT087.mail.protection.outlook.com (10.13.172.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 22:01:42 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 14:01:34 -0800
+Received: from dvt1-1.nvidia.com (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 14:01:33 -0800
+From:   Kechen Lu <kechenl@nvidia.com>
+To:     <kvm@vger.kernel.org>, <seanjc@google.com>, <pbonzini@redhat.com>
+CC:     <chao.gao@intel.com>, <shaoqin.huang@intel.com>,
+        <vkuznets@redhat.com>, <kechenl@nvidia.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v5 0/6] KVM: x86: add per-vCPU exits disable capability
+Date:   Fri, 13 Jan 2023 22:01:08 +0000
+Message-ID: <20230113220114.2437-1-kechenl@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230112214015.1014857-1-namhyung@kernel.org> <20230112214015.1014857-4-namhyung@kernel.org>
- <CAPhsuW71GHAayZmGFfSrpCARiD3YEO1C8QBy1cc1ZEuSFJB=sA@mail.gmail.com>
-In-Reply-To: <CAPhsuW71GHAayZmGFfSrpCARiD3YEO1C8QBy1cc1ZEuSFJB=sA@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 13 Jan 2023 13:56:36 -0800
-Message-ID: <CAM9d7ciPAocvOvspzfrq2hym-u2+Fbg2A6WJhOQqxwG7CGiuJg@mail.gmail.com>
-Subject: Re: [PATCH 3/8] perf/core: Add perf_sample_save_raw_data() helper
-To:     Song Liu <song@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-s390@vger.kernel.org,
-        x86@kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT087:EE_|MW4PR12MB5642:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93c589de-666d-4f88-2e6f-08daf5b1c169
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RPuW2GqkPS2bYxufV5ir8FWL0dAqw380VI9Lzak32nIK8KgmBmtYe5VTUaK3Uvq1P5Ye/NfAIuNnld+GQq1X5yGjWzvK8krY6Sg2Y9bbIRW/NQS5/0hgBTBewPcBGzK2PgwV93rpBSKPWPx2kho/rIfTS3XEVaDsR8NjQsZeg4j31cHLdpK0ckAS1lpCj/3K8NmYGbNanvndSySRawyO2fAMSrZh5hGYX5bY5IrGr+Hu1Y7KkbZrH/5frI5UGMH3ZhyLdZCTXUYw22qEEghV2gfD/toYivi5XFgAoyMpZnO5QE8X0KpXwK8jWaHD/J/T03+17N69jW/jb5IqgqHZ6YCDYrreIG30JKNQ+YgGOhCuNx6A5LnbVrf0HQ32KB+7wQ3zHC/g7QCI6OPo2MC5jNnNzuMqOq7q13xCUiPFxoxrrg9bbSeMQfYM7ECe4zZp8vyuHuKCvJLGnAQh5N0RZE8kOmH2a+BkA/blQjCFhyvbD/kS5fFMAj53QWYnv9u2FB2pTF8DBY2MaoQEaRoDBOXc0oIRwPM8fymPqst2O2kNR4eQsz+Tj2hp1WKP29DmQIYwSgWd63XG2yscH9JwrX2CgHnaKswXHPAALSzQMYHYWJn6fQrVXe0oLSV4YpdS/yhJC4tJRcMe3WPdsHCZdQEz80ppzMyqoLNJUduAFtKNhzETQ68En3QMDK6p+3wcIP52E/Jm9AZsLy9cAJ2M0Q==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199015)(40470700004)(46966006)(36840700001)(26005)(6666004)(36756003)(8936002)(2616005)(7696005)(1076003)(316002)(5660300002)(16526019)(40480700001)(186003)(40460700003)(4326008)(356005)(82740400003)(110136005)(41300700001)(70586007)(7636003)(478600001)(54906003)(8676002)(86362001)(70206006)(82310400005)(47076005)(83380400001)(2906002)(426003)(336012)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 22:01:42.7696
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93c589de-666d-4f88-2e6f-08daf5b1c169
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT087.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5642
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,69 +102,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+Summary
+===========
+Introduce support of vCPU-scoped ioctl with KVM_CAP_X86_DISABLE_EXITS
+cap for disabling exits to enable finer-grained VM exits disabling
+on per vCPU scales instead of whole guest. This patch series enabled
+the vCPU-scoped exits control and toggling.
 
-On Fri, Jan 13, 2023 at 1:01 PM Song Liu <song@kernel.org> wrote:
->
-> On Thu, Jan 12, 2023 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > When it saves the raw_data to the perf sample data, it needs to update
-> > the sample flags and the dynamic size.  To make sure this, add the
-> > perf_sample_save_raw_data() helper and convert all call sites.
-> >
-> > Cc: linux-s390@vger.kernel.org
-> > Cc: x86@kernel.org
-> > Cc: bpf@vger.kernel.org
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
+Motivation
+============
+In use cases like Windows guest running heavy CPU-bound
+workloads, disabling HLT VM-exits could mitigate host sched ctx switch
+overhead. Simply HLT disabling on all vCPUs could bring
+performance benefits, but if no pCPUs reserved for host threads, could
+happened to the forced preemption as host does not know the time to do
+the schedule for other host threads want to run. With this patch, we
+could only disable part of vCPUs HLT exits for one guest, this still
+keeps performance benefits, and also shows resiliency to host stressing
+workload running at the same time.
 
-[SNIP]
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index 0fba98b9cd65..133894ae5e30 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -7588,30 +7588,10 @@ void perf_prepare_sample(struct perf_event_header *header,
-> >         if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
-> >                 perf_sample_save_callchain(data, event, regs);
-> >
-> > -       if (sample_type & PERF_SAMPLE_RAW) {
-> > -               struct perf_raw_record *raw = data->raw;
-> > -               int size;
-> > -
-> > -               if (raw && (data->sample_flags & PERF_SAMPLE_RAW)) {
-> > -                       struct perf_raw_frag *frag = &raw->frag;
-> > -                       u32 sum = 0;
-> > -
-> > -                       do {
-> > -                               sum += frag->size;
-> > -                               if (perf_raw_frag_last(frag))
-> > -                                       break;
-> > -                               frag = frag->next;
-> > -                       } while (1);
-> > -
-> > -                       size = round_up(sum + sizeof(u32), sizeof(u64));
-> > -                       raw->size = size - sizeof(u32);
-> > -                       frag->pad = raw->size - sum;
-> > -               } else {
-> > -                       size = sizeof(u64);
-> > -                       data->raw = NULL;
-> > -               }
-> > -
-> > -               data->dyn_size += size;
-> > +       if (filtered_sample_type & PERF_SAMPLE_RAW) {
-> > +               data->raw = NULL;
-> > +               data->dyn_size += sizeof(u64);
-> > +               data->sample_flags |= PERF_SAMPLE_RAW;
-> >         }
->
-> I don't quite follow this change, and the commit log doesn't seem
-> to cover this part.
+Performance and Testing
+=========================
+In the host stressing workload experiment with Windows guest heavy
+CPU-bound workloads, it shows good resiliency and having the ~3%
+performance improvement. E.g. Passmark running in a Windows guest
+with this patch disabling HLT exits on only half of vCPUs still
+showing 2.4% higher main score v/s baseline.
 
-It's for when the user requested RAW but no actual data.
-It assumes PMU drivers call perf_sample_save_raw_data()
-before perf_prepare_sample() if there's RAW data.
-So we can only handle the 'else' part in the original code.
+Tested everything on AMD machines.
 
-Thanks,
-Namhyung
+v4->v5 :
+- Drop the usage of KVM request, keep the VM-scoped exits disable
+  as the existing design, and only allow per-vCPU settings to
+  override the per-VM settings (Sean Christopherson)
+- Refactor the disable exits selftest without introducing any
+  new prerequisite patch, tests per-vCPU exits disable and overrides,
+  and per-VM exits disable
+
+v3->v4 (Chao Gao) :
+- Use kvm vCPU request KVM_REQ_DISABLE_EXIT to perform the arch
+  VMCS updating (patch 5)
+- Fix selftests redundant arguments (patch 7)
+- Merge overlapped fix bits from patch 4 to patch 3
+
+v2->v3 (Sean Christopherson) :
+- Reject KVM_CAP_X86_DISABLE_EXITS if userspace disable MWAIT exits
+  when MWAIT is not allowed in guest (patch 3)
+- Make userspace able to re-enable previously disabled exits (patch 4)
+- Add mwait/pause/cstate exits flag toggling instead of only hlt
+  exits (patch 5)
+- Add selftests for KVM_CAP_X86_DISABLE_EXITS (patch 7)
+
+v1->v2 (Sean Christopherson) :
+- Add explicit restriction for VM-scoped exits disabling to be called
+  before vCPUs creation (patch 1)
+- Use vCPU ioctl instead of 64bit vCPU bitmask (patch 5), and make exits
+  disable flags check purely for vCPU instead of VM (patch 2)
+
+Best Regards,
+Kechen
+
+Kechen Lu (3):
+  KVM: x86: Move *_in_guest power management flags to vCPU scope
+  KVM: x86: add vCPU scoped toggling for disabled exits
+  KVM: selftests: Add tests for VM and vCPU cap
+    KVM_CAP_X86_DISABLE_EXITS
+
+Sean Christopherson (3):
+  KVM: x86: only allow exits disable before vCPUs created
+  KVM: x86: Reject disabling of MWAIT interception when not allowed
+  KVM: x86: Let userspace re-enable previously disabled exits
+
+ Documentation/virt/kvm/api.rst                |   8 +-
+ arch/x86/include/asm/kvm-x86-ops.h            |   1 +
+ arch/x86/include/asm/kvm_host.h               |   7 +
+ arch/x86/kvm/cpuid.c                          |   4 +-
+ arch/x86/kvm/lapic.c                          |   7 +-
+ arch/x86/kvm/svm/nested.c                     |   4 +-
+ arch/x86/kvm/svm/svm.c                        |  42 +-
+ arch/x86/kvm/vmx/vmx.c                        |  53 +-
+ arch/x86/kvm/x86.c                            |  69 ++-
+ arch/x86/kvm/x86.h                            |  16 +-
+ include/uapi/linux/kvm.h                      |   4 +-
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/x86_64/disable_exits_test.c | 457 ++++++++++++++++++
+ 13 files changed, 626 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/disable_exits_test.c
+
+-- 
+2.34.1
+
