@@ -2,195 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B5B669578
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4349E669582
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbjAML3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S234010AbjAMLaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbjAML1z (ORCPT
+        with ESMTP id S232500AbjAML3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:27:55 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4422C87F3B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:17:40 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id mp20so4943666ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:17:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IAHsl98CG/fDYP0sHTVVPevitb6k0mLO+y4UR5S17ws=;
-        b=rO55n1kXDBRrBIHjuqo1touxvhO5hNjfwY90pyGz0sCM3W/856cTLNOOYRKpX5PcGL
-         rSQgkH1xRtwXkjqISOn+99ma+tsjgFJb9qRjuOt861vmBfi0nRX/iXf3oyWgf3y9cdGg
-         aI+CeupWYwoiNaT38kIOj7+2YapQGpuYrrXcXm+X79LTvAMFPw2Nb/beIiEpBsljbRtQ
-         6FwtNAZEo9j6JOSaxxTHi20/Um9j76HYDTe6yntvAmm15YTsvOlmhpWm+/BZKEPFpMOS
-         4J9mKOw95UKB27KbRnt13xpOVEA+n+6eIISbjDU/l87yt+IELSShkK94r7gHnK5iLuVJ
-         E8cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IAHsl98CG/fDYP0sHTVVPevitb6k0mLO+y4UR5S17ws=;
-        b=u9HX7Zo61tXrTRVxxhyVS1f2ZbCyBlXmNavO2bqGJmNnl5EX+5DVUuFjxIzsBCN5FV
-         k33/Jyww5iWPb3lwAh9y1jUAmjNDN/Kt/ajG6ZQciVybALFys/KrEXEI+KN0bWBxbNzv
-         dTjBlHbs+TruMEc1oyerxJxfW1sMtIHyRjhdSKZfaim0OJ6TdZ8ZZ2SSS6xgoAdnDqHR
-         TuKI3tNj4+FBhxerjV/bcwknL5gN8uNR7/Nno/e8yua46Cu4pXMrpE7+Ff6jRTNkcLfX
-         X1Wt0Xf00rtpWKOhqqzZsQm2Qm08++0zvJB9+V2iVPDoL2l4AzmUYL5fWSdB7ghU8A+l
-         KIdg==
-X-Gm-Message-State: AFqh2krlfpCMh6qJVBeoIA3prAat2n0BfaQqmV25HiM6KRSSwoN8uuUy
-        Ph/1FNsxiRByeKS355ybl6StIg==
-X-Google-Smtp-Source: AMrXdXtK7YAEGRUOWzs41epBgJvNi/mOK9+XEuk1w/FCzjBdpqY4FoD7/7XhR3QePTmT+MlmLRnvTg==
-X-Received: by 2002:a17:907:73c1:b0:7c1:2868:65f1 with SMTP id es1-20020a17090773c100b007c1286865f1mr61779721ejc.72.1673608658631;
-        Fri, 13 Jan 2023 03:17:38 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u13-20020aa7db8d000000b004833aac6ef9sm7996567edt.62.2023.01.13.03.17.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 03:17:38 -0800 (PST)
-Message-ID: <63fdd223-c5e1-302d-ffef-9e582874e938@linaro.org>
-Date:   Fri, 13 Jan 2023 12:17:36 +0100
+        Fri, 13 Jan 2023 06:29:39 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F338E7D9C0;
+        Fri, 13 Jan 2023 03:19:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QiDBE7QfqwbOQGvzFGPyeg41joEHACtfkGqj5wqGLwg=; b=JCRP7BzfTidqbfbybLpKWnV5N/
+        Mp1Xzl0fOmQvgET+5IIjszaU9sGgJjnp3kxUu52jLbNVZ9C/0hL44Q5yv4n7m66+5fW7zH7BHCiFs
+        gf5aa0v29w1iw1f34v9dMimcY1DiLf1ug+bzSmIvV8YIw8qHbHK4U4ol3or/ArWij0DzIbbt1Pwyj
+        5h+p7a5i6WqXvO8V/vlBD0ryi73gH1tg9n2/0ZP1hp795iz4n8DgY2TWkyr3HxHi4BMSg7xY2NAxF
+        Jwu4JlLZ6B58w/8iC2maLVYQaRLh4bBWzoXwO+xgLf5gongc0YNZv/v7mfXaqnKII1QT++Ga9csQy
+        8CWQvKTw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pGI5P-004KjY-16;
+        Fri, 13 Jan 2023 11:19:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 61B9C3001F7;
+        Fri, 13 Jan 2023 12:19:11 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3F98F2CCEBAD8; Fri, 13 Jan 2023 12:19:11 +0100 (CET)
+Date:   Fri, 13 Jan 2023 12:19:11 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        linux-s390@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 3/8] perf/core: Add perf_sample_save_raw_data() helper
+Message-ID: <Y8E+L3DSYu0k8+e0@hirez.programming.kicks-ass.net>
+References: <20230112214015.1014857-1-namhyung@kernel.org>
+ <20230112214015.1014857-4-namhyung@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add binding for Loongson-1 clock
- driver
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230113110738.1505973-1-keguang.zhang@gmail.com>
- <20230113110738.1505973-2-keguang.zhang@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113110738.1505973-2-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112214015.1014857-4-namhyung@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 12:07, Keguang Zhang wrote:
-> Add devicetree binding document for the Loongson-1 clock driver.
-
-Subject: drop second/last, redundant "bindings". The "dt-bindings"
-prefix is already stating that these are bindings.
-
-Subject: Drop driver, not related to hardware.
-
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->  .../bindings/clock/loongson,ls1x-clk.yaml     | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> new file mode 100644
-> index 000000000000..4709c6757f1e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/loongson,ls1x-clk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+On Thu, Jan 12, 2023 at 01:40:10PM -0800, Namhyung Kim wrote:
+> @@ -1182,6 +1187,29 @@ static inline void perf_sample_save_callchain(struct perf_sample_data *data,
+>  	data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
+>  }
+>  
+> +static inline void perf_sample_save_raw_data(struct perf_sample_data *data,
+> +					     struct perf_raw_record *raw)
+> +{
+> +	struct perf_raw_frag *frag = &raw->frag;
+> +	u32 sum = 0;
+> +	int size;
 > +
-> +title: Loongson-1 Clock Controller
-
-Wasn't this already sent?
-https://lore.kernel.org/all/20190130194731.GA25716@bogus/
-Then this is a v4? Aren't you duplicating efforts (and reviewers efforts)?
-
+> +	do {
+> +		sum += frag->size;
+> +		if (perf_raw_frag_last(frag))
+> +			break;
+> +		frag = frag->next;
+> +	} while (1);
 > +
-> +maintainers:
-> +  - Keguang Zhang <keguang.zhang@gmail.com>
+> +	size = round_up(sum + sizeof(u32), sizeof(u64));
+> +	raw->size = size - sizeof(u32);
+> +	frag->pad = raw->size - sum;
 > +
-> +properties:
+> +	data->raw = raw;
+> +	data->dyn_size += size;
+> +	data->sample_flags |= PERF_SAMPLE_RAW;
+> +}
 
-compatible is a first property.
-
-> +  "#clock-cells":
-> +    const: 0
-> +
-> +  compatible:
-> +    enum:
-> +      - loongson,ls1b-clk-pll
-> +      - loongson,ls1b-clk-cpu
-> +      - loongson,ls1b-clk-ahb
-> +      - loongson,ls1c-clk-pll
-> +      - loongson,ls1c-clk-cpu
-> +      - loongson,ls1c-clk-ahb
-
-Are you registering single clocks? It looks like. No, make a proper
-clock controller.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - "#clock-cells"
-> +  - compatible
-> +  - clocks
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clocks {
-
-No, not really related to the binding.
-
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +
-> +        xtal: xtal {
-
-Incorrect in this context. Missing unit address.
-
-> +            compatible = "fixed-clock";
-> +            #clock-cells = <0>;
-> +            clock-frequency = <33000000>;
-> +        };
-> +
-> +        pll: pll@1fe78030 {
-
-Node names should be generic, so "clock-controller"
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +            compatible = "loongson,ls1b-clk-pll";
-> +            #clock-cells = <0>;
-> +            clocks = <&xtal>;
-> +            reg = <0x1fe78030 0x4>;
-
-compatible is first property, then reg, then the rest.
-
-> +        };
-> +
-> +        cpu_clk: cpu_clk@1fe78034 {
-
-No underscores in node names. Anyway this should be gone - make a proper
-clock controller.
-
-
-Best regards,
-Krzysztof
-
+This might be a wee big for inline, but I suppose it doesn't matter too
+much.
