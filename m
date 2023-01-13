@@ -2,104 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8766166935B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72221669363
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241271AbjAMJxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S241159AbjAMJzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239638AbjAMJxH (ORCPT
+        with ESMTP id S240834AbjAMJy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:53:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A03A7BDCD;
-        Fri, 13 Jan 2023 01:49:01 -0800 (PST)
+        Fri, 13 Jan 2023 04:54:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D735BBE;
+        Fri, 13 Jan 2023 01:50:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DAAA6112C;
-        Fri, 13 Jan 2023 09:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB670C433EF;
-        Fri, 13 Jan 2023 09:48:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9932061136;
+        Fri, 13 Jan 2023 09:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4509C433D2;
+        Fri, 13 Jan 2023 09:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673603340;
-        bh=1LY5Wahlmj+cAfehHuOC3snGF6O3X/tHawwgCwx8Gfo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IGTsIaOkP5VsQOv/TdhT0y71HwxxZ0BeUQ+lv/GcI6Zg7TNUGZEu0jIQTbHOJH1bF
-         rupjBUdUSBirha+/W3JKiRC1xk7xnRCJM8TiYMXH5p9SMjtikeVbnrX+5WRvGn/2Nh
-         GGQUPBiaLFsI5VQkfA8hL0hsiOertllCuVVO0oEodMrZsGqNyv9dItDUk4hB4JYqI/
-         i9KJ0BwhIDAOPoaumdCywvDwHEbSLVJzI9Xtl55PERCZ2w49UjuAwwGuaHIE+5Xj9m
-         Rf57WBOuLhoSyqSGQ2i20AMeFM9KZYR0SmuW28jpMh+NXGs/giziNYOZx8RxWQC5vK
-         jzZYCc4O7Na1A==
-Message-ID: <2fc741b2-671d-8817-1d6f-511398aea9ff@kernel.org>
-Date:   Fri, 13 Jan 2023 11:48:53 +0200
+        s=k20201202; t=1673603453;
+        bh=NYX/34PPDvETDVkL0+RT3Jnvul+RxVMdywKfKz+QCKQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MclVWFbXvTmpZ0EstEsimrOPF2g0T52j4hpbGpu9LICWLKXHpXv/BokGXhfvZB2rs
+         uaIfD3+YecOr2Sk/3ioTBf6xvVEdfAb2kpnEQ8lFpUcVlwaxyHA4wJmwDJ//sM0Yxm
+         +xyKWo/albG2N9OOux+Y+w8yGELShyEhFIXP+nH9e0QtwTOspqs5HFC5bXZpAMMcw3
+         k5+ZUZOstIsBj7mKTn71fSE17R0TfS0yPY38Y+7uLWvZ4ydqp3IiP5RAlfZ15A8nzF
+         3yC8IOS7iKsauiXZKRDTXWxrwQUSjZ8tAfLG50Lcv+f2pqLq0OYNd5axoU140OTSXY
+         aIesdkWCsTBuA==
+Date:   Fri, 13 Jan 2023 09:50:47 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH] dt-bindings: arm-smmu: disallow clocks when not used
+Message-ID: <20230113095046.GB12235@willie-the-truck>
+References: <20221222092355.74586-1-krzysztof.kozlowski@linaro.org>
+ <e2cc612a-7b1f-6c18-7d5b-1403fac77a99@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next 0/5] Add PPS support to am65-cpts driver
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, nm@ti.com, kristo@kernel.org,
-        vigneshr@ti.com, nsekhar@ti.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-References: <20230111114429.1297557-1-s-vadapalli@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230111114429.1297557-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2cc612a-7b1f-6c18-7d5b-1403fac77a99@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Siddharth,
-
-On 11/01/2023 13:44, Siddharth Vadapalli wrote:
-> The CPTS hardware doesn't support PPS signal generation. Using the GenFx
-> (periodic signal generator) function, it is possible to model a PPS signal
-> followed by routing it via the time sync router to the CPTS_HWy_TS_PUSH
-> (hardware time stamp) input, in order to generate timestamps at 1 second
-> intervals.
+On Thu, Jan 12, 2023 at 02:53:20PM +0100, Krzysztof Kozlowski wrote:
+> On 22/12/2022 10:23, Krzysztof Kozlowski wrote:
+> > Disallow clocks for variants other than:
+> > 1. SMMUs with platform-specific compatibles which list explicit clocks
+> >    and clock-names,
+> > 2. SMMUs using only generic compatibles, e.g. arm,mmu-500, which have a
+> >    variable clocks on different implementations.
+> > 
+> > This requires such variants with platform-specific compatible, to
+> > explicitly list the clocks or omit them, making the binding more
+> > constraint.
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > ---
 > 
-> This series adds driver support for enabling PPS signal generation.
-> Additionally, the documentation for the am65-cpts driver is updated with
-> the bindings for the "ti,pps" property, which is used to inform the
-> pair [CPTS_HWy_TS_PUSH, GenFx] to the cpts driver. The PPS example is
-> enabled for AM625-SK board by default, by adding the timesync_router node
-> to the AM62x SoC, and configuring it for PPS in the AM625-SK board dts.
+> Will, Robin, Joerg,
 > 
-> Grygorii Strashko (3):
->   dt-binding: net: ti: am65x-cpts: add 'ti,pps' property
->   net: ethernet: ti: am65-cpts: add pps support
->   net: ethernet: ti: am65-cpts: adjust pps following ptp changes
-> 
-> Siddharth Vadapalli (2):
->   arm64: dts: ti: k3-am62-main: Add timesync router node
->   arm64: dts: ti: k3-am625-sk: Add cpsw3g cpts PPS support
+> Anyone willing to pick up this patch?
 
-Device tree patches need to be sent separately. You don't need to involve
-net maintainers for that.
+Sure, I'll do an SMMU bindings pass shortly for 6.3
 
-If you introduce a new binding then that needs to be in maintainer's
-tree before you can send a related device tree patch.
-
-> 
->  .../bindings/net/ti,k3-am654-cpts.yaml        |   8 +
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi      |   9 ++
->  arch/arm64/boot/dts/ti/k3-am625-sk.dts        |  20 +++
->  drivers/net/ethernet/ti/am65-cpts.c           | 144 ++++++++++++++++--
->  4 files changed, 166 insertions(+), 15 deletions(-)
-> 
-
-cheers,
--roger
+Will
