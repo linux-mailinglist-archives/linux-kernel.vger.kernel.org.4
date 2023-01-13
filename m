@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E4966A559
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E28166A56D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjAMVwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S231159AbjAMVx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjAMVwM (ORCPT
+        with ESMTP id S230347AbjAMVx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:52:12 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0D910FEC;
-        Fri, 13 Jan 2023 13:52:10 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ntw9v5ZZmz4xGM;
-        Sat, 14 Jan 2023 08:52:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673646726;
-        bh=RxeRAYswbnUK0H5CEMGCbTuBQWWxqAX388X15Xp37iE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l2Gh/0PrHTOUIlo5ZI35+zbf5UYMrVMx/7OKs47BE012qPDyyRpeGbGTJYFNmxoSL
-         pCGMwEm0/z6YA9plawdyreiFYhsQTuBihxW6XMSX7i2sK5mLeFGz8XRkQcTEiGtdRu
-         qc6VOGUOJXJlrK1pR+0Y9ttI2ij5FXgx7LzqYbolVL1yLNvb1rsa+R3kA3CcLaCLPw
-         /LZURVgfmq8NRPLUTOwKq4GYY0LC5/Ix2F5YkHyDYEIBaiK3TBl0jMTcgLsFBrJZRS
-         xpPj5yn48imvQWIZSvbpfZ4oTMKZkpm2SInuNmaMx6XIGu65DHQeqcVwDXMo0i3hoD
-         zZniDeVHWMrDg==
-Date:   Sat, 14 Jan 2023 08:51:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tip tree
-Message-ID: <20230114085153.59c0866e@canb.auug.org.au>
-In-Reply-To: <87358es8lh.fsf@meer.lwn.net>
-References: <20230113124053.5a75633d@canb.auug.org.au>
-        <87358es8lh.fsf@meer.lwn.net>
+        Fri, 13 Jan 2023 16:53:26 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E81658F94;
+        Fri, 13 Jan 2023 13:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673646806; x=1705182806;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=G/VQved2ff+tefAVfi0iakcBPqZfQVrJ7htF8hbF9mk=;
+  b=WmLNyfNptEBenlkmcC9oMLJ0gnh5lk/56TQDu9D9KEMfBctjN7+TBWkR
+   OmiVnIO50KVEZQZ0aQn3VWMHkYOSlsDE1DV8rkFZK4Vu2Pb7EN0KVFwuv
+   sVK/9knKK8E2A7pavP7pX3P9ewqN0DX7m1LfMPZlYr4h5IcV+etJ94ji5
+   sJr3aM3nw+Fh70GS1VY9RmtpJJeAx+tneHllhf6CaZySb+hDkwgswH/Il
+   tibnPTj+8UWVPdQr7nnWAsVRw/YbC4YwTNdm+hdc2NXUZvnpO8eea/ZTm
+   aT1Z5LSTbnRStUCtAvvmrqUAZ9NfhKYvzSaGl9XPmAxbL+V26tn4HoCGj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="324166136"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="324166136"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 13:53:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="987142579"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="987142579"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jan 2023 13:53:22 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5C84AE1; Fri, 13 Jan 2023 23:53:56 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH v3 0/4] gpiolib: get rid of exessive ->of_gpio_ranges_fallback()
+Date:   Fri, 13 Jan 2023 23:53:48 +0200
+Message-Id: <20230113215352.44272-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+wzkIZRyY4fGas17gqIax=B";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+wzkIZRyY4fGas17gqIax=B
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The ->of_gpio_ranges_fallback() repeats the idea that lies behind
+->add_pin_ranges(), while the latter covers more cases that the former
+hook. Drop the former one for good.
 
-Hi Jon,
+Changelog v3:
+- moved check of the property presense to GPIO library
+- split out the refcount fix in a separate patch
+- added cover letter
 
-On Fri, 13 Jan 2023 09:27:38 -0700 Jonathan Corbet <corbet@lwn.net> wrote:
->
-> I'm sure I checked before applying that ... I guess maybe not.  I've
-> disappeared it now, thanks.
+Andy Shevchenko (4):
+  gpiolib: Check "gpio-ranges" before calling ->add_pin_ranges()
+  pinctrl: bcm2835: Remove of_node_put() in
+    bcm2835_of_gpio_ranges_fallback()
+  pinctrl: bcm2835: Switch to use ->add_pin_ranges()
+  Revert "gpiolib: of: Introduce hook for missing gpio-ranges"
 
-You may well have checked, both commits appeared in linux-next for the
-first time yesterday.
+ drivers/gpio/gpiolib-of.c             |  5 -----
+ drivers/gpio/gpiolib.c                |  8 ++++++++
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 10 ++++------
+ include/linux/gpio/driver.h           | 12 ------------
+ 4 files changed, 12 insertions(+), 23 deletions(-)
 
---=20
-Cheers,
-Stephen Rothwell
+-- 
+2.39.0
 
---Sig_/+wzkIZRyY4fGas17gqIax=B
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPB0nkACgkQAVBC80lX
-0GyOtgf/SI4G/W5kptF6GeC79HPNjVeGa2vyJRrm0143M9qZ97RSNf1sgnsH+A5q
-RC1Cpjb7jl0CHtBrdko7EPgsxoCGhSGgzsEaOHaNw06DK+PPsUP4VscLbAfv9D5w
-klc6EI2Ms4jYUKI2QnIWXapaKWxwO1WoYAWzydxRx8/w++j36jJyg32NSo+s8o4a
-dXpgFkriGGh9ATUXX78Rulppmoauie8uisajIBDoFVfxEetiMpabiS6dbRMmf3wb
-RRTLbYIYrvfIwI3zxq0to0hSC1wX/j1E6PbNjUQuv7f8fRBPt96kwedyNPU8n4H5
-fc3vJp8Y0LJ43HnQj4vk+DaltzaGuA==
-=7/7H
------END PGP SIGNATURE-----
-
---Sig_/+wzkIZRyY4fGas17gqIax=B--
