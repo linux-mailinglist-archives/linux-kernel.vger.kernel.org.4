@@ -2,202 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D5666A3CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F49E66A3CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjAMT6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
+        id S231208AbjAMUBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjAMT6f (ORCPT
+        with ESMTP id S231191AbjAMUBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:58:35 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55CD869F1;
-        Fri, 13 Jan 2023 11:58:33 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ud5so54747140ejc.4;
-        Fri, 13 Jan 2023 11:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m1Bs/TNdFi0UV3tkxYGOXoG9MLNWFUnNK4EJRg4R6c8=;
-        b=gfxiiPHmcgM+/qiJjPmOsjS3s8pAL6hBxe2o+wn7fnfeOjsQ9+vJxAWUjH0NWhALDv
-         2oXmyhPGfPK3WAExVSUcaWWEwVsp1mhT97stYeSiqGvVKRc6wLV70hh5ZIq6GnHjzce+
-         skk82AHnBw/oUJsfxEritr7qSj+cTRgH1tdTmfuTvbiRFxdmFWw8S2xtylPpfuWcARH1
-         EEVuwc+2aIY5MIdT0pZoCXijsE2trs/cQ5mRD6kqyeKhcKkycP9IB9vtlQrDRzEA/1+H
-         LQ6F6zuEEwEcWPwSg1Lwp1go94f8vtWkGBPUiG7Avh3ScjRmXz4oBvs7TRTyvYLAa6JV
-         F3+Q==
+        Fri, 13 Jan 2023 15:01:33 -0500
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DD83E0C;
+        Fri, 13 Jan 2023 12:01:30 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id az20so35647579ejc.1;
+        Fri, 13 Jan 2023 12:01:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m1Bs/TNdFi0UV3tkxYGOXoG9MLNWFUnNK4EJRg4R6c8=;
-        b=D+CzX7UVWYYTVZCjuTg9uLxIJBmapCIL6cAYwtzoKmAax+hSea7r7tXUjKJKrE+Mvs
-         9cbSBQ08GWV42d7PybXc2Nw7vz+23ukg2SNnwXNR3e0ZsfoYIuAgZOR4d6HNBIVSPY/e
-         6ZO01AhabEyeESmjZQoAl9HyAO2B18D7fDG42nntb35IY2OWMyTAo5b+/hMxs/BYaIOq
-         2/IrWrT06T3DsuB398AmuytTwIdIexlP/iM/aVakIWyqVDDyKDqX7mki2iePg7pvxFJj
-         DuU5Czi+eOGcZrZXtF1azhe2qztxa9v/7yYsJBJmO9jxgaD5TUG1/lMkR2IF7/tZjyEE
-         VCJg==
-X-Gm-Message-State: AFqh2kpTOBZxzaMrpN1qH1rmCQXamWLeYzfbJFcxtLfBc7655HTJfqhy
-        aaB6puAZbn3tF4m95nEfNv6fJOGP+Ws=
-X-Google-Smtp-Source: AMrXdXvU6CwiH9dKLA45vk/7f2vTSzhztuu9DL8bz5CMA5aKgSeDgE67IjwpGrF77vk4tLriTRrFkg==
-X-Received: by 2002:a17:906:b00d:b0:7c1:8ba6:6eb3 with SMTP id v13-20020a170906b00d00b007c18ba66eb3mr73926764ejy.35.1673639912295;
-        Fri, 13 Jan 2023 11:58:32 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170906078600b0084d381d0528sm7661277ejc.180.2023.01.13.11.58.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 11:58:31 -0800 (PST)
-Message-ID: <8eca0d59-8db3-b66e-f219-0a256a9b0c79@gmail.com>
-Date:   Fri, 13 Jan 2023 20:58:30 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B8h4FM5Yah9+1s69S3Tpy1g06YL7NXwd6Be7KRZZVjo=;
+        b=5DDhlubkQcS23SojcpHiMPICLJY2tgOi6kTZK+wZaBJn2u4ciz7R0vynuAiJDy4/4I
+         K5aywq5d4uRTO/ruOCyY01yW0zybNDwsEYM+GnrgT2QTQXUYYi3BOPa7LLfPpn0UJwZZ
+         VUXgVES30jcfo/UqRZSHlHYENhGq1SiXT9zr+6hjrXwnie7haz3lJkah8kmArEnD8dcB
+         YjtAVZs5pZSuQH0bW9UGodW82Mlh2XoFWMlU406AONTzAZQ7IReXJKkYGOWU22PG1acl
+         20yIblV6jvkCGPsawqmUbwj3GDEfGsSKS3AjC5mJicmKIWaeWLtz8FPNaWyRX30xzZK8
+         YbxA==
+X-Gm-Message-State: AFqh2kouWzq7d4LvfcjCnCxPqnfo+GUbrXqP2a9z+VotQnXVRfeonN1Z
+        NX9nwB9V+5WYNzqHIU7W7lQJf4zvSR2gyLm0OG2fpVH7
+X-Google-Smtp-Source: AMrXdXvtzfulXjief5eu2O7psrMpxIy6ySvJ6xob6pTI92g8+/l7uWRz1A+g49VM2SXsHORTmy3FqTplRwkyqVowev4=
+X-Received: by 2002:a17:907:8d0e:b0:7b2:7b45:2cd2 with SMTP id
+ tc14-20020a1709078d0e00b007b27b452cd2mr7286659ejc.615.1673640089136; Fri, 13
+ Jan 2023 12:01:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: rockchip: convert
- rockchip-dp-phy.txt to yaml
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     heiko@sntech.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-        kishon@kernel.org
-References: <aa6fe473-71f2-edba-f009-994a3dbc9802@gmail.com>
- <Y8GeBzNJvhMeh3sn@matsya>
-Content-Language: en-US
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <Y8GeBzNJvhMeh3sn@matsya>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215181848.129326-1-helgaas@kernel.org>
+In-Reply-To: <20221215181848.129326-1-helgaas@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 13 Jan 2023 21:01:17 +0100
+Message-ID: <CAJZ5v0jHYQHKsg=5OLCUuv=x2F0YN1D_VF984VKDKa7t-1rHJg@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 15, 2022 at 7:19 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Simplify __rpm_get_callback() slightly by returning as soon as the return
+> value is known.  No functional change intended.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/base/power/runtime.c | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 50e726b6c2cf..7171ed0668f3 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
+>
+>  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+>  {
+> -       pm_callback_t cb;
+> -       const struct dev_pm_ops *ops;
+> +       const struct dev_pm_ops *ops = NULL;
+>
+>         if (dev->pm_domain)
+>                 ops = &dev->pm_domain->ops;
+> @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+>                 ops = dev->class->pm;
+>         else if (dev->bus && dev->bus->pm)
+>                 ops = dev->bus->pm;
+> -       else
+> -               ops = NULL;
+>
+>         if (ops)
+> -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> -       else
+> -               cb = NULL;
+> +               return *(pm_callback_t *)((void *)ops + cb_offset);
+>
+> -       if (!cb && dev->driver && dev->driver->pm)
+> -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> +       if (dev->driver && dev->driver->pm)
+> +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+>
+> -       return cb;
+> +       return NULL;
+>  }
+>
+>  #define RPM_GET_CALLBACK(dev, callback) \
+> --
 
-
-On 1/13/23 19:08, Vinod Koul wrote:
-> On 29-12-22, 10:44, Johan Jonker wrote:
->> Convert rockchip-dp-phy.txt to yaml.
-> 
-> This series fails to apply, pls rebase
-
-Hi Vinod, Heiko,
-
-This serie and others must be combined in the right order to grf.yaml.
-Maybe better that Heiko does that with your ACK.
-
-Johan
-
-===
-
-Apply after:
-  dt-bindings: soc: rockchip: grf: add rockchip,lvds.yaml
-
->>
->> Changed:
->>   rename file name
-> 
-> This should not be in change log but after the --- line
-> 
->>
->> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->> ---
->>
->> Changed V2:
->>   Use the compatible as filename.
->> ---
->>  .../bindings/phy/rockchip,rk3288-dp-phy.yaml  | 41 +++++++++++++++++++
->>  .../bindings/phy/rockchip-dp-phy.txt          | 26 ------------
->>  2 files changed, 41 insertions(+), 26 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml
->>  delete mode 100644 Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
->>
->> diff --git a/Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml
->> new file mode 100644
->> index 000000000..2538235c5
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/phy/rockchip,rk3288-dp-phy.yaml
->> @@ -0,0 +1,41 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/phy/rockchip,rk3288-dp-phy.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Rockchip specific extensions to the Analogix Display Port PHY
->> +
->> +maintainers:
->> +  - Heiko Stuebner <heiko@sntech.de>
->> +
->> +properties:
->> +  compatible:
->> +    const: rockchip,rk3288-dp-phy
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    const: 24m
->> +
->> +  "#phy-cells":
->> +    const: 0
->> +
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +  - "#phy-cells"
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/rk3288-cru.h>
->> +    edp-phy {
->> +      compatible = "rockchip,rk3288-dp-phy";
->> +      clocks = <&cru SCLK_EDP_24M>;
->> +      clock-names = "24m";
->> +      #phy-cells = <0>;
->> +    };
->> diff --git a/Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt b/Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
->> deleted file mode 100644
->> index e3b4809fb..000000000
->> --- a/Documentation/devicetree/bindings/phy/rockchip-dp-phy.txt
->> +++ /dev/null
->> @@ -1,26 +0,0 @@
->> -Rockchip specific extensions to the Analogix Display Port PHY
->> -------------------------------------
->> -
->> -Required properties:
->> -- compatible : should be one of the following supported values:
->> -	 - "rockchip.rk3288-dp-phy"
->> -- clocks: from common clock binding: handle to dp clock.
->> -	of memory mapped region.
->> -- clock-names: from common clock binding:
->> -	Required elements: "24m"
->> -- #phy-cells : from the generic PHY bindings, must be 0;
->> -
->> -Example:
->> -
->> -grf: syscon@ff770000 {
->> -	compatible = "rockchip,rk3288-grf", "syscon", "simple-mfd";
->> -
->> -...
->> -
->> -	edp_phy: edp-phy {
->> -		compatible = "rockchip,rk3288-dp-phy";
->> -		clocks = <&cru SCLK_EDP_24M>;
->> -		clock-names = "24m";
->> -		#phy-cells = <0>;
->> -	};
->> -};
->> --
->> 2.20.1
-> 
+Applied as 6.3 material, thanks!
