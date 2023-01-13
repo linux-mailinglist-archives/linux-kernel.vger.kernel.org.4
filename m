@@ -2,91 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3681B66A51C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414A866A521
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjAMV3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S229510AbjAMVbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjAMV3N (ORCPT
+        with ESMTP id S230251AbjAMVbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:29:13 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FB60B4B6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:29:12 -0800 (PST)
-Received: from 8bytes.org (p549ad69d.dip0.t-ipconnect.de [84.154.214.157])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id E179E261BE3;
-        Fri, 13 Jan 2023 22:29:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1673645351;
-        bh=tzuJaJssUMjZZ7WLqNeP+q104UEKVHyeooMwQQif+MY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qHPgiBWYU81GJ5qhc+lVhSrETIETFKjlBhBkoCRCPDaUfDtrFXBnJRws7ZU0vdcte
-         EVW68474RhBEjBV/l5J4NQJ+k07UVdL0g0iyUU5Vh/FEUXw3rlbYANAwnIhP2xdr4W
-         IzODCxuPkH8q8GnRuLbZ1rwcP0HvRlUtXGEZQJhuKpQAx0jhx3TEORgqL3YyLO5otX
-         R/kjFSbQkBCuErp402mUDSQG3Jb2BW9y+2Sfp+wb8dGxlzzt+wVunAReuSfJIfklb6
-         XDXUL6q3DHsml+OxtPu1+1dAJWzrEn+WyEM6QY+rU3IlYuBazzuHRkE1ecOxplH1C+
-         VdPJHghUzaabA==
-Date:   Fri, 13 Jan 2023 22:29:09 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] iommu/ipmmu-vmsa: Remove ipmmu_utlb_disable()
-Message-ID: <Y8HNJfz9R1IidJPq@8bytes.org>
-References: <20230113185640.8050-1-joro@8bytes.org>
- <Y8GtFcNq2jugBpI3@ziepe.ca>
- <Y8GwHQLKnXyqa3Ty@8bytes.org>
- <Y8G06onFowE3ZIy8@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8G06onFowE3ZIy8@ziepe.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 16:31:43 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC55CFA
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:30:59 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id q9-20020a17090a304900b00226e84c4880so9994331pjl.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=L6JMs+vv0Y8b3m+JQom4X+Xtk6qATobid/EnFCyXyOM=;
+        b=k5gES+OYQ33yZJbqj6EICTT/1+3F+ewBr5o1mDRPJcxeYe4eyVjUNmgTMOfEi3ctVr
+         l0yIbSuHeQo8DfUsgXRVGzSkAk0q72JNEUFMPoCERObxULD6UJ2BRE6Yt6k6Xw/M5N5S
+         l9tDBXC7w+uByJ9jNhqliIS2ClP1y5k87kuJuxSe5Ky4uAdQD9kZUrqf/7i2vZACwa3u
+         HrvoVYADmB4zoxyqPhHeFYovU5pm2y+UkRKEdEC3ugzXzDZrNmXDJ4BUKJORoWJ/O1fn
+         4RFyJRPKXg9cTuvGoOhWM5F55GbMoLk5OgD0XUXT3Ol/QKQ4boyd6yMIfurFY6yMEjia
+         Olrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L6JMs+vv0Y8b3m+JQom4X+Xtk6qATobid/EnFCyXyOM=;
+        b=3agwKO/CddhsbIgPviAMUTUFkqYp/E9h99TAZLAdfx6y3v3ODIB0GCCWpGdB6a8wUI
+         SxiFCmbed83sDBnxQOQF7Ya3oWNEZuisNuaeyQOJf4d9oSRwLAd9nHYiq1eXoysXsN7T
+         qWvAzhrzJpkvJfFS/al9xm1C6jLjf5NslRFDl746UXy7/OOQGulhbhMK0vmGD7dhOq5k
+         9W5DL+hHlhrVwcUKhRrIS8mOMl8bkySBsnO2bjZ7l4XxKTQzozlu9cPSKrp0SCDu0jwX
+         sT7ca6tHYXsZ8RWsgwEcxA9cC2uXmuZi0VVVFxvmOoaNBOSt7xKZiXWJ7+4DihxSZlOZ
+         gseg==
+X-Gm-Message-State: AFqh2kq0H4Hs0O4TiebvujJNFks0woa+U8iyjq/+/lK68S+D6FqlJv6U
+        9W4oz5QoxjVr8c53gayYI1keTDJ+9HdPoFg1z0oeE1fS85YajwQrxKck1mAH85wUmXdAIoOfZm9
+        vuNvoPzHcWMSzWgF2ZwWz+z/i1zwYcwiW7dXyDIib0z3Ia8lNO/mOKqVcykpAMcysMYaZj/kInQ
+        xH5yMKCxI=
+X-Google-Smtp-Source: AMrXdXs19Hm7YNsIlOoPtjAfoKNdOI6m9CNlFDVidToplU+VfsIec2tRsOeip86nZJFq2LUjUmGdzLv1DyEmSZeWjA==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a17:90b:4ac5:b0:229:36cd:4ab8 with
+ SMTP id mh5-20020a17090b4ac500b0022936cd4ab8mr227511pjb.114.1673645459173;
+ Fri, 13 Jan 2023 13:30:59 -0800 (PST)
+Date:   Fri, 13 Jan 2023 21:29:26 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230113212926.2904735-1-dionnaglaze@google.com>
+Subject: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org
+Cc:     jiewen.yao@intel.com, devel@edk2.groups.io,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Ard Biescheuvel <ardb@kernel.org>,
+        "Min M. Xu" <min.m.xu@intel.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 03:45:46PM -0400, Jason Gunthorpe wrote:
-> On Fri, Jan 13, 2023 at 08:25:17PM +0100, Joerg Roedel wrote:
-> > In general it is a good idea to at least compile-test every file that is
-> > changed in a patch-set before sending it out and not rely on 0-day bot
-> > for that.
-> 
-> Against every arch combination? This is why we have automation bots :(
+This patch depends on Kirill A. Shutemov's series
 
-No, not every combination. But if possible please compile-test each
-changed file with a .config that pulls that source file in.  Lots of
-drivers can be enabled just with COMPILE_TEST on x86 or be catched with
-a generic ARM/ARM64 config which enables all IOMMU drivers.  PAMU is a
-bit more difficult as it requires a PPC-32 bit config, but that is the
-exception.
+[PATCHv8 00/14] mm, x86/cc: Implement support for unaccepted memory
 
-A full kernel build is usually also not necessary, often a 'make
-drivers/iommu/' with a given config is enough.
+The UEFI v2.9 specification includes a new memory type to be used in
+environments where the OS must accept memory that is provided from its
+host. Before the introduction of this memory type, all memory was
+accepted eagerly in the firmware. In order for the firmware to safely
+stop accepting memory on the OS's behalf, the OS must affirmatively
+indicate support to the firmware.
 
-That is also how I compile-test the IOMMU tree before I push changes
-out. There are per-arch configurations which select all IOMMU drivers on
-that arch. Only for X86 I do the full allnoconfig, defconfig,
-allmodconfig and allyesconfig cycle (each for 32 and 64 bit).
+Enabling unaccepted memory requires calling a 0-argument enablement
+protocol before ExitBootServices. This call is only made if the kernel
+is compiled with UNACCEPTED_MEMORY=y
 
-That certainly does not catch everything, but a lot of compile issues can be
-found that way. And for patch-sets only touching, for example, VT-d it
-is still enough to only compile-test on x86. A patch-set touching that
-much drivers is rather the exception.
+The naming of the protocol guid is dependent on the standardization of
+the protocol, which is being discussed. Acceptance is contingent on
+the kernel community's approval.
 
-Regards,
+Cc: Ard Biescheuvel <ardb@kernel.org>
+Cc: "Min M. Xu" <min.m.xu@intel.org>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: James Bottomley <jejb@linux.ibm.com>
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Jiewen Yao <jiewen.yao@intel.com>
+Cc: Erdem Aktas <erdemaktas@google.com>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 
-	Joerg
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+---
+ drivers/firmware/efi/libstub/x86-stub.c | 37 +++++++++++++++++++++++++
+ include/linux/efi.h                     |  1 +
+ 2 files changed, 38 insertions(+)
+
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+index a0bfd31358ba..abf31e5ade55 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -26,6 +26,17 @@ const efi_dxe_services_table_t *efi_dxe_table;
+ u32 image_offset __section(".data");
+ static efi_loaded_image_t *image = NULL;
+ 
++typedef union memory_acceptance_protocol memory_acceptance_protocol_t;
++union memory_acceptance_protocol {
++	struct {
++		efi_status_t (__efiapi *allow_unaccepted_memory)(
++			memory_acceptance_protocol_t *);
++	};
++	struct {
++		u32 allow_unaccepted_memory;
++	} mixed_mode;
++};
++
+ static efi_status_t
+ preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
+ {
+@@ -310,6 +321,30 @@ setup_memory_protection(unsigned long image_base, unsigned long image_size)
+ #endif
+ }
+ 
++
++static void setup_unaccepted_memory(void)
++{
++	efi_guid_t mem_acceptance_proto = EFI_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
++	memory_acceptance_protocol_t *proto;
++	efi_status_t status;
++
++	if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
++		return;
++
++	/*
++	 * Enable unaccepted memory before calling exit boot services in order
++	 * for the UEFI to not accept all memory on EBS.
++	 */
++	status = efi_bs_call(locate_protocol, &mem_acceptance_proto, NULL,
++			     (void **)&proto);
++	if (status != EFI_SUCCESS)
++		return;
++
++	status = efi_call_proto(proto, allow_unaccepted_memory);
++	if (status != EFI_SUCCESS)
++		efi_err("Memory acceptance protocol failed\n");
++}
++
+ static const efi_char16_t apple[] = L"Apple";
+ 
+ static void setup_quirks(struct boot_params *boot_params,
+@@ -899,6 +934,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
+ 
+ 	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
+ 
++	setup_unaccepted_memory();
++
+ 	status = exit_boot(boot_params, handle);
+ 	if (status != EFI_SUCCESS) {
+ 		efi_err("exit_boot() failed!\n");
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index 4b27519143f5..bfc0e4f2aba5 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -391,6 +391,7 @@ void efi_native_runtime_setup(void);
+ #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
+ #define EFI_DXE_SERVICES_TABLE_GUID		EFI_GUID(0x05ad34ba, 0x6f02, 0x4214,  0x95, 0x2e, 0x4d, 0xa0, 0x39, 0x8e, 0x2b, 0xb9)
+ #define EFI_SMBIOS_PROTOCOL_GUID		EFI_GUID(0x03583ff6, 0xcb36, 0x4940,  0x94, 0x7e, 0xb9, 0xb3, 0x9f, 0x4a, 0xfa, 0xf7)
++#define EFI_MEMORY_ACCEPTANCE_PROTOCOL_GUID	EFI_GUID(0xc5a010fe, 0x38a7, 0x4531,  0x8a, 0x4a, 0x05, 0x00, 0xd2, 0xfd, 0x16, 0x49)
+ 
+ #define EFI_IMAGE_SECURITY_DATABASE_GUID	EFI_GUID(0xd719b2cb, 0x3d3a, 0x4596,  0xa3, 0xbc, 0xda, 0xd0, 0x0e, 0x67, 0x65, 0x6f)
+ #define EFI_SHIM_LOCK_GUID			EFI_GUID(0x605dab50, 0xe046, 0x4300,  0xab, 0xb6, 0x3d, 0xd8, 0x10, 0xdd, 0x8b, 0x23)
+-- 
+2.39.0.314.g84b9a713c41-goog
+
