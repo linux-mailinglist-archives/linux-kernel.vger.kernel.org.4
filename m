@@ -2,347 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A44669927
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FF666992E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjAMNx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S230120AbjAMNy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:54:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241899AbjAMNx2 (ORCPT
+        with ESMTP id S241975AbjAMNxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:53:28 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14F91903A;
-        Fri, 13 Jan 2023 05:50:22 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id h16so21120429wrz.12;
-        Fri, 13 Jan 2023 05:50:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5ge1HoAOSGvKDWdqSB2297lLpq0G/qQASQVrgOsDIw=;
-        b=GU8VY1MzwEvEg/LM6HO99UpJRhfOVDaKQBxBG9ozjICjKFXI4ZtCyZryPGkWnZv8Pu
-         QgUkWiLYLKjIbJNcz7QTX0+h4QZIMo0Ktn4rAFLYHMqiP10Q+/4sUNnDXPWhi9fdzNbR
-         8Oo9IB1lgjVr2ijCu4JInit+BK2+mNPdPXiMAKf194981IoejQJjDnevGzVFhv2bfE67
-         D4CjrLjDc3VCuPta+CcRNw+TIuy7HLQzStJh6u36C+MRhYt0hoF46YNshwXYJa1ag2iQ
-         QnyidOFqLbXubXDupggVXb3uyaI/9Kdx+bQg80TB2P7NC+/0NnAPfvAWHR8gRp2rlg/H
-         BE4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w5ge1HoAOSGvKDWdqSB2297lLpq0G/qQASQVrgOsDIw=;
-        b=TkbnNC60vBi6sKE+NezQhPbUxrOVTnYs8OPV4VIMa5DGGHpp6MQKI4hAzRNfRE3Xsl
-         7CMXCprastJoNPbYcv5/Va3e0wLqEHmOIueD+xgxAUqN3GH7WO4tqrUm6EuaPFGDm764
-         /Wq/F1WcPlAYgiMitdM1AW7fqecVHh577L1hTdk58Btk8agwlw7rhz1n+Mt7+vedefxL
-         /fG4tbMHTgSnddCFpzF79Fc7Jf8rdJH2GYxa94K+nc+tcRrQTDXZthjcw4Q40YY2OWEs
-         hhsciC4UsF00hChGd+ihnRwSlUOzYTyjMYDdEYypbIqxV624Rv2zH8aJxGkWapqVnFbW
-         3juw==
-X-Gm-Message-State: AFqh2krnywfg5IBaBvteLIzxIZK6IjEXM/KzKaC6vew+XuNPQozSbfAD
-        66TAcpNuhU/sRctimL+iWbI=
-X-Google-Smtp-Source: AMrXdXshexR+Ps4Mp2UrVCu8BTB8SefGRw7+8mTbREtVbT2TWBcouYtxi//VC90xVmnKaPGHzlYcLQ==
-X-Received: by 2002:adf:e19d:0:b0:28f:29b3:1a7f with SMTP id az29-20020adfe19d000000b0028f29b31a7fmr38539267wrb.36.1673617821126;
-        Fri, 13 Jan 2023 05:50:21 -0800 (PST)
-Received: from Ansuel-xps. (93-34-92-88.ip49.fastwebnet.it. [93.34.92.88])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b0024274a5db0asm19181933wrj.2.2023.01.13.05.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 05:50:20 -0800 (PST)
-Message-ID: <63c1619c.df0a0220.225ea.edb1@mx.google.com>
-X-Google-Original-Message-ID: <Y8FhnE1qOTc6p2GT@Ansuel-xps.>
-Date:   Fri, 13 Jan 2023 14:50:20 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Marko <robimarko@gmail.com>
-Subject: Re: [RESEND PATCH 1/2] clk: qcom: clk-rcg2: introduce support for
- multiple conf for same freq
-References: <20230111194250.15793-1-ansuelsmth@gmail.com>
- <00cebe7d-ae3d-8772-c206-cd3ce6a275c1@linaro.org>
+        Fri, 13 Jan 2023 08:53:41 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::605])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ED510FDF;
+        Fri, 13 Jan 2023 05:51:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kuMKyVMxn86jwo2PcYfJ7PpLC1UCrJtqeKY3+4W1wRbgcm6C2j47w/I4JmQEbah19cXDUpL96ODYU5At+21Xx4yEGveb94uxLWFvPE/YCE/mwAFTEue6e3rn+rNzvTshTw3LLlCTb8pDRkvROeJ5861jTqrjKewpG9MmSath/GShMujPfZBbPxTDmoh/3+csJO9HFSJvgEEdTP6JxgB8gKsRO18IblmRD5sKvE/jd+95Ie+OqdJE5TA9RiNzYmQv8pZpBFm8cDb28GhkkV00mUj65xWA5Eh0Qn6sF8WzPvSfLBdtLqshStat3EEwbc7YryTR7nPnQdkSwRrJyy5+Dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=whdklx2dLe8lOr40B674jgnQbLrq9TvhbZRAe/Z1fL8=;
+ b=E0LsQH0ojBZALvWhyZHXc08rTtwNlbnmqXrG34vlns+UjY/QkfexVoUE2619RSFJhW+dXENl3I6+YVTtQR3aivqOjlE6E1qawnBtJEliygs5yanCdvSFWli/LD9Y+B3EQtZ1xd/2fuPpO5IdLLmeGWgJLYHVorRcV7DbvYLwou3P4O2XLr8OQVCEGA6VTyCjNzODUkgCzbFVvBind91uCTK+Wlu65VNE11rUeIqP9Knav7Drn9FuYeGMpZxnQGtmuRCf0J5sVx4YAnk0u737Rnc+BiPd1ZhsIgEOJ7kLLenyY0ORTS1oPgezd+GXL6bq+spnGE2cGdkQbWw8jIKMVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=whdklx2dLe8lOr40B674jgnQbLrq9TvhbZRAe/Z1fL8=;
+ b=M8ENaMW5WWQkDMzs9w/YlEgW5Hqr+kX1TizL/bnNkZn+Oc8h7S+40QGrWqXovttYGUOhk+/A8LNekjkwj5rG1K7Fc6FfUquTX1aGqecrSiWCxK+3cnO+Rt5POzJBbETgkxSHXLFVRbXXjecANla1rZw/SiBZgxvLf1F+t4sV1br26GD/NoJ8StSlE9wXAgatUtmCABV74KrEE7uCOMeIagpWdQjcb1C0elaEodI9vzNSxM0F8CtFncipAa9/k937NlDKPCCJ+x1IBq1dvzS42pPDgekNmJEeFjnojx662mxQs0cK8cigcXVpWiT/CDZ6OeslDoaJmfzzMbDmWI1hdw==
+Received: from BN8PR07CA0029.namprd07.prod.outlook.com (2603:10b6:408:ac::42)
+ by SJ2PR12MB7894.namprd12.prod.outlook.com (2603:10b6:a03:4c6::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Fri, 13 Jan
+ 2023 13:51:15 +0000
+Received: from BN8NAM11FT113.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ac:cafe::13) by BN8PR07CA0029.outlook.office365.com
+ (2603:10b6:408:ac::42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
+ Transport; Fri, 13 Jan 2023 13:51:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT113.mail.protection.outlook.com (10.13.176.163) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 13:51:14 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 05:50:48 -0800
+Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 05:50:43 -0800
+Message-ID: <8e6d7dd3-1bdc-ee4b-0c1e-1ae9cd8e4f29@nvidia.com>
+Date:   Fri, 13 Jan 2023 19:20:41 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00cebe7d-ae3d-8772-c206-cd3ce6a275c1@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [Patch v1 08/10] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
+        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
+        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
+        Rajkumar Kasirajan <rkasirajan@nvidia.com>
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-9-sumitg@nvidia.com>
+ <4e3e4485-ba22-eb47-fb95-e8d626160bc6@gmail.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <4e3e4485-ba22-eb47-fb95-e8d626160bc6@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT113:EE_|SJ2PR12MB7894:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a9bd4bc-63cb-43b6-ac0b-08daf56d3cf5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bU56m77Y4qxU45SZbRtWeB5nD3+GkJgBqbaXJTKD1pFf0NLPdU8Vm/w/ukjAkyJSj9d+rcWGHv/ym0P5jQfAFWotLRdsrNUG0EzLFx0ihYyPan5qYp+1+f2QDWZIzfHevpMOQXIMWT+73D5mqeeICAhFPUad4EuQ5akhpsX0cLgE7F8OjPZp39iuvX2qe0afmPpt99I12jCa1nifUa+W40FW5N9B1k4VvP+fqNukuRRsSn/KCSYayb7/m00sTtwTmhWKRP/w1whp+0CloNLO/oMd1WIVxsB+mxBTRJEcfE77JkXO9gPPbaoK9vFoGBMwMsyivZEXoaTbv7p2FV5vUqcRXPEmLwN5wqMDZYbhF1Tz1xekDikm+pLhshVqpEICLgdBxRym6jgYma39J8z50dUR+Oq+3OSqdEp5zFXgMdn2vC0S/AMUpNpxrxk7osTCbDO0YYzhwVpY/MDIbu+CWpQLX0DQXl5uRxE5mTGSjDy7hYCcNG/vUUvNo9McBSzXrRA9X3VaaLvg89/vRrPYP2kZKY5tWKDWPSZLx8fnb5m4urv4ebHX/jyzOxOYVdnJ8NXrb0NsDH0o0/feVaS50Ldeo1zuwZicv7A4qOh9KVp4dfnczrka1X2Mo8+wviTeQe0WIPKMEhcGaa2e0Ak8aDwjGiCFDpSSjuNpq9vqpccuHdDvgoidF4kAz/+aYaJi5+0oy6w7x2RfoxKtVngBOWBStV5a6XlGAm9grqjTDpy58baAHFIyLM3FKbq8Sftm5WQunIPyAR35t135zR950JhKt7PaLOvtSCA4prx94S+z9zMvFoSA+IZQmrE41WoCeyzU5dknMW0Cq5ejrVIsrQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(82310400005)(47076005)(8936002)(82740400003)(26005)(2906002)(5660300002)(41300700001)(7636003)(7416002)(426003)(16576012)(921005)(4326008)(316002)(8676002)(70586007)(110136005)(356005)(54906003)(70206006)(16526019)(2616005)(40480700001)(336012)(31686004)(86362001)(40460700003)(186003)(107886003)(966005)(31696002)(36756003)(83380400001)(36860700001)(53546011)(478600001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 13:51:14.7289
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a9bd4bc-63cb-43b6-ac0b-08daf56d3cf5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT113.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7894
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 05:46:09AM +0200, Dmitry Baryshkov wrote:
-> Hi,
-> 
-> On 11/01/2023 21:42, Christian Marangi wrote:
-> > Some RCG frequency can be reached by multiple configuration.
-> > 
-> > We currently declare multiple configuration for the same frequency but
-> > that is not supported and always the first configuration will be taken.
-> > 
-> > These multiple configuration are needed as based on the current parent
-> > configuration, it may be needed to use a different configuration to
-> > reach the same frequency.
-> > 
-> > To handle this introduce 2 new macro, FM and C.
-> > 
-> > - FM is used to declare an empty freq_tbl with just the frequency and an
-> >    array of confs to insert all the config for the provided frequency.
-> > 
-> > - C is used to declare a fre_conf where src, pre_div, m and n are
-> >    provided.
-> > 
-> > The driver is changed to handle this special freq_tbl and select the
-> > correct config by calculating the final rate and deciding based on the
-> > one that is less different than the requested one.
-> 
-> I gave this a thought.
-> 
-> First some generic thought about RCG2 risen by your patch. I'll talk about
-> the CEIL functions, but the same applies to FLOOR ones.
-> 
-> The clk_rcg2_determine_rate() / freq_tbl_determine_rate() determines the
-> best supported rate and and selects a best parent. Good. Then CCF will pass
-> the determined target rate, parent index and parent rate either to
-> clk_rcg2_set_rate() or to the clk_rcg2_set_rate_and_parent() depending on
-> whether it determines that the parent should be switched or not. So far so
-> good.
-> 
-> However then the __clk_rcg2_set_rate() will perform the same search again,
-> taking care of FLOOR or CEIL, completely ignoring the fact that rate passed
-> is already known to be the supported rate, so we can just look for it and
-> ignoring the provided parent (or a note from CCF that the parent should
-> remain the same).
->
 
-Interesting analysis and looks to be something to fix and improve for
-sure. Will take some time but happy to fix. Also in theory on a system
-we should have all kind of clk variant due to the amount of clocks
-modern so a simple clk_summary diff should catch regression quite
-easily.
 
-> This worked correctly in the single-possible-configuration case, however it
-> IMHO becames fragile in the multiple-possible-configuration case. Consider
-> CCF switching the parent rate during the clk_set_rate() call. Then the
-> second lookup might end up selecting _different_ parent/mnd configuration.
+On 22/12/22 21:16, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
 > 
-> Thus said, I'd suggest first changing clk_rcg2_set_rate/and_parent(). Make
-> it look up the exact configuration without the rounding (it is unnecessary
-> anyway). This would require something like qcom_find_freq_exact(). Or just
-> loop over the table in __clk_rcg2_set_rate().
-
-Just to make sure I understood the logic. Since it's all driven by
-determine_rate, in theory we should never do searching on the set rate
-and just execute what it's said... With the following idea why the
-set_floor_rate needed a __clk_rcg2_set_rate variant with the FLOOR
-policy? If everything is decided by determine_rate then the set_rate
-function should be able to just use a TO-IMPLEMENT find_freq_exact
-function. Am I missing something?
-
 > 
-> Then for your case make it actually use the provided parent index (or the
-> current parent in the .set_rate() case). This will make sure that we follow
-> CCF decisions instead of making them on our own.
+> 20.12.2022 19:02, Sumit Gupta пишет:
+>> Add support to use OPP table from DT in Tegra194 cpufreq driver.
+>> Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
+>> Cross check the OPP's present in DT against the LUT from BPMP-FW
+>> and enable only those DT OPP's which are present in LUT also.
+>>
+>> The OPP table in DT has CPU Frequency to bandwidth mapping where
+>> the bandwidth value is per MC channel. DRAM bandwidth depends on the
+>> number of MC channels which can vary as per the boot configuration.
+>> This per channel bandwidth from OPP table will be later converted by
+>> MC driver to final bandwidth value by multiplying with number of
+>> channels before sending the request to BPMP-FW.
+>>
+>> If OPP table is not present in DT, then use the LUT from BPMP-FW directy
+>> as the frequency table and not do the DRAM frequency scaling which is
+>> same as the current behavior.
+>>
+>> Now, as the CPU Frequency table is being controlling through OPP table
+>> in DT. Keeping fewer entries in the table will create less frequency
+>> steps and scale fast to high frequencies if required.
 > 
-> Finally for your usecase to work correcly you need to select correct
-> rate+parent in the .determine_rate callback.
+> It's not exactly clear what you're doing here. Are you going to scale
+> memory BW based on CPU freq? If yes, then this is wrong because CPU freq
+> is independent from the memory subsystem.
 > 
-> We know that the freq_table is sorted already. Add a loop to
-> _freq_tbl_determine_rate() policy switchcase to check next table entries
-> determing if their parent rate is better than the parent rate of the
-> selected entry.
-
-With this you mean that we should continue putting duplicate entry in
-the freq table and always check the next element for alternative conf?
-
-This was the qcom way and honestly I find it pretty confusing than a
-well organized table with only unique entry and a way to directly check
-if we are in a multi-conf scenario. (also lets not trust devs with
-having the freq table sorted)
-
-> 
-> > 
-> > Tested-by: Robert Marko <robimarko@gmail.com>
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >   drivers/clk/qcom/clk-rcg.h  | 14 ++++++-
-> >   drivers/clk/qcom/clk-rcg2.c | 84 +++++++++++++++++++++++++++++++++----
-> >   2 files changed, 88 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> > index 01581f4d2c39..18f4f7b59f36 100644
-> > --- a/drivers/clk/qcom/clk-rcg.h
-> > +++ b/drivers/clk/qcom/clk-rcg.h
-> > @@ -7,7 +7,17 @@
-> >   #include <linux/clk-provider.h>
-> >   #include "clk-regmap.h"
-> > -#define F(f, s, h, m, n) { (f), (s), (2 * (h) - 1), (m), (n) }
-> > +#define F(f, s, h, m, n) { (f), (s), (2 * (h) - 1), (m), (n), 0, NULL }
-> > +
-> > +#define FM(_f, _confs) { .freq = (_f), .confs_num = ARRAY_SIZE(_confs), .confs = (_confs) }
-> > +#define C(s, h, m, n) { (s), (2 * (h) - 1), (m), (n) }
-> > +
-> > +struct freq_conf {
-> > +	u8 src;
-> > +	u8 pre_div;
-> > +	u16 m;
-> > +	u16 n;
-> > +};
-> >   struct freq_tbl {
-> >   	unsigned long freq;
-> > @@ -15,6 +25,8 @@ struct freq_tbl {
-> >   	u8 pre_div;
-> >   	u16 m;
-> >   	u16 n;
-> > +	int confs_num;
-> > +	const struct freq_conf *confs;
-> >   };
-> >   /**
-> > diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> > index 76551534f10d..7d3b59ec2b50 100644
-> > --- a/drivers/clk/qcom/clk-rcg2.c
-> > +++ b/drivers/clk/qcom/clk-rcg2.c
-> > @@ -209,11 +209,60 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> >   	return __clk_rcg2_recalc_rate(hw, parent_rate, cfg);
-> >   }
-> > +static void
-> > +clk_rcg2_select_conf(struct clk_hw *hw, struct freq_tbl *f_tbl,
-> > +		     const struct freq_tbl *f, unsigned long req_rate)
-> > +{
-> > +	unsigned long best_rate = 0, parent_rate, rate;
-> > +	const struct freq_conf *conf, *best_conf;
-> > +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> > +	struct clk_hw *p;
-> > +	int index, i;
-> > +
-> > +	/* Search in each provided config the one that is near the wanted rate */
-> > +	for (i = 0, conf = f->confs; i < f->confs_num; i++, conf++) {
-> > +		index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
-> > +		if (index < 0)
-> > +			continue;
-> > +
-> > +		p = clk_hw_get_parent_by_index(hw, index);
-> > +		if (!p)
-> > +			continue;
-> > +
-> > +		parent_rate =  clk_hw_get_rate(p);
-> > +		rate = calc_rate(parent_rate, conf->n, conf->m, conf->n, conf->pre_div);
-> > +
-> > +		if (rate == req_rate) {
-> > +			best_conf = conf;
-> > +			break;
-> > +		}
-> > +
-> > +		if (abs(req_rate - rate) < abs(best_rate - rate)) {
-> > +			best_rate = rate;
-> > +			best_conf = conf;
-> > +		}
-> > +	}
-> > +
-> > +	/*
-> > +	 * Very unlikely.
-> > +	 * Force the first conf if we can't find a correct config.
-> > +	 */
-> > +	if (unlikely(i == f->confs_num))
-> > +		best_conf = f->confs;
-> > +
-> > +	/* Apply the config */
-> > +	f_tbl->src = best_conf->src;
-> > +	f_tbl->pre_div = best_conf->pre_div;
-> > +	f_tbl->m = best_conf->m;
-> > +	f_tbl->n = best_conf->n;
-> > +}
-> > +
-> >   static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
-> >   				    struct clk_rate_request *req,
-> >   				    enum freq_policy policy)
-> >   {
-> >   	unsigned long clk_flags, rate = req->rate;
-> > +	struct freq_tbl f_tbl;
-> >   	struct clk_hw *p;
-> >   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> >   	int index;
-> > @@ -232,7 +281,15 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
-> >   	if (!f)
-> >   		return -EINVAL;
-> > -	index = qcom_find_src_index(hw, rcg->parent_map, f->src);
-> > +	f_tbl = *f;
-> > +	/*
-> > +	 * A single freq may be reached by multiple configuration.
-> > +	 * Try to find the bast one if we have this kind of freq_table.
-> > +	 */
-> > +	if (f->confs)
-> > +		clk_rcg2_select_conf(hw, &f_tbl, f, rate);
-> > +
-> > +	index = qcom_find_src_index(hw, rcg->parent_map, f_tbl.src);
-> >   	if (index < 0)
-> >   		return index;
-> > @@ -242,18 +299,18 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
-> >   		return -EINVAL;
-> >   	if (clk_flags & CLK_SET_RATE_PARENT) {
-> > -		rate = f->freq;
-> > -		if (f->pre_div) {
-> > +		rate = f_tbl.freq;
-> > +		if (f_tbl.pre_div) {
-> >   			if (!rate)
-> >   				rate = req->rate;
-> >   			rate /= 2;
-> > -			rate *= f->pre_div + 1;
-> > +			rate *= f_tbl.pre_div + 1;
-> >   		}
-> > -		if (f->n) {
-> > +		if (f_tbl.n) {
-> >   			u64 tmp = rate;
-> > -			tmp = tmp * f->n;
-> > -			do_div(tmp, f->m);
-> > +			tmp = tmp * f_tbl.n;
-> > +			do_div(tmp, f_tbl.m);
-> >   			rate = tmp;
-> >   		}
-> >   	} else {
-> > @@ -261,7 +318,7 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
-> >   	}
-> >   	req->best_parent_hw = p;
-> >   	req->best_parent_rate = rate;
-> > -	req->rate = f->freq;
-> > +	req->rate = f_tbl.freq;
-> >   	return 0;
-> >   }
-> > @@ -357,6 +414,7 @@ static int __clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
-> >   {
-> >   	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> >   	const struct freq_tbl *f;
-> > +	struct freq_tbl f_tbl;
-> >   	switch (policy) {
-> >   	case FLOOR:
-> > @@ -372,7 +430,15 @@ static int __clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
-> >   	if (!f)
-> >   		return -EINVAL;
-> > -	return clk_rcg2_configure(rcg, f);
-> > +	f_tbl = *f;
-> > +	/*
-> > +	 * A single freq may be reached by multiple configuration.
-> > +	 * Try to find the best one if we have this kind of freq_table.
-> > +	 */
-> > +	if (f->confs)
-> > +		clk_rcg2_select_conf(hw, &f_tbl, f, rate);
-> > +
-> > +	return clk_rcg2_configure(rcg, &f_tbl);
-> >   }
-> >   static int clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
-> 
-> -- 
-> With best wishes
-> Dmitry
+> All Tegra30+ SoCs have ACTMON hardware unit that monitors CPU memory
+> activity and CPU memory BW should be scaled based on CPU memory events
+> counter. We have ACTMON devfreq driver for older SoCs. I have no clue
+> how ACTMON can be accessed on T186+, perhaps there should be a BPMP FW
+> API for that.
 > 
 
--- 
-	Ansuel
+Yes, scaling the memory BW based on CPU freq.
+Referred below patch set for previous generation of Tegra Soc's which 
+you mentioned and tried to trace the history.
+ 
+https://patchwork.ozlabs.org/project/linux-tegra/patch/1418719298-25314-3-git-send-email-tomeu.vizoso@collabora.com/
+
+In new Tegra Soc's, actmon counter control and usage has been moved to 
+BPMP-FW where only 'MCALL' counter is used and 'MCCPU is not being used.
+Using the actmon counter was a reactive way to scale the frequency which 
+is less effective due to averaging over a time period.
+We are now using the proactive way where clients tell their bandwidth
+needs to help achieve better performance.
