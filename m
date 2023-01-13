@@ -2,88 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C4066A28C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD69D66A27A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjAMTCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S230448AbjAMS76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjAMTCm (ORCPT
+        with ESMTP id S229944AbjAMS7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:02:42 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A381D544FB
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:02:41 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id s67so15609515pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:02:41 -0800 (PST)
+        Fri, 13 Jan 2023 13:59:54 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A338551C6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:59:50 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id j6-20020a4ac546000000b004f1f6208187so4378179ooq.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:59:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Esn860/b7q2FuVfCNzZ6mccJ1X/ZkalyPjwmd217Nv4=;
-        b=Ery1UMs1jDwUi0O+CXdO2n+YdU/UHLge+mNe4ZmVdYZVyEbilxA035tLhx4HIQxmf/
-         HVcCxE9PvQ/niZzlQ8b+a4mdSHwLyyeghuEcEIUR9CV5ug1E6Ld2JYeIGmrEeGdzGoqH
-         JBZQbfHTCqJYx0Dkl++j+gVFGIE9rbtOCAyY19r5nuk5TPxtLrztVK6dEHAz4D0oGIal
-         zhtqnF/9LWftIrGaaJH6KpABefdUB8pJBOSvJaCLRsGQQtWM662WilzhzqCUVdXW/epn
-         GK+yLiw+LmMv6XLJJc1PDKvFL3FAxWcbUr/F8goR5cweMEt11j7ja86Mc0KYCsBnuiF2
-         zjRg==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bTIDomgS8mXkDJCvxm5Zm+LjWmMOagP4MCI8VhlfZ4M=;
+        b=PS9bts8WEYUdHc2dq03MseWIdo5SmkGasWJ1IHK/82VNd2x1nauvFpnIRKJHReewV4
+         qHgmemCtG+n4JzEug1j/TkXXGr7XuvlNF4IBzbNfnN6lagwFrOKhEymKlD3N/LDBaGvv
+         sKYDqBaLKXsSv5VTvSWrpB1Ro6mV2B1zSTvwS3WrXPPhGJgdWKpIwnEsYL1x49CphPxG
+         SL4YOgYdR5jGUY39ZZius3Ig7i4WfTYOC67k8Vh1lto4GbCgV9uKa97KEalM5EmLMGPn
+         3yGQHE93+pmLVFjd1TlIZLJrfjBmFeNgyn5vD6/2wKe8LZIYKJC7joRnrftdzonfyS0K
+         +t4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Esn860/b7q2FuVfCNzZ6mccJ1X/ZkalyPjwmd217Nv4=;
-        b=NZqoxpCTXp7pZyq53ILvYEHMpqKty9M1kt4thidrBnZ7eq70dHzR1CkPNtBW5dRZhK
-         zYe1WN+JH9KKBH8ixCh9BggFaUE6/GViN14FeEL0u1CBPLyAocu0EH6JbyyxBDC7qZEC
-         M9TZkgsZbt3/28gEroXL3GnovJEjDQN0KfnEc41WEQ1aFRbiEtAbvFLQjC1r2yP3OqOi
-         vI7TpKa4s2tpWd0KiCanGvPAWdZAWMDnlrUFKz2FXEI+/jmSF1riqvj1jLxygsE+Oit+
-         C/C3hdtt3gK73oR3dy/1DNSAoSOX55A0WVag22xyvIADLmbj73lgpytqr08EbEfBC8Uf
-         sCfw==
-X-Gm-Message-State: AFqh2kqpW+ZS1yF9fPYORya+P1iYVrG8IyvLZzcL3OYrtT63+jYsC5l0
-        9vZRLelrR2NhaCdQyXQTMsk=
-X-Google-Smtp-Source: AMrXdXsTwypi3hXE5837mhpHBU4iIcaBxV7ODjHBBoshttfRO0lfABfRnWVwsVB8sgZjDfQ2Qi9Mew==
-X-Received: by 2002:a05:6a00:d77:b0:587:102b:edb6 with SMTP id n55-20020a056a000d7700b00587102bedb6mr22154080pfv.17.1673636561162;
-        Fri, 13 Jan 2023 11:02:41 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:2e4e:fba:501b:3a8c])
-        by smtp.gmail.com with ESMTPSA id e26-20020aa7981a000000b00585cb0efebbsm3572849pfl.175.2023.01.13.11.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 11:02:40 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 13 Jan 2023 11:02:38 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCHv2 4/4] zsmalloc: set default zspage chain size to 8
-Message-ID: <Y8GqzpA8G8KOoV2n@google.com>
-References: <20230109033838.2779902-1-senozhatsky@chromium.org>
- <20230109033838.2779902-5-senozhatsky@chromium.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bTIDomgS8mXkDJCvxm5Zm+LjWmMOagP4MCI8VhlfZ4M=;
+        b=XIxXlH1rmiwHrZz0CwdkDjZWvN1c2PWXO0Xboa2lZY4KmcyvPVvhJXo2WRFH/6BibZ
+         RLFebt1pHk0w1k3Y8HD6EXfl5wu/5t247JsJp6ZQ78THOW1eTRwgW/oMvthdGeG99grj
+         IGrhNbzjFcwJ3O1ZKQZ8fMrzwdpmyxcroap58/Ugm82q7lttZSyDoR5C+t6PbNqNy32X
+         N9uANlbpQ3P3rwSOvjTJD+O/aPVob9y7728MDaNdt3cEVLZvmJNjtV5w/SYLx06VRBLi
+         OBEFnxBHSj+4nl6I3rQhoOc0kbZeoJYiLDXXvcoooj5kEUYm1VVt5ewWnK1FnrA/2Dnz
+         IJKw==
+X-Gm-Message-State: AFqh2kqNvtVi78fqIlziop+LnIWrbJ+4uCLFVXkwKqgVVympVAqGVz2m
+        8zw53e6VoS1SmGGFExvbZAvREw==
+X-Google-Smtp-Source: AMrXdXvaOiO0G10Az4EGLc64Vx6N+KrZr3PuLGXv0M+M3iF7lrA3WUc8R2fIq6AYtp8ZC6Mk4E9lCQ==
+X-Received: by 2002:a4a:c594:0:b0:4e7:5d43:a654 with SMTP id x20-20020a4ac594000000b004e75d43a654mr22358114oop.0.1673636389556;
+        Fri, 13 Jan 2023 10:59:49 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id bc31-20020a056820169f00b0049f8b4b2095sm10111163oob.44.2023.01.13.10.59.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 10:59:48 -0800 (PST)
+Message-ID: <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
+Date:   Fri, 13 Jan 2023 13:11:56 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230109033838.2779902-5-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
+ <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 12:38:38PM +0900, Sergey Senozhatsky wrote:
-> This changes key characteristics (pages per-zspage and objects
-> per-zspage) of a number of size classes which in results in
-> different pool configuration. With zspage chain size of 8 we
-> have more size clases clusters (123) and higher huge size class
-> watermark (3632 bytes).
+On 1/13/23 02:52, John Paul Adrian Glaubitz wrote:
+> Hi Geert!
 > 
-> Please read zsmalloc documentation for more details.
+> On 1/13/23 09:26, Geert Uytterhoeven wrote:
+>> Indeed.  The main issue is not the lack of people sending patches and
+>> fixes, but those patches never being applied by the maintainers.
+>> Perhaps someone is willing to stand up to take over maintainership?
 > 
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Acked-by: Minchan Kim <minchan@kernel.org>
+> I actually would be willing to do it but I'm a bit hesitant as I'm not 100%
+> sure my skills are sufficient. Maybe if someone can assist me?
 
-Thanks for great work, Sergey!
+My skills aren't sufficient and I dunno how much time I have, but I can
+certainly assist. I test sh4 regularlyish and it's in the list of architectures
+I ship binaries and tiny VM images for, just refreshed tuesday:
+
+https://landley.net/toybox/downloads/binaries/0.8.9/
+https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+
+(The sh2eb isn't a VM, it's a physical board I have here...)
+
+There is definitely interest in this architecture. I'm aware Rich hasn't been
+the most responsive maintainer. (I'm told he's on vacation with his family at
+the moment, according to the text I got about this issue from the J-core
+hardware guys in Japan.)
+
+The main reason we haven't converted everything to device tree is we only have
+access to test hardware for a subset of the boards. Pruning the list of
+supported boards and converting the rest to device tree might make sense. We can
+always add/convert boards back later...
+
+Rob
