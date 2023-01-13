@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE10669903
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC5266990B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241622AbjAMNtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:49:19 -0500
+        id S241497AbjAMNuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:50:46 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241885AbjAMNss (ORCPT
+        with ESMTP id S240277AbjAMNuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:48:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940F7249
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:43:58 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5FAF26B3B1;
-        Fri, 13 Jan 2023 13:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673617436; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S6nF7/THmOUUOTsAB+4DblfEjyDDT4H7PFp1Q1Ojth0=;
-        b=qaXXrxrqCb0du8W/JmeBZQs4oVpsTF2eZG5QJgf+mZ52SuLF8Xdxjr2ALZzJ+iMk6H0wk/
-        KWH4u3ABOJVnGg06jGUYA1JGaq6XzgdYoEyzoz5CvJL0emE+BK47rpSZF+n1uMDwtZC3Vl
-        3LBuIwptXukKs9fNtSW/Qg51nniJqoU=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 407052C141;
-        Fri, 13 Jan 2023 13:43:56 +0000 (UTC)
-Date:   Fri, 13 Jan 2023 14:43:53 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     akpm@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, zwp10758@gmail.com
-Subject: Re: [RFC PATCH] hung_task: show sysctl_hung_task_warnings
-Message-ID: <Y8FgGev2HPX/ksUS@alley>
-References: <Y7/QOZYvOFjbP3wu@zwp-5820-Tower>
+        Fri, 13 Jan 2023 08:50:22 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D656DB9D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:45:10 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4d0f843c417so170943577b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:45:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N9gSuTuOIeRoyvXTslypN3S9Y3n9ZhQxFv0DvHbjXOo=;
+        b=XUWtnSngwMqp0UV7+YoSQSR43zlVXU4xZV+OghNp2zfKJqKNZSWd+UoXUp9v9V9uvB
+         ffGPgkM6bVmmhPDO8sh0LaGP514Je2D3rR9qM6QE9iWzkKJY7KKgxtXraU1tkwAy9s0Q
+         SiybHuuvqpsSllMrAUzECDUxWETqLcic3sRQ09XfY/HkTdOTJFnzTV/T4IW9cG/r3Clu
+         dWjoFsMVpqnqojQgsNhZfLDf38ymkZZ8mdyq+4YHqzoreBb3gQDswu46hWUfdIrqNG3H
+         TathLmKvrjhS7oOIJ1AwWwFFDhO50clncGTZuQpI880Km2p4YABs/aZZY2fgvA3/EgUM
+         znzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N9gSuTuOIeRoyvXTslypN3S9Y3n9ZhQxFv0DvHbjXOo=;
+        b=DkaCrqGYsTM1GAdYkhBrG07fILipEulE6eYJWfqgNVpYMLR3m5zP/ItIa1EgAutI0f
+         10LzEmMBY0yrlrHaPM+mJMCjWVXDTAdNxJcCfmm1I1fyW2I0mt5d8MIUHDMD1qeLSJGW
+         z/wlrTJibb76hLMsGLOntAIx5E+5NJ+YEh8ebf4pT39q7vGKKpmumucL7f6yIhsYm+CP
+         p/O/rbjJhDuDn8uDmo8ixx7zMIrspHlQLonEELV5zea47dYxEVWET7ivRNAKbLYHn1k1
+         BDPuwOza3QnwBoLZxI5ozxqXJjbJNQJPTy1JVnVvBAyDDt4jmntuv234rqfyzD6gi1Vk
+         tDRg==
+X-Gm-Message-State: AFqh2krslK1o3jxItF3UDelPDLPstKWsB2Rd6ai8KMhJV5gI/QD8QqX5
+        UMww2bTstTLQZx9xqs+GHIs+uDxyyfIbqINJT5Nenw==
+X-Google-Smtp-Source: AMrXdXtJH9fhqngsU/znGp5Pce6WNzdeRxElK/cgmqsxhsBn2wn0OeFj/fgiLxP0V8CiM2Wny3plPb1rZ6Kc6GkYCFs=
+X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
+ bg19-20020a05690c031300b0037e6806a5f9mr3612977ywb.47.1673617509336; Fri, 13
+ Jan 2023 05:45:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7/QOZYvOFjbP3wu@zwp-5820-Tower>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113133503.58336-1-sensor1010@163.com>
+In-Reply-To: <20230113133503.58336-1-sensor1010@163.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 13 Jan 2023 14:44:58 +0100
+Message-ID: <CANn89iKDXQ_nvnXBp5Q99P67AW-jFTNkpEmYdESDWitf0Nt4vw@mail.gmail.com>
+Subject: Re: [PATCH v1] wireless/at76c50x-usb.c : Use devm_kzalloc replaces kmalloc
+To:     Lizhe <sensor1010@163.com>
+Cc:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, johannes.berg@intel.com,
+        alexander@wetzel-home.de, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-01-12 17:17:45, Weiping Zhang wrote:
-> This patch try to add more debug info to detect lost kernel log or no
-> hung task was detected.
-> 
-> The user set 10 to the hung_task_timeout_secs, the kernel log:
-> 
-> [ 3942.642220] INFO: task mount:19066 blocked for more than 10 seconds.
-> [ 3952.876768] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
-> [ 3952.877088] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
-> [ 3952.878212] INFO: task mount:19066 blocked for more than 10 seconds.
-> [ 3963.116805] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
-> [ 3963.117137] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
-> [ 3963.118275] INFO: task mount:19066 blocked for more than 10 seconds.
-> [ 3973.356837] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
-> [ 3973.357148] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
-> [ 3973.358247] INFO: task mount:19066 blocked for more than 10 seconds.
-> [ 3993.836899] INFO: task kworker/u81:0:7 blocked for more than 10 seconds.
-> [ 3993.837238] INFO: task scsi_eh_0:506 blocked for more than 10 seconds.
-> [ 3993.838356] INFO: task mount:19066 blocked for more than 10 seconds.
-> 
-> There is no any log at about 3983, it's hard to know if kernel log was
-> lost or there is no hung task was detected at that moment. So this patch
-> print sysctl_hung_task_warnings to distinguish the above two cases.
-> 
-> Signed-off-by: Weiping Zhang <zhangweiping@didiglobal.com>
+On Fri, Jan 13, 2023 at 2:35 PM Lizhe <sensor1010@163.com> wrote:
+>
+> use devm_kzalloc replaces kamlloc
+>
+> Signed-off-by: Lizhe <sensor1010@163.com>
 > ---
->  kernel/hung_task.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-> index c71889f3f3fc..ca917931473d 100644
-> --- a/kernel/hung_task.c
-> +++ b/kernel/hung_task.c
-> @@ -127,8 +127,11 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
->  	 * complain:
->  	 */
->  	if (sysctl_hung_task_warnings) {
-> -		if (sysctl_hung_task_warnings > 0)
-> +		if (sysctl_hung_task_warnings > 0) {
->  			sysctl_hung_task_warnings--;
-> +			pr_err("sysctl_hung_task_warnings: %d\n",
-> +				sysctl_hung_task_warnings);
-> +		}
+>  drivers/net/wireless/atmel/at76c50x-usb.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wireless/atmel/at76c50x-usb.c b/drivers/net/wireless/atmel/at76c50x-usb.c
+> index 009bca34ece3..ebd8ef525557 100644
+> --- a/drivers/net/wireless/atmel/at76c50x-usb.c
+> +++ b/drivers/net/wireless/atmel/at76c50x-usb.c
+> @@ -2444,7 +2444,7 @@ static int at76_probe(struct usb_interface *interface,
+>
+>         udev = usb_get_dev(interface_to_usbdev(interface));
+>
+> -       fwv = kmalloc(sizeof(*fwv), GFP_KERNEL);
+> +       fwv = devm_kzalloc(sizeof(*fwv), GFP_KERNEL);
 
-It is too much noise. But it might make sense to report it when
-the counter gets down to zero. Something like:
+Have you compiled this patch ?
 
-		if (sysctl_hung_task_warnings)
-			pr_info("Future hung task reports are suppressed, see sysctl kernel.hung_task_warnings\n");
-
-and move this down after printing all the details for this hung task report.
-
->  		pr_err("INFO: task %s:%d blocked for more than %ld seconds.\n",
->  		       t->comm, t->pid, (jiffies - t->last_switch_time) / HZ);
->  		pr_err("      %s %s %.*s\n",
-
-Best Regards,
-Petr
+>         if (!fwv) {
+>                 ret = -ENOMEM;
+>                 goto exit;
+> @@ -2535,7 +2535,6 @@ static int at76_probe(struct usb_interface *interface,
+>                 at76_delete_device(priv);
+>
+>  exit:
+> -       kfree(fwv);
+>         if (ret < 0)
+>                 usb_put_dev(udev);
+>         return ret;
+> --
+> 2.17.1
+>
