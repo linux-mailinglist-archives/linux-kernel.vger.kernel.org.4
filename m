@@ -2,172 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6085E669D96
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622B4669D9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjAMQX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S229734AbjAMQXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjAMQW7 (ORCPT
+        with ESMTP id S229694AbjAMQXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:22:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500706147C;
-        Fri, 13 Jan 2023 08:17:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD66EB82189;
-        Fri, 13 Jan 2023 16:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62D2C433F0;
-        Fri, 13 Jan 2023 16:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673626641;
-        bh=ZvTX6LgnsVxHP/nn+kEAnIIzNIaAPDqMNjglQidPBxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nVZh0z88hXIK/5/RYc8qJh1S1mPXk9GOR0CuDl9PbK4pQMNNxkh1SwhmO8x4LVMEx
-         rBRT0RQA14Mjm2odPwsgHEsN22EWuJ3C+cfX03iXWCmdPJbYd6aGbLwzpiTlckK2Hn
-         OkrCDGvp1YY5uWenMY4h+t3zk5ph7B6ihtvgsCwQ5aYLaCkxv57ZL5BXAFA0K2wyWO
-         z49oSRgegJ2dttzSRI0vT4EAZclCYSyB4zTtomLKsr7gQutnWV6R1Pqj3WDZ9ptGrB
-         P88L7WSXeAJMuA0naYCwOeccSkDMx8ICS6hgLbrB5C4x42lSkAnB1IWfEOyw6xgYU0
-         mXZegfNuwuYug==
-Date:   Fri, 13 Jan 2023 17:17:12 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>, "kw@linux.com" <kw@linux.com>,
-        Frank Li <frank.li@nxp.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v4 0/14] Add i.MX PCIe EP mode support
-Message-ID: <Y8GECJPWt126G8am@lpieralisi>
-References: <1666598803-1912-1-git-send-email-hongxing.zhu@nxp.com>
- <AS8PR04MB86761655C5F12142BA183B998C049@AS8PR04MB8676.eurprd04.prod.outlook.com>
+        Fri, 13 Jan 2023 11:23:03 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C446C7C39D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:17:35 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id c26so12103061pfp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TJeOsX7rqE6g0mVRSRHk5yMoUKpARELqW20Sskbk42I=;
+        b=IQ4NJUEEXnGK+4TAeAUhUDbJE39b5ZeOp1OkVTltv8wQ+Xw/ab4dZJsfeAjbFFROcM
+         t68CuD5zBGt1Hw9j0S/xUGh9mzMnECcJveODqqLxEdLoGsZtXfi33tXPnJw1uXZyMSBw
+         U/4qJwAZBR1xOV8LlKyaG6WbPNsOmhhzRLLYzskRVN3UbSxyKeBJ7w/m1F9d4GyOgXdb
+         3oGx9CtiHVr1s/ibzcusJma+EtZaQOARrir1OLiel8qyu0IWpN2bkwMxcTJXnpzafR9W
+         iSJbpvsbPUKzW/e0ZnGsOQLM3n1qdnhrQ3HRe/qcqutpi1rYQdcy1s3ckztjiRSdYTUe
+         WkUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TJeOsX7rqE6g0mVRSRHk5yMoUKpARELqW20Sskbk42I=;
+        b=28uLhz1QFHu8U4p5/M0ok9HbcHRt3gWHLog2Y3a/4MuUM5MpT+8W52Ndy/401OoDHM
+         ttbt+mOnC2G8wM7dH+KIiL2MR7GdYJKqbIz5S7GNFTKMgVGUgpjtTqzBCvkygOBsZbl4
+         B3sZ9H/gmKz8OTcIvm7DxhXCTIlAhHhRQ765TfOgYGjNahuct33U3HGfa33V3qRK36uL
+         ZgzISQQ4+cIvxZnyvD0xpzlRiYlBpFw1TOxlCIcT2efWJwEDILhv515OZ7LW97LaBcFM
+         AZWMwNe2WqZ2hXGLcJTaj2vx4s/0+gv3WNQQVjLKm12iMXuzfpvlXivzgYv8VYVhkutW
+         4K5A==
+X-Gm-Message-State: AFqh2kp/DRJbxHcnzm/9sssIxi9u95MJNTAaQ+cI8oQdYFqmqJWWTS7l
+        gL3nwZuZLFUvxvHvNAfaeBzRCQ==
+X-Google-Smtp-Source: AMrXdXuXHVHcsxtYERQM+5pjJq9HKtQ+w/9gzosLvtojx6mjzh7D5LxDRnQ8J2KS7JQnIjIk3czM+g==
+X-Received: by 2002:aa7:8148:0:b0:576:9252:d06 with SMTP id d8-20020aa78148000000b0057692520d06mr1269277pfn.0.1673626655147;
+        Fri, 13 Jan 2023 08:17:35 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b00581a156b920sm1555298pfk.132.2023.01.13.08.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:17:34 -0800 (PST)
+Date:   Fri, 13 Jan 2023 16:17:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        harald@profian.com, Nikunj A Dadhania <nikunj@amd.com>
+Subject: Re: [PATCH RFC v7 07/64] KVM: SEV: Handle KVM_HC_MAP_GPA_RANGE
+ hypercall
+Message-ID: <Y8GEGnmD90bySl8C@google.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-8-michael.roth@amd.com>
+ <Y8GAGB73ZKElDYPI@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB86761655C5F12142BA183B998C049@AS8PR04MB8676.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8GAGB73ZKElDYPI@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 04:42:30AM +0000, Hongxing Zhu wrote:
-> Ping.
-> Almost one month pass away after this re-send of v4 series. 
-> Any comments?
-
-Can you rebase on top of v6.2-rc1 and resend it please ? I will merge
-the dt bindings and PCI changes then.
-
-Thanks,
-Lorenzo
-
-> Thanks.
-> Best Regards
-> Richard Zhu
+On Fri, Jan 13, 2023, Borislav Petkov wrote:
+> On Wed, Dec 14, 2022 at 01:39:59PM -0600, Michael Roth wrote:
+> > From: Nikunj A Dadhania <nikunj@amd.com>
+> > 
+> > KVM_HC_MAP_GPA_RANGE hypercall is used by the SEV guest to notify a
+> > change in the page encryption status to the hypervisor.
+> > 
+> > The hypercall exits to userspace with KVM_EXIT_HYPERCALL exit code,
+> > currently this is used for explicit memory conversion between
+> > shared/private for memfd based private memory.
 > 
-> > -----Original Message-----
-> > From: Richard Zhu <hongxing.zhu@nxp.com>
-> > Sent: 2022年10月24日 16:06
-> > To: l.stach@pengutronix.de; bhelgaas@google.com; robh+dt@kernel.org;
-> > lorenzo.pieralisi@arm.com; shawnguo@kernel.org; kishon@ti.com;
-> > kw@linux.com; Frank Li <frank.li@nxp.com>
-> > Cc: Hongxing Zhu <hongxing.zhu@nxp.com>; linux-pci@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
-> > <linux-imx@nxp.com>
-> > Subject: [PATCH v4 0/14] Add i.MX PCIe EP mode support
-> > 
-> > i.MX PCIe controller is one dual mode PCIe controller, and can work either as
-> > RC or EP.
-> > 
-> > This series add the i.MX PCIe EP mode support. And had been verified on
-> > i.MX8MQ, i.MX8MM EVK and i.MX8MP EVK boards.
-> > 
-> > In the verification, one EVK board used as RC, the other one used as EP.
-> > Use the cross TX/RX differential cable connect the two PCIe ports of these two
-> > EVK boards.
-> > 
-> > +-----------+                +------------+
-> > |   PCIe TX |<-------------->|PCIe RX     |
-> > |           |                |            |
-> > |EVK Board  |                |EVK Board   |
-> > |           |                |            |
-> > |   PCIe RX |<-------------->|PCIe TX     |
-> > +-----------+                +------------+
-> > 
-> > NOTE:
-> > Re-base to 6.1-rc1, and re-send the v4 series.
-> > BTW, the following PHY changes [1] is required when apply this series.
-> > 
-> > [1]
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchw
-> > ork.kernel.org%2Fproject%2Flinux-pci%2Fcover%2F1665625622-20551-1-git-s
-> > end-email-hongxing.zhu%40nxp.com%2F&amp;data=05%7C01%7Chongxing.z
-> > hu%40nxp.com%7C80b50b3789f9433f62e008dab5998a09%7C686ea1d3bc2b
-> > 4c6fa92cd99c5c301635%7C0%7C0%7C638021968298265067%7CUnknown%
-> > 7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwi
-> > LCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=j70ORNKBvTCjWtJzS375
-> > TvuQfCGrVRQNbxS%2BhrGI0ZA%3D&amp;reserved=0
-> > 
-> > Main changes from v3 -> v4:
-> > - Add the Rob's ACK in the dt-binding patch.
-> > - Use "i.MX" to keep spell consistent.
-> > - Squash generic endpoint infrastructure changes of
-> >   "[12/14] PCI: imx6: Add iMX8MM PCIe EP mode" into Kconfig changes.
-> > 
-> > Main changes from v2 -> v3:
-> > - Add the i.MX8MP PCIe EP support, and verified on i.MX8MP EVK board.
-> > - Rebase to latest pci/next branch(tag: v6.0-rc1 plus some PCIe changes).
-> > 
-> > Main changes from v1 -> v2:
-> > - Add Rob's ACK into first two commits.
-> > - Rebase to the tag: pci-v5.20-changes of the pci/next branch.
-> > 
-> > Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml |   3 ++
-> > arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi             |  14 ++++++
-> > arch/arm64/boot/dts/freescale/imx8mm.dtsi                 |  20
-> > +++++++++
-> > arch/arm64/boot/dts/freescale/imx8mp-evk.dts              |  13 ++++++
-> > arch/arm64/boot/dts/freescale/imx8mp.dtsi                 |  19
-> > ++++++++
-> > arch/arm64/boot/dts/freescale/imx8mq-evk.dts              |  12 ++++++
-> > arch/arm64/boot/dts/freescale/imx8mq.dtsi                 |  27
-> > ++++++++++++
-> > drivers/misc/pci_endpoint_test.c                          |   2 +
-> > drivers/pci/controller/dwc/Kconfig                        |  23
-> > +++++++++-
-> > drivers/pci/controller/dwc/pci-imx6.c                     | 200
-> > +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> > ++++++++++++++++--------
-> > 10 files changed, 314 insertions(+), 19 deletions(-)
-> > 
-> > [RESEND v4 01/14] dt-bindings: imx6q-pcie: Add i.MX8MM PCIe EP mode
-> > [RESEND v4 02/14] dt-bindings: imx6q-pcie: Add i.MX8MQ PCIe EP mode
-> > [RESEND v4 03/14] dt-bindings: imx6q-pcie: Add i.MX8MP PCIe EP mode
-> > [RESEND v4 04/14] arm64: dts: Add i.MX8MM PCIe EP support [RESEND v4
-> > 05/14] arm64: dts: Add i.MX8MM PCIe EP support on EVK [RESEND v4 06/14]
-> > arm64: dts: Add i.MX8MQ PCIe EP support [RESEND v4 07/14] arm64: dts:
-> > Add i.MX8MQ PCIe EP support on EVK [RESEND v4 08/14] arm64: dts: Add
-> > i.MX8MP PCIe EP support [RESEND v4 09/14] arm64: dts: Add i.MX8MP PCIe
-> > EP support on EVK [RESEND v4 10/14] misc: pci_endpoint_test: Add i.MX8
-> > PCIe EP device [RESEND v4 11/14] PCI: imx6: Add i.MX PCIe EP mode support
-> > [RESEND v4 12/14] PCI: imx6: Add i.MX8MQ PCIe EP support [RESEND v4
-> > 13/14] PCI: imx6: Add i.MX8MM PCIe EP support [RESEND v4 14/14] PCI: imx6:
-> > Add i.MX8MP PCIe EP support
+> So Tom and I spent a while to figure out what this is doing...
+> 
+> Please explain in more detail what that is. Like the hypercall gets ignored for
+> memslots which cannot be private...?
+
+Don't bother, just drop the patch.  It's perfectly legal for userspace to create
+the private memslot in response to a guest request.
