@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962D5668E8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 07:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44201668E8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 07:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240793AbjAMG5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 01:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S241034AbjAMG5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 01:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbjAMGz4 (ORCPT
+        with ESMTP id S240665AbjAMG4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 01:55:56 -0500
+        Fri, 13 Jan 2023 01:56:01 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9072F714AA;
-        Thu, 12 Jan 2023 22:41:13 -0800 (PST)
-X-UUID: 428e24a8930d11eda06fc9ecc4dadd91-20230113
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAC671897;
+        Thu, 12 Jan 2023 22:41:14 -0800 (PST)
+X-UUID: 428f4cc0930d11eda06fc9ecc4dadd91-20230113
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pgMKWf8cswrcZe1AKhWsFWsHR/fVUbTFef1NB0mRUw8=;
-        b=hiLi3lUacpMceljQ6Lulvx1tGtUKnzahqxgcb2kXriMlg7az0RDhatdlA9N7jiDJCytWk3nQ2oaYEksYGGflNoJG9osuMlXgdSYpEZmiUSKymLdJcAImUlvm9KN7oe+CNcKqWQOCUumakldOZ4OIQQef7lmSeyjS09lLfBvnpyg=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=6xF/zeCCVLyEJ+xAWRxshxuUk+t638QqKQjpL5e1kXQ=;
+        b=thyympIUGn/5vexi8E6mEMeboLWtjYmAAGja+SJhldeTfrHbxkMtoLkLdOsE3n8AItGldWX3+INXOG+NWk/e8znS/r+X9DXugTSPwRkyHXQbAdgPslT0r7EuinqvfsBuSM4lvgVps/kRwSKlxizmin0UBZeuY+/qQC0s+1+Zo6k=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:6e5401c6-6f8b-42c5-9521-515fe798d94f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-30
-X-CID-META: VersionHash:543e81c,CLOUDID:171b8c54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-O-INFO: VERSION:1.1.17,REQID:3b426a5e-f7dc-4669-9e44-b3896146096a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:543e81c,CLOUDID:96f0b5f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
 X-CID-BVR: 0
-X-UUID: 428e24a8930d11eda06fc9ecc4dadd91-20230113
+X-UUID: 428f4cc0930d11eda06fc9ecc4dadd91-20230113
 Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 801805891; Fri, 13 Jan 2023 14:41:07 +0800
+        with ESMTP id 1336158206; Fri, 13 Jan 2023 14:41:07 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
@@ -49,9 +49,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v5 09/12] media: platform: mtk-mdp3: dynamically allocate component clocks
-Date:   Fri, 13 Jan 2023 14:41:01 +0800
-Message-ID: <20230113064104.22402-10-moudy.ho@mediatek.com>
+Subject: [PATCH v5 10/12] media: platform: mtk-mdp3: Split general definitions used in MDP3
+Date:   Fri, 13 Jan 2023 14:41:02 +0800
+Message-ID: <20230113064104.22402-11-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230113064104.22402-1-moudy.ho@mediatek.com>
 References: <20230113064104.22402-1-moudy.ho@mediatek.com>
@@ -68,168 +68,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For extensibility of adding more MDP3 components in the further, the
-magic number is removed by dynamically allocating component clocks.
+Separate the generic definitions used in mdp3 to avoid recursive includes
+when splitting chip-related definitions in further.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 49 +++++++++++--------
- .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  3 +-
- 2 files changed, 31 insertions(+), 21 deletions(-)
+ .../platform/mediatek/mdp3/mtk-img-ipi.h      | 45 +---------------
+ .../platform/mediatek/mdp3/mtk-mdp3-type.h    | 53 +++++++++++++++++++
+ 2 files changed, 54 insertions(+), 44 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 8f4786cc4416..6288c11e979a 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -670,7 +670,8 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- {
- 	int i, ret;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
+index c7f231f8ea3e..239578f9ff96 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
+@@ -9,6 +9,7 @@
+ #define __MTK_IMG_IPI_H__
  
--	if (comp->comp_dev) {
-+	/* Only DMA capable components need the pm control */
-+	if (comp->comp_dev && is_dma_capable(comp->type)) {
- 		ret = pm_runtime_resume_and_get(comp->comp_dev);
- 		if (ret < 0) {
- 			dev_err(dev,
-@@ -680,7 +681,7 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- 		}
- 	}
+ #include <linux/types.h>
++#include "mtk-mdp3-type.h"
  
--	for (i = 0; i < ARRAY_SIZE(comp->clks); i++) {
-+	for (i = 0; i < comp->clk_num; i++) {
- 		if (IS_ERR_OR_NULL(comp->clks[i]))
- 			continue;
- 		ret = clk_prepare_enable(comp->clks[i]);
-@@ -700,7 +701,7 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- 			continue;
- 		clk_disable_unprepare(comp->clks[i]);
- 	}
--	if (comp->comp_dev)
-+	if (comp->comp_dev && is_dma_capable(comp->type))
- 		pm_runtime_put_sync(comp->comp_dev);
+ /*
+  * ISP-MDP generic input information
+@@ -16,12 +17,6 @@
+  *     6da52bdcf4bf76a0983b313e1d4745d6
+  */
  
- 	return ret;
-@@ -710,13 +711,13 @@ void mdp_comp_clock_off(struct device *dev, struct mdp_comp *comp)
- {
- 	int i;
- 
--	for (i = 0; i < ARRAY_SIZE(comp->clks); i++) {
-+	for (i = 0; i < comp->clk_num; i++) {
- 		if (IS_ERR_OR_NULL(comp->clks[i]))
- 			continue;
- 		clk_disable_unprepare(comp->clks[i]);
- 	}
- 
--	if (comp->comp_dev)
-+	if (comp->comp_dev && is_dma_capable(comp->type))
- 		pm_runtime_put(comp->comp_dev);
- }
- 
-@@ -795,7 +796,7 @@ static int mdp_comp_init(struct mdp_dev *mdp, struct device_node *node,
- 			 struct mdp_comp *comp, enum mtk_mdp_comp_id id)
- {
- 	struct device *dev = &mdp->pdev->dev;
--	int clk_num;
-+	struct platform_device *pdev_c;
- 	int clk_ofst;
- 	int i;
- 	s32 event;
-@@ -805,6 +806,14 @@ static int mdp_comp_init(struct mdp_dev *mdp, struct device_node *node,
- 		return -EINVAL;
- 	}
- 
-+	pdev_c = of_find_device_by_node(node);
-+	if (!pdev_c) {
-+		dev_warn(dev, "can't find platform device of node:%s\n",
-+			 node->name);
-+		return -ENODEV;
-+	}
-+
-+	comp->comp_dev = &pdev_c->dev;
- 	comp->public_id = id;
- 	comp->type = mdp->mdp_data->comp_data[id].match.type;
- 	comp->inner_id = mdp->mdp_data->comp_data[id].match.inner_id;
-@@ -812,10 +821,15 @@ static int mdp_comp_init(struct mdp_dev *mdp, struct device_node *node,
- 	comp->ops = mdp_comp_ops[comp->type];
- 	__mdp_comp_init(mdp, node, comp);
- 
--	clk_num = mdp->mdp_data->comp_data[id].info.clk_num;
-+	comp->clk_num = mdp->mdp_data->comp_data[id].info.clk_num;
-+	comp->clks = devm_kzalloc(dev, sizeof(struct clk *) * comp->clk_num,
-+				  GFP_KERNEL);
-+	if (!comp->clks)
-+		return -ENOMEM;
-+
- 	clk_ofst = mdp->mdp_data->comp_data[id].info.clk_ofst;
- 
--	for (i = 0; i < clk_num; i++) {
-+	for (i = 0; i < comp->clk_num; i++) {
- 		comp->clks[i] = of_clk_get(node, i + clk_ofst);
- 		if (IS_ERR(comp->clks[i]))
- 			break;
-@@ -852,6 +866,11 @@ static void mdp_comp_deinit(struct mdp_comp *comp)
- 	if (!comp)
- 		return;
- 
-+	if (comp->comp_dev && comp->clks) {
-+		devm_kfree(&comp->mdp_dev->pdev->dev, comp->clks);
-+		comp->clks = NULL;
-+	}
-+
- 	if (comp->regs)
- 		iounmap(comp->regs);
- }
-@@ -933,7 +952,8 @@ void mdp_comp_destroy(struct mdp_dev *mdp)
- 
- 	for (i = 0; i < ARRAY_SIZE(mdp->comp); i++) {
- 		if (mdp->comp[i]) {
--			pm_runtime_disable(mdp->comp[i]->comp_dev);
-+			if (is_dma_capable(mdp->comp[i]->type))
-+				pm_runtime_disable(mdp->comp[i]->comp_dev);
- 			mdp_comp_deinit(mdp->comp[i]);
- 			devm_kfree(mdp->comp[i]->comp_dev, mdp->comp[i]);
- 			mdp->comp[i] = NULL;
-@@ -945,7 +965,6 @@ int mdp_comp_config(struct mdp_dev *mdp)
- {
- 	struct device *dev = &mdp->pdev->dev;
- 	struct device_node *node, *parent;
--	struct platform_device *pdev;
- 	int ret;
- 
- 	memset(mdp_comp_alias_id, 0, sizeof(mdp_comp_alias_id));
-@@ -986,18 +1005,8 @@ int mdp_comp_config(struct mdp_dev *mdp)
- 		}
- 
- 		/* Only DMA capable components need the pm control */
--		comp->comp_dev = NULL;
- 		if (!is_dma_capable(comp->type))
- 			continue;
+-#define IMG_MAX_HW_INPUTS	3
 -
--		pdev = of_find_device_by_node(node);
--		if (!pdev) {
--			dev_warn(dev, "can't find platform device of node:%s\n",
--				 node->name);
--			return -ENODEV;
--		}
+-#define IMG_MAX_HW_OUTPUTS	4
 -
--		comp->comp_dev = &pdev->dev;
- 		pm_runtime_enable(comp->comp_dev);
- 	}
+-#define IMG_MAX_PLANES		3
+-
+ #define IMG_IPI_INIT    1
+ #define IMG_IPI_DEINIT  2
+ #define IMG_IPI_FRAME   3
+@@ -71,17 +66,6 @@ struct img_image_buffer {
  
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-index 5188aa0821c4..8d2ab9184f58 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
-@@ -159,7 +159,8 @@ struct mdp_comp {
- 	void __iomem			*regs;
- 	phys_addr_t			reg_base;
- 	u8				subsys_id;
--	struct clk			*clks[6];
-+	u8				clk_num;
-+	struct clk			**clks;
- 	struct device			*comp_dev;
- 	enum mdp_comp_type		type;
- 	enum mtk_mdp_comp_id		public_id;
+ #define IMG_SUBPIXEL_SHIFT	20
+ 
+-struct img_crop {
+-	s32 left;
+-	s32 top;
+-	u32 width;
+-	u32 height;
+-	u32 left_subpix;
+-	u32 top_subpix;
+-	u32 width_subpix;
+-	u32 height_subpix;
+-} __packed;
+-
+ #define IMG_CTRL_FLAG_HFLIP	BIT(0)
+ #define IMG_CTRL_FLAG_DITHER	BIT(1)
+ #define IMG_CTRL_FLAG_SHARPNESS	BIT(4)
+@@ -146,20 +130,6 @@ struct img_comp_frame {
+ 	u32 out_total_width;
+ } __packed;
+ 
+-struct img_region {
+-	s32 left;
+-	s32 right;
+-	s32 top;
+-	s32 bottom;
+-} __packed;
+-
+-struct img_offset {
+-	s32 left;
+-	s32 top;
+-	u32 left_subpix;
+-	u32 top_subpix;
+-} __packed;
+-
+ struct img_comp_subfrm {
+ 	u32 tile_disable;
+ 	struct img_region in;
+@@ -267,19 +237,6 @@ struct img_compparam {
+ 	};
+ } __packed;
+ 
+-#define IMG_MAX_COMPONENTS	20
+-
+-struct img_mux {
+-	u32 reg;
+-	u32 value;
+-	u32 subsys_id;
+-} __packed;
+-
+-struct img_mmsys_ctrl {
+-	struct img_mux sets[IMG_MAX_COMPONENTS * 2];
+-	u32 num_sets;
+-} __packed;
+-
+ struct img_config {
+ 	struct img_compparam components[IMG_MAX_COMPONENTS];
+ 	u32 num_components;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
+new file mode 100644
+index 000000000000..37cd7b27548f
+--- /dev/null
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
++ */
++
++#ifndef __MTK_MDP3_TYPE_H__
++#define __MTK_MDP3_TYPE_H__
++
++#include <linux/types.h>
++
++#define IMG_MAX_HW_INPUTS	3
++#define IMG_MAX_HW_OUTPUTS	4
++#define IMG_MAX_PLANES		3
++#define IMG_MAX_COMPONENTS	20
++
++struct img_crop {
++	s32 left;
++	s32 top;
++	u32 width;
++	u32 height;
++	u32 left_subpix;
++	u32 top_subpix;
++	u32 width_subpix;
++	u32 height_subpix;
++} __packed;
++
++struct img_region {
++	s32 left;
++	s32 right;
++	s32 top;
++	s32 bottom;
++} __packed;
++
++struct img_offset {
++	s32 left;
++	s32 top;
++	u32 left_subpix;
++	u32 top_subpix;
++} __packed;
++
++struct img_mux {
++	u32 reg;
++	u32 value;
++	u32 subsys_id;
++} __packed;
++
++struct img_mmsys_ctrl {
++	struct img_mux sets[IMG_MAX_COMPONENTS * 2];
++	u32 num_sets;
++} __packed;
++
++#endif  /* __MTK_MDP3_TYPE_H__ */
 -- 
 2.18.0
 
