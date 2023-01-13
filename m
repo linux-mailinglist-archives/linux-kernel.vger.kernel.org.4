@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507BD66A50A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668F966A510
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjAMVUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S230515AbjAMVVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjAMVTy (ORCPT
+        with ESMTP id S229706AbjAMVU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:19:54 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99BF80AEB;
-        Fri, 13 Jan 2023 13:19:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673644790;
-        bh=1ePr5/9/hpdk8ZNP/fLzQHeSBYrINMgfTNk9jaNeHJo=;
-        h=Date:To:From:Subject:From;
-        b=UcrXebDqr75hEGbA8OgZScDK5rqBtb5/QBKuGsgD0XV0ptggC9HFLuva2FTFY3pZf
-         yaGXO1YejIpMF9r1jiPXCIW8OHrqhORlX31p/MOp9QYRq1E15yeH7Lbt//t+HNZ2Zd
-         +qu0GVC3RYwtsyqPgHQ8xULrxzxyw06qurzqb6UDy4m5v2CFCrXG59pFtPhAF1LFra
-         P0GaMsgC+411+8crWZwuNntoH924WIpGOaP6eIeXAT12F3C+apXIQtre7jk2CKf6Or
-         e1ZgTmbd0OC5IR3q1ebNSdS9/QVifZ5s7yWCKKv8QR+lgUSeLerGd/CyN43h386Flt
-         ZJVWPGUao1OaA==
-Received: from [10.1.0.205] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NtvSk161FzgMN;
-        Fri, 13 Jan 2023 16:19:50 -0500 (EST)
-Message-ID: <d8cf45aa-936c-90e7-61c4-cef6f7fe0006@efficios.com>
-Date:   Fri, 13 Jan 2023 16:20:23 -0500
+        Fri, 13 Jan 2023 16:20:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FDD149FE
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:20:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F2D5B82204
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 21:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CFC01C433F1;
+        Fri, 13 Jan 2023 21:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673644855;
+        bh=gZQB5Rr2EKLw5BonMhM/yCovKBuhaogmYvswMy1xP9w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oBrE0H3K371NXAfkbiN5sBdKxDvbddGPf2zFOd4EAIkikaO/zNHWNfil91D/QGlud
+         MlT0hW9qpx8n7VnQ+CCG8SbFvrJeTlqkVJ64Wqef8ZXEo0Xy1vC5yLUIewoCE+Q8Vb
+         uax/R7aDtbH9YxIhkiQop9HHHnV99suvJwWCOB2RB2LuQUmNoB6hyI17+fzv5bfkyq
+         UGAiMa695VIHdb5XASOqDLatNdIcA6T/E+ndeTyUtRvVOC5iDkLPS91KfNrp+8abAF
+         pF+I6Dd/lQDhAsPE6VZk1ozYDEUZBqyu9fl5zTiIhQDkYtL3b8+o7rYwip4hHQm2md
+         44y4UYAMTDX2g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BCDE9C395CA;
+        Fri, 13 Jan 2023 21:20:55 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.12.12 and 2.13.8 (Linux kernel tracer)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Use per-device lockdep key
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167364485577.21086.1402903031972419181.git-patchwork-notify@kernel.org>
+Date:   Fri, 13 Jan 2023 21:20:55 +0000
+References: <20230111074146.2624496-1-wenst@chromium.org>
+In-Reply-To: <20230111074146.2624496-1-wenst@chromium.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        angelogioacchino.delregno@collabora.com,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-Those are stable release updates of the LTTng modules project.
+This patch was applied to chrome-platform/linux.git (for-kernelci)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-The most relevant change is that the 2.13.8 version introduces
-support for the 6.1 Linux kernel, kernel version ranges updates
-for the RHEL kernels, and a kallsyms wrapper fix on ppc64el.
+On Wed, 11 Jan 2023 15:41:46 +0800 you wrote:
+> Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
+> the following lock sequences:
+> 
+> 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
+> 2. lock(&ec_dev->lock); lock(prepare_lock);
+> 
+> The actual dependency chains are much longer. The shortened version
+> looks somewhat like:
+> 
+> [...]
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-tracer toolset.
+Here is the summary with links:
+  - [v2] platform/chrome: cros_ec: Use per-device lockdep key
+    https://git.kernel.org/chrome-platform/c/961a325becd9
 
-* New in these releases:
-
-2023-01-13 (National Sticker Day) LTTng modules 2.13.8
-         * fix: jbd2: use the correct print format
-         * Fix: in_x32_syscall was introduced in v4.7.0
-         * Explicitly skip tracing x32 system calls
-         * fix: kallsyms wrapper on ppc64el
-         * fix: Adjust ranges for RHEL 8.6 kernels
-         * fix: kvm-x86 requires CONFIG_KALLSYMS_ALL
-         * fix: mm/slab_common: drop kmem_alloc & avoid dereferencing fields when not using (v6.1)
-
-2023-01-13 (National Sticker Day) LTTng modules 2.12.12
-         * fix: jbd2: use the correct print format
-         * Fix: in_x32_syscall was introduced in v4.7.0
-         * Explicitly skip tracing x32 system calls
-         * fix: kallsyms wrapper on ppc64el
-         * fix: Adjust ranges for RHEL 8.6 kernels
-         * fix: kvm-x86 requires CONFIG_KALLSYMS_ALL
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
+You are awesome, thank you!
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
