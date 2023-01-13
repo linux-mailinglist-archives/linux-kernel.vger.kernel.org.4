@@ -2,175 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095D166933D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9740669342
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241051AbjAMJsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S240806AbjAMJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239619AbjAMJrc (ORCPT
+        with ESMTP id S240922AbjAMJr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:47:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D6A69B10;
-        Fri, 13 Jan 2023 01:36:57 -0800 (PST)
-Date:   Fri, 13 Jan 2023 09:36:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673602616;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kXuL1K66hVbbl9oh0JbPD/eGxNZzYXrhlx9eaWy4U8I=;
-        b=y2e+r1z/cqcPUoWXtGQeq+zFge5v/TfLp7Rzbgh92sI1uNdJEVJl657Sv62XMBV6u1Fbul
-        f8A/dl/IbQqFagqv/h41yeDmr8VVVMpOqBomTOt4HWn7zunkYTsyj9BOAX9qwGOZErCQ3Q
-        B8n8civBxxHSWW7RafznrXCNXa+Xvgb98dFFZpFOn9xqxjxGdqw8/yPVaE+7zbPaoDh7MG
-        LJFyAMsJj1euqH5lkNdp8AMSSKV7L1uxzAABVXNbkVWnWWG3HZD73CGLM/iTYxrF4T6Mko
-        VBm3VrPwJU+agYmMlq4RWTen50a7czOKG6ZPGBrChlmrbHcL2MOUNcGG6BKPHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673602616;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kXuL1K66hVbbl9oh0JbPD/eGxNZzYXrhlx9eaWy4U8I=;
-        b=54cZ1Z8JGlCzBYnaPnskvMgbrVBTDUsjBPjNdVREMh9sgn553DHY4FBjNW05AiGtKnF5+f
-        VHf6C7RPe+TT9fBw==
-From:   "tip-bot2 for H. Peter Anvin (Intel)" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/gsseg: Use the LKGS instruction if available for
- load_gs_index()
-Cc:     "H. Peter Anvin (Intel)" <hpa@zytor.com>,
-        Xin Li <xin3.li@intel.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230112072032.35626-6-xin3.li@intel.com>
-References: <20230112072032.35626-6-xin3.li@intel.com>
-MIME-Version: 1.0
-Message-ID: <167360261521.4906.1537966381271124611.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 04:47:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B968143E42;
+        Fri, 13 Jan 2023 01:39:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 348A460B1B;
+        Fri, 13 Jan 2023 09:39:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88583C433D2;
+        Fri, 13 Jan 2023 09:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673602762;
+        bh=VfAdCPcysVT/3jW83ODpVi1gcLL1NcM8uhMQlELECPE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CwHnAZ/hDQ3CyGL5y9IFOTkJ0YRLPA7CyI3xuAS6yP2KQ+YXy5xW95h/cPvm5nVJP
+         Kcn7l8Ev0CmXTgPaHPaxErwv2V49MIeTaMpPU05imaC4gGKt89C+OgK9lsclxrN6iq
+         KBg5KddP1c479Svp6CFSQHZfnuSeF03zJbl6Q9QbFJhwvZbQkDpXZzC5R1ROvflZ5/
+         8Ko85a8OsG6FYorPRH6uWqa38GQdznlnWTRJgbY45XC5ZIR3mVfOZLMVfsZsfj3HxO
+         hNXPmSwQ7ADu47qtCmImEffoCSmE9ZhQHs4gv9lZJfvbp0kynYJLI0Du+Ize8iinaJ
+         H6KZOlUIMEb5g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pGGWs-001SiU-9t;
+        Fri, 13 Jan 2023 09:39:18 +0000
+Date:   Fri, 13 Jan 2023 09:39:17 +0000
+Message-ID: <868ri6ojsq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/9] irqchip/riscv-intc: Add support for RISC-V AIA
+In-Reply-To: <20230103141409.772298-4-apatel@ventanamicro.com>
+References: <20230103141409.772298-1-apatel@ventanamicro.com>
+        <20230103141409.772298-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+On Tue, 03 Jan 2023 14:14:03 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> The RISC-V advanced interrupt architecture (AIA) extends the per-HART
+> local interrupts in following ways:
+> 1. Minimum 64 local interrupts for both RV32 and RV64
+> 2. Ability to process multiple pending local interrupts in same
+>    interrupt handler
+> 3. Priority configuration for each local interrupts
+> 4. Special CSRs to configure/access the per-HART MSI controller
+> 
+> This patch adds support for RISC-V AIA in the RISC-V intc driver.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  drivers/irqchip/irq-riscv-intc.c | 37 ++++++++++++++++++++++++++------
+>  1 file changed, 31 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> index f229e3e66387..880d1639aadc 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/smp.h>
+> +#include <asm/hwcap.h>
+>  
+>  static struct irq_domain *intc_domain;
+>  
+> @@ -29,6 +30,15 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+>  	generic_handle_domain_irq(intc_domain, cause);
+>  }
+>  
+> +static asmlinkage void riscv_intc_aia_irq(struct pt_regs *regs)
 
-Commit-ID:     92cbbadf73f45c5d8bb26ed8668ff59671ff21e6
-Gitweb:        https://git.kernel.org/tip/92cbbadf73f45c5d8bb26ed8668ff59671ff21e6
-Author:        H. Peter Anvin (Intel) <hpa@zytor.com>
-AuthorDate:    Wed, 11 Jan 2023 23:20:32 -08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Fri, 13 Jan 2023 10:07:27 +01:00
+What does "static asmlinkage" in a C file even mean? And clearly, this
+isn't the only instance in this file...
 
-x86/gsseg: Use the LKGS instruction if available for load_gs_index()
+> +{
+> +	unsigned long topi;
+> +
+> +	while ((topi = csr_read(CSR_TOPI)))
+> +		generic_handle_domain_irq(intc_domain,
+> +					  topi >> TOPI_IID_SHIFT);
+> +}
+> +
+>  /*
+>   * On RISC-V systems local interrupts are masked or unmasked by writing
+>   * the SIE (Supervisor Interrupt Enable) CSR.  As CSRs can only be written
+> @@ -38,12 +48,18 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+>  
+>  static void riscv_intc_irq_mask(struct irq_data *d)
+>  {
+> -	csr_clear(CSR_IE, BIT(d->hwirq));
+> +	if (d->hwirq < BITS_PER_LONG)
 
-The LKGS instruction atomically loads a segment descriptor into the
-%gs descriptor registers, *except* that %gs.base is unchanged, and the
-base is instead loaded into MSR_IA32_KERNEL_GS_BASE, which is exactly
-what we want this function to do.
+And what if BIT_PER_LONG is 32, as I expect it to be on 32bit, which
+the commit message says is supported?
 
-Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: Xin Li <xin3.li@intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230112072032.35626-6-xin3.li@intel.com
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
----
- arch/x86/include/asm/gsseg.h | 33 +++++++++++++++++++++++++++++----
- arch/x86/kernel/cpu/common.c |  1 +
- arch/x86/xen/enlighten_pv.c  |  1 +
- 3 files changed, 31 insertions(+), 4 deletions(-)
+> +		csr_clear(CSR_IE, BIT(d->hwirq));
+> +	else
+> +		csr_clear(CSR_IEH, BIT(d->hwirq - BITS_PER_LONG));
+>  }
+>  
+>  static void riscv_intc_irq_unmask(struct irq_data *d)
+>  {
+> -	csr_set(CSR_IE, BIT(d->hwirq));
+> +	if (d->hwirq < BITS_PER_LONG)
+> +		csr_set(CSR_IE, BIT(d->hwirq));
+> +	else
+> +		csr_set(CSR_IEH, BIT(d->hwirq - BITS_PER_LONG));
+>  }
+>  
+>  static void riscv_intc_irq_eoi(struct irq_data *d)
+> @@ -115,7 +131,7 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
+>  static int __init riscv_intc_init(struct device_node *node,
+>  				  struct device_node *parent)
+>  {
+> -	int rc;
+> +	int rc, nr_irqs;
+>  	unsigned long hartid;
+>  
+>  	rc = riscv_of_parent_hartid(node, &hartid);
+> @@ -133,14 +149,21 @@ static int __init riscv_intc_init(struct device_node *node,
+>  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
+>  		return 0;
+>  
+> -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
+> +	nr_irqs = BITS_PER_LONG;
+> +	if (riscv_isa_extension_available(NULL, SxAIA) && BITS_PER_LONG == 32)
+> +		nr_irqs = nr_irqs * 2;
 
-diff --git a/arch/x86/include/asm/gsseg.h b/arch/x86/include/asm/gsseg.h
-index d15577c..ab6a595 100644
---- a/arch/x86/include/asm/gsseg.h
-+++ b/arch/x86/include/asm/gsseg.h
-@@ -14,17 +14,42 @@
- 
- extern asmlinkage void asm_load_gs_index(u16 selector);
- 
-+/* Replace with "lkgs %di" once binutils support LKGS instruction */
-+#define LKGS_DI _ASM_BYTES(0xf2,0x0f,0x00,0xf7)
-+
-+static inline void native_lkgs(unsigned int selector)
-+{
-+	u16 sel = selector;
-+	asm_inline volatile("1: " LKGS_DI
-+			    _ASM_EXTABLE_TYPE_REG(1b, 1b, EX_TYPE_ZERO_REG, %k[sel])
-+			    : [sel] "+D" (sel));
-+}
-+
- static inline void native_load_gs_index(unsigned int selector)
- {
--	unsigned long flags;
-+	if (cpu_feature_enabled(X86_FEATURE_LKGS)) {
-+		native_lkgs(selector);
-+	} else {
-+		unsigned long flags;
- 
--	local_irq_save(flags);
--	asm_load_gs_index(selector);
--	local_irq_restore(flags);
-+		local_irq_save(flags);
-+		asm_load_gs_index(selector);
-+		local_irq_restore(flags);
-+	}
- }
- 
- #endif /* CONFIG_X86_64 */
- 
-+static inline void __init lkgs_init(void)
-+{
-+#ifdef CONFIG_PARAVIRT_XXL
-+#ifdef CONFIG_X86_64
-+	if (cpu_feature_enabled(X86_FEATURE_LKGS))
-+		pv_ops.cpu.load_gs_index = native_lkgs;
-+#endif
-+#endif
-+}
-+
- #ifndef CONFIG_PARAVIRT_XXL
- 
- static inline void load_gs_index(unsigned int selector)
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 9cfca3d..b7ac85a 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1960,6 +1960,7 @@ void __init identify_boot_cpu(void)
- 	setup_cr_pinning();
- 
- 	tsx_init();
-+	lkgs_init();
- }
- 
- void identify_secondary_cpu(struct cpuinfo_x86 *c)
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 5b13796..ce2f19e 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -276,6 +276,7 @@ static void __init xen_init_capabilities(void)
- 	setup_clear_cpu_cap(X86_FEATURE_ACC);
- 	setup_clear_cpu_cap(X86_FEATURE_X2APIC);
- 	setup_clear_cpu_cap(X86_FEATURE_SME);
-+	setup_clear_cpu_cap(X86_FEATURE_LKGS);
- 
- 	/*
- 	 * Xen PV would need some work to support PCID: CR3 handling as well
+Really, please drop this BITS_PER_LONG stuff. Use explicit numbers.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
