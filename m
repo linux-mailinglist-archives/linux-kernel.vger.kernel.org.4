@@ -2,147 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3FD669874
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B8A669879
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbjAMN12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S241089AbjAMN1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241411AbjAMN1C (ORCPT
+        with ESMTP id S240363AbjAMN1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:27:02 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2087.outbound.protection.outlook.com [40.107.237.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA20736FD;
-        Fri, 13 Jan 2023 05:18:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JxyADPuqJGqx5hjgKcu5cxdvCg1u2RuwepQ5L3c4DadcHbyl8C+fJ+20gBtGGdgSibzKhpGnJlhh06uOYl1lssuVlCe6CHJ3mgSGMsOaWtME8n0hGFu9Zo5yfxY6bWitshoFPwefxUJRVa9aqOT4ozF9i1tCH0I4cVAx2HyzrM22gG74kQOCh/OLRGBzXwkbCqFSgJmMQnBxu7xvj1lAuvmh3XRvEZ/d/5eAiR9ueieY35EQ9mAU16/kVmnqiGYJrbzyagvOABskFJOUGKNt5kOQy/K5hxDfMwTCPOoXGL05aUDOkW4n4UaoKvVIlB8Yv+kpVI62xqdhzrjzRTaE/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cO1al7zjvmQQMJeexHhTn2NQVGSX0cdB0sPkCZK8eR0=;
- b=QBsQHNgdggDgWkeF9oBiS643th5zOa1Ifaa0CNFooE3bK/PPYrEtYlM9W0Kvjw8suCpetkzkpJ8OrD6qdCEm83HSkwwYmAMQ6N/UAXsh+94WocXA0j6PqMz8nHtPIfV3zAoWBrB/t04RMvWvWI18wDVYqk5tfEsMWGWfqTP/DHbXqKe95nkR6OReEt7PLh/preMb3zbN999kcT5xNLWcPmIdtVy1flwH5T8IFq43tRojt61BPn0eDktuTkk9kJjw30+FHEXY1hevriPvii5kPg92oVTEZbWtgYncu21hJ0fu/sLy6SqFUnclZH+4zHHpKbb3yD3kJSqyh75GjMcwGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cO1al7zjvmQQMJeexHhTn2NQVGSX0cdB0sPkCZK8eR0=;
- b=cPkrMUyU7sNiPx8+J5XNm+1BVvUKZaEXmNDfz04lLTh1/67W+Wii/In9Kndgya0cl2cm7xufLyfmMVGtZk+tH5us94R6IxkDnedOduiWlTy+bIDTKl/FQQt2Nn/SANhYZIbNqqJRZ8OIDEyb3elvC0WdN4VFlRLPhJKc3LMlXoRXmzVcjbTUvpplSp9ZPiYK+/ZGN9gbgwwyos6TNW2dxNGivyFXwrGTafLgaU7LiI5QVGxP6/LgEIP+CDDDvDwjsrYkgqYVXTcu83tTK5lRPmlU2+OpTf+jlyr00tF9V8GsZloD25nYAMiQRD88Uletoq8jHpH3My13ehmpVzeZmg==
-Received: from MW4PR03CA0043.namprd03.prod.outlook.com (2603:10b6:303:8e::18)
- by MN2PR12MB4406.namprd12.prod.outlook.com (2603:10b6:208:268::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Fri, 13 Jan
- 2023 13:18:11 +0000
-Received: from CO1NAM11FT024.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8e:cafe::1c) by MW4PR03CA0043.outlook.office365.com
- (2603:10b6:303:8e::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
- Transport; Fri, 13 Jan 2023 13:18:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- CO1NAM11FT024.mail.protection.outlook.com (10.13.174.162) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 13:18:10 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 05:18:03 -0800
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 13 Jan 2023 05:18:02 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Fri, 13 Jan 2023 05:18:02 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
-In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
-References: <20230112135326.981869724@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Fri, 13 Jan 2023 08:27:13 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3935D5CF9C;
+        Fri, 13 Jan 2023 05:18:54 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id ay40so15261989wmb.2;
+        Fri, 13 Jan 2023 05:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgIF86xFlVafZ9POD/Q6wH2nOUXlLRZBzccN46/gwyI=;
+        b=aZvWv2v3QWsETkYdecEWQ0sinCRBmmqTcYg2AxF5SGnEJdz3BT2VVQE4FmsNMZcYZo
+         y7FBVB9PomPLrGum4K+tgt3TW9Oo0OsZ3J41z+gw6W6KKiAFr8LftysIIxdhZ63MOzhJ
+         WpxW4SW6Cs6Yf2Q4nytMAuzd4jdbtgDASmvgS+lTbcVD8ZtYquBEZbgWBtY9+0jZRMYc
+         Vm1IDGn/0K/o7Nla8jr97mOCf0PFCd/1dwToSqYc8yjNNYKAhSXoZ5UGrMRmbW5lK9Dp
+         EUdfSPdTDjHg7rKJP3Gnkl6MUc/TFNWmxMSVLwhu41YpRVqdC+m7FS+HMH+P/Ps88Mug
+         r3cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YgIF86xFlVafZ9POD/Q6wH2nOUXlLRZBzccN46/gwyI=;
+        b=35tbslBt8IZEyOHm569y24v+eVc0i9SAsg8PrkhyxhAr0Qj+OC18I3wMi8jeCggFKW
+         we6a0BWmZpAc5qPJLNgR5Qbt5EsMOVPi+uCZkJav0E0L/16Rs4gVvDibw0z178Ri8XDD
+         Mcom7rvUCm7dX/bsJyrLTCtIWl/ffLfa+6N+kAH07c+EynlkFiBCiB3bnb5vVmj7G0gh
+         fhwaKVt/ASn4f8ngoFE4xQ64vuP8S58lNbRXQnWweFWBiPpySc493aTi7uQrvGlRRBA7
+         Ct+Y7WXJIP5RUNqzeIbIPPQCsXFHSB8lWLHXCFtcfvR92Qj48qnePBo4Ia88loH02EFd
+         3pJA==
+X-Gm-Message-State: AFqh2kpdl2+AeUuMBj+cCVTT0tyY0odVxAMbQZcbLPrYa4dkyIqGDp8u
+        3D++ylBMoHeL9AiTjPu51Kg=
+X-Google-Smtp-Source: AMrXdXt5dXeyjA4xq4soWwa1BPKHI/UVZQ7Z2QmybFI6KSU/hzx4ltymAgon77A/gX4Ush5hVGEwmQ==
+X-Received: by 2002:a05:600c:5399:b0:3d9:c6f5:c63d with SMTP id hg25-20020a05600c539900b003d9c6f5c63dmr26889582wmb.28.1673615932941;
+        Fri, 13 Jan 2023 05:18:52 -0800 (PST)
+Received: from Ansuel-xps. (93-34-92-88.ip49.fastwebnet.it. [93.34.92.88])
+        by smtp.gmail.com with ESMTPSA id x7-20020a05600c188700b003c701c12a17sm27788319wmp.12.2023.01.13.05.18.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 05:18:52 -0800 (PST)
+Message-ID: <63c15a3c.050a0220.5f7c6.1db3@mx.google.com>
+X-Google-Original-Message-ID: <Y8FaO230vYJUCfjX@Ansuel-xps.>
+Date:   Fri, 13 Jan 2023 14:18:51 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v6 2/6] dt-bindings: arm: msm: Convert and split kpss-acc
+ driver Documentation to yaml
+References: <20230110183259.19142-1-ansuelsmth@gmail.com>
+ <20230110183259.19142-3-ansuelsmth@gmail.com>
+ <f851bca5-d0e1-fe40-9b06-e6f2af37cce0@linaro.org>
 MIME-Version: 1.0
-Message-ID: <598fdcfc-9517-4ef6-bca1-8a5062af6209@drhqmail202.nvidia.com>
-Date:   Fri, 13 Jan 2023 05:18:02 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT024:EE_|MN2PR12MB4406:EE_
-X-MS-Office365-Filtering-Correlation-Id: d4614808-2be2-4b63-d132-08daf5689e2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xqtfNEpKRrRQpJAna/OrYBrqZTmYYofo9xSTBtx+NsPPRHu0JtT6OHgi7AKTh6fmLzsdvrJpMRuq/3Y6vLzEu8LGslaTaN6qC62KlgWcFpF/HpcsTqAy8RuGIyLLXLpFWrAfUcbdzttmag8jxHX3n04VkNbnGomOeX29mjFP0SZAXp3oOrRd6nGGgIHey0JGqwkafwi7W/7QaXyY6ZipfgD48/hw/ZQ8fr2XtVqUg8gHczzAnDienI322HMYrxCS1pNEgSDFH+XpAH4Y7QvXOqWh0u8skdoutB3k40YkP3hseh/gWmxuV8Vn3AAvs3XAz42r0NYVT9VDlyCGO1RwxsUesHY2MMWfdWLFlMQGBuBg7WqxjzMs7+jFifhS5UBvKao0yoIHBB9J74XQNSFwhwRKVjJBMR9tiNmzsRi7NpVLZ89y436+A3wkZc8xcIX+N73we/aH0V+BOxtqJm2y3aM1CfvYi7R8N+e3CC7gdn6LoNwytHvgDLfpYu40i8GPcRmJArxnKCdVQl4Nsry6fWYZXz9OxMxkuwApcKoV53DoUPOg6K7gntAJvNlQydWlhLoQ+eoVBuj7+ok7/ZMX8sNGvlckQUhYOpKA7FV3IKoWiHukM+VJeOZyyaQ0uV+XzHqrYKFrKIfyCksaGOn+g782xK8NdtQz40zeGSsOVtgqDy27avp4hrLdsR9IhoV1L6mFVeRoDkuHaLCfP07f5+7rGfj9j7/32ogDHW2noyAwKFiHAbz03zuBi4xeKNyr+xJhlhuNW/B7uEZJNYE/4PyTzUlsbCxWS1uAHevVjEY=
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199015)(46966006)(40470700004)(36840700001)(82740400003)(31686004)(6916009)(82310400005)(54906003)(36860700001)(7636003)(186003)(966005)(478600001)(31696002)(2906002)(41300700001)(7416002)(356005)(40460700003)(8936002)(5660300002)(26005)(40480700001)(316002)(8676002)(4326008)(336012)(86362001)(47076005)(70206006)(426003)(70586007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 13:18:10.4746
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4614808-2be2-4b63-d132-08daf5689e2f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT024.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4406
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f851bca5-d0e1-fe40-9b06-e6f2af37cce0@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 14:56:21 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.6 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Jan 12, 2023 at 06:00:10AM +0200, Dmitry Baryshkov wrote:
+> On 10/01/2023 20:32, Christian Marangi wrote:
+> > Convert kpss-acc driver Documentation to yaml.
+> > The original Documentation was wrong all along. Fix it while we are
+> > converting it.
+> > The example was wrong as kpss-acc-v2 should only expose the regs but we
+> > don't have any driver that expose additional clocks. The kpss-acc driver
+> > is only specific to v1. For this exact reason, split the Documentation
+> > to 2 different schema, v1 as clock-controller and v2 for
+> > power-controller as per msm-3.10 specification, the exposed regs handle
+> > power domains.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> >   .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 -------------
+> >   .../bindings/clock/qcom,kpss-acc-v1.yaml      | 72 +++++++++++++++++++
+> >   .../bindings/power/qcom,kpss-acc-v2.yaml      | 47 ++++++++++++
+> >   3 files changed, 119 insertions(+), 49 deletions(-)
+> >   delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+> >   create mode 100644 Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+> > deleted file mode 100644
+> > index 7f696362a4a1..000000000000
+> > --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+> > +++ /dev/null
+> > @@ -1,49 +0,0 @@
+> > -Krait Processor Sub-system (KPSS) Application Clock Controller (ACC)
+> > -
+> > -The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
+> > -There is one ACC register region per CPU within the KPSS remapped region as
+> > -well as an alias register region that remaps accesses to the ACC associated
+> > -with the CPU accessing the region.
+> > -
+> > -PROPERTIES
+> > -
+> > -- compatible:
+> > -	Usage: required
+> > -	Value type: <string>
+> > -	Definition: should be one of:
+> > -			"qcom,kpss-acc-v1"
+> > -			"qcom,kpss-acc-v2"
+> > -
+> > -- reg:
+> > -	Usage: required
+> > -	Value type: <prop-encoded-array>
+> > -	Definition: the first element specifies the base address and size of
+> > -		    the register region. An optional second element specifies
+> > -		    the base address and size of the alias register region.
+> > -
+> > -- clocks:
+> > -        Usage: required
+> > -        Value type: <prop-encoded-array>
+> > -        Definition: reference to the pll parents.
+> > -
+> > -- clock-names:
+> > -        Usage: required
+> > -        Value type: <stringlist>
+> > -        Definition: must be "pll8_vote", "pxo".
+> > -
+> > -- clock-output-names:
+> > -	Usage: optional
+> > -	Value type: <string>
+> > -	Definition: Name of the output clock. Typically acpuX_aux where X is a
+> > -		    CPU number starting at 0.
+> > -
+> > -Example:
+> > -
+> > -	clock-controller@2088000 {
+> > -		compatible = "qcom,kpss-acc-v2";
+> > -		reg = <0x02088000 0x1000>,
+> > -		      <0x02008000 0x1000>;
+> > -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
+> > -		clock-names = "pll8_vote", "pxo";
+> > -		clock-output-names = "acpu0_aux";
+> > -	};
+> > diff --git a/Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml b/Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
+> > new file mode 100644
+> > index 000000000000..a466e4e8aacd
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/qcom,kpss-acc-v1.yaml
+> > @@ -0,0 +1,72 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/qcom,kpss-acc-v1.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Krait Processor Sub-system (KPSS) Application Clock Controller (ACC) v1
+> > +
+> > +maintainers:
+> > +  - Christian Marangi <ansuelsmth@gmail.com>
+> > +
+> > +description:
+> > +  The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
+> > +  There is one ACC register region per CPU within the KPSS remapped region as
+> > +  well as an alias register region that remaps accesses to the ACC associated
+> > +  with the CPU accessing the region. ACC v1 is currently used as a
+> > +  clock-controller for enabling the cpu and hanling the aux clocks.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,kpss-acc-v1
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: Base address and size of the register region
+> > +      - description: Optional base address and size of the alias register region
+> > +    minItems: 1
+> > +
+> > +  clocks:
+> > +    minItems: 2
+> > +    maxItems: 2
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: pll8_vote
+> > +      - const: pxo
+> > +
+> > +  clock-output-names:
+> > +    description: Name of the aux clock. Krait can have at most 4 cpu.
+> > +    enum:
+> > +      - acpu0_aux
+> > +      - acpu1_aux
+> > +      - acpu2_aux
+> > +      - acpu3_aux
+> > +
+> > +  '#clock-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +  - clock-output-names
+> > +  - '#clock-cells'
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
+> > +
+> > +    clock-controller@2088000 {
+> > +      compatible = "qcom,kpss-acc-v1";
+> > +      reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
+> > +      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+> > +      clock-names = "pll8_vote", "pxo";
+> > +      clock-output-names = "acpu0_aux";
+> > +      #clock-cells = <0>;
+> > +    };
+> > +
+> > +...
+> > diff --git a/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml b/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
+> > new file mode 100644
+> > index 000000000000..91af95569ae6
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/qcom,kpss-acc-v2.yaml
+> > @@ -0,0 +1,47 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/qcom,kpss-acc-v2.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Krait Processor Sub-system (KPSS) Application Clock Controller (ACC) v2
+> > +
+> > +maintainers:
+> > +  - Christian Marangi <ansuelsmth@gmail.com>
+> > +
+> > +description:
+> > +  The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
+> > +  There is one ACC register region per CPU within the KPSS remapped region as
+> > +  well as an alias register region that remaps accesses to the ACC associated
+> > +  with the CPU accessing the region. ACC v2 is currently used as a
+> > +  power-controller for enabling the cpu.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,kpss-acc-v2
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: Base address and size of the register region
+> > +      - description: Optional base address and size of the alias register region
+> > +    minItems: 1
+> > +
+> > +  '#power-domain-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - '#power-domain-cells'
 > 
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
+> This dictates that if at some point we implement the kps-acc-v2 driver, it
+> will return a single power domain. I can not confirm that this would be the
+> case. I see that you want to migrate from the clock-controller as the acc-v2
+> doesn't provide clocks. I'd suggest instead using the neutral
+> `power-manager@...` node name. It doesn't demand anything, so we can drop
+> the (unused and unsupported) #power-domain-cells property.
+>
+
+Thanks for the review of the series and thanks for the suggestion. Will
+do the change and send v7 hoping it's the final revision.
+
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    power-controller@f9088000 {
+> > +      compatible = "qcom,kpss-acc-v2";
+> > +      reg = <0xf9088000 0x1000>,
+> > +            <0xf9008000 0x1000>;
+> > +      #power-domain-cells = <0>;
+> > +    };
+> > +...
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> -- 
+> With best wishes
+> Dmitry
 > 
-> thanks,
-> 
-> greg k-h
 
-All tests passing for Tegra ...
-
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
-
-Linux version:	6.1.6-rc1-g5eedeabf82ee
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
+-- 
+	Ansuel
