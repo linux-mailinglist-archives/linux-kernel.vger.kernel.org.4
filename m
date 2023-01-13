@@ -2,109 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C59669954
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E310669955
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241783AbjAMODA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S233650AbjAMODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241770AbjAMOCA (ORCPT
+        with ESMTP id S241808AbjAMOCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 09:02:00 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B0E0E7;
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414BD1CA;
         Fri, 13 Jan 2023 05:59:34 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id mp20so5912272ejc.7;
-        Fri, 13 Jan 2023 05:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5I4m/EnweQ5SqB1DHqUreYhEufcWoW7oFYxI0NTJspA=;
-        b=cX9POSfg1VNn+g1+ero6V6UjGb7H9mLduuabZEeInSH2IW4z75eYg//ouJP/FYhwV1
-         u7LD20+3n7/F3YRjpN/VfJ3R5PWj3jRuJB4YFXiVv114C0Ljmr2d2nt51iaSqgVAVsTh
-         SRF/qEmiPDgTjPP69y0uF/OzdAkf10qPlIylu+HvoQjizlqUWoJNLArSnfC07dUh5NWY
-         U3AAwu+qOjE2ltBqUPQ0TwD1umnNM0JC+DFpunyB5cokiwJF4z36rKHu5olEJjqOyQ5B
-         5efik53s5GngQ7TUN8ssyE+TZujB5oSD9rFErny+eVGGrc2bIETL3vm41FVNRFd+Iqal
-         h4BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5I4m/EnweQ5SqB1DHqUreYhEufcWoW7oFYxI0NTJspA=;
-        b=WUhzo5FSvQuPyCZr6ii1V5/SCQnpNKU7XF5eIAdkLxXs7ry7FVga7qfYOAswn8qaIE
-         boRyZwY3jK40dnwfF1D7iiXfMLnpHEeS+SYgUmp/aFVxVFNz/Z5XfW6aIUxDfJdyNuXv
-         QbNjuLFEQPQu1UjhGJAmrnAaoOhT8w1MRdQcqNe8YOklmsLH7WkSP2K55ovRypCEWf3M
-         /Wo4FzFu+XeEQ4s+9Jo7faA3Qd2BpLfn8B/wVpc/JS14TwPYQocG/5xCaspMuXvh4xSr
-         g5FB2M4jsR5a4OzK3QBIXF+lHbdjOsfO9En1Rh9BR50NpUE0nZ/SSsc3mrmdsAi4KOPQ
-         dIsQ==
-X-Gm-Message-State: AFqh2kqSj6XfpncaY4vCadwUuoAteq/hnpJtBeRxsljcAQBdeLRpRozr
-        x4SM1P7lqfCiyBm/T4XzdGQ=
-X-Google-Smtp-Source: AMrXdXuD6T1yk7qurYpUiH6yo27/FdUjp8etImogdv44WzUG/B2H4OVrR7fNqY+XDi9/GJVOTueVlw==
-X-Received: by 2002:a17:907:73c1:b0:7e7:4dd7:bc0c with SMTP id es1-20020a17090773c100b007e74dd7bc0cmr65354966ejc.66.1673618372910;
-        Fri, 13 Jan 2023 05:59:32 -0800 (PST)
-Received: from skbuf ([188.26.184.223])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b007c0bb571da5sm8473751ejw.41.2023.01.13.05.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 05:59:32 -0800 (PST)
-Date:   Fri, 13 Jan 2023 15:59:30 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20230113135930.27hpr5uxtrv77z44@skbuf>
-References: <20230106101651.1137755-1-lukma@denx.de>
- <20230106101651.1137755-1-lukma@denx.de>
- <20230106145109.mrv2n3ppcz52jwa2@skbuf>
- <20230113131331.28ba7997@wsk>
- <20230113122754.52qvl3pvwpdy5iqk@skbuf>
- <20230113142017.78184ce1@wsk>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6kboQ5MB7uZ6CHhRg2eIn8RfDMDJ2TsZf8BKVulus5A=; b=ZTAU6Pkntpy8KSSflFMFJA3/gN
+        HcJPCQ631UoV2WzEQqkqBBRdS27YRmIkPpCdYTrvOnvUolnOaXifUsp+2b65sxHOta8lGzjoSrgwc
+        VoSKLSh3nfRimYnSzPZMhWamT1YRmRsOHkw0bZUjWOfDVFlNWWwxGnl+cZN82szTQepK5g1XbHefy
+        mG9Ety+ssNpJsCiAOr9DXLXTwbjjzOKeKgWyPWaeanvE0O03P9LaO2HE/NsKmu40ggOiM3aFQzL9y
+        Xpvc8GJqBrxfKlsYsKrpyUZemhy2q4fde6o8PQt6HQbEIjg3vIwA6dcFY8bGeaBQk5vjXxAb/J8tk
+        QX7/er3w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pGKaj-0069DE-CO; Fri, 13 Jan 2023 13:59:33 +0000
+Date:   Fri, 13 Jan 2023 13:59:33 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     yang.yang29@zte.com.cn, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        iamjoonsoo.kim@lge.com, ran.xiaokai@zte.com.cn
+Subject: Re: [PATCH linux-next v2] swap_state: update shadow_nodes for
+ anonymous page
+Message-ID: <Y8FjxV4gWiBw8o5l@casper.infradead.org>
+References: <202301131550455361823@zte.com.cn>
+ <Y8Eao1l0qRVLKK7e@debian.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113142017.78184ce1@wsk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8Eao1l0qRVLKK7e@debian.me>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 02:20:17PM +0100, Lukasz Majewski wrote:
-> The fixed function maybe should look like below:
+On Fri, Jan 13, 2023 at 03:47:31PM +0700, Bagas Sanjaya wrote:
+> On Fri, Jan 13, 2023 at 03:50:45PM +0800, yang.yang29@zte.com.cn wrote:
+> > This patch updates shadow_nodes of anonymous page when swap
+> > cache is add or delete.
 > 
-> static int mv88e6xxx_get_max_mtu(struct dsa_switch *ds, int port)
-> {
-> 	....
-> 	
-> 	int max_mtu;
-> 
-> 	max_mtu = chip->info->max_frame_size - VLAN_ETH_HLEN -
-> 		  ETH_FCS_LE;
-> 
-> 	if (dsa_is_dsa_port(ds, port) || dsa_is_cpu_port(ds, port))
-> 		  max_mtu -= EDSA_HLEN;
-> 
-> 	return max_mtu;
-> }
-> 
-> Comments more than welcome.
+> By what?
 
-I suspect that looking at the DSA code which calls these methods will
-answer a lot of your questions. ds->ops->port_max_mtu() is only called
-for user ports. As for ds->ops->port_change_mtu(), this will always be
-called with the requested L2 payload length (default 1500) on user ports,
-and with the maximum among user ports for DSA and CPU ports.
+This is not a helpful question.
+
+> > @@ -252,6 +256,8 @@ void clear_shadow_from_swap_cache(int type, unsigned long begin,
+> >  		struct address_space *address_space = swap_address_space(entry);
+> >  		XA_STATE(xas, &address_space->i_pages, curr);
+> > 
+> > +		xas_set_update(&xas, workingset_update_node);
+> > +
+> >  		xa_lock_irq(&address_space->i_pages);
+> >  		xas_for_each(&xas, old, end) {
+> >  			if (!xa_is_value(old))
+> 
+> Adding xas_set_update() call?
+
+It makes perfect sense to me.
+
+> In any case, please explain what you are doing above in imperative mood
+> (no "This patch does foo" but "Do foo" instead).
+
+Not helpful either.
+
