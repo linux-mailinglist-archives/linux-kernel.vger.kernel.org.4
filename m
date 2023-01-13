@@ -2,121 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD93669348
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2163669349
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241258AbjAMJuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S240378AbjAMJuk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 Jan 2023 04:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241263AbjAMJtH (ORCPT
+        with ESMTP id S240798AbjAMJty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:49:07 -0500
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88938183B4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:41:05 -0800 (PST)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 288AA801F680
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:41:05 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 111BA10048A9A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:41:03 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id GGYZpkNXnNX2aGGYZpYlpB; Fri, 13 Jan 2023 09:41:03 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=63c1272f
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=uJXoyXs2SWzOjiTBKGkA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mxW8uGqGMuSrm9VAd4TzJRjnrvQElaUGGwjOOM2nzVg=; b=mG0LQp7LNTzoUYm8KeHBL72TaI
-        buyuNWMjEt5+HzmAcTsie8vzVPBOQ3TC/aKTQkoI98O8tVKkCLaz0VdeXOytDr3N1R+piJjxRgQ+X
-        jf4xt+lP8CWKyC4TF+8svzAO0TD+VyL4vMvET3VNxbcPvfEX7WmP4tdoQqedN0s2PMmSTnSshmzCq
-        iB2Rx0T8gnX8hwoZYcz4war1SJoVyXRqepJ5yTJNLwOXsVQ9NM/XPVF5tXxc6/Zwgw7cLvRiOsKMc
-        vk0MbBmZJkcI7x9Kz54ixttj089b29I1e2qxQ7S2A6NgLtfFkE/ay//IYyWxwNlJGqYOt8x6vQVb0
-        SBN2jguw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51314 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pGGYX-002Owm-MJ;
-        Fri, 13 Jan 2023 02:41:01 -0700
-Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230112135326.981869724@linuxfoundation.org>
-In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <de70b4e2-59c5-df8e-e929-c97e1b2438f3@w6rz.net>
-Date:   Fri, 13 Jan 2023 01:40:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 13 Jan 2023 04:49:54 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00A93AC
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:42:28 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7F88D24DDB2;
+        Fri, 13 Jan 2023 17:42:21 +0800 (CST)
+Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 13 Jan
+ 2023 17:42:19 +0800
+Received: from ubuntu.localdomain (113.72.144.207) by EXMBX067.cuchost.com
+ (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 13 Jan
+ 2023 17:42:18 +0800
+From:   Mason Huo <mason.huo@starfivetech.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        "Mason Huo" <mason.huo@starfivetech.com>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Subject: [PATCH v1] irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
+Date:   Fri, 13 Jan 2023 17:42:16 +0800
+Message-ID: <20230113094216.116036-1-mason.huo@starfivetech.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pGGYX-002Owm-MJ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51314
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.144.207]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX067.cuchost.com
+ (172.16.6.67)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 5:56 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.6 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The priority and enable registers of plic will be reset
+during hibernation power cycle in poweroff mode,
+add the syscore callbacks to save/restore those registers.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+---
+ drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
+ 1 file changed, 91 insertions(+), 2 deletions(-)
 
-Tested-by: Ron Economos <re@w6rz.net>
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index ff47bd0dec45..80306de45d2b 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -17,6 +17,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+ #include <linux/spinlock.h>
++#include <linux/syscore_ops.h>
+ #include <asm/smp.h>
+ 
+ /*
+@@ -67,6 +68,8 @@ struct plic_priv {
+ 	struct irq_domain *irqdomain;
+ 	void __iomem *regs;
+ 	unsigned long plic_quirks;
++	unsigned int nr_irqs;
++	u32 *priority_reg;
+ };
+ 
+ struct plic_handler {
+@@ -79,10 +82,13 @@ struct plic_handler {
+ 	raw_spinlock_t		enable_lock;
+ 	void __iomem		*enable_base;
+ 	struct plic_priv	*priv;
++	/* To record interrupts that are enabled before suspend. */
++	u32 enable_reg[MAX_DEVICES / 32];
+ };
+ static int plic_parent_irq __ro_after_init;
+ static bool plic_cpuhp_setup_done __ro_after_init;
+ static DEFINE_PER_CPU(struct plic_handler, plic_handlers);
++static struct plic_priv *priv_data;
+ 
+ static int plic_irq_set_type(struct irq_data *d, unsigned int type);
+ 
+@@ -229,6 +235,78 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return IRQ_SET_MASK_OK;
+ }
+ 
++static void plic_irq_resume(void)
++{
++	unsigned int i, cpu;
++	u32 __iomem *reg;
++
++	for (i = 0; i < priv_data->nr_irqs; i++)
++		writel(priv_data->priority_reg[i],
++				priv_data->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		for (i = 0; i < DIV_ROUND_UP(priv_data->nr_irqs, 32); i++) {
++			reg = handler->enable_base + i * sizeof(u32);
++			raw_spin_lock(&handler->enable_lock);
++			writel(handler->enable_reg[i], reg);
++			raw_spin_unlock(&handler->enable_lock);
++		}
++	}
++}
++
++static int plic_irq_suspend(void)
++{
++	unsigned int i, cpu;
++	u32 __iomem *reg;
++
++	for (i = 0; i < priv_data->nr_irqs; i++)
++		priv_data->priority_reg[i] =
++			readl(priv_data->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		for (i = 0; i < DIV_ROUND_UP(priv_data->nr_irqs, 32); i++) {
++			reg = handler->enable_base + i * sizeof(u32);
++			raw_spin_lock(&handler->enable_lock);
++			handler->enable_reg[i] = readl(reg);
++			raw_spin_unlock(&handler->enable_lock);
++		}
++	}
++
++	return 0;
++}
++
++static struct syscore_ops plic_irq_syscore_ops = {
++	.suspend	= plic_irq_suspend,
++	.resume		= plic_irq_resume,
++};
++
++static void plic_irq_pm_init(void)
++{
++	unsigned int cpu;
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		memset(&handler->enable_reg[0], 0,
++			sizeof(handler->enable_reg));
++	}
++
++	register_syscore_ops(&plic_irq_syscore_ops);
++}
++
+ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+ 			      irq_hw_number_t hwirq)
+ {
+@@ -351,6 +429,7 @@ static int __init __plic_init(struct device_node *node,
+ 		return -ENOMEM;
+ 
+ 	priv->plic_quirks = plic_quirks;
++	priv_data = priv;
+ 
+ 	priv->regs = of_iomap(node, 0);
+ 	if (WARN_ON(!priv->regs)) {
+@@ -363,15 +442,21 @@ static int __init __plic_init(struct device_node *node,
+ 	if (WARN_ON(!nr_irqs))
+ 		goto out_iounmap;
+ 
++	priv->nr_irqs = nr_irqs;
++
++	priv->priority_reg = kcalloc(nr_irqs, sizeof(u32), GFP_KERNEL);
++	if (!priv->priority_reg)
++		goto out_free_priority_reg;
++
+ 	nr_contexts = of_irq_count(node);
+ 	if (WARN_ON(!nr_contexts))
+-		goto out_iounmap;
++		goto out_free_priority_reg;
+ 
+ 	error = -ENOMEM;
+ 	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
+ 			&plic_irqdomain_ops, priv);
+ 	if (WARN_ON(!priv->irqdomain))
+-		goto out_iounmap;
++		goto out_free_priority_reg;
+ 
+ 	for (i = 0; i < nr_contexts; i++) {
+ 		struct of_phandle_args parent;
+@@ -461,11 +546,15 @@ static int __init __plic_init(struct device_node *node,
+ 				  plic_starting_cpu, plic_dying_cpu);
+ 		plic_cpuhp_setup_done = true;
+ 	}
++	plic_irq_pm_init();
+ 
+ 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
+ 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
+ 	return 0;
+ 
++out_free_priority_reg:
++	kfree(priv->priority_reg);
++
+ out_iounmap:
+ 	iounmap(priv->regs);
+ out_free_priv:
+-- 
+2.39.0
 
