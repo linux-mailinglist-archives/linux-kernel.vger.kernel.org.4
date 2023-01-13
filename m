@@ -2,153 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8BC668911
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CC366892F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240564AbjAMBWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S232754AbjAMBcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240472AbjAMBWR (ORCPT
+        with ESMTP id S239995AbjAMBcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:22:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C215D6B6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:22:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673572936; x=1705108936;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E4YBRPtKn4LIf4pU2TyEB5QjnZETC1Inb5tOwtncOro=;
-  b=aDvB/kO/Olpw2bqQcMTQTyEd8vxltdX910QXlmnm7zIFdiM66HsKXh17
-   +Yptzd7pRU+pxeUWTP7pG3m6Ith9DhliOaD+zT610AzFw7KwrZ1x1/BF5
-   8QnrwH3gWXrUvl0wgNfmLBVCNQ7ZBSVql4clKVCIRmqobYABVsVbRk1Dy
-   rbLptkztlIYvigRiLRT30xDXiI1uTG6/M/CtMMOMvdDSgBCtHrFi5u1NO
-   uCy3zs3bZcgXke75pOP9VLAQ8zBAI+eSh6Kh0hzv1CDHsGUSN5XoNHMSs
-   SqjXiJXxdpHbADIh3xQ8F1mMzB7sXldXFMQoNIc4Qxhy9DlXj6vtiu/Yl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="303580248"
-X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="303580248"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:22:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="608005038"
-X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="608005038"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jan 2023 17:22:15 -0800
-Date:   Thu, 12 Jan 2023 17:31:29 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 5/7] x86/sched: Remove SD_ASYM_PACKING from the "SMT"
- domain
-Message-ID: <20230113013129.GA9379@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-6-ricardo.neri-calderon@linux.intel.com>
- <Y5IKuJTjE6Pjrw9I@arm.com>
- <20221214165900.GA972@ranerica-svr.sc.intel.com>
- <xhsmhwn6s62b5.mognet@vschneid.remote.csb>
- <20221220004238.GB23844@ranerica-svr.sc.intel.com>
- <xhsmhr0wre5rg.mognet@vschneid.remote.csb>
- <20221229190249.GA14462@ranerica-svr.sc.intel.com>
- <xhsmh1qo2dwrk.mognet@vschneid.remote.csb>
+        Thu, 12 Jan 2023 20:32:08 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8788BCEC;
+        Thu, 12 Jan 2023 17:32:07 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id p17-20020a9d6951000000b00678306ceb94so11560708oto.5;
+        Thu, 12 Jan 2023 17:32:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Fl+dQgFDOHnehs2ITo/nmS7u8hX/0iRdSWJRduyAIA=;
+        b=0pKCl1+OZSv+gvtSZLb/3AAuVHLTnJ36Ia4Ue0RDpN2ZOEz811+GfVKs0RovyBW05y
+         HJHs8ADG8DfAasPO8RqNrtFXfhV7yP/zQmUl+gi0X61Mj+clcJPIg9g8gci+OQtgMfOW
+         FH7rHXIXX9dhLnSQxecVcV96kCdh+N97fsrTf3NnjvPoHqTGOOjdCvZAFmq4O1rqd5TB
+         uLH3fOeAeZkvVzc2+HnFrq7/05pmKrEy+Af7WASXTiIaNtIofs7kNEVKQFeskHFy9I0n
+         I7FStpIoPJGojqPrkVEMN2Ro3kKlF+eg4JK0+wXPpSpVYgE7spgICgr+7/r66iyvz1nr
+         Zuyg==
+X-Gm-Message-State: AFqh2kqLqehdHyISrNLECM/zd6/yFJo/rBCf+i0uYfGtXHksiUOLdtzl
+        nmtkQDWoC6bX4m+29VAnRw==
+X-Google-Smtp-Source: AMrXdXux7TjfK/p9O4zfaswoprC9n3HwjdB7E7cR7YzT/PblrisFh5R9M2PwmiABCZQjJ/Iovf1ujQ==
+X-Received: by 2002:a9d:5904:0:b0:670:885e:f8ff with SMTP id t4-20020a9d5904000000b00670885ef8ffmr36547872oth.8.1673573526782;
+        Thu, 12 Jan 2023 17:32:06 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c9-20020a056830314900b0066dae8cf9a0sm9973706ots.50.2023.01.12.17.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 17:32:06 -0800 (PST)
+Received: (nullmailer pid 592094 invoked by uid 1000);
+        Fri, 13 Jan 2023 01:32:05 -0000
+Date:   Thu, 12 Jan 2023 19:32:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Subject: Re: [PATCH] of: property: fix #nvmem-cell-cells parsing
+Message-ID: <167357352392.592020.6790951746345716129.robh@kernel.org>
+References: <20230110233056.3490942-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xhsmh1qo2dwrk.mognet@vschneid.remote.csb>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230110233056.3490942-1-michael@walle.cc>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 07:17:51PM +0000, Valentin Schneider wrote:
-> On 29/12/22 11:02, Ricardo Neri wrote:
-> > On Thu, Dec 22, 2022 at 04:56:51PM +0000, Valentin Schneider wrote:
-> >> diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-> >> index 57bde66d95f7a..8dc16942135b4 100644
-> >> --- a/include/linux/sched/sd_flags.h
-> >> +++ b/include/linux/sched/sd_flags.h
-> >> @@ -132,12 +132,12 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
-> >>  /*
-> >>   * Place busy tasks earlier in the domain
-> >>   *
-> >> - * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
-> >> - *               up, but currently assumed to be set from the base domain
-> >> - *               upwards (see update_top_cache_domain()).
-> >> + * SHARED_PARENT: Usually set on the SMT level. Can be set further up if all
-> >> + *                siblings of an SMT core are identical, but SMT cores themselves
-> >> + *                have different priorites.
-> >>   * NEEDS_GROUPS: Load balancing flag.
-> >>   */
-> >> -SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-> >> +SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
-> >
-> > But this would not work for Power7. It only has SD_ASYM_PACKING in the SMT
-> > sched domain. Must it have either of these flags?
-> >
-> 
-> It's not mandatory, but making sure SD flags conform to either of them
-> means the topology debugging infra can help spot misshapen topologies...
-> 
-> > In Power7 SMT siblings have the different priority but, IIUC, physical
-> > cores are identical.
-> >
-> 
-> 
-> ...But you're right, this doesn't work with Power7 as it would need
-> SD_ASYM_PACKING all the way up the topology to conform with
-> SDF_SHARED_PARENT, which clearly doesn't work with how Power7 uses
-> asym_packing.
-> 
-> > It seems to me that asym_packing is specific to a domain.
-> >
-> 
-> For Power7 it is, since the asymmetry is only between siblings of a given
-> core. For other systems where the asymmetry is between cores, that could
-> theoretically affect several levels. Consider:
-> 
->   DIE [                      ]
->   MC  [          ][          ]
->   SMT [    ][    ][    ][    ]
->   CPU  0  1  2  3  4  5  6  7
->   prio 3  3  2  2  1  1  0  0
-> 
-> As done in your patch, here asym_packing doesn't make sense for SMT, but it
-> does for MC and DIE.
-> 
-> Anywho, I think what this means if we should drop the SDF_SHARED_* metaflag
-> for SD_ASYM_PACKING, unless we can think of a nice way to programmatically
-> describe how SD_ASYM_PACKING should be set.
 
-Perhaps it can be done by adding an extra check for sg::asym_prefer_cpu. In
-the example you give, DIE does not need SD_ASYM_PACKING if asym_prefer_cpu 
-all the MC sched groups of have the same priority. This would satisfy both
-Power7 and x86.
+On Wed, 11 Jan 2023 00:30:56 +0100, Michael Walle wrote:
+> Commit 67b8497f005f ("of: property: make #.*-cells optional for simple
+> props") claims to make the cells-name property optional for simple
+> properties, but changed the code for the wrong property, i.e. for
+> DEFINE_SUFFIX_PROP(). Fix that.
+> 
+> Fixes: 67b8497f005f ("of: property: make #.*-cells optional for simple props")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Tested-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  drivers/of/property.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
 
-This assumes that priorities are available when checking the sanity of the
-topology.
-
-Thanks and BR,
-Ricardo
+Applied, thanks!
