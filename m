@@ -2,259 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE86669246
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA5F66924B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241114AbjAMJFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S240785AbjAMJG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240798AbjAMJFK (ORCPT
+        with ESMTP id S241124AbjAMJF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:05:10 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC1A73E3D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:04:09 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v23so21800149pju.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZXGSNWlfPLDUVH1iGddBW0l88BlZlK09bpAmm1lhmY=;
-        b=6Xi6bt0Ya85oYGvBiB8XVOqsGmOeuImFPi8YUQmFpLyBbvMRW8wQ3ncWNYy7CrCCP5
-         7Bp5l3FqLFwFc+teXf4lcKx+tqseBiI2In/92EvMSusgGuUBXI/UCMeQwC6r6Wz5gzfs
-         amr/e/jV8iGhrmJhLxiP8n2OS+iX0vmNVJUHGxQKw2YHPv/2JDPG2O9eOXgzYWh2lIGb
-         LmtMbMob2J/Si3uqRiG35feI1RnRG+KZn5lP6ZzLKohi1mFsEOiFAQd2eRGExtc01dHX
-         CWILOI9FP8bc78/Yj3N1kjOirm3B+DToda7tD1rD+NXyeMAAkTZhFjYT9viuZcC36Ug8
-         KvnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hZXGSNWlfPLDUVH1iGddBW0l88BlZlK09bpAmm1lhmY=;
-        b=vg8eQxbB68FyQA62lwBL6EcQht3+Oq4USfXpcMv8JO312YbYX8VZ621PFy/7OkZxQx
-         0fgByuMsUMljGPmNOmYAvPY6VMs/6yeSkfglchonGP1YHhIuwjAnzj/3vuGnC6KF9Q/+
-         HQFCSUdWWY9zWqckeFZl34EzUxPuLI1TAq0+eJXArCEhOJnb8z0xuzA20LcNrCQ467i9
-         ILZIqC3cfIGbRwgEfWtJBzwm035zhvTDKbrdsJparAkZ00Ia0CDr3wHIegbXCCl1wm7y
-         8JmEUfUKr8UxhrNhIZx0FUI+6jV+PQP1sGM7UUB7ak48xjnGkf5NM5PvN0FMZrQVdlSv
-         seQA==
-X-Gm-Message-State: AFqh2krcVdi8gxQ7Xbfx87LsPz2yjbYF+9BPC9lA8j8Bay0lwbeibRfK
-        +p/LC+NnyZ4wYrPoBWoQK5mOgw==
-X-Google-Smtp-Source: AMrXdXvri2Qepeukyexki5xgsBZ2ZmJCQ1Uu3PE520x2rvuu313ZsZ+U3mGUYtdp0BpMZzcbYrlxdw==
-X-Received: by 2002:a17:902:b609:b0:192:e9cf:93ba with SMTP id b9-20020a170902b60900b00192e9cf93bamr32178510pls.12.1673600649254;
-        Fri, 13 Jan 2023 01:04:09 -0800 (PST)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id p15-20020a170902e74f00b00189bf5deda3sm13645510plf.133.2023.01.13.01.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 01:04:08 -0800 (PST)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     Jingoo Han <jingoohan1@gmail.com>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Shunsuke Mie <mie@igel.co.jp>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Frank Li <Frank.Li@nxp.com>, Li Chen <lchen@ambarella.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 3/3] PCI: endpoint: support pci_epc_mem_map/unmap API changes
-Date:   Fri, 13 Jan 2023 18:03:50 +0900
-Message-Id: <20230113090350.1103494-4-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230113090350.1103494-1-mie@igel.co.jp>
-References: <20230113090350.1103494-1-mie@igel.co.jp>
+        Fri, 13 Jan 2023 04:05:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CAD7458A;
+        Fri, 13 Jan 2023 01:04:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53A7960FB2;
+        Fri, 13 Jan 2023 09:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB8DC433AC;
+        Fri, 13 Jan 2023 09:04:19 +0000 (UTC)
+Message-ID: <c092c11f-870f-6520-ad89-001468ed59dc@xs4all.nl>
+Date:   Fri, 13 Jan 2023 10:04:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 0/9] media: dt-bindings: common CEC properties
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, Joe Tessler <jrt@google.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-tegra@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-media@vger.kernel.org, Jeff Chase <jnchase@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
+ <cd803c70-faf0-963e-fca3-0edd13fa8a29@linaro.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <cd803c70-faf0-963e-fca3-0edd13fa8a29@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The APIs have changed to support non aligned memory mapping on
-endpoint. Adapt the new API to pci-epf-test. The API allocate
-pci epc memory inside, so remove allocations.
+Hi Krzysztof,
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- drivers/pci/endpoint/functions/pci-epf-test.c | 89 +++++--------------
- 1 file changed, 24 insertions(+), 65 deletions(-)
+On 13/01/2023 09:59, Krzysztof Kozlowski wrote:
+> On 08/12/2022 11:31, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> Changes since v3
+>> ================
+>> 1. cec-gpio: Add missing SPDX.
+>> 2. nvidia,tegra114-cec: Correct path in maintainers.
+>>
+> 
+> 
+> Mauro (and maybe Hans?), any comments here. Can you apply the patchset?
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 55283d2379a6..73e75591fd81 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -323,37 +323,22 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
- 	struct pci_epc *epc = epf->epc;
- 	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
- 	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
-+	size_t size = reg->size;
- 
--	src_addr = pci_epc_mem_alloc_addr(epc, &src_phys_addr, reg->size);
--	if (!src_addr) {
--		dev_err(dev, "Failed to allocate source address\n");
--		reg->status = STATUS_SRC_ADDR_INVALID;
--		ret = -ENOMEM;
--		goto err;
--	}
--
--	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, src_phys_addr,
--			       reg->src_addr, reg->size);
--	if (ret) {
-+	src_addr = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, reg->src_addr,
-+			       &src_phys_addr, size);
-+	if (IS_ERR(src_addr)) {
- 		dev_err(dev, "Failed to map source address\n");
- 		reg->status = STATUS_SRC_ADDR_INVALID;
--		goto err_src_addr;
--	}
--
--	dst_addr = pci_epc_mem_alloc_addr(epc, &dst_phys_addr, reg->size);
--	if (!dst_addr) {
--		dev_err(dev, "Failed to allocate destination address\n");
--		reg->status = STATUS_DST_ADDR_INVALID;
--		ret = -ENOMEM;
--		goto err_src_map_addr;
-+		goto err;
- 	}
- 
--	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, dst_phys_addr,
--			       reg->dst_addr, reg->size);
-+	dst_addr = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, reg->dst_addr,
-+			       &dst_phys_addr, size);
- 	if (ret) {
- 		dev_err(dev, "Failed to map destination address\n");
- 		reg->status = STATUS_DST_ADDR_INVALID;
--		goto err_dst_addr;
-+		goto err_src_map_addr;
- 	}
- 
- 	ktime_get_ts64(&start);
-@@ -393,16 +378,10 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
- 	pci_epf_test_print_rate("COPY", reg->size, &start, &end, use_dma);
- 
- err_map_addr:
--	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, dst_phys_addr);
--
--err_dst_addr:
--	pci_epc_mem_free_addr(epc, dst_phys_addr, dst_addr, reg->size);
-+	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, dst_phys_addr, dst_addr, size);
- 
- err_src_map_addr:
--	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, src_phys_addr);
--
--err_src_addr:
--	pci_epc_mem_free_addr(epc, src_phys_addr, src_addr, reg->size);
-+	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, src_phys_addr, src_addr, size);
- 
- err:
- 	return ret;
-@@ -410,7 +389,7 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
- 
- static int pci_epf_test_read(struct pci_epf_test *epf_test)
- {
--	int ret;
-+	int ret = 0;
- 	void __iomem *src_addr;
- 	void *buf;
- 	u32 crc32;
-@@ -424,21 +403,14 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
- 	struct device *dma_dev = epf->epc->dev.parent;
- 	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
- 	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
-+	size_t size = reg->size;
- 
--	src_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size);
--	if (!src_addr) {
--		dev_err(dev, "Failed to allocate address\n");
--		reg->status = STATUS_SRC_ADDR_INVALID;
--		ret = -ENOMEM;
--		goto err;
--	}
--
--	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, phys_addr,
--			       reg->src_addr, reg->size);
--	if (ret) {
-+	src_addr = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no,
-+				    reg->src_addr, &phys_addr, size);
-+	if (IS_ERR(src_addr)) {
- 		dev_err(dev, "Failed to map address\n");
- 		reg->status = STATUS_SRC_ADDR_INVALID;
--		goto err_addr;
-+		goto err;
- 	}
- 
- 	buf = kzalloc(reg->size, GFP_KERNEL);
-@@ -489,10 +461,7 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
- 	kfree(buf);
- 
- err_map_addr:
--	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr);
--
--err_addr:
--	pci_epc_mem_free_addr(epc, phys_addr, src_addr, reg->size);
-+	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr, src_addr, size);
- 
- err:
- 	return ret;
-@@ -500,7 +469,7 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
- 
- static int pci_epf_test_write(struct pci_epf_test *epf_test)
- {
--	int ret;
-+	int ret = 0;
- 	void __iomem *dst_addr;
- 	void *buf;
- 	bool use_dma;
-@@ -513,21 +482,14 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
- 	struct device *dma_dev = epf->epc->dev.parent;
- 	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
- 	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
-+	size_t size = reg->size;
- 
--	dst_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size);
--	if (!dst_addr) {
--		dev_err(dev, "Failed to allocate address\n");
--		reg->status = STATUS_DST_ADDR_INVALID;
--		ret = -ENOMEM;
--		goto err;
--	}
--
--	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, phys_addr,
--			       reg->dst_addr, reg->size);
--	if (ret) {
-+	dst_addr = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no,
-+				    reg->dst_addr, &phys_addr, size);
-+	if (IS_ERR(dst_addr)) {
- 		dev_err(dev, "Failed to map address\n");
- 		reg->status = STATUS_DST_ADDR_INVALID;
--		goto err_addr;
-+		goto err;
- 	}
- 
- 	buf = kzalloc(reg->size, GFP_KERNEL);
-@@ -585,10 +547,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
- 	kfree(buf);
- 
- err_map_addr:
--	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr);
--
--err_addr:
--	pci_epc_mem_free_addr(epc, phys_addr, dst_addr, reg->size);
-+	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr, dst_addr, size);
- 
- err:
- 	return ret;
--- 
-2.25.1
+No comments yet. I plan to review and likely merge this next week.
+
+Regards,
+
+	Hans
+
+> 
+> Best regards,
+> Krzysztof
 
