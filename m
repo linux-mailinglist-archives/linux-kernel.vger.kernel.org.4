@@ -2,126 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12007668BBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B070A668BAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238248AbjAMFup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 00:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S240129AbjAMFo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 00:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjAMFtz (ORCPT
+        with ESMTP id S237640AbjAMFnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 00:49:55 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0D31E0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 21:49:54 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id s13-20020a17090a6e4d00b0022900843652so4416541pjm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 21:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWKc0l2Qw6F73of28DYGFo+S2kOIG+V6VrgUC1o/HMs=;
-        b=T+yj+vJ9gC2N8z8WJPIVJ5o6PEhbHCKEHTFja2VN9wsOXbY46za7wqxN6feGNp/PDw
-         r1Xpb0nf9xWKTWmiOf8NrMYL67ZhgDOzkbPAenRustMQh5BNRuoR6zEY0Zpt/91cC8R/
-         6HhrXDkI5PsFxRHx71z37pIjvd91tIRZ80pD4lI9Iop12Z2wnFoiDlSvNagK/d6ZgOsY
-         2P4fQ/wSKI6a9f+I7/rtGxHLAcZ5I5tnn+w/yaWKRY0vK5B6q2fagUnbR81JYJSaG6Vk
-         NsKZW8K9ScihJbj2o18OJPK11Lu5lv4RoSS/I4M2JhNEcw5ilnYtG3bs+xwGK92eNBkP
-         tXOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWKc0l2Qw6F73of28DYGFo+S2kOIG+V6VrgUC1o/HMs=;
-        b=FfUffa5G6snBbO8i/Ks15PDpGoJTOPGjjEO9NXfD66dr9cM6YejcjXcYkZboHMraHO
-         RwO6hm5sb/dCKK9kkckWZTnVmqFAUCt/LZOMP7N5647UghzsncauiNjG8AzNPPYZE8jm
-         KYnSzHRAA/FB7FSRfbyQ9JK6qJ3+zFXnEdOnWTR8dH1g628qrKUZFojC8mSyjcxbMg3j
-         j8ZZuappBnnRC+8ANmJLKg9n8FhRCFQ5fKw+DvAUWBiFSwBuPB/QafjoIFLi/GBmrZOO
-         Nx+Ht3BJJwMnX50yayKZPvF1P1+GUPWVGBpc7fIRu9+xi5PL6gTkM+31jiKgxuisTf0M
-         VrnQ==
-X-Gm-Message-State: AFqh2kpBemPOYDix5CDcCMipCCkHBleUJMmv6gONg8GwZI17cPBBQqsE
-        TKkT2RptlkVJ8KPRqVzd304=
-X-Google-Smtp-Source: AMrXdXsr1P6+PRiw6tbAoEgIVBCqonVVF/n+YkwfBn7QRsqFIukitOB0HXgpeumRtAcRESRcaIh9rA==
-X-Received: by 2002:a17:902:e48d:b0:194:4484:8e61 with SMTP id i13-20020a170902e48d00b0019444848e61mr10140052ple.69.1673588994272;
-        Thu, 12 Jan 2023 21:49:54 -0800 (PST)
-Received: from MBP ([68.74.118.125])
-        by smtp.gmail.com with ESMTPSA id s9-20020a170902ea0900b0017f57787a4asm13164690plg.229.2023.01.12.21.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 21:49:53 -0800 (PST)
-References: <m2bko8c0yh.fsf@gmail.com> <m2pmcoag55.fsf@gmail.com>
- <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
- <Y5oqxh2jnarlEKNG@bombadil.infradead.org> <m2o7s55gan.fsf@gmail.com>
- <m2ili43s2v.fsf@gmail.com> <Y6P2MUcTGU9LIrDg@bombadil.infradead.org>
- <m235983p58.fsf@gmail.com> <m2bknv3b1a.fsf@gmail.com>
- <m21qor3afi.fsf@gmail.com> <Y6XC3Du9pFKQFNkt@bombadil.infradead.org>
-User-agent: mu4e 1.8.10; emacs 29.0.60
-From:   Schspa Shi <schspa@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
-        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
-        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
-        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] umh: fix UAF when the process is being killed
-Date:   Fri, 13 Jan 2023 13:42:05 +0800
-In-reply-to: <Y6XC3Du9pFKQFNkt@bombadil.infradead.org>
-Message-ID: <m2cz7j7zm2.fsf@gmail.com>
+        Fri, 13 Jan 2023 00:43:16 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3C9687B0;
+        Thu, 12 Jan 2023 21:43:14 -0800 (PST)
+X-UUID: 27a6938a930511eda06fc9ecc4dadd91-20230113
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=qv+KkInTLw4al9JNASorMveEjnaJV7ozjLhA4jeinMs=;
+        b=hNqr8ttZCzMo0v5kzEUlsUbplwl2+JORVhsxiywWtG8Zf+ZlhjA6O14TmhQX69QC3V0MIIlzyMVNhVeRTvFvsAAGjg23MqemX+cAXjqTeeIzdG0RwqIuzs0Jb+cFciRCS2Jzn6lZi8F/Cnvgi1PpZfksdeoxut89q7EFLbG2srM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:9099235e-9b66-459e-a2bc-f2b0105d3d39,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.17,REQID:9099235e-9b66-459e-a2bc-f2b0105d3d39,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:543e81c,CLOUDID:6436b4f5-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230113134309PR28TXVK,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0
+X-CID-APTURL: Status:success,Category:nil,Trust:0,Unknown:1,Malicious:0
+X-CID-BVR: 0,NGT
+X-UUID: 27a6938a930511eda06fc9ecc4dadd91-20230113
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1160642785; Fri, 13 Jan 2023 13:43:06 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 13 Jan 2023 13:43:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 13 Jan 2023 13:43:05 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v5 00/10] add support for MT8195 VPPSYS on MMSYS and MUTEX
+Date:   Fri, 13 Jan 2023 13:42:54 +0800
+Message-ID: <20230113054304.21841-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes since v4:
+- Rebase on linux-next.
+- Remove MMSYS fallback compatible.
+- Migrate MT8195 VPPSYS0/1 from clock to mtk-mmsys driver.
 
-Luis Chamberlain <mcgrof@kernel.org> writes:
+Changes since v3:
+- Rebase on linux-next.
 
-> On Thu, Dec 22, 2022 at 08:09:38PM +0800, Schspa Shi wrote:
->> 
->> Attaching the full test program in case anyone wants to add some
->> comments.
->
-> Good stuff.
->
-> That looks like a kernel sefltest. So you can just add it as an
-> initial selftest for completion so lib/test_completion.c and extend
-> lib/Kconfig.debug for a new kconfig symbol for it, and then just add
-> a script on tools/testing/selftets/completion/ with a simple makefile
-> which references a script which just calls modprobe. You can look at
-> tools/testing/selftests/kmod/ for an example.
+Changes since v2:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+- Split dts settings into two patches based on belonging to MMSYS or MUTEX.
 
-OK, but I want to know, is it enough to add only positive examples for
-the test items here? Do we need a reverse example to prove that the
-previous writing is wrong?
+Changes since v1:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+- Add compatible names to VPPSYS0 and VPPSYS1 in MMSYS binding file.
+- Fix VPPSYS's MMSYS and MUTEX dts to pass the dtsb_check.
+- Rename mtk_mmsys_merge_config() and mtk_mmsys_rsz_dcm_config() to
+  mtk_mmsys_vpp_rsz_merge_config() and mtk_mmsys_vpp_rsz_dcm_config().
+- Clean up mtk_mmsys_vpp_rsz_dcm_config().
+- Add a comment to mtk_mutex_write_mod() and clean it up for use in more
+  than 32 mods.
 
->
-> But I still think you may want an SmPL Coccinelle grammer patch to hunt
-> down other users with this pattern. The beneefit is that then you can
-> use the same Coccinelle patch to also then *fix* the issue in other
-> places.
->
+Hi,
 
-Yes, I'm learning about SmPL, and I'll add this syntax patch later to
-find more problems.
+This series add support for MT8195's two VPPSYS(Video Processor Pipe Subsystem),
+under which there will be corresponding MMSYS and MUTEX settings that
+need to be configured.
 
-> The current uaf on umh is not something I'm terribly concerned to be
-> exploited in the wild. I don't think other use cases would be easier,
-> but, all this work would close the gap completely.
->
-> Thanks for doing this.
->
->   Luis
+Moudy Ho (4):
+  dt-bindings: arm: mediatek: migrate MT8195 vppsys0/1 to mtk-mmsys
+    driver
+  dt-bindings: arm: mediatek: mmsys: Add support for MT8195 VPPSYS
+  arm64: dts: mediatek: mt8195: add MUTEX configuration for VPPSYS
+  clk: mediatek: remove MT8195 vppsys/0/1 simple_probe
 
+Roy-CW.Yeh (6):
+  dt-bindings: soc: mediatek: Add support for MT8195 VPPSYS
+  arm64: dts: mediatek: mt8195: add MMSYS configuration for VPPSYS
+  soc: mediatek: mmsys: add support for MT8195 VPPSYS
+  soc: mediatek: mmsys: add config api for RSZ switching and DCM
+  soc: mediatek: mutex: Add mtk_mutex_set_mod support to set MOD1
+  soc: mediatek: mutex: support MT8195 VPPSYS
+
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |   2 +
+ .../arm/mediatek/mediatek,mt8195-clock.yaml   |  16 ---
+ .../bindings/soc/mediatek/mediatek,mutex.yaml |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  26 +++-
+ drivers/clk/mediatek/clk-mt8195-vpp0.c        |  58 ++++++--
+ drivers/clk/mediatek/clk-mt8195-vpp1.c        |  58 ++++++--
+ drivers/soc/mediatek/mt8195-mmsys.h           |  13 ++
+ drivers/soc/mediatek/mtk-mmsys.c              |  64 +++++++++
+ drivers/soc/mediatek/mtk-mmsys.h              |   1 +
+ drivers/soc/mediatek/mtk-mutex.c              | 135 +++++++++++++++++-
+ include/linux/soc/mediatek/mtk-mmsys.h        |   4 +
+ include/linux/soc/mediatek/mtk-mutex.h        |  35 +++++
+ 12 files changed, 356 insertions(+), 57 deletions(-)
 
 -- 
-BRs
-Schspa Shi
+2.18.0
+
