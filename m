@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B8A669792
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC86366979F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjAMMnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S241383AbjAMMpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241566AbjAMMnG (ORCPT
+        with ESMTP id S241761AbjAMMnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:43:06 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5699887F39
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:48 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id u19so51946444ejm.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:48 -0800 (PST)
+        Fri, 13 Jan 2023 07:43:07 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F41287F31
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:50 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mp20so5393489ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linbit-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w8mQ1DNdko28cUxvjVBwoXrO008ZDGIG0DMI/J1nWT4=;
-        b=spZ9bBE74IdXZvFGyhmamqe/1SDBwGLUSQcAXBhiwbLOeW5LdETOuSw5m+TSnCduvh
-         i1dq8pBx80HiBAQcGyxEY7bGUwTu7HGxSxh5IVd2vJJzbwTudnAkAOm1FZMZACIgnAUG
-         LJFOsRpwpphyUe8m9LlCxV+VWqB3hnbrDjtKvi8zr4L8jJ7bq1yM+6S8hSkauyzAELBb
-         h8cwpFX/WD9jR0CJed2lXICxX6+pQu+9OhUREJogH4PvwJZEDLXjcm1ihM0rQwzO7Ya5
-         859r3Uyiovs6+qkiWv/7Wy163pJ4VOkBZlrkbGWRu9MdVP8K0Q7Rt7so9rV00GVCbZko
-         T0/A==
+        bh=rnWGghdREJ6zIaEe7+G9hDEkG3lKlZcJtoyqEzGOui4=;
+        b=7MggSvVJcvB+UhgdCA3YbS9r+ZOV3AkBaHplJBS3GHTsZ7kKYp6j6tXdu3rHlUqUXg
+         CuAfampyUgvOK/Fjbv+qH5HZtB1stqe6g5zwpCnI2n1nXZ9V5LzZPISGD/8Rks0pJVd8
+         3hOsc+AUF1w1Cgt6rac331YMACuqJ5zZDkJHuMd0X0+JgPBKuzSAYJu9TkR3TizU1AJ/
+         phVvbDXyDj0AFqcLRk4ActDz2MfJpRpdnlUm2cpG6EFRJfyMePbRmfm7qZv/7xQCYsUL
+         VtmfkqA8ATSi4pBSUl7CMjgtFQKfrHylppisWyml8jf0ra9PKm1lR0Akk9lI/b3A5BJK
+         grHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w8mQ1DNdko28cUxvjVBwoXrO008ZDGIG0DMI/J1nWT4=;
-        b=i0jvVSd2/fC66Ej97A+EUsDcDGMSknRJ4ik1Ws8uA1DVdDRyRhES0nhp6kByCmS6aT
-         +9RCw7TZAnIhbsS3fS5LnzlM8tV7KVpDo+e0GUcNNrz7/LQBGqlzNBcFVhdVkhGlImhs
-         fKotX/mKVqdzsBWye4u4dMwY15N5QMlIu7hGxYv6SYBk2poVq9xLBsVUaEajB3YjILlO
-         CeP5bNGB7Lv+FiewCqEP2Tjo3LwB0a0V5XynCYa77VgJtWFPiNH09emLRv+LnDTQgAai
-         oD8+9IyZCkXEgvrtdl326phEzpEc8L9PLZSZ1SU2JQfx8vmYE99rdqlhQ9yA5R4JDZ9V
-         B86A==
-X-Gm-Message-State: AFqh2kqcQyIZERIYQEmOOacv038dOeJD0pbgl8fKquWZzdYC0xswfxKL
-        vX3Hke4lC0dOFCOkabJnPIixC+umht8+jPq+PPE=
-X-Google-Smtp-Source: AMrXdXsjRgGq/XdmuiDTy/O+NIzOeI0x1b11hX7Z1ViInZBjrvxvNGqtTAecfa6o7Iznz1GQ/tHnaQ==
-X-Received: by 2002:a17:907:7f22:b0:869:c5a4:e1a7 with SMTP id qf34-20020a1709077f2200b00869c5a4e1a7mr4493526ejc.62.1673613319454;
-        Fri, 13 Jan 2023 04:35:19 -0800 (PST)
+        bh=rnWGghdREJ6zIaEe7+G9hDEkG3lKlZcJtoyqEzGOui4=;
+        b=yu2yEfeMakIyYs+egWkCVwHSpXT055Ond6wt2n8Opf0gcGHBojxu0WsWDXnogYaiXq
+         UxBTwM3S9p8uOnVDTcy8ruI4NlW8CAHxJUHcjmLyZWvOAGfSRaSDLKUq7UegqyyptphQ
+         yoSzl6eTXpCJZ5t4Oe2l7T2A6yjqPZhVIIFAT/v9p5v17ryq+em9WCrQAT6b7Zm39ivz
+         KBBEpG85L84A5htXEXRhkBkHMCsnFAD6+uD0UMhkEGrdpnxpzXHyBOKX9tB+DgbRqJ5b
+         5FiOLIDTGYTdJ8isFLT9Zpt0+LseC7AGZ5EsZuVhITFCol+0OHXwT+S3mAk+W0NbG5Mf
+         ce/g==
+X-Gm-Message-State: AFqh2kqT7+SgVA2Gs29eYuxnKlKZ23zGqss3fIxs7Q36i/AnEGztDV0Z
+        K2Q9r+eVUHin3V+H+hOBFwGZFw==
+X-Google-Smtp-Source: AMrXdXs1zcfIgcaXvcxplpumwnRr+KMhCRY/vNTco05knDjB5ZLtnWzyxCP0Udy1N5NsZvzBzh/K/g==
+X-Received: by 2002:a17:907:d50d:b0:801:d6f2:754 with SMTP id wb13-20020a170907d50d00b00801d6f20754mr70167151ejc.52.1673613320223;
+        Fri, 13 Jan 2023 04:35:20 -0800 (PST)
 Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b00846734faa9asm8386323ejo.164.2023.01.13.04.35.18
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b00846734faa9asm8386323ejo.164.2023.01.13.04.35.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 13 Jan 2023 04:35:19 -0800 (PST)
 From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
@@ -60,9 +60,9 @@ Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>,
         Joel Colledge <joel.colledge@linbit.com>
-Subject: [PATCH 1/3] drbd: split off drbd_buildtag into separate file
-Date:   Fri, 13 Jan 2023 13:35:04 +0100
-Message-Id: <20230113123506.144082-2-christoph.boehmwalder@linbit.com>
+Subject: [PATCH 2/3] drbd: drop API_VERSION define
+Date:   Fri, 13 Jan 2023 13:35:05 +0100
+Message-Id: <20230113123506.144082-3-christoph.boehmwalder@linbit.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230113123506.144082-1-christoph.boehmwalder@linbit.com>
 References: <20230113123506.144082-1-christoph.boehmwalder@linbit.com>
@@ -78,86 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To be more similar to what we do in the out-of-tree module and ease the
-upstreaming process.
+Use the genetlink api version as defined in drbd_genl_api.h.
 
 Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
 Reviewed-by: Joel Colledge <joel.colledge@linbit.com>
 ---
- drivers/block/drbd/Makefile        |  2 +-
- drivers/block/drbd/drbd_buildtag.c | 22 ++++++++++++++++++++++
- drivers/block/drbd/drbd_main.c     | 18 ------------------
- 3 files changed, 23 insertions(+), 19 deletions(-)
- create mode 100644 drivers/block/drbd/drbd_buildtag.c
+ drivers/block/drbd/drbd_debugfs.c | 2 +-
+ drivers/block/drbd/drbd_main.c    | 2 +-
+ drivers/block/drbd/drbd_proc.c    | 2 +-
+ include/linux/drbd.h              | 1 -
+ include/linux/drbd_genl_api.h     | 2 +-
+ 5 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/block/drbd/Makefile b/drivers/block/drbd/Makefile
-index c93e462130ff..67a8b352a1d5 100644
---- a/drivers/block/drbd/Makefile
-+++ b/drivers/block/drbd/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--drbd-y := drbd_bitmap.o drbd_proc.o
-+drbd-y := drbd_buildtag.o drbd_bitmap.o drbd_proc.o
- drbd-y += drbd_worker.o drbd_receiver.o drbd_req.o drbd_actlog.o
- drbd-y += drbd_main.o drbd_strings.o drbd_nl.o
- drbd-y += drbd_interval.o drbd_state.o
-diff --git a/drivers/block/drbd/drbd_buildtag.c b/drivers/block/drbd/drbd_buildtag.c
-new file mode 100644
-index 000000000000..956a4d5c339b
---- /dev/null
-+++ b/drivers/block/drbd/drbd_buildtag.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/drbd.h>
-+#include <linux/module.h>
-+
-+const char *drbd_buildtag(void)
-+{
-+	/* DRBD built from external sources has here a reference to the
-+	 * git hash of the source code.
-+	 */
-+
-+	static char buildtag[38] = "\0uilt-in";
-+
-+	if (buildtag[0] == 0) {
-+#ifdef MODULE
-+		sprintf(buildtag, "srcversion: %-24s", THIS_MODULE->srcversion);
-+#else
-+		buildtag[0] = 'b';
-+#endif
-+	}
-+
-+	return buildtag;
-+}
+diff --git a/drivers/block/drbd/drbd_debugfs.c b/drivers/block/drbd/drbd_debugfs.c
+index a72c096aa5b1..12460b584bcb 100644
+--- a/drivers/block/drbd/drbd_debugfs.c
++++ b/drivers/block/drbd/drbd_debugfs.c
+@@ -844,7 +844,7 @@ static int drbd_version_show(struct seq_file *m, void *ignored)
+ {
+ 	seq_printf(m, "# %s\n", drbd_buildtag());
+ 	seq_printf(m, "VERSION=%s\n", REL_VERSION);
+-	seq_printf(m, "API_VERSION=%u\n", API_VERSION);
++	seq_printf(m, "API_VERSION=%u\n", GENL_MAGIC_VERSION);
+ 	seq_printf(m, "PRO_VERSION_MIN=%u\n", PRO_VERSION_MIN);
+ 	seq_printf(m, "PRO_VERSION_MAX=%u\n", PRO_VERSION_MAX);
+ 	return 0;
 diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
-index 7213ffd69a16..345bfac441da 100644
+index 345bfac441da..5156d2fb2d76 100644
 --- a/drivers/block/drbd/drbd_main.c
 +++ b/drivers/block/drbd/drbd_main.c
-@@ -3776,24 +3776,6 @@ _drbd_insert_fault(struct drbd_device *device, unsigned int type)
- }
- #endif
+@@ -2899,7 +2899,7 @@ static int __init drbd_init(void)
  
--const char *drbd_buildtag(void)
--{
--	/* DRBD built from external sources has here a reference to the
--	   git hash of the source code. */
--
--	static char buildtag[38] = "\0uilt-in";
--
--	if (buildtag[0] == 0) {
--#ifdef MODULE
--		sprintf(buildtag, "srcversion: %-24s", THIS_MODULE->srcversion);
--#else
--		buildtag[0] = 'b';
--#endif
--	}
--
--	return buildtag;
--}
--
- module_init(drbd_init)
- module_exit(drbd_cleanup)
+ 	pr_info("initialized. "
+ 	       "Version: " REL_VERSION " (api:%d/proto:%d-%d)\n",
+-	       API_VERSION, PRO_VERSION_MIN, PRO_VERSION_MAX);
++	       GENL_MAGIC_VERSION, PRO_VERSION_MIN, PRO_VERSION_MAX);
+ 	pr_info("%s\n", drbd_buildtag());
+ 	pr_info("registered as block device major %d\n", DRBD_MAJOR);
+ 	return 0; /* Success! */
+diff --git a/drivers/block/drbd/drbd_proc.c b/drivers/block/drbd/drbd_proc.c
+index 2227fb0db1ce..1d0feafceadc 100644
+--- a/drivers/block/drbd/drbd_proc.c
++++ b/drivers/block/drbd/drbd_proc.c
+@@ -228,7 +228,7 @@ int drbd_seq_show(struct seq_file *seq, void *v)
+ 	};
  
+ 	seq_printf(seq, "version: " REL_VERSION " (api:%d/proto:%d-%d)\n%s\n",
+-		   API_VERSION, PRO_VERSION_MIN, PRO_VERSION_MAX, drbd_buildtag());
++		   GENL_MAGIC_VERSION, PRO_VERSION_MIN, PRO_VERSION_MAX, drbd_buildtag());
+ 
+ 	/*
+ 	  cs .. connection state
+diff --git a/include/linux/drbd.h b/include/linux/drbd.h
+index 5755537b51b1..df65a8f5228a 100644
+--- a/include/linux/drbd.h
++++ b/include/linux/drbd.h
+@@ -40,7 +40,6 @@
+ 
+ extern const char *drbd_buildtag(void);
+ #define REL_VERSION "8.4.11"
+-#define API_VERSION 1
+ #define PRO_VERSION_MIN 86
+ #define PRO_VERSION_MAX 101
+ 
+diff --git a/include/linux/drbd_genl_api.h b/include/linux/drbd_genl_api.h
+index bd62efc29002..70682c058027 100644
+--- a/include/linux/drbd_genl_api.h
++++ b/include/linux/drbd_genl_api.h
+@@ -47,7 +47,7 @@ enum drbd_state_info_bcast_reason {
+ #undef linux
+ 
+ #include <linux/drbd.h>
+-#define GENL_MAGIC_VERSION	API_VERSION
++#define GENL_MAGIC_VERSION	1
+ #define GENL_MAGIC_FAMILY	drbd
+ #define GENL_MAGIC_FAMILY_HDRSZ	sizeof(struct drbd_genlmsghdr)
+ #define GENL_MAGIC_INCLUDE_FILE <linux/drbd_genl.h>
 -- 
 2.38.1
 
