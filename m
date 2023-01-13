@@ -2,105 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2704F66A241
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A8C66A242
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjAMSlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S230007AbjAMSlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjAMSlp (ORCPT
+        with ESMTP id S229979AbjAMSlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:41:45 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9743D1DA
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:41:42 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id jn22so24264923plb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=godItNTiu1hFRNSRzyHDiQ09s/Iir0TYSKsoCsWjnBI=;
-        b=ETvBwnoWQjAy4YvByjEGST2SfwtwOTHrXBkGCH7CY6CS5ocaYNVmsxWzl03UwSz2vl
-         x3+YtwG7slgYRTPbz7quPAROdVldSPr1rg8X1IIdhN4n9G1uHeKtc47dPm+kAYJkPw3/
-         kfkgfQzlVLeF9ptQAC+MyzOyCvW28G+mN0j7yVqDXuMtSAYzpwMUfS+AeQO6WXsuJ3So
-         cVwE1PVqO4EJIW81fT4RocCow5Iwk5FO85cu18YG/g0KwtMkMYxLQBqTzd5cG27Jnv3+
-         u0HagV3CDWxT8onavImXo6uH0GaE1U50G5ghTh6KRwvyRfoYIjhim2uPN4VsNuF/V4Wc
-         oy+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=godItNTiu1hFRNSRzyHDiQ09s/Iir0TYSKsoCsWjnBI=;
-        b=v2979Y92Xa4gvwCcso6hcUkxPS97Zg1pzZXeKOd5eqU5Y+t6lgsdRG25/hhBuIAPGN
-         6Db70vBIWTQLb1vnIX49H08IVgqVsij97ew8jopfFjn0OXFsomvy7LimQLcMyW2QB+gD
-         OOJaMIGjWvYtvrnb+r6cb3P5HLb/Ep16zw6c8RHdWM3fTSX4s8XT1AFDuT6D3Tf83o1d
-         bmf/VTz/jVjqShtv2Oxhvl82mUecsP9n7OdyylZj4dol8ERZV0ly5Auj6ddudonqlaKj
-         alhYNHp0hTEyIbKEZIB5RlTIy9I3/fVI+nU0Dk7yZmfw2Vs6Cl8alsmFrMYBypuLXFfC
-         omEg==
-X-Gm-Message-State: AFqh2kpJzu5+HTsrYL1b4wp57X/b47YO8NoRfePHZpIeVeQ2ju5IJXXL
-        7Sgl5nLonQWzNwpTjzndf3Youw==
-X-Google-Smtp-Source: AMrXdXvRij7in5oNpdpmDfXW61gvt60eWr/Gx1OLt9EPk0FAutZuxDCB4HdkixgaoHQ2ouBVgm2OKQ==
-X-Received: by 2002:a17:90a:d148:b0:229:1e87:365f with SMTP id t8-20020a17090ad14800b002291e87365fmr495333pjw.2.1673635301522;
-        Fri, 13 Jan 2023 10:41:41 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y23-20020a17090ad71700b0022910fa4d1csm2619706pju.46.2023.01.13.10.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 10:41:41 -0800 (PST)
-Date:   Fri, 13 Jan 2023 18:41:37 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Orr <marcorr@google.com>, Ben Gardon <bgardon@google.com>,
-        Venkatesh Srinivas <venkateshs@chromium.org>
-Subject: Re: [PATCH 0/6] KVM: x86: x2APIC reserved bits/regs fixes
-Message-ID: <Y8Gl4ZI3HsFGlALe@google.com>
-References: <20230107011025.565472-1-seanjc@google.com>
- <674ac894-12a2-c15f-72c5-878558a8005d@redhat.com>
+        Fri, 13 Jan 2023 13:41:47 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E991C91A;
+        Fri, 13 Jan 2023 10:41:46 -0800 (PST)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id E017D40737DF;
+        Fri, 13 Jan 2023 18:41:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru E017D40737DF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1673635301;
+        bh=z0c82/y44qwB7Ag9SFACMqw3ieqU7OANQ9HTnTyVxw4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=okUTJQ0/GB0KvrpMp3MSPN/nSKBKvqdWcj5YUosfzQ1OiZsDlKHvcNx2/9uzEZdv7
+         JMyMvHbpb/fQdBCnxPDAgDP9LOBTyJvCkQ/6wk05dV0L3QD5++1lDxxCi4lxcF4WU8
+         IJzwp6wWNf5vMPGgFnpXlLwYMv2xCtnbfYDNWMLg=
+Subject: Re: [lvc-project] [PATCH] iio: chemical: scd30: Add check for NULL in
+ scd30_i2c_command
+To:     Anastasia Belova <abelova@astralinux.ru>,
+        Tomasz Duszynski <tomasz.duszynski@octakon.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, lvc-project@linuxtesting.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>
+References: <20230113133320.7531-1-abelova@astralinux.ru>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <c0c7d2d7-648d-feb3-14ea-c2ab3baddfb1@ispras.ru>
+Date:   Fri, 13 Jan 2023 21:41:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <674ac894-12a2-c15f-72c5-878558a8005d@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230113133320.7531-1-abelova@astralinux.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023, Paolo Bonzini wrote:
-> On 1/7/23 02:10, Sean Christopherson wrote:
-> > Fixes for edge cases where KVM mishandles reserved bits/regs checks when
-> > the vCPU is in x2APIC mode.
-> > 
-> > The first two patches were previously posted[*], but both patches were
-> > broken (as posted against upstream), hence I took full credit for doing
-> > the work and changed Marc to a reporter.
-> > 
-> > The VMX APICv fixes are for bugs found when writing tests.  *sigh*
-> > I didn't Cc those to stable as the odds of breaking something when touching
-> > the MSR bitmaps seemed higher than someone caring about a 10 year old bug.
-> > 
-> > AMD x2AVIC support may or may not suffer similar interception bugs, but I
-> > don't have hardware to test and this already snowballed further than
-> > expected...
-> > 
-> > [*] https://lore.kernel.org/kvm/20220525173933.1611076-1-venkateshs@chromium.org
+On 13.01.2023 16:33, Anastasia Belova wrote:
+> Check rsp for NULL-pointer before dereferencing.
 > 
-> Looks good; please feel free to start gathering this in your tree for 6.3.
-
-Thanks!
-
-> Next week I'll go through Ben's series as well as Aaron's "Clean up the
-> supported xfeatures" and others.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> Let me know if you would like me to queue anything of these instead, and
-> please remember to set up the tree in linux-next. :)
+> Fixes: e510190e0139 ("iio: chemical: scd30: add I2C interface driver")
+> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> ---
+>  drivers/iio/chemical/scd30_i2c.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/chemical/scd30_i2c.c b/drivers/iio/chemical/scd30_i2c.c
+> index bae479a4721f..84baf67fc0ce 100644
+> --- a/drivers/iio/chemical/scd30_i2c.c
+> +++ b/drivers/iio/chemical/scd30_i2c.c
+> @@ -101,8 +101,10 @@ static int scd30_i2c_command(struct scd30_state *state, enum scd30_cmd cmd, u16
+>  			return -EIO;
+>  		}
+>  
+> -		*rsp++ = buf[i];
+> -		*rsp++ = buf[i + 1];
+> +		if (rsp) {
+> +			*rsp++ = buf[i];
+> +			*rsp++ = buf[i + 1];
+> +		}
+>  	}
+>  
+>  	return 0;
+> 
 
-Ya, next week is going to be dedicated to sorting out maintenance mechanics.
+
+It seems it is better to put the whole validation loop under if (rsp)
+check.
+
+--
+Alexey
