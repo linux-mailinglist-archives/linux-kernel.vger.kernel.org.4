@@ -2,280 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE170669567
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D06966955F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbjAMLUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S235409AbjAMLTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbjAMLS5 (ORCPT
+        with ESMTP id S241431AbjAMLSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:18:57 -0500
-Received: from outbound-smtp05.blacknight.com (outbound-smtp05.blacknight.com [81.17.249.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF2482B2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:13:30 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp05.blacknight.com (Postfix) with ESMTPS id 143F3CCCE4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:13:29 +0000 (GMT)
-Received: (qmail 11467 invoked from network); 13 Jan 2023 11:13:28 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 13 Jan 2023 11:13:28 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 6/6] mm: discard __GFP_ATOMIC
-Date:   Fri, 13 Jan 2023 11:12:17 +0000
-Message-Id: <20230113111217.14134-7-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230113111217.14134-1-mgorman@techsingularity.net>
-References: <20230113111217.14134-1-mgorman@techsingularity.net>
+        Fri, 13 Jan 2023 06:18:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FB437D9D8;
+        Fri, 13 Jan 2023 03:12:51 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7871FEC;
+        Fri, 13 Jan 2023 03:13:32 -0800 (PST)
+Received: from [10.57.37.197] (unknown [10.57.37.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B50E13F587;
+        Fri, 13 Jan 2023 03:12:47 -0800 (PST)
+Message-ID: <70a94ad3-fe5d-b013-7f6b-dd83d2332e0e@arm.com>
+Date:   Fri, 13 Jan 2023 11:12:46 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 0/7] perf cs_etm: Basic support for virtual/kernel
+ timestamps
+Content-Language: en-US
+To:     Tanmay Jagdale <tanmay@marvell.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>
+Cc:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        George Cherian <gcherian@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230103162042.423694-1-james.clark@arm.com>
+ <PH0PR18MB5017223066D8744D12C1F1BAD6FF9@PH0PR18MB5017.namprd18.prod.outlook.com>
+ <5acce414-eabb-3d22-4907-da6b64b85a9c@arm.com>
+ <b61039b1-1f64-ff1e-8e6a-7d8ada28656c@arm.com>
+ <PH0PR18MB50178B52ED081276D2404493D6FD9@PH0PR18MB5017.namprd18.prod.outlook.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <PH0PR18MB50178B52ED081276D2404493D6FD9@PH0PR18MB5017.namprd18.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
 
-__GFP_ATOMIC serves little purpose.  Its main effect is to set
-ALLOC_HARDER which adds a few little boosts to increase the chance of an
-allocation succeeding, one of which is to lower the water-mark at which it
-will succeed.
 
-It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
-adjusts this watermark.  It is probable that other users of __GFP_HIGH
-should benefit from the other little bonuses that __GFP_ATOMIC gets.
+On 12/01/2023 15:33, Tanmay Jagdale wrote:
+> Hi James
+> 
+>>>>> base-commit: 09e6f9f98370be9a9f8978139e0eb1be87d1125f
+>>>> I have tested this patch set on our platform and able to see updated
+>>>> timestamp values in perf script's output.
+>>>>
+>>>> $ perf record -e cs_etm/cycacc,@tmc_etr0/k -C 9 taskset -c 9 sleep 2
+>>>> $ perf script --itrace=i1ns --ns -Fcomm,tid,pid,time,cpu,event,ip,sym,addr,symoff,flags,callindent
+>>>>
+>>>> At certain points noticed that hardware emits same timestamp packets
+>>>> but with updated cycle count (CC) values. A small snippet of the log:
+>>>>
+>>>> Idx:100; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086A761C ~[0x761C]
+>>>> Idx:103; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3d
+>>>> Idx:107; ID:12; I_ATOM_F2 : Atom format 2.; EN
+>>>> Idx:108; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x3f
+>>>> Idx:112; ID:12; I_ATOM_F1 : Atom format 1.; N
+>>>> Idx:113; ID:12; I_TIMESTAMP : Timestamp.; Updated val = 0x2f373e37e02; CC=0x45
+>>>> Idx:116; ID:12; I_ATOM_F1 : Atom format 1.; E
+>>>> Idx:117; ID:12; I_ADDR_S_IS0 : Address, Short, IS0.; Addr=0xFFFF8000086B52D4 ~[0x152D4]
+>>>>
+>>>> Since the source of timestamp is the Generic Timer block and the CPUs
+>>>> run at higher frequencies, this behaviour could be possible on high
+>>>> performance ARM cores.
+>>>>
+>>>> Having consecutive timestamps with same value is resulting in a
+>>>> slightly jumbled order (in nanosecs) in perf script's time column.
+>>>> A snippet corresponding to the Coresight trace data mentioned above:
+>>>> ...
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   return                               0 ffff8000086a761c coresight_timeout+0xc8
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   return                               0 ffff8000086a7620 coresight_timeout+0xcc
+>>>> perf   965/965   [001]  3182.286629046:            instructions:k:   jmp                                  0 ffff8000086a75c8 coresight_timeout+0x74
+>>>> perf   965/965   [001]  3182.286629046:            instructions:k:   jmp                                  0 ffff8000086a75cc coresight_timeout+0x78
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75d0 coresight_timeout+0x7c
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75d4 coresight_timeout+0x80
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75d8 coresight_timeout+0x84
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75dc coresight_timeout+0x88
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75e0 coresight_timeout+0x8c
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75e4 coresight_timeout+0x90
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75e8 coresight_timeout+0x94
+>>>> perf   965/965   [001]  3182.286629044:            instructions:k:   jcc                                  0 ffff8000086a75ec coresight_timeout+0x98
+>>>>
+>>>> Perf's do_soft_timestamp() logic in cs_etm_decoder.c file is incrementing
+>>>> the HW timestamp based on instruction count. Since the next timestamp
+>>>> also has the same value, it could be leading to this jumbled order.
+>>>>
+>>>> We would like to know if this has been observed on other platforms ?
+>>>> And what could be a solution in SW for this ?
+>>>
+>>> Nice catch. If I'm understanding this correctly it looks like the issue
+>>> is a combination of the cycle count in the packet being ignored by Perf,
+>>> and the instruction count being reset to 0 when a new timestamp is received.
+>>>
+>>> It looks like it can be fixed by some combination of combining the cycle
+>>> count and instruction count and maybe not resetting instruction count if
+>>> the newly received timestamp is the same as the last one. I will look
+>>> into this.
+>>>
+>>> We haven't noticed it on any other platforms, but we haven't been
+>>> looking too closely at the timestamps until now. Perhaps I can add a
+>>> test that checks if the trace in a known function goes in the correct
+>>> time order.
+>>>
+>>
+>> I'm thinking of something like the following patch to fix the ordering.
+>> It doesn't use the cycle count, but I'm not sure if that would be
+>> worthwhile in the end, considering that it would have sub nanosecond
+>> resolution so wouldn't affect the Perf timestamps:
+> Thanks for coming up with a quick solution for this issue !
+> 
+>>
+>>
+>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+>> index 31fa3b45134a..08a028e3e87a 100644
+>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+>> @@ -112,6 +112,19 @@ int cs_etm_decoder__get_packet(struct cs_etm_packet_queue *packet_queue,
+>>  	return 1;
+>>  }
+>>
+>> +static u64 cs_etm_decoder__instr_count_to_ns(u64 instr_count)
+>> +{
+>> +	/*
+>> +	 * Assume a maximum of 0.1ns elapsed per instruction. This would be the
+>> +	 * case with a theoretical 10GHz core executing 1 instruction per cycle.
+>> +	 * Used to estimate the sample time for synthesized instructions because
+>> +	 * Coresight only emits a timestamp for a range of instructions rather
+>> +	 * than per instruction.
+>> +	 */
+>> +	const int INSTR_PER_NS = 10;
+>> +
+>> +	return instr_count / INSTR_PER_NS;
+>> +}
+>>  static int cs_etm_decoder__gen_etmv3_config(struct cs_etm_trace_params *params,
+>>  					    ocsd_etmv3_cfg *config)
+>>  {
+>> @@ -267,7 +280,7 @@ cs_etm_decoder__do_soft_timestamp(struct cs_etm_queue *etmq,
+>>  	packet_queue->cs_timestamp = packet_queue->next_cs_timestamp;
+>>
+>>  	/* Estimate the timestamp for the next range packet */
+>> -	packet_queue->next_cs_timestamp += packet_queue->instr_count;
+>> +	packet_queue->next_cs_timestamp += cs_etm_decoder__instr_count_to_ns(packet_queue->instr_count);
+>>  	packet_queue->instr_count = 0;
+>>
+>>  	/* Tell the front end which traceid_queue needs attention */
+>> @@ -295,11 +308,17 @@ cs_etm_decoder__do_hard_timestamp(struct cs_etm_queue *etmq,
+>>  	 * hence asking the decoder to keep decoding rather than stopping.
+>>  	 */
+>>  	if (packet_queue->cs_timestamp) {
+>> -		packet_queue->next_cs_timestamp = elem->timestamp;
+>> +		/*
+>> +		 * Don't allow next_cs_timestamp to be less than the last one estimated by
+>> +		 * cs_etm_decoder__do_soft_timestamp() otherwise new instructions would
+>> +		 * appear to go back in time. In theory this should never happen, but if
+>> +		 * it did, then next_cs_timestamp should eventually catch up to real time
+>> +		 * unless every single range was predicted to be too long for some reason.
+>> +		 */
+>> +		packet_queue->next_cs_timestamp = max(elem->timestamp, packet_queue->next_cs_timestamp);
+>>  		return OCSD_RESP_CONT;
+>>  	}
+>>
+>> -
+>>  	if (!elem->timestamp) {
+>>  		/*
+>>  		 * Zero timestamps can be seen due to misconfiguration or hardware bugs.
+>> @@ -312,7 +331,7 @@ cs_etm_decoder__do_hard_timestamp(struct cs_etm_queue *etmq,
+>>  					". Decoding may be improved by prepending 'Z' to your current --itrace
+>> arguments.\n",
+>>  					indx);
+>>
+>> -	} else if (packet_queue->instr_count > elem->timestamp) {
+>> +	} else if (cs_etm_decoder__instr_count_to_ns(packet_queue->instr_count) > elem->timestamp) {
+>>  		/*
+>>  		 * Sanity check that the elem->timestamp - packet_queue->instr_count would not
+>>  		 * result in an underflow. Warn and clamp at 0 if it would.
+>> @@ -327,7 +346,8 @@ cs_etm_decoder__do_hard_timestamp(struct cs_etm_queue *etmq,
+>>  		 * which instructions started by subtracting the number of instructions
+>>  		 * executed to the timestamp.
+>>  		 */
+>> -		packet_queue->cs_timestamp = elem->timestamp - packet_queue->instr_count;
+>> +		packet_queue->cs_timestamp = elem->timestamp -
+>> +			cs_etm_decoder__instr_count_to_ns(packet_queue->instr_count);
+>>  	}
+>>  	packet_queue->next_cs_timestamp = elem->timestamp;
+>>  	packet_queue->instr_count = 0;
+> I have tested this diff along with the patchset and found that
+> timestamps are generated/estimated in an increasing order.
+> 
+> However, found few corner cases where they weren't in order.
+> I'm currently gathering more information on these corner cases.
+> 
+> Used the following steps to find inconsistencies:
+> $ perf record -e cs_etm/@tmc_etr0/k -C 4 taskset -c 4 sleep 1
+> $ perf script --itrace=i1ns --ns -Fcomm,tid,pid,time,cpu,event,ip,sym,addr,symoff,flags,callindent > itrace
+> $ sed 's/://g' itrace | awk -F '.' ' { print $2 } ' | awk '{ if ($1 < prev) { print "line:" NR " " $0 } {prev=$1}}'
+> 
+> Setting INSTR_PER_NS to higher values (14,16,20 etc) results in
+> lower inconsistencies but it would defeat the purpose of
+> estimating values in software since we could be returning 0
+> from __instr_count_to_ns() in many cases.
+> 
+> Please share your thoughts.
 
-__GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM.
-There is little point to this.  We already get a might_sleep() warning if
-__GFP_DIRECT_RECLAIM is set.
+I believe this could be because I was adding nanosecond values
+to the raw coresight counter before it was converted which was
+a mistake. I have made another change to move the conversion
+as early as possible to avoid mistakes like this.
 
-__GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
-probable that testing ALLOC_HARDER is a better fit here.
+Increasing the INSTR_PER_NS shouldn't be required because of
+the max() call, in fact INSTR_PER_NS isn't necessarily
+needed at all, I just thought it would make it more accurate.
 
-__GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
-sleep.  This should test __GFP_DIRECT_RECLAIM instead.
+I'll test the new version on the file that you sent before
+pasting it here. If you have another recording that has more
+of the edge cases then please also upload that one too.
 
-This patch:
- - removes __GFP_ATOMIC
- - allows __GFP_HIGH allocations to ignore watermark boosting as well
-   as GFP_ATOMIC requests.
- - makes other adjustments as suggested by the above.
-
-The net result is not change to GFP_ATOMIC allocations.  Other
-allocations that use __GFP_HIGH will benefit from a few different extra
-privileges.  This affects:
-  xen, dm, md, ntfs3
-  the vermillion frame buffer
-  hibernation
-  ksm
-  swap
-all of which likely produce more benefit than cost if these selected
-allocation are more likely to succeed quickly.
-
-[mgorman: Minor adjustments to rework on top of a series]
-Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
-Signed-off-by: NeilBrown <neilb@suse.de>
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
- Documentation/mm/balance.rst   |  2 +-
- drivers/iommu/tegra-smmu.c     |  4 ++--
- include/linux/gfp_types.h      | 12 ++++--------
- include/trace/events/mmflags.h |  1 -
- lib/test_printf.c              |  8 ++++----
- mm/internal.h                  |  2 +-
- mm/page_alloc.c                | 13 +++----------
- tools/perf/builtin-kmem.c      |  1 -
- 8 files changed, 15 insertions(+), 28 deletions(-)
-
-diff --git a/Documentation/mm/balance.rst b/Documentation/mm/balance.rst
-index 6a1fadf3e173..e38e9d83c1c7 100644
---- a/Documentation/mm/balance.rst
-+++ b/Documentation/mm/balance.rst
-@@ -6,7 +6,7 @@ Memory Balancing
- 
- Started Jan 2000 by Kanoj Sarcar <kanoj@sgi.com>
- 
--Memory balancing is needed for !__GFP_ATOMIC and !__GFP_KSWAPD_RECLAIM as
-+Memory balancing is needed for !__GFP_HIGH and !__GFP_KSWAPD_RECLAIM as
- well as for non __GFP_IO allocations.
- 
- The first reason why a caller may avoid reclaim is that the caller can not
-diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
-index 5b1af40221ec..af8d0e685260 100644
---- a/drivers/iommu/tegra-smmu.c
-+++ b/drivers/iommu/tegra-smmu.c
-@@ -671,12 +671,12 @@ static struct page *as_get_pde_page(struct tegra_smmu_as *as,
- 	 * allocate page in a sleeping context if GFP flags permit. Hence
- 	 * spinlock needs to be unlocked and re-locked after allocation.
- 	 */
--	if (!(gfp & __GFP_ATOMIC))
-+	if (gfpflags_allow_blocking(gfp))
- 		spin_unlock_irqrestore(&as->lock, *flags);
- 
- 	page = alloc_page(gfp | __GFP_DMA | __GFP_ZERO);
- 
--	if (!(gfp & __GFP_ATOMIC))
-+	if (gfpflags_allow_blocking(gfp))
- 		spin_lock_irqsave(&as->lock, *flags);
- 
- 	/*
-diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-index d88c46ca82e1..5088637fe5c2 100644
---- a/include/linux/gfp_types.h
-+++ b/include/linux/gfp_types.h
-@@ -31,7 +31,7 @@ typedef unsigned int __bitwise gfp_t;
- #define ___GFP_IO		0x40u
- #define ___GFP_FS		0x80u
- #define ___GFP_ZERO		0x100u
--#define ___GFP_ATOMIC		0x200u
-+/* 0x200u unused */
- #define ___GFP_DIRECT_RECLAIM	0x400u
- #define ___GFP_KSWAPD_RECLAIM	0x800u
- #define ___GFP_WRITE		0x1000u
-@@ -116,11 +116,8 @@ typedef unsigned int __bitwise gfp_t;
-  *
-  * %__GFP_HIGH indicates that the caller is high-priority and that granting
-  * the request is necessary before the system can make forward progress.
-- * For example, creating an IO context to clean pages.
-- *
-- * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
-- * high priority. Users are typically interrupt handlers. This may be
-- * used in conjunction with %__GFP_HIGH
-+ * For example creating an IO context to clean pages and requests
-+ * from atomic context.
-  *
-  * %__GFP_MEMALLOC allows access to all memory. This should only be used when
-  * the caller guarantees the allocation will allow more memory to be freed
-@@ -135,7 +132,6 @@ typedef unsigned int __bitwise gfp_t;
-  * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency reserves.
-  * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
-  */
--#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
- #define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
- #define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
- #define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
-@@ -329,7 +325,7 @@ typedef unsigned int __bitwise gfp_t;
-  * version does not attempt reclaim/compaction at all and is by default used
-  * in page fault path, while the non-light is used by khugepaged.
-  */
--#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
-+#define GFP_ATOMIC	(__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
- #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
- #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
- #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
-diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
-index 412b5a46374c..9db52bc4ce19 100644
---- a/include/trace/events/mmflags.h
-+++ b/include/trace/events/mmflags.h
-@@ -31,7 +31,6 @@
- 	gfpflag_string(__GFP_HIGHMEM),		\
- 	gfpflag_string(GFP_DMA32),		\
- 	gfpflag_string(__GFP_HIGH),		\
--	gfpflag_string(__GFP_ATOMIC),		\
- 	gfpflag_string(__GFP_IO),		\
- 	gfpflag_string(__GFP_FS),		\
- 	gfpflag_string(__GFP_NOWARN),		\
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index d34dc636b81c..46b4e6c414a3 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -674,17 +674,17 @@ flags(void)
- 	gfp = GFP_ATOMIC|__GFP_DMA;
- 	test("GFP_ATOMIC|GFP_DMA", "%pGg", &gfp);
- 
--	gfp = __GFP_ATOMIC;
--	test("__GFP_ATOMIC", "%pGg", &gfp);
-+	gfp = __GFP_HIGH;
-+	test("__GFP_HIGH", "%pGg", &gfp);
- 
- 	/* Any flags not translated by the table should remain numeric */
- 	gfp = ~__GFP_BITS_MASK;
- 	snprintf(cmp_buffer, BUF_SIZE, "%#lx", (unsigned long) gfp);
- 	test(cmp_buffer, "%pGg", &gfp);
- 
--	snprintf(cmp_buffer, BUF_SIZE, "__GFP_ATOMIC|%#lx",
-+	snprintf(cmp_buffer, BUF_SIZE, "__GFP_HIGH|%#lx",
- 							(unsigned long) gfp);
--	gfp |= __GFP_ATOMIC;
-+	gfp |= __GFP_HIGH;
- 	test(cmp_buffer, "%pGg", &gfp);
- 
- 	kfree(cmp_buffer);
-diff --git a/mm/internal.h b/mm/internal.h
-index 23a37588073a..71b1111427f3 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -24,7 +24,7 @@ struct folio_batch;
- #define GFP_RECLAIM_MASK (__GFP_RECLAIM|__GFP_HIGH|__GFP_IO|__GFP_FS|\
- 			__GFP_NOWARN|__GFP_RETRY_MAYFAIL|__GFP_NOFAIL|\
- 			__GFP_NORETRY|__GFP_MEMALLOC|__GFP_NOMEMALLOC|\
--			__GFP_ATOMIC|__GFP_NOLOCKDEP)
-+			__GFP_NOLOCKDEP)
- 
- /* The GFP flags allowed during early boot */
- #define GFP_BOOT_MASK (__GFP_BITS_MASK & ~(__GFP_RECLAIM|__GFP_IO|__GFP_FS))
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index b9ae0ba0a2ab..78ffebc4798b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4087,13 +4087,14 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
- 	if (__zone_watermark_ok(z, order, mark, highest_zoneidx, alloc_flags,
- 					free_pages))
- 		return true;
-+
- 	/*
--	 * Ignore watermark boosting for GFP_ATOMIC order-0 allocations
-+	 * Ignore watermark boosting for __GFP_HIGH order-0 allocations
- 	 * when checking the min watermark. The min watermark is the
- 	 * point where boosting is ignored so that kswapd is woken up
- 	 * when below the low watermark.
- 	 */
--	if (unlikely(!order && (gfp_mask & __GFP_ATOMIC) && z->watermark_boost
-+	if (unlikely(!order && (alloc_flags & ALLOC_MIN_RESERVE) && z->watermark_boost
- 		&& ((alloc_flags & ALLOC_WMARK_MASK) == WMARK_MIN))) {
- 		mark = z->_watermark[WMARK_MIN];
- 		return __zone_watermark_ok(z, order, mark, highest_zoneidx,
-@@ -5058,14 +5059,6 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
- 	unsigned int zonelist_iter_cookie;
- 	int reserve_flags;
- 
--	/*
--	 * We also sanity check to catch abuse of atomic reserves being used by
--	 * callers that are not in atomic context.
--	 */
--	if (WARN_ON_ONCE((gfp_mask & (__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)) ==
--				(__GFP_ATOMIC|__GFP_DIRECT_RECLAIM)))
--		gfp_mask &= ~__GFP_ATOMIC;
--
- restart:
- 	compaction_retries = 0;
- 	no_progress_loops = 0;
-diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
-index e20656c431a4..173d407dce92 100644
---- a/tools/perf/builtin-kmem.c
-+++ b/tools/perf/builtin-kmem.c
-@@ -641,7 +641,6 @@ static const struct {
- 	{ "__GFP_HIGHMEM",		"HM" },
- 	{ "GFP_DMA32",			"D32" },
- 	{ "__GFP_HIGH",			"H" },
--	{ "__GFP_ATOMIC",		"_A" },
- 	{ "__GFP_IO",			"I" },
- 	{ "__GFP_FS",			"F" },
- 	{ "__GFP_NOWARN",		"NWR" },
--- 
-2.35.3
-
+James
