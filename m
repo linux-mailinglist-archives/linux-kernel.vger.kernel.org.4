@@ -2,534 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04376691ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2DE6691F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238902AbjAMIzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S230223AbjAMI50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241031AbjAMIzI (ORCPT
+        with ESMTP id S231327AbjAMI5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:55:08 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52E81CFF1;
-        Fri, 13 Jan 2023 00:55:03 -0800 (PST)
-Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D1DE44D4;
-        Fri, 13 Jan 2023 09:55:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673600102;
-        bh=+P8Hm0X0J+bO4G9y7T4Dtvy9+cFX6XGadXoApF4NKRo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EjyIbB+/flLvuxC3f2Bmre16WynXV2OqoS/GYHy8pehwytiJjPd57AEiEic/2Mm2A
-         vy5GynwshwN4yc6VZzBVAgMZXH5fuLs4Gt8zDnvSatUie7cVtNsNil2MmvU6L0ma4M
-         XvdCiFyuiI/ueZTBIT39VcuMqql/xif5+HsohYUg=
-Date:   Fri, 13 Jan 2023 09:54:59 +0100
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     shravan kumar <shravan.chippa@microchip.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Prakash Battu <Prakash.Battu@microchip.com>
-Subject: Re: [PATCH v9 3/4] media: i2c: imx334: support lower bandwidth mode
-Message-ID: <20230113085459.s2wkaadkhssge5o6@uno.localdomain>
-References: <20230113010135.2620818-1-shravan.chippa@microchip.com>
- <20230113010135.2620818-4-shravan.chippa@microchip.com>
+        Fri, 13 Jan 2023 03:57:24 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9642DDE
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:57:23 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id b3so32177835lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ysmHHp/43jCoR62RWa7j7U0fIOfTEzPcP5KkwYW03+Y=;
+        b=JSQ9xgftTgc+3wChXekfPAhq633giaFDfteRLlk662EuogEM1yyTybzvAs6JUU/+yC
+         eNIF1kkjxwXwhNvUW/gsqLNtNK05X+jWily8sQ+HYu5OdZY7ixMtw1gB1pc4/qvzC3Wn
+         VTy6p3Zh3kRQf38km99+OrYx/mu5/hsETlOXWDbJYYKMY2EbE/aOns8YPUtulVjbu17G
+         mw/qbhx8aj7KehXUPGMZVTgpsMkg5E3g8714UEE29BALMQ3joIu+r/y5Bx9eknQdZtku
+         nnwCirFJ46KtEfZDpGTS7InzMD02NBOk2969DPioKPJE4hZAFbYT8z1JeBb2XQlw934g
+         YSsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ysmHHp/43jCoR62RWa7j7U0fIOfTEzPcP5KkwYW03+Y=;
+        b=nWBdAN6GWwrfMLYSCQetMXvSiRrW2hlRW8OtU1NCQlRd95R0xeahxVFtn40qsEgxRm
+         4ggP5KXXtr07tlZpsi2uS+eaQY72gvNPtCz7zcIXR+iG9OahTBWIGDARDAz3rTuN3007
+         rNZMjfG43BztEqfet+HZ5tRwQfTYyL1dSvWlPGfho1AaPzvUcdDdylz3LcE6WEou/MFX
+         ZYVx/9t3Zc7Qv6/UcjFQngjTN5yBu+u1lXrZ8LlVHoiGQjj+TUh3f7gVLT8mU9Q6EW+5
+         CBeQE0k/p/wb2R/e+N+joQ9ouUuEzqmK9HT4iohKB5GJaMtc42wWtCrPNyWgHPdTZois
+         M5yg==
+X-Gm-Message-State: AFqh2krsqGfyqDoSVy1UwnmVGsFuWsEW+4DTXiqFxszSZdRY88gqhAVD
+        wJSbzbNMi7KzxMS3Zsm2mE/tVA==
+X-Google-Smtp-Source: AMrXdXtBlsg3TCrCR6Yu2JIdPZC5uS8fWSZfkc3geFs8erjGiBE3AGQjYSZ0FPjxIX17l3lKzpd9tQ==
+X-Received: by 2002:a05:6512:368a:b0:4b5:b90a:829d with SMTP id d10-20020a056512368a00b004b5b90a829dmr19917438lfs.66.1673600241703;
+        Fri, 13 Jan 2023 00:57:21 -0800 (PST)
+Received: from [192.168.2.31] ([194.204.33.9])
+        by smtp.gmail.com with ESMTPSA id br11-20020a056512400b00b0048a934168c0sm3758739lfb.35.2023.01.13.00.57.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 00:57:21 -0800 (PST)
+Message-ID: <9a64c685-9ff0-bc1d-e604-e3773ff9edd7@linaro.org>
+Date:   Fri, 13 Jan 2023 10:57:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230113010135.2620818-4-shravan.chippa@microchip.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm/msm: Initialize mode_config earlier
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230113041051.4189063-1-quic_bjorande@quicinc.com>
+ <eea1c5dc-6bc5-4246-f0e1-0c790de9f078@linaro.org>
+In-Reply-To: <eea1c5dc-6bc5-4246-f0e1-0c790de9f078@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shravan
+On 13/01/2023 06:23, Dmitry Baryshkov wrote:
+> On 13/01/2023 06:10, Bjorn Andersson wrote:
+>> Invoking drm_bridge_hpd_notify() on a drm_bridge with a HPD-enabled
+>> bridge_connector ends up in drm_bridge_connector_hpd_cb() calling
+>> drm_kms_helper_hotplug_event(), which assumes that the associated
+>> drm_device's mode_config.funcs is a valid pointer.
+>>
+>> But in the MSM DisplayPort driver the HPD enablement happens at bind
+>> time and mode_config.funcs is initialized late in msm_drm_init(). This
+>> means that there's a window for hot plug events to dereference a NULL
+>> mode_config.funcs.
+>>
+>> Move the assignment of mode_config.funcs before the bind, to avoid this
+>> scenario.
+> 
+> Cam we make DP driver not to report HPD events until the enable_hpd() 
+> was called? I think this is what was fixed by your internal_hpd patchset.
 
-On Fri, Jan 13, 2023 at 06:31:34AM +0530, shravan kumar wrote:
-> From: Shravan Chippa <shravan.chippa@microchip.com>
->
-> Some platforms may not be capable of supporting the bandwidth
-> required for 12 bit or 3840x2160@60 resolutions.
->
-> Add support for dynamically selecting 10 bit and 1920x1080@30
-> resolutions while leaving the existing configuration as default
->
-> CC: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Prakash Battu <Prakash.Battu@microchip.com>
-> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-> ---
->  drivers/media/i2c/imx334.c | 298 +++++++++++++++++++++++++++++++++----
->  1 file changed, 272 insertions(+), 26 deletions(-)
->
-> diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-> index 40ece08f20f5..4ab1b9eb9a64 100644
-> --- a/drivers/media/i2c/imx334.c
-> +++ b/drivers/media/i2c/imx334.c
-> @@ -79,7 +79,6 @@ struct imx334_reg_list {
->   * struct imx334_mode - imx334 sensor mode structure
->   * @width: Frame width
->   * @height: Frame height
-> - * @code: Format code
->   * @hblank: Horizontal blanking in lines
->   * @vblank: Vertical blanking in lines
->   * @vblank_min: Minimal vertical blanking in lines
-> @@ -91,7 +90,6 @@ struct imx334_reg_list {
->  struct imx334_mode {
->  	u32 width;
->  	u32 height;
-> -	u32 code;
->  	u32 hblank;
->  	u32 vblank;
->  	u32 vblank_min;
-> @@ -119,6 +117,7 @@ struct imx334_mode {
->   * @vblank: Vertical blanking in lines
->   * @cur_mode: Pointer to current selected sensor mode
->   * @mutex: Mutex for serializing sensor controls
-> + * @cur_code: current selected format code
->   * @streaming: Flag indicating streaming state
->   */
->  struct imx334 {
-> @@ -140,6 +139,7 @@ struct imx334 {
->  	u32 vblank;
->  	const struct imx334_mode *cur_mode;
->  	struct mutex mutex;
-> +	u32 cur_code;
->  	bool streaming;
->  };
->
-> @@ -147,6 +147,169 @@ static const s64 link_freq[] = {
->  	IMX334_LINK_FREQ,
->  };
->
-> +/* Sensor mode registers */
-
-I would have added a summary of the mode: resolution and expected FPS
-at least
-
-> +static const struct imx334_reg mode_1920x1080_regs[] = {
-> +	{0x3000, 0x01},
-> +	{0x3018, 0x04},
-> +	{0x3030, 0xca},
-> +	{0x3031, 0x08},
-> +	{0x3032, 0x00},
-> +	{0x3034, 0x4c},
-> +	{0x3035, 0x04},
-> +	{0x302c, 0xf0},
-> +	{0x302d, 0x03},
-> +	{0x302e, 0x80},
-> +	{0x302f, 0x07},
-> +	{0x3074, 0xcc},
-> +	{0x3075, 0x02},
-> +	{0x308e, 0xcd},
-> +	{0x308f, 0x02},
-> +	{0x3076, 0x38},
-> +	{0x3077, 0x04},
-> +	{0x3090, 0x38},
-> +	{0x3091, 0x04},
-> +	{0x3308, 0x38},
-> +	{0x3309, 0x04},
-> +	{0x30C6, 0x00},
-> +	{0x30c7, 0x00},
-> +	{0x30ce, 0x00},
-> +	{0x30cf, 0x00},
-> +	{0x30d8, 0x18},
-> +	{0x30d9, 0x0a},
-> +	{0x304c, 0x00},
-> +	{0x304e, 0x00},
-> +	{0x304f, 0x00},
-> +	{0x3050, 0x00},
-> +	{0x30b6, 0x00},
-> +	{0x30b7, 0x00},
-> +	{0x3116, 0x08},
-> +	{0x3117, 0x00},
-> +	{0x31a0, 0x20},
-> +	{0x31a1, 0x0f},
-> +	{0x300c, 0x3b},
-> +	{0x300d, 0x29},
-> +	{0x314c, 0x29},
-> +	{0x314d, 0x01},
-> +	{0x315a, 0x06},
-> +	{0x3168, 0xa0},
-> +	{0x316a, 0x7e},
-> +	{0x319e, 0x02},
-> +	{0x3199, 0x00},
-> +	{0x319d, 0x00},
-> +	{0x31dd, 0x03},
-> +	{0x3300, 0x00},
-> +	{0x341c, 0xff},
-> +	{0x341d, 0x01},
-> +	{0x3a01, 0x03},
-> +	{0x3a18, 0x7f},
-> +	{0x3a19, 0x00},
-> +	{0x3a1a, 0x37},
-> +	{0x3a1b, 0x00},
-> +	{0x3a1c, 0x37},
-> +	{0x3a1d, 0x00},
-> +	{0x3a1e, 0xf7},
-> +	{0x3a1f, 0x00},
-> +	{0x3a20, 0x3f},
-> +	{0x3a21, 0x00},
-> +	{0x3a20, 0x6f},
-> +	{0x3a21, 0x00},
-> +	{0x3a20, 0x3f},
-> +	{0x3a21, 0x00},
-> +	{0x3a20, 0x5f},
-> +	{0x3a21, 0x00},
-> +	{0x3a20, 0x2f},
-> +	{0x3a21, 0x00},
-> +	{0x3078, 0x02},
-> +	{0x3079, 0x00},
-> +	{0x307a, 0x00},
-> +	{0x307b, 0x00},
-> +	{0x3080, 0x02},
-> +	{0x3081, 0x00},
-> +	{0x3082, 0x00},
-> +	{0x3083, 0x00},
-> +	{0x3088, 0x02},
-> +	{0x3094, 0x00},
-> +	{0x3095, 0x00},
-> +	{0x3096, 0x00},
-> +	{0x309b, 0x02},
-> +	{0x309c, 0x00},
-> +	{0x309d, 0x00},
-> +	{0x309e, 0x00},
-> +	{0x30a4, 0x00},
-> +	{0x30a5, 0x00},
-> +	{0x3288, 0x21},
-> +	{0x328a, 0x02},
-> +	{0x3414, 0x05},
-> +	{0x3416, 0x18},
-> +	{0x35Ac, 0x0e},
-> +	{0x3648, 0x01},
-> +	{0x364a, 0x04},
-> +	{0x364c, 0x04},
-> +	{0x3678, 0x01},
-> +	{0x367c, 0x31},
-> +	{0x367e, 0x31},
-> +	{0x3708, 0x02},
-> +	{0x3714, 0x01},
-> +	{0x3715, 0x02},
-> +	{0x3716, 0x02},
-> +	{0x3717, 0x02},
-> +	{0x371c, 0x3d},
-> +	{0x371d, 0x3f},
-> +	{0x372c, 0x00},
-> +	{0x372d, 0x00},
-> +	{0x372e, 0x46},
-> +	{0x372f, 0x00},
-> +	{0x3730, 0x89},
-> +	{0x3731, 0x00},
-> +	{0x3732, 0x08},
-> +	{0x3733, 0x01},
-> +	{0x3734, 0xfe},
-> +	{0x3735, 0x05},
-> +	{0x375d, 0x00},
-> +	{0x375e, 0x00},
-> +	{0x375f, 0x61},
-> +	{0x3760, 0x06},
-> +	{0x3768, 0x1b},
-> +	{0x3769, 0x1b},
-> +	{0x376a, 0x1a},
-> +	{0x376b, 0x19},
-> +	{0x376c, 0x18},
-> +	{0x376d, 0x14},
-> +	{0x376e, 0x0f},
-> +	{0x3776, 0x00},
-> +	{0x3777, 0x00},
-> +	{0x3778, 0x46},
-> +	{0x3779, 0x00},
-> +	{0x377a, 0x08},
-> +	{0x377b, 0x01},
-> +	{0x377c, 0x45},
-> +	{0x377d, 0x01},
-> +	{0x377e, 0x23},
-> +	{0x377f, 0x02},
-> +	{0x3780, 0xd9},
-> +	{0x3781, 0x03},
-> +	{0x3782, 0xf5},
-> +	{0x3783, 0x06},
-> +	{0x3784, 0xa5},
-> +	{0x3788, 0x0f},
-> +	{0x378a, 0xd9},
-> +	{0x378b, 0x03},
-> +	{0x378c, 0xeb},
-> +	{0x378d, 0x05},
-> +	{0x378e, 0x87},
-> +	{0x378f, 0x06},
-> +	{0x3790, 0xf5},
-> +	{0x3792, 0x43},
-> +	{0x3794, 0x7a},
-> +	{0x3796, 0xa1},
-> +	{0x37b0, 0x37},
-> +	{0x3e04, 0x0e},
-> +	{0x30e8, 0x50},
-> +	{0x30e9, 0x00},
-> +	{0x3e04, 0x0e},
-> +	{0x3002, 0x00},
-> +};
-> +
->  /* Sensor mode registers */
-
-Same here, as otherwise two identical comments are pretty useless
-
->  static const struct imx334_reg mode_3840x2160_regs[] = {
->  	{0x3000, 0x01},
-> @@ -263,20 +426,53 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
->  	{0x3a29, 0x00},
->  };
->
-> +static const struct imx334_reg raw10_framefmt_regs[] = {
-> +	{0x3050, 0x00},
-> +	{0x319d, 0x00},
-> +	{0x341c, 0xff},
-> +	{0x341d, 0x01},
-> +};
-> +
-> +static const struct imx334_reg raw12_framefmt_regs[] = {
-> +	{0x3050, 0x01},
-> +	{0x319d, 0x01},
-> +	{0x341c, 0x47},
-> +	{0x341d, 0x00},
-> +};
-> +
-> +static const u32 imx334_mbus_codes[] = {
-> +	MEDIA_BUS_FMT_SRGGB12_1X12,
-> +	MEDIA_BUS_FMT_SRGGB10_1X10,
-> +};
-> +
->  /* Supported sensor mode configurations */
-> -static const struct imx334_mode supported_mode = {
-> -	.width = 3840,
-> -	.height = 2160,
-> -	.hblank = 560,
-> -	.vblank = 2340,
-> -	.vblank_min = 90,
-> -	.vblank_max = 132840,
-> -	.pclk = 594000000,
-> -	.link_freq_idx = 0,
-> -	.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-> -	.reg_list = {
-> -		.num_of_regs = ARRAY_SIZE(mode_3840x2160_regs),
-> -		.regs = mode_3840x2160_regs,
-> +static const struct imx334_mode supported_modes[] = {
-> +	{
-> +		.width = 3840,
-> +		.height = 2160,
-> +		.hblank = 560,
-> +		.vblank = 2340,
-> +		.vblank_min = 90,
-> +		.vblank_max = 132840,
-> +		.pclk = 594000000,
-> +		.link_freq_idx = 0,
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mode_3840x2160_regs),
-> +			.regs = mode_3840x2160_regs,
-> +		},
-> +	}, {
-> +		.width = 1920,
-> +		.height = 1080,
-> +		.hblank = 2480,
-> +		.vblank = 1170,
-> +		.vblank_min = 45,
-> +		.vblank_max = 132840,
-> +		.pclk = 297000000,
-> +		.link_freq_idx = 0,
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
-> +			.regs = mode_1920x1080_regs,
-> +		},
-
-This seems to make frame duration calculations right
-
-        duration = (1920+2480) * (1080+1170) / 297000000 = 0.033
-        link_freq = (1920+2480) * (1080+1170) * 30 * 12 / 8 = 445500000
-
->  	},
->  };
->
-> @@ -518,6 +714,21 @@ static const struct v4l2_ctrl_ops imx334_ctrl_ops = {
->  	.s_ctrl = imx334_set_ctrl,
->  };
->
-> +static int imx334_get_format_code(struct imx334 *imx334, u32 code)
-> +{
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(imx334_mbus_codes); i++) {
-> +		if (imx334_mbus_codes[i] == code)
-> +			break;
-> +	}
-> +
-> +	if (i == ARRAY_SIZE(imx334_mbus_codes))
-> +		i = 0;
-> +
-> +	return imx334_mbus_codes[i];
-
-Or
-
-	for (i = 0; i < ARRAY_SIZE(imx334_mbus_codes); i++) {
-		if (imx334_mbus_codes[i] == code)
-                        return imx334_mbus_codes[i];
-        }
-
-        return imx334_mbus_codes[0];
+Or to express this in another words: I thought that internal_hpd already 
+deferred enabling hpd event reporting till the time when we need it, 
+didn't it?
 
 
+-- 
+With best wishes
+Dmitry
 
-> +}
-> +
->  /**
->   * imx334_enum_mbus_code() - Enumerate V4L2 sub-device mbus codes
->   * @sd: pointer to imx334 V4L2 sub-device structure
-> @@ -530,10 +741,10 @@ static int imx334_enum_mbus_code(struct v4l2_subdev *sd,
->  				 struct v4l2_subdev_state *sd_state,
->  				 struct v4l2_subdev_mbus_code_enum *code)
->  {
-> -	if (code->index > 0)
-> +	if (code->index >= ARRAY_SIZE(imx334_mbus_codes))
->  		return -EINVAL;
->
-> -	code->code = supported_mode.code;
-> +	code->code = imx334_mbus_codes[code->index];
->
->  	return 0;
->  }
-> @@ -550,15 +761,20 @@ static int imx334_enum_frame_size(struct v4l2_subdev *sd,
->  				  struct v4l2_subdev_state *sd_state,
->  				  struct v4l2_subdev_frame_size_enum *fsize)
->  {
-> -	if (fsize->index > 0)
-> +	struct imx334 *imx334 = to_imx334(sd);
-> +	u32 code;
-> +
-> +	if (fsize->index >= ARRAY_SIZE(supported_modes))
->  		return -EINVAL;
->
-> -	if (fsize->code != supported_mode.code)
-> +	code = imx334_get_format_code(imx334, fsize->code);
-> +
-> +	if (fsize->code != code)
->  		return -EINVAL;
->
-> -	fsize->min_width = supported_mode.width;
-> +	fsize->min_width = supported_modes[fsize->index].width;
->  	fsize->max_width = fsize->min_width;
-> -	fsize->min_height = supported_mode.height;
-> +	fsize->min_height = supported_modes[fsize->index].height;
->  	fsize->max_height = fsize->min_height;
->
->  	return 0;
-> @@ -577,7 +793,6 @@ static void imx334_fill_pad_format(struct imx334 *imx334,
->  {
->  	fmt->format.width = mode->width;
->  	fmt->format.height = mode->height;
-> -	fmt->format.code = mode->code;
->  	fmt->format.field = V4L2_FIELD_NONE;
->  	fmt->format.colorspace = V4L2_COLORSPACE_RAW;
->  	fmt->format.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> @@ -607,6 +822,7 @@ static int imx334_get_pad_format(struct v4l2_subdev *sd,
->  		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
->  		fmt->format = *framefmt;
->  	} else {
-> +		fmt->format.code = imx334->cur_code;
->  		imx334_fill_pad_format(imx334, imx334->cur_mode, fmt);
->  	}
->
-> @@ -633,7 +849,13 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
->
->  	mutex_lock(&imx334->mutex);
->
-> -	mode = &supported_mode;
-> +	fmt->format.code = imx334_get_format_code(imx334, fmt->format.code);
-
-I would move this after imx334_fill_pad_format() otherwise one could
-this the function overrides it
-
-> +
-> +	mode = v4l2_find_nearest_size(supported_modes,
-> +				      ARRAY_SIZE(supported_modes),
-> +				      width, height,
-> +				      fmt->format.width, fmt->format.height);
-> +
->  	imx334_fill_pad_format(imx334, mode, fmt);
->
->  	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> @@ -641,7 +863,8 @@ static int imx334_set_pad_format(struct v4l2_subdev *sd,
->
->  		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
->  		*framefmt = fmt->format;
-> -	} else {
-> +	} else if (imx334->cur_mode != mode || imx334->cur_code != fmt->format.code) {
-> +		imx334->cur_code = fmt->format.code;
->  		ret = imx334_update_controls(imx334, mode);
->  		if (!ret)
->  			imx334->cur_mode = mode;
-> @@ -666,11 +889,26 @@ static int imx334_init_pad_cfg(struct v4l2_subdev *sd,
->  	struct v4l2_subdev_format fmt = { 0 };
->
->  	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-> -	imx334_fill_pad_format(imx334, &supported_mode, &fmt);
-> +	imx334_fill_pad_format(imx334, &supported_modes[0], &fmt);
->
->  	return imx334_set_pad_format(sd, sd_state, &fmt);
->  }
->
-> +static int imx334_set_framefmt(struct imx334 *imx334)
-> +{
-> +	switch (imx334->cur_code) {
-> +	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +		return imx334_write_regs(imx334, raw10_framefmt_regs,
-> +					 ARRAY_SIZE(raw10_framefmt_regs));
-> +
-> +	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +		return imx334_write_regs(imx334, raw12_framefmt_regs,
-> +					 ARRAY_SIZE(raw12_framefmt_regs));
-> +	}
-> +
-> +	return -EINVAL;
-> +}
-> +
->  /**
->   * imx334_start_streaming() - Start sensor stream
->   * @imx334: pointer to imx334 device
-> @@ -691,6 +929,13 @@ static int imx334_start_streaming(struct imx334 *imx334)
->  		return ret;
->  	}
->
-> +	ret = imx334_set_framefmt(imx334);
-> +	if (ret) {
-> +		dev_err(imx334->dev, "%s failed to set frame format: %d\n",
-> +			__func__, ret);
-> +		return ret;
-> +	}
-> +
->  	/* Setup handler will write actual exposure and gain */
->  	ret =  __v4l2_ctrl_handler_setup(imx334->sd.ctrl_handler);
->  	if (ret) {
-> @@ -1061,7 +1306,8 @@ static int imx334_probe(struct i2c_client *client)
->  	}
->
->  	/* Set default mode to max resolution */
-> -	imx334->cur_mode = &supported_mode;
-> +	imx334->cur_mode = &supported_modes[0];
-> +	imx334->cur_code = imx334_mbus_codes[0];
-
-All minors
-
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-
-Thanks
-   j
->  	imx334->vblank = imx334->cur_mode->vblank;
->
->  	ret = imx334_init_controls(imx334);
-> --
-> 2.34.1
->
