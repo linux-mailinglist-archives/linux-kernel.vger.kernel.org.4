@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE795669EB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A041669EB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjAMQug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S230469AbjAMQuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjAMQtt (ORCPT
+        with ESMTP id S230078AbjAMQtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:49:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322306A0E7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673628456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=djME/70Dq2hCyOWtbb9rXV1J/myyoY9n25749b7HV2g=;
-        b=FNilpsuJ8Y7ARbvSiNCzGoZ04f2OzGcd1UYTYVdKd1GqkI+6up6IhZfBLUcdtl/xlL5Pn0
-        F7MV0U2JcX7LireZaVBH84rzhm9GOpqUA3EFKcjNCPh8m2UxN1/GBY56PIXsGCAic9W0ia
-        UmSuJmnu1eZ3D+eDBdCH6v2BmFlwfJY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-324-ELt3lwm8OWe3g-tBTW2G-g-1; Fri, 13 Jan 2023 11:47:34 -0500
-X-MC-Unique: ELt3lwm8OWe3g-tBTW2G-g-1
-Received: by mail-wm1-f70.google.com with SMTP id bg25-20020a05600c3c9900b003da1f6a7b2dso1691167wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:47:33 -0800 (PST)
+        Fri, 13 Jan 2023 11:49:40 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264FF7188F;
+        Fri, 13 Jan 2023 08:47:58 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-15ed38a9b04so4217487fac.8;
+        Fri, 13 Jan 2023 08:47:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=djME/70Dq2hCyOWtbb9rXV1J/myyoY9n25749b7HV2g=;
-        b=txJZvexKbCPP/b7GkXK6MNdc/O3eepk4BSxujka0CBfKPgJ/yopwA8QSB8+2o6nXy0
-         hbLVXY0Uamk9J9akXfLn5254DyUi1QpGG/w0jr9DHTD8v1c77Hk+dK3cgahOS3WACQPe
-         ththZQOqdM9AhFxe9RWyV+I1oMQjZJhywa9RQ1BcQzsGEo2AH1ASYttor+oFYEX/LGGK
-         KQBqMO6qkBqhRp+xhssf21cVTWEE6/xomVYyMbf+IfMVfUpBZory1ZnoMGKn13e6JCwH
-         TCjSby0pc/qsFl4z6S/abpmppFCpCVn05pdpdvLcjuphoz19qEBb8W/TGB4OfNeyZdnE
-         cZeQ==
-X-Gm-Message-State: AFqh2kofHhAfSK0biJu6uy7zHlSKLv+UuHzKkW13T3XMtVTkcLawYZnf
-        jiqllsISBbSrSQpuT/unrpg73r+AQp9YaLkgmu/5dh4IQzE4LWmQocOxcT2vxKBvIty2L2SMlWm
-        1Dtp/Wca5DUW/LBmYIaowj+1E
-X-Received: by 2002:a5d:5c12:0:b0:242:800:9a7f with SMTP id cc18-20020a5d5c12000000b0024208009a7fmr55202705wrb.65.1673628452598;
-        Fri, 13 Jan 2023 08:47:32 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv5j3W2PLZJa6k66qSJK7vxx5Jkcl2ZNrIGiRyqW1y76dg3kAVn3B9j77QV4e5H///posi9iw==
-X-Received: by 2002:a5d:5c12:0:b0:242:800:9a7f with SMTP id cc18-20020a5d5c12000000b0024208009a7fmr55202698wrb.65.1673628452442;
-        Fri, 13 Jan 2023 08:47:32 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id e1-20020adfdbc1000000b002b8fe58d6desm19496504wrj.62.2023.01.13.08.47.31
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qcrFc4jdvlDwh9W9dFniLVotEshlIzTbEVTh7avnPjU=;
+        b=TUYt6CQZqWQoYuWIYXbJ0cxxnZVT7eFiFW486vhKqvbzkdIwcHCNRehqlH7KQYjXVr
+         cJDBkQglNRiX9WP0BvTtyxf+6W367nQChWw2Y4SeOIMW9DjWi+g7VtLpUk3TZ9xZzalg
+         QZ+ZxylB35Fb/bCPuWc9sYi0pehfL7CHwXDZJJGhPkEKA/zusMcRnpIDBMq+BQG5vmAS
+         oaVjghaayk8myORnb2fCnBQCF2tOkcVeXybmAmCLjnW92t347eVDaSnkO/AqO/ya6r/b
+         +F7jwjnTltny+EF2+Cn5NUBlAx5Xa5dS1CgaxOCh6/yGObamMz7KysVsx/GT0KahSR7p
+         1Z3g==
+X-Gm-Message-State: AFqh2koaTcpwFS+LeXEsOl6wmThBnMT0vEkyh3riWQ5XeZKra9VA19+L
+        /T0F++CojfrChvaOh91qHQ==
+X-Google-Smtp-Source: AMrXdXv+k98p64UgHJm4EP5V4/yJKF55uhIGbsy/sWBBjdpj1YQAUec/vQvkLdsRb85rPqzUQqOsWA==
+X-Received: by 2002:a05:6870:d79f:b0:158:450f:1cc1 with SMTP id bd31-20020a056870d79f00b00158450f1cc1mr11184186oab.45.1673628472454;
+        Fri, 13 Jan 2023 08:47:52 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id er14-20020a056870c88e00b0013bc40b09dasm10676115oab.17.2023.01.13.08.47.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 08:47:31 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the workqueues tree
-In-Reply-To: <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
-References: <20230113143102.2e94d74f@canb.auug.org.au>
- <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
-Date:   Fri, 13 Jan 2023 16:47:31 +0000
-Message-ID: <xhsmhzgamidp8.mognet@vschneid.remote.csb>
+        Fri, 13 Jan 2023 08:47:52 -0800 (PST)
+Received: (nullmailer pid 2379179 invoked by uid 1000);
+        Fri, 13 Jan 2023 16:47:51 -0000
+Date:   Fri, 13 Jan 2023 10:47:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        NXP Linux Team <linux-imx@nxp.com>, u-boot@lists.denx.de,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH V2 5/6] dt-bindings: nvmem: u-boot,env: add MAC's
+ #nvmem-cell-cells
+Message-ID: <167362844818.2378726.12657196612848519101.robh@kernel.org>
+References: <20230111073102.8147-1-zajec5@gmail.com>
+ <20230111073102.8147-5-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230111073102.8147-5-zajec5@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,31 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/23 06:31, Tejun Heo wrote:
-> On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the workqueues tree, today's linux-next build (x86_64
->> allnoconfig and several others) produced this warning:
->>
->> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
->>  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
->>       |             ^~~~~~~~~~~~~
->>
->> Introduced by commit
->>
->>   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
->
-> Valentin, this is caused by rebind_worker() being only used by
-> rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
-> rebind_worker(). Just fold it back into rebind_workers()?
->
 
-Woops! Yes I only did it to keep things aligned with unbind_workers(), let
-me resend with that folded back in. Sorry!
+On Wed, 11 Jan 2023 08:31:01 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> U-Boot's "ethaddr" environment variable is very often used to store
+> *base* MAC address. It's used as a base for calculating addresses for
+> multiple interfaces. It's done by adding proper values. Actual offsets
+> are picked by manufacturers and vary across devices.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>  .../devicetree/bindings/nvmem/layouts/u-boot,env.yaml      | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
 
-> Thanks.
->
-> --
-> tejun
-
+Reviewed-by: Rob Herring <robh@kernel.org>
