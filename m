@@ -2,111 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F396699DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A3D6699E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241500AbjAMOQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S241636AbjAMOQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242075AbjAMONz (ORCPT
+        with ESMTP id S242112AbjAMOOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:13:55 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ABC69523
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673619175; x=1705155175;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bgR5ummVsveUjZeTs1DpxvmSSGDvw4EF1HbWfjVN/8A=;
-  b=AAHzebDMISlWfDB0fjOnTRnFu/eSr07XPjVpvgOo42FvCZneWD9rtt/8
-   NRyp+R1F6oc2Y40VWSqEOxe8aUfARbr4KJJEfR4XDRjduc8AqZNAtpqLh
-   lOpoOrU57+PQ020EeWjB88SAskLRnTW0ZVL/oTonpKfHSgHUk/604I3ZM
-   yYqj/os+pQIZgjCmJgpj3OTq05cEtwB0RjDqQI4jEPkhNwU5Bwcz3qYTF
-   midQwRaf8vFI2Ix67JJ5xWQMaoYipn+gQKDeHDzDb3j7QiHvRnCSbTT3C
-   T7MHdEwG1Cc759JPdtxXbquEz8/apiAk1tCKC8jotoXVyl7od06yki53Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="324057611"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="324057611"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 06:12:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="832078121"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="832078121"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.190.181]) ([10.252.190.181])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 06:12:51 -0800
-Message-ID: <a84ac37c-2b03-35f2-2275-442b448cf6b5@linux.intel.com>
-Date:   Fri, 13 Jan 2023 22:12:48 +0800
+        Fri, 13 Jan 2023 09:14:02 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9576DBB2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:13:08 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id bu8so33282631lfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:13:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLMxgYnqS/4/TB7UwvI/vIGP7m316E2G7fHeJE1jpg8=;
+        b=AgTJXz4WlI46LfMJr07WPO9BhmaVxpE2iOif1zm+Oqp2iZVRniRVH567A90yVL5zdT
+         q1XZFC3xt7nD6cJNMVIvsOZecK0s9anCwlI3UWXh2ZdrPj0tZocJmc/VU9ZcuJg6dyTK
+         APxb7T3i87E3Xsmq+DLDOIjYhftZV8wQrUz9GGXYm1vlT2HYb8Q8EXQCe5dVC28w94XB
+         5f7UeCZX30k7tILF7DrEO0D4HJzPbpfVs418KVMVGS9QCsqtum44qhS7GAzZ0+irSILU
+         ipDxlxLSFw7DLoQehGVG7EYWuzAgSdyGCk1kY45FvWcJvcItZFLeF+D4HXs+ejyIVgO+
+         HwvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HLMxgYnqS/4/TB7UwvI/vIGP7m316E2G7fHeJE1jpg8=;
+        b=fzVsZZNIxTVDwHvKq3jCqLw7CjLFNr3VD0TpPm06mxT5OxuFBWUVUFt9/tgpFqfnqX
+         E2CBSez0g/C+uA1ayMct03hJe+cWNHsN+7bfN7c7WLH7lq//iVixH1KTYEV5X/+cnIWy
+         ZvZtLwa+UT85SdNytnXVL3vJAnorv+UW4H+1gj6q4eQk/X9iWVJrXjaA4IxGxjVbX5TR
+         9xokmvy4lGYeGG59NXo//I7fTphOngbQgjmmU8A4qNPXOV754n2T+DAsgN82yPWlH7eL
+         fYYa8t5iWjdFtsYqubxKJR4wHFRc19hBp1SAmxV53SKhgKO0ccxJtQq2jeOVAMhJYZ0r
+         5sTg==
+X-Gm-Message-State: AFqh2kofazAEZg7VNs/5xuqrAbQL8d/x44Co1CWCgRmx0AbVp75E+Zs0
+        htjCQAlXC/FzxTNFjxOAFq0traCksOSIFKnlTgGqvw==
+X-Google-Smtp-Source: AMrXdXutSMAOZy9HzarrHShlHiOo8HAv9jYGW08xHIKS5auBxnj5lfCkvop1Nhs4GtEDmbJ2Th7fITLFBqZcAAXkUY0=
+X-Received: by 2002:a05:6512:708:b0:4ca:fab6:91db with SMTP id
+ b8-20020a056512070800b004cafab691dbmr3403772lfs.202.1673619186692; Fri, 13
+ Jan 2023 06:13:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com
-Subject: Re: [PATCH 3/7] iommu/vt-d: Support Enhanced Command Interface
-To:     kan.liang@linux.intel.com, joro@8bytes.org, will@kernel.org,
-        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
-        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230111202504.378258-1-kan.liang@linux.intel.com>
- <20230111202504.378258-4-kan.liang@linux.intel.com>
- <6783f737-2701-77e3-ce83-8d287be51cf6@linux.intel.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <6783f737-2701-77e3-ce83-8d287be51cf6@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113131257.661079-1-benjamin.gaignard@collabora.com>
+In-Reply-To: <20230113131257.661079-1-benjamin.gaignard@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Fri, 13 Jan 2023 11:12:53 -0300
+Message-ID: <CAAEAJfAnoe+rL=9yFV1crhoaFa9uWaaJq3nCeS+QZPLi_xnsOw@mail.gmail.com>
+Subject: Re: [PATCH v2] media: verisilicon: HEVC: Only propose 10 bits
+ compatible pixels formats
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, hverkuil-cisco@xs4all.nl,
+        nicolas.dufresne@collabora.co.uk, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/13 21:55, Baolu Lu wrote:
->> +/*
->> + * Function to submit a command to the enhanced command interface. The
->> + * valid enhanced command descriptions are defined in Table 47 of the
->> + * VT-d spec. The VT-d hardware implementation may support some but not
->> + * all commands, which can be determined by checking the Enhanced
->> + * Command Capability Register.
->> + *
->> + * Return values:
->> + *  - 0: Command successful without any error;
->> + *  - Negative: software error value;
->> + *  - Nonzero positive: failure status code defined in Table 48.
->> + */
->> +int ecmd_submit_sync(struct intel_iommu *iommu, u8 ecmd,
->> +             u64 oa, bool has_ob, u64 ob)
->> +{
->> +    unsigned long flags;
->> +    u64 res;
->> +    int ret;
->> +
->> +    if (!cap_ecmds(iommu->cap))
->> +        return -ENODEV;
->> +
->> +    raw_spin_lock_irqsave(&iommu->register_lock, flags);
->> +
->> +    res = dmar_readq(iommu->reg + DMAR_ECRSP_REG);
->> +    if (res & DMA_ECMD_ECRSP_IP) {
->> +        ret = -EBUSY;
->> +        goto err;
->> +    }
->> +
->> +    if (has_ob)
->> +        dmar_writeq(iommu->reg + DMAR_ECEO_REG, ob);
-> 
-> The ecmds that require a Operand B are statically defined in the spec,
-> right? What will it look like if we define a static ignore_ob(ecmd)?
+Hi Benjamin,
 
-Or simply remove has_ob parameter? The least case is an unnecessary
-write to a register. It's fine as far as I can see since we should avoid
-using it in any critical path.
+On Fri, Jan 13, 2023 at 10:13 AM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+> When decoding a 10bits bitstreams HEVC driver should only expose
+> 10bits pixel formats.
+> To fulfill this requirement it is needed to call hantro_reset_raw_fmt()
+> when bit depth change and to correctly set match_depth in pixel formats
+> enumeration.
+>
+> Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
+>
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+> version 2:
+> - Also remove struct hantro_ctx *ctx variable in hantro_try_ctrl()
+>
+>  .../media/platform/verisilicon/hantro_drv.c   | 40 +++++++++++++++----
+>  .../media/platform/verisilicon/hantro_v4l2.c  |  2 +-
+>  .../media/platform/verisilicon/hantro_v4l2.h  |  1 +
+>  .../media/platform/verisilicon/imx8m_vpu_hw.c |  2 +
+>  4 files changed, 36 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+> index 8cb4a68c9119..e824e87618db 100644
+> --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> @@ -251,11 +251,6 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+>
+>  static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>  {
+> -       struct hantro_ctx *ctx;
+> -
+> -       ctx = container_of(ctrl->handler,
+> -                          struct hantro_ctx, ctrl_handler);
+> -
 
---
-Best regards,
-baolu
+This change is unrelated to this commit.
+
+>         if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+>                 const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+>
+> @@ -274,8 +269,6 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>                 if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
+>                         /* Only 8-bit and 10-bit are supported */
+>                         return -EINVAL;
+> -
+> -               ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
+>         } else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+>                 const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
+>
+> @@ -286,6 +279,32 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+>         return 0;
+>  }
+>
+> +static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +       struct hantro_ctx *ctx;
+> +
+> +       ctx = container_of(ctrl->handler,
+> +                          struct hantro_ctx, ctrl_handler);
+> +
+> +       vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
+> +
+> +       switch (ctrl->id) {
+> +       case V4L2_CID_STATELESS_HEVC_SPS:
+> +               const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
+> +               int bit_depth = sps->bit_depth_luma_minus8 + 8;
+> +
+> +               if (ctx->bit_depth != bit_depth) {
+> +                       ctx->bit_depth = bit_depth;
+> +                       hantro_reset_raw_fmt(ctx);
+
+We need to propagate the EBUSY error from hantro_set_fmt_cap,
+to hantro_reset_raw_fmt, so this operation can fail if the capture
+queue has buffers allocated.
+
+Keep in mind, we have to make sure the hantro_ctx state
+remains unchanged when the operation fails.
+
+The entire hantro_v4l2.c format negotiation is done without this
+case in mind (controls can change the format enumeration),
+so this new case needs some refactoring.
+
+I also think we need v4l2-compliance tests for it.
+
+Thanks!
+Ezequiel
+
+
+> +               }
+> +               break;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
+>  {
+>         struct hantro_ctx *ctx;
+> @@ -328,6 +347,11 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+>         .try_ctrl = hantro_try_ctrl,
+>  };
+>
+> +static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+> +       .s_ctrl = hantro_hevc_s_ctrl,
+> +       .try_ctrl = hantro_try_ctrl,
+> +};
+> +
+>  static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
+>         .s_ctrl = hantro_jpeg_s_ctrl,
+>  };
+> @@ -470,7 +494,7 @@ static const struct hantro_ctrl controls[] = {
+>                 .codec = HANTRO_HEVC_DECODER,
+>                 .cfg = {
+>                         .id = V4L2_CID_STATELESS_HEVC_SPS,
+> -                       .ops = &hantro_ctrl_ops,
+> +                       .ops = &hantro_hevc_ctrl_ops,
+>                 },
+>         }, {
+>                 .codec = HANTRO_HEVC_DECODER,
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> index 2c7a805289e7..0025e049dd26 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -398,7 +398,7 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
+>                 hantro_set_fmt_out(ctx, fmt);
+>  }
+>
+> -static void
+> +void
+>  hantro_reset_raw_fmt(struct hantro_ctx *ctx)
+>  {
+>         const struct hantro_fmt *raw_vpu_fmt;
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.h b/drivers/media/platform/verisilicon/hantro_v4l2.h
+> index 64f6f57e9d7a..f642560aed93 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.h
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.h
+> @@ -21,6 +21,7 @@
+>  extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
+>  extern const struct vb2_ops hantro_queue_ops;
+>
+> +void hantro_reset_raw_fmt(struct hantro_ctx *ctx);
+>  void hantro_reset_fmts(struct hantro_ctx *ctx);
+>  int hantro_get_format_depth(u32 fourcc);
+>  const struct hantro_fmt *
+> diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+> index b390228fd3b4..f850d8bddef6 100644
+> --- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+> +++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+> @@ -152,6 +152,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
+>         {
+>                 .fourcc = V4L2_PIX_FMT_NV12,
+>                 .codec_mode = HANTRO_MODE_NONE,
+> +               .match_depth = true,
+>                 .postprocessed = true,
+>                 .frmsize = {
+>                         .min_width = FMT_MIN_WIDTH,
+> @@ -165,6 +166,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
+>         {
+>                 .fourcc = V4L2_PIX_FMT_P010,
+>                 .codec_mode = HANTRO_MODE_NONE,
+> +               .match_depth = true,
+>                 .postprocessed = true,
+>                 .frmsize = {
+>                         .min_width = FMT_MIN_WIDTH,
+> --
+> 2.34.1
+>
