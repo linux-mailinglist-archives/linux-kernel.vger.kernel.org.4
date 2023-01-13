@@ -2,128 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC97B66A09D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C65669F22
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjAMRZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S229716AbjAMRMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbjAMRXr (ORCPT
+        with ESMTP id S229648AbjAMRMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:23:47 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CFFA41E0;
-        Fri, 13 Jan 2023 09:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673630079; x=1705166079;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X8stOTJGnm5tBQ17hxvmLP0ufU3YgC/jbWgKibzqyBQ=;
-  b=F5VvlyjH9/uVcSJ8isNoNBceJwIhETUNuGtaqAbsgq/tUR7Ff7hIljzb
-   gHWy7YQIiTYjx0+yUPCoDR+rA0pw/i8jUQckVcaCoR/rxZEpsXnYbXQHq
-   JOjd1gzntiSDm1fVDTDsChcBwwdNxT+VaPlmEKKhTe8JYjDrHs/KPXWQz
-   AieiU/3fVTlagltyP2z3f2hHD5aYKNpuK6V2O1pgkKX9EwsdahITQJbae
-   Vflsx4K4UxJmHg/ClP6moerC718OVjp7P9yGHdHau73Qu5Ieu4ADETNTF
-   eKSo8iN4SrWCjWnc85QSouofIEOssjRJQ3Klon5fykL1FVSwl72bNdDXP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="326101567"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="326101567"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:10:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="903625125"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="903625125"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jan 2023 09:10:18 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8741F92; Fri, 13 Jan 2023 19:10:52 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 2/2] Revert "gpiolib: of: Introduce hook for missing gpio-ranges"
-Date:   Fri, 13 Jan 2023 19:10:51 +0200
-Message-Id: <20230113171051.19309-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113171051.19309-1-andriy.shevchenko@linux.intel.com>
-References: <20230113171051.19309-1-andriy.shevchenko@linux.intel.com>
+        Fri, 13 Jan 2023 12:12:17 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4959A88A3C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:13 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id hw16so41928190ejc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qXnH9+h8kjSG0D+e/tnKkzeho/i7l+Lx3wm/Pwk9hac=;
+        b=ROG+cpPA7tl0aCgfJI9jL9DcMqmLVplApi4g3Ilww+0nQVJDXEJz5+pkSOj+WKlc9Y
+         9It0rNCOMWqs31gTquAT75MIhflWofQmAXN4YdlkMYxgUCIuNIclhhP3VR88v95TkFMN
+         s04wUBBiDuUs1Jm2zak+zs9h9W1gvDzqDH6K8AWRD5z3kMv9nnfG9oOF5jnD0AvkAlxY
+         PatMIuorIACUKx9viOAX4ZERgZEWGNparDSsu7QU1A3cd7NCa5CdyGqe2xe9S/8QEs2W
+         bWIGSV3PSwTogUk10787nrTXyWN1aSFtwzHq125GxfuEEImWgrPCd+hleRHEwJ1RpftP
+         eBjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qXnH9+h8kjSG0D+e/tnKkzeho/i7l+Lx3wm/Pwk9hac=;
+        b=dOjjDQfrf0AkXGPHLafQcZDEIj3sKnaHAJizDn4NYTJYC3/CS/7blOwCY27ay6iMIu
+         3VUEi0sZCZy7Mjyl1rwy3Bqme3ELX0oD1OLtK6+cvpsFl1pD+HqbbCHyWOzCzkr4N4Uv
+         6oiNcswckh+fI7PWFkIJmq+HJAwLhxh/29O1LXmMoS4msKTioXRm5mI/6Id/tx4I7XVh
+         uHDsi2uLc1cb20qkgTy1AEZmsbfK5TH3T3po4p3rC1Wgu3wAU8Sp2Kn4BPqZJxC2hQ23
+         3kMBAXW11ojH+iDZBxw0RTZBuAgRD4/9okfJlBUy4PFzlvordZwMOikUQE0uEVkDJFzX
+         ZbOA==
+X-Gm-Message-State: AFqh2ko1HyBkCdqvLD6HNyz7KDJQwykjnu1aKiWcTxC4XOxGCU428NpA
+        PIGqR27E5gsl0MdJXIVrcNqtOQ==
+X-Google-Smtp-Source: AMrXdXv6SPsf041fEDD4/yrRnbbzKtP8ij8KanGx5OYsJX5jdeqd/G+Y7NuRCChlBMCjb6SDeiiNZg==
+X-Received: by 2002:a17:906:b00c:b0:7c4:fa17:7202 with SMTP id v12-20020a170906b00c00b007c4fa177202mr68173183ejy.33.1673629871904;
+        Fri, 13 Jan 2023 09:11:11 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id og5-20020a1709071dc500b0084d420503a3sm6994015ejc.178.2023.01.13.09.11.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 09:11:11 -0800 (PST)
+Message-ID: <6bd2d336-e8e8-245c-292c-1e74b4988d89@linaro.org>
+Date:   Fri, 13 Jan 2023 18:11:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [Patch v1 05/10] dt-bindings: tegra: add icc ids for dummy MC
+ clients
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
+        bbasu@nvidia.com
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-6-sumitg@nvidia.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221220160240.27494-6-sumitg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 3550bba25d5587a701e6edf20e20984d2ee72c78.
+On 20/12/2022 17:02, Sumit Gupta wrote:
+> Adding ICC id's for dummy software clients representing CCPLEX clusters.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
 
-No users for this one, revert it for good.
-The ->add_pin_ranges() can be used instead.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: made it as a pure revert
- drivers/gpio/gpiolib-of.c   |  5 -----
- include/linux/gpio/driver.h | 12 ------------
- 2 files changed, 17 deletions(-)
-
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 72d8a3da31e3..266352b1a966 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -980,11 +980,6 @@ static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
- 	if (!np)
- 		return 0;
- 
--	if (!of_property_read_bool(np, "gpio-ranges") &&
--	    chip->of_gpio_ranges_fallback) {
--		return chip->of_gpio_ranges_fallback(chip, np);
--	}
--
- 	group_names = of_find_property(np, group_names_propname, NULL);
- 
- 	for (;; index++) {
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index ddc7a14a274f..5ab50ba3c309 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -521,18 +521,6 @@ struct gpio_chip {
- 	 */
- 	int (*of_xlate)(struct gpio_chip *gc,
- 			const struct of_phandle_args *gpiospec, u32 *flags);
--
--	/**
--	 * @of_gpio_ranges_fallback:
--	 *
--	 * Optional hook for the case that no gpio-ranges property is defined
--	 * within the device tree node "np" (usually DT before introduction
--	 * of gpio-ranges). So this callback is helpful to provide the
--	 * necessary backward compatibility for the pin ranges.
--	 */
--	int (*of_gpio_ranges_fallback)(struct gpio_chip *gc,
--				       struct device_node *np);
--
- #endif /* CONFIG_OF_GPIO */
- };
- 
--- 
-2.39.0
+Best regards,
+Krzysztof
 
