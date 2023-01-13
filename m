@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D55466A316
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DAE66A35E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjAMTbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
+        id S230522AbjAMTcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjAMTa0 (ORCPT
+        with ESMTP id S230183AbjAMTa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:30:26 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC1888DEE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:16 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4d4b54d0731so108678167b3.18
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:16 -0800 (PST)
+        Fri, 13 Jan 2023 14:30:57 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9654FFD27
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:55 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id i1so7746967ilu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OYI7n7ZxeJbzc3ugoUEmPU4HTlcXY2wcEsEpgVbelmw=;
-        b=ThGDNtBdyYDpNLmjAmXExCnTdPb0ZeXG7u+LrZopq0ooHgWxrX9/gBZ+z52wHQZOlq
-         j5iFxBoe++GtsSU4jtrJqmyYkdpVDDoYB5hgiS9eQqb2CDzQ5Cyd2Mby1rif3UNQ59MQ
-         CNSQBTXvhPwdn6ezr51z3znvGuGpDk0+PwPW2BcW7oJpWh+IcWlrZMZe1PGOgSVy7SHr
-         DT09Nlqd1UNXs4vcAvKLTFzQTMTod+dQk4l3ZoKR3ENRloVjFbKmGTYcaefe8nFd0vfR
-         HDmdRO8a/L7QgVCp6/sdy37Ak1DDXt4kEw0AD4lBQzcbumK0CQQ9fWCMmJWDTGHzj1Ei
-         ZdvA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ww+3SueiUHoCitYrSDWO8ffFpPcz7FnsT8mBQaBvWbA=;
+        b=jh8UX2Q211H4EUbNFb9Y/zMlOBh94pDye0mJCLGSYNsPbeTvPMD42ag8DOgpKdeaX2
+         jNiQvvD0eAwYju556HZHviFlFSqhqo03nyxFA8RXfOxri8B4f5SPTc+c68/iVwR7Slg7
+         4z7wORaiWjTX/cv8A2NS2Li9M7R5iAKJWngmJWXlGrNIiGXO6wy4fHPAxvCCpf11rbvD
+         +hwYzuixYvAwQ4ZumrqCwCMkf4gkPFG3e6MN0Ctr2lbae6aect7EQk4mNKcDha/8NLaB
+         nANNpjkq4MGQ60vV7TBNxC5Tu9YGNmnEXrvZ1q7ToaV8COmK6Nx8wDgeJA5Rbr805Sur
+         LJlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OYI7n7ZxeJbzc3ugoUEmPU4HTlcXY2wcEsEpgVbelmw=;
-        b=ZAoH+jBJxWADzHy69N9ZKeObHcprjatulXhJThz9DpkX3rOmWwoYx0Vl8RnoT8Anxf
-         f07zwztG/P3wjzhiDWicVba6VwL5z5WSxJfDpGBiQaVZChU+U6VNyLfHKspLsJq8lkGR
-         lRYy9VYKHbkDlIhMWKOGCg4hy9XQKZJ2RLzbXvWkx4EkNy0Xkwzs9wBVUWwDIxbVEfsY
-         /A3dnEVSWabCPqcUou66QbmV7dcMxxFZ+qRdjGS/vShEmP8JA82X1IE4/wva/Xr3KmI9
-         k+cco3ISiCY3FqZT0sLXK1bRbMYRn7odK8MYkNYxID6pHJCEGhPcNmT6JQZuPRIauhmJ
-         uDZA==
-X-Gm-Message-State: AFqh2kqb6pWzD4kCG2yXLQSIL3N8G3pW9kgMdptUuLBe0lwzqFHm/K8+
-        dZYXY4VaJv2VyXJKIKN7HxPuBVW61B2Q
-X-Google-Smtp-Source: AMrXdXsgTTSp4m33QxaqaCs0r9IfBeXFvdinDI+HQvS2JRlTxa/XPXazKp04CFYAH1EhQBUlU59kVehclstM
-X-Received: from bg.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b4])
- (user=bgeffon job=sendgmr) by 2002:a0d:db93:0:b0:3ab:78e8:caef with SMTP id
- d141-20020a0ddb93000000b003ab78e8caefmr3106653ywe.285.1673638216101; Fri, 13
- Jan 2023 11:30:16 -0800 (PST)
-Date:   Fri, 13 Jan 2023 14:30:06 -0500
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230113193006.1320379-1-bgeffon@google.com>
-Subject: [PATCH] PM: hibernate: don't store zero pages in the image file.
-From:   Brian Geffon <bgeffon@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ww+3SueiUHoCitYrSDWO8ffFpPcz7FnsT8mBQaBvWbA=;
+        b=YleY+T+G96XX5KTmak5qwDyAok4v3B7WJJkav85VfNSIySF9ARYmc1ZgJnN1T5zrnX
+         osucFCOe4n07N6jaegg0d8HRBHPhKHPs7d89hv8BlxgUFtZ9leD2UMw+i5x5xO0k46NL
+         2BZmrzJZVdWJAl5B72JBJ238VcJf5GX/3o2L6SDFD9sarV9g1p1yhWiY86zKBizjSzi7
+         jBYrxosKcsKLCnYG5AHmrHnu6DOI0KXLwjGCBfdgoSjX1HYH5q4cH0rr0aBxmDxweDkp
+         zDYP76ozovb3WnbvGv4frvoLyIpp1X/uMzq4k605Jqqv3wP2NGe613g8PHzsOKtQ/95l
+         ff0Q==
+X-Gm-Message-State: AFqh2kpPOZMf4Rlb7fNUGsQRLGP1oNRpMUpSmj2XqecSYgU7iORNUJTV
+        FQju9gG7DQlL6OZRXxw2/TCYB9pTzCWIow==
+X-Google-Smtp-Source: AMrXdXuPuviDGlo0ZTneXXHi5n4jyPbQPD+3oh8IUEST16U72gkfwe35/NGuBn1LdnoIPYsme1yDlg==
+X-Received: by 2002:a92:b703:0:b0:305:e3da:fae8 with SMTP id k3-20020a92b703000000b00305e3dafae8mr57500774ili.10.1673638253870;
+        Fri, 13 Jan 2023 11:30:53 -0800 (PST)
+Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
+        by smtp.googlemail.com with ESMTPSA id e32-20020a026d60000000b0039e583abceasm6497289jaf.68.2023.01.13.11.30.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 11:30:53 -0800 (PST)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
+        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
+        jbaron@akamai.com, gregkh@linuxfoundation.org,
+        Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH v2 11/20] dyndbg-API: specialize DYNDBG_CLASSMAP_(DEFINE|USE)
+Date:   Fri, 13 Jan 2023 12:30:07 -0700
+Message-Id: <20230113193016.749791-12-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230113193016.749791-1-jim.cromie@gmail.com>
+References: <20230113193016.749791-1-jim.cromie@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,398 +76,536 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ChromeOS we've observed a considerable number of in-use pages filled
-with zeros. Today with hibernate it's entirely possible that saveable
-pages are just zero filled. Since we're already copying pages
-word-by-word in do_copy_page it becomes almost free to determine if a
-page was completely filled with zeros.
+Now that the DECLARE_DYNDBG_CLASSMAP macro has been split into
+DYNDBG_CLASSMAP_DEFINE and DYNDBG_CLASSMAP_USE, lets differentiate
+them according to their separate jobs.
 
-This change introduces a new bitmap which will track these zero pages.
-If a page is zero it will not be included in the saved image, instead to
-track these zero pages in the image file we will introduce a new flag
-which we will set on the packed PFN list. When reading back in the image
-file we will detect these zero page PFNs and rebuild the zero page bitmap.
+Dyndbg's existing __dyndbg_classes[] section does:
 
-When the image is being loaded through calls to snapshot_write_next if we
-encounter a zero page we will silently memset it to 0 and then continue on
-to the next page. Given the implementation in snapshot_read_next and
-snapshot_write_next this change  will be transparent to non-compressed,
-compressed, and swsusp modes of operation.
+. catalogs the classmaps defined by the module (or builtin modules)
+. authorizes dyndbg to >control those class'd prdbgs for the module.
 
-To provide some concrete numbers from simple ad-hoc testing, on a device
-which was lightly in use we saw that:
+This patch adds __dyndbg_class_refs[] section:
 
- PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
+. catalogs references/uses of the above classmap definitions.
+. authorizes dyndbg to >control those class'd prdbgs in ref'g module.
+. maps the client module to classmap definitions
+  drm-drivers and helpers are clients.
+  this allows dyndbg to apply drm.debug to the client module, when added.
 
-Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero
-filled and could be tracked entirely within the packed PFN list. The
-savings would obviously be much lower for lzo compressed images, but even
-in the case of compression not copying pages across to the compression
-threads will still speed things up. It's also possible that we would see
-better overall compression ratios as larger regions of "real data" would
-improve the compressibility.
+The distinction of the 2 roles yields 2 gains:
 
-Finally, such an approach could dramatically improve swsusp performance
-as each one of those zero pages requires a write syscall to reload, by
-handling it as part of the packed PFN list we're able to fully avoid
-that.
+It follows the define-once-declare-elsewhere pattern that K&R gave us,
+dumping the weird coordinated-changes-by-identical-classmaps API.
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
+It should help solve the chicken-egg problem that DRM_USE_DYNAMIC_DEBUG
+has; the _USEr module must propagate the drm.debug setting once the
+using module has loaded.
+
+The new DYNDBG_CLASSMAP_* macros add records to the sections:
+
+DYNDBG_CLASSMAP_DEFINE:
+  invoked just once per sub-system.
+  for drm, its drm_print, where drm.debug is exposed.
+  defines the classmap, names "DRM_UT_*", maps to class_id's
+  authorizes dyndbg to exert >control
+  populates __dyndbg_classes[] "section", __used.
+  exports the classmap.
+
+DYNDBG_CLASSMAP_USE:
+  invoked by modules using classmaps defined & exported elsewhere
+  populates __dyndbg_class_refs[] "section", __used.
+  maps client-module name to the extern'd classmap.
+  has client-name, so dyndbg can recognize loading client modules.
+
+also:
+
+struct ddebug_info gets 2 new fields to encapsulate the new section:
+  class_refs, num_class_refs.
+  set by dynamic_debug_init() for builtins.
+  or by kernel/module/main:load_info() for loadable modules.
+
+. struct ddebug_class_user
+  contains: user-module-name, ref to classmap-defn
+  dyndbg finds drm-driver's use of a classmap, gets/applies its settings
+
+. vmlinux.lds.h additions: linker symbols, KEEP for new section
+
+dynamic_debug.c: 2 sets of changes;
+  those "under" ddebug_add_module(), immediately below
+  those "under" ddebug_change(), further below
+
+ddebug_attach_module_classes():
+  as before:
+  called from ddebug_add_module
+  finds classmaps whose .mod_name matches module being added.
+  attaches them to the module's ddebug_table.
+
+ddebug_attach_client_module_classes():
+  new:
+  called from ddebug_add_module, after list-add to ddebug-tables.
+  like above, but works class-refs, not classes.
+  foreach __dyndbg_class_refs: ddebug_param_load_dependent_class(classmap*)
+
+s/ddebug_find_kparams/ddebug_apply_parents_params/.
+
+ddebug_find_kparam(classmap*):
+
+scans module's/builtin kernel-params, calls ddebug_match_attach_kparam
+for each to find the params/sysfs-nodes using a classmap.
+
+ddebug_match_apply_kparam():
+
+1st, it tests the kernel-param.ops is dyndbg's; this guarantees that
+the attached arg is a struct ddebug_class_param, which has a ref to
+the param's state.
+
+Then compare the modname being loaded to the classmap.mod_name; if it
+matches, save the debug_class_param into the classmap.dc_parm.  This
+lets users of the classmap (in particular a client) access the state.
+
+ddebug_param_load_dependent_class():
+
+Called from ddebug_attach_client_module_classes() on each class_refs[]
+entry.  Each user refs a classmap which has already been seen by
+ddebug_find_kparam(), and whose .dc_parm has the state.
+
+So this fn just copies the state to a local var, then calls
+ddebug_apply_class_bitmap() to apply it to the dependent module.
+ddebug_apply_class_bitmap() tests for bit changes before sending
+messages without making changes.
+
+ddebug_find_valid_class():
+
+This helps ddebug_change(), doing the search over classmaps, looking
+for the class given to >control.  So now it searches over
+__dyndbg_class_refs[] after __dyndbg_classes[].
+
+Thats the theory anyway.  things are still broken (differently) for
+both builtins and loadables.  For loadables, the >control is applied,
+but doesnt alter any callsites.  For builtins, things break earlier.
+
+[*] consider swapping struct ddebug_class_param's dc_parm for kparam.
+This gives access to kparam->name, helpful for current debugging.
+Attaching that kp via macro would simplify attach-*module-classes too.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+
+dyndbg: rework ddebug_(|client_)_module_attach_classes
+
+move ddebug_attach_module_classes() up.
+
+name-refinements++:
+
+s/ddebug_param_load_dependent_class/ddebug_apply_parents_params/
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- kernel/power/snapshot.c | 127 ++++++++++++++++++++++++++++++----------
- 1 file changed, 97 insertions(+), 30 deletions(-)
+ include/asm-generic/vmlinux.lds.h |   3 +
+ include/linux/dynamic_debug.h     |  39 ++++---
+ kernel/module/main.c              |   2 +
+ lib/dynamic_debug.c               | 166 ++++++++++++++++++++++++++----
+ 4 files changed, 176 insertions(+), 34 deletions(-)
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index cd8b7b35f1e8..9846de7f2d41 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -404,6 +404,7 @@ struct bm_position {
- 	struct mem_zone_bm_rtree *zone;
- 	struct rtree_node *node;
- 	unsigned long node_pfn;
-+	unsigned long cur_pfn;
- 	int node_bit;
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 3dc5824141cd..7100701fb68c 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -363,6 +363,9 @@
+ 	__start___dyndbg_classes = .;					\
+ 	KEEP(*(__dyndbg_classes))					\
+ 	__stop___dyndbg_classes = .;					\
++	__start___dyndbg_class_refs = .;				\
++	KEEP(*(__dyndbg_class_refs))					\
++	__stop___dyndbg_class_refs = .;					\
+ 	__start___dyndbg = .;						\
+ 	KEEP(*(__dyndbg))						\
+ 	__stop___dyndbg = .;						\
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index 1cdfd62fd2e4..397ac8294230 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -81,8 +81,8 @@ enum ddebug_class_map_type {
  };
  
-@@ -589,6 +590,7 @@ static void memory_bm_position_reset(struct memory_bitmap *bm)
- 	bm->cur.node = list_entry(bm->cur.zone->leaves.next,
- 				  struct rtree_node, list);
- 	bm->cur.node_pfn = 0;
-+	bm->cur.cur_pfn = BM_END_OF_MAP;
- 	bm->cur.node_bit = 0;
- }
- 
-@@ -850,6 +852,11 @@ static void memory_bm_clear_current(struct memory_bitmap *bm)
- 	clear_bit(bit, bm->cur.node->data);
- }
- 
-+static unsigned long memory_bm_get_current(struct memory_bitmap *bm)
-+{
-+	return bm->cur.cur_pfn;
-+}
-+
- static int memory_bm_test_bit(struct memory_bitmap *bm, unsigned long pfn)
- {
- 	void *addr;
-@@ -929,10 +936,12 @@ static unsigned long memory_bm_next_pfn(struct memory_bitmap *bm)
- 		if (bit < bits) {
- 			pfn = bm->cur.zone->start_pfn + bm->cur.node_pfn + bit;
- 			bm->cur.node_bit = bit + 1;
-+			bm->cur.cur_pfn = pfn;
- 			return pfn;
- 		}
- 	} while (rtree_next_node(bm));
- 
-+	bm->cur.cur_pfn = BM_END_OF_MAP;
- 	return BM_END_OF_MAP;
- }
- 
-@@ -1371,14 +1380,18 @@ static unsigned int count_data_pages(void)
- 
- /*
-  * This is needed, because copy_page and memcpy are not usable for copying
-- * task structs.
-+ * task structs. Returns 1 if a page was filled with only zeros, otherwise 0.
+ struct ddebug_class_map {
+-	struct module *mod;
+-	const char *mod_name;	/* needed for builtins */
++	const struct module *mod;		/* NULL for builtins */
++	const char *mod_name;
+ 	const char **class_names;
+ 	const int length;
+ 	const int base;		/* index of 1st .class_id, allows split/shared space */
+@@ -99,8 +99,8 @@ struct ddebug_class_map {
+  * @classes: class-names used to control class'd prdbgs
   */
--static inline void do_copy_page(long *dst, long *src)
-+static inline int do_copy_page(long *dst, long *src)
- {
- 	int n;
-+	long z = 0;
+ #define DYNDBG_CLASSMAP_DEFINE(_var, _maptype, _base, ...)		\
+-	static const char *_var##_classnames[] = { __VA_ARGS__ };	\
+-	static struct ddebug_class_map __aligned(8) __used		\
++	const char *_var##_classnames[] = { __VA_ARGS__ };		\
++	struct ddebug_class_map __aligned(8) __used			\
+ 		__section("__dyndbg_classes") _var = {			\
+ 		.mod = THIS_MODULE,					\
+ 		.mod_name = KBUILD_MODNAME,				\
+@@ -108,24 +108,37 @@ struct ddebug_class_map {
+ 		.map_type = _maptype,					\
+ 		.length = ARRAY_SIZE(_var##_classnames),		\
+ 		.class_names = _var##_classnames,			\
+-	}
++	};								\
++	EXPORT_SYMBOL(_var)
  
--	for (n = PAGE_SIZE / sizeof(long); n; n--)
-+	for (n = PAGE_SIZE / sizeof(long); n; n--) {
-+		z |= *src;
- 		*dst++ = *src++;
+-/*
+- * refer to the classmap instantiated once, by the macro above.  This
+- * distinguishes the multiple users of drm.debug from the single
+- * definition, allowing them to specialize.  ATM its a pass-thru, but
+- * it should help regularize the admittedly wierd sharing by identical
+- * definitions.
++struct ddebug_class_user {
++	char *user_mod_name;
++	struct ddebug_class_map *map;
++};
++/**
++ * DYNDBG_CLASSMAP_USE - Use a classmap DEFINEd in another module.
++ * This lets dyndbg initialize the dependent module's prdbgs from the
++ * other module's controlling sysfs node.
+  */
+-#define DYNDBG_CLASSMAP_USE(_var, _maptype, _base, ...)		\
+-	DYNDBG_CLASSMAP_DEFINE(_var, _maptype, _base, __VA_ARGS__)
++#define DYNDBG_CLASSMAP_USE(_var, ...)					\
++	DYNDBG_CLASSMAP_USE_(_var, __UNIQUE_ID(ddebug_class_user),	\
++			     __VA_ARGS__)
++#define DYNDBG_CLASSMAP_USE_(_var, _uname, ...)				\
++	extern struct ddebug_class_map _var;				\
++	static struct ddebug_class_user __used				\
++	__section("__dyndbg_class_refs") _uname = {			\
++		.user_mod_name = KBUILD_MODNAME,			\
++		.map = &_var,						\
 +	}
-+	return !z;
- }
  
- /**
-@@ -1389,15 +1402,17 @@ static inline void do_copy_page(long *dst, long *src)
-  * CONFIG_ARCH_HAS_SET_DIRECT_MAP is not set. In that case kernel_page_present()
-  * always returns 'true'.
-  */
--static void safe_copy_page(void *dst, struct page *s_page)
-+static int safe_copy_page(void *dst, struct page *s_page)
- {
-+	int ret;
- 	if (kernel_page_present(s_page)) {
--		do_copy_page(dst, page_address(s_page));
-+		ret = do_copy_page(dst, page_address(s_page));
- 	} else {
- 		hibernate_map_page(s_page);
--		do_copy_page(dst, page_address(s_page));
-+		ret = do_copy_page(dst, page_address(s_page));
- 		hibernate_unmap_page(s_page);
- 	}
-+	return ret;
- }
+ /* encapsulate linker provided built-in (or module) dyndbg data */
+ struct _ddebug_info {
+ 	struct _ddebug *descs;
+ 	struct ddebug_class_map *classes;
++	struct ddebug_class_user *class_refs;
+ 	unsigned int num_descs;
+ 	unsigned int num_classes;
++	unsigned int num_class_refs;
+ };
  
- #ifdef CONFIG_HIGHMEM
-@@ -1407,17 +1422,18 @@ static inline struct page *page_is_saveable(struct zone *zone, unsigned long pfn
- 		saveable_highmem_page(zone, pfn) : saveable_page(zone, pfn);
- }
- 
--static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-+static int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
- {
- 	struct page *s_page, *d_page;
- 	void *src, *dst;
-+	int ret;
- 
- 	s_page = pfn_to_page(src_pfn);
- 	d_page = pfn_to_page(dst_pfn);
- 	if (PageHighMem(s_page)) {
- 		src = kmap_atomic(s_page);
- 		dst = kmap_atomic(d_page);
--		do_copy_page(dst, src);
-+		ret = do_copy_page(dst, src);
- 		kunmap_atomic(dst);
- 		kunmap_atomic(src);
- 	} else {
-@@ -1426,30 +1442,32 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
- 			 * The page pointed to by src may contain some kernel
- 			 * data modified by kmap_atomic()
- 			 */
--			safe_copy_page(buffer, s_page);
-+			ret = safe_copy_page(buffer, s_page);
- 			dst = kmap_atomic(d_page);
- 			copy_page(dst, buffer);
- 			kunmap_atomic(dst);
- 		} else {
--			safe_copy_page(page_address(d_page), s_page);
-+			ret = safe_copy_page(page_address(d_page), s_page);
- 		}
- 	}
-+	return ret;
- }
- #else
- #define page_is_saveable(zone, pfn)	saveable_page(zone, pfn)
- 
--static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-+static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
- {
--	safe_copy_page(page_address(pfn_to_page(dst_pfn)),
-+	return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
- 				pfn_to_page(src_pfn));
- }
- #endif /* CONFIG_HIGHMEM */
- 
- static void copy_data_pages(struct memory_bitmap *copy_bm,
--			    struct memory_bitmap *orig_bm)
-+			    struct memory_bitmap *orig_bm,
-+			    struct memory_bitmap *zero_bm)
- {
- 	struct zone *zone;
--	unsigned long pfn;
-+	unsigned long pfn, copy_pfn;
- 
- 	for_each_populated_zone(zone) {
- 		unsigned long max_zone_pfn;
-@@ -1462,11 +1480,18 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
- 	}
- 	memory_bm_position_reset(orig_bm);
- 	memory_bm_position_reset(copy_bm);
-+	copy_pfn = memory_bm_next_pfn(copy_bm);
- 	for(;;) {
- 		pfn = memory_bm_next_pfn(orig_bm);
- 		if (unlikely(pfn == BM_END_OF_MAP))
- 			break;
--		copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
-+		if (copy_data_page(copy_pfn, pfn)) {
-+			memory_bm_set_bit(zero_bm, pfn);
-+
-+			/* We will reuse this copy_pfn for a real 'nonzero' page. */
-+			continue;
-+		}
-+		copy_pfn = memory_bm_next_pfn(copy_bm);
- 	}
- }
- 
-@@ -1494,6 +1519,9 @@ static struct memory_bitmap orig_bm;
-  */
- static struct memory_bitmap copy_bm;
- 
-+/* Memory bitmap which tracks which saveable pages were zero filled. */
-+static struct memory_bitmap zero_bm;
-+
- /**
-  * swsusp_free - Free pages allocated for hibernation image.
-  *
-@@ -1756,6 +1784,12 @@ int hibernate_preallocate_memory(void)
- 		goto err_out;
- 	}
- 
-+	error = memory_bm_create(&zero_bm, GFP_IMAGE, PG_ANY);
-+	if (error) {
-+		pr_err("Cannot allocate zero bitmap\n");
-+		goto err_out;
-+	}
-+
- 	alloc_normal = 0;
- 	alloc_highmem = 0;
- 
-@@ -2013,11 +2047,12 @@ static int swsusp_alloc(struct memory_bitmap *copy_bm,
- 
- asmlinkage __visible int swsusp_save(void)
- {
--	unsigned int nr_pages, nr_highmem;
-+	unsigned int nr_pages, nr_highmem, nr_zero_pages;
- 
- 	pr_info("Creating image:\n");
- 
- 	drain_local_pages(NULL);
-+	nr_zero_pages = 0;
- 	nr_pages = count_data_pages();
- 	nr_highmem = count_highmem_pages();
- 	pr_info("Need to copy %u pages\n", nr_pages + nr_highmem);
-@@ -2037,19 +2072,23 @@ asmlinkage __visible int swsusp_save(void)
- 	 * Kill them.
- 	 */
- 	drain_local_pages(NULL);
--	copy_data_pages(&copy_bm, &orig_bm);
-+	copy_data_pages(&copy_bm, &orig_bm, &zero_bm);
- 
- 	/*
- 	 * End of critical section. From now on, we can write to memory,
- 	 * but we should not touch disk. This specially means we must _not_
- 	 * touch swap space! Except we must write out our image of course.
- 	 */
-+	memory_bm_position_reset(&zero_bm);
-+	while (memory_bm_next_pfn(&zero_bm) != BM_END_OF_MAP)
-+		nr_zero_pages++;
- 
- 	nr_pages += nr_highmem;
--	nr_copy_pages = nr_pages;
-+	/* We don't actually copy the zero pages */
-+	nr_copy_pages = nr_pages - nr_zero_pages;
- 	nr_meta_pages = DIV_ROUND_UP(nr_pages * sizeof(long), PAGE_SIZE);
- 
--	pr_info("Image created (%d pages copied)\n", nr_pages);
-+	pr_info("Image created (%d pages copied, %d zero pages)\n", nr_copy_pages, nr_zero_pages);
+ struct ddebug_class_param {
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d02d39c7174e..ee4f85a3b8f0 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2111,6 +2111,8 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 					sizeof(*info->dyndbg.descs), &info->dyndbg.num_descs);
+ 	info->dyndbg.classes = section_objs(info, "__dyndbg_classes",
+ 					sizeof(*info->dyndbg.classes), &info->dyndbg.num_classes);
++	info->dyndbg.class_refs = section_objs(info, "__dyndbg_class_refs",
++					sizeof(*info->dyndbg.class_refs), &info->dyndbg.num_class_refs);
  
  	return 0;
  }
-@@ -2094,15 +2133,22 @@ static int init_header(struct swsusp_info *info)
- 	return init_header_complete(info);
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index b51f4bde6198..19bf66229d45 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -43,13 +43,16 @@ extern struct _ddebug __start___dyndbg[];
+ extern struct _ddebug __stop___dyndbg[];
+ extern struct ddebug_class_map __start___dyndbg_classes[];
+ extern struct ddebug_class_map __stop___dyndbg_classes[];
++extern struct ddebug_class_user __start___dyndbg_class_refs[];
++extern struct ddebug_class_user __stop___dyndbg_class_refs[];
+ 
+ struct ddebug_table {
+ 	struct list_head link;
+ 	const char *mod_name;
+ 	struct _ddebug *ddebugs;
+ 	struct ddebug_class_map *classes;
+-	unsigned int num_ddebugs, num_classes;
++	struct ddebug_class_user *class_refs;
++	unsigned int num_ddebugs, num_classes, num_class_refs;
+ };
+ 
+ struct ddebug_query {
+@@ -147,21 +150,36 @@ static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
+ 		  query->first_lineno, query->last_lineno, query->class_string);
  }
  
-+#define ENCODED_PFN_ZERO_FLAG (1UL << (BITS_PER_LONG - 1))
-+#define ENCODED_PFN_MASK (~ENCODED_PFN_ZERO_FLAG)
++#define vpr_dt_info(dt, _msg, ...)					\
++	v2pr_info(_msg " module:%s nd:%d nc:%d nu:%d\n", ##__VA_ARGS__,	\
++		  dt->mod_name, dt->num_ddebugs, dt->num_classes, dt->num_class_refs);
 +
- /**
-  * pack_pfns - Prepare PFNs for saving.
-  * @bm: Memory bitmap.
-  * @buf: Memory buffer to store the PFNs in.
-+ * @zero_bm: Memory bitmap containing PFNs of zero pages.
-  *
-  * PFNs corresponding to set bits in @bm are stored in the area of memory
-- * pointed to by @buf (1 page at a time).
-+ * pointed to by @buf (1 page at a time). Pages which were filled with only
-+ * zeros will have the highest bit set in the packed format to distinguish
-+ * them from PFNs which will be contained in the image file.
-  */
--static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
-+static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm,
-+		struct memory_bitmap *zero_bm)
+ #define __outvar /* filled by callee */
+ static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
+ 							const char *class_string,
+ 							__outvar int *class_id)
  {
- 	int j;
+ 	struct ddebug_class_map *map;
++	struct ddebug_class_user *cli;
+ 	int i, idx;
  
-@@ -2110,6 +2156,8 @@ static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
- 		buf[j] = memory_bm_next_pfn(bm);
- 		if (unlikely(buf[j] == BM_END_OF_MAP))
- 			break;
-+		if (memory_bm_test_bit(zero_bm, buf[j]))
-+			buf[j] |= ENCODED_PFN_ZERO_FLAG;
- 	}
- }
- 
-@@ -2151,7 +2199,7 @@ int snapshot_read_next(struct snapshot_handle *handle)
- 		memory_bm_position_reset(&copy_bm);
- 	} else if (handle->cur <= nr_meta_pages) {
- 		clear_page(buffer);
--		pack_pfns(buffer, &orig_bm);
-+		pack_pfns(buffer, &orig_bm, &zero_bm);
- 	} else {
- 		struct page *page;
- 
-@@ -2247,24 +2295,30 @@ static int load_header(struct swsusp_info *info)
-  * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
-  * @bm: Memory bitmap.
-  * @buf: Area of memory containing the PFNs.
-+ * @zero_bm: Memory bitmap which will be populated with the PFNs of zero pages.
-  *
-  * For each element of the array pointed to by @buf (1 page at a time), set the
-- * corresponding bit in @bm.
-+ * corresponding bit in @bm. If the page was originally populated with only
-+ * zeros then a corresponding bit will also be set in @zero_bm.
-  */
--static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
-+static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm,
-+		struct memory_bitmap *zero_bm)
- {
--	int j;
-+	int j, zero;
-+	unsigned long decoded_pfn;
- 
- 	for (j = 0; j < PAGE_SIZE / sizeof(long); j++) {
- 		if (unlikely(buf[j] == BM_END_OF_MAP))
- 			break;
- 
--		if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
--			memory_bm_set_bit(bm, buf[j]);
-+		zero = !!(buf[j] & ENCODED_PFN_ZERO_FLAG);
-+		decoded_pfn = buf[j] & ENCODED_PFN_MASK;
-+		if (pfn_valid(decoded_pfn) && memory_bm_pfn_present(bm, decoded_pfn)) {
-+			memory_bm_set_bit(bm, decoded_pfn);
- 		} else {
--			if (!pfn_valid(buf[j]))
-+			if (!pfn_valid(decoded_pfn))
- 				pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
--				       (unsigned long long)PFN_PHYS(buf[j]));
-+				       (unsigned long long)PFN_PHYS(decoded_pfn));
- 			return -EFAULT;
+-	for (map = dt->classes, i = 0; i < dt->num_classes; i++, map++) {
++	for (i = 0, map = dt->classes; i < dt->num_classes; i++, map++) {
+ 		idx = match_string(map->class_names, map->length, class_string);
+ 		if (idx >= 0) {
+ 			*class_id = idx + map->base;
++			vpr_dt_info(dt, "good-class: %s.%s ", map->mod_name, class_string);
+ 			return map;
  		}
  	}
-@@ -2631,6 +2685,7 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 	static struct chain_allocator ca;
- 	int error = 0;
- 
-+next:
- 	/* Check if we have already loaded the entire image */
- 	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages)
- 		return 0;
-@@ -2657,9 +2712,13 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 		if (error)
- 			return error;
- 
-+		error = memory_bm_create(&zero_bm, GFP_ATOMIC, PG_ANY);
-+		if (error)
-+			return error;
-+
- 		hibernate_restore_protection_begin();
- 	} else if (handle->cur <= nr_meta_pages + 1) {
--		error = unpack_orig_pfns(buffer, &copy_bm);
-+		error = unpack_orig_pfns(buffer, &copy_bm, &zero_bm);
- 		if (error)
- 			return error;
- 
-@@ -2686,6 +2745,14 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 			handle->sync_read = 0;
- 	}
- 	handle->cur++;
-+
-+	/* Zero pages were not included in the image, memset it and move on. */
-+	if ((handle->cur > nr_meta_pages + 1) &&
-+			memory_bm_test_bit(&zero_bm, memory_bm_get_current(&orig_bm))) {
-+		memset(handle->buffer, 0, PAGE_SIZE);
-+		goto next;
++	for (i = 0, cli = dt->class_refs; i < dt->num_class_refs; i++, cli++) {
++		idx = match_string(cli->map->class_names, cli->map->length, class_string);
++		if (idx >= 0) {
++			*class_id = idx + cli->map->base;
++			vpr_dt_info(dt, "class-ref: %s.%s ",
++				    cli->user_mod_name, class_string);
++			return cli->map;
++		}
 +	}
-+
- 	return PAGE_SIZE;
+ 	*class_id = -ENOENT;
+ 	return NULL;
+ }
+@@ -590,9 +608,10 @@ static int ddebug_exec_queries(char *query, const char *modname)
+ 	return nfound;
  }
  
+-/* apply a new bitmap to the sys-knob's current bit-state */
++/* apply a new class-param setting */
+ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+-				     const unsigned long *new_bits, const unsigned long *old_bits,
++				     const unsigned long *new_bits,
++				     const unsigned long *old_bits,
+ 				     const char *query_modname)
+ {
+ #define QUERY_SIZE 128
+@@ -601,8 +620,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 	int matches = 0;
+ 	int bi, ct;
+ 
+-	v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits, *old_bits,
+-		  query_modname ?: "");
++	if (*new_bits != *old_bits)
++		v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
++			  *old_bits, query_modname ?: "'*'");
+ 
+ 	for (bi = 0; bi < map->length; bi++) {
+ 		if (test_bit(bi, new_bits) == test_bit(bi, old_bits))
+@@ -617,8 +637,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ 		v2pr_info("bit_%d: %d matches on class: %s -> 0x%lx\n", bi,
+ 			  ct, map->class_names[bi], *new_bits);
+ 	}
+-	v2pr_info("applied bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits, *old_bits,
+-		  query_modname ?: "");
++	if (*new_bits != *old_bits)
++		v2pr_info("applied bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
++			  *old_bits, query_modname ?: "'*'");
+ 
+ 	return matches;
+ }
+@@ -720,7 +741,10 @@ static int param_set_dyndbg_module_classes(const char *instr,
+ 		/* numeric input, accept and fall-thru */
+ 		rc = kstrtoul(instr, 0, &inrep);
+ 		if (rc) {
+-			pr_err("expecting numeric input: %s > %s\n", instr, KP_NAME(kp));
++			char *nl = strchr(instr, '\n');
++			if (nl)
++				*nl = '\0';
++			pr_err("expecting numeric input, not: %s > %s\n", instr, KP_NAME(kp));
+ 			return -EINVAL;
+ 		}
+ 		break;
+@@ -1113,12 +1137,17 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+ static const char *ddebug_class_name(struct ddebug_table *dt, struct _ddebug *dp)
+ {
+ 	struct ddebug_class_map *map = dt->classes;
++	struct ddebug_class_user *cli = dt->class_refs;
+ 	int i;
+ 
+ 	for (i = 0; i < dt->num_classes; i++, map++)
+ 		if (class_in_range(dp->class_id, map))
+ 			return map->class_names[dp->class_id - map->base];
+ 
++	for (i = 0; i < dt->num_class_refs; i++, cli++)
++		if (class_in_range(dp->class_id, cli->map))
++			return cli->map->class_names[dp->class_id - cli->map->base];
++
+ 	return NULL;
+ }
+ 
+@@ -1199,31 +1228,120 @@ static const struct proc_ops proc_fops = {
+ 	.proc_write = ddebug_proc_write
+ };
+ 
++
++/*
++ * Find this module's classmaps in a sub/whole-range of the builtin/
++ * modular classmap vector/section.  Save the start and length of the
++ * subrange at its edges.
++ */
+ static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug_info *di)
+ {
+ 	struct ddebug_class_map *cm;
+ 	int i, nc = 0;
+ 
+-	/*
+-	 * Find this module's classmaps in a subrange/wholerange of
+-	 * the builtin/modular classmap vector/section.  Save the start
+-	 * and length of the subrange at its edges.
+-	 */
+-	for (cm = di->classes, i = 0; i < di->num_classes; i++, cm++) {
++	for (i = 0, cm = di->classes; i < di->num_classes; i++, cm++) {
+ 
+ 		if (!strcmp(cm->mod_name, dt->mod_name)) {
+ 			if (!nc) {
+-				v2pr_info("start subrange, class[%d]: module:%s base:%d len:%d ty:%d\n",
+-					  i, cm->mod_name, cm->base, cm->length, cm->map_type);
+ 				dt->classes = cm;
++				v2pr_info("classes[0..]: module:%s base:%d len:%d ty:%d\n",
++					  cm->mod_name, cm->base, cm->length, cm->map_type);
+ 			}
+ 			nc++;
+ 		}
+ 	}
+-	if (nc) {
+-		dt->num_classes = nc;
++	dt->num_classes = nc;
++	if (nc)
+ 		vpr_info("module:%s attached %d classes\n", dt->mod_name, nc);
++}
++
++#define vpr_cm_info(cm, _msg, ...)					\
++	v2pr_info(_msg "module:%s base:%d len:%d type:%d\n", ##__VA_ARGS__, \
++		  cm->mod_name, cm->base, cm->length, cm->map_type)
++
++static void ddebug_match_apply_kparam(const struct kernel_param *kp,
++				      const struct ddebug_class_map *cm,
++				      const char *cli_name)
++{
++	struct ddebug_class_param *dcp;
++	unsigned long new_bits, old_bits = 0;
++	int totct = 0;
++
++	if (kp->ops != &param_ops_dyndbg_classes)
++		return;
++
++	dcp = (struct ddebug_class_param *)kp->arg;
++
++	if (cm == dcp->map) {
++		v2pr_info("found kp:%s =0x%lx", kp->name, *dcp->bits);
++		vpr_cm_info(cm, "mapped to:");
++		/*
++		 * using apply-bitmap is too low.
++		 * param_set_dyndbg_classes uses map_type to sort
++		 * levels-to-bits.
++		 * param_set_dyndbg_classes is too high, it takes
++		 * string inputs.
++		 * de-union-ing levels/bits might solve it (partly),
++		 * at least simplifying the translation, and possibly
++		 * the apply-bitmap fn/iface
++		 */
++		new_bits = *dcp->bits;
++		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits, cli_name);
++	}
++}
++
++static void ddebug_apply_parents_params(const struct ddebug_class_map *cm,
++					const char *user_modname)
++{
++	const struct kernel_param *kp;
++#if IS_ENABLED(CONFIG_MODULES)
++	int i;
++
++	if (cm->mod) {
++		vpr_cm_info(cm, "loaded class:");
++		for (i = 0, kp = cm->mod->kp; i < cm->mod->num_kp; i++, kp++)
++			ddebug_match_apply_kparam(kp, cm, user_modname);
++	}
++#endif
++	if (!cm->mod) {
++		vpr_cm_info(cm, "builtin class:");
++		for (kp = __start___param; kp < __stop___param; kp++)
++			ddebug_match_apply_kparam(kp, cm, user_modname);
++	}
++}
++
++/*
++ * propagates class-params thru their classmaps to class-users.  this
++ * means a query against the dt/module, which means it must be on the
++ * list to be seen by ddebug_change.
++ */
++static void ddebug_attach_client_module_classes(struct ddebug_table *dt, const struct _ddebug_info *di)
++{
++	struct ddebug_class_user *cli;
++	const struct ddebug_class_map *cm;
++	int i, nc = 0;
++
++	for (i = 0, cli = di->class_refs; i < di->num_class_refs; i++, cli++) {
++
++		BUG_ON(!cli || !cli->map || !cli->user_mod_name);
++
++		if (!strcmp(cli->user_mod_name, dt->mod_name)) {
++
++			v2pr_info("class_ref[%d] %s -> %s\n", i,
++				  cli->user_mod_name, cli->map->mod_name);
++
++			if (!nc++)
++				dt->class_refs = cli;
++		}
++	}
++	dt->num_class_refs = nc;
++
++	for (i = 0, cli = dt->class_refs; i < dt->num_class_refs; i++, cli++) {
++		cm = cli->map;
++		ddebug_apply_parents_params(cm, cli->user_mod_name);
+ 	}
++
++	vpr_dt_info(dt, "attach-client-module: ");
+ }
+ 
+ /*
+@@ -1235,7 +1353,8 @@ static int __ddebug_add_module(struct _ddebug_info *di, unsigned int base,
+ {
+ 	struct ddebug_table *dt;
+ 
+-	v3pr_info("add-module: %s.%d sites\n", modname, di->num_descs);
++	v3pr_info("add-module: %s %d sites %d.%d\n", modname, di->num_descs,
++		  di->num_classes, di->num_class_refs);
+ 	if (!di->num_descs) {
+ 		v3pr_info(" skip %s\n", modname);
+ 		return 0;
+@@ -1258,13 +1377,16 @@ static int __ddebug_add_module(struct _ddebug_info *di, unsigned int base,
+ 
+ 	INIT_LIST_HEAD(&dt->link);
+ 
+-	if (di->classes && di->num_classes)
++	if (di->num_classes)
+ 		ddebug_attach_module_classes(dt, di);
+ 
+ 	mutex_lock(&ddebug_lock);
+ 	list_add_tail(&dt->link, &ddebug_tables);
+ 	mutex_unlock(&ddebug_lock);
+ 
++	if (di->num_class_refs)
++		ddebug_attach_client_module_classes(dt, di);
++
+ 	vpr_info("%3u debug prints in module %s\n", di->num_descs, modname);
+ 	return 0;
+ }
+@@ -1390,8 +1512,10 @@ static int __init dynamic_debug_init(void)
+ 	struct _ddebug_info di = {
+ 		.descs = __start___dyndbg,
+ 		.classes = __start___dyndbg_classes,
++		.class_refs = __start___dyndbg_class_refs,
+ 		.num_descs = __stop___dyndbg - __start___dyndbg,
+ 		.num_classes = __stop___dyndbg_classes - __start___dyndbg_classes,
++		.num_class_refs = __stop___dyndbg_class_refs - __start___dyndbg_class_refs,
+ 	};
+ 
+ 	if (&__start___dyndbg == &__stop___dyndbg) {
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.39.0
 
