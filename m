@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243DE66902B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740BB669036
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240949AbjAMILL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S229989AbjAMIMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235311AbjAMIKW (ORCPT
+        with ESMTP id S234092AbjAMIMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:10:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F6A6369;
-        Fri, 13 Jan 2023 00:09:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DD18B81FF6;
-        Fri, 13 Jan 2023 08:09:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171ACC433D2;
-        Fri, 13 Jan 2023 08:09:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673597366;
-        bh=zSasbgdHynKwfOjksylVPOoExRkYiM4TC878mGmgv54=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZLE/kooOpcCY4IviTNZiNIs7j0uraeKNofPA7RBDKDdYNmyEhL1+HFJD4suPSinNB
-         Gf6z+TUM9sv4RYwZaVdVkN9wQjY3ijOPi1EkL0qhnaxC/KD5JU7Vl1rBhOKOtyc1ar
-         2nxSLE+B1V5sW36DZRU8EZx0OfuUHnI3WAkeUBiHLx1PQvQKYU5L/LnrxQJnUm27Ul
-         KDUhocgTlb7MXFjLZe3xt53e9MNZ7MnB1iejurVLHaWpwrSoR2EtGCjP1sgS/8Dbr2
-         gdQzOwNYss14SHo1E418WwurqfzPdWeddGFzUfhIKzPB9puCdTfwmlq7sxh/3c4UJW
-         JcTuDj4Ot78kQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pGF83-0006Nr-KU; Fri, 13 Jan 2023 09:09:35 +0100
-Date:   Fri, 13 Jan 2023 09:09:35 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH 5.15.y 4/4] phy: qcom-qmp-combo: fix runtime suspend
-Message-ID: <Y8ERv0712EfPJWtF@hovoldconsulting.com>
-References: <20230113005405.3992011-1-swboyd@chromium.org>
- <20230113005405.3992011-5-swboyd@chromium.org>
+        Fri, 13 Jan 2023 03:12:10 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48383BE82;
+        Fri, 13 Jan 2023 00:10:07 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pGF8L-000nxd-RT; Fri, 13 Jan 2023 09:09:53 +0100
+Received: from dynamic-078-054-173-160.78.54.pool.telefonica.de ([78.54.173.160] helo=[192.168.1.11])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pGF8L-002cz3-K9; Fri, 13 Jan 2023 09:09:53 +0100
+Message-ID: <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+Date:   Fri, 13 Jan 2023 09:09:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113005405.3992011-5-swboyd@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: remove arch/sh
+To:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+Content-Language: en-US
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <20230113062339.1909087-1-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 78.54.173.160
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 04:54:05PM -0800, Stephen Boyd wrote:
-> From: Johan Hovold <johan+linaro@kernel.org>
-> 
-> commit c7b98de745cffdceefc077ad5cf9cda032ef8959 upstream.
-> 
-> Drop the confused runtime-suspend type check which effectively broke
-> runtime PM if the DP child node happens to be parsed before the USB
-> child node during probe (e.g. due to order of child nodes in the
-> devicetree).
-> 
-> Instead use the new driver data USB PHY pointer to access the USB
-> configuration and resources.
-> 
-> Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> [swboyd@chromium.org: Backport to pre-split driver]
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> index 9fda6d283f20..d928afe2ebba 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> @@ -4985,15 +4985,11 @@ static void qcom_qmp_phy_disable_autonomous_mode(struct qmp_phy *qphy)
->  static int __maybe_unused qcom_qmp_phy_runtime_suspend(struct device *dev)
->  {
->  	struct qcom_qmp *qmp = dev_get_drvdata(dev);
-> -	struct qmp_phy *qphy = qmp->phys[0];
-> +	struct qmp_phy *qphy = qmp->usb_phy;
->  	const struct qmp_phy_cfg *cfg = qphy->cfg;
->  
->  	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
+Hello!
 
-So this doesn't work currently either as the usb_phy pointer is not set
-for PCIe and UFS PHYs.
+On 1/13/23 07:23, Christoph Hellwig wrote:
+> arch/sh has been a long drag because it supports a lot of SOCs, and most
+> of them haven't even been converted to device tree infrastructure.  These
+> SOCs are generally obsolete as well, and all of the support has been barely
+> maintained for almost 10 years, and not at all for more than 1 year.
+> 
+> Drop arch/sh and everything that depends on it.
 
->  
-> -	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
-> -	if (cfg->type != PHY_TYPE_USB3)
-> -		return 0;
-> -
->  	if (!qmp->init_count) {
->  		dev_vdbg(dev, "PHY not initialized, bailing out\n");
->  		return 0;
+I'm still maintaining and using this port in Debian.
 
-Johan
+It's a bit disappointing that people keep hammering on it. It works fine for me.
+
+Adrian
+
+-- 
+  .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+
