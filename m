@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C757F66A172
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FBC66A16D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjAMSDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        id S229933AbjAMSC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjAMSBi (ORCPT
+        with ESMTP id S230085AbjAMSBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 13:01:38 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 799291175
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:56:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F9FE10FD
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:56:13 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58D1AFEC;
-        Fri, 13 Jan 2023 09:56:52 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ECF21176A;
+        Fri, 13 Jan 2023 09:56:54 -0800 (PST)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C04423F67D;
-        Fri, 13 Jan 2023 09:56:07 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 618CD3F67D;
+        Fri, 13 Jan 2023 09:56:10 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
@@ -37,9 +37,9 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
         Jamie Iles <quic_jiles@quicinc.com>,
         Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
-Subject: [PATCH v2 10/18] x86/resctrl: Allow arch to allocate memory needed in resctrl_arch_rmid_read()
-Date:   Fri, 13 Jan 2023 17:54:51 +0000
-Message-Id: <20230113175459.14825-11-james.morse@arm.com>
+Subject: [PATCH v2 11/18] x86/resctrl: Make resctrl_mounted checks explicit
+Date:   Fri, 13 Jan 2023 17:54:52 +0000
+Message-Id: <20230113175459.14825-12-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230113175459.14825-1-james.morse@arm.com>
 References: <20230113175459.14825-1-james.morse@arm.com>
@@ -53,229 +53,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Depending on the number of monitors available, Arm's MPAM may need to
-allocate a monitor prior to reading the counter value. Allocating a
-contended resource may involve sleeping.
+The rdt_enable_key is switched when resctrl is mounted, and used to
+prevent a second mount of the filesystem. It also enables the
+architecture's context switch code.
 
-All callers of resctrl_arch_rmid_read() read the counter on more than
-one domain. If the monitor is allocated globally, there is no need to
-allocate and free it for each call to resctrl_arch_rmid_read().
+This requires another architecture to have the same set of static-keys,
+as resctrl depends on them too.
 
-Add arch hooks for this allocation, which need calling before
-resctrl_arch_rmid_read(). The allocated monitor is passed to
-resctrl_arch_rmid_read(), then freed again afterwards. The helper
-can be called on any CPU, and can sleep.
+Make the resctrl_mounted checks explicit: resctrl can keep track of
+whether it has been mounted once. This doesn't need to be combined with
+whether the arch code is context switching the CLOSID.
+Tests against the rdt_mon_enable_key become a test that resctrl is
+mounted and that monitoring is enabled.
+
+This will allow the static-key changing to be moved behind resctrl_arch_
+calls.
 
 Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- arch/x86/include/asm/resctrl.h         | 11 +++++++
  arch/x86/kernel/cpu/resctrl/internal.h |  1 +
- arch/x86/kernel/cpu/resctrl/monitor.c  | 40 +++++++++++++++++++++++---
- include/linux/resctrl.h                |  4 +--
- 4 files changed, 50 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/resctrl/monitor.c  |  5 +++--
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 17 +++++++++++------
+ 3 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
-index d589a82995ac..194a1570af7b 100644
---- a/arch/x86/include/asm/resctrl.h
-+++ b/arch/x86/include/asm/resctrl.h
-@@ -136,6 +136,17 @@ static inline u32 resctrl_arch_rmid_idx_encode(u32 closid, u32 rmid)
- 	return rmid;
- }
- 
-+/* x86 can always read an rmid, nothing needs allocating */
-+struct rdt_resource;
-+static inline int resctrl_arch_mon_ctx_alloc(struct rdt_resource *r, int evtid)
-+{
-+	might_sleep();
-+	return 0;
-+};
-+
-+static inline void resctrl_arch_mon_ctx_free(struct rdt_resource *r, int evtid,
-+					     int ctx) { };
-+
- void resctrl_cpu_detect(struct cpuinfo_x86 *c);
- 
- #else
 diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 1f90a10b75a1..e85e454bec72 100644
+index e85e454bec72..65d85e1ef75f 100644
 --- a/arch/x86/kernel/cpu/resctrl/internal.h
 +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -88,6 +88,7 @@ struct rmid_read {
- 	bool			first;
- 	int			err;
- 	u64			val;
-+	int			arch_mon_ctx;
- };
+@@ -95,6 +95,7 @@ extern bool rdt_alloc_capable;
+ extern bool rdt_mon_capable;
+ extern unsigned int rdt_mon_features;
+ extern struct list_head resctrl_schema_all;
++extern bool resctrl_mounted;
  
- extern bool rdt_alloc_capable;
+ enum rdt_group_type {
+ 	RDTCTRL_GROUP = 0,
 diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index d6ae4b713801..4e248f4a5f59 100644
+index 4e248f4a5f59..4ff258b49e9c 100644
 --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -15,6 +15,7 @@
-  * Software Developer Manual June 2016, volume 3, section 17.17.
-  */
+@@ -795,7 +795,7 @@ void mbm_handle_overflow(struct work_struct *work)
  
-+#include <linux/cpu.h>
- #include <linux/module.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
-@@ -236,7 +237,7 @@ static void __rmid_read(void *arg)
+ 	mutex_lock(&rdtgroup_mutex);
  
- int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- 			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
--			   u64 *val)
-+			   u64 *val, int ignored)
- {
- 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
- 	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
-@@ -285,9 +286,14 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
- 	u32 idx_limit = resctrl_arch_system_num_rmid_idx();
- 	struct rmid_entry *entry;
- 	u32 idx, cur_idx = 1;
-+	int arch_mon_ctx;
- 	bool rmid_dirty;
- 	u64 val = 0;
+-	if (!static_branch_likely(&rdt_mon_enable_key))
++	if (!resctrl_mounted || !static_branch_likely(&rdt_mon_enable_key))
+ 		goto out_unlock;
  
-+	arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, QOS_L3_OCCUP_EVENT_ID);
-+	if (arch_mon_ctx < 0)
-+		return;
+ 	r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+@@ -823,8 +823,9 @@ void mbm_setup_overflow_handler(struct rdt_domain *dom, unsigned long delay_ms)
+ 	unsigned long delay = msecs_to_jiffies(delay_ms);
+ 	int cpu;
+ 
+-	if (!static_branch_likely(&rdt_mon_enable_key))
++	if (!resctrl_mounted || !static_branch_likely(&rdt_mon_enable_key))
+ 		return;
 +
+ 	cpu = cpumask_any(&dom->cpu_mask);
+ 	dom->mbm_work_cpu = cpu;
+ 	schedule_delayed_work_on(cpu, &dom->mbm_over, delay);
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index ced7400decae..370da7077c67 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -42,6 +42,9 @@ LIST_HEAD(rdt_all_groups);
+ /* list of entries for the schemata file */
+ LIST_HEAD(resctrl_schema_all);
+ 
++/* the filesystem can only be mounted once */
++bool resctrl_mounted;
++
+ /* Kernel fs node for "info" directory under root */
+ static struct kernfs_node *kn_info;
+ 
+@@ -794,7 +797,7 @@ int proc_resctrl_show(struct seq_file *s, struct pid_namespace *ns,
+ 	mutex_lock(&rdtgroup_mutex);
+ 
+ 	/* Return empty if resctrl has not been mounted. */
+-	if (!static_branch_unlikely(&rdt_enable_key)) {
++	if (!resctrl_mounted) {
+ 		seq_puts(s, "res:\nmon:\n");
+ 		goto unlock;
+ 	}
+@@ -2196,7 +2199,7 @@ static int rdt_get_tree(struct fs_context *fc)
  	/*
- 	 * Skip RMID 0 and start from RMID 1 and check all the RMIDs that
- 	 * are marked as busy for occupancy < threshold. If the occupancy
-@@ -301,7 +307,8 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
- 
- 		entry = __rmid_entry(idx);
- 		if (resctrl_arch_rmid_read(r, d, entry->closid, entry->rmid,
--					   QOS_L3_OCCUP_EVENT_ID, &val)) {
-+					   QOS_L3_OCCUP_EVENT_ID, &val,
-+					   arch_mon_ctx)) {
- 			rmid_dirty = true;
- 		} else {
- 			rmid_dirty = (val >= resctrl_rmid_realloc_threshold);
-@@ -316,6 +323,8 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
- 		}
- 		cur_idx = idx + 1;
+ 	 * resctrl file system can only be mounted once.
+ 	 */
+-	if (static_branch_unlikely(&rdt_enable_key)) {
++	if (resctrl_mounted) {
+ 		ret = -EBUSY;
+ 		goto out;
  	}
-+
-+	resctrl_arch_mon_ctx_free(r, QOS_L3_OCCUP_EVENT_ID, arch_mon_ctx);
- }
+@@ -2244,8 +2247,10 @@ static int rdt_get_tree(struct fs_context *fc)
+ 	if (rdt_mon_capable)
+ 		static_branch_enable_cpuslocked(&rdt_mon_enable_key);
  
- bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d)
-@@ -407,16 +416,22 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
- {
- 	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
- 	struct rdt_domain *d;
-+	int arch_mon_ctx;
- 	u64 val = 0;
- 	u32 idx;
- 	int err;
+-	if (rdt_alloc_capable || rdt_mon_capable)
++	if (rdt_alloc_capable || rdt_mon_capable) {
+ 		static_branch_enable_cpuslocked(&rdt_enable_key);
++		resctrl_mounted = true;
++	}
  
- 	idx = resctrl_arch_rmid_idx_encode(entry->closid, entry->rmid);
+ 	if (is_mbm_enabled()) {
+ 		r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+@@ -2512,6 +2517,7 @@ static void rdt_kill_sb(struct super_block *sb)
+ 	static_branch_disable_cpuslocked(&rdt_alloc_enable_key);
+ 	static_branch_disable_cpuslocked(&rdt_mon_enable_key);
+ 	static_branch_disable_cpuslocked(&rdt_enable_key);
++	resctrl_mounted = false;
+ 	kernfs_kill_sb(sb);
+ 	mutex_unlock(&rdtgroup_mutex);
+ 	cpus_read_unlock();
+@@ -3336,7 +3342,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d)
+ 	 * If resctrl is mounted, remove all the
+ 	 * per domain monitor data directories.
+ 	 */
+-	if (static_branch_unlikely(&rdt_mon_enable_key))
++	if (resctrl_mounted && static_branch_unlikely(&rdt_mon_enable_key))
+ 		rmdir_mondata_subdir_allrdtgrp(r, d->id);
  
-+	arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, QOS_L3_OCCUP_EVENT_ID);
-+	if (arch_mon_ctx < 0)
-+		return;
-+
- 	entry->busy = 0;
- 	list_for_each_entry(d, &r->domains, list) {
- 		err = resctrl_arch_rmid_read(r, d, entry->closid, entry->rmid,
--					     QOS_L3_OCCUP_EVENT_ID, &val);
-+					     QOS_L3_OCCUP_EVENT_ID, &val,
-+					     arch_mon_ctx);
- 		if (err || val <= resctrl_rmid_realloc_threshold)
- 			continue;
+ 	if (is_mbm_enabled())
+@@ -3413,8 +3419,7 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+ 	if (is_llc_occupancy_enabled())
+ 		INIT_DELAYED_WORK(&d->cqm_limbo, cqm_handle_limbo);
  
-@@ -429,6 +444,7 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
- 		set_bit(idx, d->rmid_busy_llc);
- 		entry->busy++;
- 	}
-+	resctrl_arch_mon_ctx_free(r, QOS_L3_OCCUP_EVENT_ID, arch_mon_ctx);
+-	/* If resctrl is mounted, add per domain monitor data directories. */
+-	if (static_branch_unlikely(&rdt_mon_enable_key))
++	if (resctrl_mounted && static_branch_unlikely(&rdt_mon_enable_key))
+ 		mkdir_mondata_subdir_allrdtgrp(r, d);
  
- 	if (entry->busy)
- 		rmid_limbo_count++;
-@@ -465,7 +481,7 @@ static int __mon_event_count(u32 closid, u32 rmid, struct rmid_read *rr)
- 		resctrl_arch_reset_rmid(rr->r, rr->d, closid, rmid, rr->evtid);
- 
- 	rr->err = resctrl_arch_rmid_read(rr->r, rr->d, closid, rmid, rr->evtid,
--					 &tval);
-+					 &tval, rr->arch_mon_ctx);
- 	if (rr->err)
- 		return rr->err;
- 
-@@ -538,6 +554,9 @@ int mon_event_count(void *info)
- 	int ret;
- 
- 	rdtgrp = rr->rgrp;
-+	rr->arch_mon_ctx = resctrl_arch_mon_ctx_alloc(rr->r, rr->evtid);
-+	if (rr->arch_mon_ctx < 0)
-+		return rr->arch_mon_ctx;
- 
- 	ret = __mon_event_count(rdtgrp->closid, rdtgrp->mon.rmid, rr);
- 
-@@ -564,6 +583,8 @@ int mon_event_count(void *info)
- 	if (ret == 0)
- 		rr->err = 0;
- 
-+	resctrl_arch_mon_ctx_free(rr->r, rr->evtid, rr->arch_mon_ctx);
-+
  	return 0;
- }
- 
-@@ -700,11 +721,21 @@ static void mbm_update(struct rdt_resource *r, struct rdt_domain *d,
- 	if (is_mbm_total_enabled()) {
- 		rr.evtid = QOS_L3_MBM_TOTAL_EVENT_ID;
- 		rr.val = 0;
-+		rr.arch_mon_ctx = resctrl_arch_mon_ctx_alloc(rr.r, rr.evtid);
-+		if (rr.arch_mon_ctx < 0)
-+			return;
-+
- 		__mon_event_count(closid, rmid, &rr);
-+
-+		resctrl_arch_mon_ctx_free(rr.r, rr.evtid, rr.arch_mon_ctx);
- 	}
- 	if (is_mbm_local_enabled()) {
- 		rr.evtid = QOS_L3_MBM_LOCAL_EVENT_ID;
- 		rr.val = 0;
-+		rr.arch_mon_ctx = resctrl_arch_mon_ctx_alloc(rr.r, rr.evtid);
-+		if (rr.arch_mon_ctx < 0)
-+			return;
-+
- 		__mon_event_count(closid, rmid, &rr);
- 
- 		/*
-@@ -714,6 +745,7 @@ static void mbm_update(struct rdt_resource *r, struct rdt_domain *d,
- 		 */
- 		if (is_mba_sc(NULL))
- 			mbm_bw_count(closid, rmid, &rr);
-+		resctrl_arch_mon_ctx_free(rr.r, rr.evtid, rr.arch_mon_ctx);
- 	}
- }
- 
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 57d32c3ce06f..d90d3dca48e9 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -230,6 +230,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
-  * @rmid:		rmid of the counter to read.
-  * @eventid:		eventid to read, e.g. L3 occupancy.
-  * @val:		result of the counter read in bytes.
-+ * @arch_mon_ctx:	An allocated context from resctrl_arch_mon_ctx_alloc().
-  *
-  * Call from process context on a CPU that belongs to domain @d.
-  *
-@@ -238,8 +239,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
-  */
- int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- 			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
--			   u64 *val);
--
-+			   u64 *val, int arch_mon_ctx);
- 
- /**
-  * resctrl_arch_reset_rmid() - Reset any private state associated with rmid
 -- 
 2.30.2
 
