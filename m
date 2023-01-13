@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02F766A26B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF5B66A282
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjAMS5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S230418AbjAMTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjAMS5v (ORCPT
+        with ESMTP id S230406AbjAMTAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:57:51 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65411CE32
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:57:50 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-434eb7c6fa5so238713997b3.14
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s0i2zZBdrCWRI9lmKA/36c64wVimSwf1CiL2+om4mgI=;
-        b=e6pfazQiYivaHP9XqMCP5fL6vnwPvriEHQad3NVSdxFMeQuXIIff+6pWflu0WlYXdC
-         QSJgNpOHrcy2L8irdpn2EEuVQOOZcA7dXwJzAFkLPCKJaDSdw9yU64m5hu3zqlX79ZDt
-         wEJ1B3RaFiU+7nsE57mp1uu/psdWgbR+JAoxPekkl0pishgP5Y2rD7ajxh5VZpC6fc8N
-         XI9lzEk+uKqwbSqSUE/aN9LI4a92Vaw51ACQQjTd1r8/Z94PCWvKZXPn95CupEv1GTyL
-         LqpE41JbjiwNh+sOCn4MCi4IbTXXv9aXkhuzaqxEmbWytJZNEhJJ8HZQlxdbQBCeBN05
-         6cAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s0i2zZBdrCWRI9lmKA/36c64wVimSwf1CiL2+om4mgI=;
-        b=zpPxwlyxjePPIMNMxySG1MBcXQCDoWx93h/bbOk7Cf3njQcZ8p8MqXDZ5ekRCXabgh
-         Jyf5zHmFUbft9DMpuqy9GFB98krPewMmoAm6Oet12Spdz287JEAtG5xlc3u89EoHwRxy
-         AS4bWodHbtVfcDm7KjjyFNhEpj4OlOFuaH1N+pJCpNpBGS6FXOttWsCqm4lScW5z8OLs
-         W/zJH8tzsfQuUImAR8nUMeaxqxz/e3ABODE6F38Vch3tKqQSLL7TvWAJa/a8oWjtyJ+p
-         C6p2bJhEOVFl0qovaP6aoCmsV8C/HGP8E1oo0KE3OXic+VQEvoB1/Y1xjaJwAEQCBypz
-         Zq7A==
-X-Gm-Message-State: AFqh2kqOk07sUpzJeU/XNADzebjYOWWCIJvIfj0FMiVLaSP8CcSJHzOD
-        caCMwI8oSiQGmKr0f8y3kEjxWKNZc09W
-X-Google-Smtp-Source: AMrXdXuIfeiMj4FfTSA3IXDlo2QLb1EWzOITknF00Kz9b9grv9RndDgACvilj1UWEWIPTzvvj7mN5CvRe4Ft
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fa4e:1fbc:95a:3ea6])
- (user=irogers job=sendgmr) by 2002:a25:dd84:0:b0:756:35b9:e2de with SMTP id
- u126-20020a25dd84000000b0075635b9e2demr9383227ybg.117.1673636269620; Fri, 13
- Jan 2023 10:57:49 -0800 (PST)
-Date:   Fri, 13 Jan 2023 10:57:32 -0800
-Message-Id: <20230113185732.134861-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH] perf buildid: Avoid copy of uninitialized memory
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 14:00:18 -0500
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7192660CE5;
+        Fri, 13 Jan 2023 11:00:07 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 4FBFBE0F1B;
+        Fri, 13 Jan 2023 22:00:06 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:from:from:in-reply-to:message-id
+        :mime-version:references:reply-to:subject:subject:to:to; s=post;
+         bh=un4iekTAGShKOgiEqknkF/bWRTvm2tqOhETsV7qQ9zQ=; b=MY9qAJB7oyPY
+        y4dm2goANNmsf1VV4dDHzjj3CFPROgnbRPs30XVYFQFFe/rj7zGRqngcle8Eqn/S
+        k+ED6LjYJII9Poo+aTAaWnZqccv8/8cLlgH7137W1z+ZrF+/atSBzhr/fYmQTEbE
+        AsToHw/NbzIg8Ndg2otBkha6DWtkyXk=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 35029E0F19;
+        Fri, 13 Jan 2023 22:00:06 +0300 (MSK)
+Received: from localhost (10.8.30.26) by mail (192.168.51.25) with Microsoft
+ SMTP Server (TLS) id 15.0.1395.4; Fri, 13 Jan 2023 22:00:05 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] spi: dw: Fix wrong FIFO level setting for long xfers
+Date:   Fri, 13 Jan 2023 21:59:42 +0300
+Message-ID: <20230113185942.2516-1-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230113165724.27199-1-Sergey.Semin@baikalelectronics.ru>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.8.30.26]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-build_id__init only copies the buildid data up to size leaving the
-rest of the data array uninitialized. Copying the full array during
-synthesis means the written event contains uninitialized memory.  This
-was detected by the Clang/LLVM memory sanitizer.
+Due to using the u16 type in the min_t() macros the SPI transfer length
+will be cast to word before participating in the conditional statement
+implied by the macro. Thus if the transfer length is greater than 64KB the
+Tx/Rx FIFO threshold level value will be determined by the leftover of the
+truncated after the type-case length. In the worst case it will cause the
+dramatical performance drop due to the "Tx FIFO Empty" or "Rx FIFO Full"
+interrupts triggered on each xfer word sent/received to/from the bus.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+The problem can be easily fixed by specifying the unsigned int type in the
+min_t() macros thus preventing the possible data loss.
+
+Fixes: ea11370fffdf ("spi: dw: get TX level without an additional variable")
+Reported-by: Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
 ---
- tools/perf/util/synthetic-events.c | 2 +-
+
+Changelog v2:
+- Use min_t(unisgned int, ...) macros instead of just min(). (@Andy)
+---
+ drivers/spi/spi-dw-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 3ab6a92b1a6d..348d05e4ec03 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -2219,7 +2219,7 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index 99edddf9958b..c3bfb6c84cab 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -366,7 +366,7 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+ 	 * will be adjusted at the final stage of the IRQ-based SPI transfer
+ 	 * execution so not to lose the leftover of the incoming data.
+ 	 */
+-	level = min_t(u16, dws->fifo_len / 2, dws->tx_len);
++	level = min_t(unsigned int, dws->fifo_len / 2, dws->tx_len);
+ 	dw_writel(dws, DW_SPI_TXFTLR, level);
+ 	dw_writel(dws, DW_SPI_RXFTLR, level - 1);
  
- 	len = pos->long_name_len + 1;
- 	len = PERF_ALIGN(len, NAME_ALIGN);
--	memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
-+	memcpy(&ev.build_id.build_id, pos->bid.data, pos->bid.size);
- 	ev.build_id.size = pos->bid.size;
- 	ev.build_id.header.type = PERF_RECORD_HEADER_BUILD_ID;
- 	ev.build_id.header.misc = misc | PERF_RECORD_MISC_BUILD_ID_SIZE;
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.39.0
+
 
