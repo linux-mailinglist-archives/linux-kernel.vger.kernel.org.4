@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180B866A52E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D9366A530
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjAMVfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
+        id S229673AbjAMVh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjAMVfr (ORCPT
+        with ESMTP id S229759AbjAMVhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:35:47 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7617F033
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:35:45 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id q10so2911597wrs.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:35:45 -0800 (PST)
+        Fri, 13 Jan 2023 16:37:53 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5CAE7D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:37:50 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id j34-20020a05600c1c2200b003da1b054057so3920669wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:37:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.huji.ac.il; s=mailhuji;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AUN/ktfr557NsAgFfe15xaS8LcaziSyCzLEF8bg3s5M=;
-        b=BIRAK53OfezEtN8URwkxVmK5kppDX4q8H2bA72tfN4L+0MiD/i6fPkbEX33sWodGUh
-         dAz6/hc5downSGqBmpfb/UfyZc6qVW2rqslcGZ0rZnsvcOtDJwYMUmqXIBB4iKiJbewI
-         mTmFX3o2MDXeQv6DuDGQJ/6okhKQvCwCaFQd4=
+        bh=3TF4yl0qyemn80KbaOcWcMV7jh9ZuWBx78qicss9uQc=;
+        b=p1ndSiVOwC15bI8PmJFG+sQFPFJP0t7Nb2kQN1/L1cRjs7817uXGxSoGRkPnYDtV6C
+         S0DyVESqxTkJhavAAUaFaPVxERTTTYzOT/qD3O+CtZ+gHMZNTqKPpjvSOZm7IgSJAlzY
+         iKLh98QZQTcQnkUG8so+tEhkdC0HTSTYZ3OvA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AUN/ktfr557NsAgFfe15xaS8LcaziSyCzLEF8bg3s5M=;
-        b=PwjuREpOJFneaw89JqVfzhDi5io/XmlPFGSQ98Fk/RADg2iXG6jdcgu2id/pj4AINj
-         wXpJAjiMBkI5tulsJUAWnLNUqpdYc8czNXD0nHuK6RlSGu47zy3v0POQGKTU+kdF/dU8
-         8JmSQSJXlS+67ZtnCR35qDHtn2zX7Q7PbdTCsBSJWnjMl5SdTGlpkm58XFoQaA8w9Umz
-         59wnb/d+mhspVDkjpv2eqKnHwl9iWunBm9iazFkssiP3wQJKk+ey9dFx0sWgbqRpI+Ke
-         P1LM/+liWygGLHA2qcEAqE0lhqTvBmYZ++BMFa+RHrPYrNw5aKnGb1BQgbuPZMU1wiyU
-         O2dQ==
-X-Gm-Message-State: AFqh2krXoiXVb4DMc9rdzG+9DS8Ji+tqnC6YPGys9AHdmiDZB5Jr5SsP
-        46w7R1dAG3iLJdUndLls5rJaxYaWlAXcvCk3kcm7Va3h1KTiVeZ+fRUVHv7i5oRK049rQ+2De/T
-        UbvPOZG/DkcDR2Lyj8NmDiLA7cypBNL2rWhwgWeDW5Je4V8ynD8dB6D+cWCa+hzPgFgso7UkPrC
-        T5w65a9Ep5HRu6jv81Jd5ZJdY=
-X-Google-Smtp-Source: AMrXdXvE/8rU7gIEorncZU3DBDT4X3Eg5QqP/DvVq2f1hnYANi/szg8il3w3o9R1s/fOXCWai3RgUA==
-X-Received: by 2002:a05:6000:1707:b0:2ae:d9e2:7c80 with SMTP id n7-20020a056000170700b002aed9e27c80mr28262611wrc.8.1673645744176;
-        Fri, 13 Jan 2023 13:35:44 -0800 (PST)
+        bh=3TF4yl0qyemn80KbaOcWcMV7jh9ZuWBx78qicss9uQc=;
+        b=Ij716rwiGSPjXvVASi6Tj1OvjfLtYnl2AfUg4kSMrRRoDs56yMie2rZe/2UziwtiYu
+         nEJE3GM1ocTAVhXIBjAsNxsYuGiYiJ22XP82PO9wX7Mb2tGYnem1cXEAUOJ65R227glH
+         TMoit8iM3wSgu9ViR3LzITUKMfXNDV7sXtrLpyT/dgypCW3V7qvICVIU9Wbbh2G9v9Jp
+         2Tbr1O6bMSBdKCMTj/Qi/1A7aOS/8VNHIjl07Xewy8S72L54KeXn0dMbbOELDtuXBHgA
+         0b4mQPHvhH14EB3YVRpmTxLj+5apdkpoJRwTbquP6fmM007hKo7lmRtXZzIyMtRuudJ6
+         hDIw==
+X-Gm-Message-State: AFqh2kpyfGa+EWll0p50FN4L0/tjAUsXKvI4hGs+snmBTuMpol0lgR6Q
+        LwmwvFbKKt4rAR8SuR8kefZKXqiam+DQbeEeZ9Ktm/vuRPsVou7RR6vAfGxHbNo6KTjsoAtU496
+        AWQjm1cL3nP5fKyKuICZ9ExPjB0jT+v6P/uxuwlMOqjNVxxKbEqcDo893S23jPTcogoVIWaRBjm
+        IEOjY4umfPUcZtG0UMXIWa2Sk=
+X-Google-Smtp-Source: AMrXdXtXqloDtFhx4OVf2TNQBeviRbt9VacFPJc7UOTi8ZcQ2RpkAcNb16kTYI3wvQIaO+jNjFrG9Q==
+X-Received: by 2002:a05:600c:3b14:b0:3cf:d18e:528b with SMTP id m20-20020a05600c3b1400b003cfd18e528bmr886119wms.39.1673645868866;
+        Fri, 13 Jan 2023 13:37:48 -0800 (PST)
 Received: from MacBook-Pro-6.lan ([2a0d:6fc2:218c:1a00:2dd5:e78e:71c0:661b])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d4010000000b002bbed1388a5sm14508089wrp.15.2023.01.13.13.35.42
+        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003da2932bde0sm319944wmq.23.2023.01.13.13.37.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 13:35:43 -0800 (PST)
+        Fri, 13 Jan 2023 13:37:48 -0800 (PST)
 From:   david.keisarschm@mail.huji.ac.il
 To:     linux-kernel@vger.kernel.org, Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
@@ -61,9 +61,9 @@ To:     linux-kernel@vger.kernel.org, Christoph Lameter <cl@linux.com>,
 Cc:     Jason@zx2c4.com, linux-mm@kvack.org,
         David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>,
         aksecurity@gmail.com, ilay.bahat1@gmail.com
-Subject: [PATCH v4 1/3] slab_allocator: mm/slab.c: Replace invocation of weak PRNG
-Date:   Fri, 13 Jan 2023 23:35:40 +0200
-Message-Id: <c64c1b08c60dee2a2d7f18d42acad71c2b271711.1673470326.git.david.keisarschm@mail.huji.ac.il>
+Subject: [PATCH v4 2/3] slab_allocator: mm/slab_common.c: Replace invocation of weak PRNG
+Date:   Fri, 13 Jan 2023 23:37:45 +0200
+Message-Id: <fa85216179a1e3ce104a1b3526a01626f0af0024.1673470326.git.david.keisarschm@mail.huji.ac.il>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1673470326.git.david.keisarschm@mail.huji.ac.il>
 References: <cover.1673470326.git.david.keisarschm@mail.huji.ac.il>
@@ -80,18 +80,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>
 
-The Slab allocator randomization uses the prandom_u32 PRNG.
-That was added to prevent attackers to obtain information on the heap state,
-by randomizing the freelists state.
+The Slab allocator randomization inside slab_common.c uses the prandom_u32 PRNG.
+That was added to prevent attackers to obtain information on the heap state.
 
 However, this PRNG turned out to be weak, as noted in commit c51f8f88d705
 To fix it, we have changed the invocation of prandom_u32_state to get_random_u32
-to ensure the PRNG is strong. Since a modulo operation is applied right after that,
-we used get_random_u32_below, to achieve uniformity.
+to ensure the PRNG is strong.
 
-In addition, we changed the freelist_init_state union to struct,
-since the rnd_state inside which is used to store the state of prandom_u32,
-is not needed anymore, since get_random_u32 maintains its own state.
+Since a modulo operation is applied right after that,
+in the Fisher-Yates shuffle, we used get_random_u32_below, to achieve uniformity.
 
 Signed-off-by: David Keisar Schmidt <david.keisarschm@mail.huji.ac.il>
 ---
@@ -100,88 +97,55 @@ Changes since v3:
 
 Changes since v2:
 * replaced instances of get_random_u32 with get_random_u32_below
-    in mm/slab.c.
+    in mm/slab_common.c.
 
 
- mm/slab.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ mm/slab_common.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/mm/slab.c b/mm/slab.c
-index 59c8e28f7..c259e0b09 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -2360,20 +2360,17 @@ static void cache_init_objs_debug(struct kmem_cache *cachep, struct slab *slab)
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 0042fb273..e254b2f55 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -1130,7 +1130,7 @@ EXPORT_SYMBOL(kmalloc_large_node);
  
  #ifdef CONFIG_SLAB_FREELIST_RANDOM
- /* Hold information during a freelist initialization */
--union freelist_init_state {
--	struct {
--		unsigned int pos;
--		unsigned int *list;
--		unsigned int count;
--	};
--	struct rnd_state rnd_state;
-+struct freelist_init_state {
-+	unsigned int pos;
-+	unsigned int *list;
-+	unsigned int count;
- };
- 
- /*
-  * Initialize the state based on the randomization method available.
-  * return true if the pre-computed list is available, false otherwise.
-  */
--static bool freelist_state_initialize(union freelist_init_state *state,
-+static bool freelist_state_initialize(struct freelist_init_state *state,
- 				struct kmem_cache *cachep,
- 				unsigned int count)
+ /* Randomize a generic freelist */
+-static void freelist_randomize(struct rnd_state *state, unsigned int *list,
++static void freelist_randomize(unsigned int *list,
+ 			       unsigned int count)
  {
-@@ -2381,23 +2378,22 @@ static bool freelist_state_initialize(union freelist_init_state *state,
  	unsigned int rand;
+@@ -1141,8 +1141,7 @@ static void freelist_randomize(struct rnd_state *state, unsigned int *list,
  
- 	/* Use best entropy available to define a random shift */
--	rand = get_random_u32();
-+	rand = get_random_u32_below(count);
- 
- 	/* Use a random state if the pre-computed list is not available */
- 	if (!cachep->random_seq) {
--		prandom_seed_state(&state->rnd_state, rand);
- 		ret = false;
- 	} else {
- 		state->list = cachep->random_seq;
- 		state->count = count;
--		state->pos = rand % count;
-+		state->pos = rand;
- 		ret = true;
+ 	/* Fisher-Yates shuffle */
+ 	for (i = count - 1; i > 0; i--) {
+-		rand = prandom_u32_state(state);
+-		rand %= (i + 1);
++		rand = get_random_u32_below(i+1);
+ 		swap(list[i], list[rand]);
  	}
- 	return ret;
+ }
+@@ -1151,7 +1150,6 @@ static void freelist_randomize(struct rnd_state *state, unsigned int *list,
+ int cache_random_seq_create(struct kmem_cache *cachep, unsigned int count,
+ 				    gfp_t gfp)
+ {
+-	struct rnd_state state;
+ 
+ 	if (count < 2 || cachep->random_seq)
+ 		return 0;
+@@ -1160,10 +1158,7 @@ int cache_random_seq_create(struct kmem_cache *cachep, unsigned int count,
+ 	if (!cachep->random_seq)
+ 		return -ENOMEM;
+ 
+-	/* Get best entropy at this stage of boot */
+-	prandom_seed_state(&state, get_random_long());
+-
+-	freelist_randomize(&state, cachep->random_seq, count);
++	freelist_randomize(cachep->random_seq, count);
+ 	return 0;
  }
  
- /* Get the next entry on the list and randomize it using a random shift */
--static freelist_idx_t next_random_slot(union freelist_init_state *state)
-+static freelist_idx_t next_random_slot(struct freelist_init_state *state)
- {
- 	if (state->pos >= state->count)
- 		state->pos = 0;
-@@ -2418,7 +2414,7 @@ static void swap_free_obj(struct slab *slab, unsigned int a, unsigned int b)
- static bool shuffle_freelist(struct kmem_cache *cachep, struct slab *slab)
- {
- 	unsigned int objfreelist = 0, i, rand, count = cachep->num;
--	union freelist_init_state state;
-+	struct freelist_init_state state;
- 	bool precomputed;
- 
- 	if (count < 2)
-@@ -2447,8 +2443,7 @@ static bool shuffle_freelist(struct kmem_cache *cachep, struct slab *slab)
- 
- 		/* Fisher-Yates shuffle */
- 		for (i = count - 1; i > 0; i--) {
--			rand = prandom_u32_state(&state.rnd_state);
--			rand %= (i + 1);
-+			rand = get_random_u32_below(i+1);
- 			swap_free_obj(slab, i, rand);
- 		}
- 	} else {
 -- 
 2.38.0
 
