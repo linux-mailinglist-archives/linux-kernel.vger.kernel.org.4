@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C65669F22
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FAC669F28
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjAMRMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S229618AbjAMRMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjAMRMR (ORCPT
+        with ESMTP id S229726AbjAMRMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:12:17 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4959A88A3C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:13 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id hw16so41928190ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qXnH9+h8kjSG0D+e/tnKkzeho/i7l+Lx3wm/Pwk9hac=;
-        b=ROG+cpPA7tl0aCgfJI9jL9DcMqmLVplApi4g3Ilww+0nQVJDXEJz5+pkSOj+WKlc9Y
-         9It0rNCOMWqs31gTquAT75MIhflWofQmAXN4YdlkMYxgUCIuNIclhhP3VR88v95TkFMN
-         s04wUBBiDuUs1Jm2zak+zs9h9W1gvDzqDH6K8AWRD5z3kMv9nnfG9oOF5jnD0AvkAlxY
-         PatMIuorIACUKx9viOAX4ZERgZEWGNparDSsu7QU1A3cd7NCa5CdyGqe2xe9S/8QEs2W
-         bWIGSV3PSwTogUk10787nrTXyWN1aSFtwzHq125GxfuEEImWgrPCd+hleRHEwJ1RpftP
-         eBjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qXnH9+h8kjSG0D+e/tnKkzeho/i7l+Lx3wm/Pwk9hac=;
-        b=dOjjDQfrf0AkXGPHLafQcZDEIj3sKnaHAJizDn4NYTJYC3/CS/7blOwCY27ay6iMIu
-         3VUEi0sZCZy7Mjyl1rwy3Bqme3ELX0oD1OLtK6+cvpsFl1pD+HqbbCHyWOzCzkr4N4Uv
-         6oiNcswckh+fI7PWFkIJmq+HJAwLhxh/29O1LXmMoS4msKTioXRm5mI/6Id/tx4I7XVh
-         uHDsi2uLc1cb20qkgTy1AEZmsbfK5TH3T3po4p3rC1Wgu3wAU8Sp2Kn4BPqZJxC2hQ23
-         3kMBAXW11ojH+iDZBxw0RTZBuAgRD4/9okfJlBUy4PFzlvordZwMOikUQE0uEVkDJFzX
-         ZbOA==
-X-Gm-Message-State: AFqh2ko1HyBkCdqvLD6HNyz7KDJQwykjnu1aKiWcTxC4XOxGCU428NpA
-        PIGqR27E5gsl0MdJXIVrcNqtOQ==
-X-Google-Smtp-Source: AMrXdXv6SPsf041fEDD4/yrRnbbzKtP8ij8KanGx5OYsJX5jdeqd/G+Y7NuRCChlBMCjb6SDeiiNZg==
-X-Received: by 2002:a17:906:b00c:b0:7c4:fa17:7202 with SMTP id v12-20020a170906b00c00b007c4fa177202mr68173183ejy.33.1673629871904;
-        Fri, 13 Jan 2023 09:11:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id og5-20020a1709071dc500b0084d420503a3sm6994015ejc.178.2023.01.13.09.11.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 09:11:11 -0800 (PST)
-Message-ID: <6bd2d336-e8e8-245c-292c-1e74b4988d89@linaro.org>
-Date:   Fri, 13 Jan 2023 18:11:08 +0100
+        Fri, 13 Jan 2023 12:12:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639F488DDA
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1B7C6229E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A6EC433D2;
+        Fri, 13 Jan 2023 17:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673629881;
+        bh=LL/lMQywjl9XFUL9aiAeF5ZOmGV2ft5JIT2pLycXCfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M6igAXCGYq20hp9tPeZhnyQfFftg0ni2mFKR8GoD3c/rsVLp+wUzE29g0k7QryUnf
+         G+1UYdvGkI4AphrUu9WSqvQsV44juexlJpvVykjPgS37VqFU4sWvCo2LsRhF506bod
+         CNTT1QY4f694co4Ff5096n3+tRahcvMIrFRJWcq5S3Gp7WEnYGWCiHKgPXxkGzOamM
+         2YBxxkm2q5gfQknDAWMA7QEQyOsQrvKQSdAPlxVkTPlBXmdWUzcjY2Qs7VkHohdvvw
+         wt+LBzvvwsXU70oXcSY5e6IqqvuOrQOTDSmCb2Lc6LaekeAROxapo/qhbrionlAl+N
+         4r+YK9Ra1c6rg==
+Date:   Fri, 13 Jan 2023 17:11:15 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH 2/2] regmap: sdw: Remove 8-bit value size restriction
+Message-ID: <Y8GQs6svuei0SnX6@sirena.org.uk>
+References: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
+ <20230112171840.2098463-3-ckeepax@opensource.cirrus.com>
+ <756fcb2d-d571-18cb-985e-d907ab682275@linux.intel.com>
+ <Y8BOCpXyOyF3igfG@sirena.org.uk>
+ <3320e6b8-28c7-d028-3c4c-2b4b25a963fb@linux.intel.com>
+ <Y8BkiF8sfqPifYTO@sirena.org.uk>
+ <4a6ae9b4-2748-c751-aec6-05979de95cfe@linux.intel.com>
+ <20230113110252.GK36097@ediswmail.ad.cirrus.com>
+ <487b7647-8304-8e36-00f2-c9ba3aa50004@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Patch v1 05/10] dt-bindings: tegra: add icc ids for dummy MC
- clients
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-6-sumitg@nvidia.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220160240.27494-6-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Z4kQJHcgSRHcgMz/"
+Content-Disposition: inline
+In-Reply-To: <487b7647-8304-8e36-00f2-c9ba3aa50004@linux.intel.com>
+X-Cookie: I know how to do SPECIAL EFFECTS!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,14 +64,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/12/2022 17:02, Sumit Gupta wrote:
-> Adding ICC id's for dummy software clients representing CCPLEX clusters.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--Z4kQJHcgSRHcgMz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Krzysztof
+On Fri, Jan 13, 2023 at 10:57:39AM -0600, Pierre-Louis Bossart wrote:
 
+> The change from reg_write/read_reg to write/read seems ok, what I was
+> asking about was the gather_write.
+
+> +	.write = regmap_sdw_write,
+> +	.gather_write = regmap_sdw_gather_write,
+> +	.read = regmap_sdw_read,
+
+> what happens if you only have .write and .read? What does the
+> .gather_write help with if you only use only address?
+
+Like I said before it means that the core doesn't have to put the
+register in a linear buffer with the values, meaning it can avoid
+copying already formatted data around or allocating memory.
+
+--Z4kQJHcgSRHcgMz/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPBkLIACgkQJNaLcl1U
+h9CVJgf9GMgtyJcMx5FSRjr5BEqOqFjs+LoFoue2wNLyCXl7cwU7l9BIVKNQpm8K
+NL0JghhDvda6gGYrDbrLFp/Hd85ImgzJ1jN6W5cR2fIaP+K11BzJe+l9euqqannn
+lUqNOt9FVbkjDKcXxXE1wgjfvy5EbZHs8cHG/EUiTzRj+idv9k2V5cUFxICu6g7k
+qxzj0rX64flrsECenoTs9vcXPhUjvtqki6PxxkZKysbyrDCxISDYYSmKx1D6qn5P
+nHSio8V6Me7vNGihfJlUr4l3OsBXOTGfJUNRo3EYF4OxAwasYz6FWoTf5NXxwsB9
+GZBqtAMKplyND2JA7ZJc52nZ0r2DVA==
+=7nwP
+-----END PGP SIGNATURE-----
+
+--Z4kQJHcgSRHcgMz/--
