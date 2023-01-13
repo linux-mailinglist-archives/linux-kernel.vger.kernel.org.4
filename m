@@ -2,87 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062B266A718
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4751A66A6F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjAMXbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
+        id S230182AbjAMXUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjAMXbH (ORCPT
+        with ESMTP id S231402AbjAMXUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:31:07 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0542560867;
-        Fri, 13 Jan 2023 15:31:06 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id t15so24212208ybq.4;
-        Fri, 13 Jan 2023 15:31:05 -0800 (PST)
+        Fri, 13 Jan 2023 18:20:18 -0500
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6513C8CD02
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:20:12 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1433ef3b61fso23895025fac.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:20:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8x+fgQ2I+pqMaMW/X5cHc/YMKvj8qdTDIS+NdFNCDfs=;
-        b=UfJhXVJb1zWU33EOx/tQXgiCDEU01jCZSsPVbZIiPgBaKFDfZNX0lZLjS108G07PUG
-         FMWkrMhxWibRRQo3QQHDsFAt1R1S8aYvXIoUu6KyT8bA5q3INPo9T/TYrZGvXlwr0b2i
-         ysNr3Usj3/vBXtcxXgklg5QZgGqZyn5AYSbmBldrOYpatdZjtOp35qAtlFkclQrATi6T
-         9MpCMO/Ze0RJ10tc8gTW8tnJrGrrSKyklsR9S8sNTSqF5wsFn/5flPsTiB8FmSesbYup
-         u26YHzPZjXNw+A4AoMD1fJaW6xATtQrfHItSeX+iOFMKgp4I0wM9tMCrkptVeelW+xkJ
-         F6jA==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TQ9PrP3iNHpghVpkywhiMHcSFTwXN8kLEUSP7zNfGWk=;
+        b=HEeiDnUeOlaMmzrHg6LtTWNe2KIF6Q5d6PASMOjvpBnFNwlXnpxtBoyLsjdUSiFic5
+         Zy4GrupmECG1CN3m99XRInimzLkAyFlnAC1yFwr9ZV5WqZ8Mxia0axE41+SyDlpGZHOF
+         b9/hPmk9ZzrDZTerjRuPw9aOBuwmuFZgGCgGCyi5DNv5BOgrp6hpzWbx8PiSSS3PCS6S
+         UoJjpLq7r0mXx6nv8CL2PCVxH6W+Fc0fSdqCoguiOJxRwovXLajxMhMVOFQITRvWQd2L
+         +x8hdq/wHJdMhQD25h3cEnBEwX4srdIbxyBywCRXQlXO+4KVbgaam+X20emmeoxJCckb
+         5wPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8x+fgQ2I+pqMaMW/X5cHc/YMKvj8qdTDIS+NdFNCDfs=;
-        b=O9zw+iI5MZQQTutPSf6n9kPC7JJ0Kt8QLzoScmm0M+C4EwE2x0myMvZhzJQr2xiN7A
-         QQ0vrjV+HZptOrNnaB8SLX238eVS4H2D8qx+3XEIIiYsT4xeSa2Z51+l/q0GXMnI+Von
-         fpBYw7xRZ402EosQ+rkw5VSSajKc+SUQhfAWHspDoN7zd0TV5oawRG2x8XikcgOVZ8lY
-         GlaVh1iZk+FAC93YX6/MKQ0Qmx2SVWAgymlxcDNsyfrxBegqLWmuQd6SlUeewE8IeVaM
-         nXnBSuNrktZqoDa2nsbqv3cw7adLkuPr7sfhH0CLchLPkZ8a5f9qqPRlts/KbunlQGQP
-         zuyg==
-X-Gm-Message-State: AFqh2kqyqoJzrgLA1hfqT7GtTDXk6SSUVNACkNHE1zXk9h6x29hKAw6d
-        muU/3FNZ77kwQvZzHtWTP9aN/bfTMay34mSqCy8=
-X-Google-Smtp-Source: AMrXdXva20Xrfbl+zo3SLpX+v/KZPjReiMCBsty5G9qfiJpanHD4htIziE8YIoEbPoyqjtYrmzhByrDdsZ7Bq44udRs=
-X-Received: by 2002:a25:e6c7:0:b0:7cb:dfbe:3996 with SMTP id
- d190-20020a25e6c7000000b007cbdfbe3996mr620654ybh.489.1673652665276; Fri, 13
- Jan 2023 15:31:05 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TQ9PrP3iNHpghVpkywhiMHcSFTwXN8kLEUSP7zNfGWk=;
+        b=3nF6pfaQ/+EUMjeOF7pbVupy6ho4qVN7PC0fureNMpUYTN5bPLAV2eiHolBBMygLTS
+         y9TVeWqpFfff8Ht7PNBwUYlRjJnprUn/qw9jd3s11UxBIHRsIgfPg/9+aKjMuBd1jE6o
+         YsbA8VTL4zsEeIaZGd+OV/VL7muV4dq5oBArPlk+KdCNuQxSRNdYi3Dz92tgQIX/5Rs/
+         an9gfHwWE6HeO5fedMVT4lB5ZHpHPgC/3rK3VUfX7CL0Z9pH8AvA6OfWKwyfU0XT69i2
+         Iry+xXLi8yVsCSTj3M8jxCx5AghaVKsbht94OPzXLYTv2d/GNFlghS87fteW5UrxdIKd
+         +9mw==
+X-Gm-Message-State: AFqh2koxJb0yHmr6BknSCDwelb7+/qmucgTryiT+FC3gtCG86FJkVQ8q
+        9uNaVFk038z62unb04NnrcD4FQ==
+X-Google-Smtp-Source: AMrXdXu9HHEo/oiUtz2RMFCVU9bzsQZjZJ6cJq7QQE+EgrBS53y1RWYqF/4GpGuzhXIiUysKwMTRjQ==
+X-Received: by 2002:a05:6871:4090:b0:155:cb39:7325 with SMTP id kz16-20020a056871409000b00155cb397325mr16579350oab.6.1673652012126;
+        Fri, 13 Jan 2023 15:20:12 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056870738d00b0013ae39d0575sm11411907oam.15.2023.01.13.15.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 15:20:11 -0800 (PST)
+Message-ID: <38200b53-c743-4396-6603-7274f4a29c86@landley.net>
+Date:   Fri, 13 Jan 2023 17:32:20 -0600
 MIME-Version: 1.0
-References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-5-ojeda@kernel.org>
-In-Reply-To: <20230109204520.539080-5-ojeda@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 14 Jan 2023 00:30:54 +0100
-Message-ID: <CANiq72=FZB1_muUYq=ZGPvY5jfTgg8FqcKnG=E1BMQML5rVG=w@mail.gmail.com>
-Subject: Re: [PATCH 5/6] kbuild: rust_is_available: fix confusion when a
- version appears in the path
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Jordan Isaacs <mail@jdisaacs.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
+ <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
+ <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
+ <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 9:46 PM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> Reported-by: Jordan (@jordanisaacs)
+On 1/13/23 13:05, John Paul Adrian Glaubitz wrote:
+> Hi Rob!
+> 
+> On 1/13/23 20:11, Rob Landley wrote:
+>> There is definitely interest in this architecture. I'm aware Rich hasn't been
+>> the most responsive maintainer. (I'm told he's on vacation with his family at
+>> the moment, according to the text I got about this issue from the J-core
+>> hardware guys in Japan.)
+> 
+> Well, maybe we can just give it a try together ...
 
-Cc'ing Jordan who gave us the email address in GitHub and wants to
-send a `Tested-by` tag.
+Jeff Dionne said he'd make himself available to answer hardware questions. (He
+said he maintained some Linux ports 20 years ago, but isn't current with Linux
+plumbing. Last month he was digging through the guts of vxworks, and the project
+before that was some sort of BSD I think?)
 
-Cheers,
-Miguel
+I _do_ maintain Linux patches, I just generally don't bother to repost them
+endlessly. Here's my "on top of 6.1" stack for example, each of which links to
+at least one time it was posted to linux-kernel:
+
+https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/linux-patches/
+
+>> The main reason we haven't converted everything to device tree is we only have
+>> access to test hardware for a subset of the boards. Pruning the list of
+>> supported boards and converting the rest to device tree might make sense. We can
+>> always add/convert boards back later...
+> 
+> There is a patch by Yoshinori Sato which adds device tree support to SH. Maybe we
+> can revive it.
+
+The turtle board is device tree and has been since it was merged. The
+infrastructure is there, the question is converting over boards and testing
+them, or deciding to prune them. Did Sato-san convert many boards? (I'm not
+finding his patch via google...)
+
+> Adrian
+
+Rob
