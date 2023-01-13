@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2780266881E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031C066881D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239924AbjAMAKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S239769AbjAMAKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbjAMAKn (ORCPT
+        with ESMTP id S232215AbjAMAKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:10:43 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9568940861
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:10:42 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 70A385C00B3;
-        Thu, 12 Jan 2023 19:10:41 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 12 Jan 2023 19:10:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1673568641; x=1673655041; bh=fn
-        0w1gSR5DhOV6wrzetzvqJJjGA7awX0sZ7gHK1BH/Q=; b=BOQJnOfNbZsiA95+o3
-        xdZp6MCLdZMTzaocrB/0UyDRkcLXi2xkFD+lY3uxivC2pJHdwZnpZbMHopjBUctM
-        va9SelUa/2dVs5ZaC9r0/7WOB/xEO8q7UWYWM9Sts5uZf2METrizVXRk1UmX0OKq
-        KMfqBKfcwtu07lSxbWZmkTFLRcR6//ie5VHE0j3AajqFbBoGAGS1av0y0zY6pi4X
-        HqdD5kfK49pqlQZNPhP3EEgu902A/YHmfIGnyrK7SiZsa/w2o3Sa/Skz6IMiohXq
-        dC6ynx8kGIxbu9JFKniXYEagxl4Z4jgquvJAxWkCXKoutKk3Lou9v1nrSFoiT8D/
-        n5dQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673568641; x=1673655041; bh=fn0w1gSR5DhOV6wrzetzvqJJjGA7
-        awX0sZ7gHK1BH/Q=; b=NxQbSwT50YVM8JGTH5Qf66/uZGD2RRXtclEucb+pKHpl
-        fm56sVIj2nBPUx+COUD9Z9dmUB+0eEqJE7rtgeoJn28o9KB3IuBG78bUeny7qR1s
-        WWQoAKuLA34GRXrg2mB9taMeyF5OwuaG516xD8QmzzbL1z+btfskDyvrU43vjJdU
-        FxsRIASkAuQ7VuWUQsbncf2B2G10UexkJ28wbIhJbrt6VLJVgbaAhxUeKBOUALAd
-        NalTKsxHEoEr39NcKu27rzeAfjWNUt3vVPCMrPtz8IYb4VlICIcHe9zrss6E/6Jv
-        n6xG6pXg9G70yoxZj5JbIJ+ZYcKNr3LUIPJwcQzsUg==
-X-ME-Sender: <xms:gKHAYyZ-zX-h6X5XiFI3jXSCS_9HP79vJQR6j4DB5eslc6z16BL0CA>
-    <xme:gKHAY1b20pA4Kd4YzMGXmz4F5i2f5NjsErwRLMiB8usiyVeReW0Jo4hd8Yld4BMmC
-    o-jPpNNMNdl3Bf3Iok>
-X-ME-Received: <xmr:gKHAY89-zNUbJa6HibVU2ILVKD6S-ak3Dh8ZY5B8grE5dYOd-BYbBYOxWTReEcd-CFRh4A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleejgddvtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:gaHAY0pkt2-PHmrI2qKrVa2P85QtgN3D9ylKGD2jrZKX1wj8WzpMsA>
-    <xmx:gaHAY9rzqzELJr24R0l7xBhESXCuB8anedS97PNlXVV4m50nZCT-Mg>
-    <xmx:gaHAYyRMK_1vPCVqRFOH0UjHQ4lT5zXTaQrweFGVAGOL10Rl9Vbg7w>
-    <xmx:gaHAY-e4ziIhCFAc33M2FGgVH-sYGI7cW9d7j-OeZbtpw1wz3ZCk5A>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Jan 2023 19:10:40 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id A6A84109AF0; Fri, 13 Jan 2023 03:10:37 +0300 (+03)
-Date:   Fri, 13 Jan 2023 03:10:37 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
-Message-ID: <20230113001037.adqha6lxj7lh75at@box.shutemov.name>
-References: <20230111133351.807024-1-jannh@google.com>
- <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
- <CAHbLzkpAVTys9dBSodHBB3ovKhwP8imUsyXy=aPqY5SyXCT7ww@mail.gmail.com>
+        Thu, 12 Jan 2023 19:10:42 -0500
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DE53FCBD;
+        Thu, 12 Jan 2023 16:10:41 -0800 (PST)
+Received: by mail-ot1-f43.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so11468205otp.9;
+        Thu, 12 Jan 2023 16:10:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fa4bJd4FpH5J8PcBXntkqApcXjG667hIZgm37d7PnJs=;
+        b=2YLw+2DLMPxDoMCRT/n64RQrktJBjAp1wf7MpAZiDhWPbxD3zpe7HbYB4iLQmuEh6V
+         VS+TMEe3Q3bOllNUxZq5aoCXl9mxfqLIxoLnaxdTTKl5kzfz9SQD27vRQ20w7TfQQohV
+         MDQyFpEAWoqE5UHNhdT/nGWzFnvwUkAjN+u/GpqhkA/SXVegBfrNHa0HxuEQadwpS0gB
+         nOUvHia5SAtAahCngm0sdj/27BTAkxaLHjD7qBlTpjPrQ5cIIL0BLO7Vn56VTkWC06HF
+         Wh6XBireilFdvMYqHi09RknFysKxtNZJBVjmMz+HoXW54KRk8OFarD4+NjPgb+YpyTnv
+         h1ww==
+X-Gm-Message-State: AFqh2kriSQIzoJncV59O3OBxS7gkG7OScnCjrIQD340O3ssJYB+rYnXc
+        RP2cHbwiT209vPYbwLp9Pw==
+X-Google-Smtp-Source: AMrXdXsCm+dOf8HVHiGAZD0eySI8muKiDK59xiObAtl+2yolg7B9eZifleapRpBiiS57/n3VNls3Og==
+X-Received: by 2002:a05:6830:388c:b0:671:7bc7:dabe with SMTP id bq12-20020a056830388c00b006717bc7dabemr49626972otb.21.1673568640879;
+        Thu, 12 Jan 2023 16:10:40 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e26-20020a0568301f3a00b006770e855c61sm439545oth.31.2023.01.12.16.10.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 16:10:40 -0800 (PST)
+Received: (nullmailer pid 501210 invoked by uid 1000);
+        Fri, 13 Jan 2023 00:10:39 -0000
+Date:   Thu, 12 Jan 2023 18:10:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        kernel@collabora.com, Rob Herring <robh+dt@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCHv5 06/10] dt-bindings: mfd: add rk806 binding
+Message-ID: <167356863889.501159.246967021598779982.robh@kernel.org>
+References: <20230109172723.60304-1-sebastian.reichel@collabora.com>
+ <20230109172723.60304-7-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHbLzkpAVTys9dBSodHBB3ovKhwP8imUsyXy=aPqY5SyXCT7ww@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109172723.60304-7-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:12:53AM -0800, Yang Shi wrote:
-> > This is totally wrong direction. Or I don't understand the race.
-> >
-> > At this point we already paid nearly all price of of pagetable retraction.
-> > I don't see any correctness reason to stop here, except for the assert.
+
+On Mon, 09 Jan 2023 18:27:19 +0100, Sebastian Reichel wrote:
+> Add DT binding document for Rockchip's RK806 PMIC.
 > 
-> Isn't it possible that collapse_and_free_pmd() clear the pmd which may
-> point to a PTE which maps the COW'ed anon page if this race happens?
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/mfd/rockchip,rk806.yaml          | 406 ++++++++++++++++++
+>  1 file changed, 406 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk806.yaml
+> 
 
-No. At this point we have huge page in the place in the page cache and it
-is locked. COW fault would serialize on the page lock.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Rob Herring <robh@kernel.org>
