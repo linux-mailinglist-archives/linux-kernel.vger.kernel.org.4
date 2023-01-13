@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46ED66893D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C5D6688F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjAMBms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S240292AbjAMBNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239769AbjAMBmp (ORCPT
+        with ESMTP id S234697AbjAMBNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:42:45 -0500
-X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 17:42:42 PST
-Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D569E389D
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 17:42:42 -0800 (PST)
-Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
-        by 156.147.23.53 with ESMTP; 13 Jan 2023 10:12:41 +0900
-X-Original-SENDERIP: 156.147.1.125
-X-Original-MAILFROM: chanho.min@lge.com
-Received: from unknown (HELO ?10.178.36.63?) (10.178.36.63)
-        by 156.147.1.125 with ESMTP; 13 Jan 2023 10:12:41 +0900
-X-Original-SENDERIP: 10.178.36.63
-X-Original-MAILFROM: chanho.min@lge.com
-From:   Chanho Min <chanho.min@lge.com>
-Subject: Re: Re: [PATCH v2 10/23] arm64: dts: Update cache properties for lg
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Lee Gunho <gunho.lee@lge.com>
-References: <20221107155825.1644604-1-pierre.gondois@arm.com>
- <20221107155825.1644604-11-pierre.gondois@arm.com>
- <0fc92ab1-144a-47dd-e5c4-a165a82d385d@arm.com>
-Message-ID: <1e36270f-237e-7069-ffe7-3086216b9d6b@lge.com>
-Date:   Fri, 13 Jan 2023 10:12:41 +0900
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 12 Jan 2023 20:13:15 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D53F5D6BC;
+        Thu, 12 Jan 2023 17:13:12 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtNhP5tDCz4wgq;
+        Fri, 13 Jan 2023 12:13:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673572391;
+        bh=1sSfbQquQYVOZSzbn1ll1Ailg+vb1yv87aNiDgoy7+o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YiFn9NqNcWHxCTywRS7guLhPG5nZYZhMjpZ8nEIazEwIzOY8OqIQ456gilGs9E3UN
+         +GAxtxV6Q4I9MDJfRhjj5N28FNp+o5hubTFQQi100eQbfAcWNenqX/aWV8QoOPVMFa
+         Zvn9jMgKu58mWp40iark1Jhf7b17EF3Xaj8GRJPupkERpr9wcPkf17hsv1l8J9iTVH
+         hl4fp+VCrKmp7KdueXdbceeSSZWzbu94D55+fxyoQSz72+Ox4/fifAqhOBUcVTJRTS
+         ng2AAMX5PD/uViAKq8XS6g+kHdYq47JKYggzg4z6oSv0Ar+BHd/9NoPB9CKn10M6l4
+         Gc65wIq3+7umg==
+Date:   Fri, 13 Jan 2023 12:13:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the sound-asoc tree
+Message-ID: <20230113121308.5e86479f@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <0fc92ab1-144a-47dd-e5c4-a165a82d385d@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fHB5_u/=swJpA8.e2YwU17l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-23. 1. 12. 오후 5:34에 Pierre Gondois 이(가) 쓴 글:
-> (subset for cc list)
-> Hello,
-> Just a reminder in case the patch was forgotten,
-> Regards,
-> Pierre
-> 
-> On 11/7/22 16:57, Pierre Gondois wrote:
->> The DeviceTree Specification v0.3 specifies that the cache node
->> 'compatible' and 'cache-level' properties are 'required'. Cf.
->> s3.8 Multi-level and Shared Cache Nodes
->> The 'cache-unified' property should be present if one of the
->> properties for unified cache is present ('cache-size', ...).
->>
->> Update the Device Trees accordingly.
->>
->> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+--Sig_/fHB5_u/=swJpA8.e2YwU17l
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Chanho Min <chanho.min@lge.com>
->> ---
->>   arch/arm64/boot/dts/lg/lg1312.dtsi | 1 +
->>   arch/arm64/boot/dts/lg/lg1313.dtsi | 1 +
->>   2 files changed, 2 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/lg/lg1312.dtsi 
->> b/arch/arm64/boot/dts/lg/lg1312.dtsi
->> index 78ae73d0cf36..25ed9aeee2dc 100644
->> --- a/arch/arm64/boot/dts/lg/lg1312.dtsi
->> +++ b/arch/arm64/boot/dts/lg/lg1312.dtsi
->> @@ -48,6 +48,7 @@ cpu3: cpu@3 {
->>           };
->>           L2_0: l2-cache0 {
->>               compatible = "cache";
->> +            cache-level = <2>;
->>           };
->>       };
->> diff --git a/arch/arm64/boot/dts/lg/lg1313.dtsi 
->> b/arch/arm64/boot/dts/lg/lg1313.dtsi
->> index 2173316573be..db82fd4cc759 100644
->> --- a/arch/arm64/boot/dts/lg/lg1313.dtsi
->> +++ b/arch/arm64/boot/dts/lg/lg1313.dtsi
->> @@ -48,6 +48,7 @@ cpu3: cpu@3 {
->>           };
->>           L2_0: l2-cache0 {Re: Re: [PATCH v2 10/23] arm64: dts: Update cache properties for lg
->>               compatible = "cache";
->> +            cache-leveRe: Re: [PATCH v2 10/23] arm64: dts: Update cache properties for lgl = <2>;
->>           };
->>       };
+Hi all,
+
+The following commit is also in the arm-soc tree as a different commit
+(but the same patch):
+
+  5eab9265759e ("ASoC: PXA: make SND_PXA2XX_SOC_AC97 user-selectable")
+
+(commit 350a6eb412d3 in the arm-soc tree)
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fHB5_u/=swJpA8.e2YwU17l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAsCQACgkQAVBC80lX
+0GylCwgAk1i1EfBhwr6rga+46p12VqI3iQSh5TePD8GorTQ5JGciP6ix6WqYisZG
+PFh50kfMhYFSN+TgtE4j8kighTEgp3DQYeYzjtLwm0gf31izAQsl5qupX94Con64
+XtWG5JdGaw3k3sSMvEsj2fCdjj8zgDSd2BlUyDZffhC2UvMUNMLf6EvWhnnHJu6S
+7gfGENZ5v7EMJccEiv9vvTbe9HmYfNE7iisCeFMBsttk1mzp4edce64gzj6CD2QB
+W91VfU29j8z7GDDsxpNNYWaFhM0YajiEb603qmUAEUqfyR/p7E34PzG+FLqEMJhG
+mj8IjKXIciHPAq8kmVED8YR+VhM1+w==
+=yHUz
+-----END PGP SIGNATURE-----
+
+--Sig_/fHB5_u/=swJpA8.e2YwU17l--
