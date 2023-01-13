@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE79669C1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0D1669C2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjAMP2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S230210AbjAMP3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjAMP2S (ORCPT
+        with ESMTP id S229720AbjAMP2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:28:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D795080AF8;
-        Fri, 13 Jan 2023 07:21:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F78D6216C;
-        Fri, 13 Jan 2023 15:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABBBBC433D2;
-        Fri, 13 Jan 2023 15:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673623306;
-        bh=SY8pBPoQTNbHRLf2rJIor5xp42/a0AI7mV21kU2mDAM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tr0kONao44o0PAxUUqzdkC7Xdl9HnbfzeGE0G8LbsgDuEc1wnhtuc/82b4efJZo0H
-         DxstI4zxh7FECHxv+PACaJlhSYUDuHnihXxVvzvserY8g+qIpUH8qroR5y7hWCub3E
-         VD1JYg+eI8FAVC14bYPo/VJ3yrxJaGvkX0v6WcomuxMM/Q7KxNXAZie88cA8spD4et
-         f9AQ1yx0zlXMs1YjGzeQGZktJtA5PlVR45iL1lP3Muqw68Un/KgL634GLaVF6gGeLI
-         XY3cvWi3AzzbIxHug7qtdvob4gsVcUUBfRzNijseS/Lfl5nyTLxV4Z7ByvULedAksQ
-         HuSM7bBpLqAqg==
-Date:   Fri, 13 Jan 2023 16:21:38 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, mani@kernel.org,
-        Sergey.Semin@baikalelectronics.ru, ffclaire1224@gmail.com,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V3 11/21] PCI: tegra194: Remove IRQF_ONESHOT flag during
- Endpoint interrupt registration
-Message-ID: <Y8F3AuEk75TNO4+3@lpieralisi>
-References: <20221013183854.21087-1-vidyas@nvidia.com>
- <20221013183854.21087-12-vidyas@nvidia.com>
+        Fri, 13 Jan 2023 10:28:22 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3914876D8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:21:58 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id dw9so21324013pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=g9YfzH5zKGAWD5WagxwC+0aZDoyNg2SDmBAwauSl/+s=;
+        b=SESCF6u/Xps5hlU0zKsOMf7UJvRF43RHivcNYz3gp7zAC2kSF8CAU6ed+Q1iPdmGKS
+         PBzxqZeeSV1nFsICGTZw4J+n4aeznS/XVOHz2+sKct9j3PkprHH20M4cGvQWXzjBI0D3
+         yjUb2tt3TXo43k/g1F9QaD9qufjPkwMaFC6k3c3uwzgAW0pPOtSKFH0wEm8HOIDNIS8C
+         XfqOipeIpoQ7fitlgrwvoFcwBfqZSbFIfcFma4cjVX+ul/XKTWE30xSc8ty1h5fojb+N
+         XkQKkShuVkABQOZ5by5Ggl6pMUtxOPyJ8zpmOq3JK+NpfLvLV3wauTmeloiA3HdQeoe9
+         HZcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g9YfzH5zKGAWD5WagxwC+0aZDoyNg2SDmBAwauSl/+s=;
+        b=6kEFjQBUg744a80e/dX0w1VMBaTgoovocbDhyHZaHMn9Dnufr+xQsHjk9G4SbLk+6h
+         NfbSmyKQASvKxR2sQ8JDaS7LXcW5Qymk4LJr9gGYeNM9++TbKwL7muc6LAEnKGt0FXvY
+         W8BfzXLGoke6hskp+NVrsqycKeUUUG0NvS/4drranMuFilswRsch7pTNj7uD5URQJ+Nk
+         MLLitnRqVpzVLt97poQpIyT1umH/E2LlGkzhq0WlamYEBZX85TwF8pnNCbfG7cxh4x6k
+         VXrw0LDwiBcPAQhOW47Ll4MAJv0LPESHGlXmikD943FbvJYpDfT3sTiw698IHFw9T6pL
+         GU2Q==
+X-Gm-Message-State: AFqh2kpJMnXOKrKSQYQki7247a/C4snP7QDjYo0wo4IURDlunD8MiUwm
+        Z03UeYeX/wOid056tzF5iTLG4Q==
+X-Google-Smtp-Source: AMrXdXtl4mEVlVyUN6ZBZk69yfDOipBvbK+FFzqa2vsCfOmdq7h0HOIN0AWuzCCExEXpk+FwXQOzEw==
+X-Received: by 2002:a17:903:2614:b0:193:256d:8afe with SMTP id jd20-20020a170903261400b00193256d8afemr1189233plb.2.1673623318408;
+        Fri, 13 Jan 2023 07:21:58 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902b18700b0019335832ee9sm9954324plr.179.2023.01.13.07.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:21:57 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:21:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v11 013/113] x86/cpu: Add helper functions to
+ allocate/free TDX private host key id
+Message-ID: <Y8F3Eo2lKB4hupQI@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <241994f1f6782753f3307fe999a3dad434477c16.1673539699.git.isaku.yamahata@intel.com>
+ <20230113144712.00006f41@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013183854.21087-12-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113144712.00006f41@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 12:08:44AM +0530, Vidya Sagar wrote:
-> Tegra PCIe endpoint has a common interrupt that notifies hardware events
-> like link up, LTR send, etc. DMA completion event is also notified over
-> this interrupt. Remove IRQF_ONESHOT flag from interrupt registration and
-> allow DMA driver to share this interrupt.
+On Fri, Jan 13, 2023, Zhi Wang wrote:
+> On Thu, 12 Jan 2023 08:31:21 -0800 isaku.yamahata@intel.com wrote:
+> > @@ -132,6 +136,31 @@ static struct notifier_block tdx_memory_nb = {
+> >  	.notifier_call = tdx_memory_notifier,
+> >  };
+> >  
+> > +/* TDX KeyID pool */
+> > +static DEFINE_IDA(tdx_keyid_pool);
+> > +
+> > +int tdx_keyid_alloc(void)
+> > +{
+> > +	if (WARN_ON_ONCE(!tdx_keyid_start || !nr_tdx_keyids))
+> > +		return -EINVAL;
+> 
+> Better mention that tdx_keyid_start and nr_tdx_keyids are defined in
+> another patches.
 
-I don't understand the rationale behind this change, please elaborate
-on it.
+Eh, no need.  That sort of information doesn't belong in the changelog because
+when this code is merged it will be a natural sequence.  The cover letter
+explicitly calls out that this needs the kernel patches[*].  A footnote could be
+added, but asking Isaku and co. to document every external dependency is asking
+too much IMO.
 
-Thanks,
-Lorenzo
-
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
-> V3:
-> * This is a new patch in this series
-> 
->  drivers/pci/controller/dwc/pcie-tegra194.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-> index 7820bf4b9786..786e5d5f43b9 100644
-> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
-> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-> @@ -2354,7 +2354,7 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
->  		ret = devm_request_threaded_irq(dev, pp->irq,
->  						tegra_pcie_ep_hard_irq,
->  						tegra_pcie_ep_irq_thread,
-> -						IRQF_SHARED | IRQF_ONESHOT,
-> +						IRQF_SHARED,
->  						"tegra-pcie-ep-intr", pcie);
->  		if (ret) {
->  			dev_err(dev, "Failed to request IRQ %d: %d\n", pp->irq,
-> -- 
-> 2.17.1
-> 
-> 
-> -- 
-> linux-phy mailing list
-> linux-phy@lists.infradead.org
-> https://lists.infradead.org/mailman/listinfo/linux-phy
+[*] https://lore.kernel.org/lkml/cover.1670566861.git.kai.huang@intel.com
