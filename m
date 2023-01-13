@@ -2,245 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95396697D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C72D06697DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241650AbjAMM6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S241360AbjAMM75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241721AbjAMM5I (ORCPT
+        with ESMTP id S241074AbjAMM64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:57:08 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3BFA16584;
-        Fri, 13 Jan 2023 04:45:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B491CFEC;
-        Fri, 13 Jan 2023 04:45:55 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.46.126])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C4BE3F587;
-        Fri, 13 Jan 2023 04:45:12 -0800 (PST)
-Date:   Fri, 13 Jan 2023 12:45:04 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Thomas Gleixner <tglx@linotronix.de>, stable@vger.kernel.org,
-        Yogesh Lal <quic_ylal@quicinc.com>
-Subject: Re: [PATCH] clocksource/drivers/arm_arch_timer: Update sched_clock
- when non-boot CPUs need counter workaround
-Message-ID: <Y8FSUOC7k3ChMazG@FVFF77S0Q05N>
-References: <20230113111648.1977473-1-maz@kernel.org>
+        Fri, 13 Jan 2023 07:58:56 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A23D5B16D;
+        Fri, 13 Jan 2023 04:45:59 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ud5so52100634ejc.4;
+        Fri, 13 Jan 2023 04:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AcHErRJ45q81GGjXiRiribjr5Anofis06MFnaHfQP8A=;
+        b=gE5v/WSVjrSut5xsLiOn7g1on0KaAbtIMutebQ2onxicQ+j4sdTSHu3jnH4FTYJg3t
+         nVOsvPPcRVfY7T9THsEk7GLAWyEiRl4sB/zr6HnxnKXeuvJIZf1MEfDbFrIbgJIeu9Zn
+         PQANGv90Y4oC10zujvSBzrdUCcKJ4wKBhaM3n2Qd4/7zV8F3cAbyJh6E+wISja3jxksG
+         Ge3YjllyPU8HEU1EA/p41Aui0ZEsV/oHxR+e3f1Vnr8p04eDk/ODfvG5GUHhvi2N+3qf
+         ephPmCC2NUBjWVYtAqrHWSeFobLjAjUtK/PtwiTK1wUmA5PQqDAvJ1/0P0INym8ELFTp
+         jfDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AcHErRJ45q81GGjXiRiribjr5Anofis06MFnaHfQP8A=;
+        b=33BLRoGY9s0zX/y/ftwHQYWOZoCb5Q5/mAPa+Vok8C0RRaKUWHeiAjLDYI+PNYUKhL
+         bEhv+519IjZ96uH6cs9pTiCwAgCLkL6Iz3r1EJS1r1HFvLuJLqZyLfU4Lzaspe24KCIV
+         Zs7RMYbnOT0SZAxBmAX53gNA0uDoOKYLRiqC0PwkEKARWUVRj91zjm5RdmIvOereHH4g
+         f67pobrNO3ewEMg0sTEMWBe21QHRlvglK8Y7rjUEqPEw1uBBRM0Dxl9Pt6kg9YkrI3If
+         Sp82NHvwNsl/1w4llFEzohMTZeCdgyu+tzo0WaowTqzoV5Geo8SsutZ84FN1ONSefvdz
+         4KYQ==
+X-Gm-Message-State: AFqh2kozShmX0rTEdFgWcv5m+XnVbSBNGV89YkkjogPoNpyXB/O0nqrn
+        5ye6gCkahyIRj2oETFLJyic=
+X-Google-Smtp-Source: AMrXdXvVr/9yNhQpjOFOJXlU0GdHaAOCYq+3W9OAzkBY/ShZ3eCuqjVnT1dNuTlNluFaFeVqoKIulQ==
+X-Received: by 2002:a17:906:5a71:b0:84d:4a2b:73b9 with SMTP id my49-20020a1709065a7100b0084d4a2b73b9mr14662505ejc.59.1673613957932;
+        Fri, 13 Jan 2023 04:45:57 -0800 (PST)
+Received: from gmail.com ([31.46.242.235])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b007c0b28b85c5sm8462298ejt.138.2023.01.13.04.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 04:45:57 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 13 Jan 2023 13:45:53 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Xin Li <xin3.li@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] x86/gsseg: Add the new <asm/gsseg.h> header to
+ <asm/asm-prototypes.h>
+Message-ID: <Y8FSgX0fDs5/SqSl@gmail.com>
+References: <20230113125321.4c60d02f@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113111648.1977473-1-maz@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113125321.4c60d02f@canb.auug.org.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
 
-On Fri, Jan 13, 2023 at 11:16:48AM +0000, Marc Zyngier wrote:
-> When booting on a CPU that has a countertum on the counter read,
-> we use the arch_counter_get_cnt{v,p}ct_stable() backend which
-> applies the workaround.
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+
+> Hi all,
 > 
-> However, we don't do the same thing when an affected CPU is
-> a secondary CPU, and we're stuck with the standard sched_clock()
-> backend that knows nothing about the workaround.
+> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> produced this warning:
 > 
-> Fix it by always indirecting sched_clock(), making arch_timer_read_counter
-> a function instead of a function pointer. In turn, we update the
-> pointer (now private to the driver code) when detecting a new
-> workaround.
+> WARNING: modpost: EXPORT symbol "asm_load_gs_index" [vmlinux] version generation failed, symbol will not be versioned.
+> Is "asm_load_gs_index" prototyped in <asm/asm-prototypes.h>?
+> 
+> Introduced by commit
+> 
+>   ae53fa187030 ("x86/gsseg: Move load_gs_index() to its own new header file")
 
-Unfortunately, I don't think this is sufficient.
-
-I'm pretty sure secondary CPUs might call sched_clock() before getting to
-arch_counter_register(), so there'll be a window where this could go wrong.
-
-If we consider late onlining on a preemptible kernel we'll also have a race at
-runtime:
-
-| sched_clock() {
-| 	arch_timer_read_counter() {
-| 		// reads __arch_timer_read_counter == arch_counter_get_cntvct;
-| 		
-| 		arch_counter_get_cntvct() {
-| 			
-| 			< PREEMPTED >
-| 			< CPU requiring workaround onlined >
-| 			< RESCHEDULED on affected CPU >
-| 
-| 			MRS xN, CNTVCT_EL0	// reads junk here
-| 		}
-| 	}
-| }
-
-I think we need to reconsider the approach.
-
-Since the accessor is out-of-line anyway, we could use a static key *within*
-the accessor to handle that, e.g.
-
-| u64 arch_timer_get_cntvct(void)
-| {
-| 	u64 val = read_sysreg(cntvct_el0);
-| 	if (!static_branch_unlikely(use_timer_workaround))
-| 		return val;
-| 
-| 	// do stablisation workaround here
-| 	
-| 	return val;
-| }
-
-... and we'd need to transiently enable the workaround when beinging a CPU
-online in case it needs the workaround. We could use the static key inc / dec
-helpers from the CPU invoking the hotplug to manage that.
-
-With that, we should never perform the first read on an affected core without
-also deciding to perform the workaround.
-
-Does that make sound plausible?
+Yeah - the new header moved the asm_load_gs_index() prototype out of the 
+list of includes in <asm/asm-prototypes.h> - needs to be added explicitly. 
+Patch below should solve this.
 
 Thanks,
-Mark.
 
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@kernel.org>
-> Cc: Thomas Gleixner <tglx@linotronix.de>
-> Cc: stable@vger.kernel.org
-> Reported-by: Yogesh Lal <quic_ylal@quicinc.com>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Fixes: 0ea415390cd3 ("clocksource/arm_arch_timer: Use arch_timer_read_counter to access stable counters")
-> Link: https://lore.kernel.org/r/ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com
-> ---
->  drivers/clocksource/arm_arch_timer.c | 56 +++++++++++++++++-----------
->  include/clocksource/arm_arch_timer.h |  2 +-
->  2 files changed, 36 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-> index e09d4427f604..5272db86bef5 100644
-> --- a/drivers/clocksource/arm_arch_timer.c
-> +++ b/drivers/clocksource/arm_arch_timer.c
-> @@ -217,7 +217,12 @@ static notrace u64 arch_counter_get_cntvct(void)
->   * to exist on arm64. arm doesn't use this before DT is probed so even
->   * if we don't have the cp15 accessors we won't have a problem.
->   */
-> -u64 (*arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
-> +static u64 (*__arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
-> +
-> +u64 arch_timer_read_counter(void)
-> +{
-> +	return __arch_timer_read_counter();
+	Ingo
 
-Since the function pointer can be modified concurrently, we'll need to use 
-	return READ_ONCE(__arch_timer_read_counter)();
+===========>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Fri, 13 Jan 2023 13:43:20 +0100
+Subject: [PATCH] x86/gsseg: Add the new <asm/gsseg.h> header to <asm/asm-prototypes.h>
 
-SInce this could change dynamically, we
-> +}
->  EXPORT_SYMBOL_GPL(arch_timer_read_counter);
->  
->  static u64 arch_counter_read(struct clocksource *cs)
-> @@ -230,6 +235,28 @@ static u64 arch_counter_read_cc(const struct cyclecounter *cc)
->  	return arch_timer_read_counter();
->  }
->  
-> +static bool arch_timer_counter_has_wa(void);
-> +
-> +static u64 (*arch_counter_get_read_fn(void))(void)
-> +{
-> +	u64 (*rd)(void);
-> +
-> +	if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
-> +	    arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
-> +		if (arch_timer_counter_has_wa())
-> +			rd = arch_counter_get_cntvct_stable;
-> +		else
-> +			rd = arch_counter_get_cntvct;
-> +	} else {
-> +		if (arch_timer_counter_has_wa())
-> +			rd = arch_counter_get_cntpct_stable;
-> +		else
-> +			rd = arch_counter_get_cntpct;
-> +	}
-> +
-> +	return rd;
-> +}
-> +
->  static struct clocksource clocksource_counter = {
->  	.name	= "arch_sys_counter",
->  	.id	= CSID_ARM_ARCH_COUNTER,
-> @@ -571,8 +598,10 @@ void arch_timer_enable_workaround(const struct arch_timer_erratum_workaround *wa
->  			per_cpu(timer_unstable_counter_workaround, i) = wa;
->  	}
->  
-> -	if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
-> -		atomic_set(&timer_unstable_counter_workaround_in_use, 1);
-> +	if (wa->read_cntvct_el0 || wa->read_cntpct_el0) {
-> +		__arch_timer_read_counter = arch_counter_get_read_fn();
-> +		atomic_set_release(&timer_unstable_counter_workaround_in_use, 1);
-> +	}
->  
->  	/*
->  	 * Don't use the vdso fastpath if errata require using the
-> @@ -641,7 +670,7 @@ static bool arch_timer_counter_has_wa(void)
->  #else
->  #define arch_timer_check_ool_workaround(t,a)		do { } while(0)
->  #define arch_timer_this_cpu_has_cntvct_wa()		({false;})
-> -#define arch_timer_counter_has_wa()			({false;})
-> +static bool arch_timer_counter_has_wa(void)		{ return false; }
->  #endif /* CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND */
->  
->  static __always_inline irqreturn_t timer_handler(const int access,
-> @@ -1079,25 +1108,10 @@ static void __init arch_counter_register(unsigned type)
->  
->  	/* Register the CP15 based counter if we have one */
->  	if (type & ARCH_TIMER_TYPE_CP15) {
-> -		u64 (*rd)(void);
-> -
-> -		if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
-> -		    arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
-> -			if (arch_timer_counter_has_wa())
-> -				rd = arch_counter_get_cntvct_stable;
-> -			else
-> -				rd = arch_counter_get_cntvct;
-> -		} else {
-> -			if (arch_timer_counter_has_wa())
-> -				rd = arch_counter_get_cntpct_stable;
-> -			else
-> -				rd = arch_counter_get_cntpct;
-> -		}
-> -
-> -		arch_timer_read_counter = rd;
-> +		__arch_timer_read_counter = arch_counter_get_read_fn();
->  		clocksource_counter.vdso_clock_mode = vdso_default;
->  	} else {
-> -		arch_timer_read_counter = arch_counter_get_cntvct_mem;
-> +		__arch_timer_read_counter = arch_counter_get_cntvct_mem;
->  	}
->  
->  	width = arch_counter_get_width();
-> diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_arch_timer.h
-> index 057c8964aefb..ec331b65ba23 100644
-> --- a/include/clocksource/arm_arch_timer.h
-> +++ b/include/clocksource/arm_arch_timer.h
-> @@ -85,7 +85,7 @@ struct arch_timer_mem {
->  #ifdef CONFIG_ARM_ARCH_TIMER
->  
->  extern u32 arch_timer_get_rate(void);
-> -extern u64 (*arch_timer_read_counter)(void);
-> +extern u64 arch_timer_read_counter(void);
->  extern struct arch_timer_kvm_info *arch_timer_get_kvm_info(void);
->  extern bool arch_timer_evtstrm_available(void);
->  
-> -- 
-> 2.34.1
-> 
+Module build needs to be able to pick up the C prototype:
+
+  WARNING: modpost: EXPORT symbol "asm_load_gs_index" [vmlinux] version generation failed, symbol will not be versioned.
+  Is "asm_load_gs_index" prototyped in <asm/asm-prototypes.h>?
+
+Fixes: ae53fa187030 ("x86/gsseg: Move load_gs_index() to its own new header file")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/x86/include/asm/asm-prototypes.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
+index 8f80de627c60..b1a98fa38828 100644
+--- a/arch/x86/include/asm/asm-prototypes.h
++++ b/arch/x86/include/asm/asm-prototypes.h
+@@ -12,6 +12,7 @@
+ #include <asm/special_insns.h>
+ #include <asm/preempt.h>
+ #include <asm/asm.h>
++#include <asm/gsseg.h>
+ 
+ #ifndef CONFIG_X86_CMPXCHG64
+ extern void cmpxchg8b_emu(void);
+
+
