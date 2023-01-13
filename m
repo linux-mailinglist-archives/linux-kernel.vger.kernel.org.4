@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBE8669BBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569CE669BBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjAMPRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S230049AbjAMPRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjAMPQU (ORCPT
+        with ESMTP id S230034AbjAMPQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:16:20 -0500
+        Fri, 13 Jan 2023 10:16:25 -0500
 Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B7B40C2C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:07:08 -0800 (PST)
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200]) by mx-outbound12-28.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 13 Jan 2023 15:07:06 +0000
-Received: by mail-pf1-f200.google.com with SMTP id 74-20020a62184d000000b0058b9f769609so3164513pfy.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:07:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5293E7BCE9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:07:12 -0800 (PST)
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72]) by mx-outbound12-28.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 13 Jan 2023 15:07:10 +0000
+Received: by mail-pj1-f72.google.com with SMTP id o36-20020a17090a0a2700b00226b4e9895aso10097822pjo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:07:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mistralsolutions.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z+NSHccOtsCvHIJa85NeQChFC1UztUbiKQ4lP4DgpYE=;
-        b=W9+BtAl08PRQpEb9/gbIViu7QsPYIAff+i6FpkK4mdaCYS6DY0+6/aufc6tFCweI2o
-         9P1DKxBQCY5CluMNnBoYx55P+Sa+okGBGBsDdaqJod/93s66g0BvXZHdH4HHkXIrIntF
-         ght67/8qciMtcCtM5OUjR7QDf0AOo+hbFd8Xk=
+        bh=HbRGp4p8llZk1W2l8huKtE8ynztaxnnEWZGQtpnZTOI=;
+        b=dGvYv+WYBC50wTVzwAJTgsk5pyoEsceJdZ5OMbvQDoXU4V7Hf4vLyvB7VAezKtAVvp
+         g72OaNcztylGRqgPXeq5Rn7UbFMWQnOq3uR8saS0VYfapBZhfCY1RTzU4c/AY69o8yi4
+         ryPIITSLRq+At6HIGHBXXp6MnvR12GITn5aro=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z+NSHccOtsCvHIJa85NeQChFC1UztUbiKQ4lP4DgpYE=;
-        b=YwZBNTEWKUVrpUlZB3/Igag3koeXSJlj16CN0yQFdlvKrQgBLxXjCXUIHxpmZThJVn
-         s1nQ80INBc5/MOn1eQAtnOZZGSZo9UcdaZydKmBYwNjElMu7i7tdPtpLA3gB76EXwcyD
-         qwBAQXfW3DYucGtUAi/5M71T0CbCjL67RcRWz+zq60gRcYtJUWsOyDRZ5s9RTV0aXwCY
-         RTiRYfWsbAIQo5Q8Dc0VjhRV90qrkTbUg/S+4A1CF5jV56Ge4HCkiPzmChBFWbaxdTmN
-         UIP0zCHKJcIs62H99G5LriZ82/vz3dNYVeZuwGBycmhnwM9FSo8bFDXktA0IS0rUjPRG
-         Laag==
-X-Gm-Message-State: AFqh2krBjwk1ggAB7lQPufyYvGZHz2YkAG68EISroS4AldWCiFV9nNED
-        ZTaO+LxnBYtwGGvQMoxiqDRK6sts0T/Wdw3qvJlJ/3dLurax7cpGNbggTGRX0/NvIxFHuV+xB4A
-        KX0gNHfUhbORF2kTaSJ89urXtTw6e1cRuLOmWwQP+rslQMx4eUk61l6dSLi/f
-X-Received: by 2002:a17:903:2447:b0:191:1a7c:ef9f with SMTP id l7-20020a170903244700b001911a7cef9fmr114145362pls.1.1673622425263;
-        Fri, 13 Jan 2023 07:07:05 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXusrPlnaK+wmzYGKRbXYOFMSqbu96oB8HP0e7TOKd6vguQ6K8ok85JPWB7jm/g9wf1EWy8T0A==
-X-Received: by 2002:a17:903:2447:b0:191:1a7c:ef9f with SMTP id l7-20020a170903244700b001911a7cef9fmr114145330pls.1.1673622424972;
-        Fri, 13 Jan 2023 07:07:04 -0800 (PST)
+        bh=HbRGp4p8llZk1W2l8huKtE8ynztaxnnEWZGQtpnZTOI=;
+        b=MQCAJw2PZez6d/UyGY4gBqecDCnjO8fGvkFloQvSyZDC3rFrlf9UU8vclTbaGnPAa6
+         NrT5LP4fqTKmSdtg/AVKUgoQZNl1PApOFnaAtmXVPIiVp4o4oM7g9zzasa43GicBauVV
+         VWmljoEaQipoibSI0FPF4d5Wwnl8sl1qfEmSqoRkHLJ2nKeeYWixU70qC0uS9sHwwxpV
+         p/3rNEz48aBRTSzkzAn2B0VKTDYbbjLzQtQe9s4OVi1gyg0njwm2V7rzFSSv9nTJa7ea
+         zYcQ8sY1kQAyezCbtYKoIM8gKrPuKx9QHb3j6g2S8xrW63LXwgvp/NHTUM1dOyBvFrXs
+         l2og==
+X-Gm-Message-State: AFqh2krz7++5DdWdhUIA9yy4KLDckYjYSyroR8TwR6m8igeCbcEisWM5
+        Gacy+8AwyKpUWGb69/PKoEX3n2IpNuBwfYUlCd2C1Tp0BVgBUVtL8KUALnAulYx3yFjODVj+goo
+        R/T0usoPJlBKamLJ17LSicInyEXoG9vAjufpM3w/INs8k7CuHtLT5KeprkWNw
+X-Received: by 2002:a17:902:bb85:b0:189:8ca1:e641 with SMTP id m5-20020a170902bb8500b001898ca1e641mr80498984pls.60.1673622429055;
+        Fri, 13 Jan 2023 07:07:09 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXscZmErgOwVL6tBvKuitY7Ib1z13zgRMu2ttD4v7LZfAmey7RhM9DZ9ozf9VslikARPV/ITGQ==
+X-Received: by 2002:a17:902:bb85:b0:189:8ca1:e641 with SMTP id m5-20020a170902bb8500b001898ca1e641mr80498971pls.60.1673622428746;
+        Fri, 13 Jan 2023 07:07:08 -0800 (PST)
 Received: from LAP568U.mistral.in ([106.51.227.150])
-        by smtp.gmail.com with ESMTPSA id v11-20020a170902f0cb00b00180033438a0sm14325723pla.106.2023.01.13.07.07.01
+        by smtp.gmail.com with ESMTPSA id v11-20020a170902f0cb00b00180033438a0sm14325723pla.106.2023.01.13.07.07.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 07:07:04 -0800 (PST)
+        Fri, 13 Jan 2023 07:07:08 -0800 (PST)
 From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
 X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
 To:     Roger Quadros <rogerq@kernel.org>, Vinod Koul <vkoul@kernel.org>,
@@ -59,26 +59,27 @@ To:     Roger Quadros <rogerq@kernel.org>, Vinod Koul <vkoul@kernel.org>,
 Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
         linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
         Sinthu Raja <sinthu.raja@ti.com>
-Subject: [PATCH V4 1/2] phy: ti: j721e-wiz: Manage TypeC lane swap if typec-dir-gpios not specified
-Date:   Fri, 13 Jan 2023 20:36:14 +0530
-Message-Id: <20230113150615.19375-2-sinthu.raja@ti.com>
+Subject: [PATCH V4 2/2] phy: ti: j721e-wiz: Add support to enable LN23 Type-C swap
+Date:   Fri, 13 Jan 2023 20:36:15 +0530
+Message-Id: <20230113150615.19375-3-sinthu.raja@ti.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230113150615.19375-1-sinthu.raja@ti.com>
 References: <20230113150615.19375-1-sinthu.raja@ti.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1673622425-303100-5447-19117-1
+X-BESS-ID: 1673622429-303100-5446-19125-1
 X-BESS-VER: 2019.1_20221214.2106
-X-BESS-Apparent-Source-IP: 209.85.210.200
+X-BESS-Apparent-Source-IP: 209.85.216.72
 X-BESS-Outbound-Spam-Score: 0.00
 X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.245440 [from 
-        cloudscan20-233.eu-central-1b.ess.aws.cudaops.com]
+        cloudscan13-144.eu-central-1a.ess.aws.cudaops.com]
         Rule breakdown below
          pts rule name              description
         ---- ---------------------- --------------------------------
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
         0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
 X-BESS-BRTS-Status: 1
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -92,99 +93,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sinthu Raja <sinthu.raja@ti.com>
 
-It's possible that the Type-C plug orientation on the DIR line will be
-implemented through hardware design. In that situation, there won't be
-an external GPIO line available, but the driver still needs to address
-this since the DT won't use the typec-dir-gpios property.
+The WIZ acts as a wrapper for SerDes and has Lanes 0 and 2 reserved
+for USB for type-C lane swap if Lane 1 and Lane 3 are linked to the
+USB PHY that is integrated into the SerDes IP. The WIZ control register
+has to be configured to support this lane swap feature.
 
-Add code to handle LN10 Type-C swap if typec-dir-gpios property is not
-specified in DT.
+The support for swapping lanes 2 and 3 is missing and therefore
+add support to configure the control register to swap between
+lanes 2 and 3 if PHY type is USB.
 
 Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
 Reviewed-by: Roger Quadros <rogerq@kernel.org>
 ---
 
-No changes in V4.
+Changes in V4:
+============
+- Add Review tag.
+- Fix checkpatch CHECK errors.
+ * Remove unnecessary paranthesis.
+ * Avoid logical continuations in multiple lines.
 
 Changes in V3:
 =============
-- Added Reviewed-by tag.
+Address review comments:
+- Update comment to mention the LN23 SWAP along with the LN10
 
 Changes in V2:
 =============
 Address review comments:
-- Update commit description as per review comments.
-- Restore code to check only debounce delay only if typec-dir-gpios property is specified in DT.
-- Rename lane_phy_reg variable as master_lane_num.
-- Update inline comments.
+- Update commit description.
+- Rename enum variable name from wiz_lane_typec_swap_mode to wiz_typec_master_lane.
+- Rename enumerators name specific to list of master lanes used for lane swapping.
+- Add inline comments.
 
- drivers/phy/ti/phy-j721e-wiz.c | 38 +++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 10 deletions(-)
+ drivers/phy/ti/phy-j721e-wiz.c | 38 +++++++++++++++++++++++++++++-----
+ 1 file changed, 33 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
-index ddce5ef7711c..b5c1b82e99a6 100644
+index b5c1b82e99a6..1b83c98a78f0 100644
 --- a/drivers/phy/ti/phy-j721e-wiz.c
 +++ b/drivers/phy/ti/phy-j721e-wiz.c
-@@ -376,6 +376,7 @@ struct wiz {
- 	struct gpio_desc	*gpio_typec_dir;
- 	int			typec_dir_delay;
- 	u32 lane_phy_type[WIZ_MAX_LANES];
-+	u32 master_lane_num[WIZ_MAX_LANES];
- 	struct clk		*input_clks[WIZ_MAX_INPUT_CLOCKS];
- 	struct clk		*output_clks[WIZ_MAX_OUTPUT_CLOCKS];
- 	struct clk_onecell_data	clk_data;
-@@ -1234,15 +1235,30 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
- 	struct wiz *wiz = dev_get_drvdata(dev);
- 	int ret;
+@@ -58,6 +58,14 @@ enum wiz_lane_standard_mode {
+ 	LANE_MODE_GEN4,
+ };
  
--	/* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
--	if (id == 0 && wiz->gpio_typec_dir) {
--		if (wiz->typec_dir_delay)
--			msleep_interruptible(wiz->typec_dir_delay);
--
--		if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
--			regmap_field_write(wiz->typec_ln10_swap, 1);
--		else
--			regmap_field_write(wiz->typec_ln10_swap, 0);
-+	if (id == 0) {
-+		/* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
-+		if (wiz->gpio_typec_dir) {
-+			if (wiz->typec_dir_delay)
-+				msleep_interruptible(wiz->typec_dir_delay);
++/*
++ * List of master lanes used for lane swapping
++ */
++enum wiz_typec_master_lane {
++	LANE0 = 0,
++	LANE2 = 2,
++};
 +
-+			if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
-+				regmap_field_write(wiz->typec_ln10_swap, 1);
-+			else
-+				regmap_field_write(wiz->typec_ln10_swap, 0);
-+		} else {
-+			/* if no typec-dir gpio was specified and PHY type is
-+			 * USB3 with master lane number is '0', set LN10 SWAP
-+			 * bit to '1'
-+			 */
-+			u32 num_lanes = wiz->num_lanes;
-+			int i;
+ enum wiz_refclk_mux_sel {
+ 	PLL0_REFCLK,
+ 	PLL1_REFCLK,
+@@ -194,6 +202,9 @@ static const struct reg_field p_mac_div_sel1[WIZ_MAX_LANES] = {
+ static const struct reg_field typec_ln10_swap =
+ 					REG_FIELD(WIZ_SERDES_TYPEC, 30, 30);
+ 
++static const struct reg_field typec_ln23_swap =
++					REG_FIELD(WIZ_SERDES_TYPEC, 31, 31);
 +
-+			for (i = 0; i < num_lanes; i++) {
-+				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3)
-+					if (wiz->master_lane_num[i] == 0)
-+						regmap_field_write(wiz->typec_ln10_swap, 1);
-+			}
-+		}
+ struct wiz_clk_mux {
+ 	struct clk_hw		hw;
+ 	struct regmap_field	*field;
+@@ -367,6 +378,7 @@ struct wiz {
+ 	struct regmap_field	*mux_sel_field[WIZ_MUX_NUM_CLOCKS];
+ 	struct regmap_field	*div_sel_field[WIZ_DIV_NUM_CLOCKS_16G];
+ 	struct regmap_field	*typec_ln10_swap;
++	struct regmap_field	*typec_ln23_swap;
+ 	struct regmap_field	*sup_legacy_clk_override;
+ 
+ 	struct device		*dev;
+@@ -676,6 +688,13 @@ static int wiz_regfield_init(struct wiz *wiz)
+ 		return PTR_ERR(wiz->typec_ln10_swap);
  	}
  
- 	if (id == 0) {
-@@ -1386,8 +1402,10 @@ static int wiz_get_lane_phy_types(struct device *dev, struct wiz *wiz)
- 		dev_dbg(dev, "%s: Lanes %u-%u have phy-type %u\n", __func__,
- 			reg, reg + num_lanes - 1, phy_type);
++	wiz->typec_ln23_swap = devm_regmap_field_alloc(dev, regmap,
++						       typec_ln23_swap);
++	if (IS_ERR(wiz->typec_ln23_swap)) {
++		dev_err(dev, "LN23_SWAP reg field init failed\n");
++		return PTR_ERR(wiz->typec_ln23_swap);
++	}
++
+ 	wiz->phy_en_refclk = devm_regmap_field_alloc(dev, regmap, phy_en_refclk);
+ 	if (IS_ERR(wiz->phy_en_refclk)) {
+ 		dev_err(dev, "PHY_EN_REFCLK reg field init failed\n");
+@@ -1246,17 +1265,26 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
+ 			else
+ 				regmap_field_write(wiz->typec_ln10_swap, 0);
+ 		} else {
+-			/* if no typec-dir gpio was specified and PHY type is
+-			 * USB3 with master lane number is '0', set LN10 SWAP
+-			 * bit to '1'
++			/* if no typec-dir gpio is specified and PHY type is USB3
++			 * with master lane number is '0' or '2', then set LN10 or
++			 * LN23 SWAP bit to '1' respectively.
+ 			 */
+ 			u32 num_lanes = wiz->num_lanes;
+ 			int i;
  
--		for (i = reg; i < reg + num_lanes; i++)
-+		for (i = reg; i < reg + num_lanes; i++) {
-+			wiz->master_lane_num[i] = reg;
- 			wiz->lane_phy_type[i] = phy_type;
-+		}
+ 			for (i = 0; i < num_lanes; i++) {
+-				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3)
+-					if (wiz->master_lane_num[i] == 0)
++				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3) {
++					switch (wiz->master_lane_num[i]) {
++					case LANE0:
+ 						regmap_field_write(wiz->typec_ln10_swap, 1);
++						break;
++					case LANE2:
++						regmap_field_write(wiz->typec_ln23_swap, 1);
++						break;
++					default:
++						break;
++					}
++				}
+ 			}
+ 		}
  	}
- 
- 	return 0;
 -- 
 2.36.1
 
