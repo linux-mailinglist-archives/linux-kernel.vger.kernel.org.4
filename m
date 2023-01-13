@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E986693F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BC76693FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240991AbjAMKXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 05:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S241061AbjAMKXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 05:23:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240805AbjAMKWe (ORCPT
+        with ESMTP id S241024AbjAMKW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 05:22:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9996C5830F;
-        Fri, 13 Jan 2023 02:21:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A6EC61129;
-        Fri, 13 Jan 2023 10:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47A4C433EF;
-        Fri, 13 Jan 2023 10:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673605304;
-        bh=QJB4bPL/qxvG2LxsovNGnWYa2fcv/xAVjbx4c/RVED0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OQ8m4D+3wF4Chb2uthGQTjVojqbZNyoIz2Ni4i2cGVW7CudPublYKRnf+S6MHLwII
-         CQ7XocZJelHMgEP0dTE/0keJs7mqddkdhnaqnU+Hzn3UhbMXGZhVE3mZQC74I/007j
-         JiZOocVsn40T2mctTSNOAsUg/HW93u1cl6/oC9nkaM3nBgFZkDYqZyWYjkRUxtFQwS
-         VwlFQJXdlbuHimPQKmBRUdsSDfXCt5d8G2WSrX2LkvPmmEl2ItoCjaoGLo+0GKeVil
-         fEmuds6/Yj+IX2ejHxxdZh8lqSUUSk7+emTULe2V2muZgQcwCYkfRP+ZLjbO7J8GHL
-         eGFPjQTqhR3HA==
-Message-ID: <14dfa3ac-344f-5185-fd83-06b3c9884b5c@kernel.org>
-Date:   Fri, 13 Jan 2023 12:21:37 +0200
+        Fri, 13 Jan 2023 05:22:59 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25BE1788F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 02:22:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673605366; x=1705141366;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CDcpGc14MxwljMRrNGGaJzjMrvUpcw8OYXg9rqQznUQ=;
+  b=jlUoylVARX8BXNVQfSrQBU9qkKD6NzTVLKuZwVhDCzLdhj9Bk9xkhDWE
+   8GzM/75eI1ET83xYDp5L9iFaXHbu8EZlmAtvSQeSRp+zCzTQfi44q1Dal
+   O4HwExhxFEkPJ68dT+zg6UV9uU8MK7INI+UZowLD+J+CHrDW4mLP27Ztl
+   qEmSR1w8wf5p08B14zYMDP94fBj0oTVJ+4fTAPHI7iO20l2Cfdy4jErvE
+   /1ijIz3jJ5uHQO2QNWQ6xNnl9G1gfPCpKeRqOnuB8YEP+Diuw3uAktMft
+   iTvK1i0rquBUSff9X4k5eKhavEuTRo9TGxvCwvUqq+X66yj3/RNy6GKkD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="324024194"
+X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
+   d="scan'208";a="324024194"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 02:22:34 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="721473464"
+X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
+   d="scan'208";a="721473464"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 02:22:32 -0800
+Message-ID: <d2c6f43a-e166-a201-4662-ba726347f2da@linux.intel.com>
+Date:   Fri, 13 Jan 2023 11:22:30 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next 0/5] Add PPS support to am65-cpts driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/5] soundwire: stream: uniquify dev_err() logs
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        nm@ti.com, kristo@kernel.org, vigneshr@ti.com, nsekhar@ti.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-References: <20230111114429.1297557-1-s-vadapalli@ti.com>
- <2fc741b2-671d-8817-1d6f-511398aea9ff@kernel.org>
- <19566370-3cf1-09fd-119f-c39c0309eb6d@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <19566370-3cf1-09fd-119f-c39c0309eb6d@ti.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     pierre-louis.bossart@linux.intel.com, vinod.koul@linaro.org,
+        bard.liao@intel.com, linux-kernel@vger.kernel.org
+References: <20230113093532.3872113-1-yung-chuan.liao@linux.intel.com>
+ <20230113093532.3872113-2-yung-chuan.liao@linux.intel.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20230113093532.3872113-2-yung-chuan.liao@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13/01/2023 11:56, Siddharth Vadapalli wrote:
-> Hello Roger,
+On 1/13/2023 10:35 AM, Bard Liao wrote:
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 > 
-> On 13/01/23 15:18, Roger Quadros wrote:
->> Siddharth,
->>
->> On 11/01/2023 13:44, Siddharth Vadapalli wrote:
->>> The CPTS hardware doesn't support PPS signal generation. Using the GenFx
->>> (periodic signal generator) function, it is possible to model a PPS signal
->>> followed by routing it via the time sync router to the CPTS_HWy_TS_PUSH
->>> (hardware time stamp) input, in order to generate timestamps at 1 second
->>> intervals.
->>>
->>> This series adds driver support for enabling PPS signal generation.
->>> Additionally, the documentation for the am65-cpts driver is updated with
->>> the bindings for the "ti,pps" property, which is used to inform the
->>> pair [CPTS_HWy_TS_PUSH, GenFx] to the cpts driver. The PPS example is
->>> enabled for AM625-SK board by default, by adding the timesync_router node
->>> to the AM62x SoC, and configuring it for PPS in the AM625-SK board dts.
->>>
->>> Grygorii Strashko (3):
->>>   dt-binding: net: ti: am65x-cpts: add 'ti,pps' property
->>>   net: ethernet: ti: am65-cpts: add pps support
->>>   net: ethernet: ti: am65-cpts: adjust pps following ptp changes
->>>
->>> Siddharth Vadapalli (2):
->>>   arm64: dts: ti: k3-am62-main: Add timesync router node
->>>   arm64: dts: ti: k3-am625-sk: Add cpsw3g cpts PPS support
->>
->> Device tree patches need to be sent separately. You don't need to involve
->> net maintainers for that.
->>
->> If you introduce a new binding then that needs to be in maintainer's
->> tree before you can send a related device tree patch.
+> There are a couple of duplicate logs which makes harder than needed to
+> follow the error flows. Add __func__ or make the log unique.
 > 
-> Thank you for letting me know. Would I need to resend the series in order for it
-> to be reviewed? I was hoping that if I get feedback for this series, I will
-> implement it and post just the bindings and driver patches as the v2 series,
-> dropping the device tree patches. Please let me know.
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> ---
+>   drivers/soundwire/stream.c | 14 ++++++++------
+>   1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+> index df3b36670df4..e0eae0b98267 100644
+> --- a/drivers/soundwire/stream.c
+> +++ b/drivers/soundwire/stream.c
+> @@ -1389,7 +1389,7 @@ static int _sdw_prepare_stream(struct sdw_stream_runtime *stream,
+>   
+>   	ret = do_bank_switch(stream);
+>   	if (ret < 0) {
+> -		dev_err(bus->dev, "Bank switch failed: %d\n", ret);
+> +		dev_err(bus->dev, "do_bank_switch failed: %d\n", ret);
+>   		goto restore_params;
+>   	}
 
-You could wait a couple of days for more comments here before spinning off a v2 ;)
+This one seems bit unrelated to the change and makes error message 
+inconsistent with:
+https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git/tree/drivers/soundwire/stream.c?h=next&id=545c365185a47672b1d5cc13c84057a1e874993c#n1498
+and
+https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git/tree/drivers/soundwire/stream.c?h=next&id=545c365185a47672b1d5cc13c84057a1e874993c#n1575
+which actually brings me to another suggestion, can this error message 
+perhaps be just moved into do_bank_switch() function itself, instead of 
+being duplicated multiple times or alternatively just also prefix all of 
+them with function name?
 
-cheers,
--roger
