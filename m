@@ -2,166 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE65669FD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651C7669F0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjAMRSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S229610AbjAMRK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjAMRRh (ORCPT
+        with ESMTP id S229529AbjAMRKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:17:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035018CD27
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673629966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nb3/Kg+q8w8ft77T7rabV7x4+F6BGLijJ0EWAhVZvAg=;
-        b=FYP+AGy59gSVp2/mgu2edSHQw29OEw11uPyvCVZ4CqT94iQQh2kNNfQwqKSG2e0Mnee9A8
-        bO9zM2OGhbMF9kU80Tssv1GcHnfRkdIQF9MhErssy5MqCjHI47pxTY4ALvJ3vlkJC5WOJV
-        QeM9ce7J8Z7NgfR6XN548mnsgrXhf5U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-111-JtK01FPYOwaf9TktFHEmLQ-1; Fri, 13 Jan 2023 12:12:40 -0500
-X-MC-Unique: JtK01FPYOwaf9TktFHEmLQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A68780D0EB;
-        Fri, 13 Jan 2023 17:12:38 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.193.196])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DDF5F40C2064;
-        Fri, 13 Jan 2023 17:12:31 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        David Hildenbrand <david@redhat.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH mm-unstable v1 16/26] parisc/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Date:   Fri, 13 Jan 2023 18:10:16 +0100
-Message-Id: <20230113171026.582290-17-david@redhat.com>
-In-Reply-To: <20230113171026.582290-1-david@redhat.com>
-References: <20230113171026.582290-1-david@redhat.com>
+        Fri, 13 Jan 2023 12:10:22 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0D865363
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:10:21 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d2so1546847wrp.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vazWzgcQHorHqt/43WrkMc2t081lWzcdhOcSKYE7GTo=;
+        b=vq8McZG8ps+E0ie7TKEPaWfVpJDwfMTXkAOY0kC/ExAkUUO3xBWLhLskEt34KCyUWa
+         4eXFcW6FBtWpfOyptjWTatUjYUkZHLM+bLDXtd3/kx5hnNgAfk6gjPxigErO2LNdREUR
+         EkmalnVjz49NXBuH7ozmr3u1d18E8VKUpUyhDisNVznE5rDV3VbfVgwecC4qen3Ybn9G
+         cqKeGpjNGrqXZ6JiONFeIVXcEZKDlH89uljOEHsF23BVUaINh9ONw52FgZrv//Pme6gI
+         nHE7ZysTBeL8RRaKxqjtYE3u5R4vFEVP+qx1N8t1CfD/fGK+c++D5wVDMX4akHy0Sf9W
+         90JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vazWzgcQHorHqt/43WrkMc2t081lWzcdhOcSKYE7GTo=;
+        b=NdiyieElxVBVPJwbfoefDiibXIOiqjmaUHjH72YrgKNxnrmBoCVZWlmUPc87cXOJG7
+         NUpDgoofvmhy3sPuR8SEcoX6TjwUMAH4WqhLg+cwUORof7KC/DJ22WTNpWHGZ3FxQtHM
+         59RMt6qDomy7RYrPoAfrv+cb4mqBucalVYHjNfXC3/oon0LyDY5QTvGPcbOhAtGnPZOr
+         xs1+e/7YBLodjIEMyacORbw5qzXTtIuB7YnRy3uonA036CSWIbkIWDYVXLSMftzTwurO
+         ZDfMmFEG7GVdWWC2BXGMKhnxtFSgy3zw7t2aehNwqzaHNdK/7qP64Xs31f31YRuCcL6G
+         geWA==
+X-Gm-Message-State: AFqh2krmSpJIEbCi07w7j6ppJbo+5G0D7JzFyMOl8Rk4C9lP4yyj2hWg
+        awVpDhlcDaCffAbO0NM1r24/8w==
+X-Google-Smtp-Source: AMrXdXs+SbWwU6FVfDwhNYh8eG4DSKugwTztZjJGi5RnSaPxNbFwQHoTLsWfYUaSnOIp05pSp9gKPQ==
+X-Received: by 2002:a5d:514b:0:b0:2a2:e87a:b4e1 with SMTP id u11-20020a5d514b000000b002a2e87ab4e1mr280248wrt.36.1673629819690;
+        Fri, 13 Jan 2023 09:10:19 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d4bc6000000b0027323b19ecesm19254261wrt.16.2023.01.13.09.10.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 09:10:19 -0800 (PST)
+Message-ID: <9e831252-7198-7983-8a52-0e745688452d@linaro.org>
+Date:   Fri, 13 Jan 2023 17:10:17 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 0/4] soc: qcom: Introduce PMIC GLINK
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by using the yet-unused
-_PAGE_ACCESSED location in the swap PTE. Looking at pte_present()
-and pte_none() checks, there seems to be no actual reason why we cannot
-use it: we only have to make sure we're not using _PAGE_PRESENT.
+On 13/01/2023 04:11, Bjorn Andersson wrote:
+> This implements the base PMIC GLINK driver, a power_supply driver and a
+> driver for the USB Type-C altmode protocol. This has been tested and
+> shown to provide battery information, USB Type-C switch and mux requests
+> and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
+> 
+> Bjorn Andersson (4):
+>    dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+>    soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+>    soc: qcom: pmic_glink: Introduce altmode support
+>    power: supply: Introduce Qualcomm PMIC GLINK power supply
+> 
+>   .../bindings/soc/qcom/qcom,pmic-glink.yaml    |  102 ++
+>   drivers/power/supply/Kconfig                  |    9 +
+>   drivers/power/supply/Makefile                 |    1 +
+>   drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
+>   drivers/soc/qcom/Kconfig                      |   15 +
+>   drivers/soc/qcom/Makefile                     |    2 +
+>   drivers/soc/qcom/pmic_glink.c                 |  336 ++++
+>   drivers/soc/qcom/pmic_glink_altmode.c         |  477 ++++++
+>   include/linux/soc/qcom/pmic_glink.h           |   32 +
+>   9 files changed, 2395 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+>   create mode 100644 drivers/power/supply/qcom_battmgr.c
+>   create mode 100644 drivers/soc/qcom/pmic_glink.c
+>   create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
+>   create mode 100644 include/linux/soc/qcom/pmic_glink.h
+> 
 
-Reusing this bit avoids having to steal one bit from the swap offset.
+How does the USB PHY and a USB redriver fit into this ?
 
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Signed-off-by: David Hildenbrand <david@redhat.com>
+Is the host supposed to manage both/neither ? Is the DSP responsible for 
+configuring the PHY lanes and the turnaround on orientation switch ?
+
 ---
- arch/parisc/include/asm/pgtable.h | 41 ++++++++++++++++++++++++++++---
- 1 file changed, 38 insertions(+), 3 deletions(-)
-
-diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
-index ea357430aafe..3033bb88df34 100644
---- a/arch/parisc/include/asm/pgtable.h
-+++ b/arch/parisc/include/asm/pgtable.h
-@@ -218,6 +218,9 @@ extern void __update_cache(pte_t pte);
- #define _PAGE_KERNEL_RWX	(_PAGE_KERNEL_EXEC | _PAGE_WRITE)
- #define _PAGE_KERNEL		(_PAGE_KERNEL_RO | _PAGE_WRITE)
- 
-+/* We borrow bit 23 to store the exclusive marker in swap PTEs. */
-+#define _PAGE_SWP_EXCLUSIVE	_PAGE_ACCESSED
-+
- /* The pgd/pmd contains a ptr (in phys addr space); since all pgds/pmds
-  * are page-aligned, we don't care about the PAGE_OFFSET bits, except
-  * for a few meta-information bits, so we shift the address to be
-@@ -394,17 +397,49 @@ extern void paging_init (void);
- 
- #define update_mmu_cache(vms,addr,ptep) __update_cache(*ptep)
- 
--/* Encode and de-code a swap entry */
--
-+/*
-+ * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
-+ * are !pte_none() && !pte_present().
-+ *
-+ * Format of swap PTEs (32bit):
-+ *
-+ *                         1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
-+ *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+ *   <---------------- offset -----------------> P E <ofs> < type ->
-+ *
-+ *   E is the exclusive marker that is not stored in swap entries.
-+ *   _PAGE_PRESENT (P) must be 0.
-+ *
-+ *   For the 64bit version, the offset is extended by 32bit.
-+ */
- #define __swp_type(x)                     ((x).val & 0x1f)
- #define __swp_offset(x)                   ( (((x).val >> 6) &  0x7) | \
- 					  (((x).val >> 8) & ~0x7) )
--#define __swp_entry(type, offset)         ((swp_entry_t) { (type) | \
-+#define __swp_entry(type, offset)         ((swp_entry_t) { \
-+					    ((type) & 0x1f) | \
- 					    ((offset &  0x7) << 6) | \
- 					    ((offset & ~0x7) << 8) })
- #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
- #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
- 
-+#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-+static inline int pte_swp_exclusive(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
-+}
-+
-+static inline pte_t pte_swp_mkexclusive(pte_t pte)
-+{
-+	pte_val(pte) |= _PAGE_SWP_EXCLUSIVE;
-+	return pte;
-+}
-+
-+static inline pte_t pte_swp_clear_exclusive(pte_t pte)
-+{
-+	pte_val(pte) &= ~_PAGE_SWP_EXCLUSIVE;
-+	return pte;
-+}
-+
- static inline int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
- {
- 	pte_t pte;
--- 
-2.39.0
-
+bod
