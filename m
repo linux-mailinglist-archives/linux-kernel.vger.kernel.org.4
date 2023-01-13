@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8F2669BED
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA7A669BFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjAMP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S230223AbjAMP0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjAMP0L (ORCPT
+        with ESMTP id S230071AbjAMP0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:26:11 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4463B4EC8E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:18:29 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id 6so10337280vkz.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVtN3K9mnpeDZHFf7lev4Sj9elnbL+XiynQF7HQce4M=;
-        b=Cik0XGAFoR5TWFWC6vud1pQ/7F3ZC/4yXfYRlm7rPH+zzWz7wKgMmtJSYf0/YkoW69
-         meineUAPaf0mwXDzQoiTRxEqVwwWDq46e0NT0ZJ6KlxbckCxexE8tpJQ43vz37JA+TOy
-         URFuXGbhHgdpDNp18mNTMgXiKNgmxCs9vzs8MBP76EjLH5ohCMREJiMZ0xcBqbK1V+kK
-         P/Zp/u8BMCrOXyRHeOJ6atM88AJxKPfCgit5NA40WbLbORBXfx5HXQFQyfg1RdmpsWq+
-         ZZHJhISNiTVdAAHK2orsO0oOSxRYkgaQDD3QEuKBEpyaOELNPFPcdo6+sKRO1lI05RLl
-         yAjw==
+        Fri, 13 Jan 2023 10:26:15 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288F47278D;
+        Fri, 13 Jan 2023 07:18:56 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id n8so17958266oih.0;
+        Fri, 13 Jan 2023 07:18:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rVtN3K9mnpeDZHFf7lev4Sj9elnbL+XiynQF7HQce4M=;
-        b=Q3uKYFCygH0hZ03OUulojVbndbI8qniUlJj2rtTH5BImBgh0irMXXEo+Z/z5R+y/l6
-         yYzfkFkBEZKBKpV8axPukGCGVtugqgjlB7kAts2riGuMpZhSbjLbuVarEGjHi9JibYog
-         1f2TDxElYUQoHikXu15j8Dg9CvrD/mPcbgHVKCi4Mwj5MTNf6i3GQYkDnsj6dGPzdEQ6
-         d9XMXakdJhO9ehKPBEWagLoaETGZfDyRMY84K8ySuH7vBoGV5gTDEl4gmDKTgHywcSAU
-         yC3NUz93yDn+TeSFphRhOBME9qmESkXuGR0npGO/0/HjTJgzQJapeTELDzmdOiWtu1I5
-         DjEg==
-X-Gm-Message-State: AFqh2kpX/aPqBeOFfaiZgNzwhtNcf1mHxu16SdMgwODlDWBH+F5HCeiE
-        hQR9K/+M8kRkAxawmeqAeVpEAU8ogD1Y+mEwpL9B9Q==
-X-Google-Smtp-Source: AMrXdXvockga8iZEgIHNW2j1FyU0XR2H2L/Hb4GTKyAiwlS8C0vNvOP+VpqEt9X1+Wg3Qf21rkumD27oqr4mSsbt09Q=
-X-Received: by 2002:a1f:324a:0:b0:3db:138f:3502 with SMTP id
- y71-20020a1f324a000000b003db138f3502mr716112vky.28.1673623108336; Fri, 13 Jan
- 2023 07:18:28 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ieDDnBbNB9JJsaMwpNzXJlERKk1wwpqLtOrBhJRfGpo=;
+        b=IZra8qjrcHr3eLbPGF9QPAUCfQ/039Fts8ql1H2MrriLwt0C+pWfFHzqSsotqYsAkf
+         ZGo295nFFgvvEGxogSV2+JT7dob+NPjhG6hSRVsSZStYXkIyyc7dRVaEMIjGOPDCY9UK
+         O66HdNI62tmqqgNk4dw9CPXy91TGjtJr2fqRjuM7anMwV5/cU60RP24hQt89WtTVNqD6
+         qm59rGQO/Vh2r/WPj3KKafL7EkljDSCZrJJCFgAedT0SCouSgdjtS6bWTso0aNsabsX3
+         OemNwBFGDatZgl2lLsDvvKLMAj/NRVfdqPyDzT0KS1DNd7eaaeYFdj7LiY8ZZyIznUot
+         XpvQ==
+X-Gm-Message-State: AFqh2kpj4Uo7mbYOiA4tQZeNtkdhNKVxyY6iHmSGExsuQsB6IR7DIX8d
+        9wfsKuz4lP2bsRMc5dSsNQ==
+X-Google-Smtp-Source: AMrXdXvKjUuXqtnMP8HRUWF6KklExF2oSAG2rWu9CjnEqT3LUV2kOArvIgWmH2DzIBq+esFLR8R2ag==
+X-Received: by 2002:a05:6808:996:b0:364:c003:e1ba with SMTP id a22-20020a056808099600b00364c003e1bamr517132oic.46.1673623135307;
+        Fri, 13 Jan 2023 07:18:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w11-20020a0568080d4b00b0035c422bb303sm9298016oik.19.2023.01.13.07.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:18:54 -0800 (PST)
+Received: (nullmailer pid 2206759 invoked by uid 1000);
+        Fri, 13 Jan 2023 15:18:53 -0000
+Date:   Fri, 13 Jan 2023 09:18:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: remove arch/sh
+Message-ID: <20230113151853.GA2184281-robh@kernel.org>
+References: <20230113062339.1909087-1-hch@lst.de>
 MIME-Version: 1.0
-References: <20230112134645.59232-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230112134645.59232-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 13 Jan 2023 16:18:17 +0100
-Message-ID: <CAMRc=Mc791ZKZziZQu_c1YhphqH6yXtyYzpsw2UCRFbs5OhdKg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: davinci: Do not mention legacy API in the code
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113062339.1909087-1-hch@lst.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 2:46 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Replace mentioning of legacy API by the latest one.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpio-davinci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
-> index fa51a91afa54..e1c1b9a527db 100644
-> --- a/drivers/gpio/gpio-davinci.c
-> +++ b/drivers/gpio/gpio-davinci.c
-> @@ -534,7 +534,7 @@ static int davinci_gpio_irq_setup(struct platform_device *pdev)
->         }
->
->         /*
-> -        * Arrange gpio_to_irq() support, handling either direct IRQs or
-> +        * Arrange gpiod_to_irq() support, handling either direct IRQs or
->          * banked IRQs.  Having GPIOs in the first GPIO bank use direct
->          * IRQs, while the others use banked IRQs, would need some setup
->          * tweaks to recognize hardware which can do that.
-> --
-> 2.39.0
->
+On Fri, Jan 13, 2023 at 07:23:17AM +0100, Christoph Hellwig wrote:
+> Hi all,
+> 
+> arch/sh has been a long drag because it supports a lot of SOCs, and most
+> of them haven't even been converted to device tree infrastructure.  These
+> SOCs are generally obsolete as well, and all of the support has been barely
+> maintained for almost 10 years, and not at all for more than 1 year.
+> 
+> Drop arch/sh and everything that depends on it.
+> 
+> Diffstat:
+>  Documentation/sh/booting.rst                             |   12 
+>  Documentation/sh/features.rst                            |    3 
+>  Documentation/sh/index.rst                               |   56 
+>  Documentation/sh/new-machine.rst                         |  277 -
+>  Documentation/sh/register-banks.rst                      |   40 
 
-Applied, thanks!
+Can you please also remove:
 
-Bart
+Documentation/devicetree/bindings/mtd/flctl-nand.txt
+Documentation/devicetree/bindings/interrupt-controller/jcore,aic.txt
+Documentation/devicetree/bindings/spi/jcore,spi.txt
+Documentation/devicetree/bindings/timer/jcore,pit.txt
+
+Rob
