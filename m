@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA0566A17C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BC366A17D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjAMSEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:04:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S230490AbjAMSEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbjAMSDe (ORCPT
+        with ESMTP id S231164AbjAMSDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:03:34 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF407F9D0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:58:19 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id fd15so9727197qtb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:58:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nwounBNqcFt0WNcsB2zzBI6/+gCmMNx+ampM2FZOqRs=;
-        b=bRqlN8u/n+nMOL2S0M2dbaw6HTZpWGe4ACj4DqT5mAO/bmVutbUWTtz9F+dzuho9Xu
-         wIhyrZnq7QkkHtz8hJF49/dfH5EXzP2KyO6lguO9GhLkh6AAwRsRPs2p4GDazYivsoaL
-         qGqZ8z3OIVbHuDhDIQJKasftGjDvf/E9HMtUinwBIO+RGY6/yfuEdERcZG1mjG0oYc1K
-         UpjwcFWn0VTeS2tO6Alkj6Km1vM9OwJU5zkcNzz0k4DaFgvaDJKt5R/xuwO2YhzYKl0n
-         x1F4yff9zaHf2Qz3Xx67IocgR5hmWMNDg5hoVlh7X8Nu3h5CWs2naf5dVSv/Ip1zQ6y1
-         W8RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nwounBNqcFt0WNcsB2zzBI6/+gCmMNx+ampM2FZOqRs=;
-        b=H9a9VdFdXFQTv75h0ony/jEqH4pHqZoMpFDN66L85z9T2DaYwCNg0vxcEvjm+o4D+p
-         7cKqTkmvCYY3uzLUNfaV3VpwtCUPUgWCNSP3yDiK+JUWu1ZA2XANCCAOzvRxFpEKY+jA
-         Nn+07WlKWtR4P1wIxLoau7tIHVbLIPCrnA3VcoIi7qWcLbMpQ/sxrqo+B1xfVY7gN6um
-         CeG3gSRoVtVyEH7EHXAksBxUmJ0tMYcpiXUMwwU2/IzE3op2uE0bmlBuDaSjdHDaUYJy
-         QFkcyK/ls7PrKDsWIyuroKHGz8ZxfX8DlCdfPw+zCb6/ufr2a+akCGJ2WlxVlSwe9/y+
-         aCLg==
-X-Gm-Message-State: AFqh2kobnPsFxOW0GkhzaRrmNVR124vK+vgJytRnM5yO4TpWRYHZv2EG
-        7RUVpKZZSIP2bhUoodlsQQk=
-X-Google-Smtp-Source: AMrXdXuUuGAUif1AZgAb5hHYfIiUROV67NU8RM+1dHCDlc3JJIX/yITonzZOhWSGfUFpD0Jf/Qirbg==
-X-Received: by 2002:a05:622a:4c08:b0:3a7:f599:9c6c with SMTP id ey8-20020a05622a4c0800b003a7f5999c6cmr116643440qtb.26.1673632698537;
-        Fri, 13 Jan 2023 09:58:18 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id ge9-20020a05622a5c8900b003a7e38055c9sm10875572qtb.63.2023.01.13.09.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 09:58:17 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8AD5627C005A;
-        Fri, 13 Jan 2023 12:58:17 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 13 Jan 2023 12:58:17 -0500
-X-ME-Sender: <xms:uJvBYyUQH2y2hZr5dW5Bd-mrXUiE21Mzsxn2hIz_Sv31ta8BR7wlEw>
-    <xme:uJvBY-k5zTFw0nimO6s_OF5w4HeTWFuHCHM8uezIkvCEJLaWt7R_hweXJiNG2U54h
-    o2SXMHs53zisCBBtQ>
-X-ME-Received: <xmr:uJvBY2ZWlf6pbWfTaT1q1d4I8Qu1ZmwqPAQWvyQN6H47aypcQABoBFjjFAA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleekgddutdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:uJvBY5XZIPCgKBmxRx7YqlH9eqtZHEssKETb9bck8Gyz8wq1VLOs2g>
-    <xmx:uJvBY8lGGMkIyfDyIEK5C0Z6HikPlgzFst1-usI83xrWwVp07Uk6WA>
-    <xmx:uJvBY-dVIX_aZrOVWX-jOJYmY2W_2qrkznD_bcVLYbm9Rrp-rRM4Dw>
-    <xmx:uZvBY6bINI4u5xnGpj4MUVM8zGKCdKI44b5cArqDI_HEH9p6OoD2uA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Jan 2023 12:58:16 -0500 (EST)
-Date:   Fri, 13 Jan 2023 09:58:10 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 2/3] rcu: Equip sleepable RCU with lockdep dependency
- graph checks
-Message-ID: <Y8GbsulOXWNK9WGs@boqun-archlinux>
-References: <20230113065955.815667-1-boqun.feng@gmail.com>
- <20230113130330.1027-1-hdanton@sina.com>
+        Fri, 13 Jan 2023 13:03:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAF7892CA
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:58:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18336B821AB
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:58:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFFFC433F0;
+        Fri, 13 Jan 2023 17:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673632696;
+        bh=JuFDRpf2cgQra4Jmh7Rp/roiRRmIQ+8USu0y4bvm8KA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RkzR17B3MqmFD3UDolrzkWFgVQxhTgJ+4mIBUVVNY+/xkKk5diJ1opON8eqkEMhs8
+         56NpBBuZXT0z1eov1BtFLHwQbVq7pZQDfLDmHe9msV4+HlUoBra7C35UT54dmiJ/gK
+         I1PeMTqmdr8gQ4978vdbOXvc7PZ0whaLOhhHuMROJiFm/4AZiws4TVlDUiUf86aDGk
+         x4fdw0aL6q3xuuyxREb6gubPmU5zMZzolXC/K6ft33MfIN971TxVhZMBbkY7ON5C82
+         El2Tp/2Lhy6ANr8J4O8V6cctEBXUyKemnbT2XRdS7k4SEw6v+NDC9c+dmUfmCZslMQ
+         o87sG7uo5PfJQ==
+Date:   Fri, 13 Jan 2023 23:28:12 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Michael Trimarchi <michael@amarulasolutions.com>
+Cc:     Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-amarula@amarulasolutions.com
+Subject: Re: [RFC PATCH 2/4] phy: rockchip: Add inno_is_valid_phy_mode
+Message-ID: <Y8GbtA7+xHtBEpRs@matsya>
+References: <20221002064540.2500257-1-michael@amarulasolutions.com>
+ <20221002064540.2500257-3-michael@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113130330.1027-1-hdanton@sina.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221002064540.2500257-3-michael@amarulasolutions.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 09:03:30PM +0800, Hillf Danton wrote:
-> On 12 Jan 2023 22:59:54 -0800 Boqun Feng <boqun.feng@gmail.com>
-> > --- a/kernel/rcu/srcutree.c
-> > +++ b/kernel/rcu/srcutree.c
-> > @@ -1267,6 +1267,8 @@ static void __synchronize_srcu(struct srcu_struct *ssp, bool do_norm)
-> >  {
-> >  	struct rcu_synchronize rcu;
-> >  
-> > +	srcu_lock_sync(&ssp->dep_map);
-> > +
-> >  	RCU_LOCKDEP_WARN(lockdep_is_held(ssp) ||
-> >  			 lock_is_held(&rcu_bh_lock_map) ||
-> >  			 lock_is_held(&rcu_lock_map) ||
-> > -- 
-> > 2.38.1
+On 02-10-22, 08:45, Michael Trimarchi wrote:
+> The function is used to avoid to enable clock on the hardware
+> if the mode requested is invalid
 > 
-> The following deadlock is able to escape srcu_lock_sync() because the
-> __lock_release folded in sync leaves one lock on the sync side.
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+>  .../phy/rockchip/phy-rockchip-inno-dsidphy.c  | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
 > 
-> 	cpu9		cpu0
-> 	---		---
-> 	lock A		srcu_lock_acquire(&ssp->dep_map);
-> 	srcu_lock_sync(&ssp->dep_map);
-> 			lock A
+> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> index 630e01b5c19b..644cf73cfd53 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> @@ -217,6 +217,20 @@ static void phy_update_bits(struct inno_dsidphy *inno,
+>  	writel(tmp, inno->phy_base + reg);
+>  }
+>  
+> +static int inno_is_valid_phy_mode(struct inno_dsidphy *inno)
+> +{
+> +	switch (inno->mode) {
+> +	case PHY_MODE_MIPI_DPHY:
+> +		break;
+> +	case PHY_MODE_LVDS:
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +};
+> +
+>  static unsigned long inno_dsidphy_pll_calc_rate(struct inno_dsidphy *inno,
+>  						unsigned long rate)
+>  {
+> @@ -495,6 +509,11 @@ static void inno_dsidphy_lvds_mode_enable(struct inno_dsidphy *inno)
+>  static int inno_dsidphy_power_on(struct phy *phy)
+>  {
+>  	struct inno_dsidphy *inno = phy_get_drvdata(phy);
+> +	int ret = 0;
 
-But isn't it just the srcu_mutex_ABBA test case in patch #3, and my run
-of lockdep selftest shows we can catch it. Anything subtle I'm missing?
+this initialization is superfluous
 
-Regards,
-Boqun
+> +
+> +	ret = inno_is_valid_phy_mode(inno);
+> +	if (ret)
+> +		return ret;
+>  
+>  	clk_prepare_enable(inno->pclk_phy);
+>  	clk_prepare_enable(inno->ref_clk);
+> -- 
+> 2.34.1
+
+-- 
+~Vinod
