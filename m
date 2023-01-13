@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B62669AD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC59669B14
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjAMOpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S229699AbjAMO4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjAMOpA (ORCPT
+        with ESMTP id S229526AbjAMO4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:45:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637B99B285;
-        Fri, 13 Jan 2023 06:34:39 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DFD041EC06EE;
-        Fri, 13 Jan 2023 15:34:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673620476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Tupfp8exSpQ4RbZCFKZqWdQOqhq4P6GGAsJ+a2D0UiA=;
-        b=ez7twyV8r/e81WS/tbD53J8+AErW3z0qB4278JGKImv1VqOOCl1mPfVpOFxrRJ28COpxQh
-        Dv1Gq7oYynLuj2xK9oaktn6HgMReadvqdPvF6eFjiLTcuQhSsMnFEKro/KuoY1OpfH1HFh
-        wAglyU90GKfDGW7vcQmeT3ce5DqinWQ=
-Date:   Fri, 13 Jan 2023 15:34:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, harald@profian.com
-Subject: Re: [PATCH RFC v7 04/64] KVM: x86: Add 'fault_is_private' x86 op
-Message-ID: <Y8Fr/F1RV0B8CHq5@zn.tnic>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-5-michael.roth@amd.com>
- <Y628y6hQK38+IAev@zn.tnic>
- <20230105024256.ptujtjgzcdmpakoa@amd.com>
+        Fri, 13 Jan 2023 09:56:04 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB7E90845;
+        Fri, 13 Jan 2023 06:42:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673620937; x=1705156937;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=18oofQWHf5DFIwDs98Wn9Hl16JNrdAL2In5saqMvGME=;
+  b=JaipAo6oX0LcypWynuh2CGNn65JVY7qXzYpJ3Cua3Q8jkWlkMpei/mtO
+   3tMWwPLrVE036SJ//Z4ky5L72NVC53v4t4/etx/cJ/Md2T0HK3UnW4j5R
+   ekXtk8tqJnFuw/9bnG7REcDUZVjPbrUOzaYTvMn1DLtBt9a1Vw+Bw6lNO
+   4walz+pwTZCocwqAABsTyaf0ngb7wunM5Pu51OM4j1pOlMZ3iWYr5Bas0
+   9bc71s0otBlV5soJjND+E1l3RbJrmNPT7aQcCu1M5OmUhzhZ/UGSnj86X
+   ft244a9uQrcgg9L9q8D6ut7cINBvOIvtHn8GukNkPI5WwXjrA2kpnzUET
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="307548090"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="307548090"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 06:36:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="766033116"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="766033116"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Jan 2023 06:36:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BFE7C130; Fri, 13 Jan 2023 16:36:41 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Baruch Siach <baruch@tkos.co.il>
+Subject: [PATCH v2 1/2] pinctrl: digicolor: Remove duplicate assignment of of_gpio_n_cells
+Date:   Fri, 13 Jan 2023 16:36:39 +0200
+Message-Id: <20230113143640.24302-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230105024256.ptujtjgzcdmpakoa@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,37 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 08:42:56PM -0600, Michael Roth wrote:
-> Obviously I need to add some proper documentation for this, but a 1
-> return basically means 'private_fault' pass-by-ref arg has been set
-> with the appropriate value, whereas 0 means "there's no platform-specific
-> handling for this, so if you have some generic way to determine this
-> then use that instead".
+The of_gpio_n_cells default is 2 when ->of_xlate() callback is
+not defined. No need to assign it explicitly in the driver.
 
-Still binary, tho, and can be bool, right?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: added tag (Baruch), avoid confusion with previously sent patch
+ drivers/pinctrl/pinctrl-digicolor.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-I.e., you can just as well do:
-
-        if (static_call(kvm_x86_fault_is_private)(kvm, gpa, err, &private_fault))
-                goto out;
-
-at the call site.
-
-> This is mainly to handle CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING, which
-> just parrots whatever kvm_mem_is_private() returns to support running
-> KVM selftests without needed hardware/platform support. If we don't
-> take care to skip this check where the above fault_is_private() hook
-> returns 1, then it ends up breaking SNP in cases where the kernel has
-> been compiled with CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING, since SNP
-> relies on the page fault flags to make this determination, not
-> kvm_mem_is_private(), which normally only tracks the memory attributes
-> set by userspace via KVM_SET_MEMORY_ATTRIBUTES ioctl.
-
-Some of that explanation belongs into the commit message, which is a bit
-lacking...
-
+diff --git a/drivers/pinctrl/pinctrl-digicolor.c b/drivers/pinctrl/pinctrl-digicolor.c
+index cc3546fc4610..05213261b8a4 100644
+--- a/drivers/pinctrl/pinctrl-digicolor.c
++++ b/drivers/pinctrl/pinctrl-digicolor.c
+@@ -248,7 +248,6 @@ static int dc_gpiochip_add(struct dc_pinmap *pmap)
+ 	chip->set		= dc_gpio_set;
+ 	chip->base		= -1;
+ 	chip->ngpio		= PINS_COUNT;
+-	chip->of_gpio_n_cells	= 2;
+ 
+ 	spin_lock_init(&pmap->lock);
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.39.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
