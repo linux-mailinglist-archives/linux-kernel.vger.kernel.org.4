@@ -2,169 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF97669AAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4E6669AAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjAMOic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S229459AbjAMOiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjAMOhX (ORCPT
+        with ESMTP id S230046AbjAMOhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:37:23 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000006F979
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:29:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673620166; x=1705156166;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sAwPcA67rv6du0GkUAVuBNgzwTh7NVh2xGwbgS+hU/I=;
-  b=PSX8gnQhhJ8VzGUIHuZYA8OvM/klVLiV6MsTau3GotM59ESggaKtASZ9
-   4TBtqSh4yREoJe6kh7FoZx4rvBtEP/v1W5CMXUO5wBmVwKjnxeXWwsiWY
-   kk8f7uaRXklJtO7eg2acdOFo+97YFlB2GARFW7lntNUivxxHxCAGVIHLD
-   9fEIZmb4c4LitpJIEUUmsEWn8ZQiQ9jZbLS8ng5RXU+ORMkYmbV7BIfd3
-   CzX/X6ei+7VcbTOoRVvh5DP9D/VLScPkHlo1/Ye1yaU8oHsXAm3HmoIr9
-   RwX+lm9po6Xu/wpvBiLO2ZPfinvMsqCcq92vTVVlE09VmxOPfENlDHped
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="410237720"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="410237720"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 06:29:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="651538269"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="651538269"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 13 Jan 2023 06:29:24 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pGL3b-000BAu-0G;
-        Fri, 13 Jan 2023 14:29:23 +0000
-Date:   Fri, 13 Jan 2023 22:28:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 0b8ddef9f5c69f7193ebf1a3c38c279ee173722c
-Message-ID: <63c16a8e.hJZpboLofvxANVq5%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 13 Jan 2023 09:37:00 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837A563F76
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:29:02 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id jl4so23588197plb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:29:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1mGF4lsVKLm/eDxz74sh69kCRVBYQn+CwprK0yc4u+Q=;
+        b=GmUarweIy7GVBjeKLQkudWYCZQMAATfasa7tivR+9HNv34zVcO5pVXyOgc6AfPmGN6
+         /8s0VniqivbBf1U6U6sLKWzbRPyYwqPzxGbJzJbsL2HhaOuavlInpuADZu4euneZjJ6S
+         QI0jADkhtvQbUcPXLFFkUqa4alkLkhIBOrKASc83ZCHDf6zH8T79s6KZtXiLHSPZInFU
+         nOkDCOdUPM6B86n96q1P59SG3aYE10fBIur7h2UdLwg0Hz3qidBXPc3UmIE/Sf0I5cLJ
+         Ipd2wDQc2n4qhG/+MXiUaYzMAuc1N4fj71o2ZxHW69ej8KoI/xrI7gw/TQvP45Fw86IF
+         az/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1mGF4lsVKLm/eDxz74sh69kCRVBYQn+CwprK0yc4u+Q=;
+        b=Q74x0n5o+z7HRn8reI2Owmo2Ads9mBNep9durtJAF22MibWKsq/psyNSGpeLfLwtMw
+         eYKvS051hDRboCRdTjexRgQ7scVRWPMW7vER5IxZwNqr/jgXnHHTjT28MlGus6Ym2UId
+         wfoPrpkNdDMndR17hXp1lk46aYAqdL+yx2/rVHhXvbioApe6E5w0HXfzOREB6IN24BVv
+         6p5OINknTGDnvbK/y6So/VC7l2zRqCrNoXo0ZRY7pWbRs26TYgKp/ydA0jwLI+Uf0o5L
+         oY0Dsi51N7HDJSocdSWqjwWsVOZpApVr3km5VM25Pibl4VPbsVR2xjy3RdymJTEoL/zr
+         UhfQ==
+X-Gm-Message-State: AFqh2kpQ2g7Ks6DeUJDPEFNQomNA9EDbRT6SgM2Pcy2R0HgHu1z+wqPp
+        VEcaozrsoRJats9isYhiMSfwwUaQj5YLWsI/XD19Oi1/FDIttYPQ
+X-Google-Smtp-Source: AMrXdXt8iwarO9Phh6o0XtiRz31AjrNGA9akG6qhxQwr041CsW69OQYMLuQczKptQMgNLdkGRDa4Z7BhQGPt/I9Yeyc=
+X-Received: by 2002:a17:90b:110d:b0:215:f80c:18e6 with SMTP id
+ gi13-20020a17090b110d00b00215f80c18e6mr8012996pjb.45.1673620141513; Fri, 13
+ Jan 2023 06:29:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221228165415.3436-1-vincent.guittot@linaro.org> <Y8FhfyVyUDZ98hKD@e126311.manchester.arm.com>
+In-Reply-To: <Y8FhfyVyUDZ98hKD@e126311.manchester.arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 13 Jan 2023 15:28:49 +0100
+Message-ID: <CAKfTPtCmDA8WPrhFc8YxFXSOPOKasvvNWA3iOmRYcC2VSyMMrw@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: unlink misfit task from cpu overutilized
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 0b8ddef9f5c69f7193ebf1a3c38c279ee173722c  rcu: Disable laziness if lazy-tracking says so
+Hi Kajetan,
 
-elapsed time: 721m
+On Fri, 13 Jan 2023 at 14:50, Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> Hi,
+>
+> > By taking into account uclamp_min, the 1:1 relation between task misfit
+> > and cpu overutilized is no more true as a task with a small util_avg of
+> > may not may not fit a high capacity cpu because of uclamp_min constraint.
+> >
+> > Add a new state in util_fits_cpu() to reflect the case that task would fit
+> > a CPU except for the uclamp_min hint which is a performance requirement.
+> >
+> > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> > can use this new value to take additional action to select the best CPU
+> > that doesn't match uclamp_min hint.
+>
+> I just wanted to flag some issues I noticed with this patch and the
+> entire topic.
+>
+> I was testing this on a Pixel 6 with a 5.18 android-mainline kernel with
 
-configs tested: 87
-configs skipped: 2
+Do you have more details to share on your setup ?
+Android kernel has some hack on top of the mainline. Do you use some ?
+Then, the perf and the power can be largely impacted by the cgroup
+configuration. Have you got details on your setup ?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I'm going to try to reproduce the behavior
 
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a014
-i386                          randconfig-a012
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a016
-x86_64                        randconfig-a015
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a006
-ia64                             allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arc                  randconfig-r043-20230112
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-riscv                randconfig-r042-20230112
-s390                 randconfig-r044-20230112
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-arm                          pxa3xx_defconfig
-sh                         ap325rxa_defconfig
-sh                     magicpanelr2_defconfig
-sh                         microdev_defconfig
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-i386                          randconfig-c001
-mips                     decstation_defconfig
-powerpc                        cell_defconfig
-sh                           se7705_defconfig
-arm                           viper_defconfig
+> all the relevant uclamp and CFS scheduling patches backported to it from
+> mainline. From what I can see, the 'uclamp fits capacity' patchset
+> introduced some alarming power usage & performance issues that this
+> patch makes even worse.
+>
+> The patch stack for the following tables is as follows:
+>
+> (ufc_patched) sched/fair: unlink misfit task from cpu overutilized
 
-clang tested configs:
-i386                          randconfig-a013
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a005
-x86_64                        randconfig-k001
-hexagon              randconfig-r041-20230112
-powerpc                          g5_defconfig
-mips                          malta_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                      maltaaprp_defconfig
-arm                  randconfig-r046-20230112
-hexagon              randconfig-r045-20230112
-x86_64                          rhel-8.3-rust
+I just sent a v3 which fixes a condition. Wonder if this could have an
+impact on the results both perf and power
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> sched/uclamp: Fix a uninitialized variable warnings
+> (baseline_ufc) sched/fair: Check if prev_cpu has highest spare cap in feec()
+> sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
+> sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
+> sched/uclamp: Make asym_fits_capacity() use util_fits_cpu()
+> sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
+> sched/uclamp: Fix fits_capacity() check in feec()
+> sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
+> sched/uclamp: Fix relationship between uclamp and migration margin
+> (previous 'baseline' was here)
+>
+> I omitted the 3 patches relating directly to capacity_inversion but in
+> the other tests I did with those there were similar issues. It's
+> probably easier to consider the uclamp parts and their effects in
+> isolation.
+>
+> 1. Geekbench 5 (performance regression)
+>
+> +-----------------+----------------------------+--------+-----------+
+> |     metric      |           kernel           | value  | perc_diff |
+> +-----------------+----------------------------+--------+-----------+
+> | multicore_score |          baseline          | 2765.4 |   0.0%    |
+> | multicore_score |        baseline_ufc        | 2704.3 |  -2.21%   | <-- a noticeable score decrease already
+> | multicore_score |        ufc_patched         | 2443.2 |  -11.65%  | <-- a massive score decrease
+> +-----------------+----------------------------+--------+-----------+
+>
+> +--------------+--------+----------------------------+--------+-----------+
+> |  chan_name   | metric |           kernel           | value  | perc_diff |
+> +--------------+--------+----------------------------+--------+-----------+
+> | total_power  | gmean  |          baseline          | 2664.0 |   0.0%    |
+> | total_power  | gmean  |        baseline_ufc        | 2621.5 |   -1.6%   | <-- worse performance per watt
+> | total_power  | gmean  |        ufc_patched         | 2601.2 |  -2.36%   | <-- much worse performance per watt
+> +--------------+--------+----------------------------+--------+-----------+
+>
+> The most likely cause for the regression seen above is the decrease in the amount of
+> time spent while overutilized with these patches. Maximising
+> overutilization for GB5 is the desired outcome as the benchmark for
+> almost its entire duration keeps either 1 core or all the cores
+> completely saturated so EAS cannot be effective. These patches have the
+> opposite from the desired effect in this area.
+>
+> +----------------------------+--------------------+--------------------+------------+
+> |          kernel            |        time        |     total_time     | percentage |
+> +----------------------------+--------------------+--------------------+------------+
+> |          baseline          |      121.979       |      181.065       |   67.46    |
+> |        baseline_ufc        |      120.355       |      184.255       |   65.32    |
+> |        ufc_patched         |       60.715       |      196.135       |   30.98    | <-- !!!
+> +----------------------------+--------------------+--------------------+------------+
+
+I'm not surprised because some use cases which were not overutilized
+were wrongly triggered as overutilized so switching back to
+performance mode. You might have to tune the uclamp value
+
+>
+> 2. Jankbench (power usage regression)
+>
+> +--------+---------------+---------------------------------+-------+-----------+
+> | metric |   variable    |             kernel              | value | perc_diff |
+> +--------+---------------+---------------------------------+-------+-----------+
+> | gmean  | mean_duration |          baseline_60hz          | 14.6  |   0.0%    |
+> | gmean  | mean_duration |        baseline_ufc_60hz        | 15.2  |   3.83%   |
+> | gmean  | mean_duration |        ufc_patched_60hz         | 14.0  |  -4.12%   |
+> +--------+---------------+---------------------------------+-------+-----------+
+>
+> +--------+-----------+---------------------------------+-------+-----------+
+> | metric | variable  |             kernel              | value | perc_diff |
+> +--------+-----------+---------------------------------+-------+-----------+
+> | gmean  | jank_perc |          baseline_60hz          |  1.9  |   0.0%    |
+> | gmean  | jank_perc |        baseline_ufc_60hz        |  2.2  |  15.39%   |
+> | gmean  | jank_perc |        ufc_patched_60hz         |  2.0  |   3.61%   |
+> +--------+-----------+---------------------------------+-------+-----------+
+>
+> +--------------+--------+---------------------------------+-------+-----------+
+> |  chan_name   | metric |             kernel              | value | perc_diff |
+> +--------------+--------+---------------------------------+-------+-----------+
+> | total_power  | gmean  |          baseline_60hz          | 135.9 |   0.0%    |
+> | total_power  | gmean  |        baseline_ufc_60hz        | 155.7 |  14.61%   | <-- !!!
+> | total_power  | gmean  |        ufc_patched_60hz         | 157.1 |  15.63%   | <-- !!!
+> +--------------+--------+---------------------------------+-------+-----------+
+>
+> With these patches while running Jankbench we use up ~15% more power
+> just to achieve roughly the same results. Here I'm not sure where this
+> issue is coming from exactly but all the results above are very consistent
+> across different runs.
+>
+> > --
+> > 2.17.1
+> >
+> >
