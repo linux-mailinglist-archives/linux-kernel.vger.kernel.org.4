@@ -2,513 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B99566A1AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78FC66A19B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjAMSOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
+        id S229700AbjAMSMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjAMSNs (ORCPT
+        with ESMTP id S230190AbjAMSLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:13:48 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD35D89BFF;
-        Fri, 13 Jan 2023 10:05:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44C3D1A00;
-        Fri, 13 Jan 2023 10:05:09 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 227B33F67D;
-        Fri, 13 Jan 2023 10:04:25 -0800 (PST)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     catalin.marinas@arm.com, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mhiramat@kernel.org, ndesaulniers@google.com,
-        ojeda@kernel.org, peterz@infradead.org, rafael.j.wysocki@intel.com,
-        revest@chromium.org, robert.moore@intel.com, rostedt@goodmis.org,
-        will@kernel.org
-Subject: [PATCH v2 8/8] arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
-Date:   Fri, 13 Jan 2023 18:03:55 +0000
-Message-Id: <20230113180355.2930042-9-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230113180355.2930042-1-mark.rutland@arm.com>
-References: <20230113180355.2930042-1-mark.rutland@arm.com>
-MIME-Version: 1.0
+        Fri, 13 Jan 2023 13:11:22 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::601])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9F857D8;
+        Fri, 13 Jan 2023 10:04:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CJfrDvYMWFqex52NumWE/EDd1Fsxtcxmxiy75PIxA0HmItCe7CDRLi75jxwVgyXlCZgeG+r8+pGf3TmzBkevzG2ypOvyDu1BpKd0ORFeWJPIjgQMG0g6Rqh+JKr6PYPvomL7W+5+aXAGWq2wOnRhFZaLy4FC3evBMrKdhGD20O0iITOq+Si3kvZHgDv+4Rcavn2QN5KX9Guxpd4qYrCWM523ZiFkh4TdjOytQItv6/0EpHqJQvOqLzhEZTZbuiUbTmMkxdV7PfkZX6YpshuFeCXoLHUs5FVIrkkMSEVRj38swl7ZjvA1oFAYdci9U2BpZPhwX3dwS9OH3z0Tpvccgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qFcZDFEeKtMD8aP1IAx3TNYzM5xB/12M04De5nVoWEo=;
+ b=hlRxj4s+mrE/Px24vg22asQSSzcC34tbt5Ku+qFNTpjRT7IdR1dNG5KDoDToVHUXnM2WLDMPEf2XvBhhQxO/1+H+mCVahnRXNHXcIYrG4aO4yTQ2hOh4+gSwRgj3eFZ2QhSunXWhujextXvfx9LDfWYFvx8z4NDPuah4bs3H+7SmVOrwpTOtXxI//xt0YbjgPCl9+RRMy9ju3aEKW6CV2B6QY0Q9hiMXc8NqzQeKKoozSANbsgOcAgK1CB5KNy4oWkf8Lz8oC76wDVs5BiJVkHQPsSegtcz2ZZZeVc5vEe8vw6vUztvpPSRIydBEJu3bhBHLNt4JVb5Z7TWCSxbGIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qFcZDFEeKtMD8aP1IAx3TNYzM5xB/12M04De5nVoWEo=;
+ b=Z+uWxrBIotkU3RYKHd/VLDBXf8k1bdXZ9JyETR6rOiMiOALzJ8FDwNnGd5Cs3PWZdfyaF+UMSmeP6UeNUOwxWlmiiDmgxEUouu3LqMJ6nvuaf5liBOziiO9Cn5YzEAFrMAGGV/qIjZBOCNBKPezY/dQkzcOXtWy3jNsgxcfMm1c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
+ by DM4PR12MB5987.namprd12.prod.outlook.com (2603:10b6:8:6a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Fri, 13 Jan
+ 2023 18:04:06 +0000
+Received: from BY5PR12MB3683.namprd12.prod.outlook.com
+ ([fe80::3ddf:d47:b37a:5a7a]) by BY5PR12MB3683.namprd12.prod.outlook.com
+ ([fe80::3ddf:d47:b37a:5a7a%3]) with mapi id 15.20.5986.018; Fri, 13 Jan 2023
+ 18:04:06 +0000
+Message-ID: <e675a037-3c07-a8bb-19d4-781ab881c920@amd.com>
+Date:   Fri, 13 Jan 2023 10:04:04 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
+ Gecko/20100101 Thunderbird/109.0
+Subject: Re: [PATCH] dt-bindings: sram: Tightly Coupled Memory (TCM) bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tanmay Shah <tanmay.shah@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+References: <20230113073045.4008853-1-tanmay.shah@amd.com>
+ <df4fdecb-6ca7-d96b-bcad-02cefb52ce4e@linaro.org>
+From:   Tanmay Shah <tanmays@amd.com>
+In-Reply-To: <df4fdecb-6ca7-d96b-bcad-02cefb52ce4e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR05CA0198.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::23) To BY5PR12MB3683.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a5::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|DM4PR12MB5987:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15c5416c-cd31-4f24-54b9-08daf5908f96
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i+OLF9fefesDTiMx+guigSyl7Dyvk+oHrQaLVfEjXdXfukKmuJ/qmJsI0NPUG9Pv4OZZAxzVLz4tVLzuBvRavFS6aCxz6hKGeIF1TJ0gwaPYy4reHmAcHfOovx7wmFM12b/9Zumhr/IR0/bgqp3+pt79uKfqpK/hKBSxoKJm6wt2/gJHxX9oahMl1ZKBeGA5jAaFjSf5Te7B8NWf+/Uj0salZ3+GBeGlB0ANA75N1dKNqxUXxiPwJ0d1/GyNLVS+g1KYUjSzDocWThuaKt2L6JxjlbCWCAsO5M7Aw2iGlOlQ4vBue/l/jDlb9vQoXahZBQRsnx/hiVUamyYXbUnVSeDvobHOG1dugzLGBoYUWV2CGpIiLtO+bVD7x3L+2brUxrlocwXkn1YqHbPHs7oU6C08n8LY/V3YfRU8YVERz0ub/IVbg2uVYcgYadL4T3Clsx3ODWo0frP7j+iKTNqzQcOeX6p9p+uOQME1Fy4WwfBdjCf4q6H8wbrGsj5gr7KgvHKP1y70sdkLWykjDMUrtxIc4VXLH5etvr+Wr5kzFJ3exr+2d16omHA0OHLsYGL0EfsGxfs3FAzDGwfUFFwEwn0LD9iNXViePd6bkWERWsL5jhoy5qqaKW3Pdu74LV7iSKdUZr73uI5dOtbEJ1WnKTLE+y4oTSvFyS+AvMkSS8l/ByBs881WQyHYJwYIU3edfeCVFvkUKbXrpyaJhmwGNHRR+eBmrE8xv+fwcnBz9eRDpPht8m144W2HsjNo7T1ZyEF0yeA8WpTimfO7j69vkpPUeyP99otAhMZfdEtkzh4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199015)(31686004)(5660300002)(8936002)(41300700001)(4326008)(316002)(2906002)(66946007)(66556008)(110136005)(66476007)(8676002)(966005)(6486002)(478600001)(38100700002)(186003)(53546011)(6512007)(6506007)(36756003)(31696002)(2616005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVRUcGh1Tmwyc0QwUVM1YlV6N3ZtdmZNSjVUMjVxQzQ1MmpRbVFCWlpTc1E1?=
+ =?utf-8?B?MC9ob09MNUZnREFqdHF5cU4rTjlPNFByWEc4RmtjMld1bytNUjhqUHljVTB0?=
+ =?utf-8?B?aWVuSjlKVUV3UGZnbnRoa094cGcwLysxTHZ6d0dxYnBUV1pHYnBncnhKRWcy?=
+ =?utf-8?B?QnJzV1dHODZ2V3NNNm8xcUhOaGUxbjh3UlVFRU4zY2dnU1A4U3ZmMmV1LzVr?=
+ =?utf-8?B?dk9jb28xRFppWmN3ejEyL241NTI5SjhjM3JKQjBCbElwWExPUURPMDJDWlJD?=
+ =?utf-8?B?UUVWWlFVUW41MXJSVVhucklOSWUwaDk0R2xIYWxSeE9vRjlBTGRsOEYrRi91?=
+ =?utf-8?B?YXNhT0FITlZQazRMdWg2MlYzcndmeFBlb0pZL0VRUENBdWlweTl0RXo2enU5?=
+ =?utf-8?B?RjczdFlHNzBtaVcxbFAreDY4ZS90M3lUS2VtNHVhQ3J2UWF3NS81YmdsL0JD?=
+ =?utf-8?B?bzlKZUxLRnZLTllWMGYwUDJ1VFBWZW10VDAvQUMvQ3JPRlVKdUlzdHZYajJ2?=
+ =?utf-8?B?SUhwaHducjB6dWNNN29rNlBwNlViMHdubUNmR1BNRStuUkQydk5mU1hRY1VI?=
+ =?utf-8?B?QlZxd1ZDTExVQ2Y5c05FcHhrRlpnbDlGNzFhT0M4enMxQVJDNHZsUDU5WklI?=
+ =?utf-8?B?ZXBOVUVHQmRwTGFNUVFjUlFDcldiZEFBUjE2N3NsVGZzdzFyeWFDbmZ4Ykd6?=
+ =?utf-8?B?bk92a2JiUk15cWgydTZtV25vQjE5Rm9acXJJck9Hc0oxSHIvZHI1WFRtRW9Q?=
+ =?utf-8?B?OXpFNDFwM3E4bzhtTHdUbDVoY0tUN3hNblZCMDFSeWxaWjNqczE0OWMzQmpy?=
+ =?utf-8?B?K2RxSlRpcFlvS21rOVJ2N1JWSm9qQjJFK3NIMUhoN3RtN1d2YnJKM0x2ekNQ?=
+ =?utf-8?B?RWw0ZC9NZmxuTTlQV2hlWC91a245K00yd1Zra2hxc3dVRDBqRjZ2YmpaM2lp?=
+ =?utf-8?B?VUxSMUhnRFNIZnJHT3BQMzB5YUZxT2JEMmFYak1ObFpWa05ORUJFYktQbXdV?=
+ =?utf-8?B?cFFVc1NXcGVKdGthY214M1YyVWZZWmxSN1dBTXQyL0F2ZE5Uamc2aEZFT1hD?=
+ =?utf-8?B?ZnN1S1NDTlYrem1abDZzTVovcFlnVjhYczBQSnJDb2FRNGFtNUt5QWV1cFJF?=
+ =?utf-8?B?REtOeHp0b0hvMG56L05xZUtoRXNJejMxeUFVdjlMMXRTYlNqZExVRVVYVUo2?=
+ =?utf-8?B?R1RpcU5TWERKbFpDd1g3VGRZYVo5ZFZZbm4wNXRCSGhCZmFPUVlOUFNYdmtY?=
+ =?utf-8?B?ckl6NXZOb1MvVmZocTVYZ2JwZXFzbjNxVEJIeFlwcXpwMGw4dnE0RWQ4c0w1?=
+ =?utf-8?B?NktidnI4ZWJQL1hVRW8xa2ZxT212bTMyekx3WmYvVURZUTB4dkdJYTRCcDhn?=
+ =?utf-8?B?dGVPNWZpUmtWVGh1Zmo5bkp3MlVWZzJNUjhVNjRRUnE1bkhNVFAxanNLTFpW?=
+ =?utf-8?B?MWlicytUeFZVRFFidGlXSGYwMjRBMlhZN0QvYkJmSnpLV1NWdGMvWDd0OEZI?=
+ =?utf-8?B?Um9TTCs0RFFKWHRXREtsSDVQMFRkbEFhZDRReHBITzV6OVZsVVNhTVJsdEtj?=
+ =?utf-8?B?ZkpyYThlVHFhQ1FxeFhrcXQ1QXpWenlZeG1QN2x3RmFjT0diOTNIQzdXMnNp?=
+ =?utf-8?B?VWZQVmd5RGlEZTdkSkx2VG5tNkt5a1FZVnFRcDJYZlZWbk5KWXZkSDhIcWc3?=
+ =?utf-8?B?b1FYd0ZoTm1TdlVWSmtWeGhHa1pRUnVsTURNUFNibmg5c2pQd3FRRmpjTnpv?=
+ =?utf-8?B?ZWJpdTJ1S25YeXQ5ZGpNRmxONmI4bjcwWDUwYTR2RlkyM01LNlZDSHpKdmpt?=
+ =?utf-8?B?MlNNa1pLZXMrN1FBWllUa0tpYWhWTlpBVXlBUVUybFhvWjJ1UXhYYjNzV2R1?=
+ =?utf-8?B?VTJPWGUrbmMvMlJDSnhZcUc3Ym81dTJVc2VpMytTZmFJZm1hVDlzaUpwL2ZH?=
+ =?utf-8?B?eEgzMmJTaHZLdy9YT0ptTHhXVWVQWDRYQ28zL0NmdTFWcXBud0JvVllVWmd0?=
+ =?utf-8?B?M3NRL00yditYN210M2pvc0YyUE9OSTFzK0ozWlMzbk1iSFl0MHV5RmsweUdh?=
+ =?utf-8?B?V2hoTkhEdkNwUUZwa3RLb2thaXgvc05iU2U2SXYxRy8vVnpRWHlycHlCMGJz?=
+ =?utf-8?B?aGhnWlpJVldMUmVNYWJ3aG56Uncrcld2aXhtNFFSR1M1a0d0OGxHVHFwdFVv?=
+ =?utf-8?Q?m08GQFqTiaGI+cIlh9fK0Oi+goOr2K/yWmQTdJBCyefv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15c5416c-cd31-4f24-54b9-08daf5908f96
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 18:04:06.0842
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xVT4jWTP63cHuhSolkXJ+rxwARXbjJ7cyYzYSp0bH9k1b0zxZt/jG/0iiUhJkf/s
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5987
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables support for DYNAMIC_FTRACE_WITH_CALL_OPS on arm64.
-This allows each ftrace callsite to provide an ftrace_ops to the common
-ftrace trampoline, allowing each callsite to invoke distinct tracer
-functions without the need to fall back to list processing or to
-allocate custom trampoliens for each callsite. This significantly speeds
-up cases where multiple distinct trace functions are used and callsites
-are mostly traced by a single tracer.
+Hi Krzysztof Thanks for your reviews.
 
-The main idea is to place a pointer to the ftrace_ops as a literal at a
-fixed offset from the function entry point, which can be recovered by
-the common ftrace trampoline. Using a 64-bit literal avoids branch range
-limitations, and permits the ops to be swapped atomically without
-special considerations that apply to code-patching. In future this will
-also allow for the implementation of DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-without branch range limitations by using additional fields in struct
-ftrace_ops.
+Please find my comments below.
 
-As noted in the core patch adding support for
-DYNAMIC_FTRACE_WITH_CALL_OPS, this approach allows for directly invoking
-ftrace_ops::func even for ftrace_ops which are dynamically-allocated (or
-part of a module), without going via ftrace_ops_list_func.
+On 1/12/23 11:52 PM, Krzysztof Kozlowski wrote:
+> On 13/01/2023 08:30, Tanmay Shah wrote:
+>> This patch introduces bindings for TCM memory address space on AMD-xilinx
+>> platforms. As of now TCM addresses are hardcoded in xilinx remoteproc
+>> driver. This bindings will help in defining TCM in device-tree and
+>> make it's access platform agnostic and data-driven from the driver.
+>>
+>> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+>> ---
+>>   .../devicetree/bindings/sram/xlnx,tcm.yaml    | 137 ++++++++++++++++++
+>>   1 file changed, 137 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml b/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+>> new file mode 100644
+>> index 000000000000..02d17026fb1f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+>> @@ -0,0 +1,137 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/sram/xlnx,tcm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Tightly Coupled Memory (TCM)
+>> +
+>> +maintainers:
+>> +  - Tanmay Shah <tanmay.shah@amd.com>
+>> +
+>> +description: |
+>> +  Tightly Coupled Memory(TCM) is available on AMD-Xilinx paltforms for ARM
+>> +  cortex remote processors to use. It is low-latency memory that provide
+>> +  predictable instruction execution and predictable data load/store timing.
+>> +  TCM can be configured in lockstep mode or split mode. In split mode
+>> +  configuration each RPU core has its own set of ATCM and BTCM memories and in
+>> +  lockstep mode redundant processor's TCM become available to lockstep
+>> +  processor. So In lockstep mode ATCM and BTCM size is increased.
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "sram-[0-9a-f]+$"
+> Drop node name requirement.
+> Why do you need sram node at all?
 
-Currently, this approach is not compatible with CLANG_CFI, as the
-presence/absence of pre-function NOPs changes the offset of the
-pre-function type hash, and there's no existing mechanism to ensure a
-consistent offset for instrumented and uninstrumented functions. When
-CLANG_CFI is enabled, the existing scheme with a global ops->func
-pointer is used, and there should be no functional change. I am
-currently working with others to allow the two to work together in
-future (though this will liekly require updated compiler support).
 
-I've benchamrked this with the ftrace_ops sample module [1], which is
-not currently upstream, but available at:
+I will remove sram- node. However, it device-tree I was planning to put
 
-  https://lore.kernel.org/lkml/20230103124912.2948963-1-mark.rutland@arm.com
-  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git ftrace-ops-sample-20230109
+all TCM nodes under single node for example:
 
-Using that module I measured the total time taken for 100,000 calls to a
-trivial instrumented function, with a number of tracers enabled with
-relevant filters (which would apply to the instrumented function) and a
-number of tracers enabled with irrelevant filters (which would not apply
-to the instrumented function). I tested on an M1 MacBook Pro, running
-under a HVF-accelerated QEMU VM (i.e. on real hardware).
+tcm {
 
-Before this patch:
+     tcm-lockstep {
 
-  Number of tracers     || Total time  | Per-call average time (ns)
-  Relevant | Irrelevant || (ns)        | Total        | Overhead
-  =========+============++=============+==============+============
-         0 |          0 ||      94,583 |         0.95 |           -
-         0 |          1 ||      93,709 |         0.94 |           -
-         0 |          2 ||      93,666 |         0.94 |           -
-         0 |         10 ||      93,709 |         0.94 |           -
-         0 |        100 ||      93,792 |         0.94 |           -
-  ---------+------------++-------------+--------------+------------
-         1 |          1 ||   6,467,833 |        64.68 |       63.73
-         1 |          2 ||   7,509,708 |        75.10 |       74.15
-         1 |         10 ||  23,786,792 |       237.87 |      236.92
-         1 |        100 || 106,432,500 |     1,064.43 |     1063.38
-  ---------+------------++-------------+--------------+------------
-         1 |          0 ||   1,431,875 |        14.32 |       13.37
-         2 |          0 ||   6,456,334 |        64.56 |       63.62
-        10 |          0 ||  22,717,000 |       227.17 |      226.22
-       100 |          0 || 103,293,667 |      1032.94 |     1031.99
-  ---------+------------++-------------+--------------+--------------
+     };
 
-  Note: per-call overhead is estiamated relative to the baseline case
-  with 0 relevant tracers and 0 irrelevant tracers.
+     tcm-core@0 {
 
-After this patch
+     };
 
-  Number of tracers     || Total time  | Per-call average time (ns)
-  Relevant | Irrelevant || (ns)        | Total        | Overhead
-  =========+============++=============+==============+============
-         0 |          0 ||      94,541 |         0.95 |           -
-         0 |          1 ||      93,666 |         0.94 |           -
-         0 |          2 ||      93,709 |         0.94 |           -
-         0 |         10 ||      93,667 |         0.94 |           -
-         0 |        100 ||      93,792 |         0.94 |           -
-  ---------+------------++-------------+--------------+------------
-         1 |          1 ||     281,000 |         2.81 |        1.86
-         1 |          2 ||     281,042 |         2.81 |        1.87
-         1 |         10 ||     280,958 |         2.81 |        1.86
-         1 |        100 ||     281,250 |         2.81 |        1.87
-  ---------+------------++-------------+--------------+------------
-         1 |          0 ||     280,959 |         2.81 |        1.86
-         2 |          0 ||   6,502,708 |        65.03 |       64.08
-        10 |          0 ||  18,681,209 |       186.81 |      185.87
-       100 |          0 || 103,550,458 |     1,035.50 |     1034.56
-  ---------+------------++-------------+--------------+------------
+};
 
-  Note: per-call overhead is estiamated relative to the baseline case
-  with 0 relevant tracers and 0 irrelevant tracers.
+The top-most tcm node I assumed sram node. So I kept sram@xxxx
 
-As can be seen from the above:
+>> +
+>> +patternProperties:
+>> +  "^tcm-[a-z]+@[0-9a-f]+$":
+>> +    type: object
+>> +    description: |
+>> +      During the split mode, each RPU core has its own set of ATCM and BTCM memory
+>> +
+>> +      During the lock-step operation, the TCMs that are associated with the
+>> +      redundant processor become available to the lock-step processor.
+>> +      For example if each individual processor has 64KB ATCM, then in lockstep mode
+>> +      The size of ATCM become 128KB. Same for BTCM. tcm-lockstep node represents
+>> +      TCM address space in lockstep mode. tcm-core@x node specfies each core's
+>> +      TCM address space in split mode.
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        oneOf:
+> This is not oneOf.
+>
+>> +          - items:
+> and you do not have more than one item.
+>
+>> +              - enum:
+>> +                  - xlnx,tcm-lockstep
+>> +                  - xlnx,tcm-split
+> compatible describes hardware, not configuration. What you encode here
+> does not fit compatible.
 
-a) Whenever there is a single relevant tracer function associated with a
-   tracee, the overhead of invoking the tracer is constant, and does not
-   scale with the number of tracers which are *not* associated with that
-   tracee.
 
-b) The overhead for a single relevant tracer has dropped to ~1/7 of the
-   overhead prior to this series (from 13.37ns to 1.86ns). This is
-   largely due to permitting calls to dynamically-allocated ftrace_ops
-   without going through ftrace_ops_list_func.
+I see. So, only xlnx,tcm is enough.
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Florent Revest <revest@chromium.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Will Deacon <will@kernel.org>
----
- arch/arm64/Kconfig               |   3 +
- arch/arm64/Makefile              |   5 +-
- arch/arm64/include/asm/ftrace.h  |  15 +--
- arch/arm64/kernel/asm-offsets.c  |   4 +
- arch/arm64/kernel/entry-ftrace.S |  32 ++++++-
- arch/arm64/kernel/ftrace.c       | 156 +++++++++++++++++++++++++++++++
- 6 files changed, 195 insertions(+), 20 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 03934808b2ed..7838f568fa15 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -123,6 +123,7 @@ config ARM64
- 	select DMA_DIRECT_REMAP
- 	select EDAC_SUPPORT
- 	select FRAME_POINTER
-+	select FUNCTION_ALIGNMENT_8B if DYNAMIC_FTRACE_WITH_CALL_OPS
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_ARCH_TOPOLOGY
- 	select GENERIC_CLOCKEVENTS_BROADCAST
-@@ -186,6 +187,8 @@ config ARM64
- 	select HAVE_DYNAMIC_FTRACE
- 	select HAVE_DYNAMIC_FTRACE_WITH_ARGS \
- 		if $(cc-option,-fpatchable-function-entry=2)
-+	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
-+		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI_CLANG)
- 	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
- 		if DYNAMIC_FTRACE_WITH_ARGS
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index d62bd221828f..4c3be442fbb3 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -139,7 +139,10 @@ endif
- 
- CHECKFLAGS	+= -D__aarch64__
- 
--ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-+ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
-+  KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-+  CC_FLAGS_FTRACE := -fpatchable-function-entry=4,2
-+else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-   CC_FLAGS_FTRACE := -fpatchable-function-entry=2
- endif
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 5664729800ae..1c2672bbbf37 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -62,20 +62,7 @@ extern unsigned long ftrace_graph_call;
- 
- extern void return_to_handler(void);
- 
--static inline unsigned long ftrace_call_adjust(unsigned long addr)
--{
--	/*
--	 * Adjust addr to point at the BL in the callsite.
--	 * See ftrace_init_nop() for the callsite sequence.
--	 */
--	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_ARGS))
--		return addr + AARCH64_INSN_SIZE;
--	/*
--	 * addr is the address of the mcount call instruction.
--	 * recordmcount does the necessary offset calculation.
--	 */
--	return addr;
--}
-+unsigned long ftrace_call_adjust(unsigned long addr);
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- struct dyn_ftrace;
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index 2234624536d9..ae345b06e9f7 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/arm_sdei.h>
- #include <linux/sched.h>
-+#include <linux/ftrace.h>
- #include <linux/kexec.h>
- #include <linux/mm.h>
- #include <linux/dma-mapping.h>
-@@ -193,6 +194,9 @@ int main(void)
-   DEFINE(KIMAGE_HEAD,			offsetof(struct kimage, head));
-   DEFINE(KIMAGE_START,			offsetof(struct kimage, start));
-   BLANK();
-+#endif
-+#ifdef CONFIG_FUNCTION_TRACER
-+  DEFINE(FTRACE_OPS_FUNC,		offsetof(struct ftrace_ops, func));
- #endif
-   return 0;
- }
-diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-index 3b625f76ffba..350ed81324ac 100644
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -65,13 +65,35 @@ SYM_CODE_START(ftrace_caller)
- 	stp	x29, x30, [sp, #FREGS_SIZE]
- 	add	x29, sp, #FREGS_SIZE
- 
--	sub	x0, x30, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
--	mov	x1, x9				// parent_ip (callsite's LR)
--	ldr_l	x2, function_trace_op		// op
--	mov	x3, sp				// regs
-+	/* Prepare arguments for the the tracer func */
-+	sub	x0, x30, #AARCH64_INSN_SIZE		// ip (callsite's BL insn)
-+	mov	x1, x9					// parent_ip (callsite's LR)
-+	mov	x3, sp					// regs
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-+	/*
-+	 * The literal pointer to the ops is at an 8-byte aligned boundary
-+	 * which is either 12 or 16 bytes before the BL instruction in the call
-+	 * site. See ftrace_call_adjust() for details.
-+	 *
-+	 * Therefore here the LR points at `literal + 16` or `literal + 20`,
-+	 * and we can find the address of the literal in either case by
-+	 * aligning to an 8-byte boundary and subtracting 16. We do the
-+	 * alignment first as this allows us to fold the subtraction into the
-+	 * LDR.
-+	 */
-+	bic	x2, x30, 0x7
-+	ldr	x2, [x2, #-16]				// op
-+
-+	ldr	x4, [x2, #FTRACE_OPS_FUNC]		// op->func
-+	blr	x4					// op->func(ip, parent_ip, op, regs)
-+
-+#else
-+	ldr_l   x2, function_trace_op			// op
- 
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
--	bl	ftrace_stub
-+	bl      ftrace_stub				// func(ip, parent_ip, op, regs)
-+#endif
- 
- /*
-  * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 38ebdf063255..5545fe1a9012 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -60,6 +60,89 @@ int ftrace_regs_query_register_offset(const char *name)
- }
- #endif
- 
-+unsigned long ftrace_call_adjust(unsigned long addr)
-+{
-+	/*
-+	 * When using mcount, addr is the address of the mcount call
-+	 * instruction, and no adjustment is necessary.
-+	 */
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_ARGS))
-+		return addr;
-+
-+	/*
-+	 * When using patchable-function-entry without pre-function NOPS, addr
-+	 * is the address of the first NOP after the function entry point.
-+	 *
-+	 * The compiler has either generated:
-+	 *
-+	 * addr+00:	func:	NOP		// To be patched to MOV X9, LR
-+	 * addr+04:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * Or:
-+	 *
-+	 * addr-04:		BTI	C
-+	 * addr+00:	func:	NOP		// To be patched to MOV X9, LR
-+	 * addr+04:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * We must adjust addr to the address of the NOP which will be patched
-+	 * to `BL <caller>`, which is at `addr + 4` bytes in either case.
-+	 *
-+	 */
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
-+		return addr + AARCH64_INSN_SIZE;
-+
-+	/*
-+	 * When using patchable-function-entry with pre-function NOPs, addr is
-+	 * the address of the first pre-function NOP.
-+	 *
-+	 * Starting from an 8-byte aligned base, the compiler has either
-+	 * generated:
-+	 *
-+	 * addr+00:		NOP		// Literal (first 32 bits)
-+	 * addr+04:		NOP		// Literal (last 32 bits)
-+	 * addr+08:	func:	NOP		// To be patched to MOV X9, LR
-+	 * addr+12:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * Or:
-+	 *
-+	 * addr+00:		NOP		// Literal (first 32 bits)
-+	 * addr+04:		NOP		// Literal (last 32 bits)
-+	 * addr+08:	func:	BTI	C
-+	 * addr+12:		NOP		// To be patched to MOV X9, LR
-+	 * addr+16:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * We must adjust addr to the address of the NOP which will be patched
-+	 * to `BL <caller>`, which is at either addr+12 or addr+16 depending on
-+	 * whether there is a BTI.
-+	 */
-+
-+	if (!IS_ALIGNED(addr, sizeof(unsigned long))) {
-+		WARN_RATELIMIT(1, "Misaligned patch-site %pS\n",
-+			       (void *)(addr + 8));
-+		return 0;
-+	}
-+
-+	/* Skip the NOPs placed before the function entry point */
-+	addr += 2 * AARCH64_INSN_SIZE;
-+
-+	/* Skip any BTI */
-+	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)) {
-+		u32 insn = le32_to_cpu(*(__le32 *)addr);
-+
-+		if (aarch64_insn_is_bti(insn)) {
-+			addr += AARCH64_INSN_SIZE;
-+		} else if (insn != aarch64_insn_gen_nop()) {
-+			WARN_RATELIMIT(1, "unexpected insn in patch-site %pS: 0x%08x\n",
-+				       (void *)addr, insn);
-+		}
-+	}
-+
-+	/* Skip the first NOP after function entry */
-+	addr += AARCH64_INSN_SIZE;
-+
-+	return addr;
-+}
-+
- /*
-  * Replace a single instruction, which may be a branch or NOP.
-  * If @validate == true, a replaced instruction is checked against 'old'.
-@@ -98,6 +181,13 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	unsigned long pc;
- 	u32 new;
- 
-+	/*
-+	 * When using CALL_OPS, the function to call is associated with the
-+	 * call site, and we don't have a global function pointer to update.
-+	 */
-+	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
-+		return 0;
-+
- 	pc = (unsigned long)ftrace_call;
- 	new = aarch64_insn_gen_branch_imm(pc, (unsigned long)func,
- 					  AARCH64_INSN_BRANCH_LINK);
-@@ -176,6 +266,44 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec,
- 	return true;
- }
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-+static const struct ftrace_ops *arm64_rec_get_ops(struct dyn_ftrace *rec)
-+{
-+	const struct ftrace_ops *ops = NULL;
-+
-+	if (rec->flags & FTRACE_FL_CALL_OPS_EN) {
-+		ops = ftrace_find_unique_ops(rec);
-+		WARN_ON_ONCE(!ops);
-+	}
-+
-+	if (!ops)
-+		ops = &ftrace_list_ops;
-+
-+	return ops;
-+}
-+
-+static int ftrace_rec_set_ops(const struct dyn_ftrace *rec,
-+			      const struct ftrace_ops *ops)
-+{
-+	unsigned long literal = ALIGN_DOWN(rec->ip - 12, 8);
-+	return aarch64_insn_write_literal_u64((void *)literal,
-+					      (unsigned long)ops);
-+}
-+
-+static int ftrace_rec_set_nop_ops(struct dyn_ftrace *rec)
-+{
-+	return ftrace_rec_set_ops(rec, &ftrace_nop_ops);
-+}
-+
-+static int ftrace_rec_update_ops(struct dyn_ftrace *rec)
-+{
-+	return ftrace_rec_set_ops(rec, arm64_rec_get_ops(rec));
-+}
-+#else
-+static int ftrace_rec_set_nop_ops(struct dyn_ftrace *rec) { return 0; }
-+static int ftrace_rec_update_ops(struct dyn_ftrace *rec) { return 0; }
-+#endif
-+
- /*
-  * Turn on the call to ftrace_caller() in instrumented function
-  */
-@@ -183,6 +311,11 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- {
- 	unsigned long pc = rec->ip;
- 	u32 old, new;
-+	int ret;
-+
-+	ret = ftrace_rec_update_ops(rec);
-+	if (ret)
-+		return ret;
- 
- 	if (!ftrace_find_callable_addr(rec, NULL, &addr))
- 		return -EINVAL;
-@@ -193,6 +326,19 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- 	return ftrace_modify_code(pc, old, new, true);
- }
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-+int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
-+		       unsigned long addr)
-+{
-+	if (WARN_ON_ONCE(old_addr != (unsigned long)ftrace_caller))
-+		return -EINVAL;
-+	if (WARN_ON_ONCE(addr != (unsigned long)ftrace_caller))
-+		return -EINVAL;
-+
-+	return ftrace_rec_update_ops(rec);
-+}
-+#endif
-+
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- /*
-  * The compiler has inserted two NOPs before the regular function prologue.
-@@ -220,6 +366,11 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
- {
- 	unsigned long pc = rec->ip - AARCH64_INSN_SIZE;
- 	u32 old, new;
-+	int ret;
-+
-+	ret = ftrace_rec_set_nop_ops(rec);
-+	if (ret)
-+		return ret;
- 
- 	old = aarch64_insn_gen_nop();
- 	new = aarch64_insn_gen_move_reg(AARCH64_INSN_REG_9,
-@@ -237,9 +388,14 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
- {
- 	unsigned long pc = rec->ip;
- 	u32 old = 0, new;
-+	int ret;
- 
- 	new = aarch64_insn_gen_nop();
- 
-+	ret = ftrace_rec_set_nop_ops(rec);
-+	if (ret)
-+		return ret;
-+
- 	/*
- 	 * When using mcount, callsites in modules may have been initalized to
- 	 * call an arbitrary module PLT (which redirects to the _mcount stub)
--- 
-2.30.2
+>
+>> +
+>> +      "#address-cells":
+> Use consistent quotes, either " or '
 
+
+Ack.
+
+
+>
+>> +        const: 1
+>> +
+>> +      "#size-cells":
+>> +        const: 1
+>> +
+>> +      reg:
+>> +        items:
+>> +          - description: |
+>> +              ATCM Memory address space. An ATCM typically holds interrupt or
+>> +              exception code that must be accessed at high speed, without any
+>> +              potential delay resulting from a cache miss.
+>> +              RPU on AMD-Xilinx platform can also fetch data from ATCM
+>> +          - description: |
+>> +              BTCM Memory address space. A BTCM typically holds a block of data
+>> +              for intensive processing, such as audio or video processing. RPU on
+>> +              AMD-Xilinx Platforms can also fetch Code (Instructions) from BTCM
+>> +
+>> +      reg-names:
+>> +        items:
+>> +          - const: atcm
+>> +          - const: btcm
+>> +
+>> +      ranges: true
+>> +
+>> +      power-domains:
+>> +        maxItems: 8
+>> +        items:
+>> +          - description: list of ATCM Power domains
+>> +          - description: list of BTCM Power domains
+>> +        additionalItems: true
+> And what are the rest?
+As both items are list, we should be able to include more than one 
+power-domain I believe.
+
+
+So first item I am trying to create list of ATCM power domains.
+
+In split mode, first item is ATCM power-domain and second item is BTCM 
+power domain.
+
+However, In lockstep mode, second core's TCM physically relocates and 
+two ATCM combines and
+
+makes single region of ATCM. However, their power-domains remains same.
+
+So, In lockstep mode, first two banks are ATCM and so, first two items 
+are ATCM power-domains.
+
+I am not sure best way to represent this. But, first itmes is list.
+
+So, I am assuming list of all ATCM power-domains possible.
+
+
+>
+>> +
+>> +    required:
+>> +      - compatible
+>> +      - '#address-cells'
+>> +      - '#size-cells'
+>> +      - reg
+>> +      - ranges
+>> +      - power-domains
+>> +    unevaluatedProperties: false
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/power/xlnx-zynqmp-power.h>
+>> +
+>> +    amba {
+> Drop.
+
+
+ACK
+
+
+>> +        sram@ffe00000 {
+> This does not match your bindings.
+
+
+Ok. This was node-name. I will remove it from example.
+
+
+>
+>> +            tcm-lockstep@ffe00000 {
+>> +                compatible = "xlnx,tcm-lockstep";
+>> +
+>> +                #address-cells = <1>;
+>> +                #size-cells = <1>;
+>> +
+>> +                reg = <0xffe00000 0x20000>, <0xffe20000 0x20000>;
+>> +                reg-names = "atcm", "btcm";
+>> +                ranges = <0x0 0xffe00000 0x20000>, <0x20000 0xffe20000 0x20000>;
+>> +                power-domains = <&zynqmp_firmware PD_R5_0_ATCM>,
+>> +                                <&zynqmp_firmware PD_R5_1_ATCM>,
+> This is BTCM domain according to your binding. Your binding here is
+> probably wrong and does not match real DTS.
+
+
+As explained above, the first Item is list of all ATCM power-domains.
+
+So, I kept both ATCM power-domains for lockstep mode.
+
+We don't have dts nodes for TCM yet. We are using hard-coded address in 
+xlnx_r5_remoteproc.c driver.
+
+As the bindings are new, I was hoping to introduce dts nodes once 
+bindings are designed right.
+
+
+
+>
+>> +                                <&zynqmp_firmware PD_R5_0_BTCM>,
+>> +                                <&zynqmp_firmware PD_R5_1_BTCM>;
+>> +            };
+>> +
+>> +            tcm-core@0 {
+>> +                compatible = "xlnx,tcm-split";
+>> +
+>> +                #address-cells = <1>;
+>> +                #size-cells = <1>;
+>> +
+>> +                reg = <0xffe00000 0x10000>, <0xffe20000 0x10000>;
+>> +                reg-names = "atcm", "btcm";
+>> +                ranges = <0x0 0xffe00000 0x10000>, <0x20000 0xffe20000 0x10000>;
+>> +                power-domains = <&zynqmp_firmware PD_R5_0_ATCM>,
+>> +                                <&zynqmp_firmware PD_R5_0_BTCM>;
+>> +            };
+>> +
+>> +            tcm-core@1 {
+>> +                compatible = "xlnx,tcm-split";
+>> +
+>> +                #address-cells = <1>;
+>> +                #size-cells = <1>;
+>> +
+>> +                reg = <0xffe90000 0x10000>, <0xffeb0000 0x10000>;
+>> +                reg-names = "atcm", "btcm";
+>> +                ranges = <0x0 0xffe90000 0x10000>, <0x20000 0xffeb0000 0x10000>;
+>> +                power-domains = <&zynqmp_firmware PD_R5_1_ATCM>,
+>> +                                <&zynqmp_firmware PD_R5_1_BTCM>;
+>> +            };
+>> +        };
+>> +    };
+>> +...
+>>
+>> base-commit: 6b31ffe9c8b9947d6d3552d6e10752fd96d0f80f
+> Best regards,
+> Krzysztof
+>
