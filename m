@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2DE6691F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411C76691F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjAMI50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S232242AbjAMI6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjAMI5Y (ORCPT
+        with ESMTP id S231594AbjAMI6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:57:24 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9642DDE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:57:23 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id b3so32177835lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:57:23 -0800 (PST)
+        Fri, 13 Jan 2023 03:58:30 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D575E674;
+        Fri, 13 Jan 2023 00:58:29 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so8651017pjl.0;
+        Fri, 13 Jan 2023 00:58:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ysmHHp/43jCoR62RWa7j7U0fIOfTEzPcP5KkwYW03+Y=;
-        b=JSQ9xgftTgc+3wChXekfPAhq633giaFDfteRLlk662EuogEM1yyTybzvAs6JUU/+yC
-         eNIF1kkjxwXwhNvUW/gsqLNtNK05X+jWily8sQ+HYu5OdZY7ixMtw1gB1pc4/qvzC3Wn
-         VTy6p3Zh3kRQf38km99+OrYx/mu5/hsETlOXWDbJYYKMY2EbE/aOns8YPUtulVjbu17G
-         mw/qbhx8aj7KehXUPGMZVTgpsMkg5E3g8714UEE29BALMQ3joIu+r/y5Bx9eknQdZtku
-         nnwCirFJ46KtEfZDpGTS7InzMD02NBOk2969DPioKPJE4hZAFbYT8z1JeBb2XQlw934g
-         YSsQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOXPJ4ctD/k2tBI58EgwSpUTlf5yt8enn1GdO0RLBD0=;
+        b=WepC8TjvkfEvn2+hH+Z9pCWF0UhvJkafe0KSBJ71K2YEizMOPCV7SXZfh/ziw07ThH
+         CHRY+4mmFo8uk66L+y7eGGfpTxHamxpsQHfl2SalOt5DWCu8KJE5IrUtSYDyup8GH6SJ
+         aHC61XuOoagU+UkBu/mAhD0UeLZqVDeM9ZsmuHebZ5YKsbLBYwlP8qA4Vmf5q63Bi84d
+         YCzyyplOSRx+4Mn0JKEiSOwSIeoHD4ZJO8Ynrc0hMjvFC5MAauSB6L1a3U9KwAcQJQrY
+         WxV+2gMqFbIcwee5y24U2BJ5XxrpWQQjXuDRT4GfoqtVN1X7jigcUEVivS79VS81Rj3j
+         PKMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysmHHp/43jCoR62RWa7j7U0fIOfTEzPcP5KkwYW03+Y=;
-        b=nWBdAN6GWwrfMLYSCQetMXvSiRrW2hlRW8OtU1NCQlRd95R0xeahxVFtn40qsEgxRm
-         4ggP5KXXtr07tlZpsi2uS+eaQY72gvNPtCz7zcIXR+iG9OahTBWIGDARDAz3rTuN3007
-         rNZMjfG43BztEqfet+HZ5tRwQfTYyL1dSvWlPGfho1AaPzvUcdDdylz3LcE6WEou/MFX
-         ZYVx/9t3Zc7Qv6/UcjFQngjTN5yBu+u1lXrZ8LlVHoiGQjj+TUh3f7gVLT8mU9Q6EW+5
-         CBeQE0k/p/wb2R/e+N+joQ9ouUuEzqmK9HT4iohKB5GJaMtc42wWtCrPNyWgHPdTZois
-         M5yg==
-X-Gm-Message-State: AFqh2krsqGfyqDoSVy1UwnmVGsFuWsEW+4DTXiqFxszSZdRY88gqhAVD
-        wJSbzbNMi7KzxMS3Zsm2mE/tVA==
-X-Google-Smtp-Source: AMrXdXtBlsg3TCrCR6Yu2JIdPZC5uS8fWSZfkc3geFs8erjGiBE3AGQjYSZ0FPjxIX17l3lKzpd9tQ==
-X-Received: by 2002:a05:6512:368a:b0:4b5:b90a:829d with SMTP id d10-20020a056512368a00b004b5b90a829dmr19917438lfs.66.1673600241703;
-        Fri, 13 Jan 2023 00:57:21 -0800 (PST)
-Received: from [192.168.2.31] ([194.204.33.9])
-        by smtp.gmail.com with ESMTPSA id br11-20020a056512400b00b0048a934168c0sm3758739lfb.35.2023.01.13.00.57.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:57:21 -0800 (PST)
-Message-ID: <9a64c685-9ff0-bc1d-e604-e3773ff9edd7@linaro.org>
-Date:   Fri, 13 Jan 2023 10:57:18 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FOXPJ4ctD/k2tBI58EgwSpUTlf5yt8enn1GdO0RLBD0=;
+        b=SfqDUdJrFwQ8z0aeqIP7uaK5DycvgUPPVxVEebaGdYWOusspVGxNz5GG+w/FRyy/9X
+         c+cKkpEqDJ4dmGM0aH1QwFHIEtrI9ljVw8sdkQKikzmUIF+3k/NRdQc5Aqg1iMI3VIus
+         A7dB7RK6QZmejaZpHro60/rIHHUMORXr5cpUgRz6aSETo868gw+Folbmw/CqH3KzJO65
+         Kqi9pAZ3Sr50GlDHalrzEv6nsr2gnT23l0JyQKJ+PFRGjygwCKdj1nBIn0nhiQmbO7I+
+         0KCtfdEFyF4GPpMW92gyZaRkW3n9cIts6sQyA4AY+ZXODDLQaYsJgg5JF1X/zdFnAZbn
+         wu1g==
+X-Gm-Message-State: AFqh2kob+ZYVaKOcJf7aWirQD/6ci2Klh+FVW+A5mymTlWXeo0cz0bRO
+        ef9k7f09Jt9DBy6SIUbU7os=
+X-Google-Smtp-Source: AMrXdXuQw68i6p+qo+YvoqAdx2+WtXc7vRnMg9DA0n+kdseNoAgF7zhqsYbHAx61beHGy0jivV0+dQ==
+X-Received: by 2002:a17:903:2781:b0:194:62d9:9a86 with SMTP id jw1-20020a170903278100b0019462d99a86mr4518331plb.59.1673600309306;
+        Fri, 13 Jan 2023 00:58:29 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
+        by smtp.gmail.com with ESMTPSA id l17-20020a170903245100b001890cbd1ff1sm13660500pls.149.2023.01.13.00.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 00:58:28 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 52ADC104D0B; Fri, 13 Jan 2023 15:58:25 +0700 (WIB)
+Date:   Fri, 13 Jan 2023 15:58:24 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
+Message-ID: <Y8EdMJ2eLJUS89MS@debian.me>
+References: <20230112135326.981869724@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/msm: Initialize mode_config earlier
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230113041051.4189063-1-quic_bjorande@quicinc.com>
- <eea1c5dc-6bc5-4246-f0e1-0c790de9f078@linaro.org>
-In-Reply-To: <eea1c5dc-6bc5-4246-f0e1-0c790de9f078@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zQWMkMI+vsN3CxJf"
+Content-Disposition: inline
+In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 06:23, Dmitry Baryshkov wrote:
-> On 13/01/2023 06:10, Bjorn Andersson wrote:
->> Invoking drm_bridge_hpd_notify() on a drm_bridge with a HPD-enabled
->> bridge_connector ends up in drm_bridge_connector_hpd_cb() calling
->> drm_kms_helper_hotplug_event(), which assumes that the associated
->> drm_device's mode_config.funcs is a valid pointer.
->>
->> But in the MSM DisplayPort driver the HPD enablement happens at bind
->> time and mode_config.funcs is initialized late in msm_drm_init(). This
->> means that there's a window for hot plug events to dereference a NULL
->> mode_config.funcs.
->>
->> Move the assignment of mode_config.funcs before the bind, to avoid this
->> scenario.
-> 
-> Cam we make DP driver not to report HPD events until the enable_hpd() 
-> was called? I think this is what was fixed by your internal_hpd patchset.
 
-Or to express this in another words: I thought that internal_hpd already 
-deferred enabling hpd event reporting till the time when we need it, 
-didn't it?
+--zQWMkMI+vsN3CxJf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jan 12, 2023 at 02:56:21PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.6 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
--- 
-With best wishes
-Dmitry
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--zQWMkMI+vsN3CxJf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8EdKwAKCRD2uYlJVVFO
+o8TtAP9eso2fiajGisTlUTcDipiG1cn3y8pnv8zXeHj+GFa6+wD/V9SD7pAdnmgs
+WuXlu5MexNtRwUPOvPmfy64uD14rQA4=
+=O5XG
+-----END PGP SIGNATURE-----
+
+--zQWMkMI+vsN3CxJf--
