@@ -2,141 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A843F669C53
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD3A669CF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjAMPbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S229979AbjAMPwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjAMPbQ (ORCPT
+        with ESMTP id S229908AbjAMPv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:31:16 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D4B93C36
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:24:30 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id cf42so33639419lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X5neXXvR4xShgIQ+mBGlETi+Hmx/OfLeRgPrvDQqsMM=;
-        b=lgYwpaRKm0lkoFxPYt4FB+s3m286q8Altyh+EMp/DStxeiUb4AVUHZputDOFj5ejeR
-         Om03kDdoWEB6MtHZVZjoJJNJbZX8OFhwNNg0i5NbvEX41WIPVj0p3z4oxTxH2EqnqhLD
-         WkBQT96hDUI9UN6I43VG4wo0+NDg9fZx+XV7ZvSC50fSPav4/c7XPM0+AL+wJpujt/8F
-         p2UoCfQ+K+qtC3w8WurMjPaduDbAn0oKREFn8OnnfkcT9OyeXQeuhQtv3BxU+gB+FTzl
-         oRqIMOlQ2/3WVF0J/3ZGwKkpCeiW2WGE2KqDoXtjlRqg07Fz2iCG+0MUpld2slkdbeG8
-         7TfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X5neXXvR4xShgIQ+mBGlETi+Hmx/OfLeRgPrvDQqsMM=;
-        b=Nvk1lf4fzw927QnTZ3EhoTAXNmVQIrao2DyprDdv898VuowuQRIj3pQRbeWBMERA2I
-         6szHurBehjPfNiom5cki8S6RUWYJ0FVJYMIiDXOrKt2mv2jn+yIrK4G7ssosQGDGiqd4
-         mokmtbVinoDvD4S1iFx/6JclwrNKntn54kgUeseUT0+zFvclGMTNSXtWn/uPvMJAasKb
-         X3+07KkXycoihy86p2Gwp5yOdGf7/QsTq0LDC75CtDRXyhBj7Jj0C6tE4RR2M3fjjCKo
-         FVmqKVG0vSmyNVUirguCy94xWwnrBt4v+nPhKk6bZWALeHscAosou4ElqLC2+eQ0DZiz
-         0zhQ==
-X-Gm-Message-State: AFqh2kpqpZrrBNTEV787gV5z+PKKYvRHLfwSmgbnqY6Gsy9XiT9NgG0L
-        4oOrIR5AkDHpR66DBWrs65Z7+Q==
-X-Google-Smtp-Source: AMrXdXvAg3JiBLhBzGE5SuTRLQ5LoXvDpRYLITqKt41wh2MJYE/w8yrIo3AaWGcX9fSggjw86D7F2A==
-X-Received: by 2002:ac2:53b0:0:b0:4cc:a108:ca0a with SMTP id j16-20020ac253b0000000b004cca108ca0amr41337lfh.46.1673623468437;
-        Fri, 13 Jan 2023 07:24:28 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id x2-20020a056512130200b004a8f824466bsm3886305lfu.188.2023.01.13.07.24.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 07:24:27 -0800 (PST)
-Message-ID: <552e75a9-179a-7720-3d37-59f1846266b1@linaro.org>
-Date:   Fri, 13 Jan 2023 16:24:25 +0100
+        Fri, 13 Jan 2023 10:51:59 -0500
+X-Greylist: delayed 1114 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 Jan 2023 07:44:36 PST
+Received: from mail.dmbarone.com (mail.dmbarone.com [5.181.144.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DA948CD6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:44:35 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dmbarone.com (Postfix) with ESMTP id E698D2A53D3;
+        Fri, 13 Jan 2023 15:25:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
+        t=1673623547; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=r2EVfrMFNUwxfjB2Ca1PGnPoTG72NbWnrDW9xvNQNeb4pQfoZtr93D+4YnXk1MDbm
+         9kuGgiEgPVZo4Oh5/7+ZgJ5jRqA+TphSst4VAuFT0rFQVVh3Cs7iffVt2O5OP7/Ch0
+         WeJMVTAVtCOHI7qjSwJnUxMIEHGo1SVEnf0Kr70M=
+X-Virus-Scanned: Debian amavisd-new at ispdmbarone.kubeitalia.it
+Received: from mail.dmbarone.com ([127.0.0.1])
+        by localhost (ispdmbarone.kubeitalia.it [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id SHnWGolhtmJT; Fri, 13 Jan 2023 15:25:46 +0000 (UTC)
+Received: from [172.20.10.6] (unknown [129.205.124.225])
+        (Authenticated sender: admin@dmbarone.com)
+        by mail.dmbarone.com (Postfix) with ESMTPSA id 2AAC12A4453;
+        Fri, 13 Jan 2023 15:25:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
+        t=1673623546; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=b0nKKOSnPdZTWmnuXTpTSmliuR0E94SMrGVynzzIDlj+sAWFmtX20eue/jRQbBe37
+         8/+TjcW1PKW+4gsOFRozp5Pap0lgHFR0Xd+TGrbcIBlLhKw6Lr7YG4eWB6I/ocS+2v
+         +P2KZqWKJkPz0I0n+2zDvgTPrZs0EdF+YAtRIzdM=
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/6] regulator: qcom_smd: Add MP5496 regulators
-Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
- <20230113150310.29709-4-quic_devipriy@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230113150310.29709-4-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeit!!?=
+To:     Recipients <admi@dmbarone.com>
+From:   <admi@dmbarone.com>
+Date:   Fri, 13 Jan 2023 16:25:41 +0100
+Reply-To: theresasteven225@gmail.com
+X-Antivirus: Avast (VPS 230113-2, 1/13/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230113152546.E698D2A53D3@mail.dmbarone.com>
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [129.205.124.225 listed in zen.spamhaus.org]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [5.181.144.66 listed in bl.score.senderscore.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [theresasteven225[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Eine Spende wurde an Sie get=E4tigt, antworten Sie f=FCr weitere Einzelheit=
+en.
 
+Gr=FC=DFe
+Theresia Steven
 
-On 13.01.2023 16:03, devi priya wrote:
-> Adding support for PMIC MP5496 on IPQ9574 SoC
-> 
-> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> ---
-Please simply extend the existing MP5496 support with this
-S1 regulator. If you don't explicitly define and set voltages
-for the other vregs, they will not be probed.
-
-Konrad
->  drivers/regulator/qcom_smd-regulator.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
-> index 9f2b58458841..1eb17d378897 100644
-> --- a/drivers/regulator/qcom_smd-regulator.c
-> +++ b/drivers/regulator/qcom_smd-regulator.c
-> @@ -767,6 +767,15 @@ static const struct regulator_desc mp5496_ldoa2 = {
->  	.ops = &rpm_mp5496_ops,
->  };
->  
-> +static const struct regulator_desc ipq9574_mp5496_smpa1 = {
-> +	.linear_ranges = (struct linear_range[]) {
-> +		REGULATOR_LINEAR_RANGE(600000, 0, 37, 12500),
-> +	},
-> +	.n_linear_ranges = 1,
-> +	.n_voltages = 38,
-> +	.ops = &rpm_mp5496_ops,
-> +};
-> +
->  static const struct regulator_desc pm2250_lvftsmps = {
->  	.linear_ranges = (struct linear_range[]) {
->  		REGULATOR_LINEAR_RANGE(320000, 0, 269, 4000),
-> @@ -799,6 +808,11 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
->  	{}
->  };
->  
-> +static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
-> +	{ "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
-> +	{}
-> +};
-> +
->  static const struct rpm_regulator_data rpm_pm2250_regulators[] = {
->  	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pm2250_lvftsmps, "vdd_s1" },
->  	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm2250_lvftsmps, "vdd_s2" },
-> @@ -1320,6 +1334,8 @@ static const struct rpm_regulator_data rpm_pms405_regulators[] = {
->  };
->  
->  static const struct of_device_id rpm_of_match[] = {
-> +	{ .compatible = "qcom,rpm-ipq9574-mp5496-regulators",
-> +		.data = &rpm_ipq9574_mp5496_regulators },
->  	{ .compatible = "qcom,rpm-mp5496-regulators", .data = &rpm_mp5496_regulators },
->  	{ .compatible = "qcom,rpm-pm2250-regulators", .data = &rpm_pm2250_regulators },
->  	{ .compatible = "qcom,rpm-pm6125-regulators", .data = &rpm_pm6125_regulators },
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
