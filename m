@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831E1668EA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB61668EB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240882AbjAMHAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
+        id S241192AbjAMHAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240949AbjAMG64 (ORCPT
+        with ESMTP id S240887AbjAMG66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 01:58:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5486B595;
-        Thu, 12 Jan 2023 22:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=YJruvXG7kiwPmKxC/nF7gon5wmgRUYksNeIoAbOzgU0=; b=piNcqQ1Cf4XjLCWmyQAz6vK1cL
-        vce3b8lKz0sVE444kluJuofenZYfKc8E8KMF1NfqRNyTkKOglkSP1ke1s67G8XQZBT9wZn0Qi5WUs
-        SqXYwEfV5SzVhOPDYeOCESjyCYMexzxgAghw3RqWWWyzR5qnwg/aibOgXtA+j9qyP7gh8PBQtcS8G
-        LIKydudI/rJHqIFE77wjNWUf1XYWpfGGcKEqDIoBZn7TUlm+Q9S3EV/XhztwDmDFhG6hK41tMIS2Q
-        9JjD0PSTSO4sS7mP0hbZyzyyZEk3C+1pN9Bk5WMdI6Ghckz9UxIGqGcxEnTigE666H2xjuzPqu7CI
-        uUJhI0VQ==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGDo2-000rw1-Kd; Fri, 13 Jan 2023 06:44:50 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] thermal: mtk_thermal: fix kernel-doc function name
-Date:   Thu, 12 Jan 2023 22:44:49 -0800
-Message-Id: <20230113064449.15061-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        Fri, 13 Jan 2023 01:58:58 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB3872897
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 22:45:10 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 141so14390601pgc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 22:45:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=friendlyarm-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FC/n51wttnGtNiNe7WH/BCIkLrvufvFzSnIEhGzQM4w=;
+        b=b0jXb0ooQnNdoQ1WJ1MwgGXuYTywiQ6y+Pr92jpfFcquqViGzUGql5QyfKLmpQAOCt
+         sAXVt8LTJf2qY6u5MSi9BQ8MQ+ZIG4E6OOVRCltq5A8wC4vADIcT0KdoeIQZ8iVfJ51E
+         yTiLT3jCXN9OUYohSxwtFWUeDjQ0/esf9aBuIgXA7NYo8w+wct9CAK2IsShJIWWw1X4c
+         4sE2DExfsS0srEhZAEEs4Zgf0jFwO1NQ8SU5IRwSyk7tr/0R87VxAF0GRkB5H1bujoMP
+         8ZsMYzT/Pk+9MRBSKfaDi6tTSnyVytrNcKaUNWSA2+GVlWNgKRoU8L7MuQBmTJ5GhEwc
+         6PUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FC/n51wttnGtNiNe7WH/BCIkLrvufvFzSnIEhGzQM4w=;
+        b=5iVrntJ9xafAk6PAUSpBExLEGytwXsHB7dccz5CX95oMgpbuezHiRLUaL4yt7zj0oC
+         Nphk0WhKKsmMtcTDfaep6wtB92mckRttLOP4BblAigkl2tlDEZ7smQMOWOA5GpIRQd4s
+         XS/l4eUKpttDYxK5TAKxotjiVib50dle4MPeE7j3HZboLI4E6S0O278mW0lNNvBXDzmp
+         yyRhKbPASekmS53Urmcof84I5gED58j1OfALvLXqcv+VFFoLtXbXZXrZndN5P1ZIVogX
+         Dat8XMFgw/Gg78kXcYZDV9CuHXm6TdPvNYAP97ahL94oAsiQwdNsKEKLwkR94wny+/XV
+         x/Jw==
+X-Gm-Message-State: AFqh2krah55RYRlbD7HZcQzkzahvNPhLFrp8fURk13BHShb+Z+a26dYW
+        zFv2LMLC4xkD9sKqwq/R7ozdRw==
+X-Google-Smtp-Source: AMrXdXvDmf/1LdiTumMJjPEnygIZlv2EFUyFz6qHZThsAio0M/pePfshn1odQvyy9Za0jbgDpDpHIQ==
+X-Received: by 2002:a05:6a00:88a:b0:581:19ed:78b9 with SMTP id q10-20020a056a00088a00b0058119ed78b9mr79911887pfj.2.1673592309502;
+        Thu, 12 Jan 2023 22:45:09 -0800 (PST)
+Received: from jensen.next (li999-236.members.linode.com. [45.33.49.236])
+        by smtp.gmail.com with ESMTPSA id p29-20020aa79e9d000000b00574db8ca00fsm12886122pfq.185.2023.01.12.22.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 22:45:08 -0800 (PST)
+From:   Jensen Huang <jensenhuang@friendlyarm.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Jensen Huang <jensenhuang@friendlyarm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: add missing #interrupt-cells to rk356x pcie2x1
+Date:   Fri, 13 Jan 2023 14:44:57 +0800
+Message-Id: <20230113064457.7105-1-jensenhuang@friendlyarm.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the correct function name in a kernel-doc comment to prevent
-a warning:
+This fixes the following issue:
+  pcieport 0000:00:00.0: of_irq_parse_pci: failed with rc=-22
 
-drivers/thermal/mtk_thermal.c:562: warning: expecting prototype for raw_to_mcelsius(). Prototype was for raw_to_mcelsius_v1() instead
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
+Signed-off-by: Jensen Huang <jensenhuang@friendlyarm.com>
 ---
- drivers/thermal/mtk_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff -- a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -550,7 +550,7 @@ static const struct mtk_thermal_data mt8
- };
- 
- /**
-- * raw_to_mcelsius - convert a raw ADC value to mcelsius
-+ * raw_to_mcelsius_v1 - convert a raw ADC value to mcelsius
-  * @mt:	The thermal controller
-  * @sensno:	sensor number
-  * @raw:	raw ADC value
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 5706c3e24f0a..b3185e4115d9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -985,6 +985,7 @@ pcie2x1: pcie@fe260000 {
+ 		resets = <&cru SRST_PCIE20_POWERUP>;
+ 		reset-names = "pipe";
+ 		#address-cells = <3>;
++		#interrupt-cells = <1>;
+ 		#size-cells = <2>;
+ 		status = "disabled";
+
+--
+2.38.1
+
