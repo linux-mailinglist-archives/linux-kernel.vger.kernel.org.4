@@ -2,88 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC20366932D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E91669337
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbjAMJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S241062AbjAMJr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240940AbjAMJmi (ORCPT
+        with ESMTP id S237529AbjAMJqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:42:38 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C236C13F37;
-        Fri, 13 Jan 2023 01:33:02 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id D17141C0AB2; Fri, 13 Jan 2023 10:33:00 +0100 (CET)
-Date:   Fri, 13 Jan 2023 10:32:59 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 6.0 000/148] 6.0.19-rc1 review
-Message-ID: <Y8ElS+jivE5FWvku@amd.ucw.cz>
-References: <20230110180017.145591678@linuxfoundation.org>
- <CA+G9fYtpM7X15rY6g6asDxrjxDSfj5sDiP8P5Yb1TS3VVmjGNw@mail.gmail.com>
+        Fri, 13 Jan 2023 04:46:44 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C56781D69;
+        Fri, 13 Jan 2023 01:35:42 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id y1so22918736plb.2;
+        Fri, 13 Jan 2023 01:35:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LuIB1D5VRsHEDevL2A4uFAIi6WCJULM9GsA/lvt8gRg=;
+        b=mnDB/X5DlObF+SjP5BeF0jehFm9HeXGYxNn4oN8HTB5R4Fqbz441FRARuNYzyJuGGF
+         9Wc35fGmyl8YZeGv5nrkcOOG/VEZtx+VzOdELjedCFaH4aaXLZO+12PR0Gq0EsaIo+Bb
+         SlgdQ/yKtYlScsrl9EDoGckqyYL8SHYnZl5WAv+nRcjQAuMS0pSQozp8r6G3WJYHu9oU
+         e92u++dtOC1/mPIVhqA5IQ72filvcgQbdcFLwElLthbc+WovdtqTkLgYjjBCa8YsPiCx
+         KvkgHka8A5MdFYIGvEnTmKCMaN9lxFgyEhHuFZ9om9sa3IUH4f9/44t5Y1KEH7Hvkoqq
+         QrZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LuIB1D5VRsHEDevL2A4uFAIi6WCJULM9GsA/lvt8gRg=;
+        b=Ht3FcFiSSm39tNFYYR22y2DtqboRjZz6V3b2z95U653nC8t8smoIafxQPu9OyrIgCe
+         GseTWUYA8NA8jDNEefXE1U15QqXgip7rILDRHGr1PS4T36420OsVJX3jrqrdlQSrzWXF
+         iSyUZM82E/FcqFq7bcUCwQUXOz0+//w8fei8kky4a7qneYreeU0/n8lQa25Yh6JKhBQP
+         Y1qFSR2+PJkipo7qAy4efdv/GRWVLWvJX3aLNBZSCyO+p8l3wjzeBQ9TJeUGJXRV9Xrs
+         GBYnMopjKE3ebksJddlVtbRoW174OLETnJq/5lTLX2nl18bMhIo32mc8sJbXgg8Zq0s8
+         FZ6g==
+X-Gm-Message-State: AFqh2kpTi5R2QVDzU8hcFtlLVpFaniwih/0CgRKpXrrusGWxrIqjMfpz
+        1FxGqobyqqZIbrEMJm9dkVo=
+X-Google-Smtp-Source: AMrXdXuLiqHGdVOkmSVng7rqdaveCxTRaofjgG8nAEHpdBXuBZyAjqHm8kAc9GP7Cgq+kjEdwJN2Tg==
+X-Received: by 2002:a17:902:7c17:b0:192:6b28:2b4e with SMTP id x23-20020a1709027c1700b001926b282b4emr65625792pll.69.1673602542027;
+        Fri, 13 Jan 2023 01:35:42 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.12])
+        by smtp.gmail.com with ESMTPSA id y12-20020a17090322cc00b001896af10ca7sm13674311plg.134.2023.01.13.01.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 01:35:41 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     andrii@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH] libbpf: replace '.' with '_' in legacy kprobe event name
+Date:   Fri, 13 Jan 2023 17:34:27 +0800
+Message-Id: <20230113093427.1666466-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="XYCzQcN7upoMrEuL"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtpM7X15rY6g6asDxrjxDSfj5sDiP8P5Yb1TS3VVmjGNw@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Menglong Dong <imagedong@tencent.com>
 
---XYCzQcN7upoMrEuL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+'.' is not allowed in the event name of kprobe. Therefore, we will get a
+EINVAL if the kernel function name has a '.' in legacy kprobe attach
+case, such as 'icmp_reply.constprop.0'.
 
-Hi!
+In order to adapt this case, we need to replace the '.' with other char
+in gen_kprobe_legacy_event_name(). And I use '_' for this propose.
 
-> Results from Linaro=E2=80=99s test farm.
-> Regressions on arm64 Raspberry Pi 4 Model B.
->=20
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->=20
-> While running LTP controllers cgroup_fj_stress_blkio test cases
-> the Insufficient stack space to handle exception! occurred and
-> followed by kernel panic on arm64 Raspberry Pi 4 Model B with
-> clang-15 built kernel Image.
->=20
-> The full boot and test log attached to this email and build and
-> Kconfig links provided in the bottom of this email.
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+ tools/lib/bpf/libbpf.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Full log is 11MB. That's rather... big for an email. Please post such
-stuff as a link or at least compress them...
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index fdfb1ca34ced..5d6f6675c2f2 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9994,9 +9994,16 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
+ 					 const char *kfunc_name, size_t offset)
+ {
+ 	static int index = 0;
++	int i = 0;
+ 
+ 	snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(), kfunc_name, offset,
+ 		 __sync_fetch_and_add(&index, 1));
++
++	while (buf[i] != '\0') {
++		if (buf[i] == '.')
++			buf[i] = '_';
++		i++;
++	}
+ }
+ 
+ static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
+-- 
+2.39.0
 
-Best regards,
-								Pavel
-							=09
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---XYCzQcN7upoMrEuL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8ElSwAKCRAw5/Bqldv6
-8nsQAJ9lZgYFZdyj9N+xPb683pLscM0lqgCcDrW+2w/2k3wcoopdIFYzgsvsejA=
-=ON0+
------END PGP SIGNATURE-----
-
---XYCzQcN7upoMrEuL--
