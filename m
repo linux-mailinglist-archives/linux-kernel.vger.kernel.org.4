@@ -2,72 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1A866895A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 03:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28051668961
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 03:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjAMCE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 21:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S240368AbjAMCFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 21:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjAMCEZ (ORCPT
+        with ESMTP id S231346AbjAMCFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 21:04:25 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181A9621B0
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:04:24 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id h24-20020a056e021d9800b0030be8a5dd68so14874762ila.13
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:04:24 -0800 (PST)
+        Thu, 12 Jan 2023 21:05:22 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B883621B1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:05:19 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id s8so13714798plk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 18:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=imvHeHfSB76NKxqNg7yS5d0bnfZ/68ukGArZSjXXLbU=;
+        b=gfL4hh/PAfTWoPxrgPNOjugdRQT6/WV65DgBrSnpV5ljD3nsqQZO//RzEo7T4oLQqx
+         c4Q0mI405eGfoj8LuS0wI2sQdlqaeNnCgTAsK9ojs6iEaCaHua6vjwZaKDc+OIsKFBm9
+         w5TSAgwjkuR9lTRDlbRtIxIeYn77XVQL36m+j6TNN1IPYFjq7eERVWltVZh8xI+AuS6x
+         Ebb8o0T31ad1vrZqKXtO581o4RiY7HqEeVSqH6w/J7bYR6aLkGoMN3t0S7fDWdcn2JdL
+         sRmydefKjnfHqNzBKp647Hzmqgin/vcHPGOfInZ9RvBNC86xV/kMej7ry3nwiPeZw8Hm
+         rb1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayK0uCBsQox46J2IE0pM400tXWnCHlDcWCx3CfqtMg4=;
-        b=DwldKgGhhQMljrR0HCmlZvLImfUKSNaf9R8Jk0+tkknVEzq67kRoss5qwSb1pfYZiP
-         /f84YkM22kGhfbro9nhesHUEm7c8nCIU0wqIoiVlqvQgH4eZ9h8EOSwwoqhsoqyHPkTQ
-         3QVxIH7qFeFj9BD9XpmRtRTfFypjiLbmZfuiI0R4lJlnOY99LYE/+p0cDedkmjRf/VnI
-         Uh8ld0R5UIsfxZV9xIdoypEnKn95Uzhaa5e8VSmstKGEvIoGlTrGpXZ/fKFm9RafI5IX
-         hzWhx4Q3v/v9lqz3orQl81MFYkdpdzh3H/d544xeBd+VSn1tDS+1Mlp+m6HErufjhgQ5
-         6mNQ==
-X-Gm-Message-State: AFqh2kooIdTwN57uidOkseG7OnCEYfdXtdMs1WpWM/yVl7KImvy2xZ3a
-        sqt6MViok9H8gA3b/2oV/lWeOu2vXz4qxp2ul4RGtPsC37Jb
-X-Google-Smtp-Source: AMrXdXsKcSRHw8sK4t0XWANe42NYk0I4/oJdtmEBrZdoPzhm0JpvcxnGDQ4Sn8K9sIotqBiDSGtJjPWBqOpkz1le8/IfbiZrzani
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=imvHeHfSB76NKxqNg7yS5d0bnfZ/68ukGArZSjXXLbU=;
+        b=v63GVKAkfPk61xdrRXnWl54gvDFUxsREiqlx4+U0wIiL4SO3AxEFsyA7LCE3tIHT23
+         Ao2V/Ud/vUADfiJPIM2AwjWIwmAuFlPsDJYoLU7rGBlN3m8WQivWsNkru5mSNcnMo5Lc
+         ZcqleGkn2y1mTMDrDypMWKmRlMuVPCUaaWH3nctLFfoBN52wDb3c5VbiQia/cv9r14JR
+         96V0VMqBdAywDnTaJAVDl86RMHu/MkgYk5w0gr9ShduNEIYQYIlVPsdOx6K5J02a4a4P
+         9nlPoG51uFEZCZun6p0ogRTOzIzc50S4ZuFVyAl8sAO0C5bvDi/WkqW7t/QsvBtQFfRM
+         VWdA==
+X-Gm-Message-State: AFqh2krZVugaUSHE+PaWJI04jBTcS0TKFbxTRPYsirxPxho7z17iUv5C
+        XuRupSJXSwFe9JSG1/rnVjAT6A==
+X-Google-Smtp-Source: AMrXdXt5UhWv4+gCCOg9vsmsrXhYZBecqcoz5x+/Oa5eI3PEct7oPHliTdSgvAqHMlV57ui5SVshog==
+X-Received: by 2002:a17:902:b10e:b0:191:4367:7fde with SMTP id q14-20020a170902b10e00b0019143677fdemr994708plr.0.1673575518755;
+        Thu, 12 Jan 2023 18:05:18 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d22-20020a170902aa9600b001871461688esm12835625plr.175.2023.01.12.18.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 18:05:18 -0800 (PST)
+Date:   Fri, 13 Jan 2023 02:05:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, pbonzini@redhat.com,
+        jgg@nvidia.com, cohuck@redhat.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com,
+        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vfio: fix potential deadlock on vfio group lock
+Message-ID: <Y8C8WpkjgFelldTQ@google.com>
+References: <20230112203844.41179-1-mjrosato@linux.ibm.com>
+ <20230112140517.6db5b346.alex.williamson@redhat.com>
+ <bce7912a-f904-b5a3-d234-c3e2c42d9e54@linux.ibm.com>
+ <Y8CX8YwT/T9v4U/D@google.com>
+ <20230112175648.158dca5f.alex.williamson@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:f53:b0:30c:2d97:1a9b with SMTP id
- y19-20020a056e020f5300b0030c2d971a9bmr5456205ilj.143.1673575463465; Thu, 12
- Jan 2023 18:04:23 -0800 (PST)
-Date:   Thu, 12 Jan 2023 18:04:23 -0800
-In-Reply-To: <d4f4556c-11ac-7533-f047-cdcfda9bddf8@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000013c3e05f21ba793@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in io_fallback_tw
-From:   syzbot <syzbot+ebcc33c1e81093c9224f@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112175648.158dca5f.alex.williamson@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jan 12, 2023, Alex Williamson wrote:
+> On Thu, 12 Jan 2023 23:29:53 +0000
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Thu, Jan 12, 2023, Matthew Rosato wrote:
+> > > On 1/12/23 4:05 PM, Alex Williamson wrote:  
+> > > > On Thu, 12 Jan 2023 15:38:44 -0500
+> > > > Matthew Rosato <mjrosato@linux.ibm.com> wrote:  
+> > > >> @@ -344,6 +345,35 @@ static bool vfio_assert_device_open(struct vfio_device *device)
+> > > >>  	return !WARN_ON_ONCE(!READ_ONCE(device->open_count));
+> > > >>  }
+> > > >>  
+> > > >> +static bool vfio_kvm_get_kvm_safe(struct kvm *kvm)
+> > > >> +{
+> > > >> +	bool (*fn)(struct kvm *kvm);
+> > > >> +	bool ret;
+> > > >> +
+> > > >> +	fn = symbol_get(kvm_get_kvm_safe);
+> > > >> +	if (WARN_ON(!fn))  
+> > 
+> > In a related vein to Alex's comments about error handling, this should not WARN.
+> > WARNing during vfio_kvm_put_kvm() makes sense, but the "get" is somewhat blind.
+> 
+> It's not exactly blind though, we wouldn't have a kvm pointer if the
+> kvm-vfio device hadn't stuffed one into the group.  We only call into
+> here if we have a non-NULL pointer, so it wouldn't simply be that the
+> kvm module isn't available for this to fire, but more that we have an
+> API change to make the symbol no longer exist.  A WARN for that doesn't
+> seem unreasonable.  Thanks,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Hmm, I was thinking that it might be possible for kvm.ko to be on its way out,
+but barring use of force module unload, which breaks things left and right, kvm.ko
+can only be going if all VMs have been destroyed.
 
-Reported-and-tested-by: syzbot+ebcc33c1e81093c9224f@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         73f41663 Merge branch 'for-6.3/iter-ubuf' into for-next
-git tree:       git://git.kernel.dk/linux.git for-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16cc1236480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
-dashboard link: https://syzkaller.appspot.com/bug?extid=ebcc33c1e81093c9224f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+Agreed, WARN is fine.
