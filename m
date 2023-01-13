@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C461A669951
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C59669954
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241349AbjAMOCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S241783AbjAMODA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbjAMOBZ (ORCPT
+        with ESMTP id S241770AbjAMOCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:01:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEE613F60;
-        Fri, 13 Jan 2023 05:58:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 507D0B8206B;
-        Fri, 13 Jan 2023 13:58:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AC4C433D2;
-        Fri, 13 Jan 2023 13:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673618313;
-        bh=kGpMQxjI+fFQs+jBsaQNT3ZJMiDOZkdLszEE2sQFRCw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=a0b6N8+JbeS5RVqc3A1GvhT8qfZBs89IP5y30W79s44rrUaFmN3Iq/PcmfbvWCAoi
-         bAg9+/vRi63twHuw8/t6EHBLUg3+UZlGkTs21MAHBQKj0HKI7Ssl2mhqEuupAZQPQL
-         h3OGSbIfl0jxx+15dwHn4do/GIf3rJmnUmXWv6puOkr5eCjOTFd5nxomLf0Ksg2FP4
-         cLH4ZXIB2pGCv7QsWo3FqHokcDi07JWBv7OYJdGkRgcO3us2Uxgj3bvVBTMRAmX+n6
-         j9sX9nyefXIie0kj4z3qTGzyxqaoEoWKey7+ki1E79d6ogiLEId1FzhuISpcywY4XP
-         MowxazhYPP+aA==
-Date:   Fri, 13 Jan 2023 07:58:30 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: rcar: avoid defines prefixed with CONFIG
-Message-ID: <20230113135830.GA1835786@bhelgaas>
+        Fri, 13 Jan 2023 09:02:00 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B0E0E7;
+        Fri, 13 Jan 2023 05:59:34 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id mp20so5912272ejc.7;
+        Fri, 13 Jan 2023 05:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5I4m/EnweQ5SqB1DHqUreYhEufcWoW7oFYxI0NTJspA=;
+        b=cX9POSfg1VNn+g1+ero6V6UjGb7H9mLduuabZEeInSH2IW4z75eYg//ouJP/FYhwV1
+         u7LD20+3n7/F3YRjpN/VfJ3R5PWj3jRuJB4YFXiVv114C0Ljmr2d2nt51iaSqgVAVsTh
+         SRF/qEmiPDgTjPP69y0uF/OzdAkf10qPlIylu+HvoQjizlqUWoJNLArSnfC07dUh5NWY
+         U3AAwu+qOjE2ltBqUPQ0TwD1umnNM0JC+DFpunyB5cokiwJF4z36rKHu5olEJjqOyQ5B
+         5efik53s5GngQ7TUN8ssyE+TZujB5oSD9rFErny+eVGGrc2bIETL3vm41FVNRFd+Iqal
+         h4BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5I4m/EnweQ5SqB1DHqUreYhEufcWoW7oFYxI0NTJspA=;
+        b=WUhzo5FSvQuPyCZr6ii1V5/SCQnpNKU7XF5eIAdkLxXs7ry7FVga7qfYOAswn8qaIE
+         boRyZwY3jK40dnwfF1D7iiXfMLnpHEeS+SYgUmp/aFVxVFNz/Z5XfW6aIUxDfJdyNuXv
+         QbNjuLFEQPQu1UjhGJAmrnAaoOhT8w1MRdQcqNe8YOklmsLH7WkSP2K55ovRypCEWf3M
+         /Wo4FzFu+XeEQ4s+9Jo7faA3Qd2BpLfn8B/wVpc/JS14TwPYQocG/5xCaspMuXvh4xSr
+         g5FB2M4jsR5a4OzK3QBIXF+lHbdjOsfO9En1Rh9BR50NpUE0nZ/SSsc3mrmdsAi4KOPQ
+         dIsQ==
+X-Gm-Message-State: AFqh2kqSj6XfpncaY4vCadwUuoAteq/hnpJtBeRxsljcAQBdeLRpRozr
+        x4SM1P7lqfCiyBm/T4XzdGQ=
+X-Google-Smtp-Source: AMrXdXuD6T1yk7qurYpUiH6yo27/FdUjp8etImogdv44WzUG/B2H4OVrR7fNqY+XDi9/GJVOTueVlw==
+X-Received: by 2002:a17:907:73c1:b0:7e7:4dd7:bc0c with SMTP id es1-20020a17090773c100b007e74dd7bc0cmr65354966ejc.66.1673618372910;
+        Fri, 13 Jan 2023 05:59:32 -0800 (PST)
+Received: from skbuf ([188.26.184.223])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b007c0bb571da5sm8473751ejw.41.2023.01.13.05.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 05:59:32 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:59:30 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
+ about max frame size
+Message-ID: <20230113135930.27hpr5uxtrv77z44@skbuf>
+References: <20230106101651.1137755-1-lukma@denx.de>
+ <20230106101651.1137755-1-lukma@denx.de>
+ <20230106145109.mrv2n3ppcz52jwa2@skbuf>
+ <20230113131331.28ba7997@wsk>
+ <20230113122754.52qvl3pvwpdy5iqk@skbuf>
+ <20230113142017.78184ce1@wsk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113084516.31888-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113142017.78184ce1@wsk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
-
-On Fri, Jan 13, 2023 at 09:45:16AM +0100, Lukas Bulwahn wrote:
-> Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
-> that are introduced in a Kconfig file.
+On Fri, Jan 13, 2023 at 02:20:17PM +0100, Lukasz Majewski wrote:
+> The fixed function maybe should look like below:
 > 
-> Here, a definition for a bitmask to configure the SEND_ENABLE mode is named
-> CONFIG_SEND_ENABLE.
+> static int mv88e6xxx_get_max_mtu(struct dsa_switch *ds, int port)
+> {
+> 	....
+> 	
+> 	int max_mtu;
 > 
-> Rename this local definition to CONFIGURE_SEND_ENABLE to avoid defines
-> prefixed with "CONFIG".
+> 	max_mtu = chip->info->max_frame_size - VLAN_ETH_HLEN -
+> 		  ETH_FCS_LE;
 > 
-> No functional change.
+> 	if (dsa_is_dsa_port(ds, port) || dsa_is_cpu_port(ds, port))
+> 		  max_mtu -= EDSA_HLEN;
+> 
+> 	return max_mtu;
+> }
+> 
+> Comments more than welcome.
 
-If you update this patch, please capitalize the subject to match:
-
-  $ git log --oneline drivers/pci/controller/pcie-rcar-host.c
-  6e36203bc14c ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
-  84b576146294 ("PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()")
-  d2a14b54989e ("PCI: rcar: Check if device is runtime suspended instead of __clk_is_enabled()")
-  a115b1bd3af0 ("PCI: rcar: Add L1 link state fix into data abort hook")
-  83ed8d4fa656 ("PCI: rcar: Convert to MSI domains")
-
-Bjorn
+I suspect that looking at the DSA code which calls these methods will
+answer a lot of your questions. ds->ops->port_max_mtu() is only called
+for user ports. As for ds->ops->port_change_mtu(), this will always be
+called with the requested L2 payload length (default 1500) on user ports,
+and with the maximum among user ports for DSA and CPU ports.
