@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACD1669163
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548E8669168
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbjAMIms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S230223AbjAMIoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjAMImo (ORCPT
+        with ESMTP id S232051AbjAMIn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:42:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A03F440;
-        Fri, 13 Jan 2023 00:42:43 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 194845F9CE;
-        Fri, 13 Jan 2023 08:42:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673599361; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tn3pIfSFHMAaGKQ0wQUSfqNv0AGtcMDyvx2yhx14BF0=;
-        b=MBsoXy0wcYRuu5Kue6BMjCgXARbLAQJk/VqHt/iRhBK/bRgiyNe3k4gp7pxwcWeA9Prop8
-        0LWEQCTjczPkK6TNNGra7mg+eBfY55utQL9Jn6L51VSgQbXfGxhIbgKJVvsCSotb6xj7PO
-        MzBrd1PP9y6Cw1gLuSs/QaesbmCQqdM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673599361;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tn3pIfSFHMAaGKQ0wQUSfqNv0AGtcMDyvx2yhx14BF0=;
-        b=KMHxhaL8EgbXJidfcT6tY9VYHXtg6yeHkf4K0/qQRdT4IXh1TR+M3BSMDznQC/FV3qw32A
-        SabK8ITT6F9QxHBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F046713913;
-        Fri, 13 Jan 2023 08:42:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8zonOoAZwWMhXQAAMHmgww
-        (envelope-from <cahu@suse.de>); Fri, 13 Jan 2023 08:42:40 +0000
-Message-ID: <5ab09d55233d1ba5969bd6a02214046c24145527.camel@suse.de>
-Subject: Re: [PATCH] rndis_wlan: Prevent buffer overflow in rndis_query_oid
-From:   cahu <cahu@suse.de>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>, kvalo@kernel.org,
-        jussi.kivilinna@iki.fi, davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 13 Jan 2023 09:42:40 +0100
-In-Reply-To: <20230110173007.57110-1-szymon.heidrich@gmail.com>
-References: <20230110173007.57110-1-szymon.heidrich@gmail.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-VPz1AUbM/19UkYX6m/ao"
-User-Agent: Evolution 3.46.3 
+        Fri, 13 Jan 2023 03:43:57 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BA2574F4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:43:53 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id tz12so50676528ejc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:43:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zB+Yx7ZN+t7edTSSom9Kj39XMeVTKD+ND0VCe3SN4Xo=;
+        b=T0mlgn8SoCNdoXKYzWPoS6UZfF4bzgKg38/V/2QqDRoLC8pHUYv6ZiFwbPYy3kJjyf
+         gOZ0KTVHs9NjUAqYjo+BNTiT809LbyGIQaQ2tRv9TBNw9x+NOWfWunTvDHWn/hYiMhgX
+         ks/HSCZqpbrt3g/tYDo5xacZQ6Kg7EwNxgCCMBRCuvCeIiHQgoAL1mKgyBroSxKB1P3P
+         lI1FulipNUMrGHzrKS7Kzotv+wldtlp4dc4iHAVOOaTOKrwpQtYW2GEF8mX1YQanjtYQ
+         qHCOiL942qC1P2KpmkiocIEW7RF6lZS3RKqBF2l9C1joEWR2MoG8QlBAGvmi1BL1mqo4
+         94EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zB+Yx7ZN+t7edTSSom9Kj39XMeVTKD+ND0VCe3SN4Xo=;
+        b=I9rBdSzHo9NoR1h8CEI4WuyTduGCB60a+dcpkFHPMiLsc9fQXqphg1hfcN8yqfeabd
+         iRvXs+uckUZW2OcIxSHgeJpCLtIVjvAlc+vZ6Sq4g8o2MgICFZgGeTxrL02q5hWIx5gS
+         ve0d3c3s5sGEzxK2k9glRiViKcNob0XF+2CUirHkIbx7zx7eNBnREqisn9CTD2jmp4r6
+         aSZ8PC3t/rx679b+Ieff7lhLunZX/+c0T1ZmoO0rff0h4miBCxWJsRv5kMN6McyQ3Yfr
+         PbeD08wOhu9Eq7DdbQUHkkAUlRtXMpGJXR/+XtR+BNKtO5gfcKcrrJBHYc42v/T6V/Mt
+         hvJg==
+X-Gm-Message-State: AFqh2kqSazOuGiBk5ftiNTQpfSYw60ySBHk8HNWgT6ybv6+Ikl+E7aiw
+        kqHgc8JeydYg8v/Bte/tr/CR9A==
+X-Google-Smtp-Source: AMrXdXtxzKO66Ep+oG3JB08FrDupgVqkcya4/5xLrZ8ij7hNjKIxPF0yY8p0tpEqRM+R6h/+bYJM8A==
+X-Received: by 2002:a17:906:5fd0:b0:862:11f6:a082 with SMTP id k16-20020a1709065fd000b0086211f6a082mr6581682ejv.17.1673599431999;
+        Fri, 13 Jan 2023 00:43:51 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b0084d242d07ffsm7979277ejm.8.2023.01.13.00.43.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 00:43:51 -0800 (PST)
+Message-ID: <04e90058-606e-9f0d-3e1c-844595b36fb1@linaro.org>
+Date:   Fri, 13 Jan 2023 09:43:49 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 1/2] dt-bindings: clock: Add QDU1000 and QRU1000 GCC
+ clocks
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230112204446.30236-1-quic_molvera@quicinc.com>
+ <20230112204446.30236-2-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230112204446.30236-2-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---=-VPz1AUbM/19UkYX6m/ao
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-TWl0cmUgYXNzaWduZWQgQ1ZFLTIwMjMtMjM1NTkgZm9yIHRoaXMuCgpPbiBUdWUsIDIwMjMtMDEt
-MTAgYXQgMTg6MzAgKzAxMDAsIFN6eW1vbiBIZWlkcmljaCB3cm90ZToKPiBTaW5jZSByZXNwbGVu
-IGFuZCByZXNwb2ZmcyBhcmUgc2lnbmVkIGludGVnZXJzIHN1ZmZpY2llbnRseQo+IGxhcmdlIHZh
-bHVlcyBvZiB1bnNpZ25lZCBpbnQgbGVuIGFuZCBvZmZzZXQgbWVtYmVycyBvZiBSTkRJUwo+IHJl
-c3BvbnNlIHdpbGwgcmVzdWx0IGluIG5lZ2F0aXZlIHZhbHVlcyBvZiBwcmlvciB2YXJpYWJsZXMu
-Cj4gVGhpcyBtYXkgYmUgdXRpbGl6ZWQgdG8gYnlwYXNzIGltcGxlbWVudGVkIHNlY3VyaXR5IGNo
-ZWNrcwo+IHRvIGVpdGhlciBleHRyYWN0IG1lbW9yeSBjb250ZW50cyBieSBtYW5pcHVsYXRpbmcg
-b2Zmc2V0IG9yCj4gb3ZlcmZsb3cgdGhlIGRhdGEgYnVmZmVyIHZpYSBtZW1jcHkgYnkgbWFuaXB1
-bGF0aW5nIGJvdGgKPiBvZmZzZXQgYW5kIGxlbi4KPiAKPiBBZGRpdGlvbmFsbHkgYXNzdXJlIHRo
-YXQgc3VtIG9mIHJlc3BsZW4gYW5kIHJlc3BvZmZzIGRvZXMgbm90Cj4gb3ZlcmZsb3cgc28gYnVm
-ZmVyIGJvdW5kYXJpZXMgYXJlIGtlcHQuCj4gCj4gRml4ZXM6IDgwZjhjNWI0MzRmOSAoInJuZGlz
-X3dsYW46IGNvcHkgb25seSB1c2VmdWwgZGF0YSBmcm9tCj4gcm5kaXNfY29tbWFuZCByZXNwb25k
-IikKPiBTaWduZWQtb2ZmLWJ5OiBTenltb24gSGVpZHJpY2ggPHN6eW1vbi5oZWlkcmljaEBnbWFp
-bC5jb20+Cj4gLS0tCj4gwqBkcml2ZXJzL25ldC93aXJlbGVzcy9ybmRpc193bGFuLmMgfCA0ICsr
-LS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4g
-Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JuZGlzX3dsYW4uYwo+IGIvZHJp
-dmVycy9uZXQvd2lyZWxlc3Mvcm5kaXNfd2xhbi5jCj4gaW5kZXggODJhNzQ1OGUwLi5kN2ZjMDUz
-MjggMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3Mvcm5kaXNfd2xhbi5jCj4gKysr
-IGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mvcm5kaXNfd2xhbi5jCj4gQEAgLTY5Nyw3ICs2OTcsNyBA
-QCBzdGF0aWMgaW50IHJuZGlzX3F1ZXJ5X29pZChzdHJ1Y3QgdXNibmV0ICpkZXYsCj4gdTMyIG9p
-ZCwgdm9pZCAqZGF0YSwgaW50ICpsZW4pCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBzdHJ1Y3Qgcm5kaXNfcXVlcnlfY8KgwqDCoMKgKmdldF9jOwo+IMKgwqDCoMKgwqDCoMKgwqB9
-IHU7Cj4gwqDCoMKgwqDCoMKgwqDCoGludCByZXQsIGJ1ZmxlbjsKPiAtwqDCoMKgwqDCoMKgwqBp
-bnQgcmVzcGxlbiwgcmVzcG9mZnMsIGNvcHlsZW47Cj4gK8KgwqDCoMKgwqDCoMKgdTMyIHJlc3Bs
-ZW4sIHJlc3BvZmZzLCBjb3B5bGVuOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGJ1ZmxlbiA9ICps
-ZW4gKyBzaXplb2YoKnUuZ2V0KTsKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKGJ1ZmxlbiA8IENPTlRS
-T0xfQlVGRkVSX1NJWkUpCj4gQEAgLTc0MCw3ICs3NDAsNyBAQCBzdGF0aWMgaW50IHJuZGlzX3F1
-ZXJ5X29pZChzdHJ1Y3QgdXNibmV0ICpkZXYsCj4gdTMyIG9pZCwgdm9pZCAqZGF0YSwgaW50ICps
-ZW4pCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290
-byBleGl0X3VubG9jazsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KPiDCoAo+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoKHJlc3BsZW4gKyByZXNwb2Zmcykg
-PiBidWZsZW4pIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJlc3BsZW4g
-PiAoYnVmbGVuIC0gcmVzcG9mZnMpKSB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgLyogRGV2aWNlIHdvdWxkIGhhdmUgcmV0dXJuZWQgbW9yZSBkYXRh
-IGlmCj4gYnVmZmVyIHdvdWxkCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgICogaGF2ZSBiZWVuIGJpZyBlbm91Z2guIENvcHkganVzdCB0aGUgYml0cwo+
-IHRoYXQgd2UgZ290Lgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAqLwoK
+On 12/01/2023 21:44, Melody Olvera wrote:
+> Add device tree bindings for global clock controller on QDU1000 and
+> QRU1000 SoCs.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  .../bindings/clock/qcom,qdu1000-gcc.yaml      |  51 +++++
+>  include/dt-bindings/clock/qcom,qdu1000-gcc.h  | 175 ++++++++++++++++++
+>  2 files changed, 226 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,qdu1000-gcc.h
+> 
 
 
---=-VPz1AUbM/19UkYX6m/ao
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
-iQIzBAABCAAdFiEEWHPP0YwOptScu/bEBioQFhUFoIoFAmPBGYAACgkQBioQFhUF
-oIq8Fw/7B0kVO8rQxfWzvp1yuDw5oZzC7LfD+HqZA+YuXPFVXN14QADsJ3In8pqY
-xm212/XkTvexbrERAn/G9YsdaBTqLd8ewZu26Jv8qX2dsCv/TB2+3bNcmNd4LjBI
-zE3IQkHZ2qfNHjjfJE4smlvB0xzdlDCzTSHsFMvWVkhDbsxmKtzT5nMUhBKLLTxi
-xa+MBrBDk6D+O/XVo1K0iqAQ1yYBa+gja3Eri1Grr94KlIZV4WndqjzhuBGNRqH3
-qDxtimX02jtO8hNuIAVHBOlVsrR5HhDLNf98LPynmoNP6e+q7grKSzS2AeXxCJpc
-UfTy1x4ble2rQSluMQMvQsV8ljp5Gq1ZD5hZF3xWn+t4UV8zVWeekTXdIvpCQkWL
-MlcBnRhKpTeq8QB/jlHMb9ca/IbYb6/TQcOUaEjl2ArZS9/hmPfbpZsUqnqaj/gF
-AlMejXU9jJvGjv9K/30lRwwc0suRvx74RE80/2OaPHtDulIQNQcZ/oykPFlucHNa
-+/tE8+GANHzZMbd0FeW4UTeiqPC1UeiBnu0le/zyRaxoOWBAH4se2iJ4Ze/nDUi/
-JW6v0AfY5JZjV0P39PZ8e7E8eouZkIf/9/E3iSbNyol+VtqzyInGjo+9IwVZXzo+
-U4XL9M2JdBl5LxISS0YW3UwUWB8Muurts2oqaV/ZCaPnC6Kazhk=
-=ktM3
------END PGP SIGNATURE-----
-
---=-VPz1AUbM/19UkYX6m/ao--
