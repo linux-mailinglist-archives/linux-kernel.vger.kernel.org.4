@@ -2,135 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F276366A439
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620D666A447
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjAMUmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S230056AbjAMUoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjAMUmd (ORCPT
+        with ESMTP id S229837AbjAMUoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:42:33 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1108587921;
-        Fri, 13 Jan 2023 12:42:33 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id d2-20020a056830044200b00684cc404c8aso2328690otc.0;
-        Fri, 13 Jan 2023 12:42:33 -0800 (PST)
+        Fri, 13 Jan 2023 15:44:10 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C14C8793B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:44:09 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k18so563716pll.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:44:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wFX1TAztefX49Dlr88yQWueCiK9uug2GKKIgj7SNmgw=;
+        b=t3T7bdFcRj0TMIIRv4lrC1ysO6ZajfDnSWPjuxjJd+Z67qU9yBY0ugR12YXRcDDZfb
+         yxwtc1P88m6Fg+/6USQKKxCzVsFQoZD/MtbG9DRbDTR5xBKx/xgu7ciOHyNwzZmVZi+s
+         ydPfsQJTDM1ncZiqGQ9/l24VlAYJuNoTLRzH9MBWSEYpmXSbp34j2yAS6MFCeLDgeQm8
+         ZNo+3pnPUV0pxPVZBiGOY6ZyoSFOUpg/X3U3pPZpILQgREGmZAzaZqGTKFQIJ/LeFaBH
+         vdFaoek2Uoosyfl7wDUCuHP/3gfWzAhfm662amVz9GYoWPxYoAaWiJoesYH25hvo6SIx
+         b5MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kmvQnuv1fXumUPiHaWF/NrHLmipdDuyfTZdsKOQOgKY=;
-        b=EZMF4T0BTZgM/fUGioAJXR7dpqJVrKRaeHZa0A/ubVy/9/4T6fU0iOX9tUkyTcfRms
-         e7ioVN4WU7wFgNWCcf7tFbU89OqwxW9NyukuAjb6aZjssdzpjBsRvfrlp8tsCJUUbKZ0
-         kc8LBhb2dqnzu5DzDkjpzMmSecN2qmvfQIlfqJhBZB+BYH+NdO/hFvBfXhdhUdi56OmL
-         1IwvuQfrn1YQ20l3gCz1BKrpvPqWl2CDrTUi/d5C3+O11ctOw75hdnQgveqSRVKO04/3
-         wOzYP+tNjr4nf052bjWlbr0mUIVqJRSRJi5pugPRo7E1FbTvtSF+ULcdLRFR38U28223
-         uvFA==
-X-Gm-Message-State: AFqh2kqGXHSCQ22Sukcm0JhlIn+vnyxFHjvl86gXITa764BxNeAB0MK/
-        43XOFi0QuuxLwY9El2GvOivWO5BWFA==
-X-Google-Smtp-Source: AMrXdXtsPMkTlNYDgR0d4inu8VinibhZFbz2bg//MXzm1dZymwYMTp1mb7YwjZHEHaEGE+rh+kb3nQ==
-X-Received: by 2002:a05:6830:368b:b0:670:7a2b:f52f with SMTP id bk11-20020a056830368b00b006707a2bf52fmr42687541otb.8.1673642552296;
-        Fri, 13 Jan 2023 12:42:32 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bt25-20020a05683039d900b0066e80774203sm11196309otb.43.2023.01.13.12.42.31
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wFX1TAztefX49Dlr88yQWueCiK9uug2GKKIgj7SNmgw=;
+        b=daLESfoXoMk6+5WvTyeYzjyH+wijdMmwJD+Aby3ESxjKO3R9P3I/hta9eNhY3nWzeM
+         3R/ovTo9tqYtxSZ4rsxt2tyIZRv5kiP6tyXmxyPf6yqoUKePjfeu+a+tWPz3Tz64AirI
+         Hb5zHLSzZ8EN6TvGbp9/uhCagn3xUTXE9P6o5ENz9gbi4Le1tAKkYajnvhFn+d4Ytaip
+         7GsfyEu2kLc7pfNNopUuoVNo4vXVaa6pVCVo3kwcVCHTzq5FDY4H4KBTmBSntVIEZHLg
+         FKZzhg8BOpWPqUQxCjwlSU0uWIAXOxHyUKhtZeZv2AOxQ2XEnTSeKujzhLtioiiXWTmT
+         2/mA==
+X-Gm-Message-State: AFqh2krixaIjcm9Z7rKGefXW3kaw6iR4OVKJCGwgiBItqP7Gi1Y3HMrK
+        B+hVKnfBfTnqMiap7c01AeK40A==
+X-Google-Smtp-Source: AMrXdXtX0nXp49pBZlB9bSrCFWdMWJXGiP3+ghZrlZ3nXV0E++DXWEHapsnIM08THmpGR7hFMQhz1Q==
+X-Received: by 2002:a17:90a:5416:b0:226:6470:af3d with SMTP id z22-20020a17090a541600b002266470af3dmr10568808pjh.3.1673642648824;
+        Fri, 13 Jan 2023 12:44:08 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id lb3-20020a17090b4a4300b0021900ba8eeesm1447661pjb.2.2023.01.13.12.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 12:42:31 -0800 (PST)
-Received: (nullmailer pid 2888595 invoked by uid 1000);
-        Fri, 13 Jan 2023 20:42:31 -0000
-Date:   Fri, 13 Jan 2023 14:42:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 2/3] dt-bindings: arm: optee: add interrupt controller
- properties
-Message-ID: <20230113204231.GA2873887-robh@kernel.org>
-References: <20230112145424.3791276-1-etienne.carriere@linaro.org>
- <20230112145424.3791276-3-etienne.carriere@linaro.org>
+        Fri, 13 Jan 2023 12:44:08 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     =?utf-8?q?Christoph_B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org
+In-Reply-To: <20230113123538.144276-1-christoph.boehmwalder@linbit.com>
+References: <20230113123538.144276-1-christoph.boehmwalder@linbit.com>
+Subject: Re: [RESEND PATCH 0/8] Miscellaneous DRBD reorganization
+Message-Id: <167364264790.13167.1164501758187135700.b4-ty@kernel.dk>
+Date:   Fri, 13 Jan 2023 13:44:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112145424.3791276-3-etienne.carriere@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.12-dev-78c63
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 03:54:23PM +0100, Etienne Carriere wrote:
-> Adds optional interrupt controller properties used when OP-TEE generates
-> interrupt events optee driver shall notified to its registered
-> interrupt consumer. The example shows how OP-TEE can trigger a wakeup
-> interrupt event consumed by a gpio-keys compatible device.
 
-Why do we need this in DT? It's not a GPIO key, but an abuse of the 
-binding. It looks like unnecessary abstraction to me.
-
-
+On Fri, 13 Jan 2023 13:35:30 +0100, Christoph Böhmwalder wrote:
+> Some more mostly trivial "alignment patches" to (slowly but surely)
+> move further in the direction of re-upstreaming DRBD.
 > 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->  .../arm/firmware/linaro,optee-tz.yaml         | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
+> These should be fairly uncontroversial.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> index d4dc0749f9fd..42874ca21b7e 100644
-> --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> @@ -40,6 +40,11 @@ properties:
->        HVC #0, register assignments
->        register assignments are specified in drivers/tee/optee/optee_smc.h
->  
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +
->  required:
->    - compatible
->    - method
-> @@ -48,12 +53,24 @@ additionalProperties: false
->  
->  examples:
->    - |
-> +    #include <dt-bindings/input/input.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      firmware  {
-> -        optee  {
-> +        optee: optee {
->              compatible = "linaro,optee-tz";
->              method = "smc";
->              interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <1>;
-> +        };
-> +    };
-> +
-> +    wake_up {
-> +        compatible = "gpio-keys";
-> +
-> +        button {
-> +            linux,code = <KEY_WAKEUP>;
-> +            interrupts-extended = <&optee 0>;
+> Andreas Gruenbacher (1):
+>   drbd: drbd_insert_interval(): Clarify comment
+> 
+> [...]
 
-In the end, you just need optee IRQ #0 to generate KEY_WAKEUP. Does 
-either the optee interrupt number or the key code need to be 
-configurable? If so, why? Why isn't #0 just wakeup and the driver can 
-send KEY_WAKEUP?
+Applied, thanks!
 
-DT is for non-discoverable hardware that we can't fix. Why repeat that 
-for software interfaces to firmware?
+[1/8] drbd: adjust drbd_limits license header
+      commit: f4095e7643c0fd00f1c125388d6d83d60875d489
+[2/8] drbd: fix DRBD_VOLUME_MAX 65535 -> 65534
+      commit: f7fb0227ae90fff4d09d969c353e8a30f2e0edcc
+[3/8] drbd: make limits unsigned
+      commit: 4e5ebce4a5dde36316a78550c9f7b97a9e03302b
+[4/8] drbd: remove unnecessary assignment in vli_encode_bits
+      commit: 93a8026b0d7161597437eb2d87ceac4f194991c4
+[5/8] drbd: remove macros using require_context
+      commit: 00f0c8eccb383782621c74e5bd2ce9b4b8dbad5a
+[6/8] MAINTAINERS: add drbd headers
+      commit: 463afd417b268d18d3c83ec0851e978dd12daaa2
+[7/8] drbd: interval tree: make removing an "empty" interval a no-op
+      commit: 6928e2f7919aa3cd4e31aba5b16f6f212df2bb35
+[8/8] drbd: drbd_insert_interval(): Clarify comment
+      commit: 2b0802d1ac9333d060312b22e9d898614253adcf
 
-Rob
+Best regards,
+-- 
+Jens Axboe
+
+
+
