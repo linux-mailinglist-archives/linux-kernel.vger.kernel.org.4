@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00BB66A454
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A8A66A456
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjAMUp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S231265AbjAMUqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjAMUpy (ORCPT
+        with ESMTP id S230511AbjAMUpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:45:54 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8079E88DC0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:45:52 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id b9-20020a17090a7ac900b00226ef160dcaso23803178pjl.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:45:52 -0800 (PST)
+        Fri, 13 Jan 2023 15:45:55 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAE288A37
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:45:53 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id c6so24619112pls.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:45:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oBsnza7SjgnXFTIjLQUDwUcM1ztzwvsDYDJycxWPRuM=;
-        b=fuxKQIX4GR/eDBiDhjV4CW0niwbhXkxfJ/TM8VnS3wi8/N4+NaR71L5t1VxEjktnvl
-         +5S2NjYa9zX/G5bYUyXsJyx4c4KSw2TWkzpNecUl19IS0+x8fXpIzufoQbgaXE6sQm9t
-         e/zSqznM+RQYAIQZOOpFaKliJdXqtCr2M/x0c=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PobSF2/MDkJrX0shmq4Y9cOMyGXHMWsuX8BGemf4VBw=;
+        b=Bk0IWpPecl/O/TDwZ0QOdESqr6Zk5qYmXoE7OVj3ynKjewF1Rg1fDbPfzyFRa8K40U
+         LJfzekoRATjBbgAaGvkiEYTL3P+XjjkE7mOLJvku9+zQHQugdRsZgyeYnGTohCTmT93o
+         b4FfVO+qDuxe4DlkcKogEN727pajt14vxaH1I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oBsnza7SjgnXFTIjLQUDwUcM1ztzwvsDYDJycxWPRuM=;
-        b=TIbzrKX18zWwnLRV0sPAzrnnSQIGU6zbfo90Elwv1N8CE/7X8WG9d8iC7/3UMa9KmX
-         gEsuCZJNUUPHfIXgfeF6fvsLgYeZxbwl7uIaRIQ9TXbt6+uZTmx3envrzPdzFGm1Jfn9
-         Yd/2+9c+FCmz6TCF/sWewi9UazlIy2wcsaUw1sKL+q2eGF8E3jGUnNXP/bxEF7js0r4/
-         +0qYozed7JjayLLpmtD+8Xi1Uwq2Z+ESoaM4M1+CBCBM0HuBtJsdXhZ74A2zBc+u7Mwq
-         nZh07DLmrr6vXeBZfrxtbmIIaD9cCtGF5VlrtqlNWKwM1qow0akHB3sRxA4thbFkhLWm
-         AVbA==
-X-Gm-Message-State: AFqh2kqXVPsQnZfcvoeCQfSakdUSsr4hmKsWabH9Kzh43oApL5646F6Y
-        C+VxmwQlYw7e16ftnP0f3G0OthZK1XzlKxgT
-X-Google-Smtp-Source: AMrXdXuPPgSWqm02NFgZb/rwdZksyLT26TQx05NI4EC+9K85sk+xYfvLjW2F/eEZQHMlVPhY5ovpNw==
-X-Received: by 2002:a05:6a20:93a7:b0:b0:42a5:fe24 with SMTP id x39-20020a056a2093a700b000b042a5fe24mr104817648pzh.4.1673642751435;
-        Fri, 13 Jan 2023 12:45:51 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PobSF2/MDkJrX0shmq4Y9cOMyGXHMWsuX8BGemf4VBw=;
+        b=r8WPJY+xFwGlaTN0r7lUyTUjLR+00O9fMkpwLULyBGPiZn8XnkPWZ1VZNqYem572Ng
+         vzxblkeKXIYRuyz95+JDnEuM5AKiFftCHOoGVyLO7TEKiLvTCEi88p0nN96hplETzK1x
+         jQLkNec7fsGrrvSfAjFe0lIknWFNdimUUPxFZCeoZIq4jJp3NRIKJOE/iOz8+aaw1DIu
+         F/9Sz08ZXmfQijh/KC8HFEpVEKd0N4t/0OYOVk6JJOiCbo0zCDPLur5AdpKpK2WYe8L1
+         wpcq8XmWMUVZEHxCxVbqq/eBn4e6boXZ7pniD3XRBk9hm9W8IBSqofZxpcGQ6oBHopVB
+         d83w==
+X-Gm-Message-State: AFqh2koJapdTFrpQBvCQbfFT8HmYGDZjVgetvctX8m/jWo+Amdm0HgMp
+        jbuDHnRyQUB8Ip0uWcuCtLHanw==
+X-Google-Smtp-Source: AMrXdXvjFDqqv5LXuw9EMZqIQeligGqs3tcgL4coCCLoaghRb4BWIhdTQPe9rtpQbAoKrG+r1WTY/w==
+X-Received: by 2002:a17:903:1355:b0:193:3a92:f4bd with SMTP id jl21-20020a170903135500b001933a92f4bdmr12657981plb.47.1673642753165;
+        Fri, 13 Jan 2023 12:45:53 -0800 (PST)
 Received: from smtp.gmail.com ([2620:15c:11a:201:4652:3752:b9b7:29f9])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170902e99500b001945b984341sm4010081plb.100.2023.01.13.12.45.49
+        by smtp.gmail.com with ESMTPSA id f21-20020a170902e99500b001945b984341sm4010081plb.100.2023.01.13.12.45.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 12:45:50 -0800 (PST)
+        Fri, 13 Jan 2023 12:45:52 -0800 (PST)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Johan Hovold <johan+linaro@kernel.org>,
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15.y v2 0/5] phy: qcom-qmp-combo: Backport some stable fixes
-Date:   Fri, 13 Jan 2023 12:45:43 -0800
-Message-Id: <20230113204548.578798-1-swboyd@chromium.org>
+Subject: [PATCH 5.15.y v2 1/5] phy: qcom-qmp-combo: disable runtime PM on unbind
+Date:   Fri, 13 Jan 2023 12:45:44 -0800
+Message-Id: <20230113204548.578798-2-swboyd@chromium.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+In-Reply-To: <20230113204548.578798-1-swboyd@chromium.org>
+References: <20230113204548.578798-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,33 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the qmp phy driver was split it looks like 5.15.y stable kernels
-aren't getting fixes like commit 7a7d86d14d07 ("phy: qcom-qmp-combo: fix
-broken power on") which is tagged for stable 5.10. Trogdor boards use
-the qmp phy on 5.15.y kernels, so I backported the fixes I could find
-that looked like we may possibly trip over at some point.
+From: Johan Hovold <johan+linaro@kernel.org>
 
-USB and DP work on my Trogdor.Lazor board with this set.
+commit 4382d518d1887e62234560ea08a0203d11d28cc1 upstream.
 
-Changes from v1 (https://lore.kernel.org/r/20230113005405.3992011-1-swboyd@chromium.org):
- * New patch for memleak on probe deferal to avoid compat issues
- * Update "fix broken power on" patch for pcie/ufs phy
+Make sure to disable runtime PM also on driver unbind.
 
-Johan Hovold (5):
-  phy: qcom-qmp-combo: disable runtime PM on unbind
-  phy: qcom-qmp-combo: fix memleak on probe deferral
-  phy: qcom-qmp-usb: fix memleak on probe deferral
-  phy: qcom-qmp-combo: fix broken power on
-  phy: qcom-qmp-combo: fix runtime suspend
+Fixes: ac0d239936bd ("phy: qcom-qmp: Add support for runtime PM").
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220907110728.19092-2-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
- drivers/phy/qualcomm/phy-qcom-qmp.c | 97 ++++++++++++++++++-----------
- 1 file changed, 61 insertions(+), 36 deletions(-)
-
-Cc: Johan Hovold <johan+linaro@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-
-base-commit: d57287729e229188e7d07ef0117fe927664e08cb
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+index a9687e040960..7b7557c35af6 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -5740,7 +5740,9 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	pm_runtime_set_active(dev);
+-	pm_runtime_enable(dev);
++	ret = devm_pm_runtime_enable(dev);
++	if (ret)
++		return ret;
+ 	/*
+ 	 * Prevent runtime pm from being ON by default. Users can enable
+ 	 * it using power/control in sysfs.
+@@ -5790,13 +5792,10 @@ static int qcom_qmp_phy_probe(struct platform_device *pdev)
+ 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+ 	if (!IS_ERR(phy_provider))
+ 		dev_info(dev, "Registered Qcom-QMP phy\n");
+-	else
+-		pm_runtime_disable(dev);
+ 
+ 	return PTR_ERR_OR_ZERO(phy_provider);
+ 
+ err_node_put:
+-	pm_runtime_disable(dev);
+ 	of_node_put(child);
+ 	return ret;
+ }
 -- 
 https://chromeos.dev
 
