@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A795D669653
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D785669658
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbjAMMDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S231745AbjAMMDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbjAMMCq (ORCPT
+        with ESMTP id S232755AbjAMMDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:02:46 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8596E831A1;
-        Fri, 13 Jan 2023 03:54:19 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30DBs0H1018134;
-        Fri, 13 Jan 2023 05:54:00 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673610840;
-        bh=NjK3ll3K3PU3Y2EKZgN7uX2wCYmbFcRcjDsJF3k/myE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=eD44ySg4bX2VY6nH4Aa3DVwlAyttpcNgMTaU1i2f13sI55/X5EwAYZ5K/3ZWzTlnw
-         FPhSq/NdbbyN1vT1npCdR2xnpP5r66ejhyd6If+IBgRx4JDZd1ew3VYb5PzroN/P2B
-         KKTn54ovdU5m79aIkwTo+n/ArwwBBOoiUspYrbYI=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30DBs05D116596
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 13 Jan 2023 05:54:00 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 13
- Jan 2023 05:54:00 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 13 Jan 2023 05:54:00 -0600
-Received: from [10.24.69.141] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30DBrvxD029551;
-        Fri, 13 Jan 2023 05:53:57 -0600
-Message-ID: <d109dbf8-ba51-7322-34e7-f688c5a18908@ti.com>
-Date:   Fri, 13 Jan 2023 17:23:56 +0530
+        Fri, 13 Jan 2023 07:03:06 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4AE83E1C;
+        Fri, 13 Jan 2023 03:54:29 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso14215074wmq.3;
+        Fri, 13 Jan 2023 03:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NzbNjSUYq3lJOoU05SBD+iYcga1U6ox8imF8t/9BQK8=;
+        b=Aa7B72HDB1zekRgERXJJwJamxmE6crmVUsKekfOybzfu19PhWBG4FJLl+96bFdH8Wy
+         rLVyNceHkj8IJoYYf6E9GH1gkOkDqB1fGco5A9n/Yv5TuzHIGMQsi+7Ud9s3mbjjUPgm
+         W13DO00dgVyProTDkuDLprrXjDmwjJ2LXwJGuhKjlHhgAL56KlcQQw25H7gm/1291F5+
+         VqyG9g9h6ZuUSnQmIQ51nGyT7xvsHkmzsVEPqy1lp7elPDTeRr6EGne4C+vNQmdHvSXE
+         6F5b7PIE5aOkcLinlKTUlFQ85lIvBLCrbFF5o0N+rwewhrDanewnHDity52Q/ku+6vLI
+         aiGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NzbNjSUYq3lJOoU05SBD+iYcga1U6ox8imF8t/9BQK8=;
+        b=zbgSeR+Tz88IGKLci0f9WZbS9iuCVlE3Go9QRp9CfNFQqRZSKhByle8KCJQ7CYpXrs
+         q73ZnE15c9QISeQgxpVVlqgVLIbDtazcy3wChQk86AOGMavFg3SxsqQF7FH4v3NFJVyb
+         ZinDoZejZ3IMJU46xE0uJq2GO0RZZMiOdtGKbHYZX+dawkb9jby2WFREc2Ac9JV4B4+/
+         k+IpC+jX+Ih9lx/hUNb6aM1FBiHB7ZeinHZ3qkPhoVxTjd0LzBtT/KBZnjibYWNMNcbL
+         YjzC+vspp0RcLjE2OAq98wZWpvSwxHq8z549cRPhIkFfUJ3exbMZh8qPDFUAW4JazU/H
+         +bsw==
+X-Gm-Message-State: AFqh2kpC6EGMc8hdhIPf8jyDOJtLxnfzAirJ2CRcU+Jtg2H2Y/LClinU
+        MmqmNrNskQEdJRD+n27kEaQ=
+X-Google-Smtp-Source: AMrXdXsl/E0OL1OrzaPYsol/4C1UNXj1AoUqRxQ+VOS8jMaTTSzcHpS/zAO7tvU18WVbLEcQH+HqGg==
+X-Received: by 2002:a05:600c:d2:b0:3d2:2b70:f2fd with SMTP id u18-20020a05600c00d200b003d22b70f2fdmr59320360wmm.21.1673610868049;
+        Fri, 13 Jan 2023 03:54:28 -0800 (PST)
+Received: from [192.168.0.30] ([37.222.254.155])
+        by smtp.gmail.com with ESMTPSA id l13-20020adfe58d000000b00296730b5c3esm18911503wrm.102.2023.01.13.03.54.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 03:54:27 -0800 (PST)
+Message-ID: <96384f72-19aa-b038-75c6-76b0957750c7@gmail.com>
+Date:   Fri, 13 Jan 2023 12:54:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RESEND PATCH V3 2/3] arm64: dts: ti: Add initial support for
- AM68 SK System on Module
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 2/6] dt-bindings/thermal/mediatek: Add dt-binding
+ document for LVTS thermal controllers
 Content-Language: en-US
-To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sinthu Raja <sinthu.raja@ti.com>
-References: <20230110110052.14851-1-sinthu.raja@ti.com>
- <20230110110052.14851-3-sinthu.raja@ti.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <20230110110052.14851-3-sinthu.raja@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230112152855.216072-1-bchihi@baylibre.com>
+ <20230112152855.216072-3-bchihi@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230112152855.216072-3-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,101 +80,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sinthu,
 
-On 10/01/23 16:30, Sinthu Raja wrote:
-> From: Sinthu Raja <sinthu.raja@ti.com>
+
+On 12/01/2023 16:28, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> AM68 Starter Kit (SK) is a low cost, small form factor board designed
-> for TI’s AM68 SoC. TI’s AM68 SoC comprises of dual core A72, high
-> performance vision accelerators, hardware accelerators, latest C71x
-> DSP, high bandwidth real-time IPs for capture and display. The SoC is
-> power optimized to provide best in class performance for industrial
-> applications.
+> Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
 > 
->     AM68 SK supports the following interfaces:
->       * 16 GB LPDDR4 RAM
->       * x1 Gigabit Ethernet interface
->       * x1 USB 3.1 Type-C port
->       * x2 USB 3.1 Type-A ports
->       * x1 PCIe M.2 M Key
->       * 512 Mbit OSPI flash
->       * x2 CSI2 Camera interface (RPi and TI Camera connector)
->       * 40-pin Raspberry Pi GPIO header
-> 
-> SK's System on Module (SoM) contains the SoC and DDR.
-> Therefore, add DT node for the SOC and DDR on the SoM.
-> 
-> Schematics: https://www.ti.com/lit/zip/SPRR463
-> TRM: http://www.ti.com/lit/pdf/spruj28
-> 
-> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 > ---
+>   .../thermal/mediatek,lvts-thermal.yaml        | 140 ++++++++++++++++++
+>   1 file changed, 140 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
 > 
-> Changes in V3:
-> =============
-> Addressed review comments
->  - Removed the unused nodes that are disabled by default.
-> OSPI support will be added once the OSPI node is enabled for J721s2/AM68 in main DTSI.
-> 
-> Changes in V2:
-> =============
-> Address review comments
->  - drop the empty lines.
-> 
-> V1: https://lore.kernel.org/linux-arm-kernel/20221018123849.23695-3-sinthu.raja@ti.com/
-> V2: https://lore.kernel.org/lkml/20221107123852.8063-3-sinthu.raja@ti.com/
-> 
->  arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi | 31 ++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
 > new file mode 100644
-> index 000000000000..c35f81edee8c
+> index 000000000000..43b8777fc1b2
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-> @@ -0,0 +1,31 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-> + */
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> @@ -0,0 +1,140 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +/dts-v1/;
+> +title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
 > +
-> +#include "k3-j721s2.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
+> +maintainers:
+> +  - Balsam CHIHI <bchihi@baylibre.com>
 > +
-> +/ {
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		/* 16 GB RAM */
-> +		reg = <0x00 0x80000000 0x00 0x80000000>,
-> +		      <0x08 0x80000000 0x03 0x80000000>;
-> +	};
+> +description: |
+> +  LVTS is a thermal management architecture composed of three subsystems,
+> +  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
+> +  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
+> +  a Digital controller (LVTS_CTRL).
 > +
-> +	/* Reserving memory regions still pending */
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8192-lvts-mcu
+> +      - mediatek,mt8192-lvts-ap
 
-Is this comment needed?
+I wonder: you provide the binding description for mt8192 but no implementation 
+in the driver. Are you sure the description is correct?
 
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		secure_ddr: optee@9e800000 {
-> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
-> +			alignment = <0x1000>;
-
-Is alignment needed here?
-
-Please see https://lore.kernel.org/lkml/cd5dbbb0-2d9f-8d7d-b051-f8d01d710c62@ti.com/
-
-> +			no-map;
-> +		};
-> +	};
-> +};
-
--- 
 Regards,
-Vaishnav
+Matthias
+
+> +      - mediatek,mt8195-lvts-mcu
+> +      - mediatek,mt8195-lvts-ap
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +    description: LVTS reset for clearing temporary data on AP/MCU.
+> +
+> +  nvmem-cells:
+> +    minItems: 1
+> +    items:
+> +      - description: Calibration eFuse data 1 for LVTS
+> +      - description: Calibration eFuse data 2 for LVTS
+> +
+> +  nvmem-cell-names:
+> +    minItems: 1
+> +    items:
+> +      - const: lvts-calib-data-1
+> +      - const: lvts-calib-data-2
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +allOf:
+> +  - $ref: thermal-sensor.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8192-lvts-mcu
+> +              - mediatek,mt8192-lvts-ap
+> +    then:
+> +      properties:
+> +        nvmem-cells:
+> +          maxItems: 1
+> +
+> +        nvmem-cell-names:
+> +          maxItems: 1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8195-lvts-mcu
+> +              - mediatek,mt8195-lvts-ap
+> +    then:
+> +      properties:
+> +        nvmem-cells:
+> +          maxItems: 2
+> +
+> +        nvmem-cell-names:
+> +          maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +  - "#thermal-sensor-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/reset/mt8195-resets.h>
+> +    #include <dt-bindings/thermal/mediatek-lvts.h>
+> +
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      lvts_mcu: thermal-sensor@11278000 {
+> +        compatible = "mediatek,mt8195-lvts-mcu";
+> +        reg = <0 0x11278000 0 0x1000>;
+> +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
+> +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
+> +        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
+> +        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
+> +        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
+> +        #thermal-sensor-cells = <1>;
+> +      };
+> +    };
+> +
+> +    thermal_zones: thermal-zones {
+> +      cpu0-thermal {
+> +        polling-delay = <1000>;
+> +        polling-delay-passive = <250>;
+> +        thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU0>;
+> +        trips {
+> +          cpu0_alert: trip-alert {
+> +            temperature = <85000>;
+> +            hysteresis = <2000>;
+> +            type = "passive";
+> +          };
+> +          cpu0_crit: trip-crit {
+> +            temperature = <100000>;
+> +            hysteresis = <2000>;
+> +            type = "critical";
+> +          };
+> +        };
+> +      };
+> +    };
