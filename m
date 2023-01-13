@@ -2,98 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F22E669671
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C535866967B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbjAMMIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S241361AbjAMMIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241163AbjAMMG7 (ORCPT
+        with ESMTP id S233174AbjAMMHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:06:59 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983AD49141
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:58:12 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id cf18so45415142ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XJfnZs4jo54Kgz5HLGIY/C94TyuqRX8gh4vXaqx8qwc=;
-        b=xz/7KR/nbYYYhHj/GgARzVka0RWlZgXvR8KL/EWM+Dqqnk4bAhFX/oRMaOU/zthcVn
-         r8j1WHiNXLTpC6LtFX8mmYWnIUgZ+2Cx3Bh0YujgJVTcVoKpBSQ8Vdqn0mGz2M0MCZOB
-         GUcxSAWuUsOzj4fXr7ztt+Fx4SWBJPdgodoJYpx0g+eJOXv0dJmRm/vkIkWvwzYNI85e
-         ozQh57PYlC7FzFkdwrkcnv8s1nKArYmrFsj+kpfMokUQRPcpY6T2hrriGCEwf9ctWHp9
-         AkQr2hgyDja6oq/l9KdyithNXDba+O0KX58P/p8Hs36aKQmTQK5pFglh1ieuACzpbgQh
-         KZoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XJfnZs4jo54Kgz5HLGIY/C94TyuqRX8gh4vXaqx8qwc=;
-        b=4MSZWV5Tk9N6oK8RP122w4I4I1caaIGbG/i2CAenrkD8TtirvwA+vorznZGpwsIeut
-         tNKtxHz9nXBZDdJCFmVyIeOJ7Z5wNqn4KRa+9cLE0xHSZqKiF1utWKONnGhIFsJAIH4F
-         WvpV1TagnR6ZDu2q7pBwPeFZlGRIkZ6JXvLAUYHLt1AWabbpObDn9thraj6Mup0BNgzq
-         e8Ytxy98IQXRT/qxv2uKFzqF2qC+0THADQ/qVoI/0oOqCVa8f5dzT4Je3Rkg3Mk60xgX
-         JONen9RGV1ps3Z5Pao5TCKYoNWXE9ZQPXrfSXpXkCviqzxXXEYM0tBkY5Lup/bsDOgqy
-         Sh3g==
-X-Gm-Message-State: AFqh2kqjdWVOC5qlcypvYAZpiAFwWmd8LSl5ekYT9JWHA9Vmji+Llaxf
-        na8ksyFZdagO35dNBoMlcdKdDA==
-X-Google-Smtp-Source: AMrXdXtPh9NG2bS51YWCcldtb0iT3Z5psXpa553yTDBZpJtjglNIRpUJFcZBAJrCFSxgoYo+c07TxQ==
-X-Received: by 2002:a17:906:5202:b0:7c1:4a3:10b6 with SMTP id g2-20020a170906520200b007c104a310b6mr67094493ejm.53.1673611091238;
-        Fri, 13 Jan 2023 03:58:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ku26-20020a170907789a00b0084d46461852sm6153963ejc.126.2023.01.13.03.58.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 03:58:10 -0800 (PST)
-Message-ID: <329aed63-4522-9859-4359-2a450c46dcc0@linaro.org>
-Date:   Fri, 13 Jan 2023 12:58:08 +0100
+        Fri, 13 Jan 2023 07:07:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21138E3;
+        Fri, 13 Jan 2023 03:59:26 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBA0Jp030099;
+        Fri, 13 Jan 2023 11:59:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=tUm6z8rhz5JYg4o8nm0MDjJ+lFRhmC9Z6zMZeJ23joo=;
+ b=XOjEGu0nMYAKblUuw08qsV3r01MGl/7u8E/GR/NotQEIaHrrB3BzruXvA4ynXDqA6MfW
+ 1JM4+DH39zqEiaRFxZVB7lNzk93ILNWz10Xu6qpli+/19jBDSXyVdUwJpmrvZQSDa7ar
+ NmAHF8+7879PVggQKj8SJ8nrSkWyqv14ckuHSz/3K/YEfv8nPGBKD77a/KRcz9zZE3ZM
+ aPdUmfW+3ufzrZijw4fUIImv7AbRM/JwXerlONjUxr6l7kJqHoGW27RX7SZf6sn8/4ti
+ 6rlMbGyGrVFI1X0zHl6fvh3lPtdMKB530sJgSQd/MNbDB41J4wQB/qb7g4catUznBDyK aA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2jghtk79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 11:59:05 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DBx4dq025641
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 11:59:04 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 13 Jan 2023 03:59:00 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <keescook@chromium.org>, <gpiccoli@igalia.com>, <corbet@lwn.net>,
+        <tony.luck@intel.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v2 1/3] dt-bindings: reserved-memory: ramoops: Update the binding
+Date:   Fri, 13 Jan 2023 17:28:44 +0530
+Message-ID: <1673611126-13803-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 01/10] dt-bindings: arm: mediatek: migrate MT8195
- vppsys0/1 to mtk-mmsys driver
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230113054304.21841-1-moudy.ho@mediatek.com>
- <20230113054304.21841-2-moudy.ho@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113054304.21841-2-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8eDys0jK4zvAYYr57p5RD86TQAo9kAma
+X-Proofpoint-ORIG-GUID: 8eDys0jK4zvAYYr57p5RD86TQAo9kAma
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
+ clxscore=1011 bulkscore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130080
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 06:42, Moudy Ho wrote:
-> MT8195 vppsys0/1 should be probed from mtk-mmsys driver to
-> populate device by platform_device_register_data then start
-> its own clock driver.
+Update the ramoops region binding document with details
+like region can also be reserved dynamically apart from
+reserving it statically.
 
-Unfortunately I don't understand why this justifies removal of compatibles.
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+Change in v2:
+  - Added this patch as per changes going to be done in patch 3/3
 
-How do you propagate or instantiate devices is not really connected with
- the hardware description.
+ .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+index 0391871..54e46e8 100644
+--- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
++++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
+@@ -10,7 +10,8 @@ description: |
+   ramoops provides persistent RAM storage for oops and panics, so they can be
+   recovered after a reboot. This is a child-node of "/reserved-memory", and
+   is named "ramoops" after the backend, rather than "pstore" which is the
+-  subsystem.
++  subsystem. This region can be reserved both statically or dynamically by
++  using appropriate property in device tree.
+ 
+   Parts of this storage may be set aside for other persistent log buffers, such
+   as kernel log messages, or for optional ECC error-correction data.  The total
+@@ -112,7 +113,13 @@ unevaluatedProperties: false
+ 
+ required:
+   - compatible
+-  - reg
++
++oneOf:
++  - required:
++      - reg
++
++  - required:
++      - size
+ 
+ anyOf:
+   - required: [record-size]
+@@ -142,3 +149,26 @@ examples:
+             };
+         };
+     };
++
++  - |
++    / {
++        compatible = "foo";
++        model = "foo";
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        reserved-memory {
++            #address-cells = <2>;
++            #size-cells = <2>;
++            ranges;
++
++            ramoops: ramoops_region {
++                compatible = "ramoops";
++                alloc-ranges = <0x0 0x00000000 0xffffffff 0xffffffff>;
++                size = <0x0 0x10000>;       /* 64kB */
++                console-size = <0x8000>;    /* 32kB */
++                record-size = <0x400>;      /*  1kB */
++                ecc-size = <16>;
++            };
++        };
++    };
+-- 
+2.7.4
 
