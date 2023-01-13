@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCF7669D8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAF6669DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjAMQWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
+        id S229445AbjAMQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:26:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjAMQVm (ORCPT
+        with ESMTP id S229796AbjAMQZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:21:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C0578A65
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673626480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UnyCGexQh4EwPAqsC7ijXoPzL2plmVvArEUvtL9Gw3U=;
-        b=KzuTCZw12iRJQP+pI7OLdTztWS+rAoq/9NLGPIu9MKBNHr4FRZtF1W+dRV8HcPCi1LYZQ7
-        K3M8bRFqCuOUSun+ud9F3uoPOopvuNzoksIYzJIDVcNlHSWL8+5NQSwTY9v/cJgECyBhIV
-        +GcEsc/6c8l5ZRVA4FkXYBmBEHEHsYA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-HvU4vtMbP4C2N92cq1wegA-1; Fri, 13 Jan 2023 11:14:37 -0500
-X-MC-Unique: HvU4vtMbP4C2N92cq1wegA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A52C61C05AF0;
-        Fri, 13 Jan 2023 16:14:36 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 654E32026D68;
-        Fri, 13 Jan 2023 16:14:36 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Seth Jenkins <sethjenkins@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Pavel Emelyanov <xemul@parallels.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] aio: fix mremap after fork null-deref
-References: <20221104212519.538108-1-sethjenkins@google.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Fri, 13 Jan 2023 11:18:33 -0500
-In-Reply-To: <20221104212519.538108-1-sethjenkins@google.com> (Seth Jenkins's
-        message of "Fri, 4 Nov 2022 17:25:19 -0400")
-Message-ID: <x49a62ml86e.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 13 Jan 2023 11:25:33 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265F077D1E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:19:16 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so17734222wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:19:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhz9fWOoERNBAN38ex2htt2h7c3lJT7eoS2NI1GaWwA=;
+        b=CbuR3CX0p4skKGw4xsujWI8bAF7IwZzXvafQLAFYWfdT0cxwQOuyzMYog3nQApK4yI
+         mCW7BeHY/pvbQTUb59i30dWLoZhyWomHHyOS+sGJxH8Y/dR2vu5seIdkLfGG+7YsA9Fb
+         qpQWX+O6m5BmLLqlpzcxO9JUiBRoRmS4yzxX3efqbhb3HvpWz5lhknuFi+wKcE0psmb1
+         lj0uMe9tPyg41MpQ13/XWD74HsAN+WUzcJz53QwLEpIaoCIY11CH3xkk++CgkGN/fZzh
+         4bo/t6CCMyiBaClf424D7IxEmdHPI7DinlsDlmKY/ne9mgijFk51gpnJU8oLiap7TS7G
+         MQ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zhz9fWOoERNBAN38ex2htt2h7c3lJT7eoS2NI1GaWwA=;
+        b=jMEbRj9wz+d12Pn8bK1iYquIAK0MDpa3BSH5m5K6QlD7GHyb/s0h1yMo2U5V51ovSv
+         PndBCHZQ1U45kTjqnRs0vz1j39yoLztJJk51zG6lbWR8HodY+P98guUcmP5loMgULsLe
+         UwZo4TJ3Gr+QgN+c5GmPHp4oAPXTZIiH+PJHzUNu9/to5Bnp9vyTGMhbqCol2U9KSWY7
+         1m8xBnhX4/OPy2sGP973i1px83pCCG+nQlk9JdZN/UbDmimeBfIMQPP//pBYBtw5hDrf
+         p+Cur883mNcW6QMIIy4T73Qu8AFARX4l2MAnQqXtoG9Z+LYY8wX0ZFnmZB6iWdy2JwTV
+         U+rg==
+X-Gm-Message-State: AFqh2kpXiIKlmMu7PVeF0brOyy3D6uNbve+vnc26TpMIclECKA6Fsdkx
+        Zn/k0HSdfECl1QGIslmeH176mw==
+X-Google-Smtp-Source: AMrXdXtIgncPdiydx2VlDE0pGuWdm7d/in7Wu/0hk+2SCGaU6GE63Rke3KKAMtwlBX6B8wIfaEEE0g==
+X-Received: by 2002:a05:600c:3844:b0:3d2:191d:2420 with SMTP id s4-20020a05600c384400b003d2191d2420mr59847990wmr.7.1673626754635;
+        Fri, 13 Jan 2023 08:19:14 -0800 (PST)
+Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c42c600b003b492753826sm23729637wme.43.2023.01.13.08.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:19:13 -0800 (PST)
+Date:   Fri, 13 Jan 2023 16:19:12 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH] backlight: ili922x: fix kernel-doc warnings
+Message-ID: <Y8GEgFlw+q0P+2em@aspen.lan>
+References: <20230113064108.29172-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113064108.29172-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Seth Jenkins <sethjenkins@google.com> writes:
-
-> Commit e4a0d3e720e7 ("aio: Make it possible to remap aio ring") introduced
-> a null-deref if mremap is called on an old aio mapping after fork as
-> mm->ioctx_table will be set to NULL.
+On Thu, Jan 12, 2023 at 10:41:08PM -0800, Randy Dunlap wrote:
+> Convert comments for START_BYTE() and CHECK_FREQ_REG() macros into
+> kernel-doc notation to avoid these kernel-doc warnings:
 >
-> Fixes: e4a0d3e720e7 ("aio: Make it possible to remap aio ring")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Seth Jenkins <sethjenkins@google.com>
-> ---
->  fs/aio.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
+> drivers/video/backlight/ili922x.c:85: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * START_BYTE(id, rs, rw)
+> drivers/video/backlight/ili922x.c:118: warning: expecting prototype for CHECK_FREQ_REG(spi_device s, spi_transfer x)(). Prototype was for CHECK_FREQ_REG() instead
 >
-> diff --git a/fs/aio.c b/fs/aio.c
-> index 5b2ff20ad322..74eae7de7323 100644
-> --- a/fs/aio.c
-> +++ b/fs/aio.c
-> @@ -361,16 +361,18 @@ static int aio_ring_mremap(struct vm_area_struct *vma)
->  	spin_lock(&mm->ioctx_lock);
->  	rcu_read_lock();
->  	table = rcu_dereference(mm->ioctx_table);
-> -	for (i = 0; i < table->nr; i++) {
-> -		struct kioctx *ctx;
-> -
-> -		ctx = rcu_dereference(table->table[i]);
-> -		if (ctx && ctx->aio_ring_file == file) {
-> -			if (!atomic_read(&ctx->dead)) {
-> -				ctx->user_id = ctx->mmap_base = vma->vm_start;
-> -				res = 0;
-> +	if (table) {
-> +		for (i = 0; i < table->nr; i++) {
-> +			struct kioctx *ctx;
-> +
-> +			ctx = rcu_dereference(table->table[i]);
-> +			if (ctx && ctx->aio_ring_file == file) {
-> +				if (!atomic_read(&ctx->dead)) {
-> +					ctx->user_id = ctx->mmap_base = vma->vm_start;
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Jingoo Han <jingoohan1@gmail.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
 
-This is now over 80 columns.  I'd prefer it if you would just invert the
-NULL pointer check and add a label:
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-if (!table)
-	goto out_unlock;
 
-Other than that, it looks good to me.
-
-Cheers,
-Jeff
-
+Daniel.
