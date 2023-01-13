@@ -2,197 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E45E669C06
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D95669C0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjAMP1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S229637AbjAMP1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:27:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjAMP02 (ORCPT
+        with ESMTP id S229437AbjAMP1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:26:28 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A87F8D5E4;
-        Fri, 13 Jan 2023 07:19:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673623165; x=1705159165;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rCjPB/5T/fdzdveTe1HJ5ppssFlxiUdMulVsnKmxWDI=;
-  b=pxJPkcjci67lV2RIxYJZRQEjESO9vSZZ023bEjhlYOhavg/rON8jlapv
-   +R+HoSIMuzM3sC+6vX9Cc/03aYDgUBTSjFvL3uurdo44Q512QncanIrfx
-   L2yTvbqS8C8sLwIpNSt/L99uTNC5ePskUe36n/EnKDKpw4EK6jZXD+Ke2
-   j8Wr8B1NsW0O1pq5ohZUIvaoZQqP+9fsjZdQ31n2tBCCE3ytx6TQici7f
-   6oRFkJL8C1UBgFYiD0t33xGu2WId1PwJ6gV1HGiW4AORhy3VHePX6qMvE
-   0ipTyIX8QKIjM/cAGdC6rI6ZNj15+MyPkbUQ+8/Z3JVx3tofeC9+4pTDY
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,214,1669100400"; 
-   d="asc'?scan'208";a="132230154"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2023 08:19:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 13 Jan 2023 08:19:24 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 13 Jan 2023 08:19:22 -0700
-Date:   Fri, 13 Jan 2023 15:18:59 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 05/13] riscv: cpufeature: extend
- riscv_cpufeature_patch_func to all ISA extensions
-Message-ID: <Y8F2YxMHUt+djhX4@wendy>
-References: <20230111171027.2392-1-jszhang@kernel.org>
- <20230111171027.2392-6-jszhang@kernel.org>
- <2398293.3Lj2Plt8kZ@diego>
- <20230112092136.f2g43hrhmrqouy4y@orel>
+        Fri, 13 Jan 2023 10:27:13 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858DF81D51
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:20:10 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id o7so22421047ljj.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SSgTXFHyKy3EKW5amzFNddURi7wwL3JPtHEB4W2PJIQ=;
+        b=E+Ko3HoaAn/SbNq2+BoHjVxHOcFXzxcMw5eAnMS7INVdgfQwkd47z0/mJOV5XoH498
+         scTjG3apXZotcgyYBbdTB1cUhowgMekHOy1hfNWvlASySy0yRd7gG4cWcB5FR7gy/508
+         BxaNCdVHU/hZlmXCX11/vmpk7b3qlV3Mom9au2tVJ36szclEsWxoaKG1SrKU1+5r6TmC
+         phFiurVXNenluvCVRtvFrmBL5DAxUUj/0PoGhJp1toeZdMGZkQujloCxNS+e1QNClM3X
+         HsvM8DnHrtWSbIkFQrovljY1C8ndbwfkHRDo85zbuIaZCICMW2Dr1oAdkQ2yKx7O2mff
+         64mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SSgTXFHyKy3EKW5amzFNddURi7wwL3JPtHEB4W2PJIQ=;
+        b=FoP0dz/pDS0mjgF4+JO5S5HvtWo13WWM0uuDD8ldZwvATggPb21YNLBlnNGC0cMZoF
+         Ghy57E06zuJyZUzOUrikzZ2K4DowBGrnt9P//3H7h7LXpK9Tea0O+QjhE9O8M1Ia8Syy
+         +u7jCzss3hr5jCZwOzs7cM0NFWtT7Kkc9cn3HHNjBXc0ZJV/iZfgxhLTLR0GlK1P0vWL
+         dcUhtF9tOHOCDzJbHgS94dEOVDWxEzFlA3+RdNPXBSRCCJp38Lv7vCAxoU6kqJlVJTZx
+         PQ+HRYqjqekPjAdtDGbcQ4wf43KSBQ9pYPG3D4AJJyG5J7dOfvLuML3UvLs2uuyNEh9v
+         /nYQ==
+X-Gm-Message-State: AFqh2kp47m6EBEW/evY/d90r9957satgUhrDp1QULw8JvUDnrojjJBI4
+        71AOnVLIMfeGEmtXSoCrBJLcxA==
+X-Google-Smtp-Source: AMrXdXtlAwax9wzqDnNUzguINen9TYLIV91ebf6KZx6f+zkSZhQ803ZvgPpY7xs8wCz4XL7zPvUNXw==
+X-Received: by 2002:a2e:a48a:0:b0:281:e762:35aa with SMTP id h10-20020a2ea48a000000b00281e76235aamr62619lji.3.1673623208570;
+        Fri, 13 Jan 2023 07:20:08 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id p6-20020a2ea406000000b00289cfd2088csm693673ljn.73.2023.01.13.07.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 07:20:08 -0800 (PST)
+Message-ID: <b87ab80d-0936-5a5a-25da-35c0dbdede33@linaro.org>
+Date:   Fri, 13 Jan 2023 16:20:06 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eJJr4NZdBAlir24b"
-Content-Disposition: inline
-In-Reply-To: <20230112092136.f2g43hrhmrqouy4y@orel>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 6/6] clk: qcom: Fix APSS PLL and RCG Configuration
+Content-Language: en-US
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, jassisinghbrar@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230113143647.14961-1-quic_devipriy@quicinc.com>
+ <20230113143647.14961-7-quic_devipriy@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230113143647.14961-7-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---eJJr4NZdBAlir24b
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jan 12, 2023 at 10:21:36AM +0100, Andrew Jones wrote:
-> On Thu, Jan 12, 2023 at 12:29:57AM +0100, Heiko St=C3=BCbner wrote:
-> > Am Mittwoch, 11. Januar 2023, 18:10:19 CET schrieb Jisheng Zhang:
-> > > riscv_cpufeature_patch_func() currently only scans a limited set of
-> > > cpufeatures, explicitly defined with macros. Extend it to probe for a=
-ll
-> > > ISA extensions.
-> > >=20
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > > ---
-> > >  arch/riscv/include/asm/errata_list.h |  9 ++--
-> > >  arch/riscv/kernel/cpufeature.c       | 63 ++++----------------------=
---
-> > >  2 files changed, 11 insertions(+), 61 deletions(-)
-> >=20
-> > hmmm ... I do see a somewhat big caveat for this.
-> > and would like to take back my Reviewed-by for now
-> >=20
-> >=20
-> > With this change we would limit the patchable cpufeatures to actual
-> > riscv extensions. But cpufeatures can also be soft features like
-> > how performant the core handles unaligned accesses.
->=20
-> I agree that this needs to be addressed and Jisheng also raised this
-> yesterday here [*]. It seems we need the concept of cpufeatures, which
-> may be extensions or non-extensions.
->=20
-> [*] https://lore.kernel.org/all/Y77xyNPNqnFQUqAx@xhacker/
->=20
-> > See Palmer's series [0].
-> >=20
-> >=20
-> > Also this essentially codifies that each ALTERNATIVE can only ever
-> > be attached to exactly one extension.
-> >=20
-> > But contrary to vendor-errata, it is very likely that we will need
-> > combinations of different extensions for some alternatives in the futur=
-e.
->=20
-> One possible approach may be to combine extensions/non-extensions at boot
-> time into pseudo-cpufeatures. Then, alternatives can continue attaching to
-> a single "feature". (I'm not saying that's a better approach than the
-> bitmap, I'm just suggesting it as something else to consider.)
 
 
-> >         ALTERNATIVE_2("nop",
-> >                       "j strcmp_zbb_unaligned", 0, CPUFEATURE_ZBB | CPU=
-FEATURE_FAST_UNALIGNED, 0, CONFIG_RISCV_ISA_ZBB,
-> >                       "j variant_zbb", 0, CPUFEATURE_ZBB, CPUFEATURE_FA=
-ST_UNALIGNED, CONFIG_RISCV_ISA_ZBB)
-> >=20
-> > [the additional field there models a "not" component]
+On 13.01.2023 15:36, devi priya wrote:
+> Included CLK_IS_CRITICAL flag which helps to properly enable
+> the APSS PLL during bootup.
+Please describe the issue and not only the user-visible impact it
+makes. Does the PLL get shut down by clk_ignore_unused? Maybe you
+would be interested in the sync_state changes that landed in recent
+-next that may solve it for you?
 
-Since we're discussing theoretical implementations, and it's a little hard
-to picture all that they entail in my head, I might be making a fool of
-myself here with assumptions...
+I don't think it should be always-on, as you have an alternate source
+for low power modes, adding CLK_IS_CRITICAL will keep the PLL enabled
+even if you're not using it.
 
-Heiko's suggestion sounded along the lines of: keep probing individual
-"features" as we are now. Features in this case being the presence of
-the extension or non-extension capability. And then in the alternative,
-make all of the decisions about which to apply.
+> clk_rcg2_ops should be used for APSS clock RCG, as other ops
+> will not configure the RCG register
+RCG register meaning RCG register*s*, meaning in this case M/N/D
+which would be required for proper rate setting and not only input
+switching (which arguably doesn't seem to be of much concern on a
+single-parent clock)? This all is not obvious..
 
-Drew's suggestion would have significantly more defined CPUFEATURE_FOOs,
-but would offload the decision making about which extensions or non-
-extension capabilities constitute a feature to regular old cpufeature
-code. However, the order of precedence would remain in the alt macro, as
-it does now.
-
-I think I am just a wee bit biased, but adding the complexity somewhere
-other than alternative macros seems a wise choice, especially as we are
-likely to find that complexity increases over time?
-
-The other thing that came to mind, and maybe this is just looking for
-holes where they don't exist (or are not worth addressing), is that
-order of precedence.
-I can imagine that, in some cases, the order of precedence is not a
-constant per psuedo-cpufeature, but determined by implementation of
-the capabilities that comprise it?
-
-If my assumption/understanding holds, moving decision making out of the
-alternative seems like it would better provision for scenarios like
-that? I dunno, maybe that is whatever the corollary of "premature
-optimisation" is for this discussion.
-
-That's my unsolicited =E2=82=AC 0.02, hopefully I wasn't off-base with the
-assumptions I made.
-
-Heiko, I figure you've got some sort of WIP stuff for this anyway since
-you're interested in the fast unaligned? How close are you to posting any
-of that?
-
-While I think of it, w.r.t. extension versus (pseudo)cpufeature etc
-naming, it may make sense to call the functions that this series adds
-in patch 6 has_cpufeature_{un,}likely(), no matter what decision gets
-made here?
-IMO using cpufeature seems to make more sense for a general use API that
-may be used later on for the likes of unaligned access, even if
-initially it is not used for anything other than extensions.
-
-Thanks,
-Conor.
-
-
---eJJr4NZdBAlir24b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8F2UAAKCRB4tDGHoIJi
-0mkYAP9Ci+2UMUBqP3SY4QGQiesTmNsCfaU2nMywpEkD7pp3lwEAz2lq9OwtYfZH
-DzZpfIO0gPw9wLXBt0ndw8rV6hphPQQ=
-=bfSv
------END PGP SIGNATURE-----
-
---eJJr4NZdBAlir24b--
+Konrad
+> 
+> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> ---
+>  drivers/clk/qcom/apss-ipq-pll.c | 1 +
+>  drivers/clk/qcom/apss-ipq6018.c | 8 +++++++-
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
+> index dd0c01bf5a98..75486a124fcd 100644
+> --- a/drivers/clk/qcom/apss-ipq-pll.c
+> +++ b/drivers/clk/qcom/apss-ipq-pll.c
+> @@ -33,6 +33,7 @@ static struct clk_alpha_pll ipq_pll = {
+>  			},
+>  			.num_parents = 1,
+>  			.ops = &clk_alpha_pll_huayra_ops,
+> +			.flags = CLK_IS_CRITICAL,
+>  		},
+>  	},
+>  };
+> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
+> index f2f502e2d5a4..0d0e7196a4dc 100644
+> --- a/drivers/clk/qcom/apss-ipq6018.c
+> +++ b/drivers/clk/qcom/apss-ipq6018.c
+> @@ -33,15 +33,21 @@ static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
+>  	{ P_APSS_PLL_EARLY, 5 },
+>  };
+>  
+> +static const struct freq_tbl ftbl_apcs_alias0_clk_src[] = {
+> +	{ .src = P_APSS_PLL_EARLY, .pre_div = 1 },
+> +	{ }
+> +};
+> +
+>  static struct clk_rcg2 apcs_alias0_clk_src = {
+>  	.cmd_rcgr = 0x0050,
+> +	.freq_tbl = ftbl_apcs_alias0_clk_src,
+>  	.hid_width = 5,
+>  	.parent_map = parents_apcs_alias0_clk_src_map,
+>  	.clkr.hw.init = &(struct clk_init_data){
+>  		.name = "apcs_alias0_clk_src",
+>  		.parent_data = parents_apcs_alias0_clk_src,
+>  		.num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
+> -		.ops = &clk_rcg2_mux_closest_ops,
+> +		.ops = &clk_rcg2_ops,
+>  		.flags = CLK_SET_RATE_PARENT,
+>  	},
+>  };
