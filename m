@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4281C66A628
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC2366A62A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjAMWo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 17:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S230209AbjAMWpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 17:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjAMWou (ORCPT
+        with ESMTP id S231179AbjAMWpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 17:44:50 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B788576AE9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:44:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1673649883; x=1705185883;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eBHvLdmdEqZp7wzKBhxjpIb9vAX0WonjjojON8von1o=;
-  b=F/JLVVWRAJQZw88OwKtsyF1+8F3y0ZjRAvf3wzbwJmbs8uyOKt5rePTa
-   +wkctw2Tw8rr1CeaczlkEQabrhpGOwRI+IsuO8Hi3ZWd7UHYZFdd2Dc8Z
-   Xn0oxY76qcltUGCVzeaBir9NDce2tz3MLn61YDv9/kF4KX1dKYy00lHrc
-   TsIQhRuLBU71qMBmVOcmlprYUetSw3RmnnIX8k/MIsz7ujSYzMiXAV223
-   JUfH/IYf+Db+1BvIwkanBLELSseh4XwBm+4jz+lCYnjFMaNDFOjC2TdDY
-   K1pPTp4uUaBUVxBhbIh/Et4km/0/bm1bUunvdvPpbrWOqCMR617TQ1b9X
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,215,1669046400"; 
-   d="scan'208";a="332771926"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Jan 2023 06:44:43 +0800
-IronPort-SDR: f6fvtnyMXra4RvuVXH66RfkhoQyljJ0yR4h+1zHC7IbjFojVhnvqdkORBIDYBPVJw+SQw5bcQE
- Q+Crcc91k68gZkmPbBELrhpUz49JYfdMPNngPE1E09IpTpfRviMpvoJDfC3UH+BsBOqa6K0oHK
- gvoZnpIOEVOLPa4S8A75ykvA86ZMmYkM1Cq0bfjdKK8sGOTAqPQXXJj56UTPFgoX7+T07vScXa
- BBycqHlgt1u8Nb2/K5x3TL5LqgL130HSnHUyRmZmhsWkfQ/IOCXgonPqhecKYM8As1pZoGCUny
- 9dU=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jan 2023 14:02:28 -0800
-IronPort-SDR: ESOaaBL0BVbemqbunwNMaDEFBIXiitnLeP5A82bPNj1IquSgVeoBSlYeHHrmopWPtkZW0bGF3N
- 85JUbWkibgUN+lpcmi/mci67ZvmBEAYkFcTEMAujTubsP2SEpLtH3y0Lfax8fdETCLoceagE+Z
- wHgZ6BELtgfyQoOpQePS7MsxPllhaXtZ05GjI/Y/PKqrxg4s9R5limsp+xopQmQ4k5VkuWxid2
- 4t0Wn9VX/umHXnlR/YFRrT+UGbskhAmg8VPABvWmNxYMCKzP/Q9N/KFxGdZHCP/DQZlh4PAmxy
- 8zw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jan 2023 14:44:43 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NtxLf5pHKz1RvTr
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:44:42 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1673649882; x=1676241883; bh=eBHvLdmdEqZp7wzKBhxjpIb9vAX0Wonjjoj
-        ON8von1o=; b=G5+1uxPSZXiJqDV6/5jXuM/M+u4VUC5IAL9ilNbq5Ubiyz2+Hnk
-        GPFMlYXvDR4teG5oZvNuYLrCkyAisBAZof9niKpKIpGOkyScLxlRzuMYvU7xMC1r
-        fCqonayPbhrBJUZI6/kSHrB59Toq6ZtbEpDG8ZK/F98J+dj51D48KfQAWIW38Rib
-        AypzEjLhgu9JvXbeOUFVeDVzrui/emjjs7SaRvnDhgta3BTK1j/P5yVg9MsMIX1R
-        9VuEUqoKeF3Tvq28LMZUDU/9KveqJYQuDPZp+ZT+PUn94epRrMp78B+KLW1tukY3
-        XiKNA1vKFg8yp5RFE9FtCvuAoa7XftG2png==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id slmrM55hM_DF for <linux-kernel@vger.kernel.org>;
-        Fri, 13 Jan 2023 14:44:42 -0800 (PST)
-Received: from [10.225.163.30] (unknown [10.225.163.30])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NtxLd6sGBz1RvLy;
-        Fri, 13 Jan 2023 14:44:41 -0800 (PST)
-Message-ID: <c2ad2551-e179-f0fc-28dc-8e3871b4d06b@opensource.wdc.com>
-Date:   Sat, 14 Jan 2023 07:44:40 +0900
+        Fri, 13 Jan 2023 17:45:41 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC6478A45
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:45:41 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id g23so9268954plq.12
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:45:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n5j3zGLGYIDHIc+SfHENsP+6wHl7aF41ocUmiDBCYQ0=;
+        b=sv+fwEZs5pMW7YVskHNkYk7qS5BEjpjzfeCxS3ESjQdiQl5XM9iJzovzCHHEWE6Y7s
+         MTFvGIt5Hii5NRUJICpBuh/r6ih6T67irFuzXknIY4slT8OJ4uK+8L8L1LsG+aitRASo
+         HJOldOsuOFnWws+gR2XL3l/j0snkMAQYsBny89H18kYGhDttFWDgrALPFwxmxFsFJYNA
+         hamRZvpYgilUsG2lQOkLcp2SE6PT8Bcj01M0/aA5Em60vzlbjungF11aRRhrx8AB9rVL
+         57FTsmyXpn6W8/V8DGywlrC0cmq/aTg8gyglFU4YI4ES7DZ6alHDlm59jsKGTmnRJ/Fm
+         92fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n5j3zGLGYIDHIc+SfHENsP+6wHl7aF41ocUmiDBCYQ0=;
+        b=DiaFgo5kdhNH/KAUm98xDcEhSfuYZCY/v9WwZ36L0jfhe/quUydTBiUf/UJzqa3waZ
+         koUJ79c8jqDs65+VU6BwvJB0K5SJrhzWUxySHZd9l1ivS8EhiHBFLnlk2q/3IO7GjjtX
+         5q9W/rt4yZ9cMhgIoRadFzBhyzkgk06r9eKpQ4iU3BU/nHknYCS5NmgfCNdzH9bs/2ZF
+         mSw/wJ4/S0RdKT+juIu3IF+ArUFDiCw43lLwD2QL0Aqopzq11gvpi7xCqaEmwQ/ektzA
+         co8Fm1RV+9IBEXsCtqUCMEXr64zSUjdY5Cz7BdFny/IChdLd39x5d8qVjD/jVYQfu77T
+         sY3A==
+X-Gm-Message-State: AFqh2kohx/CTeTSKQAXXSW6R8tYqdkfCovq8Ly9n2eFOrrEq9DyxhDfv
+        1HidAPFykXII9ZcdFNWfI7hrQcwvlvTetU0SLYmXtA==
+X-Google-Smtp-Source: AMrXdXvNn1l4cxy+9xn/nsyxTYoAvQss413ZOx3wj1jctbxKLz3mF1xHLFglrxI34f3o75+G+8kx2bjw1IwtlX6i7OI=
+X-Received: by 2002:a17:90b:3c81:b0:219:2e8c:d1d0 with SMTP id
+ pv1-20020a17090b3c8100b002192e8cd1d0mr5949807pjb.57.1673649940289; Fri, 13
+ Jan 2023 14:45:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] ata: Don't build PATA_CS5535 on UML
-To:     Peter Foley <pefoley2@pefoley.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230112-umide-v1-1-78742026a3f1@pefoley.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221220031023.197178-1-rmoar@google.com> <CAGS_qxrp_oT7b_NNP4PfES06QAp-V4B4BAETFd3Wv9x-F8Zhrg@mail.gmail.com>
+ <CA+GJov4cyXhLnVtSMB8vBzscN0_y4fmSegEJjCr1aY51aCs5Bg@mail.gmail.com>
+In-Reply-To: <CA+GJov4cyXhLnVtSMB8vBzscN0_y4fmSegEJjCr1aY51aCs5Bg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 13 Jan 2023 14:45:29 -0800
+Message-ID: <CAGS_qxqz31x_ya1BhoL=3xXLWnuwcJErdUweGK_tKx2KP_tLYQ@mail.gmail.com>
+Subject: Re: [PATCH v1] lib/hashtable_test.c: add test for the hashtable structure
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/23 13:37, Peter Foley wrote:
-> This driver uses MSR functions that aren't implemented under UML.
-> Avoid building it to prevent tripping up allyesconfig.
-> 
-> e.g.
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3a3): undefined reference to `__tracepoint_read_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x3d2): undefined reference to `__tracepoint_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x457): undefined reference to `__tracepoint_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x481): undefined reference to `do_trace_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4d5): undefined reference to `do_trace_write_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x4f5): undefined reference to `do_trace_read_msr'
-> /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: pata_cs5535.c:(.text+0x51c): undefined reference to `do_trace_write_msr'
-> 
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+On Fri, Jan 13, 2023 at 2:23 PM Rae Moar <rmoar@google.com> wrote:
 
-Applied to for-6.2-fixes with a slightly tweaked commit title.
-Thanks !
+<snip>
 
--- 
-Damien Le Moal
-Western Digital Research
+> > Note: given x is supposed to point to a or b, I don't know if checking
+> > against a.data does us much good.
+> > If we're trying to check that hash_add() doesn't mutate the keys and
+> > data, this code won't catch it.
+> > We'd have to instead do something like
+> >   if(x->key != 1 && x->key != 2) KUNIT_FAIL(test, ...);
+> >
+>
+> This seems like a good change to me in combination with changing it to
+> x->visited++;.
+> Although David's suggestion might be slightly more exhaustive.
+> Why wouldn't it be important to check that the key matches the data?
 
+Checks like
+  KUNIT_EXPECT_EQ(test, x->data, a.data);
+won't do anything, given that x == &a.
+We're just comparing x->data to itself.
+
+So we would have to write something instead like
+  hash_for_each(hash, bkt, x, node) {
+          x->visited++;
+          if (x->key == a.key) {
+                  KUNIT_EXPECT_EQ(test, x->data, 13);
+          } else if (x->key == b.key) {
+                  KUNIT_EXPECT_EQ(test, x->data, 10);
+          } else { /* some call to KUNIT_FAIL about a bad key */ }
+  }
+
+Maybe that's worth it in one of the test cases, but I don't know if
+it's necessary to replicate this in the other places where we're
+incrementing `visited` by checking keys.
+
+Daniel
