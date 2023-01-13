@@ -2,141 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2657F66A233
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8F866A237
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjAMSh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S229704AbjAMSjF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 Jan 2023 13:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjAMShg (ORCPT
+        with ESMTP id S229603AbjAMSjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:37:36 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6D21EC5D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:36:39 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id o13so19743925pjg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4F3gMakR5EjuEaFBMZ7D8qgSZpXpMhQV5Lb3h6YkX4=;
-        b=sqwP3bvcIkIkHlOHuaj7PzhrogErMceNfkIz1l7wmrEJ52RKt1ZoLaNFxbpOSA3UpL
-         wq1sh1ojD/X7Iy6a9obxqvPAX82NCW94JSqZoXJ4VPostzzk8OBUzRW2QZCxPsty/wXb
-         9IXClLbv/GxUW9SLkr6zfzlHZd7HpiTaZ8Yvy9soWUs1OemOk/v/NO8MYlwrCl9zXF5+
-         HCfWR+ud6GaZDcvdGETTwikzINdoumIpGP5pl8ezxXEzc3zwN5BIhZBeMaQiCdi43Xmr
-         yAQ8h9uEbmzXOuUyEHA/9lDV/SU+Yesi9ACAmnts4FF2odbDNYPf5Uon+/q/RdhTXpub
-         HMJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4F3gMakR5EjuEaFBMZ7D8qgSZpXpMhQV5Lb3h6YkX4=;
-        b=2vAR3n52cly0u/vUt/X1HR6pAP1+AEimYW/5FVj3cTBLQA6dQpSB8GXKyPaEyirtKi
-         uHFrT+YkeJfoSi7i9LtFibZdN1qNBobLK7RHKnv94sUv/AQ7qF1jBsKnrcigKNBdJ4ON
-         OmIEMfrYe9CrlK9w4rkWjCwtgKlqKEGhjfQAr1cNYGXYcelvowd3pEveWe7wqPFgyl4l
-         QlgcTOJpyEmPQPFan/qJ1IfbXxmRBKegpu25+SCcMAHDSK8Yc0UPanbfWtdOnx8Npjdt
-         6RYNbExTZHBaChFtRlSgCvNGE6lOpivd4Jk5ELylm54BUw6OmlUCwJHI7cjvnuabULTa
-         k7XQ==
-X-Gm-Message-State: AFqh2kpUgKzDUy3d5eBU96VPtNyac+1qcja5+grCc3K3PakfTd+O63e5
-        lPdVT2cLKlaM3nuE4kQFAZTQfg71zsN1rJq2pVhowA==
-X-Google-Smtp-Source: AMrXdXut+ZVz9p9DBkW4zfz3GUwV90SnmUswJaW85cGYlU4XXpHCwXHrnm3bYtlfE6P1Eb4qY9jWr4Npr5okcAdcplU=
-X-Received: by 2002:a17:90a:488a:b0:226:b5f4:d420 with SMTP id
- b10-20020a17090a488a00b00226b5f4d420mr3958048pjh.102.1673634998456; Fri, 13
- Jan 2023 10:36:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20230104132646.7100-1-chunfeng.yun@mediatek.com>
-In-Reply-To: <20230104132646.7100-1-chunfeng.yun@mediatek.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 13 Jan 2023 10:36:27 -0800
-Message-ID: <CAKwvOdnMF4LRhTnQ3Rg+q3hd7jm2tS0aTHmwU6isKJHL2u9Q-g@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] phy: mediatek: fix build warning caused by clang
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 13:39:02 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8695F1003;
+        Fri, 13 Jan 2023 10:38:59 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pGOx5-003Fps-AY; Fri, 13 Jan 2023 19:38:55 +0100
+Received: from p57ae5361.dip0.t-ipconnect.de ([87.174.83.97] helo=smtpclient.apple)
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pGOx5-000ESc-2y; Fri, 13 Jan 2023 19:38:55 +0100
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v4] sh: avoid using IRQ0 on SH3/4
+Date:   Fri, 13 Jan 2023 19:38:44 +0100
+Message-Id: <09EB6264-E85C-487C-B706-6411BB18DDDF@physik.fu-berlin.de>
+References: <961f3b42-1522-79d5-7012-1533b568696f@omp.ru>
+Cc:     Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In-Reply-To: <961f3b42-1522-79d5-7012-1533b568696f@omp.ru>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+X-Mailer: iPhone Mail (20C65)
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.174.83.97
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 4, 2023 at 5:26 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> Remove the temporary @mask_, this may cause build warning when use clang
-> compiler for powerpc, but can't reproduce it when compile for arm64.
-> the build warning is -Wtautological-constant-out-of-range-compare, and
-> caused by
-> "BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask)"
+Hi Sergey!
 
-Can you please include the text of the observed warning?
+> On Jan 13, 2023, at 7:27 PM, Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+> 
+> ﻿Hello!
+> 
+>> On 5/3/22 11:42 PM, Sergey Shtylyov wrote:
+>> 
+>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+>> and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
+>> see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
+>> at 0 -- modify that code to start the IRQ #s from 16 instead.
+>> 
+>> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+>> indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
+>> 
+>> [1] https://lore.kernel.org/all/025679e1-1f0a-ae4b-4369-01164f691511@omp.ru/
+>> 
+>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+>> 
+>> ---
+>> The patch is against Linus Torvalds' 'linux.git' repo.
+> 
+>   So, this patch hasn't been merged... may I ask why? :-(
 
->
-> After removing @mask_, there is a "CHECK:MACRO_ARG_REUSE" when run
-> checkpatch.pl, due to @mask is constant, no reuse problem will happen.
->
-> Fixes: 84513eccd678 ("phy: mediatek: fix build warning of FIELD_PREP()")
+The SH maintainers have been MIA which is why the other maintainers want to kill the architecture again.
 
-Uh, why was 84513eccd678 sent/reviewed/merged if it didn't fix the
-issue correctly in the first place?
+I’m seriously considering adopting the architecture.
 
-Is the issue perhaps that your mask isn't wide enough in the first
-place, and should be?  See:
-commit cfd6fb45cfaf ("crypto: ccree - avoid out-of-range warnings from clang")
-for inspiration.
+Not sure whether Linus would grant that though.
 
-> Reported-by: kernel test robot <lkp@intel.com>
-
-Can you please include the Link: tag to the lore URL of the report?
-
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v6: modify the title
-> v5: no changes
-> v4 new patch, I'm not sure it can fix build warning, due to I don't cross compile
->     it for powerpc using clang in office.
-> ---
->  drivers/phy/mediatek/phy-mtk-io.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/phy/mediatek/phy-mtk-io.h b/drivers/phy/mediatek/phy-mtk-io.h
-> index d20ad5e5be81..58f06db822cb 100644
-> --- a/drivers/phy/mediatek/phy-mtk-io.h
-> +++ b/drivers/phy/mediatek/phy-mtk-io.h
-> @@ -39,8 +39,8 @@ static inline void mtk_phy_update_bits(void __iomem *reg, u32 mask, u32 val)
->  /* field @mask shall be constant and continuous */
->  #define mtk_phy_update_field(reg, mask, val) \
->  ({ \
-> -       typeof(mask) mask_ = (mask);    \
-> -       mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-> +       BUILD_BUG_ON_MSG(!__builtin_constant_p(mask), "mask is not constant"); \
-> +       mtk_phy_update_bits(reg, mask, FIELD_PREP(mask, val)); \
->  })
->
->  #endif
-> --
-> 2.18.0
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Adrian
