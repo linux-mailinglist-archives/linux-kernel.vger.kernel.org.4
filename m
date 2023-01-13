@@ -2,114 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E149B669D01
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF466669D04
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjAMP56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S230411AbjAMP6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjAMP5c (ORCPT
+        with ESMTP id S230181AbjAMP5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:57:32 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7032990E53;
-        Fri, 13 Jan 2023 07:49:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673624940; x=1705160940;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=T44IkxO1oGhpft8V3zmtoEVIR4F6V8En4z3hWLh6jrk=;
-  b=css6Gh1CH4QRKlZaUjdQU1P+wUOBI0QupWCPFJAfj4G6NxgMTNURkV7F
-   knTPHyuie0j4CIaI20L3IrOX3jvm1fhStvrnym4EuGFZoGNOTlZJs7iFW
-   yiyq4Br66c4+XhzGMBJQKEDEnP3Ep/dz2+EkSt2Is0fevwLiK+EhIfxDj
-   nMHiHahDwAywjEqYowkTFJZWlKtge97xsVqsZc3cFl7yBPcIJr8Pp+HNh
-   z6LoMsca5YxsRy7oYCTkp2YNFAJbTHk9pbjUIzAgQYPjOG4PyMV7X46vL
-   HFhe4SxXK8VlqRNJ8FznoLWvoitJU2tTeDPmsfSkDmVtcJ1cvEkRQfsbB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="303715310"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="303715310"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:49:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="746969933"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="746969933"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:48:59 -0800
-Message-ID: <34f9fc91c398f85c0bedaff89adbb33897cb1f62.camel@linux.intel.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points
- int340x
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "daniel.lezcano@kernel.org" <daniel.lezcano@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-Date:   Fri, 13 Jan 2023 07:48:59 -0800
-In-Reply-To: <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
-References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
-         <20230110151745.2546131-4-daniel.lezcano@linaro.org>
-         <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
-         <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Fri, 13 Jan 2023 10:57:37 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C2F90E74
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:49:04 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o13so19306188pjg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wobIjMJNqTwtr3bYoELqDsKPAwD1PC9Q+itWmni1C6o=;
+        b=b63RB6SUcCzsN6y8LRPVghJm6iLrFxEo37MywBuf7UMlj+FVwXhZZe4YLNQobeby9f
+         5Y7aa0MQGskyI2wvFHZz+jDqS363pC0Dz1i7oI/i6JDA6Xndz8H2Uyj6ctnHzV51E6/E
+         w792bLZupviwtara97i1v6aHHvJ6p1tQzOr0T7doUpDitcCzKuM5r010rVTnPFIm3Bog
+         RLbnXBcBp5mJBlujcwZJ1eZjCw7yBPrDxzjHsG8vRZXjN1VQLLh9sN8DhDoY0Ki7pAkB
+         2wQNZMUUctFpcWq/t8PpsJAki9xOcJ8zX1OD7H8Ltkbbcch0m4LNTv2NTDyZ6IZqe46O
+         RhDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wobIjMJNqTwtr3bYoELqDsKPAwD1PC9Q+itWmni1C6o=;
+        b=fZhK0yoo0/DJo1G5JXFx7LVbq4BrgVE0TB3AAwXn+nN3IyDNz0KA+PmUDCUe9F9Vzr
+         c6ye4WPwmKG427qRAslve48ccKY6f8pIpXqlb7fHGk8SCfls3g0etuZG1q/Bp1BdaOQk
+         IBWUmavuBvwmHrVhoDak/sbwfHja0bQvLBWQnDmg6sdAanQM30iRY/CBLHIxLh0ps0tF
+         pPv0eL5FdcAeSrIF1Y3tMjWZghSGGbiPcI+dT3+OmgQau5eQ3t4sj8pzYhDZ8Tbtloe0
+         iIypctF6YDDlTwCSWi4ciQKFQhHiAJXXdre8KCa+EVsTT+5bRetyLQaAqM+dULarrUiR
+         gDBg==
+X-Gm-Message-State: AFqh2krqTBET9kZG5kCFXs+CGHTjoQ/wT3xtuwmwABcVFGAqgJunZw9B
+        tRcF6aikyngK9IfJyAnVTUdPHQ==
+X-Google-Smtp-Source: AMrXdXsEAKrdgDrfSletqAhmR5qRLbIJ5zZEClWrVw8g6qy+aLPjc/GLLtqeuK1KgkeyLfP8BgaTBA==
+X-Received: by 2002:a17:90a:fd12:b0:226:5758:a57f with SMTP id cv18-20020a17090afd1200b002265758a57fmr1478484pjb.2.1673624943743;
+        Fri, 13 Jan 2023 07:49:03 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id nv7-20020a17090b1b4700b00212cf2fe8c3sm2732462pjb.1.2023.01.13.07.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 07:49:03 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:48:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        harald@profian.com
+Subject: Re: [PATCH RFC v7 04/64] KVM: x86: Add 'fault_is_private' x86 op
+Message-ID: <Y8F9a2pmh13aIQZL@google.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-5-michael.roth@amd.com>
+ <Y628y6hQK38+IAev@zn.tnic>
+ <20230105024256.ptujtjgzcdmpakoa@amd.com>
+ <Y8Fr/F1RV0B8CHq5@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8Fr/F1RV0B8CHq5@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-> > > 
-
-[...]
-
-> > > -       status = acpi_evaluate_integer(d->adev->handle, "GTSH",
-> > > NULL,
-> > > &hyst);
-> > > -       if (ACPI_FAILURE(status))
-> > > -               *temp = 0;
-> > > -       else
-> > > -               *temp = hyst * 100;
-> > 
-> > The previous code returns hyst * 100.
-> > But the new API retuurns hyst directly.
-> > 
-> > -/sys/class/thermal/thermal_zone2/trip_point_4_hyst:2000
-> > +/sys/class/the
-> > rmal/thermal_zone2/trip_point_4_hyst:20
-> > 
-> > Is this done on purpose?
+On Fri, Jan 13, 2023, Borislav Petkov wrote:
+> On Wed, Jan 04, 2023 at 08:42:56PM -0600, Michael Roth wrote:
+> > Obviously I need to add some proper documentation for this, but a 1
+> > return basically means 'private_fault' pass-by-ref arg has been set
+> > with the appropriate value, whereas 0 means "there's no platform-specific
+> > handling for this, so if you have some generic way to determine this
+> > then use that instead".
 > 
-> No, it is an error. The function thermal_acpi_trip_gtsh() should do:
+> Still binary, tho, and can be bool, right?
 > 
->         return deci_kelvin_to_millicelsius(hyst);
+> I.e., you can just as well do:
 > 
+>         if (static_call(kvm_x86_fault_is_private)(kvm, gpa, err, &private_fault))
+>                 goto out;
 > 
+> at the call site.
 
-GTSH returns here in tenths of degree Kelvin. For example 15 means 1.5
-degree K.
+Ya.  Don't spend too much time trying to make this look super pretty though, there
+are subtle bugs inherited from the base UPM series that need to be sorted out and
+will impact this code.  E.g. invoking kvm_mem_is_private() outside of the protection
+of mmu_invalidate_seq means changes to the attributes may not be reflected in the
+page tables.
 
-I would like to test your next series with thermald. If there is a
-problem, it will break every distro.
+I'm also hoping we can avoid a callback entirely, though that may prove to be
+more pain than gain.  I'm poking at the UPM and testing series right now, will
+circle back to this and TDX in a few weeks to see if there's a sane way to communicate
+shared vs. private without having to resort to a callback, and without having
+races between page faults, KVM_SET_MEMORY_ATTRIBUTES, and KVM_SET_USER_MEMORY_REGION2.
 
-Thanks,
-Srinivas
-
-
+> > This is mainly to handle CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING, which
+> > just parrots whatever kvm_mem_is_private() returns to support running
+> > KVM selftests without needed hardware/platform support. If we don't
+> > take care to skip this check where the above fault_is_private() hook
+> > returns 1, then it ends up breaking SNP in cases where the kernel has
+> > been compiled with CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING, since SNP
+> > relies on the page fault flags to make this determination, not
+> > kvm_mem_is_private(), which normally only tracks the memory attributes
+> > set by userspace via KVM_SET_MEMORY_ATTRIBUTES ioctl.
 > 
-> 
+> Some of that explanation belongs into the commit message, which is a bit
+> lacking...
 
-
+I'll circle back to this too when I give this series (and TDX) a proper look,
+there's got too be a better way to handle this.
