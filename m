@@ -2,65 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0D366A6FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 324AC66A708
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjAMXX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        id S231426AbjAMX0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjAMXX4 (ORCPT
+        with ESMTP id S229968AbjAMX0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:23:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3960A6719A;
-        Fri, 13 Jan 2023 15:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uo0wRiUMsv1attXrd3ti/SMjYXEvY7sRfF3P5n6hjy4=; b=eHWl7lsza7bgtbnqAvN1J3bq1g
-        DUrk7ERX7EEh4J3gB8cw9WMHNaggBGcSmfLA7HrkBfZQa5BJBMFjQMaB7UmaQu/ineehsEae0tXwd
-        s5XTBCLtHnkziGdmguP5koz3LomIjOTwdvW8A7MkURcQTSU42bdyt0gHZGif0EatHjwegnzdPn8IN
-        X4N1RtTPMO9ZH5KLcLzzTv7EhSfdgClgo5y7p3l0bOAQ3YjjnClCmjr/iMdz+Hv7Lw18+JYRedOkB
-        Q/xNjGundNi1aBMwhvHSLNgc7F3sG+5jtAUYVcCiU4+jrkYrxWffMlUJlN3GRlKJbSF+799RfIA07
-        zCEnT9iw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGTOW-004oWc-EH; Fri, 13 Jan 2023 23:23:34 +0000
-Date:   Fri, 13 Jan 2023 15:23:32 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v3] kallsyms: Remove the performance test from
- kallsyms_selftest.c
-Message-ID: <Y8Hn9Bd7XFGkBnWO@bombadil.infradead.org>
-References: <20230110130121.1279-1-thunder.leizhen@huawei.com>
+        Fri, 13 Jan 2023 18:26:39 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEB88A213
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:26:37 -0800 (PST)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 37AB810048F91
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 23:26:37 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id GTRVpuRhGNX2aGTRVpil5a; Fri, 13 Jan 2023 23:26:37 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=63c1e8ad
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=uJXoyXs2SWzOjiTBKGkA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wHGbrhCQsYGBvnsMDI9Sc8XtN0LjMmgv6I4KTkqII/Q=; b=r0r4CG2TTmT9lusgtrd/RylcSx
+        nnC5EraDyh1bCg83gOe5WN0dhEWAFeqFYjnaCxUB3Lx08qzDBxyvp4usO/2KDRXc5zbxHnW3j0S53
+        vW1v//ItAUhUgDWAIDAtAtw0scLeEAvrtShAND7ALW0BlyXyZ/Gp2OEaVpPyvGnL3oOFiP+ZZ6GaQ
+        s41FcXeCk6MhCaX2Ra3ZxFTw+Bzh5gUe1Ljhlv6F0G9Em+v0LlUdXu5pC15C/necIi6oNg8UbaZCb
+        mpdSbA6wc+M3R7dSH4erc/4iYro2bL5h8HA99gXsoclutOspuzOqigIyLXRk9Iu8UR23MhQsetwW+
+        2TUXk1Sw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51374 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pGTRT-003UAp-Sf;
+        Fri, 13 Jan 2023 16:26:35 -0700
+Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230112135524.143670746@linuxfoundation.org>
+In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <1e9676f3-e436-3f69-ddff-abfc6ba5804d@w6rz.net>
+Date:   Fri, 13 Jan 2023 15:26:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110130121.1279-1-thunder.leizhen@huawei.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pGTRT-003UAp-Sf
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51374
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,9 +94,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 09:01:21PM +0800, Zhen Lei wrote:
-> Suggested-by: Petr Mladek <pmladek@suse.com>
+On 1/12/23 5:45 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.163 release.
+> There are 783 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.163-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I've dropped this in favor of Nick's fix and pushed to Linus.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-  Luis
+Tested-by: Ron Economos <re@w6rz.net>
+
