@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E596692C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DBE6692D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241123AbjAMJUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S241010AbjAMJ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbjAMJTR (ORCPT
+        with ESMTP id S241074AbjAMJZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:19:17 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BB8EA2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:14:02 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D131B4ECED;
-        Fri, 13 Jan 2023 09:14:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673601240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=22DFHnDxPptAxbZRoG0bfrp/Xo+pGFjmLGSMAbfetfs=;
-        b=OeKmqSXK6BMh1+XSb4Yht+FwtZ3vbNAUYn424dWwVqnXft2E2H2qY4xnZSv22j+3Fcid6W
-        qxBw9EAKsq2DQhg2mMhVMuPEGYRmGDmvhiXWmQmur3NNywDeUBr0Dmd35RlipU3MLxMox7
-        9MDbEt0p7ut324nkAcMAKEvRCh42KMQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 576AB2C141;
-        Fri, 13 Jan 2023 09:14:00 +0000 (UTC)
-Date:   Fri, 13 Jan 2023 10:13:59 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2] tty: serial: kgdboc: fix mutex locking order for
- configure_kgdboc()
-Message-ID: <Y8Eg1wDOOkSCAh2E@alley>
-References: <20230112161213.1434854-1-john.ogness@linutronix.de>
+        Fri, 13 Jan 2023 04:25:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4E56CFC0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0yGEeUtjPEYmvw01tTdJaP6xQOH4LDHoqrSGg4IbmmE=; b=b7GY0Fs4Kh53b766Ze4bZu1Jc3
+        sQKmwNr2hglGmJZJeqnF5joOSCDOx/qOi5bgtrJcB8WFpuJ7T/vyAl8+mvecgBYhnxnO8kMgyVhNN
+        v6eGdd6cwqv6aDki48ixTT8FYF5Bo9vWzEsufvVsogSfgELN6F63++l4Tzd22nVG8g1l0pwBPKGUZ
+        A3lGv9kjETaf0T7YYyxcnZmF0zSy4O/IuXY3ykZGulJhVGuYa7iuM6gad8wGL8NJpmfLyHe10Qn53
+        L4tqvf37g6tcW6x7srF1FtAQdXPdGN10AJOJwjFgzHtEJBO5WP16pPTYtGMQSPOZNqUmxfdGlxZpV
+        w393kA+A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pGGCF-005xMC-Ns; Fri, 13 Jan 2023 09:17:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 518FB300094;
+        Fri, 13 Jan 2023 10:17:46 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 088172013A2A1; Fri, 13 Jan 2023 10:17:46 +0100 (CET)
+Date:   Fri, 13 Jan 2023 10:17:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Joan Bruguera <joanbrugueram@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        Jan Beulich <jbeulich@suse.com>,
+        Roger Pau Monne <roger.pau@citrix.com>,
+        Kees Cook <keescook@chromium.org>, mark.rutland@arm.com,
+        x86@kernel.org
+Subject: Re: [RFC][PATCH 0/6] x86: Fix suspend vs retbleed=stuff
+Message-ID: <Y8EhucZfQ2IyJtnU@hirez.programming.kicks-ass.net>
+References: <20230112143141.645645775@infradead.org>
+ <20230113073938.1066227-1-joanbrugueram@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230112161213.1434854-1-john.ogness@linutronix.de>
+In-Reply-To: <20230113073938.1066227-1-joanbrugueram@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-01-12 17:18:13, John Ogness wrote:
-> Several mutexes are taken while setting up console serial ports. In
-> particular, the tty_port->mutex and @console_mutex are taken:
+On Fri, Jan 13, 2023 at 07:39:38AM +0000, Joan Bruguera wrote:
+> Hi Peter,
 > 
->   serial_pnp_probe
->     serial8250_register_8250_port
->       uart_add_one_port (locks tty_port->mutex)
->         uart_configure_port
->           register_console (locks @console_mutex)
-> 
-> In order to synchronize kgdb's tty_find_polling_driver() with
-> register_console(), commit 6193bc90849a ("tty: serial: kgdboc:
-> synchronize tty_find_polling_driver() and register_console()") takes
-> the @console_mutex. However, this leads to the following call chain
-> (with locking):
-> 
->   platform_probe
->     kgdboc_probe
->       configure_kgdboc (locks @console_mutex)
->         tty_find_polling_driver
->           uart_poll_init (locks tty_port->mutex)
->             uart_set_options
-> 
-> This is clearly deadlock potential due to the reverse lock ordering.
-> 
-> Since uart_set_options() requires holding @console_mutex in order to
-> serialize early initialization of the serial-console lock, take the
-> @console_mutex in uart_poll_init() instead of configure_kgdboc().
-> 
-> Since configure_kgdboc() was using @console_mutex for safe traversal
-> of the console list, change it to use the SRCU iterator instead.
-> 
-> Add comments to uart_set_options() kerneldoc mentioning that it
-> requires holding @console_mutex (aka the console_list_lock).
-> 
-> Fixes: 6193bc90849a ("tty: serial: kgdboc: synchronize tty_find_polling_driver() and register_console()")
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> I tried your patches on both QEMU and my two (real) computers where
+> s2ram with `retbleed=stuff` was failing and they wake up fine now.
 
-JFYI, the patch has been committed into printk/linux.git,
-branch rework/console-list-lock.
+Yay \o/
 
-I am going to give it few days in linux-next. If there is no problem
-I will send a pull request for 6.2-rc5 later the following week.
+> However, I think some minor reviews are needed:
+> 
+> (1) I got a build error due to a symbol conflict between the
+>     `restore_registers` in `arch/x86/include/asm/suspend_64.h` and the
+>     one in `drivers/gpu/drm/amd/display/dc/gpio/hw_gpio.c`.
+> 
+>     (I fixed by renaming the one in `hw_gpio.c`, but it's worth
+>      an `allmodconfig` just in case there's something else)
 
-Please, let me known if you have another preference.
+Urgh, must be my .config for not spotting that, will fix!
 
-Best Regards,
-Petr
+> (2) Tracing with QEMU I still see two `sarq $5, %gs:0x1337B33F` before
+>     `%gs` is restored. Those correspond to the calls from
+>     `secondary_startup_64` in `arch/x86/kernel/head_64.S` to
+>     `verify_cpu` and `sev_verify_cbit`.
+>     Those don't cause a crash but look suspicious, are they correct?
+> 
+>     (There are also some `sarq`s in the call to `early_setup_idt` from
+>     `secondary_startup_64`, but `%gs` is restored immediately before)
+
+OK, I'll have a look, thanks!
