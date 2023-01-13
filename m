@@ -2,177 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7610B668ACA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A9D668ACF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjAMEVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 23:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S235159AbjAMEVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 23:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjAMEUG (ORCPT
+        with ESMTP id S236012AbjAMEU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 23:20:06 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3686B66986
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:15:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD6B2FEC;
-        Thu, 12 Jan 2023 20:16:10 -0800 (PST)
-Received: from [10.162.41.9] (unknown [10.162.41.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C6133F587;
-        Thu, 12 Jan 2023 20:15:26 -0800 (PST)
-Message-ID: <0351f0bc-d94b-957f-8e03-6525e47d63a4@arm.com>
-Date:   Fri, 13 Jan 2023 09:45:22 +0530
+        Thu, 12 Jan 2023 23:20:29 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715EF669BE
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:16:29 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id cf42so31421143lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=URtOFWc4Y3NxXCjmj7AoFN5jaz8UOuGFeVdCsjgAKHQ=;
+        b=n15d5i1b2JsF8ap0e3rcuLaCuH0PeyokVa8wCGGEM6lsGiHuwi14ThJo3h8e2SEiW8
+         nnYqZQNvmtOucAd0ruIgTM1aZ9q14Hise7ZkAm+ZzrSkH1t3XL1CDVG/CTAMZW1DFm/a
+         B1CNMhEK5uOwnpzNZVvFQK+kaeXJMG+2+/26d3UVJa/CR/Mo0MefuRbIZg+XPjgdhK1D
+         NNa5VEo7/TdHA7cTcpdJ1tGsYDEU2O+Ujr6NonQbNjr46FuBM+qMyTB8ZXP3ACz7cTj1
+         IvqWFbenwDmwH9Pzw0fsHNEANVJdvsBMEvW+7JMD9FNNoPGG8op4yyBW2IL3P3CFahCO
+         bu+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=URtOFWc4Y3NxXCjmj7AoFN5jaz8UOuGFeVdCsjgAKHQ=;
+        b=ulzaWcEA8d2SwVv2+gCOHVuG2IpUHZpAMH/XfuGAXPS5xYAv546nBUMobAd0XSS4He
+         qb4fUUC/oQY1AXZ+3h8torfxXQxJNQLlGdNe8UkBLEYjV0t6lGWSmmLtNeescVgPeaey
+         5MwI/HfGQoj5gZrNYFrkOWoS0D8cPzwBS9pP9Rjl+8dGBKnGMwq1KyJbIhe7HwbIs+af
+         WdqtnPwvGQ7aD3m+RbVfl0IoFu19eW/3hvBKFYcYJ6q6cPTjGDNuKnS/spitEu0Wh+md
+         m7bBBoz3pnNnVerN5YNs3wTVP2NsOMoshHOg3PNyEJ6kBu/lJ+XL86QgdKkl+FUQxem2
+         5ApQ==
+X-Gm-Message-State: AFqh2krLElCaPaWZBIHc5fwhXTZ8z8MCkJnai9OMVb3oaw0PG0RopkyI
+        kD2Iow/7qenu3DZnGzNJYFxRyw==
+X-Google-Smtp-Source: AMrXdXvRHpkZJ1xwVK3MJlzWO9Gyuyj2XbYT3Ctq3VNKQBgDU1Ogv3R+JLOhJKYOu2PWtREwf7STIA==
+X-Received: by 2002:a05:6512:38cc:b0:4a4:68b9:19f0 with SMTP id p12-20020a05651238cc00b004a468b919f0mr18223586lft.24.1673583387558;
+        Thu, 12 Jan 2023 20:16:27 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id p18-20020a19f012000000b004cc9e4bc00esm922753lfc.2.2023.01.12.20.16.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 20:16:26 -0800 (PST)
+Message-ID: <d457ed7e-bfb3-b31d-72c5-ed8130e5c37e@linaro.org>
+Date:   Fri, 13 Jan 2023 05:16:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V7 3/6] arm64/perf: Add branch stack support in struct
- arm_pmu
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] clk: qcom: Remove need for clk_ignore_unused on sc8280xp
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20230105031039.207972-1-anshuman.khandual@arm.com>
- <20230105031039.207972-4-anshuman.khandual@arm.com>
- <Y8ARAjUaE44y+Cw3@FVFF77S0Q05N>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <Y8ARAjUaE44y+Cw3@FVFF77S0Q05N>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230113041038.4188995-1-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230113041038.4188995-1-quic_bjorande@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The subject could be more in the likes of "use disable_unused sync_state"..
 
-On 1/12/23 19:24, Mark Rutland wrote:
-> On Thu, Jan 05, 2023 at 08:40:36AM +0530, Anshuman Khandual wrote:
->> This updates 'struct arm_pmu' for branch stack sampling support later. This
->> adds a new 'features' element in the structure to track supported features,
->> and another 'private' element to encapsulate implementation attributes on a
->> given 'struct arm_pmu'. These updates here will help in tracking any branch
->> stack sampling support, which is being added later. This also adds a helper
->> arm_pmu_branch_stack_supported().
->>
->> This also enables perf branch stack sampling event on all 'struct arm pmu',
->> supporting the feature but after removing the current gate that blocks such
->> events unconditionally in armpmu_event_init(). Instead a quick probe can be
->> initiated via arm_pmu_branch_stack_supported() to ascertain the support.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  drivers/perf/arm_pmu.c       | 3 +--
->>  include/linux/perf/arm_pmu.h | 9 +++++++++
->>  2 files changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
->> index 14a3ed3bdb0b..a85b2d67022e 100644
->> --- a/drivers/perf/arm_pmu.c
->> +++ b/drivers/perf/arm_pmu.c
->> @@ -510,8 +510,7 @@ static int armpmu_event_init(struct perf_event *event)
->>  		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
->>  		return -ENOENT;
->>  
->> -	/* does not support taken branch sampling */
->> -	if (has_branch_stack(event))
->> +	if (has_branch_stack(event) && !arm_pmu_branch_stack_supported(armpmu))
->>  		return -EOPNOTSUPP;
->>  
->>  	return __hw_perf_event_init(event);
->> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
->> index 2a9d07cee927..64e1b2594025 100644
->> --- a/include/linux/perf/arm_pmu.h
->> +++ b/include/linux/perf/arm_pmu.h
->> @@ -80,11 +80,14 @@ enum armpmu_attr_groups {
->>  	ARMPMU_NR_ATTR_GROUPS
->>  };
->>  
->> +#define ARM_PMU_BRANCH_STACK	BIT(0)
->> +
->>  struct arm_pmu {
->>  	struct pmu	pmu;
->>  	cpumask_t	supported_cpus;
->>  	char		*name;
->>  	int		pmuver;
->> +	int		features;
->>  	irqreturn_t	(*handle_irq)(struct arm_pmu *pmu);
->>  	void		(*enable)(struct perf_event *event);
->>  	void		(*disable)(struct perf_event *event);
+On 13.01.2023 05:10, Bjorn Andersson wrote:
+> With the transition of disabling unused clocks at sync_state, rather
+> than late_initcall() it's now possible to drop clk_ignore_unused and
+> unused clock disabled once client drivers have probed. Do this on
+> SC8280XP.
 > 
-> Hmm, we already have the secure_access field separately. How about we fold that
-> in and go with:
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/clk/qcom/dispcc-sc8280xp.c | 1 +
+>  drivers/clk/qcom/gcc-sc8280xp.c    | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> 	unsigned int	secure_access    : 1,
-> 			has_branch_stack : 1;
-
-Something like this would work, but should we use __u32 instead of unsigned int
-to ensure 32 bit width ?
-
--       bool            secure_access; /* 32-bit ARM only */
-+       unsigned int    secure_access   : 1, /* 32-bit ARM only */
-+                       has_branch_stack: 1,
-+                       reserved        : 31;
-
-> 
-> ... that way we have one way to manage flags, we don't need to allocate the
-> bits, and the bulk of the existing code for secure_access can stay as-is.
-
-Right, the changed code also builds on arm32 without any code change.
-
-> 
->> @@ -119,8 +122,14 @@ struct arm_pmu {
->>  
->>  	/* Only to be used by ACPI probing code */
->>  	unsigned long acpi_cpuid;
->> +	void		*private;
-> 
-> Does this need to be on the end of struct arm_pmu, or can it be placed earlier?
-
-This additional 'private' attribute structure sticking out from struct arm_pmu
-should be at the end. But is there any benefit moving this earlier ?
-
-> 
-> The line spacing makes it look like the ACPI comment applies to 'private',
-> which isn't the case.
-
-Sure, will add the following comment, and a space in between.
-
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index f60f7e01acae..c0a090ff7991 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -130,6 +130,8 @@ struct arm_pmu {
- 
-        /* Only to be used by ACPI probing code */
-        unsigned long acpi_cpuid;
-+
-+       /* Implementation specific attributes */
-        void            *private;
- };
-
-> 
->>  };
->>  
->> +static inline bool arm_pmu_branch_stack_supported(struct arm_pmu *armpmu)
->> +{
->> +	return armpmu->features & ARM_PMU_BRANCH_STACK;
->> +}
-> 
-> With the above, this would become:
-> 
-> static inline bool arm_pmu_branch_stack_supported(struct arm_pmu *armpmu)
-> {
-> 	return armpmu->has_branch_stack;
-> }
-
-Right, will change this helper as required.
+> diff --git a/drivers/clk/qcom/dispcc-sc8280xp.c b/drivers/clk/qcom/dispcc-sc8280xp.c
+> index 167470beb369..c84a6481b879 100644
+> --- a/drivers/clk/qcom/dispcc-sc8280xp.c
+> +++ b/drivers/clk/qcom/dispcc-sc8280xp.c
+> @@ -3199,6 +3199,7 @@ static struct platform_driver disp_cc_sc8280xp_driver = {
+>  	.driver = {
+>  		.name = "disp_cc-sc8280xp",
+>  		.of_match_table = disp_cc_sc8280xp_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
+>  
+> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+> index b3198784e1c3..f4fdc5b9663c 100644
+> --- a/drivers/clk/qcom/gcc-sc8280xp.c
+> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
+> @@ -7441,6 +7441,7 @@ static struct platform_driver gcc_sc8280xp_driver = {
+>  	.driver = {
+>  		.name = "gcc-sc8280xp",
+>  		.of_match_table = gcc_sc8280xp_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
+>  
