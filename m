@@ -2,129 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F1D6698E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232696698F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbjAMNn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S241473AbjAMNoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241754AbjAMNmO (ORCPT
+        with ESMTP id S242083AbjAMNoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:42:14 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1029CB1E9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:36:18 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso14404584wmq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=no/No00/dUadTgkiqCjE1V7uzOtAh13kNBL63Zyd1c0=;
-        b=DhEzzOKdo9LfA6gSAquygvXRjkhj9nQ922NqGep8Xbfc8XNBzPihRyc9TdA0EWhTie
-         F76eyr/wtmgYKZ6XjdCJf5vvOthtGWZKWPx/mA7MSTBA3JjYexWThLDxZ7sJp2M8ZALS
-         rISoTp8igr8je9DOIUgZUSqsFHiOSpniyKtpQOQJG6rKiCpAEqbYIeN/zN2hmwnvtbfE
-         Sgr66vV7HeFWnbtilMGnvhWWfTFyjlgVeb0o1EKYUUADymnfI0u5ZT6r0GGmcFqU5EtM
-         DaOcs1aj1uIzelutM4DzyysOUfAMQ1AXioetEYCdGXYfngQZaRiJapNXqR7BOB9IgS37
-         FAcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=no/No00/dUadTgkiqCjE1V7uzOtAh13kNBL63Zyd1c0=;
-        b=mx4GtYTBEzrXl68DX+rYA+vAU0Aem8mKoxAjkZlsrYUJ8o9d2AcA+4+23wS3pMeZgZ
-         23GuYp3sb9mnTxlfy+fGQqvqDhAp2dawuqYgfOI5fkyyr6D6DlkA1Y6GE1sl4ZphtSzG
-         R8ynfihXWdFK0KvZVab9PAza38k/U1qt6ajLE+a+9NfteUkZNI6nksLIJff0eHD7JzFv
-         yvYsPHVX+Zpxr2j+oWRhsgcoYfObBI/H/WoNNxdnd1uvkUpe8IwNxlcKZY3kGpfaR9D7
-         aKTonXVKOssupgvGnn/Fd6tww/ua0abjGEEWlBmaW0Fw7kbHZQcjpBK+r/IHTMuuCpA7
-         y8PQ==
-X-Gm-Message-State: AFqh2kog9lA68Z6vfi0eXKZhbHiV9sKLxArSdEBfLSo693Ygm+tvnSAp
-        YEdWXG+JqrbPyPp0BhzWK9PNiA==
-X-Google-Smtp-Source: AMrXdXtXICIa/h9q5hoEJ0F4W0PHTJ4838F/fZyqJPgglv65iNxCrnXS1zSuU5aqDheMs9b9yFLLDg==
-X-Received: by 2002:a7b:c851:0:b0:3d9:f067:1c32 with SMTP id c17-20020a7bc851000000b003d9f0671c32mr13863320wml.29.1673616976552;
-        Fri, 13 Jan 2023 05:36:16 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:1563:65bf:c344:661e])
-        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b003cf71b1f66csm28900643wms.0.2023.01.13.05.36.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 05:36:15 -0800 (PST)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     zhangqiao22@huawei.com,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v4] sched/fair: limit sched slice duration
-Date:   Fri, 13 Jan 2023 14:36:13 +0100
-Message-Id: <20230113133613.257342-1-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 13 Jan 2023 08:44:08 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969821B9E7;
+        Fri, 13 Jan 2023 05:37:41 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBqXUF009633;
+        Fri, 13 Jan 2023 13:37:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=n2SyNKcK46gx09H9UFtDsHRC5Vbg9kR1yPB5UVVXA/Q=;
+ b=dbAbzpLG/6JC8nrwYrc5qT+MnH8h3MNy3Qe0yvIHxGXLNvAc84HcnnGR52iNC/v2ZH3y
+ BJXLYfql2+i8w/k4UWuvl8ioH9+txvoDnKzc9278a83h0TlbP91c24xIHs68uiIj1LbG
+ j5oGgbUo83wkZSLuLS5SpjmYikcm8E//EHrhM/R76HkPpstND6vAQBpU/c79rJCw200M
+ ObXX1gh6iZv3CqPrelNHFsgq9TpJiNiBFBmFuy++H3mVOLG47OpQ6H/7IsZ11AXa6Wp6
+ s/Q+SW45l8oKYz64zygw8kEwcMQocTg3qThXNyJOh6TKscxftc6L0ETdp0qCo0J4H/Sd dg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n33h60xp5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 13:37:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DDb0d0020109
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 13:37:00 GMT
+Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 05:36:51 -0800
+Message-ID: <36022e14-382e-3d75-9184-509202576f87@quicinc.com>
+Date:   Fri, 13 Jan 2023 19:06:48 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-7-quic_devipriy@quicinc.com>
+ <e5383b73-7026-ede1-387c-5847535438eb@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <e5383b73-7026-ede1-387c-5847535438eb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: lczEDLnIllztC0mbisexd5fhTm4U4643
+X-Proofpoint-GUID: lczEDLnIllztC0mbisexd5fhTm4U4643
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_06,2023-01-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 adultscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=708 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301130089
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In presence of a lot of small weight tasks like sched_idle tasks, normal
-or high weight tasks can see their ideal runtime (sched_slice) to increase
-to hundreds ms whereas it normally stays below sysctl_sched_latency.
 
-2 normal tasks running on a CPU will have a max sched_slice of 12ms
-(half of the sched_period). This means that they will make progress
-every sysctl_sched_latency period.
 
-If we now add 1000 idle tasks on the CPU, the sched_period becomes
-3006 ms and the ideal runtime of the normal tasks becomes 609 ms.
-It will even become 1500ms if the idle tasks belongs to an idle cgroup.
-This means that the scheduler will look for picking another waiting task
-after 609ms running time (1500ms respectively). The idle tasks change
-significantly the way the 2 normal tasks interleave their running time
-slot whereas they should have a small impact.
-
-Such long sched_slice can delay significantly the release of resources
-as the tasks can wait hundreds of ms before the next running slot just
-because of idle tasks queued on the rq.
-
-Cap the ideal_runtime to sysctl_sched_latency to make sure that tasks will
-regularly make progress and will not be significantly impacted by
-idle/background tasks queued on the rq.
-
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-Tested-By: Dietmar Eggemann <dietmar.eggemann@arm.com>
----
-
-Change since v3:
-- Rebased
-- Added Tested tag
-
- kernel/sched/fair.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index e9d906a9bba9..d4db72f8f84e 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4896,7 +4896,13 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
- 	struct sched_entity *se;
- 	s64 delta;
- 
--	ideal_runtime = sched_slice(cfs_rq, curr);
-+	/*
-+	 * When many tasks blow up the sched_period; it is possible that
-+	 * sched_slice() reports unusually large results (when many tasks are
-+	 * very light for example). Therefore impose a maximum.
-+	 */
-+	ideal_runtime = min_t(u64, sched_slice(cfs_rq, curr), sysctl_sched_latency);
-+
- 	delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
- 	if (delta_exec > ideal_runtime) {
- 		resched_curr(rq_of(cfs_rq));
--- 
-2.34.1
-
+On 1/11/2023 3:15 PM, Krzysztof Kozlowski wrote:
+> On 10/01/2023 13:13, devi priya wrote:
+>> From: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+>>
+>> Add initial device tree support for Qualcomm IPQ9574 SoC
+>> and AL02 board
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> Signed-off-by: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+> 
+> Don't use CAPITAL CASE FOR NAMES BUT Camel Case. Although different
+> languages might have different rules, but most cases when transliterated
+> to English (or Latin alphabet), the name Start with capital letter. The
+> same in your case.
+Sure, okay
+> 
+>> ---
+>>   arch/arm64/boot/dts/qcom/Makefile            |   1 +
+>>   arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  69 ++++
+> 
+> One more:
+> 
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+> 
+> Best regards,
+> Krzysztof
+> 
+Best Regards,
+Devi Priya
