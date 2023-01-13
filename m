@@ -2,159 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2FE669803
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5775D669807
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjAMNGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43500 "EHLO
+        id S232755AbjAMNHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241262AbjAMNGT (ORCPT
+        with ESMTP id S232818AbjAMNGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:06:19 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DF0777F1;
-        Fri, 13 Jan 2023 04:53:35 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DCWnIT026966;
-        Fri, 13 Jan 2023 04:53:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=sHS+MWVt42zp5n6cGpK596g9AMg9qy3GV/dfe0+81Bk=;
- b=SO7f7P7PVcEHz4u7T6txd7eW+0KcFS21UOANH6IRYTfjjEpZKf1Zukp4QnwFuLBA3Uvu
- ZbLtA0pNOSApLNdHdNjQjH8ZCAkc94syetD1hl/dLuZle+K/dc5tZE57e4CSVglrp2ph
- BjT1RH7mMUa3iAzS825ThuYVi7siwO4qCTNdb+1/zBpWiKR9ocTD4Z4kfTYzc9HE4itD
- A4StFYDhGGb+lcRv2657XL2b9viUw8FlsD/npqjFgwGKG21jsznlyzENmjrh0WZY7WHF
- an/cCZ1UIf0p0Imk3C/8GqWg9Ud2wZR6oA8r0yYM7hcNHWyu+F9Qi/7z+ANhnJCA4Oxl Fg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3n1k574xh4-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 04:53:31 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 13 Jan
- 2023 04:53:29 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Fri, 13 Jan 2023 04:53:29 -0800
-Received: from localhost.localdomain (unknown [10.110.150.170])
-        by maili.marvell.com (Postfix) with ESMTP id 8E9363F7063;
-        Fri, 13 Jan 2023 04:53:29 -0800 (PST)
-From:   Wojciech Zmuda <wzmuda@marvell.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <jassisinghbrar@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>, <sgoutham@marvell.com>,
-        <devicetree@vger.kernel.org>, Wojciech Zmuda <wzmuda@marvell.com>
-Subject: [PATCH v3 2/2] dt-bindings: mailbox: add Marvell MHU
-Date:   Fri, 13 Jan 2023 04:53:23 -0800
-Message-ID: <20230113125323.3744-3-wzmuda@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230113125323.3744-1-wzmuda@marvell.com>
-References: <20230113125323.3744-1-wzmuda@marvell.com>
+        Fri, 13 Jan 2023 08:06:23 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175F477D0C;
+        Fri, 13 Jan 2023 04:53:53 -0800 (PST)
+Date:   Fri, 13 Jan 2023 12:53:51 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673614431;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=uo4Pn34x3mARkiqqYbo0hcHiXCD+oJvRBLIoK4xAgHk=;
+        b=rBevJTUPS7iy3wUmslENJSCuD3oHuKLmnPDbHfoME+hRNRiKa+AZYhQDNVZs/HtRJlyqpR
+        ciSNjYkcLzmRY7r8K270moGNkw6augD/Pqgk7vpd6vhKunXg4lqgJPRFxXbcH067E9EZr4
+        oABlox9fJ7XYAWK+yjZXa29lf/5Sd/b55EO6dTkrTZlqO7znsuD50oG3TUXr8cCZqwnjjv
+        3Y6I+aVF2dpDiEJn/+x/V66gmgnm+XNCY4zhBCVEUF7bcIpcJ5XLx2BfMDQpZt0osue1Bm
+        clgNog8A1+X5wd9vrOEAnVRDLcmoxjOQrQxOAitjsCuNSWLsv8aakAkEVfBmZg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673614431;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=uo4Pn34x3mARkiqqYbo0hcHiXCD+oJvRBLIoK4xAgHk=;
+        b=n3aNAPVHEm/Ogb1Le9xEcHRdK28QzTTsHodedYe3h46mXZQKjRBKshUBZUU0b44esEgMet
+        rPQgNsIAskPkCcBA==
+From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/gsseg: Add the new <asm/gsseg.h> header to
+ <asm/asm-prototypes.h>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: DPbyGrH68TFaFiJFllOGKJMUBjf-emeD
-X-Proofpoint-GUID: DPbyGrH68TFaFiJFllOGKJMUBjf-emeD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167361443119.4906.4984894590925431359.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marvell Message Handling Unit is a mailbox controller present in
-Marvell OcteonTx and OcteonTX2 SoC family.
+The following commit has been merged into the x86/cpu branch of tip:
 
-Signed-off-by: Wojciech Zmuda <wzmuda@marvell.com>
+Commit-ID:     e12ad468c22065a2826b2fc4c11d2113a7975301
+Gitweb:        https://git.kernel.org/tip/e12ad468c22065a2826b2fc4c11d2113a7975301
+Author:        Ingo Molnar <mingo@kernel.org>
+AuthorDate:    Fri, 13 Jan 2023 13:43:20 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Fri, 13 Jan 2023 13:43:20 +01:00
+
+x86/gsseg: Add the new <asm/gsseg.h> header to <asm/asm-prototypes.h>
+
+Module build needs to be able to pick up the C prototype:
+
+  WARNING: modpost: EXPORT symbol "asm_load_gs_index" [vmlinux] version generation failed, symbol will not be versioned.
+  Is "asm_load_gs_index" prototyped in <asm/asm-prototypes.h>?
+
+Fixes: ae53fa187030 ("x86/gsseg: Move load_gs_index() to its own new header file")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org
 ---
- .../bindings/mailbox/marvell,mhu.yml          | 59 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 60 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mailbox/marvell,mhu.yml
+ arch/x86/include/asm/asm-prototypes.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mailbox/marvell,mhu.yml b/Documentation/devicetree/bindings/mailbox/marvell,mhu.yml
-new file mode 100644
-index 000000000000..3fe8238eefe7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mailbox/marvell,mhu.yml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mailbox/marvell,mhu.yml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell Message Handling Unit
-+
-+maintainers:
-+  - Sujeet Baranwal <sbaranwal@marvell.com>
-+  - Sunil Goutham <sgoutham@marvell.com>
-+  - Wojciech Bartczak <wbartczak@marvell.com>
-+
-+description:
-+  The Control-Processors Cluster (CPC) provides Arm-platform specification
-+  entities for managing the system. One of the CPC processors is the System
-+  Control Processor (SCP). The SCP is responsible, among others, for booting
-+  the chip, clock and power initialization, controlling power consumption
-+  through DVFS, monitoring temperature sensors and controlling AVS. The SCP,
-+  as each XCP, contains mailboxes for software-to-software communications.
-+  Mailbox writes cause an interrupt to the local XCP core or to the AP.
-+  This driver exposes AP-SCP Message Handling Unit to the system, providing
-+  the mailbox communication mechanism to the system, with the intention
-+  of plugging into the SCMI framework. It is designed to work with Marvell
-+  OcteonTX and OcteonTX2-based platforms.
-+  Mailbox has no other usage than SCMI communication. In case of
-+  configurations running without SCMI support it should be disabled.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+        - enum:
-+          - marvell,octeontx-mhu
-+          - marvell,octeontx2-mhu
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#mbox-cells":
-+    description: Index of the channel
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#mbox-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    / {
-+        mailbox: mailbox {
-+            compatible = "marvell,octeontx2-mhu";
-+            reg = <0xe000 0 0 0 0>; /* DEVFN = 0xe0 (1c:0) */
-+            #mbox-cells = <1>;
-+    };
-+
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 57db5055cdd6..685bdb2c1735 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11328,6 +11328,7 @@ M:	Sunil Goutham <sgoutham@marvell.com>
- M:	Wojciech Bartczak <wbartczak@marvell.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/mailbox/marvell,mhu.yml
- F:	drivers/mailbox/marvell_mhu.c
+diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
+index 8f80de6..b1a98fa 100644
+--- a/arch/x86/include/asm/asm-prototypes.h
++++ b/arch/x86/include/asm/asm-prototypes.h
+@@ -12,6 +12,7 @@
+ #include <asm/special_insns.h>
+ #include <asm/preempt.h>
+ #include <asm/asm.h>
++#include <asm/gsseg.h>
  
- MATROX FRAMEBUFFER DRIVER
--- 
-2.17.1
-
+ #ifndef CONFIG_X86_CMPXCHG64
+ extern void cmpxchg8b_emu(void);
