@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D824166979D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B8A669792
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241533AbjAMMpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S230421AbjAMMnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241705AbjAMMnH (ORCPT
+        with ESMTP id S241566AbjAMMnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:43:07 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3A98792E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:46 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id vm8so51995307ejc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:46 -0800 (PST)
+        Fri, 13 Jan 2023 07:43:06 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5699887F39
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:48 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id u19so51946444ejm.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:35:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NGS8p58llTH0j/JtmBIf8IcqQNNb3dOfgpZWMO+4qxc=;
-        b=G5XERQe1fAt3Kb9rlbCJGlE/89ixGm3qrHLrpxM52o9W/0TyCmxSK8KQYB+DUYZTCl
-         AY4qBORSFTisRda10PDMY+5R4iuPQsg9ejNoGN0oAsC0KmmDTingntoX093fWxIcrj+l
-         UCE5EExAVjAxNtM0FNgYMtoLw/XQgmXjT6fiMaAgJz92EOyw+9QhW40mYzZl3TtoVTnG
-         xTq+RBQHqeDUbXoAayRw0mInjrPtl8dXWHZBcCLRPNTqRIel4A3i1BVADEN1KuHalqpG
-         rDbDh9YTvY3a008v1wbhhbnxzKGt+Z/U9hhC072Jib9MCA5BUVcpEzd1sOxgmJ3eCboL
-         /rog==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w8mQ1DNdko28cUxvjVBwoXrO008ZDGIG0DMI/J1nWT4=;
+        b=spZ9bBE74IdXZvFGyhmamqe/1SDBwGLUSQcAXBhiwbLOeW5LdETOuSw5m+TSnCduvh
+         i1dq8pBx80HiBAQcGyxEY7bGUwTu7HGxSxh5IVd2vJJzbwTudnAkAOm1FZMZACIgnAUG
+         LJFOsRpwpphyUe8m9LlCxV+VWqB3hnbrDjtKvi8zr4L8jJ7bq1yM+6S8hSkauyzAELBb
+         h8cwpFX/WD9jR0CJed2lXICxX6+pQu+9OhUREJogH4PvwJZEDLXjcm1ihM0rQwzO7Ya5
+         859r3Uyiovs6+qkiWv/7Wy163pJ4VOkBZlrkbGWRu9MdVP8K0Q7Rt7so9rV00GVCbZko
+         T0/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NGS8p58llTH0j/JtmBIf8IcqQNNb3dOfgpZWMO+4qxc=;
-        b=4SffvmmGJJbamS0cfyQtOqlqwsiYB+oORXaTGGSlupbz3pDJUYB9fKDOP+QQPPsqGQ
-         V00SP2+avgK9DEvogOBtfop9lnhIoYDJ/2wgVZs4pt14S7p4dTe0Hy/1lcQu7KscGgs9
-         rZnFmaC6GqisTjTkKTODwusb3VPsgHl4g7+PzxXhjioBtSRRFZXxxvx+tK7aiZmGzIGM
-         P27OlHo7mrsO8apLAUStj68P+7taLqt5aKf7PhAHHC5B3Ofz4t7nu/b4wAHvGAidcobd
-         liJmEZxYUICVy6HicVadqjwHG3eO/5KIDakzI0yJ7P531s1xGmFqTq62drw/aohLKw7J
-         HacQ==
-X-Gm-Message-State: AFqh2koFxZPfNszykwGCTS8rT54zJGmzta7QjHERb3pKcBFMaCCAVq3P
-        tUQq874yf7nAtBdJssNYUdpiTA==
-X-Google-Smtp-Source: AMrXdXt9Y/gN9hPS5KrmX/hHe2LMLmsSTU6vMBSp1QqWDvsKO+j0a8BW8SZ67KSgwDQIo/CICV+jqA==
-X-Received: by 2002:a17:906:a18c:b0:7c1:5467:39b1 with SMTP id s12-20020a170906a18c00b007c1546739b1mr70848155ejy.72.1673613318750;
-        Fri, 13 Jan 2023 04:35:18 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w8mQ1DNdko28cUxvjVBwoXrO008ZDGIG0DMI/J1nWT4=;
+        b=i0jvVSd2/fC66Ej97A+EUsDcDGMSknRJ4ik1Ws8uA1DVdDRyRhES0nhp6kByCmS6aT
+         +9RCw7TZAnIhbsS3fS5LnzlM8tV7KVpDo+e0GUcNNrz7/LQBGqlzNBcFVhdVkhGlImhs
+         fKotX/mKVqdzsBWye4u4dMwY15N5QMlIu7hGxYv6SYBk2poVq9xLBsVUaEajB3YjILlO
+         CeP5bNGB7Lv+FiewCqEP2Tjo3LwB0a0V5XynCYa77VgJtWFPiNH09emLRv+LnDTQgAai
+         oD8+9IyZCkXEgvrtdl326phEzpEc8L9PLZSZ1SU2JQfx8vmYE99rdqlhQ9yA5R4JDZ9V
+         B86A==
+X-Gm-Message-State: AFqh2kqcQyIZERIYQEmOOacv038dOeJD0pbgl8fKquWZzdYC0xswfxKL
+        vX3Hke4lC0dOFCOkabJnPIixC+umht8+jPq+PPE=
+X-Google-Smtp-Source: AMrXdXsjRgGq/XdmuiDTy/O+NIzOeI0x1b11hX7Z1ViInZBjrvxvNGqtTAecfa6o7Iznz1GQ/tHnaQ==
+X-Received: by 2002:a17:907:7f22:b0:869:c5a4:e1a7 with SMTP id qf34-20020a1709077f2200b00869c5a4e1a7mr4493526ejc.62.1673613319454;
+        Fri, 13 Jan 2023 04:35:19 -0800 (PST)
 Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
         by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b00846734faa9asm8386323ejo.164.2023.01.13.04.35.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 04:35:18 -0800 (PST)
+        Fri, 13 Jan 2023 04:35:19 -0800 (PST)
 From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>
 To:     Jens Axboe <axboe@kernel.dk>
@@ -57,11 +58,14 @@ Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
         Philipp Reisner <philipp.reisner@linbit.com>,
         linux-block@vger.kernel.org,
         =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-Subject: [RESEND PATCH 0/3] DRBD file structure reorganization
-Date:   Fri, 13 Jan 2023 13:35:03 +0100
-Message-Id: <20230113123506.144082-1-christoph.boehmwalder@linbit.com>
+        <christoph.boehmwalder@linbit.com>,
+        Joel Colledge <joel.colledge@linbit.com>
+Subject: [PATCH 1/3] drbd: split off drbd_buildtag into separate file
+Date:   Fri, 13 Jan 2023 13:35:04 +0100
+Message-Id: <20230113123506.144082-2-christoph.boehmwalder@linbit.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230113123506.144082-1-christoph.boehmwalder@linbit.com>
+References: <20230113123506.144082-1-christoph.boehmwalder@linbit.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,30 +78,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make our lives easier when sending future, more complex patches,
-we want to align the file structure as best as possible with what we
-have in the out-of-tree module.
+To be more similar to what we do in the out-of-tree module and ease the
+upstreaming process.
 
-Christoph Böhmwalder (3):
-  drbd: split off drbd_buildtag into separate file
-  drbd: drop API_VERSION define
-  drbd: split off drbd_config into separate file
-
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Reviewed-by: Joel Colledge <joel.colledge@linbit.com>
+---
  drivers/block/drbd/Makefile        |  2 +-
  drivers/block/drbd/drbd_buildtag.c | 22 ++++++++++++++++++++++
- drivers/block/drbd/drbd_debugfs.c  |  2 +-
- drivers/block/drbd/drbd_int.h      |  1 +
- drivers/block/drbd/drbd_main.c     | 20 +-------------------
- drivers/block/drbd/drbd_proc.c     |  2 +-
- include/linux/drbd.h               |  7 -------
- include/linux/drbd_config.h        | 16 ++++++++++++++++
- include/linux/drbd_genl_api.h      |  2 +-
- 9 files changed, 44 insertions(+), 30 deletions(-)
+ drivers/block/drbd/drbd_main.c     | 18 ------------------
+ 3 files changed, 23 insertions(+), 19 deletions(-)
  create mode 100644 drivers/block/drbd/drbd_buildtag.c
- create mode 100644 include/linux/drbd_config.h
 
-
-base-commit: f596da3efaf4130ff61cd029558845808df9bf99
+diff --git a/drivers/block/drbd/Makefile b/drivers/block/drbd/Makefile
+index c93e462130ff..67a8b352a1d5 100644
+--- a/drivers/block/drbd/Makefile
++++ b/drivers/block/drbd/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-drbd-y := drbd_bitmap.o drbd_proc.o
++drbd-y := drbd_buildtag.o drbd_bitmap.o drbd_proc.o
+ drbd-y += drbd_worker.o drbd_receiver.o drbd_req.o drbd_actlog.o
+ drbd-y += drbd_main.o drbd_strings.o drbd_nl.o
+ drbd-y += drbd_interval.o drbd_state.o
+diff --git a/drivers/block/drbd/drbd_buildtag.c b/drivers/block/drbd/drbd_buildtag.c
+new file mode 100644
+index 000000000000..956a4d5c339b
+--- /dev/null
++++ b/drivers/block/drbd/drbd_buildtag.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/drbd.h>
++#include <linux/module.h>
++
++const char *drbd_buildtag(void)
++{
++	/* DRBD built from external sources has here a reference to the
++	 * git hash of the source code.
++	 */
++
++	static char buildtag[38] = "\0uilt-in";
++
++	if (buildtag[0] == 0) {
++#ifdef MODULE
++		sprintf(buildtag, "srcversion: %-24s", THIS_MODULE->srcversion);
++#else
++		buildtag[0] = 'b';
++#endif
++	}
++
++	return buildtag;
++}
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index 7213ffd69a16..345bfac441da 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -3776,24 +3776,6 @@ _drbd_insert_fault(struct drbd_device *device, unsigned int type)
+ }
+ #endif
+ 
+-const char *drbd_buildtag(void)
+-{
+-	/* DRBD built from external sources has here a reference to the
+-	   git hash of the source code. */
+-
+-	static char buildtag[38] = "\0uilt-in";
+-
+-	if (buildtag[0] == 0) {
+-#ifdef MODULE
+-		sprintf(buildtag, "srcversion: %-24s", THIS_MODULE->srcversion);
+-#else
+-		buildtag[0] = 'b';
+-#endif
+-	}
+-
+-	return buildtag;
+-}
+-
+ module_init(drbd_init)
+ module_exit(drbd_cleanup)
+ 
 -- 
 2.38.1
 
