@@ -2,116 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE60668E9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 07:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F12A668C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 07:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241051AbjAMG7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 01:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S229825AbjAMGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 01:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjAMG47 (ORCPT
+        with ESMTP id S233125AbjAMGTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 01:56:59 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A454F81C26;
-        Thu, 12 Jan 2023 22:42:28 -0800 (PST)
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 192.168.8.21
-        by mg.richtek.com with MailGates ESMTP Server V3.0(2734:0:AUTH_RELAY)
-        (envelope-from <prvs=1372DA5DC2=cy_huang@richtek.com>); Fri, 13 Jan 2023 14:23:39 +0800 (CST)
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(16476:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Fri, 13 Jan 2023 14:17:48 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 13 Jan
- 2023 14:17:47 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Fri, 13 Jan 2023 14:17:47 +0800
-From:   <cy_huang@richtek.com>
-To:     <sre@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <alina_yu@richtek.com>, <cy_huang@richtek.com>,
-        <u0084500@gmail.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v8 3/3] Documentation: power: rt9471: Document exported sysfs entries
-Date:   Fri, 13 Jan 2023 14:17:46 +0800
-Message-ID: <1673590666-24618-4-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1673590666-24618-1-git-send-email-cy_huang@richtek.com>
-References: <1673590666-24618-1-git-send-email-cy_huang@richtek.com>
+        Fri, 13 Jan 2023 01:19:23 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A00160D1;
+        Thu, 12 Jan 2023 22:18:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0FE8ECE1FD0;
+        Fri, 13 Jan 2023 06:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2A6C433EF;
+        Fri, 13 Jan 2023 06:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673590718;
+        bh=wEWDjWNp9HFA9trnITWiDujwpu+PYv8VBDs0iEs8fKQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=s4lca7SYzgmB7X8BuvQifCXHQU8caIg0muaQPNrePzqJnrURktGBRve08Z+9lwFuF
+         f9U+2Eh77R1ZuC/4EbMpRou497ecuMLxlEIzDxQ2f/54CDiN3ocukVORldYqv42stb
+         q2s3/5flzZ64aRCssNtknitwJNgHyBcEG5/UMmQIHN4EQs4s4GIsR0bIvHes8V03Wj
+         r7nwzIT6lcYUUZpk20+0NXxFFWx8DSBSsmrsEcMQvq3ZpCyS951n5OzsxXTNJnHdnv
+         Z4JzrM41cH2Z1duzJMrU6QuRc9nOb1Ur71tLeO/1Xs0NymJMmxam44tjT3zfRzGO2U
+         FEsG+K79RoGQQ==
+Date:   Thu, 12 Jan 2023 22:18:36 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 net-next 03/12] docs: ethtool-netlink: document
+ interface for MAC Merge layer
+Message-ID: <20230112221836.0b1e6021@kernel.org>
+In-Reply-To: <20230111161706.1465242-4-vladimir.oltean@nxp.com>
+References: <20230111161706.1465242-1-vladimir.oltean@nxp.com>
+        <20230111161706.1465242-4-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, 11 Jan 2023 18:16:57 +0200 Vladimir Oltean wrote:
+> Show details about the structures passed back and forth related to MAC
+> Merge layer configuration, state and statistics. The rendered htmldocs
+> will be much more verbose due to the kerneldoc references.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+> v1->v2: patch is new
+> 
+>  Documentation/networking/ethtool-netlink.rst | 103 +++++++++++++++++++
+>  Documentation/networking/statistics.rst      |   1 +
+>  2 files changed, 104 insertions(+)
+> 
+> diff --git a/Documentation/networking/ethtool-netlink.rst b/Documentation/networking/ethtool-netlink.rst
+> index f10f8eb44255..490c2280ce4f 100644
+> --- a/Documentation/networking/ethtool-netlink.rst
+> +++ b/Documentation/networking/ethtool-netlink.rst
+> @@ -223,6 +223,8 @@ Userspace to kernel:
+>    ``ETHTOOL_MSG_PSE_SET``               set PSE parameters
+>    ``ETHTOOL_MSG_PSE_GET``               get PSE parameters
+>    ``ETHTOOL_MSG_RSS_GET``               get RSS settings
+> +  ``ETHTOOL_MSG_MM_GET``                get MAC merge layer state
+> +  ``ETHTOOL_MSG_MM_SET``                set MAC merge layer parameters
+>    ===================================== =================================
+>  
+>  Kernel to userspace:
+> @@ -265,6 +267,7 @@ Kernel to userspace:
+>    ``ETHTOOL_MSG_MODULE_GET_REPLY``         transceiver module parameters
+>    ``ETHTOOL_MSG_PSE_GET_REPLY``            PSE parameters
+>    ``ETHTOOL_MSG_RSS_GET_REPLY``            RSS settings
+> +  ``ETHTOOL_MSG_MM_GET_REPLY``             MAC merge layer status
+>    ======================================== =================================
+>  
+>  ``GET`` requests are sent by userspace applications to retrieve device
+> @@ -1716,6 +1719,104 @@ being used. Current supported options are toeplitz, xor or crc32.
+>  ETHTOOL_A_RSS_INDIR attribute returns RSS indrection table where each byte
+>  indicates queue number.
+>  
+> +MM_GET
+> +======
+> +
+> +Retrieve 802.3 MAC Merge parameters.
+> +
+> +Request contents:
+> +
+> +  ====================================  ======  ==========================
+> +  ``ETHTOOL_A_MM_HEADER``               nested  request header
+> +  ====================================  ======  ==========================
+> +
+> +Kernel response contents:
+> +
+> +  ================================  ======  ===================================
+> +  ``ETHTOOL_A_MM_HEADER``           Nested  request header
+> +
+> +  ``ETHTOOL_A_MM_SUPPORTED``        Bool    set if device supports the MM layer
 
-Document the settings exported by rt9471 charger driver through sysfs entries:
-- sysoff_enable
-- port_detect_enable
+I'm guessing the empty lines are to improve readability?
+(They are not required for the table to render correctly.)
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Since v6:
-- Explain more details for sysoff_enable attribute.
+Why did you capitalize the types, tho?
 
-Since v5:
-- Recover all the change in sysfs-class-power.
-- New a sysfs-class-power-rt9471 file.
-- Remove 'charge_term_enable' sysfs entry, directly integrate it in
-  'charge_term_current' power supply property control.
+> +  ``ETHTOOL_A_MM_PMAC_ENABLED``     Bool    set if RX of preemptible and SMD-V
+> +                                            frames is enabled
 
----
- Documentation/ABI/testing/sysfs-class-power-rt9471 | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9471
+s/is/are/ ?
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/Documentation/ABI/testing/sysfs-class-power-rt9471
-new file mode 100644
-index 00000000..38227a8
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
-@@ -0,0 +1,32 @@
-+What:		/sys/class/power_supply/rt9471-*/sysoff_enable
-+Date:		Oct 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the sysoff mode of rt9471 charger devices.
-+		If enabled and the input is removed, the internal battery FET is turned
-+		off to reduce the leakage from the BAT pin. See device datasheet for details.
-+		It's commonly used when the product enter shipping stage. After entering
-+		shipping mode, only 'VBUS' or 'Power key" pressed can make it leave this
-+		mode. 'Disable' also can help to leave it, but it's more like to abort
-+		the action before the device really enter shipping mode.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9471-*/port_detect_enable
-+Date:		Oct 2022
-+KernelVersion:	6.1
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry allows enabling the USB BC12 port detect function of rt9471 charger
-+		devices. If enabled and VBUS is inserted, device will start to do the BC12
-+		port detect and report the usb port type when port detect is done. See
-+		datasheet for details. Normally controlled when TypeC/USBPD port integrated.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
--- 
-2.7.4
+> +  ``ETHTOOL_A_MM_TX_ENABLED``       Bool    set if TX of preemptible frames is
+> +                                            administratively enabled (might be
+> +                                            inactive if verification failed)
+> +
+> +  ``ETHTOOL_A_MM_TX_ACTIVE``        Bool    set if TX of preemptible frames is
+> +                                            operationally enabled
+> +
+> +  ``ETHTOOL_A_MM_ADD_FRAG_SIZE``    U32     minimum size of transmitted
+> +                                            non-final fragments, in octets
+> +
+> +  ``ETHTOOL_A_MM_VERIFY_ENABLED``   Bool    set if TX of SMD-V frames is
+> +                                            administratively enabled (TX will
+> +                                            not take place when port is not up)
+
+The sentence in the brackets seems obvious, is there some special 
+MM meaning to "port is not up"? You're not talking about the link
+being up?
+
+> +  ``ETHTOOL_A_MM_VERIFY_STATUS``    U8      state of the Verify function
+
+Only places you say "Verify function" rather than just "verification",
+not sure that's on purpose.
+
+> +  ``ETHTOOL_A_MM_VERIFY_TIME``      U32     delay between verification attempts
+> +
+> +  ``ETHTOOL_A_MM_MAX_VERIFY_TIME``  U32     maximum interval supported by
+
+s/interval/verification interval/ ?
+
+> +                                            device
+> +
+> +  ``ETHTOOL_A_MM_STATS``            Nested  IEEE 802.3-2018 subclause 30.14.1
+> +                                            oMACMergeEntity statistics counters
+> +
+
+The empty line between last entry and delimiter can go
+
+> +  ================================  ======  ===================================
+> +
+> +If ``ETHTOOL_A_MM_SUPPORTED`` is reported as false, the other netlink
+> +attributes will be absent.
+
+Why not return -EOPNOTSUPP?
+You do so in case driver does not have the op:
+
++	if (!ops->get_mm)
++		return -EOPNOTSUPP;
 
