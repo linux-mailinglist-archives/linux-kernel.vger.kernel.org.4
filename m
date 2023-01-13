@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEA5668AAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC38D668AB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238487AbjAMEM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 23:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S234780AbjAMENQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 23:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbjAMELz (ORCPT
+        with ESMTP id S234718AbjAMEL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 23:11:55 -0500
+        Thu, 12 Jan 2023 23:11:56 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1123761313;
-        Thu, 12 Jan 2023 20:11:41 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30D3TBG3007409;
-        Fri, 13 Jan 2023 04:11:38 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D07BA0;
+        Thu, 12 Jan 2023 20:11:43 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30D472Ji009477;
+        Fri, 13 Jan 2023 04:11:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=FgrnE3uDR31VvIPVFnTjM4rDKI7sAez5H4TTb8LGUUA=;
- b=EYQ5akbvOuIzRQ98P+kKsFO3lz8Wgk9pDfnsoUKbTMjLgRBRFjbNt0jDNus4rquDGAw1
- j6sV5CNBv0uhWbmLm2ASrf+j2YAvxHBjTqNUFCotnI6Y2UbbRrxBF4uCWSNK/8E5lwwE
- 1BtdEIDhRiu5+0EgLdgtMMnMbcGtE0XMU7MUhj0JcxjlirPbOyHScoFkcL8ojXGiuiOF
- p92A/ynJdhZmCpJ2sNd9A/TnVhQ0BhkhS1BuD871iG8RU3yWxq2EWY/y3GFIG4qCM4W9
- a4bIhIRYOdXWZnGCkFj7sslm50r+tHT6i7gXTQoYlxkn1o/W3Fn4Xt0i3cOZspMsvxyd zQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2jghsnev-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=qcppdkim1;
+ bh=FRnM/dodPKY9NgBPb57hwiI1wCh0wHUvAf4TQWCuAFE=;
+ b=JmPDC/ZkRVV5ddX+Q/m3/zwIbRIwoWAhCA5NrURf0etyKZsDJpkEf7Uc+YbJacdgOooE
+ 9B3cYS9FVZ/VEvolElKZo83qvOte6RsaT0Xl2SpLjKOgnob3wEj/SgUNZAvWYoD/JDQH
+ gtHIEzFIjB7Gj7dqkX9CiXTn1rxcINiDrWGBactXC24fAgKnIkxFT/bd2GrHY4O/X9hN
+ tsG+df6iug5b/Ype1OUunozIeDRoMx2P3LelR8GsEl/gOi5pIsYply09/1d3xZVnhsda
+ NEgD+ATlpwRozTk9HvB2qoO5ZJbts4DNtZKo1LwMs1IGldTaCtQ4TphUWRWtnG7JNbL2 SA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2fwpt1sx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 04:11:38 +0000
+        Fri, 13 Jan 2023 04:11:39 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30D4Bbc3031173
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30D4Bb44001432
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 13 Jan 2023 04:11:37 GMT
 Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
@@ -51,10 +51,12 @@ CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
         Johan Hovold <johan@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v2 0/4] soc: qcom: Introduce PMIC GLINK
-Date:   Thu, 12 Jan 2023 20:11:28 -0800
-Message-ID: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+Subject: [PATCH v2 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+Date:   Thu, 12 Jan 2023 20:11:29 -0800
+Message-ID: <20230113041132.4189268-2-quic_bjorande@quicinc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -63,15 +65,15 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oP24DT4V-EEved4HU8fi3a0WIQXF36Nh
-X-Proofpoint-ORIG-GUID: oP24DT4V-EEved4HU8fi3a0WIQXF36Nh
+X-Proofpoint-GUID: QSBG86Tg4kRlR4R91biZ6KowVJDgxMNQ
+X-Proofpoint-ORIG-GUID: QSBG86Tg4kRlR4R91biZ6KowVJDgxMNQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-12_14,2023-01-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- clxscore=1011 bulkscore=0 impostorscore=0 mlxlogscore=852
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 spamscore=0 impostorscore=0
+ malwarescore=0 mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2301130026
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
@@ -82,33 +84,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements the base PMIC GLINK driver, a power_supply driver and a
-driver for the USB Type-C altmode protocol. This has been tested and
-shown to provide battery information, USB Type-C switch and mux requests
-and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Bjorn Andersson (4):
-  dt-bindings: soc: qcom: Introduce PMIC GLINK binding
-  soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
-  soc: qcom: pmic_glink: Introduce altmode support
-  power: supply: Introduce Qualcomm PMIC GLINK power supply
+The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
+platforms and implement USB Type-C handling and battery management.
+This binding describes the component in the OS used to communicate with
+the firmware and connect it's resources to those described in the
+Devicetree, particularly the USB Type-C controllers relationship with
+USB and DisplayPort components.
 
- .../bindings/soc/qcom/qcom,pmic-glink.yaml    |  102 ++
- drivers/power/supply/Kconfig                  |    9 +
- drivers/power/supply/Makefile                 |    1 +
- drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
- drivers/soc/qcom/Kconfig                      |   15 +
- drivers/soc/qcom/Makefile                     |    2 +
- drivers/soc/qcom/pmic_glink.c                 |  336 ++++
- drivers/soc/qcom/pmic_glink_altmode.c         |  477 ++++++
- include/linux/soc/qcom/pmic_glink.h           |   32 +
- 9 files changed, 2395 insertions(+)
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+
+Changes since v1:
+- Added reg under connector, to identify multiple connectors
+- Updated maintainer email
+
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
- create mode 100644 drivers/power/supply/qcom_battmgr.c
- create mode 100644 drivers/soc/qcom/pmic_glink.c
- create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
- create mode 100644 include/linux/soc/qcom/pmic_glink.h
 
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+new file mode 100644
+index 000000000000..a79dd0ed9275
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/qcom/qcom,pmic-glink.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm PMIC GLINK firmware interface for battery management, USB
++  Type-C and other things.
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++
++description:
++  The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
++  platforms and implement USB Type-C handling and battery management. This
++  binding describes the component in the OS used to communicate with the
++  firmware and connect it's resources to those described in the Devicetree,
++  particularly the USB Type-C controllers relationship with USB and DisplayPort
++  components.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - qcom,sc8180x-pmic-glink
++          - qcom,sc8280xp-pmic-glink
++          - qcom,sm8350-pmic-glink
++      - const: qcom,pmic-glink
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++patternProperties:
++  '^connector@\d$':
++    $ref: /schemas/connector/usb-connector.yaml#
++
++    properties:
++      reg: true
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |+
++    pmic-glink {
++        compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        connector@0 {
++            compatible = "usb-c-connector";
++            reg = <0>;
++            power-role = "dual";
++            data-role = "dual";
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    endpoint {
++                        remote-endpoint = <&usb_role>;
++                    };
++                };
++
++                port@1 {
++                    reg = <1>;
++
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++
++                    endpoint@0 {
++                        reg = <0>;
++                        remote-endpoint = <&qmp_out>;
++                    };
++
++                    endpoint@1 {
++                        reg = <1>;
++                        remote-endpoint = <&displayport_hpd>;
++                    };
++                };
++
++                port@2 {
++                    reg = <2>;
++                    endpoint {
++                        remote-endpoint = <&sbu_mux>;
++                    };
++                };
++            };
++        };
++    };
++...
++
 -- 
 2.37.3
 
