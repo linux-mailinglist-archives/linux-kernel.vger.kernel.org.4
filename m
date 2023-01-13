@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB446697C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1636697C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240696AbjAMMzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S241569AbjAMMzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241650AbjAMMzA (ORCPT
+        with ESMTP id S240759AbjAMMzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:55:00 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C650DAE48;
-        Fri, 13 Jan 2023 04:41:43 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ntgyg69p0z6J9YS;
-        Fri, 13 Jan 2023 20:41:31 +0800 (CST)
-Received: from localhost (10.81.201.219) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
- 2023 12:41:40 +0000
-Date:   Fri, 13 Jan 2023 12:41:39 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH v6 5/8] cxl/mem: Trace Memory Module Event Record
-Message-ID: <20230113124139.000034c0@Huawei.com>
-In-Reply-To: <20221216-cxl-ev-log-v6-5-346583105b30@intel.com>
-References: <20221216-cxl-ev-log-v6-0-346583105b30@intel.com>
-        <20221216-cxl-ev-log-v6-5-346583105b30@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 13 Jan 2023 07:55:22 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BFE76206
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:42:08 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id bn6so22336320ljb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:42:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7bDIwWVCRlNTvDwsFQzlmS++5tBa1uCLSFWFBYXobMg=;
+        b=U7FNcxeX7ENbW2naYg7iLVlsfQapVqotNClbPON1ANwn5eTAyNLN5fyvLfYf1VPuRQ
+         w0q8RkZI6RfMN4WWT3EiA7ELAwLS6ikloGJ89/eL6nvfh1MWepVRuAL7PIRQdSa+tE4D
+         PVDZbygsRQOXoor1Pk1O+aNw5ZHZKgzWfrtSHfdBpwsb50enPr+G0LTZi5Bu+QWI446c
+         zwizqwSneIPu6dAPoGCoxQ/yC9rAAh7ShUSruA+ESxliEnKCZfo0mEYhKWJvHIefCp5p
+         pSiobhM5yquAOqpfeS96B9wUhPraZEAZBOkbt7dSmkK1JjC7eGIsAVgGJ0HeyhMBmGqc
+         V25A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7bDIwWVCRlNTvDwsFQzlmS++5tBa1uCLSFWFBYXobMg=;
+        b=7X7Ni1ONaw5gqgHc+OaapdxEuS10Og2YYGy/gdcPDYgtq/RkZB+9LzzpsfIgIUKpNj
+         GAN512VV5JYEjIheeBjKiT8cmjXPNwUchiO0d+NFtAgqldEWkKkbIxIEu+EpkuT1lkHH
+         3G1KeX7pX6KvRzBgvMHXb5l3QE3eYWIz9jR5IEMquY1iBT3jKdNBZUFiHtEF92GyM6BJ
+         AT761vQ6IAFlepDzqIq4iIP5EFTnwrizQus+fPobYkt2MBkBuwtJa8JipLCi5GVWp3Fl
+         aFU3aYHRn052rVYpk6b02EBsvUTsYVA9ZH1Z5Xu7jT0cckXfCdAzEHx1ePGWk88x6Xpx
+         oonQ==
+X-Gm-Message-State: AFqh2krFtwDpWYzXTZSRCgZRQvDXM6HiQ6gpCChwaAr4Mf7quQRg2piv
+        AR8OfJMZAJdB1ShXXhhf5LmxBJfiDvtctdMqii0=
+X-Google-Smtp-Source: AMrXdXvawrAjUrqJc+DNIRjS6r4dZRlXVb3OOcKx8iYpG16TpolJtyhs/mTNOJ0Zt1kFid5aR6FzgFyNWWCJnxXmhzk=
+X-Received: by 2002:a2e:9e81:0:b0:281:d9b5:9491 with SMTP id
+ f1-20020a2e9e81000000b00281d9b59491mr1222143ljk.170.1673613726108; Fri, 13
+ Jan 2023 04:42:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.201.219]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a2e:b5b0:0:0:0:0:0 with HTTP; Fri, 13 Jan 2023 04:42:05
+ -0800 (PST)
+Reply-To: ska.anna794@gmail.com
+From:   Anna <jannette71dval@gmail.com>
+Date:   Fri, 13 Jan 2023 13:42:05 +0100
+Message-ID: <CAFkFQMxBg+uq8nmCSyPYEbEaYw_HgQt5KqFP1Wqx=dFbnKEv7g@mail.gmail.com>
+Subject: Hospital
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:229 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5375]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ska.anna794[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jannette71dval[at]gmail.com]
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023 11:42:24 -0800
-Ira Weiny <ira.weiny@intel.com> wrote:
+Sincerely,
 
-> CXL rev 3.0 section 8.2.9.2.1.3 defines the Memory Module Event Record.
-> 
-> Determine if the event read is memory module record and if so trace the
-> record.
-> 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Typo inline.  With that fixed
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Dear friend, how are you, I have a charity donation fund that I want
+Contribute by helping. Please try to contact me to know more
+information. Hereby I will tell you more about myself and my plans
+Money when I hear from you.
 
-> diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-> index b6321cfb1d9f..ebb4c8ce8587 100644
-> --- a/drivers/cxl/core/trace.h
-> +++ b/drivers/cxl/core/trace.h
-> @@ -439,6 +439,149 @@ TRACE_EVENT(cxl_dram,
->  	)
->  );
->  
-> +/*
-> + * Memory Module Event Record - MMER
-> + *
-> + * CXL res 3.0 section 8.2.9.2.1.3; Table 8-45
-> + */
-> +#define CXL_MMER_HEALTH_STATUS_CHANGE		0x00
-> +#define CXL_MMER_MEDIA_STATUS_CHANGE		0x01
-> +#define CXL_MMER_LIFE_USED_CHANGE		0x02
-> +#define CXL_MMER_TEMP_CHANGE			0x03
-> +#define CXL_MMER_DATA_PATH_ERROR		0x04
-> +#define CXL_MMER_LAS_ERROR			0x05
-
-CXL_MMER_LSA_ERROR
-
-> +#define show_dev_evt_type(type)	__print_symbolic(type,			   \
-> +	{ CXL_MMER_HEALTH_STATUS_CHANGE,	"Health Status Change"	}, \
-> +	{ CXL_MMER_MEDIA_STATUS_CHANGE,		"Media Status Change"	}, \
-> +	{ CXL_MMER_LIFE_USED_CHANGE,		"Life Used Change"	}, \
-> +	{ CXL_MMER_TEMP_CHANGE,			"Temperature Change"	}, \
-> +	{ CXL_MMER_DATA_PATH_ERROR,		"Data Path Error"	}, \
-> +	{ CXL_MMER_LAS_ERROR,			"LSA Error"		}  \
-> +)
+Waiting for your reply to provide you with more details.
