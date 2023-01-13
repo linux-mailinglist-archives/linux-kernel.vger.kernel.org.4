@@ -2,173 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CA9669E1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0CB669E1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjAMQ2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S229924AbjAMQ31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjAMQ2L (ORCPT
+        with ESMTP id S229926AbjAMQ2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:28:11 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C977EA52
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:22:24 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id cf18so47103972ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:22:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bexLBDu2Jcqr900kwtHlEd3vc21Me48gshjDc+jPY5U=;
-        b=iGbfa1kPYcyjjbwACbG3VaTIbW+t0C83bDns2PeqtRAE3fKZyPa/WEmxMc79C7n+k0
-         LSn7GtKnoYNf36+3K5afjV9HtWsYGjR6SztHSRfDbdDn8o7Jtsm88jzTkgzpLLt/mibF
-         XlwJuLig4EvjXMVD6NKEn0QZv/t3QADwTFWKXR5D+iaP5uuiZooEJDe/8aSmLbQQdbg/
-         tvs9JayG5UkN4ibEtzCdON79+XZZJFzTAWvYpJkrx95wlIipqCFl2etYsvPfiOZ5WO/I
-         ZyMfPDeN4OS5JYIyM4BO7L8zP8T6WGZZWy0WiWHLPvKxkkyvycgHI+qvxOHZ/z9EvWH5
-         GIhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bexLBDu2Jcqr900kwtHlEd3vc21Me48gshjDc+jPY5U=;
-        b=nec5Aw+JuGk78IE1DE78gsSIVBuv19ICLo2NyzNWbLlvVanM0ZZSPa0kW7F+2MlLyN
-         v+zzjtyt/yhG4Jcjzca2dWc+OrflyMmjSrB765hfOm+qGemh4cESxRLVLc3gktTjN7TY
-         yPp3i5gqud7rCq8MWcilOyzVrpqEr8SuttMGFXEJ/dE7dkXoMa+03aMdm9yd3R9RGkAh
-         +oYuhHiLSUnc23v9BZs9OBw7BQD62lU1iV6bAM5RQnoija7subjUTfx9V/LpLnHOCXDA
-         uZeXRDqcB+DOUw9FvuRz0dhHDsv2ltZ9w2nxRkxSsKPq7fVMg81uo/DVKZBnRTVs08DS
-         pM8Q==
-X-Gm-Message-State: AFqh2kr9zfUuttavO/k0KTE2m06fDtWgmX7FESzNOMHN3BPf43OOCed3
-        SgYoliJRKRFpWlD5AeOwwJqLfA==
-X-Google-Smtp-Source: AMrXdXteXj2KfLx4/wMmN2219OBKDVEo2r86wx6/WgM1C2Dv8h723tnkzSLIYUoGCqzY6op/E1Rujg==
-X-Received: by 2002:a17:907:a609:b0:7c1:22a6:818f with SMTP id vt9-20020a170907a60900b007c122a6818fmr4233958ejc.25.1673626942675;
-        Fri, 13 Jan 2023 08:22:22 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b0084d242d07ffsm8376737ejm.8.2023.01.13.08.22.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 08:22:22 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] ASoC: dt-bindings: qcom,wcd934x: Allow usage as IFD device
-Date:   Fri, 13 Jan 2023 17:22:14 +0100
-Message-Id: <20230113162214.117261-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230113162214.117261-1-krzysztof.kozlowski@linaro.org>
-References: <20230113162214.117261-1-krzysztof.kozlowski@linaro.org>
+        Fri, 13 Jan 2023 11:28:17 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA97FC9C;
+        Fri, 13 Jan 2023 08:22:51 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pGMp4-000DRc-S9; Fri, 13 Jan 2023 17:22:30 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pGMp4-000Dff-6W; Fri, 13 Jan 2023 17:22:30 +0100
+Subject: Re: [PATCH] bpf: Fix pointer-leak due to insufficient speculative
+ store bypass mitigation
+To:     Luis Gerhorst <gerhorst@cs.fau.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Piotr Krysiuk <piotras@gmail.com>,
+        Benedict Schlueter <benedict.schlueter@rub.de>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     stefan.saecherl@use.startmail.com,
+        Henriette Hofmeier <henriette.hofmeier@rub.de>
+References: <20230109150544.41465-1-gerhorst@cs.fau.de>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <b643a86c-87cd-348c-8695-e14c7670871b@iogearbox.net>
+Date:   Fri, 13 Jan 2023 17:22:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230109150544.41465-1-gerhorst@cs.fau.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26780/Fri Jan 13 09:37:02 2023)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The WCD9340 audio codec appears on Slimbus twice: as IFD device without
-properties and the actual audio-codec referencing the former via
-wcd9340_ifd.  Allow in the binding both versions to fix several warnings
-like:
+On 1/9/23 4:05 PM, Luis Gerhorst wrote:
+> To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
+> insufficient speculative store bypass mitigation") inserts lfence
+> instructions after 1) initializing a stack slot and 2) spilling a
+> pointer to the stack.
+> 
+> However, this does not cover cases where a stack slot is first
+> initialized with a pointer (subject to sanitization) but then
+> overwritten with a scalar (not subject to sanitization because the slot
+> was already initialized). In this case, the second write may be subject
+> to speculative store bypass (SSB) creating a speculative
+> pointer-as-scalar type confusion. This allows the program to
+> subsequently leak the numerical pointer value using, for example, a
+> branch-based cache side channel.
+> 
+> To fix this, also sanitize scalars if they write a stack slot that
+> previously contained a pointer. Assuming that pointer-spills are only
+> generated by LLVM on register-pressure, the performance impact on most
+> real-world BPF programs should be small.
+> 
+> The following unprivileged BPF bytecode drafts a minimal exploit and the
+> mitigation:
+> 
+>    [...]
+>    // r6 = 0 or 1 (skalar, unknown user input)
+>    // r7 = accessible ptr for side channel
+>    // r10 = frame pointer (fp), to be leaked
+>    //
+>    r9 = r10 # fp alias to encourage ssb
+>    *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
+>    // lfence added here because of pointer spill to stack.
+>    //
+>    // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
+>    // for no r9-r10 dependency.
+>    //
+>    *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
+>    // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
+>    // store may be subject to SSB
+>    //
+>    // fix: also add an lfence when the slot contained a ptr
+>    //
+>    r8 = *(u64 *)(r9 - 8)
+>    // r8 = architecturally a scalar, speculatively a ptr
+>    //
+>    // leak ptr using branch-based cache side channel:
+>    r8 &= 1 // choose bit to leak
+>    if r8 == 0 goto SLOW // no mispredict
+>    // architecturally dead code if input r6 is 0,
+>    // only executes speculatively iff ptr bit is 1
+>    r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
+> SLOW:
+>    [...]
+> 
+> After running this, the program can time the access to *(r7 + 0) to
+> determine whether the chosen pointer bit was 0 or 1. Repeat this 64
+> times to recover the whole address on amd64.
+> 
+> In summary, sanitization can only be skipped if one scalar is
+> overwritten with another scalar. Scalar-confusion due to speculative
+> store bypass can not lead to invalid accesses because the pointer bounds
+> deducted during verification are enforced using branchless logic. See
+> 979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
+> arithmetic") for details.
+> 
+> Do not make the mitigation depend on
+> !env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
+> likely unexpected if these were enabled. For example, leaking the
+> address to a protected log file may be acceptable while disabling the
+> mitigation might unintentionally leak the address into the cached-state
+> of a map that is accessible to unprivileged processes.
+> 
+> Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
+> Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
+> Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
 
-  sdm850-samsung-w737.dtb: ifd@0,0: 'reset-gpios' is a required property
-  sdm850-samsung-w737.dtb: ifd@0,0: 'slim-ifc-dev' is a required property
-  sdm850-samsung-w737.dtb: ifd@0,0: 'interrupt-controller' is a required property
+This looks good to me, thank you for the research on this topic! Applied
+to bpf tree. (I've also added a link tag to your other mail.)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=e4f4db47794c9f474b184ee1418f42e6a07412b6
 
----
-
-oneOf: interrupts-extended|interrupts is needed to avoid dtschema
-limitation.
----
- .../bindings/sound/qcom,wcd934x.yaml          | 58 ++++++++++++++-----
- 1 file changed, 43 insertions(+), 15 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-index 39b27126cfc1..ea09590bfa30 100644
---- a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-@@ -149,21 +149,49 @@ patternProperties:
- required:
-   - compatible
-   - reg
--  - reset-gpios
--  - slim-ifc-dev
--  - interrupts
--  - interrupt-controller
--  - clock-frequency
--  - clock-output-names
--  - qcom,micbias1-microvolt
--  - qcom,micbias2-microvolt
--  - qcom,micbias3-microvolt
--  - qcom,micbias4-microvolt
--  - "#interrupt-cells"
--  - "#clock-cells"
--  - "#sound-dai-cells"
--  - "#address-cells"
--  - "#size-cells"
-+
-+allOf:
-+  - if:
-+      required:
-+        - slim-ifc-dev
-+    then:
-+      required:
-+        - reset-gpios
-+        - slim-ifc-dev
-+        - interrupt-controller
-+        - clock-frequency
-+        - clock-output-names
-+        - qcom,micbias1-microvolt
-+        - qcom,micbias2-microvolt
-+        - qcom,micbias3-microvolt
-+        - qcom,micbias4-microvolt
-+        - "#interrupt-cells"
-+        - "#clock-cells"
-+        - "#sound-dai-cells"
-+        - "#address-cells"
-+        - "#size-cells"
-+      oneOf:
-+        - required:
-+            - interrupts-extended
-+        - required:
-+            - interrupts
-+    else:
-+      properties:
-+        reset-gpios: false
-+        slim-ifc-dev: false
-+        interrupts: false
-+        interrupt-controller: false
-+        clock-frequency: false
-+        clock-output-names: false
-+        qcom,micbias1-microvolt: false
-+        qcom,micbias2-microvolt: false
-+        qcom,micbias3-microvolt: false
-+        qcom,micbias4-microvolt: false
-+        "#interrupt-cells": false
-+        "#clock-cells": false
-+        "#sound-dai-cells": false
-+        "#address-cells": false
-+        "#size-cells": false
- 
- additionalProperties: false
- 
--- 
-2.34.1
-
+Thanks,
+Daniel
