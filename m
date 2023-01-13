@@ -2,206 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54E1669328
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE9C669329
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241242AbjAMJnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S241270AbjAMJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240908AbjAMJmZ (ORCPT
+        with ESMTP id S236012AbjAMJm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:42:25 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EC37FEF8;
-        Fri, 13 Jan 2023 01:31:38 -0800 (PST)
-Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5B58C4D4;
-        Fri, 13 Jan 2023 10:31:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673602296;
-        bh=as+L/QPxdqQJEWl8FxG1PpXjcsdzFj4FeCjO0Y8t9CI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j5Hrb4mpsI29bQcTlOdFVVbLU9otzBqVzfqtD1aFxxM1fSe5xQ7o/5Ulv0idmEUWV
-         R0a8/MZk9d6BI70/6TWEPHpRcpGlFYQwS41h/AYURBLvd/LDYG/NyQQE3v+l8scdK+
-         7AA458KpDFRDLIB+37QTPC09ccUINllIWD9eXaNU=
-Date:   Fri, 13 Jan 2023 10:31:33 +0100
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     shravan kumar <shravan.chippa@microchip.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v9 4/4] media: i2c: imx334: update pixel and link
- frequency
-Message-ID: <20230113093133.6lqbnlhqkyhzhwyd@uno.localdomain>
-References: <20230113010135.2620818-1-shravan.chippa@microchip.com>
- <20230113010135.2620818-5-shravan.chippa@microchip.com>
+        Fri, 13 Jan 2023 04:42:26 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA035792A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:31:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9023B4EE24;
+        Fri, 13 Jan 2023 09:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673602306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tovvpvHeaV22GvURx3gvEqzAQ4TD9yfJURji8yDl97o=;
+        b=0lc80+7EUA6D7uxhIZlEEl0jeu+l4dQ10E2Ta3uQR0990JUx5UvYUoUPvOSSU4Vlx2suVU
+        czSoFFUdkb0bDQ1UO+8MqBvhStIVC6BvyAPkxhq+B3OGrhSvkJ8D10VvHChFf20i/yjbXE
+        ToOaDkTA5NYzm/9I8snyVw6zI/Br8T4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673602306;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tovvpvHeaV22GvURx3gvEqzAQ4TD9yfJURji8yDl97o=;
+        b=jjMM1CT8fsep7K+rpz2c2M04gZYltkmxzyh68mA4Gt+PxbLf37LVqRLoXSN/I2pHZhSoZC
+        e2iC9e4WcbMabfDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 675AE1358A;
+        Fri, 13 Jan 2023 09:31:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id U9tJGAIlwWNxdwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 13 Jan 2023 09:31:46 +0000
+Message-ID: <42450da5-eb1c-b093-daf7-67a4e64b9a22@suse.de>
+Date:   Fri, 13 Jan 2023 10:31:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230113010135.2620818-5-shravan.chippa@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
+ drivers(tdfx, mga, i810, savage, r128, sis, via)
+Content-Language: en-US
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Danilo Krummrich <dakr@redhat.com>,
+        Borislav Petkov <bp@suse.de>
+References: <20221203102502.3185-1-cai.huoqing@linux.dev>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221203102502.3185-1-cai.huoqing@linux.dev>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Zyik608rO7UMP9x3Rjzvi0P9"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shravan
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Zyik608rO7UMP9x3Rjzvi0P9
+Content-Type: multipart/mixed; boundary="------------zlu00uMo0z04vFhvjkRGR10E";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Cai Huoqing <cai.huoqing@linux.dev>
+Cc: Sam Ravnborg <sam@ravnborg.org>, Randy Dunlap <rdunlap@infradead.org>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Danilo Krummrich <dakr@redhat.com>, Borislav Petkov <bp@suse.de>
+Message-ID: <42450da5-eb1c-b093-daf7-67a4e64b9a22@suse.de>
+Subject: Re: [RESEND PATCH linux-next v2 00/10] drm: Remove some obsolete
+ drivers(tdfx, mga, i810, savage, r128, sis, via)
+References: <20221203102502.3185-1-cai.huoqing@linux.dev>
+In-Reply-To: <20221203102502.3185-1-cai.huoqing@linux.dev>
 
-On Fri, Jan 13, 2023 at 06:31:35AM +0530, shravan kumar wrote:
-> From: Shravan Chippa <shravan.chippa@microchip.com>
->
-> Update pixel_rate and link frequency for 1920x1080@30
-> while changing mode.
->
-> Add dummy ctrl cases for pixel_rate and link frequency
-> to avoid error while changing the modes dynamically
->
-> Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
-> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-> ---
->  drivers/media/i2c/imx334.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-> index 4ab1b9eb9a64..373022fbd6b2 100644
-> --- a/drivers/media/i2c/imx334.c
-> +++ b/drivers/media/i2c/imx334.c
-> @@ -49,7 +49,8 @@
->  #define IMX334_INCLK_RATE	24000000
->
->  /* CSI2 HW configuration */
-> -#define IMX334_LINK_FREQ	891000000
-> +#define IMX334_LINK_FREQ_891M	891000000
-> +#define IMX334_LINK_FREQ_445M	445500000
+--------------zlu00uMo0z04vFhvjkRGR10E
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Good!
+TWVyZ2VkIGludG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtzIGEgbG90Lg0KDQpBbSAwMy4xMi4y
+MiB1bSAxMToyMiBzY2hyaWViIENhaSBIdW9xaW5nOg0KPiBDb21taXQgMzk5NTE2YWIwZmVl
+ICgiTUFJTlRBSU5FUlM6IEFkZCBhIGJ1bmNoIG9mIGxlZ2FjeSAoVU1TKSBEUk0gZHJpdmVy
+cyIpDQo+IG1hcmtlZCB0aGVzZSBkcml2ZXJzIG9ic29sZXRlIDcgeWVhcnMgYWdvLg0KPiBB
+bmQgdGhlIG1lc2EgVU1EIG9mIHRoZXNlIGRybSBkcml2ZXJzIGFscmVhZHkgaW4gZGVwcmVj
+YXRlZCBsaXN0DQo+IGluIHRoZSBsaW5rOiBodHRwczovL2RvY3MubWVzYTNkLm9yZy9zeXN0
+ZW1zLmh0bWwNCj4gDQo+IDNkZnggR2xpZGUtLT5kcml2ZXIvZ3B1L2RybS90ZGZ4DQo+IE1h
+dHJveC0tPmRyaXZlci9ncHUvZHJtL21nYQ0KPiBJbnRlbCBpODEwLS0+ZHJpdmVyL2dwdS9k
+cm0vaTgxMA0KPiBTMyBTYXZhZ2UtLT5kcml2ZXJzL2dwdS9kcm0vc2F2YWdlDQo+IEFUSSBS
+YWdlIDEyOC0+ZHJpdmVycy9ncHUvZHJtL3IxMjgNCj4gU2lsaWNvbiBJbnRlZ3JhdGVkIFN5
+c3RlbXMtPmRyaXZlcnMvZ3B1L2RybS9zaXMNCj4gVklBIFVuaWNocm9tZS0+ZHJpdmVycy9n
+cHUvZHJtL3ZpYQ0KPiANCj4gdjEtPnYyOg0KPiAxLkFkZCBkcm0gdmlhIGRyaXZlciB0byB0
+aGUgcGF0Y2hzZXQuDQo+IDIuUmVtb3ZlIHJlbGF0ZWQgZHJtX3BjaWlkcy4NCj4gMy5SZW1v
+dmUgcmVsYXRlZCBkcm0gdWFwaSBoZWFkZXIgZmlsZXMuDQo+IDQuc3BsaXQgdG8gc2VyaWVz
+IGF2b2lkIGxhcmdlIHBhdGNoIGVtYWlsLg0KPiANCj4gQ2FpIEh1b3FpbmcgKDEwKToNCj4g
+ICAgZHJtOiBSZW1vdmUgdGhlIG9ic29sZXRlIGRyaXZlci1pODEwDQo+ICAgIGRybTogUmVt
+b3ZlIHRoZSBvYnNvbGV0ZSBkcml2ZXItbWdhDQo+ICAgIGRybTogUmVtb3ZlIHRoZSBvYnNv
+bGV0ZSBkcml2ZXItcjEyOA0KPiAgICBkcm06IFJlbW92ZSB0aGUgb2Jzb2xldGUgZHJpdmVy
+LXNhdmFnZQ0KPiAgICBkcm06IFJlbW92ZSB0aGUgb2Jzb2xldGUgZHJpdmVyLXNpcw0KPiAg
+ICBkcm06IFJlbW92ZSB0aGUgb2Jzb2xldGUgZHJpdmVyLXRkZngNCj4gICAgZHJtOiBSZW1v
+dmUgdGhlIG9ic29sZXRlIGRyaXZlci12aWENCj4gICAgZHJtOiBBZGQgY29tbWVudHMgdG8g
+S2NvbmZpZw0KPiAgICBkcm06IFJlbW92ZSBzb21lIG9ic29sZXRlIGRybSBwY2lpZHModGRm
+eCwgbWdhLCBpODEwLCBzYXZhZ2UsIHIxMjgsDQo+ICAgICAgc2lzLCB2aWEpDQo+ICAgIE1B
+SU5UQUlORVJTOiBSZW1vdmUgc29tZSBvYnNvbGV0ZSBkcml2ZXJzIGluZm8odGRmeCwgbWdh
+LCBpODEwLA0KPiAgICAgIHNhdmFnZSwgcjEyOCwgc2lzKQ0KPiANCj4gICBNQUlOVEFJTkVS
+UyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyOSAtDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL0tjb25maWcgICAgICAgICAgICAgICB8ICAgNTkgKy0NCj4gICBkcml2ZXJzL2dwdS9k
+cm0vTWFrZWZpbGUgICAgICAgICAgICAgIHwgICAgNyAtDQo+ICAgZHJpdmVycy9ncHUvZHJt
+L2k4MTAvTWFrZWZpbGUgICAgICAgICB8ICAgIDggLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9p
+ODEwL2k4MTBfZG1hLmMgICAgICAgfCAxMjY2IC0tLS0tLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
+L2RybS9pODEwL2k4MTBfZHJ2LmMgICAgICAgfCAgMTAxIC0NCj4gICBkcml2ZXJzL2dwdS9k
+cm0vaTgxMC9pODEwX2Rydi5oICAgICAgIHwgIDI0NiAtLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
+bS9tZ2EvTWFrZWZpbGUgICAgICAgICAgfCAgIDExIC0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
+bWdhL21nYV9kbWEuYyAgICAgICAgIHwgMTE2OCAtLS0tLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
+L2RybS9tZ2EvbWdhX2Rydi5jICAgICAgICAgfCAgMTA0IC0NCj4gICBkcml2ZXJzL2dwdS9k
+cm0vbWdhL21nYV9kcnYuaCAgICAgICAgIHwgIDY4NSAtLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
+L2RybS9tZ2EvbWdhX2lvYzMyLmMgICAgICAgfCAgMTk3IC0tDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL21nYS9tZ2FfaXJxLmMgICAgICAgICB8ICAxNjkgLS0NCj4gICBkcml2ZXJzL2dwdS9k
+cm0vbWdhL21nYV9zdGF0ZS5jICAgICAgIHwgMTA5OSAtLS0tLS0tLQ0KPiAgIGRyaXZlcnMv
+Z3B1L2RybS9tZ2EvbWdhX3dhcnAuYyAgICAgICAgfCAgMTY3IC0tDQo+ICAgZHJpdmVycy9n
+cHUvZHJtL3IxMjgvTWFrZWZpbGUgICAgICAgICB8ICAgMTAgLQ0KPiAgIGRyaXZlcnMvZ3B1
+L2RybS9yMTI4L2F0aV9wY2lnYXJ0LmMgICAgfCAgMjI4IC0tDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL3IxMjgvYXRpX3BjaWdhcnQuaCAgICB8ICAgMzEgLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
+bS9yMTI4L3IxMjhfY2NlLmMgICAgICAgfCAgOTQ0IC0tLS0tLS0NCj4gICBkcml2ZXJzL2dw
+dS9kcm0vcjEyOC9yMTI4X2Rydi5jICAgICAgIHwgIDExNiAtDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL3IxMjgvcjEyOF9kcnYuaCAgICAgICB8ICA1NDQgLS0tLQ0KPiAgIGRyaXZlcnMvZ3B1
+L2RybS9yMTI4L3IxMjhfaW9jMzIuYyAgICAgfCAgMTk5IC0tDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL3IxMjgvcjEyOF9pcnEuYyAgICAgICB8ICAxMTggLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
+bS9yMTI4L3IxMjhfc3RhdGUuYyAgICAgfCAxNjQxIC0tLS0tLS0tLS0tDQo+ICAgZHJpdmVy
+cy9ncHUvZHJtL3NhdmFnZS9NYWtlZmlsZSAgICAgICB8ICAgIDkgLQ0KPiAgIGRyaXZlcnMv
+Z3B1L2RybS9zYXZhZ2Uvc2F2YWdlX2JjaS5jICAgfCAxMDgyIC0tLS0tLS0tDQo+ICAgZHJp
+dmVycy9ncHUvZHJtL3NhdmFnZS9zYXZhZ2VfZHJ2LmMgICB8ICAgOTEgLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS9zYXZhZ2Uvc2F2YWdlX2Rydi5oICAgfCAgNTgwIC0tLS0NCj4gICBkcml2
+ZXJzL2dwdS9kcm0vc2F2YWdlL3NhdmFnZV9zdGF0ZS5jIHwgMTE2OSAtLS0tLS0tLQ0KPiAg
+IGRyaXZlcnMvZ3B1L2RybS9zaXMvTWFrZWZpbGUgICAgICAgICAgfCAgIDEwIC0NCj4gICBk
+cml2ZXJzL2dwdS9kcm0vc2lzL3Npc19kcnYuYyAgICAgICAgIHwgIDE0MyAtDQo+ICAgZHJp
+dmVycy9ncHUvZHJtL3Npcy9zaXNfZHJ2LmggICAgICAgICB8ICAgODAgLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS9zaXMvc2lzX21tLmMgICAgICAgICAgfCAgMzYzIC0tLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS90ZGZ4L01ha2VmaWxlICAgICAgICAgfCAgICA4IC0NCj4gICBkcml2ZXJz
+L2dwdS9kcm0vdGRmeC90ZGZ4X2Rydi5jICAgICAgIHwgICA5MCAtDQo+ICAgZHJpdmVycy9n
+cHUvZHJtL3RkZngvdGRmeF9kcnYuaCAgICAgICB8ICAgNDcgLQ0KPiAgIGRyaXZlcnMvZ3B1
+L2RybS92aWEvTWFrZWZpbGUgICAgICAgICAgfCAgICA4IC0NCj4gICBkcml2ZXJzL2dwdS9k
+cm0vdmlhL3ZpYV8zZF9yZWcuaCAgICAgIHwgMTc3MSAtLS0tLS0tLS0tLS0NCj4gICBkcml2
+ZXJzL2dwdS9kcm0vdmlhL3ZpYV9kcmkxLmMgICAgICAgIHwgMzYzMCAtLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tDQo+ICAgaW5jbHVkZS9kcm0vZHJtX3BjaWlkcy5oICAgICAgICAgICAg
+ICB8ICAxMTIgLQ0KPiAgIGluY2x1ZGUvdWFwaS9kcm0vaTgxMF9kcm0uaCAgICAgICAgICAg
+fCAgMjkyIC0tDQo+ICAgaW5jbHVkZS91YXBpL2RybS9tZ2FfZHJtLmggICAgICAgICAgICB8
+ICA0MjkgLS0tDQo+ICAgaW5jbHVkZS91YXBpL2RybS9yMTI4X2RybS5oICAgICAgICAgICB8
+ICAzMzYgLS0tDQo+ICAgaW5jbHVkZS91YXBpL2RybS9zYXZhZ2VfZHJtLmggICAgICAgICB8
+ICAyMjAgLS0NCj4gICBpbmNsdWRlL3VhcGkvZHJtL3Npc19kcm0uaCAgICAgICAgICAgIHwg
+ICA3NyAtDQo+ICAgaW5jbHVkZS91YXBpL2RybS92aWFfZHJtLmggICAgICAgICAgICB8ICAy
+ODIgLS0NCj4gICA0NiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMTk5NzUgZGVs
+ZXRpb25zKC0pDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9pODEw
+L01ha2VmaWxlDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9pODEw
+L2k4MTBfZG1hLmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL2k4
+MTAvaTgxMF9kcnYuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0v
+aTgxMC9pODEwX2Rydi5oDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2Ry
+bS9tZ2EvTWFrZWZpbGUNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
+L21nYS9tZ2FfZG1hLmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
+L21nYS9tZ2FfZHJ2LmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
+L21nYS9tZ2FfZHJ2LmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJt
+L21nYS9tZ2FfaW9jMzIuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9k
+cm0vbWdhL21nYV9pcnEuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9k
+cm0vbWdhL21nYV9zdGF0ZS5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
+L2RybS9tZ2EvbWdhX3dhcnAuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
+dS9kcm0vcjEyOC9NYWtlZmlsZQ0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
+dS9kcm0vcjEyOC9hdGlfcGNpZ2FydC5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZl
+cnMvZ3B1L2RybS9yMTI4L2F0aV9wY2lnYXJ0LmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQg
+ZHJpdmVycy9ncHUvZHJtL3IxMjgvcjEyOF9jY2UuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0
+NCBkcml2ZXJzL2dwdS9kcm0vcjEyOC9yMTI4X2Rydi5jDQo+ICAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IGRyaXZlcnMvZ3B1L2RybS9yMTI4L3IxMjhfZHJ2LmgNCj4gICBkZWxldGUgbW9kZSAx
+MDA2NDQgZHJpdmVycy9ncHUvZHJtL3IxMjgvcjEyOF9pb2MzMi5jDQo+ICAgZGVsZXRlIG1v
+ZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9yMTI4L3IxMjhfaXJxLmMNCj4gICBkZWxldGUg
+bW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3IxMjgvcjEyOF9zdGF0ZS5jDQo+ICAgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9zYXZhZ2UvTWFrZWZpbGUNCj4gICBk
+ZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3NhdmFnZS9zYXZhZ2VfYmNpLmMN
+Cj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3NhdmFnZS9zYXZhZ2Vf
+ZHJ2LmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3NhdmFnZS9z
+YXZhZ2VfZHJ2LmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL3Nh
+dmFnZS9zYXZhZ2Vfc3RhdGUuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
+dS9kcm0vc2lzL01ha2VmaWxlDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
+L2RybS9zaXMvc2lzX2Rydi5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
+L2RybS9zaXMvc2lzX2Rydi5oDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1
+L2RybS9zaXMvc2lzX21tLmMNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUv
+ZHJtL3RkZngvTWFrZWZpbGUNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUv
+ZHJtL3RkZngvdGRmeF9kcnYuYw0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dw
+dS9kcm0vdGRmeC90ZGZ4X2Rydi5oDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMv
+Z3B1L2RybS92aWEvTWFrZWZpbGUNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVycy9n
+cHUvZHJtL3ZpYS92aWFfM2RfcmVnLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgZHJpdmVy
+cy9ncHUvZHJtL3ZpYS92aWFfZHJpMS5jDQo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGluY2x1
+ZGUvdWFwaS9kcm0vaTgxMF9kcm0uaA0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBpbmNsdWRl
+L3VhcGkvZHJtL21nYV9kcm0uaA0KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3Vh
+cGkvZHJtL3IxMjhfZHJtLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBp
+L2RybS9zYXZhZ2VfZHJtLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBp
+L2RybS9zaXNfZHJtLmgNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBpL2Ry
+bS92aWFfZHJtLmgNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
+aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
+TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
+RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
->  #define IMX334_NUM_DATA_LANES	4
->
->  #define IMX334_REG_MIN		0x00
-> @@ -144,7 +145,8 @@ struct imx334 {
->  };
->
->  static const s64 link_freq[] = {
-> -	IMX334_LINK_FREQ,
-> +	IMX334_LINK_FREQ_891M,
-> +	IMX334_LINK_FREQ_445M,
->  };
->
->  /* Sensor mode registers */
-> @@ -468,7 +470,7 @@ static const struct imx334_mode supported_modes[] = {
->  		.vblank_min = 45,
->  		.vblank_max = 132840,
->  		.pclk = 297000000,
-> -		.link_freq_idx = 0,
-> +		.link_freq_idx = 1,
->  		.reg_list = {
->  			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
->  			.regs = mode_1920x1080_regs,
-> @@ -598,6 +600,11 @@ static int imx334_update_controls(struct imx334 *imx334,
->  	if (ret)
->  		return ret;
->
-> +	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
-> +				       mode->pclk, 1, mode->pclk);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
->  				       mode->hblank, 1, mode->hblank);
->  	if (ret)
-> @@ -698,6 +705,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
->  		pm_runtime_put(imx334->dev);
->
->  		break;
-> +	case V4L2_CID_PIXEL_RATE:
-> +	case V4L2_CID_LINK_FREQ:
->  	case V4L2_CID_HBLANK:
->  		ret = 0;
->  		break;
-> @@ -1102,7 +1111,7 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
->  	}
->
->  	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
-> -		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ)
-> +		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ_891M)
+--------------zlu00uMo0z04vFhvjkRGR10E--
 
-Is it legit to specify 445MHz in device tree ? I think so, as it's one
-of the frequencies the sensor can operate at. If that's the case the
-code here will fail, as it only recognize 891MHz ?
+--------------Zyik608rO7UMP9x3Rjzvi0P9
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-The DTS property serve to specify a sub-set of all the link-frequencies the
-driver can to operate at. If a dtb specifies 445MHz only, it means
-your driver cannot operate at 891MHz full resolution mode. Sakari, is
-my understanding correct here ?
+-----BEGIN PGP SIGNATURE-----
 
-In theory you could require dtbs to support both frequencies, but
-old dtbs will only have 891MHz specified, should they continue to work but
-with only the full resolution mode available ?
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPBJQIFAwAAAAAACgkQlh/E3EQov+Be
+qg/+Pfl62kSUWrpI0VXaaqcXr5ro/ewN5YNfIWx7warNuXDUlYZZarvrFOa6XF5edpPq7UDwm6Un
+T3kqlEOr3rf3d6ZpG8LbM+G8Vfs0TzW0U4vkRd7UjD5qFmKQ3vQ7NZ/yFlX1aPXlyQTeSClCilfR
+V2Oz3gTTPLA/mSuhSdJnmsn28dcuCE+Q0JH4ENE9J37xL/pp5bCXWtfqvaXHl/Ibx8YoOMNZJXi+
+hOjmGWz5udPWBvp33HG4m/2aipHeAgQ9oQBNvQghmqPD+VOJWzKTlTu7efzXtqC166QcIFmY+aFr
+DbYHyR44d0ELU3RSOc0llU0c/3SZmV70HUIa7Q+bTfiD38kE/wOhmS+ckQlaj8sz39QkrtgzMiT3
+QJicaAtWXdeD6IYGqYkD8p95kV/OxAVPNfJlk6GVTdh7u66FGye7/zDPq6hUsqdCYy8SjXmDbnXP
+aoGNn5ZlXShhMIl/3U1gsyeDd+B84fizYE/nJW8IcCPJnydt5moJ3UuccUWsXJs6cjlubfL+iVvS
+Wo/Y3xZkFXinuhKhMhcmd8ph5ln0SyGRb+S9CUosNfTDRqFnsImbk7NSG6ZgVTMmmG0R1B6otNAa
+oPASpeKcFfysHTTgLJ6snqLcGJ1SgUJLJEbgZGt0yrvgvM9/txkGflBIi/iPUNoQebX6xTAu4pUF
+cSg=
+=GaRK
+-----END PGP SIGNATURE-----
 
-A possible way out is to:
-
-1) Collect the allowed frequencies at dtbs probe time
-
-        static const s64 link_freq[] = {
-                IMX334_LINK_FREQ_891M,
-                IMX334_LINK_FREQ_445M,
-        };
-        static s64 enabled_link_freq[ARRAY_SIZE(link_freq)] = {};
-
-
-        ...
-
-  	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
-                for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
-                        if (bus_cfg.link_frequencies[i] == link_freq[j])
-                                enabled_link_frequencies[j] = link_freq[j];
-                }
-        }
-
-        for (i = 0; i < ARRAY_SIZE(link_freq); i++) {
-                if (enabled_link_freq[i] != 0)
-                        break;
-        }
-        if (i == ARRAY_SIZE(link_freq)) {
-		dev_err(imx334->dev, "no valid link frequencies in DTS");
-		ret = -EINVAL;
-		goto done_endpoint_free;
-        }
-
-        ...
-
-2) When enumerating or setting mode, make sure the mode's
-   enabled_link_freq[mode->link_freq_idx] != 0
-
-   but this might quickly get complex and error prone.
-
-Sakari, what is the best way to handle situations like this one ?
-The driver is upstream working with a single link_frequency of 891MHz.
-A new link frequency is added, and it is now allowed to have DTS
-specify both frequencies, or just one of them. Should the driver rule
-out all modes that require a link_frequency not specified in DTS ?
-
-There are several examples of drivers handling multiple link_freqs in
-media/i2c/ but I haven't find out that filters the modes according to
-the specified frequencies (I admit I only quickly looked).
-
-Thanks
-  j
-
-}
-
-
-
-
->  			goto done_endpoint_free;
->
->  	ret = -EINVAL;
-> --
-> 2.34.1
->
+--------------Zyik608rO7UMP9x3Rjzvi0P9--
