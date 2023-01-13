@@ -2,73 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6652266880D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214F5668811
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237200AbjAMAAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S239837AbjAMABj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjAMAAe (ORCPT
+        with ESMTP id S239077AbjAMABZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:00:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1564F59334;
-        Thu, 12 Jan 2023 16:00:34 -0800 (PST)
+        Thu, 12 Jan 2023 19:01:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BD111A06;
+        Thu, 12 Jan 2023 16:01:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6600621C9;
-        Fri, 13 Jan 2023 00:00:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70176C433D2;
-        Fri, 13 Jan 2023 00:00:32 +0000 (UTC)
-Date:   Thu, 12 Jan 2023 19:00:30 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ross Zwisler <zwisler@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 3/4] tracing: Add trace_array_puts() to write into
- instance
-Message-ID: <20230112190030.0c1fc121@gandalf.local.home>
-In-Reply-To: <Y8CXI1h9hsPeiu6u@google.com>
-References: <20230111145636.450953217@goodmis.org>
-        <20230111145842.694147820@goodmis.org>
-        <Y8CXI1h9hsPeiu6u@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C1F0B82036;
+        Fri, 13 Jan 2023 00:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D064EC433D2;
+        Fri, 13 Jan 2023 00:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673568082;
+        bh=TyMA7DoMSGx0SjncJKNHxuzQNLUrFJ8p4YaiwDyBuaY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gR85rp8zy7pV4cJt2OoeWvGaL29TLrpklndP+zww6sarfVli/SfqswZRdJID+fOCU
+         GQlZ7+xybWobxHvp+nVagnFMn3QCWDe1USlPnq9jI0xqIt5kmAinmYY+oJGCLY7f71
+         Y86vFIjDv8AVW51swoLI1z51GDEljI6z4bYdqq3/QDlB2+lxsQwytCAlFQb3kUcSc7
+         /IScmkPgtQ8xrmn8G5WtgmW/pGoMY7n/2faRqebwkQZbvmjnjzl9IAScg5Fiz+IiSj
+         kCB1LU1CUkq9rBdfVS3psckS7YVjmgs1+pFgnhasG0Rr7A7IyA59whfvdwkre12e+8
+         0BwjkL103gCQg==
+Date:   Thu, 12 Jan 2023 16:01:20 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: retry to update the inode page given
+ EIO
+Message-ID: <Y8CfUMsas4ZqVL0R@google.com>
+References: <20230105233908.1030651-1-jaegeuk@kernel.org>
+ <Y74O+5SklijYqMU1@google.com>
+ <77b18266-69c4-c7f0-0eab-d2069a7b21d5@kernel.org>
+ <Y78E9NpDxtvr2/Hs@google.com>
+ <bb9a9d1a-0d4c-b27e-e724-f99d5b8b4283@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb9a9d1a-0d4c-b27e-e724-f99d5b8b4283@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 16:26:27 -0700
-Ross Zwisler <zwisler@google.com> wrote:
-
-> > +/**
-> > + * trace_array_puts - write a constant string into the trace buffer.
-> > + * @tr:    The trace array to write to
-> > + * @ip:	   The address of the caller  
+On 01/12, Chao Yu wrote:
+> On 2023/1/12 2:50, Jaegeuk Kim wrote:
+> > On 01/11, Chao Yu wrote:
+> > > On 2023/1/11 9:20, Jaegeuk Kim wrote:
+> > > > In f2fs_update_inode_page, f2fs_get_node_page handles EIO along with
+> > > > f2fs_handle_page_eio that stops checkpoint, if the disk couldn't be recovered.
+> > > > As a result, we don't need to stop checkpoint right away given single EIO.
+> > > 
+> > > f2fs_handle_page_eio() only covers the case that EIO occurs on the same
+> > > page, should we cover the case EIO occurs on different pages?
+> > 
+> > Which case are you looking at?
 > 
-> @ip is not an arg to trace_array_puts(), an can be dropped from the comment.
+> - __get_node_page(PageA)		- __get_node_page(PageB)
+>  - f2fs_handle_page_eio
+>   - sbi->page_eio_ofs[type] = PageA->index
+> 					 - f2fs_handle_page_eio
+> 					  - sbi->page_eio_ofs[type] = PageB->index
+> 
+> In such race case, it may has low probability to set CP_ERROR_FLAG as we expect?
 
-Good catch.
-
-My first version had it, and then I realized I didn't like it (to be in
-sync with the internal version of __trace_puts()". But I forgot to update
-the kernel doc. Thanks for pointing that out.
+Do you see that case in products?
+I'm trying to avoid setting CP_ERROR_FLAG here.
 
 > 
-> Other than that, you can add:
+> Thanks,
 > 
-> Reviewed-by: Ross Zwisler <zwisler@google.com>
-
-Thanks,
-
--- Steve
+> > 
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Randall Huang <huangrandall@google.com>
+> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > ---
+> > > > 
+> > > >    Change log from v1:
+> > > >     - fix a bug
+> > > > 
+> > > >    fs/f2fs/inode.c | 2 +-
+> > > >    1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> > > > index ff6cf66ed46b..2ed7a621fdf1 100644
+> > > > --- a/fs/f2fs/inode.c
+> > > > +++ b/fs/f2fs/inode.c
+> > > > @@ -719,7 +719,7 @@ void f2fs_update_inode_page(struct inode *inode)
+> > > >    	if (IS_ERR(node_page)) {
+> > > >    		int err = PTR_ERR(node_page);
+> > > > -		if (err == -ENOMEM) {
+> > > > +		if (err == -ENOMEM || (err == -EIO && !f2fs_cp_error(sbi))) {
+> > > >    			cond_resched();
+> > > >    			goto retry;
+> > > >    		} else if (err != -ENOENT) {
