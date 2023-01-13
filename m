@@ -2,85 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D6C66A25F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484E866A25B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjAMSs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S230134AbjAMSsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjAMSsZ (ORCPT
+        with ESMTP id S229939AbjAMSsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:48:25 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B20327183;
-        Fri, 13 Jan 2023 10:48:24 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id d16so6831781qtw.8;
-        Fri, 13 Jan 2023 10:48:24 -0800 (PST)
+        Fri, 13 Jan 2023 13:48:11 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171342D8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:48:09 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ud5so54362561ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:48:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=km2chU6Uz/sy/0UFbCpxcWmUeBDD1WA+yAZkjGgI1Lo=;
-        b=SwXdZ/OcjODyj0kahdbYvA6ok6v2hzrOhYo/1Lsijf5KrYh9vH3rGCurdP0CIJTz+E
-         fTGvnMACw6sr9xJ1dxnsXkdLyHFXPQJcl54JzKYnpWDq4hKTRlVYFEMwQtSG3+lIAmYW
-         038kDrDiDIfNQnN7nzOuvpihuFIA2rFm9JOVY77eypYMJYvBBB8ygoANg/3fTsAq/VIN
-         dN90mIJ2PMTnr+0NF6XuxzGeJd23v+vJ1oUn3L6FtGleeQ5xGG4t0LsNcVg5VOpD7wbE
-         mPmVaHW3kycRSkYaHQzw3CM9oT2Tdln/gb3NPcGCbZjuI+eduDB2vpFfmtVvTxvqkYsE
-         4SQg==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EG7jr/g9OljSlpvTsWEcmSixEQmShFVdzLVLaGMM5uM=;
+        b=FHNytH06W0UmXriNfArsKvuBHWyeeP40z9gCwoD//tkNxKoF3yEHvkTmM2lpJYyPvh
+         aUyQRjEdDyKDeYHV4ZnvgLw5xckxaKf3W0c5KQwF8eb11onD2e1VJmqQ2Atq0Kyojgno
+         GKVKsYXK5U/vmuLBdCYPIZKreg21A3xg5cKdE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=km2chU6Uz/sy/0UFbCpxcWmUeBDD1WA+yAZkjGgI1Lo=;
-        b=50l9eOPXf81Lqm/864rq+O7edgQEt3qYET5iCK0mEMQWCeGMvp1QpOstRW3rVf4S44
-         WKAGsxFSYKQtUOxaCP+GfjESkBVzWHPD//7py7ysKKWTO6fNwzdjWkO4aV+cE3qZZOKG
-         1Azz8tFh4CoFUsHv1XxVnjCF5hFjT5hQRB06E6ZJCQ00uAq6Ch/bShNQY6uMTa9soQ7R
-         Rw/R3s0GcZVRJ06fXxiF/tQuG0uhPl1S/rWa1T0TZ4zS8FVTV6xRlkOTtrPsFGpmIkCB
-         FPT22JDlB0cJw1znL0se7x96HcV+/NGK0XULqCO7lik8KohIdv8q1Bu6YiW6qzsEOWkD
-         p3VQ==
-X-Gm-Message-State: AFqh2kpFI2AN2SJfnj3Bdwns7YKmKzU74yfl3NJfARqWsat67F2c7ic/
-        MDJwLjgMDR2UWr79mYrjTz83IiRqkhGn6ue5OG0=
-X-Google-Smtp-Source: AMrXdXtE4oDa+XfbV5WsgM8B+Khqg6/6Rc5E5NQ20g3FwFNJ8nG/ZHMFP+iNLFrJPndbTGCVgZA7YpZh8YwYoMhgKXY=
-X-Received: by 2002:ac8:1247:0:b0:3b1:328c:ff11 with SMTP id
- g7-20020ac81247000000b003b1328cff11mr283404qtj.195.1673635703313; Fri, 13 Jan
- 2023 10:48:23 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EG7jr/g9OljSlpvTsWEcmSixEQmShFVdzLVLaGMM5uM=;
+        b=DCYoOw49G5SOCcrrGdg0JQ5eMNJGfKkn+iNCon1oULs15UjBlx5mzuG7EcpIiVJrBV
+         3zgDqWSu1Uh+Nut1fQRLME5B6bv+eWgdtNOXd5n/nlMxjjS7uSiSvEc3PGAf5a4ND3Rc
+         8dJbD49YEOSyypgVWWYc+0VCTo2KmxMgnHMkLc7ubTdIaW5bd5fzjRwUkJcu2+PTxR8r
+         EbTdfCMWaYy0EPAblx6o03WZh/q7vhSOt8AbzObuIU/stF0OJFLF5VAAhCS5TYLoR9wF
+         oUb1lmwDaiZ2HYjUX/L0nSt4JZRPlFzHNiY2eeFA3ntRExdENX+RdpP1hmQ46ggarRpF
+         ayQA==
+X-Gm-Message-State: AFqh2kpDaMHCbanseEI+yo4YIhXotQ0ZCeCzLsynZHXGRCfN3vKfJ9xA
+        sGSJ878s+D6gzNp+H3i4JgwTWw==
+X-Google-Smtp-Source: AMrXdXsDpOBPrtmtkIdWBJZbgTmyQYDq0rUmqeQfEqwOFTt1cJYFl4hQ+nnqLt3BH5+kuiBBd52u2A==
+X-Received: by 2002:a17:906:cec4:b0:84d:269c:760a with SMTP id si4-20020a170906cec400b0084d269c760amr23264615ejb.51.1673635687677;
+        Fri, 13 Jan 2023 10:48:07 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id k2-20020a170906970200b0073dbaeb50f6sm8691799ejx.169.2023.01.13.10.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 10:48:05 -0800 (PST)
+Date:   Fri, 13 Jan 2023 19:48:03 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     jim.cromie@gmail.com
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
+        ville.syrjala@linux.intel.com, seanpaul@chromium.org,
+        robdclark@gmail.com, jbaron@akamai.com, gregkh@linuxfoundation.org,
+        daniel.vetter@ffwll.ch
+Subject: Re: [RFC PATCH 00/17] DRM_USE_DYNAMIC_DEBUG regression
+Message-ID: <Y8GnY7k22KkG/AmN@phenom.ffwll.local>
+Mail-Followup-To: jim.cromie@gmail.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@intel.com,
+        ville.syrjala@linux.intel.com, seanpaul@chromium.org,
+        robdclark@gmail.com, jbaron@akamai.com, gregkh@linuxfoundation.org
+References: <20221206003424.592078-1-jim.cromie@gmail.com>
+ <Y79Btep8JnPKvuAp@phenom.ffwll.local>
+ <CAJfuBxxZ0Kjc0G5Ngv7bmokkC4AJKZ07OMCKyLmHBGSsjG7qfA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230113133320.7531-1-abelova@astralinux.ru> <c0c7d2d7-648d-feb3-14ea-c2ab3baddfb1@ispras.ru>
-In-Reply-To: <c0c7d2d7-648d-feb3-14ea-c2ab3baddfb1@ispras.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 13 Jan 2023 20:47:47 +0200
-Message-ID: <CAHp75Vf3SZEFmXoqm8-ynyYq5p8Eme93Da87RbCP5-9hzAzrZg@mail.gmail.com>
-Subject: Re: [lvc-project] [PATCH] iio: chemical: scd30: Add check for NULL in scd30_i2c_command
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc:     Anastasia Belova <abelova@astralinux.ru>,
-        Tomasz Duszynski <tomasz.duszynski@octakon.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        lvc-project@linuxtesting.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfuBxxZ0Kjc0G5Ngv7bmokkC4AJKZ07OMCKyLmHBGSsjG7qfA@mail.gmail.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 8:41 PM Alexey Khoroshilov
-<khoroshilov@ispras.ru> wrote:
-> On 13.01.2023 16:33, Anastasia Belova wrote:
+On Fri, Jan 13, 2023 at 11:29:57AM -0700, jim.cromie@gmail.com wrote:
+> On Wed, Jan 11, 2023 at 4:09 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > On Mon, Dec 05, 2022 at 05:34:07PM -0700, Jim Cromie wrote:
+> > > Hi everyone,
+> > >
+> > > DRM_USE_DYNAMIC_DEBUG=y has a regression on rc-*
+> > >
+> > > Regression is due to a chicken-egg problem loading modules; on
+> > > `modprobe i915`, drm is loaded 1st, and drm.debug is set.  When
+> > > drm_debug_enabled() tested __drm_debug at runtime, that just worked.
+> > >
+> > > But with DRM_USE_DYNAMIC_DEBUG=y, the runtime test is replaced with a
+> > > post-load enablement of drm_dbg/dyndbg callsites (static-keys), via
+> > > dyndbg's callback on __drm_debug.  Since all drm-drivers need drm.ko,
+> > > it is loaded 1st, then drm.debug=X is applied, then drivers load, but
+> > > too late for drm_dbgs to be enabled.
+> > >
+> > > STATUS
+> > >
+> > > For all-loadable drm,i915,amdgpu configs, it almost works, but
+> > > propagating drm.debug to dependent modules doesnt actually apply,
+> > > though the motions are there.  This is not the problem I want to chase
+> > > here.
+> > >
+> > > The more basic trouble is:
+> > >
+> > > For builtin drm + helpers, things are broken pretty early; at the
+> > > beginning of dynamic_debug_init().  As the ddebug_sanity() commit-msg
+> > > describes in some detail, the records added by _USE fail to reference
+> > > the struct ddebug_class_map created and exported by _DEFINE, but get
+> > > separate addresses to "other" data that segv's when used as the
+> > > expected pointer. FWIW, the pointer val starts with "revi".
+> >
+> > So I honestly have no idea here, linker stuff is way beyond where I have
+> > clue. So what's the way forward here?
+> >
+> 
+> Ive fixed this aspect.
+> Unsurprisingly, it wasnt the linker :-}
 
-> It seems it is better to put the whole validation loop under if (rsp)
-> check.
+Awesome!
 
-No. The entire patch is redundant.
-The code that calls this function is under the control of the same
-driver, so we know how to avoid shooting in our foot.
+> > The DEFINE/USE split does like the right thing to do at least from the
+> > "how it's used in drivers" pov. But if we're just running circles not
+> > quite getting there I dunno :-/
+> > -Daniel
+> >
+> 
+> Sending new rev next.
+> I think its getting close.
 
+Thanks a lot for keeping on pushing this.
+-Daniel
 -- 
-With Best Regards,
-Andy Shevchenko
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
