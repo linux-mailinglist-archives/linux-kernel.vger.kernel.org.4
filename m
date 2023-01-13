@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971396692E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5F16692EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240846AbjAMJ2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:28:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        id S240831AbjAMJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjAMJ1U (ORCPT
+        with ESMTP id S240980AbjAMJ1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:27:20 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056A843195;
-        Fri, 13 Jan 2023 01:22:44 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRV0_1673601759;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRV0_1673601759)
+        Fri, 13 Jan 2023 04:27:23 -0500
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30684319E;
+        Fri, 13 Jan 2023 01:22:46 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRVD_1673601760;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRVD_1673601760)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 17:22:39 +0800
+          Fri, 13 Jan 2023 17:22:40 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Ian Rogers <irogers@google.com>
@@ -40,113 +40,56 @@ Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
         Shuai Xue <xueshuai@linux.alibaba.com>,
         Zhuo Song <zhuo.song@linux.alibaba.com>,
         Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v7 6/9] perf vendor events arm64: Add cache metrics for neoverse-n2-v2
-Date:   Fri, 13 Jan 2023 17:22:17 +0800
-Message-Id: <1673601740-122788-7-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH v7 7/9] perf vendor events arm64: Add branch metrics for neoverse-n2-v2
+Date:   Fri, 13 Jan 2023 17:22:18 +0800
+Message-Id: <1673601740-122788-8-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
 References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add cache related metrics.
+Add branch related metrics.
 
 Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 ---
- .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ .../arch/arm64/arm/neoverse-n2-v2/metrics.json      | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-index 60bbd8f..08c6aaa 100644
+index 08c6aaa..afcdb17 100644
 --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
 +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-@@ -62,5 +62,82 @@
-         "MetricGroup": "TLB",
-         "MetricName": "itlb_walk_rate",
+@@ -139,5 +139,26 @@
+         "MetricGroup": "Cache",
+         "MetricName": "ll_cache_read_hit_rate",
          "ScaleUnit": "100%"
 +    },
 +    {
-+        "MetricExpr": "L1I_CACHE_REFILL / INST_RETIRED * 1000",
-+        "BriefDescription": "The rate of L1 I-Cache misses per kilo instructions",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l1i_cache_mpki",
++        "MetricExpr": "BR_MIS_PRED_RETIRED / INST_RETIRED * 1000",
++        "BriefDescription": "The rate of branches mis-predicted per kilo instructions",
++        "MetricGroup": "Branch",
++        "MetricName": "branch_mpki",
 +        "ScaleUnit": "1MPKI"
 +    },
 +    {
-+        "MetricExpr": "L1I_CACHE_REFILL / L1I_CACHE",
-+        "BriefDescription": "The rate of L1 I-Cache misses to the overall L1 I-Cache",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l1i_cache_miss_rate",
-+        "ScaleUnit": "100%"
++        "MetricExpr": "BR_RETIRED / INST_RETIRED * 1000",
++        "BriefDescription": "The rate of branches retired per kilo instructions",
++        "MetricGroup": "Branch",
++        "MetricName": "branch_pki",
++        "ScaleUnit": "1PKI"
 +    },
 +    {
-+        "MetricExpr": "L1D_CACHE_REFILL / INST_RETIRED * 1000",
-+        "BriefDescription": "The rate of L1 D-Cache misses per kilo instructions",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l1d_cache_mpki",
-+        "ScaleUnit": "1MPKI"
-+    },
-+    {
-+        "MetricExpr": "L1D_CACHE_REFILL / L1D_CACHE",
-+        "BriefDescription": "The rate of L1 D-Cache misses to the overall L1 D-Cache",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l1d_cache_miss_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "L2D_CACHE_REFILL / INST_RETIRED * 1000",
-+        "BriefDescription": "The rate of L2 D-Cache misses per kilo instructions",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l2d_cache_mpki",
-+        "ScaleUnit": "1MPKI"
-+    },
-+    {
-+        "MetricExpr": "L2D_CACHE_REFILL / L2D_CACHE",
-+        "BriefDescription": "The rate of L2 D-Cache misses to the overall L2 D-Cache",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l2d_cache_miss_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "L3D_CACHE_REFILL / INST_RETIRED * 1000",
-+        "BriefDescription": "The rate of L3 D-Cache misses per kilo instructions",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l3d_cache_mpki",
-+        "ScaleUnit": "1MPKI"
-+    },
-+    {
-+        "MetricExpr": "L3D_CACHE_REFILL / L3D_CACHE",
-+        "BriefDescription": "The rate of L3 D-Cache misses to the overall L3 D-Cache",
-+        "MetricGroup": "Cache",
-+        "MetricName": "l3d_cache_miss_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "LL_CACHE_MISS_RD / INST_RETIRED * 1000",
-+        "BriefDescription": "The rate of LL Cache read misses per kilo instructions",
-+        "MetricGroup": "Cache",
-+        "MetricName": "ll_cache_read_mpki",
-+        "ScaleUnit": "1MPKI"
-+    },
-+    {
-+        "MetricExpr": "LL_CACHE_MISS_RD / LL_CACHE_RD",
-+        "BriefDescription": "The rate of LL Cache read misses to the overall LL Cache read",
-+        "MetricGroup": "Cache",
-+        "MetricName": "ll_cache_read_miss_rate",
-+        "ScaleUnit": "100%"
-+    },
-+    {
-+        "MetricExpr": "(LL_CACHE_RD - LL_CACHE_MISS_RD) / LL_CACHE_RD",
-+        "BriefDescription": "The rate of LL Cache read hit to the overall LL Cache read",
-+        "MetricGroup": "Cache",
-+        "MetricName": "ll_cache_read_hit_rate",
++        "MetricExpr": "BR_MIS_PRED_RETIRED / BR_RETIRED",
++        "BriefDescription": "The rate of branches mis-predited to the overall branches",
++        "MetricGroup": "Branch",
++        "MetricName": "branch_miss_pred_rate",
 +        "ScaleUnit": "100%"
      }
  ]
