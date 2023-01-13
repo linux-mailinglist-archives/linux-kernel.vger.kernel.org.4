@@ -2,160 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2686695C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795796695C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241398AbjAMLh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S240196AbjAMLiv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 Jan 2023 06:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239755AbjAMLhG (ORCPT
+        with ESMTP id S240879AbjAMLhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:37:06 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0503C0D;
-        Fri, 13 Jan 2023 03:26:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673609162; x=1705145162;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=3zWCepS/PjqqIlq4uR9kQQQ6flUr/KG7RcCHKr25P5w=;
-  b=bTZspTfoNFfvzxAE6Gah+xIRy3StndkQjnxqzpIcxSL1au/fGPwNYip2
-   StJSciZ/2x71pmq15E7j3IxJDDgHuQK3+iHq7NO1C/Tb04aTdJmEe7fgi
-   h1K2Xn2/CXiNiFYM4iC5d9OrsiwOLOq7jQ8l/PtYmfUS4UutrxpTLYT9a
-   DXnqQoX+wj+imLCMudFxZ+5AHCvASw1rjgUuyoAwKrIEhvWbvWuALEoE2
-   4lo3R8Z8A9H3fhuLXaHes0RwWaOm/pPQKRZPHXSlK5oe+jwAgymNpZipb
-   9TWUvJL9Tky9Ik6K32KVY+qGK9Kg1/5vMKkVT4rto7SXklIr3Y6jrxz1O
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="324032447"
-X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
-   d="scan'208";a="324032447"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 03:26:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="800572954"
-X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
-   d="scan'208";a="800572954"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Jan 2023 03:26:01 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 13 Jan 2023 03:26:01 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 13 Jan 2023 03:26:01 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 13 Jan 2023 03:25:57 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KQXcl9WyvTFPHE+Qdpzry7jWMNn+aPPGqrO56KQ8u/QeX6aoigtpRgap6IQZwosVO0vwIISrKT79/Jv4Rmxzdq8TNXA+2Wd72bGVgbx91XUMG9du3OxWf6/A4uH4W0qItMz2tJZ9bVRP4GL1rxxStjO0QkkiTZmuwCHtH1hydyFKEbTHmDfcOCBID49SunKEDpx6eJ/tdKpPOugHny8ZAUWAJJmU7vf/l3Dqr0sU/zviGqyV9J39z1lpKVB8GWKvgj6795dt0Y3BKH2P8gBPHL3UCbzBOdSNORmu0quVxWa+OLzB92LMM8Po0TPvdYwEOEMy2CWTxJtDMer+PvnPIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u/izAONncReZHFGQZeXBVEurOiZb1SgaVz8ccFhAnJg=;
- b=ai/VUNLjMKHhUU+1H0h6xIz25x5N0HbQn+IJ6g+rDt3nOxEo1d4Nye1s9CRky83Zl7m2Al39w4Wgxbmch8DY+rcfhjwJfzZpEhnR0h262tJh6adZmgjXbPb0omdgOANaWJEWrWRe09ce6r5W/R5fdMEK0NYbJmzJxKU82kExM1ccGxgCjXMggmaX6vk+bk96rcVix8X/fhQwKrNymXmdActBcdbEFyIYFraczai3hhM0cgPW9a+l/sXAblsZ6WeLDdzXC/74foFTsbl6nNCdmOX9PXeQod3UgAgj5PxaipO9SjWbu6t40AJf9BlvUmSfIBVQBHe5NX5qD7brqnnUyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB5825.namprd11.prod.outlook.com (2603:10b6:806:234::5)
- by DM6PR11MB4627.namprd11.prod.outlook.com (2603:10b6:5:2a2::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Fri, 13 Jan
- 2023 11:25:56 +0000
-Received: from SA1PR11MB5825.namprd11.prod.outlook.com
- ([fe80::a329:b6fa:2276:4693]) by SA1PR11MB5825.namprd11.prod.outlook.com
- ([fe80::a329:b6fa:2276:4693%3]) with mapi id 15.20.6002.013; Fri, 13 Jan 2023
- 11:25:56 +0000
-Message-ID: <608756bb-3012-e02c-5b16-04314cdc9889@intel.com>
-Date:   Fri, 13 Jan 2023 12:25:48 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH rcu v2 15/20] kernel/notifier: Remove CONFIG_SRCU
-To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-team@meta.com>,
-        <rostedt@goodmis.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Borislav Petkov <bp@suse.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        John Ogness <john.ogness@linutronix.de>
-References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
- <20230113001132.3375334-15-paulmck@kernel.org>
-Content-Language: en-US
-From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-In-Reply-To: <20230113001132.3375334-15-paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BE1P281CA0079.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:78::18) To SA1PR11MB5825.namprd11.prod.outlook.com
- (2603:10b6:806:234::5)
+        Fri, 13 Jan 2023 06:37:25 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4844261C
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:26:53 -0800 (PST)
+Received: from [127.0.0.1] (adsl-dyn97.91-127-229.t-com.sk [91.127.229.97])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 890981F542;
+        Fri, 13 Jan 2023 12:26:50 +0100 (CET)
+Date:   Fri, 13 Jan 2023 12:26:47 +0100
+From:   Martin Botka <martin.botka@somainline.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+CC:     martin.botka1@gmail.com,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] mfd: ax20x: Add suppport for AXP1530 PMIC
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230113003555.356d2196@slackpad.lan>
+References: <20221214190305.3354669-1-martin.botka@somainline.org> <20221214190305.3354669-3-martin.botka@somainline.org> <20221216181752.1d839233@donnerap.cambridge.arm.com> <1C9140E8-1476-4EA0-B685-A733990C5E0F@somainline.org> <20230110000025.221430b6@slackpad.lan> <YUU8OR.U1Y9JN3YI5H3@somainline.org> <20230113003555.356d2196@slackpad.lan>
+Message-ID: <80824264-34C6-4A75-933D-E076413B8A8C@somainline.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB5825:EE_|DM6PR11MB4627:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3d819a7c-768e-4711-6a92-08daf558efed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 40t5ekv5ysGpVtu1AF89E77zHWXvqV3Hrker5jo4CGsQfBjHPnJE5RletHMmIFZQUEvoG5w1MRhJwXAYmn1neHbdkcYFDtymwr7vNiVZ8HWAvR84+2nh1Vpw8sv4sxOSaC/9Gz+P0Uh2nUv86PwnyEESeYdrbdPYG6StcxZaf4mPcfMZgdOEfK2wnl14HsarFQsl3PhtZ2T9iF7DDribKx+CHlCGKBwhDtBK62qkOjp3ijtpwlnhC5TEcfmGsCYrq5C39Sb98o5MLShxO4QDeY2Git1DQRGmLgwWsIokPYW5G5Ua9Rxe/fooZstnZ0kvd2adBNJru/FjdEffd4BZvdSHJ9wcZeQMQ/8mhx/xBwsdhf4BtmM4KE7JlHLRagqYKS9uGbAjhMIr9e94Kee44lgHsp43mWk+DZbJ+KnDGFy14KNeeq2pyZls0fkdZu7lahUdjNgqvRMBqX1bd9OxJyK3kxfWWIELVAlJUg7XajjdXpiyoV2eA/nzHJgPDzxQDBqkvOVybF9TKqj/K1ufzFzQdts97AxmAfr1vMGUiEloY3YvDx8EhD39MktnHYtOToB9kVcqTYZKZSIwaihNcWCaL2t/NCE2r+00Zsob0Ymk6dSNcj8w8SdzK00FcNMipyd2gTMz9aft4msfqPABq/Fj6c/cyPiPzrf4GfXQP02flFV8o7Tw/3A6wtAIJYISWgKU58gT5jggJvOUjgLEbnxQMOPGsCRCHtsOUl8bKkU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB5825.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(366004)(396003)(376002)(39860400002)(451199015)(41300700001)(6506007)(31686004)(5660300002)(8936002)(6666004)(2906002)(53546011)(83380400001)(66556008)(8676002)(4326008)(36756003)(38100700002)(82960400001)(66476007)(66946007)(316002)(54906003)(478600001)(6486002)(2616005)(86362001)(186003)(31696002)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MGdhQ2dmZngrY1YyZmt2bDRjeDBmLzZ5WTdlNUJaVmlUemRtRHNKaFRJbngr?=
- =?utf-8?B?dGZSWm5UZy9oR2pzMks3VTdDWVJVaTdmRkprQ1I3YlJJZ1N0a2R1UDc2UXBn?=
- =?utf-8?B?NUpBdXNIMmpmMWdpVEs2UUxrWWltOUFkaWwrRGpueU1DbllmV3NYUXcxQVpm?=
- =?utf-8?B?YjFRdHNKSW55aGlYeUR5dmFkWDRoMURrdTNiWXBOY3ZEWnVWc2tlaHZITkxR?=
- =?utf-8?B?VzR1STU3dnlNM1lkb1cwckRnamJuVHl4TFg3U2orQm9LaUdWWlhtQ1p5cWZI?=
- =?utf-8?B?ZnRYKythRFhBRVo3a3pBNXFhMjRRYTBZWEtQdG1pNnZOdXJOOXJYUjBRNmEx?=
- =?utf-8?B?eDk4c0JLeldtaitObnhGbWFYNUVWb3ZyL0VpK0VFSlZLWUdWZ3ZuT2tXSXJk?=
- =?utf-8?B?eVpIa3V1TFJnSFd3SGNhb1FSRmhBZUtXb3liNm5WRFQ3b1Y1cU1EbFhsSUpt?=
- =?utf-8?B?dlM5aTh5aVZpZjVEU2ZzSngwMjNZbUo1Nk0xMnVNK1FzV1JCbWMxczdLWjBv?=
- =?utf-8?B?ZDZ2MFhYYkRHZkEzT0o5QU5iQ2M5LzRLamZldU83VDJlMmJtRkZUTkE0ZE1H?=
- =?utf-8?B?NHdvVnkzcnp1ZmNnT0g5V3BubzJuS05VZlBEYTNJaWJyQjh5T2hVRzV4MDhH?=
- =?utf-8?B?Y05mdjJqRWxaa3dnQnFyTFpNOWJtd1hUWXJqNEQzdzFHTFVUU21BcjVhU0Nx?=
- =?utf-8?B?eUhaT0FqR3E2T0ZJSDVyQml0anhsa1V2djM0cWZqUXg5MjlKTUtWK29DdU9K?=
- =?utf-8?B?L3ByMXZPMlBadFVEMUxWemxsejlGWXBITGRyc2JTUzloNmtMVXRyR1BqTVFD?=
- =?utf-8?B?UFZ3TmNQeFBWcW1GUVR5bHNVQjJLN0dua1dRQjlyRXhWeU1NSW5vZWYybFph?=
- =?utf-8?B?NENXb2Z6VnhGTmxsZUVhTzBvd3F3LzBFVVJOUktiUVZqbU4xRmF3UWdnSXMr?=
- =?utf-8?B?bldoay9uNFZna0lBRC9zTzFhZEk0ZFB6cHVTczRmaEdabVVBT29XTW9ETlFh?=
- =?utf-8?B?WkhMZzVjRnh6cjJoVGRXR1drWmQ1ZUtGdDZoWkdaak1NcW92cmZnWEQyb0Nq?=
- =?utf-8?B?bGtKOG9kUFdTdTEvRk9tTXFwZlRXWG1EVTdDcnprQmYvc0RTekpzS2VmY3RI?=
- =?utf-8?B?QytFYTljZ2h2T29IK25OdnA0L0tFNHFyZzlVV1d1U3d5dmRUTzBrK3RxUk9h?=
- =?utf-8?B?WTQrdGtNU2I2WTdmWVZoSHZuRkI2cTcyR2FUek94eEFNSzZqbmtnYTI2RWZV?=
- =?utf-8?B?KzhnOGROUVpaM0lPUnhnUUpOR0JTWWJkNmptekdtMDB2SzhxRERZa0xvalBE?=
- =?utf-8?B?MDJUclhIVnlqM2tkcGhMcVBCY2o5YTE4b2hxYlEyVGlIUUVKN1pGZ3B1dm43?=
- =?utf-8?B?bXdqd3V1enNJNXp1cXFqN3dDZmNmR052UUpEdzZ1U2tHV1RaNWl1dnRrT0FT?=
- =?utf-8?B?MnNrc1huSWRxU0gyOXV0L1gvYWJqRFF5cnQvajYyOUVOMHZEc2U0RzFmeFRs?=
- =?utf-8?B?aHc2dGxDRWN6WHpKdDRkYXlodXkzaUN2OXd3WnhWb29wOEI5YU1idHZ5RENs?=
- =?utf-8?B?b3VGaWcvcG94c3JJa0kyclNpQ3E2Z2lCNnF0YWlEUmJTeGsvMzBwVVpVZFNz?=
- =?utf-8?B?NHVueGVLbDQrSW9oeW92NnRvN2Y2dG5DUWphcGkwZStYTkl3d2RJYXJZQnRt?=
- =?utf-8?B?NzdNRFFDNjdUbkRzaEhBREg3SjVFR09LWDNpclEvaTJHSktPMHV1Y0Q4QVV1?=
- =?utf-8?B?cnZEdzN6d01ORjUrd1FkMldIQXBWSE1EN1V5SXVKZFk1UmMwWHlPejVjWkNr?=
- =?utf-8?B?MzhxSlBPcnU4cURpblZIREdaVVVSWEJvRDcvenNqcHorODVWNStWRUIxN281?=
- =?utf-8?B?UHdUV2JjL0s4Vzh5MWxUZFdldUY3cGdIVkhscXl0dnZTeU5WM2g1ZGE1VGk5?=
- =?utf-8?B?OWVxalZmQVErVzVkV2hqZ1dTV1p2eGVwNVhvZTFOQXZHdXFlTGpLaHpsZExU?=
- =?utf-8?B?cTFzakhlcGdUazNHR09ScDd3NGpTdmpPenRyL3pHQUpLRTN0ZXYvRmhSb1dy?=
- =?utf-8?B?L3FXNllYUFViZkhWbkQyMjFDQUR1T21EY1c1M1YyQjFNRisxL0JtZEU4Vjkz?=
- =?utf-8?B?Vzh2MDZlVHZTR3g5YWxaeE85TVBnWlJuc041SVNPZy96K1RFc2tGUUNsTnBY?=
- =?utf-8?B?WGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d819a7c-768e-4711-6a92-08daf558efed
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB5825.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 11:25:56.1037
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H6DXRf9z12u0Wd9zEWDvdTRZFWpshdfr2QpsmzhOVyjrIi43ni3xJiTSkuvosteXQy6EPO3OXpb7+xG1Gz2pxwdniVJ2vNQhI2PSxbtzmRY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4627
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -163,43 +57,390 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 1/13/2023 1:11 AM, Paul E. McKenney wrote:
-> Now that the SRCU Kconfig option is unconditionally selected, there is
-> no longer any point in conditional compilation based on CONFIG_SRCU.
-> Therefore, remove the #ifdef.
+
+On January 13, 2023 1:35:55 AM GMT+01:00, Andre Przywara <andre.przywara@arm.com> wrote:
+>On Tue, 10 Jan 2023 01:32:58 +0100
+>Martin Botka <martin.botka@somainline.org> wrote:
 >
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> Cc: "Michał Mirosław" <mirq-linux@rere.qmqm.pl>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Reviewed-by: John Ogness <john.ogness@linutronix.de>
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-
-> ---
->   kernel/notifier.c | 3 ---
->   1 file changed, 3 deletions(-)
+>Hi Martin,
 >
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index ab75637fd904f..d353e4b5402d7 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -456,7 +456,6 @@ int raw_notifier_call_chain(struct raw_notifier_head *nh,
->   }
->   EXPORT_SYMBOL_GPL(raw_notifier_call_chain);
->   
-> -#ifdef CONFIG_SRCU
->   /*
->    *	SRCU notifier chain routines.    Registration and unregistration
->    *	use a mutex, and call_chain is synchronized by SRCU (no locks).
-> @@ -573,8 +572,6 @@ void srcu_init_notifier_head(struct srcu_notifier_head *nh)
->   }
->   EXPORT_SYMBOL_GPL(srcu_init_notifier_head);
->   
-> -#endif /* CONFIG_SRCU */
-> -
->   static ATOMIC_NOTIFIER_HEAD(die_chain);
->   
->   int notrace notify_die(enum die_val val, const char *str,
+>> On Tue, Jan 10 2023 at 12:00:25 AM +00:00:00, Andre Przywara 
+>> <andre.przywara@arm.com> wrote:
+>> > On Sat, 17 Dec 2022 01:13:01 +0100
+>> > Martin Botka <martin.botka@somainline.org> wrote:
+>> > 
+>> > Hi Martin,  
+>> Hello Andre,
+>> > 
+>> > hope you had a good break! Did you have any chance to come back to 
+>> > this
+>> > again? Now would be a good time to send a new version, otherwise it's
+>> > getting pretty tight for v6.3 already.
+>> >   
+>> I did have a good break :)
+>> I unfortunately did not. Was bit busy with issues to one of my projects.
+>> Will see if I can sort this out tomorrow but you said you already have 
+>> AXP313A driver
+>> ready. So it may be better if you send your driver.
+>
+>Well, so my patch just compiled, and it wasn't as complete as yours.
+>Also I have no means of testing it. Also you were first with the patch,
+>so deserve the credits.
+>
+>Since you seem to be busy in the next days, I could offer to address
+>the comments myself (since you acked them), and send a v6 on
+>your behalf. I would need to rely on you for testing, maybe Junari
+>(from #linux-sunxi) could also help out here.
+That is very kind of you. But please add yourself as co-author or something like that so your contribution isn't without credit.
+
+As for testing I can after 21:30UTC+1. I should be on IRC after that hopefully.
+
+Cheers,
+Martin
+>
+>> > On Friday, "junari" in the #linux-sunxi IRC channel, made some
+>> > interesting discovery: he is playing around with an AXP313a on some
+>> > H616 device and figured that DCDC3 is not behaving like the datasheet:
+>> > https://oftc.irclog.whitequark.org/linux-sunxi/2023-01-06#31784528;
+>> > He later confirmed the voltage:
+>> > https://oftc.irclog.whitequark.org/linux-sunxi/2023-01-08#31788373;
+>> >   
+>> Ah interesting. What i also found out right after signing off is from a 
+>> friend at BIQU
+>> that the AXP1530 is the AXP313A. It is the same chip. The only 
+>> difference being that AXP1530
+>> is the internal naming AXP uses. I mean we kinda figured that one out 
+>> but its nice to have
+>> confirmation on this :)
+>
+>Indeed, thanks for that. Aside from the BSP driver, there doesn't seem
+>to be many records of the AXP1530, so I would go with the AXP313a name,
+>and leave the AXP1530 for the trivia section.
+>
+>Cheers,
+>Andre
+>
+>
+>> > Basically it looks like the DCDC3 parameters you harvested from the 
+>> > BSP
+>> > code seem to be correct after all. Do you have any chance to measure
+>> > the voltage?  
+>> I wish i had. Dont think my multimeter would be able to be so precise.
+>> Will try to source some oscilloscope but that wont be in time 
+>> unfortunately.
+>> > If not, can we try to deduce what the right settings are? The voltage
+>> > difference seems to be significant (860mV vs 1200mV), I wonder if any
+>> > device connected there (DRAM?) would work with the wrong setting?  
+>> I will try to be around in IRC sunxi channel "today" from around 
+>> 13:00UTC+1.
+>> Would be prob best to discuss this there and then share our findings 
+>> here on LKML :)
+>> 
+>> Cheers,
+>> Martin
+>> > 
+>> > Cheers,
+>> > Andre
+>> >   
+>> >>  On December 16, 2022 7:17:52 PM GMT+01:00, Andre Przywara 
+>> >> <andre.przywara@arm.com> wrote:  
+>> >>  >On Wed, 14 Dec 2022 20:03:04 +0100
+>> >>  >Martin Botka <martin.botka@somainline.org> wrote:
+>> >>  >
+>> >>  >Hi Martin,
+>> >>  >  
+>> >>  >> AXP1530 is a PMIC chip produced by X-Powers and an be connected   
+>> >> via  
+>> >>  >> I2C bus.
+>> >>  >> Where AXP313A seems to be closely related so the same driver can   
+>> >> be used and  
+>> >>  >> seen it only paired with H616 SoC.  
+>> >>  >
+>> >>  >So as mentioned, I am pretending this is for the AXP313A now,   
+>> >> looking at  
+>> >>  >its datasheet.
+>> >>  >Of course the elephant in the room is s/AXP1530/AXP313A/, but   
+>> >> other than  
+>> >>  >that:
+>> >>  >  
+>> >>  >>
+>> >>  >> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+>> >>  >> ---
+>> >>  >>  drivers/mfd/axp20x-i2c.c   |  2 ++
+>> >>  >>  drivers/mfd/axp20x.c       | 62   
+>> >> ++++++++++++++++++++++++++++++++++++++  
+>> >>  >>  include/linux/mfd/axp20x.h | 32 ++++++++++++++++++++
+>> >>  >>  3 files changed, 96 insertions(+)
+>> >>  >>
+>> >>  >> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
+>> >>  >> index 8fd6727dc30a..6bfb931a580e 100644
+>> >>  >> --- a/drivers/mfd/axp20x-i2c.c
+>> >>  >> +++ b/drivers/mfd/axp20x-i2c.c
+>> >>  >> @@ -60,6 +60,7 @@ static void axp20x_i2c_remove(struct   
+>> >> i2c_client *i2c)  
+>> >>  >>  #ifdef CONFIG_OF
+>> >>  >>  static const struct of_device_id axp20x_i2c_of_match[] = {
+>> >>  >>  	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
+>> >>  >> +	{ .compatible = "x-powers,axp1530", .data = (void   
+>> >> *)AXP1530_ID},  
+>> >>  >>  	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
+>> >>  >>  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
+>> >>  >>  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+>> >>  >> @@ -73,6 +74,7 @@ MODULE_DEVICE_TABLE(of, axp20x_i2c_of_match);
+>> >>  >>
+>> >>  >>  static const struct i2c_device_id axp20x_i2c_id[] = {
+>> >>  >>  	{ "axp152", 0 },
+>> >>  >> +	{ "axp1530", 0 },
+>> >>  >>  	{ "axp202", 0 },
+>> >>  >>  	{ "axp209", 0 },
+>> >>  >>  	{ "axp221", 0 },
+>> >>  >> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+>> >>  >> index 880c41fa7021..6caa7e87ad80 100644
+>> >>  >> --- a/drivers/mfd/axp20x.c
+>> >>  >> +++ b/drivers/mfd/axp20x.c
+>> >>  >> @@ -34,6 +34,7 @@
+>> >>  >>
+>> >>  >>  static const char * const axp20x_model_names[] = {
+>> >>  >>  	"AXP152",
+>> >>  >> +	"AXP1530",
+>> >>  >>  	"AXP202",
+>> >>  >>  	"AXP209",
+>> >>  >>  	"AXP221",
+>> >>  >> @@ -66,6 +67,24 @@ static const struct regmap_access_table   
+>> >> axp152_volatile_table = {  
+>> >>  >>  	.n_yes_ranges	= ARRAY_SIZE(axp152_volatile_ranges),
+>> >>  >>  };
+>> >>  >>
+>> >>  >> +static const struct regmap_range axp1530_writeable_ranges[] = {
+>> >>  >> +	regmap_reg_range(AXP1530_ON_INDICATE, AXP1530_FREQUENCY),  
+>> >>  >
+>> >>  >Where does this FREQUENCY register come from? BSP source? Is that   
+>> >> the  
+>> >>  >lost register to set the PWM frequency?
+>> >>  >The 313 datasheet doesn't mention it, and since we deny   
+>> >> programming the  
+>> >>  >frequency, I would just leave it out.
+>> >>  >If people find it existing (and useful!) later on, we should be   
+>> >> able to  
+>> >>  >add it without breaking anything.  
+>> >> 
+>> >>  BSP. Ack.  
+>> >>  >  
+>> >>  >> +};
+>> >>  >> +
+>> >>  >> +static const struct regmap_range axp1530_volatile_ranges[] = {
+>> >>  >> +	regmap_reg_range(AXP1530_ON_INDICATE, AXP1530_FREQUENCY),
+>> >>  >> +};
+>> >>  >> +
+>> >>  >> +static const struct regmap_access_table axp1530_writeable_table   
+>> >> = {  
+>> >>  >> +	.yes_ranges = axp1530_writeable_ranges,
+>> >>  >> +	.n_yes_ranges = ARRAY_SIZE(axp1530_writeable_ranges),
+>> >>  >> +};
+>> >>  >> +
+>> >>  >> +static const struct regmap_access_table axp1530_volatile_table   
+>> >> = {  
+>> >>  >> +	.yes_ranges = axp1530_volatile_ranges,
+>> >>  >> +	.n_yes_ranges = ARRAY_SIZE(axp1530_volatile_ranges),
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  static const struct regmap_range axp20x_writeable_ranges[] = {
+>> >>  >>  	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ5_STATE),
+>> >>  >>  	regmap_reg_range(AXP20X_CHRG_CTRL1, AXP20X_CHRG_CTRL2),
+>> >>  >> @@ -245,6 +264,15 @@ static const struct regmap_config   
+>> >> axp152_regmap_config = {  
+>> >>  >>  	.cache_type	= REGCACHE_RBTREE,
+>> >>  >>  };
+>> >>  >>
+>> >>  >> +static const struct regmap_config axp1530_regmap_config = {
+>> >>  >> +	.reg_bits = 8,
+>> >>  >> +	.val_bits = 8,
+>> >>  >> +	.wr_table = &axp1530_writeable_table,
+>> >>  >> +	.volatile_table = &axp1530_volatile_table,
+>> >>  >> +	.max_register = AXP1530_FREQUENCY,
+>> >>  >> +	.cache_type = REGCACHE_RBTREE,
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  static const struct regmap_config axp20x_regmap_config = {
+>> >>  >>  	.reg_bits	= 8,
+>> >>  >>  	.val_bits	= 8,
+>> >>  >> @@ -304,6 +332,16 @@ static const struct regmap_irq   
+>> >> axp152_regmap_irqs[] = {  
+>> >>  >>  	INIT_REGMAP_IRQ(AXP152, GPIO0_INPUT,		2, 0),
+>> >>  >>  };
+>> >>  >>
+>> >>  >> +static const struct regmap_irq axp1530_regmap_irqs[] = {
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, KEY_L2H_EN, 0, 7),
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, KEY_H2L_EN, 0, 6),
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, POKSIRQ_EN, 0, 5),
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, POKLIRQ_EN, 0, 4),  
+>> >>  >
+>> >>  >Are those identifiers from the BSP source? The (translated) manual   
+>> >> gives  
+>> >>  >some explanation, namely:
+>> >>  >	PWRON key rising edge
+>> >>  >	PWRON key falling edge
+>> >>  >	Short press the PWRON button
+>> >>  >	Long press the PWRON button
+>> >>  >
+>> >>  >So I'd suggest we follow the existing naming:
+>> >>  >	PEK_RIS_EDGE, PEK_FAL_EDGE, PEK_SHORT, PEK_LONG (respectively)
+>> >>  >
+>> >>  >Or come up with names that people could actually decipher ;-)
+>> >>  >
+>> >>  >  
+>> >>  Ack.  
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, DCDC3_UNDER, 0, 3),
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, DCDC2_UNDER, 0, 2),
+>> >>  >> +	INIT_REGMAP_IRQ(AXP1530, TEMP_OVER, 0, 0),
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  static const struct regmap_irq axp20x_regmap_irqs[] = {
+>> >>  >>  	INIT_REGMAP_IRQ(AXP20X, ACIN_OVER_V,		0, 7),
+>> >>  >>  	INIT_REGMAP_IRQ(AXP20X, ACIN_PLUGIN,		0, 6),
+>> >>  >> @@ -514,6 +552,18 @@ static const struct regmap_irq_chip   
+>> >> axp152_regmap_irq_chip = {  
+>> >>  >>  	.num_regs		= 3,
+>> >>  >>  };
+>> >>  >>
+>> >>  >> +static const struct regmap_irq_chip axp1530_regmap_irq_chip = {
+>> >>  >> +	.name = "axp1530_irq_chip",
+>> >>  >> +	.status_base = AXP1530_IRQ_STATUS1,
+>> >>  >> +	.ack_base = AXP1530_IRQ_STATUS1,
+>> >>  >> +	.mask_base = AXP1530_IRQ_ENABLE1,
+>> >>  >> +	.mask_invert = true,
+>> >>  >> +	.init_ack_masked = true,
+>> >>  >> +	.irqs = axp1530_regmap_irqs,
+>> >>  >> +	.num_irqs = ARRAY_SIZE(axp1530_regmap_irqs),
+>> >>  >> +	.num_regs = 1,
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
+>> >>  >>  	.name			= "axp20x_irq_chip",
+>> >>  >>  	.status_base		= AXP20X_IRQ1_STATE,
+>> >>  >> @@ -683,6 +733,12 @@ static const struct mfd_cell axp152_cells[]   
+>> >> = {  
+>> >>  >>  	},
+>> >>  >>  };
+>> >>  >>
+>> >>  >> +static struct mfd_cell axp1530_cells[] = {
+>> >>  >> +	{
+>> >>  >> +		.name = "axp20x-regulator",
+>> >>  >> +	},
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  static const struct resource axp288_adc_resources[] = {
+>> >>  >>  	DEFINE_RES_IRQ_NAMED(AXP288_IRQ_GPADC, "GPADC"),
+>> >>  >>  };
+>> >>  >> @@ -874,6 +930,12 @@ int axp20x_match_device(struct axp20x_dev   
+>> >> *axp20x)  
+>> >>  >>  		axp20x->regmap_cfg = &axp152_regmap_config;
+>> >>  >>  		axp20x->regmap_irq_chip = &axp152_regmap_irq_chip;
+>> >>  >>  		break;
+>> >>  >> +	case AXP1530_ID:
+>> >>  >> +		axp20x->nr_cells = ARRAY_SIZE(axp1530_cells);
+>> >>  >> +		axp20x->cells = axp1530_cells;
+>> >>  >> +		axp20x->regmap_cfg = &axp1530_regmap_config;
+>> >>  >> +		axp20x->regmap_irq_chip = &axp1530_regmap_irq_chip;
+>> >>  >> +		break;
+>> >>  >>  	case AXP202_ID:
+>> >>  >>  	case AXP209_ID:
+>> >>  >>  		axp20x->nr_cells = ARRAY_SIZE(axp20x_cells);
+>> >>  >> diff --git a/include/linux/mfd/axp20x.h   
+>> >> b/include/linux/mfd/axp20x.h  
+>> >>  >> index 9ab0e2fca7ea..cad25754500f 100644
+>> >>  >> --- a/include/linux/mfd/axp20x.h
+>> >>  >> +++ b/include/linux/mfd/axp20x.h
+>> >>  >> @@ -12,6 +12,7 @@
+>> >>  >>
+>> >>  >>  enum axp20x_variants {
+>> >>  >>  	AXP152_ID = 0,
+>> >>  >> +	AXP1530_ID,
+>> >>  >>  	AXP202_ID,
+>> >>  >>  	AXP209_ID,
+>> >>  >>  	AXP221_ID,
+>> >>  >> @@ -45,6 +46,18 @@ enum axp20x_variants {
+>> >>  >>  #define AXP152_DCDC_FREQ		0x37
+>> >>  >>  #define AXP152_DCDC_MODE		0x80
+>> >>  >>
+>> >>  >> +#define AXP1530_ON_INDICATE		0x00
+>> >>  >> +#define AXP1530_OUTPUT_CONTROL	0x10
+>> >>  >> +#define AXP1530_DCDC1_CONRTOL	0x13
+>> >>  >> +#define AXP1530_DCDC2_CONRTOL	0x14
+>> >>  >> +#define AXP1530_DCDC3_CONRTOL	0x15
+>> >>  >> +#define AXP1530_ALDO1_CONRTOL	0x16
+>> >>  >> +#define AXP1530_DLDO1_CONRTOL	0x17
+>> >>  >> +#define AXP1530_OUTOUT_MONITOR	0x1D  
+>> >>  >
+>> >>  >Shall this read AXP1530_OUTPUT_MONITOR?
+>> >>  >  
+>> >>  >> +#define AXP1530_IRQ_ENABLE1		0x20
+>> >>  >> +#define AXP1530_IRQ_STATUS1		0x21  
+>> >>  >
+>> >>  >There is only one interrupt register, so can we drop the trailing   
+>> >> number?  
+>> >>  >  
+>> >>  Yep.  
+>> >>  >> +#define AXP1530_FREQUENCY		0x87  
+>> >>  >
+>> >>  >As mentioned, the manual does not mention it, and we don't use it   
+>> >> anyway.  
+>> >>  >  
+>> >>  Ack.  
+>> >>  >> +
+>> >>  >>  #define AXP20X_PWR_INPUT_STATUS		0x00
+>> >>  >>  #define AXP20X_PWR_OP_MODE		0x01
+>> >>  >>  #define AXP20X_USB_OTG_STATUS		0x02
+>> >>  >> @@ -287,6 +300,15 @@ enum axp20x_variants {
+>> >>  >>  #define AXP288_FG_TUNE5             0xed
+>> >>  >>
+>> >>  >>  /* Regulators IDs */
+>> >>  >> +enum {
+>> >>  >> +	AXP1530_DCDC1 = 0,
+>> >>  >> +	AXP1530_DCDC2,
+>> >>  >> +	AXP1530_DCDC3,
+>> >>  >> +	AXP1530_LDO1,
+>> >>  >> +	AXP1530_LDO2,  
+>> >>  >
+>> >>  >I guess we should add the RTC LDO as LDO3 here.
+>> >>  >
+>> >>  >The rest of the numbers match with the datasheet.
+>> >>  >  
+>> >>  Ack.
+>> >> 
+>> >>  I will take some time off due to Uni so v6 will be delayed peobably 
+>> >> last holidays.
+>> >> 
+>> >>  Best regards and happy holidays,
+>> >>  Martin  
+>> >>  >Cheers,
+>> >>  >Andre
+>> >>  >  
+>> >>  >> +	AXP1530_REG_ID_MAX,
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  enum {
+>> >>  >>  	AXP20X_LDO1 = 0,
+>> >>  >>  	AXP20X_LDO2,
+>> >>  >> @@ -440,6 +462,16 @@ enum {
+>> >>  >>  	AXP152_IRQ_GPIO0_INPUT,
+>> >>  >>  };
+>> >>  >>
+>> >>  >> +enum axp1530_irqs {
+>> >>  >> +	AXP1530_IRQ_TEMP_OVER,
+>> >>  >> +	AXP1530_IRQ_DCDC2_UNDER = 2,
+>> >>  >> +	AXP1530_IRQ_DCDC3_UNDER,
+>> >>  >> +	AXP1530_IRQ_POKLIRQ_EN,
+>> >>  >> +	AXP1530_IRQ_POKSIRQ_EN,
+>> >>  >> +	AXP1530_IRQ_KEY_L2H_EN,
+>> >>  >> +	AXP1530_IRQ_KEY_H2L_EN,
+>> >>  >> +};
+>> >>  >> +
+>> >>  >>  enum {
+>> >>  >>  	AXP20X_IRQ_ACIN_OVER_V = 1,
+>> >>  >>  	AXP20X_IRQ_ACIN_PLUGIN,  
+>> >>  >  
+>> >   
+>> 
+>> 
+>
