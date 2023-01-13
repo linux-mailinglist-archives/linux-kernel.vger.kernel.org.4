@@ -2,114 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214F5668811
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780266881E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239837AbjAMABj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
+        id S239924AbjAMAKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239077AbjAMABZ (ORCPT
+        with ESMTP id S234031AbjAMAKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:01:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BD111A06;
-        Thu, 12 Jan 2023 16:01:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C1F0B82036;
-        Fri, 13 Jan 2023 00:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D064EC433D2;
-        Fri, 13 Jan 2023 00:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673568082;
-        bh=TyMA7DoMSGx0SjncJKNHxuzQNLUrFJ8p4YaiwDyBuaY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gR85rp8zy7pV4cJt2OoeWvGaL29TLrpklndP+zww6sarfVli/SfqswZRdJID+fOCU
-         GQlZ7+xybWobxHvp+nVagnFMn3QCWDe1USlPnq9jI0xqIt5kmAinmYY+oJGCLY7f71
-         Y86vFIjDv8AVW51swoLI1z51GDEljI6z4bYdqq3/QDlB2+lxsQwytCAlFQb3kUcSc7
-         /IScmkPgtQ8xrmn8G5WtgmW/pGoMY7n/2faRqebwkQZbvmjnjzl9IAScg5Fiz+IiSj
-         kCB1LU1CUkq9rBdfVS3psckS7YVjmgs1+pFgnhasG0Rr7A7IyA59whfvdwkre12e+8
-         0BwjkL103gCQg==
-Date:   Thu, 12 Jan 2023 16:01:20 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: retry to update the inode page given
- EIO
-Message-ID: <Y8CfUMsas4ZqVL0R@google.com>
-References: <20230105233908.1030651-1-jaegeuk@kernel.org>
- <Y74O+5SklijYqMU1@google.com>
- <77b18266-69c4-c7f0-0eab-d2069a7b21d5@kernel.org>
- <Y78E9NpDxtvr2/Hs@google.com>
- <bb9a9d1a-0d4c-b27e-e724-f99d5b8b4283@kernel.org>
+        Thu, 12 Jan 2023 19:10:43 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9568940861
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:10:42 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 70A385C00B3;
+        Thu, 12 Jan 2023 19:10:41 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 19:10:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1673568641; x=1673655041; bh=fn
+        0w1gSR5DhOV6wrzetzvqJJjGA7awX0sZ7gHK1BH/Q=; b=BOQJnOfNbZsiA95+o3
+        xdZp6MCLdZMTzaocrB/0UyDRkcLXi2xkFD+lY3uxivC2pJHdwZnpZbMHopjBUctM
+        va9SelUa/2dVs5ZaC9r0/7WOB/xEO8q7UWYWM9Sts5uZf2METrizVXRk1UmX0OKq
+        KMfqBKfcwtu07lSxbWZmkTFLRcR6//ie5VHE0j3AajqFbBoGAGS1av0y0zY6pi4X
+        HqdD5kfK49pqlQZNPhP3EEgu902A/YHmfIGnyrK7SiZsa/w2o3Sa/Skz6IMiohXq
+        dC6ynx8kGIxbu9JFKniXYEagxl4Z4jgquvJAxWkCXKoutKk3Lou9v1nrSFoiT8D/
+        n5dQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673568641; x=1673655041; bh=fn0w1gSR5DhOV6wrzetzvqJJjGA7
+        awX0sZ7gHK1BH/Q=; b=NxQbSwT50YVM8JGTH5Qf66/uZGD2RRXtclEucb+pKHpl
+        fm56sVIj2nBPUx+COUD9Z9dmUB+0eEqJE7rtgeoJn28o9KB3IuBG78bUeny7qR1s
+        WWQoAKuLA34GRXrg2mB9taMeyF5OwuaG516xD8QmzzbL1z+btfskDyvrU43vjJdU
+        FxsRIASkAuQ7VuWUQsbncf2B2G10UexkJ28wbIhJbrt6VLJVgbaAhxUeKBOUALAd
+        NalTKsxHEoEr39NcKu27rzeAfjWNUt3vVPCMrPtz8IYb4VlICIcHe9zrss6E/6Jv
+        n6xG6pXg9G70yoxZj5JbIJ+ZYcKNr3LUIPJwcQzsUg==
+X-ME-Sender: <xms:gKHAYyZ-zX-h6X5XiFI3jXSCS_9HP79vJQR6j4DB5eslc6z16BL0CA>
+    <xme:gKHAY1b20pA4Kd4YzMGXmz4F5i2f5NjsErwRLMiB8usiyVeReW0Jo4hd8Yld4BMmC
+    o-jPpNNMNdl3Bf3Iok>
+X-ME-Received: <xmr:gKHAY89-zNUbJa6HibVU2ILVKD6S-ak3Dh8ZY5B8grE5dYOd-BYbBYOxWTReEcd-CFRh4A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleejgddvtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:gaHAY0pkt2-PHmrI2qKrVa2P85QtgN3D9ylKGD2jrZKX1wj8WzpMsA>
+    <xmx:gaHAY9rzqzELJr24R0l7xBhESXCuB8anedS97PNlXVV4m50nZCT-Mg>
+    <xmx:gaHAYyRMK_1vPCVqRFOH0UjHQ4lT5zXTaQrweFGVAGOL10Rl9Vbg7w>
+    <xmx:gaHAY-e4ziIhCFAc33M2FGgVH-sYGI7cW9d7j-OeZbtpw1wz3ZCk5A>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 12 Jan 2023 19:10:40 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A6A84109AF0; Fri, 13 Jan 2023 03:10:37 +0300 (+03)
+Date:   Fri, 13 Jan 2023 03:10:37 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
+Message-ID: <20230113001037.adqha6lxj7lh75at@box.shutemov.name>
+References: <20230111133351.807024-1-jannh@google.com>
+ <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
+ <CAHbLzkpAVTys9dBSodHBB3ovKhwP8imUsyXy=aPqY5SyXCT7ww@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb9a9d1a-0d4c-b27e-e724-f99d5b8b4283@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHbLzkpAVTys9dBSodHBB3ovKhwP8imUsyXy=aPqY5SyXCT7ww@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12, Chao Yu wrote:
-> On 2023/1/12 2:50, Jaegeuk Kim wrote:
-> > On 01/11, Chao Yu wrote:
-> > > On 2023/1/11 9:20, Jaegeuk Kim wrote:
-> > > > In f2fs_update_inode_page, f2fs_get_node_page handles EIO along with
-> > > > f2fs_handle_page_eio that stops checkpoint, if the disk couldn't be recovered.
-> > > > As a result, we don't need to stop checkpoint right away given single EIO.
-> > > 
-> > > f2fs_handle_page_eio() only covers the case that EIO occurs on the same
-> > > page, should we cover the case EIO occurs on different pages?
-> > 
-> > Which case are you looking at?
+On Thu, Jan 12, 2023 at 10:12:53AM -0800, Yang Shi wrote:
+> > This is totally wrong direction. Or I don't understand the race.
+> >
+> > At this point we already paid nearly all price of of pagetable retraction.
+> > I don't see any correctness reason to stop here, except for the assert.
 > 
-> - __get_node_page(PageA)		- __get_node_page(PageB)
->  - f2fs_handle_page_eio
->   - sbi->page_eio_ofs[type] = PageA->index
-> 					 - f2fs_handle_page_eio
-> 					  - sbi->page_eio_ofs[type] = PageB->index
-> 
-> In such race case, it may has low probability to set CP_ERROR_FLAG as we expect?
+> Isn't it possible that collapse_and_free_pmd() clear the pmd which may
+> point to a PTE which maps the COW'ed anon page if this race happens?
 
-Do you see that case in products?
-I'm trying to avoid setting CP_ERROR_FLAG here.
+No. At this point we have huge page in the place in the page cache and it
+is locked. COW fault would serialize on the page lock.
 
-> 
-> Thanks,
-> 
-> > 
-> > > 
-> > > Thanks,
-> > > 
-> > > > 
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Randall Huang <huangrandall@google.com>
-> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > > ---
-> > > > 
-> > > >    Change log from v1:
-> > > >     - fix a bug
-> > > > 
-> > > >    fs/f2fs/inode.c | 2 +-
-> > > >    1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > > index ff6cf66ed46b..2ed7a621fdf1 100644
-> > > > --- a/fs/f2fs/inode.c
-> > > > +++ b/fs/f2fs/inode.c
-> > > > @@ -719,7 +719,7 @@ void f2fs_update_inode_page(struct inode *inode)
-> > > >    	if (IS_ERR(node_page)) {
-> > > >    		int err = PTR_ERR(node_page);
-> > > > -		if (err == -ENOMEM) {
-> > > > +		if (err == -ENOMEM || (err == -EIO && !f2fs_cp_error(sbi))) {
-> > > >    			cond_resched();
-> > > >    			goto retry;
-> > > >    		} else if (err != -ENOENT) {
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
