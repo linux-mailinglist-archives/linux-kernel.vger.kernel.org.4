@@ -2,209 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C464669832
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E222266985D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240363AbjAMNQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S241320AbjAMNUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbjAMNP4 (ORCPT
+        with ESMTP id S241570AbjAMNUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:15:56 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B579559CC
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:06:14 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 081176B1FA;
-        Fri, 13 Jan 2023 13:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673615173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 13 Jan 2023 08:20:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F7959D00
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673615320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b4BbmbSd3UvEy9SdkA+0yT3JqRozaBsHVEN+OsDtaAg=;
-        b=pnwi8fP7mwxBuE0MWRu3DZQAlZVkba6fMpx0R0NjF0CkYpE74qYdlDek2KBfSONWUlepYz
-        zNIBNR42R5VatgQ/Tsl/PO60UZayrT1s2bjMYFFY/M17lC9tI7OxBqRtcaBCEyakHoXBMW
-        BKOGXpvWoEVr/EXngCsU8a+mYfp/1uU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBC7B13913;
-        Fri, 13 Jan 2023 13:06:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Bd/JMkRXwWOuagAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 13 Jan 2023 13:06:12 +0000
-Date:   Fri, 13 Jan 2023 14:06:11 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] mm/page_alloc: Explicitly define how __GFP_HIGH
- non-blocking allocations accesses reserves
-Message-ID: <Y8FXQ4XrSuoPux/7@dhcp22.suse.cz>
-References: <20230113111217.14134-1-mgorman@techsingularity.net>
- <20230113111217.14134-6-mgorman@techsingularity.net>
+        bh=zTGp/g2Mj2pJKwIiYAJsofqpy3bUijk8D7H1gLakptw=;
+        b=TzFFb9RdwzjYz+tUJPXhoLPooIvp/08XiWlQJUkZdX192ZUnivaTB9CqyP+ocphwi1UDjj
+        e56kgwrtilhdGRKTNmLWgY7mHFWczCRSTVGvmcPR8MqylXTY77WuNzqbZAyn5UvDv0aIW9
+        3SbuKwVEeGKfhFZn4Z9PPqpRokmAQCQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-80-5MI1HJVhMaODli8BBZ1yYA-1; Fri, 13 Jan 2023 08:08:39 -0500
+X-MC-Unique: 5MI1HJVhMaODli8BBZ1yYA-1
+Received: by mail-wm1-f69.google.com with SMTP id bi6-20020a05600c3d8600b003da1f6a7b20so791879wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:08:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zTGp/g2Mj2pJKwIiYAJsofqpy3bUijk8D7H1gLakptw=;
+        b=GPhQ/i1omDCsTTulUCf5nJ1ZC6Sdu6BdMzDve4dQvhMYcNiaucFw3+vYSxSMgESwv1
+         p6aB+wlhGyUPTJKf8YshUMlh3Jyt7ImItZugp9r5RK9I4D3Ij3hmbO7p6C/eWJB9wICL
+         SKH9EtJ361JDKBTN1F8ZMIraBMaIqegJ86MFZyd7uqcehYIObP5g38NLRHQ/ZbwqOKKd
+         mjp+oXzg77gT+3ntuE7GBpRUabtaYzQuXUo6C6PSkRanPAQyfq5qJYzXXF9zlhIeowSi
+         3TUHHEsKakDo1jzTZ+XosBB7oM6I8TESbaw8TbxjmBll7HkYVPgIa36UASZOKNqiO7L2
+         qiaw==
+X-Gm-Message-State: AFqh2koBlOmywPeoG4nqVb44f3D0/2w+qCC9XCCXviwJ3RaVw0mQyRSq
+        fiNv7qRmNr3DwZyWFG6x1IOH2dNcaK6jEAnT1QZx2k4l0+LHNH2ywgNblJoUpKGw1Z0akKi+sY8
+        ly4xfTCq1UY8H1wDKtu1fxBXN
+X-Received: by 2002:adf:cd82:0:b0:2bd:bf44:2427 with SMTP id q2-20020adfcd82000000b002bdbf442427mr8484115wrj.42.1673615318295;
+        Fri, 13 Jan 2023 05:08:38 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvPtDScdJl06i/LvqN9fQBg1j/z9NuB/ZbSPipm75MwKl4iLeEaz8CQ94/uHzhS2GM0wFfPXg==
+X-Received: by 2002:adf:cd82:0:b0:2bd:bf44:2427 with SMTP id q2-20020adfcd82000000b002bdbf442427mr8484099wrj.42.1673615317966;
+        Fri, 13 Jan 2023 05:08:37 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:ec00:869d:7200:eb03:db01? (p200300cbc704ec00869d7200eb03db01.dip0.t-ipconnect.de. [2003:cb:c704:ec00:869d:7200:eb03:db01])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5d6b8a000000b002425787c5easm18873317wrx.96.2023.01.13.05.08.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 05:08:37 -0800 (PST)
+Message-ID: <8bbc5629-b89a-83f3-41a4-0083ea2468c1@redhat.com>
+Date:   Fri, 13 Jan 2023 14:08:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113111217.14134-6-mgorman@techsingularity.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH -next 5/7] mm: memory: convert wp_page_copy() to use
+ folios
+Content-Language: en-US
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230112083006.163393-1-wangkefeng.wang@huawei.com>
+ <20230112083006.163393-6-wangkefeng.wang@huawei.com>
+ <CGME20230113130136eucas1p18a54a3812792e500a02079ee890e5ecb@eucas1p1.samsung.com>
+ <32fefce6-e25d-106d-12ec-8fc612843cfb@samsung.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <32fefce6-e25d-106d-12ec-8fc612843cfb@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 13-01-23 11:12:16, Mel Gorman wrote:
-> GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a vague
-> description. In preparation for the removal of GFP_ATOMIC redefine
-> __GFP_ATOMIC to simply mean non-blocking and renaming ALLOC_HARDER to
-> ALLOC_NON_BLOCK accordingly. __GFP_HIGH is required for access to reserves
-> but non-blocking is granted more access. For example, GFP_NOWAIT is
-> non-blocking but has no special access to reserves. A __GFP_NOFAIL
-> blocking allocation is granted access similar to __GFP_HIGH if the
-> only alternative is an OOM kill.
+On 13.01.23 14:01, Marek Szyprowski wrote:
+> Hi
 > 
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-
-Acked-by: Michal Hocko <mhocko@suse.com>
-
-Thanks!
-
-> ---
->  mm/internal.h   |  7 +++++--
->  mm/page_alloc.c | 44 ++++++++++++++++++++++++--------------------
->  2 files changed, 29 insertions(+), 22 deletions(-)
+> On 12.01.2023 09:30, Kefeng Wang wrote:
+>> The old_page/new_page are converted to old_folio/new_folio in
+>> wp_page_copy(), then replaced related page functions to folio
+>> functions.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 > 
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 8706d46863df..23a37588073a 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -735,7 +735,10 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
->  #define ALLOC_OOM		ALLOC_NO_WATERMARKS
->  #endif
->  
-> -#define ALLOC_HARDER		 0x10 /* try to alloc harder */
-> +#define ALLOC_NON_BLOCK		 0x10 /* Caller cannot block. Allow access
-> +				       * to 25% of the min watermark or
-> +				       * 62.5% if __GFP_HIGH is set.
-> +				       */
->  #define ALLOC_MIN_RESERVE	 0x20 /* __GFP_HIGH set. Allow access to 50%
->  				       * of the min watermark.
->  				       */
-> @@ -750,7 +753,7 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
->  #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
->  
->  /* Flags that allow allocations below the min watermark. */
-> -#define ALLOC_RESERVES (ALLOC_HARDER|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
-> +#define ALLOC_RESERVES (ALLOC_NON_BLOCK|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
->  
->  enum ttu_flags;
->  struct tlbflush_unmap_batch;
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 6f41b84a97ac..b9ae0ba0a2ab 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3989,18 +3989,19 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
->  		 * __GFP_HIGH allows access to 50% of the min reserve as well
->  		 * as OOM.
->  		 */
-> -		if (alloc_flags & ALLOC_MIN_RESERVE)
-> +		if (alloc_flags & ALLOC_MIN_RESERVE) {
->  			min -= min / 2;
->  
-> -		/*
-> -		 * Non-blocking allocations can access some of the reserve
-> -		 * with more access if also __GFP_HIGH. The reasoning is that
-> -		 * a non-blocking caller may incur a more severe penalty
-> -		 * if it cannot get memory quickly, particularly if it's
-> -		 * also __GFP_HIGH.
-> -		 */
-> -		if (alloc_flags & ALLOC_HARDER)
-> -			min -= min / 4;
-> +			/*
-> +			 * Non-blocking allocations (e.g. GFP_ATOMIC) can
-> +			 * access more reserves than just __GFP_HIGH. Other
-> +			 * non-blocking allocations requests such as GFP_NOWAIT
-> +			 * or (GFP_KERNEL & ~__GFP_DIRECT_RECLAIM) do not get
-> +			 * access to the min reserve.
-> +			 */
-> +			if (alloc_flags & ALLOC_NON_BLOCK)
-> +				min -= min / 4;
-> +		}
->  
->  		/*
->  		 * OOM victims can try even harder than the normal reserve
-> @@ -4851,28 +4852,30 @@ gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
->  	 * The caller may dip into page reserves a bit more if the caller
->  	 * cannot run direct reclaim, or if the caller has realtime scheduling
->  	 * policy or is asking for __GFP_HIGH memory.  GFP_ATOMIC requests will
-> -	 * set both ALLOC_HARDER (__GFP_ATOMIC) and ALLOC_MIN_RESERVE(__GFP_HIGH).
-> +	 * set both ALLOC_NON_BLOCK and ALLOC_MIN_RESERVE(__GFP_HIGH).
->  	 */
->  	alloc_flags |= (__force int)
->  		(gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM));
->  
-> -	if (gfp_mask & __GFP_ATOMIC) {
-> +	if (!(gfp_mask & __GFP_DIRECT_RECLAIM)) {
->  		/*
->  		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
->  		 * if it can't schedule.
->  		 */
->  		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
-> -			alloc_flags |= ALLOC_HARDER;
-> +			alloc_flags |= ALLOC_NON_BLOCK;
->  
->  			if (order > 0)
->  				alloc_flags |= ALLOC_HIGHATOMIC;
->  		}
->  
->  		/*
-> -		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
-> -		 * comment for __cpuset_node_allowed().
-> +		 * Ignore cpuset mems for non-blocking __GFP_HIGH (probably
-> +		 * GFP_ATOMIC) rather than fail, see the comment for
-> +		 * __cpuset_node_allowed().
->  		 */
-> -		alloc_flags &= ~ALLOC_CPUSET;
-> +		if (alloc_flags & ALLOC_MIN_RESERVE)
-> +			alloc_flags &= ~ALLOC_CPUSET;
->  	} else if (unlikely(rt_task(current)) && in_task())
->  		alloc_flags |= ALLOC_MIN_RESERVE;
->  
-> @@ -5303,12 +5306,13 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
->  		WARN_ON_ONCE_GFP(costly_order, gfp_mask);
->  
->  		/*
-> -		 * Help non-failing allocations by giving them access to memory
-> -		 * reserves but do not use ALLOC_NO_WATERMARKS because this
-> +		 * Help non-failing allocations by giving some access to memory
-> +		 * reserves normally used for high priority non-blocking
-> +		 * allocations but do not use ALLOC_NO_WATERMARKS because this
->  		 * could deplete whole memory reserves which would just make
-> -		 * the situation worse
-> +		 * the situation worse.
->  		 */
-> -		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_HARDER, ac);
-> +		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_MIN_RESERVE, ac);
->  		if (page)
->  			goto got_pg;
->  
-> -- 
-> 2.35.3
+> This patch, merged into today's linux-next as commit 9ebae00c8e30 ("mm:
+> memory: convert wp_page_copy() to use folios"), causes serious stability
+> issues on my ARM based test boards. Here is the example of such crash:
+
+syzbot is also not happy:
+
+https://lkml.kernel.org/r/000000000000807c7805f2205df1@google.com
 
 -- 
-Michal Hocko
-SUSE Labs
+Thanks,
+
+David / dhildenb
+
