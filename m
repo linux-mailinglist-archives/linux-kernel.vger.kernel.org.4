@@ -2,210 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C51668F5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4A3668F5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbjAMHmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S239005AbjAMHmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbjAMHls (ORCPT
+        with ESMTP id S235371AbjAMHl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:41:48 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51C737532
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:41:45 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id r6-20020a92cd86000000b00304b2d1c2d7so15347628ilb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:41:45 -0800 (PST)
+        Fri, 13 Jan 2023 02:41:58 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7606085D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:41:57 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id mp20so3724614ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:41:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6jZVPkMKH4dg9LBMPAxa9vHTcN8f+QCAxm1Sdx9qwJU=;
+        b=J3aaWsdWmJTehzMVhoxONIh9ExogjBLIzEuEIE3yW7JL3XtFYWNVDekd1+bBX5A4Og
+         pCo7uFCd10bjUtrzNej37f+xKmypWmiow14s5Gb7NcWfW1dA+zIUw2twoRiQKVMbMhW3
+         eRMBcemDO8IoRsKkRnmccerajwNuBFb4xibsqig8UaEAlBj4G11Pqm1HzJYxxU7tWP4t
+         5Xo5Z3L+/bnpDb2blNP6X2ZIHAuxumGO0XwsO5z1T6uZks4nGG3KeHsq+LBKheCuSIgC
+         GC+fYX+wj4eeP0kHCeDuUlRM7bAyV2lsVtJBNIxdS2jyBEepDmoBgBhu5vANKa5eNG3Z
+         hoBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XR5y/VHLhbyQu8W3GOG3cTtNbzdtZN9dmHX0UMQPOGc=;
-        b=V2jwFHirHdxtYcKSU71j3InDfR/p+xptym/rPLMt6Zp5JBx1Mt+wiOe/Dr3/NsFs6v
-         lkuB6GjpT1XrKPd8wrDcbT/rEejXeanU9Yt/dwzN/swNwVVGKkCxphpq6XBZQb58kn7p
-         5WKkTrs+bzz8BN17JGHTNjFB5rZaGEPt68Jy5hewzE+n1woR754VahNYLMiEiY2WZjYx
-         ASETZPeDKM0MT8E+AI5SFZERYWgA9MXnWbQQSj65NAgqUUc9E+VEva+IaIIpWWdpZ/O3
-         +iC0iyXmnefAa2jGs3xe9f/7IzAyEFFXGO02lGor88Xuby18ilQ9yNA9nd/qU40XaXXE
-         wWRA==
-X-Gm-Message-State: AFqh2kp7cFC08Eurm3cxTGwMhuRstQr1V4ToFtqG24zFl+Y4Gl11tO01
-        Lm14wEqoPXlOkr3XEXR1IH/mo4mdIFxha9atGf+hrjHnK7PH
-X-Google-Smtp-Source: AMrXdXs1T9JThVOnYNs/qNxg1W+tq0gNFTqyHfalkGsbQMNrN7h+ac2BoS/lojboTh54qhd+dN3gZS85TIw1GNgfp9rnvlJtH4dV
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6jZVPkMKH4dg9LBMPAxa9vHTcN8f+QCAxm1Sdx9qwJU=;
+        b=Gx3pxc21onGUewmqxxCIJTlP8xXIktcXuT6e/oupmFBX4uxiWUfeJNg+2G5a5XYmo/
+         exfmHz/59Iirk7Ztjn+zBHKZLdgXCWNWOIBOEjyspkO6yxSRTkxuMYNTJTUqy2Td1nRe
+         4xex1O5PuAH8d1w8Q86ryNGQ/HMDR3YMV63lxST/yZz4jsouEJi1V6ZFYhLKaeYENFEG
+         68vAbl/6CoBhS2hZKz/glUlYwDGO9W/VKS/tUABmTfvdRdFKHgkH4BfuLAmc8+gjJz0+
+         59pFTwpNR3TtTNkcVtl0KcBgRpEtPLDX1J2XLhLwAgUmC5BBv7ajLo9gzJX9qa3iF2dT
+         hNRw==
+X-Gm-Message-State: AFqh2kpfgegEuhMpQ2o2HoIW2G1fMwSNL0vnqC/cgAdUCMg9Io8luYVq
+        thesOcMuSyxh4twh38uKFXgN5A==
+X-Google-Smtp-Source: AMrXdXuQPiGyD2HBuR8sg3rcbklpELPTDaituTJoWc3bimEkPQJMxFjPT8IVOo9o7LHXkoI573hwSg==
+X-Received: by 2002:a17:906:468d:b0:7c0:a5c8:d14f with SMTP id a13-20020a170906468d00b007c0a5c8d14fmr66826201ejr.77.1673595716005;
+        Thu, 12 Jan 2023 23:41:56 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906311200b0084b89c66eb5sm8202096ejx.4.2023.01.12.23.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 23:41:55 -0800 (PST)
+Message-ID: <f4356898-de35-9728-5395-baecb07c843f@linaro.org>
+Date:   Fri, 13 Jan 2023 08:41:52 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:2c03:0:b0:30c:33da:cb53 with SMTP id
- t3-20020a922c03000000b0030c33dacb53mr6291710ile.173.1673595705127; Thu, 12
- Jan 2023 23:41:45 -0800 (PST)
-Date:   Thu, 12 Jan 2023 23:41:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000807c7805f2205df1@google.com>
-Subject: [syzbot] linux-next boot error: general protection fault in _compound_head
-From:   syzbot <syzbot+65231569237fd5c39d34@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, david@redhat.com, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        muchun.song@linux.dev, osalvador@suse.de, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 02/16] dt-bindings: spi: Add bcmbca-hsspi controller
+ support
+To:     William Zhang <william.zhang@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+Cc:     anand.gore@broadcom.com, tomer.yacoby@broadcom.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        jonas.gorski@gmail.com, kursad.oney@broadcom.com, dregan@mail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106200809.330769-1-william.zhang@broadcom.com>
+ <20230106200809.330769-3-william.zhang@broadcom.com>
+ <b529a53b-d00c-063d-a58d-e64b0300605d@linaro.org>
+ <5dfac2d7-3b4b-9ded-0dde-26b289c604d0@broadcom.com>
+ <99b01e96-3b96-6692-c5e1-87db49295e6d@linaro.org>
+ <49925933-aacc-4f0d-a1ca-e1bd45b05eee@broadcom.com>
+ <b246a81f-e465-5e52-f0ce-65e0a82fc3e1@linaro.org>
+ <32a464f8-6a4b-6777-9775-f17e990e0c6a@gmail.com>
+ <71c2e796-f0fb-90cd-4599-13c9718f41d5@linaro.org>
+ <31644849-dc69-ddfc-a6b6-6ffd37d64d2b@broadcom.com>
+ <f0a50234-bc8c-09c4-e2c1-22cbeaba5c15@linaro.org>
+ <e99a71b2-0b05-1a53-1c29-3778b49a3b86@broadcom.com>
+ <0cc43891-405e-418f-01ee-845d680b3a24@linaro.org>
+ <14a48b44-962e-1839-4fbb-1739ba8dbc35@broadcom.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <14a48b44-962e-1839-4fbb-1739ba8dbc35@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 12/01/2023 20:50, William Zhang wrote:
+>>> No as we are adding chip model specific info here.  The existing driver
+>>> spi-bcm63xx-hsspi.c only binds to brcm,bcm6328-hsspi. This driver
+>>> supports all the chips with rev1.0 controller so I am using this 6328
+>>> string for other chips with v1.0 in the dts patch, which is not ideal.
+>>
+>> Why? This is perfectly ideal and usual case. Why changing it?
+>>
+>>> Now I have to add more compatible to this driver and for each new chip
+>>> with 1.0 in the future if any.
+>>
+>> Why you cannot use compatibility with older chipset?
+>>
+> IMHO it is really confusing that we have all the SoCs but have to bind 
+> to an antique SoC's spi controller compatible and people may think it is 
+> a mistake or typo when they don't know they are actually the same.
 
-syzbot found the following issue on:
+I am sorry, this is ridiculous argument. It's like saying - people
+cannot understand what they are reading, therefore we need to present
+them obfuscated information so they will think something else than their
+minds created...
 
-HEAD commit:    6b31ffe9c8b9 Add linux-next specific files for 20230113
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=152656ea480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=65231569237fd5c39d34
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> I 
+> know there are usage like that but when we have clear knowledge of the 
+> IP block with rev info, I think it is much better to have a precise SoC 
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ce9e6ba7733a/disk-6b31ffe9.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1e7d869b72b8/vmlinux-6b31ffe9.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6a2e565791bb/bzImage-6b31ffe9.xz
+No, it's not particularly better and you were questioning it just before...
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+65231569237fd5c39d34@syzkaller.appspotmail.com
+> model number and a general revision info in the compatible. As you know 
+> they are many usage of IP rev info in the compatible too. 
+> brcm,bcm6328-hsspi will stay so it does not break any existing dts 
+> reference to that.
 
-zswap: loaded using pool lzo/zbud
-debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-Key type .fscrypt registered
-Key type fscrypt-provisioning registered
-kAFS: Red Hat AFS client v0.1 registering.
-Btrfs loaded, crc32c=crc32c-intel, assert=on, ref-verify=on, zoned=yes, fsverity=yes
-Key type big_key registered
-Key type encrypted registered
-AppArmor: AppArmor sha1 policy hashing enabled
-ima: No TPM chip found, activating TPM-bypass!
-Loading compiled-in module X.509 certificates
-Loaded X.509 cert 'Build time autogenerated kernel key: eb9e833d5ab7051cb5090e71343bc6c45ed6a48c'
-ima: Allocated hash algorithm: sha256
-ima: No architecture policies found
-evm: Initialising EVM extended attributes:
-evm: security.selinux (disabled)
-evm: security.SMACK64 (disabled)
-evm: security.SMACK64EXEC (disabled)
-evm: security.SMACK64TRANSMUTE (disabled)
-evm: security.SMACK64MMAP (disabled)
-evm: security.apparmor
-evm: security.ima
-evm: security.capability
-evm: HMAC attrs: 0x1
-PM:   Magic number: 7:396:565
-usb usb29-port6: hash matches
-printk: console [netcon0] enabled
-netconsole: network logging started
-gtp: GTP module loaded (pdp ctx size 104 bytes)
-rdma_rxe: loaded
-cfg80211: Loading compiled-in X.509 certificates for regulatory database
-cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-ALSA device list:
-  #0: Dummy 1
-  #1: Loopback 1
-  #2: Virtual MIDI Card 1
-md: Waiting for all devices to be available before autodetect
-md: If you don't use raid, use raid=noautodetect
-md: Autodetecting RAID arrays.
-md: autorun ...
-md: ... autorun DONE.
-EXT4-fs (sda1): mounted filesystem 9ce8f422-5403-4bd0-ab21-1df2c0fc2934 with ordered data mode. Quota mode: none.
-VFS: Mounted root (ext4 filesystem) readonly on device 8:1.
-devtmpfs: mounted
-Freeing unused kernel image (initmem) memory: 2928K
-Write protecting the kernel read-only data: 184320k
-Freeing unused kernel image (rodata/data gap) memory: 1256K
-x86/mm: Checked W+X mappings: passed, no W+X pages found.
-Failed to set sysctl parameter 'max_rcu_stall_to_panic=1': parameter not found
-Run /sbin/init as init process
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 1 PID: 1 Comm: init Not tainted 6.2.0-rc3-next-20230113-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:_compound_head+0x21/0x150 include/linux/page-flags.h:251
-Code: e8 34 6a 14 00 eb ee 66 90 41 54 55 53 48 89 fb e8 44 a2 c6 ff 48 8d 7b 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 fd 00 00 00 48 8b 6b 08 31 ff 49 89 ec 41 83 e4
-RSP: 0000:ffffc90000067bb0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff81bb265c RDI: 0000000000000008
-RBP: ffff88801be3bd20 R08: 0000000000000000 R09: ffff88801c278303
-R10: ffffed100384f060 R11: 0000000000000000 R12: 0000000000000000
-R13: ffffc90000067da8 R14: ffffc90000067d80 R15: 0000000000000000
-FS:  00007f92c0dc0800(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f92c0e4c300 CR3: 000000001bf3c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- wp_page_copy mm/memory.c:3047 [inline]
- do_wp_page+0x749/0x3880 mm/memory.c:3425
- handle_pte_fault mm/memory.c:4937 [inline]
- __handle_mm_fault+0x2183/0x3eb0 mm/memory.c:5061
- handle_mm_fault+0x1b6/0x850 mm/memory.c:5207
- do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1407
- handle_page_fault arch/x86/mm/fault.c:1498 [inline]
- exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1554
- asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0033:0x7f92c0e2df98
-Code: 0b 8b 3d 6f d3 01 00 e9 9e ff ff ff c3 55 53 48 8d 1d 9c e3 01 00 52 48 8b 3d 74 e3 01 00 48 8d ab 00 01 00 00 e8 08 f1 ff ff <48> c7 05 5d e3 01 00 00 00 00 00 48 8b 3b 48 83 c3 08 e8 f1 f0 ff
-RSP: 002b:00007ffd667702e0 EFLAGS: 00010202
-RAX: 0000000000000000 RBX: 00007f92c0e4c320 RCX: 000055ba317c6480
-RDX: 0000000000000007 RSI: 000055ba317c6480 RDI: 0000000000000000
-RBP: 00007f92c0e4c420 R08: 0000000000000000 R09: 000055ba317c64d0
-R10: 0000000000000011 R11: 000000000000000c R12: 0000000000000000
-R13: 00007ffd6677036c R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:_compound_head+0x21/0x150 include/linux/page-flags.h:251
-Code: e8 34 6a 14 00 eb ee 66 90 41 54 55 53 48 89 fb e8 44 a2 c6 ff 48 8d 7b 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 fd 00 00 00 48 8b 6b 08 31 ff 49 89 ec 41 83 e4
-RSP: 0000:ffffc90000067bb0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff81bb265c RDI: 0000000000000008
-RBP: ffff88801be3bd20 R08: 0000000000000000 R09: ffff88801c278303
-R10: ffffed100384f060 R11: 0000000000000000 R12: 0000000000000000
-R13: ffffc90000067da8 R14: ffffc90000067d80 R15: 0000000000000000
-FS:  00007f92c0dc0800(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f92c0e4c300 CR3: 000000001bf3c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	e8 34 6a 14 00       	callq  0x146a39
-   5:	eb ee                	jmp    0xfffffff5
-   7:	66 90                	xchg   %ax,%ax
-   9:	41 54                	push   %r12
-   b:	55                   	push   %rbp
-   c:	53                   	push   %rbx
-   d:	48 89 fb             	mov    %rdi,%rbx
-  10:	e8 44 a2 c6 ff       	callq  0xffc6a259
-  15:	48 8d 7b 08          	lea    0x8(%rbx),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 fd 00 00 00    	jne    0x131
-  34:	48 8b 6b 08          	mov    0x8(%rbx),%rbp
-  38:	31 ff                	xor    %edi,%edi
-  3a:	49 89 ec             	mov    %rbp,%r12
-  3d:	41                   	rex.B
-  3e:	83                   	.byte 0x83
-  3f:	e4                   	.byte 0xe4
+Anyway your ship sailed - you already have bindings using SoC  versions...
 
+> 
+> Anyway if you still does not like this idea, I will drop the rev info 
+> and you have it your way.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Best regards,
+Krzysztof
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
