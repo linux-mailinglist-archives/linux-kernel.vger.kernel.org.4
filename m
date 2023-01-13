@@ -2,116 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997A166A709
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA4766A716
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjAMX1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S231482AbjAMX3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbjAMX1H (ORCPT
+        with ESMTP id S231451AbjAMX3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:27:07 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3E18A213
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:27:07 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p24so24913073plw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:27:07 -0800 (PST)
+        Fri, 13 Jan 2023 18:29:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53688A211
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:29:35 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v23so23874831pju.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:29:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QeiJHvrswqLFEJEjzaUv7SNJ90rY7sOx4dR9LZd7H2E=;
-        b=DuqQQVG5xVrKMgjEw0hjJ9MguBiRIpWq1NyyBjNbv2+ESrZQPti6WbySPmR4WRj/cg
-         pR/DACzXpZET9vv+RCNgTa02tSyRReJqJl2vDrNc5GhJjcaQYdH6BhKrDinJm53Iuk7P
-         MKB14bcVCKcNYXjForPiwJ1N8J3HioI9efTEs=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZQbX+PJeFGPE/epzSLyMXyeM3puvzgeaNuzCa8J0EXw=;
+        b=KI84PoD5hlyAFNUuR0aDNZVOeTIPetcODuXQFOLsthx0M9PBbd4Ii4NEbvq7AksXu7
+         toZuH3SuWrDmOxlRgY9v/sD5jNWPLQf6dKrCbnokAUAIQEtbRDiSfZWcl/1I3UQVFAEb
+         a6/l7wl7AA00DOx0ry/KDkad9zplSEVZSJFkd/VMKfI133Y6qU9QwZssXXrbCDw5Nb9m
+         dzGrv28dPEYNNVmjwYaPASFLrerbq2hEC4XqdUUCBoLLJ4B4Gtckq/k2ywJKN2rpzvVv
+         ocA532ET5RmMjB9lD97Ske8J4o2bErglLd6L5RaQkIXwXXqhqMDkO9X/qFp6RwMMIFsr
+         LLbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QeiJHvrswqLFEJEjzaUv7SNJ90rY7sOx4dR9LZd7H2E=;
-        b=YcdOcnO6Fy7gMurmrpEeWraV9G2OhjhAaG+MV9KakRurP55uOVgJKflQcN3rTIGYKB
-         ldzLoxck0nX0frgX3ITifIKuavoi0iM6fx5aUtEJzjf2cP90Qk7t7mpwmvMpwVVZ6aoE
-         RPXaezpGywPhV03HTjbntoAnDN5w6yvJI4bwLI5AdYir+O+8QGBV8QI1vLwdwe9syhiX
-         VS3t1wG9yc1YdYRlO/LXkZfJCkSE/9gLHR5XMbrsoqnjgSoF4XwLeTw2l7WVmQdtjDNB
-         hrRTaewIa3bo3c3tK9FXB9j//P2Fo8xk1NzH21JQqlg5L8nNsSHOijQt371qD7z6jdz4
-         3Dow==
-X-Gm-Message-State: AFqh2kqynjWQ0s9w3HAis1UAJBXrXt3gy/LZhWgXLS7Arpo3OyT/4FVo
-        1M30vRxrhfKETWn6ySODecYPlQ==
-X-Google-Smtp-Source: AMrXdXsDMheL/IO0a+uJkPxWNIoWsClmDoGmLb3/qltk/bmQk14iAy/bo+Gr8FI23b07uGkLj8h8Sg==
-X-Received: by 2002:a17:902:b085:b0:192:d5dc:c84b with SMTP id p5-20020a170902b08500b00192d5dcc84bmr38212483plr.50.1673652426625;
-        Fri, 13 Jan 2023 15:27:06 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x3-20020a170902a38300b0018997f6fc88sm14682715pla.34.2023.01.13.15.27.05
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZQbX+PJeFGPE/epzSLyMXyeM3puvzgeaNuzCa8J0EXw=;
+        b=Fe7r4PQoPzrJlUTH8z09S1/NHVEn1ZMdYE4Oho9EwjpNGSC4ppEmX40z/ykUmYxncO
+         pbIzDF8ga3DZJEX7hvox4iZvZoRHwJ32CQa64fd9VodDlE2gVnsEWQ5D6O5ZduFiMJ8D
+         bOdJL8nw6yaMRauk0ezYCZxdoGHvrGLSt3m77ydq4BvV7dkLaSYlcvJVKuG5GOIRgFUc
+         j4FpkuJ+yW0cOHKgh5ew7lCZmF/CA4KevTqzOtQLNNdm4125G3uqpaSx8yghmziFFHmW
+         U3uLpfgvYIT3vLW0Ln/iP0Q0z6EySg9YtEQxCPldfLkGhTgQhDYZ4mupnfDonZ1o2nlU
+         5XTA==
+X-Gm-Message-State: AFqh2kp457TvdANcbvLsWRSaEsYf9xAO5XkbSsBG1uEgiIoCaGT9nsTL
+        WQbmBlMsbaiRHidG1IOzSmXXcA==
+X-Google-Smtp-Source: AMrXdXuw7u5n3rdsoSl403MwiroTsQpSA4OUWBZMOT9napmmz7jBR90tsEYJogYGPCeapKIvBrQTcA==
+X-Received: by 2002:a17:902:d409:b0:189:6624:58c0 with SMTP id b9-20020a170902d40900b00189662458c0mr1300675ple.3.1673652575167;
+        Fri, 13 Jan 2023 15:29:35 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090311ce00b00189c536c72asm14777597plh.148.2023.01.13.15.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 15:27:06 -0800 (PST)
-Date:   Fri, 13 Jan 2023 15:27:05 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jack Rosenthal <jrosenth@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [GIT PULL] kernel hardening fixes for v6.2-rc4
-Message-ID: <202301131526.28719A40@keescook>
+        Fri, 13 Jan 2023 15:29:34 -0800 (PST)
+Date:   Fri, 13 Jan 2023 23:29:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 8/9] KVM: Handle page fault for private memory
+Message-ID: <Y8HpW9VNVlIdiH+P@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-9-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221202061347.1070246-9-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Dec 02, 2022, Chao Peng wrote:
+> @@ -5599,6 +5652,9 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
+>  			return -EIO;
+>  	}
+>  
+> +	if (r == RET_PF_USER)
+> +		return 0;
+> +
+>  	if (r < 0)
+>  		return r;
+>  	if (r != RET_PF_EMULATE)
+> @@ -6452,7 +6508,8 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
+>  		 */
+>  		if (sp->role.direct &&
+>  		    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
+> -							       PG_LEVEL_NUM)) {
+> +							       PG_LEVEL_NUM,
+> +							       false)) {
 
-Please pull these two kernel hardening fixes for v6.2-rc4.
+Passing %false is incorrect.  It might not cause problems because KVM currently
+doesn't allowing modifying private memslots (that likely needs to change to allow
+dirty logging), but it's wrong since nothing guarantees KVM is operating on SPTEs
+for shared memory.
 
-Thanks!
+One option would be to take the patches from the TDX series that add a "private"
+flag to the shadow page role, but I'd rather not add the role until it's truly
+necessary.
 
--Kees
+For now, I think we can do this without impacting performance of guests that don't
+support private memory.
 
-The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
+int kvm_mmu_max_mapping_level(struct kvm *kvm,
+			      const struct kvm_memory_slot *slot, gfn_t gfn,
+			      int max_level)
+{
+	bool is_private = kvm_slot_can_be_private(slot) &&
+			  kvm_mem_is_private(kvm, gfn);
 
-  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
+	return __kvm_mmu_max_mapping_level(kvm, slot, gfn, max_level, is_private);
+}
 
-are available in the Git repository at:
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 25099c94e770..153842bb33df 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -2335,4 +2335,34 @@ static inline void kvm_arch_set_memory_attributes(struct kvm *kvm,
+>  }
+>  #endif /* __KVM_HAVE_ARCH_SET_MEMORY_ATTRIBUTES */
+>  
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+> +{
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.2-rc4
+This code, i.e. the generic KVM changes, belongs in a separate patch.  It'll be
+small, but I want to separate x86's page fault changes from the restrictedmem
+support adding to common KVM.
 
-for you to fetch changes up to 42633ed852deadc14d44660ad71e2f6640239120:
+This should also short-circuit based on CONFIG_HAVE_KVM_RESTRICTED_MEM, though
+I would name that CONFIG_KVM_PRIVATE_MEMORY since in KVM's world, it's all about
+private vs. shared at this time.
 
-  kbuild: Fix CFI hash randomization with KASAN (2023-01-13 15:22:03 -0800)
+> +	return xa_to_value(xa_load(&kvm->mem_attr_array, gfn)) &
+> +	       KVM_MEMORY_ATTRIBUTE_PRIVATE;
+> +}
+> +#else
+> +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+> +{
+> +	return false;
+> +}
+> +
+> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> +
+> +#ifdef CONFIG_HAVE_KVM_RESTRICTED_MEM
+> +static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
+> +					gfn_t gfn, kvm_pfn_t *pfn, int *order)
+> +{
+> +	int ret;
+> +	struct page *page;
+> +	pgoff_t index = gfn - slot->base_gfn +
+> +			(slot->restricted_offset >> PAGE_SHIFT);
+> +
+> +	ret = restrictedmem_get_page(slot->restricted_file, index,
+> +				     &page, order);
 
-----------------------------------------------------------------
-kernel hardening fixes for v6.2-rc4
+This needs handle errors.  If "ret" is non-zero, "page" is garbage.
 
-- Fix CFI hash randomization with KASAN (Sami Tolvanen)
-
-- Check size of coreboot table entry and use flex-array
-
-----------------------------------------------------------------
-Kees Cook (1):
-      firmware: coreboot: Check size of table entry and use flex-array
-
-Sami Tolvanen (1):
-      kbuild: Fix CFI hash randomization with KASAN
-
- drivers/firmware/google/coreboot_table.c | 9 +++++++--
- drivers/firmware/google/coreboot_table.h | 1 +
- init/Makefile                            | 1 +
- scripts/Makefile.vmlinux                 | 1 +
- 4 files changed, 10 insertions(+), 2 deletions(-)
-
--- 
-Kees Cook
+> +	*pfn = page_to_pfn(page);
+> +	return ret;
+> +}
+> +#endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
+> +
+>  #endif
+> -- 
+> 2.25.1
+> 
