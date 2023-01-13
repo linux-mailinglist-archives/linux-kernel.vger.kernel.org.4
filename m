@@ -2,84 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EA8669996
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E473669999
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241925AbjAMOHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S241691AbjAMOHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240798AbjAMOGw (ORCPT
+        with ESMTP id S241882AbjAMOGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:06:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604BCFC;
+        Fri, 13 Jan 2023 09:06:55 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901C86E410;
+        Fri, 13 Jan 2023 06:03:35 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id j130so17755970oif.4;
+        Fri, 13 Jan 2023 06:03:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QutA8fHBQTxFnKX6Y2E+CKgWtbt+S8/vaN1GoJ/uma8=;
+        b=YKgcetQBfchjYhkxCnaFULOgrZeKVQtCUVZnkdXSMs5JizvJwFK8eNUdvWIHtzLUP4
+         MURxZuVa8VMOBF/aWfGMkqN+jaZZBdCNRcZKj//RBj0qYGU+7OcvRRtCzBe/Eslmn2f1
+         NtMpRQ+ZtIdiQ1exfcLH74grLho9jMMvF1c+CzYdzB2iqON1sbg0L12Rgy7MyzSVzGX2
+         SJBj5HPOqEvNpV2vKhplurXJZBEN5zXDiHwANbyPY4OJwwdV50oJCbF7aC0hkIbIMYeq
+         FzUJ2Cg15Xi22BG0UmTZkEYj7KiTAz/gqwsIEU41X8OvX76VC75QtFRLcnxu62CcklCu
+         XNnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QutA8fHBQTxFnKX6Y2E+CKgWtbt+S8/vaN1GoJ/uma8=;
+        b=rkXroa0R+LaxYqDKzYrhh4Ided0Te0t4RldanxWQX7vFuq6XFTyKDj4aRdEDDoUpkk
+         LCMUb+j6f3cb3DdnOA7jwfES1GrM0DzePBv9X6AnxX9VrWhAwL5DnGsW5qjNs1LfGhGA
+         3GmtSqjJA2mi3gJ1B6+p9oCvxitkSogsQba/q7yPWQoaEJ9UXf/6izkwLB6vwuMQKacK
+         7iyIxSVho3VPh0N1tuslSSK4WRloZoeH7nj85bp5XKIVXO9BGBcguW2+F96UJn/BQHNt
+         qYB9CtMIJQjJqqjNw+uul6kemDneoxevD+PUYKb0u31BLTS6lsGZ455p/ULYFv0ubS4k
+         RRJw==
+X-Gm-Message-State: AFqh2kpX3r+BhqDctRNHG0gXsOBqzkw18XNxVydluWocqRJxqz/2Y3u5
+        dVsadP6r2SwsLkj6O/1F1VY=
+X-Google-Smtp-Source: AMrXdXsZpwz3t+cwCWsi7vgosB3GCWdqQwkzNWgwVO3CJtxmy/bCR8oLEgtKXY/top1u7+cm73oPmg==
+X-Received: by 2002:a05:6808:e83:b0:364:8f2c:186c with SMTP id k3-20020a0568080e8300b003648f2c186cmr3675955oil.7.1673618614855;
         Fri, 13 Jan 2023 06:03:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6501B8215D;
-        Fri, 13 Jan 2023 14:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3437EC433EF;
-        Fri, 13 Jan 2023 14:03:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673618611;
-        bh=RTvuy+dTqPShiRNonoOL20JdR0sMfhjyNaV/ObiJjNo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cBXyW3TB7xwWQEdHbF0HBJVQWmAP09DEFS5FsjhH5+QpSafAaJuZ/eR8/C0DcJvxQ
-         LVAv9hp5CZKm/JWaMXfSqMyPY4Fh3Vza2Gj8U2jHVfoVVXs3BvD50uH8zGuDpWjASS
-         X2o8LKldguRLZWRwF4HTVaLXjHpCT5x4YoyRQATVjXAxPpxUh49BIEDtQTC7xd9t0k
-         OzDxLKXQQwq2ScW+0sxBBeQPF6M4zch8lbyuDMgmhoevhSY4eIJgIzpQmh+0AyCmPY
-         BoLspTGFKt/kwtP8FSTAsT0Xwk9Ph4m4MjwJQRHjWriu3LHc0JJ454hasio35v1rDH
-         sMVS0cnzD5NoQ==
-Date:   Fri, 13 Jan 2023 08:03:28 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h16-20020a9d7990000000b0066ec4e2b396sm5302099otm.53.2023.01.13.06.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 06:03:34 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 13 Jan 2023 06:03:33 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pci@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: PCI: qcom,pcie-ep: correct
- qcom,perst-regs
-Message-ID: <20230113140328.GA1836008@bhelgaas>
+Subject: Re: [PATCH v2 7/7] dt-bindings: watchdog: allow "timer" as node name
+Message-ID: <20230113140333.GG1606649@roeck-us.net>
+References: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
+ <20230113103346.29381-8-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7831a607-db55-274c-8fba-d01d5bac3a7a@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113103346.29381-8-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:02:27AM +0100, Krzysztof Kozlowski wrote:
-> On 30/12/2022 14:42, Lorenzo Pieralisi wrote:
-> > On Wed, 9 Nov 2022 12:32:02 +0100, Krzysztof Kozlowski wrote:
-> >> qcom,perst-regs is an phandle array of one item with a phandle and its
-> >> arguments.
-> > 
-> > Applied to pci/dt, thanks!
-> > 
-> > [1/1] dt-bindings: PCI: qcom,pcie-ep: correct qcom,perst-regs
-> >       https://git.kernel.org/lpieralisi/pci/c/68909a813609
+On Fri, Jan 13, 2023 at 11:33:46AM +0100, Krzysztof Kozlowski wrote:
+> On some SoCs the watchdog device is actually mixed with timer, e.g.
+> the qcom,msm-timer on older Qualcomm SoCs where this is actually one
+> hardware block responsible for both system timer and watchdog.
 > 
-> It's still not in linux-next. Is you tree correctly included in the next?
+> Allow calling such device nodes as "timer".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
 
-It's on Lorenzo's branch
-(https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/)
-but I haven't pulled it into my "next" branch yet.  Will try to do
-that today.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Bjorn
+> ---
+> 
+> Changes since v1:
+> 1. Add tag.
+> 
+> See also:
+> https://lore.kernel.org/linux-arm-msm/20221212163532.142533-1-krzysztof.kozlowski@linaro.org/T/#t
+> 
+> which causes warnings:
+> 
+> qcom-msm8960-cdp.dtb: timer@200a000: $nodename:0: 'timer@200a000' does not match '^watchdog(@.*|-[0-9a-f])?$'
+>   From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> ---
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> index fccae0d00110..519b48889eb1 100644
+> --- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> @@ -14,9 +14,14 @@ description: |
+>    This document describes generic bindings which can be used to
+>    describe watchdog devices in a device tree.
+>  
+> +select:
+> +  properties:
+> +    $nodename:
+> +      pattern: "^watchdog(@.*|-[0-9a-f])?$"
+> +
+>  properties:
+>    $nodename:
+> -    pattern: "^watchdog(@.*|-[0-9a-f])?$"
+> +    pattern: "^(timer|watchdog)(@.*|-[0-9a-f])?$"
+>  
+>    timeout-sec:
+>      description:
+> -- 
+> 2.34.1
+> 
