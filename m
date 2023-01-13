@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F281E66A238
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C4466A23B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjAMSjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S229436AbjAMSjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjAMSjD (ORCPT
+        with ESMTP id S230346AbjAMSj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:39:03 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5125C209;
-        Fri, 13 Jan 2023 10:39:02 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id bp15so34286105lfb.13;
-        Fri, 13 Jan 2023 10:39:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y+Ihb7yYd+dHkT3peC3oWMSMFZmTeVb3TWtbghgSLf8=;
-        b=gWQQou4T5QGvl3TUuN+n2NqdV0UyZLx03XI3YRXPRylqua4IXFppBI8k2CQt8+ZFmh
-         OOcb3x5rKqp88ZXO7UOJrfFq4QNKQA8JWxGryT1NaiBU6wzVP1Et8GQ4TEOXdleqWHeT
-         AsFV5U/7Gn2anS5iB+pJQOc7wlAnDZovLNoHvw0vffHVQTzoYIfBHhNSyShrJ6CyGtXF
-         paNqRK+sHrGDa2dppJfWu2eCGn0TFu9zSKFKNQ/smI782wpu5Kww9yVUXpxfIhsswJiU
-         wmcKDdLG/TwbqQsRDLNvJqu9L0CR53sJ9JTHcwoCwAYzJmK7OEx1PgBjMBjZtFn3/oQb
-         TXXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y+Ihb7yYd+dHkT3peC3oWMSMFZmTeVb3TWtbghgSLf8=;
-        b=3uF7tj9DcKQE8ezMdubA6lI33VqiwWj4W9KNoqaMkoNIxSzLKIBIgbhJdYK19K240q
-         Y7Q/QMH07QddKRX2b9Q+Zz/P0JzNSYL8nAH8ACx7jyCkQQ3kCFfpOjpHD0CxCDI2pjNl
-         OQ1FkQKG2GHrYxguxdOM1pkXII/d12D8QS+3VbjZ8lT9Pt/Xe+V+5q+NBVGiIQoz0ohm
-         fiVJtxde6eFA9A21ybuRVa4ALbEBsPzU+JLO9u7fQsNnSbfcJrSArZEHkBawJRvenCzp
-         sjrZfTrS7zSBDcYoWRZCtiw1MOcBxzWFHCe9RUZPumtJ/t919qbFbbtwwVaWCliY5Csy
-         wI9w==
-X-Gm-Message-State: AFqh2kqXbpFH3nwCEr/pbQyxzdQQIKCg/Tjv3qYb8VKaAIe66KMgs4Hb
-        paMlS+CC9uyIOJBEWZfKKGzsRLmsJxA=
-X-Google-Smtp-Source: AMrXdXu712NUTAQ0T3YcSwrV0RpfV0bTzFPz9RV+HRn1MXb8nk5ZsrDEol6rOAdo02svcOg8qvGLBQ==
-X-Received: by 2002:a05:6512:39c6:b0:4cc:725d:9d3d with SMTP id k6-20020a05651239c600b004cc725d9d3dmr9534530lfu.54.1673635140657;
-        Fri, 13 Jan 2023 10:39:00 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id q11-20020a056512210b00b004cc9042c9cfsm1989295lfr.158.2023.01.13.10.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 10:39:00 -0800 (PST)
-Date:   Fri, 13 Jan 2023 21:38:57 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw: Fix wrong FIFO level setting for long xfers
-Message-ID: <20230113183857.ed5nh3k5ohm34oju@mobilestation>
-References: <20230113165724.27199-1-Sergey.Semin@baikalelectronics.ru>
- <CAHp75Vc3+_SiVFzmJPM2dtPqUGErGY6Qc6_deS1yaDkjtT35rQ@mail.gmail.com>
- <20230113181854.ob7lgbwixnxdrcys@mobilestation>
- <Y8GjYUWKSbfXFNEK@smile.fi.intel.com>
+        Fri, 13 Jan 2023 13:39:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506922AE5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:39:28 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pGOxI-0003Gm-8t; Fri, 13 Jan 2023 19:39:08 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pGOxD-005pLl-Fq; Fri, 13 Jan 2023 19:39:03 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pGOxC-00CamQ-Tu; Fri, 13 Jan 2023 19:39:02 +0100
+Date:   Fri, 13 Jan 2023 19:39:01 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
+Cc:     thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/5] pwm: Add Apple PWM controller
+Message-ID: <20230113183901.gt5vdmidprxbzzer@pengutronix.de>
+References: <20230106135839.18676-1-fnkl.kernel@gmail.com>
+ <20230106135839.18676-3-fnkl.kernel@gmail.com>
+ <20230110230618.pfz267jj5ne34ava@pengutronix.de>
+ <CAMT+MTToR+0_CmVBuGfLemALUv1XuevObAMB=TQXV0Vd7HdW5Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nmof7qq6mclq3tlw"
 Content-Disposition: inline
-In-Reply-To: <Y8GjYUWKSbfXFNEK@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMT+MTToR+0_CmVBuGfLemALUv1XuevObAMB=TQXV0Vd7HdW5Q@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 08:30:57PM +0200, Andy Shevchenko wrote:
-> On Fri, Jan 13, 2023 at 09:18:54PM +0300, Serge Semin wrote:
-> > On Fri, Jan 13, 2023 at 07:33:16PM +0200, Andy Shevchenko wrote:
-> > > On Fri, Jan 13, 2023 at 6:57 PM Serge Semin
-> > > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > >
-> > > > Due to using the u16 type in the min_t() macros the SPI transfer length
-> > > > will be cast to word before participating in the conditional statement
-> > > > implied by the macro. Thus if the transfer length is greater than 64KB the
-> > > > Tx/Rx FIFO threshold level value will be determined by the leftover of the
-> > > > truncated after the type-case length. In the worst case it will cause
-> > > > having the "Tx FIFO Empty" or "Rx FIFO Full" interrupts triggered on each
-> > > > word sent/received to/from the bus. In its turn it will cause the
-> > > > dramatical performance drop.
-> > > >
-> > > > The problem can be easily fixed by using the min() macros instead of
-> > > > min_t() which doesn't imply any type casting thus preventing the possible
-> > > > data loss.
-> > 
-> > > But this would be problematic if the types of the parameters are different.
-> > > Currently they are u32 vs. unsigned int.
-> > 
-> > Yes, it would but only in case if somebody changes their types. As you
-> > said they are currently of u32 and unsigned int types which are the
-> > same on all the currently supported platforms. So even if somebody
-> > changes the type of any of them then the compiler will warn about it
-> > anyway.
-> > 
-> > > I would rather assume that
-> > > FIFO length is always less than or equal to 64K and just change the
-> > > type in min_t to follow what dws->tx_len is.
-> > 
-> > There is no need in assuming in this case. FIFO depth doesn't exceed
-> > 256 xfer words by the DW SSI IP-core design (judging by the constraints
-> > applied to the SSI_RX_FIFO_DEPTH and SSI_TX_FIFO_DEPTH synthesize
-> > parameters). So the dws->fifo_len can be easily converted to u16 type.
-> > The problem is in the tx_len field casting to u16. It's a rare case,
-> > but the SPI xfers length can be greater than 64K. The
-> > spi_transfer.len field is of the unsigned int type and the SPI-core
-> > doesn't have any constraints to that (except the one defined by the
-> > controller drivers).
-> > 
-> > So to make sure I correctly understand what you meant. Do you suggest
-> > to do something like this (it was my first version of the fix):
-> > -	level = min_t(u16, dws->fifo_len / 2, dws->tx_len);
-> > +	level = min_t(u32, dws->fifo_len / 2, dws->tx_len);
-> > or even like this
-> > -	level = min_t(u16, dws->fifo_len / 2, dws->tx_len);
-> > +	level = min_t(typeof(dws->tx_len), dws->fifo_len / 2, dws->tx_len);
-> > ?
-> 
 
-> No, I suggest
-> 
-> 	level = min_t(unsigned int, dws->fifo_len / 2, dws->tx_len);
-> 
-> So, we do not care about changing of the fifo_len type, and we won't issue
-> a compiler warning if it becomes, let's say, u8. While your solution will
-> still produce it.
-> 
-> > Personally I would prefer either my solution with just min() macros
-> > usage (which in case of the types change will give the compile-time
-> > warning about the types mismatch) or using the min_t(u32, ...) version
-> > (using typeof() seems overkill). I don't see much different (do you?).
-> 
-> Yes, hence personally I prefer my proposal.
+--nmof7qq6mclq3tlw
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok. min_t(unsigned int, ...) it's then. I'll resubmit v2 shortly.
+On Fri, Jan 13, 2023 at 09:25:08PM +0300, Sasha Finkelstein wrote:
+> On Wed, 11 Jan 2023 at 02:06, Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > > + * Limitations:
+> > > + * - The writes to cycle registers are shadowed until a write to
+> > > + *   the control register.
+> > > + * - If both OFF_CYCLES and ON_CYCLES are set to 0, the output
+> > > + *   is a constant off signal.
+> >
+> > How does the PWM behave with *APPLE_PWM_CTRLAPPLE_PWM_CTRL =3D 0?
+> > (typically: drives constant low)
+> >
+> APPLE_PWM_CTRL =3D 0 implies that the APPLE_CTRL_ENABLE bit is set low, w=
+hich
+> turns off the pwm signal (constant low). I do not think that it is
+> necessary to explicitly
+> specify that case in the comments.
 
--Serge(y)
+This is an information that I want to have available. Ideally easily
+greppable by using the format that other drivers use for that, too.
+(The command I usually use is:
 
-> 
-> > Both versions have their pros and cons.
-> 
-> Right.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+	sed -rn '/Limitations:/,/\*\/?$/p' drivers/pwm/*.c
+
+so if you make sure your info is added accordingly that would be good.)
+
+This is useful to answer questions like: Can I reasonably expect that a
+disabled PWM respects the configured polarity.
+
+> > Can you please rename such that the (maybe new) name for APPLE_PWM_CTRL
+> > is a prefix for the (maybe new) APPLE_CTRL_ENABLE and the other register
+> > bit definitions?
+> To make sure, you want the register named APPLE_PWM_CTRL, and the bits na=
+med
+> APPLE_PWM_CTRL_ENABLE, APPLE_PWM_CTRL_MODE and so on?
+
+Yes.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--nmof7qq6mclq3tlw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPBpUIACgkQwfwUeK3K
+7AnWsggAk/ifPGzsZY/5XaujVz/l2za+R4K7un5xaWTjbba1YwhEvJJcLl0LNJbQ
+vIqOfST9nif+KCixGcdeSZDkMLMC0GPYU/VRnuaWPkSkAMt0yGrdOUkiiFfSgqC4
+UB8F7NfJX5nE2zWVIsspjI7liC5r68tH0mmy7Sjmi93Ux3e32WXCyNUoXR9h5Gt9
+ZcNmSvBhVqmpMOORK7uPL0jC7RRTr+TWd2I1dfmJ7jOuWpxSDzpN40wcCe1ih3U3
+R2O8GstPfM5CeXWRkXzktKUqk+oCOy2G0JWPTIlztyETKBfVqimJ/C+0VQP1hedI
+hqlDcd1ZngxvKk5+scRf+OzQhg8L8g==
+=ocLx
+-----END PGP SIGNATURE-----
+
+--nmof7qq6mclq3tlw--
