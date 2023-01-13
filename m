@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0021B66A12D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C082966A132
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjAMRwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S230305AbjAMRxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjAMRvk (ORCPT
+        with ESMTP id S229568AbjAMRwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:51:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2074688A21;
-        Fri, 13 Jan 2023 09:44:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C6E622C8;
-        Fri, 13 Jan 2023 17:44:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E8FC433EF;
-        Fri, 13 Jan 2023 17:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673631861;
-        bh=/TvEdaQnixfTBRY60kd1Sqb49/Ul7/Ctq0AxWaiJKDU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CNLq1Swlnx3kKr+nR2rzwo+GXUG8Zp76/g2O+kc50d8VeyLm92uCYYIW1htMfB9Gb
-         6x8VQ3IHqxI4vx9bWoW3MQVpMwJP/ii2A/hefduydZCAf0OqCocTJzPlm1DOj9BJsb
-         dv6oniJ4DBtn8H2OWZXwSlOO/sJdyJbsxftU1BwMR3JNvUEVhMNcCg3RocbBlHY6bj
-         qHZWRF4W34holfYLRYDR0UHuWg3uHQBHBz+y82P4lb8Kb94jmYg4q9vIUxWCqg06UZ
-         qr7Pa23V9iJOWBYsRBEP2+OfhH4fSGmJTaqIDxCiQDWMyizkI7uO/uxmrqf48IIbIu
-         zf3YkIGl4+QfA==
-Date:   Fri, 13 Jan 2023 23:13:45 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-phy@lists.infradead.org, shawn.guo@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org
-Subject: Re: [PATCH 0/3] Add Qualcomm SM6115 and SM4250 USB3 PHY support
-Message-ID: <Y8GYUWF/LHqGzlE/@matsya>
-References: <20221213122843.454845-1-bhupesh.sharma@linaro.org>
+        Fri, 13 Jan 2023 12:52:49 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFEF8F8EE
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:45:57 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id p1so6170097vsr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Q3MaSVSqTaDvspy+O+trO5FGSc9zxpeY67q3aD4cKc=;
+        b=S6dh+IKQDZlJ1tE56ZBYvb6O81iVrSvJMT9Y1Ppf2ifA2pxVSuBZDPBEBXmoBU/6Iq
+         rQzLENf6AaEaLvkYWJY7ubJKbMn2klY5tR1ONfL0hbq1w4ABdg8jVuLok2jGn91dzl3k
+         y8YLdPZuYYCosAFmHyZEa8s3CkNKOmiNUBBTMY8Y/Co2t9OZQqRtiNUZtGLTYvQXVdq2
+         zz3VdT8RpX8dwscQIJ1s50jenbE1rs22osRa+cf0bWQSwf+KWEhMrsbH+2uaxh/TyS2Q
+         H/8wTzPxSVMgxR8hx0NqmskKBo1CSneRALOr0ITxDyaMzxwkPV4Eyh5yLGGTrcTEKnPA
+         VYug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Q3MaSVSqTaDvspy+O+trO5FGSc9zxpeY67q3aD4cKc=;
+        b=71rjRZUm8J9gOzvSc0cSPM/SIeDTuMW7o7B4V/TcDqbXCNgQPUIpN8U3/4FOxmCBN/
+         HK00QrGwlcNAj/F5aIuDprNjRoz1PUoxPmxAS0N/+B+XvILo19AJO0xxodk4E51T2QXc
+         rLj01CC7fyVJ8ipSF1gw1b6cCYO4VS2R9xpHYOSV00nJFWWGJm49vA/c1a634YxshcUL
+         9Jq5kLOXXaSLQ3thL46Ou5EmsbDLdQc17T1sMmMDQTcChDDvXGiL5IBSvNSeY1foDN9W
+         qDUqsnXhEwQf35UTuwoh7tzIVwDHVz6QKZcyUOEzoZgXznFXQZnvB5PNWYm53OcxGeqi
+         vnZg==
+X-Gm-Message-State: AFqh2koCYW5qHfy6+46X/2UqaO2YzAC5DED/yZUcFRxH4VYYOYNjq+W8
+        9mg8JQwrev5ymkUlW9j8D4pjEF0uVbeKsjHQqkj5fQ==
+X-Google-Smtp-Source: AMrXdXtKzDdD32RD5wvCAC1hYG1hBkZnhQzXrUYAHiwdIjTb8NqkF2hXHIiEZk99l2aFalHyubgcSNA8eQ61nXoUZ/c=
+X-Received: by 2002:a05:6102:3d17:b0:3cd:405e:40c6 with SMTP id
+ i23-20020a0561023d1700b003cd405e40c6mr6714861vsv.83.1673631955989; Fri, 13
+ Jan 2023 09:45:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213122843.454845-1-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230112135524.143670746@linuxfoundation.org>
+In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 13 Jan 2023 23:15:44 +0530
+Message-ID: <CA+G9fYsyDyZ3ZmfRYf-YrGpbKg8UBgeozcvpGZO9rtr4n+TBYw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,10 +72,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-12-22, 17:58, Bhupesh Sharma wrote:
-> The series adds support for USB3 PHY found on SM6115 and SM4250 SoCs.
+On Thu, 12 Jan 2023 at 19:28, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.163 release.
+> There are 783 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.163-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Applied, thanks
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-~Vinod
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.163-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: d33d55703c7895c3dd8793cbad6046db91df21db
+* git describe: v5.10.162-784-gd33d55703c78
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.162-784-gd33d55703c78
+
+## Test Regressions (compared to v5.10.162)
+
+## Metric Regressions (compared to v5.10.162)
+
+## Test Fixes (compared to v5.10.162)
+
+## Metric Fixes (compared to v5.10.162)
+
+## Test result summary
+total: 157841, pass: 132606, fail: 3922, skip: 20968, xfail: 345
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 150 passed, 1 failed
+* arm64: 49 total, 46 passed, 3 failed
+* i386: 39 total, 37 passed, 2 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 32 total, 25 passed, 7 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
