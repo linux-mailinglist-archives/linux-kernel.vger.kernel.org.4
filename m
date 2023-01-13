@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB4C66967E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F624669687
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240751AbjAMMKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S241123AbjAMMMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240928AbjAMMJW (ORCPT
+        with ESMTP id S232204AbjAMML3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:09:22 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A55736C0;
-        Fri, 13 Jan 2023 04:03:06 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBs2ik021014;
-        Fri, 13 Jan 2023 12:02:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=WV1GMeXtHBAkSXAwxixVT2ra972So+jSDMEr/4FiIc0=;
- b=eqGPxT9dgnpzVQUTssleakiwPWCkmwe5Kde0cseueAZ3r9imfLBWequbgnEujOHp2f9z
- Yn/FOlMvCyafnjVr1l+q/BfYg7OBMR0KMDQb2DIeMGZ9GxC/ZiSq1GtI+IW/dNV4eVT+
- vrpOXPlm7bN0vjPh2ZptsDCjRslqXYkmY2d4ZwM0WmF8ygTYID36XqiSPyRtieiq9MKs
- wQbtxoAu+oJrZpM1oVSdhGTiY2XNP2pqk+Tg6W0TfLV1xAn1CZrGLSR7yD6s4xL5NCg5
- FtmdOi9TqjfN8tKSMN9nhZUWioCSm/i/1eLguvhnNDDF7Nhd5+er4t1Gw7dshbcEcUmx vA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2k47jn51-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 12:02:54 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DC2qPJ017272
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 12:02:52 GMT
-Received: from [10.216.54.29] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 04:02:49 -0800
-Message-ID: <240e0299-96ca-2703-1339-1c52c4c1582d@quicinc.com>
-Date:   Fri, 13 Jan 2023 17:32:46 +0530
+        Fri, 13 Jan 2023 07:11:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF7A7A922;
+        Fri, 13 Jan 2023 04:04:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCCC261704;
+        Fri, 13 Jan 2023 12:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2589AC433EF;
+        Fri, 13 Jan 2023 12:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673611496;
+        bh=nPr/NKAEqyB20pLfjVKLni1cuewC0KvKd5eN/llyWns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g7FUc2QJpGJnlOx4rfsced8r/HOCpDzS3QQOaPDoQg9LADymB2vk3ARBxRiEnDBAA
+         c1v6olylFVeJ+cOfFk81yvZOSlmF2KguuPIn3iuO/ApAj7coA573QYODJytEd/rtSa
+         T5NBqscqDnPaf3aKS75mxwdn9XB2NfSp8jZOVeA2kBF/zZusEfbZ+vEWlIaoJ2j0pE
+         ruJIgVvGtD28YOVFI9JJesKOCzZItINFs48c1v2ZRSr5GJs7GyPc4zqVq0bdcXvx2D
+         xXGJ8YR8K8L35fjnQ/83kpeq6Q+l9xv0rZ1CRoKEDs/qQvt92Q6amL0FQoNZfWlIo4
+         BrOPwW5VlB4tQ==
+Date:   Fri, 13 Jan 2023 13:04:46 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 24/25] PCI: bt1: Set 64-bit DMA-mask
+Message-ID: <Y8FI3m0Yare5gCeM@lpieralisi>
+References: <20221214235305.31744-1-Sergey.Semin@baikalelectronics.ru>
+ <20221214235305.31744-25-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] pstore/ram: Rework logic for detecting ramoops
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-CC:     <tony.luck@intel.com>, <gpiccoli@igalia.com>,
-        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1673428065-22356-1-git-send-email-quic_mojha@quicinc.com>
- <202301121337.B8CCCB6@keescook>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <202301121337.B8CCCB6@keescook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: KtUFqNPyFmQfR45qIlgY16zdOw1gfnCq
-X-Proofpoint-ORIG-GUID: KtUFqNPyFmQfR45qIlgY16zdOw1gfnCq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 clxscore=1015 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 lowpriorityscore=0 spamscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301130081
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214235305.31744-25-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,99 +68,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On Thu, Dec 15, 2022 at 02:53:04AM +0300, Serge Semin wrote:
+> The DW PCIe RC IP-core is synthesized with the 64-bits AXI address bus.
+> Since the device is also equipped with the eDMA engine we need to
+> explicitly set the device DMA-mask so the DMA-engine clients would be able
+> to allocate the data buffers from the DMA-able memory space.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v7:
+> - This is a new patch added on v7 stage of the series. (@Robin)
+> ---
+>  drivers/pci/controller/dwc/pcie-bt1.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Thanks for your comments.
+Hi Robin,
 
-On 1/13/2023 3:09 AM, Kees Cook wrote:
-> On Wed, Jan 11, 2023 at 02:37:45PM +0530, Mukesh Ojha wrote:
->> The reserved memory region for ramoops is assumed to be at a fixed
->> and known location when read from the devicetree. This is not desirable
->> in environments where it is preferred the region to be dynamically
->> allocated at runtime, as opposed to being fixed at compile time.
->>
->> Also, Some of the platforms might be still expecting dedicated
->> memory region for ramoops node where the region is known
->> beforehand and platform_get_resource() is used in that case.
->>
->> So, Add logic to detect the start and size of the ramoops memory
->> region by looking up reserved memory region with
->> of_reserved_mem_lookup() when platform_get_resource() failed.
->>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> 
-> Thanks for the patch! Notes below...
-> 
->> ---
->>   fs/pstore/ram.c | 19 ++++++++++++++-----
->>   1 file changed, 14 insertions(+), 5 deletions(-)
->>
->> diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
->> index ade66db..e4bbba1 100644
->> --- a/fs/pstore/ram.c
->> +++ b/fs/pstore/ram.c
->> @@ -20,6 +20,7 @@
->>   #include <linux/compiler.h>
->>   #include <linux/of.h>
->>   #include <linux/of_address.h>
->> +#include <linux/of_reserved_mem.h>
->>   
->>   #include "internal.h"
->>   #include "ram_internal.h"
->> @@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
->>   {
->>   	struct device_node *of_node = pdev->dev.of_node;
->>   	struct device_node *parent_node;
->> +	struct reserved_mem *rmem;
->>   	struct resource *res;
->>   	u32 value;
->>   	int ret;
->> @@ -651,13 +653,20 @@ static int ramoops_parse_dt(struct platform_device *pdev,
->>   
->>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>   	if (!res) {
->> -		dev_err(&pdev->dev,
->> -			"failed to locate DT /reserved-memory resource\n");
->> -		return -EINVAL;
->> +		rmem = of_reserved_mem_lookup(of_node);
->> +		if (rmem) {
->> +			pdata->mem_size = rmem->size;
->> +			pdata->mem_address = rmem->base;
->> +		} else {
->> +			dev_err(&pdev->dev,
->> +				"failed to locate DT /reserved-memory resource\n");
->> +			return -EINVAL;
->> +		}
-> 
-> Since the "else" case returns, the traditional code pattern is to leave
-> the other case "inline" (an indented), like so:
-> 
-> 		if (!rmem) {
-> 			dev_err(&pdev->dev,
-> 				"failed to locate DT /reserved-memory resource\n");
-> 			return -EINVAL;
-> 		}
-> 		pdata->mem_size = rmem->size;
-> 		pdata->mem_address = rmem->base;
-> 
+are you OK with this change ? I think that's the last (PCI) bit we
+need to take the series.
 
-Fixed it in v2.
+Thanks,
+Lorenzo
 
+> diff --git a/drivers/pci/controller/dwc/pcie-bt1.c b/drivers/pci/controller/dwc/pcie-bt1.c
+> index 8b6c7d544d9a..04aa58348aa5 100644
+> --- a/drivers/pci/controller/dwc/pcie-bt1.c
+> +++ b/drivers/pci/controller/dwc/pcie-bt1.c
+> @@ -583,6 +583,10 @@ static int bt1_pcie_add_port(struct bt1_pcie *btpci)
+>  	struct device *dev = &btpci->pdev->dev;
+>  	int ret;
+>  
+> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> +	if (ret)
+> +		return ret;
+> +
+>  	btpci->dw.version = DW_PCIE_VER_460A;
+>  	btpci->dw.dev = dev;
+>  	btpci->dw.ops = &bt1_pcie_ops;
+> -- 
+> 2.38.1
 > 
->> +	} else {
->> +		pdata->mem_size = resource_size(res);
->> +		pdata->mem_address = res->start;
->>   	}
 > 
-> Since this change the potential interface with DT, can you also update
-> the documentation in:
-> 
-> Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-> 
-> Or maybe my understanding of DT parsing is lacking and this change is
-> doing something slightly different?
->
-
-Have updated the docs in v2;
-
--Mukesh
