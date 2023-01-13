@@ -2,135 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC47766906B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A147E66906D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240979AbjAMIQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S240905AbjAMIQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 03:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240798AbjAMIPj (ORCPT
+        with ESMTP id S240904AbjAMIPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:15:39 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D8957925
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:14:26 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id s3so13109790pfd.12
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0FsBVBmfB/H+Y5/KzKaDMSTPpmYjsoB85VM4zL2yMS8=;
-        b=rMfGJ68HJK8Jlqj7h7DVh+ltD81hJdwaDe30H4cTCaZLj6bHu72iDeKWdqgiNwsjj8
-         H5gufzfCvmWKlKgrt3j33rBli2JnptlH6v/gCsNSD8X/QLOfZVaIoYhwuHtzv9bi0C1u
-         nQbYxoKYfQ1qdtRBYbB2YGkL3i+rBITOrL/Ct+R0hwei/RBrIoWFSx8VjLOfCJgyT69y
-         m8/7tHhknyTdEQJmzGIceHncp48LF91yrOgKGc0KQp5tesFI2cHn4w9aqNptJlT808E/
-         vBNXAxFthhvYdPrdBcIspcBeUzV7sfp5T/ZoDKaVzaZCKOQT2L/UnOLnw5dNRjt7KsgG
-         TUSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0FsBVBmfB/H+Y5/KzKaDMSTPpmYjsoB85VM4zL2yMS8=;
-        b=kuVl0pVIf8sVQ+8lbsNFtn8uU8kSUE/naGwerLB9JMbrsactpWhDrvug3weTm3at6b
-         SleVCOOr0a1A98YAu2cjLX2vRGITib2Xb8URWZfF/FlOzR+C7WMnG+gFNxvkAczgLI13
-         PkYbb73OIV29KpV2RDRu3tHnQasNYFVfhol49/fNo0xmRveDvpgpFEwF01tmCu9Fhydt
-         Dl9yKVZMgM0QERQEOQuFB953b8BmoD2MFBFifg37s1pbhKzBfXaPINkwn6gu1Hnv8Prb
-         mYlGjmVSOhSKEg7mlSFZPYgKeajeNEmLBX728v9GERD7mHYa9Hy0aQ/Wmk6Ms5+tVfIC
-         8Okw==
-X-Gm-Message-State: AFqh2kqpWMlyxCAHh/K9SUEF30VtymswK5RVTMOiqfYMAiEZJ7jRNoBA
-        7EFsw/dFPk64N8QC33Qqm8v3J7SHv3PlhzZScs4xrM3twEk5/g==
-X-Google-Smtp-Source: AMrXdXs4bWSVsmmRf9cfAoDNEQqEJWJ9TSanmNzWQpNea6UnN8+GIDHATGBbv4A/sJ/Ql2N2eurHpgAmaQsWrrxDA20=
-X-Received: by 2002:a62:506:0:b0:57f:ccb0:8ddf with SMTP id
- 6-20020a620506000000b0057fccb08ddfmr5455626pff.36.1673597666199; Fri, 13 Jan
- 2023 00:14:26 -0800 (PST)
+        Fri, 13 Jan 2023 03:15:43 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ECE41000;
+        Fri, 13 Jan 2023 00:14:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673597677; x=1705133677;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y7FOxYVwp7hywXJrSy2gC+GFo0iJ/WSBlTtbFipUyvY=;
+  b=C8uaCtsc/X+fzsVrTOvd8pVHudkzLQ5er7hOm7zb0rbVm0oL/iBZx7HP
+   g2sWtE7VAlYfLNIP1eW10i04TtZJLtBvDo4hoKMRICPculi0dTI80O/5c
+   hY8VOo8lyAHgHAPyUVGTepiWXvfa0k0IBQ4IpSD+r9hwRZSWrXsa1CYnl
+   pAF94ig9V8xDeChYaKAc/GHpCYfZInNDUww3exP7SHb8aSHWbajX5oE4I
+   T8fQRDdbDYiunjcMyV0FdNJAKU70jhMF2urK4KqasHQ4JaWHMCsi4tzp4
+   hyMHjIoPtX1gs5GOnxgI44GTAc3rSVUSg91Rt7tfAOoPmLpMgrmf79oyL
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,213,1669100400"; 
+   d="scan'208";a="195616545"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2023 01:14:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 13 Jan 2023 01:14:33 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 13 Jan 2023 01:14:27 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next v3 0/8] Add support for two classes of VCAP rules
+Date:   Fri, 13 Jan 2023 09:14:16 +0100
+Message-ID: <20230113081424.3505035-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230112122708.330667-1-qyousef@layalina.io> <20230112122708.330667-3-qyousef@layalina.io>
-In-Reply-To: <20230112122708.330667-3-qyousef@layalina.io>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 13 Jan 2023 09:14:15 +0100
-Message-ID: <CAKfTPtD2kHJUc_my21Wu2c4jZhb0z3vFceF1QfiPMKN6mWQgbQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] sched/fair: Fixes for capacity inversion detection
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 at 13:27, Qais Yousef <qyousef@layalina.io> wrote:
->
-> Traversing the Perf Domains requires rcu_read_lock() to be held and is
-> conditional on sched_energy_enabled(). Ensure right protections applied.
->
-> Also skip capacity inversion detection for our own pd; which was an
-> error.
->
-> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-> Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+This adds support for two classes of VCAP rules:
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+- Permanent rules (added e.g. for PTP support)
+- TC user rules (added by the TC userspace tool)
 
-> ---
->  kernel/sched/fair.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5a8e75d4a17b..34239d3118f0 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -8992,16 +8992,23 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
->          *   * Thermal pressure will impact all cpus in this perf domain
->          *     equally.
->          */
-> -       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-> +       if (sched_energy_enabled()) {
->                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-> -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-> +               struct perf_domain *pd;
-> +
-> +               rcu_read_lock();
->
-> +               pd = rcu_dereference(rq->rd->pd);
->                 rq->cpu_capacity_inverted = 0;
->
->                 for (; pd; pd = pd->next) {
->                         struct cpumask *pd_span = perf_domain_span(pd);
->                         unsigned long pd_cap_orig, pd_cap;
->
-> +                       /* We can't be inverted against our own pd */
-> +                       if (cpumask_test_cpu(cpu_of(rq), pd_span))
-> +                               continue;
-> +
->                         cpu = cpumask_any(pd_span);
->                         pd_cap_orig = arch_scale_cpu_capacity(cpu);
->
-> @@ -9026,6 +9033,8 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
->                                 break;
->                         }
->                 }
-> +
-> +               rcu_read_unlock();
->         }
->
->         trace_sched_cpu_capacity_tp(rq);
-> --
-> 2.25.1
->
+For this to work the VCAP Loopups must be enabled from boot, so that the
+"internal" clients like PTP can add rules that are always active.
+
+When the TC tool add a flower filter the VCAP rule corresponding to this
+filter will be disabled (kept in memory) until a TC matchall filter creates
+a link from chain 0 to the chain (lookup) where the flower filter was
+added.
+
+When the flower filter is enabled it will be written to the appropriate
+VCAP lookup and become active in HW.
+
+Likewise the flower filter will be disabled if there is no link from chain
+0 to the chain of the filter (lookup), and when that happens the
+corresponding VCAP rule will be read from the VCAP instance and stored in
+memory until it is deleted or enabled again.
+
+Version History:
+================
+v3      Removed the change that allowed rules to always be added in the
+        LAN996x even though the lookups are not enabled (Horatiu Vultur).
+
+        Added a check for validity of the chain source when enabling a
+        lookup.
+
+v2      Adding a missing goto exit in vcap_add_rule (Dan Carpenter).
+        Added missing checks for error returns in vcap_enable_rule.
+
+v1      Initial version
+
+
+Steen Hegelund (8):
+  net: microchip: vcap api: Erase VCAP cache before encoding rule
+  net: microchip: sparx5: Reset VCAP counter for new rules
+  net: microchip: vcap api: Always enable VCAP lookups
+  net: microchip: vcap api: Convert multi-word keys/actions when
+    encoding
+  net: microchip: vcap api: Use src and dst chain id to chain VCAP
+    lookups
+  net: microchip: vcap api: Check chains when adding a tc flower filter
+  net: microchip: vcap api: Add a storage state to a VCAP rule
+  net: microchip: vcap api: Enable/Disable rules via chains in VCAP HW
+
+ .../ethernet/microchip/lan966x/lan966x_goto.c |  10 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |   3 +-
+ .../microchip/lan966x/lan966x_tc_flower.c     |  30 +-
+ .../microchip/lan966x/lan966x_tc_matchall.c   |  16 +-
+ .../microchip/lan966x/lan966x_vcap_impl.c     |  21 +-
+ .../microchip/sparx5/sparx5_tc_flower.c       |  28 +-
+ .../microchip/sparx5/sparx5_tc_matchall.c     |  16 +-
+ .../microchip/sparx5/sparx5_vcap_debugfs.c    |   2 +-
+ .../microchip/sparx5/sparx5_vcap_impl.c       |  29 +-
+ .../net/ethernet/microchip/vcap/vcap_api.c    | 767 +++++++++++++-----
+ .../net/ethernet/microchip/vcap/vcap_api.h    |   5 -
+ .../ethernet/microchip/vcap/vcap_api_client.h |   8 +-
+ .../microchip/vcap/vcap_api_debugfs.c         |  57 +-
+ .../microchip/vcap/vcap_api_debugfs_kunit.c   |  10 +-
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  |  32 +-
+ .../microchip/vcap/vcap_api_private.h         |  12 +-
+ 16 files changed, 699 insertions(+), 347 deletions(-)
+
+-- 
+2.39.0
+
