@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5D06693DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C4F6693E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjAMKQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 05:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S240698AbjAMKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 05:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjAMKQQ (ORCPT
+        with ESMTP id S240196AbjAMKRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 05:16:16 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97793EBC;
-        Fri, 13 Jan 2023 02:16:13 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:299b:2170:fef0:26ee])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE14A6602CCE;
-        Fri, 13 Jan 2023 10:16:11 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673604972;
-        bh=uvLHq13CAGAoG5W+OuGNtmqdHKgq7qLWvksrMYmsUYk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CB35nnrxX+A7tXdRtYYNRX5ZsjQQrcwd+zppfC3orQ1+P/Vp1cXmpgYPabLpckzfN
-         Gp24WIMFMn+dL49BB0zCqPxDFH+D2xddU89kQY5etC/N2s8QTpE07jXmQoDystaRkX
-         S5bLGIoY35+q/ueWDSvI3NOhL0tQyqb9yYo38ckgadHecycElJHDpOH3ZuA7EK3C4B
-         feCvHyOoBziQpJg2NxrlwffTxuM7m7zOqE/+AqbZt2RviDlFjz4XhNQ64ViTdnrbjP
-         foxvwEISfhhrvDpoFPcDnG+smRMY4lVkAdclfPHuLQwwiSzDaCpt6I8ysVyvvQGol2
-         QFNJvdLCdMiTA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH] media: verisilicon: HEVC: Only propose 10 bits compatible pixels formats
-Date:   Fri, 13 Jan 2023 11:16:04 +0100
-Message-Id: <20230113101604.261429-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 13 Jan 2023 05:17:36 -0500
+Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340E7183A1;
+        Fri, 13 Jan 2023 02:17:30 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
+        (authenticated bits=0)
+        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30DAGrIm1867629
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Fri, 13 Jan 2023 10:16:54 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30DAGlEi020267
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Fri, 13 Jan 2023 11:16:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1673605008; bh=UwgL4KMt3pjnoZk+tNr+CMFYAZq3Cr7X+xqZUA7Ufo0=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=SeoVtk2B2QVOHm8ZcMEo7om8ODX+yJXE7uRF+ratRhcaUxrRmWqUhHUHucsKKZZ8d
+         Z3QTE59AJzj80KDct7UX7pmOmPsnz371cimLbixMvl29ArvU5/LSZ9ZHBR1piPATpn
+         hIJtdH8o5mQFKy/V1NmtB+nUb5yGWghn3Z5ZybWY=
+Received: (nullmailer pid 210628 invoked by uid 1000);
+        Fri, 13 Jan 2023 10:16:47 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Greg KH <greg@kroah.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] r8152; preserve device list format
+Organization: m
+References: <87k01s6tkr.fsf@miraculix.mork.no>
+        <20230112100100.180708-1-bjorn@mork.no> <Y7/dBXrI2QkiBFlW@kroah.com>
+        <87cz7k6ooc.fsf@miraculix.mork.no> <878ri86o6j.fsf@miraculix.mork.no>
+        <Y7/ir/zcJQUVec72@kroah.com>
+Date:   Fri, 13 Jan 2023 11:16:47 +0100
+In-Reply-To: <Y7/ir/zcJQUVec72@kroah.com> (Greg KH's message of "Thu, 12 Jan
+        2023 11:36:31 +0100")
+Message-ID: <874jsu68og.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,134 +66,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When decoding a 10bits bitstreams HEVC driver should only expose
-10bits pixel formats.
-To fulfill this requirement it is needed to call hantro_reset_raw_fmt()
-when bit depth change and to correctly set match_depth in pixel formats
-enumeration.
+Greg KH <greg@kroah.com> writes:
+> On Thu, Jan 12, 2023 at 11:29:40AM +0100, Bj=C3=B8rn Mork wrote:
+>> Bj=C3=B8rn Mork <bjorn@mork.no> writes:
+>> > Greg KH <greg@kroah.com> writes:
+>> >
+>> >> No need for this, just backport the original change to older kernels =
+and
+>> >> all will be fine.
+>> >>
+>> >> Don't live with stuff you don't want to because of stable kernels,
+>> >> that's not how this whole process works at all :)
+>> >
+>> > OK, thanks.  Will prepare a patch for stable instead then.
+>> >
+>> > But I guess the original patch is unacceptable for stable as-is? It
+>> > changes how Linux react to these devces, and includes a completely new
+>> > USB device driver (i.e not interface driver).
+>>=20
+>> Doh!  I gotta start thinking before I send email.  Will start right
+>> after sending this one ;-)
+>>=20
+>> We cannot backport the device-id table change to stable without taking
+>> the rest of the patch. The strategy used by the old driver needs two
+>> entries per device ID, which is why the macro was there.
+>>=20
+>> So the question is: Can commit ec51fbd1b8a2 ("r8152: add USB device
+>> driver for config selection") be accepted in stable?
+>>=20
+>> ( Direct link for convenience since it's not yet in mainline:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/comm=
+it/drivers/net/usb/r8152.c?id=3Dec51fbd1b8a2bca2948dede99c14ec63dc57ff6b
+>> )
+>>=20
+>> This is not within the rules as I read them, but it's your call...
+>
+> Ah, yeah, that's simple enough, I'd take it if you send it to me :)
 
-Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
+Great!
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- .../media/platform/verisilicon/hantro_drv.c   | 35 +++++++++++++++++--
- .../media/platform/verisilicon/hantro_v4l2.c  |  2 +-
- .../media/platform/verisilicon/hantro_v4l2.h  |  1 +
- .../media/platform/verisilicon/imx8m_vpu_hw.c |  2 ++
- 4 files changed, 36 insertions(+), 4 deletions(-)
+There is no point backporting to anything older than v5.15 since the
+patch depend on significant driver changes between v5.10 and v5.15.  The
+good news is that those changes also modified the macro in question so
+any device ID patch for v5.10 or older will have to be fixed up in any
+case.  So we don't lose anything by ignoring the older longterm kernels
+here.
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 8cb4a68c9119..78ea05294004 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -274,8 +274,6 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
- 		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
- 			/* Only 8-bit and 10-bit are supported */
- 			return -EINVAL;
--
--		ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
- 	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
- 		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
- 
-@@ -286,6 +284,32 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
- 	return 0;
- }
- 
-+static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct hantro_ctx *ctx;
-+
-+	ctx = container_of(ctrl->handler,
-+			   struct hantro_ctx, ctrl_handler);
-+
-+	vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_STATELESS_HEVC_SPS:
-+		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
-+		int bit_depth = sps->bit_depth_luma_minus8 + 8;
-+
-+		if (ctx->bit_depth != bit_depth) {
-+			ctx->bit_depth = bit_depth;
-+			hantro_reset_raw_fmt(ctx);
-+		}
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct hantro_ctx *ctx;
-@@ -328,6 +352,11 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
- 	.try_ctrl = hantro_try_ctrl,
- };
- 
-+static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
-+	.s_ctrl = hantro_hevc_s_ctrl,
-+	.try_ctrl = hantro_try_ctrl,
-+};
-+
- static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
- 	.s_ctrl = hantro_jpeg_s_ctrl,
- };
-@@ -470,7 +499,7 @@ static const struct hantro_ctrl controls[] = {
- 		.codec = HANTRO_HEVC_DECODER,
- 		.cfg = {
- 			.id = V4L2_CID_STATELESS_HEVC_SPS,
--			.ops = &hantro_ctrl_ops,
-+			.ops = &hantro_hevc_ctrl_ops,
- 		},
- 	}, {
- 		.codec = HANTRO_HEVC_DECODER,
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 2c7a805289e7..0025e049dd26 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -398,7 +398,7 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
- 		hantro_set_fmt_out(ctx, fmt);
- }
- 
--static void
-+void
- hantro_reset_raw_fmt(struct hantro_ctx *ctx)
- {
- 	const struct hantro_fmt *raw_vpu_fmt;
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.h b/drivers/media/platform/verisilicon/hantro_v4l2.h
-index 64f6f57e9d7a..f642560aed93 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.h
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.h
-@@ -21,6 +21,7 @@
- extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
- extern const struct vb2_ops hantro_queue_ops;
- 
-+void hantro_reset_raw_fmt(struct hantro_ctx *ctx);
- void hantro_reset_fmts(struct hantro_ctx *ctx);
- int hantro_get_format_depth(u32 fourcc);
- const struct hantro_fmt *
-diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-index b390228fd3b4..f850d8bddef6 100644
---- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-+++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-@@ -152,6 +152,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV12,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 		.postprocessed = true,
- 		.frmsize = {
- 			.min_width = FMT_MIN_WIDTH,
-@@ -165,6 +166,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_P010,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 		.postprocessed = true,
- 		.frmsize = {
- 			.min_width = FMT_MIN_WIDTH,
--- 
-2.34.1
+IIUC the special netdev stable rules are gone.  But if this is going to
+stable, then I believe it still has to go to "net" first.
 
+David/Jakub - Would you please pick
+
+  ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+  69649ef84053 ("cdc_ether: no need to blacklist any r8152 devices")
+
+from net-next to net?  With a "CC: stable" preferably.  Or do you prefer
+some other solution?
+
+
+
+Bj=C3=B8rn
