@@ -2,46 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9EA668F9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE3D668FB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjAMHx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S239354AbjAMHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbjAMHx4 (ORCPT
+        with ESMTP id S236402AbjAMHzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:53:56 -0500
-Received: from out-107.mta0.migadu.com (out-107.mta0.migadu.com [IPv6:2001:41d0:1004:224b::6b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE6C6147A
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:53:55 -0800 (PST)
-Message-ID: <ec0e983b-15fb-e43f-90e2-d4f79d27298a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1673596433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CJxeeSc3qQrOJLMjTK8T/8vYCXW4ZeXCWrjeCq9A1J0=;
-        b=qnukT8iyfmEX70BRRAwnkgLN9F6bWePzWFC8UrbiRJX2XnxJFe/vfNCUIF2r2jdGhB/NTO
-        lkDMXP5gSL+cEb2gMB60A7JZpZ0BkFP7AXJDSgXQCoS9vHR7/3+igfbBX3zZ4BkWZMcGaj
-        S1jOuImh2EZ3jTd+CMPIjBcH2uHWW+Q=
-Date:   Fri, 13 Jan 2023 15:53:46 +0800
+        Fri, 13 Jan 2023 02:55:09 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ED26878B;
+        Thu, 12 Jan 2023 23:55:08 -0800 (PST)
+Received: from pendragon.ideasonboard.com (85-76-5-15-nat.elisa-mobile.fi [85.76.5.15])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DBD14D4;
+        Fri, 13 Jan 2023 08:55:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673596505;
+        bh=vRdyiqF+PpWa7HcHfhCtuslDgXVXt8V4AOIdljF1BQo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MplxUnHw8ErIF7LyxmuN/+OcdYTL+KHEXJob0ft2ezOhqAVYE3m8P/x5TGmDxunAX
+         hNGSu2Rfv8w4h3WiaTzkK6SyygY+7vdn0jtGh9flpoxnn8uBnWmrnoDsTJWb5wUuXu
+         ajDTUWUaMexyxBvmwaL7WwO3/s2maPmjOdQvt9qo=
+Date:   Fri, 13 Jan 2023 09:55:04 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: [PATCH 01/22] gpu/drm: remove the shmobile drm driver
+Message-ID: <Y8EOWGVmwEElKGE4@pendragon.ideasonboard.com>
+References: <20230113062339.1909087-1-hch@lst.de>
+ <20230113062339.1909087-2-hch@lst.de>
+ <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH] infiniband: sw: rxe: Add NULL checks for qp->resp.mr
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, zyjzyj2000@gmail.com,
-        jgg@ziepe.ca, leon@kernel.org
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-References: <20230113023527.728725-1-baijiaju1990@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20230113023527.728725-1-baijiaju1990@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,116 +62,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/1/13 10:35, Jia-Ju Bai 写道:
-> In a previous commit 3282a549cf9b, qp->resp.mr could be NULL. Moreover,
-> in many functions, qp->resp.mr is checked before its dereferences.
-> However, in some functions, this variable is not checked, and thus NULL
-> checks should be added.
-
-IMO， we should analyze the code snippet one by one.
-And it is not good to add "NULL check" without futher investigations.
-
-Zhu Yanjun
+On Fri, Jan 13, 2023 at 09:46:49AM +0200, Laurent Pinchart wrote:
+> Hi Christoph,
 > 
-> These results are reported by a static tool written by myself.
+> Thank you for the patch.
 > 
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> ---
->   drivers/infiniband/sw/rxe/rxe_resp.c | 47 ++++++++++++++++------------
->   1 file changed, 27 insertions(+), 20 deletions(-)
+> On Fri, Jan 13, 2023 at 07:23:18AM +0100, Christoph Hellwig wrote:
+> > This driver depends on ARM && ARCH_SHMOBILE, but ARCH_SHMOBILE can only be
+> > set for each/sh, making the driver dead code except for the COMPILE_TEST
+> > case.
+> > 
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-> index c74972244f08..2eafa1667a9e 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-> @@ -621,11 +621,13 @@ static enum resp_states write_data_in(struct rxe_qp *qp,
->   	int	err;
->   	int data_len = payload_size(pkt);
->   
-> -	err = rxe_mr_copy(qp->resp.mr, qp->resp.va + qp->resp.offset,
-> -			  payload_addr(pkt), data_len, RXE_TO_MR_OBJ);
-> -	if (err) {
-> -		rc = RESPST_ERR_RKEY_VIOLATION;
-> -		goto out;
-> +	if (qp->resp.mr) {
-> +		err = rxe_mr_copy(qp->resp.mr, qp->resp.va + qp->resp.offset,
-> +				  payload_addr(pkt), data_len, RXE_TO_MR_OBJ);
-> +		if (err) {
-> +			rc = RESPST_ERR_RKEY_VIOLATION;
-> +			goto out;
-> +		}
->   	}
->   
->   	qp->resp.va += data_len;
-> @@ -699,11 +701,13 @@ static enum resp_states process_flush(struct rxe_qp *qp,
->   		start = res->flush.va;
->   		length = res->flush.length;
->   	} else { /* level == IB_FLUSH_MR */
-> -		start = mr->ibmr.iova;
-> -		length = mr->ibmr.length;
-> +		if (mr) {
-> +			start = mr->ibmr.iova;
-> +			length = mr->ibmr.length;
-> +		}
->   	}
->   
-> -	if (res->flush.type & IB_FLUSH_PERSISTENT) {
-> +	if (mr && res->flush.type & IB_FLUSH_PERSISTENT) {
->   		if (rxe_flush_pmem_iova(mr, start, length))
->   			return RESPST_ERR_RKEY_VIOLATION;
->   		/* Make data persistent. */
-> @@ -742,7 +746,7 @@ static enum resp_states atomic_reply(struct rxe_qp *qp,
->   		qp->resp.res = res;
->   	}
->   
-> -	if (!res->replay) {
-> +	if (!res->replay && mr) {
->   		if (mr->state != RXE_MR_STATE_VALID) {
->   			ret = RESPST_ERR_RKEY_VIOLATION;
->   			goto out;
-> @@ -793,15 +797,17 @@ static enum resp_states do_atomic_write(struct rxe_qp *qp,
->   	int payload = payload_size(pkt);
->   	u64 src, *dst;
->   
-> -	if (mr->state != RXE_MR_STATE_VALID)
-> +	if (mr && mr->state != RXE_MR_STATE_VALID)
->   		return RESPST_ERR_RKEY_VIOLATION;
->   
->   	memcpy(&src, payload_addr(pkt), payload);
->   
-> -	dst = iova_to_vaddr(mr, qp->resp.va + qp->resp.offset, payload);
-> -	/* check vaddr is 8 bytes aligned. */
-> -	if (!dst || (uintptr_t)dst & 7)
-> -		return RESPST_ERR_MISALIGNED_ATOMIC;
-> +	if (mr) {
-> +		dst = iova_to_vaddr(mr, qp->resp.va + qp->resp.offset, payload);
-> +		/* check vaddr is 8 bytes aligned. */
-> +		if (!dst || (uintptr_t)dst & 7)
-> +			return RESPST_ERR_MISALIGNED_ATOMIC;
-> +	}
->   
->   	/* Do atomic write after all prior operations have completed */
->   	smp_store_release(dst, src);
-> @@ -1002,13 +1008,14 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->   		return RESPST_ERR_RNR;
->   	}
->   
-> -	err = rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
-> -			  payload, RXE_FROM_MR_OBJ);
-> -	if (mr)
-> +	if (mr) {
-> +		err = rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
-> +				  payload, RXE_FROM_MR_OBJ);
->   		rxe_put(mr);
-> -	if (err) {
-> -		kfree_skb(skb);
-> -		return RESPST_ERR_RKEY_VIOLATION;
-> +		if (err) {
-> +			kfree_skb(skb);
-> +			return RESPST_ERR_RKEY_VIOLATION;
-> +		}
->   	}
->   
->   	if (bth_pad(&ack_pkt)) {
+> No objection from me.
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+To expand a little bit on this, ARCH_SHMOBILE used to be set for the
+ARM-based shmobile SoCs too, until
+
+commit 08e735233ea29b17bfec8e4cb302e799d9f920b8
+Author: Geert Uytterhoeven <geert+renesas@glider.be>
+Date:   Tue Aug 28 17:10:10 2018 +0200
+
+    ARM: shmobile: Remove the ARCH_SHMOBILE Kconfig symbol
+
+    All drivers for Renesas ARM SoCs have gained proper ARCH_RENESAS
+    platform dependencies.  Hence finish the conversion from ARCH_SHMOBILE
+    to ARCH_RENESAS for Renesas 32-bit ARM SoCs, as started by commit
+    9b5ba0df4ea4f940 ("ARM: shmobile: Introduce ARCH_RENESAS").
+
+    Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+    Acked-by: Arnd Bergmann <arnd@arndb.de>
+    Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+
+merged in v4.20. The DRM shmobile driver's Kconfig entry wasn't updated,
+making it dead code indeed.
+
+I haven't tested this driver in ages, hence my lack of objection, but
+someone may want to keep it for the pre-R-Car ARM SoCs.
+
+Also, I just noticed that you forgot to update the MAINTAINERS file in
+this patch to drop the drivers/gpu/drm/shmobile/ entry.
+
+> > ---
+> >  drivers/gpu/drm/Kconfig                       |   2 -
+> >  drivers/gpu/drm/Makefile                      |   1 -
+> >  drivers/gpu/drm/shmobile/Kconfig              |  12 -
+> >  drivers/gpu/drm/shmobile/Makefile             |   8 -
+> >  .../gpu/drm/shmobile/shmob_drm_backlight.c    |  82 ---
+> >  .../gpu/drm/shmobile/shmob_drm_backlight.h    |  19 -
+> >  drivers/gpu/drm/shmobile/shmob_drm_crtc.c     | 683 ------------------
+> >  drivers/gpu/drm/shmobile/shmob_drm_crtc.h     |  55 --
+> >  drivers/gpu/drm/shmobile/shmob_drm_drv.c      | 303 --------
+> >  drivers/gpu/drm/shmobile/shmob_drm_drv.h      |  42 --
+> >  drivers/gpu/drm/shmobile/shmob_drm_kms.c      | 150 ----
+> >  drivers/gpu/drm/shmobile/shmob_drm_kms.h      |  29 -
+> >  drivers/gpu/drm/shmobile/shmob_drm_plane.c    | 261 -------
+> >  drivers/gpu/drm/shmobile/shmob_drm_plane.h    |  19 -
+> >  drivers/gpu/drm/shmobile/shmob_drm_regs.h     | 310 --------
+> >  15 files changed, 1976 deletions(-)
+> >  delete mode 100644 drivers/gpu/drm/shmobile/Kconfig
+> >  delete mode 100644 drivers/gpu/drm/shmobile/Makefile
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_backlight.c
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_backlight.h
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_crtc.c
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_crtc.h
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_drv.c
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_drv.h
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_kms.c
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_kms.h
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_plane.c
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_plane.h
+> >  delete mode 100644 drivers/gpu/drm/shmobile/shmob_drm_regs.h
+
+-- 
+Regards,
+
+Laurent Pinchart
