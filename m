@@ -2,112 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E222266985D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12853669854
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241320AbjAMNUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S241794AbjAMNUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241570AbjAMNUG (ORCPT
+        with ESMTP id S241875AbjAMNTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:20:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F7959D00
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:08:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673615320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zTGp/g2Mj2pJKwIiYAJsofqpy3bUijk8D7H1gLakptw=;
-        b=TzFFb9RdwzjYz+tUJPXhoLPooIvp/08XiWlQJUkZdX192ZUnivaTB9CqyP+ocphwi1UDjj
-        e56kgwrtilhdGRKTNmLWgY7mHFWczCRSTVGvmcPR8MqylXTY77WuNzqbZAyn5UvDv0aIW9
-        3SbuKwVEeGKfhFZn4Z9PPqpRokmAQCQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-80-5MI1HJVhMaODli8BBZ1yYA-1; Fri, 13 Jan 2023 08:08:39 -0500
-X-MC-Unique: 5MI1HJVhMaODli8BBZ1yYA-1
-Received: by mail-wm1-f69.google.com with SMTP id bi6-20020a05600c3d8600b003da1f6a7b20so791879wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:08:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zTGp/g2Mj2pJKwIiYAJsofqpy3bUijk8D7H1gLakptw=;
-        b=GPhQ/i1omDCsTTulUCf5nJ1ZC6Sdu6BdMzDve4dQvhMYcNiaucFw3+vYSxSMgESwv1
-         p6aB+wlhGyUPTJKf8YshUMlh3Jyt7ImItZugp9r5RK9I4D3Ij3hmbO7p6C/eWJB9wICL
-         SKH9EtJ361JDKBTN1F8ZMIraBMaIqegJ86MFZyd7uqcehYIObP5g38NLRHQ/ZbwqOKKd
-         mjp+oXzg77gT+3ntuE7GBpRUabtaYzQuXUo6C6PSkRanPAQyfq5qJYzXXF9zlhIeowSi
-         3TUHHEsKakDo1jzTZ+XosBB7oM6I8TESbaw8TbxjmBll7HkYVPgIa36UASZOKNqiO7L2
-         qiaw==
-X-Gm-Message-State: AFqh2koBlOmywPeoG4nqVb44f3D0/2w+qCC9XCCXviwJ3RaVw0mQyRSq
-        fiNv7qRmNr3DwZyWFG6x1IOH2dNcaK6jEAnT1QZx2k4l0+LHNH2ywgNblJoUpKGw1Z0akKi+sY8
-        ly4xfTCq1UY8H1wDKtu1fxBXN
-X-Received: by 2002:adf:cd82:0:b0:2bd:bf44:2427 with SMTP id q2-20020adfcd82000000b002bdbf442427mr8484115wrj.42.1673615318295;
-        Fri, 13 Jan 2023 05:08:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvPtDScdJl06i/LvqN9fQBg1j/z9NuB/ZbSPipm75MwKl4iLeEaz8CQ94/uHzhS2GM0wFfPXg==
-X-Received: by 2002:adf:cd82:0:b0:2bd:bf44:2427 with SMTP id q2-20020adfcd82000000b002bdbf442427mr8484099wrj.42.1673615317966;
-        Fri, 13 Jan 2023 05:08:37 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:ec00:869d:7200:eb03:db01? (p200300cbc704ec00869d7200eb03db01.dip0.t-ipconnect.de. [2003:cb:c704:ec00:869d:7200:eb03:db01])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d6b8a000000b002425787c5easm18873317wrx.96.2023.01.13.05.08.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 05:08:37 -0800 (PST)
-Message-ID: <8bbc5629-b89a-83f3-41a4-0083ea2468c1@redhat.com>
-Date:   Fri, 13 Jan 2023 14:08:36 +0100
+        Fri, 13 Jan 2023 08:19:38 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1E3103;
+        Fri, 13 Jan 2023 05:09:51 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBlBka032516;
+        Fri, 13 Jan 2023 13:09:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Pcu7qTXYqJaD0IKb069b6gojgn9RycIXtUdyV8gwfqs=;
+ b=jbXxzjDLc8UvPo+TzSLsh5rg/bOG0nvPXi2cuVYXa8dvwMt3vzSol4VuHC5jpNqS5gbY
+ zqzc99QbpkaHoHIaZBLD7a5+J6ywFAzRHUr6og18+gyp/mG1JN0dbG8g0uaM+hf+WZ5u
+ tcc/V5wdkHwhnPTGRqTbaOSYoYQx0ZALZRmWCYyi/dkBm+qGDxoEtjv6VRJz59QJqRf9
+ d5qs4V9K6GujwQWtMG9zaEwyv/A2rUpv4nHzgaWuWVGhi7yAC/Zj++qGPOKOV/1+R5Zi
+ RgN0CEHqh3mZaW9AlindClvymxg/xft6T78eatQ72rjoddFu8xrm6qKWwJdEG6VfgABI qQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n32wu90wj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 13:09:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DD8uvv007975
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 13:08:56 GMT
+Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 05:08:48 -0800
+Message-ID: <bd52102b-6b01-2659-09ec-238463b0eb82@quicinc.com>
+Date:   Fri, 13 Jan 2023 18:38:45 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH -next 5/7] mm: memory: convert wp_page_copy() to use
- folios
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/7] dt-bindings: arm64: ipq9574: Add binding descriptions
+ for clock and reset
 Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230112083006.163393-1-wangkefeng.wang@huawei.com>
- <20230112083006.163393-6-wangkefeng.wang@huawei.com>
- <CGME20230113130136eucas1p18a54a3812792e500a02079ee890e5ecb@eucas1p1.samsung.com>
- <32fefce6-e25d-106d-12ec-8fc612843cfb@samsung.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <32fefce6-e25d-106d-12ec-8fc612843cfb@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-2-quic_devipriy@quicinc.com>
+ <603f9c39-3e36-bb44-2305-1d37fe033dd5@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <603f9c39-3e36-bb44-2305-1d37fe033dd5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 3qn-0KVstC7QwFw_lMeGphGaiX0YT-GO
+X-Proofpoint-ORIG-GUID: 3qn-0KVstC7QwFw_lMeGphGaiX0YT-GO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_06,2023-01-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130088
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.01.23 14:01, Marek Szyprowski wrote:
-> Hi
+
+
+On 1/11/2023 3:06 PM, Krzysztof Kozlowski wrote:
+> On 10/01/2023 13:13, devi priya wrote:
+>> Adding support for the global clock controller found on
+>> IPQ9574 based devices
 > 
-> On 12.01.2023 09:30, Kefeng Wang wrote:
->> The old_page/new_page are converted to old_folio/new_folio in
->> wp_page_copy(), then replaced related page functions to folio
->> functions.
+> Subject: drop second/last, redundant "bindings descriptions for". The
+> "dt-bindings" prefix is already stating that these are bindings.
+Sure, will do
+> 
 >>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> ---
+>>   .../bindings/clock/qcom,gcc-other.yaml        |   4 +
+>>   .../devicetree/bindings/clock/qcom,gcc.yaml   |   9 +-
+>>   include/dt-bindings/clock/qcom,gcc-ipq9574.h  | 226 ++++++++++++++++++
+>>   include/dt-bindings/reset/qcom,gcc-ipq9574.h  | 164 +++++++++++++
+>>   4 files changed, 402 insertions(+), 1 deletion(-)
+>>   create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq9574.h
+>>   create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq9574.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+>> index 2e8acca64af1..cc563d640336 100644
+>> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+>> @@ -18,6 +18,8 @@ description: |
+>>       include/dt-bindings/clock/qcom,gcc-ipq4019.h
+>>       include/dt-bindings/clock/qcom,gcc-ipq6018.h
+>>       include/dt-bindings/reset/qcom,gcc-ipq6018.h
+>> +    include/dt-bindings/clock/qcom,gcc-ipq9574.h
+>> +    include/dt-bindings/reset/qcom,gcc-ipq9574.h
+>>       include/dt-bindings/clock/qcom,gcc-msm8953.h
+>>       include/dt-bindings/clock/qcom,gcc-mdm9607.h
+>>       include/dt-bindings/clock/qcom,gcc-mdm9615.h
+>> @@ -34,6 +36,8 @@ properties:
+>>         - qcom,gcc-mdm9607
+>>         - qcom,gcc-msm8953
+>>         - qcom,gcc-mdm9615
+>> +      - qcom,gcc-ipq9574
 > 
-> This patch, merged into today's linux-next as commit 9ebae00c8e30 ("mm:
-> memory: convert wp_page_copy() to use folios"), causes serious stability
-> issues on my ARM based test boards. Here is the example of such crash:
+> Incorrect order but anyway let's switch to new naming style just like
+> SM8550 and SA8775p.
+okay
+> 
+>> +
+> 
+> Not related change.
+> 
+Understood, will remove
+>>   
+>>   required:
+>>     - compatible
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>> index 7129fbcf2b6c..5a71268538e6 100644
+>> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>> @@ -24,6 +24,14 @@ properties:
+>>     '#power-domain-cells':
+>>       const: 1
+>>   
+>> +  clocks:
+>> +    minItems: 1
+>> +    maxItems: 8
+>> +
+>> +  clock-names:
+>> +    minItems: 1
+>> +    maxItems: 8
+> 
+> This does not look correct, neither related.
+Okay
+>> +
+>>     reg:
+>>       maxItems: 1
+>>   
+>> @@ -35,7 +43,6 @@ required:
+>>     - reg
+>>     - '#clock-cells'
+>>     - '#reset-cells'
+>> -  - '#power-domain-cells'
+> 
+> Eee? Why? What's this?
+Sure, will address it accordingly
+> 
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-syzbot is also not happy:
-
-https://lkml.kernel.org/r/000000000000807c7805f2205df1@google.com
-
--- 
-Thanks,
-
-David / dhildenb
-
+Best regards,
+Devi Priya
