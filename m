@@ -2,147 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFBE668F38
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC901668F37
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241106AbjAMH0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S235409AbjAMH00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:26:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjAMHZm (ORCPT
+        with ESMTP id S237927AbjAMHZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:25:42 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDA534749
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:19:52 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id v10so28786001edi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:19:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DpXLHrg8X0CGU6JDii/ohDZ9K/nd3cxPDJslReflqhY=;
-        b=ehe9mwAR5ZA5cDQuVHFHDRchLkfrmo3peGHkDc0PFG5s0Upfmnko1VLDA+CWvB1J5v
-         RRFHV/PPqwMe8sV7rxbCD27+WnACTn87EFaP+aYY7rAGw93+sCDFbNKrXQiAHzBKBW9Z
-         4IjVj0tbW1Oo8qo5jMRx7fC6gfss50Btap5WI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DpXLHrg8X0CGU6JDii/ohDZ9K/nd3cxPDJslReflqhY=;
-        b=gJCRNec8ASUhK4DBvtB4AeAXAwJWt/E+q78AyycDgp2BH9ClX0dbSEd6YKYUjuqedb
-         sIEl86VK83g5qY0hSMIR7PMOtcWkhrr/32kRefHp0FEWV5CmPM8wBT4WdbVxMSb76WvB
-         qG7SJKVYFU7Gw7EJYIK431qELmdYk6VqmURdgMMmw2oRxQU+QPzTk4RyQWgalDA9nztr
-         x7iHJZ4L71HexS35I0twnbCo9TB+WZwpcYVhwpk4tPBUtFMwO244fIhSlVFbCyf52eiI
-         IndQ0WA2ieFt6nLwgWGvMVlR6Dsl9MRO/lJebr4eoVV4l38hDluHi6mHPag/ai+SDg3s
-         URNw==
-X-Gm-Message-State: AFqh2kotKI7WK1ns1Df4CJBijLp3AbsgWpQuFwgoigrdYQjPeVl8UyD7
-        YRDdvamIfdvOwOaxDWeBsLXNi/eUOFbzrDDTPXn6rw==
-X-Google-Smtp-Source: AMrXdXs9143abyTWHtHNY5LHnX/w6oQ4m5L/dgDdGys9klvHOQFzzvk3yR3WZdd/+Kl7n1QvVTdml6OSgSBqEZ3r5Zg=
-X-Received: by 2002:a05:6402:1619:b0:499:bbb0:7f3e with SMTP id
- f25-20020a056402161900b00499bbb07f3emr2072687edv.104.1673594390525; Thu, 12
- Jan 2023 23:19:50 -0800 (PST)
+        Fri, 13 Jan 2023 02:25:48 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2523B7E3;
+        Thu, 12 Jan 2023 23:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673594413; x=1705130413;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y3dF78OQd21knEiz3Yhh/QY/Dl2oydckoMmUh4NifSQ=;
+  b=lN3g1z0swha2u/3w7jUVIV0eN7JroEzz4rWMEkUnm/vOSdfY/CuFRmnM
+   tL1wmpldvMq3W7520/tEYmhL9ZNowRwYTy1LD2XROEyXZxHB+qSpsz6+L
+   xXh8vLSRfi/xSGHLL1H0/nkkg9VSZjcwPsv6Q/VX/NYZSetqrZxfcGZcd
+   3dvXuctUIOSqxjD34c+G7A7+rgTpPd1jm5rHzKjunmW5xkecJ4ZFIdZO7
+   YG8EjUKoGGDSOBQ5BDUZCSGaxia1COpunPO9vVne2hoIABFADkFVt/7Bc
+   YtLnYKeht50DwUllXzg0X9Tfkdv4+daSw5f7U3vD5c53QdxXE2oeUjszI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="351170039"
+X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
+   d="scan'208";a="351170039"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 23:20:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="690412760"
+X-IronPort-AV: E=Sophos;i="5.97,213,1669104000"; 
+   d="scan'208";a="690412760"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.38.178])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 23:20:10 -0800
+Message-ID: <47bdc4e2-a2d6-12b4-f826-63874c9c0cbb@intel.com>
+Date:   Fri, 13 Jan 2023 09:20:05 +0200
 MIME-Version: 1.0
-References: <CAOf5uwns3YZMY5xhM+o0rNvtTqEDwCbua5HuSy-LBwgZq_eWYg@mail.gmail.com>
- <DB7PR04MB4010D6ABA0D10AB826F468CC90C29@DB7PR04MB4010.eurprd04.prod.outlook.com>
-In-Reply-To: <DB7PR04MB4010D6ABA0D10AB826F468CC90C29@DB7PR04MB4010.eurprd04.prod.outlook.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Fri, 13 Jan 2023 08:19:39 +0100
-Message-ID: <CAOf5uwmaP0x3s7W6OZaCfLmJguSMtKtJtLCgKZ2nuDZ9VgpLVg@mail.gmail.com>
-Subject: Re: NXP imx6ull nonalignment buffer question
-To:     Bough Chen <haibo.chen@nxp.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [PATCH 2/5] drivers: mmc: sdhci-cadence: enable
+ MMC_SDHCI_IO_ACCESSORS
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, yamada.masahiro@socionext.com,
+        devicetree@vger.kernel.org, jannadurai@marvell.com,
+        cchavva@marvell.com
+References: <20221219142418.27949-1-pmalgujar@marvell.com>
+ <20221219142418.27949-3-pmalgujar@marvell.com>
+ <35ea0a7a-3d63-26b7-4dc3-69f6ca41909a@intel.com>
+ <20230112141230.GB6335@Dell2s-9>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230112141230.GB6335@Dell2s-9>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 12/01/23 16:12, Piyush Malgujar wrote:
+> Hi Adrian, 
+> 
+> Thank you for the review comments.
+> 
+> On Wed, Jan 11, 2023 at 10:23:43AM +0200, Adrian Hunter wrote:
+>> On 19/12/22 16:24, Piyush Malgujar wrote:
+>>> From: Jayanthi Annadurai <jannadurai@marvell.com>
+>>>
+>>> Add support for CONFIG_MMC_SDHCI_IO_ACCESSORS for controller
+>>> specific register read and write APIs.
+>>>
+>>> Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
+>>> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
+>>> ---
+>>>  drivers/mmc/host/Kconfig         | 12 ++++++
+>>>  drivers/mmc/host/sdhci-cadence.c | 63 ++++++++++++++++++++++++++++++++
+>>>  2 files changed, 75 insertions(+)
+>>>
+>>> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+>>> index 5e19a961c34d7b5664ab2fd43cfba82dc90913ac..b5b2ae0bb4625bdb9d17acdbb1887c9caa3a1f32 100644
+>>> --- a/drivers/mmc/host/Kconfig
+>>> +++ b/drivers/mmc/host/Kconfig
+>>> @@ -262,6 +262,18 @@ config MMC_SDHCI_CADENCE
+>>>  
+>>>  	  If unsure, say N.
+>>>  
+>>> +config MMC_SDHCI_CN10K
+>>> +	tristate "SDHCI Cadence support for Marvell CN10K platforms"
+>>> +	select MMC_SDHCI_CADENCE
+>>> +	select MMC_SDHCI_IO_ACCESSORS
+>>
+>> Probably better to just add MMC_SDHCI_IO_ACCESSORS to 
+>> config MMC_SDHCI_CADENCE and drop MMC_SDHCI_CN10K
+>>
+> 
+> This reason behind this was to not force SDHCI_IO_ACCESSORS upon cadence users as some may not
+> require it owing to how cadence ip is integrated to soc.
 
-On Fri, Jan 13, 2023 at 4:30 AM Bough Chen <haibo.chen@nxp.com> wrote:
->
-> > -----Original Message-----
-> > From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-> > Sent: 2023=E5=B9=B41=E6=9C=889=E6=97=A5 21:02
-> > To: Bough Chen <haibo.chen@nxp.com>; Shawn Guo <shawnguo@kernel.org>;
-> > Fabio Estevam <festevam@gmail.com>; LKML <linux-kernel@vger.kernel.org>
-> > Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>;
-> > linux-mmc@vger.kernel.org; Ulf Hansson <ulf.hansson@linaro.org>
-> > Subject: NXP imx6ull nonalignment buffer question
-> >
-> > Hi Haibo
-> >
-> > Working on imx6ulz design and found that if I send a sdio packet using =
-the
-> > sdio_writesb the adma driver tries to handle it with two dma descriptor=
-s. The
-> > first one filled with the bytes up to 3 to cover the misalign and then =
-another
-> > buffer descriptor
-> >
-> >   offset =3D (SDHCI_ADMA2_ALIGN - (addr & SDHCI_ADMA2_MASK)) &
-> >                          SDHCI_ADMA2_MASK;
-> >                 if (offset) {
-> >                         if (data->flags & MMC_DATA_WRITE) {
-> >                                 buffer =3D sdhci_kmap_atomic(sg);
-> >                                 memcpy(align, buffer, offset);
-> >                                 sdhci_kunmap_atomic(buffer);
-> >                         }
-> >
-> >                         /* tran, valid */
-> >                         __sdhci_adma_write_desc(host, &desc,
-> > align_addr,
-> >                                                 offset,
-> > ADMA2_TRAN_VALID);
-> >
-> >                         BUG_ON(offset > 65536);
-> >
-> >                         align +=3D SDHCI_ADMA2_ALIGN;
-> >                         align_addr +=3D SDHCI_ADMA2_ALIGN;
-> >
-> >                         addr +=3D offset;
-> >                         len -=3D offset;
-> >                 }
-> >
-> > In 48.7.4 Data Length Setting
-> > For either ADMA (ADMA1 or ADMA2) transfer, the data in the data buffer =
-must
-> > be word aligned, so the data length set in the descriptor must be a mul=
-tiple of 4.
-> > I have noticed that this code does not work as expected.
->
-> Hi Michael,
->
-> My understanding is: for the sentence " the data in the data buffer must =
-be word aligned", this means the start address of the data must be word ali=
-gned, but not limit the data length.
->
+In practice, it makes no difference to performance and adds a
+negligible amount of code, so it is not worth the extra complexity
+to make it conditional.
 
-Ok. My specific problem is that this seems not working on imx6ulz, I
-found the problem working on a wifi chipset, if the request gets split
-for no-alignment
-of the data in two dma descriptors, the chipset does not reply to me.
-Anyway, I will retest it with the upstream kernel again. I will check
-better and I will follow up if any more question
+> 
+>>> +	help
+>>> +	  This selects the SDHCI cadence driver and IO Accessors
+>>> +	  for Marvell CN10K platforms
+>>> +
+>>> +	  If you have Marvell CN10K platform, say Y or M here.
+>>> +
+>>> +	  If unsure, say N.
+>>> +
+>>>  config MMC_SDHCI_CNS3XXX
+>>>  	tristate "SDHCI support on the Cavium Networks CNS3xxx SoC"
+>>>  	depends on ARCH_CNS3XXX || COMPILE_TEST
+>>> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+>>> index 5332d19e489be936d6814feba4f0fc046f5e130e..6bf703f15bc5be7e3be4cb1144b78ec3585ec540 100644
+>>> --- a/drivers/mmc/host/sdhci-cadence.c
+>>> +++ b/drivers/mmc/host/sdhci-cadence.c
+>>> @@ -449,6 +449,61 @@ static u32 read_dqs_cmd_delay, clk_wrdqs_delay, clk_wr_delay, read_dqs_delay;
+>>>  
+>>>  static u32 sdhci_cdns_sd6_get_mode(struct sdhci_host *host, unsigned int timing);
+>>>  
+>>> +#ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
+>>> +static u32 sdhci_cdns_sd6_readl(struct sdhci_host *host, int reg)
+>>> +{
+>>> +	return readl(host->ioaddr + reg);
+>>> +}
+>>> +
+>>> +static void sdhci_cdns_sd6_writel(struct sdhci_host *host, u32 val, int reg)
+>>> +{
+>>> +	writel(val, host->ioaddr + reg);
+>>> +}
+>>> +
+>>> +static u16 sdhci_cdns_sd6_readw(struct sdhci_host *host, int reg)
+>>> +{
+>>> +	u32 val, regoff;
+>>> +
+>>> +	regoff = reg & ~3;
+>>> +
+>>> +	val = readl(host->ioaddr + regoff);
+>>> +	if ((reg & 0x3) == 0)
+>>> +		return (val & 0xFFFF);
+>>> +	else
+>>> +		return ((val >> 16) & 0xFFFF);
+>>> +}
+>>> +
+>>> +static void sdhci_cdns_sd6_writew(struct sdhci_host *host, u16 val, int reg)
+>>> +{
+>>> +	writew(val, host->ioaddr + reg);
+>>> +}
+>>> +
+>>> +static u8 sdhci_cdns_sd6_readb(struct sdhci_host *host, int reg)
+>>> +{
+>>> +	u32 val, regoff;
+>>> +
+>>> +	regoff = reg & ~3;
+>>> +
+>>> +	val = readl(host->ioaddr + regoff);
+>>> +	switch (reg & 3) {
+>>> +	case 0:
+>>> +		return (val & 0xFF);
+>>> +	case 1:
+>>> +		return ((val >> 8) & 0xFF);
+>>> +	case 2:
+>>> +		return ((val >> 16) & 0xFF);
+>>> +	case 3:
+>>> +		return ((val >> 24) & 0xFF);
+>>> +	}
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static void sdhci_cdns_sd6_writeb(struct sdhci_host *host, u8 val, int reg)
+>>> +{
+>>> +	writeb(val, host->ioaddr + reg);
+>>> +}
+>>> +#endif
+>>> +
+>>>  static int sdhci_cdns_sd6_phy_lock_dll(struct sdhci_cdns_sd6_phy *phy)
+>>>  {
+>>>  	u32 delay_element = phy->d.delay_element_org;
+>>> @@ -1576,6 +1631,14 @@ static const struct sdhci_ops sdhci_cdns_sd4_ops = {
+>>>  };
+>>>  
+>>>  static const struct sdhci_ops sdhci_cdns_sd6_ops = {
+>>> +#ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
+>>> +	.read_l = sdhci_cdns_sd6_readl,
+>>> +	.write_l = sdhci_cdns_sd6_writel,
+>>> +	.read_w = sdhci_cdns_sd6_readw,
+>>> +	.write_w = sdhci_cdns_sd6_writew,
+>>> +	.read_b = sdhci_cdns_sd6_readb,
+>>> +	.write_b = sdhci_cdns_sd6_writeb,
+>>> +#endif
+>>>  	.get_max_clock = sdhci_cdns_get_max_clock,
+>>>  	.set_clock = sdhci_cdns_sd6_set_clock,
+>>>  	.get_timeout_clock = sdhci_cdns_get_timeout_clock,
+>>
+> 
+> Rest of the comments will be taken care in v2.
+> 
+> Thanks,
+> Piyush
 
-Thank you
-
-> Best Regards
-> Haibo Chen
-> >
-> > Did you have any feedback?
-> >
-> > Michael
