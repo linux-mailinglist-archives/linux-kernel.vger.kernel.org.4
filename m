@@ -2,132 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFB0669A4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63ADD669A8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjAMOdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        id S230031AbjAMOfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjAMOcj (ORCPT
+        with ESMTP id S230025AbjAMOda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:32:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8416AEE20;
-        Fri, 13 Jan 2023 06:26:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AEE356077A;
-        Fri, 13 Jan 2023 14:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673620005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=ZlT0bW1RT1S/RjUud1OHBkBdTWci8dCpwsYwHEA60CU=;
-        b=Jtmx8qSh10mse1aghzGf5O2OJpk2ANrzQQJ5UjROd+nkGRzzkpW181UYRfbFuNUdiZx/AR
-        mP9smr3XuGiJPpkaCClRrUHpB5OLjkNkOmrbVeOKK3dxAkgSQRja2ayHRV2XxI7ks2di8b
-        3SXt2oNX2EI1jeRd4c+CBnjsuRMGNGg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673620005;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=ZlT0bW1RT1S/RjUud1OHBkBdTWci8dCpwsYwHEA60CU=;
-        b=1XFKdmKo9XRjBZi/aLaSro2SdtveCWAwmQm5jYelTynOhKUoWeko+Nsx4AREXPY9iHKZt0
-        LaJJafmXd/Vr/FDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84F701358A;
-        Fri, 13 Jan 2023 14:26:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DeG5HyVqwWOTGAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 13 Jan 2023 14:26:45 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, Clement Lecigne <clecigne@google.com>
-Subject: [PATCH 5.10.y] ALSA: pcm: Properly take rwsem lock in ctl_elem_read_user/ctl_elem_write_user to prevent UAF
-Date:   Fri, 13 Jan 2023 15:26:39 +0100
-Message-Id: <20230113142639.4420-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Fri, 13 Jan 2023 09:33:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886524D71D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:27:57 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pGL1f-0006Gx-Tq; Fri, 13 Jan 2023 15:27:23 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pGL1f-005mzE-79; Fri, 13 Jan 2023 15:27:23 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pGL1b-00CkPU-8B; Fri, 13 Jan 2023 15:27:19 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v1 00/20] ARM: imx: make Ethernet refclock configurable
+Date:   Fri, 13 Jan 2023 15:26:58 +0100
+Message-Id: <20230113142718.3038265-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Clement Lecigne <clecigne@google.com>
+Most of i.MX SoC variants have configurable FEC/Ethernet reference clock
+used by RMII specification. This functionality is located in the
+general purpose registers (GRPx) and till now was not implemented as
+part of SoC clock tree.
 
-[ Note: this is a fix that works around the bug equivalently as the
-  two upstream commits:
-   1fa4445f9adf ("ALSA: control - introduce snd_ctl_notify_one() helper")
-   56b88b50565c ("ALSA: pcm: Move rwsem lock inside snd_ctl_elem_read to prevent UAF")
-  but in a simpler way to fit with older stable trees -- tiwai ]
+With this patch set, we move forward and add this missing functionality
+to some of i.MX clk drivers. So, we will be able to configure clock topology
+by using devicetree and be able to troubleshoot clock dependencies
+by using clk_summary etc.
 
-Add missing locking in ctl_elem_read_user/ctl_elem_write_user which can be
-easily triggered and turned into an use-after-free.
+Currently implemented and tested i.MX6Q, i.MX6DL and i.MX6UL variants.
 
-Example code paths with SNDRV_CTL_IOCTL_ELEM_READ:
+Oleksij Rempel (20):
+  clk: imx: add clk-gpr-mux driver
+  clk: imx6q: add ethernet refclock mux support
+  ARM: imx6q: skip ethernet refclock reconfiguration if enet_clk_ref is
+    present
+  ARM: imx6q: use of_clk_get_by_name() instead of_clk_get() to get ptp
+    clock
+  ARM: dts: imx6qdl: use enet_clk_ref instead of enet_out for the FEC
+    node
+  ARM: dts: imx6dl-lanmcu: configure ethernet reference clock parent
+  ARM: dts: imx6dl-alti6p: configure ethernet reference clock parent
+  ARM: dts: imx6dl-plybas: configure ethernet reference clock parent
+  ARM: dts: imx6dl-plym2m: configure ethernet reference clock parent
+  ARM: dts: imx6dl-prtmvt: configure ethernet reference clock parent
+  ARM: dts: imx6dl-victgo: configure ethernet reference clock parent
+  ARM: dts: imx6q-prtwd2: configure ethernet reference clock parent
+  ARM: dts: imx6qdl-skov-cpu: configure ethernet reference clock parent
+  ARM: dts: imx6dl-eckelmann-ci4x10: configure ethernet reference clock
+    parent
+  clk: imx: add imx_obtain_fixed_of_clock()
+  clk: imx6ul: fix enet1 gate configuration
+  clk: imx6ul: add ethernet refclock mux support
+  ARM: dts: imx6ul: set enet_clk_ref to CLK_ENETx_REF_SEL
+  ARM: mach-imx: imx6ul: remove not optional ethernet refclock overwrite
+  ARM: dts: imx6ul-prti6g: configure ethernet reference clock parent
 
-64-bits:
-snd_ctl_ioctl
-  snd_ctl_elem_read_user
-    [takes controls_rwsem]
-    snd_ctl_elem_read [lock properly held, all good]
-    [drops controls_rwsem]
+ arch/arm/boot/dts/imx6dl-alti6p.dts           |  12 +-
+ arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts |  13 +-
+ arch/arm/boot/dts/imx6dl-lanmcu.dts           |  12 +-
+ arch/arm/boot/dts/imx6dl-plybas.dts           |  12 +-
+ arch/arm/boot/dts/imx6dl-plym2m.dts           |  12 +-
+ arch/arm/boot/dts/imx6dl-prtmvt.dts           |  11 +-
+ arch/arm/boot/dts/imx6dl-victgo.dts           |  12 +-
+ arch/arm/boot/dts/imx6q-prtwd2.dts            |  17 ++-
+ arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi       |  12 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                |   4 +-
+ arch/arm/boot/dts/imx6ul-prti6g.dts           |  14 ++-
+ arch/arm/boot/dts/imx6ul.dtsi                 |  10 +-
+ arch/arm/mach-imx/mach-imx6q.c                |  12 +-
+ arch/arm/mach-imx/mach-imx6ul.c               |  20 ---
+ drivers/clk/imx/Makefile                      |   1 +
+ drivers/clk/imx/clk-gpr-mux.c                 | 119 ++++++++++++++++++
+ drivers/clk/imx/clk-imx6q.c                   |  13 ++
+ drivers/clk/imx/clk-imx6ul.c                  |  33 ++++-
+ drivers/clk/imx/clk.c                         |  14 +++
+ drivers/clk/imx/clk.h                         |   8 ++
+ include/dt-bindings/clock/imx6qdl-clock.h     |   4 +-
+ include/dt-bindings/clock/imx6ul-clock.h      |   7 +-
+ include/linux/mfd/syscon/imx6q-iomuxc-gpr.h   |   6 +-
+ 23 files changed, 297 insertions(+), 81 deletions(-)
+ create mode 100644 drivers/clk/imx/clk-gpr-mux.c
 
-32-bits (compat):
-snd_ctl_ioctl_compat
-  snd_ctl_elem_write_read_compat
-    ctl_elem_write_read
-      snd_ctl_elem_read [missing lock, not good]
-
-CVE-2023-0266 was assigned for this issue.
-
-Signed-off-by: Clement Lecigne <clecigne@google.com>
-Cc: stable@kernel.org # 5.12 and older
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
-
-Greg, this is a patch for the last ALSA PCM UCM fix for the older
-stable trees.  Please take this to 5.10.y and older stable trees.
-Thanks!
-
- sound/core/control_compat.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/sound/core/control_compat.c b/sound/core/control_compat.c
-index 97467f6a32a1..980ab3580f1b 100644
---- a/sound/core/control_compat.c
-+++ b/sound/core/control_compat.c
-@@ -304,7 +304,9 @@ static int ctl_elem_read_user(struct snd_card *card,
- 	err = snd_power_wait(card, SNDRV_CTL_POWER_D0);
- 	if (err < 0)
- 		goto error;
-+	down_read(&card->controls_rwsem);
- 	err = snd_ctl_elem_read(card, data);
-+	up_read(&card->controls_rwsem);
- 	if (err < 0)
- 		goto error;
- 	err = copy_ctl_value_to_user(userdata, valuep, data, type, count);
-@@ -332,7 +334,9 @@ static int ctl_elem_write_user(struct snd_ctl_file *file,
- 	err = snd_power_wait(card, SNDRV_CTL_POWER_D0);
- 	if (err < 0)
- 		goto error;
-+	down_write(&card->controls_rwsem);
- 	err = snd_ctl_elem_write(card, file, data);
-+	up_write(&card->controls_rwsem);
- 	if (err < 0)
- 		goto error;
- 	err = copy_ctl_value_to_user(userdata, valuep, data, type, count);
 -- 
-2.35.3
+2.30.2
 
