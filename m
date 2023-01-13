@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FC566A1B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8B566A1CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjAMSP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S229999AbjAMSRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjAMSOo (ORCPT
+        with ESMTP id S229896AbjAMSQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:14:44 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E946ECBD;
-        Fri, 13 Jan 2023 10:05:50 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso27812051pjt.0;
-        Fri, 13 Jan 2023 10:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7NMAvip3vfz223F9hHO3sbLI85Qz2jNvsvM/QRqJNU=;
-        b=iqHyBtfue4/l/adXUxuM1ma0e2zNIFivmoKfdBUu8DuvMIBMK4RQH568rclP36h571
-         xbUd69mCVySJwkJuap54Fm5zUymVXHEYFEsgDoDWKpMUwt/YZ3haOY1FsU41hp24vwOn
-         LgFLq1ApaifjvcaPbJeAH5wA124yz5AcDlQ48eX1HKrvZK/Rahmpj5vIC98T4T4n/558
-         vpRaH+GVk2qVrB8mXcOdiLonIrQ3PPJpkZzdNCtNXCIPZhQ4y+gd312MF6JHYrBblPdH
-         4Cpwt2EWLnJtBnoA6P2XBoXRDIiHDb6pFudSObGNuIuYB2GPm1Fjw4yf/8X6083sLrh9
-         m0xQ==
+        Fri, 13 Jan 2023 13:16:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9C440C38
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:06:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673633166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hQvFnya6NFdzrd0uXGd+lLCU8K6l8CjIC+mc6Joc75c=;
+        b=IJl+RtvOTIyV9LyVTAnGcFYYCSh7k7AivRDbZaAvvCJsLNCjjd/qykEurNTuALvETLZ/76
+        xg9s2IPZb4ONmd8IfdZ799N6c5zjDT/LCofr5XPyat3bANIm3wceBNZAMLSU6imtzuqduN
+        zHLhA6EYQods4robzf4AlwtoQg3L2ZA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-588-iY59gdtnPgyOT0GXLm4GfQ-1; Fri, 13 Jan 2023 13:06:04 -0500
+X-MC-Unique: iY59gdtnPgyOT0GXLm4GfQ-1
+Received: by mail-ej1-f71.google.com with SMTP id sd1-20020a1709076e0100b00810be49e7afso15951608ejc.22
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:06:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M7NMAvip3vfz223F9hHO3sbLI85Qz2jNvsvM/QRqJNU=;
-        b=KbN+KO+ot7T2M6u4C7ukeWkrb/Kxgveqk4NkvjRtwdBd5PqUW8II7GX90HRdiwV5tt
-         mAmUcz2PsDrZkHJ2BfrkAA9V7I8gDucCbMgwliAdx7o0z1ck0ZkSCcLVVEY4gj2LSj9O
-         IELgZdN8wX5nxqbSNQCK+7xdI2pvH86NAHClWnHRXFhu58+k4O64ESxnqlHzuMq6cPKF
-         UGmbF/wd5wwOowALCWRaBMt6rc9YvAIX2JEpPPYW+9ud5Q0FAtZq/T+P9zW2JfO8lQxV
-         CqQTsgruVbPRgd8djdDDKhwGcc9jildISMAOT3ynpJaX88iyE2lB2kDV4bWDWugtzZff
-         clNA==
-X-Gm-Message-State: AFqh2kqAjkKdh4avlmYh4df8UYONC/gz+wW0Jzvs5Hr5oYngTTqiETO0
-        CvsFKpEDz9QZ6/Y75EZzbNXfRaa4IyBevpcf4wE=
-X-Google-Smtp-Source: AMrXdXvTz/OR/mjkEDIh1uXTetfqAEHYND8ZDBSaBkZQnGWp+cLVTgiovs6DZV4YTmL+MF8tCi5WLKHNuqd/PVImRZE=
-X-Received: by 2002:a17:90a:1a13:b0:229:3009:5233 with SMTP id
- 19-20020a17090a1a1300b0022930095233mr223463pjk.213.1673633149684; Fri, 13 Jan
- 2023 10:05:49 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hQvFnya6NFdzrd0uXGd+lLCU8K6l8CjIC+mc6Joc75c=;
+        b=hHmN/TWlok6ce/jAZLYvy9hS3uaOwjFEyVDloloXMLQ/pbwNvl5VUgLRHfWleLKCpw
+         dstIrVe++YHSjOKzAnPXxtkSTelfpG7YdgWTx3KnLQ7uqpe1tRVXm+K8F4eSIxOR47NB
+         E45Rizsts5yPykRIBZT2VXJ63sHFMN0Eg2hWi9YNZqCPv8JsUqJtIHHDAWH5HxJ8ydax
+         6aNc9P0Ttv4SKH4e/HmPWrqI5eIOSLCT9bMCLT2pUtYPyeFVdcUKw+2Hfy4WuikcuLZh
+         8WRiOkdmPf/sy1GAkd6iB3Qyfb4+ZunUSEJM40N+a/pT/nggtX3wbmaOQ4jJ3TARig08
+         mvTA==
+X-Gm-Message-State: AFqh2ko1KPgRV9f46dtEssD0q6kZGBLH6QZ7Xzqpl2mY7HhplmDygc42
+        Cmpyv/TGFJIJjNj1EunBEXgyWrdkx+IVTlNvK4rW6cTKyzYeCBgNb5B5Iv4WHiwna8T3puCp2XT
+        LKAXG0X5fY399XelEELeVLXUR
+X-Received: by 2002:a17:906:7c58:b0:84d:4e9d:864a with SMTP id g24-20020a1709067c5800b0084d4e9d864amr15761301ejp.74.1673633163193;
+        Fri, 13 Jan 2023 10:06:03 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt4OmwyB6O2jyNzsN9OMjhhAn2F5iRTGB3A9G+/HJ+y66pFH9MGlJvZurdSDSOqdub4DT7B+Q==
+X-Received: by 2002:a17:906:7c58:b0:84d:4e9d:864a with SMTP id g24-20020a1709067c5800b0084d4e9d864amr15761291ejp.74.1673633163017;
+        Fri, 13 Jan 2023 10:06:03 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id la19-20020a170907781300b007aee7ca1199sm8819421ejc.10.2023.01.13.10.06.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 10:06:02 -0800 (PST)
+Message-ID: <674ac894-12a2-c15f-72c5-878558a8005d@redhat.com>
+Date:   Fri, 13 Jan 2023 19:06:01 +0100
 MIME-Version: 1.0
-References: <20230112135524.143670746@linuxfoundation.org>
-In-Reply-To: <20230112135524.143670746@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Fri, 13 Jan 2023 10:05:38 -0800
-Message-ID: <CAJq+SaBg0D=rFPwG=FqPE-F-p8ujiAX7Jt+vJb7HjeLPQBfQnQ@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/783] 5.10.163-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/6] KVM: x86: x2APIC reserved bits/regs fixes
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Orr <marcorr@google.com>, Ben Gardon <bgardon@google.com>,
+        Venkatesh Srinivas <venkateshs@chromium.org>
+References: <20230107011025.565472-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230107011025.565472-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.10.163 release.
-> There are 783 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.163-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On 1/7/23 02:10, Sean Christopherson wrote:
+> Fixes for edge cases where KVM mishandles reserved bits/regs checks when
+> the vCPU is in x2APIC mode.
+> 
+> The first two patches were previously posted[*], but both patches were
+> broken (as posted against upstream), hence I took full credit for doing
+> the work and changed Marc to a reporter.
+> 
+> The VMX APICv fixes are for bugs found when writing tests.  *sigh*
+> I didn't Cc those to stable as the odds of breaking something when touching
+> the MSR bitmaps seemed higher than someone caring about a 10 year old bug.
+> 
+> AMD x2AVIC support may or may not suffer similar interception bugs, but I
+> don't have hardware to test and this already snowballed further than
+> expected...
+> 
+> [*] https://lore.kernel.org/kvm/20220525173933.1611076-1-venkateshs@chromium.org
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+Looks good; please feel free to start gathering this in your tree for 6.3.
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+Next week I'll go through Ben's series as well as Aaron's "Clean up the 
+supported xfeatures" and others.
 
-Thanks.
+Let me know if you would like me to queue anything of these instead, and 
+please remember to set up the tree in linux-next. :)
+
+Thanks,
+
+Paolo
+
+> Sean Christopherson (6):
+>    KVM: x86: Inject #GP if WRMSR sets reserved bits in APIC Self-IPI
+>    KVM: x86: Inject #GP on x2APIC WRMSR that sets reserved bits 63:32
+>    KVM: x86: Mark x2APIC DFR reg as non-existent for x2APIC
+>    KVM: x86: Split out logic to generate "readable" APIC regs mask to
+>      helper
+>    KVM: VMX: Always intercept accesses to unsupported "extended" x2APIC
+>      regs
+>    KVM: VMX: Intercept reads to invalid and write-only x2APIC registers
+> 
+>   arch/x86/kvm/lapic.c   | 55 ++++++++++++++++++++++++++----------------
+>   arch/x86/kvm/lapic.h   |  2 ++
+>   arch/x86/kvm/vmx/vmx.c | 40 +++++++++++++++---------------
+>   3 files changed, 57 insertions(+), 40 deletions(-)
+> 
+> 
+> base-commit: 91dc252b0dbb6879e4067f614df1e397fec532a1
+
