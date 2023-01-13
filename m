@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF12669CFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E149B669D01
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 16:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjAMP5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 10:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S230142AbjAMP56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 10:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjAMP53 (ORCPT
+        with ESMTP id S230356AbjAMP5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 10:57:29 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0E87ECA7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:48:51 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id l129so9511659vkh.6
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 07:48:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sjh8dEOOgcZldDsl77ZYrTSvmKIK20XlFulb2zyWnx8=;
-        b=AnLIoVgFPahZ0SLfc3kLAeouXizP96+BR8eOix5vANkp8TTN33WkWOA3gIZbeyv8E+
-         2eDDPq8HwINGcLp5NgTCew3h2rNGay1NjICE409Gmq8CrJB60opLT6y9mQkoBVRgAFTj
-         8Mh/o9YN6QLF/y6Pqz2yWRAFwybSoFBUGLYLjpqYXqx1HBkSQ4vdhLVKqv1JJKiZFspI
-         lRfT5zmtvK6pt8Joca7p+DeAS7cOUooio7tlj0YQjxNWsXBD1id4TK3KLKcUOBA9H7u2
-         FpG6ncD0QMJ0BJnOvsiEP6FLxe0kQH0L7j4svxeg0T+fHsP03JoRkz02gad4TZ+rURGs
-         69WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sjh8dEOOgcZldDsl77ZYrTSvmKIK20XlFulb2zyWnx8=;
-        b=RO43D+sWwVY7+5Es1RbVSVQfEBExdimmIQYjtRZy5VbPxfovwSHSph+9Nt99VZryVe
-         yM8gDjsNqRvmOWmXHLL7KJLJCxYtctvV0Ts2zMRMLuDw12+5VKK/9aMwCaK2L+Njzzq4
-         FdGiPyiaURoSN8DkwZ4bvDj4t16NZ9MUYMd7WoIObitBL+X4JgDJlwCC6DJo4VIoNeZ2
-         8o2R1uzj94zczvd1Yj+lOwe6gWIMQp4YcKG/Ru1qVrqa2lJEn4bf7Fh+6UhX8dJq5hw5
-         zYc7GzMNhP7RJfXV95GQRxWtt28+5bEeaK6K8AbdFRVQS9gkU2Kfokezp3SZGu9VvEVv
-         VYWA==
-X-Gm-Message-State: AFqh2kpxmPJa6CwupLbjzp1tSlDopmbcIEIMbBpWZazzqiYgituCAfi+
-        KudZqnWrA0sKvcWVocg1tsSzobjupKe0SIUwvegqbQ==
-X-Google-Smtp-Source: AMrXdXsI3jUe1ZOmxcBuPFkKStLnmNlMx7lM3Z58HMQDqrP86jptXCPC06qiPeyDnCmvidNT/WWExc8wwMy3H1VFgZI=
-X-Received: by 2002:a1f:3215:0:b0:3d5:86ff:6638 with SMTP id
- y21-20020a1f3215000000b003d586ff6638mr8205679vky.30.1673624930613; Fri, 13
- Jan 2023 07:48:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20230110180017.145591678@linuxfoundation.org> <CA+G9fYtpM7X15rY6g6asDxrjxDSfj5sDiP8P5Yb1TS3VVmjGNw@mail.gmail.com>
- <Y8ElS+jivE5FWvku@amd.ucw.cz>
-In-Reply-To: <Y8ElS+jivE5FWvku@amd.ucw.cz>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 13 Jan 2023 21:18:39 +0530
-Message-ID: <CA+G9fYv=ZcY5-hT7-RZmnhwyac3cf1DsG6WSeOSyHqSHSbALgw@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/148] 6.0.19-rc1 review
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>
+        Fri, 13 Jan 2023 10:57:32 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7032990E53;
+        Fri, 13 Jan 2023 07:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673624940; x=1705160940;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=T44IkxO1oGhpft8V3zmtoEVIR4F6V8En4z3hWLh6jrk=;
+  b=css6Gh1CH4QRKlZaUjdQU1P+wUOBI0QupWCPFJAfj4G6NxgMTNURkV7F
+   knTPHyuie0j4CIaI20L3IrOX3jvm1fhStvrnym4EuGFZoGNOTlZJs7iFW
+   yiyq4Br66c4+XhzGMBJQKEDEnP3Ep/dz2+EkSt2Is0fevwLiK+EhIfxDj
+   nMHiHahDwAywjEqYowkTFJZWlKtge97xsVqsZc3cFl7yBPcIJr8Pp+HNh
+   z6LoMsca5YxsRy7oYCTkp2YNFAJbTHk9pbjUIzAgQYPjOG4PyMV7X46vL
+   HFhe4SxXK8VlqRNJ8FznoLWvoitJU2tTeDPmsfSkDmVtcJ1cvEkRQfsbB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="303715310"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="303715310"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:49:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="746969933"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="746969933"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 07:48:59 -0800
+Message-ID: <34f9fc91c398f85c0bedaff89adbb33897cb1f62.camel@linux.intel.com>
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points
+ int340x
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "daniel.lezcano@kernel.org" <daniel.lezcano@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+Date:   Fri, 13 Jan 2023 07:48:59 -0800
+In-Reply-To: <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
+References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
+         <20230110151745.2546131-4-daniel.lezcano@linaro.org>
+         <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
+         <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+Hi Daniel,
 
-On Fri, 13 Jan 2023 at 15:03, Pavel Machek <pavel@denx.de> wrote:
->
-> Hi!
+> > > 
 
-> Full log is 11MB. That's rather... big for an email. Please post such
-> stuff as a link or at least compress them...
+[...]
 
-Thanks for the comments,
-And i did in the next email with a trimmed version of log files.
+> > > -       status = acpi_evaluate_integer(d->adev->handle, "GTSH",
+> > > NULL,
+> > > &hyst);
+> > > -       if (ACPI_FAILURE(status))
+> > > -               *temp = 0;
+> > > -       else
+> > > -               *temp = hyst * 100;
+> > 
+> > The previous code returns hyst * 100.
+> > But the new API retuurns hyst directly.
+> > 
+> > -/sys/class/thermal/thermal_zone2/trip_point_4_hyst:2000
+> > +/sys/class/the
+> > rmal/thermal_zone2/trip_point_4_hyst:20
+> > 
+> > Is this done on purpose?
+> 
+> No, it is an error. The function thermal_acpi_trip_gtsh() should do:
+> 
+>         return deci_kelvin_to_millicelsius(hyst);
+> 
+> 
 
-[ + attachment failed resending with trim version of log file. ]
+GTSH returns here in tenths of degree Kelvin. For example 15 means 1.5
+degree K.
 
-In general practice, I do share links to log files, kconfigs and artifacts.
+I would like to test your next series with thermald. If there is a
+problem, it will break every distro.
 
-Thank you.
-Naresh Kamboju
+Thanks,
+Srinivas
+
+
+> 
+> 
+
+
