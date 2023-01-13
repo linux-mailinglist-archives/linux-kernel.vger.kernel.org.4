@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8102A66981F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BD866981E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241775AbjAMNMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
+        id S240830AbjAMNMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241110AbjAMNLh (ORCPT
+        with ESMTP id S240941AbjAMNLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:11:37 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A84C3E84E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sfJlOYO8oT2oPc3YcXscu+eA6dh/Ct/nDZR0RvIAf6Y=; b=XiIJ6939tE1F6/5MIyvqQRsyX4
-        zPQinpFwfCbUsr/ZeCKo0iPXa9gyR5C0u68GCX0LDeo4dwCSAuqGb1HcuNOc8EyIGcJlVk6QLr1sG
-        3cTf/k7bOSKHZ5APi0Ip5t1q5jaPxnaaPwBGJY5teGYcBo0PPK9+hh1ipyYmWLNoBt/u2z+4wFvt0
-        a/Pk3KzwPw7M9ERS7wWijK4ZoSmJCRqII4YP6dO0Z1jEHF5lhvvIIMmcRws26s7y6QzGOCEIPkv2J
-        3hZs7m/RgwXavhyuPQO6FvjYJwAN6OjHM1gmDFTiNaUlXMGJb/cdlCfeemQxfBC4UgHBaVDU5QWeu
-        9aIi9Flg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGJfH-0066XJ-Al; Fri, 13 Jan 2023 13:00:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E5685300642;
-        Fri, 13 Jan 2023 13:59:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A17DB20B8E4E3; Fri, 13 Jan 2023 13:59:56 +0100 (CET)
-Date:   Fri, 13 Jan 2023 13:59:56 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joan Bruguera <joanbrugueram@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        Jan Beulich <jbeulich@suse.com>,
-        Roger Pau Monne <roger.pau@citrix.com>,
-        Kees Cook <keescook@chromium.org>, mark.rutland@arm.com,
-        x86@kernel.org
-Subject: Re: [RFC][PATCH 0/6] x86: Fix suspend vs retbleed=stuff
-Message-ID: <Y8FVzPWQOHl0H4CY@hirez.programming.kicks-ass.net>
-References: <20230112143141.645645775@infradead.org>
- <20230113073938.1066227-1-joanbrugueram@gmail.com>
- <Y8EhucZfQ2IyJtnU@hirez.programming.kicks-ass.net>
+        Fri, 13 Jan 2023 08:11:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F3540C21;
+        Fri, 13 Jan 2023 05:00:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF7461961;
+        Fri, 13 Jan 2023 13:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ECE6C433D2;
+        Fri, 13 Jan 2023 13:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673614806;
+        bh=ZP8XIsS+80qkgSOQWeJfZPFezfHfSRD008tq6Tt5pVM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q+TA5zAKqGXCmaGrYk99jkVIQKonzPOPIegiyi8+3I1BxmPRQIzsBF6XwqZ995nY1
+         67EHFMpuyIpINrwtBWjLO72bP1/a+LErlP0dks1cZ/62ZeX991mzu6avglNIIT8IJn
+         0QjWBnYyM69eY23rRuLQHJ1QdBNjTUWmagQKDB2y396+kya1S2yYGbFRYhDydcdDGX
+         5cNH0vywKEefPBNhPGY4mnJqa5927Q27NJWbzohinWryB/AjfGSJ+fvX4VPb8mnMiC
+         a14pIf0Xf35qcjB6F93E/vLbrioQ2MD0A+lRPvtIOLQP5cgQ2FpwKR7QScWVjdQTZz
+         +s4zkg6xtizcA==
+Date:   Fri, 13 Jan 2023 12:59:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/3] ASoC: codecs: Add support for the Renesas IDT821034
+ codec
+Message-ID: <Y8FVz/Mp5xSdI34a@sirena.org.uk>
+References: <20230111134905.248305-1-herve.codina@bootlin.com>
+ <20230111134905.248305-3-herve.codina@bootlin.com>
+ <Y77DKSdZf27qE+xl@sirena.org.uk>
+ <20230111174022.077f6a8c@bootlin.com>
+ <Y774bY4icD8RuMnX@sirena.org.uk>
+ <20230113090431.7f84c93a@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tY5Grajt3iCZ58MK"
 Content-Disposition: inline
-In-Reply-To: <Y8EhucZfQ2IyJtnU@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230113090431.7f84c93a@bootlin.com>
+X-Cookie: I know how to do SPECIAL EFFECTS!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:17:46AM +0100, Peter Zijlstra wrote:
 
-> > (2) Tracing with QEMU I still see two `sarq $5, %gs:0x1337B33F` before
-> >     `%gs` is restored. Those correspond to the calls from
-> >     `secondary_startup_64` in `arch/x86/kernel/head_64.S` to
-> >     `verify_cpu` and `sev_verify_cbit`.
-> >     Those don't cause a crash but look suspicious, are they correct?
-> > 
-> >     (There are also some `sarq`s in the call to `early_setup_idt` from
-> >     `secondary_startup_64`, but `%gs` is restored immediately before)
-> 
-> OK, I'll have a look, thanks!
+--tY5Grajt3iCZ58MK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Definitely fishy and I'm not sure why SMP bringup doesn't burn. Trying
-to figure out what to do about this.
+On Fri, Jan 13, 2023 at 09:04:31AM +0100, Herve Codina wrote:
 
-One thing I noticed is that trampoline_start already does verify_cpu,
-and perhaps we can make startup_64 also do it, then secodary_startup_64
-doesn't have to do it (and the realmode trampolines aren't patched).
+> For DAPM (struct snd_soc_dapm_widget), no kind of .put() and .get()
+> are available. I will use some Ids for the 'reg' value and use the
+> .write() and .read() hooks available in struct snd_soc_component_driver
+> in order to handle these Ids and so perform the accesses.
 
-Doing that would also require pushing the whole SEV thing into the
-trampoline which them also gets rid of sev_verify_cbit I think.
+That's what the event hooks are for - there's plenty of widgets using
+SND_SOC_NOPM as the register, look at those for examples.
 
-But this definitely needs more thinking -- this is not an area I've
-poked at much before.
+--tY5Grajt3iCZ58MK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPBVc8ACgkQJNaLcl1U
+h9AzVQf+IpbKw3nUOCd5FnoIfC7a9hLUt4eHIEqikDmn4Lb0N0OX7frf/8tR948l
+KlKpueTgBz0TLqZUaI43dlzt2AeYsHcshaZ8Rkg+2YtAumavq3sc4rrq+9HxRn5X
+akZKiao7FYUAVxqcVvyfatB3qtShtwes0I80YL/8JClxfd/vOZTUriymgeTemgwb
+3h1esS5zNPKD1rp/h2Fm/AytOFrTE0xA+7HlZ5qmy357cwpc+JKYx9enGt6hwc95
+zhE3+AZ1UIc0bFfp8xhGnW0YzlelN1grOl5oar0kdwTOY9kQTwVgTfMp3+L4BBBD
+1xdRqnZEhFNnTC1IW724rzztEvTfuA==
+=p0Is
+-----END PGP SIGNATURE-----
+
+--tY5Grajt3iCZ58MK--
