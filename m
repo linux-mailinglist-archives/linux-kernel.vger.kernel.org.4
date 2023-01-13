@@ -2,347 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD30B6696E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458EC669701
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbjAMMZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S241096AbjAMM3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241372AbjAMMZH (ORCPT
+        with ESMTP id S241221AbjAMM2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:25:07 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E708F37267;
-        Fri, 13 Jan 2023 04:23:02 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NtgSw2YrCz6J7TJ;
-        Fri, 13 Jan 2023 20:19:12 +0800 (CST)
-Received: from localhost (10.81.201.219) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
- 2023 12:22:59 +0000
-Date:   Fri, 13 Jan 2023 12:22:58 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH v6 1/8] cxl/mem: Read, trace, and clear events on driver
- load
-Message-ID: <20230113122258.00000eeb@Huawei.com>
-In-Reply-To: <20221216-cxl-ev-log-v6-1-346583105b30@intel.com>
-References: <20221216-cxl-ev-log-v6-0-346583105b30@intel.com>
-        <20221216-cxl-ev-log-v6-1-346583105b30@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 13 Jan 2023 07:28:03 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFCA1B9F3;
+        Fri, 13 Jan 2023 04:25:32 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DAbvXY003163;
+        Fri, 13 Jan 2023 12:24:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FLKDNmDTs22NYoQdmcaDLbxot9m4TNetlGOYrtzw2mQ=;
+ b=nnJ0sV30so+/JEIQKgP/kW0G9rFAYGXq2FjM6Dd5OrtbHbuusoDFphJASUVUiQceWpe3
+ IyMbPGjwM2bp1W9FvJYVwYJupYnFaFmM8slPpZ2PDQYStzebzMTElUQ1lzwAW71bjPkC
+ u8PSPYuTRgvBhHIHOiuFHyKmdabTV+l1rl5vpMVz1Jh1pxxXhajcog70JGMNMATjigq5
+ F4/1TRvGHhG961eWlyaSLx/wtr7oYCZHbEBTqv3KsoPr8RWrORF1EPtSYROMgOAFgHNw
+ o/DSaOQW7cgcrmBp1n3b8rZ3J80bAFKcNPGtG2BFvk6SJoN6ASERYbGyfBqERZaRM7cN qA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n351f8j90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 12:24:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DCOetc001712
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 12:24:40 GMT
+Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 04:24:31 -0800
+Message-ID: <90484f63-bd72-f3a4-b1c5-d3830c2245d0@quicinc.com>
+Date:   Fri, 13 Jan 2023 17:54:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/7] dt-bindings: arm64: ipq9574: Add binding descriptions
+ for clock and reset
+To:     Rob Herring <robh@kernel.org>
+CC:     <tdas@codeaurora.org>, <quic_kathirav@quicinc.com>,
+        <dmitry.baryshkov@linaro.org>, <quic_gokulsri@quicinc.com>,
+        <nfraprado@collabora.com>, <linux-arm-msm@vger.kernel.org>,
+        <quic_poovendh@quicinc.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <andersson@kernel.org>, <arnd@arndb.de>, <sboyd@kernel.org>,
+        <broonie@kernel.org>, <will@kernel.org>,
+        <quic_sjaganat@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-clk@vger.kernel.org>, <quic_srichara@quicinc.com>,
+        <linux-gpio@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        <catalin.marinas@arm.com>, <marcel.ziswiler@toradex.com>,
+        <linus.walleij@linaro.org>, <konrad.dybcio@linaro.org>,
+        <mturquette@baylibre.com>, <shawnguo@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <agross@kernel.org>
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-2-quic_devipriy@quicinc.com>
+ <167335661700.1967953.6789968437095688240.robh@kernel.org>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <167335661700.1967953.6789968437095688240.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.201.219]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EDSnF2RVtGWsYcqRMoJXvr-AVfLhZTKG
+X-Proofpoint-ORIG-GUID: EDSnF2RVtGWsYcqRMoJXvr-AVfLhZTKG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1011 impostorscore=0 mlxlogscore=999 spamscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130083
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 Jan 2023 11:42:20 -0800
-Ira Weiny <ira.weiny@intel.com> wrote:
 
-> CXL devices have multiple event logs which can be queried for CXL event
-> records.  Devices are required to support the storage of at least one
-> event record in each event log type.
+
+On 1/10/2023 6:59 PM, Rob Herring wrote:
 > 
-> Devices track event log overflow by incrementing a counter and tracking
-> the time of the first and last overflow event seen.
+> On Tue, 10 Jan 2023 17:43:10 +0530, devi priya wrote:
+>> Adding support for the global clock controller found on
+>> IPQ9574 based devices
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> ---
+>>   .../bindings/clock/qcom,gcc-other.yaml        |   4 +
+>>   .../devicetree/bindings/clock/qcom,gcc.yaml   |   9 +-
+>>   include/dt-bindings/clock/qcom,gcc-ipq9574.h  | 226 ++++++++++++++++++
+>>   include/dt-bindings/reset/qcom,gcc-ipq9574.h  | 164 +++++++++++++
+>>   4 files changed, 402 insertions(+), 1 deletion(-)
+>>   create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq9574.h
+>>   create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq9574.h
+>>
 > 
-> Software queries events via the Get Event Record mailbox command; CXL
-> rev 3.0 section 8.2.9.2.2 and clears events via CXL rev 3.0 section
-> 8.2.9.2.3 Clear Event Records mailbox command.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> If the result of negotiating CXL Error Reporting Control is OS control,
-> read and clear all event logs on driver load.
+> yamllint warnings/errors:
 > 
-> Ensure a clean slate of events by reading and clearing the events on
-> driver load.
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295, 0], [4294967295, 1], [4294967295, 2], [4294967295]] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.example.dtb: clock-controller@100000: Unevaluated properties are not allowed ('#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' were unexpected)
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295]] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.example.dtb: clock-controller@100000: Unevaluated properties are not allowed ('#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' were unexpected)
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295, 1], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295]] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.example.dtb: clock-controller@100000: clock-names: ['bi_tcxo', 'bi_tcxo_ao', 'sleep_clk', 'pcie_0_pipe_clk', 'pcie_1_pipe_clk', 'ufs_phy_rx_symbol_0_clk', 'ufs_phy_rx_symbol_1_clk', 'ufs_phy_tx_symbol_0_clk', 'usb3_phy_wrapper_gcc_usb30_pipe_clk'] is too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.example.dtb: clock-controller@100000: Unevaluated properties are not allowed ('#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' were unexpected)
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
 > 
-> The status register is not used because a device may continue to trigger
-> events and the only requirement is to empty the log at least once.  This
-> allows for the required transition from empty to non-empty for interrupt
-> generation.  Handling of interrupts is in a follow on patch.
+> doc reference errors (make refcheckdocs):
 > 
-> The device can return up to 1MB worth of event records per query.
-> Allocate a shared large buffer to handle the max number of records based
-> on the mailbox payload size.
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230110121316.24892-2-quic_devipriy@quicinc.com
 > 
-> This patch traces a raw event record and leaves specific event record
-> type tracing to subsequent patches.  Macros are created to aid in
-> tracing the common CXL Event header fields.
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
 > 
-> Each record is cleared explicitly.  A clear all bit is specified but is
-> only valid when the log overflows.
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
 > 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-A few trivial comments inline, but whether you act on them or not lookjs
-good to me.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+> pip3 install dtschema --upgrade
 > 
-> ---
-> Changes from V4:
->         Jonathan/Johnny
->                 Clear limit mailbox size based on nr records
->         Jonathan
->                 Use offsetof() in CXL_CLEAR_EVENT_LIMIT_HANDLES()
-> ---
->  drivers/cxl/core/mbox.c  | 137 +++++++++++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/core/trace.h | 120 +++++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h        |  12 +++++
->  drivers/cxl/cxlmem.h     |  86 +++++++++++++++++++++++++++++
->  drivers/cxl/pci.c        |  40 ++++++++++++++
->  5 files changed, 395 insertions(+)
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
 > 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index b03fba212799..5ad4716f2e11 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
+Sure, will check
 
-...
-
-> +static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-> +				    enum cxl_event_log_type type)
-> +{
-> +	struct cxl_get_event_payload *payload;
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	u8 log_type = type;
-> +	u16 nr_rec;
-> +
-> +	mutex_lock(&cxlds->event.log_lock);
-> +	payload = cxlds->event.buf;
-> +
-> +	mbox_cmd = (struct cxl_mbox_cmd) {
-> +		.opcode = CXL_MBOX_OP_GET_EVENT_RECORD,
-> +		.payload_in = &log_type,
-> +		.size_in = sizeof(log_type),
-> +		.payload_out = payload,
-> +		.size_out = cxlds->payload_size,
-> +		.min_out = struct_size(payload, records, 0),
-> +	};
-> +
-> +	do {
-> +		int rc, i;
-> +
-> +		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> +		if (rc) {
-> +			dev_err_ratelimited(cxlds->dev, "Event log '%d': Failed to query event records : %d",
-
-Might as well have slightly shorter line by adding a break after dev,
-Same with other case below. If nothing else it will reduce bot warnings slightly I think.
-
-> +					    type, rc);
-> +			break;
-> +		}
-> +
-> +		nr_rec = le16_to_cpu(payload->record_count);
-> +		if (!nr_rec)
-> +			break;
-> +
-> +		for (i = 0; i < nr_rec; i++)
-> +			trace_cxl_generic_event(cxlds->dev, type,
-> +						&payload->records[i]);
-> +
-> +		if (payload->flags & CXL_GET_EVENT_FLAG_OVERFLOW)
-> +			trace_cxl_overflow(cxlds->dev, type, payload);
-> +
-> +		rc = cxl_clear_event_record(cxlds, type, payload);
-> +		if (rc) {
-> +			dev_err_ratelimited(cxlds->dev, "Event log '%d': Failed to clear events : %d",
-> +					    type, rc);
-> +			break;
-> +		}
-> +	} while (nr_rec);
-
-...
-
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index ab138004f644..e0450b2a0f3f 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-
-
-...
-
-> +/*
-> + * Common Event Record Format
-> + * CXL rev 3.0 section 8.2.9.2.1; Table 8-42
-> + */
-> +struct cxl_event_record_hdr {
-> +	uuid_t id;
-> +	u8 length;
-> +	u8 flags[3];
-> +	__le16 handle;
-> +	__le16 related_handle;
-> +	__le64 timestamp;
-> +	u8 maint_op_class;
-> +	u8 reserved[15];
-> +} __packed;
-> +
-> +#define CXL_EVENT_RECORD_DATA_LENGTH 0x50
-> +struct cxl_event_record_raw {
-> +	struct cxl_event_record_hdr hdr;
-> +	u8 data[CXL_EVENT_RECORD_DATA_LENGTH];
-> +} __packed;
-
-Mostly to avoid ugly casts in patch 3, I would consider
-a union of all the defined record types.  That way you could
-just pick the right one based on a uuid match and keep type
-safety etc.
-
-> +
-> +/*
-> + * Get Event Records output payload
-> + * CXL rev 3.0 section 8.2.9.2.2; Table 8-50
-> + */
-> +#define CXL_GET_EVENT_FLAG_OVERFLOW		BIT(0)
-> +#define CXL_GET_EVENT_FLAG_MORE_RECORDS		BIT(1)
-> +struct cxl_get_event_payload {
-> +	u8 flags;
-> +	u8 reserved1;
-> +	__le16 overflow_err_count;
-> +	__le64 first_overflow_timestamp;
-> +	__le64 last_overflow_timestamp;
-> +	__le16 record_count;
-> +	u8 reserved2[10];
-> +	struct cxl_event_record_raw records[];
-> +} __packed;
-> +
-> +/*
-> + * CXL rev 3.0 section 8.2.9.2.2; Table 8-49
-> + */
-> +enum cxl_event_log_type {
-> +	CXL_EVENT_TYPE_INFO = 0x00,
-> +	CXL_EVENT_TYPE_WARN,
-> +	CXL_EVENT_TYPE_FAIL,
-> +	CXL_EVENT_TYPE_FATAL,
-> +	CXL_EVENT_TYPE_MAX
-> +};
-> +
-> +/*
-> + * Clear Event Records input payload
-> + * CXL rev 3.0 section 8.2.9.2.3; Table 8-51
-> + */
-> +#define CXL_CLEAR_EVENT_MAX_HANDLES (0xff)
-> +struct cxl_mbox_clear_event_payload {
-> +	u8 event_log;		/* enum cxl_event_log_type */
-> +	u8 clear_flags;
-> +	u8 nr_recs;
-> +	u8 reserved[3];
-> +	__le16 handle[CXL_CLEAR_EVENT_MAX_HANDLES];
-> +} __packed;
-> +#define CXL_CLEAR_EVENT_LIMIT_HANDLES(payload_size)			\
-> +	(((payload_size) -						\
-> +	  offsetof(struct cxl_mbox_clear_event_payload, handle)) /	\
-> +	 sizeof(__le16))
-> +#define CXL_CLEAR_EVENT_PL_SIZE(nr_handles)				\
-> +	(offsetof(struct cxl_mbox_clear_event_payload, handle) +	\
-> +	 (nr_handles * sizeof(__le16)))
-> +
-
-Still ugly, but I guess I can live with it though it's a bit of
-large structure to put on the stack and if you used the heap then
-a simple struct_size() allocation and having a variable length
-array for last element would make this neater.
-
-
-
-
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 3a66aadb4df0..a2d8382bc593 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -417,8 +417,37 @@ static void disable_aer(void *pdev)
->  	pci_disable_pcie_error_reporting(pdev);
->  }
->  
-> +static void cxl_mem_free_event_buffer(void *buf)
-> +{
-> +	kvfree(buf);
-> +}
-> +
-> +/*
-> + * There is a single buffer for reading event logs from the mailbox.  All logs
-> + * share this buffer protected by the cxlds->event_log_lock.
-> + */
-> +static int cxl_mem_alloc_event_buf(struct cxl_dev_state *cxlds)
-> +{
-> +	struct cxl_get_event_payload *buf;
-> +
-> +	dev_dbg(cxlds->dev, "Allocating event buffer size %zu\n",
-> +		cxlds->payload_size);
-> +
-> +	buf = kvmalloc(cxlds->payload_size, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	if (devm_add_action_or_reset(cxlds->dev, cxl_mem_free_event_buffer,
-> +				     buf))
-> +		return -ENOMEM;
-trivial:
-
-Should return the error code from devm_add_action_or_reset.
-Sure it's always -ENOMEM today, but it might not be in future ;)
-
-> +
-> +	cxlds->event.buf = buf;
-> +	return 0;
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
-> +	struct pci_host_bridge *host_bridge = pci_find_host_bridge(pdev->bus);
->  	struct cxl_register_map map;
->  	struct cxl_memdev *cxlmd;
->  	struct cxl_dev_state *cxlds;
-> @@ -494,6 +523,17 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
->  
-> +	rc = cxl_mem_alloc_event_buf(cxlds);
-
-I'm in two minds about this.  For current support, makes little sense to have
-this unless host_bridge->native_cxl_error is true, but then we'll end up moving
-it for DCD.
-
-On balance I'd rather today's code made sense and we had to modify a bit more when
-adding DCD support though, so better to move it under the if below.
-(unless I'm missing something of course!)
-
-> +	if (rc)
-> +		return rc;
-> +
-> +	/*
-> +	 * When BIOS maintains CXL error reporting control, it will process
-> +	 * event records.  Only one agent can do so.
-> +	 */
-> +	if (host_bridge->native_cxl_error)
-> +		cxl_mem_get_event_records(cxlds, CXLDEV_EVENT_STATUS_ALL);
-> +
->  	if (cxlds->regs.ras) {
->  		pci_enable_pcie_error_reporting(pdev);
->  		rc = devm_add_action_or_reset(&pdev->dev, disable_aer, pdev);
-> 
-
+Best Regards,
+Devi Priya
