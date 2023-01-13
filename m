@@ -2,42 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C535866967B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B88D669666
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241361AbjAMMIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S241245AbjAMMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbjAMMHe (ORCPT
+        with ESMTP id S233993AbjAMMHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:07:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21138E3;
-        Fri, 13 Jan 2023 03:59:26 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBA0Jp030099;
-        Fri, 13 Jan 2023 11:59:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=tUm6z8rhz5JYg4o8nm0MDjJ+lFRhmC9Z6zMZeJ23joo=;
- b=XOjEGu0nMYAKblUuw08qsV3r01MGl/7u8E/GR/NotQEIaHrrB3BzruXvA4ynXDqA6MfW
- 1JM4+DH39zqEiaRFxZVB7lNzk93ILNWz10Xu6qpli+/19jBDSXyVdUwJpmrvZQSDa7ar
- NmAHF8+7879PVggQKj8SJ8nrSkWyqv14ckuHSz/3K/YEfv8nPGBKD77a/KRcz9zZE3ZM
- aPdUmfW+3ufzrZijw4fUIImv7AbRM/JwXerlONjUxr6l7kJqHoGW27RX7SZf6sn8/4ti
- 6rlMbGyGrVFI1X0zHl6fvh3lPtdMKB530sJgSQd/MNbDB41J4wQB/qb7g4catUznBDyK aA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2jghtk79-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 11:59:05 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DBx4dq025641
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 11:59:04 GMT
+        Fri, 13 Jan 2023 07:07:31 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C0A3AB13;
+        Fri, 13 Jan 2023 03:59:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1673611149; x=1705147149;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=B/FJ28V5OM9qQHwIsioJH73Z9oXDZRZjd2zV9nWXUuI=;
+  b=ucKD6SB+OpCcVChs6yWgzlnfkj2r47Gfs0GyrKdfYT2rzDyhxaBfqJVh
+   /RKH8ZzRyOOPqM2lFttem9jueqjrTQczlygm6qbvp8Z2+WpZ4jMuLgPWW
+   9Q3J+gpvndTUBXBH87Mev6hp1UBMPEQFKAO0xDch/6MCIJWHlQvJbt6HV
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jan 2023 03:59:09 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 03:59:09 -0800
 Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 13 Jan 2023 03:59:00 -0800
+ 15.2.986.36; Fri, 13 Jan 2023 03:59:05 -0800
 From:   Mukesh Ojha <quic_mojha@quicinc.com>
 To:     <keescook@chromium.org>, <gpiccoli@igalia.com>, <corbet@lwn.net>,
         <tony.luck@intel.com>, <robh+dt@kernel.org>,
@@ -45,104 +41,90 @@ To:     <keescook@chromium.org>, <gpiccoli@igalia.com>, <corbet@lwn.net>,
 CC:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v2 1/3] dt-bindings: reserved-memory: ramoops: Update the binding
-Date:   Fri, 13 Jan 2023 17:28:44 +0530
-Message-ID: <1673611126-13803-1-git-send-email-quic_mojha@quicinc.com>
+Subject: [PATCH v2 2/3] Documentation: admin-guide: ramoops.rst: Update the ramoops document
+Date:   Fri, 13 Jan 2023 17:28:45 +0530
+Message-ID: <1673611126-13803-2-git-send-email-quic_mojha@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1673611126-13803-1-git-send-email-quic_mojha@quicinc.com>
+References: <1673611126-13803-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8eDys0jK4zvAYYr57p5RD86TQAo9kAma
-X-Proofpoint-ORIG-GUID: 8eDys0jK4zvAYYr57p5RD86TQAo9kAma
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- clxscore=1011 bulkscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301130080
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the ramoops region binding document with details
-like region can also be reserved dynamically apart from
-reserving it statically.
+The reserved memory region for ramoops is assumed to be at a fixed
+and known location when read from the devicetree. This is not desirable
+in environments where it is preferred the region to be dynamically
+allocated at runtime. So, update the document while adding the
+support in the driver.
 
 Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 ---
 Change in v2:
   - Added this patch as per changes going to be done in patch 3/3
 
- .../bindings/reserved-memory/ramoops.yaml          | 34 ++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/ramoops.rst | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-index 0391871..54e46e8 100644
---- a/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-+++ b/Documentation/devicetree/bindings/reserved-memory/ramoops.yaml
-@@ -10,7 +10,8 @@ description: |
-   ramoops provides persistent RAM storage for oops and panics, so they can be
-   recovered after a reboot. This is a child-node of "/reserved-memory", and
-   is named "ramoops" after the backend, rather than "pstore" which is the
--  subsystem.
-+  subsystem. This region can be reserved both statically or dynamically by
-+  using appropriate property in device tree.
+diff --git a/Documentation/admin-guide/ramoops.rst b/Documentation/admin-guide/ramoops.rst
+index e9f8514..88884b2 100644
+--- a/Documentation/admin-guide/ramoops.rst
++++ b/Documentation/admin-guide/ramoops.rst
+@@ -16,8 +16,9 @@ survive after a restart.
+ Ramoops concepts
+ ----------------
  
-   Parts of this storage may be set aside for other persistent log buffers, such
-   as kernel log messages, or for optional ECC error-correction data.  The total
-@@ -112,7 +113,13 @@ unevaluatedProperties: false
+-Ramoops uses a predefined memory area to store the dump. The start and size
+-and type of the memory area are set using three variables:
++Ramoops uses both predefined and dynamically memory area to store the dump.
++The start and size and type of the memory area are set using three
++variables:
  
- required:
-   - compatible
--  - reg
-+
-+oneOf:
-+  - required:
-+      - reg
-+
-+  - required:
-+      - size
+   * ``mem_address`` for the start
+   * ``mem_size`` for the size. The memory size will be rounded down to a
+@@ -70,7 +71,8 @@ Setting the ramoops parameters can be done in several different manners:
  
- anyOf:
-   - required: [record-size]
-@@ -142,3 +149,26 @@ examples:
-             };
-         };
-     };
+  B. Use Device Tree bindings, as described in
+  ``Documentation/devicetree/bindings/reserved-memory/ramoops.yaml``.
+- For example::
 +
-+  - |
-+    / {
-+        compatible = "foo";
-+        model = "foo";
-+        #address-cells = <2>;
-+        #size-cells = <2>;
++ Example of statically reserved ramoops region::
+ 
+ 	reserved-memory {
+ 		#address-cells = <2>;
+@@ -85,6 +87,23 @@ Setting the ramoops parameters can be done in several different manners:
+ 		};
+ 	};
+ 
++ Example of dynamically reserved ramoops region::
 +
-+        reserved-memory {
-+            #address-cells = <2>;
-+            #size-cells = <2>;
-+            ranges;
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
 +
-+            ramoops: ramoops_region {
-+                compatible = "ramoops";
-+                alloc-ranges = <0x0 0x00000000 0xffffffff 0xffffffff>;
-+                size = <0x0 0x10000>;       /* 64kB */
-+                console-size = <0x8000>;    /* 32kB */
-+                record-size = <0x400>;      /*  1kB */
-+                ecc-size = <16>;
-+            };
-+        };
-+    };
++		ramoops@8f000000 {
++			compatible = "ramoops";
++			alloc-ranges = <0x0 0x00000000 0xffffffff 0xffffffff>;
++			size = <0 0x100000>;
++			record-size = <0x4000>;
++			console-size = <0x4000>;
++		};
++	};
++
++
+  C. Use a platform device and set the platform data. The parameters can then
+  be set through that platform data. An example of doing that is:
+ 
 -- 
 2.7.4
 
