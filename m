@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129D566971E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2866669710
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241168AbjAMMcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S241289AbjAMMcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241208AbjAMMcH (ORCPT
+        with ESMTP id S240979AbjAMMcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 07:32:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1FD4319C;
-        Fri, 13 Jan 2023 04:31:06 -0800 (PST)
-Date:   Fri, 13 Jan 2023 12:31:04 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144DE43D8E;
+        Fri, 13 Jan 2023 04:31:07 -0800 (PST)
+Date:   Fri, 13 Jan 2023 12:31:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1673613065;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=48P8KVWCYjMGGvLZjw2r6s5bxt15ORTDOcSGZ3/Il2Q=;
-        b=xTBd4OWCGmaNV4APjPCKnJixlVG65hrEm5Ok6jXl3FCyCorsFB3TNki09EghgZPw4CeHhF
-        t/ZldtXAzNp6IhJelqmJFuyqPhByDrkfj8MaJiJsPXNVIu0FI8+c8as9gUI6+evTSDfbF4
-        uhJwlhqTTkv6IbAY8arEmoUfDfG1E/zSsqxbQDDPBvsIyR7Coj/ShvK44PxXwfeR7+9XPU
-        QfK30Pb7aBYThjOnBvJNUb40HJqL79n8ODcF67Cq/AfHnUKuyDdnAEyXCGkm3gidPYnWga
-        la7KSBgShJNS2MchnO9mMf7c1j1vyWD3w3lJODEGOcz4XeImn258UxIh8Wk/+g==
+        bh=YrVSD9mvSByVVVJgGZwGXLjs6fL/wAq3WD+FK1aXvxc=;
+        b=m2mYYYxM06RIm00g1vKQ/BmmmWa7Qlmk4gqimC/tlLnsLZ1+lVxPlDSKbUhFftmMDYb8yL
+        lzBfUNAtF73r1tpsI/PxnZX2ByqOB42EUstNtSPkWnVrYz4guu4c+nkjJEHov5cQw9zqIn
+        OqYmkHkXeGoLBGW87GAcjJXDxGrqXH+w66tJtcINotCSvkA/Gj1Fx7U6bGUG51zCEVhHRU
+        s/mzX6yBX/RA/hFFM0/SVUFWKc+EXNR9kJ9QRZfpieukqWGfJWgBvTHtD/tSU7ApZkTs4t
+        839OIR7few+V9t2eH1KLtS9oOYdI/VfmnI5deZroQ3wRf/6ZUVtYzW+rjK24xg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1673613065;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=48P8KVWCYjMGGvLZjw2r6s5bxt15ORTDOcSGZ3/Il2Q=;
-        b=MLW5crS0wxMIz2rrWnMMu75203GVRbIZ0au/pJ7cDipr/UXG2YCyiBs8qwFsbnn/Lg/Jq2
-        l1LJ1a7KUMZ1k1DQ==
+        bh=YrVSD9mvSByVVVJgGZwGXLjs6fL/wAq3WD+FK1aXvxc=;
+        b=q9RjxWBKb4LzTtOCy/6Xl1x0tAdzRuFjwdfrIe10rpJh1TUnubJetJcpSbL5LU6SxucDNc
+        /XemTrooK90VtDDQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] cpuidle: Add comments about noinstr/__cpuidle usage
+Subject: [tip: sched/core] cpuidle,arch: Mark all regular cpuidle_state::
+ Enter methods __cpuidle
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230112195542.397238052@infradead.org>
-References: <20230112195542.397238052@infradead.org>
+In-Reply-To: <20230112195542.335211484@infradead.org>
+References: <20230112195542.335211484@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167361306473.4906.1967859270536906724.tip-bot2@tip-bot2>
+Message-ID: <167361306530.4906.577388410385763862.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,66 +67,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     0e985e9d22864e29d5d2b3d909ad15134d7f6d46
-Gitweb:        https://git.kernel.org/tip/0e985e9d22864e29d5d2b3d909ad15134d7f6d46
+Commit-ID:     26388a7c353f7b1d3fd8a6df6452fa9773193155
+Gitweb:        https://git.kernel.org/tip/26388a7c353f7b1d3fd8a6df6452fa9773193155
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 12 Jan 2023 20:44:04 +01:00
+AuthorDate:    Thu, 12 Jan 2023 20:44:03 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Fri, 13 Jan 2023 11:48:18 +01:00
 
-cpuidle: Add comments about noinstr/__cpuidle usage
+cpuidle,arch: Mark all regular cpuidle_state:: Enter methods __cpuidle
 
-Add a few words on noinstr / __cpuidle usage.
+For all cpuidle drivers that do not use CPUIDLE_FLAG_RCU_IDLE (iow,
+the simple ones) make sure all the functions are marked __cpuidle.
+
+( due to lack of noinstr validation on these platforms it is entirely
+  possible this isn't complete )
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230112195542.397238052@infradead.org
+Link: https://lore.kernel.org/r/20230112195542.335211484@infradead.org
 ---
- drivers/cpuidle/cpuidle.c      | 12 ++++++++++++
- include/linux/compiler_types.h | 10 ++++++++++
- 2 files changed, 22 insertions(+)
+ arch/arm/kernel/cpuidle.c           | 4 ++--
+ arch/arm/mach-davinci/cpuidle.c     | 4 ++--
+ arch/arm/mach-imx/cpuidle-imx5.c    | 4 ++--
+ arch/arm/mach-imx/cpuidle-imx6sl.c  | 4 ++--
+ arch/arm/mach-imx/cpuidle-imx7ulp.c | 4 ++--
+ arch/arm/mach-s3c/cpuidle-s3c64xx.c | 5 ++---
+ arch/mips/kernel/idle.c             | 6 +++---
+ 7 files changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 73f7d8b..500d172 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -252,6 +252,18 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
- 		instrumentation_begin();
+diff --git a/arch/arm/kernel/cpuidle.c b/arch/arm/kernel/cpuidle.c
+index e168462..437ff39 100644
+--- a/arch/arm/kernel/cpuidle.c
++++ b/arch/arm/kernel/cpuidle.c
+@@ -26,8 +26,8 @@ static struct cpuidle_ops cpuidle_ops[NR_CPUS] __ro_after_init;
+  *
+  * Returns the index passed as parameter
+  */
+-int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
+-		struct cpuidle_driver *drv, int index)
++__cpuidle int arm_cpuidle_simple_enter(struct cpuidle_device *dev, struct
++				       cpuidle_driver *drv, int index)
+ {
+ 	cpu_do_idle();
+ 
+diff --git a/arch/arm/mach-davinci/cpuidle.c b/arch/arm/mach-davinci/cpuidle.c
+index dd38785..78a1575 100644
+--- a/arch/arm/mach-davinci/cpuidle.c
++++ b/arch/arm/mach-davinci/cpuidle.c
+@@ -44,8 +44,8 @@ static void davinci_save_ddr_power(int enter, bool pdown)
+ }
+ 
+ /* Actual code that puts the SoC in different idle states */
+-static int davinci_enter_idle(struct cpuidle_device *dev,
+-			      struct cpuidle_driver *drv, int index)
++static __cpuidle int davinci_enter_idle(struct cpuidle_device *dev,
++					struct cpuidle_driver *drv, int index)
+ {
+ 	davinci_save_ddr_power(1, ddr2_pdown);
+ 	cpu_do_idle();
+diff --git a/arch/arm/mach-imx/cpuidle-imx5.c b/arch/arm/mach-imx/cpuidle-imx5.c
+index a8457c4..5ad9f2f 100644
+--- a/arch/arm/mach-imx/cpuidle-imx5.c
++++ b/arch/arm/mach-imx/cpuidle-imx5.c
+@@ -8,8 +8,8 @@
+ #include <asm/system_misc.h>
+ #include "cpuidle.h"
+ 
+-static int imx5_cpuidle_enter(struct cpuidle_device *dev,
+-			      struct cpuidle_driver *drv, int index)
++static __cpuidle int imx5_cpuidle_enter(struct cpuidle_device *dev,
++					struct cpuidle_driver *drv, int index)
+ {
+ 	arm_pm_idle();
+ 	return index;
+diff --git a/arch/arm/mach-imx/cpuidle-imx6sl.c b/arch/arm/mach-imx/cpuidle-imx6sl.c
+index b86ffbe..b49cd63 100644
+--- a/arch/arm/mach-imx/cpuidle-imx6sl.c
++++ b/arch/arm/mach-imx/cpuidle-imx6sl.c
+@@ -11,8 +11,8 @@
+ #include "common.h"
+ #include "cpuidle.h"
+ 
+-static int imx6sl_enter_wait(struct cpuidle_device *dev,
+-			    struct cpuidle_driver *drv, int index)
++static __cpuidle int imx6sl_enter_wait(struct cpuidle_device *dev,
++				       struct cpuidle_driver *drv, int index)
+ {
+ 	imx6_set_lpm(WAIT_UNCLOCKED);
+ 	/*
+diff --git a/arch/arm/mach-imx/cpuidle-imx7ulp.c b/arch/arm/mach-imx/cpuidle-imx7ulp.c
+index ca86c96..f55ed74 100644
+--- a/arch/arm/mach-imx/cpuidle-imx7ulp.c
++++ b/arch/arm/mach-imx/cpuidle-imx7ulp.c
+@@ -12,8 +12,8 @@
+ #include "common.h"
+ #include "cpuidle.h"
+ 
+-static int imx7ulp_enter_wait(struct cpuidle_device *dev,
+-			    struct cpuidle_driver *drv, int index)
++static __cpuidle int imx7ulp_enter_wait(struct cpuidle_device *dev,
++					struct cpuidle_driver *drv, int index)
+ {
+ 	if (index == 1)
+ 		imx7ulp_set_lpm(ULP_PM_WAIT);
+diff --git a/arch/arm/mach-s3c/cpuidle-s3c64xx.c b/arch/arm/mach-s3c/cpuidle-s3c64xx.c
+index b1c5f43..27a13cc 100644
+--- a/arch/arm/mach-s3c/cpuidle-s3c64xx.c
++++ b/arch/arm/mach-s3c/cpuidle-s3c64xx.c
+@@ -19,9 +19,8 @@
+ #include "regs-sys-s3c64xx.h"
+ #include "regs-syscon-power-s3c64xx.h"
+ 
+-static int s3c64xx_enter_idle(struct cpuidle_device *dev,
+-			      struct cpuidle_driver *drv,
+-			      int index)
++static __cpuidle int s3c64xx_enter_idle(struct cpuidle_device *dev,
++					struct cpuidle_driver *drv, int index)
+ {
+ 	unsigned long tmp;
+ 
+diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
+index 3e7ccdd..5abc8b7 100644
+--- a/arch/mips/kernel/idle.c
++++ b/arch/mips/kernel/idle.c
+@@ -241,7 +241,7 @@ void __init check_wait(void)
  	}
+ }
  
-+	/*
-+	 * NOTE!!
-+	 *
-+	 * For cpuidle_state::enter() methods that do *NOT* set
-+	 * CPUIDLE_FLAG_RCU_IDLE RCU will be disabled here and these functions
-+	 * must be marked either noinstr or __cpuidle.
-+	 *
-+	 * For cpuidle_state::enter() methods that *DO* set
-+	 * CPUIDLE_FLAG_RCU_IDLE this isn't required, but they must mark the
-+	 * function calling ct_cpuidle_enter() as noinstr/__cpuidle and all
-+	 * functions called within the RCU-idle region.
-+	 */
- 	entered_state = target_state->enter(dev, drv, index);
+-void arch_cpu_idle(void)
++__cpuidle void arch_cpu_idle(void)
+ {
+ 	if (cpu_wait)
+ 		cpu_wait();
+@@ -249,8 +249,8 @@ void arch_cpu_idle(void)
  
- 	if (WARN_ONCE(!irqs_disabled(), "%ps leaked IRQ state", target_state->enter))
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index d785890..dea5bf5 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -239,6 +239,16 @@ struct ftrace_likely_data {
+ #ifdef CONFIG_CPU_IDLE
  
- #define noinstr __noinstr_section(".noinstr.text")
- 
-+/*
-+ * The __cpuidle section is used twofold:
-+ *
-+ *  1) the original use -- identifying if a CPU is 'stuck' in idle state based
-+ *     on it's instruction pointer. See cpu_in_idle().
-+ *
-+ *  2) supressing instrumentation around where cpuidle disables RCU; where the
-+ *     function isn't strictly required for #1, this is interchangeable with
-+ *     noinstr.
-+ */
- #define __cpuidle __noinstr_section(".cpuidle.text")
- 
- #endif /* __KERNEL__ */
+-int mips_cpuidle_wait_enter(struct cpuidle_device *dev,
+-			    struct cpuidle_driver *drv, int index)
++__cpuidle int mips_cpuidle_wait_enter(struct cpuidle_device *dev,
++				      struct cpuidle_driver *drv, int index)
+ {
+ 	arch_cpu_idle();
+ 	return index;
