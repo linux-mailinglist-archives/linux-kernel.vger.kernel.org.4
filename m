@@ -2,96 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA903669830
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C464669832
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241296AbjAMNPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S240363AbjAMNQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241735AbjAMNPG (ORCPT
+        with ESMTP id S233016AbjAMNP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:15:06 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AB65B48F;
-        Fri, 13 Jan 2023 05:04:34 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DCYkaS016890;
-        Fri, 13 Jan 2023 13:04:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ww6zMmjTcnOLd/peXe5T2gKR2lL/++unddACNTL4kJ8=;
- b=H3dv/E+QZqHv4LgfcKoViCe4Mpgl+CB6l0LT6YAW+rMiqwLLkvIzrxOLa5UzkCRK0dwQ
- vYkD0yIDHcrnfcara6SvzkESH9Rbmm73hasJZWM8tTRuog4Dn2qfFgkRzGBSchbs2gOv
- p2XeFK1aJGa8gzL09TbFDqSlQsws++g56qDY4/zbqJQM82ydXAs9bhoFhiaNAkAqeTad
- MizVRbC14FqvWaL7GllIcbMSseQLYm39YRHvHSjIuhh3Ga5iYGWIsjnSfKo8iI71dlDe
- Wr9jufOssSeMHZ9Y+eHglIB94E/tIC0Q6cXOIC9xb3O3UojGhUKWbAvsf6hys/tQl5o7 pQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n3745h1b3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:04:26 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30DCaYZO025455;
-        Fri, 13 Jan 2023 13:04:25 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n3745h1au-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:04:25 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30D9nr6A018953;
-        Fri, 13 Jan 2023 13:04:24 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3n1knv7mmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:04:24 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30DD4Nmd61931944
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Jan 2023 13:04:23 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C66358056;
-        Fri, 13 Jan 2023 13:04:23 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9151A5804E;
-        Fri, 13 Jan 2023 13:04:20 +0000 (GMT)
-Received: from [9.160.94.233] (unknown [9.160.94.233])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 13 Jan 2023 13:04:20 +0000 (GMT)
-Message-ID: <1b45ee50-4b5d-8baf-a7ac-213d93810bee@linux.ibm.com>
-Date:   Fri, 13 Jan 2023 08:04:20 -0500
+        Fri, 13 Jan 2023 08:15:56 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B579559CC
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:06:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 081176B1FA;
+        Fri, 13 Jan 2023 13:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673615173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b4BbmbSd3UvEy9SdkA+0yT3JqRozaBsHVEN+OsDtaAg=;
+        b=pnwi8fP7mwxBuE0MWRu3DZQAlZVkba6fMpx0R0NjF0CkYpE74qYdlDek2KBfSONWUlepYz
+        zNIBNR42R5VatgQ/Tsl/PO60UZayrT1s2bjMYFFY/M17lC9tI7OxBqRtcaBCEyakHoXBMW
+        BKOGXpvWoEVr/EXngCsU8a+mYfp/1uU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBC7B13913;
+        Fri, 13 Jan 2023 13:06:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Bd/JMkRXwWOuagAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 13 Jan 2023 13:06:12 +0000
+Date:   Fri, 13 Jan 2023 14:06:11 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] mm/page_alloc: Explicitly define how __GFP_HIGH
+ non-blocking allocations accesses reserves
+Message-ID: <Y8FXQ4XrSuoPux/7@dhcp22.suse.cz>
+References: <20230113111217.14134-1-mgorman@techsingularity.net>
+ <20230113111217.14134-6-mgorman@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] vfio: fix potential deadlock on vfio group lock
-Content-Language: en-US
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     alex.williamson@redhat.com, pbonzini@redhat.com
-Cc:     jgg@nvidia.com, cohuck@redhat.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com,
-        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com,
-        akrowiak@linux.ibm.com, jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230112203844.41179-1-mjrosato@linux.ibm.com>
-In-Reply-To: <20230112203844.41179-1-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FK2FA6y0FMkvmXlctVD_onLmjziCsCtV
-X-Proofpoint-GUID: fpYPBVu0flP9NM919a5cnTgN6lCDkcUT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_05,2023-01-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301130083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113111217.14134-6-mgorman@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,89 +67,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 3:38 PM, Matthew Rosato wrote:
-> Currently it is possible that the final put of a KVM reference comes from
-> vfio during its device close operation.  This occurs while the vfio group
-> lock is held; however, if the vfio device is still in the kvm device list,
-> then the following call chain could result in a deadlock:
+On Fri 13-01-23 11:12:16, Mel Gorman wrote:
+> GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a vague
+> description. In preparation for the removal of GFP_ATOMIC redefine
+> __GFP_ATOMIC to simply mean non-blocking and renaming ALLOC_HARDER to
+> ALLOC_NON_BLOCK accordingly. __GFP_HIGH is required for access to reserves
+> but non-blocking is granted more access. For example, GFP_NOWAIT is
+> non-blocking but has no special access to reserves. A __GFP_NOFAIL
+> blocking allocation is granted access similar to __GFP_HIGH if the
+> only alternative is an OOM kill.
 > 
-> kvm_put_kvm
->  -> kvm_destroy_vm
->   -> kvm_destroy_devices
->    -> kvm_vfio_destroy
->     -> kvm_vfio_file_set_kvm
->      -> vfio_file_set_kvm
->       -> group->group_lock/group_rwsem
-> 
-> Avoid this scenario by having vfio core code acquire a KVM reference
-> the first time a device is opened and hold that reference until the
-> device fd is closed, at a point after the group lock has been released.
-> 
-> Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
-> Reported-by: Alex Williamson <alex.williamson@redhat.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+Thanks!
+
 > ---
-> Changes from v1:
-> * Re-write using symbol get logic to get kvm ref during first device
->   open, release the ref during device fd close after group lock is
->   released
-> * Drop kvm get/put changes to drivers; now that vfio core holds a
->   kvm ref until sometime after the device_close op is called, it
->   should be fine for drivers to get and put their own references to it.
-> ---
->  drivers/vfio/group.c     |  6 ++---
->  drivers/vfio/vfio_main.c | 48 +++++++++++++++++++++++++++++++++++++---
->  include/linux/vfio.h     |  1 -
->  3 files changed, 48 insertions(+), 7 deletions(-)
+>  mm/internal.h   |  7 +++++--
+>  mm/page_alloc.c | 44 ++++++++++++++++++++++++--------------------
+>  2 files changed, 29 insertions(+), 22 deletions(-)
 > 
-> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-> index bb24b2f0271e..2b0da82f82f4 100644
-> --- a/drivers/vfio/group.c
-> +++ b/drivers/vfio/group.c
-> @@ -165,9 +165,9 @@ static int vfio_device_group_open(struct vfio_device *device)
->  	}
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 8706d46863df..23a37588073a 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -735,7 +735,10 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>  #define ALLOC_OOM		ALLOC_NO_WATERMARKS
+>  #endif
 >  
->  	/*
-> -	 * Here we pass the KVM pointer with the group under the lock.  If the
-> -	 * device driver will use it, it must obtain a reference and release it
-> -	 * during close_device.
-> +	 * Here we pass the KVM pointer with the group under the lock.  A
-> +	 * reference will be obtained the first time the device is opened and
-> +	 * will be held until the device fd is closed.
+> -#define ALLOC_HARDER		 0x10 /* try to alloc harder */
+> +#define ALLOC_NON_BLOCK		 0x10 /* Caller cannot block. Allow access
+> +				       * to 25% of the min watermark or
+> +				       * 62.5% if __GFP_HIGH is set.
+> +				       */
+>  #define ALLOC_MIN_RESERVE	 0x20 /* __GFP_HIGH set. Allow access to 50%
+>  				       * of the min watermark.
+>  				       */
+> @@ -750,7 +753,7 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>  #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
+>  
+>  /* Flags that allow allocations below the min watermark. */
+> -#define ALLOC_RESERVES (ALLOC_HARDER|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
+> +#define ALLOC_RESERVES (ALLOC_NON_BLOCK|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
+>  
+>  enum ttu_flags;
+>  struct tlbflush_unmap_batch;
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 6f41b84a97ac..b9ae0ba0a2ab 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3989,18 +3989,19 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+>  		 * __GFP_HIGH allows access to 50% of the min reserve as well
+>  		 * as OOM.
+>  		 */
+> -		if (alloc_flags & ALLOC_MIN_RESERVE)
+> +		if (alloc_flags & ALLOC_MIN_RESERVE) {
+>  			min -= min / 2;
+>  
+> -		/*
+> -		 * Non-blocking allocations can access some of the reserve
+> -		 * with more access if also __GFP_HIGH. The reasoning is that
+> -		 * a non-blocking caller may incur a more severe penalty
+> -		 * if it cannot get memory quickly, particularly if it's
+> -		 * also __GFP_HIGH.
+> -		 */
+> -		if (alloc_flags & ALLOC_HARDER)
+> -			min -= min / 4;
+> +			/*
+> +			 * Non-blocking allocations (e.g. GFP_ATOMIC) can
+> +			 * access more reserves than just __GFP_HIGH. Other
+> +			 * non-blocking allocations requests such as GFP_NOWAIT
+> +			 * or (GFP_KERNEL & ~__GFP_DIRECT_RECLAIM) do not get
+> +			 * access to the min reserve.
+> +			 */
+> +			if (alloc_flags & ALLOC_NON_BLOCK)
+> +				min -= min / 4;
+> +		}
+>  
+>  		/*
+>  		 * OOM victims can try even harder than the normal reserve
+> @@ -4851,28 +4852,30 @@ gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
+>  	 * The caller may dip into page reserves a bit more if the caller
+>  	 * cannot run direct reclaim, or if the caller has realtime scheduling
+>  	 * policy or is asking for __GFP_HIGH memory.  GFP_ATOMIC requests will
+> -	 * set both ALLOC_HARDER (__GFP_ATOMIC) and ALLOC_MIN_RESERVE(__GFP_HIGH).
+> +	 * set both ALLOC_NON_BLOCK and ALLOC_MIN_RESERVE(__GFP_HIGH).
 >  	 */
->  	ret = vfio_device_open(device, device->group->iommufd,
->  			       device->group->kvm);
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 5177bb061b17..c969e2a0ecd3 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -16,6 +16,7 @@
->  #include <linux/fs.h>
->  #include <linux/idr.h>
->  #include <linux/iommu.h>
-> +#include <linux/kvm_host.h>
+>  	alloc_flags |= (__force int)
+>  		(gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM));
+>  
+> -	if (gfp_mask & __GFP_ATOMIC) {
+> +	if (!(gfp_mask & __GFP_DIRECT_RECLAIM)) {
+>  		/*
+>  		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
+>  		 * if it can't schedule.
+>  		 */
+>  		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
+> -			alloc_flags |= ALLOC_HARDER;
+> +			alloc_flags |= ALLOC_NON_BLOCK;
+>  
+>  			if (order > 0)
+>  				alloc_flags |= ALLOC_HIGHATOMIC;
+>  		}
+>  
+>  		/*
+> -		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
+> -		 * comment for __cpuset_node_allowed().
+> +		 * Ignore cpuset mems for non-blocking __GFP_HIGH (probably
+> +		 * GFP_ATOMIC) rather than fail, see the comment for
+> +		 * __cpuset_node_allowed().
+>  		 */
+> -		alloc_flags &= ~ALLOC_CPUSET;
+> +		if (alloc_flags & ALLOC_MIN_RESERVE)
+> +			alloc_flags &= ~ALLOC_CPUSET;
+>  	} else if (unlikely(rt_task(current)) && in_task())
+>  		alloc_flags |= ALLOC_MIN_RESERVE;
+>  
+> @@ -5303,12 +5306,13 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+>  		WARN_ON_ONCE_GFP(costly_order, gfp_mask);
+>  
+>  		/*
+> -		 * Help non-failing allocations by giving them access to memory
+> -		 * reserves but do not use ALLOC_NO_WATERMARKS because this
+> +		 * Help non-failing allocations by giving some access to memory
+> +		 * reserves normally used for high priority non-blocking
+> +		 * allocations but do not use ALLOC_NO_WATERMARKS because this
+>  		 * could deplete whole memory reserves which would just make
+> -		 * the situation worse
+> +		 * the situation worse.
+>  		 */
+> -		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_HARDER, ac);
+> +		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_MIN_RESERVE, ac);
+>  		if (page)
+>  			goto got_pg;
+>  
+> -- 
+> 2.35.3
 
-Ugh, looks like including linux/kvm_host.h here breaks architectures that don't have an arch/*/include/uapi/asm/kvm.h
-
-AFAICT this should be implicit with the CONFIG_HAVE_KVM bool, so unless someone has a better idea, to avoid I think we can key off of CONFIG_HAVE_KVM like so...
-
-#ifdef CONFIG_HAVE_KVM
-#include <linux/kvm_host.h>
-#endif
-
-[...]
-
-#ifdef CONFIG_HAVE_KVM
-[...symbol_get implementation here...]
-#else
-static bool vfio_kvm_get_kvm_safe(struct kvm *kvm)
-{
-	return false;
-}
-static void vfio_kvm_put_kvm(struct kvm *kvm)
-{
-
-}
-#endif
-
-
+-- 
+Michal Hocko
+SUSE Labs
