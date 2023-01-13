@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18EA66952E
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB24666954A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241318AbjAMLOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S241007AbjAMLPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbjAMLMn (ORCPT
+        with ESMTP id S233010AbjAMLM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:12:43 -0500
-Received: from outbound-smtp28.blacknight.com (outbound-smtp28.blacknight.com [81.17.249.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B9CD10B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:09:57 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp28.blacknight.com (Postfix) with ESMTPS id F1C0E46013
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:09:55 +0000 (GMT)
-Received: (qmail 25896 invoked from network); 13 Jan 2023 11:09:54 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 13 Jan 2023 11:09:54 -0000
-Date:   Fri, 13 Jan 2023 11:09:52 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Michal Hocko <mhocko@suse.com>, Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/7] mm/page_alloc: Treat RT tasks similar to __GFP_HIGH
-Message-ID: <20230113110952.co52bcxjeptiqsxo@techsingularity.net>
-References: <20230109151631.24923-1-mgorman@techsingularity.net>
- <20230109151631.24923-3-mgorman@techsingularity.net>
- <Y77VYdboKBUsILhD@dhcp22.suse.cz>
- <20230112093623.sl4jpqf6f2ng43w2@techsingularity.net>
- <4c169ca43a7b49f1bf61c01181ed585e@AcuMS.aculab.com>
+        Fri, 13 Jan 2023 06:12:58 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30AD5BA26
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:10:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Vd9jhcP8uEUT5hmIk4rjX8e85onT
+        P5WZD7k4yzlL92w=; b=CcDCgPv8aBaVmQ+gCP0YyTx/YB1kQ2Z8xUnrKOTP2tJ6
+        rO8ptKXdCNFtIB13c5u7JhLeOcAVPYFD3D6j0osEPdr0BUdK1ln0dRA5G26IIJKX
+        SzBDX93dK2cas7HI0+SwAREtu/HJZw3fQCAaWGiz1WVpvHjVIXBdTcotVzTvd8o=
+Received: (qmail 1257272 invoked from network); 13 Jan 2023 12:10:28 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2023 12:10:28 +0100
+X-UD-Smtp-Session: l3s3148p1@oqPuRyPyHOlehh92
+Date:   Fri, 13 Jan 2023 12:10:27 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] memory: renesas-rpc-if: Fix PHYCNT.STRTIM setting
+Message-ID: <Y8E8IzJYqhTXLALE@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20230113080550.1736-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVw+fCqEewmY7BA4q0a=WAaDguaTChGKwUXFtWMCV8SaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qsBv+IE2hD/J6Qj2"
 Content-Disposition: inline
-In-Reply-To: <4c169ca43a7b49f1bf61c01181ed585e@AcuMS.aculab.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdVw+fCqEewmY7BA4q0a=WAaDguaTChGKwUXFtWMCV8SaQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 09:04:50AM +0000, David Laight wrote:
-> From: Mel Gorman
-> > Sent: 12 January 2023 09:36
-> ...
-> > Hard realtime tasks should be locking down resources in advance. Even a
-> > soft-realtime task like audio or video live decoding which cannot jitter
-> > should be allocating both memory and any disk space required up-front
-> > before the recording starts instead of relying on reserves. At best,
-> > reserve access will only delay the problem by a very short interval.
-> 
-> Or, at least, ensuring the system isn't memory limited.
-> 
 
-Added to changelog.
+--qsBv+IE2hD/J6Qj2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The biggest effect on RT task latency/jitter (on a normal kernel)
-> is hardware interrupt and softint code 'stealing' the cpu.
-> The main 'culprit' being ethernet receive.
->  
-> Unfortunately if you are doing RTP audio (UDP data) you absolutely
-> need the ethernet receive to run. When the softint code decides
-> to drop back to a normal priority kernel worker thread packets
-> get lost.
-> 
 
-Yes, although this is a fundamental problem for background networking
-processing in general IIUC that is independent of mm/. ksoftirqd may be
-getting stalled behind a higher priority, a realtime task, a task that has
-built a credit due to sleep time under GENTLE_FAIR_SLEEPERS relative to
-ksoftirqd etc. As a normal low-priority CPU hog may be at the same priority
-as ksoftirqd, it can use enough of the scheduler slice for the runqueue to
-cause an indirect priority inversion if a high priority task is sleeping
-waiting on network traffic it needs ASAP that's stalled on ksoftirqd. I
-didn't check for other examples but the only one I'm aware of that boosts
-ksoftirq priority is during rcutorture (see rcutorture_booster_init). A
-quick glance doesn't show any possibility of boosting ksoftirqd priority
-temporarily if dealing with NET_TX_SOFTIRQ although it might be an
-interesting idea if it was demonstrated with a realistic (or at least
-semi-realistic) test case that priority inversion can occur due to background
-RX processing. It's not even PREEMPT_RT-specific, I suspect it's a general
-problem. I don't think this series makes a difference because if any of
-the critical tasks are depending on the memory reserves, they're already
-in serious trouble.
+> > +       regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+> > +                          RPCIF_PHYCNT_STRTIM(rpc->info->strtim),
+> > +                          RPCIF_PHYCNT_STRTIM(rpc->info->strtim));
+>=20
+> I'm not sure this is guaranteed to work, as using rpc->info->strtim as
+> the mask may not clear all bits (e.g. on R-Car M3-W it is 6, not 7), and
+> the initial values of the bits are documented to be undefined.
 
-> (I've been running 10000 RTP streams - with 10k receive UDP sockets.)
-> 
+Okay, thanks! I will fix this.
 
-min_reserve access isn't going to fix any stalls with that volume of
-streams :D
 
-> So I doubt avoiding sleeps in kmalloc() is going to make a
-> significant difference.
-> 
+--qsBv+IE2hD/J6Qj2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Agreed.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Mel Gorman
-SUSE Labs
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPBPB8ACgkQFA3kzBSg
+KbZZQhAArUlOgri2MGsoj+3B32+aZBdhkUkaVqkxAvI6oTCEMJfMW2/xj6/Ulhvz
+gnG7hT4b8wELAkjpUqRlyCDwVCfG1C/yQqBroaDOA5876cpIbeLIiYNdG69BPKxt
+xk7JsDSWjKhChd3i+Ot98Is4n5gLN9bNjVBl/eeQzyTm6Jtjcu/k54mA7VmiG6ft
+4TOWXKPqf91To7B0lGQkE/5C3FFx6hG/9Em8eJ+rbCtPWaZagEjlde6PSfLQ0DqK
+dLaHrGGSCOW5xE6Y30LfQwofQGpHRNE/4XwbssRVGash5wtFjdp8SPO9nW75u+jl
+2uenYR11QbZmN5ghow9VU5nKO6DgLgABpgMqPL0XQvgyh0dhJXVk8mDXccZSMGi+
+b5D9YqxlI7vEujtGnJd4aPojxXJMAVihpAc7rdsjTWRiJK6sdwISZ5I5nes7WOwQ
+JR2TNWuj5TYbNz3hLCWl5Z/lq9rKcWNM0j+wLJ8mE3X96G9VUneLXcFhbjjGH8pN
+56RAH59wmtoJBHYmsjrYhcvwZOoGhxaohmr7mBL5ZXw1x48FcPsLQlA690XRWPnK
+ruyjfYTxKnwDsyq3xtvOm/7CJt/HFrCi6hEnzxBW0bHEdcRm6BjBO/eAASmk5dq5
+uIsrUGzbZSRKFB7uZhXRtZFnX7LAqlzts6dis2YQB8LyvM3/mrQ=
+=/WdR
+-----END PGP SIGNATURE-----
+
+--qsBv+IE2hD/J6Qj2--
