@@ -2,231 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2163669349
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049346692D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240378AbjAMJuk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 Jan 2023 04:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S240560AbjAMJ1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240798AbjAMJty (ORCPT
+        with ESMTP id S240903AbjAMJZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:49:54 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00A93AC
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:42:28 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7F88D24DDB2;
-        Fri, 13 Jan 2023 17:42:21 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 13 Jan
- 2023 17:42:19 +0800
-Received: from ubuntu.localdomain (113.72.144.207) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 13 Jan
- 2023 17:42:18 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Mason Huo" <mason.huo@starfivetech.com>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>
-Subject: [PATCH v1] irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
-Date:   Fri, 13 Jan 2023 17:42:16 +0800
-Message-ID: <20230113094216.116036-1-mason.huo@starfivetech.com>
-X-Mailer: git-send-email 2.39.0
+        Fri, 13 Jan 2023 04:25:58 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A3213DD0;
+        Fri, 13 Jan 2023 01:19:50 -0800 (PST)
+Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NtbNL2NLGzqVHW;
+        Fri, 13 Jan 2023 17:14:58 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
+ 2023 17:19:46 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <tj@kernel.org>, <josef@toxicpanda.com>,
+        <axboe@kernel.dk>, <paolo.valente@linaro.org>,
+        <shinichiro.kawasaki@wdc.com>, <yukuai3@huawei.com>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai1@huaweicloud.com>,
+        <yi.zhang@huawei.com>, <yangerkun@huawei.com>
+Subject: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+Date:   Fri, 13 Jan 2023 17:44:10 +0800
+Message-ID: <20230113094410.2907223-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.144.207]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The priority and enable registers of plic will be reset
-during hibernation power cycle in poweroff mode,
-add the syscore callbacks to save/restore those registers.
+After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
+bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+bic->bfqq will be freed first, and bic_set_bfqq() is called with the freed
+bic->bfqq.
 
-Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
-Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Fix the problem by always freeing bfqq after bic_set_bfqq().
+
+Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 2 deletions(-)
+ block/bfq-cgroup.c  | 2 +-
+ block/bfq-iosched.c | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index ff47bd0dec45..80306de45d2b 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -17,6 +17,7 @@
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
- #include <linux/spinlock.h>
-+#include <linux/syscore_ops.h>
- #include <asm/smp.h>
- 
- /*
-@@ -67,6 +68,8 @@ struct plic_priv {
- 	struct irq_domain *irqdomain;
- 	void __iomem *regs;
- 	unsigned long plic_quirks;
-+	unsigned int nr_irqs;
-+	u32 *priority_reg;
- };
- 
- struct plic_handler {
-@@ -79,10 +82,13 @@ struct plic_handler {
- 	raw_spinlock_t		enable_lock;
- 	void __iomem		*enable_base;
- 	struct plic_priv	*priv;
-+	/* To record interrupts that are enabled before suspend. */
-+	u32 enable_reg[MAX_DEVICES / 32];
- };
- static int plic_parent_irq __ro_after_init;
- static bool plic_cpuhp_setup_done __ro_after_init;
- static DEFINE_PER_CPU(struct plic_handler, plic_handlers);
-+static struct plic_priv *priv_data;
- 
- static int plic_irq_set_type(struct irq_data *d, unsigned int type);
- 
-@@ -229,6 +235,78 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
- 	return IRQ_SET_MASK_OK;
+diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+index a6e8da5f5cfd..feb13ac25557 100644
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -749,8 +749,8 @@ static void bfq_sync_bfqq_move(struct bfq_data *bfqd,
+ 		 * old cgroup.
+ 		 */
+ 		bfq_put_cooperator(sync_bfqq);
+-		bfq_release_process_ref(bfqd, sync_bfqq);
+ 		bic_set_bfqq(bic, NULL, true, act_idx);
++		bfq_release_process_ref(bfqd, sync_bfqq);
+ 	}
  }
  
-+static void plic_irq_resume(void)
-+{
-+	unsigned int i, cpu;
-+	u32 __iomem *reg;
-+
-+	for (i = 0; i < priv_data->nr_irqs; i++)
-+		writel(priv_data->priority_reg[i],
-+				priv_data->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		for (i = 0; i < DIV_ROUND_UP(priv_data->nr_irqs, 32); i++) {
-+			reg = handler->enable_base + i * sizeof(u32);
-+			raw_spin_lock(&handler->enable_lock);
-+			writel(handler->enable_reg[i], reg);
-+			raw_spin_unlock(&handler->enable_lock);
-+		}
-+	}
-+}
-+
-+static int plic_irq_suspend(void)
-+{
-+	unsigned int i, cpu;
-+	u32 __iomem *reg;
-+
-+	for (i = 0; i < priv_data->nr_irqs; i++)
-+		priv_data->priority_reg[i] =
-+			readl(priv_data->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		for (i = 0; i < DIV_ROUND_UP(priv_data->nr_irqs, 32); i++) {
-+			reg = handler->enable_base + i * sizeof(u32);
-+			raw_spin_lock(&handler->enable_lock);
-+			handler->enable_reg[i] = readl(reg);
-+			raw_spin_unlock(&handler->enable_lock);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct syscore_ops plic_irq_syscore_ops = {
-+	.suspend	= plic_irq_suspend,
-+	.resume		= plic_irq_resume,
-+};
-+
-+static void plic_irq_pm_init(void)
-+{
-+	unsigned int cpu;
-+
-+	for_each_cpu(cpu, cpu_present_mask) {
-+		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
-+
-+		if (!handler->present)
-+			continue;
-+
-+		memset(&handler->enable_reg[0], 0,
-+			sizeof(handler->enable_reg));
-+	}
-+
-+	register_syscore_ops(&plic_irq_syscore_ops);
-+}
-+
- static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
- 			      irq_hw_number_t hwirq)
- {
-@@ -351,6 +429,7 @@ static int __init __plic_init(struct device_node *node,
- 		return -ENOMEM;
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 815b884d6c5a..2ddf831221c4 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5581,9 +5581,11 @@ static void bfq_check_ioprio_change(struct bfq_io_cq *bic, struct bio *bio)
  
- 	priv->plic_quirks = plic_quirks;
-+	priv_data = priv;
- 
- 	priv->regs = of_iomap(node, 0);
- 	if (WARN_ON(!priv->regs)) {
-@@ -363,15 +442,21 @@ static int __init __plic_init(struct device_node *node,
- 	if (WARN_ON(!nr_irqs))
- 		goto out_iounmap;
- 
-+	priv->nr_irqs = nr_irqs;
+ 	bfqq = bic_to_bfqq(bic, false, bfq_actuator_index(bfqd, bio));
+ 	if (bfqq) {
+-		bfq_release_process_ref(bfqd, bfqq);
++		struct bfq_queue *old_bfqq = bfqq;
 +
-+	priv->priority_reg = kcalloc(nr_irqs, sizeof(u32), GFP_KERNEL);
-+	if (!priv->priority_reg)
-+		goto out_free_priority_reg;
-+
- 	nr_contexts = of_irq_count(node);
- 	if (WARN_ON(!nr_contexts))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
- 
- 	error = -ENOMEM;
- 	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
- 			&plic_irqdomain_ops, priv);
- 	if (WARN_ON(!priv->irqdomain))
--		goto out_iounmap;
-+		goto out_free_priority_reg;
- 
- 	for (i = 0; i < nr_contexts; i++) {
- 		struct of_phandle_args parent;
-@@ -461,11 +546,15 @@ static int __init __plic_init(struct device_node *node,
- 				  plic_starting_cpu, plic_dying_cpu);
- 		plic_cpuhp_setup_done = true;
+ 		bfqq = bfq_get_queue(bfqd, bio, false, bic, true);
+ 		bic_set_bfqq(bic, bfqq, false, bfq_actuator_index(bfqd, bio));
++		bfq_release_process_ref(bfqd, old_bfqq);
  	}
-+	plic_irq_pm_init();
  
- 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
- 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
- 	return 0;
- 
-+out_free_priority_reg:
-+	kfree(priv->priority_reg);
-+
- out_iounmap:
- 	iounmap(priv->regs);
- out_free_priv:
+ 	bfqq = bic_to_bfqq(bic, true, bfq_actuator_index(bfqd, bio));
 -- 
-2.39.0
+2.31.1
 
