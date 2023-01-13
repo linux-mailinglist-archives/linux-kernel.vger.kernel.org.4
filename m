@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1636697C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F8B6697C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbjAMMzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S241343AbjAMM4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240759AbjAMMzW (ORCPT
+        with ESMTP id S241514AbjAMMz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:55:22 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BFE76206
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:42:08 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id bn6so22336320ljb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:42:07 -0800 (PST)
+        Fri, 13 Jan 2023 07:55:57 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6995185C9A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:43:10 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id i188so22072199vsi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:43:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7bDIwWVCRlNTvDwsFQzlmS++5tBa1uCLSFWFBYXobMg=;
-        b=U7FNcxeX7ENbW2naYg7iLVlsfQapVqotNClbPON1ANwn5eTAyNLN5fyvLfYf1VPuRQ
-         w0q8RkZI6RfMN4WWT3EiA7ELAwLS6ikloGJ89/eL6nvfh1MWepVRuAL7PIRQdSa+tE4D
-         PVDZbygsRQOXoor1Pk1O+aNw5ZHZKgzWfrtSHfdBpwsb50enPr+G0LTZi5Bu+QWI446c
-         zwizqwSneIPu6dAPoGCoxQ/yC9rAAh7ShUSruA+ESxliEnKCZfo0mEYhKWJvHIefCp5p
-         pSiobhM5yquAOqpfeS96B9wUhPraZEAZBOkbt7dSmkK1JjC7eGIsAVgGJ0HeyhMBmGqc
-         V25A==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2/6TZmWfUChFLdDGAMfhGqMTkLVrzJKqZem9xSaw0S8=;
+        b=RJgJ8FTqHUU4D4CXrkHoK9OBpPAdXnLS1Kp/nB2aWTWGhgIio3lKzRBd46Wy1WAvGw
+         BEPfBJaLnGzVYZynfoYGEYZbRWIZ3hYeirMPXYOtnR9Xw91svg5410tc/OLwsBhGcW+/
+         DTrtyHGct+k0qhdvykimdDyxwwNPzUBgrvGvSkKcmVbUATMEEgqdvHKI3XIbcmjPrLvg
+         sMG/fGYpYwWrxvFWJnIiEEWq3gYNWrCGe4+ZXDRgdORdtREit+wsLQMWeEGst+1mmtBk
+         TwW6Vtc+F1W2kv0ng3nXwFTGINdwIKh3ipKyH93x3vEJb3VhQ6jhs0JaA6Qr907ofAbm
+         nwfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7bDIwWVCRlNTvDwsFQzlmS++5tBa1uCLSFWFBYXobMg=;
-        b=7X7Ni1ONaw5gqgHc+OaapdxEuS10Og2YYGy/gdcPDYgtq/RkZB+9LzzpsfIgIUKpNj
-         GAN512VV5JYEjIheeBjKiT8cmjXPNwUchiO0d+NFtAgqldEWkKkbIxIEu+EpkuT1lkHH
-         3G1KeX7pX6KvRzBgvMHXb5l3QE3eYWIz9jR5IEMquY1iBT3jKdNBZUFiHtEF92GyM6BJ
-         AT761vQ6IAFlepDzqIq4iIP5EFTnwrizQus+fPobYkt2MBkBuwtJa8JipLCi5GVWp3Fl
-         aFU3aYHRn052rVYpk6b02EBsvUTsYVA9ZH1Z5Xu7jT0cckXfCdAzEHx1ePGWk88x6Xpx
-         oonQ==
-X-Gm-Message-State: AFqh2krFtwDpWYzXTZSRCgZRQvDXM6HiQ6gpCChwaAr4Mf7quQRg2piv
-        AR8OfJMZAJdB1ShXXhhf5LmxBJfiDvtctdMqii0=
-X-Google-Smtp-Source: AMrXdXvawrAjUrqJc+DNIRjS6r4dZRlXVb3OOcKx8iYpG16TpolJtyhs/mTNOJ0Zt1kFid5aR6FzgFyNWWCJnxXmhzk=
-X-Received: by 2002:a2e:9e81:0:b0:281:d9b5:9491 with SMTP id
- f1-20020a2e9e81000000b00281d9b59491mr1222143ljk.170.1673613726108; Fri, 13
- Jan 2023 04:42:06 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2/6TZmWfUChFLdDGAMfhGqMTkLVrzJKqZem9xSaw0S8=;
+        b=m5Ax65Fkf1lMorn/+mbVFEvjWtnw3CBBVXZkgakJpGD8+pazjrls6RV9oFwMNIAFG/
+         zqe7eGDAQilKRGMHXp6Xt4Zfym0urH3SuGKODsLalGCQ/5aAbrDAKV9ZQevRtwhaCP7k
+         CrAtUcLNC9Sv7YVfE3uNV79ihNuS/j9uBO+iVjXzYRwSzrFa4cHsxXcW9uZlQ+jmy3nc
+         KoKchBLNU23+cZ+jdReiS+syhxqPdrPnDLGXLEgaWAgInSuVhoAd3ZFHbW/tRJY6FKKw
+         kTz5UkxVdWHlbNR8FH1ZJH6/Uk9N3FRN6zOpN4IO6rlISCmsXPqAWPW3qvV3tYot4/g8
+         yK0A==
+X-Gm-Message-State: AFqh2koakXoEw9wXw5hG9DBJ8qsQPtKvMFxDwXw/rYu6q98XdLmCLwuQ
+        d6rJzUhdtNM2MH0Hf/Sf5AJsSIku6+xUl3K3M3ZwMw==
+X-Google-Smtp-Source: AMrXdXsqEL7wsfhpmfGzD+j0DOcb/mMYgKjn7c6o6l8PSk0zZcsyvavL4MJCcHbKDwwfG0BNeyWVx5dqk0tnvx2uJKE=
+X-Received: by 2002:a67:df8c:0:b0:3c5:1ac1:bf38 with SMTP id
+ x12-20020a67df8c000000b003c51ac1bf38mr11701035vsk.78.1673613789271; Fri, 13
+ Jan 2023 04:43:09 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a2e:b5b0:0:0:0:0:0 with HTTP; Fri, 13 Jan 2023 04:42:05
- -0800 (PST)
-Reply-To: ska.anna794@gmail.com
-From:   Anna <jannette71dval@gmail.com>
-Date:   Fri, 13 Jan 2023 13:42:05 +0100
-Message-ID: <CAFkFQMxBg+uq8nmCSyPYEbEaYw_HgQt5KqFP1Wqx=dFbnKEv7g@mail.gmail.com>
-Subject: Hospital
-To:     undisclosed-recipients:;
+References: <20230112141743.63521-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112141743.63521-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 13 Jan 2023 13:42:58 +0100
+Message-ID: <CAMRc=Mfum8Vbs5_e9-1D2yyir7ce7=8kerdPO+nkwR44_JwDeA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpiolib: Do not mention legacy API in the code
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DEAR_FRIEND,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:229 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5375]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [ska.anna794[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jannette71dval[at]gmail.com]
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sincerely,
+On Thu, Jan 12, 2023 at 3:17 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Replace mentioning of legacy API by the latest one.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/linux/gpio/driver.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index 8e2e2618d40e..ddc7a14a274f 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -339,7 +339,7 @@ struct device_node;
+>   * @set_multiple: assigns output values for multiple signals defined by "mask"
+>   * @set_config: optional hook for all kinds of settings. Uses the same
+>   *     packed config format as generic pinconf.
+> - * @to_irq: optional hook supporting non-static gpio_to_irq() mappings;
+> + * @to_irq: optional hook supporting non-static gpiod_to_irq() mappings;
+>   *     implementation may not sleep
+>   * @dbg_show: optional routine to show contents in debugfs; default code
+>   *     will be used when this is omitted, but custom code can show extra
+> --
+> 2.39.0
+>
 
-Dear friend, how are you, I have a charity donation fund that I want
-Contribute by helping. Please try to contact me to know more
-information. Hereby I will tell you more about myself and my plans
-Money when I hear from you.
+Applied, thanks!
 
-Waiting for your reply to provide you with more details.
+Bart
