@@ -2,146 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602AD66933A
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1716966933E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240048AbjAMJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S240818AbjAMJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239600AbjAMJrQ (ORCPT
+        with ESMTP id S240722AbjAMJrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:47:16 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0699F4FD63
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:36:11 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id g9so3998347qtu.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:36:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OfYWOGUw6JcZk6BCbCEfYG54SLYJu12x8TR2uJqxvmU=;
-        b=lba8i3MlJTJwJPCZlDXGAbD/pMwI0YVnbcvwe7FxYMKYbG0WZmNcPlFvwZn9INgVPH
-         R5dP1UbUFUkNzXHrtaluXitfQ5cfpmzd8tOFcY1qD12OYmxE1ZPCHXFCA5iisGmo/Otg
-         XQCuhIL/fcFVtLlxR0fAUT+IVZUX3GPR7sEXVC97qn2FYBrJsWgsGtsmxADP/HqBV/ME
-         3vOYBS/Y+XM73FkH0HhraEB+pO52cdTjtocPs0cJD5tfWRDEEaZKGkJswBBpA9zclaW1
-         45V9QJ6Axu/O4kpCcu7FUsSIz3vQFpCKg0AlQ0u6qzC47vr7YVTy5JLY3v3fzIDl+UtN
-         wcxQ==
-X-Gm-Message-State: AFqh2kqhBoQu3n88IUK17owZyoEesXKokkOVc9U9Wf0dbE5R9k4Adml4
-        Aal25FR7xMFPMEFtnflJBjzoToeUpcuUiA==
-X-Google-Smtp-Source: AMrXdXs/TVzGk0fBJGObs8+isZe7HI+Fledm2tkfIpg5lharTdsA5Abx7m945KzVgTYNF+4AmRPkUw==
-X-Received: by 2002:a05:622a:4a15:b0:3af:b6bd:aba7 with SMTP id fv21-20020a05622a4a1500b003afb6bdaba7mr18333943qtb.43.1673602569925;
-        Fri, 13 Jan 2023 01:36:09 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05620a294f00b0070383f1b6f1sm12495037qkp.31.2023.01.13.01.36.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 01:36:09 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-4c24993965eso270265387b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:36:09 -0800 (PST)
-X-Received: by 2002:a0d:d98c:0:b0:4dd:7a8e:1cf3 with SMTP id
- b134-20020a0dd98c000000b004dd7a8e1cf3mr249079ywe.384.1673602568857; Fri, 13
- Jan 2023 01:36:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20230104231127.2634648-1-nphamcs@gmail.com> <20230104231127.2634648-3-nphamcs@gmail.com>
-In-Reply-To: <20230104231127.2634648-3-nphamcs@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 10:35:57 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXObtC0_US+fpc9Wq0SEHGcmLfVb19F55SF6x=yMKD4UQ@mail.gmail.com>
-Message-ID: <CAMuHMdXObtC0_US+fpc9Wq0SEHGcmLfVb19F55SF6x=yMKD4UQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] cachestat: implement cachestat syscall
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 04:47:35 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE6A6B1BF;
+        Fri, 13 Jan 2023 01:36:59 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Ntbsj6HXgz8RTZH;
+        Fri, 13 Jan 2023 17:36:57 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl2.zte.com.cn with SMTP id 30D9agSE049932;
+        Fri, 13 Jan 2023 17:36:42 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Fri, 13 Jan 2023 17:36:45 +0800 (CST)
+Date:   Fri, 13 Jan 2023 17:36:45 +0800 (CST)
+X-Zmail-TransId: 2b0363c1262d2bddc3a3
+X-Mailer: Zmail v1.0
+Message-ID: <202301131736452546903@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
+        <willy@infradead.org>, <bagasdotme@gmail.com>
+Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <iamjoonsoo.kim@lge.com>,
+        <ran.xiaokai@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjNdIHN3YXBfc3RhdGU6IHVwZGF0ZSBzaGFkb3dfbm9kZXMgZm9yIGFub255bW91cyBwYWdl?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 30D9agSE049932
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63C12639.000 by FangMail milter!
+X-FangMail-Envelope: 1673602617/4Ntbsj6HXgz8RTZH/63C12639.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63C12639.000/4Ntbsj6HXgz8RTZH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 12:13 AM Nhat Pham <nphamcs@gmail.com> wrote:
-> Implement a new syscall that queries cache state of a file and
-> summarizes the number of cached pages, number of dirty pages, number of
-> pages marked for writeback, number of (recently) evicted pages, etc. in
-> a given range.
->
-> NAME
->     cachestat - query the page cache statistics of a file.
->
-> SYNOPSIS
->     #include <sys/mman.h>
->
->     struct cachestat {
->         __u64 nr_cache;
->         __u64 nr_dirty;
->         __u64 nr_writeback;
->         __u64 nr_evicted;
->         __u64 nr_recently_evicted;
->     };
->
->     int cachestat(unsigned int fd, off_t off, size_t len,
->           size_t cstat_size, struct cachestat *cstat,
->           unsigned int flags);
->
-> DESCRIPTION
->     cachestat() queries the number of cached pages, number of dirty
->     pages, number of pages marked for writeback, number of evicted
->     pages, number of recently evicted pages, in the bytes range given by
->     `off` and `len`.
->
->     An evicted page is a page that is previously in the page cache but
->     has been evicted since. A page is recently evicted if its last
->     eviction was recent enough that its reentry to the cache would
->     indicate that it is actively being used by the system, and that
->     there is memory pressure on the system.
->
->     These values are returned in a cachestat struct, whose address is
->     given by the `cstat` argument.
->
->     The `off` and `len` arguments must be non-negative integers. If
->     `len` > 0, the queried range is [`off`, `off` + `len`]. If `len` ==
->     0, we will query in the range from `off` to the end of the file.
->
->     `cstat_size` allows users to obtain partial results. The syscall
->     will copy the first `csstat_size` bytes to the specified userspace
->     memory. `cstat_size` must be a non-negative value that is no larger
->     than the current size of the cachestat struct.
->
->     The `flags` argument is unused for now, but is included for future
->     extensibility. User should pass 0 (i.e no flag specified).
->
-> RETURN VALUE
->     On success, cachestat returns 0. On error, -1 is returned, and errno
->     is set to indicate the error.
->
-> ERRORS
->     EFAULT cstat points to an invalid address.
->
->     EINVAL invalid `cstat_size` or `flags`
->
->     EBADF  invalid file descriptor.
->
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+From: Yang Yang <yang.yang29@zte.com.cn>
 
->  arch/m68k/kernel/syscalls/syscall.tbl       |   1 +
+Shadow_nodes is for shadow nodes reclaiming of workingset handling,
+it is updated when page cache add or delete since long time ago
+workingset only supported page cache. But when workingset supports
+anonymous page detection, we missied updating shadow nodes for
+it. This caused that shadow nodes of anonymous page will never be
+reclaimd by scan_shadow_nodes() even they use much memory and
+system memory is tense.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
+So update shadow_nodes of anonymous page when swap cache is
+add or delete by calling  xas_set_update(..workingset_update_node).
 
-Gr{oetje,eeting}s,
+Fixes: aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+---
+change for v3
+- Modify git log of explain of this patch do in imperative mood. Thanks to
+Bagas Sanjaya.
+change for v2
+- Include a description of the user-visible effect. Add fixes tag. Modify comments.
+Also call workingset_update_node() in clear_shadow_from_swap_cache(). Thanks
+to Matthew Wilcox.
+---
+ include/linux/xarray.h | 3 ++-
+ mm/swap_state.c        | 6 ++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-                        Geert
+diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+index 44dd6d6e01bc..5cc1f718fec9 100644
+--- a/include/linux/xarray.h
++++ b/include/linux/xarray.h
+@@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
+  * @update: Function to call when updating a node.
+  *
+  * The XArray can notify a caller after it has updated an xa_node.
+- * This is advanced functionality and is only needed by the page cache.
++ * This is advanced functionality and is only needed by the page cache
++ * and swap cache.
+  */
+ static inline void xas_set_update(struct xa_state *xas, xa_update_node_t update)
+ {
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index cb9aaa00951d..7a003d8abb37 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -94,6 +94,8 @@ int add_to_swap_cache(struct folio *folio, swp_entry_t entry,
+ 	unsigned long i, nr = folio_nr_pages(folio);
+ 	void *old;
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
++	xas_set_update(&xas, workingset_update_node);
++
+ 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+ 	VM_BUG_ON_FOLIO(folio_test_swapcache(folio), folio);
+ 	VM_BUG_ON_FOLIO(!folio_test_swapbacked(folio), folio);
+@@ -145,6 +147,8 @@ void __delete_from_swap_cache(struct folio *folio,
+ 	pgoff_t idx = swp_offset(entry);
+ 	XA_STATE(xas, &address_space->i_pages, idx);
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
++	xas_set_update(&xas, workingset_update_node);
++
+ 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+ 	VM_BUG_ON_FOLIO(!folio_test_swapcache(folio), folio);
+ 	VM_BUG_ON_FOLIO(folio_test_writeback(folio), folio);
+@@ -252,6 +256,8 @@ void clear_shadow_from_swap_cache(int type, unsigned long begin,
+ 		struct address_space *address_space = swap_address_space(entry);
+ 		XA_STATE(xas, &address_space->i_pages, curr);
+
++		xas_set_update(&xas, workingset_update_node);
++
+ 		xa_lock_irq(&address_space->i_pages);
+ 		xas_for_each(&xas, old, end) {
+ 			if (!xa_is_value(old))
+-- 
+2.15.2
