@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F437668B13
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C52668B17
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjAMFHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 00:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S233341AbjAMFKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 00:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbjAMFHp (ORCPT
+        with ESMTP id S231169AbjAMFI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 00:07:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA935BA0A;
-        Thu, 12 Jan 2023 21:07:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A590DB8203D;
-        Fri, 13 Jan 2023 05:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D796EC433D2;
-        Fri, 13 Jan 2023 05:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673586460;
-        bh=si37ZEiLLqD4Qqncw3uQ5PyAKOVJHCNmIcksGtXSdOo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c0cfPWZq1RW4eWz/Lo5HA+NhvY3uDudwZaJg4y3XbFMgGD3QNocNEZGGiiRGVuQaQ
-         oZ7vcv+dzXr697jdfFhk7i6Hbhp6I43srwrgOxH0VXOyZvJ5W4gMpUUyf7sjq+0DGW
-         Fj4aCcQHLYDxddRgtWRDMkSygSptVrL2knaAV4E9IyiCPUzB/CzMzgG79zrW+Rz7Sb
-         WxtKBpSeYMlgeHrsAF5ZJZI186yB6ETCtj/fHM888cOVLOaZiKG02YQPsa2JVXolre
-         5hYNvELQRsv5eOxbWpwd9lTMXMswIMAKYUD3oNRprLTUFtymDfgOgSG3Pm2kxTOyzS
-         uXi55EwIdcIiQ==
-Date:   Thu, 12 Jan 2023 21:07:38 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Rahul Rameshbabu <rrameshbabu@nvidia.com>
-Cc:     Hariprasad Kelam <hkelam@marvell.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <edumazet@google.com>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
-        <sbhatta@marvell.com>
-Subject: Re: [net-next PATCH 0/5] octeontx2-pf: HTB offload support
-Message-ID: <20230112210738.72393731@kernel.org>
-In-Reply-To: <20230112173120.23312-1-hkelam@marvell.com>
-References: <20230112173120.23312-1-hkelam@marvell.com>
+        Fri, 13 Jan 2023 00:08:58 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045815BA14;
+        Thu, 12 Jan 2023 21:08:12 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ss4so42452917ejb.11;
+        Thu, 12 Jan 2023 21:08:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wtw4WHGu+OATpWcU0u4H+R8E0E8xhz+D1fXiT2aRITI=;
+        b=dMQBkDVowPjcnzuTiFHOBWCdCct36UMtona+WrSRnGFGrA1UjMiZnmb4LXbxIskScC
+         k7ehagq9WRleuolKvqfIrm2N0FLPuUeaqmil0cE3RV01+Si74LUV3OC4Sbx2xUW4E3NI
+         1OWO2m2ZhnH9yz885DRuAZJH+gHW506l1PXNVxwA2sr7QJUz04Viis+tpIphUzqmNFzA
+         zq5MT+Cg1tv97F38aQv+ZSULw576vUtxEbzVq1/lZ/EJP4Mj06Gia+fncyYB6zOkBvHZ
+         xpgUhENRnLaUq6QsN+jNdLKSn55TWkSpjHkfemUs3RLm6vxkfAlDtSwS+Tf30pLF3RT8
+         CXqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wtw4WHGu+OATpWcU0u4H+R8E0E8xhz+D1fXiT2aRITI=;
+        b=ibNmWlmdWLlDuGbPhlmu7AJbSIkjweNTgdMaDqui4l08/LNjLvzhkPuO1vEnf700Xh
+         /UAYIXgbR7Yl6malkBVXf7z0Me99MsBqJU38+5MbyglbBDnqJc0tHcdsno7BbBkryKhD
+         kI1RAENHRwRMYk8/3pK8tRUC37s9Q4/tuG1P7UwndGoQPmWUxDtDeg7XogexmRwLPJ12
+         4LdHeHDKBUWyd6IkO2vC4Z9F/30UOnReEzkTDjn9RltJVBJ/i6YjyJEPX9enCus69dV9
+         dKTfd3uZDAWXsXJqy2R1rbCWwCB+8PvkPJMK3UC1u7Vm0r9GebIW2tW8kVoZpdKD5HC3
+         jL/w==
+X-Gm-Message-State: AFqh2kpT5TFmTZpCbB70QCQANhM1hXqKQaeiDtHcGsEVBDTO3nfP495m
+        lTEtt8YVBxlFnO0fbe/BMys=
+X-Google-Smtp-Source: AMrXdXteEP5DXH8667AQDCEZztPHXS5s+cR8cR1LVXg6WWAFS+f9RCRnqMToHs/+vv/OKYDslxBaEg==
+X-Received: by 2002:a17:907:62a9:b0:85d:dd20:60a2 with SMTP id nd41-20020a17090762a900b0085ddd2060a2mr13187213ejc.7.1673586490507;
+        Thu, 12 Jan 2023 21:08:10 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id b1-20020a1709063ca100b007af0f0d2249sm8146059ejh.52.2023.01.12.21.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 21:08:10 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        Samuel Holland <samuel@sholland.org>,
+        Andrew Lunn <andrew@lunn.ch>, Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH v5 2/4] regulator: sun20i: Add Allwinner D1 LDOs driver
+Date:   Fri, 13 Jan 2023 06:08:08 +0100
+Message-ID: <5906718.lOV4Wx5bFT@jernej-laptop>
+In-Reply-To: <20221208084127.17443-3-samuel@sholland.org>
+References: <20221208084127.17443-1-samuel@sholland.org>
+ <20221208084127.17443-3-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 23:01:15 +0530 Hariprasad Kelam wrote:
-> octeontx2 silicon and CN10K transmit interface consists of five
-> transmit levels starting from MDQ, TL4 to TL1. Once packets are
-> submitted to MDQ, hardware picks all active MDQs using strict
-> priority, and MDQs having the same priority level are chosen using
-> round robin. Each packet will traverse MDQ, TL4 to TL1 levels.
-> Each level contains an array of queues to support scheduling and
-> shaping.
-> 
-> As HTB supports classful queuing mechanism by supporting rate and
-> ceil and allow the user to control the absolute bandwidth to
-> particular classes of traffic the same can be achieved by
-> configuring shapers and schedulers on different transmit levels.
-> 
-> This series of patches adds support for HTB offload,
-> 
-> Patch1: Allow strict priority parameter in HTB offload mode.
-> 
-> Patch2: defines APIs such that the driver can dynamically initialize/
->         deinitialize the send queues.
-> 
-> Patch3: Refactors transmit alloc/free calls as preparation for QOS
->         offload code.
-> 
-> Patch4: Adds devlink support for the user to configure round-robin
->         priority at TL1
-> 
-> Patch5:  Adds actual HTB offload support.
+Dne =C4=8Detrtek, 08. december 2022 ob 09:41:25 CET je Samuel Holland napis=
+al(a):
+> D1 contains two pairs of LDOs, "analog" LDOs and "system" LDOs. They are
+> similar and can share a driver, but only the system LDOs have a DT
+> binding defined so far.
+>=20
+> The system LDOs have a single linear range. The voltage step is not an
+> integer, so a custom .list_voltage is needed to get the rounding right.
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Rahul, since you're working on fixing the HTB offload warn - 
-would you mind reviewing this series?
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-https://lore.kernel.org/all/20230112173120.23312-1-hkelam@marvell.com/
+Best regards,
+Jernej
+
+
