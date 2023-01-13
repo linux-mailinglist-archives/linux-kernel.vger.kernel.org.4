@@ -2,261 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D2D668F4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D39668F48
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbjAMHem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S235363AbjAMHdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241086AbjAMHdh (ORCPT
+        with ESMTP id S240388AbjAMHdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:33:37 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4889111165;
-        Thu, 12 Jan 2023 23:31:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W/IHAf6xpp/J+7+TeyUogtmVDthztbYNzsOjzYmgSeF7jyAueoueWaZx08b6Gp3W8fvmHR4kZFXuBXYNBup+Eq98Rj8O4wMyOQkTg7UTCdnFvkq4j+0Vr6KGw1F4c2ixVv4i+N9Vzq9I1SCP6u+Xh2SMVJUhe+FISzLeCJ9ebY6hDHYFitBuOnloInAlW30l082mEf2MEaB6/PzDBNhvr2Z+QXrOU09yTrDjRODBcKrFPda0xGEgfS7OiifhTuPoZIOwifcKbG0GIxuslWsyit9R8DEy7Sjep8zckhBJnlWwzbRqhpk47t3Y7YFQ9kxlhueiWn5MXSSiElSM2A8emA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XLtly/pVIDJj8inooB/0YSXTqbtqYBaC7zX3HoN5gtw=;
- b=E8s1UudS6Orz1i4Z4h/66nQwxI881KGOwGWmPz8MdWJmXuE7AB/sHEYhCvfkKroq5guXsBVPI4EutppCmlNko/D7hNYwr9IV2wOpOHB0ajEXkOf83hUMLhzLEliU7IqxM1OG9lXtqqLlZnWgaLvIsy0oW+iH/Bjf6QP7VclePG1ECX3fxc8Tp2Gbfa0v1KB8dxdv+dIGB8TkDvPF0srd7DTL3IGKe/THG6IketpJd3KLd3g0l1noHpl6rTtU0xozR+g34QueD1fvJHen7GRCZN+u9/9fSF0B7HFaosl35Nr+HiyXOvZ9WfNAbTA0XqiGNVFi74fTJIPRO/G4gOwZKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XLtly/pVIDJj8inooB/0YSXTqbtqYBaC7zX3HoN5gtw=;
- b=IIYNYIgoDhkcpMGXvaOBHFJEiBw8zgumOfXO94I9B3uurwR2A8OvWVn84gA/qqGQbPE8ckQ4P46877p8YdgoIuxR90bouaG0Z9KYA9wFcKnSJjYBTEpBweGPQLwBuMsP4dagADOR2+sIt/MtPcP/GEbpjMlgcH1bz0miW4Lg1ys=
-Received: from DM6PR08CA0055.namprd08.prod.outlook.com (2603:10b6:5:1e0::29)
- by CH2PR12MB4876.namprd12.prod.outlook.com (2603:10b6:610:67::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Fri, 13 Jan
- 2023 07:31:44 +0000
-Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1e0:cafe::b1) by DM6PR08CA0055.outlook.office365.com
- (2603:10b6:5:1e0::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.16 via Frontend
- Transport; Fri, 13 Jan 2023 07:31:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 07:31:43 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
- 2023 01:31:42 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 12 Jan
- 2023 23:31:05 -0800
-Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Fri, 13 Jan 2023 01:31:05 -0600
-From:   Tanmay Shah <tanmay.shah@amd.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <tanmay.shah@amd.com>
-Subject: [PATCH] dt-bindings: sram: Tightly Coupled Memory (TCM) bindings
-Date:   Thu, 12 Jan 2023 23:30:46 -0800
-Message-ID: <20230113073045.4008853-1-tanmay.shah@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 13 Jan 2023 02:33:08 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A09C1F2
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:30:49 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id b24-20020a056602219800b006e2bf9902cbso12785514iob.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:30:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Jn2IjgZdXm/96r6RmphfrZAhetnN7SR5hazoCfKvYo=;
+        b=XTC/TH+wbEhBG+/lpjAwFYWJRqFyA20rsCKxZoY+nRTO7z85xPGHftekRFY69UmaFs
+         ss7kic6K8gD5DVEjnLKOUTjnoTb9jjtwn6XCt4KFlLBndLSvOLa6R5t/WkDToP6uSNQp
+         gHZibfxJVnVw8D2KcLhrUKxSFJUNyK0w+XtGOBePIgnzImpjYq0C77xHLSf8IpVy0HNp
+         x/KyzNK9EEvcPLGA9eGfKobVXuwqsJPC8hU2fHIgUyenk7rH0yJlzA4UG5iopeZUjCl1
+         s2SB0/Opa6w03ToXppEOC82SnUkxB/ONqRgN+b8wVen1iskUjAlAv0R99iIsCW+BC6Uc
+         d4XQ==
+X-Gm-Message-State: AFqh2krYXZCwONvsvBrSAUijqd3XNBBmt7/9wEe3etqa1MJLuQPfJrKF
+        t9oG75tKW1qR/5SLPQCX9a+ikkIOYZYP1Xiqixvu/sm2Za+a
+X-Google-Smtp-Source: AMrXdXu1i4g0+NR+5NEcNu8wWWUy8SwoV90a88ao+uzXce6tzeqTVw23nD2X3DGGa8jrzAm8gBlSBJ7A/AMeUox8qf+tkqgYjyPB
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT032:EE_|CH2PR12MB4876:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0eaad9f8-adca-49f0-6323-08daf538386f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WaYAmeddtHAZjQ13qnaIjw2IOVS7IDQEy7h5tf3llE4SoX1I+/RyiVSb+8b2O7EKPPyX3/mOKtVNb9AFwzJU927pXt7Iy4ZwTvwElahlgZQoE/ydb9wRiDNZDWgKrtEdBd4UL6Hur2QTTh4SP2SWNQ4doCaMYSqpMgoqJ3IjX5RKSeak+1OE1DVD0ECrVcCSGMRRV70CV6XsS74gZVB/e8RzRf/ARIkamUDrhgw8Em0A23gURahPpOxGPCHaf3o/OzoeMxo+u6wrtsF0dNxKSP1RBFg4lQq8mm/TUgzeESbfxhy5AAw23YsQl6h0V0KI5/1EH4iR+dL1+1sFaGGOkayQHuH7CcF/OTdhqcHo8qcQT32pGZalGGOGDknzObCEEeMLQ4fhlIrygLJC7MLAQmYWfW92LBqu8ZDnx8HM1NsgpEwkLesNswXZTIlideRVFik3ZIrNn94BQmzuIVXBdzIYkct6foGgtapmMHV4pNo/3VZKdvSxqbI6mibO0/Eif0jEEBDtO51YRw6cd3n2DGaooMbEKYs1DV5ihMjDntOCNTOa/8FyhwB9QIAXLSYfN77NgcEmsjEuv6AaZ41fouvTdXW+qAnPsVL09thS0CpKvLAFAKGfm9vXsOOOtRDaFarxM1K9K9n88ni1CYC1sIXBrF0ScHQ673ERtnRvBl88RblBA8E4S2oQB3TMXT0TH5Jw2ax5sstdJaJ/FjOWFRBLIa7K3OUXsC4CvkyAbYZmDvdCgolrfTgch1HLiKsKmHSm2q4jZO6AgmDCXBjOzieIS7zio+huhpFL35QDwx8=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199015)(46966006)(40470700004)(36840700001)(2906002)(6666004)(186003)(966005)(26005)(478600001)(336012)(2616005)(54906003)(4326008)(1076003)(70586007)(8676002)(40460700003)(41300700001)(426003)(70206006)(47076005)(110136005)(44832011)(40480700001)(82740400003)(8936002)(5660300002)(316002)(83380400001)(36756003)(356005)(82310400005)(36860700001)(86362001)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 07:31:43.9362
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0eaad9f8-adca-49f0-6323-08daf538386f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4876
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9297:0:b0:6fa:3c6a:f9a6 with SMTP id
+ s23-20020a5d9297000000b006fa3c6af9a6mr5170096iom.184.1673595048751; Thu, 12
+ Jan 2023 23:30:48 -0800 (PST)
+Date:   Thu, 12 Jan 2023 23:30:48 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000060fb5d05f2203601@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
+From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces bindings for TCM memory address space on AMD-xilinx
-platforms. As of now TCM addresses are hardcoded in xilinx remoteproc
-driver. This bindings will help in defining TCM in device-tree and
-make it's access platform agnostic and data-driven from the driver.
+Hello,
 
-Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+syzbot found the following issue on:
+
+HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=123b545e480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17530902480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1206692c480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in __wake_up_common+0x637/0x650 kernel/sched/wait.c:100
+Read of size 8 at addr ffff88801eb938f0 by task syz-executor234/5078
+
+CPU: 0 PID: 5078 Comm: syz-executor234 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+ __wake_up_common+0x637/0x650 kernel/sched/wait.c:100
+ __wake_up_common_lock+0xd4/0x140 kernel/sched/wait.c:138
+ snd_pcm_post_stop+0x91/0x1f0 sound/core/pcm_native.c:1522
+ snd_pcm_action_single+0xf4/0x130 sound/core/pcm_native.c:1283
+ snd_pcm_action+0x6e/0x90 sound/core/pcm_native.c:1364
+ snd_pcm_stop sound/core/pcm_native.c:1543 [inline]
+ snd_pcm_drop+0x165/0x2b0 sound/core/pcm_native.c:2227
+ snd_pcm_kernel_ioctl+0x243/0x2e0 sound/core/pcm_native.c:3456
+ snd_pcm_oss_sync+0x230/0x810 sound/core/oss/pcm_oss.c:1746
+ snd_pcm_oss_release+0x27a/0x300 sound/core/oss/pcm_oss.c:2590
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb17/0x2a90 kernel/exit.c:867
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ get_signal+0x225f/0x24f0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f864105c209
+Code: Unable to access opcode bytes at 0x7f864105c1df.
+RSP: 002b:00007fff6e56b898 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: fffffffffffffe00 RBX: 0000000000000004 RCX: 00007f864105c209
+RDX: 0000000000002020 RSI: 00000000200021c0 RDI: 0000000000000006
+RBP: 0000000000000000 R08: 00007fff6e56ba38 R09: 00007fff6e56ba38
+R10: 000000000000000d R11: 0000000000000246 R12: 00007f864101f800
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 5078:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 1002:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
+ io_req_caches_free+0x1a9/0x1e6 io_uring/io_uring.c:2737
+ io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2967
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+The buggy address belongs to the object at ffff88801eb938c0
+ which belongs to the cache io_kiocb of size 216
+The buggy address is located 48 bytes inside of
+ 216-byte region [ffff88801eb938c0, ffff88801eb93998)
+
+The buggy address belongs to the physical page:
+page:ffffea00007ae4c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1eb93
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff88801bc32dc0 dead000000000122 0000000000000000
+raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 5078, tgid 5078 (syz-executor234), ts 58909389529, free_ts 58908987546
+ prep_new_page mm/page_alloc.c:2549 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1062
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2407
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3429
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1451 [inline]
+ free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
+ skb_free_frag include/linux/skbuff.h:3193 [inline]
+ skb_free_head+0x96/0x110 net/core/skbuff.c:818
+ skb_release_data+0x5f4/0x870 net/core/skbuff.c:849
+ skb_release_all net/core/skbuff.c:914 [inline]
+ __kfree_skb+0x4f/0x70 net/core/skbuff.c:928
+ tcp_rcv_established+0x15fd/0x2270 net/ipv4/tcp_input.c:5927
+ tcp_v4_do_rcv+0x663/0x9d0 net/ipv4/tcp_ipv4.c:1721
+ tcp_v4_rcv+0x2eab/0x3280 net/ipv4/tcp_ipv4.c:2142
+ ip_protocol_deliver_rcu+0x9f/0x480 net/ipv4/ip_input.c:205
+ ip_local_deliver_finish+0x2ec/0x4f0 net/ipv4/ip_input.c:233
+ NF_HOOK include/linux/netfilter.h:302 [inline]
+ NF_HOOK include/linux/netfilter.h:296 [inline]
+ ip_local_deliver+0x1ae/0x200 net/ipv4/ip_input.c:254
+ dst_input include/net/dst.h:454 [inline]
+ ip_sublist_rcv_finish+0x9a/0x2c0 net/ipv4/ip_input.c:580
+ ip_list_rcv_finish.constprop.0+0x4f9/0x6c0 net/ipv4/ip_input.c:630
+ ip_sublist_rcv net/ipv4/ip_input.c:638 [inline]
+ ip_list_rcv+0x347/0x4a0 net/ipv4/ip_input.c:673
+ __netif_receive_skb_list_ptype net/core/dev.c:5525 [inline]
+ __netif_receive_skb_list_core+0x548/0x8f0 net/core/dev.c:5573
+ __netif_receive_skb_list net/core/dev.c:5625 [inline]
+ netif_receive_skb_list_internal+0x75f/0xdc0 net/core/dev.c:5716
+
+Memory state around the buggy address:
+ ffff88801eb93780: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801eb93800: fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc
+>ffff88801eb93880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+                                                             ^
+ ffff88801eb93900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801eb93980: fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
 ---
- .../devicetree/bindings/sram/xlnx,tcm.yaml    | 137 ++++++++++++++++++
- 1 file changed, 137 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml b/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
-new file mode 100644
-index 000000000000..02d17026fb1f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
-@@ -0,0 +1,137 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sram/xlnx,tcm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Tightly Coupled Memory (TCM)
-+
-+maintainers:
-+  - Tanmay Shah <tanmay.shah@amd.com>
-+
-+description: |
-+  Tightly Coupled Memory(TCM) is available on AMD-Xilinx paltforms for ARM
-+  cortex remote processors to use. It is low-latency memory that provide
-+  predictable instruction execution and predictable data load/store timing.
-+  TCM can be configured in lockstep mode or split mode. In split mode
-+  configuration each RPU core has its own set of ATCM and BTCM memories and in
-+  lockstep mode redundant processor's TCM become available to lockstep
-+  processor. So In lockstep mode ATCM and BTCM size is increased.
-+
-+properties:
-+  $nodename:
-+    pattern: "sram-[0-9a-f]+$"
-+
-+patternProperties:
-+  "^tcm-[a-z]+@[0-9a-f]+$":
-+    type: object
-+    description: |
-+      During the split mode, each RPU core has its own set of ATCM and BTCM memory
-+
-+      During the lock-step operation, the TCMs that are associated with the
-+      redundant processor become available to the lock-step processor.
-+      For example if each individual processor has 64KB ATCM, then in lockstep mode
-+      The size of ATCM become 128KB. Same for BTCM. tcm-lockstep node represents
-+      TCM address space in lockstep mode. tcm-core@x node specfies each core's
-+      TCM address space in split mode.
-+
-+    properties:
-+      compatible:
-+        oneOf:
-+          - items:
-+              - enum:
-+                  - xlnx,tcm-lockstep
-+                  - xlnx,tcm-split
-+
-+      "#address-cells":
-+        const: 1
-+
-+      "#size-cells":
-+        const: 1
-+
-+      reg:
-+        items:
-+          - description: |
-+              ATCM Memory address space. An ATCM typically holds interrupt or
-+              exception code that must be accessed at high speed, without any
-+              potential delay resulting from a cache miss.
-+              RPU on AMD-Xilinx platform can also fetch data from ATCM
-+          - description: |
-+              BTCM Memory address space. A BTCM typically holds a block of data
-+              for intensive processing, such as audio or video processing. RPU on
-+              AMD-Xilinx Platforms can also fetch Code (Instructions) from BTCM
-+
-+      reg-names:
-+        items:
-+          - const: atcm
-+          - const: btcm
-+
-+      ranges: true
-+
-+      power-domains:
-+        maxItems: 8
-+        items:
-+          - description: list of ATCM Power domains
-+          - description: list of BTCM Power domains
-+        additionalItems: true
-+
-+    required:
-+      - compatible
-+      - '#address-cells'
-+      - '#size-cells'
-+      - reg
-+      - ranges
-+      - power-domains
-+    unevaluatedProperties: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/power/xlnx-zynqmp-power.h>
-+
-+    amba {
-+        sram@ffe00000 {
-+            tcm-lockstep@ffe00000 {
-+                compatible = "xlnx,tcm-lockstep";
-+
-+                #address-cells = <1>;
-+                #size-cells = <1>;
-+
-+                reg = <0xffe00000 0x20000>, <0xffe20000 0x20000>;
-+                reg-names = "atcm", "btcm";
-+                ranges = <0x0 0xffe00000 0x20000>, <0x20000 0xffe20000 0x20000>;
-+                power-domains = <&zynqmp_firmware PD_R5_0_ATCM>,
-+                                <&zynqmp_firmware PD_R5_1_ATCM>,
-+                                <&zynqmp_firmware PD_R5_0_BTCM>,
-+                                <&zynqmp_firmware PD_R5_1_BTCM>;
-+            };
-+
-+            tcm-core@0 {
-+                compatible = "xlnx,tcm-split";
-+
-+                #address-cells = <1>;
-+                #size-cells = <1>;
-+
-+                reg = <0xffe00000 0x10000>, <0xffe20000 0x10000>;
-+                reg-names = "atcm", "btcm";
-+                ranges = <0x0 0xffe00000 0x10000>, <0x20000 0xffe20000 0x10000>;
-+                power-domains = <&zynqmp_firmware PD_R5_0_ATCM>,
-+                                <&zynqmp_firmware PD_R5_0_BTCM>;
-+            };
-+
-+            tcm-core@1 {
-+                compatible = "xlnx,tcm-split";
-+
-+                #address-cells = <1>;
-+                #size-cells = <1>;
-+
-+                reg = <0xffe90000 0x10000>, <0xffeb0000 0x10000>;
-+                reg-names = "atcm", "btcm";
-+                ranges = <0x0 0xffe90000 0x10000>, <0x20000 0xffeb0000 0x10000>;
-+                power-domains = <&zynqmp_firmware PD_R5_1_ATCM>,
-+                                <&zynqmp_firmware PD_R5_1_BTCM>;
-+            };
-+        };
-+    };
-+...
-
-base-commit: 6b31ffe9c8b9947d6d3552d6e10752fd96d0f80f
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
