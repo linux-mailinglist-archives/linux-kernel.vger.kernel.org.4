@@ -2,139 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F5E66991F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FA8669924
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241074AbjAMNxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S241108AbjAMNxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241347AbjAMNwU (ORCPT
+        with ESMTP id S241410AbjAMNw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:52:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CB687BF;
-        Fri, 13 Jan 2023 05:49:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69BDD61DE6;
-        Fri, 13 Jan 2023 13:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B432DC433F0;
-        Fri, 13 Jan 2023 13:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673617745;
-        bh=jbCnZtB+5zZ9PoSDkY6kEzzfCJcEPrRIqB+juM/kNJw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i5lTeu5xY2oN+T0eTAFbwFxN/mkGgmj3R1uqHdYoY5NLOx2Vi8JJYCGlq9H244KuV
-         KORCNCzrEsMtBrwiP+Rag2BjZ03N/T3fck1lMU5vHyuGRmRtV039ot2ypE4/v6xpC2
-         CVr+p8ehHmk5c4JTWKzlXcnRYvl+vntmdLRqPqFjB24ZgYXmJfytaAFriPeYxTRaTF
-         EzFzGcdfYKkmi6gBMRnzWCk7eMJAyxklVz4Mv2q6uc4BlH1vOZSgC3rGt6V3ZnoGEY
-         izrBtYRVXuWOyR7XdjMpXzWUj6/ZKG1wHK6m3eOLTfx0G1/W+tqgepVn8hmFTwIty9
-         8Cf1FC0lDBcnQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pGKQZ-001WzG-9z;
-        Fri, 13 Jan 2023 13:49:03 +0000
+        Fri, 13 Jan 2023 08:52:56 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7782958F8A;
+        Fri, 13 Jan 2023 05:50:04 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6607BFEC;
+        Fri, 13 Jan 2023 05:50:46 -0800 (PST)
+Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0CE73F8D6;
+        Fri, 13 Jan 2023 05:50:00 -0800 (PST)
+Date:   Fri, 13 Jan 2023 13:49:51 +0000
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com, kajetan.puchalski@arm.com
+Subject: Re: [PATCH v2] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <Y8FhfyVyUDZ98hKD@e126311.manchester.arm.com>
+References: <20221228165415.3436-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Date:   Fri, 13 Jan 2023 13:49:02 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     devi priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
-        marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org, tdas@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
-In-Reply-To: <20230110121316.24892-7-quic_devipriy@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-7-quic_devipriy@quicinc.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <5da7ead743415dfb6d571a6b72a81b08@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: quic_devipriy@quicinc.com, agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org, nfraprado@collabora.com, broonie@kernel.org, tdas@codeaurora.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com, quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com, quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228165415.3436-1-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-10 12:13, devi priya wrote:
-> From: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+Hi,
+
+> By taking into account uclamp_min, the 1:1 relation between task misfit
+> and cpu overutilized is no more true as a task with a small util_avg of
+> may not may not fit a high capacity cpu because of uclamp_min constraint.
 > 
-> Add initial device tree support for Qualcomm IPQ9574 SoC
-> and AL02 board
+> Add a new state in util_fits_cpu() to reflect the case that task would fit
+> a CPU except for the uclamp_min hint which is a performance requirement.
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> Signed-off-by: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile            |   1 +
->  arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  69 ++++
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 318 +++++++++++++++++++
->  3 files changed, 388 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> can use this new value to take additional action to select the best CPU
+> that doesn't match uclamp_min hint.
+
+I just wanted to flag some issues I noticed with this patch and the
+entire topic.
+
+I was testing this on a Pixel 6 with a 5.18 android-mainline kernel with
+all the relevant uclamp and CFS scheduling patches backported to it from
+mainline. From what I can see, the 'uclamp fits capacity' patchset
+introduced some alarming power usage & performance issues that this
+patch makes even worse.
+
+The patch stack for the following tables is as follows:
+
+(ufc_patched) sched/fair: unlink misfit task from cpu overutilized
+sched/uclamp: Fix a uninitialized variable warnings
+(baseline_ufc) sched/fair: Check if prev_cpu has highest spare cap in feec()
+sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
+sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
+sched/uclamp: Make asym_fits_capacity() use util_fits_cpu()
+sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
+sched/uclamp: Fix fits_capacity() check in feec()
+sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
+sched/uclamp: Fix relationship between uclamp and migration margin
+(previous 'baseline' was here)
+
+I omitted the 3 patches relating directly to capacity_inversion but in
+the other tests I did with those there were similar issues. It's
+probably easier to consider the uclamp parts and their effects in
+isolation.
+
+1. Geekbench 5 (performance regression)
+
++-----------------+----------------------------+--------+-----------+
+|     metric      |           kernel           | value  | perc_diff |
++-----------------+----------------------------+--------+-----------+
+| multicore_score |          baseline          | 2765.4 |   0.0%    |
+| multicore_score |        baseline_ufc        | 2704.3 |  -2.21%   | <-- a noticeable score decrease already
+| multicore_score |        ufc_patched         | 2443.2 |  -11.65%  | <-- a massive score decrease
++-----------------+----------------------------+--------+-----------+
+
++--------------+--------+----------------------------+--------+-----------+
+|  chan_name   | metric |           kernel           | value  | perc_diff |
++--------------+--------+----------------------------+--------+-----------+
+| total_power  | gmean  |          baseline          | 2664.0 |   0.0%    |
+| total_power  | gmean  |        baseline_ufc        | 2621.5 |   -1.6%   | <-- worse performance per watt
+| total_power  | gmean  |        ufc_patched         | 2601.2 |  -2.36%   | <-- much worse performance per watt
++--------------+--------+----------------------------+--------+-----------+
+
+The most likely cause for the regression seen above is the decrease in the amount of
+time spent while overutilized with these patches. Maximising
+overutilization for GB5 is the desired outcome as the benchmark for
+almost its entire duration keeps either 1 core or all the cores
+completely saturated so EAS cannot be effective. These patches have the
+opposite from the desired effect in this area.
+
++----------------------------+--------------------+--------------------+------------+
+|          kernel            |        time        |     total_time     | percentage |
++----------------------------+--------------------+--------------------+------------+
+|          baseline          |      121.979       |      181.065       |   67.46    |
+|        baseline_ufc        |      120.355       |      184.255       |   65.32    |
+|        ufc_patched         |       60.715       |      196.135       |   30.98    | <-- !!!
++----------------------------+--------------------+--------------------+------------+
+
+2. Jankbench (power usage regression)
+
++--------+---------------+---------------------------------+-------+-----------+
+| metric |   variable    |             kernel              | value | perc_diff |
++--------+---------------+---------------------------------+-------+-----------+
+| gmean  | mean_duration |          baseline_60hz          | 14.6  |   0.0%    |
+| gmean  | mean_duration |        baseline_ufc_60hz        | 15.2  |   3.83%   |
+| gmean  | mean_duration |        ufc_patched_60hz         | 14.0  |  -4.12%   |
++--------+---------------+---------------------------------+-------+-----------+
+
++--------+-----------+---------------------------------+-------+-----------+
+| metric | variable  |             kernel              | value | perc_diff |
++--------+-----------+---------------------------------+-------+-----------+
+| gmean  | jank_perc |          baseline_60hz          |  1.9  |   0.0%    |
+| gmean  | jank_perc |        baseline_ufc_60hz        |  2.2  |  15.39%   |
+| gmean  | jank_perc |        ufc_patched_60hz         |  2.0  |   3.61%   |
++--------+-----------+---------------------------------+-------+-----------+
+
++--------------+--------+---------------------------------+-------+-----------+
+|  chan_name   | metric |             kernel              | value | perc_diff |
++--------------+--------+---------------------------------+-------+-----------+
+| total_power  | gmean  |          baseline_60hz          | 135.9 |   0.0%    |
+| total_power  | gmean  |        baseline_ufc_60hz        | 155.7 |  14.61%   | <-- !!!
+| total_power  | gmean  |        ufc_patched_60hz         | 157.1 |  15.63%   | <-- !!!
++--------------+--------+---------------------------------+-------+-----------+
+
+With these patches while running Jankbench we use up ~15% more power
+just to achieve roughly the same results. Here I'm not sure where this
+issue is coming from exactly but all the results above are very consistent
+across different runs.
+
+> -- 
+> 2.17.1
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile
-> b/arch/arm64/boot/dts/qcom/Makefile
-> index 3e79496292e7..872c62028a0b 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-huawei-g7.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-> b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-> new file mode 100644
-> index 000000000000..ae3c32f3e16a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-
-[...]
-
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | 
-> IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-
-Interesting choice for the PPIs...
-
-> +		clock-frequency = <24000000>;
-
-Please drop this and fix the firmware. No system built within
-past 10 years should need it.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+> 
