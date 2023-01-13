@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25317668F91
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27249668F97
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbjAMHvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S234718AbjAMHwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjAMHvA (ORCPT
+        with ESMTP id S233993AbjAMHwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:51:00 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0575F75;
-        Thu, 12 Jan 2023 23:50:55 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NtYWL1bQDz6FK2T;
-        Fri, 13 Jan 2023 15:50:54 +0800 (CST)
-Received: from szxlzmapp06.zte.com.cn ([10.5.230.252])
-        by mse-fl1.zte.com.cn with SMTP id 30D7ohY7091613;
-        Fri, 13 Jan 2023 15:50:43 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Fri, 13 Jan 2023 15:50:45 +0800 (CST)
-Date:   Fri, 13 Jan 2023 15:50:45 +0800 (CST)
-X-Zmail-TransId: 2b0363c10d55ffffffffcfca5f18
-X-Mailer: Zmail v1.0
-Message-ID: <202301131550455361823@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>,
-        <willy@infradead.org>
-Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <iamjoonsoo.kim@lge.com>,
-        <yang.yang29@zte.com.cn>, <ran.xiaokai@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHN3YXBfc3RhdGU6IHVwZGF0ZSBzaGFkb3dfbm9kZXMgZm9yIGFub255bW91cyBwYWdl?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30D7ohY7091613
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63C10D5E.000 by FangMail milter!
-X-FangMail-Envelope: 1673596254/4NtYWL1bQDz6FK2T/63C10D5E.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C10D5E.000/4NtYWL1bQDz6FK2T
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        Fri, 13 Jan 2023 02:52:16 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556E63391
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:52:12 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id v6so7375962ejg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:52:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iBghY86jJuEVQ+AH+91zNe2AIXF3nPFzvcmXm4jdEbQ=;
+        b=qrQtVENj71y4qXu0yz0Y3sXQ4A/TRVKwjpPaSmS9OHf1H6c/xj1qF1HhbGiqxXbskA
+         s1BNaIB/Ebf2aew2Bff8cTa//o6Chk6g4qqke0WwIbMCvnS5sfvTC58UWHFBxRWnYCQs
+         CChymXkI6bnQOGRX+0NZ3ieHcKDbBNnC7VJp95THNKKS1JyjQ/3ShS42gKcVnlK40L36
+         OBmfSg11a4Cz3CoyWm17rDr6/ax6bcLCsjyei0P6ZeLd9KLzlO+be061piadNMg7L+zi
+         RyPwmMXIGtt+Ya36mzbguUexyLcCfM4vgbnCCCXb9oFzif4bUOwU/Hicd6PyfTWyFvdj
+         b58A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iBghY86jJuEVQ+AH+91zNe2AIXF3nPFzvcmXm4jdEbQ=;
+        b=yPO6gIpbG108OjGHjneNWjvnLliCDKXNQTAAT+yepLFZg6ysIv6suEMBJiDabW3pqg
+         UpEtRnq0DQT0fM4rqTxG1foVGeLO0Rz+3ayf9zmKlVmg+ZlzdmvgQxgbD/aYVULvJ2cz
+         0uv/XAXIXL7nAeX1k92lYjZCkqXWSeE4qYoBPF9VpWTttFC2w58tkaQBUYsZiqZEJyJv
+         kYyFolkAAwTZBWiFSva0aGhbmAo87AheCQd7OpHB61u/nhj1BjOvt1zkLxXZxBfgD7Fp
+         K76p3C/Nj9V5BMBFAjD9Cr+9yMggF+oM9DSxOltI8GEIX6TkGiuRDqdE+hVEVbJ9Exrk
+         9M9g==
+X-Gm-Message-State: AFqh2kobxS5yMlcCT1fYom/iIsS/LbMIKs77KfTMDz+HET6T57M7Kxrm
+        xhRcP2pnambG9KKZsNT+5nx93w==
+X-Google-Smtp-Source: AMrXdXsEEkA/Hk4h+bKI2b+6ohFfmnxdxyLhgZVNraLrg8zBIS8U5vNBD9c95jtXqkX/bSR+jBXT3g==
+X-Received: by 2002:a17:907:7e83:b0:7c0:f558:e518 with SMTP id qb3-20020a1709077e8300b007c0f558e518mr83747934ejc.51.1673596330697;
+        Thu, 12 Jan 2023 23:52:10 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709062bcc00b007ae38d837c5sm8347522ejg.174.2023.01.12.23.52.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 23:52:10 -0800 (PST)
+Message-ID: <df4fdecb-6ca7-d96b-bcad-02cefb52ce4e@linaro.org>
+Date:   Fri, 13 Jan 2023 08:52:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: sram: Tightly Coupled Memory (TCM) bindings
+Content-Language: en-US
+To:     Tanmay Shah <tanmay.shah@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+References: <20230113073045.4008853-1-tanmay.shah@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113073045.4008853-1-tanmay.shah@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,76 +76,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+On 13/01/2023 08:30, Tanmay Shah wrote:
+> This patch introduces bindings for TCM memory address space on AMD-xilinx
+> platforms. As of now TCM addresses are hardcoded in xilinx remoteproc
+> driver. This bindings will help in defining TCM in device-tree and
+> make it's access platform agnostic and data-driven from the driver.
+> 
+> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> ---
+>  .../devicetree/bindings/sram/xlnx,tcm.yaml    | 137 ++++++++++++++++++
+>  1 file changed, 137 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml b/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+> new file mode 100644
+> index 000000000000..02d17026fb1f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sram/xlnx,tcm.yaml
+> @@ -0,0 +1,137 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sram/xlnx,tcm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tightly Coupled Memory (TCM)
+> +
+> +maintainers:
+> +  - Tanmay Shah <tanmay.shah@amd.com>
+> +
+> +description: |
+> +  Tightly Coupled Memory(TCM) is available on AMD-Xilinx paltforms for ARM
+> +  cortex remote processors to use. It is low-latency memory that provide
+> +  predictable instruction execution and predictable data load/store timing.
+> +  TCM can be configured in lockstep mode or split mode. In split mode
+> +  configuration each RPU core has its own set of ATCM and BTCM memories and in
+> +  lockstep mode redundant processor's TCM become available to lockstep
+> +  processor. So In lockstep mode ATCM and BTCM size is increased.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "sram-[0-9a-f]+$"
 
-Shadow_nodes is for shadow nodes reclaiming of workingset handling,
-it is updated when page cache add or delete since long time ago
-workingset only supported page cache. But when workingset supports
-anonymous page detection, we missied updating shadow nodes for
-it. This caused that shadow nodes of anonymous page will never be
-reclaimd by scan_shadow_nodes() even they use much memory and
-system memory is tense.
+Drop node name requirement.
 
-This patch updates shadow_nodes of anonymous page when swap
-cache is add or delete.
+Why do you need sram node at all?
 
-Fixes: aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
----
-change for v2
-- Include a description of the user-visible effect. Add fixes tag. Modify comments.
-Also call workingset_update_node() in clear_shadow_from_swap_cache(). Thanks
-to Matthew Wilcox.
----
-include/linux/xarray.h | 3 ++-
- mm/swap_state.c        | 6 ++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+> +
+> +patternProperties:
+> +  "^tcm-[a-z]+@[0-9a-f]+$":
+> +    type: object
+> +    description: |
+> +      During the split mode, each RPU core has its own set of ATCM and BTCM memory
+> +
+> +      During the lock-step operation, the TCMs that are associated with the
+> +      redundant processor become available to the lock-step processor.
+> +      For example if each individual processor has 64KB ATCM, then in lockstep mode
+> +      The size of ATCM become 128KB. Same for BTCM. tcm-lockstep node represents
+> +      TCM address space in lockstep mode. tcm-core@x node specfies each core's
+> +      TCM address space in split mode.
+> +
+> +    properties:
+> +      compatible:
+> +        oneOf:
 
-diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-index 44dd6d6e01bc..5cc1f718fec9 100644
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -1643,7 +1643,8 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
-  * @update: Function to call when updating a node.
-  *
-  * The XArray can notify a caller after it has updated an xa_node.
-- * This is advanced functionality and is only needed by the page cache.
-+ * This is advanced functionality and is only needed by the page cache
-+ * and swap cache.
-  */
- static inline void xas_set_update(struct xa_state *xas, xa_update_node_t update)
- {
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index cb9aaa00951d..7a003d8abb37 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -94,6 +94,8 @@ int add_to_swap_cache(struct folio *folio, swp_entry_t entry,
- 	unsigned long i, nr = folio_nr_pages(folio);
- 	void *old;
+This is not oneOf.
 
-+	xas_set_update(&xas, workingset_update_node);
-+
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(folio_test_swapcache(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_swapbacked(folio), folio);
-@@ -145,6 +147,8 @@ void __delete_from_swap_cache(struct folio *folio,
- 	pgoff_t idx = swp_offset(entry);
- 	XA_STATE(xas, &address_space->i_pages, idx);
+> +          - items:
 
-+	xas_set_update(&xas, workingset_update_node);
-+
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_swapcache(folio), folio);
- 	VM_BUG_ON_FOLIO(folio_test_writeback(folio), folio);
-@@ -252,6 +256,8 @@ void clear_shadow_from_swap_cache(int type, unsigned long begin,
- 		struct address_space *address_space = swap_address_space(entry);
- 		XA_STATE(xas, &address_space->i_pages, curr);
+and you do not have more than one item.
 
-+		xas_set_update(&xas, workingset_update_node);
-+
- 		xa_lock_irq(&address_space->i_pages);
- 		xas_for_each(&xas, old, end) {
- 			if (!xa_is_value(old))
--- 
-2.15.2
+> +              - enum:
+> +                  - xlnx,tcm-lockstep
+> +                  - xlnx,tcm-split
+
+compatible describes hardware, not configuration. What you encode here
+does not fit compatible.
+
+> +
+> +      "#address-cells":
+
+Use consistent quotes, either " or '
+
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 1
+> +
+> +      reg:
+> +        items:
+> +          - description: |
+> +              ATCM Memory address space. An ATCM typically holds interrupt or
+> +              exception code that must be accessed at high speed, without any
+> +              potential delay resulting from a cache miss.
+> +              RPU on AMD-Xilinx platform can also fetch data from ATCM
+> +          - description: |
+> +              BTCM Memory address space. A BTCM typically holds a block of data
+> +              for intensive processing, such as audio or video processing. RPU on
+> +              AMD-Xilinx Platforms can also fetch Code (Instructions) from BTCM
+> +
+> +      reg-names:
+> +        items:
+> +          - const: atcm
+> +          - const: btcm
+> +
+> +      ranges: true
+> +
+> +      power-domains:
+> +        maxItems: 8
+> +        items:
+> +          - description: list of ATCM Power domains
+> +          - description: list of BTCM Power domains
+> +        additionalItems: true
+
+And what are the rest?
+
+> +
+> +    required:
+> +      - compatible
+> +      - '#address-cells'
+> +      - '#size-cells'
+> +      - reg
+> +      - ranges
+> +      - power-domains
+> +    unevaluatedProperties: false
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/power/xlnx-zynqmp-power.h>
+> +
+> +    amba {
+
+Drop.
+
+> +        sram@ffe00000 {
+
+This does not match your bindings.
+
+> +            tcm-lockstep@ffe00000 {
+> +                compatible = "xlnx,tcm-lockstep";
+> +
+> +                #address-cells = <1>;
+> +                #size-cells = <1>;
+> +
+> +                reg = <0xffe00000 0x20000>, <0xffe20000 0x20000>;
+> +                reg-names = "atcm", "btcm";
+> +                ranges = <0x0 0xffe00000 0x20000>, <0x20000 0xffe20000 0x20000>;
+> +                power-domains = <&zynqmp_firmware PD_R5_0_ATCM>,
+> +                                <&zynqmp_firmware PD_R5_1_ATCM>,
+
+This is BTCM domain according to your binding. Your binding here is
+probably wrong and does not match real DTS.
+
+> +                                <&zynqmp_firmware PD_R5_0_BTCM>,
+> +                                <&zynqmp_firmware PD_R5_1_BTCM>;
+> +            };
+> +
+> +            tcm-core@0 {
+> +                compatible = "xlnx,tcm-split";
+> +
+> +                #address-cells = <1>;
+> +                #size-cells = <1>;
+> +
+> +                reg = <0xffe00000 0x10000>, <0xffe20000 0x10000>;
+> +                reg-names = "atcm", "btcm";
+> +                ranges = <0x0 0xffe00000 0x10000>, <0x20000 0xffe20000 0x10000>;
+> +                power-domains = <&zynqmp_firmware PD_R5_0_ATCM>,
+> +                                <&zynqmp_firmware PD_R5_0_BTCM>;
+> +            };
+> +
+> +            tcm-core@1 {
+> +                compatible = "xlnx,tcm-split";
+> +
+> +                #address-cells = <1>;
+> +                #size-cells = <1>;
+> +
+> +                reg = <0xffe90000 0x10000>, <0xffeb0000 0x10000>;
+> +                reg-names = "atcm", "btcm";
+> +                ranges = <0x0 0xffe90000 0x10000>, <0x20000 0xffeb0000 0x10000>;
+> +                power-domains = <&zynqmp_firmware PD_R5_1_ATCM>,
+> +                                <&zynqmp_firmware PD_R5_1_BTCM>;
+> +            };
+> +        };
+> +    };
+> +...
+> 
+> base-commit: 6b31ffe9c8b9947d6d3552d6e10752fd96d0f80f
+
+Best regards,
+Krzysztof
+
