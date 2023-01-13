@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3401E668F61
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FDB668F67
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240331AbjAMHml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S236408AbjAMHnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236408AbjAMHmI (ORCPT
+        with ESMTP id S240334AbjAMHnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:42:08 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E241B9E6
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:42:06 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id j16so30039825edw.11
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:42:06 -0800 (PST)
+        Fri, 13 Jan 2023 02:43:05 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF341B9E6
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:43:03 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id tz12so50355538ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 23:43:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nsdFs6pzrliWUStfNOl1FM9T1mI6Xi1uicxIBR+DHR0=;
-        b=bxg1JS8fp+9+/+7/09+z6yzY2UJpMRs52IaTtZs4uChAsUtbFr3/5xjnZ2k8aPLFrI
-         EC7tEE24pKzHsigOYR9z4BFbxC3/iEJXOK4WREzE3Z5Tcyny0ZpGcnLUIEMwUotRlpcw
-         lZM6FwML+lEJGVYZbFzIBaHIBU3qh2tCXZauGMuuEutvJfiZlhEMsdpTJct0SRkdCtng
-         sarYsRN7TiRqDEFGwgYGG3cYJ9RZYwCGxxBJASK4jBlhtMTWrFsmRl8cyIlCAj3WdBJj
-         Lav4o1Cr+KDqYPabyg43TRivHDBRAqpf8rmkN2uM/3MbrhNm/ZyVGTnJiuNAXW6Dlo1s
-         exyg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9fmIJc68vb/dpe2aUgc9GwKKtWf/YipuVliNTzq4hAE=;
+        b=Jg+ThatndKiwgz9RECLXAFxz1B0/L46pWmp/CErwVAAzUS+FUbCBQWzXqekxS7kT5Y
+         sZV9e4dBjMaFUQakfhSnbXE6PUVZ9gtdVRjSgFuRZ7UVIx/B1kuVIG/mTLlRxW439/X1
+         Fj+pluC9o3bz5iYIZgCPxF2dgw5H0/gbC7m2sdwS2iwF0wwwA2hhBCuE2o0fUk8M9MCN
+         jQDW0OXem87Qzyd3/IrB+JExIxBA+sOx2tkITyUkbJVk41L+fjOFRR5hxsosN4eVUjpJ
+         gKZHDPe7R2+SDUfMDR1nCGFCnXW6k4TNMaqdv/yxCbBR2Dt5YYyE3VMnwTT5jzZ6ICHy
+         HkAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsdFs6pzrliWUStfNOl1FM9T1mI6Xi1uicxIBR+DHR0=;
-        b=qpTJ6k9qky9RJCe0MVRDoa8M79rEnrpVhZzm0QnafGg0zhT4RFYXMFMCmYaSA5RcJD
-         RIZfV4C2+h816wr0a2vHjbXSZrDPdeVG7PaXlCfjzdfxJIAks6yRjUVhFiFxruen2Kqf
-         IZS0/cHySA94pwDjFZEEpMgHEfuAjxHA+s2BjGpqVPoq4fnUvKLsn9J1m20trbQS4dnm
-         4x0AW94UhLLJEiGrX7/YDMOgybuDSKXKbK7ibHRPhmj4UIMl4EPvsz97TAAflAacqOvJ
-         bdpeTmh96EgYeVdfSDT+D9V0CxkvPKFQP1E3TBh+b3dfdiTwSmvwLtvDgRZAB7FKOAmm
-         Sxnw==
-X-Gm-Message-State: AFqh2kpLREvR5YBet39Eno2FfynJ9GYxR5m114RXfqaN8TlmTo2045ex
-        RRCnT7phctthduv3PbLrX8E1LA==
-X-Google-Smtp-Source: AMrXdXtm2abt8YC1BnrO9ZablHgd7dzlkKrmOBXbgyyxB4FSNCxnE4tz+rAhG7qm5jh2MQ0HncQ+xQ==
-X-Received: by 2002:aa7:c393:0:b0:499:b604:4de6 with SMTP id k19-20020aa7c393000000b00499b6044de6mr14363452edq.25.1673595725444;
-        Thu, 12 Jan 2023 23:42:05 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id l15-20020aa7c3cf000000b00467481df198sm7904083edr.48.2023.01.12.23.42.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 23:42:05 -0800 (PST)
-Date:   Fri, 13 Jan 2023 08:42:04 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Kumar Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Eric Lin <eric.lin@sifive.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 04/11] RISC-V: KVM: Modify SBI extension handler to
- return SBI error code
-Message-ID: <20230113074204.p3wmeer2o3penunt@orel>
-References: <20221215170046.2010255-1-atishp@rivosinc.com>
- <20221215170046.2010255-5-atishp@rivosinc.com>
- <20230112110444.jjbmgslr6dspxwbh@orel>
- <CAHBxVyEyMdk+vQ5wTgOF56UJs-zLtkVixDxXquTjoLyV6Vj21Q@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fmIJc68vb/dpe2aUgc9GwKKtWf/YipuVliNTzq4hAE=;
+        b=YVRShVdHF81YpUj1arCA6eQ1IeWwGPfFVkoOig0PE6oI4hxsGK+WBEgyKvW5bLPcjC
+         5vQOlNOgjQtacvCpr4WpNJT/Gza6FQPrkIyvq4LKRMlCaR15C4UG1AsvZ7uEHgKbDEmU
+         SKreZAHOOj9nIV3XkMRfpLQPUDGyorDBhW1OC7ZTd4QEcaY9h+Pue+1nMrygX7u+ainT
+         JyCsEyu4MwUpbTf8EqB4PBqzCEcQYNIx4SJ64e+HMuswijqHFjZIs5VT/yrupsYL8Xn0
+         qeWHz9hIcyTNbMJoYD6AjDGZZ4lktaT0JE+jEOyy/VZIzeTbh0qme2GyaVvsRCmPAjs4
+         oc/Q==
+X-Gm-Message-State: AFqh2kqSgjsJacr9alFYnN3AoeP57aVTxCdpOSxfBj0zCAMd9dZD3GGd
+        FMEKtipebdOu0gcKZDsbcIw5dA==
+X-Google-Smtp-Source: AMrXdXtsKwRdrzZmYjZPVOJhVqAxfq7Od77kmMoSQ/3P2/S/WxytDSSYO8UY2hBmYbdv2d+ya3bo+w==
+X-Received: by 2002:a17:907:d311:b0:86a:2c18:e422 with SMTP id vg17-20020a170907d31100b0086a2c18e422mr1931559ejc.77.1673595782407;
+        Thu, 12 Jan 2023 23:43:02 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b007a4e02e32ffsm8290030ejc.60.2023.01.12.23.43.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 23:43:01 -0800 (PST)
+Message-ID: <8109445e-a21c-3159-1182-5be45fa0ce8e@linaro.org>
+Date:   Fri, 13 Jan 2023 08:43:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHBxVyEyMdk+vQ5wTgOF56UJs-zLtkVixDxXquTjoLyV6Vj21Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: add display port audio
+Content-Language: en-US
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20221221071734.2887901-1-judyhsiao@chromium.org>
+ <afd7851b-0846-c21f-a769-10fb920c7c80@linaro.org>
+ <CAJXt+b8eez8KTocoAi0WP8qC3YdA9bfOTPbY8ZGfXNb-MNaT-Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJXt+b8eez8KTocoAi0WP8qC3YdA9bfOTPbY8ZGfXNb-MNaT-Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,31 +84,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:47:13AM -0800, Atish Kumar Patra wrote:
-> On Thu, Jan 12, 2023 at 3:04 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Thu, Dec 15, 2022 at 09:00:39AM -0800, Atish Patra wrote:
-...
-> > > +      * and forwards the error to the userspace.
-> > > +      */
-> > > +     if (ret < 0) {
-> > > +             next_sepc = false;
-> > > +             goto ecall_done;
-> > > +     }
-> >
-> > Shouldn't this ret < 0 check go above the "Handle special error cases..."
-> > block?
-> >
-> 
-> Why ? I thought if an extension handler has both utrap updated and
-> returns an error,
-> user space redirection should take precedence. Let me know if it is wrong.
+On 13/01/2023 02:24, Judy Hsiao wrote:
+>> Why do you change link@1 from DP to ALC?
+> Because I want make the order to be consistent with the 3 mic version. Thanks!
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682-3mic.dtsi
 
-My thinking was that utrap cannot be trusted if the handler returned an
-error. The handler may not even have had a chance to set it before hitting
-the error condition. IOW, we should check 'ret' right after the handler
-call. If it's < 0, then from the caller's perspective the handler didn't
-execute due to a KVM failure and it should be reported to userspace.
+You cut entire context. I don't know what is this about.
 
-Thanks,
-drew
+Best regards,
+Krzysztof
+
