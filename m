@@ -2,165 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0DE669828
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1206666982A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241822AbjAMNOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:14:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        id S241828AbjAMNOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbjAMNNs (ORCPT
+        with ESMTP id S241640AbjAMNNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:13:48 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D387F14
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:01:54 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4d4303c9de6so132446777b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:01:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGYWQmNHYzBdoQRygVglKx5yAwCnlfXDS08gHugHenM=;
-        b=QMHQpYbG1zxr3p3UKJ+wgp+CpyAGbvXD5qnPCovIbUovAAHioJ31d7eksVwBcNhbDM
-         Vy+AclT+9o3C6V3i9n/BCuW9Nf/KbvnR3/lnyzd3xueCE96WMzArNSKsxfW2myhj3sDj
-         V4CPuIHuwgp2SGpf2TuT+pI1AwrUVzpuGlBnC2QPMfEkxtuJ3dBWEDryZkx6XIAjmKNq
-         qPIri36oDxH+gqeoQZw8u3MzLVfLLQQg7LUa78WmNZ6D6my8+UgtGM4cjfb2qgLfXjKu
-         7IYgaFC604WKwUE7jb+GGSQ0j/EGcekLMysgir6AElQ7zexJCvbqt/M8mbI4+APGTJva
-         SobQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eGYWQmNHYzBdoQRygVglKx5yAwCnlfXDS08gHugHenM=;
-        b=VrZnca3uzShXuBB4hqMfJOBDKhrBpSx8DERWa60e82IwRDjQxYp/8ezDsM9Tk0W6k8
-         mVQL7ddnSAnJBmlmL/4GgLwQuMM+hewEUYGm313rX8jksv8XBTg8iG9L2IAwWMyrvgLB
-         qjdzhCBrqMJIxqbD6dkhUexKPQIcHkV5TpCIFDhgwrAghLs0iA2wQA9quK7qdszyWrnK
-         JBTRWBhpZuLaCTp66mPve3qR7G00KI+r8aIXnA7PdjrTXORCoJ1aTaVaHGV1YbO7ac3l
-         8HfM9p5JwpqasntPSU4LLq5TbqleAFGtYFIxDQLSu8VS2ho7mGRqqpdb0Fa5YhM+TF3o
-         7RVA==
-X-Gm-Message-State: AFqh2kqj5jSqZUp7xF1EQPxTZGrDvAMgYkVKg0Rag56OeURDOLhzY6E0
-        lLJ1+fPeOzcMsFHXUIlTnQvmZotw/xWidCgskr9B7Q==
-X-Google-Smtp-Source: AMrXdXsddOWoGnFZQINZnkBaGOB3nb1k2Yj3MDGckb0nfDcLAZ4K2UfHWcQKNw3CEaoMTFNvm5Ci0yiwpQSZqrZAhZ4=
-X-Received: by 2002:a0d:e3c3:0:b0:432:2458:f6ca with SMTP id
- m186-20020a0de3c3000000b004322458f6camr3760074ywe.138.1673614912824; Fri, 13
- Jan 2023 05:01:52 -0800 (PST)
+        Fri, 13 Jan 2023 08:13:54 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E639087F3E
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:02:04 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6DE6325513;
+        Fri, 13 Jan 2023 13:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673614923; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yM+O9RaRDIJzXpy9G7D7o0f000JhWAb4w/MPXQEEUNY=;
+        b=kA/fJKiethYO6T6us3a5KSmzDSY/071HM3lyrz1jEhcZK1GqUPQvlZPXOtxV/odLJ64bP5
+        eb/JyGhLmLjvh1dStGJLx/UUndkDwu7diu1l3gnqZmd5G8QMzJzbdrK3lQwrpJmnsNzlTV
+        9ceeaKnD8VBYAezhInnVPBX9DDsg9aI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C29813913;
+        Fri, 13 Jan 2023 13:02:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mvlkEEtWwWNdaAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 13 Jan 2023 13:02:03 +0000
+Date:   Fri, 13 Jan 2023 14:02:01 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/6] mm/page_alloc: Explicitly record high-order atomic
+ allocations in alloc_flags
+Message-ID: <Y8FWSWZ8dHVooCvN@dhcp22.suse.cz>
+References: <20230113111217.14134-1-mgorman@techsingularity.net>
+ <20230113111217.14134-4-mgorman@techsingularity.net>
 MIME-Version: 1.0
-References: <20221130081430.67831-1-luca.weiss@fairphone.com>
- <20221130081430.67831-2-luca.weiss@fairphone.com> <Y6xP4YRAp68TfxFi@hovoldconsulting.com>
- <Y8BIX+js1ircJyb9@matsya> <cf968a25-02f7-d402-530b-eb379b707e54@linaro.org> <CPR2LS3SJQ3I.Z7UY505COG3@otso>
-In-Reply-To: <CPR2LS3SJQ3I.Z7UY505COG3@otso>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 13 Jan 2023 15:01:41 +0200
-Message-ID: <CAA8EJpoOMMALHz7ysft6KvQaYhGWPD+xZiUjOTrC8CA_y81n-w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] phy: qcom-qmp-combo: Add config for SM6350
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113111217.14134-4-mgorman@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023 at 14:44, Luca Weiss <luca.weiss@fairphone.com> wrote:
->
-> Hi Dmitry,
->
-> On Thu Jan 12, 2023 at 8:33 PM CET, Dmitry Baryshkov wrote:
-> > On 12/01/2023 19:50, Vinod Koul wrote:
-> > > On 28-12-22, 15:17, Johan Hovold wrote:
-> > >> Luca, Vinod,
-> > >>
-> > >> On Wed, Nov 30, 2022 at 09:14:28AM +0100, Luca Weiss wrote:
-> > >>> Add the tables and config for the combo phy found on SM6350.
-> > >>>
-> > >>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > >>> ---
-> > >>> Changes since v2:
-> > >>> * Drop dp_txa/dp_txb changes, not required
-> > >>> * Fix dp_dp_phy offset
-> > >>>
-> > >>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 126 ++++++++++++++++++++++
-> > >>>   1 file changed, 126 insertions(+)
-> > >>>
-> > >>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > >>> index 77052c66cf70..6ac0c68269dc 100644
-> > >>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > >>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > >>
-> > >>> @@ -975,6 +1039,19 @@ static const char * const sc7180_usb3phy_reset_l[] = {
-> > >>>           "phy",
-> > >>>   };
-> > >>>
-> > >>> +static const struct qmp_combo_offsets qmp_combo_offsets_v3 = {
-> > >>> + .com            = 0x0000,
-> > >>> + .txa            = 0x1200,
-> > >>> + .rxa            = 0x1400,
-> > >>> + .txb            = 0x1600,
-> > >>> + .rxb            = 0x1800,
-> > >>> + .usb3_serdes    = 0x1000,
-> > >>> + .usb3_pcs_misc  = 0x1a00,
-> > >>> + .usb3_pcs       = 0x1c00,
-> > >>> + .dp_serdes      = 0x1000,
-> > >>
-> > >> I would have expected this to be 0x2000 as that's what the older
-> > >> platforms have been using for the dp serdes table so far. Without access
-> > >> to any documentation it's hard to tell whether everyone's just been
-> > >> cargo-culting all along or if there's actually something there at offset
-> > >> 0x2000.
-> >
-> > usb3_serdes is 0x1000, so dp_serdes equal to 0x1000 is definitely an typo.
-> >
-> > Judging from the downstream dtsi, the DP PHY starts at offset 0x2000. So
-> > dp_serdes is equal to 0x2000, dp_phy = 0x2a00, ln_tx1 = 0x2200, ln_tx2 =
-> > 0x2600.
->
-> Can you share how you got to the 0x2000 offset? You can see my
-> (potentially wrong) reasoning for 0x1000 a few messages ago[0].
->
-> The only 0x2000-something I could find now while looking at it again is
-> "#define USB3_DP_PHY_DP_DP_PHY_PD_CTL 0x2a18" which becomes
-> USB3_DP_DP_PHY_PD_CTL in the driver but this is seemingly not used at
-> all in my msm-4.19 tree.
+On Fri 13-01-23 11:12:14, Mel Gorman wrote:
+> A high-order ALLOC_HARDER allocation is assumed to be atomic. While that
+> is accurate, it changes later in the series. In preparation, explicitly
+> record high-order atomic allocations in gfp_to_alloc_flags().
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Quite simple: see [1]. DP_PLL is at +0x2000
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-[1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/lagoon-sde-pll.dtsi#27
-
-Anyway, having DP serdes at the space as USB3 serdes would mean that
-one would be setting USB3 PLL when trying to enable DP. So I could
-have said even w/o looking at the dtsi that dp serdes can _not_ be at
-0x1000.
-
->
-> Also if you have any idea on how to test it at runtime without actually
-> having to get all the type-C functionality up I'd be happy to try that.
-> Unfortunately I believe there's still quite some bits missing to
-> actually get DP out via the USB-C port - which I imagine would trigger
-> the PHY setup.
-
-Unfortunately, I don't have a recipe to test this.
-
->
-> [0] https://lore.kernel.org/linux-arm-msm/CPDIYQ3SSY3E.I0Y0NMIED0WO@otso/
->
-> Regards
-> Luca
-
+> ---
+>  mm/internal.h   |  1 +
+>  mm/page_alloc.c | 29 +++++++++++++++++++++++------
+>  2 files changed, 24 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 403e4386626d..178484d9fd94 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -746,6 +746,7 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>  #else
+>  #define ALLOC_NOFRAGMENT	  0x0
+>  #endif
+> +#define ALLOC_HIGHATOMIC	0x200 /* Allows access to MIGRATE_HIGHATOMIC */
+>  #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
+>  
+>  enum ttu_flags;
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0040b4e00913..0ef4f3236a5a 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3706,10 +3706,20 @@ struct page *rmqueue_buddy(struct zone *preferred_zone, struct zone *zone,
+>  		 * reserved for high-order atomic allocation, so order-0
+>  		 * request should skip it.
+>  		 */
+> -		if (order > 0 && alloc_flags & ALLOC_HARDER)
+> +		if (alloc_flags & ALLOC_HIGHATOMIC)
+>  			page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
+>  		if (!page) {
+>  			page = __rmqueue(zone, order, migratetype, alloc_flags);
+> +
+> +			/*
+> +			 * If the allocation fails, allow OOM handling access
+> +			 * to HIGHATOMIC reserves as failing now is worse than
+> +			 * failing a high-order atomic allocation in the
+> +			 * future.
+> +			 */
+> +			if (!page && (alloc_flags & ALLOC_OOM))
+> +				page = __rmqueue_smallest(zone, order, MIGRATE_HIGHATOMIC);
+> +
+>  			if (!page) {
+>  				spin_unlock_irqrestore(&zone->lock, flags);
+>  				return NULL;
+> @@ -4023,8 +4033,10 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+>  			return true;
+>  		}
+>  #endif
+> -		if (alloc_harder && !free_area_empty(area, MIGRATE_HIGHATOMIC))
+> +		if ((alloc_flags & (ALLOC_HIGHATOMIC|ALLOC_OOM)) &&
+> +		    !free_area_empty(area, MIGRATE_HIGHATOMIC)) {
+>  			return true;
+> +		}
+>  	}
+>  	return false;
+>  }
+> @@ -4286,7 +4298,7 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>  			 * If this is a high-order atomic allocation then check
+>  			 * if the pageblock should be reserved for the future
+>  			 */
+> -			if (unlikely(order && (alloc_flags & ALLOC_HARDER)))
+> +			if (unlikely(alloc_flags & ALLOC_HIGHATOMIC))
+>  				reserve_highatomic_pageblock(page, zone, order);
+>  
+>  			return page;
+> @@ -4813,7 +4825,7 @@ static void wake_all_kswapds(unsigned int order, gfp_t gfp_mask,
+>  }
+>  
+>  static inline unsigned int
+> -gfp_to_alloc_flags(gfp_t gfp_mask)
+> +gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
+>  {
+>  	unsigned int alloc_flags = ALLOC_WMARK_MIN | ALLOC_CPUSET;
+>  
+> @@ -4839,8 +4851,13 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
+>  		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
+>  		 * if it can't schedule.
+>  		 */
+> -		if (!(gfp_mask & __GFP_NOMEMALLOC))
+> +		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
+>  			alloc_flags |= ALLOC_HARDER;
+> +
+> +			if (order > 0)
+> +				alloc_flags |= ALLOC_HIGHATOMIC;
+> +		}
+> +
+>  		/*
+>  		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
+>  		 * comment for __cpuset_node_allowed().
+> @@ -5048,7 +5065,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+>  	 * kswapd needs to be woken up, and to avoid the cost of setting up
+>  	 * alloc_flags precisely. So we do that now.
+>  	 */
+> -	alloc_flags = gfp_to_alloc_flags(gfp_mask);
+> +	alloc_flags = gfp_to_alloc_flags(gfp_mask, order);
+>  
+>  	/*
+>  	 * We need to recalculate the starting point for the zonelist iterator
+> -- 
+> 2.35.3
 
 -- 
-With best wishes
-Dmitry
+Michal Hocko
+SUSE Labs
