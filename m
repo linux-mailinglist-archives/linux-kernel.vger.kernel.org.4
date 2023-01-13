@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2269F669742
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C78D66972E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241602AbjAMMdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S238205AbjAMMdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241254AbjAMMcK (ORCPT
+        with ESMTP id S239679AbjAMMcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:32:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA04452C6E;
+        Fri, 13 Jan 2023 07:32:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216324FCD5;
         Fri, 13 Jan 2023 04:31:10 -0800 (PST)
 Date:   Fri, 13 Jan 2023 12:31:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673613067;
+        s=2020; t=1673613066;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KvkkEgGNc+X8JPMu5cL4mkFTzR3Cr00C/ewLCIV6n7A=;
-        b=A002BPJv3ylvGpUu1LbJnExAWyKisYV34ZoLr9JZqLY5T2eHaDDGSrVqgg8yR0Z4ycQGyu
-        BW2ZJS1e/KLifnJ53+WbFEhUephVVZSwBAFRT3IT4emrUUhRHlGNcw9husexLDWLM2ajsG
-        eOZjIjXl/kMGUHD1jp4VWkj2MEf8ny/6i43DTWvkyCPFhf+DPB1EvcmMriD0SkW8FuP1Ah
-        Zh5+oXVyKPKSEMr5WlFAUhaMCf2RAGtWA/vhdcL5AqiuC2l2n9lOPqQ0Rukme3Fr4zL1cz
-        81yfrJdWX+L4F8FlvihCfKWXIOwOOuxriV/fEyLASjabeY9CXwChCCM77qT0qg==
+        bh=wDbKxqGYeN5BCJlyVJxQ3gTA0fCKqletaO/hYXAUUnc=;
+        b=vlO/ICev8KZN9TQl3yzW+cLGUJp6hWkhzFsvaQKQ67Ul6emOvti3t5IRszCEc23vlNWV1t
+        kuUDyzaPQfCDf7ydIY7Q1kCcALg4MUTHHK8GeUwK7rysULSrVUMXAklzt0JAvF8weh/YG4
+        Rk2wrsZAHDOPIBxn8MtzJpq7N/YAk5Q3h0HqCPJrf/CFvAkvnOo/lvtd1k4XVBqdVyXfb4
+        5nLMJ8ZRTC5wN3v2gEk1gNyZqUr092bB9jlU/yQ16h+hCUh5fpckB412XmJOinfZO6LkOv
+        cNSAqJbk2c66aaghjAbAD3qNEPXk/I9iY68bnIp1+grl0TOAELxMGQy63EiIeA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673613067;
+        s=2020e; t=1673613066;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KvkkEgGNc+X8JPMu5cL4mkFTzR3Cr00C/ewLCIV6n7A=;
-        b=4akcYBXgd76M0AgFmKJEap+bhgtG1pQAIus3XbF59AnwSEr9hPxH8Ps0Us+o9+R14CwQ3/
-        w6WOQrSY1y3lwdAw==
+        bh=wDbKxqGYeN5BCJlyVJxQ3gTA0fCKqletaO/hYXAUUnc=;
+        b=vs9samWpAq+oNZD3JEF5YPfkZiLzQC92ChC09IxWdgbv3sJU6tNvWZBJ5sgfRlZbHHTQKU
+        hZFlhv22R2fnG4BQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] cpuidle, ARM: OMAP2+: powerdomain: Remove
- trace_.*_rcuidle()
+Subject: [tip: sched/core] entry, kasan, x86: Disallow overriding mem*() functions
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Tony Lindgren <tony@atomide.com>,
@@ -52,10 +51,10 @@ Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230112195541.782536366@infradead.org>
-References: <20230112195541.782536366@infradead.org>
+In-Reply-To: <20230112195542.028523143@infradead.org>
+References: <20230112195542.028523143@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167361306694.4906.5223448518679666811.tip-bot2@tip-bot2>
+Message-ID: <167361306621.4906.6454025554442390032.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,167 +70,195 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     db8f50861da6b1129b744da3998587a5cceeffeb
-Gitweb:        https://git.kernel.org/tip/db8f50861da6b1129b744da3998587a5cceeffeb
+Commit-ID:     69d4c0d3218692ffa56b0e1b9c76c50c699d7044
+Gitweb:        https://git.kernel.org/tip/69d4c0d3218692ffa56b0e1b9c76c50c699d7044
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 12 Jan 2023 20:43:54 +01:00
+AuthorDate:    Thu, 12 Jan 2023 20:43:58 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Fri, 13 Jan 2023 11:48:17 +01:00
 
-cpuidle, ARM: OMAP2+: powerdomain: Remove trace_.*_rcuidle()
+entry, kasan, x86: Disallow overriding mem*() functions
 
-OMAP was the one and only user.
+KASAN cannot just hijack the mem*() functions, it needs to emit
+__asan_mem*() variants if it wants instrumentation (other sanitizers
+already do this).
+
+  vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: __sev_get_ghcb+0xa0: call to memcpy() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leaves .noinstr.text section
+
+Remove the weak aliases to ensure nobody hijacks these functions and
+add them to the noinstr section.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Tested-by: Tony Lindgren <tony@atomide.com>
 Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Acked-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230112195541.782536366@infradead.org
+Link: https://lore.kernel.org/r/20230112195542.028523143@infradead.org
 ---
- arch/arm/mach-omap2/powerdomain.c | 10 +++++-----
- drivers/base/power/runtime.c      | 24 ++++++++++++------------
- 2 files changed, 17 insertions(+), 17 deletions(-)
+ arch/x86/lib/memcpy_64.S  |  5 ++---
+ arch/x86/lib/memmove_64.S |  4 +++-
+ arch/x86/lib/memset_64.S  |  4 +++-
+ mm/kasan/kasan.h          |  4 ++++-
+ mm/kasan/shadow.c         | 38 ++++++++++++++++++++++++++++++++++++++-
+ tools/objtool/check.c     |  3 +++-
+ 6 files changed, 53 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/mach-omap2/powerdomain.c b/arch/arm/mach-omap2/powerdomain.c
-index 2d747f6..65fec41 100644
---- a/arch/arm/mach-omap2/powerdomain.c
-+++ b/arch/arm/mach-omap2/powerdomain.c
-@@ -187,9 +187,9 @@ static int _pwrdm_state_switch(struct powerdomain *pwrdm, int flag)
- 			trace_state = (PWRDM_TRACE_STATES_FLAG |
- 				       ((next & OMAP_POWERSTATE_MASK) << 8) |
- 				       ((prev & OMAP_POWERSTATE_MASK) << 0));
--			trace_power_domain_target_rcuidle(pwrdm->name,
--							  trace_state,
--							  raw_smp_processor_id());
-+			trace_power_domain_target(pwrdm->name,
-+						  trace_state,
-+						  raw_smp_processor_id());
- 		}
- 		break;
- 	default:
-@@ -541,8 +541,8 @@ int pwrdm_set_next_pwrst(struct powerdomain *pwrdm, u8 pwrst)
+diff --git a/arch/x86/lib/memcpy_64.S b/arch/x86/lib/memcpy_64.S
+index dd8cd88..a640176 100644
+--- a/arch/x86/lib/memcpy_64.S
++++ b/arch/x86/lib/memcpy_64.S
+@@ -8,7 +8,7 @@
+ #include <asm/alternative.h>
+ #include <asm/export.h>
  
- 	if (arch_pwrdm && arch_pwrdm->pwrdm_set_next_pwrst) {
- 		/* Trace the pwrdm desired target state */
--		trace_power_domain_target_rcuidle(pwrdm->name, pwrst,
--						  raw_smp_processor_id());
-+		trace_power_domain_target(pwrdm->name, pwrst,
-+					  raw_smp_processor_id());
- 		/* Program the pwrdm desired target state */
- 		ret = arch_pwrdm->pwrdm_set_next_pwrst(pwrdm, pwrst);
- 	}
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 50e726b..98f7b3d 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -468,7 +468,7 @@ static int rpm_idle(struct device *dev, int rpmflags)
- 	int (*callback)(struct device *);
- 	int retval;
+-.pushsection .noinstr.text, "ax"
++.section .noinstr.text, "ax"
  
--	trace_rpm_idle_rcuidle(dev, rpmflags);
-+	trace_rpm_idle(dev, rpmflags);
- 	retval = rpm_check_suspend_allowed(dev);
- 	if (retval < 0)
- 		;	/* Conditions are wrong. */
-@@ -508,7 +508,7 @@ static int rpm_idle(struct device *dev, int rpmflags)
- 			dev->power.request_pending = true;
- 			queue_work(pm_wq, &dev->power.work);
- 		}
--		trace_rpm_return_int_rcuidle(dev, _THIS_IP_, 0);
-+		trace_rpm_return_int(dev, _THIS_IP_, 0);
- 		return 0;
- 	}
+ /*
+  * We build a jump to memcpy_orig by default which gets NOPped out on
+@@ -43,7 +43,7 @@ SYM_TYPED_FUNC_START(__memcpy)
+ SYM_FUNC_END(__memcpy)
+ EXPORT_SYMBOL(__memcpy)
  
-@@ -530,7 +530,7 @@ static int rpm_idle(struct device *dev, int rpmflags)
- 	wake_up_all(&dev->power.wait_queue);
+-SYM_FUNC_ALIAS_WEAK(memcpy, __memcpy)
++SYM_FUNC_ALIAS(memcpy, __memcpy)
+ EXPORT_SYMBOL(memcpy)
  
-  out:
--	trace_rpm_return_int_rcuidle(dev, _THIS_IP_, retval);
-+	trace_rpm_return_int(dev, _THIS_IP_, retval);
- 	return retval ? retval : rpm_suspend(dev, rpmflags | RPM_AUTO);
+ /*
+@@ -184,4 +184,3 @@ SYM_FUNC_START_LOCAL(memcpy_orig)
+ 	RET
+ SYM_FUNC_END(memcpy_orig)
+ 
+-.popsection
+diff --git a/arch/x86/lib/memmove_64.S b/arch/x86/lib/memmove_64.S
+index 724bbf8..0266186 100644
+--- a/arch/x86/lib/memmove_64.S
++++ b/arch/x86/lib/memmove_64.S
+@@ -13,6 +13,8 @@
+ 
+ #undef memmove
+ 
++.section .noinstr.text, "ax"
++
+ /*
+  * Implement memmove(). This can handle overlap between src and dst.
+  *
+@@ -213,5 +215,5 @@ SYM_FUNC_START(__memmove)
+ SYM_FUNC_END(__memmove)
+ EXPORT_SYMBOL(__memmove)
+ 
+-SYM_FUNC_ALIAS_WEAK(memmove, __memmove)
++SYM_FUNC_ALIAS(memmove, __memmove)
+ EXPORT_SYMBOL(memmove)
+diff --git a/arch/x86/lib/memset_64.S b/arch/x86/lib/memset_64.S
+index fc9ffd3..6143b1a 100644
+--- a/arch/x86/lib/memset_64.S
++++ b/arch/x86/lib/memset_64.S
+@@ -6,6 +6,8 @@
+ #include <asm/alternative.h>
+ #include <asm/export.h>
+ 
++.section .noinstr.text, "ax"
++
+ /*
+  * ISO C memset - set a memory block to a byte value. This function uses fast
+  * string to get better performance than the original function. The code is
+@@ -43,7 +45,7 @@ SYM_FUNC_START(__memset)
+ SYM_FUNC_END(__memset)
+ EXPORT_SYMBOL(__memset)
+ 
+-SYM_FUNC_ALIAS_WEAK(memset, __memset)
++SYM_FUNC_ALIAS(memset, __memset)
+ EXPORT_SYMBOL(memset)
+ 
+ /*
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index ea8cf13..71c1543 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -618,6 +618,10 @@ void __asan_set_shadow_f3(const void *addr, size_t size);
+ void __asan_set_shadow_f5(const void *addr, size_t size);
+ void __asan_set_shadow_f8(const void *addr, size_t size);
+ 
++void *__asan_memset(void *addr, int c, size_t len);
++void *__asan_memmove(void *dest, const void *src, size_t len);
++void *__asan_memcpy(void *dest, const void *src, size_t len);
++
+ void __hwasan_load1_noabort(unsigned long addr);
+ void __hwasan_store1_noabort(unsigned long addr);
+ void __hwasan_load2_noabort(unsigned long addr);
+diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+index 2fba1f5..9826993 100644
+--- a/mm/kasan/shadow.c
++++ b/mm/kasan/shadow.c
+@@ -38,6 +38,12 @@ bool __kasan_check_write(const volatile void *p, unsigned int size)
  }
+ EXPORT_SYMBOL(__kasan_check_write);
  
-@@ -562,7 +562,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
- 	struct device *parent = NULL;
- 	int retval;
++#ifndef CONFIG_GENERIC_ENTRY
++/*
++ * CONFIG_GENERIC_ENTRY relies on compiler emitted mem*() calls to not be
++ * instrumented. KASAN enabled toolchains should emit __asan_mem*() functions
++ * for the sites they want to instrument.
++ */
+ #undef memset
+ void *memset(void *addr, int c, size_t len)
+ {
+@@ -68,6 +74,38 @@ void *memcpy(void *dest, const void *src, size_t len)
  
--	trace_rpm_suspend_rcuidle(dev, rpmflags);
-+	trace_rpm_suspend(dev, rpmflags);
- 
-  repeat:
- 	retval = rpm_check_suspend_allowed(dev);
-@@ -713,7 +713,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
- 	}
- 
-  out:
--	trace_rpm_return_int_rcuidle(dev, _THIS_IP_, retval);
-+	trace_rpm_return_int(dev, _THIS_IP_, retval);
- 
- 	return retval;
- 
-@@ -765,7 +765,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
- 	struct device *parent = NULL;
- 	int retval = 0;
- 
--	trace_rpm_resume_rcuidle(dev, rpmflags);
-+	trace_rpm_resume(dev, rpmflags);
- 
-  repeat:
- 	if (dev->power.runtime_error) {
-@@ -935,7 +935,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
- 		spin_lock_irq(&dev->power.lock);
- 	}
- 
--	trace_rpm_return_int_rcuidle(dev, _THIS_IP_, retval);
-+	trace_rpm_return_int(dev, _THIS_IP_, retval);
- 
- 	return retval;
+ 	return __memcpy(dest, src, len);
  }
-@@ -1091,7 +1091,7 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
- 		if (retval < 0) {
- 			return retval;
- 		} else if (retval > 0) {
--			trace_rpm_usage_rcuidle(dev, rpmflags);
-+			trace_rpm_usage(dev, rpmflags);
- 			return 0;
- 		}
- 	}
-@@ -1129,7 +1129,7 @@ int __pm_runtime_suspend(struct device *dev, int rpmflags)
- 		if (retval < 0) {
- 			return retval;
- 		} else if (retval > 0) {
--			trace_rpm_usage_rcuidle(dev, rpmflags);
-+			trace_rpm_usage(dev, rpmflags);
- 			return 0;
- 		}
- 	}
-@@ -1212,7 +1212,7 @@ int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
- 	} else {
- 		retval = atomic_inc_not_zero(&dev->power.usage_count);
- 	}
--	trace_rpm_usage_rcuidle(dev, 0);
-+	trace_rpm_usage(dev, 0);
- 	spin_unlock_irqrestore(&dev->power.lock, flags);
++#endif
++
++void *__asan_memset(void *addr, int c, size_t len)
++{
++	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
++		return NULL;
++
++	return __memset(addr, c, len);
++}
++EXPORT_SYMBOL(__asan_memset);
++
++#ifdef __HAVE_ARCH_MEMMOVE
++void *__asan_memmove(void *dest, const void *src, size_t len)
++{
++	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
++	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
++		return NULL;
++
++	return __memmove(dest, src, len);
++}
++EXPORT_SYMBOL(__asan_memmove);
++#endif
++
++void *__asan_memcpy(void *dest, const void *src, size_t len)
++{
++	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
++	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
++		return NULL;
++
++	return __memcpy(dest, src, len);
++}
++EXPORT_SYMBOL(__asan_memcpy);
  
- 	return retval;
-@@ -1576,7 +1576,7 @@ void pm_runtime_allow(struct device *dev)
- 	if (ret == 0)
- 		rpm_idle(dev, RPM_AUTO | RPM_ASYNC);
- 	else if (ret > 0)
--		trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
-+		trace_rpm_usage(dev, RPM_AUTO | RPM_ASYNC);
- 
-  out:
- 	spin_unlock_irq(&dev->power.lock);
-@@ -1646,7 +1646,7 @@ static void update_autosuspend(struct device *dev, int old_delay, int old_use)
- 			atomic_inc(&dev->power.usage_count);
- 			rpm_resume(dev, 0);
- 		} else {
--			trace_rpm_usage_rcuidle(dev, 0);
-+			trace_rpm_usage(dev, 0);
- 		}
- 	}
- 
+ void kasan_poison(const void *addr, size_t size, u8 value, bool init)
+ {
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 9767bab..92554c5 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1074,6 +1074,9 @@ static const char *uaccess_safe_builtin[] = {
+ 	"__asan_store16_noabort",
+ 	"__kasan_check_read",
+ 	"__kasan_check_write",
++	"__asan_memset",
++	"__asan_memmove",
++	"__asan_memcpy",
+ 	/* KASAN in-line */
+ 	"__asan_report_load_n_noabort",
+ 	"__asan_report_load1_noabort",
