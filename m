@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85225669E3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500B6669E43
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjAMQhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S229602AbjAMQhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjAMQgd (ORCPT
+        with ESMTP id S229849AbjAMQgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:36:33 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E4F848F5;
-        Fri, 13 Jan 2023 08:31:30 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 78so15335793pgb.8;
-        Fri, 13 Jan 2023 08:31:30 -0800 (PST)
+        Fri, 13 Jan 2023 11:36:52 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF2E84BD2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:31:47 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ud5so53567075ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:31:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OgCWvW8jX2wErUKxI+z8+BgYAV94/Tfe5mI1Ig8QDC4=;
-        b=qZkE3mLWRTvty5Mxr1y4bHFKSlzRssHJnZyCDg9zv4d61DQ/E99yCB3YTwCXUXo4Iw
-         SDmYOS3sGHBjpsZW7WyXDFPFg9C3blE6Rp0Vnz15GAmY4kjeM/afYaabuKoE5kIYWP7A
-         EC79oB0ZVNqoky4xizSPnYAMWPAZU7N30QDFJI7AYSV302b7rq2whcNlIFZGC4YXXJM2
-         po/SbpKL0d1RyiSKDToGZgSUfacoDyMldFbCtdlA2uOnT/rHSHkbTzg7nrStxvqA3lrb
-         NYGVz0f+AFVEBxfl1higVGDK8XokeRfSvBA6H+vQKPqbMHLebdLPLB+fzmOWJxQQsnqW
-         kplA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5fL8be1/hWU/zBSKzMOQE0sbZUNNKC9C/Oi/Qs+RWgQ=;
+        b=QU8UssxzfelsMsupXM2CTkukdmkHQbNcMZA1GI40K+EpSQXadIzS8WaBlsG1ALterx
+         xGDWi+nZcb+BDzgN31i2uUFsrTw8ZsiVjFUqcZCw4RnaX3CqhSYPn0FW/dYSEJbPzmNf
+         tH2cW+Whz3Rn6W6QqYkwTm74j+7v67Dev8fqZ9Ngqq/0ucGX+hMqaTnwL9PrxepUwEJ3
+         SdtZtE0Ta+r/dolt2oZxy5neARIf+bCDA+iU6P/z1b96neDyVtRTZw4M5sXPJw/un6J0
+         6uYWxK4l1PMTK3xrB63eiTSXb19Veh+HMV140Igpx4nV0yy8HwQh/ljpgWbmrkDCpf3G
+         AgGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OgCWvW8jX2wErUKxI+z8+BgYAV94/Tfe5mI1Ig8QDC4=;
-        b=UwPIhkKsVRYcj4WGDl4oh+MSYzLBugbnyD+jyppaW8Lh/1dueXvuQYtlj6EyxasQxW
-         PIDS5IGo68mvAA4yrH98KWJq42tFPMBI1Ml8di11QdfYogRPNQNHPX6m7AlXtO3BhyZ4
-         mU6DX5eWkQkdpfwSaF/V6YN1MnDromvcWory6oyzZdz9SKe3WM08jY01UAhW3qcdHFdH
-         7cpILbrQY/CsYAaSGVfangkok+qqn13JuV7AAP6M3A/hpid1b6NVq3lcqEKpEhvTE+1n
-         lu8X4bp0RlTTHBfojxHGcdIM9olGrczznKYl1azEsJkMZOhQfV49wFWOcGIUiSclwQO6
-         scjg==
-X-Gm-Message-State: AFqh2ko8zhgcUIhahu6D7xSxh2w//MDhTMMcP0Z/kbqqXYEEOyd3bvVv
-        B7dUyU0ZsAq1khghpVXPeFY=
-X-Google-Smtp-Source: AMrXdXv/TF3ixaHLICwM75AhYPxrA1TJHfw06SvJA5qxr6b/vPoZeiAJ0qe8UV1ZTksYL6UstOEesw==
-X-Received: by 2002:a62:6001:0:b0:582:33b4:4c57 with SMTP id u1-20020a626001000000b0058233b44c57mr10338463pfb.33.1673627489305;
-        Fri, 13 Jan 2023 08:31:29 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id p189-20020a625bc6000000b00580cc63dce8sm11780694pfb.77.2023.01.13.08.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 08:31:27 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 13 Jan 2023 06:31:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Valentin Schneider <vschneid@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the workqueues tree
-Message-ID: <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
-References: <20230113143102.2e94d74f@canb.auug.org.au>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5fL8be1/hWU/zBSKzMOQE0sbZUNNKC9C/Oi/Qs+RWgQ=;
+        b=zPKJKVAIiPYpC9P9e4MJMpFXRw6WlbOOH9ekY7XmIoou2x0srPL9evTcNeXMVbLB9d
+         PwJ8etAn+UkhYBENW7yEaiCZkNGDN3uJSYrRFNnMZEHpAXwZfBVLhBm1abBfMKYHa1+i
+         zPg+te2Dv3XL5awBMa4JUt/6/E9qU+Wta/cKSS9hAb5bqMXz4dK+truvfMGPSXHRVVBI
+         wV1GEtwmLm8uYCqyK8NQfpqwMomaRUd7qz4C4DdZ95YYM+Zb24qmtH2APc5jSpMyeVwn
+         zgBzvUV/9PBA59gsp5RobFBy4944K/pWx8p8GsjVNkmHBBoQnA755tBEUDKHJ+cIL7C+
+         mREA==
+X-Gm-Message-State: AFqh2kqlrvnS7p2Y9+xl9CmCym2h1gYbKYnbSUD+w/VIrzFD4WV9GYan
+        xDMVdfh2HyHUbo1uSsNmSAuqPA==
+X-Google-Smtp-Source: AMrXdXuNM7+hFpAqq70N7tSscaK7osTdbr2Csk1H5PBNX86/BK1dJbWmKt6EVmRZnrHQW/tXz/bV5w==
+X-Received: by 2002:a17:906:5acf:b0:83f:41a2:a68b with SMTP id x15-20020a1709065acf00b0083f41a2a68bmr3450656ejs.30.1673627506147;
+        Fri, 13 Jan 2023 08:31:46 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id ba6-20020a0564021ac600b0045cf4f72b04sm8303139edb.94.2023.01.13.08.31.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 08:31:45 -0800 (PST)
+Message-ID: <972fc587-be4a-d306-4e1e-7e68e37ed452@linaro.org>
+Date:   Fri, 13 Jan 2023 17:31:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113143102.2e94d74f@canb.auug.org.au>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: vendor-prefixes: add Bang & Olufsen a/s
+Content-Language: en-US
+To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     a.fatoum@pengutronix.de,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230113160102.677865-1-alvin@pqrs.dk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113160102.677865-1-alvin@pqrs.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 13/01/2023 17:01, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> After merging the workqueues tree, today's linux-next build (x86_64
-> allnoconfig and several others) produced this warning:
+> Bang & Olufsen a/s is a Danish designer and manufacturer of high-end
+> consumer audio and home entertainment products.
 > 
-> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
->  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
->       |             ^~~~~~~~~~~~~
+> The vendor prefix 'beo,' follows from the ubiquitous product naming
+> scheme, e.g. Beosound Balance, Beolab 28.
 > 
-> Introduced by commit
+> https://www.bang-olufsen.com/
 > 
->   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Valentin, this is caused by rebind_worker() being only used by
-rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
-rebind_worker(). Just fold it back into rebind_workers()?
+We do not add vendor prefixes for every company in the world, there is
+no need. Please bring this patch with an user.
 
-Thanks.
+Best regards,
+Krzysztof
 
--- 
-tejun
