@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB7866885D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E30F668861
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239946AbjAMAWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S231911AbjAMA1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjAMAWO (ORCPT
+        with ESMTP id S231546AbjAMA1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:22:14 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6439BC66
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:22:13 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o13so17298804pjg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:22:13 -0800 (PST)
+        Thu, 12 Jan 2023 19:27:39 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA351140B9
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:27:37 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id v65so5566876ioe.4
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:27:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yDLd/c7sffLZEFLE9eRRXtPje9jgj2d5fJUXABkKQP0=;
-        b=LpjSq/Kastw9Uyx7f/r+AXRPp75VX1xPSml8w1HOfumTaSgX7Xs9RsbvsIteXr691a
-         PvgtLM027UA7L5VjfdjU8Pk4kFOUF/8BrFWFSiQwIS8PEVk/CY3TRIgds4VX8JWsbCIQ
-         /duk64ketG1O8Sh7/btJxqHc1xiTUw73+XzcQ=
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1GucQ7IC2vs1Pp3LSSYYnizzJcFER36SWu2dsnAe2xY=;
+        b=cWrv22mkJqX9J+d6nUQvIN2mIMf7UmYwe3PoTKLngPDf0qrBbZrDjBSakwNv3I/vYi
+         tGRhtbFPVt4CBD3IQhffOemqgdqIXbsDHoDroZgEfiad3o3tkSTH5iTyCKpaZEE/rsSd
+         NbmB6AwzmBgEzzt7eDVxU4vCK7+xK++zca/0U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yDLd/c7sffLZEFLE9eRRXtPje9jgj2d5fJUXABkKQP0=;
-        b=naa+c9MDk97ZAkmIAFucIqT27cEo/qyiV0BH2GBsxN5IsWJsrpEtVI7wwbfF5tT5Xt
-         D3QPAtlcW9c4nfY6OkGC3qYI6dS+Lv0h+riF0nf5IGlN/hM6NxBVuLdZG0ThEt0gR9vF
-         x6rYKqWeTIzYZ2grWcIxo6zm3o54+VYhZncgu3eIteX7QL35huqu/AdJmBrli9uKtXou
-         w/QnKuKjclle9RpxEixWeNLbEXAEHFwvvykOKJVI/4UsgdhpLqefIWrClpiu7OHc7NnY
-         Nf96T9IE1mGK2tPKqhuE8lGvcEuxKQ7FTLfYJrQRh4PQ6lYexeALWlVSXuh8qf17KxjV
-         UHeg==
-X-Gm-Message-State: AFqh2krzP7ZsPeaWKOwXPFQCtzKKHtWmGA2pl7Z7qeZyjY8+UBYD93tl
-        ayr1krZVzAYFc7Dau3dKKuaeqA==
-X-Google-Smtp-Source: AMrXdXuOub6bFjrixZ9Yum9HR7iFKmh6XA9lU5NIhjWUIaxx11yMdgosFzluiiWICG9PJeRTO7i3nQ==
-X-Received: by 2002:a05:6a20:6707:b0:af:9538:ec5c with SMTP id q7-20020a056a20670700b000af9538ec5cmr9033204pzh.51.1673569332751;
-        Thu, 12 Jan 2023 16:22:12 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:11a:201:4652:3752:b9b7:29f9])
-        by smtp.gmail.com with ESMTPSA id 75-20020a63074e000000b004b5fb50aa6dsm4748931pgh.83.2023.01.12.16.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 16:22:12 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     stable@vger.kernel.org
-Cc:     Denis Nikitin <denik@chromium.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.15.y] KVM: arm64: nvhe: Fix build with profile optimization
-Date:   Thu, 12 Jan 2023 16:22:10 -0800
-Message-Id: <20230113002210.3984665-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GucQ7IC2vs1Pp3LSSYYnizzJcFER36SWu2dsnAe2xY=;
+        b=wKdRFpDqLkXrXEpk1tklow7O89AUfuBsapsKEZ5PLxTjJbWdkp7a07WRpmi9b3kueD
+         P3oM6hNX3Q1p7qRFRZJIzk/f1vQKvkqr6UxUG2QAc9ynu9MebfhB5r5A1+PFi7JVkpve
+         Cgrm401ofR1mm5P9+f5w/KvSqPuiAHn/iR1ANjEAbNhmgu5tIdmQMrYwUx5m8hDAzory
+         QmxStIHijaIhPXO9syDfEWwKE1w+thBZW2H+/8pdXDHfGahfRvvujHaRv/jBazFN1VKK
+         Y9fFmJ27hqvCNtQEZ2xTIC3qFyOi3w1gJXiiW4XQINwbB6ZsM3WEqRjD7NpVC//Uknak
+         xArw==
+X-Gm-Message-State: AFqh2kqKB1cuNegygpAAbDBTe2FgPU6uOwiy3MmucBgN7oJDQCWGZeDR
+        0TX4B0WvedsWSdLZcE+1OHrSwA==
+X-Google-Smtp-Source: AMrXdXuTDGOoGzU+R8vDvplB1NUrFuoEe6O3G5AkuuM2MqJbjqKDZhBsODiegGWmtuOcoWAYGsPn1Q==
+X-Received: by 2002:a05:6602:1cf:b0:6ed:95f:92e7 with SMTP id w15-20020a05660201cf00b006ed095f92e7mr9233757iot.0.1673569657202;
+        Thu, 12 Jan 2023 16:27:37 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c15-20020a02330f000000b0038a6ae38ceasm5997415jae.26.2023.01.12.16.27.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jan 2023 16:27:36 -0800 (PST)
+Message-ID: <ae0e974d-1ea8-ddd1-85a2-10e9679854c4@linuxfoundation.org>
+Date:   Thu, 12 Jan 2023 17:27:35 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230112135326.981869724@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Denis Nikitin <denik@chromium.org>
+On 1/12/23 06:56, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.6 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-commit bde971a83bbff78561458ded236605a365411b87 upstream.
+Compiled and booted on my test system. No dmesg regressions.
 
-Kernel build with clang and KCFLAGS=-fprofile-sample-use=<profile> fails with:
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-error: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o: Unexpected SHT_REL
-section ".rel.llvm.call-graph-profile"
-
-Starting from 13.0.0 llvm can generate SHT_REL section, see
-https://reviews.llvm.org/rGca3bdb57fa1ac98b711a735de048c12b5fdd8086.
-gen-hyprel does not support SHT_REL relocation section.
-
-Filter out profile use flags to fix the build with profile optimization.
-
-Signed-off-by: Denis Nikitin <denik@chromium.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221014184532.3153551-1-denik@chromium.org
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
-
-I need this to properly compile 5.15.y stable kernels in the chromeos build
-system.
-
- arch/arm64/kvm/hyp/nvhe/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index 8d741f71377f..964c2134ea1e 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -83,6 +83,10 @@ quiet_cmd_hypcopy = HYPCOPY $@
- # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
- # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
-+# Starting from 13.0.0 llvm emits SHT_REL section '.llvm.call-graph-profile'
-+# when profile optimization is applied. gen-hyprel does not support SHT_REL and
-+# causes a build failure. Remove profile optimization flags.
-+KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%, $(KBUILD_CFLAGS))
- 
- # KVM nVHE code is run at a different exception code with a different map, so
- # compiler instrumentation that inserts callbacks or checks into the code may
--- 
-https://chromeos.dev
-
+thanks,
+-- Shuah
