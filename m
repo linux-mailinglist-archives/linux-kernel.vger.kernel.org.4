@@ -2,142 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9F06698B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C126698A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241473AbjAMNfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
+        id S241733AbjAMNe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241306AbjAMNel (ORCPT
+        with ESMTP id S241855AbjAMNdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:34:41 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E10769B38;
-        Fri, 13 Jan 2023 05:27:43 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DDLcph016266;
-        Fri, 13 Jan 2023 13:27:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+WJUO3ePmvcHVo2nSLw37HwecQkJ8I9m6+fwvm9fcOE=;
- b=Y1i4LudMS6gyh/s8Kp/L5opPi+kUoDy5etYdCXP1/jROpG19BT4c8D9NR3njxsOzABaY
- xjkI4jVxfDC0Vg57KaZnj/wVsqZOGDQQB0Zk/Vol6jdhHWhC//agx3NQA/lyV4RZSsyN
- /rJnrsO1mtQk+QPHmAitrhLDZNtiKOsB0TyqEMr54S2oVrWg+q1rAE7kAxu9MI2OoD38
- W22nWt9jhN6HFbu3xl0CDpJzmUnyCxEuOjEaqzPVhr3P2dEGByEQf/9wzPy6BciRXb/h
- N4emfdpp5BlIRStkbPhHeGessEOH4475tu799WUPeuCDmYRj3OdHkBR4pFv4NGSMvDvJ Gg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2hum2wur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:27:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DDQUUZ027470
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:26:30 GMT
-Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 05:26:21 -0800
-Message-ID: <3a0cb097-36f2-01a5-658c-4ec8294e7ba7@quicinc.com>
-Date:   Fri, 13 Jan 2023 18:56:18 +0530
+        Fri, 13 Jan 2023 08:33:35 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE585D6B9;
+        Fri, 13 Jan 2023 05:26:40 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ss4so45052440ejb.11;
+        Fri, 13 Jan 2023 05:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yp6uv5Fh7h8BQa8qt2GS5w6smCQU5e2VSr/x8Q9YfvE=;
+        b=ii596FfO+j0K+Dy6HVm/KD7JigQ7QzO5khKfNwp8UydDZX5et7C5USxvSlSbBde6Sv
+         WzZUqGFE2ZbPVLRVDYBBxAzv8948v2v6/84yIdvVXPR77QlXUR0zZV7w2dDXA2IaczSe
+         fYbauv9aJJjrjWuR5fgW15eXdam/U0z1oAP8fwuU08+dm73f7NoeuByn8X4HRqac4L08
+         wNWlloInPUnWnpdtBgEsJEM6ACKwC82oTs6z9bOOrTTWT6MS444YgOFJ+4wNXoDOxHj/
+         QyvYA1UIYEUGyIuY89mP61ieyMHjs9VVqSoeByaUWMRC+9K7+iLcgtdkAKSdmG5AoIAj
+         uQ5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yp6uv5Fh7h8BQa8qt2GS5w6smCQU5e2VSr/x8Q9YfvE=;
+        b=ZMk6wgEF1qEpZCHtb72Vh/JMvXSjlGo5DNCxqppQ76hnkNTpWx7URgATN/702bjLVM
+         vIueUJnrF9joy25OmBshZ/0eiqkIgAta0strAz6+es4M/PvWHsYds+2BGJdUENbr0xg5
+         nUBtyH4OYdfSsq7dzU43h11AoRWXDCgwXgLJAD0jC+RxuKURhPSxRMmMdOJ23aBGb5J/
+         jxoIXFbbj7p2q5jwWqB5Kv7gX1NBobooKKTH3Gw00eYZG3KezyMJ0yUqDfnry/hnLQe2
+         IUgVAqxywKqAyLBa4PJFzpxKBesbFzcWZqdaEXYP+M0zW6G9M1/A+1AR8X/9tHOAP3s8
+         gSCA==
+X-Gm-Message-State: AFqh2krkvAqzOPe7e6bHSQNDo9yJyS4tpP/T2f6wWVhmH05Xy3j8t/08
+        rsHkW08mTP1AuT9g9ay4mJk=
+X-Google-Smtp-Source: AMrXdXt2pmH2TiFRrfTNJAGFePZqFtv88U1sNedtV8TqhHuAZJ5v5JpqI9eONCj0x1NXAqQdjcLRew==
+X-Received: by 2002:a17:907:cbc8:b0:84d:428f:be90 with SMTP id vk8-20020a170907cbc800b0084d428fbe90mr3487954ejc.42.1673616399398;
+        Fri, 13 Jan 2023 05:26:39 -0800 (PST)
+Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b007a9c3831409sm8510938ejd.137.2023.01.13.05.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 05:26:38 -0800 (PST)
+Date:   Fri, 13 Jan 2023 14:26:35 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
+Subject: [PATCH v3 net-next 1/1] plca.c: fix obvious mistake in checking
+ retval
+Message-ID: <f2277af8951a51cfee2fb905af8d7a812b7beaf4.1673616357.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5/7] dt-bindings: qcom: Add ipq9574 bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-6-quic_devipriy@quicinc.com>
- <8b1848f1-1a26-ff8b-75e9-e336af80743c@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <8b1848f1-1a26-ff8b-75e9-e336af80743c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IXhIrrEvdSrW60IjFIIu9pYxRZ_okc9S
-X-Proofpoint-ORIG-GUID: IXhIrrEvdSrW60IjFIIu9pYxRZ_okc9S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_06,2023-01-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- bulkscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- mlxscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301130089
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Revert a wrong fix that was done during the review process. The
+intention was to substitute "if(ret < 0)" with "if(ret)".
+Unfortunately, the intended fix did not meet the code.
+Besides, after additional review, it was decided that "if(ret < 0)"
+was actually the right thing to do.
 
+Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
+Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+ net/ethtool/plca.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-On 1/11/2023 3:09 PM, Krzysztof Kozlowski wrote:
-> On 10/01/2023 13:13, devi priya wrote:
->> Document the new ipq9574 SOC/board device tree bindings
->>
->> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
->> index 27063a045bd0..83102fe2d366 100644
->> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
->> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
->> @@ -32,6 +32,7 @@ description: |
->>           ipq4018
->>           ipq6018
->>           ipq8074
->> +        ipq9574
->>           mdm9615
->>           msm8226
->>           msm8916
->> @@ -80,6 +81,7 @@ description: |
->>           hk01
->>           hk10-c1
->>           hk10-c2
->> +        ap-al02-c7
-> 
-> 'a' rarely goes after 'h'.
-Sure, will update!
-> 
->>           idp
->>           liquid
->>           mtp
->> @@ -304,6 +306,11 @@ properties:
->>                 - qcom,ipq8074-hk10-c2
->>             - const: qcom,ipq8074
-> 
-> Best regards,
-> Krzysztof
-> 
-Best Regards,
-Devi Priya
+diff --git a/net/ethtool/plca.c b/net/ethtool/plca.c
+index d9bb13ffc654..be7404dc9ef2 100644
+--- a/net/ethtool/plca.c
++++ b/net/ethtool/plca.c
+@@ -61,7 +61,7 @@ static int plca_get_cfg_prepare_data(const struct ethnl_req_info *req_base,
+ 	}
+ 
+ 	ret = ethnl_ops_begin(dev);
+-	if (!ret)
++	if (ret < 0)
+ 		goto out;
+ 
+ 	memset(&data->plca_cfg, 0xff,
+@@ -151,7 +151,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+ 					 tb[ETHTOOL_A_PLCA_HEADER],
+ 					 genl_info_net(info), info->extack,
+ 					 true);
+-	if (!ret)
++	if (ret < 0)
+ 		return ret;
+ 
+ 	dev = req_info.dev;
+@@ -171,7 +171,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+ 	}
+ 
+ 	ret = ethnl_ops_begin(dev);
+-	if (!ret)
++	if (ret < 0)
+ 		goto out_rtnl;
+ 
+ 	memset(&plca_cfg, 0xff, sizeof(plca_cfg));
+@@ -189,7 +189,7 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+ 		goto out_ops;
+ 
+ 	ret = ops->set_plca_cfg(dev->phydev, &plca_cfg, info->extack);
+-	if (!ret)
++	if (ret < 0)
+ 		goto out_ops;
+ 
+ 	ethtool_notify(dev, ETHTOOL_MSG_PLCA_NTF, NULL);
+@@ -233,7 +233,7 @@ static int plca_get_status_prepare_data(const struct ethnl_req_info *req_base,
+ 	}
+ 
+ 	ret = ethnl_ops_begin(dev);
+-	if (!ret)
++	if (ret < 0)
+ 		goto out;
+ 
+ 	memset(&data->plca_st, 0xff,
+-- 
+2.37.4
+
