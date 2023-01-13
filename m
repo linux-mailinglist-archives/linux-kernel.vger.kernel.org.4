@@ -2,101 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723D1668A63
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 04:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF716689D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 04:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjAMDrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 22:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S240327AbjAMDC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 22:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235522AbjAMDr3 (ORCPT
+        with ESMTP id S240292AbjAMDCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 22:47:29 -0500
-X-Greylist: delayed 976 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 19:47:20 PST
-Received: from mx.meteo.gov.ua (mx.meteo.gov.ua [91.216.232.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09BFA1DF20
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=meteo.gov.ua; s=hostmaster; c=relaxed/simple;
-        q=dns/txt; i=@meteo.gov.ua; t=1673575526; x=1759975526;
-        h=From:Attention;
-        bh=VrJeq7SRLVbMHKaIV+ZaFg4obUoRuGqFhvh3ueAtLkA=;
-        b=hF8aG2db2DHDd+iNEhBE6n3A67hWK1rv2WPktK4BUV2DrZ/XHWijGH4IjO9Lwq/C
-        vveD7iECrvyHTlsb2QNiHlMZczsAYre+A7vCKG509EeJytEqvOe7O0m/EpmOdiy0
-        vOQgXeTVYwHNQZ9IPezfoDJi29Lk7d64cLJ4IW7rEnY=;
-X-AuditID: 5bd8e814-afbc57000000210c-28-63c0bc66f969
-Received: from mail.meteo.gov.ua (mail.meteo.gov.ua [91.216.232.17])
-        by mx.meteo.gov.ua (SMG) with SMTP id C2.E8.08460.66CB0C36; Fri, 13 Jan 2023 04:05:26 +0200 (EET)
-To:     undisclosed-recipients:;
-Received: from localhost (localhost [127.0.0.1])
-        by mail.meteo.gov.ua (Postfix) with ESMTP id 56C7E247D8B;
-        Fri, 13 Jan 2023 02:23:53 +0200 (EET)
-Received: from mail.meteo.gov.ua ([127.0.0.1])
-        by localhost (mail.meteo.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 4NTM9b7vEKh1; Fri, 13 Jan 2023 02:23:53 +0200 (EET)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.meteo.gov.ua (Postfix) with ESMTP id CAAA2247D43;
-        Fri, 13 Jan 2023 02:23:40 +0200 (EET)
-X-Virus-Scanned: amavisd-new at mail.meteo.gov.ua
-Received: from mail.meteo.gov.ua ([127.0.0.1])
-        by localhost (mail.meteo.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id YvCCD-KrbzlM; Fri, 13 Jan 2023 02:23:40 +0200 (EET)
-Received: from mail.meteo.gov.ua (mail.meteo.gov.ua [91.216.232.17])
-        by mail.meteo.gov.ua (Postfix) with ESMTP id 0C595247CF1;
-        Fri, 13 Jan 2023 02:23:29 +0200 (EET)
-Date:   Fri, 13 Jan 2023 02:23:29 +0200 (GMT+02:00)
-From:   JANICE LAWSON <askododesa@meteo.gov.ua>
-Reply-To: JANICE LAWSON <janicelawson556@gmail.com>
-Message-ID: <2085498293.687866.1673569409021.JavaMail.zimbra@meteo.gov.ua>
-Subject: BABY PIANO GIVEAWAY
+        Thu, 12 Jan 2023 22:02:55 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29276C3
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:02:54 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF628FEC;
+        Thu, 12 Jan 2023 19:03:35 -0800 (PST)
+Received: from [10.162.41.9] (unknown [10.162.41.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C85573F587;
+        Thu, 12 Jan 2023 19:02:50 -0800 (PST)
+Message-ID: <16dcb986-74df-9a78-5cfc-e9f59fbe0997@arm.com>
+Date:   Fri, 13 Jan 2023 08:32:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V7 2/6] arm64/perf: Add BRBE registers and fields
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+ <20230105031039.207972-3-anshuman.khandual@arm.com>
+ <Y8AKAZMq7YzOpwwV@FVFF77S0Q05N>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <Y8AKAZMq7YzOpwwV@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [91.216.232.17]
-X-Mailer: Zimbra 8.8.15_GA_4464 (ZimbraWebClient - GC108 (Win)/8.8.15_GA_4468)
-Thread-Index: a1X1MMjCIS7/quLbPp/eJ78Nz2WMig==
-Thread-Topic: BABY PIANO GIVEAWAY
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTdxTH87u/9raSMWuH2ZWNGIhuBEedjs0zsyzL5saNGkfmYuaYGUUu
-        SIpiChKdYSuMCuMhCFqlFPDRRh6pQqFroUi7tm5simVFyhAsCM2mhQGCgjy6rXC3hf8+Od/H
-        75zkx8fCEjKYn3wknZEeEaeEkQGc2N8erolMbLMcfP2CNgQ67M8wdOT+woPzit1wLqucAPuD
-        IQKGyucRTOpzCDjbZ+PAU1M2hrLOczy47PIgGG6+hUA3LeeCy+UhwNA8h6DN8hOGwrw8HjgK
-        +0m43W3jwu9nXAi8VQI409NEgu6RmgemOx0kyJ+WEZD1JIuAu01jBHS3qkhoLu32p779HoHL
-        cgpD5+wghtKFSDAbswmorHlIgnd2K7irDRhOtVznQG+fggdP7LUkqBTdCEqLFQiuFNu5MFK9
-        wIHax40IZH+UcEBhtBNQNKYmYLyqgAt95n703lb6/NV5TPc4phGdV1BC0A0DGoLWOfMx3T7g
-        Jul5xTbaMejj0U6nG9NGhYNHO3KHEF0zIkd09mkLphtHW7l0ta4e07VafsyGzwPeSWBSkjMY
-        6eZ34wIOGcwz3KMa4vjfdXMcGbqP8tEqPiWIosb1ViIfBfCFghpETWu8nCUhSPAyVVkxwmWF
-        s4iqr9EuJ4QCE6K0P6b9L1SYS7hs1RZKe3fq34Tf9Pj+MI9N+HuvLW5bYo7fZClykktMCiIp
-        Q6kes543KJu9ePnpQMFOyl5Xucwv+Nfo9epIdr6G+rncszzHglepxSonZnk9ZfhThdklQqmB
-        KQ+P5T3UsNxLsOeIqM7+eyTLoZShRYZL0FrlilrlilrlitqLCNeh1YePiw4z6UyqKCk1Q3RM
-        rEPspw0yopmb4yIrIvjIiig+DgsKbLtpPigMTBCf+IqRpn4pPZbCpFnRS3xO2IuB8Sca4oWC
-        JHE6I2GYo4z0P5XgrwqWEeZAy8mk7eui0x5lNkcO7m+97J3MnI0rHbx648an7tHnxC7PZ7Ig
-        vWv+yo7q0SGVdeL615LQGO3b3sTa6QXjBmnw2tXhb2o2db2SOKPvlJSdDMkJz63fZVNusnbH
-        Dp+2EOsutEeVSbtM976x0WSCQ1URcWefeyp6YXt6BBNne/C8QH2pabdrZq4xU6NMvFZR9aEm
-        ZHbzR68pe3eo4wveT5YYIz5G+33hP/hSoz5xEgEb/3qW1J4j3Le3WeMO9mmKujIa3vJN7hTl
-        S7JkXg2e2Phd4aS7xXprTxj5qzw2W//FgUVG1G5sjbk9MNZjmmmZxJWeCfXggYYPUnMW1kdf
-        VPHDOGmHxFsisDRN/A/guRNaIwQAAA==
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS autolearn=no
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/12/23 18:54, Mark Rutland wrote:
+> Hi Anshuman,
+> 
+> On Thu, Jan 05, 2023 at 08:40:35AM +0530, Anshuman Khandual wrote:
+>> This adds BRBE related register definitions and various other related field
+>> macros there in. These will be used subsequently in a BRBE driver which is
+>> being added later on.
+> 
+> I haven't verified the specific values, but this looks good to me aside from
+> one minor nit below.
+> 
+> [...]
+> 
+>> +# This is just a dummy register declaration to get all common field masks and
+>> +# shifts for accessing given BRBINF contents.
+>> +Sysreg	BRBINF_EL1	2	1	8	0	0
+> 
+> We don't need a dummy declaration, as we have 'SysregFields' that can be used
+> for this, e.g.
+> 
+>   SysregFields BRBINFx_EL1
+>   ...
+>   EndSysregFields
+> 
+> ... which will avoid accidental usage of the register encoding. Note that I've
+> also added an 'x' there in place of the index, which we do for other registers,
+> e.g. TTBRx_EL1.
+> 
+> Could you please update to that?
 
-I hope you are doing well.
+There is a problem in defining SysregFields (which I did explore earlier as well).
+SysregFields unfortunately does not support enums fields. Following build failure
+comes up, while trying to convert BRBINFx_EL1 into a SysregFields definition.
 
+Error at 932: unexpected Enum (inside SysregFields)
 
-I am looking to give away my late husband's Yamaha baby grand piano to a passionate instrument lover, so let me know if you will take it or have someone who will care for it.
+===============================================================================
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index a7f9054bd84c..519c4f080898 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -921,10 +921,7 @@ Enum       3:0     BT
+ EndEnum
+ EndSysreg
+ 
+-
+-# This is just a dummy register declaration to get all common field masks and
+-# shifts for accessing given BRBINF contents.
+-Sysreg BRBINF_EL1      2       1       8       0       0
++SysregFields BRBINFx_EL1
+ Res0   63:47
+ Field  46      CCU
+ Field  45:32   CC
+@@ -967,7 +964,7 @@ Enum        1:0     VALID
+        0b10    SOURCE
+        0b11    FULL
+ EndEnum
+-EndSysreg
++EndSysregFields
+ 
+ Sysreg BRBCR_EL1       2       1       9       0       0
+ Res0   63:24
+===============================================================================
 
+There are three enum fields in BRBINFx_EL1 as listed here.
 
-Email: janicelawson556@gmail.com
+Enum    13:8            TYPE
+Enum    7:6		EL
+Enum    1:0     	VALID
 
+However, BRBINF_EL1 can be changed as BRBINFx_EL1, indicating its more generic
+nature with a potential to be used for any index value register thereafter.
 
-Regards,
-
-
-Mrs Janice Lawson
+> 
+> With that:
+> 
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Mark.
