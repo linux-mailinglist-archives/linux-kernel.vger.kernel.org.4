@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D94E669EC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FAE669EC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjAMQxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S230482AbjAMQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjAMQwf (ORCPT
+        with ESMTP id S230064AbjAMQwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:52:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628E48D5DA
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:49:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673628513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7kHcZok2JboWt/NUnzQQm3ugGQ47nBsRs2mV8W7iXk=;
-        b=hsabIP8a5QhUBp0dtFcd+4dxJO9NkbYDzRdvVs7Xx165onm/8dF0f8ipcFoKvaRN5mCakF
-        9f8CCQjQO9TND6Evqm7X5Plxa3pwnHpYUZRvjmuiWESo2VHNpIQ9EaRi+l6ONIfqJpwENE
-        8XDHt4IRrtD8z2fKWksJo1yTr4m36nE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-591-G419EohtO7mkyPXKvF31xQ-1; Fri, 13 Jan 2023 11:48:32 -0500
-X-MC-Unique: G419EohtO7mkyPXKvF31xQ-1
-Received: by mail-wr1-f71.google.com with SMTP id b6-20020adfc746000000b002bae2b30112so4332982wrh.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:48:32 -0800 (PST)
+        Fri, 13 Jan 2023 11:52:47 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AE378271
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:49:47 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v6so31881634edd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E0Hwf435NI9x+XW4Wj0FsZq4Qu4oztZjGcQONywLmh8=;
+        b=L8lwqLpWBsOLOn8/6W0GxhxaHljuv6GWrzyiwr6PVLBp3jXW+Cx4znhTaYzLaimrx6
+         KtwfOQ8X3Gu31WqI4Xp9+2n8rVkmg7NqWbcmopvl/Z+n+GEs40IYQyd54NBG2kIUCoPA
+         eVTz77cX3BTCM6m3IrEgg1/evqc8cxilBhCM/S9K4VlOnFsVug3CBLOG4witg3Lg9EzW
+         bSwvz9FccElsNA/i3Uhs1cEgNveli9D/I2SJk2RgOg4AVA8PVSfNBJod2kyPllvIMoil
+         mi469QB7XMmhAIXRld78pqVadUrnCIKyBl5+kOHmI/of2PFdfHYEnESU0Z9xx9oFAx7p
+         vqjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V7kHcZok2JboWt/NUnzQQm3ugGQ47nBsRs2mV8W7iXk=;
-        b=4o82xrTUQVkMRqmcYJYYUJ4DmA6GMNVTvO9MXpzs/eq9Cu6dEPE8CrWdSGSu9Qrvk0
-         ERLy+IDAw79WbL+Oe2UuIh/LUlVsywk/5HSvNc0chGysC+DmUPA8f9QExWncrc+aGIr4
-         afSwZnlfYvrDCfXZk8DMoql/lOqKSZkftIg4Tiyy9vFiBrVEQ+3ikSStp4Hi7A+g7+xO
-         D5F0/dJaUGGYKu8yzcFf76ONT4ycgwCRXiT8XyA2kusYq6fjwGZITkJBpvhEutun0vrO
-         HrTnt0R84n++aB+yV+b++7ALSqO9cKIIbChU1Fqj32G9CwbvrX/ButUOEike2zjgtYm0
-         UD6A==
-X-Gm-Message-State: AFqh2kp9EKkgBhpOgk5bMaQBM8LvifZZXsSBXNSKvmSpCFm/TKN9PTxz
-        jeVvcw5HRhsiUksW2KyCU8XVUCUJjr4Tysays/0jnv2H6u+T4wVba8mt2MBF9XTdxupTPA486yK
-        g/xoNvzc8xNOx5ZLI9J84mzGF
-X-Received: by 2002:adf:ffcd:0:b0:2bd:db3b:33f5 with SMTP id x13-20020adfffcd000000b002bddb3b33f5mr3973276wrs.3.1673628511640;
-        Fri, 13 Jan 2023 08:48:31 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXthCwxe2HyQAUqAMUletX/WOKSF5DYScC+JbVyGBLWFTQa9J69Fx8M71m+IJhFtjV5yqkIAdg==
-X-Received: by 2002:adf:ffcd:0:b0:2bd:db3b:33f5 with SMTP id x13-20020adfffcd000000b002bddb3b33f5mr3973270wrs.3.1673628511448;
-        Fri, 13 Jan 2023 08:48:31 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id k2-20020a5d5182000000b00236545edc91sm19630130wrv.76.2023.01.13.08.48.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 08:48:30 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the workqueues tree
-In-Reply-To: <xhsmhzgamidp8.mognet@vschneid.remote.csb>
-References: <20230113143102.2e94d74f@canb.auug.org.au>
- <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
- <xhsmhzgamidp8.mognet@vschneid.remote.csb>
-Date:   Fri, 13 Jan 2023 16:48:29 +0000
-Message-ID: <xhsmhwn5qidnm.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0Hwf435NI9x+XW4Wj0FsZq4Qu4oztZjGcQONywLmh8=;
+        b=o3xlS+Qkv59I2uxF6sLuXIpqzxooxKrRcE/3x4KncYM6jc7+bCfCP7VenuAvbwJtMW
+         ql4HhTntsTIMJrABylAgsQIzPDFAbtvXnkw0/MoTzzXq35HjwbyBB5Hfl2FHV09NzXCK
+         8Y4Q6GzpwcylnTyJBv5UMVvu1SNzyz4Ul9fIWAH6HUlsUzx0xEYzOocf39BZL5OrnRxd
+         jr7LbvkH+W2DquljPImmRJsXcx+DtlAafHWztP+WADPsDkDXK2uBBfxxLGxcpezJ930m
+         XjsSDEnw49nGQOOJSDEUUqorp1aykkqpQTvd/NtzF4MaZnhhGbip7jmkKPKsmdq9cY1t
+         9S7g==
+X-Gm-Message-State: AFqh2kqwDnv2ZWMCYyyuPhNlvf+MahZVRZYQS+WVk0s1DIj8tNCE3zRk
+        GP8qDzbGoqo8uVbtwG8f46BjpA==
+X-Google-Smtp-Source: AMrXdXtpIsmBMd0PLUTqbePBHzOiSxh9soqvgLUnTlOwzhQlxgDe0YF+PTLlO5KRRmPFZRyCKGrP1A==
+X-Received: by 2002:aa7:df17:0:b0:499:d297:334e with SMTP id c23-20020aa7df17000000b00499d297334emr10427423edy.20.1673628585847;
+        Fri, 13 Jan 2023 08:49:45 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h26-20020a0564020e9a00b0045ce419ecffsm8320724eda.58.2023.01.13.08.49.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 08:49:45 -0800 (PST)
+Message-ID: <5c046bb8-3d74-04c2-f32e-b6fd450f80fc@linaro.org>
+Date:   Fri, 13 Jan 2023 17:49:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/2] Revert "dt-bindings: power: rpmpd: Add SM4250
+ support"
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20230113152232.2624545-1-konrad.dybcio@linaro.org>
+ <20230113152232.2624545-2-konrad.dybcio@linaro.org>
+ <e1782f36-5a28-1fe4-47d5-b3bc00317b57@linaro.org>
+ <92b7955c-bcac-20ad-ccde-3eef17f092b6@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <92b7955c-bcac-20ad-ccde-3eef17f092b6@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/23 16:47, Valentin Schneider wrote:
-> On 13/01/23 06:31, Tejun Heo wrote:
->> On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
->>> Hi all,
+On 13/01/2023 17:36, Konrad Dybcio wrote:
+> 
+> 
+> On 13.01.2023 17:33, Krzysztof Kozlowski wrote:
+>> On 13/01/2023 16:22, Konrad Dybcio wrote:
+>>> SM4250 and SM6115 use a shared device tree and the RPMPDs are
+>>> identical. There's no need for a separate entry, so remove it.
 >>>
->>> After merging the workqueues tree, today's linux-next build (x86_64
->>> allnoconfig and several others) produced this warning:
+>>> This reverts commit 45ac44ed10e58cf9b510e6552317ed7d2602346f.
 >>>
->>> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
->>>  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
->>>       |             ^~~~~~~~~~~~~
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  .../devicetree/bindings/power/qcom,rpmpd.yaml          |  1 -
+>>>  include/dt-bindings/power/qcom-rpmpd.h                 | 10 ----------
+>>>  2 files changed, 11 deletions(-)
 >>>
->>> Introduced by commit
->>>
->>>   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
+>>> diff --git a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+>>> index 633d49884019..5bb9f59d196f 100644
+>>> --- a/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/qcom,rpmpd.yaml
+>>> @@ -39,7 +39,6 @@ properties:
+>>>        - qcom,sdm845-rpmhpd
+>>>        - qcom,sdx55-rpmhpd
+>>>        - qcom,sdx65-rpmhpd
+>>> -      - qcom,sm4250-rpmpd
 >>
->> Valentin, this is caused by rebind_worker() being only used by
->> rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
->> rebind_worker(). Just fold it back into rebind_workers()?
->>
->
-> Woops! Yes I only did it to keep things aligned with unbind_workers(), let
-> me resend with that folded back in. Sorry!
->
+>> Yet, dedicated compatibles are usually recommended. Maybe this should be
+>> used with fallback:
+>> "qcom,sm4250-rpmpd", "qcom,sm6115-rpmpd"
+> The compatible has never been used so far and it's really the
+> same situation as SDM630/660 AFAIK, so I don't think it makes
+> much sense.
 
-Unless you'd prefer a fixup patch on top of those you've already picked up?
+OK, assuming these are almost the same SoCs in that aspect:
 
->> Thanks.
->>
->> --
->> tejun
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
