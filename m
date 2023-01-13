@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3350066A330
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6706066A336
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjAMTb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S230405AbjAMTbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjAMTam (ORCPT
+        with ESMTP id S229830AbjAMTap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:30:42 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B7E85C95
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:42 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id x6so6615328ill.10
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:42 -0800 (PST)
+        Fri, 13 Jan 2023 14:30:45 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8DB8793B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:44 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id u8so11259174ilg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:30:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b1o5vBUqYZImz4NHOXgCRklT6MZZtgIKbNelpVgr1rc=;
-        b=O/G/GtrLDkS5318MosjlluvMht6s+j6sda3zFLrbXEaHuhdy3Ep0v0dq4H3SemVWco
-         mbHU/PLBxTIyQr+HKWkeWhY4F15ONxe3ZlSHXvkjdXkVdgIfMREA53VU9Jj14bpejFKb
-         bG97tXcxSdnDGjeac8amfJc7ZA1EBBtZq/ZTtgGdh9eDV7Op2JPsuqt6Nm6/s8aZg4O2
-         FCfHXEr5/orMZzKROvde4QwLWIJ9SONF9wRfIiL8omXe6zRYbhK7wZv6Z8LYhmBjLIvD
-         QLMyIcPqJT6/6oY2ckvy7JVGWZfAFeSeLsASj6eYHjBcqYVZjVmtTWWnSN+jJDwI/oIh
-         1txw==
+        bh=h7E8mOROiZFak1hyuDLHZO4dWBPRJx+AzyZtVyPnB1c=;
+        b=NFGI8G4J3JHcHWVJJCje1tn4wX4/c1V8buxhNGuHGLE8ioehj37HI2hvsXan7Iauj1
+         bWiQH6MGv9cOKH5nmWV6A+0M/JOqI0hhwUzgAIHVc5Kq0RqrRPFL5FJCLxbDqrdlIy+y
+         UUz3LreilLsYdvT8RHh+wNBRnYKAmYuInZ33RrJREgW7fnV8RvLua8XDtq3KyvlUrm4h
+         8nNE8/1pZpXH4qvP22FNR5anq3q07NAS+Qk4kXZcZ8Y+PIru3803BdzsGR/Fy6TJXhBo
+         8GDAghcOV4YeYkquVwMQN64IO3O1+wd5nUVrgmYkTBsezoi8F8QrkhWN/Gv4GLGp7Xhi
+         DtHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b1o5vBUqYZImz4NHOXgCRklT6MZZtgIKbNelpVgr1rc=;
-        b=RfSuMLS8YQXVbOGHa0sx9tlmujEBhzHUAIWzKeJoU9MsGqfGjzejqDhKt5MIHu8Xzs
-         1nsRgJbiCS9hgqkg9HRoz0/mkx8Ro7xmQUZPcMHW5NDOo9LibDTBUTT7VMCm1Y5qfm4W
-         ssj+2uNSgFGIYNWTRtCQTgK8zvhT1ymdR6mLGtWHf4bc6gDjDaOh+KiA6B0khHld4N9N
-         Yl9ap883DiBu6d9GVWimihq4rAWDITR/5M+rXwQ8Tbkq7cmUYbtVyWWxUHw/9XUNk+g8
-         GaTnlZL07W1T5KwVUKgxveBzQ9ceF4ZTSp0kgroeofCM9d71wmfbja6E97mCVnMzCaT8
-         hFug==
-X-Gm-Message-State: AFqh2kpoBYphv3TrUsNBfmjSolLE3W1hD7SPwiX4hInDQNiEZW888IBI
-        8ocj7n19xT8gVn+7oVTfBAK0bx4AUbXTRg==
-X-Google-Smtp-Source: AMrXdXvjHFCUqwgnJISIfjiy5EhLkeG2cldtPBa2NhmQBpy3xoVlCgCyWUpN297fbq27qZozSPjmgQ==
-X-Received: by 2002:a92:1306:0:b0:30d:bd88:8a2e with SMTP id 6-20020a921306000000b0030dbd888a2emr9127064ilt.20.1673638241114;
-        Fri, 13 Jan 2023 11:30:41 -0800 (PST)
+        bh=h7E8mOROiZFak1hyuDLHZO4dWBPRJx+AzyZtVyPnB1c=;
+        b=gRWmpaf6LfEG2PEplyGEk1irNBnLDfjwDWBkHXVDyenqsk6gMJ2PFxkirmEEnBtzRI
+         aA8Z6LgsRi9tmT/gdFTtL+VWTv5h2MfKvhAPrz4/SI9abld+0hxpegvDJLqpTa6KfnJJ
+         anjngXi2xNSFz8xpYYT9u8ODsWWxxyd2fSJMxSVlLAwKfnOGcOx22dqNOGW7AiU8SxcT
+         U/fjHi2fwpupFzy2uuwwI3qon2QiEcRHtkE529w8JTyLp+FLh25hhzCAaPb1IQlkZjz0
+         rwT8ERz+QAF4s0hqmC4Bw+VxosNNZM3IgJG/Ds5wVJzAmUIJYbQaOB1nIwfGSTBDhszo
+         Ur4g==
+X-Gm-Message-State: AFqh2kq6S+OMmaeXZ50gdj0oeQ0YVYtEYq1a8OwgqoMSpa7gPTPOwEZQ
+        KjI3zVowfy1/IkJ3KJtElE/ZQduFh965mw==
+X-Google-Smtp-Source: AMrXdXvPH129dWnUpJa8DkRWJYweDtctq7cHertzhMd9iaMmt2QU3y+ioZ4YvEafYXsPdjHT7P3j0w==
+X-Received: by 2002:a92:d10f:0:b0:305:dee9:bcc6 with SMTP id a15-20020a92d10f000000b00305dee9bcc6mr53274901ilb.17.1673638243665;
+        Fri, 13 Jan 2023 11:30:43 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id e32-20020a026d60000000b0039e583abceasm6497289jaf.68.2023.01.13.11.30.40
+        by smtp.googlemail.com with ESMTPSA id e32-20020a026d60000000b0039e583abceasm6497289jaf.68.2023.01.13.11.30.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 11:30:40 -0800 (PST)
+        Fri, 13 Jan 2023 11:30:43 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
@@ -58,9 +58,9 @@ Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
         daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         jbaron@akamai.com, gregkh@linuxfoundation.org,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH v2 01/20] test-dyndbg: fixup CLASSMAP usage error
-Date:   Fri, 13 Jan 2023 12:29:57 -0700
-Message-Id: <20230113193016.749791-2-jim.cromie@gmail.com>
+Subject: [PATCH v2 02/20] test-dyndbg: show that DEBUG enables prdbgs at compiletime
+Date:   Fri, 13 Jan 2023 12:29:58 -0700
+Message-Id: <20230113193016.749791-3-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230113193016.749791-1-jim.cromie@gmail.com>
 References: <20230113193016.749791-1-jim.cromie@gmail.com>
@@ -76,59 +76,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-more careful reading of test output reveals:
+Dyndbg is required to enable prdbgs at compile-time if DEBUG is
+defined.  Show this works; add the defn to test_dynamic_debug.c,
+and manually inspect/verify its effect at module load:
 
-lib/test_dynamic_debug.c:103 [test_dynamic_debug]do_cats =pmf "doing categories\n"
-lib/test_dynamic_debug.c:105 [test_dynamic_debug]do_cats =p "LOW msg\n" class:MID
-lib/test_dynamic_debug.c:106 [test_dynamic_debug]do_cats =p "MID msg\n" class:HI
-lib/test_dynamic_debug.c:107 [test_dynamic_debug]do_cats =_ "HI msg\n" class unknown, _id:13
+[   15.292810] dyndbg: module:test_dynamic_debug attached 4 classes
+[   15.293189] dyndbg:  32 debug prints in module test_dynamic_debug
+[   15.293715] test_dd: init start
+[   15.293716] test_dd: doing categories
+[   15.293716] test_dd: LOW msg
+...
+[   15.293733] test_dd: L6 msg
+[   15.293733] test_dd: L7 msg
+[   15.293733] test_dd: init done
 
-That last line is wrong, the HI class is declared.
+NOTES:
 
-But the enum's 1st val (explicitly initialized) was wrong; it must be
-_base, not _base+1 (a DECLARE_DYNDBG_CLASSMAP param).  So the last
-enumeration exceeded the range of mapped class-id's, which triggered
-the "class unknown" report.  Basically, I coded in an error, and
-forgot to verify it and remove it.
+As is observable above, define DEBUG enables all prdbgs, including
+those in mod_init-fn, and more notably, the class'd ones (callsites
+with non-default class_ids).
 
-RFC:
+This differs from the >control interface, which in order to properly
+protect a client's class'd prdbgs, requires a "class FOO" in queries
+to change them.  If this sounds wrong, note that the DEBUG is in the
+module source file, and is thus privileged.
 
-This patch fixes a bad usage of DECLARE_DYNDBG_CLASSMAP([1]), showing that
-it is too error-prone.  As noted in test-dynamic-debug.c comments:
+This yields an occaisional surprise; the following disables all the
+compile-time enabled plain prdbgs, but leaves the class'd ones
+enabled.
 
- * Using the CLASSMAP api:
- * - classmaps must have corresponding enum
- * - enum symbols must match/correlate with class-name strings in the map.
- * - base must equal enum's 1st value
- * - multiple maps must set their base to share the 0-62 class_id space !!
- *   (build-bug-on tips welcome)
-
-Those shortcomings could largely be fixed with a __stringify_list
-(which doesn't exist) used in DEFINE_DYNAMIC_DEBUG_CLASSMAP(), on
-__VA_ARGS__ a 2nd time.  Then, DRM would pass DRM_UT_* ; all the
-categories, in order, and not their stringifications, which created
-all the usage complications above.
-
-[1] name changed later to DYNDBG_CLASSMAP_DEFINE
+ :#> modprobe test_dynamic_debug dyndbg==_
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- lib/test_dynamic_debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/test_dynamic_debug.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 8dd250ad022b..a01f0193a419 100644
+index a01f0193a419..89dd7f285e31 100644
 --- a/lib/test_dynamic_debug.c
 +++ b/lib/test_dynamic_debug.c
-@@ -75,7 +75,7 @@ DD_SYS_WRAP(disjoint_bits, p);
- DD_SYS_WRAP(disjoint_bits, T);
+@@ -8,6 +8,8 @@
  
- /* symbolic input, independent bits */
--enum cat_disjoint_names { LOW = 11, MID, HI };
-+enum cat_disjoint_names { LOW = 10, MID, HI };
- DECLARE_DYNDBG_CLASSMAP(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES, 10,
- 			"LOW", "MID", "HI");
- DD_SYS_WRAP(disjoint_names, p);
+ #define pr_fmt(fmt) "test_dd: " fmt
+ 
++#define DEBUG /* enable all prdbgs (plain & class'd) at compiletime */
++
+ #include <linux/module.h>
+ 
+ /* run tests by reading or writing sysfs node: do_prints */
 -- 
 2.39.0
 
