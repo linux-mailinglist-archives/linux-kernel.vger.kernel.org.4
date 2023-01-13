@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCB466A107
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C508266A108
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjAMRqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S229771AbjAMRql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjAMRpt (ORCPT
+        with ESMTP id S229978AbjAMRpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:45:49 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B921493C20;
-        Fri, 13 Jan 2023 09:33:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B409A6BED3;
-        Fri, 13 Jan 2023 17:33:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673631232; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=I5p1sl5UkonA67eiR2ZIh8ljw7OWOp0Jz6f3VzMJyV8=;
-        b=Aia1O321cPJ5o45Ya6hlaVP0P8WgdptZEyEAPHSz9nPii0NE4xth+RqbdF62zhtXgoV0Dr
-        7CDghpl+16iTIPcuWJXZ/Hh6TPOr0xR1rf0QTi9JMZNtI/Hse1JbwU1LQd/qFSPOFwOE1z
-        SQ1f1qSkXQ+9RbZPR6WtIDJWSVTv/Gs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673631232;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=I5p1sl5UkonA67eiR2ZIh8ljw7OWOp0Jz6f3VzMJyV8=;
-        b=3q0ttxkohrkzr0a6ThUGePUVcRDDWzjIVS582Cxk2Fu2xmI+YinzLJM3pjovCkLxwe/5xB
-        R9qxBsgXMvbIlCDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FEEA13913;
-        Fri, 13 Jan 2023 17:33:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6GeHHgCWwWP0dAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 13 Jan 2023 17:33:52 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     patches@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, regressions@leemhuis.info,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Vlastimil Babka <vbabka@suse.cz>, stable@vger.kernel.org
-Subject: [PATCH for 6.1 regression] Revert "mm/compaction: fix set skip in fast_find_migrateblock"
-Date:   Fri, 13 Jan 2023 18:33:45 +0100
-Message-Id: <20230113173345.9692-1-vbabka@suse.cz>
-X-Mailer: git-send-email 2.39.0
+        Fri, 13 Jan 2023 12:45:55 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545B488DE8;
+        Fri, 13 Jan 2023 09:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673631251; x=1705167251;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/mLCpdcyLaa16plox8m52Uh9afCDS916L+EggEDx7yA=;
+  b=TzgKGfsCcbAbr7z2pEp4ACatwWfmjJnTRlfSzz693hkMjOc5WXYrUSAF
+   qa264ntCglpbGn2aDHfKc+ZjODkUcbtTP81LGjc6eQ4ObfdJlTMNxatCz
+   HMd+mUwvR+ue6HLZtVIXZjLnzUu2XH6hsUW3kW5Pm7Zy25ogYLMsQUSEt
+   d2QvLqFv7OBsRn1fTQCfgvH0BG5qSDK4OT5RRbLyqTupHclW6mo0JaDD8
+   /OYYzcTYPnO9Z/36cHpKLrpJ0SzsMskkeXkr83C5qpeoW4UO8S9o6Bux1
+   Flzj1tpjvlUaNsedLfV+w0/12Cdw+bi/3D4vI//QSc8cGdfDkJzPZkSZL
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="324108970"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="324108970"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:34:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="721599716"
+X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
+   d="scan'208";a="721599716"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:34:10 -0800
+Message-ID: <6a5ea6ac492d354479f5d340c16588f2f4b3d7c0.camel@linux.intel.com>
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points
+ int340x
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "daniel.lezcano@kernel.org" <daniel.lezcano@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+Date:   Fri, 13 Jan 2023 09:34:09 -0800
+In-Reply-To: <35b6549e-a722-4667-c471-907d91d424ce@linaro.org>
+References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
+         <20230110151745.2546131-4-daniel.lezcano@linaro.org>
+         <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
+         <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
+         <34f9fc91c398f85c0bedaff89adbb33897cb1f62.camel@linux.intel.com>
+         <35b6549e-a722-4667-c471-907d91d424ce@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 7efc3b7261030da79001c00d92bc3392fd6c664c.
+On Fri, 2023-01-13 at 18:21 +0100, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> On 13/01/2023 16:48, srinivas pandruvada wrote:
+> > Hi Daniel,
+> > 
+> > > > > 
+> > 
+> > [...]
+> > 
+> > > > > -       status = acpi_evaluate_integer(d->adev->handle,
+> > > > > "GTSH",
+> > > > > NULL,
+> > > > > &hyst);
+> > > > > -       if (ACPI_FAILURE(status))
+> > > > > -               *temp = 0;
+> > > > > -       else
+> > > > > -               *temp = hyst * 100;
+> > > > 
+> > > > The previous code returns hyst * 100.
+> > > > But the new API retuurns hyst directly.
+> > > > 
+> > > > -/sys/class/thermal/thermal_zone2/trip_point_4_hyst:2000
+> > > > +/sys/class/the
+> > > > rmal/thermal_zone2/trip_point_4_hyst:20
+> > > > 
+> > > > Is this done on purpose?
+> > > 
+> > > No, it is an error. The function thermal_acpi_trip_gtsh() should
+> > > do:
+> > > 
+> > >          return deci_kelvin_to_millicelsius(hyst);
+> > > 
+> > > 
+> > 
+> > GTSH returns here in tenths of degree Kelvin. For example 15 means
+> > 1.5
+> > degree K.
+> 
+> Yes, so the above conversion is correct, right ?
+Correct.
 
-We have got openSUSE reports (Link 1) for 6.1 kernel with khugepaged
-stalling CPU for long periods of time. Investigation of tracepoint data
-shows that compaction is stuck in repeating fast_find_migrateblock()
-based migrate page isolation, and then fails to migrate all isolated
-pages. Commit 7efc3b726103 ("mm/compaction: fix set skip in
-fast_find_migrateblock") was suspected as it was merged in 6.1 and in
-theory can indeed remove a termination condition for
-fast_find_migrateblock() under certain conditions, as it removes a place
-that always marks a scanned pageblock from being re-scanned. There are
-other such places, but those can be skipped under certain conditions,
-which seems to match the tracepoint data.
+Thanks,
+Srinivas
 
-Testing of revert also appears to have resolved the issue, thus revert
-the commit until a more robust solution for the original problem is
-developed.
+> 
+> > I would like to test your next series with thermald. If there is a
+> > problem, it will break every distro.
+> 
+> Great, thanks!
+> 
+> 
 
-It's also likely this will fix qemu stalls with 6.1 kernel reported in
-Link 2, but that is not yet confirmed.
-
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1206848
-Link: https://lore.kernel.org/kvm/b8017e09-f336-3035-8344-c549086c2340@kernel.org/
-Fixes: 7efc3b726103 ("mm/compaction: fix set skip in fast_find_migrateblock")
-Cc: <stable@vger.kernel.org>
----
- mm/compaction.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/mm/compaction.c b/mm/compaction.c
-index ca1603524bbe..8238e83385a7 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1839,6 +1839,7 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
- 					pfn = cc->zone->zone_start_pfn;
- 				cc->fast_search_fail = 0;
- 				found_block = true;
-+				set_pageblock_skip(freepage);
- 				break;
- 			}
- 		}
--- 
-2.39.0
 
