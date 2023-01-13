@@ -2,120 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3260466A6CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0F966A6D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjAMXOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S229996AbjAMXQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjAMXNv (ORCPT
+        with ESMTP id S231428AbjAMXP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:13:51 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396446D53B
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:13:49 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso2505496pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:13:49 -0800 (PST)
+        Fri, 13 Jan 2023 18:15:29 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A9C7A921
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:15:23 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso25884180pjf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:15:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aD430Gm5/BH6KWfU6qRjnAcPFnRFXzypIgZQD78Cq8M=;
-        b=J9kbXeAr7RzKUj6xWqpWYyasnI938iccbuzYevy5Kw8J6dsLK90aA073MlhfbQX7Zx
-         g+GrHw5HrAqoynqitIFYrifwNYgqPzRdTko8sXY7wDB8RJJof1k0kQ/MRRNQ1eqRjcYi
-         cbhX/+Qd94yu+tAum1D9Oo9mUsR4zLbdFcHsJdqJmJRogfNxVk3ex3FGBS1rfDubEwnO
-         DQIlWYFYlqkXqrPcX5Qd0OI0aVEQJGn/j/r9wH/dLXSAJHp0J55zTJcP36Dgsxja9PEp
-         0qQjV1iaoAynY5Qk8zGqkPmE5xPbzsoqo7Jv4RuAEZ5C2vIa1vBQUrmm/x2y5EB/PJFI
-         jyJA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NMiMCJTb5LFuwR4bml+l69hnYQL1G+akTSIgXjV1vXs=;
+        b=X4KHjEhczDirMTjK/fziTxAevbXGGw7rq9kx81W2fTPIvGLoGCfwSt2nBrHlVe2W8G
+         Q76Va6blny+IfEe2b39IPgaNPxMmK+0Vr4hzPMoiCnrLxsyIWeVp8LDSNcUPDE4xrgVR
+         u4JyKKHzeF1QdYduZFXFEBBzXpOAzhL+bnVzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aD430Gm5/BH6KWfU6qRjnAcPFnRFXzypIgZQD78Cq8M=;
-        b=4Wz9bie/3AdiHmISLs0CAhJxWdCyN2Vs0pXe9JfpzXAY2a8PHzZHzzqu7mX1Wtcq/V
-         M4kmNXAJDvlZkmmp6kqahiR/aVN2fnvujVgyA8qao+TigvyfJYDMmgq83IkF2wPhUdHN
-         A6mV9P/PviQfhTwXvLv3BpQqU9KTQdpQhcYMESozUGcHweG9OibmMOuUELZfHfJkFWJi
-         bGbQfQdxDaxOEJb/PHh7bHGwv7R9Rg2Tvwxcl0KtaprL6GNQvuKjTHJFm2SI2opRwtFC
-         IiczbawAGJSiL5VW+kLohZ7UBPR62jnkWuUqvl4qmd/XLItBb5ODT1nVKy4IXED2PoMV
-         Ej0A==
-X-Gm-Message-State: AFqh2kqJBf00Foo8VK7ojvyM0fo24WJdG85RfSNs9oyT1GpFcHA9PsjX
-        ZwaVN6E0fqoE0JIh8PqJWwr9CvDDBl942GFo
-X-Google-Smtp-Source: AMrXdXt6FsRHB2cphm8pjBSHUu2uqj9MrjnIMJc5jrgFlJeiijosoKXpar/7LHkVP4cLD34SofgrKQ==
-X-Received: by 2002:a05:6a20:4284:b0:9d:b8e6:d8e5 with SMTP id o4-20020a056a20428400b0009db8e6d8e5mr1901073pzj.2.1673651628605;
-        Fri, 13 Jan 2023 15:13:48 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id k16-20020a170902c41000b00178b77b7e71sm7936571plk.188.2023.01.13.15.13.48
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NMiMCJTb5LFuwR4bml+l69hnYQL1G+akTSIgXjV1vXs=;
+        b=rxua1tTBQJRJxqpHMSDc+AmyP2udGwnziPdu7xqTUhOzATyFaNcF2LmfMqaAf8Jk3P
+         zuxFGeJo8a849lZ9IIMnOgXwwaTzQ6u2kBaczu5Ht7iER+725IoKRED1rjDutqAnkQVd
+         lqZgtcT82JqNzr2qjwJ1PXjBB547XkKIsQUUzrEdJvLn8TkjF1taYfHhdTNMx1rSv+cb
+         LQ9dzaeGUHgiAV5LxI72N/b2rmwvtzyY47EKlC5uauOOPkQoWriBgZsTHOF3GJdN0k7k
+         vGEKDuNDTvaAEn41kQndKZDjRCc/b2EvUWtiwf+L46wTUS01NR+lESwy69rgKRWL4sL8
+         iHHg==
+X-Gm-Message-State: AFqh2kpSH4DgmuEIbmxbWDbw0SWZuhNetmigZbXKuQrEu4U9geUmmqFX
+        1QkYnPg/AZJJNK/tT2pr6AL2Sg==
+X-Google-Smtp-Source: AMrXdXsWranqUsDdC6q52vgB5+sRwTueXpbwliTJq7AwCJ5IYX1byQz9BWxPmZN5AsX25qyHE/XO8g==
+X-Received: by 2002:a17:90b:3d8e:b0:228:f3fd:a0e2 with SMTP id pq14-20020a17090b3d8e00b00228f3fda0e2mr9863452pjb.13.1673651722785;
+        Fri, 13 Jan 2023 15:15:22 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h7-20020a17090a9c0700b00219cf5c3829sm12902587pjp.57.2023.01.13.15.15.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 15:13:48 -0800 (PST)
-Date:   Fri, 13 Jan 2023 23:13:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 4/9] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Message-ID: <Y8HlqMtgPACAN1i2@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-5-chao.p.peng@linux.intel.com>
+        Fri, 13 Jan 2023 15:15:22 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     masahiroy@kernel.org, peterz@infradead.org, samitolvanen@google.com
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com
+Subject: Re: [PATCH 0/1] Fix CFI hash randomization with KASAN
+Date:   Fri, 13 Jan 2023 15:15:18 -0800
+Message-Id: <167365171646.590452.12835527795605016769.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230112224948.1479453-1-samitolvanen@google.com>
+References: <20230112224948.1479453-1-samitolvanen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-5-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022, Chao Peng wrote:
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 99352170c130..d9edb14ce30b 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6634,6 +6634,28 @@ array field represents return values. The userspace should update the return
->  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
->  spec refer, https://github.com/riscv/riscv-sbi-doc.
->  
-> +::
-> +
-> +		/* KVM_EXIT_MEMORY_FAULT */
-> +		struct {
-> +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1ULL << 0)
+On Thu, 12 Jan 2023 22:49:47 +0000, Sami Tolvanen wrote:
+> Peter, Masahiro,
+> 
+> I noticed that KASAN+CFI fails to boot on x86_64 without
+> cfi=norand. The randomization code is missing a couple of KASAN
+> constructors in object files that are not part of vmlinux.o. This
+> happens because we don't run objtool for the files, which means
+> the type hashes are not included in the .cfi_sites section.
+> 
+> [...]
 
-Unless there's a reason not to, we should use bit 3 to match the attributes.
+Applied to for-linus/hardening, thanks!
+
+[1/1] kbuild: Fix CFI hash randomization with KASAN
+      https://git.kernel.org/kees/c/a6c5a3491b3f
+
+-- 
+Kees Cook
+
