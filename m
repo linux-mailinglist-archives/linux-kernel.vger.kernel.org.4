@@ -2,87 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A0C6692DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F1F6692E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240961AbjAMJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S241208AbjAMJ2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240992AbjAMJ1P (ORCPT
+        with ESMTP id S240845AbjAMJ1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:27:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0256CFE4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:20:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673601627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E39P6xJFtKdnbgiloEzSc7PdC9n7NpO9iAPJ8YamLms=;
-        b=jHwRJZYJOlbMye34UJd1QDO2OC/7OLox0JvkaMH6C1hVEnKXKzeBA/E0b78Rc5TWPfZ20u
-        dLdlK00eG8eOuSZXf/LMFozd5gvp4nkq1rj4eH5aAai3Qh7vW7bS7ic/+UJpO0jxL1Kiq+
-        jsqm6To5lec5Cbt/LIKEuJtAxa8bpZ8=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-66-R6Igy8NsMnGmGemgLm0PfA-1; Fri, 13 Jan 2023 04:20:26 -0500
-X-MC-Unique: R6Igy8NsMnGmGemgLm0PfA-1
-Received: by mail-ej1-f72.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso14674175ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 01:20:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E39P6xJFtKdnbgiloEzSc7PdC9n7NpO9iAPJ8YamLms=;
-        b=sSZZtSsL7ctl1ND1H/I+7VEtSwCxbn+vuPjB8pkmxtwab0OhSggt2vuE8MRD2gF8kq
-         fZu+XmlRk/z1PetpSWLwjA5tpKsL9uPLWX1Qa76dV2w2MR5fTSqoD+ZXWylPTFyqu3N7
-         ezGKhaDd1nHXRnM6CTY8lFbQMEEHQlVeph+oZalwMcvUnQInV+p/VQVzZP3nF6TdPgpw
-         28qAWSJK78WXoNN/I1gnJq+pYsUhZuiBAv38Cm0rDX9JhwqE5/V0TXEYVOiBKKgIDRSi
-         NowdmNxgED9Q7Oy5p+BRw88+wejerwRv9kt6t9MtfrlhXAV6JWIuGswwz1VB08dA1zE4
-         XU2A==
-X-Gm-Message-State: AFqh2krEiKNhrgMaVffjdvWjl6x9UG/p1DPXAQY9Bxhcy7aa88T5bHsR
-        Okrd00yUPgEj0cWjR2wcaOQLms4HhQJVjBYDRXgEO9Ne6LsMAQZzN3TWLQssP6X7t7zCMqdm53b
-        UmlhPTfyg04fxqz5gg37/3HbE
-X-Received: by 2002:a17:906:d052:b0:7c1:5098:907a with SMTP id bo18-20020a170906d05200b007c15098907amr70409399ejb.35.1673601625179;
-        Fri, 13 Jan 2023 01:20:25 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu+A9VTXHX62QJzylA4ENTpGt4m2gHv/owT5LMNTowovwA1ALCFnAa/p3OapN/YFDUVfnHYPA==
-X-Received: by 2002:a17:906:d052:b0:7c1:5098:907a with SMTP id bo18-20020a170906d05200b007c15098907amr70409391ejb.35.1673601624959;
-        Fri, 13 Jan 2023 01:20:24 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id ad7-20020a170907258700b0084bfd0a117bsm8405899ejc.16.2023.01.13.01.20.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 01:20:24 -0800 (PST)
-Message-ID: <d1d44f07-558c-e0ed-403e-61a854c868cb@redhat.com>
-Date:   Fri, 13 Jan 2023 10:20:23 +0100
+        Fri, 13 Jan 2023 04:27:17 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EAD42E17;
+        Fri, 13 Jan 2023 01:22:38 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRQt_1673601743;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRQt_1673601743)
+          by smtp.aliyun-inc.com;
+          Fri, 13 Jan 2023 17:22:33 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH v7 0/9] Add metrics for neoverse-n2-v2
+Date:   Fri, 13 Jan 2023 17:22:11 +0800
+Message-Id: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] Documentation: kvm: fix SRCU locking order docs
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
-        Michal Luczaj <mhal@rbox.co>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230111183031.2449668-1-pbonzini@redhat.com>
- <a14a13a690277d4cc95a4b26aa2d9a4d9b392a74.camel@infradead.org>
- <20230112152048.GJ4028633@paulmck-ThinkPad-P17-Gen-1>
- <Y8EF24o932lcshKs@boqun-archlinux>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y8EF24o932lcshKs@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,57 +57,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/23 08:18, Boqun Feng wrote:
-> On Thu, Jan 12, 2023 at 07:20:48AM -0800, Paul E. McKenney wrote:
->> On Thu, Jan 12, 2023 at 08:24:16AM +0000, David Woodhouse wrote:
->>> On Wed, 2023-01-11 at 13:30 -0500, Paolo Bonzini wrote:
->>>>
->>>> +- ``synchronize_srcu(&kvm->srcu)`` is called inside critical sections
->>>> +  for kvm->lock, vcpu->mutex and kvm->slots_lock.  These locks _cannot_
->>>> +  be taken inside a kvm->srcu read-side critical section; that is, the
->>>> +  following is broken::
->>>> +
->>>> +      srcu_read_lock(&kvm->srcu);
->>>> +      mutex_lock(&kvm->slots_lock);
->>>> +
->>>
->>> "Don't tell me. Tell lockdep!"
->>>
->>> Did we conclude in
->>> https://lore.kernel.org/kvm/122f38e724aae9ae8ab474233da1ba19760c20d2.camel@infradead.org/
->>> that lockdep *could* be clever enough to catch a violation of this rule
->>> by itself?
->>>
->>> The general case of the rule would be that 'if mutex A is taken in a
->>> read-section for SCRU B, then any synchronize_srcu(B) while mutex A is
->>> held shall be verboten'. And vice versa.
->>>
->>> If we can make lockdep catch it automatically, yay!
->>
->> Unfortunately, lockdep needs to see a writer to complain, and that patch
->> just adds a reader.  And adding that writer would make lockdep complain
->> about things that are perfectly fine.  It should be possible to make
->> lockdep catch this sort of thing, but from what I can see, doing so
->> requires modifications to lockdep itself.
->>
-> 
-> Please see if the follow patchset works:
-> 
-> 	https://lore.kernel.org/lkml/20230113065955.815667-1-boqun.feng@gmail.com
-> 
-> "I have been called. I must answer. Always." ;-)
+Changes since v6:
+- Split patch #1 into 3 smaller patches as suggested by Ian.
+- Change perf_pmu__get_slots into perf_pmu__cpu_slots_per_cycle,
+  per John's suggestion;
+- Return NAN instead of 0 in perf_pmu__cpu_slots_per_cycle weak
+  function, per John's suggestion;
+- Factor out pmu_core__find_same function, per John's suggestion.
+- Link: https://lore.kernel.org/all/1673017529-1429208-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-It's missing an important testcase; if it passes (does not warn), then 
-it should work:
+Changes since v5:
+- Add common topdownL1 metrics in sbsa.json as suggested by John;
+- Correct PKI/MPKI ScaleUnit to 1PKI/1MPKI;
+- Link: https://lore.kernel.org/all/1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-CPU 1                                    CPU 2
-----------------------------             ------------------------------
-mutex_lock(&m1);                         srcu_read_lock(&srcu1);
-srcu_read_lock(&srcu1);                  mutex_lock(&m1);
-srcu_read_unlock(&srcu1);                mutex_unlock(&m1);
-mutex_unlock(&m1);                       srcu_read_unlock(&srcu1);
+Changes since v4:
+- Add MPKI/PKI “ScaleUnit”;
+- Add acked-by from Ian Rogers;
+- Link: https://lore.kernel.org/all/1671799045-1108027-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-This is the main difference, lockdep-wise, between SRCU and an rwlock.
+Changes since v3:
+- Add ipc_rate metric;
+- Drop the PublicDescription;
+- Describe PEutilization metrics in more detail;
+- Link: https://lore.kernel.org/all/1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-Paolo
+Changes since v2:
+- Correct the furmula of Branch metrics;
+- Add more PE utilization metrics;
+- Add more TLB metrics;
+- Add “ScaleUnit” for some metrics;
+- Add a newline at the end of the file;
+- Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+Changes since v1:
+- Corrected formula for topdown L1 due to wrong counts for stall_slot and
+  stall_slot_frontend; 
+- Link: https://lore.kernel.org/all/1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+This series does the following things:
+
+The slots in each architecture may be different, so add #slots literal
+to obtain the slots of different architectures, and the #slots can be
+applied in the topdown metric. Currently, The #slots just support for
+arm64, and other architectures will return NAN.
+
+The metrics of topdown L1 are from ARM sbsa7.0 platform design doc[0],
+D37-38, which are standard. So put them in the common file sbsa.json of
+arm64 and add general metric support, so that other cores besides n2/v2
+can also be reused.
+
+Then add topdownL1 metric for neoverse-n2-v2, and due to the wrong count
+of stall_slot and stall_slot_frontend on neoverse-n2, the real stall_slot
+and real stall_slot_frontend need to subtract cpu_cycles, so overwrite
+the "MetricExpr" for neoverse-n2.
+Reference from ARM neoverse-n2 errata notice [1], D117.
+
+Since neoverse-n2/neoverse-v2 does not yet support topdown L2, metricgroups
+such as Cache, TLB, Branch, InstructionsMix, and PEutilization will be added
+to further analysis of performance bottlenecks in the following patches.
+Reference from ARM PMU guide [2][3].
+
+[0] https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+[1] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
+[2] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
+[3] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
+
+Tested in neoverse-n2:
+
+$./perf list
+...
+Metric Groups:
+
+Branch:
+  branch_miss_pred_rate
+       [The rate of branches mis-predited to the overall branches]
+  branch_mpki
+       [The rate of branches mis-predicted per kilo instructions]
+  branch_pki
+       [The rate of branches retired per kilo instructions]
+Cache:
+  l1d_cache_miss_rate
+       [The rate of L1 D-Cache misses to the overall L1 D-Cache]
+  l1d_cache_mpki
+       [The rate of L1 D-Cache misses per kilo instructions]
+...
+
+
+$sudo ./perf stat -M TLB false_sharing 2
+
+ Performance counter stats for 'false_sharing 2':
+
+            29,940      L2D_TLB                          #     20.0 %  l2_tlb_miss_rate         (42.36%)
+             5,998      L2D_TLB_REFILL                                                          (42.36%)
+             1,753      L1I_TLB_REFILL                   #      0.1 %  l1i_tlb_miss_rate        (43.17%)
+         2,173,957      L1I_TLB                                                                 (43.17%)
+       327,944,763      L1D_TLB                          #      0.0 %  l1d_tlb_miss_rate        (43.98%)
+            22,485      L1D_TLB_REFILL                                                          (43.98%)
+           497,210      L1I_TLB                          #      0.0 %  itlb_walk_rate           (44.83%)
+                28      ITLB_WALK                                                               (44.83%)
+       821,488,762      INST_RETIRED                     #      0.0 MPKI  itlb_mpki             (43.97%)
+               122      ITLB_WALK                                                               (43.97%)
+               744      DTLB_WALK                        #      0.0 %  dtlb_walk_rate           (43.01%)
+       263,913,146      L1D_TLB                                                                 (43.01%)
+       779,073,875      INST_RETIRED                     #      0.0 MPKI  dtlb_mpki             (42.07%)
+             1,050      DTLB_WALK                                                               (42.07%)
+
+       0.435864901 seconds time elapsed
+
+       1.201384000 seconds user
+       0.000000000 seconds sys
+
+
+$sudo ./perf stat -M TopDownL1 false_sharing 2
+
+ Performance counter stats for 'false_sharing 2':
+
+     3,408,960,257      cpu_cycles                       #      0.0 %  bad_speculation
+                                                  #      5.1 %  retiring                 (66.79%)
+    19,576,079,610      stall_slot                                                              (66.79%)
+       877,673,452      op_spec                                                                 (66.79%)
+       876,324,270      op_retired                                                              (66.79%)
+     3,406,548,064      cpu_cycles                       #     26.7 %  frontend_bound           (67.08%)
+     7,961,814,801      stall_slot_frontend                                                     (67.08%)
+     3,415,528,440      cpu_cycles                       #     68.8 %  backend_bound            (66.43%)
+    11,746,647,747      stall_slot_backend                                                      (66.43%)
+
+       0.455229807 seconds time elapsed
+
+       1.243216000 seconds user
+       0.000000000 seconds sys
+
+$sudo ./perf stat -M branch sleep 1
+
+ Performance counter stats for 'sleep 1':
+
+           901,495      INST_RETIRED                     #    223.6 PKI  branch_pki
+           201,603      BR_RETIRED
+           901,495      INST_RETIRED                     #     10.0 MPKI  branch_mpki
+             9,004      BR_MIS_PRED_RETIRED
+             9,004      BR_MIS_PRED_RETIRED              #      4.5 %  branch_miss_pred_rate
+           201,603      BR_RETIRED
+
+       1.000794467 seconds time elapsed
+
+       0.000905000 seconds user
+       0.000000000 seconds sys
+
+Jing Zhang (9):
+  perf pmu: Add #slots literal support for arm64
+  perf jevent: Add general metrics support
+  perf vendor events arm64: Add common topdown L1 metrics
+  perf vendor events arm64: Add topdown L1 metrics for neoverse-n2-v2
+  perf vendor events arm64: Add TLB metrics for neoverse-n2-v2
+  perf vendor events arm64: Add cache metrics for neoverse-n2-v2
+  perf vendor events arm64: Add branch metrics for neoverse-n2-v2
+  perf vendor events arm64: Add PE utilization metrics for
+    neoverse-n2-v2
+  perf vendor events arm64: Add instruction mix metrics for
+    neoverse-n2-v2
+
+ tools/perf/arch/arm64/util/pmu.c                   |  34 ++-
+ .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 273 +++++++++++++++++++++
+ tools/perf/pmu-events/arch/arm64/sbsa.json         |  30 +++
+ tools/perf/pmu-events/jevents.py                   |   2 +
+ tools/perf/util/expr.c                             |   5 +
+ tools/perf/util/pmu.c                              |   6 +
+ tools/perf/util/pmu.h                              |   1 +
+ 7 files changed, 349 insertions(+), 2 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/sbsa.json
+
+-- 
+1.8.3.1
 
