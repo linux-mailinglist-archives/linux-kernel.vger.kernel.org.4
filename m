@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794FC669936
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C4266993A
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241150AbjAMN5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S241117AbjAMN5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237550AbjAMN4n (ORCPT
+        with ESMTP id S241230AbjAMN5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:56:43 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F7EBD0;
-        Fri, 13 Jan 2023 05:53:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=TsFuSkwR1WlHnCqE1Bje3dfaKMH46M3DRmRqT/WlQow=; b=G23umAhl+TT9CsE3I2NGNOA/gR
-        9ZIz+nKz0V2p3Mtxlq67IyRIWo3+z0o2UC4QXKnySEeydWyqpTWwfxUWzQdxBA4mW6SRBTgeIyYsB
-        id7C23royuWvIg1RsXg/siSXUu/Ewr9zVVbiCCxrb6EVnnCTcYs21XI5rayGJxJzg/Us=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pGKUV-0020Nc-Mz; Fri, 13 Jan 2023 14:53:07 +0100
-Date:   Fri, 13 Jan 2023 14:53:07 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <Y8FiQ3Fv25QJyawQ@lunn.ch>
-References: <20230106101651.1137755-1-lukma@denx.de>
- <20230106101651.1137755-1-lukma@denx.de>
- <20230106145109.mrv2n3ppcz52jwa2@skbuf>
- <20230113131331.28ba7997@wsk>
- <20230113122754.52qvl3pvwpdy5iqk@skbuf>
- <20230113142017.78184ce1@wsk>
+        Fri, 13 Jan 2023 08:57:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A813763C5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:53:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D7A1B82161
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:53:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90000C433EF;
+        Fri, 13 Jan 2023 13:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673618026;
+        bh=OJhTBUVSKCegb4i+9SFL4R/IowVrzTMekIJtJqHYazU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Tf+MwTF03EJ37hwcN2mCS6YdBNePhSnNDwRfJpoXiCj9Elw8kCVJzz1CCL58oyY/C
+         UP9Two46IPYAKKgsJ266v5O/t20np8OOM6+Vxutkcf4dsbbJNuz5oUXNcHrAOivPEW
+         o3yuLB+tT8Dr0cPuXoUG9EqE+OArcUhj2KP9Gx8LkN1pcxzFpUo39qL3QR0bsK6ZXj
+         RV2t5MF+tbDt3U4Nf8qGbhkxYuX/K+C0bJ1HcDYUXucgdo/ON/F9xefc0gEmK6/UjE
+         SBndq1lA6g+P30C1xI48H/j1+ZkgbbPuFmMvDksQq6E+vfRwvENT7mPn97J53uuTnL
+         XM7yTpe0/9duQ==
+Date:   Fri, 13 Jan 2023 07:53:43 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yang, Lixiao" <lixiao.yang@intel.com>,
+        "Peng, Chao P" <chao.p.peng@intel.com>
+Subject: Re: RESEND: MMCONFIG related question
+Message-ID: <20230113135343.GA1834989@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113142017.78184ce1@wsk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <SJ0PR11MB67449911D6906A753244AC8A92C29@SJ0PR11MB6744.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I tend to agree... The number of switched which suppor 1522 B max frame
-> is only six. This may be why the problem was not noticed.
-> 
-> The fixed function maybe should look like below:
-> 
-> 
-> static int mv88e6xxx_get_max_mtu(struct dsa_switch *ds, int port)
-> {
-> 	....
-> 
-> 	
-> 	int max_mtu;
-> 
-> 	max_mtu = chip->info->max_frame_size - VLAN_ETH_HLEN -
-> 		  ETH_FCS_LE;
-> 
-> 	if (dsa_is_dsa_port(ds, port) || dsa_is_cpu_port(ds, port))
-> 		  max_mtu -= EDSA_HLEN;
-> 
-> 	return max_mtu;
-> }
-> 
-> Comments more than welcome.
+On Fri, Jan 13, 2023 at 10:15:45AM +0000, Duan, Zhenzhong wrote:
+> Recently Lixiao reported sriov disappered for cards which supported
+> sriov. We found it's related to commit "07eab0901ed efi/x86: Remove
+> EfiMemoryMappedIO from E820 map" which removed EfiMemoryMappedIO
+> regions from E820 map which lead to pci_mmcfg_reject_broken() check
+> failed, raw_pci_ext_ops isn't set to pci_mmcfg finally, below is the
+> related log. I know maybe bios should add MMCONFIG region into ACPI
+> motherboard resources, just want to ask if we would support the case
+> when MMCONFIG is missed in ACPI motherboard resources as I see it's
+> treated as "Firmware Info" not "Firmware bug". Thanks
 
+The patches here:
+https://lore.kernel.org/linux-pci/20230110180243.1590045-1-helgaas@kernel.org/
+should resolve this problem.
 
-I would suggest some comments are added, explaining what is going on
-here. Given the number of Fixes: tags in this area, it is clearly
-tricky to get right, given how different switches operate.
+> Also has another question, if MMCONFIG happened to be in
+> EfiMemoryMappedIO, even if it's removed from E820 map so that there
+> is no CRS clip for that region, could it be used for BAR space?
 
-I've not looked back to the email archive, but i have a vague
-recollection that it could be some switches don't impose the MTU limit
-on CPU and DSA ports, just the user ports. So the value reported for
-those ports can actually be bigger than then the max mtu, in order to
-accommodate the DSA header.
+MMCONFIG cannot be used for BAR space.  MMCONFIG should be reported
+via PNP0C02 _CRS.  BAR space, i.e., a PCI host bridge aperture, should
+be reported via PNP0A03 _CRS.
 
-	Andrew
+> Will there be conflict for BAR and MMCONFIG access?
+
+I don't think so, but I don't completely understand the scenario
+you're asking about.
+
+The E820 clipping of PCI host bridge windows is only intended to work
+around an issue where PNP0A03 _CRS reports space that is not part of
+the host bridge windows.  E.g., there were a few platforms that seemed
+to report host bridge register space via _CRS.
+
+Bjorn
+
+> [    0.000000] efi: EFI v2.60 by EDK II BIOS ID:SE5C620.86B.01.00.0763.022420181017
+> [    0.000000] efi: SMBIOS=0x6ae78000 ACPI=0x6bbab000 ACPI 2.0=0x6bbab014 MEMATTR=0x67e99018 MOKvar=0x67b2d000
+> [    0.000000] efi: Not removing mem06: MMIO range=[0xfe000000-0xfe010fff] (68KB) from e820 map
+> [    0.000000] efi: Remove mem09: MMIO range=[0x80000000-0x8fffffff] (256MB) from e820 map
+> [    0.000000] e820: remove [mem 0x80000000-0x8fffffff] reserved
+> [    3.351098] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
+> [    3.351742] PCI: not using MMCONFIG
+> [    4.867853] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0x80000000-0x8fffffff] (base 0x80000000)
+> [    4.904325] [Firmware Info]: PCI: MMCONFIG at [mem 0x80000000-0x8fffffff] not reserved in ACPI motherboard resources
+> [    4.905061] PCI: not using MMCONFIG
+> 
+> Regards
+> Zhenzhong
