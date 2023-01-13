@@ -2,183 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0229F66A268
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C05B66A285
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjAMSxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S229806AbjAMTCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjAMSxP (ORCPT
+        with ESMTP id S229532AbjAMTCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:53:15 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B554DB3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:53:13 -0800 (PST)
+        Fri, 13 Jan 2023 14:02:42 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD16544F5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:02:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673635994; x=1705171994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0xpPinmeYWs8sDGyA5KvGkl2jL8c8TvIU6/ghrxUM/I=;
-  b=D1mqTO3GxqMiDKEO0Fe8f83O9o4KojJCzLu4RrY15PZ0tmLgDq1Zp6ys
-   rrQsJRyOQOhEQutXdDH68zOqO00N9u7V2dCZVJGciKUK1qYGy+XI35E5I
-   kus94fUfh99zNiP4Gg7ao8HSxDV13OV0Nc4EigUxGxGfesVcCfQbDWews
-   OAHNJvUg4F7JL9ZShSi3kInI1ruf9j9l82PQQQ4ibcB0eAHniTr11Ezq1
-   8nHgKvoysjSBJei1RueyT9QXnGj7UztPPL0/rL31W0faAgrNxJKp+Q8Ns
-   lQtUphnohohHm8m9te31kaUZhXDclCgBFxP5YXGPah77/2+aBoqH31qMX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="311921576"
+  t=1673636561; x=1705172561;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=aEv5uAlD9RlVQZ3sj9LjdydEotF2GW9AB0fhi/QMapo=;
+  b=SxphojMj6IpPnBOH9XuilTFldmGoNlLGRUN+tgrNtBm8z24vmBhTsQRj
+   5AhEO36s6L43jRBmIGAwDeNUc4cStW/8NBXsM2+Ff8Y9KKA4R+Lfg47iB
+   PHtReNq+XyF377InBWVcEXH4QU9Z0WRUFG9EC+A3fmvLw0X9VHevxyyPx
+   EjTfcF8xwSHb9K7zmxoBV4xKYGkSGTlNR39kXkjnnG+Nss+bh0iewWZJB
+   daASjuoF0OLQyVKmHjsmLcygLTd7CwnJspuQ0DTiPO2Hmswqt3jI01pyg
+   6rwGjrzVgUrkoTckj7wGYvhDAN6c0opkP2+Vn6U6tEZk4uCsfFeryU8NL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="386415289"
 X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="311921576"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 10:53:13 -0800
+   d="scan'208";a="386415289"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 11:02:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="766117853"
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="608249972"
 X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="766117853"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Jan 2023 10:53:12 -0800
-Date:   Fri, 13 Jan 2023 11:02:26 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
- local sched group
-Message-ID: <20230113190226.GA1379@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
- <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
- <20221229040003.GA11497@ranerica-svr.sc.intel.com>
- <xhsmhsfghcb20.mognet@vschneid.remote.csb>
+   d="scan'208";a="608249972"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 13 Jan 2023 11:02:38 -0800
+Received: from [10.209.118.210] (kliang2-mobl1.ccr.corp.intel.com [10.209.118.210])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id ACA6358068A;
+        Fri, 13 Jan 2023 11:02:36 -0800 (PST)
+Message-ID: <9b4f4602-55c6-40cd-5bf9-a47c16cec1a3@linux.intel.com>
+Date:   Fri, 13 Jan 2023 14:02:35 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhsfghcb20.mognet@vschneid.remote.csb>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 3/7] iommu/vt-d: Support Enhanced Command Interface
+Content-Language: en-US
+To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org, dwmw2@infradead.org, robin.murphy@arm.com,
+        robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230111202504.378258-1-kan.liang@linux.intel.com>
+ <20230111202504.378258-4-kan.liang@linux.intel.com>
+ <6783f737-2701-77e3-ce83-8d287be51cf6@linux.intel.com>
+ <a84ac37c-2b03-35f2-2275-442b448cf6b5@linux.intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <a84ac37c-2b03-35f2-2275-442b448cf6b5@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:04:23PM +0000, Valentin Schneider wrote:
-> On 28/12/22 20:00, Ricardo Neri wrote:
-> > On Thu, Dec 22, 2022 at 04:55:58PM +0000, Valentin Schneider wrote:
-> >> Some of this is new to me - I had missed the original series introducing
-> >> this. However ISTM that this is conflating two concepts: SMT occupancy
-> >> balancing, and asym packing.
-> >> 
-> >> Take the !local_is_smt :: sg_busy_cpus >= 2 :: return true; path. It does
-> >> not involve asym packing priorities at all. This can end up in an
-> >> ASYM_PACKING load balance,
-> >
-> > Yes, this the desired result: an idle low-priority CPU should help a high-
-> > priority core with more than one busy SMT sibling. But yes, it does not
-> > relate to priorities and can be implemented differently.
-> >
-> >> which per calculate_imbalance() tries to move
-> >> *all* tasks to the higher priority CPU - in the case of SMT balancing,
-> >> we don't want to totally empty the core, just its siblings.
-> >
-> > But it will not empty the core, only one of its SMT siblings. A single
-> > sibling will be selected in find_busiest_queue(). The other siblings will
-> > be unaffected.
-> >
-> 
-> Right
-> 
-> >> 
-> >> Is there an ITMT/big.LITTLE (or however x86 calls it) case that invalidates
-> >> the above?
-> >
-> > Please see below.
-> >
-> >> 
-> >> Say, what's not sufficient with the below? AFAICT the only thing that isn't
-> >> covered is the sg_busy_cpus >= 2 thing, but IMO that's SMT balancing, not
-> >> asym packing - if the current calculate_imbalance() doesn't do it, it
-> >> should be fixed to do it.
-> >
-> > Agreed.
-> >
-> >>Looking at the
-> >> 
-> >>   local->group_type == group_has_spare
-> >> 
-> >> case, it looks like it should DTRT.
-> >
-> > I had tried (and failed) to have find_busiest_group() handle the
-> > !local_is_smt :: sg_busy_cpus >= 2 case. Now I think I made it work.
-> >
-> > When the busiest group is not overloaded, find_busiest_group() and
-> > local->group = group_has_spare during an idle load balance events the
-> > number of *idle* CPUs. However, this does not work if the local and busiest
-> > groups have different weights. In SMT2, for instance, if busiest has 2 busy
-> > CPUs (i.e., 0 idle CPUs) and the destination CPU is idle, the difference in
-> > the number of idle CPUs is 1. find_busiest_group() will incorrectly goto
-> > out_balanced.
-> >
-> > This issue very visible in Intel hybrid processors because the big cores
-> > have SMT but the small cores do not. It can, however, be reproduced in non-
-> > hybrid processors by offlining the SMT siblings of some cores.
-> >
-> 
-> I think I follow. If we're comparing two groups each spanning an SMT2 core,
-> then
-> 
->   busiest->group_weight > 1 && local->idle_cpus <= (busiest->idle_cpus + 1)
-> 
-> is false if local is fully idle and busiest fully busy, but if local
-> becomes a non-SMT core, then that's true and we goto out_balanced.
 
-Exactly right.
+
+On 2023-01-13 9:12 a.m., Baolu Lu wrote:
+> On 2023/1/13 21:55, Baolu Lu wrote:
+>>> +/*
+>>> + * Function to submit a command to the enhanced command interface. The
+>>> + * valid enhanced command descriptions are defined in Table 47 of the
+>>> + * VT-d spec. The VT-d hardware implementation may support some but not
+>>> + * all commands, which can be determined by checking the Enhanced
+>>> + * Command Capability Register.
+>>> + *
+>>> + * Return values:
+>>> + *  - 0: Command successful without any error;
+>>> + *  - Negative: software error value;
+>>> + *  - Nonzero positive: failure status code defined in Table 48.
+>>> + */
+>>> +int ecmd_submit_sync(struct intel_iommu *iommu, u8 ecmd,
+>>> +             u64 oa, bool has_ob, u64 ob)
+>>> +{
+>>> +    unsigned long flags;
+>>> +    u64 res;
+>>> +    int ret;
+>>> +
+>>> +    if (!cap_ecmds(iommu->cap))
+>>> +        return -ENODEV;
+>>> +
+>>> +    raw_spin_lock_irqsave(&iommu->register_lock, flags);
+>>> +
+>>> +    res = dmar_readq(iommu->reg + DMAR_ECRSP_REG);
+>>> +    if (res & DMA_ECMD_ECRSP_IP) {
+>>> +        ret = -EBUSY;
+>>> +        goto err;
+>>> +    }
+>>> +
+>>> +    if (has_ob)
+>>> +        dmar_writeq(iommu->reg + DMAR_ECEO_REG, ob);
+>>
+>> The ecmds that require a Operand B are statically defined in the spec,
+>> right? What will it look like if we define a static ignore_ob(ecmd)?
+> 
+
+If so, I think we have to maintain a table of ecmd in the ignore_ob(),
+and check the given ecmd at runtime, right?
+That sounds hard to maintain and low efficiency with more and more ecmds
+are introduced.
+
+> Or simply remove has_ob parameter? The least case is an unnecessary
+> write to a register. It's fine as far as I can see since we should avoid
+> using it in any critical path.
+
+I was told in the internal review that a MMIO write may trigger a VM
+exit, if in a guest. We should avoid such unnecessary MMIO write.
+
+For PMU, right, I don't think we use it at critical path. Now the PMU is
+the only customer for ecmd. I think the extra MMIO write can be tolerant.
+
+I will remove has_ob and add some comments in V2.
+
+Thanks,
+Kan
 
 > 
-> 
-> With that said, shouldn't SD_PREFER_SIBLING help here? cf.
-> 
-> 	if (sds.prefer_sibling && local->group_type == group_has_spare &&
-> 	    busiest->sum_nr_running > local->sum_nr_running + 1)
-
-It does not help because sds.prefer_sibling is false: an non-SMT core is
-looking into offloading a fully_busy SMT core at the "MC" domain.
-sds.prefer_sibling is set in update_sd_lb_stats() if the sched domain's child
-has the SD_PREFER_SIBLING flag. Since the destination CPU is the non-SMT
-core, there is no child.
-
-> 
-> It should be set on any topology level below the NUMA ones, we do remove it
-> on SD_ASYM_CPUCAPACITY levels because this used to interfere with misfit
-> balancing (it would override the group_type), things are a bit different
-> since Vincent's rewrite of load_balance() but I think we still want it off
-> there.
-
-I see in find_busiest_group() that group_misfit_task is evaluated before
-sds.prefer_sibling.
-
-> I would expect it to be set in your system, though whether this is
-> playing nice with the asymmetry is another matter :-)
-
-I recall a few instances of SD_PREFER_SIBLING causing trouble me, but I
-need to investigate more.
-
-Thanks and BR,
-Ricardo
+> -- 
+> Best regards,
+> baolu
