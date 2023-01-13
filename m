@@ -2,189 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE4866A2A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F54066A393
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjAMTG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S231220AbjAMToB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjAMTGW (ORCPT
+        with ESMTP id S231309AbjAMTnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:06:22 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E46B5F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:06:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673636776; x=1705172776;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=DdQ5zokSAwL8W4i1A99tHqqLMzi7f2jW8ikEE196vTA=;
-  b=IkDM/ip6IbKsUnGxtI8bijFr4lHzQsgzjd+8H/otA4QTt+OZeyrs00nU
-   ic2VnzMjKORL0zmz6Kc2+pA3MXR44bU6ERe0tOT0NzupKSmoIZvpdS/xF
-   FMRt2J6zpB9srsWLy5RzdsbFatS22BTZhCAv2Gqw6coeqAXW0T7Xd3NXf
-   6O9snhP7PFccnfHpgcGB6AswKPuJbeI0mm/bifvydcYNbVUt7VP2rbVFL
-   s/MBk7ZV98VTIuaaxY4kdn0Pl1zOGGkkeZ+xD7Hpw5LtqjPMB+5RkwNRo
-   8TLC8YuOqMykp2XeDSe9VdzajLuW4d5kjUvlZQWUOZZ7reWIuiOVlle89
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="325332665"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="325332665"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 11:06:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="635873566"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="635873566"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2023 11:06:11 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 13 Jan 2023 11:06:10 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 13 Jan 2023 11:06:10 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 13 Jan 2023 11:06:09 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rl7sbi2bKVTOI1C+x55L09cp/GG2RLW93cEiSwTXbXMdv3zvk6E+Y9wiZk2HTulTVm0wWHsJyVr6Avp0rXZ+58CNEgZJze07OH4DJwfkmjR5krCmfplppbIemJIJVp7DR6BagJ4UsWHVlEhWWqDTInxn0mtH41U/7uBfEvMQO7qZyQ3uVWcDRIEFLqyYEJ1mTBnL8jPboGwoTDH03hAIvOqGvrI+EBxFo6uc48yYfXKmbJhcv7zSz6k2Ov/06ANyRB74pBLBo3ocoyJPgsTydfDObV3W4RMNsTqCOqf4y+QBE41jxtEi1xF+DP5IxMuBxxBvd47DSuPF/xJz8O5Lcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8LU0gbKENw8lX+X1hUowffIKjrJXB+TCMJGJWvA1Dc4=;
- b=e/d9Rn8IMcmrSC2Yrk8Q9Epi9VLzV+47wcXq1ZcsXS0Mt5Cm8A7XNMmS9eHVhtx7+0li5ZuvhKEAtC+Cdi/3phylDwH0wUMf3wj0BfKEMU4ONkRY0PJ6BtDgKRbQXoKA2noYZEHsmvAxInjAsNbTyyiVM53Iq5c8aeWP/aRimT4VzTUddjZZ981wkvhWoVMJiEjoM/n1xgfpj3W9Zf4Em1/ANNPKFZXTuSLVvrCgiPKG+Du5IvCqf9VL9EijJEWhJnI5l2bxIyqWBnoGZi+NssTjNMCgJjJoAIKxfJO29rL00oN35YklMrlJuYeprlyJwfwazNe7MN2LhtPqw6lgFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by PH7PR11MB6474.namprd11.prod.outlook.com (2603:10b6:510:1f2::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Fri, 13 Jan
- 2023 19:06:08 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::1818:e39d:454d:a930]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::1818:e39d:454d:a930%4]) with mapi id 15.20.5986.018; Fri, 13 Jan 2023
- 19:06:07 +0000
-Date:   Fri, 13 Jan 2023 14:05:58 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Deepak R Varma <drv@mailo.com>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        "Saurabh Singh Sengar" <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH v3 0/2] drm/i915: Avoid full proxy f_ops debug attributes
-Message-ID: <Y8Grli/Ie01RvDBR@intel.com>
-References: <cover.1673451705.git.drv@mailo.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <cover.1673451705.git.drv@mailo.com>
-X-ClientProxiedBy: BY5PR17CA0031.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::44) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Fri, 13 Jan 2023 14:43:37 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F35A8B50B;
+        Fri, 13 Jan 2023 11:42:51 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 10D61141713;
+        Fri, 13 Jan 2023 19:35:57 +0000 (UTC)
+Received: from pdx1-sub0-mail-a315.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 233AA14116F;
+        Fri, 13 Jan 2023 19:35:56 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1673638556; a=rsa-sha256;
+        cv=none;
+        b=cG+Z2qAz4cvzhunoxANkxGEe2NGjw1Tb1TdfYu2QMjzlyT7iVB62nR8eeN2esf70BavIK7
+        naYklHrfGUZOhvh754wUsFVruu6YtoMoUc1Yp01e8Oso5WVh2s37MnQ8SEoxSPwBttS4YB
+        nt8rpCY3t3QOtcsPjU1yMyb/14YHz6Xz43HK66ngvjgtigvI419vU7orzk9a/et9LaBebI
+        c/nOK5I08t0KC42jqWFuUfYBvKJE7Rk8Yi7NF0prQu1TeEsLbhUeeniFHRyINsPb+aZOlD
+        5cgYfEyg9/eIdvGCTAVLz508L/PfgTeSfTpPTHEoNHg8vNVC8u0YSOmZseuGZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1673638556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=4BLKm052qLnpFlYXMLi9U0yMb6GrF0x2PZhYEYe6tjs=;
+        b=SFsUmo4XcY0lL/gkoncDmDebZPTyS8N5n3LcP2g6aYoCX6VG20vOfk35q8vISx7EYk+5lR
+        EwHJryKFEeh6dvSOX/FlUC4GNH0/i3F4GEOby3/+n5sRpqlPVYEIGT7464xSUOdCzqaZSp
+        /hJex31XDhUG5rKggAyiFsLScbzc8JgPQDj/oF3Uobxn35FxiCahyTygXAV5Buf5/2I9w3
+        xWAZO1+tJYpUvM44u+Ja7Qca0DnStlieUwj6OgoQ41rDIOto4YTvVCAz6k9T7iyrBzHgfk
+        Er+xVvOjTnUm39D3s9Slcby3/ne1nWe+533FS2GVup18HnEwuiq93QL1DJfH0w==
+ARC-Authentication-Results: i=1;
+        rspamd-7cf955c847-95cc5;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Tangy-Tasty: 1331cd9b1eee83f2_1673638556780_816576564
+X-MC-Loop-Signature: 1673638556780:4214692273
+X-MC-Ingress-Time: 1673638556780
+Received: from pdx1-sub0-mail-a315.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.107.134.75 (trex/6.7.1);
+        Fri, 13 Jan 2023 19:35:56 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a315.dreamhost.com (Postfix) with ESMTPSA id 4Nts8p3FR4z3g;
+        Fri, 13 Jan 2023 11:35:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1673638555;
+        bh=4BLKm052qLnpFlYXMLi9U0yMb6GrF0x2PZhYEYe6tjs=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=ei7fzggKdsKBEfNTyASrwafKvnYprM7I18ZA+QVy1OkOR3FQv0Xl8bmPZxwsFQTNX
+         uV0BiixDIiwfGh8v3NtVtfZMhsR+wwA4FSYmdQjesHtOhiSMbW0ejInTVbNrENgKka
+         3KOiNFMzZLhaYEtPI/mJh62uof8KTGm62ZiKa2XY9b4LLbWlWKQrGAZ/r3rBa4BTTl
+         zzWnl4cr2F5a0D7P1QqAKs2ENLzz140giLXCFmzk5KyoayLDntVoqy6FGNfNmB3Bc/
+         3jHJglrAfmB6KvJrwaynZlwkSiIdJfUFALFLJfiu3GHmET9/UoZyjmgOqUxfNjOTdl
+         Rj+7PgX4zzfTA==
+Date:   Fri, 13 Jan 2023 11:09:50 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
+Subject: Re: [PATCH v6 4/8] cxl/mem: Trace DRAM Event Record
+Message-ID: <20230113190950.okeaanjymyhy4ec4@offworld>
+References: <20221216-cxl-ev-log-v6-0-346583105b30@intel.com>
+ <20221216-cxl-ev-log-v6-4-346583105b30@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|PH7PR11MB6474:EE_
-X-MS-Office365-Filtering-Correlation-Id: 805b76c2-9443-4961-0926-08daf59937ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +qqMsRfru7HHE6v6PvcQCEahX059RQ4gCqcEJ/YeiFzxC8zyIR9CmxZ/I8bgbyyzi/gj4mEo1gakKUpQvFkDS88llOKkbs6jKYUBdCQagzdzM3F2g4Nii3GVkSnYhynXWnRKoV60QiKG62bFfAGbjPAVfSiFsFpTfLJ2M4aNFEk1TVv8q0dBcXO/jubQ1gFmH1pH6/vp5g7rShacI7Y2VRTRGTFZbdID77n5lGi4LaI3fTLMC27Hwwf0bg4SYvlT/DeHfMTSMlRRdHFoOkqLkkmIS0pIeaUEFgLLeGxt6OrE0CVSeV239rImUkyjf346AbfR+qmwxh0M1aYSXgYMKKHqypfqj66n/CJCOBwc31EPqC6y//0S+zEuwLPMrKeVt56nIe9TCA6YOd9s2nCqrg/iJmQ7xjfwHEQoUp2sagB39JKCcsMK/sCZ9AE3D71QI5NKDY9KVg6yed5007ZeqLfvfRbSB0K+YQJGfUD4B2QQo9NsslpD+zsk3w/Jr3Mt5ewaYrFnuk5UKDM9/s0evAtYNL9GZ+KLZ6ZvPNhMje8gV4WYrhZM291EJC1QBPD0chkjxfMnX4oytJUJ7KhgEYpJpiXgFhctqTRFr+6kRlHdqk7xCIoMWyhB7IugjTBHTcM7/nAEdS2fyshHoB7OBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(39860400002)(366004)(376002)(396003)(451199015)(6666004)(6506007)(66946007)(6916009)(66556008)(66476007)(6486002)(8676002)(186003)(26005)(6512007)(478600001)(41300700001)(2906002)(44832011)(4326008)(83380400001)(7416002)(5660300002)(8936002)(38100700002)(36756003)(82960400001)(86362001)(54906003)(316002)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pBCfhI+p55xPy6Q+eaRbSOa+eSNn0I1IsMfNuW7BcFPa8k3AoLfRujUNiCv8?=
- =?us-ascii?Q?ndw3ot1yFtTWjMhpBA2u1nYDjgQnSEGU3x+431BxABM0qkBdTXOrO4x1+4mp?=
- =?us-ascii?Q?XpnsOT9/rDVldj0csngU71XbHUxnqYSr2XVKRcvr3af0pWEq9QR+lJaBiEqZ?=
- =?us-ascii?Q?M9NCZRlVLHnslgPKJJ9NjQai1ZnvlZB4SGVg8bU82wsQrRtddNgJkddDv5oq?=
- =?us-ascii?Q?PdIUqeuXFBpxbk2VoDhPw7KsTXg2m3JP1j1e8MOijn/1T4f622ir6NAc5yTF?=
- =?us-ascii?Q?ac+ej0aSPRWI/4vzMLjs54nieVwb7E69vsbOD0Ea90On121cr6fAwJXULmUo?=
- =?us-ascii?Q?cusKGentJuoi087LCNN3ZirKsrujQme+E0Kn487lOL16D+XRsixY1pKoUBJL?=
- =?us-ascii?Q?A5SY0uT2eE6lXvF0QCND1HwISymTiPkzwTO835JHnzaba/HXS7i+Tit/Iiqm?=
- =?us-ascii?Q?b7iBnpix5wdcLh0TS6WldAdlcomiR3gpsHVLV+ivyf1BY5pj6MbB0JDbh4xN?=
- =?us-ascii?Q?mjbHW1sEt/4WY3hff1p4PICm+24g4GYTN53QWa4sNBKCvTk5l5aIeUCI4FoS?=
- =?us-ascii?Q?n6GQ8YO8ld+smHLmVu50JPxZnTUoSIGexuEY6NGdQbGePIZaJpAL7LHfMMAh?=
- =?us-ascii?Q?WZXLLLg5mgwBLSczfrCDKfiAxUmBd3tUSWlCG4uJ8n1whdS4jd5nFSksJOEw?=
- =?us-ascii?Q?uSKjRghB1uQsqPob1yuNfmiKm+2AEKtr3SPeGa+yyLk529Osg6QgvnxNpw/M?=
- =?us-ascii?Q?VbJ4OpiMkBPcuxv2xYRSpjgf3cmYzmFcCu+Fo4e0F6sI27blkGA9enC1bc3l?=
- =?us-ascii?Q?7eI+ugw68uzFW+u1C+/e3yFdZ3Z15BfHIny1fdOJ6lcK0LmqWG9hhPY3MeHS?=
- =?us-ascii?Q?VvpVg99ZABQKwvmwUnMA3dEZ1oFoCqVwu/xpiayhcJC9F9jm0NlDb59WSg67?=
- =?us-ascii?Q?Le6RdIr372bxxMFm8xX2HzMfoTQqEtvNP4fneosWbUzgH7Vjm1cuAZRtimuk?=
- =?us-ascii?Q?plZplso+iLtJtLWuGGsA6Jd1x9PJgJ9VvObCCmGg5Vmv5NBK/3fpfp2u1zVz?=
- =?us-ascii?Q?Kdo737NOEbj7+c1GrbWQsanOFIl176IFWzVOrtnseB6NVDPjKIq+IRtrHH/E?=
- =?us-ascii?Q?gFOBEAHG85i8pQaCRazSIBnMYzOwe32VcKbaL5UFBlROozczWSIJeW60sFIo?=
- =?us-ascii?Q?aMZn2yLMw2KZxO4yyTitta0u/jURnRy8RCbmaiGNWWQSWwPdJJSGeNUaglPe?=
- =?us-ascii?Q?13GYLuPkq0Dpcmd1aQJWRfJcnALMZlVmKjEWbJc0b2BDM8mER//0MLbxurSd?=
- =?us-ascii?Q?3cuYMp5VARdQryFpT/n99j6RCA6raoFOOxRQgBbiz+ETbCGhYtH6nA+imwd5?=
- =?us-ascii?Q?V2pC1JN9cJ/Y+Gp+WgPiKndUBAXTaVAERNLF9cHTm9+54q7JMV8EmaMJp5kU?=
- =?us-ascii?Q?emh5b0tf15TKsNonFl7bblym0DZZZmztCXCBA0Lpz/HiX74UUIRkTRtbv//1?=
- =?us-ascii?Q?tqJagkEQXdQ/lBnTNmak2aSzAB4D6OI0/r03F/Rydixo4vOs3SkIU5Wv+Kq/?=
- =?us-ascii?Q?sCESy0tUiCohVOkteFESGbZoKfI5cGSZs6dglMgxKcVE4URVM1fqQG7/YowV?=
- =?us-ascii?Q?Gw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 805b76c2-9443-4961-0926-08daf59937ac
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 19:06:07.8699
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RPcgEKY+hefyqvjxWmCqdZdLN6Wfosi/lFS+azl+ds5k6znF5DYxXa1/pZrvpA0Dfb2+tYD/Ncr2wh4+1v9XWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6474
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221216-cxl-ev-log-v6-4-346583105b30@intel.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 09:20:40PM +0530, Deepak R Varma wrote:
-> This patch series proposes to replace a combination of DEFINE_SIMPLE_ATTRIBUTE() +
-> debugfs_create_file() by a combination of DEFINE_DEBUGFS_ATTRIBUTE() +
-> debugfs_create_file_unsafe(). The change reduced overhead in terms of managing
-> the full proxy f_ops at runtime. The patches 1 & 2 covers for the DRRS and FBC
-> f_ops debugfs attributes respectively.
-> 
-> Following coccicheck make command helped identify this change:
-> 
-> make coccicheck M=drivers/gpu/drm/i915/ MODE=patch COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+On Mon, 09 Jan 2023, Ira Weiny wrote:
 
-pushed both patches to drm-intel-next. Thanks for the patches.
+>CXL rev 3.0 section 8.2.9.2.1.2 defines the DRAM Event Record.
+>
+>Determine if the event read is a DRAM event record and if so trace the
+>record.
+>
+>Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+>Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-> 
-> Changes in v3:
->    Patch 1/2: fix checkpatch function parameter alignment complaint
->    Patch 2/2: None
-> 
-> Changes in v2:
->    - Individual patches clubbed in patch set
->    - Update patch log message to include coccicheck make command
-> 
-> 
-> Deepak R Varma (2):
->   drm/i915/display: Avoid full proxy f_ops for DRRS debug attributes
->   drm/i915/fbc: Avoid full proxy f_ops for FBC debug attributes
-> 
->  drivers/gpu/drm/i915/display/intel_drrs.c |  8 ++++----
->  drivers/gpu/drm/i915/display/intel_fbc.c  | 12 ++++++------
->  2 files changed, 10 insertions(+), 10 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> 
-> 
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
