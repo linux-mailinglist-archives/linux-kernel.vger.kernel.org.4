@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB2366A0B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA9D66A0BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjAMR3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S230293AbjAMR37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjAMR20 (ORCPT
+        with ESMTP id S230193AbjAMR33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:28:26 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E1149C6;
-        Fri, 13 Jan 2023 09:16:42 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id k18so29776pll.5;
-        Fri, 13 Jan 2023 09:16:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SzEJEzPtTofWyuttDFBOYjcrqfFRv23f6yz9rpf4lRo=;
-        b=KkG+VALTfAtr+TWe1dI2KkT8jkWR78vaqXnXef5+AbqH43GTDclgqxJ0QPT10XULYO
-         gVVQ+8SmLP1J2ZJ+3ePP0YvvO+WQBfnxL66AZ3jxY/IHwKYjJ3KJG+U9/fE1VELmfDMo
-         8wclb033O4b7dDEDBAYB3+SS9L09Du7m91KZFM3Hoy5tDRCHMrdOrd765LYseTGCD94+
-         ujMpVJocsGXXpEEVNz+pRmq5Dc4+1wMXshbqG3tdj0rT7CTz4sha6lrkkauI7GRO9Wbs
-         qrzLKTBKrGrHfA11NhvUFFylLsd7R3P8an2bv3efdrGJd+NmzQfkhPgHy8lf08LBtQMz
-         uyRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzEJEzPtTofWyuttDFBOYjcrqfFRv23f6yz9rpf4lRo=;
-        b=1wxBMj8eEMbMNWZqSdjBuqbDw1otU5rF2DGnitx3Cm9FRnp1BhOf0rG1wBMu87EVL2
-         tLx6lhn3YYH7QvMIKi2hnIWBWnDWaVTN5ZY6uWw5J+5fQtW3D9IB9GbiC2gkA04L7ikM
-         uFrah4apoDsr47WnwhbhJ+VQ/pEsNXWVdCHDTrMacSdoGmfOHLWEgMTu+LETrfsxF6T+
-         +eyd/Dm3xp8twSnniow/5c1s2D3DhHuPIqKQnH7B+qKvC/bba702ea5nay4oqlHPpWlp
-         mEz4eVFGU3+tXNDws2tI4s+2qajHsC3ydr3LjRoIRbhAidL469F1IxRdLaAFLBe0VuEa
-         d/2A==
-X-Gm-Message-State: AFqh2krhgPiHCBubHlPoi8LQw+Upu9k9LtUZqPMSKCzIeCdWjixREAce
-        3BpxUtHsuhyBGyo8AT5oLJVod8vf0QQ=
-X-Google-Smtp-Source: AMrXdXv5bLO3RINRJjP+VruHEHlyaJdER2Bn+ow0voASoROxiGfVfZECedvNbgcokEw0AA2qgI80wg==
-X-Received: by 2002:a17:902:a5cc:b0:192:f999:1e73 with SMTP id t12-20020a170902a5cc00b00192f9991e73mr29988243plq.51.1673630202079;
-        Fri, 13 Jan 2023 09:16:42 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170902ce0700b001929827731esm14338051plg.201.2023.01.13.09.16.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 09:16:41 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 13 Jan 2023 07:16:40 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the workqueues tree
-Message-ID: <Y8GR+Jnif/uUG3+w@slm.duckdns.org>
-References: <20230113143102.2e94d74f@canb.auug.org.au>
- <Y8GHXUcXYJcHPkOY@slm.duckdns.org>
- <xhsmhzgamidp8.mognet@vschneid.remote.csb>
- <xhsmhwn5qidnm.mognet@vschneid.remote.csb>
+        Fri, 13 Jan 2023 12:29:29 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F0B8BF3D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:17:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EDJ4xEF3lLYItJUA9SlN4B6NAGGeDix65KOyh4872KE=; b=aXGlnATjL/pIS/dvAc4QlTkC6n
+        98Kga71sLav22h3qllusB8eu2B0ZdlIgpZcdvtKspuKgFQbCbUSVBF4X8qJwLt51fu8xisXhXywWa
+        twLWUZjoFoNDX9Ees0xi3v4KhtyssJl04flS52YYf5y7rUuUyrU1GiJfmx+YfQMvbLOLl8Ngq4hfl
+        Gm4QGhDNhBkYsb0ocZfuUvta1wC1w+K/gD/h2lN/BnXJXCf6VWmWxO/D7rY41Udntbi3TZupthNkl
+        22GSsyOJZyDXLiDsVCH8BGAIXlR7Mc/CEOuAerH/v8gnYftKmtj4kulSxMXdLOU85rp5RmPxEGxh9
+        y1vEGrDA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pGNgZ-006HaL-9N; Fri, 13 Jan 2023 17:17:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 80FF7300094;
+        Fri, 13 Jan 2023 18:17:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 59EA620A72A62; Fri, 13 Jan 2023 18:17:32 +0100 (CET)
+Date:   Fri, 13 Jan 2023 18:17:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        Joan Bruguera <joanbrugueram@gmail.com>,
+        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        Jan Beulich <jbeulich@suse.com>,
+        Roger Pau Monne <roger.pau@citrix.com>, mark.rutland@arm.com
+Subject: Re: [RFC][PATCH 2/6] x86/power: Inline write_cr[04]()
+Message-ID: <Y8GSLDhgMlE96P6+@hirez.programming.kicks-ass.net>
+References: <20230112143141.645645775@infradead.org>
+ <20230112143825.644480983@infradead.org>
+ <Y8FZvLq+MeQ7A+lI@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xhsmhwn5qidnm.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y8FZvLq+MeQ7A+lI@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 04:48:29PM +0000, Valentin Schneider wrote:
-> On 13/01/23 16:47, Valentin Schneider wrote:
-> > On 13/01/23 06:31, Tejun Heo wrote:
-> >> On Fri, Jan 13, 2023 at 02:31:02PM +1100, Stephen Rothwell wrote:
-> >>> Hi all,
-> >>>
-> >>> After merging the workqueues tree, today's linux-next build (x86_64
-> >>> allnoconfig and several others) produced this warning:
-> >>>
-> >>> kernel/workqueue.c:1993:13: warning: 'rebind_worker' defined but not used [-Wunused-function]
-> >>>  1993 | static void rebind_worker(struct worker *worker, struct worker_pool *pool)
-> >>>       |             ^~~~~~~~~~~~~
-> >>>
-> >>> Introduced by commit
-> >>>
-> >>>   793777bc193b ("workqueue: Factorize unbind/rebind_workers() logic")
-> >>
-> >> Valentin, this is caused by rebind_worker() being only used by
-> >> rebind_workers() which is inside CONFIG_SMP. I don't see any other uses of
-> >> rebind_worker(). Just fold it back into rebind_workers()?
-> >>
-> >
-> > Woops! Yes I only did it to keep things aligned with unbind_workers(), let
-> > me resend with that folded back in. Sorry!
-> >
+On Fri, Jan 13, 2023 at 02:16:44PM +0100, Ingo Molnar wrote:
 > 
-> Unless you'd prefer a fixup patch on top of those you've already picked up?
+> * Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > Since we can't do CALL/RET until GS is restored and CR[04] pinning is
+> > of dubious value in this code path, simply write the stored values.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  arch/x86/power/cpu.c |    4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > --- a/arch/x86/power/cpu.c
+> > +++ b/arch/x86/power/cpu.c
+> > @@ -208,11 +208,11 @@ static void notrace __restore_processor_
+> >  #else
+> >  /* CONFIG X86_64 */
+> >  	native_wrmsrl(MSR_EFER, ctxt->efer);
+> > -	native_write_cr4(ctxt->cr4);
+> > +	asm volatile("mov %0,%%cr4": "+r" (ctxt->cr4) : : "memory");
+> 
+> >  #endif
+> >  	native_write_cr3(ctxt->cr3);
+> >  	native_write_cr2(ctxt->cr2);
+> > -	native_write_cr0(ctxt->cr0);
+> > +	asm volatile("mov %0,%%cr0": "+r" (ctxt->cr0) : : "memory");
+> 
+> Yeah, so CR pinning protects against are easily accessible 'gadget' 
+> functions that exploits can call to disable HW protection features in the 
+> CR register.
+> 
+> __restore_processor_state() might be such a gadget if an exploit can pass 
+> in a well-prepared 'struct saved_context' on the stack.
 
-Yeah, just send another patch to fold it back in.
+Given the extent of saved_context, I think it's a total loss. Best we
+can do is something like the last patch here that dis-allows indirect
+calls of this function entirely (on appropriate builds/hardware).
 
-Thanks.
+> Can we set up cr0/cr4 after we have a proper GS, or is that a 
+> chicken-and-egg scenario?
 
--- 
-tejun
+Can be done, but given the state we're in, I'd rather have the simplest
+possible rules, calling out to functions with dodgy CR[04] is
+'suboptimal' as well.
+
+If people really worry about this I suppose we can call the full
+native_write_cr4() later to double check the value in the context or
+something.
