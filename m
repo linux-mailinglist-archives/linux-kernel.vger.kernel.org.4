@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D577A66A3E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BA866A3E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 21:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjAMUJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 15:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S229481AbjAMUK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 15:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjAMUJO (ORCPT
+        with ESMTP id S230110AbjAMUKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:09:14 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B95471C;
-        Fri, 13 Jan 2023 12:09:13 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DJETN9028868;
-        Fri, 13 Jan 2023 20:09:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5xGgPO/DQXyp6NO1eNW6XYFpT2xDoaEFxLkLz30opnc=;
- b=q9J4KqyCPKpN9dILgQctn7FdBIgWpTcv6ZCVqNscyhXCMISurvZy3A0ZqkMc+oNgQE29
- 5gDNoQTRpb8vyV0eIbWCULJixj0KBPfJuTMm0dH2mbt7o67SkeB17sPH/PPT6LAGH/PS
- d8J9XJfXinsKAyg3hIU2yHJk4NCt4xGI/LCNU6GNL4WpQhbV4/FjeqV3I3YsnMZX4b3C
- zfoyG4oL8xqkOF1RyJtVO7LT7H6HGBFWRgfaHZ5WC2Ryy2Q01uWASSZ3drUjMTDSnO4R
- qgEZbor4Ilkmpkb3S0H+i0Cr9LpTIpSGuelENTVjtp9ElLK0jc2hZFBti9dVuucw0hXt 0g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n3d9c90ad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 20:09:07 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30DJifkg020349;
-        Fri, 13 Jan 2023 20:09:07 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n3d9c90a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 20:09:07 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30DJMvfC013176;
-        Fri, 13 Jan 2023 20:09:06 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n1k941r9h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 20:09:06 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30DK947a2753036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Jan 2023 20:09:04 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C228B58060;
-        Fri, 13 Jan 2023 20:09:04 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66AC35805A;
-        Fri, 13 Jan 2023 20:09:02 +0000 (GMT)
-Received: from [9.160.94.233] (unknown [9.160.94.233])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 13 Jan 2023 20:09:02 +0000 (GMT)
-Message-ID: <e7ddd054-72dc-81c0-609a-59e98e2f835c@linux.ibm.com>
-Date:   Fri, 13 Jan 2023 15:09:01 -0500
+        Fri, 13 Jan 2023 15:10:53 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734AF88DE1
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:10:51 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 207so896550pfv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 12:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u9yUG8p2AvsCrfrOo0UvzT5Iu4BONOHKRQnB72b9ZJU=;
+        b=uHkwhfvgcFrY265BN+JmcPVnnegGsSZSRHjT558d0FZMEPTETlx205iydLJkvMIvJw
+         kYDrf940r/W9uH94T/0Skd8Gw3sfcXr4liP8jTos00gu/6Gbsc9vO5qj6crsVBHJxGIF
+         tC3FU6hWnhGMlzUih7vi5n4Jc8oUHDKbCfzSFoQP2maXznteBaq5vLD0x9rJqKVlnBew
+         WTfBEdmjAtDqxav5S8LmXyeeoiaOLO8c1UzRXGFhb6Lp2trrOeu9ynBtukjjP5NPrRmP
+         TmIa9p3syCRnxYx6wYKT6BL3usc1YRI3uD6fl4VQRxXYLNMCewUU05OsfABcI7Ku4xio
+         Evlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u9yUG8p2AvsCrfrOo0UvzT5Iu4BONOHKRQnB72b9ZJU=;
+        b=7S+BV2+eZdclrDQ9QL6xh1mXlY/pfmC/d0MEk2o37Mqvv6WZ5OTHPqQsUbiXSIODTI
+         y1ku6JIUpHhKijxjH6cU3IADZUQwysVMNMya4VaSHJqi1IuV3kWbmU61VNr4bqgkJ+JG
+         ugnlHbXGubwCfuzCxTkafU/kXmAMPedL4uFMFnNYTLQUVyMhQ23OV5i5SUnRHBTiBxEF
+         ITSnRSdYQ7G4ac/VjlZd+RGgYtrBhZu6I9vkLl+3aFhxj/5PoQrEBAmTNXitA9xbKZAE
+         vrWPUp4myNQ6FQUyAthEz/oG66dPe2Hba8wNC1F2szTuc4FzztVRxd3/jK0KdY+xxsFL
+         VqEA==
+X-Gm-Message-State: AFqh2kr5cJpytwAOKzzM46G2VEYE5lClYXFuPB0eigoY0NQB+A4r2rSQ
+        zXQPJQl9Wn7roNbNk6u5kNgubysBvHpRrH26
+X-Google-Smtp-Source: AMrXdXuBmRg5x89s/bNnjYQ24z0JAk4eLcvnOHCMH2vbSmq8KX+62vt7rBR7qCTY26F+dfD+4N0e6Q==
+X-Received: by 2002:a62:84d0:0:b0:58b:bc3a:6234 with SMTP id k199-20020a6284d0000000b0058bbc3a6234mr3325205pfd.11.1673640650860;
+        Fri, 13 Jan 2023 12:10:50 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1c60:63d3:2d69:9f71:187e:f085])
+        by smtp.gmail.com with ESMTPSA id d63-20020a623642000000b0057691fb0d37sm13983740pfa.193.2023.01.13.12.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 12:10:50 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' & '#size-cells' related dt-binding error
+Date:   Sat, 14 Jan 2023 01:40:38 +0530
+Message-Id: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3] vfio: fix potential deadlock on vfio group lock
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     alex.williamson@redhat.com, pbonzini@redhat.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
-        jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230113171132.86057-1-mjrosato@linux.ibm.com>
- <Y8GoiCBQNiAuVcNw@nvidia.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <Y8GoiCBQNiAuVcNw@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FKkc_v4Lu3Dz1BDyFdUKcG-g6uPBeO54
-X-Proofpoint-GUID: 1aIDvMavySf7-jfAduYIs_mRsxlS96Zn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_10,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 adultscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301130137
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/23 1:52 PM, Jason Gunthorpe wrote:
-> On Fri, Jan 13, 2023 at 12:11:32PM -0500, Matthew Rosato wrote:
->> @@ -462,9 +520,19 @@ static inline void vfio_device_pm_runtime_put(struct vfio_device *device)
->>  static int vfio_device_fops_release(struct inode *inode, struct file *filep)
->>  {
->>  	struct vfio_device *device = filep->private_data;
->> +	struct kvm *kvm = NULL;
->>  
->>  	vfio_device_group_close(device);
->>  
->> +	mutex_lock(&device->dev_set->lock);
->> +	if (device->open_count == 0 && device->kvm) {
->> +		kvm = device->kvm;
->> +		device->kvm = NULL;
->> +	}
->> +	mutex_unlock(&device->dev_set->lock);
-> 
-> This still doesn't seem right, another thread could have incr'd the
-> open_count already 
-> 
-> This has to be done at the moment open_count is decremented to zero,
-> while still under the original lock.
+Fix the following '#address-cells' & '#size-cells' related
+dt-binding error:
 
-Hmm..  Fair.  Well, we can go back to clearing of device->kvm in vfio_device_last_close but the group lock is held then so we can't immediately do the kvm_put at that time -- unless we go back to the notion of stacking the kvm_put on a workqueue, but now from vfio.  If we do that, I think we also have to scrap the idea of putting the kvm_put_kvm function pointer into device->put_kvm too (or otherwise stash it along with the kvm value to be picked up by the scheduled work).
+   $ make dtbs_check
 
-Another thought would be passing the device->open_count that was read while holding the dev_set->lock back on vfio_close_device() / vfio_device_group_close() as an indicator of whether vfio_device_last_close() was called - then you could use the stashed kvm value because it doesn't matter what's currently in device->kvm or what the current device->open_count is, you know that kvm reference needs to be put.
+   From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+        arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+		#address-cells:0:0: 2 was expected
+	From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
 
-e.g.:
-struct *kvm = device->kvm;
-void (*put)(struct kvm *kvm) = device->put_kvm;
-opened = vfio_device_group_close(device);
-if (opened == 0 && kvm)
-	put(kvm);
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+index ab4df02052853..7ffce3b676641 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+@@ -36,10 +36,10 @@ properties:
+     maxItems: 2
+ 
+   "#address-cells":
+-    const: 2
++    enum: [ 1, 2 ]
+ 
+   "#size-cells":
+-    const: 2
++    enum: [ 1, 2 ]
+ 
+   ranges: true
+ 
+-- 
+2.38.1
 
