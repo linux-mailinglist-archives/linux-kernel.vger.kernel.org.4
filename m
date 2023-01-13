@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150C1669950
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C461A669951
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241685AbjAMOCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S241349AbjAMOCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjAMOBX (ORCPT
+        with ESMTP id S233352AbjAMOBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:01:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E9AEE32
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:58:29 -0800 (PST)
+        Fri, 13 Jan 2023 09:01:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEE613F60;
+        Fri, 13 Jan 2023 05:58:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC0AE61DDD
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:58:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 28623C433EF;
-        Fri, 13 Jan 2023 13:58:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 507D0B8206B;
+        Fri, 13 Jan 2023 13:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AC4C433D2;
+        Fri, 13 Jan 2023 13:58:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673618308;
-        bh=4qfWw3Ez9GnDaJKDGYjaXMIltwVLJnzFcdlV4QOV+FI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Un1rcuHSpv+eNXJAjWe+uhCvJqiJ9boP/lfhwG+vPXvvN0qwK1tmDD1VzcYuVH2WW
-         Arr/uAKaejjnn1p/JE3iFN2uEl9bMXJweZu4lbPFI7c970fpEDmwGCCSgCm0v7Oyjx
-         cWRhXfM1OCo3M4oW3YddFPWOlPH8Oq4/qqNyWJhmvUjWq9bEm6lk6pn1Wwh/iCzAhM
-         ihwZnLxbZrJXn6lO5Az125MYlmeocne2xgZ3sI+cSWdyeKI6nzHIGY8h/yZx8eFp7W
-         HOlLtGp4YpslV9hPXR4eKiWVgQYBEgPt7QoBro9vid6/PBI0bVU0ewj3XoR6IP5C+R
-         3YShO3wedzVBg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14EC2C395C7;
-        Fri, 13 Jan 2023 13:58:28 +0000 (UTC)
-Subject: Re: [git pull] drm fixes for 6.2-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAPM=9tyS7pXX12Ks+b=iSbUAdfLW=U-uGKo4SkKz6yGiCsusNg@mail.gmail.com>
-References: <CAPM=9tyS7pXX12Ks+b=iSbUAdfLW=U-uGKo4SkKz6yGiCsusNg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAPM=9tyS7pXX12Ks+b=iSbUAdfLW=U-uGKo4SkKz6yGiCsusNg@mail.gmail.com>
-X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-13
-X-PR-Tracked-Commit-Id: e695bc7e542358978434c8489a5a164d2bbefae8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ff5ebafd51ecc01014f1db510299eede60faf22a
-Message-Id: <167361830808.16011.4014386693041843367.pr-tracker-bot@kernel.org>
-Date:   Fri, 13 Jan 2023 13:58:28 +0000
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        s=k20201202; t=1673618313;
+        bh=kGpMQxjI+fFQs+jBsaQNT3ZJMiDOZkdLszEE2sQFRCw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=a0b6N8+JbeS5RVqc3A1GvhT8qfZBs89IP5y30W79s44rrUaFmN3Iq/PcmfbvWCAoi
+         bAg9+/vRi63twHuw8/t6EHBLUg3+UZlGkTs21MAHBQKj0HKI7Ssl2mhqEuupAZQPQL
+         h3OGSbIfl0jxx+15dwHn4do/GIf3rJmnUmXWv6puOkr5eCjOTFd5nxomLf0Ksg2FP4
+         cLH4ZXIB2pGCv7QsWo3FqHokcDi07JWBv7OYJdGkRgcO3us2Uxgj3bvVBTMRAmX+n6
+         j9sX9nyefXIie0kj4z3qTGzyxqaoEoWKey7+ki1E79d6ogiLEId1FzhuISpcywY4XP
+         MowxazhYPP+aA==
+Date:   Fri, 13 Jan 2023 07:58:30 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: rcar: avoid defines prefixed with CONFIG
+Message-ID: <20230113135830.GA1835786@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113084516.31888-1-lukas.bulwahn@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,15 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 13 Jan 2023 15:15:17 +1000:
+Hi Lukas,
 
-> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-13
+On Fri, Jan 13, 2023 at 09:45:16AM +0100, Lukas Bulwahn wrote:
+> Defines prefixed with "CONFIG" should be limited to proper Kconfig options,
+> that are introduced in a Kconfig file.
+> 
+> Here, a definition for a bitmask to configure the SEND_ENABLE mode is named
+> CONFIG_SEND_ENABLE.
+> 
+> Rename this local definition to CONFIGURE_SEND_ENABLE to avoid defines
+> prefixed with "CONFIG".
+> 
+> No functional change.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ff5ebafd51ecc01014f1db510299eede60faf22a
+If you update this patch, please capitalize the subject to match:
 
-Thank you!
+  $ git log --oneline drivers/pci/controller/pcie-rcar-host.c
+  6e36203bc14c ("PCI: rcar: Use PCI_SET_ERROR_RESPONSE after read which triggered an exception")
+  84b576146294 ("PCI: rcar: Finish transition to L1 state in rcar_pcie_config_access()")
+  d2a14b54989e ("PCI: rcar: Check if device is runtime suspended instead of __clk_is_enabled()")
+  a115b1bd3af0 ("PCI: rcar: Add L1 link state fix into data abort hook")
+  83ed8d4fa656 ("PCI: rcar: Convert to MSI domains")
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Bjorn
