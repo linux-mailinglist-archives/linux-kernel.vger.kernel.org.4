@@ -2,125 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B2B669AAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48612669AB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 15:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjAMOkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 09:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S229640AbjAMOkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 09:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjAMOh7 (ORCPT
+        with ESMTP id S230172AbjAMOiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:37:59 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5520DF8C
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:30:04 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0355B1EC04C1;
-        Fri, 13 Jan 2023 15:30:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673620203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=y5nrVNkdIKFt3IjkBQjPyJlUGJx3Jt/3D2yBOFVDFpI=;
-        b=RmBQoBME0LYyBt+3ScyngohV4haQfHzZbn+jy71fVHsi+K9pcEBM4fuE4A46MAjsuMZGQl
-        OOkUe1PG628NyYScbcVX/3wtE/uR5elAJRzG2T0Y/kvN1ay2GjRxnqCwipOTkae1hRieYT
-        X9zQtkoHGTXesASyTfUuPrUbjXdtJXA=
-Date:   Fri, 13 Jan 2023 15:29:58 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Failure during Stack Depot allocating hash table of 1048576 entries
- with kvcalloc
-Message-ID: <Y8Fq5m0CLfcFLCOY@zn.tnic>
+        Fri, 13 Jan 2023 09:38:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6646077D2D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:30:41 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id i9so31448632edj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 06:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XIzLCHjOlK7JqT1a5riCzWdmzSSNrYyQjzpqGCHbiYA=;
+        b=rztnWigQsExyewJcT2hKS4dNXjO3uq2hIcOjtknI3x3kXg+k9eSvP/KJICjQkxKioC
+         vmLRB6+DiXnqDBC0iPMAJ4ViSvIxiH1DBFPRE6CmgGqjxSSUtdtLbt+erbeQZgYand1i
+         agQt5StA6tspagtctJpwprX/LV3Fhb/QzNQTLA365uepss9rQm8h9hNoTYhNsj9TpDSC
+         j+ucWiWdIEDlwz+EOjCl7a/lD3Y0GUn7Yo+upDfS1EqAPHSZ6Gi1Dhf73uddnc1TKMon
+         pReYdezrsTG6FwkIPI9We53kL08T1N/4mWejDPhFKH2MPa6A0lSruA59c4rkWHWXycV8
+         pwMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XIzLCHjOlK7JqT1a5riCzWdmzSSNrYyQjzpqGCHbiYA=;
+        b=qyhpwRrU7cv55ahsUc8nCdgHfKNh44anJ6aTSoHyOidKpRj6fey7kZlAfX76R53HI+
+         s1fgn6z53Kg7weyP3CKtq6PhGcM//mSFZ5OOoiMfYmEM2BJOYzygExmV3FYp/96l2VFJ
+         P4twwBPzQ1JHcBn9cHTanw7v+nodzC0nHPqrKYR0YxZr88QZ6wKWKvqBPShfJFwcskdw
+         UkkZDhRK5qofj99+D+uV6ae1S6BJTy69+w9XAQ4pwDLxNezet2kKasVEcUWRfUSWpNJc
+         JwFDXD1G+QvMEY0rhQIFZfywpopXgw6xkzn/2kHumfx12et5/ErgEN9+HKaoFtHbdSnb
+         taAw==
+X-Gm-Message-State: AFqh2koeqm3wpP5lgDSA4YEDRHUUqI57smvGhwm/2Lk3giJLRxFPSOcK
+        mfLfcQo2veWVCv9F9QRbkCIqD0GGra/h+0zds72xXQ==
+X-Google-Smtp-Source: AMrXdXuaw1xiYifqHpHgbKdJOyLfSsq/Qvd4woRbqqlxJp+p7Zqy4u4+7RifGeftB/aG1Nf4mlv0ULjps6FcYzu3d6E=
+X-Received: by 2002:a05:6402:4013:b0:49a:b8ee:ef4b with SMTP id
+ d19-20020a056402401300b0049ab8eeef4bmr788818eda.143.1673620239920; Fri, 13
+ Jan 2023 06:30:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112152855.216072-1-bchihi@baylibre.com> <20230112152855.216072-3-bchihi@baylibre.com>
+ <96384f72-19aa-b038-75c6-76b0957750c7@gmail.com>
+In-Reply-To: <96384f72-19aa-b038-75c6-76b0957750c7@gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Fri, 13 Jan 2023 15:30:03 +0100
+Message-ID: <CAGuA+ooYM3Z83igp8oVBv2Rj1t3GaUw-AoVGsaK9iHJ8REeb4w@mail.gmail.com>
+Subject: Re: [PATCH v10 2/6] dt-bindings/thermal/mediatek: Add dt-binding
+ document for LVTS thermal controllers
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jan 13, 2023 at 12:54 PM Matthias Brugger
+<matthias.bgg@gmail.com> wrote:
+>
+>
+>
+> On 12/01/2023 16:28, bchihi@baylibre.com wrote:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
+> >
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >   .../thermal/mediatek,lvts-thermal.yaml        | 140 ++++++++++++++++++
+> >   1 file changed, 140 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> > new file mode 100644
+> > index 000000000000..43b8777fc1b2
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> > @@ -0,0 +1,140 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
+> > +
+> > +maintainers:
+> > +  - Balsam CHIHI <bchihi@baylibre.com>
+> > +
+> > +description: |
+> > +  LVTS is a thermal management architecture composed of three subsystems,
+> > +  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
+> > +  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
+> > +  a Digital controller (LVTS_CTRL).
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8192-lvts-mcu
+> > +      - mediatek,mt8192-lvts-ap
+>
+> I wonder: you provide the binding description for mt8192 but no implementation
+> in the driver. Are you sure the description is correct?
 
-Lemme CC the stackdepot.c commit signers re the below splat.
+Hi Matthias,
 
-Lemme know if you need more info.
+Yes it is correct.
+mt8192 driver implementation will be added after this series, to make
+it easier to review.
+Would you like to remove the binding description of mt8192 from this series?
 
-Thx.
+Best regards,
+Balsam.
 
-...
-[    0.000000] software IO TLB: area num 4.
-[    0.000000] Memory: 15612528K/16165300K available (12288K kernel code, 116072K rwdata, 5024K rodata, 2412K init, 3822
-0K bss, 552516K reserved, 0K cma-reserved)
-[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
-[    0.000000] Stack Depot allocating hash table of 1048576 entries with kvcalloc
-[    0.000000] swapper: vmalloc error: size 8388608, vm_struct allocation failed, mode:0xdc0(GFP_KERNEL|__GFP_ZERO), nod
-emask=(null)
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.2.0-rc3+ #1
-[    0.000000] Hardware name: HP HP EliteBook 745 G3/807E, BIOS N73 Ver. 01.39 04/16/2019
-[    0.000000] Call Trace:
-[    0.000000]  <TASK>
-[    0.000000]  dump_stack_lvl+0x33/0x46
-[    0.000000]  warn_alloc+0xff/0x120
-[    0.000000]  ? __get_vm_area_node+0x173/0x180
-[    0.000000]  __vmalloc_node_range+0x4d6/0x7d0
-[    0.000000]  ? stack_depot_init.cold+0x5e/0x8f
-[    0.000000]  ? __kmalloc_large_node+0xde/0x120
-[    0.000000]  kvmalloc_node+0xb7/0xd0
-[    0.000000]  ? stack_depot_init.cold+0x5e/0x8f
-[    0.000000]  stack_depot_init.cold+0x5e/0x8f
-[    0.000000]  kmemleak_init+0x17/0x106
-[    0.000000]  start_kernel+0x3e8/0x64e
-[    0.000000]  secondary_startup_64_no_verify+0xd3/0xdb
-[    0.000000]  </TASK>
-[    0.000000] Mem-Info:
-[    0.000000] active_anon:0 inactive_anon:0 isolated_anon:0
-                active_file:0 inactive_file:0 isolated_file:0
-                unevictable:0 dirty:0 writeback:0
-                slab_reclaimable:0 slab_unreclaimable:25
-                mapped:0 shmem:0 pagetables:0
-                sec_pagetables:0 bounce:0
-                kernel_misc_reclaimable:0
-                free:3903107 free_pcp:0 free_cma:0
-[    0.000000] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:0kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
-[    0.000000] Node 0 DMA free:15360kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15988kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-[    0.000000] lowmem_reserve[]: 0 0 0 0
-[    0.000000] Node 0 DMA32 free:2262644kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:2534208kB managed:2262644kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-[    0.000000] lowmem_reserve[]: 0 0 0 0
-[    0.000000] Node 0 Normal free:13334424kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:13615104kB managed:13334780kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-[    0.000000] lowmem_reserve[]: 0 0 0 0
-[    0.000000] Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024kB (U) 1*2048kB (M) 3*4096kB (M) = 15360kB
-[    0.000000] Node 0 DMA32: 5*4kB (UM) 2*8kB (M) 3*16kB (M) 3*32kB (M) 3*64kB (M) 2*128kB (M) 2*256kB (M) 3*512kB (M) 3*1024kB (M) 2*2048kB (M) 550*4096kB (M) = 2262644kB
-[    0.000000] Node 0 Normal: 6*4kB (UM) 6*8kB (UM) 5*16kB (UM) 0*32kB 0*64kB 2*128kB (UM) 4*256kB (M) 1*512kB (U) 2*1024kB (UM) 1*2048kB (U) 3254*4096kB (M) = 13334424kB
-[    0.000000] 0 total pagecache pages
-[    0.000000] 0 pages in swap cache
-[    0.000000] Free swap  = 0kB
-[    0.000000] Total swap = 0kB
-[    0.000000] 4041325 pages RAM
-[    0.000000] 0 pages HighMem/MovableOnly
-[    0.000000] 138129 pages reserved
-[    0.000000] 0 pages hwpoisoned
-[    0.000000] Stack Depot hash table allocation failed, disabling
-[    0.000000] ftrace: allocating 35561 entries in 139 pages
-[    0.000000] ftrace: allocated 139 pages with 4 groups
-[    0.000000] Dynamic Preempt: full
-
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> Regards,
+> Matthias
+>
+> > +      - mediatek,mt8195-lvts-mcu
+> > +      - mediatek,mt8195-lvts-ap
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +    description: LVTS reset for clearing temporary data on AP/MCU.
+> > +
+> > +  nvmem-cells:
+> > +    minItems: 1
+> > +    items:
+> > +      - description: Calibration eFuse data 1 for LVTS
+> > +      - description: Calibration eFuse data 2 for LVTS
+> > +
+> > +  nvmem-cell-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - const: lvts-calib-data-1
+> > +      - const: lvts-calib-data-2
+> > +
+> > +  "#thermal-sensor-cells":
+> > +    const: 1
+> > +
+> > +allOf:
+> > +  - $ref: thermal-sensor.yaml#
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - mediatek,mt8192-lvts-mcu
+> > +              - mediatek,mt8192-lvts-ap
+> > +    then:
+> > +      properties:
+> > +        nvmem-cells:
+> > +          maxItems: 1
+> > +
+> > +        nvmem-cell-names:
+> > +          maxItems: 1
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - mediatek,mt8195-lvts-mcu
+> > +              - mediatek,mt8195-lvts-ap
+> > +    then:
+> > +      properties:
+> > +        nvmem-cells:
+> > +          maxItems: 2
+> > +
+> > +        nvmem-cell-names:
+> > +          maxItems: 2
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - resets
+> > +  - nvmem-cells
+> > +  - nvmem-cell-names
+> > +  - "#thermal-sensor-cells"
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/mt8195-clk.h>
+> > +    #include <dt-bindings/reset/mt8195-resets.h>
+> > +    #include <dt-bindings/thermal/mediatek-lvts.h>
+> > +
+> > +    soc {
+> > +      #address-cells = <2>;
+> > +      #size-cells = <2>;
+> > +
+> > +      lvts_mcu: thermal-sensor@11278000 {
+> > +        compatible = "mediatek,mt8195-lvts-mcu";
+> > +        reg = <0 0x11278000 0 0x1000>;
+> > +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
+> > +        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
+> > +        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
+> > +        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
+> > +        #thermal-sensor-cells = <1>;
+> > +      };
+> > +    };
+> > +
+> > +    thermal_zones: thermal-zones {
+> > +      cpu0-thermal {
+> > +        polling-delay = <1000>;
+> > +        polling-delay-passive = <250>;
+> > +        thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU0>;
+> > +        trips {
+> > +          cpu0_alert: trip-alert {
+> > +            temperature = <85000>;
+> > +            hysteresis = <2000>;
+> > +            type = "passive";
+> > +          };
+> > +          cpu0_crit: trip-crit {
+> > +            temperature = <100000>;
+> > +            hysteresis = <2000>;
+> > +            type = "critical";
+> > +          };
+> > +        };
+> > +      };
+> > +    };
