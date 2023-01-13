@@ -2,90 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8F866A237
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F281E66A238
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjAMSjF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 13 Jan 2023 13:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S229825AbjAMSjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAMSjC (ORCPT
+        with ESMTP id S229568AbjAMSjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:39:02 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8695F1003;
-        Fri, 13 Jan 2023 10:38:59 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pGOx5-003Fps-AY; Fri, 13 Jan 2023 19:38:55 +0100
-Received: from p57ae5361.dip0.t-ipconnect.de ([87.174.83.97] helo=smtpclient.apple)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pGOx5-000ESc-2y; Fri, 13 Jan 2023 19:38:55 +0100
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v4] sh: avoid using IRQ0 on SH3/4
-Date:   Fri, 13 Jan 2023 19:38:44 +0100
-Message-Id: <09EB6264-E85C-487C-B706-6411BB18DDDF@physik.fu-berlin.de>
-References: <961f3b42-1522-79d5-7012-1533b568696f@omp.ru>
-Cc:     Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-In-Reply-To: <961f3b42-1522-79d5-7012-1533b568696f@omp.ru>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-X-Mailer: iPhone Mail (20C65)
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.174.83.97
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 13:39:03 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5125C209;
+        Fri, 13 Jan 2023 10:39:02 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id bp15so34286105lfb.13;
+        Fri, 13 Jan 2023 10:39:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=y+Ihb7yYd+dHkT3peC3oWMSMFZmTeVb3TWtbghgSLf8=;
+        b=gWQQou4T5QGvl3TUuN+n2NqdV0UyZLx03XI3YRXPRylqua4IXFppBI8k2CQt8+ZFmh
+         OOcb3x5rKqp88ZXO7UOJrfFq4QNKQA8JWxGryT1NaiBU6wzVP1Et8GQ4TEOXdleqWHeT
+         AsFV5U/7Gn2anS5iB+pJQOc7wlAnDZovLNoHvw0vffHVQTzoYIfBHhNSyShrJ6CyGtXF
+         paNqRK+sHrGDa2dppJfWu2eCGn0TFu9zSKFKNQ/smI782wpu5Kww9yVUXpxfIhsswJiU
+         wmcKDdLG/TwbqQsRDLNvJqu9L0CR53sJ9JTHcwoCwAYzJmK7OEx1PgBjMBjZtFn3/oQb
+         TXXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y+Ihb7yYd+dHkT3peC3oWMSMFZmTeVb3TWtbghgSLf8=;
+        b=3uF7tj9DcKQE8ezMdubA6lI33VqiwWj4W9KNoqaMkoNIxSzLKIBIgbhJdYK19K240q
+         Y7Q/QMH07QddKRX2b9Q+Zz/P0JzNSYL8nAH8ACx7jyCkQQ3kCFfpOjpHD0CxCDI2pjNl
+         OQ1FkQKG2GHrYxguxdOM1pkXII/d12D8QS+3VbjZ8lT9Pt/Xe+V+5q+NBVGiIQoz0ohm
+         fiVJtxde6eFA9A21ybuRVa4ALbEBsPzU+JLO9u7fQsNnSbfcJrSArZEHkBawJRvenCzp
+         sjrZfTrS7zSBDcYoWRZCtiw1MOcBxzWFHCe9RUZPumtJ/t919qbFbbtwwVaWCliY5Csy
+         wI9w==
+X-Gm-Message-State: AFqh2kqXbpFH3nwCEr/pbQyxzdQQIKCg/Tjv3qYb8VKaAIe66KMgs4Hb
+        paMlS+CC9uyIOJBEWZfKKGzsRLmsJxA=
+X-Google-Smtp-Source: AMrXdXu712NUTAQ0T3YcSwrV0RpfV0bTzFPz9RV+HRn1MXb8nk5ZsrDEol6rOAdo02svcOg8qvGLBQ==
+X-Received: by 2002:a05:6512:39c6:b0:4cc:725d:9d3d with SMTP id k6-20020a05651239c600b004cc725d9d3dmr9534530lfu.54.1673635140657;
+        Fri, 13 Jan 2023 10:39:00 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id q11-20020a056512210b00b004cc9042c9cfsm1989295lfr.158.2023.01.13.10.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 10:39:00 -0800 (PST)
+Date:   Fri, 13 Jan 2023 21:38:57 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dw: Fix wrong FIFO level setting for long xfers
+Message-ID: <20230113183857.ed5nh3k5ohm34oju@mobilestation>
+References: <20230113165724.27199-1-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75Vc3+_SiVFzmJPM2dtPqUGErGY6Qc6_deS1yaDkjtT35rQ@mail.gmail.com>
+ <20230113181854.ob7lgbwixnxdrcys@mobilestation>
+ <Y8GjYUWKSbfXFNEK@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8GjYUWKSbfXFNEK@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey!
-
-> On Jan 13, 2023, at 7:27 PM, Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+On Fri, Jan 13, 2023 at 08:30:57PM +0200, Andy Shevchenko wrote:
+> On Fri, Jan 13, 2023 at 09:18:54PM +0300, Serge Semin wrote:
+> > On Fri, Jan 13, 2023 at 07:33:16PM +0200, Andy Shevchenko wrote:
+> > > On Fri, Jan 13, 2023 at 6:57 PM Serge Semin
+> > > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > > >
+> > > > Due to using the u16 type in the min_t() macros the SPI transfer length
+> > > > will be cast to word before participating in the conditional statement
+> > > > implied by the macro. Thus if the transfer length is greater than 64KB the
+> > > > Tx/Rx FIFO threshold level value will be determined by the leftover of the
+> > > > truncated after the type-case length. In the worst case it will cause
+> > > > having the "Tx FIFO Empty" or "Rx FIFO Full" interrupts triggered on each
+> > > > word sent/received to/from the bus. In its turn it will cause the
+> > > > dramatical performance drop.
+> > > >
+> > > > The problem can be easily fixed by using the min() macros instead of
+> > > > min_t() which doesn't imply any type casting thus preventing the possible
+> > > > data loss.
+> > 
+> > > But this would be problematic if the types of the parameters are different.
+> > > Currently they are u32 vs. unsigned int.
+> > 
+> > Yes, it would but only in case if somebody changes their types. As you
+> > said they are currently of u32 and unsigned int types which are the
+> > same on all the currently supported platforms. So even if somebody
+> > changes the type of any of them then the compiler will warn about it
+> > anyway.
+> > 
+> > > I would rather assume that
+> > > FIFO length is always less than or equal to 64K and just change the
+> > > type in min_t to follow what dws->tx_len is.
+> > 
+> > There is no need in assuming in this case. FIFO depth doesn't exceed
+> > 256 xfer words by the DW SSI IP-core design (judging by the constraints
+> > applied to the SSI_RX_FIFO_DEPTH and SSI_TX_FIFO_DEPTH synthesize
+> > parameters). So the dws->fifo_len can be easily converted to u16 type.
+> > The problem is in the tx_len field casting to u16. It's a rare case,
+> > but the SPI xfers length can be greater than 64K. The
+> > spi_transfer.len field is of the unsigned int type and the SPI-core
+> > doesn't have any constraints to that (except the one defined by the
+> > controller drivers).
+> > 
+> > So to make sure I correctly understand what you meant. Do you suggest
+> > to do something like this (it was my first version of the fix):
+> > -	level = min_t(u16, dws->fifo_len / 2, dws->tx_len);
+> > +	level = min_t(u32, dws->fifo_len / 2, dws->tx_len);
+> > or even like this
+> > -	level = min_t(u16, dws->fifo_len / 2, dws->tx_len);
+> > +	level = min_t(typeof(dws->tx_len), dws->fifo_len / 2, dws->tx_len);
+> > ?
 > 
-> ﻿Hello!
+
+> No, I suggest
 > 
->> On 5/3/22 11:42 PM, Sergey Shtylyov wrote:
->> 
->> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
->> and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
->> see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
->> at 0 -- modify that code to start the IRQ #s from 16 instead.
->> 
->> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
->> indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
->> 
->> [1] https://lore.kernel.org/all/025679e1-1f0a-ae4b-4369-01164f691511@omp.ru/
->> 
->> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
->> Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
->> 
->> ---
->> The patch is against Linus Torvalds' 'linux.git' repo.
+> 	level = min_t(unsigned int, dws->fifo_len / 2, dws->tx_len);
 > 
->   So, this patch hasn't been merged... may I ask why? :-(
+> So, we do not care about changing of the fifo_len type, and we won't issue
+> a compiler warning if it becomes, let's say, u8. While your solution will
+> still produce it.
+> 
+> > Personally I would prefer either my solution with just min() macros
+> > usage (which in case of the types change will give the compile-time
+> > warning about the types mismatch) or using the min_t(u32, ...) version
+> > (using typeof() seems overkill). I don't see much different (do you?).
+> 
+> Yes, hence personally I prefer my proposal.
 
-The SH maintainers have been MIA which is why the other maintainers want to kill the architecture again.
+Ok. min_t(unsigned int, ...) it's then. I'll resubmit v2 shortly.
 
-I’m seriously considering adopting the architecture.
+-Serge(y)
 
-Not sure whether Linus would grant that though.
-
-Adrian
+> 
+> > Both versions have their pros and cons.
+> 
+> Right.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
