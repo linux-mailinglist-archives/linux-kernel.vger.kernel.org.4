@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EB066A64F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A63B66A6A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjAMW6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 17:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S230174AbjAMXBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjAMW5o (ORCPT
+        with ESMTP id S230036AbjAMXBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 17:57:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760784F82;
-        Fri, 13 Jan 2023 14:57:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7474962263;
-        Fri, 13 Jan 2023 22:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8027C433F1;
-        Fri, 13 Jan 2023 22:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673650651;
-        bh=s/4KHihd3TlUX2HOfaEEQ08QQuS7t1/ev0yRVowTt6k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DGjGwvtJaN5G7uhUFsJvOaNGmWV7xGVt1twaufKt9hqaVwISHvOuY1A1YQ8ujSHPP
-         is7SOE+vUwAbCEDEp0uVXbFprJkWJ16wYVprF1KOURLesYTyTLvWB42F5DvWw5Ta5g
-         0MUKvI8Z/tsa3/o6q7M6sQOzHegNntuteeM6ARpsLdwzGjPSVvXWRkSzGFHdMHgf0a
-         I49KTiEr1cj4DlpNokQdMjP5J8Z5he/YAfA4wdFc/3CPVOJfEQY9rZt0UII1LVvNhk
-         sfj9jDx0NjtZoDo/MIPEjEXHfF0FA4mQaJ9iS2za1+2yOBeNLgHmilAGtDb6JgjLP9
-         +LCBDlFrlAUgQ==
-Received: by mail-lj1-f175.google.com with SMTP id n5so23406718ljc.9;
-        Fri, 13 Jan 2023 14:57:31 -0800 (PST)
-X-Gm-Message-State: AFqh2kpi33jfWLsIAzTgpfXKlFxpuHKSIV4Ia5ZjcBXV+TNg0zXYA9SC
-        gOWOfmMc73BcCirUu67pSqMhGCuMghFtJRZ3i0w=
-X-Google-Smtp-Source: AMrXdXv8G0sgEozawpW9g+yaFV8GiBq+K4nZTXfp9pJxQp0J32W/yHPnyLvZF/QcX4uoppYlhDNQGY1L+ibkeMUASuY=
-X-Received: by 2002:a2e:9382:0:b0:284:b05a:9e82 with SMTP id
- g2-20020a2e9382000000b00284b05a9e82mr1394658ljh.479.1673650649893; Fri, 13
- Jan 2023 14:57:29 -0800 (PST)
+        Fri, 13 Jan 2023 18:01:32 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34F67ECB7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:01:28 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id i65so13770714pfc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CAQbYGMaML5fa/DHmVz3EfKdwA/KXc1FwDFGQHrppL0=;
+        b=lWOjbvh4IuNBwa2ZzT3rgGJypVyC6Zc1Wqnrkimn/SW2ehJDGWbXXULefjgfyeo5Qd
+         Ws/jQ8cVwT2F36JNS9xaTdmsIAN7AC/ZZFbjr86PEUU0ytQMeSqtMi+y/vQl+/pgo4U8
+         E46GRUr/SaBCvobUxYpqR1y/6gYHKe34xATJo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAQbYGMaML5fa/DHmVz3EfKdwA/KXc1FwDFGQHrppL0=;
+        b=PYhtC+zNLEIXv6xBKZc5lciOZ7TAoxU6axPa6236u9FD8JQ+94UI6Hu/xQtVotFlBz
+         3ZS2Gu6pgy9BKWgMhe6z900IR1i2lgTyLX4yi2Bp8sjfM2TLMjj8ipXyM3q1fFqSwvfk
+         4uf9gXk7dBrCCQdiEwey9IrkGCWbk9Wm6X7vNlvyqDemcxvwjRMsoeqNDDok948dH8+m
+         aTc2wR76gCv1T8DBavuIht+w1jXcKIf6jK/xvCY4bj7CvInHCs3Vvu5kc23OMrPZNInU
+         1OJGtV5/pxsNgmdD/lKSqYdU3bdk1EGOKMe2zN+2Q0vZisixbjGhl8rDa38V6yN0NhCW
+         brtA==
+X-Gm-Message-State: AFqh2kqhm0ywh8gly4/1oyEJyhrz9FbAz6vqhE2Sof1MpRFDB2B1n44y
+        JFuKjEG/d/WfANtp2gNv+Wt2hw==
+X-Google-Smtp-Source: AMrXdXuOJHsk34k6YZdu/AFcyBDgW6AnnR45JuuXxTcdyhIWnIr9mExAvL0atVo6SvjzWEr0Ka3Jeg==
+X-Received: by 2002:a05:6a00:4212:b0:583:fb14:ddc1 with SMTP id cd18-20020a056a00421200b00583fb14ddc1mr28709488pfb.17.1673650888393;
+        Fri, 13 Jan 2023 15:01:28 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v67-20020a622f46000000b00581ad007a9fsm14121533pfv.153.2023.01.13.15.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 15:01:27 -0800 (PST)
+Date:   Fri, 13 Jan 2023 15:01:26 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Yupeng Li <liyupeng@zbhlos.com>, tariqt@nvidia.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Caicai <caizp2008@163.com>
+Subject: Re: [PATCH 1/1] net/mlx4: Fix build error use array_size() helper in
+ copy_to_user()
+Message-ID: <202301131453.D93C967D4@keescook>
+References: <20230107072725.673064-1-liyupeng@zbhlos.com>
+ <Y7wb1hCpJiGEdbav@ziepe.ca>
+ <202301131039.7354AD35CF@keescook>
 MIME-Version: 1.0
-References: <20230112214015.1014857-1-namhyung@kernel.org> <20230112214015.1014857-4-namhyung@kernel.org>
- <CAPhsuW71GHAayZmGFfSrpCARiD3YEO1C8QBy1cc1ZEuSFJB=sA@mail.gmail.com> <CAM9d7ciPAocvOvspzfrq2hym-u2+Fbg2A6WJhOQqxwG7CGiuJg@mail.gmail.com>
-In-Reply-To: <CAM9d7ciPAocvOvspzfrq2hym-u2+Fbg2A6WJhOQqxwG7CGiuJg@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 13 Jan 2023 14:57:17 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5xqgG=6VVGaaStHYRNAO=rB=mL7YALWN89r8Wf+0M5sA@mail.gmail.com>
-Message-ID: <CAPhsuW5xqgG=6VVGaaStHYRNAO=rB=mL7YALWN89r8Wf+0M5sA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] perf/core: Add perf_sample_save_raw_data() helper
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-s390@vger.kernel.org,
-        x86@kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202301131039.7354AD35CF@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,72 +75,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 1:56 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Song,
->
-> On Fri, Jan 13, 2023 at 1:01 PM Song Liu <song@kernel.org> wrote:
-> >
-> > On Thu, Jan 12, 2023 at 1:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > >
-> > > When it saves the raw_data to the perf sample data, it needs to update
-> > > the sample flags and the dynamic size.  To make sure this, add the
-> > > perf_sample_save_raw_data() helper and convert all call sites.
-> > >
-> > > Cc: linux-s390@vger.kernel.org
-> > > Cc: x86@kernel.org
-> > > Cc: bpf@vger.kernel.org
-> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Fri, Jan 13, 2023 at 10:41:01AM -0800, Kees Cook wrote:
+> On Mon, Jan 09, 2023 at 09:51:18AM -0400, Jason Gunthorpe wrote:
+> > On Sat, Jan 07, 2023 at 03:27:25PM +0800, Yupeng Li wrote:
+> > > When CONFIG_64BIT was disabled, check_copy_size() was declared with
+> > > attribute error: copy source size is too small, array_size() for 32BIT
+> > > was wrong size, some compiled msg with error like:
+> > > 
+> > >   CALL    scripts/checksyscalls.sh
+> > >   CC [M]  drivers/net/ethernet/mellanox/mlx4/cq.o
+> > > In file included from ./arch/x86/include/asm/preempt.h:7,
+> > >                  from ./include/linux/preempt.h:78,
+> > >                  from ./include/linux/percpu.h:6,
+> > >                  from ./include/linux/context_tracking_state.h:5,
+> > >                  from ./include/linux/hardirq.h:5,
+> > >                  from drivers/net/ethernet/mellanox/mlx4/cq.c:37:
+> > > In function ‘check_copy_size’,
+> > >     inlined from ‘copy_to_user’ at ./include/linux/uaccess.h:168:6,
+> > >     inlined from ‘mlx4_init_user_cqes’ at drivers/net/ethernet/mellanox/mlx4/cq.c:317:9,
+> > >     inlined from ‘mlx4_cq_alloc’ at drivers/net/ethernet/mellanox/mlx4/cq.c:394:10:
+> > > ./include/linux/thread_info.h:228:4: error: call to ‘__bad_copy_from’ declared with attribute error: copy source size is too small
+> > >   228 |    __bad_copy_from();
+> > >       |    ^~~~~~~~~~~~~~~~~
+> > > make[6]: *** [scripts/Makefile.build:250：drivers/net/ethernet/mellanox/mlx4/cq.o] 错误 1
+> > > make[5]: *** [scripts/Makefile.build:500：drivers/net/ethernet/mellanox/mlx4] 错误 2
+> > > make[5]: *** 正在等待未完成的任务....
+> > > make[4]: *** [scripts/Makefile.build:500：drivers/net/ethernet/mellanox] 错误 2
+> > > make[3]: *** [scripts/Makefile.build:500：drivers/net/ethernet] 错误 2
+> > > make[3]: *** 正在等待未完成的任务....
+> > > make[2]: *** [scripts/Makefile.build:500：drivers/net] 错误 2
+> > > make[2]: *** 正在等待未完成的任务....
+> > > make[1]: *** [scripts/Makefile.build:500：drivers] 错误 2
+> > > make: *** [Makefile:1992：.] 错误 2
+> > > 
+> > > Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
+> > > Reviewed-by: Caicai <caizp2008@163.com>
 > > > ---
->
-> [SNIP]
-> > > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > > index 0fba98b9cd65..133894ae5e30 100644
-> > > --- a/kernel/events/core.c
-> > > +++ b/kernel/events/core.c
-> > > @@ -7588,30 +7588,10 @@ void perf_prepare_sample(struct perf_event_header *header,
-> > >         if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
-> > >                 perf_sample_save_callchain(data, event, regs);
-> > >
-> > > -       if (sample_type & PERF_SAMPLE_RAW) {
-> > > -               struct perf_raw_record *raw = data->raw;
-> > > -               int size;
-> > > -
-> > > -               if (raw && (data->sample_flags & PERF_SAMPLE_RAW)) {
-> > > -                       struct perf_raw_frag *frag = &raw->frag;
-> > > -                       u32 sum = 0;
-> > > -
-> > > -                       do {
-> > > -                               sum += frag->size;
-> > > -                               if (perf_raw_frag_last(frag))
-> > > -                                       break;
-> > > -                               frag = frag->next;
-> > > -                       } while (1);
-> > > -
-> > > -                       size = round_up(sum + sizeof(u32), sizeof(u64));
-> > > -                       raw->size = size - sizeof(u32);
-> > > -                       frag->pad = raw->size - sum;
-> > > -               } else {
-> > > -                       size = sizeof(u64);
-> > > -                       data->raw = NULL;
-> > > -               }
-> > > -
-> > > -               data->dyn_size += size;
-> > > +       if (filtered_sample_type & PERF_SAMPLE_RAW) {
-> > > +               data->raw = NULL;
-> > > +               data->dyn_size += sizeof(u64);
-> > > +               data->sample_flags |= PERF_SAMPLE_RAW;
-> > >         }
-> >
-> > I don't quite follow this change, and the commit log doesn't seem
-> > to cover this part.
->
-> It's for when the user requested RAW but no actual data.
-> It assumes PMU drivers call perf_sample_save_raw_data()
-> before perf_prepare_sample() if there's RAW data.
-> So we can only handle the 'else' part in the original code.
+> > >  drivers/net/ethernet/mellanox/mlx4/cq.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/drivers/net/ethernet/mellanox/mlx4/cq.c b/drivers/net/ethernet/mellanox/mlx4/cq.c
+> > > index 4d4f9cf9facb..7dadd7227480 100644
+> > > --- a/drivers/net/ethernet/mellanox/mlx4/cq.c
+> > > +++ b/drivers/net/ethernet/mellanox/mlx4/cq.c
+> > > @@ -315,7 +315,11 @@ static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
+> > >  		}
+> > >  	} else {
+> > >  		err = copy_to_user((void __user *)buf, init_ents,
+> > > +#ifdef CONFIG_64BIT
+> > >  				   array_size(entries, cqe_size)) ?
+> > > +#else
+> > > +				   entries * cqe_size) ?
+> > > +#endif
+> > >  			-EFAULT : 0;
+> > 
+> > This can't possibly make sense, Kees?
+> 
+> Uuuuh, that's really weird. What compiler version and arch? I'll see if
+> I can reproduce this.
 
-Got it. Thanks for the explanation.
+I can't reproduce this. I'm assuming this is being seen on a 32-bit
+loongarch build? I have no idea how to get that compiler. Neither Debian
+nor Fedora seem to package it. (It looks like it was added in GCC 12?)
+Perhaps it's just "mips"? But I also can't figure out how to choose a
+32-bit mips build. Wheee.
 
-Song
+Anyway, I would assume this is a compiler bug around inlining or the
+check_mul_overflow implementation?
+
+static inline size_t __must_check size_mul(size_t factor1, size_t factor2)
+{
+        size_t bytes;
+
+        if (check_mul_overflow(factor1, factor2, &bytes))
+                return SIZE_MAX;
+
+        return bytes;
+}
+
+#define array_size(a, b)        size_mul(a, b)
+
+
+-Kees
+
+-- 
+Kees Cook
