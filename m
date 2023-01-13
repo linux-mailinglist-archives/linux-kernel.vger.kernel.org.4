@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBC8668826
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A31166883F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240372AbjAMALq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S240818AbjAMANL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240129AbjAMALj (ORCPT
+        with ESMTP id S240290AbjAMALn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:11:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4F950F59;
-        Thu, 12 Jan 2023 16:11:35 -0800 (PST)
+        Thu, 12 Jan 2023 19:11:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5C95DE46;
+        Thu, 12 Jan 2023 16:11:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 832D5621E4;
-        Fri, 13 Jan 2023 00:11:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14C6C433D2;
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB98FCE1FBA;
+        Fri, 13 Jan 2023 00:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E78FFC43392;
         Fri, 13 Jan 2023 00:11:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673568694;
-        bh=v3kfTmDwMfPA9Xint1FI2BqTjFB4FQUN1LL/8emmuPw=;
+        s=k20201202; t=1673568695;
+        bh=jkXE0W2CNP0e27Ckg1RXZA3NItagopfVWSUudCHUD9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d6uNflm9Rm7u8C2JOcazN73o27Mc8b4r1r/9WwcXBq3ijw8Ojd/+4wH4FDvAwuhm5
-         6cWj97Cs6XI1Q2OMhHHbUNSS4k2rJyT8vQFW0aqaMNi2X4U+pLlM7F9OgY0Dh69YYb
-         YEuhoX5yS9U7h5Fya/vZm8KJdahywkioJh6vhPn494eFYytoee3CmMACuOtSDCy3+D
-         JMsgrw35z8Flhq4FErQJV4uyZzry9bsYkoY9YMBclbBWku8QYnxe4OvOiLW1pJHdkU
-         bbjEHtlyQUTxnw+bpwA1LRATJSQykJ7c73B6uPw0ZVTYwW1hzYubjTGH0MUuTgiZ1g
-         FarGMsBFDIzFw==
+        b=Dbj/CuJD9xDxQdyPWfyMl08K0cLhg5VSagcd6Ztf2ZBnWMXB1dlX6QWfECKAk3uyK
+         4Cyc+6MK8O2PMAY0rj6JWtCk0BlqurrNsYRn6AAfamIFzvPL2TObRRnQEVo8AJy1Ff
+         DjKtqwUTcaEV899A/oRpdKC6AePf/7QowsTVNEo0y6BEbNZFkGsMo1DO7840j4zamF
+         e92enptQIJV6WRSlMFXWps5sxR7KFNYvcLsm8KpA2/Hr4uspO9hw/+55SlcCqGRRzU
+         fD2WsfoFQzj95/pzmYmZvtLBgGA0NGw+ecVBJjBHcB71P+CaRsl2iT2GAFah4MDgWh
+         N+BwOXPiM5MkQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9626D5C09F1; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
+        id 987685C0AF8; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH rcu v2 01/20] arch/x86: Remove "select SRCU"
-Date:   Thu, 12 Jan 2023 16:11:13 -0800
-Message-Id: <20230113001132.3375334-1-paulmck@kernel.org>
+Subject: [PATCH rcu v2 02/20] drivers/base: Remove CONFIG_SRCU
+Date:   Thu, 12 Jan 2023 16:11:14 -0800
+Message-Id: <20230113001132.3375334-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
 References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
@@ -61,41 +59,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Now that the SRCU Kconfig option is unconditionally selected, there is
-no longer any point in selecting it.  Therefore, remove the "select SRCU"
-Kconfig statements.
+no longer any point in conditional compilation based on CONFIG_SRCU.
+Therefore, remove the #ifdef and throw away the #else clause.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: <x86@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: John Ogness <john.ogness@linutronix.de>
 ---
- arch/x86/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/base/core.c | 42 ------------------------------------------
+ 1 file changed, 42 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 3604074a878b8..4a9175fe7dd18 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -283,7 +283,6 @@ config X86
- 	select RTC_LIB
- 	select RTC_MC146818_LIB
- 	select SPARSE_IRQ
--	select SRCU
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
-@@ -1938,7 +1937,6 @@ config X86_SGX
- 	depends on X86_64 && CPU_SUP_INTEL && X86_X2APIC
- 	depends on CRYPTO=y
- 	depends on CRYPTO_SHA256=y
--	select SRCU
- 	select MMU_NOTIFIER
- 	select NUMA_KEEP_MEMINFO if NUMA
- 	select XARRAY_MULTI
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index a3e14143ec0cf..bb36aca8d1b7a 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -181,7 +181,6 @@ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
+ }
+ EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
+ 
+-#ifdef CONFIG_SRCU
+ static DEFINE_MUTEX(device_links_lock);
+ DEFINE_STATIC_SRCU(device_links_srcu);
+ 
+@@ -220,47 +219,6 @@ static void device_link_remove_from_lists(struct device_link *link)
+ 	list_del_rcu(&link->s_node);
+ 	list_del_rcu(&link->c_node);
+ }
+-#else /* !CONFIG_SRCU */
+-static DECLARE_RWSEM(device_links_lock);
+-
+-static inline void device_links_write_lock(void)
+-{
+-	down_write(&device_links_lock);
+-}
+-
+-static inline void device_links_write_unlock(void)
+-{
+-	up_write(&device_links_lock);
+-}
+-
+-int device_links_read_lock(void)
+-{
+-	down_read(&device_links_lock);
+-	return 0;
+-}
+-
+-void device_links_read_unlock(int not_used)
+-{
+-	up_read(&device_links_lock);
+-}
+-
+-#ifdef CONFIG_DEBUG_LOCK_ALLOC
+-int device_links_read_lock_held(void)
+-{
+-	return lockdep_is_held(&device_links_lock);
+-}
+-#endif
+-
+-static inline void device_link_synchronize_removal(void)
+-{
+-}
+-
+-static void device_link_remove_from_lists(struct device_link *link)
+-{
+-	list_del(&link->s_node);
+-	list_del(&link->c_node);
+-}
+-#endif /* !CONFIG_SRCU */
+ 
+ static bool device_is_ancestor(struct device *dev, struct device *target)
+ {
 -- 
 2.31.1.189.g2e36527f23
 
