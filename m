@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46371668B01
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D03668B02
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjAMEt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 23:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S232402AbjAMEtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 23:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjAMEtR (ORCPT
+        with ESMTP id S231634AbjAMEtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 23:49:17 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CD65B141
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C825B145
         for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:49:16 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id x7so8186348qtv.13
+Received: by mail-qt1-x832.google.com with SMTP id fd15so8340271qtb.9
         for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 20:49:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pefoley.com; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lVbqtFvEqcEY6PTmCOfzPzIYvqXqj8MQaEjPBYbJAVg=;
-        b=oSg0uTIKfexVL+8ythAlt7gKQD/HGKHc+xpRHILJIbXc/Q6TtTwAm9x3UWR9dlzThP
-         PjoCNQjMofO/IuVqMEF74cp1PkNogOp+PcpAFL2pivlh//Mz+FnEt/Zc80N/JXgNln/A
-         8mcDcquFzM7ANPNCVQiN/Bsv6C2yDAJnlJf6o=
+        bh=zKL+FkRBVGdlcDPsmoeX6zsOGWo6bw9MhMVT8FhJJdU=;
+        b=ThajRpZiQS+ExcexJ90RPZlFJIxRsZQjG67taK6tWkRw9iMA3nan6BucM5DTe4h9zw
+         VuF25zZYkp7yPwo26kEeiPLtEHt+4ZiKwSJ0sKf16Bdcuoz1Q04Sm6usexU2OigzL5Yi
+         /iGZLdM4lZHliaMCBWlR1YYumF/AWcpL/1ZUE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lVbqtFvEqcEY6PTmCOfzPzIYvqXqj8MQaEjPBYbJAVg=;
-        b=A/FzzmS5Iq81QHsirM7+LyKeg5gLl/4W98KhaM4wYGDg4J5b5ccwz0ALEKGkIqA8Jn
-         UJWW0tbYrQT64mrh65aueIeohcw1ui+3Ju3cMJU0sx6uXgeTy6kJvhKOuQjPzI1aI9sN
-         BbH8tREbBTR5Z3+L7V3N5l2ngafMtShmQuYU1AOAWvDuGcsD0cCQvge+n0DIVYNT/CXZ
-         8Q5obQI2w59DSZA3uNxIiJVgxjQvCAngiQBaMLeMDD7TLpdkBdRokCJV+qqh6YpR/il+
-         078lCeFV4Rv70DLmxVU/ANqIOzskdth8m7mmKO2DMKZrsQ3yEPkHU93IXHKFzLOuwIbN
-         6uCQ==
-X-Gm-Message-State: AFqh2kpwy4GEvWUa0w5yxQ2GOfZe1rKBX6JANwG3T7FR6yyTYLxqVD4c
-        DH9vY8RFnAaa68A3V/MsWh7rYw==
-X-Google-Smtp-Source: AMrXdXs+4Q/0riaBJeBu43Ip9QqbHlVe2IR4rPwv7GEQW2g23YhJETxm7QMFvfo07vTpZzy0lcWyfA==
-X-Received: by 2002:a05:622a:1750:b0:3ad:d7a6:76d8 with SMTP id l16-20020a05622a175000b003add7a676d8mr30209523qtk.38.1673585355266;
+        bh=zKL+FkRBVGdlcDPsmoeX6zsOGWo6bw9MhMVT8FhJJdU=;
+        b=gdDaJfJlS2v8zQR2dVKV1mrGkBq5VcB4YrJaGaiKkXl9Odau0B1O7OJPiyweKuyVqf
+         Q0Ewy6IEhSGQ1Yu6exi1wmhk4+OYIC5HnuK1MWph/ItFBHH7qXgbH3G+w4PIazNxr8Zh
+         Gw27QAkHl2OYQr+MeIOIsmyGcLyLasUWMsvk2TdGzIXE0sUpIbbEjstxefnPFbjnn2Gt
+         x54SHTcbu0j8C1B/yxKWIxrCVumYDjJfqpbtjgZMbFTb+MjyeHM6qC/LjJnSnJsM764N
+         aFLtyNKAAWCHRZcuYciZ8YrVY8J0+F+zIcWfUU77oEU/3fSBPi41IiewYl3JI73CxkIn
+         rJtQ==
+X-Gm-Message-State: AFqh2kp2uVWYdE4HXWJDdulyvSqsolIEk5vTkl75T5cKfuuNqi0WxW2A
+        F2af86jb3QaJisOAyc21m19NfA==
+X-Google-Smtp-Source: AMrXdXu6WsXDkaK3qQyqiRnnE21ZhANn7yzKVtm6zCjaqywxitsRsQfF5r/SyGQmxC6Ta4YBcz0Ddg==
+X-Received: by 2002:a05:622a:1e8c:b0:3ad:14d0:e8b8 with SMTP id bz12-20020a05622a1e8c00b003ad14d0e8b8mr27510609qtb.26.1673585355803;
         Thu, 12 Jan 2023 20:49:15 -0800 (PST)
 Received: from [192.168.1.3] ([2600:4040:29fb:d300:887b:7eff:fe74:68b2])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b00704a9942708sm12099472qki.73.2023.01.12.20.49.14
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b00704a9942708sm12099472qki.73.2023.01.12.20.49.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 20:49:14 -0800 (PST)
+        Thu, 12 Jan 2023 20:49:15 -0800 (PST)
 From:   Peter Foley <pefoley2@pefoley.com>
-Date:   Thu, 12 Jan 2023 23:49:07 -0500
-Subject: [PATCH 1/4] um: Make the definition of cpu_data more compatible
+Date:   Thu, 12 Jan 2023 23:49:08 -0500
+Subject: [PATCH 2/4] um: Avoid pcap multiple definition errors
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230112-um-v1-1-6bec9e97ad13@pefoley.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230112-um-v1-2-6bec9e97ad13@pefoley.com>
 References: <20230112-um-v1-0-6bec9e97ad13@pefoley.com>
 In-Reply-To: <20230112-um-v1-0-6bec9e97ad13@pefoley.com>
 To:     Richard Weinberger <richard@nod.at>,
@@ -62,11 +62,11 @@ To:     Richard Weinberger <richard@nod.at>,
 Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
         Peter Foley <pefoley2@pefoley.com>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673585354; l=1683;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673585354; l=1145;
  i=pefoley2@pefoley.com; s=20230111; h=from:subject:message-id;
- bh=aGrL0ysPMYznOqdL0cA76sdMuDBI2JGj/mTkJStMEDk=;
- b=N2azVPGy0zYLU0iU3/UHyqtpzJsGGCVO2bIRlbOLxNGtGUyvZZ/Jdj31qhwLcIqfA33a965MpYY5
- tv/1TV+mARDuKlsafc554to1VTS6vsw1ltMTV8PZOe4nzSx4GHum
+ bh=6+vpUXmt9fMS9wiEsw48LBnr2Y8Q2+1VbsxVT5rxS4s=;
+ b=ivWCsOmTeN9z2HCdfQL6ie4FA5ZbD21inE4lJMPPNuOfy5kT9In2CLmOBuwihABF5gX12oK1JB1R
+ IxexZ61xBZ6QMNZ2ZjMihtKqGDBkWxJbBR7xVqq7XtCA1LMymnK9
 X-Developer-Key: i=pefoley2@pefoley.com; a=ed25519;
  pk=DCQqIdN6rHnvfQH58WQiQzJFfGUo1HyWSvdYG8vnO5o=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,48 +78,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Match the x86 implementation to improve build errors.
-Noticed when building allyesconfig.
+Change the function name in pcap_kern to avoid conflicting with
+libpcap.a.
 
 e.g.
-../arch/um/include/asm/processor-generic.h:94:19: error: called object is not a function or function pointer
-   94 | #define cpu_data (&boot_cpu_data)
-      |                  ~^~~~~~~~~~~~~~~
-../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:2157:16: note: in expansion of macro ‘cpu_data’
- 2157 |         return cpu_data(first_cpu_of_numa_node).apicid;
-
-Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+ld: /usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../lib64/libpcap.a(pcap.o): in function `pcap_init':
+(.text+0x7f0): multiple definition of `pcap_init'; arch/um/drivers/pcap_kern.o:pcap_kern.c:(.text.unlikely+0x0): first defined here
 ---
- arch/um/include/asm/processor-generic.h | 2 +-
- arch/um/kernel/um_arch.c                | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/um/drivers/pcap_kern.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/um/include/asm/processor-generic.h b/arch/um/include/asm/processor-generic.h
-index bb5f06480da9..7414154b8e9a 100644
---- a/arch/um/include/asm/processor-generic.h
-+++ b/arch/um/include/asm/processor-generic.h
-@@ -91,7 +91,7 @@ struct cpuinfo_um {
+diff --git a/arch/um/drivers/pcap_kern.c b/arch/um/drivers/pcap_kern.c
+index cfe4cb17694c..25ee2c97ca21 100644
+--- a/arch/um/drivers/pcap_kern.c
++++ b/arch/um/drivers/pcap_kern.c
+@@ -15,7 +15,7 @@ struct pcap_init {
+ 	char *filter;
+ };
  
- extern struct cpuinfo_um boot_cpu_data;
- 
--#define cpu_data (&boot_cpu_data)
-+#define cpu_data(cpu)    boot_cpu_data
- #define current_cpu_data boot_cpu_data
- #define cache_line_size()	(boot_cpu_data.cache_alignment)
- 
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index 786b44dc20c9..8dcda617b8bf 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -96,7 +96,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 
- static void *c_start(struct seq_file *m, loff_t *pos)
+-void pcap_init(struct net_device *dev, void *data)
++void pcap_init_kern(struct net_device *dev, void *data)
  {
--	return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
-+	return *pos < nr_cpu_ids ? &boot_cpu_data + *pos : NULL;
+ 	struct uml_net_private *pri;
+ 	struct pcap_data *ppri;
+@@ -44,7 +44,7 @@ static int pcap_write(int fd, struct sk_buff *skb, struct uml_net_private *lp)
  }
  
- static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+ static const struct net_kern_info pcap_kern_info = {
+-	.init			= pcap_init,
++	.init			= pcap_init_kern,
+ 	.protocol		= eth_protocol,
+ 	.read			= pcap_read,
+ 	.write			= pcap_write,
 
 -- 
 2.39.0
