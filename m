@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5BD66A2B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556A266A2B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjAMTMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S229570AbjAMTPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:15:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjAMTMZ (ORCPT
+        with ESMTP id S229686AbjAMTPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:12:25 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BE638AE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:12:23 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-4d4303c9de6so147606957b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5iYIwF91luR1VZkU1kFZWYlc/TF+s0pTovA3mLd0lqA=;
-        b=hddSQOS//qdQ19X2kZYXTd0mWRpEk4u7YwwDO4WLuBHsHLlzrUxcrDSaa5dHUimcjy
-         s69l9mUWoN2A964v9h9Md6s9NAE/2+HeZj11EE8aks0f3Hd/dDQttfuOQCjyCmq7Pwrp
-         vo0+OA8NXH7iIPW1T9GdGMCK+e/Ms4pU9PCu3b7ce76Y4sxCchUBERqfJgRoWuu8YLUR
-         wuf3neZOPxtSixAes71yxvXuoKfayR7bH3zTuFs8YkuczGEWguYHIFKrxbg+/6/PE7nx
-         Y46vvshIFKydrTwfeGYXo15MQuLMSq6k1xUK94rbLI9JGotaYrW0ENpex81ERXN3w/Rx
-         +Cog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iYIwF91luR1VZkU1kFZWYlc/TF+s0pTovA3mLd0lqA=;
-        b=Yg3dWKwJD3Az2T9X9OEEybsgd7Ei6XBxIUsnZDv3JOCt0O5a4QEIes1yWMq4mtdS+n
-         J6DPN/4CPWGViKYg+y4Izr5OhL14eknKWusjP+LYzBjsiOZsKxfXUMkVa0DiMxDL7mmn
-         ahEOg8/OfbQtth4mJ7imIkJuVnyq5NCJTpRKv4ZqFGwpXM1bAqZqwzInEpDKf2LvtmMW
-         onlWgKVCh1uNnk9gaapRnURwgcYwOX4UnT196UuWrjeCh++sTCLihSG1NEZZp9vRvz7D
-         F4lPbj/6617JG+fjnTdB0R7GuhGeBv5nS99bAo7c8qYirhX/USA/3puBkKvWXCOADqV0
-         cWqA==
-X-Gm-Message-State: AFqh2kq6Wfsfmvw4Fb1JQOlh6bct3pUhGoSViOW9KzAg5WiRZO90iiVa
-        CyNFNzI7BcQe74civzFxXybs3u8mtsD0bdc6
-X-Google-Smtp-Source: AMrXdXsum8aqm1WNhNOBVlO48D1fGi+7wn4gYXl7+Vzmlg3sRxY54ROiPYFHuAbab2aFSRZT5DBGDw==
-X-Received: by 2002:a81:4e0d:0:b0:4dc:6471:9bf1 with SMTP id c13-20020a814e0d000000b004dc64719bf1mr4705770ywb.32.1673637143071;
-        Fri, 13 Jan 2023 11:12:23 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
-        by smtp.gmail.com with ESMTPSA id m15-20020a05620a24cf00b007055dce4cecsm13393336qkn.97.2023.01.13.11.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 11:12:22 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pGPTR-00Afl3-V8;
-        Fri, 13 Jan 2023 15:12:21 -0400
-Date:   Fri, 13 Jan 2023 15:12:21 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
+        Fri, 13 Jan 2023 14:15:43 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D6D8317
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:15:42 -0800 (PST)
+Received: from lemmy.home.8bytes.org (p549ad69d.dip0.t-ipconnect.de [84.154.214.157])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id DA736262301;
+        Fri, 13 Jan 2023 20:15:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1673637341;
+        bh=x52iDVgcpj5R7lCUrrVwkkAIEqksQFPgjJqv/pTpmHs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=5SfsMmsCybtLyhG3gAxXl8dKCLbIjE0qVUAE6Fgeaoq23s8XjQ9ilicUCjdAI90z/
+         Nxbc45Ze+U+RfMEWC4rLc9c6I/ebovQ0W4KrC0oj6SZO377uoSha3ydxKlTq6GO60+
+         8kw3r7ixSrciIHYN0fH6Sc8rrM5oBCCJWl/Hl4AjJlfRWFsW2PYuzwAzbvCkMEXztO
+         GpVwzW4U3MbMcBNbvGlwEfdL1oP3tspmhlsdLg40+t7Ck6mpSwGRmFOWbNuCNoFJZD
+         5qjxtkbF71L4xR8pwmI4Jyvn+CpCPv2vlG8dlQrySCXrM9WKidoohQ3Rrh30vECRO9
+         Uy9AP2NdPjSjg==
+From:   Joerg Roedel <joro@8bytes.org>
 To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, iommu@lists.linux.dev,
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] iommu/ipmmu-vmsa: Remove ipmmu_utlb_disable()
-Message-ID: <Y8GtFcNq2jugBpI3@ziepe.ca>
-References: <20230113185640.8050-1-joro@8bytes.org>
+Subject: [PATCH] iommu/fsl_pamu: Fix compile error after adding set_platform_dma_ops
+Date:   Fri, 13 Jan 2023 20:15:28 +0100
+Message-Id: <20230113191528.23638-1-joro@8bytes.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230113185640.8050-1-joro@8bytes.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 07:56:40PM +0100, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
-> 
-> The function is unused after commit 1b932ceddd19 ("iommu:
-> Remove detach_dev callbacks") and so compilation fails with
-> 
-> drivers/iommu/ipmmu-vmsa.c:305:13: error: ‘ipmmu_utlb_disable’ defined but not used [-Werror=unused-function]
->   305 | static void ipmmu_utlb_disable(struct ipmmu_vmsa_domain *domain,
->       |             ^~~~~~~~~~~~~~~~~~
-> 
-> Remove the function to fix the compile error.
-> 
-> Fixes: 1b932ceddd19 ("iommu: Remove detach_dev callbacks")
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
-> ---
->  drivers/iommu/ipmmu-vmsa.c | 12 ------------
->  1 file changed, 12 deletions(-)
+From: Joerg Roedel <jroedel@suse.de>
 
-I'm surprised the 0-day bot didn't notice?
+The struct initializer for set_platform_dma_ops uses a semicolon as
+separator where a comma is required. Fix the compile error by using the
+correct separator.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: c1fe9119ee70 ("iommu: Add set_platform_dma_ops callbacks")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+---
+ drivers/iommu/fsl_pamu_domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jason
+diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
+index e123161c211a..bce372297099 100644
+--- a/drivers/iommu/fsl_pamu_domain.c
++++ b/drivers/iommu/fsl_pamu_domain.c
+@@ -452,7 +452,7 @@ static const struct iommu_ops fsl_pamu_ops = {
+ 	.domain_alloc	= fsl_pamu_domain_alloc,
+ 	.probe_device	= fsl_pamu_probe_device,
+ 	.device_group   = fsl_pamu_device_group,
+-	.set_platform_dma_ops = fsl_pamu_set_platform_dma;
++	.set_platform_dma_ops = fsl_pamu_set_platform_dma,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev	= fsl_pamu_attach_device,
+ 		.iova_to_phys	= fsl_pamu_iova_to_phys,
+-- 
+2.39.0
+
