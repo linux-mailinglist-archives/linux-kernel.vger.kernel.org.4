@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9B7669206
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 09:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AD8669212
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjAMI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 03:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        id S232777AbjAMJAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234718AbjAMI7T (ORCPT
+        with ESMTP id S233845AbjAMI7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 03:59:19 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089F260CD6;
-        Fri, 13 Jan 2023 00:59:16 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id fd15so8643993qtb.9;
-        Fri, 13 Jan 2023 00:59:15 -0800 (PST)
+        Fri, 13 Jan 2023 03:59:44 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FAB71FD0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:59:36 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qk9so50772578ejc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:59:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9YM8Shx2IZukw9YcFp8FhnA2qd5i13IeliX120PH17I=;
+        b=UswNafJ8Hcq8szwzEdclRDjcNXXT+kfG7zB9GvtX0hGjvzrZfoStfz9NgA0jc+sJR3
+         Rixfzk4u9VFwLwgURno/IXUlVFigpNu39LT9NDc5Xw8YuyEjr0CWwYATZyCodqdH1c81
+         LpzCJ5kKDL0FzvtYfXLmrJuwXjxK5Tz2XZbNW9Lrn/B/jTpyk8/A4/avobX/texpV4H0
+         unOstmnettk1gSMvYCtzZWZiRcF5otG5OlQau/8UI/hZ82dJiVTh9sTwE37KjRaysgSw
+         uquU+BTFsZXsw+9vVCkEjnOKOrgswmnORNmMR+V1qEAi7/K3ojaXMj/PYkoitAjerQsE
+         B4RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HIx/98EgJxXRPw6eabRyCtMqFo85a6og6EquEgJiRDY=;
-        b=P3MQ5D9sSanfyiSWLMMYawG0IaByrnHR3LWR0J/ngVlbs77UpipzZ67myUuOcHxh+U
-         KJwaBfclCdsDirCDwyWusyU/8+JukO/BM6pDQ7Klx6YVIJk7hxmL5rq4ZnD8EHDT9pq3
-         QGZeRLHhhfZKD4c8/m9sulc5LZLp9J2XCjiu/b0PwS7Cpq+5fffqC/HDGdAQH0o0j9Pv
-         Iao55QppwGJpyOexQACW708C69ZJlIOs1O/fdQkSwa0ojXQwn8HOzKNMksVYxZV0XWWV
-         13DOY45db+Gtv8OKaZU43L3txl+XYIaCpgbkzZE0a1Ax6n+jVO+2+MaJ9C7XvWwp/e5F
-         CkPQ==
-X-Gm-Message-State: AFqh2kqa+yhDSSxULc+Se/eEuQAC5YEarC3UHfVI2OdkixJlGOBtfFsv
-        QU4N2qWTN5MYIM69bRr1NNZZisq8PS1Q7A==
-X-Google-Smtp-Source: AMrXdXtU5fUgC+Y6jAFJJiOi80N6qQA+TZ4M6b/xL31LQs+0LdhwGXlu8iT5dxX4Ly7rzMJyHKn41Q==
-X-Received: by 2002:a05:622a:6027:b0:3a5:264c:5f38 with SMTP id he39-20020a05622a602700b003a5264c5f38mr17422677qtb.63.1673600354935;
-        Fri, 13 Jan 2023 00:59:14 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id g16-20020a05620a40d000b007055fa93060sm12439705qko.79.2023.01.13.00.59.13
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9YM8Shx2IZukw9YcFp8FhnA2qd5i13IeliX120PH17I=;
+        b=y0foj8WZjv3W5lxhY+GlxQubT19du4c+xUawvRwLQCHM/zQKBczbigQ8ji1A37DcjM
+         qcpmxoi5XQAn3+o1NpeI2cZYzjaeUWmam5mTt9+UAXMeLGZBcR8mR4MY/mZEGxuSYeyg
+         NkBT3ahv98R9UC1wgpJwv+nLAu55Kmu5Tq4qtlHuF63o6OlPL6wNdXq5sDTMYdUH6pvb
+         ted4xA55uMl7gbkqDILPU99YmewVgQpznkpq+17PPWpasY1dTwz0soRGDT+y7R1FGYOE
+         eQvPrsUmBRmr0jQZCIrBMAxSgv9KshxQ3GVZdg2VDpJhSiGioDxzavyF+zvwL91St/eO
+         zD5w==
+X-Gm-Message-State: AFqh2kpyyaK9ooHRG46o5U6N6mTHrqnjuahTBUlksWXTtSz2y0UmQ4xe
+        T5Rh5tUpFFD2JQnC/ppnh7yj6A==
+X-Google-Smtp-Source: AMrXdXsPxc2oqEqJfGabmBqgzaWDsQkxV3GmdjQPkiDF+d6dv+FHlRbTN+U0t+9cYBoJoZb4U0H6gg==
+X-Received: by 2002:a17:906:1e8a:b0:864:223:40b with SMTP id e10-20020a1709061e8a00b008640223040bmr6721662ejj.33.1673600374808;
+        Fri, 13 Jan 2023 00:59:34 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id en6-20020a056402528600b00499b3d09bd2sm5792349edb.91.2023.01.13.00.59.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:59:13 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id d62so5480065ybh.8;
-        Fri, 13 Jan 2023 00:59:13 -0800 (PST)
-X-Received: by 2002:a25:7:0:b0:7c1:b2e9:7e71 with SMTP id 7-20020a250007000000b007c1b2e97e71mr838217yba.604.1673600353257;
- Fri, 13 Jan 2023 00:59:13 -0800 (PST)
+        Fri, 13 Jan 2023 00:59:33 -0800 (PST)
+Message-ID: <cd803c70-faf0-963e-fca3-0edd13fa8a29@linaro.org>
+Date:   Fri, 13 Jan 2023 09:59:30 +0100
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <20230113062339.1909087-3-hch@lst.de>
-In-Reply-To: <20230113062339.1909087-3-hch@lst.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 09:59:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVM3BpvVD3c4gp1OidnwF5zFd4MJecij7zWBnahzNaSNw@mail.gmail.com>
-Message-ID: <CAMuHMdVM3BpvVD3c4gp1OidnwF5zFd4MJecij7zWBnahzNaSNw@mail.gmail.com>
-Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 0/9] media: dt-bindings: common CEC properties
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+References: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, Joe Tessler <jrt@google.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-tegra@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-media@vger.kernel.org, Jeff Chase <jnchase@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-kernel@vger.kernel.org
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
-
-On Fri, Jan 13, 2023 at 7:23 AM Christoph Hellwig <hch@lst.de> wrote:
-> USB_OHCI_SH is a dummy option that never builds any code, remove it.
+On 08/12/2022 11:31, Krzysztof Kozlowski wrote:
+> Hi,
 >
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-
-Thanks for your patch!
-Nice catch!
-
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -548,17 +548,6 @@ config USB_OHCI_HCD_SSB
+> Changes since v3
+> ================
+> 1. cec-gpio: Add missing SPDX.
+> 2. nvidia,tegra114-cec: Correct path in maintainers.
 >
->           If unsure, say N.
->
-> -config USB_OHCI_SH
-> -       bool "OHCI support for SuperH USB controller (DEPRECATED)"
-> -       depends on SUPERH || COMPILE_TEST
-> -       select USB_OHCI_HCD_PLATFORM
-> -       help
-> -         This option is deprecated now and the driver was removed, use
-> -         USB_OHCI_HCD_PLATFORM instead.
-> -
-> -         Enables support for the on-chip OHCI controller on the SuperH.
-> -         If you use the PCI OHCI controller, this option is not necessary.
-> -
 
-At this point in the series, there are still selects and enablements of
-USB_OHCI_SH in arch/sh/Kconfig and arch/sh/configs/sh7757lcr_defconfig.
-I think it would be good to replace them by USB_OHCI_HCD_PLATFORM first,
-to decouple the fate of this patch from the rest of the series.
 
->  config USB_OHCI_EXYNOS
->         tristate "OHCI support for Samsung S5P/Exynos SoC Series"
->         depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+Mauro (and maybe Hans?), any comments here. Can you apply the patchset?
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
