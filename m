@@ -2,129 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BFD66950D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232B566950F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 12:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbjAMLLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 06:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S231218AbjAMLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 06:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240773AbjAMLKn (ORCPT
+        with ESMTP id S241191AbjAMLKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 06:10:43 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEBC7D9EF;
-        Fri, 13 Jan 2023 03:02:28 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 02CA885160;
-        Fri, 13 Jan 2023 12:02:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1673607746;
-        bh=0AOevGqJKoVQxeVBRuZQl7WhrtXlVKL5Q5AjpRfvu1U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DTCc8hZSlbUYGcuaFby0ShOFkl21kC5eU6YkjfqXADWBQ/k+gB/2yR0PFa/9JVm/S
-         jLZtlbOI/Cv7xoV7OARyE8V3U8ukSmsMBJ1uer3sCig0cmEMfdcKUDcZbM6MoDkPB/
-         hemRXuxm4KuvLROWyt5Oqk5TsT6Oj55rccelJPY1Vl49t1i24yTroK3Z+/oitjMb4L
-         anetn58mbt5L3MOqFRo0yf32aGolRIZi2aaggB45SPvg/TAn+Q87RONd2CdqERvO+s
-         hUzgKAs/xjLdR5IFRlU+ta26U5+j0fJ8abMJSiODX4En3xBPNkvt2gTS8lp3xeXs2b
-         7WVruH1gpmepg==
-Date:   Fri, 13 Jan 2023 12:02:19 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20230113120219.7dc931c1@wsk>
-In-Reply-To: <20230113104937.75umsf4avujoxbaq@skbuf>
-References: <20230106101651.1137755-1-lukma@denx.de>
-        <Y7gdNlrKkfi2JvQk@lunn.ch>
-        <20230113113908.5e92b3a5@wsk>
-        <20230113104937.75umsf4avujoxbaq@skbuf>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 13 Jan 2023 06:10:48 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60E25933A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:03:06 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30D7SFPA028209;
+        Fri, 13 Jan 2023 05:02:54 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=g4nnL15Tv0FToLN5vuPX2zcsyo0M2e8TRzNlnQlo0RM=;
+ b=RhuORQEvBeP825SSZcrgW3Zr8au4dBEinTKr0S+DH7rQRhDakjbtpfguDHEM1vZLsPXE
+ +4Vl4hp1v7ubdnA1M87iAzwuNtv9N2xHVVBXZTLiM1eQUwkR1pwa5pcAEbDEr2C94YfR
+ /pNMfTt5TmzYmsRsxE/595Tw56GVq+htqfAr0OmpQW6lcjn+0akTvApT2o8XVaousbUH
+ 2FFJYMps3RBRWqlgQ6PWgpG+wsBfg9yNFrqY2QkousWc9T6CQRi50gY5yBnK8Fk66Oxd
+ bSbb9NWbO8Yl0/nOleuiapr4BxQpzWRG/Wtkcre2kC/xNalwRJKSxmSto1VA6O4/7S71 AA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3n2w1ursq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 05:02:54 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Fri, 13 Jan
+ 2023 05:02:52 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.21 via Frontend
+ Transport; Fri, 13 Jan 2023 05:02:52 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 32536B0E;
+        Fri, 13 Jan 2023 11:02:52 +0000 (UTC)
+Date:   Fri, 13 Jan 2023 11:02:52 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+CC:     Mark Brown <broonie@kernel.org>, <vkoul@kernel.org>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 2/2] regmap: sdw: Remove 8-bit value size restriction
+Message-ID: <20230113110252.GK36097@ediswmail.ad.cirrus.com>
+References: <20230112171840.2098463-1-ckeepax@opensource.cirrus.com>
+ <20230112171840.2098463-3-ckeepax@opensource.cirrus.com>
+ <756fcb2d-d571-18cb-985e-d907ab682275@linux.intel.com>
+ <Y8BOCpXyOyF3igfG@sirena.org.uk>
+ <3320e6b8-28c7-d028-3c4c-2b4b25a963fb@linux.intel.com>
+ <Y8BkiF8sfqPifYTO@sirena.org.uk>
+ <4a6ae9b4-2748-c751-aec6-05979de95cfe@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rqvhpIpmHo/d1evgXR/6VYw";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <4a6ae9b4-2748-c751-aec6-05979de95cfe@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: sBEE8L4qBQyhFq0nKVBVSpMVK9L_VN4x
+X-Proofpoint-ORIG-GUID: sBEE8L4qBQyhFq0nKVBVSpMVK9L_VN4x
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rqvhpIpmHo/d1evgXR/6VYw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 12, 2023 at 02:19:29PM -0600, Pierre-Louis Bossart wrote:
+> On 1/12/23 13:50, Mark Brown wrote:
+> > On Thu, Jan 12, 2023 at 12:43:46PM -0600, Pierre-Louis Bossart wrote:
+> >> On 1/12/23 12:14, Mark Brown wrote:
+> > 
+> >>> The regmap gather_write() operation allows the bus to take two buffers,
+> >>> one for the register and one for the value, rather than requiring the
+> >>> core combine everything into a single buffer (mainly useful for large
+> >>> transfers like firmware downloads).
+> > 
+> >> Right, but that's not supported in SoundWire. sdw_nwrite() will only
+> >> work with consecutive addresses - and the auto-increment is handled in
+> >> software, not hardware.
+> > 
+> > No, that's exactly what this is for.  It's for the *register address*
+> > being in a separate buffer, the data is then a sequence of consecutive
+> > register values.>
+> >> What's suggested here is to use the first element of reg_buf, which begs
+> >> the question how different this is from a regular write. If there was a
+> >> discontinuity in reg_buf then this wouldn't work at all.
+> > 
+> > reg_buf contains the address of exactly one register.
+> 
+> So what's the difference with a plain write() of N data?
 
-Hi Vladimir,
+There are two back end interfaces in regmap, the reg_write/read
+and the plain write/read. Both have currently have some
+limitations when dealing with SoundWire.
 
-> On Fri, Jan 13, 2023 at 11:39:08AM +0100, Lukasz Majewski wrote:
-> > Are there any more comments, or is this patch set eligible for
-> > pulling into net-next tree? =20
->=20
-> How about responding to the comment that was already posted first?
+The reg_write/reg_read can only deal with a single register
+at a time, which is really far from ideal, since it means
+all transactions will be broken up into individual registers
+at the regmap level, mostly depriving the SoundWire side
+of the opportunity to do things like a BRA transfer if it
+deems that suitable. And denying users the ability to use the
+regmap_raw_read/write API at all.
 
-Could you be more specific?
+The write/read interface allows us to pass the full transaction
+through, but does have the downside it copies the address around
+a bit more and does some pointless endian swaps on big endian
+systems. This interface is generally used by buses like I2C/SPI
+where there is no actual concept of a register address only a
+buffer of bytes to be sent/read, thus prefers to pass a single
+working buffer if it sensibly can. I went with this solution
+because it enables all the functionality and the downside is
+fairly minimal, apart from looking a little clunky as you note.
 
+I guess ideally from SoundWire's point of view expanding the
+first interface to allow multi-register transactions would
+make the most sense, but that a fairly invasive change to
+regmap and one I am a little hesitant to get into right now.
 
-On the beginning (first posted version) the patch included 9 patches
-(which included work for ADDR4 for some mv88e6020 setup).
+The half-way house would be the current CODEC i am working on
+doesn't currently need any BRA/raw transfers so I could stick
+to the reg_write/reg_read functions, but still allow larger
+than 8-bit registers. It would get me what I need for now,
+look a little cleaner, and we can deal with the other issues
+when they come up.
 
-But after the discussion, I've decided to split this patch set to
-smaller pieces;
-
-First to add the set_max_frame size with basic definition for mv88e6020
-and mv88e6071 and then follow with more complicated changes (for which
-there is no agreement on how to tackle them).
-
-For the 'set_max_frame' feature Alexander Dyuck had some comments
-regarding defensive programming approach, but finally he agreed with
-Andrew's approach.
-
-As of now - the v4 has been Acked by Andrew, so it looks like at least
-this "part" of the work is eligible for upstreaming.
-
-
-Or there are any more issues about which I've forgotten ?
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/rqvhpIpmHo/d1evgXR/6VYw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmPBOjsACgkQAR8vZIA0
-zr1c8QgA0GHLC18ZdClzvr6Lz/qe4RNhCr5giywjnQloZ0YQ9ipa1Ymc3M+32g7O
-rvpuq+x16EIveey1OEqifTvsqBQ7UDdh8B+KoD1gd80PVBCIhZdVo+tCEcNQRbdj
-5GYlSlZxih/sLVn2f7HYlF+EI9nTPpgrfdOwcA0IX5BXdoStBw2ocdt/BhmTlneU
-vAd4PUA6lUkI/of/1MVRVhmSIA0zrBOgQuyna2crGx8O4luH29245WHA5DOM7PPX
-6GIUu2bslCsOmOiQDaOPe2nFmUTp2VpgZUI6iVH13IYC6KKf8jCvk3+tZ7gbqCrl
-hZlIeCDkk9wkJi2ZMliPaxs/y5EHsw==
-=W/KO
------END PGP SIGNATURE-----
-
---Sig_/rqvhpIpmHo/d1evgXR/6VYw--
+Thanks,
+Charles
