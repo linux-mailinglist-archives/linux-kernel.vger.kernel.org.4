@@ -2,188 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC87669F35
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AC3669F5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbjAMRND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S229910AbjAMRN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjAMRM4 (ORCPT
+        with ESMTP id S229893AbjAMRNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:12:56 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECA688DE7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:31 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id d8-20020a17090a7bc800b00226eb4523ceso9567877pjl.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:11:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=R2f0XZo/PD+Ey17NBObNZ33DU+dMs/x1UfqUEm+zGQE=;
-        b=PqKZAvIPs3HOFkoiRJrrffuGojJvP+xMiiv721G4OJzOfQH2bX8jU4Mk2Tl5LDooSs
-         aa8YjWaVu58VLPJ2NSG+I6yEqbH87g3u9i/MSUJTdlO5BkZ5lMIjuEYq+Ln+PxhtQNH5
-         z+C7YjmB0dIdbKTKqAyZWqr2fHRXNdzOE4dmkBGTqbd4zgK4YyxEtATFDnyOQc4aGvck
-         rkLiekUldLX2NNd4kbDGG1iVSCrT5b4FAwfAtLBfetz33KAxOBGZ4BEiER6OPdwjy4qp
-         +gQcx6w0IxPA6d3bYpUjKWLd9hCtATtGDBbcnnFHR9vD7lSJuc/XVaE7VZ1jcHFXzHYo
-         rgsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R2f0XZo/PD+Ey17NBObNZ33DU+dMs/x1UfqUEm+zGQE=;
-        b=H7cnNP95Fo0+oUCRcpji88627nQaXrzpTR1+E+pDkixzWDyt5zJrsRVr5wKW2UGnbo
-         wEwnETeu5H7sqvRrTkbgQ1Rw7aaBcI1eqkwX/Gak+m8kjC9Fahju+FQvsjKZIgmlNQr3
-         vIsqtmdcmPPkLXvO9DElAr48vAtNmzvdJ9fAPk49YfrOF6EOU7b0SDH3HCwHSS+/NY5M
-         bDlGoghiuHqUFrr32pymnefEhMlC4kwoKdMtFQcl/Yd940/xltpK6Nadva67skXimrhf
-         ud8dDuHLTmcQ0sYG9eNHwgPhJoQpCoMpJ37yR/uEhdaYUz9ZD1KBlRn58yzjzFAgN4zZ
-         9A/Q==
-X-Gm-Message-State: AFqh2krYHRgz5Jn9yZ4o5b5ZsvWXPVhRifF2poYGB4jAC3jEHlfp8/GP
-        MS/7n02KIDG3CXNnFnT2xxD5AsQkR1EdNUJNkBSbXh8GExt/FbfIrQhvgOHZjZ56v8UUs1Soln+
-        bersDU4Gt0iYglzSjw6a+lqa0SyH5XJci9VtdeXxIxACXveBnEPCoV7e2j9/P4Md4wJ7GKV8WD1
-        giFc70ZXw=
-X-Google-Smtp-Source: AMrXdXtKasX1PdRXC4WdHMsgiEEyZVDhbpa6g9L0RJqjLicaSyJDaLuwX745uoV56aX9kO2valnZ9cProxQdP6TkuA==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a62:6d47:0:b0:581:1417:6ce6 with SMTP
- id i68-20020a626d47000000b0058114176ce6mr4915820pfc.58.1673629890428; Fri, 13
- Jan 2023 09:11:30 -0800 (PST)
-Date:   Fri, 13 Jan 2023 17:11:25 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230113171125.2846306-1-dionnaglaze@google.com>
-Subject: [PATCH] x86/efi: Safely enable unaccepted memory in UEFI
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     jiewen.yao@intel.com, devel@edk2.groups.io,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Ard Biescheuvel <ardb@kernel.org>,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 12:13:25 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF6E89BEA;
+        Fri, 13 Jan 2023 09:11:47 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DGHISV003143;
+        Fri, 13 Jan 2023 17:11:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=rmB3tNOfF0Nb80BWV6tyA3MrK480SPOHdQYPYzfIaAw=;
+ b=tk+WdoeNY3GHmvOEt47ul0guggng+K3Y1oW3457egKdKkbBsAcre6o6U2KZYqlWm4hiE
+ ZjH7n42XNtY3EmepVBAtgM+VBi7HuIkFEAVL3plggkG+sSITzVJAAN+v/eDsLlpdfYvH
+ 4e3QL/jkNR+k04P6PR5biPDTWcu4tzHLfCAS6LR5AnvKGetKQtZWFj+4hMfktmFTluZf
+ s6avs9eiSM+hzf5ZW0wHEkqwXYNu0suPVRMfh2KB60AYhBAhgFo2XZVWZuf9B+kWhevU
+ /96sDhL1vAnhNZ4Rpp2968qgX7FhwGuydXZYSnzoN0YxcH6d7qErm4vFsNuksB2rELgb wA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n3apk1e3h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 17:11:39 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30DGLBT3018627;
+        Fri, 13 Jan 2023 17:11:38 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n3apk1e38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 17:11:38 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30DF4L7i014717;
+        Fri, 13 Jan 2023 17:11:37 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3n1kv5n01y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 17:11:37 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30DHBZNJ197232
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Jan 2023 17:11:36 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B715B58043;
+        Fri, 13 Jan 2023 17:11:35 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 380B25805F;
+        Fri, 13 Jan 2023 17:11:33 +0000 (GMT)
+Received: from li-2311da4c-2e09-11b2-a85c-c003041e9174.ibm.com.com (unknown [9.160.94.233])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 13 Jan 2023 17:11:33 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     alex.williamson@redhat.com, pbonzini@redhat.com
+Cc:     jgg@nvidia.com, cohuck@redhat.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com,
+        frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@redhat.com,
+        akrowiak@linux.ibm.com, jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] vfio: fix potential deadlock on vfio group lock
+Date:   Fri, 13 Jan 2023 12:11:32 -0500
+Message-Id: <20230113171132.86057-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9vANe1Lemnb7dlBI2iIfePB6DG5MqF7U
+X-Proofpoint-GUID: S_fuYn6ObG9fDFiFS789j50vp3mf3-hc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_08,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 mlxscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch depends on Kirill A. Shutemov's series
+Currently it is possible that the final put of a KVM reference comes from
+vfio during its device close operation.  This occurs while the vfio group
+lock is held; however, if the vfio device is still in the kvm device list,
+then the following call chain could result in a deadlock:
 
-[PATCHv8 00/14] mm, x86/cc: Implement support for unaccepted memory
+kvm_put_kvm
+ -> kvm_destroy_vm
+  -> kvm_destroy_devices
+   -> kvm_vfio_destroy
+    -> kvm_vfio_file_set_kvm
+     -> vfio_file_set_kvm
+      -> group->group_lock/group_rwsem
 
-The UEFI v2.9 specification includes a new memory type to be used in
-environments where the OS must accept memory that is provided from its
-host. Before the introduction of this memory type, all memory was
-accepted eagerly in the firmware. In order for the firmware to safely
-stop accepting memory on the OS's behalf, the OS must affirmatively
-indicate support to the firmware.
+Avoid this scenario by having vfio core code acquire a KVM reference
+the first time a device is opened and hold that reference until the
+device fd is closed, at a point after the group lock has been released.
 
-Enabling unaccepted memory requires calling a 0-argument enablement
-protocol before ExitBootServices. This call is only made if the kernel
-is compiled with UNACCEPTED_MEMORY=y
-
-The naming of the protocol guid is dependent on the standardization of
-the protocol, which is being discussed. Acceptance is contingent on
-the kernel community's approval.
-
-Cc: Ard Biescheuvel <ardb@kernel.org>
-Cc: "Min M. Xu" <min.m.xu@intel.org>
-Cc: Gerd Hoffmann <kraxel@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Jiewen Yao <jiewen.yao@intel.com>
-Cc: Erdem Aktas <erdemaktas@google.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
+Reported-by: Alex Williamson <alex.williamson@redhat.com>
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 ---
- drivers/firmware/efi/libstub/x86-stub.c | 36 +++++++++++++++++++++++++
- include/linux/efi.h                     |  1 +
- 2 files changed, 37 insertions(+)
+Changes from v2:
+* Re-arrange vfio_kvm_set_kvm_safe error path to still trigger
+  device_open with device->kvm=NULL (Alex)
+* get device->dev_set->lock when checking device->open_count (Alex)
+* but don't hold it over the kvm_put_kvm (Jason)
+* get kvm_put symbol upfront and stash it in device until close (Jason)
+* check CONFIG_HAVE_KVM to avoid build errors on architectures without
+  KVM support
 
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-index a0bfd31358ba..5e9ebfbb49e6 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -26,6 +26,17 @@ const efi_dxe_services_table_t *efi_dxe_table;
- u32 image_offset __section(".data");
- static efi_loaded_image_t *image = NULL;
+Changes from v1:
+* Re-write using symbol get logic to get kvm ref during first device
+  open, release the ref during device fd close after group lock is
+  released
+* Drop kvm get/put changes to drivers; now that vfio core holds a
+  kvm ref until sometime after the device_close op is called, it
+  should be fine for drivers to get and put their own references to it.
+---
+ drivers/vfio/group.c     |  6 ++--
+ drivers/vfio/vfio_main.c | 78 +++++++++++++++++++++++++++++++++++++---
+ include/linux/vfio.h     |  2 +-
+ 3 files changed, 77 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+index bb24b2f0271e..2b0da82f82f4 100644
+--- a/drivers/vfio/group.c
++++ b/drivers/vfio/group.c
+@@ -165,9 +165,9 @@ static int vfio_device_group_open(struct vfio_device *device)
+ 	}
  
-+union memory_acceptance_protocol {
-+	struct {
-+		efi_status_t (__efiapi *allow_unaccepted_memory)(
-+			union memory_acceptance_protocol *);
-+	};
-+	struct {
-+		u32 allow_unaccepted_memory;
-+	} mixed_mode;
-+};
-+typedef union memory_acceptance_protocol memory_acceptance_protocol_t;
-+
- static efi_status_t
- preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
- {
-@@ -310,6 +321,29 @@ setup_memory_protection(unsigned long image_base, unsigned long image_size)
- #endif
+ 	/*
+-	 * Here we pass the KVM pointer with the group under the lock.  If the
+-	 * device driver will use it, it must obtain a reference and release it
+-	 * during close_device.
++	 * Here we pass the KVM pointer with the group under the lock.  A
++	 * reference will be obtained the first time the device is opened and
++	 * will be held until the device fd is closed.
+ 	 */
+ 	ret = vfio_device_open(device, device->group->iommufd,
+ 			       device->group->kvm);
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 5177bb061b17..dbdf16903d52 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -16,6 +16,9 @@
+ #include <linux/fs.h>
+ #include <linux/idr.h>
+ #include <linux/iommu.h>
++#ifdef CONFIG_HAVE_KVM
++#include <linux/kvm_host.h>
++#endif
+ #include <linux/list.h>
+ #include <linux/miscdevice.h>
+ #include <linux/module.h>
+@@ -344,6 +347,57 @@ static bool vfio_assert_device_open(struct vfio_device *device)
+ 	return !WARN_ON_ONCE(!READ_ONCE(device->open_count));
  }
  
-+
-+static void setup_unaccepted_memory(void)
++#ifdef CONFIG_HAVE_KVM
++static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct kvm *kvm)
 +{
-+#ifdef CONFIG_UNACCEPTED_MEMORY
-+	efi_guid_t mem_acceptance_proto = EFI_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
-+	memory_acceptance_protocol_t *proto;
-+	efi_status_t status;
++	void (*pfn)(struct kvm *kvm);
++	bool (*fn)(struct kvm *kvm);
++	bool ret;
 +
-+	/*
-+	 * Enable unaccepted memory before calling exit boot services in order
-+	 * for the UEFI to not accept all memory on EBS.
-+	 */
-+	status = efi_bs_call(locate_protocol, &mem_acceptance_proto, NULL,
-+			     (void **)&proto);
-+	if (status != EFI_SUCCESS)
-+		return;
++	pfn = symbol_get(kvm_put_kvm);
++	if (WARN_ON(!pfn))
++		return false;
 +
-+	status = efi_call_proto(proto, allow_unaccepted_memory);
-+	if (status != EFI_SUCCESS)
-+		efi_err("Memory acceptance protocol failed\n");
-+#endif
++	fn = symbol_get(kvm_get_kvm_safe);
++	if (WARN_ON(!fn)) {
++		symbol_put(kvm_put_kvm);
++		return false;
++	}
++
++	ret = fn(kvm);
++	if (ret)
++		device->put_kvm = pfn;
++	else
++		symbol_put(kvm_put_kvm);
++
++	symbol_put(kvm_get_kvm_safe);
++
++	return ret;
 +}
 +
- static const efi_char16_t apple[] = L"Apple";
- 
- static void setup_quirks(struct boot_params *boot_params,
-@@ -899,6 +933,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
- 
- 	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
- 
-+	setup_unaccepted_memory();
++static void vfio_kvm_put_kvm(struct vfio_device *device, struct kvm *kvm)
++{
++	if (WARN_ON(!device->put_kvm))
++		return;
 +
- 	status = exit_boot(boot_params, handle);
- 	if (status != EFI_SUCCESS) {
- 		efi_err("exit_boot() failed!\n");
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index 4b27519143f5..bfc0e4f2aba5 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -391,6 +391,7 @@ void efi_native_runtime_setup(void);
- #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
- #define EFI_DXE_SERVICES_TABLE_GUID		EFI_GUID(0x05ad34ba, 0x6f02, 0x4214,  0x95, 0x2e, 0x4d, 0xa0, 0x39, 0x8e, 0x2b, 0xb9)
- #define EFI_SMBIOS_PROTOCOL_GUID		EFI_GUID(0x03583ff6, 0xcb36, 0x4940,  0x94, 0x7e, 0xb9, 0xb3, 0x9f, 0x4a, 0xfa, 0xf7)
-+#define EFI_MEMORY_ACCEPTANCE_PROTOCOL_GUID	EFI_GUID(0xc5a010fe, 0x38a7, 0x4531,  0x8a, 0x4a, 0x05, 0x00, 0xd2, 0xfd, 0x16, 0x49)
++	device->put_kvm(kvm);
++
++	device->put_kvm = NULL;
++
++	symbol_put(kvm_put_kvm);
++}
++#else
++static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct kvm *kvm)
++{
++	return false;
++}
++
++static void vfio_kvm_put_kvm(struct vfio_device *device, struct kvm *kvm)
++{
++
++}
++#endif
++
+ static int vfio_device_first_open(struct vfio_device *device,
+ 				  struct iommufd_ctx *iommufd, struct kvm *kvm)
+ {
+@@ -361,16 +415,21 @@ static int vfio_device_first_open(struct vfio_device *device,
+ 	if (ret)
+ 		goto err_module_put;
  
- #define EFI_IMAGE_SECURITY_DATABASE_GUID	EFI_GUID(0xd719b2cb, 0x3d3a, 0x4596,  0xa3, 0xbc, 0xda, 0xd0, 0x0e, 0x67, 0x65, 0x6f)
- #define EFI_SHIM_LOCK_GUID			EFI_GUID(0x605dab50, 0xe046, 0x4300,  0xab, 0xb6, 0x3d, 0xd8, 0x10, 0xdd, 0x8b, 0x23)
+-	device->kvm = kvm;
++	if (kvm && vfio_kvm_get_kvm_safe(device, kvm))
++		device->kvm = kvm;
++
+ 	if (device->ops->open_device) {
+ 		ret = device->ops->open_device(device);
+ 		if (ret)
+-			goto err_unuse_iommu;
++			goto err_put_kvm;
+ 	}
+ 	return 0;
+ 
+-err_unuse_iommu:
+-	device->kvm = NULL;
++err_put_kvm:
++	if (device->kvm) {
++		vfio_kvm_put_kvm(device, device->kvm);
++		device->kvm = NULL;
++	}
+ 	if (iommufd)
+ 		vfio_iommufd_unbind(device);
+ 	else
+@@ -387,7 +446,6 @@ static void vfio_device_last_close(struct vfio_device *device,
+ 
+ 	if (device->ops->close_device)
+ 		device->ops->close_device(device);
+-	device->kvm = NULL;
+ 	if (iommufd)
+ 		vfio_iommufd_unbind(device);
+ 	else
+@@ -462,9 +520,19 @@ static inline void vfio_device_pm_runtime_put(struct vfio_device *device)
+ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
+ {
+ 	struct vfio_device *device = filep->private_data;
++	struct kvm *kvm = NULL;
+ 
+ 	vfio_device_group_close(device);
+ 
++	mutex_lock(&device->dev_set->lock);
++	if (device->open_count == 0 && device->kvm) {
++		kvm = device->kvm;
++		device->kvm = NULL;
++	}
++	mutex_unlock(&device->dev_set->lock);
++	if (kvm)
++		vfio_kvm_put_kvm(device, kvm);
++
+ 	vfio_device_put_registration(device);
+ 
+ 	return 0;
+diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+index 35be78e9ae57..87ff862ff555 100644
+--- a/include/linux/vfio.h
++++ b/include/linux/vfio.h
+@@ -46,7 +46,6 @@ struct vfio_device {
+ 	struct vfio_device_set *dev_set;
+ 	struct list_head dev_set_list;
+ 	unsigned int migration_flags;
+-	/* Driver must reference the kvm during open_device or never touch it */
+ 	struct kvm *kvm;
+ 
+ 	/* Members below here are private, not for driver use */
+@@ -58,6 +57,7 @@ struct vfio_device {
+ 	struct list_head group_next;
+ 	struct list_head iommu_entry;
+ 	struct iommufd_access *iommufd_access;
++	void (*put_kvm)(struct kvm *kvm);
+ #if IS_ENABLED(CONFIG_IOMMUFD)
+ 	struct iommufd_device *iommufd_device;
+ 	struct iommufd_ctx *iommufd_ictx;
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.39.0
 
