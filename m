@@ -2,95 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ED466A3A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FED66A3AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjAMTtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S230007AbjAMTud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjAMTs7 (ORCPT
+        with ESMTP id S229603AbjAMTua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:48:59 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AD06C06D
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:48:56 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id x7so9839670qtv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:48:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VCsX8uc4cCu1oNFGRmQtZZmdp5RBV4+wTc8HN1xnvho=;
-        b=e+cndpq5AbJCc9ropmy8+4Yd1TlOSMPwhQX6qeOHJmbJ4npOBH+R4Rgtl0Qp4/BK2G
-         sJIdxB8UWVpBrXxGOV6Semfw2WkqB9XY+7S+V8VS+YyVe98F2na5c+Wsnj02XNGXg6Wt
-         VYa2jZYY2i5Mre4MYmOrBY0C2RdWKQtTVUNLU3wnGoPuUYloUFmRibD39QKHMnFbcm8V
-         4QAhBuLCMXHDygbkQhOBzebF5ckjucVjZvZGHA1xpp45CkDNmWJ/cOlPydNz7rM0XUEf
-         PfKIszSirtyvvhSY0gdp7LZ0j2ohnw1RAbYfmVeuf7OixQXYvAGuFrUurJHwXwRv45wt
-         kIFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VCsX8uc4cCu1oNFGRmQtZZmdp5RBV4+wTc8HN1xnvho=;
-        b=ZN1nMPpXhv72yxlDLqUCyHokLgTPD3KjmxR5sRDXpQo7W6+EEh2Y+DUM9UhdtFuIxb
-         ZHK+cZ9aoZkSGyP9AFBfxRXooXrFPDtRHNCu7XuBvQewCxPvv0uGsW4VF43mE7FKmRw4
-         9LsZDphij67orfoJzLJLFNysNvoc4dkE8jdCb8zK/01nI9NzAAj64BdwlKch3UAI3ykL
-         lYCBHyTLKrjpH2Kx5NU+iefcWKl6qZepQWIkBNXhlXImPe/a4gQGks7ndOTIpicMtayk
-         wyc+JmDGjEGlBrrB6OpTeG0LJtRpY1eQoGmUVaweXKPqO4CF+Y8o43mLtaXr1PwU9SaW
-         x3UQ==
-X-Gm-Message-State: AFqh2kq5MfAL2wbXe+HqYHZ7sU9ddenepFWnrQQ2nHaQPRwBmT6i7T5p
-        juKDLm9xz0O08Bt3Qe00vJjr1A==
-X-Google-Smtp-Source: AMrXdXtm3RrwRr6RHb4naiD4l5n6+JmgDWK7TdiQX//Ern7jngXe0ppdvazLqngqV/8wLCwN25LO2g==
-X-Received: by 2002:a05:622a:1e99:b0:39c:da1f:f817 with SMTP id bz25-20020a05622a1e9900b0039cda1ff817mr124418233qtb.61.1673639335588;
-        Fri, 13 Jan 2023 11:48:55 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
-        by smtp.gmail.com with ESMTPSA id az31-20020a05620a171f00b006fbbdc6c68fsm13212326qkb.68.2023.01.13.11.48.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 11:48:55 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pGQ2o-00AgoL-Fw;
-        Fri, 13 Jan 2023 15:48:54 -0400
-Date:   Fri, 13 Jan 2023 15:48:54 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] iommu/fsl_pamu: Fix compile error after adding
- set_platform_dma_ops
-Message-ID: <Y8G1puXtbsHrXZfn@ziepe.ca>
-References: <20230113191528.23638-1-joro@8bytes.org>
+        Fri, 13 Jan 2023 14:50:30 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81995EE0F;
+        Fri, 13 Jan 2023 11:50:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=ouJteidaUAbrYfO/BCKeRgLKXGq2IG/QP4acR/7yoik=; b=j
+        TjqSdoipy57P1XV9ZNx37IpC6RCZLoHEqwPVRw9WMUFuTvddCalVRer8Aj8GX+UKfk4dRofdOZyHA
+        JApf1ZAEhemPIB6QYMWO6YskzTWhoZsqoPbHzHgKneZ85ovvR8qUyvBz/IMsfjfqoqbfc4wrv7Q58
+        xkyww/5BwPUbcO+o=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41188 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pGQ47-0000pu-HB; Fri, 13 Jan 2023 14:50:16 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     hvilleneuve@dimonoff.com, jic23@kernel.org, lars@metafoo.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com
+Date:   Fri, 13 Jan 2023 14:49:57 -0500
+Message-Id: <20230113194959.3276433-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113191528.23638-1-joro@8bytes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 0/2] iio: adc: ti-ads7924: add Texas Instruments ADS7924 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 08:15:28PM +0100, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
-> 
-> The struct initializer for set_platform_dma_ops uses a semicolon as
-> separator where a comma is required. Fix the compile error by using the
-> correct separator.
-> 
-> Fixes: c1fe9119ee70 ("iommu: Add set_platform_dma_ops callbacks")
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
-> ---
->  drivers/iommu/fsl_pamu_domain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Hello,
+this patch series adds the driver for the Texas Instruments ADS7924.
 
-I'd probably just squash these :\
+The Texas Instruments ADS7924 is a 4 channels, 12-bit analog to
+digital converter (ADC) with an I2C interface.
 
-Jason
+Patch 1 contains the driver for the ADS7924.
+
+Patch 2 add the dt-bindings for the ADS7924.
+
+I have tested the driver using the Texas Instruments ADS7924EVM board connected
+to a Variscite Symphony EVK with a IMX8MN NANO SOM:
+  - Tested reset pin Ok
+  - Tested regulator setup Ok
+  - Tested reading sysfs in_voltage_scale Ok
+  - Tested reading sysfs in_voltageX_raw (x=0 to 3) Ok
+
+Thank you.
+
+Link: [v1] https://lore.kernel.org/linux-iio/20221222203610.2571287-1-hugo@hugovil.com/
+Link: [v2] https://lore.kernel.org/linux-iio/20230110160124.3853593-1-hugo@hugovil.com/
+
+Changes for V3:
+- Rebase on linux-6.2-rc1
+- Refactor to follow usual coding practices as per review comments.
+- Fix missing include (reported by kernel test robot).
+- Fix DT bindings errors.
+- Removed unused define.
+- Remove breaks after return.
+- Remove debug message in ads7924_get_channels_config().
+- Remove braces around swich case IIO_CHAN_INFO_RAW.
+- Remove comments about regulator_get_voltage() failing for dummy regulator.
+
+Changes for V2:
+- Dropped patch "iio: adc: Kconfig: add SPI interface mention to AD7924
+  description"
+- Fixed comments style
+- Removed unused defines/variables/etc related to buffered support (no buffered
+  support for the moment).
+- Convert of-specific code to use the generic firmware property accessors in
+  include/linux/property.h.
+- Use FIELD_GET / FIELD_PREP for bit operations/defines
+- Simplified conversion result registers definitions/usage.
+- Now using mutex lock/unlock only for INFO_RAW switch branch
+- Use dev_err_probe() in all return paths of ads7924_probe()
+- Removed ads7924_remove() after adding callbacks with
+  devm_add_action_or_reset().
+- Change iio_device_register() to devm_iio_device_register().
+- Add the legacy i2c_device_id table
+- DT bindings: reorder entries, fix indentation,improve comments, add interrupt
+  line
+
+Hugo Villeneuve (2):
+  iio: adc: ti-ads7924: add Texas Instruments ADS7924 driver
+  dt-bindings: iio: adc: add Texas Instruments ADS7924
+
+ .../bindings/iio/adc/ti,ads7924.yaml          | 112 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/iio/adc/Kconfig                       |  11 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/ti-ads7924.c                  | 474 ++++++++++++++++++
+ 5 files changed, 605 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+ create mode 100644 drivers/iio/adc/ti-ads7924.c
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+-- 
+2.30.2
+
