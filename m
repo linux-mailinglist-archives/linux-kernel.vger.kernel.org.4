@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D528C66A37F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3921666A381
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjAMTk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S230138AbjAMTlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjAMTkM (ORCPT
+        with ESMTP id S231158AbjAMTkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:40:12 -0500
+        Fri, 13 Jan 2023 14:40:15 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099C0892E5;
-        Fri, 13 Jan 2023 11:38:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36C3BF76;
+        Fri, 13 Jan 2023 11:39:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5E6DB82184;
-        Fri, 13 Jan 2023 19:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BCBC433D2;
-        Fri, 13 Jan 2023 19:38:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 606DAB821AC;
+        Fri, 13 Jan 2023 19:38:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF4B5C433EF;
+        Fri, 13 Jan 2023 19:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673638715;
-        bh=jVTigcncu918aW6IO9uMohQaq48FyNtFtLKl6fNFPlA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ly7aBpJrDOj/VhDR3FLlia23grsdV66MhJcv3+/jbczcWlJS08sXWnYvDKHQKrds8
-         sxVxsGjK5Z1vETJoThTWVwC4AVKhWQOdFfMf39hPL6cusARG+4mQ/Y6U0cW0gO28/s
-         RpJSzMKDlWdGXxsgdQvkUplwDCoPBvrfkJZ+lYFCiMk9ERCGi8M8CRtvarv5UyjGrL
-         aA1oDrwdDUHvwFowWuOSRqI1x3VR75esWdevnmx0lUDW02LsMWJ7AU60kphBz0iFeI
-         e7RUi1gFn8VX+WMYkDQ06tsU42w7nC7ZASazcsfwecd3f3dXyOsZwbMaGdXHr9htFD
-         vcsbpf+bOKXbQ==
-Date:   Fri, 13 Jan 2023 11:38:33 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Dimitris Michailidis <dmichail@fungible.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        oss-drivers@corigine.com, "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: remove redundant config PCI dependency for some
- network driver configs
-Message-ID: <20230113113833.10abe9cc@kernel.org>
-In-Reply-To: <20230111125855.19020-1-lukas.bulwahn@gmail.com>
-References: <20230111125855.19020-1-lukas.bulwahn@gmail.com>
+        s=k20201202; t=1673638738;
+        bh=vlnmm/O7DlFaDeVKwNejA4fovrCbP+j0Q9YzyXT4DlQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ryYakuDPSknRt3Bz8BSlZQGC60Q71eSTQ9IyvXqlIaf4Kptt+9kcnWMP9xtMn9FjA
+         XK5YEdZ82czQmR6cQ2l3AF9kq/xLT8F8B1EnsMQHabYs4vB3qxWub0KCEImHFaeR0N
+         pB5cNGzmTaH33WdGM4yk85R7gNBXgkejr5L9OkhoaxcFsDckMarXyyuwuNz+okVg5P
+         vMRU3bFlc9AEerz9XZjjeekSMpZscgaWvNBE9JwDK52hyIV5+XG3YdSwoaNjBVoKJv
+         0JHXNdtFTkI2Qad01hkBMQ1ZoZVt/cFqbWX5AiWrDVKBGo0gH1cvr/nmkbURvGd3Jk
+         Jr73D/1B0LdTQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8D9CA5C06D0; Fri, 13 Jan 2023 11:38:57 -0800 (PST)
+Date:   Fri, 13 Jan 2023 11:38:57 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] Documentation/RCU: Fix a typo in checklist.rst
+Message-ID: <20230113193857.GD4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230113083108.59302-1-qiuxu.zhuo@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113083108.59302-1-qiuxu.zhuo@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,14 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023 13:58:55 +0100 Lukas Bulwahn wrote:
-> While reviewing dependencies in some Kconfig files, I noticed the redundant
-> dependency "depends on PCI && PCI_MSI". The config PCI_MSI has always,
-> since its introduction, been dependent on the config PCI. So, it is
-> sufficient to just depend on PCI_MSI, and know that the dependency on PCI
-> is implicitly implied.
+On Fri, Jan 13, 2023 at 04:31:08PM +0800, Qiuxu Zhuo wrote:
+> "Please not that you *cannot* rely..." probably has a typo.
+> Fix it.
 > 
-> Reduce the dependencies of some network driver configs.
-> No functional change and effective change of Kconfig dependendencies.
+> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> ---
+> Not sure whether it's a too small typo to need this patch.
+> If so, sorry for the noise. :-)
 
-Applied, thanks!
+Not at all!  Queued for the v6.4 merge window, thank you.  (Not the
+upcoming merge window, but the one after that.)
+
+							Thanx, Paul
+
+>  Documentation/RCU/checklist.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
+> index cc361fb01ed4..bd3c58c44bef 100644
+> --- a/Documentation/RCU/checklist.rst
+> +++ b/Documentation/RCU/checklist.rst
+> @@ -70,7 +70,7 @@ over a rather long period of time, but improvements are always welcome!
+>  	can serve as rcu_read_lock_sched(), but is less readable and
+>  	prevents lockdep from detecting locking issues.
+>  
+> -	Please not that you *cannot* rely on code known to be built
+> +	Please note that you *cannot* rely on code known to be built
+>  	only in non-preemptible kernels.  Such code can and will break,
+>  	especially in kernels built with CONFIG_PREEMPT_COUNT=y.
+>  
+> -- 
+> 2.17.1
+> 
