@@ -2,150 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F592669EC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA2D669ECD
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjAMQyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S229520AbjAMQ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjAMQxv (ORCPT
+        with ESMTP id S230198AbjAMQ4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:53:51 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C31381D45
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:50:45 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id o16-20020a056602225000b006e032e361ccso13857734ioo.13
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:50:45 -0800 (PST)
+        Fri, 13 Jan 2023 11:56:25 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C3D26C5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:56:16 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id k4so22792271vsc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pefoley.com; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TOZ2XXqS0p7ft3IrzNrVta3tYhszOavdjeGJQ4dCn8k=;
+        b=MBOddXeYiZqcidLAeKir46cRJsI/dSEbGP+R7EM2jqabnjoLy6eWPZQ8R3KDN2unkC
+         YknhoVm0yuTpp1gYD3640UlKsC6F1dKMvORGg0IepWdBvNkb7M4YvmCHOYYg2o12p/5C
+         nYQfznuYAuoEzciyKdMlW9RcIlG2+049Gl4kA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ru+MXa4EkfYAJHzobnbu3rL9zxWmOJLKLdncAEQwSH0=;
-        b=vK0V1YCHwNAKawPech6RixGZBrBPlXyP5v5Ui9Fc0s8fDSyj2LVbgIFnmB9oBDRuk8
-         0NBnz3P8E8Mv3EKdmGrqyLdKCaMaqoNTfhCOysknXRFKVjOmEpP4wfI2hMIuixQ6XN1A
-         C8Mjg/OUZ3Gkg6ivMCJ7WU07BFg5UbJ2j42hixQh7WUgDQWSoBQ1L6dGQmDeBZglkYte
-         tKgMXyuvx4FrIWV7vsNGiYbYDQ5KfxKbVnuZNSH6me27SCaMw7oe3hhVCYjl6iZDWO8Y
-         3XdUWxHOWZj6pxQ3wCDcAmYvD97XqoQaiuJf5Hgbq/eqWr23ZFXYooLZu/qVC6Fff5I+
-         CkzQ==
-X-Gm-Message-State: AFqh2ko1cgjpCBZoLVxWCUPflhlaQumzPMjlFNmqkRfvmCyita73X6uf
-        eZIGSMqfpgg4x7ou+N0504SSIUpF0S45/UOglrX7AbWzN3mE
-X-Google-Smtp-Source: AMrXdXvpQBQNc+JvI1tKlS8DEY0EInE/am68fVEQTAHiL4grI+7IL2i7yFcmjheBfpXlp+Q1bqEtvKR5/Ay0EldfmIq3cCRXzsZS
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TOZ2XXqS0p7ft3IrzNrVta3tYhszOavdjeGJQ4dCn8k=;
+        b=qDuGaeRcWCjZfnRNfl6tI9sB8yA14VIpqEIuBaoi109b2AdrTEAXb0OMYvQnJwVUcM
+         DJ81gC6JoKZnkB+LmLkPDfBW0V6RSJzbfHeeOmdLwEg5QQnYCsdgfmYP0cmn217liP6a
+         r78gjyFLcP8R231fI1rC4Ad9zcg8bx+yubkgVuakpxNkrHHpG/vCl/XeWGGg6/f4eFzT
+         StGp0JPKaKO8AnzpF0lPOPkXBFkA/CcASo3CZEKxsnDj1myewEyfCt4upiGNE/8LOXTr
+         FQel4lbtpxjt1AwJA5aL/mH6h1QYEjfeU/CYP7cRVhcKuJFr/U7WNZKZqrBILc3w7coE
+         ssmQ==
+X-Gm-Message-State: AFqh2kpDVXyLr9DM/6iG3aUmXLdd8prg5m7/Iim7y/nQKIxFGXYSvM4m
+        eBeDXm4ZrujQcrqXY+geBgOgZ02CFX3cQUfeNimIgQ==
+X-Google-Smtp-Source: AMrXdXtA4jJhbap9Mesgi8AFhu+BzYgf1NF+0+LILeIyGvLezURePTUOrnBbv4PeaVdpL8R78SDOMA==
+X-Received: by 2002:a05:6102:510e:b0:3d0:dafe:9e57 with SMTP id bm14-20020a056102510e00b003d0dafe9e57mr9244569vsb.26.1673628975033;
+        Fri, 13 Jan 2023 08:56:15 -0800 (PST)
+Received: from [192.168.1.3] ([2600:4040:29fb:d300:887b:7eff:fe74:68b2])
+        by smtp.gmail.com with ESMTPSA id bq35-20020a05620a46a300b00704c9015e68sm13018930qkb.116.2023.01.13.08.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:56:14 -0800 (PST)
+From:   Peter Foley <pefoley2@pefoley.com>
+Date:   Fri, 13 Jan 2023 11:56:11 -0500
+Subject: [PATCH] um: put power options in a menu
 MIME-Version: 1.0
-X-Received: by 2002:a02:ca46:0:b0:38a:a65d:9885 with SMTP id
- i6-20020a02ca46000000b0038aa65d9885mr7442277jal.40.1673628644450; Fri, 13 Jan
- 2023 08:50:44 -0800 (PST)
-Date:   Fri, 13 Jan 2023 08:50:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d6a91505f22808d4@google.com>
-Subject: [syzbot] [btrfs?] kernel BUG in insert_state
-From:   syzbot <syzbot+7cab7cbfd44f07a9a6bb@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230113-umpower-v1-1-faa1459f7ab3@pefoley.com>
+X-B4-Tracking: v=1; b=H4sIACuNwWMC/x2NywqDQAwAf0VydmEf2oe/Ij3EbVpzcJVEqyD+u
+ 2uPwwzMDkrCpNAUOwj9WHlMGVxZQOwxfcnwOzN464N1LphlmMaVxIS7jZV/1E+81ZDrDpVMJ5hi
+ f/UD6kxyiUnow9t/0b6O4wR7aiR2cgAAAA==
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peter Foley <pefoley2@pefoley.com>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673628974; l=663;
+ i=pefoley2@pefoley.com; s=20230111; h=from:subject:message-id;
+ bh=gLu5+b7mdNXFx8A5ZK+VNsmqzaiQBj+qX4NXuo5RyRE=;
+ b=qBQxQSZ3UYV8DOtEChK0c5gvyxQKmXVdcCWG+2ylzNq1O2S4pN9rRXq8UEdHHrJw+wXh2Ojg7LS+
+ XDKm421CBIcXLzu6aX9ISdvvt61jR0H8BODLTABtkLWhQ83/dwJ+
+X-Developer-Key: i=pefoley2@pefoley.com; a=ed25519;
+ pk=DCQqIdN6rHnvfQH58WQiQzJFfGUo1HyWSvdYG8vnO5o=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Because having them all dumped at top-level is a bit messy.
 
-syzbot found the following issue on:
+Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+---
+ arch/um/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-HEAD commit:    1fe4fd6f5cad Merge tag 'xfs-6.2-fixes-2' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=131bb6f6480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d95104afbe20f9df
-dashboard link: https://syzkaller.appspot.com/bug?extid=7cab7cbfd44f07a9a6bb
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/04384e60561f/disk-1fe4fd6f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f7ecda64fdc2/vmlinux-1fe4fd6f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/54286174b436/bzImage-1fe4fd6f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7cab7cbfd44f07a9a6bb@syzkaller.appspotmail.com
-
-RDX: 00000000000ffe00 RSI: 0000000020004200 RDI: 0000000000000006
-RBP: 00007f0c10e811d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffe378a8d4f R14: 00007f0c10e81300 R15: 0000000000022000
- </TASK>
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/extent-io-tree.c:379!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 15347 Comm: syz-executor.5 Not tainted 6.2.0-rc3-syzkaller-00008-g1fe4fd6f5cad #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:set_state_bits fs/btrfs/extent-io-tree.c:379 [inline]
-RIP: 0010:insert_state+0x399/0x3a0 fs/btrfs/extent-io-tree.c:401
-Code: ff 2c fe e9 17 fe ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 35 fd ff ff 48 89 df e8 a1 ff 2c fe e9 28 fd ff ff e8 17 56 d7 fd <0f> 0b 0f 1f 44 00 00 55 41 57 41 56 41 55 41 54 53 48 83 ec 38 44
-RSP: 0018:ffffc90003abf690 EFLAGS: 00010246
-RAX: ffffffff83b48549 RBX: 00000000fffffff4 RCX: 0000000000040000
-RDX: ffffc9000bf31000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: ffff8880277e4600 R08: ffffffff83b4831a R09: 00000000ffffffff
-R10: fffffbfff1a8331b R11: 1ffffffff1a8331a R12: 0000000000001000
-R13: 0000000000000800 R14: 0000000000003fff R15: dffffc0000000000
-FS:  00007f0c10e81700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020010000 CR3: 0000000032af8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __set_extent_bit+0x1314/0x1c90 fs/btrfs/extent-io-tree.c:1136
- set_record_extent_bits+0x52/0x80 fs/btrfs/extent-io-tree.c:1690
- qgroup_reserve_data+0x27b/0x6f0 fs/btrfs/qgroup.c:3758
- btrfs_qgroup_reserve_data+0x2a/0xc0 fs/btrfs/qgroup.c:3801
- btrfs_check_data_free_space+0x144/0x240 fs/btrfs/delalloc-space.c:154
- btrfs_buffered_write+0x580/0x1730 fs/btrfs/file.c:1253
- btrfs_do_write_iter+0x421/0x1280 fs/btrfs/file.c:1677
- call_write_iter include/linux/fs.h:2189 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0c1008c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0c10e81168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f0c101abf80 RCX: 00007f0c1008c0c9
-RDX: 00000000000ffe00 RSI: 0000000020004200 RDI: 0000000000000006
-RBP: 00007f0c10e811d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffe378a8d4f R14: 00007f0c10e81300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:set_state_bits fs/btrfs/extent-io-tree.c:379 [inline]
-RIP: 0010:insert_state+0x399/0x3a0 fs/btrfs/extent-io-tree.c:401
-Code: ff 2c fe e9 17 fe ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 35 fd ff ff 48 89 df e8 a1 ff 2c fe e9 28 fd ff ff e8 17 56 d7 fd <0f> 0b 0f 1f 44 00 00 55 41 57 41 56 41 55 41 54 53 48 83 ec 38 44
-RSP: 0018:ffffc90003abf690 EFLAGS: 00010246
-RAX: ffffffff83b48549 RBX: 00000000fffffff4 RCX: 0000000000040000
-RDX: ffffc9000bf31000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: ffff8880277e4600 R08: ffffffff83b4831a R09: 00000000ffffffff
-R10: fffffbfff1a8331b R11: 1ffffffff1a8331a R12: 0000000000001000
-R13: 0000000000000800 R14: 0000000000003fff R15: dffffc0000000000
-FS:  00007f0c10e81700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020010000 CR3: 0000000032af8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index ad4ff3b0e91e..65bc4c5f2e64 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -242,4 +242,8 @@ source "arch/um/drivers/Kconfig"
+ config ARCH_SUSPEND_POSSIBLE
+ 	def_bool y
+ 
++menu "Power management options"
++
+ source "kernel/power/Kconfig"
++
++endmenu
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: d9fc1511728c15df49ff18e49a494d00f78b7cd4
+change-id: 20230113-umpower-370c42859a65
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Best regards,
+-- 
+Peter Foley <pefoley2@pefoley.com>
