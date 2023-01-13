@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668F966A510
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF3166A512
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjAMVVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S230108AbjAMVVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjAMVU7 (ORCPT
+        with ESMTP id S230038AbjAMVVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:20:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FDD149FE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:20:58 -0800 (PST)
+        Fri, 13 Jan 2023 16:21:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0DE15F22
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:20:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F2D5B82204
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC30FB82205
         for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 21:20:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CFC01C433F1;
-        Fri, 13 Jan 2023 21:20:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 764A3C433A1;
+        Fri, 13 Jan 2023 21:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673644855;
-        bh=gZQB5Rr2EKLw5BonMhM/yCovKBuhaogmYvswMy1xP9w=;
+        s=k20201202; t=1673644856;
+        bh=P3p4lAttGXWK5Zjf3Dzui7xxuzBuF9vEYkXO8RNMgzQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oBrE0H3K371NXAfkbiN5sBdKxDvbddGPf2zFOd4EAIkikaO/zNHWNfil91D/QGlud
-         MlT0hW9qpx8n7VnQ+CCG8SbFvrJeTlqkVJ64Wqef8ZXEo0Xy1vC5yLUIewoCE+Q8Vb
-         uax/R7aDtbH9YxIhkiQop9HHHnV99suvJwWCOB2RB2LuQUmNoB6hyI17+fzv5bfkyq
-         UGAiMa695VIHdb5XASOqDLatNdIcA6T/E+ndeTyUtRvVOC5iDkLPS91KfNrp+8abAF
-         pF+I6Dd/lQDhAsPE6VZk1ozYDEUZBqyu9fl5zTiIhQDkYtL3b8+o7rYwip4hHQm2md
-         44y4UYAMTDX2g==
+        b=TuSIhAJVsf01EDO8WwwH+oZd9j6C4yXJ4KVPCPeCK5FnJCttPPynOdIpEkW7e14h2
+         hN4hh1GCOn0F0BrfsbBVtekFmTe4AaJgqc7rLHaTvhyVRvM5iPy4/yXYPYK+DR6H+a
+         vRy+QZhGK61KURBKvtQPq/M1e9NoPiUSxh2isDmu0hUL/HPd3nr8eYMkDDkoIoWiaY
+         pbsf4lv8pMM79Vx0iRMXzVF//6iTIpkMNMnhB3c7W2upSSmVVNI2XAsR/AZ92gG2R6
+         ROihJ3dYwDrKVqbkrqIRwKlc00ibJPCCE9jfktZPJWtnfpLfubVgKP1F7n67vtPapp
+         OnMUcixKVcYFg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BCDE9C395CA;
-        Fri, 13 Jan 2023 21:20:55 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61A6EE270DD;
+        Fri, 13 Jan 2023 21:20:56 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] platform/chrome: cros_ec: Use per-device lockdep key
+Subject: Re: [PATCH 1/2] platform/chrome: cros_typec_switch: Use fwnode* prop
+ check
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <167364485577.21086.1402903031972419181.git-patchwork-notify@kernel.org>
-Date:   Fri, 13 Jan 2023 21:20:55 +0000
-References: <20230111074146.2624496-1-wenst@chromium.org>
-In-Reply-To: <20230111074146.2624496-1-wenst@chromium.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
-        angelogioacchino.delregno@collabora.com,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Message-Id: <167364485639.21086.3086760523982737286.git-patchwork-notify@kernel.org>
+Date:   Fri, 13 Jan 2023 21:20:56 +0000
+References: <20230104060846.112216-1-pmalani@chromium.org>
+In-Reply-To: <20230104060846.112216-1-pmalani@chromium.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,24 +59,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+This series was applied to chrome-platform/linux.git (for-next)
+by Prashant Malani <pmalani@chromium.org>:
 
-On Wed, 11 Jan 2023 15:41:46 +0800 you wrote:
-> Lockdep reports a bogus possible deadlock on MT8192 Chromebooks due to
-> the following lock sequences:
+On Wed,  4 Jan 2023 06:08:44 +0000 you wrote:
+> Using device_property_present() multiple times on an ACPI device
+> leads to kernel panics on Chromebook systems. This happens when there
+> is > 1 boolean property in an ACPI device which is created dynamically
+> by the BIOS as part of SSDT[1] on Chromebook systems
 > 
-> 1. lock(i2c_register_adapter) [1]; lock(&ec_dev->lock)
-> 2. lock(&ec_dev->lock); lock(prepare_lock);
-> 
-> The actual dependency chains are much longer. The shortened version
-> looks somewhat like:
+> Since fwnode_* can handle simple device tree properties equally
+> well, switch to using the fwnode_property_present() function
+> version. This will avoid panics and make the usage consistent
+> when we introduce a check for the 2nd property in a subsequent patch.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] platform/chrome: cros_ec: Use per-device lockdep key
-    https://git.kernel.org/chrome-platform/c/961a325becd9
+  - [1/2] platform/chrome: cros_typec_switch: Use fwnode* prop check
+    https://git.kernel.org/chrome-platform/c/ef9c00dbd383
+  - [2/2] platform/chrome: cros_typec_switch: Check for retimer flag
+    https://git.kernel.org/chrome-platform/c/441529bed41c
 
 You are awesome, thank you!
 -- 
