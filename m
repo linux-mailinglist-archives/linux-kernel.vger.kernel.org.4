@@ -2,68 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82433669E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BA8669EB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjAMQry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S229876AbjAMQtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjAMQrJ (ORCPT
+        with ESMTP id S230521AbjAMQsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:47:09 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A7F7814C;
-        Fri, 13 Jan 2023 08:44:58 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id C8E5D733;
-        Fri, 13 Jan 2023 16:44:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C8E5D733
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1673628297; bh=I6rm7KzONNVJMxFe3CSWGLez9rLB0K0wtheNbQk0RTg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Px3iMEjwOXNwv9qHZSYHlwRKgWqhzDzT5j2jDTpRSLSBMfqK4zyBckYDO096GZi+r
-         c/n3HW579SEbB3r0lSH/Rb9To2supz/hrcIQyuamkZW0/s4oYKgDtk9Na7nShk14Gc
-         7pe5fbuPPIp+r1fNymFziv16celjWc3bfFmIybD9cvj5ctadLNBmReAofhitcmRCSl
-         rJ2iIJNdfYkZ/PYXXizk5tKnjuBlvl/FwYUSHl8BJl4zxxSmbuuCqaFkEiV91ISqfs
-         TbLf5pHzu84K149myIQ6z9H4AzmenGo4Q+Ch7RgVLXf/8ce/ELw/NcbcX2fqJfIkjO
-         yEXJc792fdgpw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     bilbao@vt.edu, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: Re: [PATCH] docs/sp_SP: Add process
- kernel-enforcement-statement.rst translation
-In-Reply-To: <20230103165608.134190-1-carlos.bilbao@amd.com>
-References: <20230103165608.134190-1-carlos.bilbao@amd.com>
-Date:   Fri, 13 Jan 2023 09:44:57 -0700
-Message-ID: <87tu0uqt86.fsf@meer.lwn.net>
+        Fri, 13 Jan 2023 11:48:46 -0500
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610D36ECB8;
+        Fri, 13 Jan 2023 08:46:19 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id r132so7561149oif.10;
+        Fri, 13 Jan 2023 08:46:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RuYGM5xxgSpVt2SshCQN8JM0QSvRbusS4+7wjpXp+iw=;
+        b=oLcNTCTFXTWPndW626haFCrCFa6y3nkzlIO7I2oNrPAjw2SFgdgj3dKUEEnXpEC3yi
+         PsFgPsU7a1C24IZr2J4681POn6BPlFj+U+aCgEQHoQib4Qw3aCBuVd2b0afNuawoVVku
+         RHaq/dAw4UGdF0byRxxvt6AnjEA65TozC+lJZxW0E9wuDKjwNXmnHwvrvoMy/PFo1mr1
+         eFXmD5FwHjpZ8NMpRIhZ57cXIH2eTU4vhRE4dxkltkPSyE1fHBsB5eOl7TgGTER/53X7
+         hdSYCbe26nQTY/I6y7FqPaMNdc2LZZTXwohdYzPNkdCTMHxGp2UX/4CE66EzKeSHKamJ
+         Wvug==
+X-Gm-Message-State: AFqh2ko3r5va4HOuzKmyhyvdtXa8j9erSEuaykD5bg5pkSoVw8AJQCG4
+        /NqbHu4YNF2cnEW12tFPGA==
+X-Google-Smtp-Source: AMrXdXv5q+MKQguVvhn/MeERISvFu/aJ07yG2Y++7z30CokWEYQNareqHHYHvXp2723AU/ZOiHMEJQ==
+X-Received: by 2002:aca:4406:0:b0:364:6230:ee4c with SMTP id r6-20020aca4406000000b003646230ee4cmr4415875oia.37.1673628378519;
+        Fri, 13 Jan 2023 08:46:18 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r16-20020a0568080ab000b0035bce2a39c7sm9350347oij.21.2023.01.13.08.46.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 08:46:18 -0800 (PST)
+Received: (nullmailer pid 2377411 invoked by uid 1000);
+        Fri, 13 Jan 2023 16:46:17 -0000
+Date:   Fri, 13 Jan 2023 10:46:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        ", Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH V2 3/6] dt-bindings: nvmem: convert U-Boot env vars to
+ NVMEM layout
+Message-ID: <167362837658.2377356.15364092039384096184.robh@kernel.org>
+References: <20230111073102.8147-1-zajec5@gmail.com>
+ <20230111073102.8147-3-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230111073102.8147-3-zajec5@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-> Translate the following document into Spanish:
->
-> - process/kernel-enforcement-statement.rst
->
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+On Wed, 11 Jan 2023 08:30:59 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> U-Boot environment variables can be found of various underlaying storage
+> entities. This binding should be defined as a layout on top on NVMEM
+> device not a NVMEM device itself.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  .../translations/sp_SP/process/index.rst      |   1 +
->  .../process/kernel-enforcement-statement.rst  | 174 ++++++++++++++++++
->  2 files changed, 175 insertions(+)
->  create mode 100644 Documentation/translations/sp_SP/process/kernel-enforcement-statement.rst
+>  .../bindings/nvmem/layouts/nvmem-layout.yaml  |  1 +
+>  .../nvmem/{ => layouts}/u-boot,env.yaml       | 29 ++++++++++---------
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 17 insertions(+), 15 deletions(-)
+>  rename Documentation/devicetree/bindings/nvmem/{ => layouts}/u-boot,env.yaml (77%)
+> 
 
-Applied, thanks.
-
-jon
+Reviewed-by: Rob Herring <robh@kernel.org>
