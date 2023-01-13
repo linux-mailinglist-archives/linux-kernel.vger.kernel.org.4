@@ -2,151 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE061669E65
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA64669D89
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 17:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjAMQmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 11:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S229698AbjAMQV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 11:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjAMQmR (ORCPT
+        with ESMTP id S229624AbjAMQU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 11:42:17 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8A4639B;
-        Fri, 13 Jan 2023 08:40:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JmTmVJO4X32f9y7JqfYGS4rNXV+kNXvr+YUTYVb6UIIEieLuJJszWzUtwVkG2ftXmVXxYCuwJwTI0NxGtVHsdcZtlfon5Ymax4oj8IlNun1bk+qym4W/b8Nekthygtv7z+gE2vGtEFi/0RZUi6vM/jOK/eGooDTbxlPGF7+tV2lK8VfQZRAg4h99R3JQwklXf5mwvsoE9lXP4ficUAjZcJFaGwqhVRhqPoUyJraFJwy9Qm1kaKzpa734xGfW+1SPinRdpETJ1RemqpFBce8pPVG1hxNDPhKQsjx852vENns9hGH5r28WssXDwXwSxcf0y8CibiXAtKC379IH0BOSsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yNFI1ODvT1qxWxuUYeT6CbLyos3m+5BrA5L0BY6iWEc=;
- b=HOEkUpctNyNckRLZTFXkF9DvdKAdMXzTC4hN5xo9JPkYU1uCGKQpX//iY6C2Vt4XpjWgfhXcLvbuqBljnKjkekoNsa6zldYwgaup7Lke8r2yaPJgXd1pkCblXFzzqjmJ1zKfr+gHP/LVuQ9DZ2U+rq/tbCXGqs+Ahu2QnQqbGhwmXWPJaxhCkYto5eZMInoEo+BB9I2bsmn8QJRQlDuln1xr6l1PQ24L8R4kmJ8J/jzwEdzVXWx0C5ndf0qfy+G8q+vAmvjxSswcZVUxS0BjXGvjHt7LbXcg5qVJmVsAjP1H1TMnPjZyirFQEpYLg56nVBpIH+kXv7EzRZLA1zs35w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yNFI1ODvT1qxWxuUYeT6CbLyos3m+5BrA5L0BY6iWEc=;
- b=g889N5AYG/onY1r49SbbU9cDImXgFl8sqlKP0/MBTg3nN/sisooAXWM40sIQvDMhUmh3y+WCX9Q3wib2eYBLG9bRh17SGThkIsOwxIXsdtsKuETYNcZMxNQtNeOchrbNhRLpV6dNoF4x8xBBPXbc35RzVYVBz61+VjA1bGLkfHghitIFS2w0DR5KRz3u7gx5lE0tUx15GzS/qFn04cVl5kUsSiqx8EfIPR1jPmmUVJlmsB/jzUl015MJ18d+GlLA+ddqxuVbMAxmRsm5G3of4LL1fdjQeO79ogGsqseQf9zpZ7FxDMVtZ7SzKzGjj2VUSVAWhgQ8Qio8D1+GzBnuHA==
-Received: from DS7PR03CA0106.namprd03.prod.outlook.com (2603:10b6:5:3b7::21)
- by DM6PR12MB5023.namprd12.prod.outlook.com (2603:10b6:5:1b6::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Fri, 13 Jan
- 2023 16:40:42 +0000
-Received: from DS1PEPF0000B077.namprd05.prod.outlook.com
- (2603:10b6:5:3b7:cafe::59) by DS7PR03CA0106.outlook.office365.com
- (2603:10b6:5:3b7::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.16 via Frontend
- Transport; Fri, 13 Jan 2023 16:40:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS1PEPF0000B077.mail.protection.outlook.com (10.167.17.8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.11 via Frontend Transport; Fri, 13 Jan 2023 16:40:41 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 08:40:35 -0800
-Received: from yaviefel (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 08:40:31 -0800
-References: <20230112201554.752144-1-daniel.machon@microchip.com>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Daniel Machon <daniel.machon@microchip.com>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <error27@gmail.com>, <horatiu.vultur@microchip.com>,
-        <Julia.Lawall@inria.fr>, <petrm@nvidia.com>,
-        <vladimir.oltean@nxp.com>, <maxime.chevallier@bootlin.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 0/6] Introduce new DCB rewrite table
-Date:   Fri, 13 Jan 2023 17:11:50 +0100
-In-Reply-To: <20230112201554.752144-1-daniel.machon@microchip.com>
-Message-ID: <87wn5qxu9u.fsf@nvidia.com>
+        Fri, 13 Jan 2023 11:20:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159EF392FD
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 08:13:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673626413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LXEPekITNxpuaI6z+nmO+Vw9fP4KuIfNcriWYNQQsP8=;
+        b=fti4TIIEaYrDSGxCmT8sig5w2A89zlYbKNHboX1s9Vtl/3NRYx55wly0LIOg0lbFrwS4OM
+        Q798r7wuIw0X2kMpUnApJIBRS7Xlab53hmfQ+PoIzkimlQdh8Xwx2B+OQx0TVVZcIHyk7W
+        bQKxr2H2bCQ73Q6ccxrfS/JSlyMcBws=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-aPBiztmeMgmtCeIvtftMfQ-1; Fri, 13 Jan 2023 11:13:29 -0500
+X-MC-Unique: aPBiztmeMgmtCeIvtftMfQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CAE4801779;
+        Fri, 13 Jan 2023 16:13:29 +0000 (UTC)
+Received: from [10.22.8.221] (unknown [10.22.8.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 033D1492B06;
+        Fri, 13 Jan 2023 16:13:28 +0000 (UTC)
+Message-ID: <f832a6bc-d0f2-b659-37c9-2b64f1e73b0d@redhat.com>
+Date:   Fri, 13 Jan 2023 11:13:28 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B077:EE_|DM6PR12MB5023:EE_
-X-MS-Office365-Filtering-Correlation-Id: fdbe7ac6-0666-4e11-d518-08daf584e90b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J2tlInTGlRBpGOIrFGVCpo0vw5kJGa9e529yEljVKNl7q/r7chHfvUm/Mtler9EersQWIgmE3yovBQcOKE+RVHxqSEFles4j2koqrFVxyS+rec3lrp2B8HFeRRe7BTeJEPUP7LkxGbQ0oXVZgalBvDr/Sdjg3J3bJHQCL937zNXpM4c3/Yb/AQ1fgdnuiQBbIanmtP4iEzA6t2egNiJovcy/geaBAd9+iQrBwfFdr2f2X60IB5h9t0ESvLBVWRd4RRBhh49l9PfvMibAPTmRA1FNDgfmwqVeXCGA1ZOjHI7IgbWJ6ha+y6eAq9wfMxKw7OVg06oGq0MlIUZhYYmztpEgsb3C76ukZEMfFvOdp1rZsqvotj4KWNNqyIkZbhnspd8TJNhYFv0j8NKHh4wOwZz9g/mHEBp2fGBuddl+PCGg/+ZwAl/DJNHFhmU82EeNw/e8w+lE0/VUecH5fN7NKBgfodPhz6PEZu5y539pZm68ljf5ty9NBm8JOI+bfwfwqJloy4MWu27uKTWGJYFUiRmjdnq1iUr3/5L0i5Oo+TZOyccTLt7uS0fEjb+5bTNBaP7j039mLEAbxRn+3wIxDKBSJnxcvsEIjOQsS6THgeqDDiKslu8HrMiijUlp4eSCGsq9JqxeI4/N6iJklX8gGNUNaunmzsc4UvUWbGWfIXR7rW9OiGcyPgLrPtwSym4HPyzWj53bDiaAdT4s8MakyQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(70586007)(36756003)(2906002)(7416002)(82310400005)(7636003)(5660300002)(8936002)(356005)(41300700001)(47076005)(83380400001)(426003)(36860700001)(82740400003)(66899015)(54906003)(86362001)(70206006)(6666004)(8676002)(2616005)(40460700003)(186003)(316002)(40480700001)(478600001)(26005)(4326008)(6916009)(16526019)(336012);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 16:40:41.9139
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdbe7ac6-0666-4e11-d518-08daf584e90b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B077.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5023
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: rseq CPU ID not correct on 6.0 kernels for pinned threads
+Content-Language: en-US
+To:     Florian Weimer <fweimer@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        libc-alpha@sourceware.org
+References: <87lem9cnxr.fsf@oldenburg.str.redhat.com>
+ <8b52b0d6-c973-f959-b44a-1b54fb808a04@efficios.com>
+ <871qnzpv9l.fsf@oldenburg.str.redhat.com>
+ <5c64b742-c41a-8c59-c0c8-8b4cdedaaba5@efficios.com>
+ <877cxq4dwn.fsf@oldenburg.str.redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <877cxq4dwn.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Daniel Machon <daniel.machon@microchip.com> writes:
-
-> There is currently no support for per-port egress mapping of priority to PCP and
-> priority to DSCP. Some support for expressing egress mapping of PCP is supported
-> through ip link, with the 'egress-qos-map', however this command only maps
-> priority to PCP, and for vlan interfaces only. DCB APP already has support for
-> per-port ingress mapping of PCP/DEI, DSCP and a bunch of other stuff. So why not
-> take advantage of this fact, and add a new table that does the reverse.
+On 1/13/23 11:06, Florian Weimer wrote:
+> * Mathieu Desnoyers:
 >
-> This patch series introduces the new DCB rewrite table. Whereas the DCB
-> APP table deals with ingress mapping of PID (protocol identifier) to priority,
-> the rewrite table deals with egress mapping of priority to PID.
+>> On 2023-01-12 11:33, Florian Weimer wrote:
+>>> * Mathieu Desnoyers:
+>>>
+>>>> As you also point out, it can also be caused by some other task
+>>>> modifying the affinity of your task concurrently. You could print
+>>>> the result of sched_getaffinity on error to get a better idea of
+>>>> the expected vs actual mask.
+>>>>
+>>>> Lastly, it could be caused by CPU hotplug which would set all bits
+>>>> in the affinity mask as a fallback. As you mention it should not be
+>>>> the cause there.
+>>>>
+>>>> Can you share your kernel configuration ?
+>>> Attached.
+>>> cpupower frequency-info says:
+>>> analyzing CPU 0:
+>>>     driver: intel_cpufreq
+>>>     CPUs which run at the same hardware frequency: 0
+>>>     CPUs which need to have their frequency coordinated by software: 0
+>>>     maximum transition latency: 20.0 us
+>>>     hardware limits: 800 MHz - 4.60 GHz
+>>>     available cpufreq governors: conservative ondemand userspace powersave performance schedutil
+>>>     current policy: frequency should be within 800 MHz and 4.60 GHz.
+>>>                     The governor "schedutil" may decide which speed to use
+>>>                     within this range.
+>>>     current CPU frequency: Unable to call hardware
+>>>     current CPU frequency: 3.20 GHz (asserted by call to kernel)
+>>>     boost state support:
+>>>       Supported: yes
+>>>       Active: yes
+>>> And I have: kernel.sched_energy_aware = 1
+>>>
+>>>> Is this on a physical machine or in a virtual machine ?
+>>> I think it happened on both.
+>>> I added additional error reporting to the test (running on kernel
+>>> 6.0.18-300.fc37.x86_64), and it seems that there is something that is
+>>> mucking with affinity masks:
+>>> info: Detected CPU set size (in bits): 64
+>>> info: Maximum test CPU: 19
+>>> error: Pinned thread 17 ran on impossible cpu 7
+>>> info: getcpu reported CPU 7, node 0
+>>> info: CPU affinity mask: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+>>> error: Pinned thread 3 ran on impossible cpu 13
+>>> info: getcpu reported CPU 13, node 0
+>>> info: CPU affinity mask: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+>>> info: Main thread ran on 2 CPU(s) of 20 available CPU(s)
+>>> info: Other threads ran on 20 CPU(s)
+>>> For each of these threads, the affinity mask should be a singleton
+>>> set.
+>>> Now I need to find out if there is a process that changes affinity
+>>> settings.
+>> If it's not cpu hotunplug, then perhaps something like systemd
+>> modifies the AllowedCPUs of your cpuset concurrently ?
+> It's probably just this kernel bug:
 >
-> It is indeed possible to integrate rewrite in the existing APP table, by
-> introducing new dedicated rewrite selectors, and altering existing functions
-> to treat rewrite entries specially. However, I feel like this is not a good
-> solution, and will pollute the APP namespace. APP is well-defined in IEEE, and
-> some userspace relies of advertised entries - for this fact, separating APP and
-> rewrite into to completely separate objects, seems to me the best solution.
+> commit da019032819a1f09943d3af676892ec8c627668e
+> Author: Waiman Long <longman@redhat.com>
+> Date:   Thu Sep 22 14:00:39 2022 -0400
 >
-> The new table shares much functionality with the APP table, and as such, much
-> existing code is reused, or slightly modified, to work for both.
+>      sched: Enforce user requested affinity
+>      
+>      It was found that the user requested affinity via sched_setaffinity()
+>      can be easily overwritten by other kernel subsystems without an easy way
+>      to reset it back to what the user requested. For example, any change
+>      to the current cpuset hierarchy may reset the cpumask of the tasks in
+>      the affected cpusets to the default cpuset value even if those tasks
+>      have pre-existing user requested affinity. That is especially easy to
+>      trigger under a cgroup v2 environment where writing "+cpuset" to the
+>      root cgroup's cgroup.subtree_control file will reset the cpus affinity
+>      of all the processes in the system.
+>      
+>      That is problematic in a nohz_full environment where the tasks running
+>      in the nohz_full CPUs usually have their cpus affinity explicitly set
+>      and will behave incorrectly if cpus affinity changes.
+>      
+>      Fix this problem by looking at user_cpus_ptr in __set_cpus_allowed_ptr()
+>      and use it to restrcit the given cpumask unless there is no overlap. In
+>      that case, it will fallback to the given one. The SCA_USER flag is
+>      reused to indicate intent to set user_cpus_ptr and so user_cpus_ptr
+>      masking should be skipped. In addition, masking should also be skipped
+>      if any of the SCA_MIGRATE_* flag is set.
+>      
+>      All callers of set_cpus_allowed_ptr() will be affected by this change.
+>      A scratch cpumask is added to percpu runqueues structure for doing
+>      additional masking when user_cpus_ptr is set.
+>      
+>      Signed-off-by: Waiman Long <longman@redhat.com>
+>      Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>      Link: https://lkml.kernel.org/r/20220922180041.1768141-4-longman@redhat.com
 >
-> ================================================================================
-> DCB rewrite table in a nutshell
-> ================================================================================
-> The table is implemented as a simple linked list, and uses the same lock as the
-> APP table. New functions for getting, setting and deleting entries have been
-> added, and these are exported, so they can be used by the stack or drivers.
-> Additionnaly, new dcbnl_setrewr and dcnl_delrewr hooks has been added, to
-> support hardware offload of the entries.
+> I don't think it's been merged into any stable kernels yet?
 
-Looks good to me overall.
+This patch will be in the v6.2 kernel. Since it is not marked as a fix, 
+it won't go into a stable kernel by default.
 
-I just want to add that to configure rewrite, mlxsw currently reverses
-the APP prioritization table. That's not ideal, and is lossy as
-well--certain configurations simply can't be expressed however you set
-up in-driver heuristics. The proposed interfaces would make
-configuration of the rewrite functionality very straightforward.
+Cheers,
+Longman
+
