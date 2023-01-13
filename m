@@ -2,121 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9477D6698C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EC46698CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240874AbjAMNi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S240363AbjAMNix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:38:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241625AbjAMNi0 (ORCPT
+        with ESMTP id S241720AbjAMNiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:38:26 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B77568AD;
-        Fri, 13 Jan 2023 05:32:44 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DDEVdo026435;
-        Fri, 13 Jan 2023 13:32:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qE+nZVuaTlN1wONkdUsvf5clh5NXX4cqNGkboCRdH1E=;
- b=NZ+4dw7N3hQalFgULmbRmcCZJwu8lTm4nhAHsQXrkOvYET2lKXGK+7OXUj9sKDDuwYHr
- 0HPQgwytpkaQScD1Pcp0SsEf/iGrvzHVICD7vQCJrY12C/9xRwOdosVdN195dRZjH6g1
- uyDQ3z3sC+fNMGzRVAkEQ2UhCm1oYmD8RDPe4uqQZk70tOURMsN0kOmUBmbOrCweF6+9
- sGnzxsbK2AD1kBZ9eY0Gyb58l3nzzdrVG/JYxnHwJgWuCjWQkIAv3W0kmKN9Nf3rp2uY
- rldmxJNLUKALNoTigi+VVn3hn42BkStxCiPdQKsLRly+IFI/0cldxlqNZ7hRNcP4VQpZ QQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2wun1k14-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:32:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DDW2cb029284
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:32:02 GMT
-Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 05:31:53 -0800
-Message-ID: <d2d595ae-4a86-9cd8-e927-a067c555d1fd@quicinc.com>
-Date:   Fri, 13 Jan 2023 19:01:50 +0530
+        Fri, 13 Jan 2023 08:38:06 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6F93E0C9
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:32:13 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4bf16baa865so283440067b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:32:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=No+5RPSlt/2AA9DS36alYfiIviplsrD4U7z1/DjK3kw=;
+        b=VJodeieRVB3/PNGRPY0aEuQS+oK4CIr7AMdUy5heO7OE7pVFTK1A164V81193yuMKY
+         o0oUSJN0YXwRO9v+Ezx7Gqn/ryTWa//kwbqXH3tngvFiYZGyvgx8YIiykr/aNB1DW48e
+         N0GbzuKPFr92tZyDVjjUmcOMVYyyySKxOlloYTGTinRJW/jHY6W1Ks5OY2dsvq2+RNlC
+         zByCYr+/SoxFMEY29qhMwONLMsOUIXHsGRC0yYIZO6xlP9PwBZYL/QzSCItRcijl/ECw
+         d67/fCqKvUg15ic9ZBUdQDMG1O2qlcwbgzC0LiRIPvIv+3nnIOosPA/oyQqI12S6iRlD
+         98PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=No+5RPSlt/2AA9DS36alYfiIviplsrD4U7z1/DjK3kw=;
+        b=5Qqj8272dLz+EuUDkWmCwh4NqnQGIbEdeodSTix1oEslnRPsARtvmfLGi2dvUI950u
+         Blg8xb7X4tH2egPL0FAxmjRKJXzssOI4zDhBMlg2DOenxjscefnFyJ4NQ/f1enJlKYYy
+         lxBcK8nOWlhBaEMpDKSo+VPKk9Q4tT0nSekhWO78PNcnxwAoFlVrfyY1qr1YlNs6OHIU
+         WYJQmPmXaq7JrQR/7Gx8DyTsH2ZwhPgrZXwjWF3O52ncyWTNiNno3dY2MNT4Cticp3WQ
+         vGRTGT7I/Lo0y4mmti0v8V8FmLSraIbjG44PTCsUJ6guO2l5VCCudGPvjThrWyw6Phu3
+         3/Jg==
+X-Gm-Message-State: AFqh2kr5r/FtesasCaNdYtSqL+vDCOyfTyPQxW7kC57soa/uEVvk8LJc
+        fXZrcp132C1necVMEiNgDWQgxqEBhXBcMWo5uokcnA==
+X-Google-Smtp-Source: AMrXdXuSKQsOMei1jTS5XnCajfRHRM/lBu1DeqBAVORpif81/tgq+9lb2f2D2pRAJV8vNH24eG1wgdez+fAcuOgg8ic=
+X-Received: by 2002:a81:6d85:0:b0:3f2:e8b7:a6ec with SMTP id
+ i127-20020a816d85000000b003f2e8b7a6ecmr2828684ywc.332.1673616732259; Fri, 13
+ Jan 2023 05:32:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-7-quic_devipriy@quicinc.com>
- <f6ef1834-b629-b76c-9cde-55af56320665@linaro.org>
- <16b185ae-99a7-61d9-b5a0-f3eb157ea420@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <16b185ae-99a7-61d9-b5a0-f3eb157ea420@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gdpGqZqw2qXpME35hUAL_mUVh7XKaXbR
-X-Proofpoint-GUID: gdpGqZqw2qXpME35hUAL_mUVh7XKaXbR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_06,2023-01-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 phishscore=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxscore=0 priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=790 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301130089
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <f2277af8951a51cfee2fb905af8d7a812b7beaf4.1673616357.git.piergiorgio.beruto@gmail.com>
+In-Reply-To: <f2277af8951a51cfee2fb905af8d7a812b7beaf4.1673616357.git.piergiorgio.beruto@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 13 Jan 2023 14:32:01 +0100
+Message-ID: <CANn89iJajiWoi4qv6=VvcrgBFhRHFbc7Dy7Mbic+j=gBsWgt3g@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next 1/1] plca.c: fix obvious mistake in checking retval
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 13, 2023 at 2:26 PM Piergiorgio Beruto
+<piergiorgio.beruto@gmail.com> wrote:
+>
+> Revert a wrong fix that was done during the review process. The
+> intention was to substitute "if(ret < 0)" with "if(ret)".
+> Unfortunately, the intended fix did not meet the code.
+> Besides, after additional review, it was decided that "if(ret < 0)"
+> was actually the right thing to do.
+>
+> Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
+> Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-
-On 1/11/2023 3:18 PM, Krzysztof Kozlowski wrote:
-> On 11/01/2023 10:44, Krzysztof Kozlowski wrote:
->> And here
->>
->>> +			clock-names = "xo", "iface", "core";
->>
->> Does not look like you tested the bindings. Please run `make
->> dt_binding_check` (see
->> Documentation/devicetree/bindings/writing-schema.rst for instructions).
-> 
-> Apologies, wrong template. Correct comment:
-> 
-> Does not look like you tested the DTS against bindings. Please run `make
-> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> for instructions).
-> 
-Sure, will check
-> Best regards,
-> Krzysztof
-> 
-Best Regards,
-Devi Priya
+Reviewed-by: Eric Dumazet <edumazet@google.com>
