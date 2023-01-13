@@ -2,351 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2476668B1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7681C668B27
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 06:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjAMFPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 00:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S232226AbjAMFRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 00:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjAMFPd (ORCPT
+        with ESMTP id S231634AbjAMFRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 00:15:33 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A0F60874
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 21:15:32 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id ud5so49778530ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 21:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E5f8Tk8nG32JDX610wYSz4l32RwyWxZLZ7Rx+rniEqA=;
-        b=TLQvpDF3lCjDWdDxkqOQ02L9FABV/4KXq3zJthoJTH85by0OVKDhpuKgjIVTxFbLAC
-         u3DSU/7k1Hs4VjTle56xLH7kxbyHz6ra42KV0RlwpKcFBpYOzqcT9bo6HetfHpJWRMXx
-         wzvxqVCM3uuAzc8GnnevWH1T7fEdHt+INm2GAtIiG4HEGMWgvg/RjF+J4WFagMvNnz9p
-         tIJWPyxL+kK1Wi+cSyZqy1VqljXlCyLaYnFS0BuFVHy+jzLCbyrdSLrEeHHPTAXNoAak
-         6aOulsIR5vHUP5Egcv9BXAZsfyoSthG+i/D8qvr0SIS1iyIHyTGBozks+CWYFkpQ5His
-         WI0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E5f8Tk8nG32JDX610wYSz4l32RwyWxZLZ7Rx+rniEqA=;
-        b=nCt95HuOGJvA+WgJtWny0XXR0qGsVc782p9zbYyVRmrzNFvLyu+leA3h3L0Fq3/2jL
-         DfIN4OvkLFEGUs1To3rwxh2YxH1aUAi/q0Nmme4OhEnALRKhiQRqavxWewwgXV8UTFVF
-         thj1+D1gY0Ldsv/uIhDz1DRMC3HRgQVV+CGFAgmzuN7Lelzm/u60lhQavLPNm5lQRc3I
-         FqnR7mU97eno3mBSif0f9SqQG4TWGAFKyij98Fb0/82xAx/6WU2b7xotbPAUCuR4qGwv
-         redG6/nHGdmhkzwMQGTTtRKOUAbI8GeCLkdwTd3S4xt1R0YeF425cjsbbjht9DVOOmPP
-         hCPg==
-X-Gm-Message-State: AFqh2kpQp3akE4LufReBMBYSh+Q+1qa/42gXDVi9kUxW9tVdQMuqS9Kx
-        00bE1KjI/fRtBlkeZQ/cXZh3EZqrlGlko04AQ8Dz38s5fls=
-X-Google-Smtp-Source: AMrXdXsZPFafHKKzcRuKl1Qoz0pXHE05Yajy7PyIYglwFzawYiEszZadYupS0xiwrELowFDfh1UQ7IJE6V9+J9A24YA=
-X-Received: by 2002:a17:907:b610:b0:84d:1e4c:2e9 with SMTP id
- vl16-20020a170907b61000b0084d1e4c02e9mr1725692ejc.476.1673586930396; Thu, 12
- Jan 2023 21:15:30 -0800 (PST)
+        Fri, 13 Jan 2023 00:17:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F6CC7;
+        Thu, 12 Jan 2023 21:17:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BAA0621E8;
+        Fri, 13 Jan 2023 05:17:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D131C433D2;
+        Fri, 13 Jan 2023 05:17:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673587028;
+        bh=XPE03f0st6e7dXiYlxulIsVQOCCHLqaGs+W0IsPREqw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ciGEzOxez/OCF4e08FgXfsSlitf1zK9otw5V4emI1RG8tRqTWcLyp4QiSgsmypjCu
+         3L/MYaimYDNYU1IzSfpiiPebb75nOLzOmjXdHYAPcMFlC7s8Vspz7cfvN1/XAmIpzN
+         jTwL/EvTiU2MDvZRvhPe2hEEAUV1k5cmAoDKa8TnuY04n71mNxMsS9bmdOT5Xl9gLp
+         LaVKtQdrCgAJiv4zyfRtjZjjRe5mP6pmL91MSzVbDJOVcgtg+qu2Zfu1XQKbUwPnlR
+         asPazFo+t/wmU1cYwRk2tNxq/O9KcY39jjpNPctHZzX2YsF/yqKzHPCpFmb283ukwO
+         UmrQji5jqZKfw==
+Date:   Thu, 12 Jan 2023 21:17:07 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <yang.yang29@zte.com.cn>
+Cc:     <santosh.shilimkar@oracle.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <rds-devel@oss.oracle.com>, <linux-kernel@vger.kernel.org>,
+        <xu.panda@zte.com.cn>
+Subject: Re: [PATCH net-next v2] net/rds: use strscpy() to instead of
+ strncpy()
+Message-ID: <20230112211707.2abb31ad@kernel.org>
+In-Reply-To: <202301111425483027624@zte.com.cn>
+References: <202301111425483027624@zte.com.cn>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 13 Jan 2023 15:15:17 +1000
-Message-ID: <CAPM=9tyS7pXX12Ks+b=iSbUAdfLW=U-uGKo4SkKz6yGiCsusNg@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.2-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, 11 Jan 2023 14:25:48 +0800 (CST) yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+> 
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
 
-Back from a week off, managed to do a couple of dives (one with happy
-manta ray about 3-4m away for 5mins).
+What are the differences in behavior between strncpy() and strscpy()?
 
-Thanks to Daniel for taking care of fixes last week.
+> diff --git a/net/rds/stats.c b/net/rds/stats.c
+> index 9e87da43c004..7018c67418f5 100644
+> --- a/net/rds/stats.c
+> +++ b/net/rds/stats.c
+> @@ -88,9 +88,7 @@ void rds_stats_info_copy(struct rds_info_iterator *iter,
+>  	size_t i;
+> 
+>  	for (i = 0; i < nr; i++) {
+> -		BUG_ON(strlen(names[i]) >= sizeof(ctr.name));
+> -		strncpy(ctr.name, names[i], sizeof(ctr.name) - 1);
+> -		ctr.name[sizeof(ctr.name) - 1] = '\0';
+> +		BUG_ON(strscpy(ctr.name, names[i], sizeof(ctr.name)) < 0);
+>  		ctr.value = values[i];
+> 
+>  		rds_info_copy(iter, &ctr, sizeof(ctr));
 
-There is a bit of a post-holiday build up here I expect, small fixes
-across the board, amdgpu and msm being the main leaders, with others
-having a few. One code removal patch for nouveau.
-
-Regards,
-Dave.
-
-drm-fixes-2023-01-13:
-drm fixes for 6.2-rc4
-
-buddy:
-- benchmark regression fix for top-down buddy allocation
-
-panel:
-- add Lenovo panel orientation quirk
-
-ttm:
-- fix kernel oops regression
-
-amdgpu:
-- fix missing fence references
-- fix missing pipeline sync fencing
-- SMU13 fan speed fix
-- SMU13 fix power cap handling
-- SMU13 BACO fix
-- Fix a possible segfault in bo validation error case
-- Delay removal of firmware framebuffer
-- Fix error when unloading
-
-amdkfd:
-- SVM fix when clearing vram
-- GC11 fix for multi-GPU
-
-i915:
-- Reserve enough fence slot for i915_vma_unbind_vsync
-- Fix potential use after free
-- Reset engines twice in case of reset failure
-- Use multi-cast registers for SVG Unit registers
-
-msm:
-- display:
-- doc warning fixes
-- dt attribs cleanups
-- memory leak fix
-- error handling in hdmi probe fix
-- dp_aux_isr incorrect signalling fix
-- shutdown path fix
-- accel:
-- a5xx: fix quirks to be a bitmask
-- a6xx: fix gx halt to avoid 1s hang
-- kexec shutdown fix
-- fix potential double free
-
-vmwgfx:
-- drop rcu usage to make code more robust
-
-virtio:
-- fix use-after-free in gem handle code
-
-nouveau:
-- drop unused nouveau_fbcon.c
-The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262=
-:
-
-  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-01-13
-
-for you to fetch changes up to e695bc7e542358978434c8489a5a164d2bbefae8:
-
-  Merge tag 'drm-msm-fixes-2023-01-12' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes (2023-01-13
-13:01:22 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.2-rc4
-
-buddy:
-- benchmark regression fix for top-down buddy allocation
-
-panel:
-- add Lenovo panel orientation quirk
-
-ttm:
-- fix kernel oops regression
-
-amdgpu:
-- fix missing fence references
-- fix missing pipeline sync fencing
-- SMU13 fan speed fix
-- SMU13 fix power cap handling
-- SMU13 BACO fix
-- Fix a possible segfault in bo validation error case
-- Delay removal of firmware framebuffer
-- Fix error when unloading
-
-amdkfd:
-- SVM fix when clearing vram
-- GC11 fix for multi-GPU
-
-i915:
-- Reserve enough fence slot for i915_vma_unbind_vsync
-- Fix potential use after free
-- Reset engines twice in case of reset failure
-- Use multi-cast registers for SVG Unit registers
-
-msm:
-- display:
-- doc warning fixes
-- dt attribs cleanups
-- memory leak fix
-- error handing in hdmi probe fix
-- dp_aux_isr incorrect signalling fix
-- shutdown path fix
-- accel:
-- a5xx: fix quirks to be a bitmask
-- a6xx: fix gx halt to avoid 1s hang
-- kexec shutdown fix
-- fix potential double free
-
-vmwgfx:
-- drop rcu usage to make code more robust
-
-virtio:
-- fix use-after-free in gem handle code
-
-nouveau:
-- drop unused nouveau_fbcon.c
-
-----------------------------------------------------------------
-Adam Skladowski (1):
-      dt-bindings: display: msm: Rename mdss node name in example
-
-Akhil P Oommen (1):
-      drm/msm/a6xx: Avoid gx gbit halt during rpm suspend
-
-Arunpravin Paneer Selvam (1):
-      drm: Optimize drm buddy top-down allocation method
-
-Bryan O'Donoghue (4):
-      dt-bindings: msm: dsi-phy-28nm: Add missing qcom,
-dsi-phy-regulator-ldo-mode
-      dt-bindings: msm: dsi-controller-main: Fix operating-points-v2 constr=
-aint
-      dt-bindings: msm: dsi-controller-main: Fix power-domain constraint
-      dt-bindings: msm: dsi-controller-main: Fix description of core clock
-
-Chris Wilson (1):
-      drm/i915/gt: Reset twice
-
-Christian K=C3=B6nig (3):
-      drm/amdgpu: fix another missing fence reference in the CS code
-      drm/amdgpu: fix missing dma_fence_put in error path
-      drm/amdgpu: fix pipeline sync v2
-
-Christophe JAILLET (1):
-      drm/msm/hdmi: Fix the error handling path of msm_hdmi_dev_probe()
-
-Dave Airlie (4):
-      Merge tag 'drm-misc-fixes-2023-01-12' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'amd-drm-fixes-6.2-2023-01-11' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2023-01-12' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'drm-msm-fixes-2023-01-12' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes
-
-Dmitry Baryshkov (1):
-      drm/msm: another fix for the headless Adreno GPU
-
-Eric Huang (2):
-      drm/amdkfd: Add sync after creating vram bo
-      drm/amdkfd: Fix NULL pointer error for GC 11.0.1 on mGPU
-
-Evan Quan (2):
-      drm/amd/pm: correct the reference clock for fan speed(rpm) calculatio=
-n
-      drm/amd/pm: add the missing mapping for PPT feature on SMU13.0.0
-and 13.0.7
-
-Guchun Chen (1):
-      drm/amd/pm/smu13: BACO is supported when it's in BACO state
-
-Gustavo Sousa (1):
-      drm/i915/gt: Cover rest of SVG unit MCR registers
-
-Konrad Dybcio (3):
-      dt-bindings: msm/dsi: Don't require vcca-supply on 14nm PHY
-      dt-bindings: msm/dsi: Don't require vdds-supply on 10nm PHY
-      drm/msm/adreno: Make adreno quirks not overwrite each other
-
-Kuogee Hsieh (1):
-      drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if irq is not
-for aux transfer
-
-Luben Tuikov (1):
-      drm/amdgpu: Fix potential NULL dereference
-
-Mario Limonciello (1):
-      drm/amd: Delay removal of the firmware framebuffer
-
-Miaoqian Lin (1):
-      drm/msm/dpu: Fix memory leak in msm_mdss_parse_data_bus_icc_path
-
-Nirmoy Das (1):
-      drm/i915: Reserve enough fence slot for i915_vma_unbind_async
-
-Patrick Thompson (1):
-      drm: Add orientation quirk for Lenovo ideapad D330-10IGL
-
-Rob Clark (2):
-      drm/i915: Fix potential context UAFs
-      drm/virtio: Fix GEM handle creation UAF
-
-Thomas Zimmermann (1):
-      drm/nouveau: Remove file nouveau_fbcon.c
-
-Yang Li (1):
-      drm/msm/dpu: Fix some kernel-doc comments
-
-YiPeng Chai (1):
-      drm/amdgpu: Fixed bug on error when unloading amdgpu
-
-Zack Rusin (2):
-      drm/vmwgfx: Remove rcu locks from user resources
-      drm/ttm: Fix a regression causing kernel oops'es
-
- .../bindings/display/msm/dsi-controller-main.yaml  |   4 +-
- .../bindings/display/msm/dsi-phy-10nm.yaml         |   1 -
- .../bindings/display/msm/dsi-phy-14nm.yaml         |   1 -
- .../bindings/display/msm/dsi-phy-28nm.yaml         |   4 +
- .../bindings/display/msm/qcom,qcm2290-mdss.yaml    |   2 +-
- .../bindings/display/msm/qcom,sm6115-mdss.yaml     |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |  51 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |   8 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   6 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c           |   4 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c       |   2 +-
- .../gpu/drm/amd/amdkfd/kfd_device_queue_manager.c  |   2 +-
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c               |   9 +
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |   8 +-
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |   1 +
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c   |   1 +
- drivers/gpu/drm/drm_buddy.c                        |  81 ++-
- drivers/gpu/drm/drm_panel_orientation_quirks.c     |   6 +
- drivers/gpu/drm/i915/gem/i915_gem_context.c        |  24 +-
- drivers/gpu/drm/i915/gt/intel_gt_regs.h            |   4 +-
- drivers/gpu/drm/i915/gt/intel_reset.c              |  34 +-
- drivers/gpu/drm/i915/gt/intel_workarounds.c        |   4 +-
- drivers/gpu/drm/i915/i915_vma.c                    |   2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c              |  15 +-
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c              |   7 +
- drivers/gpu/drm/msm/adreno/a6xx_gpu.h              |   1 +
- drivers/gpu/drm/msm/adreno/adreno_gpu.h            |  10 +-
- .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c    |   3 +-
- drivers/gpu/drm/msm/dp/dp_aux.c                    |   4 +
- drivers/gpu/drm/msm/hdmi/hdmi.c                    |  12 +-
- drivers/gpu/drm/msm/msm_drv.c                      |   2 +-
- drivers/gpu/drm/msm/msm_mdss.c                     |   6 +-
- drivers/gpu/drm/nouveau/nouveau_fbcon.c            | 613 -----------------=
-----
- drivers/gpu/drm/ttm/ttm_bo_util.c                  |   2 +-
- drivers/gpu/drm/virtio/virtgpu_ioctl.c             |  19 +-
- drivers/gpu/drm/vmwgfx/ttm_object.c                |  41 +-
- drivers/gpu/drm/vmwgfx/ttm_object.h                |  14 -
- drivers/gpu/drm/vmwgfx/vmwgfx_bo.c                 |  38 --
- drivers/gpu/drm/vmwgfx/vmwgfx_drv.h                |  18 +-
- drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c            | 176 +++---
- drivers/gpu/drm/vmwgfx/vmwgfx_resource.c           |  33 --
- 43 files changed, 332 insertions(+), 950 deletions(-)
- delete mode 100644 drivers/gpu/drm/nouveau/nouveau_fbcon.c
