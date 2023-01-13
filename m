@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A4166A72C
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DD366A731
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjAMXjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S229510AbjAMXly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 18:41:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjAMXju (ORCPT
+        with ESMTP id S230347AbjAMXlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:39:50 -0500
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C308376AD2
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:39:49 -0800 (PST)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 580E68024527
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 23:39:49 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id D865F1004A828
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 23:39:48 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id GTeGp2yQ7I3SyGTeGpteGL; Fri, 13 Jan 2023 23:39:48 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Pr9W0yA3 c=1 sm=1 tr=0 ts=63c1ebc4
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=uJXoyXs2SWzOjiTBKGkA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Q/TqADxC6PTV7Ir/FsnIJMnQKHjYOnHI4KqFm9zQaag=; b=rE9dAZrA6QlzOfUIfKNg11Ji6I
-        9Oi9DkNkhOdC0GU0Uup4gmY/FZIwHwDyABuWiVyEgZzCH3cZinjUeGA4VDrkdSi/UkRr5FSoD3cOe
-        hZVH2r4zWck2WIGJ4N0BFMn3I/Lxj57BLhzy+VxctmmjwRmtf7P7Q4h9L9BIvLH32OCVt9cG+gyyw
-        bYpcMQgveqaJvaJtp1s4VsT1Br44ICvXXTTm8t8FeFxhdVeXKAN9xI/Rh/5cmvSny4nhwfe0zk2td
-        +Y57Aai0sDPToUCZv9YA3rTtDfT0hb58eEF7kDO9c8oAKB7IBxLpNqI5pNl426wABNNYngVTt3lvZ
-        XCs+QNBw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51390 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pGTeF-003Z6t-Ip;
-        Fri, 13 Jan 2023 16:39:47 -0700
-Subject: Re: [PATCH 5.15 00/10] 5.15.88-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230112135326.689857506@linuxfoundation.org>
-In-Reply-To: <20230112135326.689857506@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <f8bca4b2-2da7-a6ee-fb21-bd7f34c2b452@w6rz.net>
-Date:   Fri, 13 Jan 2023 15:39:40 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 13 Jan 2023 18:41:52 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B30F8CD0F
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:41:51 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id c6so24974879pls.4
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q6MHYbwLCd4MXDktCkUEHbUjwJCPzByBEFcKICE41Wc=;
+        b=oTZuy2QPWn8Ttcvpqg8Wf+v1IVfqF7e+evU+pjT9cDt2BTwDYJE0G5bkNpMF6ezT3g
+         +SEvjpRmiSNsLRYN9qdquMxFrzldCiMPoVdF6prKORkPqeIap777PZoxpIHMOGBqf/A2
+         umpAryvMGRtP/6LszPqvra+mLhvn9hhxyqa3s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q6MHYbwLCd4MXDktCkUEHbUjwJCPzByBEFcKICE41Wc=;
+        b=xKYT4CjPpkxLogKKG9bxl/52p4jd8/xwGI+NElcHVqrjMMWO+6lgYWGllz5pD27NCc
+         GeUsqVEtJM7gaBWWivlIjIS3c1LSRTNi7Ts/XUeWhnyaL314yjM1OCNK5QNphN56yD1r
+         Vsv7ChfVvTplyCPGAWYDiBRazt6z5yLGNEBkZ4pXfKptrdh0pkiE88HlTbHz63sCCRm9
+         EGJVSDCL2dx5OgYZNtpMSdRNxpMrpkugMvSdneVy+uJaHVLDujGRDVQ5HUio3LXTT171
+         Lko2MIeIs7Df4IB3sHk1N7adU2PW+EU7B19lXEi1Rs6V1dqJceyMt2cJAyf25PAv8Vxf
+         6itQ==
+X-Gm-Message-State: AFqh2kpZ8jmwe2X1oZem742zTQKT5KsmiDHDRNplX60Sp7Q54ujPjmAI
+        DvidWT5jaQjmKwzc729PrrTdGw==
+X-Google-Smtp-Source: AMrXdXuZ+U95h1w+2Ck1r1tekdH9Z21e+CKOPUB5dzyfgK6c9cASSF6xg9nIODJAgNZMvedmhtP+eA==
+X-Received: by 2002:a05:6a20:c906:b0:b4:f66a:99a9 with SMTP id gx6-20020a056a20c90600b000b4f66a99a9mr43708881pzb.60.1673653310583;
+        Fri, 13 Jan 2023 15:41:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v14-20020a17090a4ece00b002194319662asm14592813pjl.42.2023.01.13.15.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 15:41:50 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Fri, 13 Jan 2023 15:41:49 -0800
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: genphy_c45_plca_set_cfg(): UNINIT
+Message-ID: <202301131541.741EBE0@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pGTeF-003Z6t-Ip
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51390
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 36
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/23 5:56 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.88 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.88-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello!
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20230113 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-Tested-by: Ron Economos <re@w6rz.net>
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
+  Wed Jan 11 08:35:02 2023 +0000
+    493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
+
+Coverity reported the following:
+
+*** CID 1530573:    (UNINIT)
+drivers/net/phy/phy-c45.c:1036 in genphy_c45_plca_set_cfg()
+1030     				return ret;
+1031
+1032     			val = ret;
+1033     		}
+1034
+1035     		if (plca_cfg->node_cnt >= 0)
+vvv     CID 1530573:    (UNINIT)
+vvv     Using uninitialized value "val".
+1036     			val = (val & ~MDIO_OATC14_PLCA_NCNT) |
+1037     			      (plca_cfg->node_cnt << 8);
+1038
+1039     		if (plca_cfg->node_id >= 0)
+1040     			val = (val & ~MDIO_OATC14_PLCA_ID) |
+1041     			      (plca_cfg->node_id);
+drivers/net/phy/phy-c45.c:1076 in genphy_c45_plca_set_cfg()
+1070     				return ret;
+1071
+1072     			val = ret;
+1073     		}
+1074
+1075     		if (plca_cfg->burst_cnt >= 0)
+vvv     CID 1530573:    (UNINIT)
+vvv     Using uninitialized value "val".
+1076     			val = (val & ~MDIO_OATC14_PLCA_MAXBC) |
+1077     			      (plca_cfg->burst_cnt << 8);
+1078
+1079     		if (plca_cfg->burst_tmr >= 0)
+1080     			val = (val & ~MDIO_OATC14_PLCA_BTMR) |
+1081     			      (plca_cfg->burst_tmr);
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1530573 ("UNINIT")
+Fixes: 493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
+
+Thanks for your attention!
+
+-- 
+Coverity-bot
