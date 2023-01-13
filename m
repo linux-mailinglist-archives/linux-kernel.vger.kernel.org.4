@@ -2,91 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DC5669324
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54E1669328
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240721AbjAMJnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
+        id S241242AbjAMJnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239679AbjAMJmZ (ORCPT
+        with ESMTP id S240908AbjAMJmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 04:42:25 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359947FEFC;
-        Fri, 13 Jan 2023 01:31:34 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id a25so11478761qto.10;
-        Fri, 13 Jan 2023 01:31:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SC0846x6bM2/0xxkG/f8yzedsbqUJvfQyAhjPvVKhSI=;
-        b=MESp9vB2/tfZXwaVMs+yM6uQSBcX+RKWOLsuyVhY1egeoWRcMtO3bq4+4T/+gXfUyP
-         YOve+2uwHU1A0JjEfRuF7F6qM9MV5raLrKlOpzYRVf2L4LOsZvQGJ63BAzVXb5tEIc0b
-         7AZn3k70rKqf8/BPdDEIXzFI3L+Juv2t0vIIYutQ+fPufXV07eFuDXKzfV3Z2kTQrYfI
-         RLzY6Wiih4Hu9ThFgl8xo/+GGFHjFIP85QAsYhT7402U3VRKiRMwEDVEHynKgVIUwAhA
-         xmR8340vQ4upkLhU6Sz9syErh8VeZUuXPJuoJt1XApx2T4JCqD4WGzI3zlJi6dRf+fHv
-         fwow==
-X-Gm-Message-State: AFqh2kr4gv0cAWsfnHFuAnxtdlM5CXrpa0AQZW4eViyaaXx5OU8Qx875
-        r4yC3fyriY0SeX06vWPp4r8szXLAxr5Vxg==
-X-Google-Smtp-Source: AMrXdXu5c59y9fd9PsUGioebA3EcIwihUMxf/UHOT+NmIekO6cPPaQlU61s9pi+LC/xlW8GaYMOZtg==
-X-Received: by 2002:ac8:4552:0:b0:3a8:a1f:6999 with SMTP id z18-20020ac84552000000b003a80a1f6999mr109872208qtn.52.1673602293681;
-        Fri, 13 Jan 2023 01:31:33 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id i17-20020a05620a405100b006cfc01b4461sm12545750qko.118.2023.01.13.01.31.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 01:31:33 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id 9so4258801ybn.6;
-        Fri, 13 Jan 2023 01:31:32 -0800 (PST)
-X-Received: by 2002:a25:3143:0:b0:77a:b5f3:d0ac with SMTP id
- x64-20020a253143000000b0077ab5f3d0acmr5751463ybx.202.1673602292739; Fri, 13
- Jan 2023 01:31:32 -0800 (PST)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EC37FEF8;
+        Fri, 13 Jan 2023 01:31:38 -0800 (PST)
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5B58C4D4;
+        Fri, 13 Jan 2023 10:31:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673602296;
+        bh=as+L/QPxdqQJEWl8FxG1PpXjcsdzFj4FeCjO0Y8t9CI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j5Hrb4mpsI29bQcTlOdFVVbLU9otzBqVzfqtD1aFxxM1fSe5xQ7o/5Ulv0idmEUWV
+         R0a8/MZk9d6BI70/6TWEPHpRcpGlFYQwS41h/AYURBLvd/LDYG/NyQQE3v+l8scdK+
+         7AA458KpDFRDLIB+37QTPC09ccUINllIWD9eXaNU=
+Date:   Fri, 13 Jan 2023 10:31:33 +0100
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     shravan kumar <shravan.chippa@microchip.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v9 4/4] media: i2c: imx334: update pixel and link
+ frequency
+Message-ID: <20230113093133.6lqbnlhqkyhzhwyd@uno.localdomain>
+References: <20230113010135.2620818-1-shravan.chippa@microchip.com>
+ <20230113010135.2620818-5-shravan.chippa@microchip.com>
 MIME-Version: 1.0
-References: <20230109180717.58855-1-casey@schaufler-ca.com> <20230109180717.58855-8-casey@schaufler-ca.com>
-In-Reply-To: <20230109180717.58855-8-casey@schaufler-ca.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 10:31:21 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXiXr6+wi53RAa4GZgHmem52oNWiw3PnH3w=qwRjhcGOw@mail.gmail.com>
-Message-ID: <CAMuHMdXiXr6+wi53RAa4GZgHmem52oNWiw3PnH3w=qwRjhcGOw@mail.gmail.com>
-Subject: Re: [PATCH v5 7/8] LSM: wireup Linux Security Module syscalls
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230113010135.2620818-5-shravan.chippa@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 7:15 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> Wireup lsm_get_self_attr, lsm_set_self_attr and lsm_module_list
-> system calls.
+Hi Shravan
+
+On Fri, Jan 13, 2023 at 06:31:35AM +0530, shravan kumar wrote:
+> From: Shravan Chippa <shravan.chippa@microchip.com>
 >
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> Cc: linux-api@vger.kernel.org
+> Update pixel_rate and link frequency for 1920x1080@30
+> while changing mode.
+>
+> Add dummy ctrl cases for pixel_rate and link frequency
+> to avoid error while changing the modes dynamically
+>
+> Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
+> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+> ---
+>  drivers/media/i2c/imx334.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+> index 4ab1b9eb9a64..373022fbd6b2 100644
+> --- a/drivers/media/i2c/imx334.c
+> +++ b/drivers/media/i2c/imx334.c
+> @@ -49,7 +49,8 @@
+>  #define IMX334_INCLK_RATE	24000000
+>
+>  /* CSI2 HW configuration */
+> -#define IMX334_LINK_FREQ	891000000
+> +#define IMX334_LINK_FREQ_891M	891000000
+> +#define IMX334_LINK_FREQ_445M	445500000
 
->  arch/m68k/kernel/syscalls/syscall.tbl               |  3 +++
+Good!
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
+>  #define IMX334_NUM_DATA_LANES	4
+>
+>  #define IMX334_REG_MIN		0x00
+> @@ -144,7 +145,8 @@ struct imx334 {
+>  };
+>
+>  static const s64 link_freq[] = {
+> -	IMX334_LINK_FREQ,
+> +	IMX334_LINK_FREQ_891M,
+> +	IMX334_LINK_FREQ_445M,
+>  };
+>
+>  /* Sensor mode registers */
+> @@ -468,7 +470,7 @@ static const struct imx334_mode supported_modes[] = {
+>  		.vblank_min = 45,
+>  		.vblank_max = 132840,
+>  		.pclk = 297000000,
+> -		.link_freq_idx = 0,
+> +		.link_freq_idx = 1,
+>  		.reg_list = {
+>  			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
+>  			.regs = mode_1920x1080_regs,
+> @@ -598,6 +600,11 @@ static int imx334_update_controls(struct imx334 *imx334,
+>  	if (ret)
+>  		return ret;
+>
+> +	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
+> +				       mode->pclk, 1, mode->pclk);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
+>  				       mode->hblank, 1, mode->hblank);
+>  	if (ret)
+> @@ -698,6 +705,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
+>  		pm_runtime_put(imx334->dev);
+>
+>  		break;
+> +	case V4L2_CID_PIXEL_RATE:
+> +	case V4L2_CID_LINK_FREQ:
+>  	case V4L2_CID_HBLANK:
+>  		ret = 0;
+>  		break;
+> @@ -1102,7 +1111,7 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
+>  	}
+>
+>  	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
+> -		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ)
+> +		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ_891M)
 
-Gr{oetje,eeting}s,
+Is it legit to specify 445MHz in device tree ? I think so, as it's one
+of the frequencies the sensor can operate at. If that's the case the
+code here will fail, as it only recognize 891MHz ?
 
-                        Geert
+The DTS property serve to specify a sub-set of all the link-frequencies the
+driver can to operate at. If a dtb specifies 445MHz only, it means
+your driver cannot operate at 891MHz full resolution mode. Sakari, is
+my understanding correct here ?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+In theory you could require dtbs to support both frequencies, but
+old dtbs will only have 891MHz specified, should they continue to work but
+with only the full resolution mode available ?
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+A possible way out is to:
+
+1) Collect the allowed frequencies at dtbs probe time
+
+        static const s64 link_freq[] = {
+                IMX334_LINK_FREQ_891M,
+                IMX334_LINK_FREQ_445M,
+        };
+        static s64 enabled_link_freq[ARRAY_SIZE(link_freq)] = {};
+
+
+        ...
+
+  	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
+                for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
+                        if (bus_cfg.link_frequencies[i] == link_freq[j])
+                                enabled_link_frequencies[j] = link_freq[j];
+                }
+        }
+
+        for (i = 0; i < ARRAY_SIZE(link_freq); i++) {
+                if (enabled_link_freq[i] != 0)
+                        break;
+        }
+        if (i == ARRAY_SIZE(link_freq)) {
+		dev_err(imx334->dev, "no valid link frequencies in DTS");
+		ret = -EINVAL;
+		goto done_endpoint_free;
+        }
+
+        ...
+
+2) When enumerating or setting mode, make sure the mode's
+   enabled_link_freq[mode->link_freq_idx] != 0
+
+   but this might quickly get complex and error prone.
+
+Sakari, what is the best way to handle situations like this one ?
+The driver is upstream working with a single link_frequency of 891MHz.
+A new link frequency is added, and it is now allowed to have DTS
+specify both frequencies, or just one of them. Should the driver rule
+out all modes that require a link_frequency not specified in DTS ?
+
+There are several examples of drivers handling multiple link_freqs in
+media/i2c/ but I haven't find out that filters the modes according to
+the specified frequencies (I admit I only quickly looked).
+
+Thanks
+  j
+
+}
+
+
+
+
+>  			goto done_endpoint_free;
+>
+>  	ret = -EINVAL;
+> --
+> 2.34.1
+>
