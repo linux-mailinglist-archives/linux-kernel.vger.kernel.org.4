@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A76C669921
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F5E66991F
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbjAMNxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
+        id S241074AbjAMNxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241324AbjAMNwX (ORCPT
+        with ESMTP id S241347AbjAMNwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:52:23 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263DD69525
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:49:09 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id qk9so52475021ejc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDfjDeTst6OQxRVhR2qypSB7k7XxFsYPOvv4qs9VTxY=;
-        b=knAfm9vHU6HiEfv+gWrWbwIGU0C9RXL7SSqRpLkf//zZYBgXkmztEsQYrNOvz6nSuU
-         Mnc9MPPtOhSg+BV/ZLQP05GW1CQRoEIjJYyUZUVyyyT9qaajgokS1qEcINf3xr6eOjoB
-         ekkr2py3iWWrMxt39pNGi55cyzez2HzjOUQXE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dDfjDeTst6OQxRVhR2qypSB7k7XxFsYPOvv4qs9VTxY=;
-        b=lB2N7WdjFDXyaPnz6JR7euRWtsg/uYWGuWw7OzehQr2vapjIjvMy2Q+EYVKRXr1MDo
-         oZZJECmZbcF+pkSYN1IecQ1SeB30FxrvH8ecL0eog4MNvHcY8Yqy3XWS+CjfzmULrFYh
-         LYLBPFRLUTvD6pJKMCexTvnQnYKHS5btYAkqzg+IVaxJF7bj56p4WnHbH8F1iGu2Z4u4
-         3KG4V4wq7eYK09sBUeraXMsQ647Mtuse1oBLd/hnDTnuiOPWqBiAriu8rVscbsybMWKZ
-         x5uE7wKiNk0ZD/wBmZLSuUZI8djROGgkTbPnKBqqS89avcQnhfLWu3ZCU+eTfu5FWYwj
-         Vicw==
-X-Gm-Message-State: AFqh2kq6c5RlW5mY7FpBd3PAzq9tz7i1m9dPIFeasSxXxID3OZrUJOgO
-        DxP7nd5+xmrE/V7CekAvYAWF3W0dRxVJSJx07DE=
-X-Google-Smtp-Source: AMrXdXvBPvBk9VIhr4SxUH4aKpo9zMpYGavW7m8bpOGxZyp5UOcKx++aEXxOYY14/dZka+TAryI32g==
-X-Received: by 2002:a17:907:d312:b0:84d:3543:fa7b with SMTP id vg18-20020a170907d31200b0084d3543fa7bmr22367374ejc.54.1673617747573;
-        Fri, 13 Jan 2023 05:49:07 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:b023:4272:bddc:acf2])
-        by smtp.gmail.com with ESMTPSA id w23-20020a1709062f9700b0084d3bf44996sm7072888eji.142.2023.01.13.05.49.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 05:49:07 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 13 Jan 2023 14:48:51 +0100
-Subject: [PATCH v5 5/5] media: uvcvideo: Fix hw timestamp handling for slow FPS
+        Fri, 13 Jan 2023 08:52:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CB687BF;
+        Fri, 13 Jan 2023 05:49:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69BDD61DE6;
+        Fri, 13 Jan 2023 13:49:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B432DC433F0;
+        Fri, 13 Jan 2023 13:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673617745;
+        bh=jbCnZtB+5zZ9PoSDkY6kEzzfCJcEPrRIqB+juM/kNJw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i5lTeu5xY2oN+T0eTAFbwFxN/mkGgmj3R1uqHdYoY5NLOx2Vi8JJYCGlq9H244KuV
+         KORCNCzrEsMtBrwiP+Rag2BjZ03N/T3fck1lMU5vHyuGRmRtV039ot2ypE4/v6xpC2
+         CVr+p8ehHmk5c4JTWKzlXcnRYvl+vntmdLRqPqFjB24ZgYXmJfytaAFriPeYxTRaTF
+         EzFzGcdfYKkmi6gBMRnzWCk7eMJAyxklVz4Mv2q6uc4BlH1vOZSgC3rGt6V3ZnoGEY
+         izrBtYRVXuWOyR7XdjMpXzWUj6/ZKG1wHK6m3eOLTfx0G1/W+tqgepVn8hmFTwIty9
+         8Cf1FC0lDBcnQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pGKQZ-001WzG-9z;
+        Fri, 13 Jan 2023 13:49:03 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Date:   Fri, 13 Jan 2023 13:49:02 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     devi priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
+        marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org, tdas@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+Subject: Re: [PATCH 6/7] arm64: dts: Add ipq9574 SoC and AL02 board support
+In-Reply-To: <20230110121316.24892-7-quic_devipriy@quicinc.com>
+References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
+ <20230110121316.24892-7-quic_devipriy@quicinc.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <5da7ead743415dfb6d571a6b72a81b08@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20220920-resend-hwtimestamp-v5-5-660679c6e148@chromium.org>
-References: <20220920-resend-hwtimestamp-v5-0-660679c6e148@chromium.org>
-In-Reply-To: <20220920-resend-hwtimestamp-v5-0-660679c6e148@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "hn.chen" <hn.chen@sunplusit.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2429; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=78AsqBPCn9SSTg96NmP9pgJexa1mmA+uxtg7QUEhcrg=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjwWFLQMt/hm9dgwBbvtkC6/YYapOI4tQlTEdEbj/n
- BT8kx8uJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY8FhSwAKCRDRN9E+zzrEiKteD/
- 4pR6X/2GxhnuA2bKPD6ZrG9DiHOPaonuT/jZsm6Wj7UCTOJsQ41RCFqfLkdl3DQ4xuERRvjkHcTznj
- 0CcJ8p6yhO6GGa4NctZGXAj3MBSsRUVkeeHhCd5VCGaYfBcuhLbHJIljtgValjqnoh7IuTqxgJPWKw
- j172qlY7ZysYOcQGX5Pj/WZMyHA3ZBQTVx3voDEmG0StmdlbCq8d0D/C829plELKJ7DFlsqNapEFQC
- uKauAa/6tgSpd9QEyeqTJ+eGVGO4YD1CAikeQlTOVSujLFUUeMkOFQwlGyi+m8ROcHm2E9bUMn6TOy
- xhgIO0F14fClachp79yCkO+uRvhNq51OlcLDZ5uOtlY4CaSN9NfFnI3FSjqJRcDko//WRW4Sru9hBP
- jwKONpryM3GhC4VUbW5r5gnwB4OPSEZ2sHKxL5i7Fkzoapzi5R7SjA8dyrMBL6u14apAA7I12IAA9J
- NJzOc781CxMGOZh2gP0WwFZs6Yb7BKY0nbS2BYCPYyFzYy0i8uf26GCB7SmXu4WKhcYEZ9zpHm5yqT
- QeO1vfzwk4WTbBTs6IpW4kswrKJ2Wc4V/m76Mlh/LH/tccCnBgOY+LL+hMphKwep4Zf1ZUV9debsUB
- vy0hwGe5pDX/ZNdJRE6Yt0F1pBASpnMVcyur7+vWzz6nvB/G4coLVIaSbqwQ==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: quic_devipriy@quicinc.com, agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org, nfraprado@collabora.com, broonie@kernel.org, tdas@codeaurora.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com, quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com, quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In UVC 1.5 we get a single clock value per frame. With the current
-buffer size of 32, FPS slowers than 32 might roll-over twice.
+On 2023-01-10 12:13, devi priya wrote:
+> From: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+> 
+> Add initial device tree support for Qualcomm IPQ9574 SoC
+> and AL02 board
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Co-developed-by: devi priya <quic_devipriy@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> Signed-off-by: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile            |   1 +
+>  arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  69 ++++
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 318 +++++++++++++++++++
+>  3 files changed, 388 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile
+> b/arch/arm64/boot/dts/qcom/Makefile
+> index 3e79496292e7..872c62028a0b 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-huawei-g7.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+> b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+> new file mode 100644
+> index 000000000000..ae3c32f3e16a
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
 
-The current code cannot handle two roll-over and provide invalid
-timestamps.
+[...]
 
-Revome all the samples from the circular buffer that are more than two
-rollovers old, so the algorithm always provides good timestamps.
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | 
+> IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
 
-Note that we are removing values that are more than one second old,
-which means that there is enough distance between the two points that
-we use for the interpolation to provide good values.
+Interesting choice for the PPIs...
 
-Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_video.c | 15 +++++++++++++++
- drivers/media/usb/uvc/uvcvideo.h  |  1 +
- 2 files changed, 16 insertions(+)
+> +		clock-frequency = <24000000>;
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 22255bfa7db9..ae692122d5dc 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -473,6 +473,20 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
- 
- 	spin_lock_irqsave(&clock->lock, flags);
- 
-+	/* Delete last overflows */
-+	if (clock->head == clock->last_sof_overflow)
-+		clock->last_sof_overflow = -1;
-+
-+	/* Handle overflows */
-+	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
-+		/* Remove data from the last^2 overflows */
-+		if (clock->last_sof_overflow != -1)
-+			clock->count = (clock->head - clock->last_sof_overflow)
-+								% clock->count;
-+		clock->last_sof_overflow = clock->head;
-+	}
-+
-+	/* Add sample */
- 	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
- 	clock->head = (clock->head + 1) % clock->size;
- 	clock->count = min(clock->count + 1, clock->size);
-@@ -600,6 +614,7 @@ static void uvc_video_clock_reset(struct uvc_clock *clock)
- 	clock->head = 0;
- 	clock->count = 0;
- 	clock->last_sof = -1;
-+	clock->last_sof_overflow = -1;
- 	clock->sof_offset = -1;
- }
- 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 699c33bc24ed..f2a7e1507492 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -501,6 +501,7 @@ struct uvc_streaming {
- 		unsigned int head;
- 		unsigned int count;
- 		unsigned int size;
-+		unsigned int last_sof_overflow;
- 
- 		u16 last_sof;
- 		u16 sof_offset;
+Please drop this and fix the firmware. No system built within
+past 10 years should need it.
 
+         M.
 -- 
-2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
+Jazz is not dead. It just smells funny...
