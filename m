@@ -2,97 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F8B6697C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9506697CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241343AbjAMM4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S240903AbjAMM4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241514AbjAMMz5 (ORCPT
+        with ESMTP id S241737AbjAMM4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:55:57 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6995185C9A
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:43:10 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id i188so22072199vsi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2/6TZmWfUChFLdDGAMfhGqMTkLVrzJKqZem9xSaw0S8=;
-        b=RJgJ8FTqHUU4D4CXrkHoK9OBpPAdXnLS1Kp/nB2aWTWGhgIio3lKzRBd46Wy1WAvGw
-         BEPfBJaLnGzVYZynfoYGEYZbRWIZ3hYeirMPXYOtnR9Xw91svg5410tc/OLwsBhGcW+/
-         DTrtyHGct+k0qhdvykimdDyxwwNPzUBgrvGvSkKcmVbUATMEEgqdvHKI3XIbcmjPrLvg
-         sMG/fGYpYwWrxvFWJnIiEEWq3gYNWrCGe4+ZXDRgdORdtREit+wsLQMWeEGst+1mmtBk
-         TwW6Vtc+F1W2kv0ng3nXwFTGINdwIKh3ipKyH93x3vEJb3VhQ6jhs0JaA6Qr907ofAbm
-         nwfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2/6TZmWfUChFLdDGAMfhGqMTkLVrzJKqZem9xSaw0S8=;
-        b=m5Ax65Fkf1lMorn/+mbVFEvjWtnw3CBBVXZkgakJpGD8+pazjrls6RV9oFwMNIAFG/
-         zqe7eGDAQilKRGMHXp6Xt4Zfym0urH3SuGKODsLalGCQ/5aAbrDAKV9ZQevRtwhaCP7k
-         CrAtUcLNC9Sv7YVfE3uNV79ihNuS/j9uBO+iVjXzYRwSzrFa4cHsxXcW9uZlQ+jmy3nc
-         KoKchBLNU23+cZ+jdReiS+syhxqPdrPnDLGXLEgaWAgInSuVhoAd3ZFHbW/tRJY6FKKw
-         kTz5UkxVdWHlbNR8FH1ZJH6/Uk9N3FRN6zOpN4IO6rlISCmsXPqAWPW3qvV3tYot4/g8
-         yK0A==
-X-Gm-Message-State: AFqh2koakXoEw9wXw5hG9DBJ8qsQPtKvMFxDwXw/rYu6q98XdLmCLwuQ
-        d6rJzUhdtNM2MH0Hf/Sf5AJsSIku6+xUl3K3M3ZwMw==
-X-Google-Smtp-Source: AMrXdXsqEL7wsfhpmfGzD+j0DOcb/mMYgKjn7c6o6l8PSk0zZcsyvavL4MJCcHbKDwwfG0BNeyWVx5dqk0tnvx2uJKE=
-X-Received: by 2002:a67:df8c:0:b0:3c5:1ac1:bf38 with SMTP id
- x12-20020a67df8c000000b003c51ac1bf38mr11701035vsk.78.1673613789271; Fri, 13
- Jan 2023 04:43:09 -0800 (PST)
+        Fri, 13 Jan 2023 07:56:09 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA71B869DD;
+        Fri, 13 Jan 2023 04:43:28 -0800 (PST)
+Received: from 8bytes.org (p200300c277327f0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7732:7f00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id B52F6262340;
+        Fri, 13 Jan 2023 13:43:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1673613806;
+        bh=eAedM8kUpXf74wYVvw3sbi954tDx1WJVtgDncIaNFq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XVvCfrEHbJJBmS+tx4zrgb9AW8hqb3KqzWWGZhf+kizYzwhSaHILZZ/w1IEqVvKUs
+         82Rr7nw9/Otg4eeV2II5Z9XkfRJmtC29LfRYGbj27HUMzIj8AvZNt73Va4e1sIB6gp
+         ILFTXXLcLI3dtOoRv6zB98XtnvJsdlmRzsilsXQ967oY0BTT5m7wSt4bu5D1HC0aQP
+         CPEVAOZTMabLxz8YfwGCGRjLf2evCsYlQoYq7c6OSoOcWgIGErvmPQEiQ8zKQ1qgR0
+         UAJaYXMH1gSjXdgjKyYu81pur7zkCA6vmnQ/VxYOESwQb7c8uUyghiz/VlACimGvfi
+         06u70PnpsuPEg==
+Date:   Fri, 13 Jan 2023 13:43:25 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     yf.wang@mediatek.com
+Cc:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:IOMMU DMA-API LAYER" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, wsd_upstream@mediatek.com,
+        stable@vger.kernel.org, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
+        jianjiao zeng <jianjiao.zeng@mediatek.com>
+Subject: Re: [PATCH v2] iommu/iova: Fix alloc iova overflows issue
+Message-ID: <Y8FR7U8YaDrIF62d@8bytes.org>
+References: <20230111063801.25107-1-yf.wang@mediatek.com>
 MIME-Version: 1.0
-References: <20230112141743.63521-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230112141743.63521-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 13 Jan 2023 13:42:58 +0100
-Message-ID: <CAMRc=Mfum8Vbs5_e9-1D2yyir7ce7=8kerdPO+nkwR44_JwDeA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: Do not mention legacy API in the code
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111063801.25107-1-yf.wang@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 3:17 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Replace mentioning of legacy API by the latest one.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  include/linux/gpio/driver.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-> index 8e2e2618d40e..ddc7a14a274f 100644
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -339,7 +339,7 @@ struct device_node;
->   * @set_multiple: assigns output values for multiple signals defined by "mask"
->   * @set_config: optional hook for all kinds of settings. Uses the same
->   *     packed config format as generic pinconf.
-> - * @to_irq: optional hook supporting non-static gpio_to_irq() mappings;
-> + * @to_irq: optional hook supporting non-static gpiod_to_irq() mappings;
->   *     implementation may not sleep
->   * @dbg_show: optional routine to show contents in debugfs; default code
->   *     will be used when this is omitted, but custom code can show extra
-> --
-> 2.39.0
->
+On Wed, Jan 11, 2023 at 02:38:00PM +0800, yf.wang@mediatek.com wrote:
+> v2: Update patch
+>     1. Cc stable@vger.kernel.org
+>        This patch needs to be merged stable branch,
+>        add stable@vger.kernel.org in mail list.
+>     2. Refer robin's suggestion to update patch.
 
-Applied, thanks!
-
-Bart
+Applied for 6.2, thanks.
