@@ -2,45 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B81668A7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 04:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7421B668A83
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 05:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjAMD61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 22:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
+        id S231429AbjAMEDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 23:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbjAMD6S (ORCPT
+        with ESMTP id S230172AbjAMEDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 22:58:18 -0500
-Received: from out30-7.freemail.mail.aliyun.com (out30-7.freemail.mail.aliyun.com [115.124.30.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA75F1A3A5;
-        Thu, 12 Jan 2023 19:58:12 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yang.su@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VZTDa66_1673582286;
-Received: from 30.97.48.93(mailfrom:yang.su@linux.alibaba.com fp:SMTPD_---0VZTDa66_1673582286)
-          by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 11:58:07 +0800
-Message-ID: <87b08879-4f1a-e91d-861a-0a1af4ad46fc@linux.alibaba.com>
-Date:   Fri, 13 Jan 2023 11:58:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 1/1] PCI: Tune secondary bus reset time for PCIe
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        alex.williamson@redhat.com, matthew@wil.cx,
-        jbarnes@virtuousgeek.org, greg@kroah.com, patchwork-bot@kernel.org,
-        andrew.murray@arm.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        kw@linux.com, linux-kernel@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20230112224808.GA1799425@bhelgaas>
-From:   Yang Su <yang.su@linux.alibaba.com>
-In-Reply-To: <20230112224808.GA1799425@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 12 Jan 2023 23:03:49 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2043.outbound.protection.outlook.com [40.107.223.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C1425D5;
+        Thu, 12 Jan 2023 20:03:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FNGEOWIjBOQQgdZFg4YBgczfv9QxAkgeu9BUUNG+P8Im1a+W4yY+qnaKE+c0fKa+ZJ0NnYVr1fQUmkUR87JBU3Pz2h76703jrNp4LtSxSSVIOMtNODCZjK8VLA381C1PLKHtEZ1QzmgphctSS+MCwplfzWKyg2GzoIz8gejSc7UcGjDx/QYFt8RXYZxLfaOZr6ZLZ9YBWyAbnPAGatEvKhmTU+BPE953veV0/JjDnwvVnijLBbuTtj5vvJ/5JIqz81HEpIiCZMqHF6SeocPu2jkvntty9WyUnD6IdGNlO7sexKWvPDvZE5GNnWquoZOJfamN8mvjkRrEsUOAiCPQTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tv9RzE1by0W2UWkZIQiyCIPro5Fis5oJqlnPIMG9RGk=;
+ b=gBUPWHMOsYP7kPjIGZWTwSIYs31hdAKIgE1xrZDIFhbtYbikYLLTAB6J44XaspWCz2oEJtHO1w//5lxCDUSZjAJOr3Z4mQaiXGccw9HHUqUFl/JpOdrhHFouuZBRqg0XETyaO2XPrbSBT3ZdWXsePCGPwwPLxmuG4fyR71W4BB75uf29FCOWkDr+wkIc9TEcccIKOA6U+ddcyffMKdwO/dUBjDtM3bS6TlV/QTgScZaRGzg6dnBmJsFWiU2TNM/vI2n7nmBIdWrwpSaqIxRpHh25gEv2YVQTMzpvHh9fdZNTHviq7QvFpKpODC+bAkGD6kdAzJaiX/Xjn5u3dMucNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tv9RzE1by0W2UWkZIQiyCIPro5Fis5oJqlnPIMG9RGk=;
+ b=PsDbEfk17PeHkBWQhi5qap6aLFCTWl6mIZKNXdk6RdsOL3V9vU0jAjntgFUK0TdASRrZBL99FBhC30iBZWPYOw0zloppz6IYawo7IoE4Hm+9aQe320yvqGxoFQ4KGlZZgg9mMYaV/m0UxSdNlv+SDsllcZe4eWAwl96rbHGLx4s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by CY5PR12MB6300.namprd12.prod.outlook.com (2603:10b6:930:f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Fri, 13 Jan
+ 2023 04:03:46 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::a0e2:652:d7bd:58f]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::a0e2:652:d7bd:58f%4]) with mapi id 15.20.5986.018; Fri, 13 Jan 2023
+ 04:03:46 +0000
+Message-ID: <b4109593-1aa9-bf7a-cb1b-3ccd586f31d6@amd.com>
+Date:   Fri, 13 Jan 2023 09:33:41 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] uprobes: list all active uprobes in the system
+To:     luolongjun@huawei.com, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sangyan@huawei.com, luanjianhai@huawei.com, zhuling8@huawei.com,
+        lizongwu@huawei.com, luolongjuna@gmail.com,
+        Ravi Bangoria <ravi.bangoria@amd.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, oleg@redhat.com
+References: <20230111104825.1945418-1-luolongjun@huawei.com>
+Content-Language: en-US
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <20230111104825.1945418-1-luolongjun@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-ClientProxiedBy: PN2PR01CA0133.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::18) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|CY5PR12MB6300:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9a0f59a-fbe4-4409-1d24-08daf51b2ae3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5J9NKQTSwCbDrRPxFLlCFdthaSHUYLa3w0iHqC8Ywnh830YqJIQEXr0zYMJuu/2lOBXA4xwygCSSbB6BtL0ATd+sYCsnb6tprAz6chdwyVoMI9LvS9oHYYNfKMrq6nL3bGtEHcqOMV41nSX5YCjLZt0q8tqDIctjaKCBRIpjBbxXfYCcm3IvEQH6kBazhywjx945RyxCCX6oRiDbifqHoxmd+SF57+a9OvwxuyTWtU8AxdEXnBQ0+wck1xcRPpRU0oQ/PiT6y69Oa8/jrGa9a5WFjqimsNQav3nVDvggO1o1LHoInnjMhU7Sb4xgPGQ/TzILJVmm8XUXb39QGhTTHFapQOs297sHAj5PJRtQb7PSNgcytsGj/VVy/VJHbfdNMho2P19lgOcFi5N7Ge7bJWkGedmey0hgcUsb6iOfdRmlOmD8oZ+JJc2rLoDw/OBUBMSIu2Nb1i0EcEuAMWwwn+6ORek6DWRoXe2nT0mdR+Ewe7EJ5ZalYcQLztkoQKCgcC0sGjl1s1m4ObimgcKz4tXxuOwGrrhEXP536LljhNuLB/cKIvCOnJVERWnifnR0rHr+m+JNGgvMIqzaKbS6gXq7lWQQ7vX5xlsGvEkp8BnmNPX+JG4jAnPQ6P6MrrG2qlNZ8Hb2gLWW4P8mWupQ2zFLfBp8N/j7Bkc61Veb+ccFZR9GMlN4tUFKUyYCJng5gqtijnnPXB7jzvtmuwI8siTksb1meT/3hJ1DORD9UlI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(451199015)(44832011)(2906002)(83380400001)(478600001)(7416002)(66476007)(5660300002)(66556008)(66946007)(186003)(8936002)(53546011)(6666004)(36756003)(26005)(4744005)(2616005)(6506007)(6512007)(6486002)(31686004)(41300700001)(38100700002)(8676002)(86362001)(316002)(4326008)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnFrV3NnT2NPdEtmYWl6OUFZTXl4VFRHdkl3bkQ1WHVnczNhcUV1YWlDbnBL?=
+ =?utf-8?B?dDdGK05vRUN5Zm5ZVklabEcwMThsdk01VXU3Z0JJRzlkc3g1eGdrZVZ6TTd2?=
+ =?utf-8?B?TStRdGhGd2JyU1BUV0hxa3lZQVIxajMzSzgzZFprS056NExmVnRvZWpVODBY?=
+ =?utf-8?B?Q2NNeUtJeE5nQkdNaS9ZaGJtVkdDbEpPOWdHS1V0UVhDRHVaOGNTT0wxbFRX?=
+ =?utf-8?B?aTVCZ3Fsd0VvM0x3OVU4TStyM2JIWXg2U25TY0ZhUlEzSXBXTTFMV3NsOUNy?=
+ =?utf-8?B?M1JURGNQYmdHTkNMSzYrS1NJenRaNmFUYlFQeUxTOW5tZE9sYmtaU292K3VK?=
+ =?utf-8?B?L0hiQk9LYzhpSm5tYUZONDdEUXc2N2l6ZGJFeWZ2dHhadHA5VlNOVmVkcTVl?=
+ =?utf-8?B?NFdrUGNnNTQ2NGdCMnpvSzNqb2d6QjNoY1FsNiswWllFc2R2K1VsYWtNZUdF?=
+ =?utf-8?B?a0dlVGovMzlPWFoyY0ZFNU4wbFBsMS9TYWhCQXlLVTlWVStLWERlRnJocGdD?=
+ =?utf-8?B?anFzMmNtem1tS1QxQ1I2cXdsd1E2NWRmc2duRGt1c1hEZHh0ZFR4SDRjeURN?=
+ =?utf-8?B?OFJkZVhQWE0xQTQyWDQyOVNYNUMwdTRPWGZpbGZ3TklqMklxcmF4YjdFOUFV?=
+ =?utf-8?B?S0VwcFgxcmZtT0tSb2FIS2pGS1FUNVp0MWdhdVh1Y1EzQTlqOHRiRlNVdGRL?=
+ =?utf-8?B?clhIT3VucktjSndJVmhRM050N1FKdkJ6VXdISUxVSUZYWGpXZmlpTEYxZmhp?=
+ =?utf-8?B?dXllNThTNnZXZTdkRkx1cFdIWHZoOFIyZUJVd1pNdStiSCsvUkNaUEI2cGFH?=
+ =?utf-8?B?TzR6aFhmYXArcXJMbmQ5dURoMGx0UmczMG11aHA2QW9ZSWx0MEw5OWlaVjFJ?=
+ =?utf-8?B?Y1ArS3lJUk9ENk0wNldQVDRIbTc4RTZHQll5R3c3b0RSSGN4d2dqZ244bHNM?=
+ =?utf-8?B?aEJ1dWZ3Z1VPUVNhQWhsbFJ5TndtZDRFTG4rcFdyOXl2KytNYlZjVjNBeCty?=
+ =?utf-8?B?bnN0T2M2UWJNcmJKZ0QvUUxJUEpuWDR1cnd1STlMN2JaenJyYnBkUFoyY2Jp?=
+ =?utf-8?B?cXhkOFZQRDRTSTlJVnQ4UXI4TzlEWnlJbWdxNW5UZkcwL0g1dnZOQkNZU05W?=
+ =?utf-8?B?bndNRisxai90dlltZEtpcTR4Tkh6RGFGWVFDVWVsS0xJbnMwSmlacGY3Z2Ey?=
+ =?utf-8?B?NEk1T05HWFZnSHp1MGM1d1VDc09ER1U1V0VZOHJYdXJESkF0eGFXMUc2NlhF?=
+ =?utf-8?B?c3RDai93cW5HZWd5UUdBNUUvb1YwVWR2Y095V2tWQVpjR3VHaWx4enJaNXFT?=
+ =?utf-8?B?eEdOa0lsc09SVW5QUHF4M0EyWkRod1VncVF5ajlVVzhoaHQ5ZUtjblZYUW8x?=
+ =?utf-8?B?QVhGTWpqTDdndEczZWVyaFlUbVZBNU0zMU5jMjgzT3F6a2Z1Ky9mUGdZSjgx?=
+ =?utf-8?B?U1FtMzN1QW9ubHFOTDRNZk05bEg0dDMrZ2tIS1FTc3F4bUZUWElqdFRXR1VO?=
+ =?utf-8?B?SkQwcStrTnFwVy9MdW9VenEzQkF6YjAzKzJRWjJWbVB2NVJ1Y3ZWZEZadW9W?=
+ =?utf-8?B?U3BnSW5iTFgrWGtMVDhEOTMxV1lreXNSeFZEaUFkREZTRHh1SmVZQ3lFWnVk?=
+ =?utf-8?B?bHozWjZ1bFg3ZUJlK00vdi9WSHNvQ0FpeTQyOFVmQldlSEY0S0JQZjIxdU5o?=
+ =?utf-8?B?SWNNNm03M0NqUmRVNW9TOFAwemJjK09PMmVBZlkwNVFrbHpYSllJTjJGYnZx?=
+ =?utf-8?B?VDBhUzI2ZUhnYU5ObVRHWWo4YWdwVUQxbkFpQ0ZaZzk0ZnNwbStzK3FMSTgv?=
+ =?utf-8?B?NmZkaXdnSE5pa2xPR3NiQmxLelVtSUZ0dWhJTUhUcmg3dWszZlFXTU82cTBC?=
+ =?utf-8?B?TThndVlEL3ZsSWZzRkFIbG5tVGVZSzdzazh0RlpncHBnK01hZE5zK1k0Tzh3?=
+ =?utf-8?B?ekQrTjIxVUMwM0JxUUtPa2FuaU04MVZwMStRb2MzUHpjNkQ4RjhGNVJaNGN0?=
+ =?utf-8?B?YjY3MGVCUFJ6czZPaCswaEhpdmFFTTljaXBCU0VZVTExWXBudHpSNEUxR1Z4?=
+ =?utf-8?B?ZDBFeXZhWWpQSGRJN1NSTTdNaEd5TnhESFB1a3k2Z2RhN01DL25mVUFDUDdu?=
+ =?utf-8?Q?tz//tAOnu+uNr5khYvrKXsHMf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9a0f59a-fbe4-4409-1d24-08daf51b2ae3
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 04:03:46.2545
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YB4+pCTeBC/xeORPGiYGjJssVZkfRNxLZBeFKS5zao+BxwdM/qE534077yGHylwZGvfevJMIjcxCCL55ayOpZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6300
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,151 +130,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry to interrupt, this email is reformat as plaint text, I want to 
-test this email
++cc: Steven, Oleg, Masami
 
-whether can send linux-kernel@vger.kernel.org .
+On 11-Jan-23 4:18 PM, luolongjun@huawei.com wrote:
+> From: Longjun Luo <luolongjun@huawei.com>
+> 
+> Since uprobes will replace instructions in the process
+> memory, it is necessary to provide one way to list
+> all active uprobes. One can access this file through
+> /sys/kernel/debug/uprobes/list.
+> 
+> Output looks like this
+> =====================
+> inode+offset/ref_ctr_offset    4160760670+0x30a10/0x0
+>     ref                        1
+>     register_rwsem             (unlocked)
+>     consumer_rwsem             (unlocked)
+>     consumers-1
+>         handler                0xffffffffc03ee02e(handler) uprobe
+>         ret_handler            0x0000000000000000( )
+>         filter                 0xffffffffc03ee010(filter) uprobe
+>     consumers-2
+>         handler                0xffffffffc03e902e(handler_1) uprobe_1
+>         ret_handler            0x0000000000000000( )
+>         filter                 0xffffffffc03e9010(filter_1) uprobe_1
 
+You can list uprobes via /sys/kernel/tracing/uprobe_events. Any specific reason
+to introduce another way?
 
-Hi Bjorn,
-
-I think my patch is different from Lucas, because I use 
-pcie_wait_for_link not
-
-pci_bridge_wait_for_secondary_bus, my patch is similar to the process logic
-
-in pci_bridge_wait_for_secondary_bus which also call pcie_wait_for_link.
-
-
-pcie_wait_for_link wait fixed 100ms and then wait the data link is 
-ready, but
-
-pci_bridge_wait_for_secondary_bus call pcie_wait_for_link wait time depends
-
-on the devices max waiting time in bus, the calculate max time having a bug
-
-as below,
-
-
-In pci_bridge_wait_for_secondary_bus, pci_bus_max_d3cold_delay will take 
-count of wrong time delay,
-
-such as NVIDIA GPU T4 is not pci bridge, so the subordinate is none, 
-pci_bus_max_d3cold_delay
-
-set the min_delay is 100, max_delay is 0, here is the bug, after 
-list_for_each_entry() in pci_bus_max_d3cold_delay,
-
-the min_delay will be 0, the max_delay also 0, the 
-pci_bus_max_d3cold_delay return is surely 0.
-
-
-Last, I request Ravi Kishore Koppuravuri to test my patch to see Intel 
-Ponte Vecchio HPC GPU
-
-whether can work, I think my patch will wait enough time to be ready 
-after secondary bus reset.
-
-
-I have tested NVIDIA GPU T4 and NVIDIA GPU A100 which my patch is ok, 
-but I think there is need
-
-more test to validate my patch. But the fact is I do not have enough 
-device to validate. If Ravi Kishore Koppuravuri
-
-can help me test, the patch test will be more enough, and I would be 
-grateful for test. Thank you very much!
-
-
-Yang
-
-
-On 2023/1/13 06:48, Bjorn Helgaas wrote:
-> [+cc Lukas, Mika]
->
-> Hi Yang Su,
->
-> Thank you for your patch!
->
-> On Sun, Jan 01, 2023 at 05:22:33PM +0800, Yang Su wrote:
->> On PCI Express, there will be cases where the new code sleeps far less
->> than the 1s being replaced by this patch. This should be okay, because
->> PCI Express Base Specification Revision 5.0 Version 1.0 (May 22, 2019)
->> in Section 6.6.1 "Conventional Reset" only notes 100ms as the minimum
->> waiting time. After this time, the OS is permitted to issue
->> Configuration Requests, but it is possible that the device responds
->> with Configuration Request Retry Status (CRS) Completions, rather than
->> Successful Completion. Returning CRS can go on for up to 1 second after
->> a Conventional Reset (such as SBR) before the OS can consider the device
->> broken. This additional wait is handled by pci_dev_wait. Besides,
->> this patch also cover PCI and PCI-X after device reset waiting Tpvrh 1000ms.
->>
->> Currently, the only callchain that lands in the function modified by
->> this patch which invokes one out of two versions of pcibios_reset_secondary_bus
->> that both end with a call to pci_reset_secondary_bus.
->>
->> Afterwards, pci_reset_secondary_bus always invokes pci_dev_wait
->> which wait for the device to return a non-CRS completion.
->>
->> Signed-off-by: Yang Su <yang.su@linux.alibaba.com>
->> ---
->>   drivers/pci/pci.c | 36 +++++++++++++++++++++++++++++++++---
->>   1 file changed, 33 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
->> index fba95486caaf..8e4899755718 100644
->> --- a/drivers/pci/pci.c
->> +++ b/drivers/pci/pci.c
->> @@ -5063,10 +5063,40 @@ void pci_reset_secondary_bus(struct pci_dev *dev)
->>   	 * Trhfa for conventional PCI is 2^25 clock cycles.
->>   	 * Assuming a minimum 33MHz clock this results in a 1s
->>   	 * delay before we can consider subordinate devices to
->> -	 * be re-initialized.  PCIe has some ways to shorten this,
->> -	 * but we don't make use of them yet.
->> +	 * be re-initialized.
->> +	 *
->> +	 * For conventional PCI needing 1s delay after bus reset.
->> +	 * Using pci_is_pcie to judge the bus is pci or pcie.
->> +	 * If the bus is pci, sleeping 1s to wait device is ready.
->> +	 *
->> +	 * And if the bus is pcie, PCI Express Base Specification Revision 2.0
->> +	 * (December 20, 2006) in Section 6.6.1 "Conventional Reset" only notes
->> +	 * 100ms as the minimum waiting time, the same as the newer PCIe spec
->> +	 * PCI Express Base Specification Revision 3.0 Version 1.a (December 7, 2015)
->> +	 * and PCI Express Base Specification Revision 5.0 Version 1.0 (May 22, 2019).
->> +	 * With a Downstream Port that supports Link speeds greater than 5.0 GT/s,
->> +	 * software must wait a minimum of 100 ms after Link training completes before
->> +	 * sending a Configuration Request to the device immediately below that Port.
->> +	 * After this time, the OS is permitted to issue Configuration Requests,
->> +	 * but it is possible that the device responds with Configuration Request
->> +	 * Retry Status (CRS) Completions, rather than Successful Completion.
->> +	 * Returning CRS can go on for up to 1 second after a Conventional Reset
->> +	 * (such as SBR) before the OS can consider the device. This additional
->> +	 * wait is handled by pci_dev_wait.
->> +	 *
->> +	 * Currently, the only callchain that lands in the function modified by
->> +	 * this patch starts at pci_bridge_secondary_bus_reset which invokes
->> +	 * one out of two versions of pcibios_reset_secondary_bus that both end
->> +	 * with a call to pci_reset_secondary_bus.
->> +	 * Afterwards, pci_bridge_secondary_bus_reset always invokes pci_dev_wait.
->>   	 */
->> -	ssleep(1);
->> +	if (pci_is_pcie(dev))
->> +		if (pcie_get_speed_cap(dev) <= PCIE_SPEED_5_0GT)
->> +			msleep(100);
->> +		else
->> +			pcie_wait_for_link(dev, true);
->> +	else
->> +		ssleep(1);
-> This code is also updated by Lukas' patch at
-> https://lore.kernel.org/r/bd6ac49d60c1ca6fe5c27c2fa54b78d70a8ba07b.1672511017.git.lukas@wunner.de,
-> which is pretty much ready to go.
->
-> Can you take a look at that series and see whether it solves the same
-> problem you're solving here?  And if not, can you provide feedback on
-> what would still be needed?
->
-> If you do need something on top of Lukas' series, please CC him if you
-> post a revised patch.
->
-> Bjorn
+Thanks,
+Ravi
