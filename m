@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A61F6692E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA326692EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 10:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjAMJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 04:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S241084AbjAMJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 04:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbjAMJ1W (ORCPT
+        with ESMTP id S241039AbjAMJ1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 13 Jan 2023 04:27:22 -0500
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8B4319C;
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596CE4319B;
         Fri, 13 Jan 2023 01:22:45 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRU7_1673601756;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRU7_1673601756)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZUDRUc_1673601757;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZUDRUc_1673601757)
           by smtp.aliyun-inc.com;
-          Fri, 13 Jan 2023 17:22:37 +0800
+          Fri, 13 Jan 2023 17:22:38 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Ian Rogers <irogers@google.com>
@@ -40,9 +40,9 @@ Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
         Shuai Xue <xueshuai@linux.alibaba.com>,
         Zhuo Song <zhuo.song@linux.alibaba.com>,
         Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v7 4/9] perf vendor events arm64: Add topdown L1 metrics for neoverse-n2-v2
-Date:   Fri, 13 Jan 2023 17:22:15 +0800
-Message-Id: <1673601740-122788-5-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH v7 5/9] perf vendor events arm64: Add TLB metrics for neoverse-n2-v2
+Date:   Fri, 13 Jan 2023 17:22:16 +0800
+Message-Id: <1673601740-122788-6-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
 References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
@@ -55,50 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add general topdown L1 metrics for neoverse-n2-v2. Due to the wrong
-count of stall_slot and stall_slot_frontend on neoverse-n2, the real
-stall_slot and real stall_slot_frontend need to subtract cpu_cycles,
-so overwrite the "MetricExpr" for neoverse-n2 which slots are 5.
-Reference from ARM neoverse-n2 errata notice [0], D117.
-
-Since neoverse-n2/neoverse-v2 does not yet support topdown L2, metric
-groups such as Cache, TLB, Branch, InstructionsMix and PEutilization
-will be added to further analysis of performance bottlenecks in the
-following patches. Reference from ARM PMU guide [1][2].
-
-[0] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
-[1] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
-[2] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
+Add TLB related metrics.
 
 Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 ---
- .../arch/arm64/arm/neoverse-n2-v2/metrics.json          | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
+ .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
 diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-new file mode 100644
-index 0000000..4e7417f
---- /dev/null
+index 4e7417f..60bbd8f 100644
+--- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
 +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
-@@ -0,0 +1,17 @@
-+[
-+    {
-+        "ArchStdEvent": "FRONTEND_BOUND",
-+        "MetricExpr": "((stall_slot_frontend) if (#slots - 5) else (stall_slot_frontend - cpu_cycles)) / (#slots * cpu_cycles)"
+@@ -13,5 +13,54 @@
+     },
+     {
+         "ArchStdEvent": "BACKEND_BOUND"
 +    },
 +    {
-+        "ArchStdEvent": "BAD_SPECULATION",
-+        "MetricExpr": "(1 - op_retired / op_spec) * (1 - (stall_slot if (#slots - 5) else (stall_slot - cpu_cycles)) / (#slots * cpu_cycles))"
++        "MetricExpr": "L1D_TLB_REFILL / L1D_TLB",
++        "BriefDescription": "The rate of L1D TLB refill to the overall L1D TLB lookups",
++        "MetricGroup": "TLB",
++        "MetricName": "l1d_tlb_miss_rate",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "ArchStdEvent": "RETIRING",
-+        "MetricExpr": "(op_retired / op_spec) * (1 - (stall_slot if (#slots - 5) else (stall_slot - cpu_cycles)) / (#slots * cpu_cycles))"
++        "MetricExpr": "L1I_TLB_REFILL / L1I_TLB",
++        "BriefDescription": "The rate of L1I TLB refill to the overall L1I TLB lookups",
++        "MetricGroup": "TLB",
++        "MetricName": "l1i_tlb_miss_rate",
++        "ScaleUnit": "100%"
 +    },
 +    {
-+        "ArchStdEvent": "BACKEND_BOUND"
-+    }
-+]
++        "MetricExpr": "L2D_TLB_REFILL / L2D_TLB",
++        "BriefDescription": "The rate of L2D TLB refill to the overall L2D TLB lookups",
++        "MetricGroup": "TLB",
++        "MetricName": "l2_tlb_miss_rate",
++        "ScaleUnit": "100%"
++    },
++    {
++        "MetricExpr": "DTLB_WALK / INST_RETIRED * 1000",
++        "BriefDescription": "The rate of TLB Walks per kilo instructions for data accesses",
++        "MetricGroup": "TLB",
++        "MetricName": "dtlb_mpki",
++        "ScaleUnit": "1MPKI"
++    },
++    {
++        "MetricExpr": "DTLB_WALK / L1D_TLB",
++        "BriefDescription": "The rate of DTLB Walks to the overall L1D TLB lookups",
++        "MetricGroup": "TLB",
++        "MetricName": "dtlb_walk_rate",
++        "ScaleUnit": "100%"
++    },
++    {
++        "MetricExpr": "ITLB_WALK / INST_RETIRED * 1000",
++        "BriefDescription": "The rate of TLB Walks per kilo instructions for instruction accesses",
++        "MetricGroup": "TLB",
++        "MetricName": "itlb_mpki",
++        "ScaleUnit": "1MPKI"
++    },
++    {
++        "MetricExpr": "ITLB_WALK / L1I_TLB",
++        "BriefDescription": "The rate of ITLB Walks to the overall L1I TLB lookups",
++        "MetricGroup": "TLB",
++        "MetricName": "itlb_walk_rate",
++        "ScaleUnit": "100%"
+     }
+ ]
 -- 
 1.8.3.1
 
