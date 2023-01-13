@@ -2,242 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1D366A123
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2634266A128
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjAMRuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S229673AbjAMRuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjAMRtU (ORCPT
+        with ESMTP id S229568AbjAMRuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:49:20 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6CB71FE8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:42:22 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id i82so10280206vki.8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:42:22 -0800 (PST)
+        Fri, 13 Jan 2023 12:50:12 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CE040C32
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:43:37 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4a2f8ad29d5so294764177b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:43:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0OKp9P3wlvWQglflLVdMb97bFP7zeKILwFZMB7vI+io=;
-        b=YUvhoZPDtOA/dQPmdROCRCT97mbXpZeR78HU7GFGWmrLAinRrfGM9P5BPvJCx7tacJ
-         yw6+nbuWOTH4tOGgRmVcTg/uOVdaDms89Q0kwZjFZMG9bf2cAqIwyMDsxocFBQ40MRAp
-         Xu/85wKjrfb5ADZi/jdIFPIyZByhCB+aMdbdlW2ml/Eyj8a67FeJFy9bF0SZnCXfaPuj
-         LNypzCQHDH1BWiCLUO6t/vgKwjs1vV3o5M1sxRg1ZYVpl/GWZCTMXBmcLewC2vvNDhuU
-         832n9FsfPIzn0pjBX39w/NZtw9tLWNtM/pCTJG5pGmZvnt0AJH0a9779Vv5L9wTCGtX0
-         LZCQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K3cf7M2HST5gUl0uPAkYtSybv0fNWjrltQKA6GbBxJY=;
+        b=Ygm//Z2g+onRKYbQS0vNoeC1nzhfRqSsW+gOqXbrk/h7Cz/H7xToX2ASSqoKSRJOH7
+         Tep4FfwPic27k/r5ofzs7jQLzjjeVkpWixFYJdoMbjMhHu5MVZprtTq2iRFHJeUhrj9H
+         vekjWlBoi5NemFAARjoa+oxoeHkOd63bjKGE25QQ7VY3gjFwhVOFj5L8l4K/o7Txg8j4
+         FLAdcH1AaHSOJ/TI/rXG0yPwXJpkJiqNWC4qcxpkXy5SH6OUdfdGmjgUZ2lJVr+Aecep
+         Gh/woY4yY7UL3snvcVoCQN8mhSya+Y+E1kRwwWpFLubWEM9UeZv4H4Wiqtsa+R6X/ZLK
+         VkuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0OKp9P3wlvWQglflLVdMb97bFP7zeKILwFZMB7vI+io=;
-        b=5iF/4eLvk/CiUXKxTXqVC0nyNaesty8EATDCgFmVSJXJIa3/7vF4tn6SMVyyskbHE/
-         TJjnn/bduSDcGZJ/vYw84Q91i8akLhsXCtNLYEXGNGyzwcZKlQLRcB2D3biuuX+A5fhW
-         FgLftW//50ZJ/tIvhCHLu7ENUEXCSETzECK99kgHIdVa/lMG77RpZx+/HMdLuObMGcuI
-         oe1V9suYMLWWJRW7mzkAoMgX/8anrW4arDNRdLIzMRA0WHC5qK7mKNjoqIiUHlV8OOk6
-         TW2VLeYFOSoqHMTKDVtXzFHzkYgR7z2KCzH2w+0EwL0KK6spertBpZ9ypsokRBFpQtdW
-         HwFA==
-X-Gm-Message-State: AFqh2korhDae0BVCspjjBGVdkShAgRMod/EdVmLnFih3ORL2moshJc18
-        nf8ClkAbifGaHqq3XtC7qZCTdhMklFuV3nSB9238cA==
-X-Google-Smtp-Source: AMrXdXs+D+TXEDwYQeE6Ar7RW5jftM2r4ElnktAnD8xg8hJfcF+xbz4j7ShMOSSTswckXGQUPAFeWjpz6ngr3w6b2n4=
-X-Received: by 2002:a1f:9e12:0:b0:3d5:de78:715f with SMTP id
- h18-20020a1f9e12000000b003d5de78715fmr5579199vke.7.1673631741277; Fri, 13 Jan
- 2023 09:42:21 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K3cf7M2HST5gUl0uPAkYtSybv0fNWjrltQKA6GbBxJY=;
+        b=PNFbZDTLG5Ew8Se4+A0t2c5SmmW2DSNloFYts6EhOBDmUFBN3nscQaygayIPcrtmcb
+         RJnnWd+z2fAz+tHiybCna60vlPPpJjH9Z5rXUFsTQamikN6VsexDju2dTMAzaMWPg1oJ
+         sL1EoxiOD7bOgHd8Ru5u5FimvPIacOpG1q9upOQM4h7jV351UZQAQu2b/aMb4CMwguBZ
+         iHV4Av6LurURDLluQKPgqD4fmbdVMv/YQdgQnCcRhFV4MHKLmgT1ZNnNvoT3eKcoHHlt
+         DGC7MfoboU/A2zMH9Pjyaus8MigKA/UCrblODnBy5l+cFI9JmAjUbEUr1q/cklnME6xU
+         sVVQ==
+X-Gm-Message-State: AFqh2kq2VIRyvKnHCitQWtXhXLiqLu+RC4ytWj5JFkou0t6ApZVhsqmu
+        VG3g6PUxHRJpPwZY4/AL49y2kFEpr/wcntQMnFQkbA==
+X-Google-Smtp-Source: AMrXdXtwZgUt8m4FJdjhH8D8XRQ44vyMb4OoabTVzwW/Pc9Pezodd/AXEt2qRiL0uIAr2ycw+M+D4Ml+ZscoW7PcvQk=
+X-Received: by 2002:a81:6f42:0:b0:36f:f251:213b with SMTP id
+ k63-20020a816f42000000b0036ff251213bmr2037205ywc.228.1673631816578; Fri, 13
+ Jan 2023 09:43:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20230112135326.689857506@linuxfoundation.org>
-In-Reply-To: <20230112135326.689857506@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 13 Jan 2023 23:12:09 +0530
-Message-ID: <CA+G9fYuMAW8EqwCUwtUwSu7-y=4kj+FU6_vex9GCB8pdVQWNPQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/10] 5.15.88-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221221222418.3307832-1-bgardon@google.com> <20221221222418.3307832-8-bgardon@google.com>
+In-Reply-To: <20221221222418.3307832-8-bgardon@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Fri, 13 Jan 2023 09:43:00 -0800
+Message-ID: <CAHVum0cGYXyjzeoNs8jnS-oD8wz4QwX0VpD9a=U8d++xJNc62A@mail.gmail.com>
+Subject: Re: [RFC 07/14] KVM: x86/MMU: Cleanup shrinker interface with Shadow MMU
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Nagareddy Reddy <nspreddy@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 Jan 2023 at 19:27, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, Dec 21, 2022 at 2:24 PM Ben Gardon <bgardon@google.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.15.88 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> The MMU shrinker currently only operates on the Shadow MMU, but having
+> the entire implemenatation in shadow_mmu.c is awkward since much of the
+> function isn't Shadow MMU specific. There has also been talk of changing the
+> target of the shrinker to the MMU caches rather than already allocated page
+> tables. As a result, it makes sense to move some of the implementation back
+> to mmu.c.
 >
-> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
-> Anything received after that time might be too late.
+
+My recommendation is to move the whole function back to mmu.c instead
+of splitting. As all logic for shrinker will be contained in one place
+instead of spreading it over two files. kvm_shadow_mmu_shrink_scan(),
+the new function created in this patch, is not used anywhere else,
+there are already some functions which are getting exposed from shadow
+mmu in this patch, it will be cleaner to just expose the other
+functions needed by shrink_scan() and keep the implementation of
+shrink_scan same and at one place.
+> No functional change intended.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.88-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c        | 43 ++++++++++++++++++++++++
+>  arch/x86/kvm/mmu/shadow_mmu.c | 62 ++++++++---------------------------
+>  arch/x86/kvm/mmu/shadow_mmu.h |  3 +-
+>  3 files changed, 58 insertions(+), 50 deletions(-)
 >
-> thanks,
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index dd97e346c786..4c45a5b63356 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3147,6 +3147,49 @@ static unsigned long mmu_shrink_count(struct shrinker *shrink,
+>         return percpu_counter_read_positive(&kvm_total_used_mmu_pages);
+>  }
 >
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.88-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 14a059c00cd899f037916c382498d573e4c5b365
-* git describe: v5.15.87-11-g14a059c00cd8
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.87-11-g14a059c00cd8
-
-## Test Regressions (compared to v5.15.86-291-g5e4a8f5e829f)
-
-## Metric Regressions (compared to v5.15.86-291-g5e4a8f5e829f)
-
-## Test Fixes (compared to v5.15.86-291-g5e4a8f5e829f)
-
-## Metric Fixes (compared to v5.15.86-291-g5e4a8f5e829f)
-
-## Test result summary
-total: 162543, pass: 135922, fail: 4890, skip: 21378, xfail: 353
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 150 passed, 1 failed
-* arm64: 49 total, 47 passed, 2 failed
-* i386: 39 total, 35 passed, 4 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 14 total, 14 passed, 0 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> +unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+> +{
+> +       struct kvm *kvm;
+> +       int nr_to_scan = sc->nr_to_scan;
+> +       unsigned long freed = 0;
+> +
+> +       mutex_lock(&kvm_lock);
+> +
+> +       list_for_each_entry(kvm, &vm_list, vm_list) {
+> +               /*
+> +                * Never scan more than sc->nr_to_scan VM instances.
+> +                * Will not hit this condition practically since we do not try
+> +                * to shrink more than one VM and it is very unlikely to see
+> +                * !n_used_mmu_pages so many times.
+> +                */
+> +               if (!nr_to_scan--)
+> +                       break;
+> +
+> +               /*
+> +                * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+> +                * here. We may skip a VM instance errorneosly, but we do not
+> +                * want to shrink a VM that only started to populate its MMU
+> +                * anyway.
+> +                */
+> +               if (!kvm->arch.n_used_mmu_pages &&
+> +                   !kvm_shadow_mmu_has_zapped_obsolete_pages(kvm))
+> +                       continue;
+> +
+> +               freed = kvm_shadow_mmu_shrink_scan(kvm, sc->nr_to_scan);
+> +
+> +               /*
+> +                * unfair on small ones
+> +                * per-vm shrinkers cry out
+> +                * sadness comes quickly
+> +                */
+> +               list_move_tail(&kvm->vm_list, &vm_list);
+> +               break;
+> +       }
+> +
+> +       mutex_unlock(&kvm_lock);
+> +       return freed;
+> +}
+> +
+>  static struct shrinker mmu_shrinker = {
+>         .count_objects = mmu_shrink_count,
+>         .scan_objects = mmu_shrink_scan,
+> diff --git a/arch/x86/kvm/mmu/shadow_mmu.c b/arch/x86/kvm/mmu/shadow_mmu.c
+> index 090b4788f7de..1259c4a3b140 100644
+> --- a/arch/x86/kvm/mmu/shadow_mmu.c
+> +++ b/arch/x86/kvm/mmu/shadow_mmu.c
+> @@ -3147,7 +3147,7 @@ void kvm_zap_obsolete_pages(struct kvm *kvm)
+>         kvm_mmu_commit_zap_page(kvm, &kvm->arch.zapped_obsolete_pages);
+>  }
+>
+> -static bool kvm_has_zapped_obsolete_pages(struct kvm *kvm)
+> +bool kvm_shadow_mmu_has_zapped_obsolete_pages(struct kvm *kvm)
+>  {
+>         return unlikely(!list_empty_careful(&kvm->arch.zapped_obsolete_pages));
+>  }
+> @@ -3416,60 +3416,24 @@ void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
+>                 kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
+>  }
+>
+> -unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+> +unsigned long kvm_shadow_mmu_shrink_scan(struct kvm *kvm, int pages_to_free)
+>  {
+> -       struct kvm *kvm;
+> -       int nr_to_scan = sc->nr_to_scan;
+>         unsigned long freed = 0;
+> +       int idx;
+>
+> -       mutex_lock(&kvm_lock);
+> -
+> -       list_for_each_entry(kvm, &vm_list, vm_list) {
+> -               int idx;
+> -               LIST_HEAD(invalid_list);
+> -
+> -               /*
+> -                * Never scan more than sc->nr_to_scan VM instances.
+> -                * Will not hit this condition practically since we do not try
+> -                * to shrink more than one VM and it is very unlikely to see
+> -                * !n_used_mmu_pages so many times.
+> -                */
+> -               if (!nr_to_scan--)
+> -                       break;
+> -               /*
+> -                * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+> -                * here. We may skip a VM instance errorneosly, but we do not
+> -                * want to shrink a VM that only started to populate its MMU
+> -                * anyway.
+> -                */
+> -               if (!kvm->arch.n_used_mmu_pages &&
+> -                   !kvm_has_zapped_obsolete_pages(kvm))
+> -                       continue;
+> -
+> -               idx = srcu_read_lock(&kvm->srcu);
+> -               write_lock(&kvm->mmu_lock);
+> -
+> -               if (kvm_has_zapped_obsolete_pages(kvm)) {
+> -                       kvm_mmu_commit_zap_page(kvm,
+> -                             &kvm->arch.zapped_obsolete_pages);
+> -                       goto unlock;
+> -               }
+> +       idx = srcu_read_lock(&kvm->srcu);
+> +       write_lock(&kvm->mmu_lock);
+>
+> -               freed = kvm_mmu_zap_oldest_mmu_pages(kvm, sc->nr_to_scan);
+> +       if (kvm_shadow_mmu_has_zapped_obsolete_pages(kvm)) {
+> +               kvm_mmu_commit_zap_page(kvm, &kvm->arch.zapped_obsolete_pages);
+> +               goto out;
+> +       }
+>
+> -unlock:
+> -               write_unlock(&kvm->mmu_lock);
+> -               srcu_read_unlock(&kvm->srcu, idx);
+> +       freed = kvm_mmu_zap_oldest_mmu_pages(kvm, pages_to_free);
+>
+> -               /*
+> -                * unfair on small ones
+> -                * per-vm shrinkers cry out
+> -                * sadness comes quickly
+> -                */
+> -               list_move_tail(&kvm->vm_list, &vm_list);
+> -               break;
+> -       }
+> +out:
+> +       write_unlock(&kvm->mmu_lock);
+> +       srcu_read_unlock(&kvm->srcu, idx);
+>
+> -       mutex_unlock(&kvm_lock);
+>         return freed;
+>  }
+> diff --git a/arch/x86/kvm/mmu/shadow_mmu.h b/arch/x86/kvm/mmu/shadow_mmu.h
+> index 20c65a0ea52c..9952aa1e86cf 100644
+> --- a/arch/x86/kvm/mmu/shadow_mmu.h
+> +++ b/arch/x86/kvm/mmu/shadow_mmu.h
+> @@ -99,7 +99,8 @@ void kvm_shadow_mmu_try_split_huge_pages(struct kvm *kvm,
+>  void kvm_rmap_zap_collapsible_sptes(struct kvm *kvm,
+>                                     const struct kvm_memory_slot *slot);
+>
+> -unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc);
+> +bool kvm_shadow_mmu_has_zapped_obsolete_pages(struct kvm *kvm);
+> +unsigned long kvm_shadow_mmu_shrink_scan(struct kvm *kvm, int pages_to_free);
+>
+>  /* Exports from paging_tmpl.h */
+>  gpa_t paging32_gva_to_gpa(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
