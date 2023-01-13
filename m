@@ -2,161 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A63B66A6A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 00:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D2666A777
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 01:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjAMXBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 18:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S229849AbjANAYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 19:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjAMXBc (ORCPT
+        with ESMTP id S229510AbjANAYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:01:32 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34F67ECB7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:01:28 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id i65so13770714pfc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 15:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CAQbYGMaML5fa/DHmVz3EfKdwA/KXc1FwDFGQHrppL0=;
-        b=lWOjbvh4IuNBwa2ZzT3rgGJypVyC6Zc1Wqnrkimn/SW2ehJDGWbXXULefjgfyeo5Qd
-         Ws/jQ8cVwT2F36JNS9xaTdmsIAN7AC/ZZFbjr86PEUU0ytQMeSqtMi+y/vQl+/pgo4U8
-         E46GRUr/SaBCvobUxYpqR1y/6gYHKe34xATJo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAQbYGMaML5fa/DHmVz3EfKdwA/KXc1FwDFGQHrppL0=;
-        b=PYhtC+zNLEIXv6xBKZc5lciOZ7TAoxU6axPa6236u9FD8JQ+94UI6Hu/xQtVotFlBz
-         3ZS2Gu6pgy9BKWgMhe6z900IR1i2lgTyLX4yi2Bp8sjfM2TLMjj8ipXyM3q1fFqSwvfk
-         4uf9gXk7dBrCCQdiEwey9IrkGCWbk9Wm6X7vNlvyqDemcxvwjRMsoeqNDDok948dH8+m
-         aTc2wR76gCv1T8DBavuIht+w1jXcKIf6jK/xvCY4bj7CvInHCs3Vvu5kc23OMrPZNInU
-         1OJGtV5/pxsNgmdD/lKSqYdU3bdk1EGOKMe2zN+2Q0vZisixbjGhl8rDa38V6yN0NhCW
-         brtA==
-X-Gm-Message-State: AFqh2kqhm0ywh8gly4/1oyEJyhrz9FbAz6vqhE2Sof1MpRFDB2B1n44y
-        JFuKjEG/d/WfANtp2gNv+Wt2hw==
-X-Google-Smtp-Source: AMrXdXuOJHsk34k6YZdu/AFcyBDgW6AnnR45JuuXxTcdyhIWnIr9mExAvL0atVo6SvjzWEr0Ka3Jeg==
-X-Received: by 2002:a05:6a00:4212:b0:583:fb14:ddc1 with SMTP id cd18-20020a056a00421200b00583fb14ddc1mr28709488pfb.17.1673650888393;
-        Fri, 13 Jan 2023 15:01:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v67-20020a622f46000000b00581ad007a9fsm14121533pfv.153.2023.01.13.15.01.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 15:01:27 -0800 (PST)
-Date:   Fri, 13 Jan 2023 15:01:26 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Yupeng Li <liyupeng@zbhlos.com>, tariqt@nvidia.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Caicai <caizp2008@163.com>
-Subject: Re: [PATCH 1/1] net/mlx4: Fix build error use array_size() helper in
- copy_to_user()
-Message-ID: <202301131453.D93C967D4@keescook>
-References: <20230107072725.673064-1-liyupeng@zbhlos.com>
- <Y7wb1hCpJiGEdbav@ziepe.ca>
- <202301131039.7354AD35CF@keescook>
+        Fri, 13 Jan 2023 19:24:05 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F422C7D9E5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:24:03 -0800 (PST)
+Received: from letrec.thunk.org ([172.102.9.47])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 30E0Nn1B014084
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 19:23:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1673655837; bh=0O+ILYmavkI++K+On1igazLn1QGxTLfJd8Hm6ezSXNs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Ob1dfKJxAQZgOvOyiL8n1E9g6meQgM4qJNAa2tcj1tUNnF3UObf2XLUWvq2LZ9iLH
+         8VeHXl234fywRmnRnbaEgM3pPtTSHBkq7vi++uhXJqtHjiDHmcBLFvHtYb8pmodl7B
+         sDiHtWrjBVUkxHqwPsbNGDiYxtIN8EoXjkWXMWFtDQHE1z4nnaRoYINKNyOp4iI1kV
+         oZfeZhM+TmcEzN3A7ysSyI4Dk7mKK2QtAeyWP3d3V2WuPjyWqQ9n/h9v35J5h47mwz
+         S5eHKPKW4Ur44RScI2dEfX5B/P4aznhbetcYwRZs28wClw5Vvu7Ss56kwJopWLGDmd
+         quQ3FpBpPSSzg==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id 0E7418C0A8D; Fri, 13 Jan 2023 16:40:20 -0500 (EST)
+Date:   Fri, 13 Jan 2023 16:40:19 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Michal Simek <michal.simek@amd.com>,
+        Kris Chaplin <kris.chaplin@amd.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Reg the next LTS kernel (6.1?)
+Message-ID: <Y8HPw2t+TbdXa83C@mit.edu>
+References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+ <Yz/ZWBeNZvKenEVM@kroah.com>
+ <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
+ <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
+ <Y53BputYK+3djDME@kroah.com>
+ <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
+ <96e41e6d-bec9-f8cf-22ed-1fa5d9022238@amd.com>
+ <Y8FAFAwB9gBzQXQG@kroah.com>
+ <314489f6-cb54-fb3b-6557-d69b1284fa4d@amd.com>
+ <Y8GFYEnIy0Wbh/n6@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202301131039.7354AD35CF@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8GFYEnIy0Wbh/n6@kroah.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:41:01AM -0800, Kees Cook wrote:
-> On Mon, Jan 09, 2023 at 09:51:18AM -0400, Jason Gunthorpe wrote:
-> > On Sat, Jan 07, 2023 at 03:27:25PM +0800, Yupeng Li wrote:
-> > > When CONFIG_64BIT was disabled, check_copy_size() was declared with
-> > > attribute error: copy source size is too small, array_size() for 32BIT
-> > > was wrong size, some compiled msg with error like:
-> > > 
-> > >   CALL    scripts/checksyscalls.sh
-> > >   CC [M]  drivers/net/ethernet/mellanox/mlx4/cq.o
-> > > In file included from ./arch/x86/include/asm/preempt.h:7,
-> > >                  from ./include/linux/preempt.h:78,
-> > >                  from ./include/linux/percpu.h:6,
-> > >                  from ./include/linux/context_tracking_state.h:5,
-> > >                  from ./include/linux/hardirq.h:5,
-> > >                  from drivers/net/ethernet/mellanox/mlx4/cq.c:37:
-> > > In function ‘check_copy_size’,
-> > >     inlined from ‘copy_to_user’ at ./include/linux/uaccess.h:168:6,
-> > >     inlined from ‘mlx4_init_user_cqes’ at drivers/net/ethernet/mellanox/mlx4/cq.c:317:9,
-> > >     inlined from ‘mlx4_cq_alloc’ at drivers/net/ethernet/mellanox/mlx4/cq.c:394:10:
-> > > ./include/linux/thread_info.h:228:4: error: call to ‘__bad_copy_from’ declared with attribute error: copy source size is too small
-> > >   228 |    __bad_copy_from();
-> > >       |    ^~~~~~~~~~~~~~~~~
-> > > make[6]: *** [scripts/Makefile.build:250：drivers/net/ethernet/mellanox/mlx4/cq.o] 错误 1
-> > > make[5]: *** [scripts/Makefile.build:500：drivers/net/ethernet/mellanox/mlx4] 错误 2
-> > > make[5]: *** 正在等待未完成的任务....
-> > > make[4]: *** [scripts/Makefile.build:500：drivers/net/ethernet/mellanox] 错误 2
-> > > make[3]: *** [scripts/Makefile.build:500：drivers/net/ethernet] 错误 2
-> > > make[3]: *** 正在等待未完成的任务....
-> > > make[2]: *** [scripts/Makefile.build:500：drivers/net] 错误 2
-> > > make[2]: *** 正在等待未完成的任务....
-> > > make[1]: *** [scripts/Makefile.build:500：drivers] 错误 2
-> > > make: *** [Makefile:1992：.] 错误 2
-> > > 
-> > > Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-> > > Reviewed-by: Caicai <caizp2008@163.com>
-> > > ---
-> > >  drivers/net/ethernet/mellanox/mlx4/cq.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/net/ethernet/mellanox/mlx4/cq.c b/drivers/net/ethernet/mellanox/mlx4/cq.c
-> > > index 4d4f9cf9facb..7dadd7227480 100644
-> > > --- a/drivers/net/ethernet/mellanox/mlx4/cq.c
-> > > +++ b/drivers/net/ethernet/mellanox/mlx4/cq.c
-> > > @@ -315,7 +315,11 @@ static int mlx4_init_user_cqes(void *buf, int entries, int cqe_size)
-> > >  		}
-> > >  	} else {
-> > >  		err = copy_to_user((void __user *)buf, init_ents,
-> > > +#ifdef CONFIG_64BIT
-> > >  				   array_size(entries, cqe_size)) ?
-> > > +#else
-> > > +				   entries * cqe_size) ?
-> > > +#endif
-> > >  			-EFAULT : 0;
-> > 
-> > This can't possibly make sense, Kees?
+On Fri, Jan 13, 2023 at 05:22:56PM +0100, Greg KH wrote:
+> > I am just saying that developers/driver owners can simple do calculation to
+> > identify LTS version. When they know it they also know time when their
+> > deadline is for upstreaming work. It means if patch is accepted between
+> > 6.0-r1 and 6.0-rc5/6 they know that it will get to 6.1 merge window.
 > 
-> Uuuuh, that's really weird. What compiler version and arch? I'll see if
-> I can reproduce this.
+> That is what I am afraid of and if it causes problems I will purposfully
+> pick the previous release.  This has happened in the past and is never
+> an excuse to get anything merged.  Code gets merged when it is ready,
+> not based on a LTS release.
 
-I can't reproduce this. I'm assuming this is being seen on a 32-bit
-loongarch build? I have no idea how to get that compiler. Neither Debian
-nor Fedora seem to package it. (It looks like it was added in GCC 12?)
-Perhaps it's just "mips"? But I also can't figure out how to choose a
-32-bit mips build. Wheee.
+This is probably the best reason not to preannounce when the LTS
+release will be ahead of time --- because it can be abused by
+developers who try to get not-ready-for-prime-time features into what
+they think will be the LTS kernel, with the result that the last
+release of the year could be utterly unsitable for that perpose.
 
-Anyway, I would assume this is a compiler bug around inlining or the
-check_mul_overflow implementation?
+What I would try to tell people who are trying to get a feature into
+the enterprise distro kernel is to target a release in the *middle*a
+of the year, so that there is plenty of time to stablize it before the
+LTS kernel is cut.
 
-static inline size_t __must_check size_mul(size_t factor1, size_t factor2)
-{
-        size_t bytes;
+Alternatively, I might work with the team reasponsible for release
+engineering the "product" kernel that I might be targetting (for
+example, for my company's Cloud Optimized OS) and since they follow
+the "upstream first" principle, once the feature is upstream, they
+will backport it into the various LTS release which we support for our
+cloud customers.  And if it just so happens that Amazon Linux doesn't
+have the feature, but my company's cloud OS does ---- well, that's the
+way the cookie crumbles, and that's why the wise distro company will
+have kernel developers on staff, not just try to freeload off of the
+LTS maintainers.  :-)
 
-        if (check_mul_overflow(factor1, factor2, &bytes))
-                return SIZE_MAX;
+						- Ted
 
-        return bytes;
-}
-
-#define array_size(a, b)        size_mul(a, b)
-
-
--Kees
-
--- 
-Kees Cook
+P.S.  And if you work for a hardware company, in general the LTS
+maintainers have been willing to handle backporting device drivers to
+older LTS kernels, since your customers might very well might want to
+stay on 5.15, 5.10, 5.4, etc.  Of course, if your feature requires
+massive surgery all over the kernel, that's even more of a reason not
+incentivize people to make massive, risky changes right before the LTS
+kernel is cut.
