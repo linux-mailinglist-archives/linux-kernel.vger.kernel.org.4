@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA87668947
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E6966894D
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 02:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240651AbjAMBx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 20:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S239769AbjAMB43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 20:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240329AbjAMBxZ (ORCPT
+        with ESMTP id S232583AbjAMB4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 20:53:25 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B989C61446;
-        Thu, 12 Jan 2023 17:53:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NtPZn6tFBz4xFv;
-        Fri, 13 Jan 2023 12:53:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673574802;
-        bh=S9U8oytHB3dSaeyje5uwZ/YSmowUo1Oik8gExE+pJVg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oloNKr4x/+89rlAXowpA8x3aBQDGsP27sTZARZ0CY56OXu9n8JXkCpcnaZD9gMg18
-         xn97MDi6n9k9qAOvHZKFmbswuf1g9/MS4WaGtb0QMnrOH5v+xFEoqoYxRXNd2yoEU9
-         BIFQs26Bwdznr52FGrDeshipzzAvVZYpf2oGLAcICO2piUDHroDf2q+X6PvMmw73bO
-         GrYiXcqr9nkaLmcLANyhHQCdMrjxDW7A49DPs1WnctcpbH1Gq3acsNAZl1qsdNBqhe
-         t68AgCZhfobUBZW1bYdaD2v+fZPEYCUG0a/gErA10hpWJ9LT2K4fId5ugiTwrdDcuW
-         Vl1tOE5jfvntQ==
-Date:   Fri, 13 Jan 2023 12:53:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Xin Li <xin3.li@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tip tree
-Message-ID: <20230113125321.4c60d02f@canb.auug.org.au>
+        Thu, 12 Jan 2023 20:56:25 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E49A62F9;
+        Thu, 12 Jan 2023 17:56:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673574984; x=1705110984;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yvASKDHwILgtst84ENqUbJ1Kti8pnA3VwnnU1NdHEAo=;
+  b=jkoJqhpDEQ6vbIiTS4B0XPDZ4nnEU/L+bnfFQkrdkHMwerBqCgvTlmUw
+   71Zq3VHSU7THdsI+9/W1VwsLUpbzF14PQ65CsjfFd9m0WL5fPVqjxE9Ze
+   PJs6rQG4kRFzvz/pST6gia8l3RclYKLlkH+tC4aP4M3O2nkFG8AqZ+DeA
+   TEI8p/MLSv3uiDC068TTnow5Ij9SER2sM9KjzEDIgrkLS8aF7saNhjrwL
+   6Wef4vfS6ONsgxp6x3L+2P0nSDjlMYnhLn03nKLQZ4NiFXbWLP2JSBPai
+   YGMHFpncdovkol0PO/DxTd/dGv7vtS4crKLPlSS7pl1f1ZMem+DFWiY5B
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="307437823"
+X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
+   d="scan'208";a="307437823"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:56:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="635606264"
+X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
+   d="scan'208";a="635606264"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.252.189.78]) ([10.252.189.78])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 17:56:19 -0800
+Message-ID: <3ae3f5d2-1b58-7498-656d-696182a3589f@linux.intel.com>
+Date:   Fri, 13 Jan 2023 09:56:17 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pfl4L1.H0m+xYyyaz6oVNfM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Matt Fagnani <matt.fagnani@bell.net>
+Subject: Re: [PATCH 1/1] PCI: Add translated request only opt-in for
+ pci_enable_pasid()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20230112183422.GA1778973@bhelgaas>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230112183422.GA1778973@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Pfl4L1.H0m+xYyyaz6oVNfM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2023/1/13 2:34, Bjorn Helgaas wrote:
+> On Thu, Jan 12, 2023 at 09:25:25PM +0800, Baolu Lu wrote:
+>> On 2023/1/12 20:38, Jason Gunthorpe wrote:
+>>> On Thu, Jan 12, 2023 at 04:46:29PM +0800, Lu Baolu wrote:
+>>>
+>>>> -int pci_enable_pasid(struct pci_dev *pdev, int features);
+>>>> +int pci_enable_pasid(struct pci_dev *pdev, int features, bool
+>>>> transled_only);
+>        ^^^^^^^^
+> 
+>> + * @flags: device-specific flags
+>> + *   - PCI_PASID_TRANSLED_REQ_ONLY: The PCI device only issues PASID
+>> + *                                  memory requests of translated type.
+>                      ^^^^^^^^
+> 
+> I don't like "transled" since it's not a word itself or an obvious
+> combination of "translated" and something else.
+> 
+> Not sure whether you need to abbreviate it, but if you do, "xlate" is
+> a common shortening of "translate".
 
-Hi all,
+Yes. "xlate" looks better. I will replace with it.
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-produced this warning:
+I've updated this patch with a v2.
 
-WARNING: modpost: EXPORT symbol "asm_load_gs_index" [vmlinux] version gener=
-ation failed, symbol will not be versioned.
-Is "asm_load_gs_index" prototyped in <asm/asm-prototypes.h>?
+https://lore.kernel.org/linux-iommu/20230113014409.752405-1-baolu.lu@linux.intel.com/
 
-Introduced by commit
+Thank you both for the comments.
 
-  ae53fa187030 ("x86/gsseg: Move load_gs_index() to its own new header file=
-")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Pfl4L1.H0m+xYyyaz6oVNfM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPAuZEACgkQAVBC80lX
-0GyrAAf/brIIZNRyAKAierbKmEcI5zwCbtEP8h/+pt1wN4EapxN+fx4NBY508iwp
-so5yy6pOu23LrQNIK8xubI/mMXonXFo2rdByWWzw7it0FRERKx6ofintqu2ef4Bj
-dgjKnfS7pCYcCrQIoAeDm42lD2KfF6WruPa1huJZS3+xl1l18xx0GDl52MocDRME
-gj54yRRIj8ESwd4QODK8lykehmZSeB7++U6nlSNSPRiSJf8+VJHGMy8R0ukMlEed
-v+QvCHD+6DRp5hnGrNOaEITZwaNsTPFFK7/Itd+AQAw46KqANaEqX2GAOxVsjDSM
-x1Eh5HCSqWIXagz75pJhYH83OUaKYQ==
-=tzyc
------END PGP SIGNATURE-----
-
---Sig_/Pfl4L1.H0m+xYyyaz6oVNfM--
+--
+Best regards,
+baolu
