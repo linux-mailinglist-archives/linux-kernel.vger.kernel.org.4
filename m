@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC866688AC
+	by mail.lfdr.de (Postfix) with ESMTP id F1A826688AD
 	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjAMAsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S239998AbjAMAtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240369AbjAMAsV (ORCPT
+        with ESMTP id S240426AbjAMAsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:48:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7486C6133B
-        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:48:20 -0800 (PST)
+        Thu, 12 Jan 2023 19:48:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB6B6145B;
+        Thu, 12 Jan 2023 16:48:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F3B5621E8
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 00:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74801C433F0;
-        Fri, 13 Jan 2023 00:48:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9882B8203E;
+        Fri, 13 Jan 2023 00:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 62EC9C433D2;
+        Fri, 13 Jan 2023 00:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673570899;
-        bh=FU5yKit5p//SKeorja80X9Jb/gpyvO/lOFikrwDWQv4=;
+        s=k20201202; t=1673570900;
+        bh=ee3SUjhc67PmTFjWF9OP6JoyAlQd1YsRCLuk1ovozCw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=FY5CGGvJ4n5TmKgXhzDzTXmr5RzlbCLO6snnSa02rVHLm1bmG0ruq6HbDlpch9vo0
-         Hz+km26bAq6gzSeAx2QrOvrYp9UnaLUX62WUBoUWmTFmXXidQcjHH5rIYT2sAwDCBR
-         xEP2m4WiGtmcaY9VoH2/GH+74OUI6nC0GBY3YT3SexRfeA0H1wxrcXVvzY0wPwYUA7
-         Hl/w+6OPPrnRalGiSUitC9owv4Pdq2qdXzXAyGPgC8LJ1C58OVAnAmeBkXxNQgXvTJ
-         /GtMByWvbUZ05liYY4Z2srBJZfD3/BIf80E37LHgvX4aG7XQyveOUOBWbIdwuJaYGh
-         DA8E/DMq6FnHw==
+        b=GTvUby1v+ooO8naAhKu5NLgb75kQiRqDDyGY985mo92Bxj28UvX0MBha9eqoKYN8z
+         S6Y/UoVb15uMc/Mr/ZDo/Hu11wWpKc1FtYgz+dNOIa+jWHudg20AQRTedVPQe9khqI
+         BJ4aHlrTIMf4JmxAMWZzmsq+q+ZjxzcJg4v3sAqoKTcvi8PZNBEN1HUWRgVJfbrMYB
+         6Z8/DgBRXtkQEN00AQ75xjMj+ESYMZr36tyBukKMi2tCBk31rNHIAFLY8fVTE1NxyV
+         5qmYxQ2u+BRqcG36JJJ9kUGFdAWDYYzZ1cXKnDhYjrcIKXeg65oBO8MW66bAVuHzQZ
+         qwSc9iUjifZuQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 62452C395D4;
-        Fri, 13 Jan 2023 00:48:19 +0000 (UTC)
-Subject: Re: [GIT PULL] xen: branch for v6.2-rc4
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52FC5C395C8;
+        Fri, 13 Jan 2023 00:48:20 +0000 (UTC)
+Subject: Re: [GIT PULL] s390 updates for 6.2-rc4
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230111122501.21815-1-jgross@suse.com>
-References: <20230111122501.21815-1-jgross@suse.com>
-X-PR-Tracked-List-Id: Xen developer discussion <xen-devel.lists.xenproject.org>
-X-PR-Tracked-Message-Id: <20230111122501.21815-1-jgross@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.2-rc4-tag
-X-PR-Tracked-Commit-Id: f57034cedeb6e00256313a2a6ee67f974d709b0b
+In-Reply-To: <Y8BJs/dL1gwtOtqd@osiris>
+References: <Y8BJs/dL1gwtOtqd@osiris>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y8BJs/dL1gwtOtqd@osiris>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.2-2
+X-PR-Tracked-Commit-Id: 1ecf7bd9c267ab85aff3c4a17fe56bc9754a13be
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bad8c4a850eaf386df681d951e3afc06bf1c7cf8
-Message-Id: <167357089939.28490.16784668804617629143.pr-tracker-bot@kernel.org>
-Date:   Fri, 13 Jan 2023 00:48:19 +0000
-To:     Juergen Gross <jgross@suse.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, sstabellini@kernel.org
+X-PR-Merge-Commit-Id: 5be413a6e2a16e08c8f0f1b59794a7203b5eca2c
+Message-Id: <167357090033.28490.11385922066507899860.pr-tracker-bot@kernel.org>
+Date:   Fri, 13 Jan 2023 00:48:20 +0000
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,12 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 11 Jan 2023 13:25:01 +0100:
+The pull request you sent on Thu, 12 Jan 2023 18:56:03 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.2-rc4-tag
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.2-2
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bad8c4a850eaf386df681d951e3afc06bf1c7cf8
+https://git.kernel.org/torvalds/c/5be413a6e2a16e08c8f0f1b59794a7203b5eca2c
 
 Thank you!
 
