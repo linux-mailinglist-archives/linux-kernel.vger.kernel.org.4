@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7F7668838
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFD1668839
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240280AbjAMAMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S240324AbjAMAMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240147AbjAMALm (ORCPT
+        with ESMTP id S240200AbjAMALm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 12 Jan 2023 19:11:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1065D8B5;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E469F5D8BF;
         Thu, 12 Jan 2023 16:11:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75629621F8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 917BB621FF;
         Fri, 13 Jan 2023 00:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C1BC4333B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD342C4333C;
         Fri, 13 Jan 2023 00:11:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673568695;
-        bh=a+uHzF3ftrhu03vhyGE1GGZJhFSl240uKQNg7uObNq0=;
+        bh=UDe46kmvGKh/94AkLoKQ4CWieFrtLxYGYLFUP7JKd6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CAgOW7vex+ciCSbrcKe8mLcxjKiLczRbAQV5b9bKwi0+OPtjYiT8btE5jC0aYRf8H
-         37Psnqhjhrn1i4ztWAOkCajlguuD5eclmrk9MKvSQqeZNCLUz1z2jnS/DZ120GTo2O
-         ID7wA/kR+BdRCoatdNNnnJYDQiB3GgFwgdwtzGHDgvfqhlD+kpSJelHs802rFGVoLB
-         0Q5S4ljC4OYfCklgjb9YFEjTcJbRwVbTmOf6Eg4XQj6gk6m021g/dYDQ0aBCTRAYOi
-         Nzy4evUPiRT3EJJByGvhpcBDHVoB5D3QcW0uQ7A7kJePdjqBcHxYa1tURasPzzHF39
-         KYnCoWNWNG3CA==
+        b=IWRzNQlPaUoYAKDMYZDZlvXLhzA/Qy//sa6+Tw5eoeloWo4VasCNeE963jYxMVKNt
+         c978Qdbz42BcLIuIQQkmfUUgwtdzVNOQCD/IXgbco8boOqeRy7f9ae9sCNLl8b3yeG
+         5KR+4AiHPQvQh/0zfaFPjnjwngMjkgtgyvwlCyr+z98r080N3t0rPGlRLfTBZNMtFt
+         C8dgV43+hL1AVRJAg0nVwqee5pXy5lo9Km97yoGBLPeBQjADztY4X3G7vwFplMaOsx
+         qe+90GI+Dz95qcFbi0WT4mNX/bxlL9eCpB/eE71P9NhkogFrEZtrjCb9uR6stkpxpt
+         1lEHPmpope+YA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B9EB35C1CB0; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
+        id BBF0A5C1CB1; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH rcu v2 19/20] tomoyo: Remove "select SRCU"
-Date:   Thu, 12 Jan 2023 16:11:31 -0800
-Message-Id: <20230113001132.3375334-19-paulmck@kernel.org>
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Subject: [PATCH rcu v2 20/20] rcu: Remove CONFIG_SRCU
+Date:   Thu, 12 Jan 2023 16:11:32 -0800
+Message-Id: <20230113001132.3375334-20-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
 References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
@@ -61,34 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the SRCU Kconfig option is unconditionally selected, there is
-no longer any point in selecting it.  Therefore, remove the "select SRCU"
-Kconfig statements.
+Now that all references to CONFIG_SRCU have been removed, it is time to
+remove CONFIG_SRCU itself.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: <linux-security-module@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
+Cc: John Ogness <john.ogness@linutronix.de>
+Cc: Petr Mladek <pmladek@suse.com>
+Reviewed-by: John Ogness <john.ogness@linutronix.de>
 ---
- security/tomoyo/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ kernel/rcu/Kconfig                                          | 3 ---
+ tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt | 4 ----
+ 2 files changed, 7 deletions(-)
 
-diff --git a/security/tomoyo/Kconfig b/security/tomoyo/Kconfig
-index b9f867100a9ff..a9796b4003124 100644
---- a/security/tomoyo/Kconfig
-+++ b/security/tomoyo/Kconfig
-@@ -6,7 +6,6 @@ config SECURITY_TOMOYO
- 	select SECURITYFS
- 	select SECURITY_PATH
- 	select SECURITY_NETWORK
--	select SRCU
- 	select BUILD_BIN2C
- 	default n
- 	help
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index ab62074174c32..9071182b1284b 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -53,9 +53,6 @@ config RCU_EXPERT
+ 
+ 	  Say N if you are unsure.
+ 
+-config SRCU
+-	def_bool y
+-
+ config TINY_SRCU
+ 	bool
+ 	default y if TINY_RCU
+diff --git a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
+index 42acb1a64ce10..3f5fb66f16df7 100644
+--- a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
++++ b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
+@@ -71,9 +71,5 @@ CONFIG_TASKS_RCU
+ 
+ 	These are controlled by CONFIG_PREEMPT and/or CONFIG_SMP.
+ 
+-CONFIG_SRCU
+-
+-	Selected by CONFIG_RCU_TORTURE_TEST, so cannot disable.
+-
+ 
+ boot parameters ignored: TBD
 -- 
 2.31.1.189.g2e36527f23
 
