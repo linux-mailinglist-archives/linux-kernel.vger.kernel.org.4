@@ -2,247 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D785669658
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C104666965C
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjAMMDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S240927AbjAMMG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjAMMDG (ORCPT
+        with ESMTP id S240987AbjAMMFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:03:06 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4AE83E1C;
-        Fri, 13 Jan 2023 03:54:29 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso14215074wmq.3;
-        Fri, 13 Jan 2023 03:54:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NzbNjSUYq3lJOoU05SBD+iYcga1U6ox8imF8t/9BQK8=;
-        b=Aa7B72HDB1zekRgERXJJwJamxmE6crmVUsKekfOybzfu19PhWBG4FJLl+96bFdH8Wy
-         rLVyNceHkj8IJoYYf6E9GH1gkOkDqB1fGco5A9n/Yv5TuzHIGMQsi+7Ud9s3mbjjUPgm
-         W13DO00dgVyProTDkuDLprrXjDmwjJ2LXwJGuhKjlHhgAL56KlcQQw25H7gm/1291F5+
-         VqyG9g9h6ZuUSnQmIQ51nGyT7xvsHkmzsVEPqy1lp7elPDTeRr6EGne4C+vNQmdHvSXE
-         6F5b7PIE5aOkcLinlKTUlFQ85lIvBLCrbFF5o0N+rwewhrDanewnHDity52Q/ku+6vLI
-         aiGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NzbNjSUYq3lJOoU05SBD+iYcga1U6ox8imF8t/9BQK8=;
-        b=zbgSeR+Tz88IGKLci0f9WZbS9iuCVlE3Go9QRp9CfNFQqRZSKhByle8KCJQ7CYpXrs
-         q73ZnE15c9QISeQgxpVVlqgVLIbDtazcy3wChQk86AOGMavFg3SxsqQF7FH4v3NFJVyb
-         ZinDoZejZ3IMJU46xE0uJq2GO0RZZMiOdtGKbHYZX+dawkb9jby2WFREc2Ac9JV4B4+/
-         k+IpC+jX+Ih9lx/hUNb6aM1FBiHB7ZeinHZ3qkPhoVxTjd0LzBtT/KBZnjibYWNMNcbL
-         YjzC+vspp0RcLjE2OAq98wZWpvSwxHq8z549cRPhIkFfUJ3exbMZh8qPDFUAW4JazU/H
-         +bsw==
-X-Gm-Message-State: AFqh2kpC6EGMc8hdhIPf8jyDOJtLxnfzAirJ2CRcU+Jtg2H2Y/LClinU
-        MmqmNrNskQEdJRD+n27kEaQ=
-X-Google-Smtp-Source: AMrXdXsl/E0OL1OrzaPYsol/4C1UNXj1AoUqRxQ+VOS8jMaTTSzcHpS/zAO7tvU18WVbLEcQH+HqGg==
-X-Received: by 2002:a05:600c:d2:b0:3d2:2b70:f2fd with SMTP id u18-20020a05600c00d200b003d22b70f2fdmr59320360wmm.21.1673610868049;
-        Fri, 13 Jan 2023 03:54:28 -0800 (PST)
-Received: from [192.168.0.30] ([37.222.254.155])
-        by smtp.gmail.com with ESMTPSA id l13-20020adfe58d000000b00296730b5c3esm18911503wrm.102.2023.01.13.03.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 03:54:27 -0800 (PST)
-Message-ID: <96384f72-19aa-b038-75c6-76b0957750c7@gmail.com>
-Date:   Fri, 13 Jan 2023 12:54:26 +0100
+        Fri, 13 Jan 2023 07:05:40 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D3584F94
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 03:55:46 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 53BCB41A42;
+        Fri, 13 Jan 2023 11:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1673610944; bh=Ms0sfliAebd5roODUWfN4RK47fgidMYE4meZVKrsFxc=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=iZ0yVGyLkBBrPUgixTqa7LMmljgi0FAls2JzpQnCwfgaD+gVhrTiCTytKGU1AovAK
+         PTwxfBwX6W5YV/840sHSRPUTW5hpHKbBOBr6DpIrUOi6j2OaknEstkDD/dzKQQKkUJ
+         QQV9jktSEWeIj4cmi0C5UYszcESHIaC4hORmJRYYG0mvNrqeH3Anpwpi4sAXWY9YUC
+         /MtMPVVo9KWmMV9Xb2oLYjo9NQ3FaqpToAa48ehWkgqjqdiCE9RQDB8Mr3PF4lzK+y
+         3fiAjsYvaw3foGjR4rxoAPaCBaRaXZxHgj6LLV7EjheYBTObybxJrS0w0x8BN5Hjys
+         3OYrapggP5Viw==
+Message-ID: <0919dba2-c493-710c-4d4c-cdcb36e1fa12@marcan.st>
+Date:   Fri, 13 Jan 2023 20:55:39 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 2/6] dt-bindings/thermal/mediatek: Add dt-binding
- document for LVTS thermal controllers
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230112152855.216072-1-bchihi@baylibre.com>
- <20230112152855.216072-3-bchihi@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230112152855.216072-3-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>
+References: <Y7RezbPSGrO37NZZ@shell.armlinux.org.uk>
+ <5333ed0e-010c-178a-beb2-e8a4338f2d43@marcan.st>
+ <Y7SWgC7m4tYSU1UJ@shell.armlinux.org.uk>
+ <Y72RXJqcGQ3G0gXu@shell.armlinux.org.uk>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v3 0/5] Fix a whole host of nvmem registration/cleanup
+ issues
+In-Reply-To: <Y72RXJqcGQ3G0gXu@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/01/2023 16:28, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On 11/01/2023 01.25, Russell King (Oracle) wrote:
+> On Tue, Jan 03, 2023 at 08:56:32PM +0000, Russell King (Oracle) wrote:
+>> Really not interested in your politics. Not interested in fixing this
+>> problem.
+>>
+>> I'll use these patches to fix the problem in my tree. I don't care about
+>> mainline.
 > 
-> Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
+> Having thought this over, this was an unfair over-reaction for which
+> I'd like to apologise. It was proving to be a very stressful couple
+> of days.
+
+Thank you.
+
 > 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> ---
->   .../thermal/mediatek,lvts-thermal.yaml        | 140 ++++++++++++++++++
->   1 file changed, 140 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+>>> Uhh. The series itself looks fine as far as fixing the problems, but I
+>>> fail to see how this is any better than my attempt as far as backporting
+>>> or commit atomicity goes. Patch #4 fixes the newer gpio leak bug *and*
+>>> half fixes the race condition bug,
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> new file mode 100644
-> index 000000000000..43b8777fc1b2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> @@ -0,0 +1,140 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek SoC Low Voltage Thermal Sensor (LVTS)
-> +
-> +maintainers:
-> +  - Balsam CHIHI <bchihi@baylibre.com>
-> +
-> +description: |
-> +  LVTS is a thermal management architecture composed of three subsystems,
-> +  a Sensing device - Thermal Sensing Micro Circuit Unit (TSMCU),
-> +  a Converter - Low Voltage Thermal Sensor converter (LVTS), and
-> +  a Digital controller (LVTS_CTRL).
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8192-lvts-mcu
-> +      - mediatek,mt8192-lvts-ap
+> There are two choices for patch for:
+> 
+> 1. add gpiod_put().
+> 2. make use of the gpiod_put() already present in the release function.
+> 
+> Either way, patch 5 depends on patch 4, and there's no way around that.
 
-I wonder: you provide the binding description for mt8192 but no implementation 
-in the driver. Are you sure the description is correct?
+How so? My idea was to just add gpiod_put() as one commit, do the race
+condition fix as another, and optionally clean up as a third commit
+after that to unify the error paths. I just tried it and it effectively
+avoids the inter-patch dependency.
 
-Regards,
-Matthias
+Done like this, both patches apply cleanly to the 6.1 stable tree, while
+the race fix applies cleanly to at least the 6.0 and 5.15 stable trees
+(haven't tried going further back). No manual backports needed. It just
+works with a Cc: stable@.
 
-> +      - mediatek,mt8195-lvts-mcu
-> +      - mediatek,mt8195-lvts-ap
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description: LVTS reset for clearing temporary data on AP/MCU.
-> +
-> +  nvmem-cells:
-> +    minItems: 1
-> +    items:
-> +      - description: Calibration eFuse data 1 for LVTS
-> +      - description: Calibration eFuse data 2 for LVTS
-> +
-> +  nvmem-cell-names:
-> +    minItems: 1
-> +    items:
-> +      - const: lvts-calib-data-1
-> +      - const: lvts-calib-data-2
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8192-lvts-mcu
-> +              - mediatek,mt8192-lvts-ap
-> +    then:
-> +      properties:
-> +        nvmem-cells:
-> +          maxItems: 1
-> +
-> +        nvmem-cell-names:
-> +          maxItems: 1
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8195-lvts-mcu
-> +              - mediatek,mt8195-lvts-ap
-> +    then:
-> +      properties:
-> +        nvmem-cells:
-> +          maxItems: 2
-> +
-> +        nvmem-cell-names:
-> +          maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +  - "#thermal-sensor-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/reset/mt8195-resets.h>
-> +    #include <dt-bindings/thermal/mediatek-lvts.h>
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      lvts_mcu: thermal-sensor@11278000 {
-> +        compatible = "mediatek,mt8195-lvts-mcu";
-> +        reg = <0 0x11278000 0 0x1000>;
-> +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +        resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-> +        nvmem-cells = <&lvts_efuse_data1 &lvts_efuse_data2>;
-> +        nvmem-cell-names = "lvts-calib-data-1", "lvts-calib-data-2";
-> +        #thermal-sensor-cells = <1>;
-> +      };
-> +    };
-> +
-> +    thermal_zones: thermal-zones {
-> +      cpu0-thermal {
-> +        polling-delay = <1000>;
-> +        polling-delay-passive = <250>;
-> +        thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU0>;
-> +        trips {
-> +          cpu0_alert: trip-alert {
-> +            temperature = <85000>;
-> +            hysteresis = <2000>;
-> +            type = "passive";
-> +          };
-> +          cpu0_crit: trip-crit {
-> +            temperature = <100000>;
-> +            hysteresis = <2000>;
-> +            type = "critical";
-> +          };
-> +        };
-> +      };
-> +    };
+> However, where our patches differ is that my series fixes one problem
+> in one patch, rather than trying to address multiple problems in one
+> patch. As has been pointed out, this is a documented requirement in
+> the submitting-patches.rst document, which has been there for a very
+> long time. You had been pointed to this document already over this
+> point.
+
+I'd like to direct your attention to submitting-patches.rst:
+
+> For example, if your changes include both bug fixes and performance
+> enhancements for a single driver, separate those changes into two
+> or more patches.
+
+Note how it says *bug fixes* (plural), and asks you to separate the
+changes into *two or more* patches (where one is the performance
+enhancements, and the other the multiple bug fixes, in the two case).
+
+The author of the document clearly understood that sometimes it makes
+perfect sense to group related changes together, when they are of the
+same type and touching closely related bits of code, and focused on the
+more egregious case of making wildly unrelated changes (performance and
+bugfixes, presumably in unrelated parts of the code) in one commit.
+*That* is what we are trying to avoid, because when done
+indiscriminately, it makes bisecting and backporting and review much harder.
+
+Yet, there is this persistent myth among some kernel maintainers that It
+Is The Rule Of The Kernel that You Do One, and Exactly One, Bug Fix Per
+Commit. And this kind of applying (not even actual, in this case) rules
+with an iron fist without any regard to nuance is one of the things that
+contributes to the unwelcoming nature of this community.
+
+The reality is that us engineers often notice little things to fix while
+working on code doing something else, and in those cases, it often makes
+little to no sense to split off the fix into another commit, especially
+if it's minor enough that it doesn't need backporting or the fix ends up
+getting subsumed into other changes being made.
+
+There is room for discretion in deciding how to split up commits, and
+it's not something you can make an objective, strict rule for that
+actually makes sense. When it comes to programming in a large
+collaborative project like this, strict rules can only be made and
+enforced for things that can be fully checked and made consistent by a
+machine... and the Linux kernel development process is too antiquated to
+have many of those (e.g. many projects are doing fully automated code
+formatting these days, while here all we have is checkpatch.pl and it's
+often wrong and unsuitable as an automated gating check). Everything
+else is at best a strong suggestion, but always subject to human
+interpretation and nuance, because we aren't robots.
+
+I do these kinds of drive-by fixes all the time, because sometimes it
+just *makes sense*. See for example 38892ea4cef, which fixed a typo
+while renaming a DT property. Or d182dc6de932, which refactored some
+OF-related code and in the process also fixed a reference leak in the
+original code. Those are things not worth backporting, and in those
+cases there is absolutely no good reason to split out the "fix" part
+from the "do" part into a tiny one-liner commit.
+
+Ultimately, drive-by fixes like this are a gift from the contributor to
+the maintainer, as they are almost always not something that is actually
+causing pain for anyone (at least not significant pain), and therefore
+there is very little reason to spend time on them. Thus, if maintainers
+attempt to enforce a strict one-patch-per-bugfix policy, it will simply
+result in (and I'm sure it already is) contributors just not doing those
+fixes at all, or choosing not to describe them in the commit message
+when they are "accidentally" fixed as part of a larger change. I know I
+would. When the patch submission process is painful, you naturally
+gravitate towards doing the least offensive thing that gets you where
+you want to be, even if that isn't necessarily the best place for the
+kernel to be in the end.
+
+That all said, you *did* have a very valid point with the merged commit
+being harder to backport in this case (where a backport is desirable),
+and checking the blame to see if it would apply cleanly further back was
+a good call - but then please appeal to that, and not to
+submitting-patches.rst. And then if we'd agreed on that being the
+desirable goal, I could've helped you structure the patches in a way
+that cleanly backports to stable, as I already locally confirmed is
+possible to do.
+
+> Therefore, I believe my series to be a technically better approach
+> which addresses several more issues while conforming to the "Solve
+> only one problem per patch." requirement which can be trivially
+> backported - and I truely believe that even patch 4 complies with
+> the requirement in submitting-patches.rst. I certainly do not
+> believe patch 4 is a kind of "partial" fix for the race condition,
+> since it in no way changes the presence of the race.
+
+It certainly fixed more things, but as I said, if this were about
+backporting, we could've done better ;)
+
+Patch 4 may not change the presence of the race, but both you and I know
+it is preparatory work for that (as if the goal were just to fix the
+gpiod leak, that would've just been adding the one-line gpiod_put()), so
+it is somewhat disingenuous to claim that it is a stand-alone fix. I
+posit that if nothing else it is harder to review as a fix for what it
+purports to fix, and not the best approach for a backport (which as I
+said doesn't work out of the box, but even if it did). Sure, it's
+splitting off the fixes in the sense that only one thing is actually
+fixed after each commit is applied, but it's not splitting them off at
+the sensible point for that.
+
+> I hope that we can continue to work to get the Apple M1 supported more
+> fully in the future.
+
+Thank you. (I still need to re-send those SMC patches... maybe next week
+I'll finally find some time)
+
+- Hector
