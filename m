@@ -2,225 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904B166A231
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2657F66A233
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 19:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjAMShY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 13:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S231326AbjAMSh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 13:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjAMShD (ORCPT
+        with ESMTP id S230134AbjAMShg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 13:37:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB065347;
-        Fri, 13 Jan 2023 10:35:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A243B82198;
-        Fri, 13 Jan 2023 18:35:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A50DC433D2;
-        Fri, 13 Jan 2023 18:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673634921;
-        bh=7OydYNeTloaeZWCHDJulIDUJtoJ1698N16BAQwlEIkE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CjQU7Lcv2Q7e51/Mj4meYlWwj6xx+FA8AptxpTqnpswpE55GDUvPJJl8CsHa0wFYt
-         IzQZreiOBQDeaEhduQ0X5uqtkCF4ONHkljGljVUq7U4CnVePjU1B8b6GvYfLMDGGYW
-         rA00/D7OxEV1oiaJAXisjskJJ6gsNT1XDPgJYBEx0aCTzslSDSeL3uQp3yR3gpCaPO
-         UeiKnrYCxw4L3gb6hNKBgv73cjfmmmikw7Nfhix5cSzmzZla7jdhVK4hA2rWNxgmBJ
-         GrxbO/uO3lo5G8zy3pv7SK7oBQ0d2Xeyzc081Ct82ddaUGTFKYk6ooa8PgxmLFRqLp
-         i+ShePHg0P9gA==
-Date:   Sat, 14 Jan 2023 00:05:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>, mani@kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 6/6] phy: qcom-qmp-ufs: Add SM8550 support
-Message-ID: <Y8GkZKwvOc5nPSjI@matsya>
-References: <20230112130542.1399921-1-abel.vesa@linaro.org>
- <20230112130542.1399921-7-abel.vesa@linaro.org>
+        Fri, 13 Jan 2023 13:37:36 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6D21EC5D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:36:39 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id o13so19743925pjg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 10:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4F3gMakR5EjuEaFBMZ7D8qgSZpXpMhQV5Lb3h6YkX4=;
+        b=sqwP3bvcIkIkHlOHuaj7PzhrogErMceNfkIz1l7wmrEJ52RKt1ZoLaNFxbpOSA3UpL
+         wq1sh1ojD/X7Iy6a9obxqvPAX82NCW94JSqZoXJ4VPostzzk8OBUzRW2QZCxPsty/wXb
+         9IXClLbv/GxUW9SLkr6zfzlHZd7HpiTaZ8Yvy9soWUs1OemOk/v/NO8MYlwrCl9zXF5+
+         HCfWR+ud6GaZDcvdGETTwikzINdoumIpGP5pl8ezxXEzc3zwN5BIhZBeMaQiCdi43Xmr
+         yAQ8h9uEbmzXOuUyEHA/9lDV/SU+Yesi9ACAmnts4FF2odbDNYPf5Uon+/q/RdhTXpub
+         HMJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j4F3gMakR5EjuEaFBMZ7D8qgSZpXpMhQV5Lb3h6YkX4=;
+        b=2vAR3n52cly0u/vUt/X1HR6pAP1+AEimYW/5FVj3cTBLQA6dQpSB8GXKyPaEyirtKi
+         uHFrT+YkeJfoSi7i9LtFibZdN1qNBobLK7RHKnv94sUv/AQ7qF1jBsKnrcigKNBdJ4ON
+         OmIEMfrYe9CrlK9w4rkWjCwtgKlqKEGhjfQAr1cNYGXYcelvowd3pEveWe7wqPFgyl4l
+         QlgcTOJpyEmPQPFan/qJ1IfbXxmRBKegpu25+SCcMAHDSK8Yc0UPanbfWtdOnx8Npjdt
+         6RYNbExTZHBaChFtRlSgCvNGE6lOpivd4Jk5ELylm54BUw6OmlUCwJHI7cjvnuabULTa
+         k7XQ==
+X-Gm-Message-State: AFqh2kpUgKzDUy3d5eBU96VPtNyac+1qcja5+grCc3K3PakfTd+O63e5
+        lPdVT2cLKlaM3nuE4kQFAZTQfg71zsN1rJq2pVhowA==
+X-Google-Smtp-Source: AMrXdXut+ZVz9p9DBkW4zfz3GUwV90SnmUswJaW85cGYlU4XXpHCwXHrnm3bYtlfE6P1Eb4qY9jWr4Npr5okcAdcplU=
+X-Received: by 2002:a17:90a:488a:b0:226:b5f4:d420 with SMTP id
+ b10-20020a17090a488a00b00226b5f4d420mr3958048pjh.102.1673634998456; Fri, 13
+ Jan 2023 10:36:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112130542.1399921-7-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230104132646.7100-1-chunfeng.yun@mediatek.com>
+In-Reply-To: <20230104132646.7100-1-chunfeng.yun@mediatek.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 13 Jan 2023 10:36:27 -0800
+Message-ID: <CAKwvOdnMF4LRhTnQ3Rg+q3hd7jm2tS0aTHmwU6isKJHL2u9Q-g@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] phy: mediatek: fix build warning caused by clang
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12-01-23, 15:05, Abel Vesa wrote:
-> Add SM8550 specific register layout and table configs.
+On Wed, Jan 4, 2023 at 5:26 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> Remove the temporary @mask_, this may cause build warning when use clang
+> compiler for powerpc, but can't reproduce it when compile for arm64.
+> the build warning is -Wtautological-constant-out-of-range-compare, and
+> caused by
+> "BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask)"
 
-Not related, but was this tested with the UFS Gear 4 support from Mani?
-It would be great to have that added (here or separately)
+Can you please include the text of the observed warning?
 
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>
+> After removing @mask_, there is a "CHECK:MACRO_ARG_REUSE" when run
+> checkpatch.pl, due to @mask is constant, no reuse problem will happen.
+>
+> Fixes: 84513eccd678 ("phy: mediatek: fix build warning of FIELD_PREP()")
+
+Uh, why was 84513eccd678 sent/reviewed/merged if it didn't fix the
+issue correctly in the first place?
+
+Is the issue perhaps that your mask isn't wide enough in the first
+place, and should be?  See:
+commit cfd6fb45cfaf ("crypto: ccree - avoid out-of-range warnings from clang")
+for inspiration.
+
+> Reported-by: kernel test robot <lkp@intel.com>
+
+Can you please include the Link: tag to the lore URL of the report?
+
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 100 ++++++++++++++++++++++++
->  1 file changed, 100 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> index 5936a3a05002..a9b666f32f59 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> @@ -95,6 +95,13 @@ static const unsigned int sm8150_ufsphy_regs_layout[QPHY_LAYOUT_SIZE] = {
->  	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V4_PCS_UFS_POWER_DOWN_CONTROL,
->  };
->  
-> +static const unsigned int sm8550_ufsphy_regs_layout[QPHY_LAYOUT_SIZE] = {
-> +	[QPHY_START_CTRL]		= QPHY_V6_PCS_UFS_PHY_START,
-> +	[QPHY_PCS_READY_STATUS]		= QPHY_V6_PCS_UFS_READY_STATUS,
-> +	[QPHY_SW_RESET]			= QPHY_V6_PCS_UFS_SW_RESET,
-> +	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V6_PCS_UFS_POWER_DOWN_CONTROL,
-> +};
-> +
->  static const struct qmp_phy_init_tbl msm8996_ufsphy_serdes[] = {
->  	QMP_PHY_INIT_CFG(QSERDES_COM_CMN_CONFIG, 0x0e),
->  	QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0xd7),
-> @@ -599,6 +606,61 @@ static const struct qmp_phy_init_tbl sm8350_ufsphy_g4_pcs[] = {
->  	QMP_PHY_INIT_CFG(QPHY_V5_PCS_UFS_BIST_FIXED_PAT_CTRL, 0x0a),
->  };
->  
-> +static const struct qmp_phy_init_tbl sm8550_ufsphy_serdes[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_SYSCLK_EN_SEL, 0xd9),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CMN_CONFIG_1, 0x16),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_HSCLK_SEL_1, 0x11),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_HSCLK_HS_SWITCH_SEL_1, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP_EN, 0x01),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_MAP, 0x04),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_IVCO, 0x0f),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_INITVAL2, 0x00),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x41),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x7f),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x06),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x4c),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x99),
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x07),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl sm8550_ufsphy_tx[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_V6_TX_LANE_MODE_1, 0x05),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_TX_RES_CODE_LANE_OFFSET_TX, 0x07),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl sm8550_ufsphy_rx[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE2, 0x0c),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE4, 0x0f),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_VGA_CAL_MAN_VAL, 0x0e),
-> +
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B0, 0xc2),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B1, 0xc2),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B3, 0x1a),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B6, 0x60),
-> +
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE2_B3, 0x9e),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE2_B6, 0x60),
-> +
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B3, 0x9e),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B4, 0x0e),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B5, 0x36),
-> +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B8, 0x02),
-> +};
-> +
-> +static const struct qmp_phy_init_tbl sm8550_ufsphy_pcs[] = {
-> +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_RX_SIGDET_CTRL2, 0x69),
-> +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_LARGE_AMP_DRV_LVL, 0x0f),
-> +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
-> +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_PLL_CNTL, 0x2b),
-> +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
-> +};
-> +
->  struct qmp_ufs_offsets {
->  	u16 serdes;
->  	u16 pcs;
-> @@ -703,6 +765,10 @@ static const char * const sm8450_ufs_phy_clk_l[] = {
->  	"qref", "ref", "ref_aux",
->  };
->  
-> +static const char * const sm8550_ufs_phy_clk_l[] = {
-> +	"qref", "ref",
-> +};
-> +
->  static const char * const sdm845_ufs_phy_clk_l[] = {
->  	"ref", "ref_aux",
->  };
-> @@ -721,6 +787,15 @@ static const struct qmp_ufs_offsets qmp_ufs_offsets_v5 = {
->  	.rx2		= 0xa00,
->  };
->  
-> +static const struct qmp_ufs_offsets qmp_ufs_offsets_v6 = {
-> +	.serdes		= 0,
-> +	.pcs		= 0x400,
-> +	.tx		= 0x1000,
-> +	.rx		= 0x1200,
-> +	.tx2		= 0x1800,
-> +	.rx2		= 0x1a00,
-> +};
-> +
->  static const struct qmp_phy_cfg msm8996_ufsphy_cfg = {
->  	.lanes			= 1,
->  
-> @@ -958,6 +1033,28 @@ static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
->  	.regs			= sm8150_ufsphy_regs_layout,
->  };
->  
-> +static const struct qmp_phy_cfg sm8550_ufsphy_cfg = {
-> +	.lanes			= 2,
-> +
-> +	.offsets		= &qmp_ufs_offsets_v6,
-> +
-> +	.tbls = {
-> +		.serdes		= sm8550_ufsphy_serdes,
-> +		.serdes_num	= ARRAY_SIZE(sm8550_ufsphy_serdes),
-> +		.tx		= sm8550_ufsphy_tx,
-> +		.tx_num		= ARRAY_SIZE(sm8550_ufsphy_tx),
-> +		.rx		= sm8550_ufsphy_rx,
-> +		.rx_num		= ARRAY_SIZE(sm8550_ufsphy_rx),
-> +		.pcs		= sm8550_ufsphy_pcs,
-> +		.pcs_num	= ARRAY_SIZE(sm8550_ufsphy_pcs),
-> +	},
-> +	.clk_list		= sm8550_ufs_phy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(sm8550_ufs_phy_clk_l),
-> +	.vreg_list		= qmp_phy_vreg_l,
-> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-> +	.regs			= sm8550_ufsphy_regs_layout,
-> +};
-> +
->  static void qmp_ufs_configure_lane(void __iomem *base,
->  					const struct qmp_phy_init_tbl tbl[],
->  					int num,
-> @@ -1467,6 +1564,9 @@ static const struct of_device_id qmp_ufs_of_match_table[] = {
->  	}, {
->  		.compatible = "qcom,sm8450-qmp-ufs-phy",
->  		.data = &sm8450_ufsphy_cfg,
-> +	}, {
-> +		.compatible = "qcom,sm8550-qmp-ufs-phy",
-> +		.data = &sm8550_ufsphy_cfg,
->  	},
->  	{ },
->  };
-> -- 
-> 2.34.1
+> v6: modify the title
+> v5: no changes
+> v4 new patch, I'm not sure it can fix build warning, due to I don't cross compile
+>     it for powerpc using clang in office.
+> ---
+>  drivers/phy/mediatek/phy-mtk-io.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/phy/mediatek/phy-mtk-io.h b/drivers/phy/mediatek/phy-mtk-io.h
+> index d20ad5e5be81..58f06db822cb 100644
+> --- a/drivers/phy/mediatek/phy-mtk-io.h
+> +++ b/drivers/phy/mediatek/phy-mtk-io.h
+> @@ -39,8 +39,8 @@ static inline void mtk_phy_update_bits(void __iomem *reg, u32 mask, u32 val)
+>  /* field @mask shall be constant and continuous */
+>  #define mtk_phy_update_field(reg, mask, val) \
+>  ({ \
+> -       typeof(mask) mask_ = (mask);    \
+> -       mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
+> +       BUILD_BUG_ON_MSG(!__builtin_constant_p(mask), "mask is not constant"); \
+> +       mtk_phy_update_bits(reg, mask, FIELD_PREP(mask, val)); \
+>  })
+>
+>  #endif
+> --
+> 2.18.0
+>
+
 
 -- 
-~Vinod
+Thanks,
+~Nick Desaulniers
