@@ -2,255 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C09A66A63B
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CCF66A63E
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjAMWuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 17:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S230273AbjAMWxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 17:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjAMWu3 (ORCPT
+        with ESMTP id S230144AbjAMWxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 17:50:29 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FAB7DE02
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:50:27 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id bj3so20601602pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:50:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQZCEBEaghsOR+zhl/QRIXPVX+uCKPvU91VQuy/V94s=;
-        b=X76rLWdZrm8cdm781bGE/NuVpMIrvPOi9lGhvncTfFs81VVxsQB/QGGTWKxHh1GL1W
-         d/AoRzt/BgZEnefw0frAVABgAhcfb0NjbvQQ6PThCX1YXedTBAqOobICTThGoiP6om5q
-         O3KMRfb6M32Bg7CVQSQvIy3h9U9bkySatLBmzLp/OFGTsGTVJq+w1gHMbDBjfBgq7rHh
-         ADYr+PPp2TF3nGbuwOKFE5/4euBQA3ZQaQSM4gqqLZGzGNJeHa+tfxiLoUS2z+t4YmPi
-         kKxrLU/4iehY+TcpZNW1WLdBUrSh7cY4mTcXmXq7RCEGkbTb53lk/EI3QzzxovpqZqg9
-         0htA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yQZCEBEaghsOR+zhl/QRIXPVX+uCKPvU91VQuy/V94s=;
-        b=A4VZ5y3tJlBrzeNP8ZAq3kA6CHu29Aynhs8WFWbSNABetsvK3ANyNjPbPTVkpmh4SV
-         l+QWyclIrtdsCW2vgMBk/NNTonP8yLURO+3x6IaghOHtE+eerTx/UDESM0AshMvufgQ3
-         yFhZdV4tNtrFcBxH21uhNCW7MPbCFLpGmhegc3SzV215+Yk/Akm4axXygmmQ4VCSRdpz
-         fY0cSloKO4j4acF9Ag/+BeG8re5amjSODwWP7U6EhN4B/NlGh8G7kM8rt43tXp45RjKG
-         iKnuhnL5X6FHCF8Ny1EytbGKVLhfi0SytE1it1syuujptN6kFh02GP05xyI5dCobbEUO
-         L3Jg==
-X-Gm-Message-State: AFqh2koIhyuvBb/Xao/MXX7/xkW424XdhfUniYzJ2FBP9OsakIEnRBkL
-        cEq5KtWuc10F/sDDMQnCHpMNmQ==
-X-Google-Smtp-Source: AMrXdXuS4zXTytfOZ5xIh4bs+rkmeZmK+QXoBwGpkC3p2EnL8ac6bXz6nz3yQ+yKSuiIei2pYWQMCA==
-X-Received: by 2002:a17:902:b10e:b0:191:4367:7fde with SMTP id q14-20020a170902b10e00b0019143677fdemr1360463plr.0.1673650227268;
-        Fri, 13 Jan 2023 14:50:27 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0019460ac7c6asm3819704plg.283.2023.01.13.14.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 14:50:26 -0800 (PST)
-Date:   Fri, 13 Jan 2023 22:50:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Fri, 13 Jan 2023 17:53:08 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89207D27C;
+        Fri, 13 Jan 2023 14:53:07 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 433D95C00B6;
+        Fri, 13 Jan 2023 17:53:05 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 13 Jan 2023 17:53:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673650385; x=
+        1673736785; bh=lKCV0ycAY0SFtq1SYJ0F5dfFWAI3C/PKOUtKuY5T64U=; b=O
+        KFd4cQE64z7byI+zm0c8nD+rqAxFmbGCCZ3Vh/GS10spMDBCdu2RoohH4GfizyP7
+        vMHfF9Q3WqmBl2tCCbTlvQDj9C1AU71gp0LMeVLamWIKmQOJVj2WgoTcd2glt9CD
+        NJU93AEM0M81j6mGmV+a78IrElGBu8J+WY2pq9Rph2PggMehhJ6Lxs8XMLC8+1xh
+        dPPhBk46PubiUYUtfMLpaPP2foH7VbmabHbuSpPNeu7qlLnMzTf+BBW3Xn2dtM2u
+        cHgF2KFFaOcui/CsmFJQNBOgoIuHOECmvhFMGxX+AdzcNb0brcCxrcIhfsuGLrL8
+        jVBLMoKogB89F8lLoGumA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673650385; x=1673736785; bh=lKCV0ycAY0SFtq1SYJ0F5dfFWAI3
+        C/PKOUtKuY5T64U=; b=h7tHLk4So03Ss4ZbzU95hbw5XdcLitSlfxF8xEqBfY3j
+        joqrFC7z74bAP8YAbP5esYISC2yGIU8b1Egx55R5djKpVEJSvNdibHDK/PK9zCGF
+        uOS8o3PHCloegp5m1Ft21Sarose/LPAvAQvydu7FsvL5YMgF3f77vlyV9z95U4vm
+        2L/cmX66SFqzKcEUawqtUm1D1ikbDK+A0pHO88VUEl3q5K9TCjVn8xei29jJOiZa
+        aqdN75PUUdaKyJvuaB6Raic4lKaYE7MtPNxwJP4FMeP+WLad4Rr3GBf1S33e/Eq0
+        88eN3GjPn6Ggd+zIshPGDz8T8T9PfoyZ+f6JrITEyg==
+X-ME-Sender: <xms:0ODBY8DY6RuCSKy1hKs8ei14XotYeEgNfvDM51g94ptZLn5i3BJQNQ>
+    <xme:0ODBY-jlQ5TmHwJi7OFBAhA4mttip_uggmMKVULoKV-TlKfkIkumA4MHMTnCSTYF7
+    Fo9YqvBg-Vb_w>
+X-ME-Received: <xmr:0ODBY_mrtzrdIrJ9DzrMo5QCBskDEtngeyvUB4IrnxQSIPGrbl9NtRMrR6X-EjYvJTmQq547ut3C11F1URb8S6wZWIpb8SA67g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleelgddtgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
+    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
+    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefgudel
+    teefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
+    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:0ODBYyxbJcG7imjuq8Dklu6XNbYfj9boTjfAqr2_DvCLFB5rN_rtKA>
+    <xmx:0ODBYxQepT3qyQlR4yI0nr6pPJ7s4J7b8tINsEXME9CfYWK1N_-OIg>
+    <xmx:0ODBY9ZiqivvK03r8PZFSikxrh3ofaufnbSumwH3KxvqEhXTH6DbzQ>
+    <xmx:0eDBYwLcidQbQg_3PNESAxuO6rWVzK0gKXNvMRH9QqCW17WYpgZuLg>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Jan 2023 17:53:02 -0500 (EST)
+Date:   Fri, 13 Jan 2023 23:52:59 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 6/9] KVM: Unmap existing mappings when change the
- memory attributes
-Message-ID: <Y8HgLq/CqTaEi/ME@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
+Message-ID: <Y8Hgy4UHxKqh0T2T@mail-itl>
+References: <20230113140610.7132-1-jgross@suse.com>
+ <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4m4xLSz0QPn9icEC"
 Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022, Chao Peng wrote:
-> @@ -785,11 +786,12 @@ struct kvm {
->  
->  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
->  	struct mmu_notifier mmu_notifier;
-> +#endif
->  	unsigned long mmu_invalidate_seq;
->  	long mmu_invalidate_in_progress;
->  	gfn_t mmu_invalidate_range_start;
->  	gfn_t mmu_invalidate_range_end;
-> -#endif
 
-Blech.  The existing code is a bit ugly, and trying to extend for this use case
-makes things even worse.
+--4m4xLSz0QPn9icEC
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Jan 2023 23:52:59 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, linux-pm@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
 
-Rather than use the base MMU_NOTIFIER Kconfig and an arbitrary define, I think we
-should first add a proper Kconfig, e.g. KVM_GENERIC_MMU_NOTIFIER, to replace the
-combination.  E.g
+On Fri, Jan 13, 2023 at 08:40:15PM +0100, Rafael J. Wysocki wrote:
+> On Fri, Jan 13, 2023 at 3:06 PM Juergen Gross <jgross@suse.com> wrote:
+> >
+> > Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
+> > Xen PV guest") missed one code path accessing real_mode_header, leading
+> > to dereferencing NULL when suspending the system under Xen:
+> >
+> >     [  348.284004] PM: suspend entry (deep)
+> >     [  348.289532] Filesystems sync: 0.005 seconds
+> >     [  348.291545] Freezing user space processes ... (elapsed 0.000 sec=
+onds) done.
+> >     [  348.292457] OOM killer disabled.
+> >     [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.10=
+4 seconds) done.
+> >     [  348.396612] printk: Suspending console(s) (use no_console_suspen=
+d to debug)
+> >     [  348.749228] PM: suspend devices took 0.352 seconds
+> >     [  348.769713] ACPI: EC: interrupt blocked
+> >     [  348.816077] BUG: kernel NULL pointer dereference, address: 00000=
+0000000001c
+> >     [  348.816080] #PF: supervisor read access in kernel mode
+> >     [  348.816081] #PF: error_code(0x0000) - not-present page
+> >     [  348.816083] PGD 0 P4D 0
+> >     [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >     [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1=
+=2E3-1.fc32.qubes.x86_64 #1
+> >     [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.0=
+1 07/03/2022
+> >     [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
+> >
+> > Fix that by adding an indirection for acpi_get_wakeup_address() which
+> > Xen PV dom0 can use to return a dummy non-zero wakeup address (this
+> > address won't ever be used, as the real suspend handling is done by the
+> > hypervisor).
+>=20
+> How exactly does this help?
 
-	config KVM_GENERIC_MMU_NOTIFIER
-	       select MMU_NOTIFIER
-	       bool
+By not accessing calling acpi_get_wakeup_address() (with the patch
+renamed to x86_acpi_get_wakeup_address()) during PV dom0 suspend, which
+otherwise would access not initialized real_mode_header.
 
-and then all architectures that currently #define KVM_ARCH_WANT_MMU_NOTIFIER can
-simply select the Kconfig, which is everything except s390.  "GENERIC" again because
-s390 does select MMU_NOTIFER and actually registers its own notifier for s390's
-version of protected VMs (at least, I think that's what its "pv" stands for).
+I confirm this patch fixes the issue.
 
-And then later down the line in this series, when the attributes and private mem
-needs to tie into the notifiers, we can do:
+> > Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as=
+ Xen PV guest")
+> > Reported-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingsl=
+ab.com>
+> > Signed-off-by: Juergen Gross <jgross@suse.com>
+> > ---
+> >  arch/x86/include/asm/acpi.h  | 2 +-
+> >  arch/x86/kernel/acpi/sleep.c | 3 ++-
+> >  include/xen/acpi.h           | 9 +++++++++
+> >  3 files changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
+> > index 65064d9f7fa6..137259ff8f03 100644
+> > --- a/arch/x86/include/asm/acpi.h
+> > +++ b/arch/x86/include/asm/acpi.h
+> > @@ -61,7 +61,7 @@ static inline void acpi_disable_pci(void)
+> >  extern int (*acpi_suspend_lowlevel)(void);
+> >
+> >  /* Physical address to resume after wakeup */
+> > -unsigned long acpi_get_wakeup_address(void);
+> > +extern unsigned long (*acpi_get_wakeup_address)(void);
+> >
+> >  /*
+> >   * Check if the CPU can handle C2 and deeper
+> > diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+> > index 3b7f4cdbf2e0..1a3cd5e24cd0 100644
+> > --- a/arch/x86/kernel/acpi/sleep.c
+> > +++ b/arch/x86/kernel/acpi/sleep.c
+> > @@ -33,10 +33,11 @@ static char temp_stack[4096];
+> >   * Returns the physical address where the kernel should be resumed aft=
+er the
+> >   * system awakes from S3, e.g. for programming into the firmware wakin=
+g vector.
+> >   */
+> > -unsigned long acpi_get_wakeup_address(void)
+> > +static unsigned long x86_acpi_get_wakeup_address(void)
+> >  {
+> >         return ((unsigned long)(real_mode_header->wakeup_start));
+> >  }
+> > +unsigned long (*acpi_get_wakeup_address)(void) =3D x86_acpi_get_wakeup=
+_address;
+> >
+> >  /**
+> >   * x86_acpi_enter_sleep_state - enter sleep state
+> > diff --git a/include/xen/acpi.h b/include/xen/acpi.h
+> > index b1e11863144d..7e1e5dbfb77c 100644
+> > --- a/include/xen/acpi.h
+> > +++ b/include/xen/acpi.h
+> > @@ -56,6 +56,12 @@ static inline int xen_acpi_suspend_lowlevel(void)
+> >         return 0;
+> >  }
+> >
+> > +static inline unsigned long xen_acpi_get_wakeup_address(void)
+> > +{
+> > +       /* Just return a dummy non-zero value, it will never be used. */
+> > +       return 1;
+> > +}
+> > +
+> >  static inline void xen_acpi_sleep_register(void)
+> >  {
+> >         if (xen_initial_domain()) {
+> > @@ -65,6 +71,9 @@ static inline void xen_acpi_sleep_register(void)
+> >                         &xen_acpi_notify_hypervisor_extended_sleep);
+> >
+> >                 acpi_suspend_lowlevel =3D xen_acpi_suspend_lowlevel;
+> > +#ifdef CONFIG_ACPI_SLEEP
+> > +               acpi_get_wakeup_address =3D xen_acpi_get_wakeup_address;
+> > +#endif
+> >         }
+> >  }
+> >  #else
+> > --
+> > 2.35.3
+> >
 
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
-	config KVM_GENERIC_MEMORY_ATTRIBUTES
-	       select KVM_GENERIC_MMU_NOTIFIER
-	       bool
+--4m4xLSz0QPn9icEC
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I.e. that way this patch doesn't need to partially expose KVM's notifier stuff
-and can instead just keep the soon-to-be-existing KVM_GENERIC_MMU_NOTIFIER.
+-----BEGIN PGP SIGNATURE-----
 
-Taking a depending on KVM_GENERIC_MMU_NOTIFIER for KVM_GENERIC_MEMORY_ATTRIBUTES
-makes sense, because AFAICT, changing any type of attribute, e.g. RWX bits, is
-going to necessitate unmapping the affected gfn range.
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmPB4MsACgkQ24/THMrX
+1yw2swgAk/5GqFX39AKLVH88v8kknH2HL3VTuIzqJY8+1FDQ5c7aWElrJp/WmgGR
+EaqALVjRocUTHRX6/rIyg5l7R3drsEOfNLa8tNd5jlWWXRDwHlrf+eXBTlQZs9zX
+a8mLaFADPonMM4XkiPfQutk/qpklvNf2ijAEfDiwsbODHa28Uzif2ysL2ZlTF2CA
+rVxwY4YY9ndRkaBSR7Y/UCMP5P/f7NtbjD2UPcZVDHl0xNp89geMBuSNVHVEcMXn
+tOivOdQ6IpczX6bCME1R3ewDNud+aFznTPyW9Q+ZQmYPLKXF+nzO1lQR5a/gBxyi
+y1OfQ7J0s3r6JaQYvmF6O7JCgHNQ+A==
+=8flr
+-----END PGP SIGNATURE-----
 
->  	struct list_head devices;
->  	u64 manual_dirty_log_protect;
->  	struct dentry *debugfs_dentry;
-> @@ -1480,6 +1482,7 @@ bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int kvm_arch_post_init_vm(struct kvm *kvm);
->  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
->  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
-> +bool kvm_arch_has_private_mem(struct kvm *kvm);
-
-The reference to private memory belongs in a later patch.  More below.
-
-> +static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
-> +{
-> +	struct kvm_gfn_range gfn_range;
-> +	struct kvm_memory_slot *slot;
-> +	struct kvm_memslots *slots;
-> +	struct kvm_memslot_iter iter;
-> +	int i;
-> +	int r = 0;
-
-The return from kvm_unmap_gfn_range() is a bool, this should be:
-
-	bool flush = false;
-
-> +
-> +	gfn_range.pte = __pte(0);
-> +	gfn_range.may_block = true;
-> +
-> +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> +		slots = __kvm_memslots(kvm, i);
-> +
-> +		kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-> +			slot = iter.slot;
-> +			gfn_range.start = max(start, slot->base_gfn);
-> +			gfn_range.end = min(end, slot->base_gfn + slot->npages);
-> +			if (gfn_range.start >= gfn_range.end)
-> +				continue;
-> +			gfn_range.slot = slot;
-> +
-> +			r |= kvm_unmap_gfn_range(kvm, &gfn_range);
-> +		}
-> +	}
-> +
-> +	if (r)
-> +		kvm_flush_remote_tlbs(kvm);
-> +}
-> +
->  static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->  					   struct kvm_memory_attributes *attrs)
->  {
->  	gfn_t start, end;
->  	unsigned long i;
->  	void *entry;
-> +	int idx;
->  	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
->  
-> -	/* flags is currently not used. */
-> +	/* 'flags' is currently not used. */
-
-Kind of a spurious change.
-
->  	if (attrs->flags)
->  		return -EINVAL;
->  	if (attrs->attributes & ~supported_attrs)
-> @@ -2372,6 +2409,13 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->  
->  	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
->  
-> +	if (kvm_arch_has_private_mem(kvm)) {
-
-I think we should assume that any future attributes will necessitate unmapping
-and invalidation, i.e. drop the private mem check.  That allows introducing
-kvm_arch_has_private_mem() in a later patch that is more directly related to
-private memory.
-
-> +		KVM_MMU_LOCK(kvm);
-> +		kvm_mmu_invalidate_begin(kvm);
-> +		kvm_mmu_invalidate_range_add(kvm, start, end);
-> +		KVM_MMU_UNLOCK(kvm);
-> +	}
-> +
->  	mutex_lock(&kvm->lock);
->  	for (i = start; i < end; i++)
->  		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
-> @@ -2379,6 +2423,16 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->  			break;
->  	mutex_unlock(&kvm->lock);
->  
-> +	if (kvm_arch_has_private_mem(kvm)) {
-> +		idx = srcu_read_lock(&kvm->srcu);
-
-Mostly for reference, this goes away if slots_lock is used instead of kvm->lock.
-
-> +		KVM_MMU_LOCK(kvm);
-> +		if (i > start)
-> +			kvm_unmap_mem_range(kvm, start, i);
-> +		kvm_mmu_invalidate_end(kvm);
-> +		KVM_MMU_UNLOCK(kvm);
-> +		srcu_read_unlock(&kvm->srcu, idx);
-> +	}
-> +
->  	attrs->address = i << PAGE_SHIFT;
->  	attrs->size = (end - i) << PAGE_SHIFT;
->  
-> -- 
-> 2.25.1
-> 
+--4m4xLSz0QPn9icEC--
