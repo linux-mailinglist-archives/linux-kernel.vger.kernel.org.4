@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ED566A5AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8855A66A5B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 23:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjAMWH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 17:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S230216AbjAMWHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 17:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjAMWH1 (ORCPT
+        with ESMTP id S230144AbjAMWHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 17:07:27 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA81011826;
-        Fri, 13 Jan 2023 14:07:25 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id u9so55494939ejo.0;
-        Fri, 13 Jan 2023 14:07:25 -0800 (PST)
+        Fri, 13 Jan 2023 17:07:36 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A242676AF5
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:07:32 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id s14-20020a17090302ce00b00192d831a155so15588954plk.11
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 14:07:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wRJeuNMECfIR2T5BvBaStXjhMzdrlDtYinDb6OGqSJE=;
-        b=dHw6TfJ4L90yibFDOR5cZ0Zz+JuTtNZSRTD8LxZ/oDHeTYXpEN1B4fsGqa8ZqcvWV6
-         2RoMRVS8yIagHclgWsXA1nHlSRjh2m8AVsmUPV+L85/OimqvJKcHLqCDO6c1eJSrUIIj
-         ZNFD0zX7vtBdL7jq2eFVIfo8xvIYI49E8JplP/rj5uVFV96SJVF8hMtY2X2udSkWOgBx
-         /s498qcNS1Eid3rgSzccVAxlcYhpjXs+FwkfMAH3dfFg+PAncoaU/kB/0z1VjBfi5/3b
-         s+JmMbiI2DgQLVxXf9HlA46kl2PETUgoQqABmk80LNQeIaAYQV32Eq4Znvy8EJnu+ZnR
-         NqKg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tvJbCtGPjaySsYlcQ9SGihqPWmk76m7GVR1zZaETHos=;
+        b=VGW1X3J7LEjFFCzmLMbT7R3kSUQNmgHK3Vr7yRvDuNGKnUl8xPF2xLfnOhVLgJ547m
+         UUur7tbTSeBSgbQmOWgks+tJOH+BFqZtRp68C3wazyRRWmeNy2rvTigm2j3CG++QQ7P0
+         09OBHs6IcAWO/B3kzf8czBdZz2UBeL25LTe5hMbJnyymh8PpxrpA+HdAWV1qrOEZXR1/
+         fRwY38oJDw1KDmYTMsMmuS43h1diht1VEkmetY6hlyv/CjcAOQ2VDpF/bqiszn/YZVJ7
+         S38x6EJ6n5UBgUZ2PjXT1H8Z/smbNH44RMmLwwnBYNLuSl1zkkgBx1F1lYzeZP7tsLFR
+         039A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wRJeuNMECfIR2T5BvBaStXjhMzdrlDtYinDb6OGqSJE=;
-        b=HFCfLy6twteL9FXGrWG2Y9OK6DwIJqEVMms1Ras+E9JWGezOvqcNjWGasy1NwDLQ9V
-         9ojJdcZuMzGEjx/NlOJUykZsIRzK4PSjwNvlVe4ij4vW30T1Bd85tBkpgn79G488qjXK
-         5+83ypMENKO1d9Nqu+PvyQwMH+8xG3JCSd7upn1H7Hm96tV9tneqxqeeo3O0tqAZixzt
-         kfjvPZEF/rtB/+6+SAsqkW5wCYVbsKzvTllESXcd/ztKIAgDpLtROMvycC4+VWx6sNnh
-         qE0EFG608oKzcoF3PfMNkA7Z/QOelGYY4c8DWdbnlg1Dql8vIRvfOoQMM9fBicAMguW6
-         i6wQ==
-X-Gm-Message-State: AFqh2kqYW/TzyrK0FXqVdOqAVRN4w/Lk0mqdFpNrdmxSJcejtVSZQ4K6
-        PV1OlFqmHZlss6aIOXPPuGxiwDVPw4B9UW463Ho=
-X-Google-Smtp-Source: AMrXdXu4DocIb/qbjx4z9p5zFrQigVSJqzdXoljmC8b6VFjo9zoeYd1+wzIw/gRCZ6atl2XwOr7aLjKah3k/7CPL9U0=
-X-Received: by 2002:a17:906:a014:b0:7c1:8450:f964 with SMTP id
- p20-20020a170906a01400b007c18450f964mr7788457ejy.176.1673647644511; Fri, 13
- Jan 2023 14:07:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20230113093427.1666466-1-imagedong@tencent.com> <bdca73eb-07e3-2187-c46f-a3f14a9e50a4@oracle.com>
-In-Reply-To: <bdca73eb-07e3-2187-c46f-a3f14a9e50a4@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 13 Jan 2023 14:07:12 -0800
-Message-ID: <CAEf4BzZ5FNw-j3F8cUpy4knRiM1sqQOOPZnM43Kj8peN9kKQLg@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: replace '.' with '_' in legacy kprobe event name
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     menglong8.dong@gmail.com, andrii@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tvJbCtGPjaySsYlcQ9SGihqPWmk76m7GVR1zZaETHos=;
+        b=YjcOvbTHKlf5w/rRWUTE3LF9DyuQrI8LXP41ciddF7pC61o+oDjiA6DU3u7IkC8D+w
+         3UA6Oz93awBRjNddVZBcD0pOn6nLUHIuHuGtpodiX1dXQ7gUm41t4R/gConuSCTSjoD4
+         lS2sUncbZNJpyzn7Z4N3toMKPuUlNT4WW0PYgewjAMjxPR54Yooxs0AYNFege4myCVZD
+         mDNI9o1TIjINQbYB8r/HJSFLf9PHdBAJ/TQInx7VjExciIzdnoQ3vMRzV0SxENo5h8lE
+         5MbdFCXgW8dAVIJqI9o8454rB0WSvTkfOjuBgiJq2WHAR2H+f1pWYBX7XCUAIk3AFrMN
+         UEYw==
+X-Gm-Message-State: AFqh2kog7zGJjGZqZoPaaY0wWY9l4lHTiZpKiSFrUP0gqyjOxC9WI3jM
+        PLDP97DtDxtu0oaKqhYNFhXAZxQ8zU+9zg==
+X-Google-Smtp-Source: AMrXdXuBdEDkPZxfm94Sp7M0g9rZG7yTh1LuBgqLeG8O8vo4RQ4HalG7AGLAlyouR8VVbrGYzEU8dRu/geFUAQ==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:90b:1109:b0:226:f85c:e099 with SMTP
+ id gi9-20020a17090b110900b00226f85ce099mr2664860pjb.198.1673647651998; Fri,
+ 13 Jan 2023 14:07:31 -0800 (PST)
+Date:   Fri, 13 Jan 2023 14:07:18 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230113220718.2901010-1-dlatypov@google.com>
+Subject: [PATCH] kunit: kunit_skip() should not overwrite KUNIT_FAIL()
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 6:13 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> On 13/01/2023 09:34, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > '.' is not allowed in the event name of kprobe. Therefore, we will get a
-> > EINVAL if the kernel function name has a '.' in legacy kprobe attach
-> > case, such as 'icmp_reply.constprop.0'.
-> >
-> > In order to adapt this case, we need to replace the '.' with other char
-> > in gen_kprobe_legacy_event_name(). And I use '_' for this propose.
-> >
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index fdfb1ca34ced..5d6f6675c2f2 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -9994,9 +9994,16 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
-> >                                        const char *kfunc_name, size_t offset)
-> >  {
-> >       static int index = 0;
-> > +     int i = 0;
-> >
-> >       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(), kfunc_name, offset,
-> >                __sync_fetch_and_add(&index, 1));
-> > +
-> > +     while (buf[i] != '\0') {
-> > +             if (buf[i] == '.')
-> > +                     buf[i] = '_';
-> > +             i++;
-> > +     }
-> >  }
->
-> probably more naturally expressed as a for() loop as is done in
-> gen_uprobe_legacy_event_name(), but not a big deal.
->
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Currently, kunit_skip() and kunit_mark_skipped() will overwrite the
+current test's status even if it was already marked FAILED.
 
-Applied, but tuned to be exactly the same loop as in
-gen_uprobe_legacy_event_name. Thanks.
+E.g. a test that just contains this
+ KUNIT_FAIL(test, "FAIL REASON");
+ kunit_skip(test, "SKIP REASON");
+will be marked "SKIPPED" in the end.
 
->
-> One issue with the legacy kprobe code is that we don't get test coverage
-> with it on new kernels - I wonder if it would be worth adding a force_legacy
-> option to bpf_kprobe_opts? A separate issue to this change of course, but
-> if we had that we could add some legacy kprobe tests that would run
-> for new kernels as well.
+Now, tests like the above don't and shouldn't exist.
+But what happens if non-test code (e.g. KASAN) calls kunit_fail_current_test()?
 
-Yep, good idea. If we ever have some bug in the latest greatest kprobe
-implementation, users will have an option to work around that with
-this.
+E.g. if we have
+  if (do_some_invalid_memory_accesses())
+    kunit_skip(");
+then the KASAN failures will get masked!
 
-The only thing is that we already have 3 modes: legacy, perf-based
-through ioctl, and bpf_link-based, so I think it should be something
-like
+This patch: make it so kunit_mark_skipped() does not modify the status
+if it's already set to something (either already to SKIPPED or FAILURE).
 
-enum kprobe_mode {
-    KPROBE_MODE_DEFAULT = 0, /* latest supported by kernel */
-    KPROBE_MODE_LEGACY,
-    KPROBE_MODE_PERF,
-    KPROBE_MODE_LINK,
-};
+Before this change, the KTAP output would look like
+    # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:23
+FAIL REASON
+    ok 1 example_simple_test # SKIP SKIP REASON
 
-LEGACY/PERF/LINK naming should be thought through, just a quick example.
+After this change:
+    # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:23
+FAIL REASON
+    # example_simple_test: status already changed, not marking skipped: SKIP REASON
+    not ok 1 example_simple_test
 
-And then just have `enum kprobe_mode mode;` in kprobe_opts, which
-would default to 0 (KPROBE_MODE_DEFAULT).
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ include/kunit/test.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Would that work?
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 87ea90576b50..39936463dde5 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -386,11 +386,18 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+  *
+  * Marks the test as skipped. @fmt is given output as the test status
+  * comment, typically the reason the test was skipped.
++ * This has no effect if the test has already been marked skipped or failed.
+  *
+  * Test execution continues after kunit_mark_skipped() is called.
+  */
+ #define kunit_mark_skipped(test_or_suite, fmt, ...)			\
+ 	do {								\
++		if (READ_ONCE((test_or_suite)->status) != KUNIT_SUCCESS) {\
++			kunit_warn(test_or_suite, "status already "	\
++				   "changed, not marking skipped: " fmt,\
++				   ##__VA_ARGS__);			\
++			break;						\
++		}							\
+ 		WRITE_ONCE((test_or_suite)->status, KUNIT_SKIPPED);	\
+ 		scnprintf((test_or_suite)->status_comment,		\
+ 			  KUNIT_STATUS_COMMENT_SIZE,			\
 
->
-> Alan
-> >
-> >  static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
-> >
+base-commit: 7dd4b804e08041ff56c88bdd8da742d14b17ed25
+-- 
+2.39.0.314.g84b9a713c41-goog
+
