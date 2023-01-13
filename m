@@ -2,76 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD449668872
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B93FA668879
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjAMAcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S233576AbjAMAdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjAMAcj (ORCPT
+        with ESMTP id S232730AbjAMAdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:32:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799CB60CC0;
-        Thu, 12 Jan 2023 16:32:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E3CC621D8;
-        Fri, 13 Jan 2023 00:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5939BC433D2;
-        Fri, 13 Jan 2023 00:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673569957;
-        bh=D+CLx71N7hh+aMCrNFwner/r2ssmRTSXXThuDIxd478=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=jY0ccoL8B48ZokoTeh5+PEtKN6kWxbJxS0xC7fk4NF+f0OyUPiKiZYDK/nOD14oid
-         tLz7NLzF3Tx0Xwg9MEZaKi2SudIgyVHThZJfATddeqtW/zbtKYZKlEdKnn/oKOUiWO
-         R/pgDXxWBTAeDYOJCK2j2rGbe+UOwXa26bbjOPXoTF2KxBtke+2UnxsnRHhmKn9O17
-         uiBWTtjprisS5+XIq8dEjy4bdTZInkEdsQTnAWM9QBXTFwkd5z57v4Opxh/A9QzWx+
-         y+TxrCELwlTHXPeWWjKpVnjYDdYmORSIanvLI1oB6z0tfPEy1vZIzjGuWMvCSydUIJ
-         WnrJCnWZMKtkg==
-Message-ID: <b19614d43df2dbd3614b9241d2c3cfc1.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 12 Jan 2023 19:33:39 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A31E061448;
+        Thu, 12 Jan 2023 16:33:32 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(16491:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Fri, 13 Jan 2023 08:33:08 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 13 Jan
+ 2023 08:33:08 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Fri, 13 Jan 2023 08:33:08 +0800
+Date:   Fri, 13 Jan 2023 08:33:07 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <matthias.bgg@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <gene_chen@richtek.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH RESEND v2] usb: typec: tcpm: Fix altmode re-registration
+ causes sysfs create fail
+Message-ID: <20230113003307.GA4232@linuxcarl2.richtek.com>
+References: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221225212632.2760126-1-martin.blumenstingl@googlemail.com>
-References: <20221225212632.2760126-1-martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v1 0/4] clk: meson: switch from .round_rate to .determine_rate
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbrunet@baylibre.com,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Date:   Thu, 12 Jan 2023 16:32:35 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1673248790-15794-1-git-send-email-cy_huang@richtek.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Martin Blumenstingl (2022-12-25 13:26:28)
-> The goal of this series is to switch the meson sub-drivers to use
-> clk_ops.determine_rate instead of clk_ops.round_rate. The former has
-> lower precision (2^31 instead of 2^32 on 32-bit systems). Also the idea
-> of the .determine_rate callback is that is replaces .round_rate so the
-> latter can be removed at some point.
->=20
-> No functional changes (apart from the 2^31 to 2^32 difference mentioned
-> bove) intended.
->=20
->=20
-> Martin Blumenstingl (4):
->   clk: meson: mpll: Switch from .round_rate to .determine_rate
->   clk: meson: dualdiv: switch from .round_rate to .determine_rate
->   clk: meson: sclk-div: switch from .round_rate to .determine_rate
->   clk: meson: clk-cpu-dyndiv: switch from .round_rate to .determine_rate
->=20
+On Mon, Jan 09, 2023 at 03:19:50PM +0800, cy_huang@richtek.com wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> There's the altmode re-registeration issue after data role
+> swap (DR_SWAP).
+> 
+> Comparing to USBPD 2.0, in USBPD 3.0, it loose the limit that only DFP
+> can initiate the VDM command to get partner identity information.
+> 
+> For a USBPD 3.0 UFP device, it may already get the identity information
+> from its port partner before DR_SWAP. If DR_SWAP send or receive at the
+> mean time, 'send_discover' flag will be raised again. It causes discover
+> identify action restart while entering ready state. And after all
+> discover actions are done, the 'tcpm_register_altmodes' will be called.
+> If old altmode is not unregistered, this sysfs create fail can be found.
+> 
+> In 'DR_SWAP_CHANGE_DR' state case, only DFP will unregister altmodes.
+> For UFP, the original altmodes keep registered.
+> 
+> This patch fix the logic that after DR_SWAP, 'tcpm_unregister_altmodes'
+> must be called whatever the current data role is.
+> 
+> Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together)
+> Reported-by: TommyYl Chen <tommyyl.chen@mediatek.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Since v2:
+> - Correct the mail sent from Richtek.
+> - Add 'Reviewed-by' tag.
+>
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Sorry, it seems I focus on the email testing and forget to attach the issue
+log in the v2 patch appendix.
+
+If anyone check this issue. Please refer to the v1 patch link.
+https://lore.kernel.org/lkml/1671096096-20307-1-git-send-email-u0084500@gmail.com/
+Inside this, the issue log show how it happened.
+
+This can help better analyze this issue. 
+
+ChiYuan Huang.
+> Hi, Greg:
+> 
+>   Please check this one. I have strongly requested our MIS to remove the confidential string.
+> 
+> ChiYuan Huang.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 904c7b4..59b366b 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4594,14 +4594,13 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+>  	case DR_SWAP_CHANGE_DR:
+> -		if (port->data_role == TYPEC_HOST) {
+> -			tcpm_unregister_altmodes(port);
+> +		tcpm_unregister_altmodes(port);
+> +		if (port->data_role == TYPEC_HOST)
+>  			tcpm_set_roles(port, true, port->pwr_role,
+>  				       TYPEC_DEVICE);
+> -		} else {
+> +		else
+>  			tcpm_set_roles(port, true, port->pwr_role,
+>  				       TYPEC_HOST);
+> -		}
+>  		tcpm_ams_finish(port);
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+> -- 
+> 2.7.4
+> 
