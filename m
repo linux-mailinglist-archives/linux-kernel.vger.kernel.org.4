@@ -2,132 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898ED6698A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA08669898
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241616AbjAMNeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
+        id S241514AbjAMNdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241734AbjAMNd1 (ORCPT
+        with ESMTP id S241411AbjAMNcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:33:27 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE445BA26;
-        Fri, 13 Jan 2023 05:26:13 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DBuSDZ005819;
-        Fri, 13 Jan 2023 13:25:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qd/+Nb4pg8YWTKhNAUyU1pOk7jqhTx4w8n80wei/bD0=;
- b=mv/EtgXuC3Qmzx36Lf+2Zed041+1GD2gkipvGyr/gTiOMpaHCpUPOVEQd0fQ3RFo88UO
- FSE3O57WY3BqtZJxvDG8Wkco05Sq3AnNMeeDrk7030IvXTSkNsfYzIQcpGNN3LjdErdj
- B1mg0uouNGnaPLIibItXWgK6rGypWzKGx4WqpUdauiiKLURSOqDWwbanZG4QdXhK1+vA
- JqBLkrxPj3GhicLfbANMawekk2RQo6hPURYLjF/I4bw6JKpvkFDzkecB8sEZWDd6lIRg
- GE8guoHh7w93cMCtnJurFRSipcfjjSWS6F0RcgZNPCY6fHLVPKHzRzwSQg1fBlOFeU/n Uw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2wun1jpd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:25:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30DDPOOr009153
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Jan 2023 13:25:24 GMT
-Received: from [10.50.57.3] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 05:25:15 -0800
-Message-ID: <5533b3f9-cd09-4e1d-455a-53ee1d39a008@quicinc.com>
-Date:   Fri, 13 Jan 2023 18:55:13 +0530
+        Fri, 13 Jan 2023 08:32:54 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA161C421;
+        Fri, 13 Jan 2023 05:25:30 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id tz12so52319536ejc.9;
+        Fri, 13 Jan 2023 05:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UOllpG0+Dl5G/9qIkXzHpwBMNf8SENLbMSdjFtdgPg4=;
+        b=PR/TRLOjKwTt0dfXTfmtHqU/QGU2Y1BwrnZAF3q5lkPA8wtAkbQiaVxnccS3IK9juN
+         ZtbWY/Hp6PccMsWTQz41H/SlpAdk7sHHjK2ZXeuXowROukD6sNnploQYWaSb5eWG0AMK
+         CAudJzXuqvELN1JUazhboI/kyuHcJzoUG2fwh4+qeXKkXCUg5kz0Qb3WPUVYjAbO4rZw
+         yjM8ociyqWAJV+mR5gMFdUUjnN+X2xJn1KfvGaQHwosutrZwsbFChUdWxld+zW900Sxg
+         tWAeEI2md0Hqge162UJdJOt3+B2DCCcsoZbAIozTFCYN5CuEqEj5O1bs4FTEh9csYyvN
+         qwJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UOllpG0+Dl5G/9qIkXzHpwBMNf8SENLbMSdjFtdgPg4=;
+        b=R4wH7LB/R98ib0tTcEW5vEwq3QC6dme04Z2Rydt6LFO/ZOOxiKG29Xs7vLyuB+bCOL
+         Gdwa62PhaCMjaGV/DZrZYoAhltyy3cbumjGr+BWZHv2QE+OLnTWQ8kf0da4CbP+3CCMH
+         D3wF77R2C/kK09FvxB5DOH9yM8rVYOYK2x+VG1QJsLx0hk81IViiu0p0UahXSAtiTQ54
+         k2Yg2+hYzHX2kE/QdDzfRU5r5ezoQnfdDHOB6+EohrgsEe6yQinueUcrjTD5L9UeQmrm
+         74TfqFbBSAoOmBGlOAjalltLMFxIbdV6Du247beTErINgfrhzUh8BaBor7jOSPJ583Kv
+         UOPg==
+X-Gm-Message-State: AFqh2kp4VFco7tWbHCs74DFgUELW/fSyeDk+yFGIxozmrflTomUQXgrs
+        02OY8x2d1iVHUKPWKUt8rVV2gIm+DgkFuyb01lE=
+X-Google-Smtp-Source: AMrXdXtvUT/ihPdUmS8OJfyvASCv1Is4rEjgNwD/WZcCjONxgISROcy/9/mCABAXkOCWC/PHgzqDafrpgL2bJi5zvIs=
+X-Received: by 2002:a17:906:c0c2:b0:836:9bcf:16e5 with SMTP id
+ bn2-20020a170906c0c200b008369bcf16e5mr4548613ejb.439.1673616328722; Fri, 13
+ Jan 2023 05:25:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/7] pinctrl: qcom: Add IPQ9574 pinctrl driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <tdas@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230110121316.24892-1-quic_devipriy@quicinc.com>
- <20230110121316.24892-5-quic_devipriy@quicinc.com>
- <788ddb2a-7c29-cc10-fce2-ca348cd81b65@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <788ddb2a-7c29-cc10-fce2-ca348cd81b65@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: dMqb2z9B4hpUuZ7iHdoWdpMhC4hklgeg
-X-Proofpoint-GUID: dMqb2z9B4hpUuZ7iHdoWdpMhC4hklgeg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-13_06,2023-01-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 phishscore=0 malwarescore=0 spamscore=0 bulkscore=0
- mlxscore=0 priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=762 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301130089
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CAKXUXMxNc4iObjL+8RyJN=Kcy5X1r21ez_05oAuy93J=gQ2gZw@mail.gmail.com>
+ <CAMj1kXH3hoGWF=c7UVsWi3xoJsJ1VyFK74CV+L8SO8u2o2xdsQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXH3hoGWF=c7UVsWi3xoJsJ1VyFK74CV+L8SO8u2o2xdsQ@mail.gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 13 Jan 2023 14:25:17 +0100
+Message-ID: <CAKXUXMyoUxKqxA3FSwFHitZkahbJqXZk4cb7LL7c9yFddFHw3Q@mail.gmail.com>
+Subject: Re: linker problem with Ubuntu 18.04 tool chain: unknown architecture
+ of input file `arch/arm64/boot/vmlinuz.o' is incompatible with aarch64 output
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 13, 2023 at 12:58 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Fri, 13 Jan 2023 at 12:50, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> >
+> > Dear Ard,
+> >
+> > with my Ubuntu 18.04 arm gcc tool chain, I encounter this linker error
+> > in my allyesconfig build:
+> >
+> >  LD      arch/arm64/boot/vmlinuz.efi.elf
+> > aarch64-linux-gnu-ld: unknown architecture of input file
+> > `arch/arm64/boot/vmlinuz.o' is incompatible with aarch64 output
+> > drivers/firmware/efi/libstub/Makefile.zboot:41: recipe for target
+> > 'arch/arm64/boot/vmlinuz.efi.elf' failed
+> > make[1]: *** [arch/arm64/boot/vmlinuz.efi.elf] Error 1
+> > arch/arm64/Makefile:173: recipe for target 'vmlinuz.efi' failed
+> > make: *** [vmlinuz.efi] Error 2
+> >
+> > I bisected it back to happen since commit c37b830fef13 ("arm64: efi:
+> > enable generic EFI compressed boot"), and it still appears with the
+> > latest next-20230113 (on linux-next, I have to remove DRM_MSM as it
+> > currently comes with a build error).
+> >
+> > The specific compiler and linker versions on my system are:
+> >
+> > $ aarch64-linux-gnu-ld --version
+> > GNU ld (GNU Binutils for Ubuntu) 2.30
+> >
+> > $ aarch64-linux-gnu-gcc --version
+> > aarch64-linux-gnu-gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0
+> >
+> >
+> > IMHO, I run pretty standard commands:
+> > make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j 32 mrproper
+> > make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j 32 allyesconfig
+> > make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j 32 all
+> >
+> > Let me know if you need more information.
+> >
+>
+> Hello Lukas,
+>
+> This seems to mean that AArch64 ld.bfd 2.30 is not able to combine
+> generic ELF objects with AArch64 ELF objects. vmlinuz.o only contains
+> a compressed blob in an ELF data section, and more modern toolchains
+> have no issue with this at all.
+>
+> Given that building allyesconfig with fairly outdated toolchains is
+> not something anyone is likely to obsess about, I don't have a strong
+> preference as to how we work around this, put perhaps the easiest
+> approach would be for CONFIG_EFI_ZBOOT to depend on !CONFIG_LD_IS_BFD
+> || CONFIG_LD_VERSION >= 23xxx here? (We'll need to check the exact
+> version)
 
+That sounds reasonable to me.
 
-On 1/11/2023 3:16 PM, Krzysztof Kozlowski wrote:
-> On 10/01/2023 13:13, devi priya wrote:
->> Add pinctrl definitions for the TLMM of IPQ9574
->>
->> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->> ---
->>   drivers/pinctrl/qcom/Kconfig           |   10 +
->>   drivers/pinctrl/qcom/Makefile          |    1 +
->>   drivers/pinctrl/qcom/pinctrl-ipq9574.c | 1003 ++++++++++++++++++++++++
->>   3 files changed, 1014 insertions(+)
->>   create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq9574.c
->>
->> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
->> index 1378ddca084f..a9b4b07e3de0 100644
->> --- a/drivers/pinctrl/qcom/Kconfig
->> +++ b/drivers/pinctrl/qcom/Kconfig
->> @@ -70,6 +70,16 @@ config PINCTRL_IPQ6018
->>   	  Qualcomm Technologies Inc. IPQ6018 platform. Select this for
->>   	  IPQ6018.
->>   
->> +config PINCTRL_IPQ9574
->> +	tristate "Qualcomm Technologies, Inc. IPQ9574 pin controller driver"
->> +	depends on GPIOLIB && OF
-> 
-> Look at other entries and use similar style.
-Sure, will do!
-> 
-> Best regards,
-> Krzysztof
-> 
-Best Regards,
-Devi Priya
+Thanks,
+
+Lukas
