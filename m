@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F5A6688C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370026688BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 01:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjAMAyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 19:54:17 -0500
+        id S239921AbjAMAyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 19:54:25 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240216AbjAMAxu (ORCPT
+        with ESMTP id S232377AbjAMAyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 19:53:50 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4454D120A8;
-        Thu, 12 Jan 2023 16:53:45 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id g68so12862262pgc.11;
-        Thu, 12 Jan 2023 16:53:45 -0800 (PST)
+        Thu, 12 Jan 2023 19:54:09 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3D7AE64
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:54:08 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id v23so16996982plo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 16:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LFhlmdG7Cx41399yo/ozHBL4wwrrh2PAewE6ufP94qA=;
-        b=i6ekoKSewTItPgRE2QdLfrvZixqAENBhz4Yj1/vL3BIQX1WDTpF0k3GyYEmg0KIHxA
-         wj+1HMU7ALqFSNrA9RlqGF4D/uEBUivlqxRFfFOol7sG1QIJ1Sw2zxDYHbNQIys/Qsky
-         0NFmblrpzx0KKcGh8kB+gjKI8HWtpVlNhmvIdyqXpDUvEnmzDJXr7Od4S3iqm/kBPJFZ
-         vh4y1phX2awKQOOPubl5cOJ3nzq2TOqpX3SUlgiRM9D7awAY5ju8+KGxseEdOdDZZsoa
-         fltbWpnTBk5i6j0UldFDab4ttCBFzpQSgO25zUk2bw5vHS/A6x2A/K5WVpUVGXOfc1WB
-         PCCQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xsayLyP7nh0k2HOHnHJ4pw0bqMbBUybwNSC5DyRKIC8=;
+        b=bMip9NCrJH3DnbTyVthFl9yIiF3j/16C2WV0j690Wq/w/Ow5h3S79FZMagva/XpF7e
+         tXprTN8l54WBgwPZqJBu+hiHHC+UWMy0S1sDG/zAi1P0y/InvPPN7uWHrPBB4hYIiGUO
+         0K5gjGa5AztHL5McB0FbEiUggdnsWQcrr3g/I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LFhlmdG7Cx41399yo/ozHBL4wwrrh2PAewE6ufP94qA=;
-        b=sPNER0SSxSLZ2OMAITrOsXnXdf7Amug05ta/Dn8xiiFuX9GYqK2/w+nUc69xs1Ex/+
-         qR457qz4+dgGC3YS9gNq0RLBXDJiuaIGdoAuoWilhomfGBui2O1xo08yYy+zgLoGmmjO
-         XRJTLLLXS0LxAkfDh6HIZMVGjBt5EqZNyDUuvfk3Hw5zJB1UnplvF+wZmlS4vrF5EvK3
-         vEGbBKuahzL6B2IYSEHugQK/qHVDG4ItWZV8GKrXfJW9JlbLvQiUxYY1cORd/0GxrANS
-         RKLyEG+0Olw3CvHrUTLgYqdK8Ox7HdF0Ij73YkuTZbPvj7369mhe+tMzAHm8kAmb6qFF
-         qFgw==
-X-Gm-Message-State: AFqh2kq7ugmShcpvZl4i+Lt4S0o4FWiJ93FqNtVsKF8oI8MQO2LHCSbU
-        psXm9WcAouwFJ7qHbLXZFBY=
-X-Google-Smtp-Source: AMrXdXu1X9KPr22ssxKflYXC/u/tn02ODq8xROkMYqYHhkQZxtO2R5++OCViQ3yaiUe/98rn3BkSUQ==
-X-Received: by 2002:a05:6a00:993:b0:581:c2d3:dc5e with SMTP id u19-20020a056a00099300b00581c2d3dc5emr67010322pfg.11.1673571224295;
-        Thu, 12 Jan 2023 16:53:44 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w9-20020a628209000000b0058a72925687sm6065388pfd.212.2023.01.12.16.53.43
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xsayLyP7nh0k2HOHnHJ4pw0bqMbBUybwNSC5DyRKIC8=;
+        b=SYuRKLtYbVaBle0Y3bHQNnzaQqOXGjZBz6883AoHnwXaguWlAFPQaSZEPdmd5QYDUh
+         /VpPf4FjlhtcFnx+7P+pX36j4qv/Es41U3JSwEyE5pghzG+/mZYI7uPE1OwctdyEFMXu
+         LPosn5IH0AMGJOSgqmcgAIoaagKlbnnV7QxZiAn0fdjYnJf1+xAweMc/62rDeYON1j+p
+         CoiNq1rV92K99U4BF5Mo4GisIq6ItOjR+KvtOfvRs3hRAVH7cbd6LiM9BJV9CybBeHF7
+         1biUZr5CUy0IeE9cT0uGQbTbX7PpedD/nxE0eoMtYmxWb18movSEtZ/LvG0Jsj+M1ZRx
+         Nvjg==
+X-Gm-Message-State: AFqh2kosthovRWt3kd5mLP0GY9kXZbEnjjDbw25czttBNTJF396lmDCJ
+        vyamSuMXTZjRB4orJlzZXegQXQ==
+X-Google-Smtp-Source: AMrXdXsLH6UhWCasDyJvsSNInG39OEZLlwb5rDlmlSiORB314t+bQ4mWVdUfo0L9yrPzsFD0DI9lCw==
+X-Received: by 2002:a05:6a20:9591:b0:ad:7428:d326 with SMTP id iu17-20020a056a20959100b000ad7428d326mr100677310pzb.30.1673571248151;
+        Thu, 12 Jan 2023 16:54:08 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:11a:201:4652:3752:b9b7:29f9])
+        by smtp.gmail.com with ESMTPSA id u11-20020a6540cb000000b0046ff3634a78sm10676614pgp.71.2023.01.12.16.54.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 16:53:43 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 12 Jan 2023 14:53:42 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
-Message-ID: <Y8CrloCDGhbU42OH@slm.duckdns.org>
-References: <Y7cX0SJ0y6+EIY5Q@slm.duckdns.org>
- <7dcdaef3-65c1-8175-fea7-53076f39697f@huaweicloud.com>
- <Y7iCId3pnEnLqY8G@slm.duckdns.org>
- <875eb43e-202d-5b81-0bff-ef0434358d99@huaweicloud.com>
- <Y7xbpidpq7+DqJan@slm.duckdns.org>
- <a71f997f-6cae-d57b-85dd-2fd499d238f6@huaweicloud.com>
- <Y72wF/b0/xNRmP7f@slm.duckdns.org>
- <53b30ac8-d608-ba0b-8b1b-7fe5cfed6d61@huaweicloud.com>
- <Y77s0f741mFfGlTO@slm.duckdns.org>
- <4aeef320-c6c8-d9b4-8826-d58f00ea6264@huaweicloud.com>
+        Thu, 12 Jan 2023 16:54:07 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.15.y 0/4] phy: qcom-qmp-combo: Backport some stable fixes
+Date:   Thu, 12 Jan 2023 16:54:01 -0800
+Message-Id: <20230113005405.3992011-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4aeef320-c6c8-d9b4-8826-d58f00ea6264@huaweicloud.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+After the qmp phy driver was split it looks like 5.15.y stable kernels
+aren't getting fixes like commit 7a7d86d14d07 ("phy: qcom-qmp-combo: fix
+broken power on") which is tagged for stable 5.10. Trogdor boards use
+the qmp phy on 5.15.y kernels, so I backported the fixes I could find
+that looked like we may possibly trip over at some point.
 
-On Thu, Jan 12, 2023 at 02:18:15PM +0800, Yu Kuai wrote:
-> remove the blkcg_deactivate_policy() from rq_qos_exit() from deleting
-> the device, and delay the policy cleanup and free to blkg_destroy_all().
-> Then the policies(other than bfq) can only call pd_free_fn() from
-> blkg_destroy(), and it's easy to guarantee the order. For bfq, it can
-> stay the same since bfq has refcounting itself.
-> 
-> Then for the problem that ioc can be freed in pd_free_fn(), we can fix
-> it by freeing ioc in ioc_pd_free() for root blkg instead of
-> rq_qos_exit().
-> 
-> What do you think?
+USB and DP work on my Trogdor.Lazor board with this set.
 
-That would remove the ability to dynamically remove an rq_qos policy, right?
-We don't currently do it but given that having an rq_qos registered comes
-with perf overhead, it's something we might want to do in the future - e.g.
-only activate the policy when the controller is actually enabled. So, idk.
-What's wrong with synchronizing the two removal paths? blkcg policies are
-combinations of cgroups and block device configurations, so having exit
-paths from both sides is kinda natural.
+Johan Hovold (4):
+  phy: qcom-qmp-combo: disable runtime PM on unbind
+  phy: qcom-qmp-combo: fix memleak on probe deferral
+  phy: qcom-qmp-combo: fix broken power on
+  phy: qcom-qmp-combo: fix runtime suspend
 
-Thanks.
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 72 ++++++++++++++---------------
+ 1 file changed, 36 insertions(+), 36 deletions(-)
 
+Cc: Johan Hovold <johan+linaro@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+
+base-commit: d57287729e229188e7d07ef0117fe927664e08cb
 -- 
-tejun
+https://chromeos.dev
+
