@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D307669407
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E286669409
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 11:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbjAMKYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 05:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S241261AbjAMKYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 05:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241172AbjAMKXi (ORCPT
+        with ESMTP id S241198AbjAMKXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 05:23:38 -0500
+        Fri, 13 Jan 2023 05:23:42 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EE2BC0F;
-        Fri, 13 Jan 2023 02:23:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CF2DEA9;
+        Fri, 13 Jan 2023 02:23:41 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2D09D4258A;
-        Fri, 13 Jan 2023 10:23:32 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 0606E42597;
+        Fri, 13 Jan 2023 10:23:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1673605416; bh=M3tZrYZnQ0FBU0rxzLvbqjtCSW4bNvZXYV5NUHuboTk=;
+        t=1673605420; bh=fxnUPxMQfOKf9QNHPBDaDANUADvv1JFN7DwbvKgCdNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=xoflWglINJt2Kww6POJDVwvtrmzEH4a7tuJzKq+dTzqd5irvgP1Exj3UZ9TOAPLHj
-         Jo9GbMSlw4pmdP335FEAWSGBaYmN81gsITgcorIbKPwW32uXmLbs8x8lc2YJTqWp1q
-         1yXxZkgs+AHxN67mmI7xs1zqw5NxTpAaTKrqtDKo9tsJCuEMAtskUmJ8DhAGqwaUTB
-         MoeuvEbtYnro6hp4nuqzlwVvP2gRKLpu5GIp07cgrhlfB+K46FCNHYpus3uqgrh2Vl
-         fW2BzoBy0+8hGZPP8SIAmC6cbHWEvdIKTOwKDMfjumS1r+Tj15QC7SltWowsx/PO62
-         FgK6uSuqSK4Hg==
+        b=YZrgvujqp8be2tc3lP2yhiK7xnACtPrFKRW8NFtP3GuVfQ+IPnZsmzqk0sqY7arBi
+         4xLm1P09TugAtLEe27leiv7gMugA+o0x7omi1CYVz4k6khlFEwheC+iVn1oms1/V1f
+         69Z0RgW5z+VG40bjNBsNKl9ocrLzjjByhPlDGqipwGs6QqZP8Gqfir29ikEy2wcOFB
+         8WtWpqmf8hWe4GiKOWrlEnjUKB0PSoZmQKXzSeqTfplqg7li1LooPURQVoaOSvu+kO
+         TAXpDL9qllak0WN5i2rdy96JCdXTEB2ZDt7zYJDBWIgegCVubpqhv98Br4ew/7Sluu
+         9sXSwo+3WWSGA==
 From:   Hector Martin <marcan@marcan.st>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -40,10 +40,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Janne Grunau <j@jannau.net>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, Hector Martin <marcan@marcan.st>
-Subject: [PATCH v2 2/3] spi: dt-bindings: Add hold/inactive CS delay peripheral properties
-Date:   Fri, 13 Jan 2023 19:23:09 +0900
-Message-Id: <20230113102309.18308-3-marcan@marcan.st>
+        Hector Martin <marcan@marcan.st>
+Subject: [PATCH v2 3/3] spi: Parse hold/inactive CS delay values from the DT
+Date:   Fri, 13 Jan 2023 19:23:10 +0900
+Message-Id: <20230113102309.18308-4-marcan@marcan.st>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230113102309.18308-1-marcan@marcan.st>
 References: <20230113102309.18308-1-marcan@marcan.st>
@@ -60,37 +60,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Janne Grunau <j@jannau.net>
 
-These two properties complete the bindings for the Linux spi_device cs
-model, which includes cs_setup, cs_hold and cs_inactive delay values.
+Now that we support parsing the setup time from the Device Tree, we can
+also easily support the remaining hold and inactive time delay values.
 
 Signed-off-by: Janne Grunau <j@jannau.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/spi/spi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index 9a60c0664bbe..782a014b63a7 100644
---- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-@@ -49,6 +49,16 @@ properties:
-       Delay in nanoseconds to be introduced by the controller after CS is
-       asserted.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 3f33934f5429..fc4f6308efd8 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2327,6 +2327,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
  
-+  spi-cs-hold-delay-ns:
-+    description:
-+      Delay in nanoseconds to be introduced by the controller before CS is
-+      de-asserted.
-+
-+  spi-cs-inactive-delay-ns:
-+    description:
-+      Delay in nanoseconds to be introduced by the controller after CS is
-+      de-asserted.
-+
-   spi-rx-bus-width:
-     description:
-       Bus width to the SPI bus used for read transfers.
+ 	/* Device CS delays */
+ 	of_spi_parse_dt_cs_delay(nc, &spi->cs_setup, "spi-cs-setup-delay-ns");
++	of_spi_parse_dt_cs_delay(nc, &spi->cs_hold, "spi-cs-hold-delay-ns");
++	of_spi_parse_dt_cs_delay(nc, &spi->cs_inactive, "spi-cs-inactive-delay-ns");
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 
