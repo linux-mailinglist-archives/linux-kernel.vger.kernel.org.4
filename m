@@ -2,160 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8536696CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78BA6696CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjAMMUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S231956AbjAMMUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239600AbjAMMTc (ORCPT
+        with ESMTP id S240584AbjAMMUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:19:32 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591DE78179
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:12:50 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso14247736wmq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:12:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k2B0hsASFUkHWI+dtbJoqoXBrOmDXx4P5iE4tDoIv9Y=;
-        b=r5LMJrP1xmHoLFxCeIJz1DlWNsBJgQSDhoBQsjNX1FZGWGcX5q6iezTlqp7iJ7dxsj
-         2l30AzU3QT015HNw22K27UXC69kTC9Dx3zjaT4zaSywPtt2UmipEhx2YBtCQbTSGOpFa
-         SVBhIPlb1y5YIsk0cxJGkLQuVIdSEnK9KyyCOIKergfjR9O/STPWjKP0B6cjspqe0DJ5
-         ufpKjggsU9ht6XRWi5FqyRLTAF0q/6DILqpjRUnnENWhFyEL2Sn2COJYru4UULhFeCzs
-         VKq9rKeYlp0KZ6KWzId19etifFPGkY4nLW/sjcNxqjKFA2MvjEAz/28i86FUaNO5dHtc
-         TJLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2B0hsASFUkHWI+dtbJoqoXBrOmDXx4P5iE4tDoIv9Y=;
-        b=oVi3IH+SvBW5eoLs0yBbYaW/PiOHX32IIodZ+QGMcoREJTCLCNKIqr6rjz+Kv5KXrO
-         KubQWARqUOmqOB3MsK7vD7chK0sFJfGRXpJ7utPVm+3OuCUNJhS9tzF8C7A3Fiy++eyq
-         Ud2lZn4Ak/VftijMQY1RsQwZbAP/dh7G18tBM35PO73knmx2qfQYcEIwDWnnzfENV+Zp
-         Qybtw3IQQs1KbfzrMYHICPh0wiHCmnKbKAagUXFZlX9ahb0Gymwahc8pYz4sbZo5wr33
-         8w53W0fUAWSHs603/FyO0PBHmmiGLOSH7XOM8XQ1o/jVHQGEeW06JAg6RiWj6Gbkh/cJ
-         RPAw==
-X-Gm-Message-State: AFqh2kovI+r/HZwCDA7vhuoeZGNdQ5XT4bXiOCmki1HsgAWAgVuNzHE7
-        /FGCP91bJJ/SjIF2By9z+YOlEQ==
-X-Google-Smtp-Source: AMrXdXu2ltpUhMmjl2uUB9itPccs5udi7WYLCpJAPI1VbQ0Ahcuu4yLeptqX5/gWOIqo97PCCNz40w==
-X-Received: by 2002:a7b:c851:0:b0:3d9:f067:1c32 with SMTP id c17-20020a7bc851000000b003d9f0671c32mr13643754wml.29.1673611968714;
-        Fri, 13 Jan 2023 04:12:48 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t9-20020a05600c198900b003d9e74dd9b2sm22536878wmq.9.2023.01.13.04.12.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 04:12:48 -0800 (PST)
-Message-ID: <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
-Date:   Fri, 13 Jan 2023 13:12:47 +0100
+        Fri, 13 Jan 2023 07:20:04 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D47D9C8;
+        Fri, 13 Jan 2023 04:13:40 -0800 (PST)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 69FBB85232;
+        Fri, 13 Jan 2023 13:13:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1673612019;
+        bh=J/U7KHP4KXz5e0asbqFdbCzP2TxQPDvlfoOPqB7U9+k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Yg3Rsrc72KpSIlP884baLc/K1DhWGtMkPhWNqSmHfyJLK3hZh5bNnZI3ycNCfTgER
+         6jLVzjcdQ0hJvkt45btW1k6VteUZGA0ZOKRAE0AnkYzqDc5q56DP65NIcBjDoV7dXJ
+         Ans3+3BaFPQ8vv+ehXPR331OuJUfRBNKLw65IR//kDhDwl32uP9sQ50hluwVQn99+B
+         HebEUH0nMmzLxHKYfxoiKhLg3jGE0WHISj7Rvp0Ev87nInuLm1x0UXs9clPjSt7YQN
+         UVehQ71cZCCFMZ51cp3djFu/lXzNNfwejxTcj7rMdgCPwqq55wb3t5i/KaiQOvAzNL
+         e8+SEoLzpHc8g==
+Date:   Fri, 13 Jan 2023 13:13:31 +0100
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
+ about max frame size
+Message-ID: <20230113131331.28ba7997@wsk>
+In-Reply-To: <20230106145109.mrv2n3ppcz52jwa2@skbuf>
+References: <20230106101651.1137755-1-lukma@denx.de>
+        <20230106101651.1137755-1-lukma@denx.de>
+        <20230106145109.mrv2n3ppcz52jwa2@skbuf>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points
- int340x
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "daniel.lezcano@kernel.org" <daniel.lezcano@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
- <20230110151745.2546131-4-daniel.lezcano@linaro.org>
- <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/WnDPSNFgBRDqwg_7+UoGrH1";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/WnDPSNFgBRDqwg_7+UoGrH1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rui;
+Hi Vladimir,
 
-thanks for testing and your comments
+> On Fri, Jan 06, 2023 at 11:16:49AM +0100, Lukasz Majewski wrote:
+> > Different Marvell DSA switches support different size of max frame
+> > bytes to be sent. This value corresponds to the memory allocated
+> > in switch to store single frame.
+> >=20
+> > For example mv88e6185 supports max 1632 bytes, which is now
+> > in-driver standard value. On the other hand - mv88e6250 supports
+> > 2048 bytes. To be more interresting - devices supporting jumbo
+> > frames - use yet another value (10240 bytes)
+> >=20
+> > As this value is internal and may be different for each switch IC,
+> > new entry in struct mv88e6xxx_info has been added to store it.
+> >=20
+> > This commit doesn't change the code functionality - it just provides
+> > the max frame size value explicitly - up till now it has been
+> > assigned depending on the callback provided by the IC driver
+> > (e.g. .set_max_frame_size, .port_set_jumbo_size).
+> >=20
+> > Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> >=20
+> > ---
+> > Changes for v2:
+> > - Define max_frame_size with default value of 1632 bytes,
+> > - Set proper value for the mv88e6250 switch SoC (linkstreet) family
+> >=20
+> > Changes for v3:
+> > - Add default value for 1632B of the max frame size (to avoid
+> > problems with not defined values)
+> >=20
+> > Changes for v4:
+> > - Rework the mv88e6xxx_get_max_mtu() by using per device defined
+> >   max_frame_size value
+> >=20
+> > - Add WARN_ON_ONCE() when max_frame_size is not defined
+> >=20
+> > - Add description for the new 'max_frame_size' member of
+> > mv88e6xxx_info ---
+> >  drivers/net/dsa/mv88e6xxx/chip.c | 41
+> > ++++++++++++++++++++++++++++---- drivers/net/dsa/mv88e6xxx/chip.h |
+> >  6 +++++ 2 files changed, 42 insertions(+), 5 deletions(-)
+> >=20
+> > diff --git a/drivers/net/dsa/mv88e6xxx/chip.c
+> > b/drivers/net/dsa/mv88e6xxx/chip.c index 242b8b325504..fc6d98c4a029
+> > 100644 --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> > +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> > @@ -3545,11 +3545,10 @@ static int mv88e6xxx_get_max_mtu(struct
+> > dsa_switch *ds, int port) {
+> >  	struct mv88e6xxx_chip *chip =3D ds->priv;
+> > =20
+> > -	if (chip->info->ops->port_set_jumbo_size)
+> > -		return 10240 - VLAN_ETH_HLEN - EDSA_HLEN -
+> > ETH_FCS_LEN;
+> > -	else if (chip->info->ops->set_max_frame_size)
+> > -		return 1632 - VLAN_ETH_HLEN - EDSA_HLEN -
+> > ETH_FCS_LEN;
+> > -	return 1522 - VLAN_ETH_HLEN - EDSA_HLEN - ETH_FCS_LEN;
+> > +	WARN_ON_ONCE(!chip->info->max_frame_size);
+> > +
+> > +	return chip->info->max_frame_size - VLAN_ETH_HLEN -
+> > EDSA_HLEN
+> > +		- ETH_FCS_LEN; =20
+>=20
+> VLAN_ETH_HLEN (18) + EDSA_HLEN (8) + ETH_FCS_LEN (4) =3D 30
+>=20
+> >  }
+> > =20
+> >  static int mv88e6xxx_change_mtu(struct dsa_switch *ds, int port,
+> > int new_mtu) @@ -4955,6 +4954,7 @@ static const struct
+> > mv88e6xxx_ops mv88e6250_ops =3D { .avb_ops =3D &mv88e6352_avb_ops,
+> >  	.ptp_ops =3D &mv88e6250_ptp_ops,
+> >  	.phylink_get_caps =3D mv88e6250_phylink_get_caps,
+> > +	.set_max_frame_size =3D mv88e6185_g1_set_max_frame_size,
+> >  };
+> > =20
+> >  static const struct mv88e6xxx_ops mv88e6290_ops =3D {
+> > @@ -5543,6 +5543,7 @@ static const struct mv88e6xxx_info
+> > mv88e6xxx_table[] =3D { .num_internal_phys =3D 5,
+> >  		.max_vid =3D 4095,
+> >  		.max_sid =3D 63,
+> > +		.max_frame_size =3D 1522, =20
+>=20
+> 1522 - 30 =3D 1492.
+>=20
+> I don't believe that there are switches which don't support the
+> standard MTU of 1500 ?!
+
+I think that this commit [1], made the adjustment to fix yet another
+issue.
+
+It looks like the missing 8 bytes are added in the
+mv88e6xxx_change_mtu() function.
+
+>=20
+> >  		.port_base_addr =3D 0x10,
+> >  		.phy_base_addr =3D 0x0,
+> >  		.global1_addr =3D 0x1b, =20
+>=20
+> Note that I see this behavior isn't new. But I've simulated it, and it
+> will produce the following messages on probe:
+>=20
+> [    7.425752] mscc_felix 0000:00:00.5 swp0 (uninitialized): PHY
+> [0000:00:00.3:10] driver [Microsemi GE VSC8514 SyncE] (irq=3DPOLL) [
+> 7.437516] mscc_felix 0000:00:00.5: nonfatal error -34 setting MTU to
+> 1500 on port 0 [    7.588585] mscc_felix 0000:00:00.5 swp1
+> (uninitialized): PHY [0000:00:00.3:11] driver [Microsemi GE VSC8514
+> SyncE] (irq=3DPOLL) [    7.600433] mscc_felix 0000:00:00.5: nonfatal
+> error -34 setting MTU to 1500 on port 1 [    7.752613] mscc_felix
+> 0000:00:00.5 swp2 (uninitialized): PHY [0000:00:00.3:12] driver
+> [Microsemi GE VSC8514 SyncE] (irq=3DPOLL) [    7.764457] mscc_felix
+> 0000:00:00.5: nonfatal error -34 setting MTU to 1500 on port 2 [
+> 7.900771] mscc_felix 0000:00:00.5 swp3 (uninitialized): PHY
+> [0000:00:00.3:13] driver [Microsemi GE VSC8514 SyncE] (irq=3DPOLL) [
+> 7.912501] mscc_felix 0000:00:00.5: nonfatal error -34 setting MTU to
+> 1500 on port 3
+>=20
+> I wonder, shouldn't we first fix that, and apply this patch set
+> afterwards?
+
+IMHO, it is up to Andrew to decide how to proceed, as the
+aforementioned patch [1] is an attempt to fix yet another issue [2].
 
 
-On 13/01/2023 12:41, Zhang, Rui wrote:
-> On Tue, 2023-01-10 at 16:17 +0100, Daniel Lezcano wrote:
->> The thermal framework gives the possibility to register the trip
->> points with the thermal zone. When that is done, no get_trip_* ops
->> are
->> needed and they can be removed.
->>
->> Convert the ops content logic into generic trip points and register
->> them with the thermal zone.
->>
->> In order to consolidate the code, use the ACPI thermal framework API
->> to fill the generic trip point from the ACPI tables.
->>
->> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
->> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
->> ---
->>     V3:
->>        - The driver Kconfig option selects CONFIG_THERMAL_ACPI
->>        - Change the initialization to use GTSH for the hysteresis on
->>          all the trip points
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
->>   .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++----------
->> ----
 
-[ ... ]
+Links:
 
->> -static int int340x_thermal_get_trip_hyst(struct thermal_zone_device
->> *zone,
->> -		int trip, int *temp)
->> -{
->> -	struct int34x_thermal_zone *d = zone->devdata;
->> -	acpi_status status;
->> -	unsigned long long hyst;
->> -
->> -	status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL,
->> &hyst);
->> -	if (ACPI_FAILURE(status))
->> -		*temp = 0;
->> -	else
->> -		*temp = hyst * 100;
-> 
-> The previous code returns hyst * 100.
-> But the new API retuurns hyst directly.
-> 
-> -/sys/class/thermal/thermal_zone2/trip_point_4_hyst:2000
-> +/sys/class/the
-> rmal/thermal_zone2/trip_point_4_hyst:20
-> 
-> Is this done on purpose?
+[1] -
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3Db9c587fed61cf88bd45822c3159644445f6d5aa6
 
-No, it is an error. The function thermal_acpi_trip_gtsh() should do:
+[2] -
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D1baf0fac10fbe3084975d7cb0a4378eb18871482
 
-	return deci_kelvin_to_millicelsius(hyst);
+Best regards,
 
+Lukasz Majewski
 
+--
 
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+--Sig_/WnDPSNFgBRDqwg_7+UoGrH1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmPBSusACgkQAR8vZIA0
+zr39sQgAmvQlm34Ino/bdyQl4HVlGaXQYKK8lr5Ogu3YrpegMVLAm7vwdxE5FA+p
+svWH0FMsCSzfLaWpVXI5tYIjJSGGXccynOfsOKmfRag3Kb8tn5zcV0KHH9Jz1WyN
+rxj7Tp5lf921fEGexW1dSYUQWoDI/nVwm88hmabbea8wovDwa9Szj+DhVLaI/Asd
+xKKvlV7IXICXFrUgLVD8MKhOcCaEAc7gHd4w2PKy0nMmRWCyO5XQT+91Nm5OK+QU
+oJT2tu7xE1vfrwDI2atM5mXi/CuLskyQL1xc4lpB71XJ7TUhsUfnJKXG5K8f5LkI
+gYoKmY25x4cE4UQ+IwQFiV+z2yX9xQ==
+=TyKL
+-----END PGP SIGNATURE-----
+
+--Sig_/WnDPSNFgBRDqwg_7+UoGrH1--
