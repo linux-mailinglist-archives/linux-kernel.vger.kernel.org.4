@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AEA66A3B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B2A66A3B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 20:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjAMTxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 14:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S230363AbjAMTyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 14:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjAMTxs (ORCPT
+        with ESMTP id S230048AbjAMTyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 14:53:48 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1CC7D247
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:53:47 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id f20so23535749lja.4
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 11:53:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yxJoOeJeLXuoA2xLIDUsuFLs7ZqEd/yD5fE3qlFqk7A=;
-        b=Rn1YZS2w7L3nZ8Sb7Ng6rbdcbE7pzQCTm+HI1VdJOFiBKz1gQk/5vq2IkEfp/r4i9Z
-         1jKK1lUJ0SjoNPb+Y5P2VvTmWKAcNkGOc0jrRONz5A860SrcC6J8dKeZG+U1iFGIgjkB
-         3l+Tb08gbsYT08e3F6TMrj4JqE0/4fh/prky8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yxJoOeJeLXuoA2xLIDUsuFLs7ZqEd/yD5fE3qlFqk7A=;
-        b=Kfe3vp8DHeCsZe57vINudzsfYfRwWX+Sc7mpcULfkJzec8LhvZxFL/MUvnwTUUl6L2
-         4IKKUd1iXauqSOmMx3VfV6UZhSn1gRWWBoClbvKE+EheqWRyO6liv+eIugQmSSZ9Go1a
-         lsj/7+sFft9CQiidFNqq+kWWAaub5kyGkbAlVmXWT8ImoCKVt3bpq9evK8ylaggWmytp
-         1RS6uU3mjzIcaGUQD3UJdVKuCpEvLVdkrMct548hNm3KNe123qLCPgA5G0AIjAKoLVlC
-         ef82zizpwyeQcYbrlrgPWjn+k1E29r3c9KYdyzzR+5xTp8Wejc8a5knTJb/N7W/euIyt
-         11yA==
-X-Gm-Message-State: AFqh2ko4WPGSvJkwRHpgjZ8CaX4chEcWy1vPLefCrMUcmaskPK2BGrdq
-        16a3g/lGGZ0KTDMnNgprRHoBd6cv5wKJ3qHSdUp+yw==
-X-Google-Smtp-Source: AMrXdXtIP5DEa3Zgi51YDgDbmJhKbc57SuJt0SLQKb1Q8s8fsroNJOyivDPMX0662NXb/zobe6OaHrS84aCoVTRebHg=
-X-Received: by 2002:a2e:9a8c:0:b0:287:dd66:81f0 with SMTP id
- p12-20020a2e9a8c000000b00287dd6681f0mr1080397lji.4.1673639625718; Fri, 13 Jan
- 2023 11:53:45 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 13 Jan 2023 13:53:44 -0600
+        Fri, 13 Jan 2023 14:54:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB9F87932;
+        Fri, 13 Jan 2023 11:54:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 20FCFCE20C2;
+        Fri, 13 Jan 2023 19:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6553C433EF;
+        Fri, 13 Jan 2023 19:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673639650;
+        bh=o/jt4K1pvhBiN+jx25cKLJjAvfIhQnIB1JmYnMtWFc0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bNP5c8f4aTCQD81HSgG75FoQJyMLmrSyhC/YNRNGbEHwD0SsWjm3yFN2KJPaJClMl
+         94cLmSemCH6fUri3EM0YX90m0e6cLwKmCjiYC8H98h0UlIRo1re/dMxtAq8tLcTiA7
+         IaBn/rjnxaoD60jNknefdfvf6Gf+NrrpfrfRTrn97aPJ4fPUyw3yYuqiHszzi5qjp7
+         sywRilHJEh8W1PBk6y49rku2oikDsvKPcMb5gIRSXYY0J1cbwFWcqAiy3FG9JQbnYI
+         JXAox9U/jXLWAe1Fh+nNqQpEXQs/rm1GLIg7mIYBnmYcDCFVIMQuvf/YY27Afq6v/8
+         q2A5xykM8KGPQ==
+Date:   Fri, 13 Jan 2023 11:54:08 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Cc:     Greg KH <greg@kroah.com>, Andre Przywara <andre.przywara@arm.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] r8152; preserve device list format
+Message-ID: <20230113115408.741150b8@kernel.org>
+In-Reply-To: <874jsu68og.fsf@miraculix.mork.no>
+References: <87k01s6tkr.fsf@miraculix.mork.no>
+        <20230112100100.180708-1-bjorn@mork.no>
+        <Y7/dBXrI2QkiBFlW@kroah.com>
+        <87cz7k6ooc.fsf@miraculix.mork.no>
+        <878ri86o6j.fsf@miraculix.mork.no>
+        <Y7/ir/zcJQUVec72@kroah.com>
+        <874jsu68og.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-In-Reply-To: <Y8EO8w9Smn4NAox6@hovoldconsulting.com>
-References: <20230113005405.3992011-1-swboyd@chromium.org> <20230113005405.3992011-3-swboyd@chromium.org>
- <Y8EO8w9Smn4NAox6@hovoldconsulting.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 13 Jan 2023 13:53:44 -0600
-Message-ID: <CAE-0n52LkayyRwV0tDk2LAciAfOmYU056L53f8Ma1QLiQCHfoQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15.y 2/4] phy: qcom-qmp-combo: fix memleak on probe deferral
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,33 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Johan Hovold (2023-01-12 23:57:39)
-> On Thu, Jan 12, 2023 at 04:54:03PM -0800, Stephen Boyd wrote:
-> > From: Johan Hovold <johan+linaro@kernel.org>
-> >
-> > commit 2de8a325b1084330ae500380cc27edc39f488c30 upstream.
-> >
-> > Switch to using the device-managed of_iomap helper to avoid leaking
-> > memory on probe deferral and driver unbind.
-> >
-> > Note that this helper checks for already reserved regions and may fail
-> > if there are multiple devices claiming the same memory.
->
-> This bit turned out to catch some buggy bindings and dts, so if you want
-> to backport this one then the corresponding fixes for that would be
-> needed as well.
->
-> That includes
->
->         a5d6b1ac56cb ("phy: qcom-qmp-usb: fix memleak on probe deferral")
->
-> and some dts fixes which likely already have been backported.
->
-> It may even be preferred to keep to just skip this patch and keep those
-> small memory leaks on probe deferral to not risk any regressions in
-> stable.
+On Fri, 13 Jan 2023 11:16:47 +0100 Bj=C3=B8rn Mork wrote:
+> There is no point backporting to anything older than v5.15 since the
+> patch depend on significant driver changes between v5.10 and v5.15.  The
+> good news is that those changes also modified the macro in question so
+> any device ID patch for v5.10 or older will have to be fixed up in any
+> case.  So we don't lose anything by ignoring the older longterm kernels
+> here.
+>=20
+> IIUC the special netdev stable rules are gone.  But if this is going to
+> stable, then I believe it still has to go to "net" first.
+>=20
+> David/Jakub - Would you please pick
+>=20
+>   ec51fbd1b8a2 ("r8152: add USB device driver for config selection")
+>   69649ef84053 ("cdc_ether: no need to blacklist any r8152 devices")
+>=20
+> from net-next to net?  With a "CC: stable" preferably.  Or do you prefer
+> some other solution?
 
-I only see qcom,sm8350-qmp-usb3-uni-phy in the stable tree and that
-hasn't been changed since the node was introduced. I'll try to port the
-exclusive logic from a5d6b1ac56cb into this patch. I don't think it's
-preferable to keep the memory leak.
+Well.. we already shipped the patch from this thread as is to Linus.
+Greg will be able to take be53771c87f4 into stable directly, with=20
+no dependencies.
+
+And now the refactoring won't cherry-pick cleanly :(
+Maybe let's leave it be?
+
+I'll keep in mind that Greg is okay with taking this sort of
+refactoring in in the future. I made an unnecessary commotion here.
