@@ -2,150 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A4266A0E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4C966A0E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjAMRnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S230199AbjAMRn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjAMRnJ (ORCPT
+        with ESMTP id S229714AbjAMRnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:43:09 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC028B775
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:29:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673630972; x=1705166972;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JIm27/Zc/uch3n2kZrsorIE+84Bcpxcmdtm6i5sjCRA=;
-  b=mtyt9kqedLZ2WBsjGhTcwTpwSxyuYotoxpLWfQapcOZ/WKPliIB7YBtI
-   qwPc+e60eleHHnRdc6OSPZKjauLqArRulgVM4lRwFVLgNdkHD7R+P03PG
-   1L2R9UqgzFGFOa2TfVLejmSCRpNuCRg4T5xl4W5inE2o/RlKIViZgPhaV
-   qjUiDxJUS3QFfUvpogiWYsGVIrP8p7FEf6NBA6sxy9TOVtyh17M/Hcvgh
-   arg0x/gnKQlwmgUIbEwnKQ1sn2RLtKmCP3RyKoo3+HpiUHEJzlW0muZYm
-   tqUPGxvKLqhGsrN9KcQa90eUZbLlynIvLreqeiZdZ623JGTUVGEAr2LUP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="304429985"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="304429985"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:29:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="766089912"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="766089912"
-Received: from araj-ucode.jf.intel.com ([10.23.0.19])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:29:31 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: [PATCH v1 Part2 0/5] Declare safe late loadable microcode
-Date:   Fri, 13 Jan 2023 09:29:15 -0800
-Message-Id: <20230113172920.113612-1-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 13 Jan 2023 12:43:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF328B76F;
+        Fri, 13 Jan 2023 09:29:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2973B8206B;
+        Fri, 13 Jan 2023 17:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C65C433EF;
+        Fri, 13 Jan 2023 17:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673630962;
+        bh=wHTzxLTSWIWcmvmjm8HxsOOrxP/zpZaqZsO3pYaP3PQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RfMMpuLL52GwyfuIE4Byu78vWrHe+aDNzSfAQpkJk1YS92uABw45T0K+vhzy7zAoC
+         kVU20RfTNSxjkom8K97OOcrzd6kzJnTZABZn5wpzgcTbt2AItUZDdvfPp5zC68WQSt
+         tX+BHKQsBWwwaWNE3HJxYUo7sEmasjzZpSziEQ7eXBwdQjVILVTbOcQA10DlG75H9Z
+         Sr9wdrAPF/WkxKAsvzNa3T2JXGGhPmSnlaRntkcc3wjAlE0GzyJHdDISaLxjVJf/VH
+         lBzgG3e3BXnwP0mlEXQCIqzhGzpogYDxRvRL1pclxHXz+YBvlRwmI1eDZpoXOoC0iZ
+         MYNthL8mvfjuQ==
+Date:   Fri, 13 Jan 2023 17:29:16 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: BUG: kernel NULL pointer dereference, address:
+ 0000000000000008 - RIP: 0010:do_wp_page
+Message-ID: <Y8GU7Pqq/z0wxwgs@sirena.org.uk>
+References: <CA+G9fYt_b04YNCCv-iTZTtwb5fmNEQ0abiO46qW_-SrA1GQX8w@mail.gmail.com>
+ <Y8Fkjxsq5EOtGiql@casper.infradead.org>
+ <CA+G9fYuahjaNs6ia1UOeF98hUhonAt0Z4YOFGcqOKt3J4tRvTw@mail.gmail.com>
+ <Y8F+iKuJWAFsUg2m@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TMhMJ435BNU2n88d"
+Content-Disposition: inline
+In-Reply-To: <Y8F+iKuJWAFsUg2m@casper.infradead.org>
+X-Cookie: I know how to do SPECIAL EFFECTS!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris & Thomas,
 
-Attached is a series that adds support for microcode to declare a minimum
-revision number that is safe for late loading.
+--TMhMJ435BNU2n88d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Late loading was disabled[1] in 5.19 due to lack of an ability to declare
-when a microcode is safe for late loading. 
+On Fri, Jan 13, 2023 at 03:53:44PM +0000, Matthew Wilcox wrote:
+> On Fri, Jan 13, 2023 at 09:14:15PM +0530, Naresh Kamboju wrote:
 
-This series is inspired by recommendations from Thomas [2]. 
+> > [   15.980869] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> > 2.0b 07/27/2017
+> > [   15.988336] RIP: 0010:do_wp_page (memory.c:?)
 
-This series is part2 and applies on top of that cleanup series part1[3].
+> Uh, are you compiling your kernels without debuginfo?  The results
+> from syzbot & 0day are much more useful:
 
-- Move where the warning and tainting is done to the same function. It
-  helps when later patches enable late loading, to issue the warning only
-  when the vendor doesn't support a mechanism for declaring a microcode
-  for safe late loading.
+> https://lore.kernel.org/linux-mm/Y8FnAwWOxLrfoWTN@casper.infradead.org/T/#u
 
-- Add meta-data for Intel microcode to specify a minimum revision that the
-  CPU must be on before attempting to load this microcode.
+> for an example.
 
-- Extend this as a generic mechanism to allow the common infrastructure to
-  permit late loading.
+This will be a consequence of x86 not including DEBUG_INFO in defconfig
+- a lot of the testing systems cover unmodified upstream configs as a
+baseline, it tends to make life easier and be an indication of what
+people want covering.  A quick survey says most architectures are
+setting at least DEBUG_INFO_REDUCED, it'd probably be a good idea for
+x86 to do so as well.  The logs from arm64 and probably also arm
+(depending on exactly which config was being covered)  should be more
+usefully decodable, Naresh you mentioned that those were also failing?
 
-- Some CPUs required a wbinvd() to be issued before attempting to load a
-  microcode. These were later addressed via microcode patches. Now there
-  exists a mechanism to declare a minimum revision, those flushes aren't
-  required any longer.
+--TMhMJ435BNU2n88d
+Content-Type: application/pgp-signature; name="signature.asc"
 
-- Provide a mechanism to override minrev as a way to bypass during the
-  transition. It is recommended to always use early loading, especially if
-  one is moving to a newer kernel. This is a chicken bit option :) and
-  completely optional.
+-----BEGIN PGP SIGNATURE-----
 
-[1] https://lore.kernel.org/lkml/20220524185324.28395-3-bp@alien8.de/
-[2] https://lore.kernel.org/linux-kernel/alpine.DEB.2.21.1909062237580.1902@nanos.tec.linutronix.de/
-[3] https://lore.kernel.org/lkml/20230109153555.4986-1-ashok.raj@intel.com/
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPBlOwACgkQJNaLcl1U
+h9DLYgf3YlPfc1pcH0HO6HljwMCx4N5dyA5iHuN02tOpucDFEofh4Ca72a+QwHbV
+w6c7eGAk+WTO+HaPHSpSRxgvT67Xnk/8s4r5xnTAXvb3CC0cUcPob3zBa8aNH2ms
+ZbQm4dd6fva7sVJFzD1NhlTd/lOeyWIK0bZ+rWtHb2uEmbroBtyyJMYOy9KBCA5i
+0vC3rXkfGeyk2bab8Io9sAx4BJbg4cSdeSX3Fg3xXgspTpuz8xr9/UKKESkZ85yB
+C/Kr98r0EmRg+5BIVdtdesDUE1+5PkpXi5mp6zCOUVe0OhebQ6Wy8rHsVqE+sddM
+zMRKyHRObgl5CJISgH0PDTJUhKtQ
+=9Dfl
+-----END PGP SIGNATURE-----
 
-Cheers,
-Ashok
-
-Cc: LKML <linux-kernel@vger.kernel.org>
-Cc: x86 <x86@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Alison Schofield <alison.schofield@intel.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Thomas Gleixner (Intel) <tglx@linutronix.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Stefan Talpalaru <stefantalpalaru@yahoo.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Peter Zilstra (Intel) <peterz@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
-
-
-Ashok Raj (5):
-  x86/microcode: Move late load warning to the same function that taints
-    kernel
-  x86/microcode/intel: Add minimum required revision to microcode header
-  x86/microcode: Add a generic mechanism to declare support for minrev
-  x86/microcode/intel: Drop wbinvd() from microcode loading
-  x86/microcode: Provide an option to override minrev enforcement
-
- arch/x86/include/asm/microcode.h       |  4 ++
- arch/x86/include/asm/microcode_intel.h |  3 +-
- arch/x86/kernel/cpu/microcode/core.c   | 36 ++++++++++++++---
- arch/x86/kernel/cpu/microcode/intel.c  | 55 ++++++++++++++++++++------
- arch/x86/Kconfig                       |  7 ++--
- 5 files changed, 83 insertions(+), 22 deletions(-)
-
--- 
-2.34.1
-
+--TMhMJ435BNU2n88d--
