@@ -2,148 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB62669652
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD010669656
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241181AbjAMMCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S236486AbjAMMDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbjAMMB5 (ORCPT
+        with ESMTP id S233993AbjAMMCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:01:57 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92CE820C9;
-        Fri, 13 Jan 2023 03:53:48 -0800 (PST)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 69F2485265;
-        Fri, 13 Jan 2023 12:53:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1673610826;
-        bh=RxrDXcJ07buIhbEVcWKHYp0D9nS5B01WBXeK3QVU//Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t1aXcoDKHREWY7AWLw2T2CBaWeYMwRLE1+XFEPPYH3dXOWewbYfw0lEPIg8CyPWwb
-         DVguK1k2KuCMB4hNEFMdmKvWJLijG7EyVyFlCkYPtQTAIkvh+idQKJ+ZW/Txlyu83r
-         7qzF0jJ8RXGVM+yw6L9a4avymv4zaUoqdTldharmKtM61x1+MhJ4v53zy4M7RmqKz0
-         PQHeDPearYer+2TzBMF20/eyqtzqR0EqKjWM0Yn0FFoIVFpdomBbq/3hVlN4hNUhq1
-         RJRGDzV5hvzQxs0CekGdz2lmro/971UzVoa7mSIAjd8ANe7tEn2hcgRka5rEfYgDeJ
-         nDIysbxPf9Yxg==
-Date:   Fri, 13 Jan 2023 12:53:38 +0100
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
- about max frame size
-Message-ID: <20230113125338.02d44137@wsk>
-In-Reply-To: <20230113111401.hyq7xogfo5tx77e7@skbuf>
-References: <20230106101651.1137755-1-lukma@denx.de>
-        <Y7gdNlrKkfi2JvQk@lunn.ch>
-        <20230113113908.5e92b3a5@wsk>
-        <20230113104937.75umsf4avujoxbaq@skbuf>
-        <20230113120219.7dc931c1@wsk>
-        <20230113111401.hyq7xogfo5tx77e7@skbuf>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 13 Jan 2023 07:02:11 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A17F82F88;
+        Fri, 13 Jan 2023 03:53:58 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ntfrf65VRz67RRb;
+        Fri, 13 Jan 2023 19:51:14 +0800 (CST)
+Received: from localhost (10.81.201.219) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
+ 2023 11:53:55 +0000
+Date:   Fri, 13 Jan 2023 11:53:54 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] cxl/mbox: Fix Payload Length check for Get Log
+ command
+Message-ID: <20230113115354.00003d5a@Huawei.com>
+In-Reply-To: <20230104202954.1163366-1-rrichter@amd.com>
+References: <20230104202954.1163366-1-rrichter@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vqs.jyD9W5E=3qeQNzhxo_h";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.201.219]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vqs.jyD9W5E=3qeQNzhxo_h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 4 Jan 2023 21:29:54 +0100
+Robert Richter <rrichter@amd.com> wrote:
 
-Hi Vladimir,
+> Commit 2aeaf663b85e introduced strict checking for variable length
+> payload size validation. The payload length of received data must
+> match the size of the requested data by the caller except for the case
+> where the min_out value is set.
+> 
+> The Get Log command does not have a header with a length field set.
+> The Log size is determined by the Get Supported Logs command (CXL 3.0,
+> 8.2.9.5.1). However, the actual size can be smaller and the number of
+> valid bytes in the payload output must be determined reading the
+> Payload Length field (CXL 3.0, Table 8-36, Note 2).
+> 
+> Two issues arise: The command can successfully complete with a payload
+> length of zero. And, the valid payload length must then also be
+> consumed by the caller.
+> 
+> Change cxl_xfer_log() to pass the number of payload bytes back to the
+> caller to determine the number of log entries. Implement the payload
+> handling as a special case where mbox_cmd->size_out is consulted when
+> cxl_internal_send_cmd() returns -EIO. A WARN_ONCE() is added to check
+> that -EIO is only returned in case of an unexpected output size.
+> 
+> Logs can be bigger than the maximum payload length and multiple Get
+> Log commands can be issued. If the received payload size is smaller
+> than the maximum payload size we can assume all valid bytes have been
+> fetched. Stop sending further Get Log commands then.
+> 
+> On that occasion, change debug messages to also report the opcodes of
+> supported commands.
+> 
+> The variable payload commands GET_LSA and SET_LSA could be also
+> affected by this strict check, but SET_LSA cannot be broken because
+> SET_LSA does not return an output payload, and GET_LSA never expects
+> short reads.
+> 
+> Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+Hi Robert, a few comments inline.
 
-> On Fri, Jan 13, 2023 at 12:02:19PM +0100, Lukasz Majewski wrote:
-> > Hi Vladimir,
-> >  =20
-> > > On Fri, Jan 13, 2023 at 11:39:08AM +0100, Lukasz Majewski wrote: =20
-> > > > Are there any more comments, or is this patch set eligible for
-> > > > pulling into net-next tree?   =20
-> > >=20
-> > > How about responding to the comment that was already posted
-> > > first? =20
-> >=20
-> > Could you be more specific?
-> >=20
-> >=20
-> > On the beginning (first posted version) the patch included 9 patches
-> > (which included work for ADDR4 for some mv88e6020 setup).
-> >=20
-> > But after the discussion, I've decided to split this patch set to
-> > smaller pieces;
-> >=20
-> > First to add the set_max_frame size with basic definition for
-> > mv88e6020 and mv88e6071 and then follow with more complicated
-> > changes (for which there is no agreement on how to tackle them).
-> >=20
-> > For the 'set_max_frame' feature Alexander Dyuck had some comments
-> > regarding defensive programming approach, but finally he agreed with
-> > Andrew's approach.
-> >=20
-> > As of now - the v4 has been Acked by Andrew, so it looks like at
-> > least this "part" of the work is eligible for upstreaming.
-> >=20
-> >=20
-> > Or there are any more issues about which I've forgotten ? =20
->=20
-> Do you agree that for the chip families which neither implement
-> port_set_jumbo_size() nor set_max_frame_size(), a max MTU of 1492 will
-> be returned, which currently produces warnings at probe time and
-> should be fixed first, prior to refactoring the code?
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230106101651.11377=
-55-1-lukma@denx.de/#25149891
+Thanks,
 
-Sorry, but I've overlooked your reply.
+Jonathan
 
-I will write my comments as a reply to it.
+> ---
+>  drivers/cxl/core/mbox.c | 28 ++++++++++++++++++++--------
+>  1 file changed, 20 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index b03fba212799..e93df0d39022 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -170,6 +170,8 @@ int cxl_internal_send_cmd(struct cxl_dev_state *cxlds,
+>  	out_size = mbox_cmd->size_out;
+>  	min_out = mbox_cmd->min_out;
+>  	rc = cxlds->mbox_send(cxlds, mbox_cmd);
+> +	if (WARN_ONCE(rc == -EIO, "Bad return code: -EIO"))
+
+This is unusual. Why the WARN_ONCE?  How can an error code
+be bad?  It may well panic.  Fine to have a dev_err() or similar
+but this seems excessive.
 
 
-Best regards,
+> +		return -ENXIO;
+>  	if (rc)
+>  		return rc;
+>  
+> @@ -576,6 +578,17 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>  		};
+>  
+>  		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
+> +
+> +		/*
+> +		 * The output payload length that indicates the number
+> +		 * of valid bytes can be smaller than the Log buffer
+> +		 * size.
+> +		 */
+> +		if (rc == -EIO && mbox_cmd.size_out < xfer_size) {
+> +			offset += mbox_cmd.size_out;
+> +			break;
+> +		}
+> +
+>  		if (rc < 0)
+>  			return rc;
+>  
+> @@ -584,7 +597,7 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
+>  		offset += xfer_size;
+>  	}
+>  
+> -	return 0;
+> +	return offset;
+>  }
+>  
+>  /**
+> @@ -608,13 +621,11 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
+>  		u16 opcode = le16_to_cpu(cel_entry[i].opcode);
+>  		struct cxl_mem_command *cmd = cxl_mem_find_command(opcode);
+>  
+> -		if (!cmd) {
+> -			dev_dbg(cxlds->dev,
+> -				"Opcode 0x%04x unsupported by driver", opcode);
+> -			continue;
+> -		}
+> +		if (cmd)
+> +			set_bit(cmd->info.id, cxlds->enabled_cmds);
+>  
+> -		set_bit(cmd->info.id, cxlds->enabled_cmds);
+> +		dev_dbg(cxlds->dev, "Opcode 0x%04x %ssupported by driver",
+> +			opcode, cmd ? "" : "un");
 
-Lukasz Majewski
+Unrelated change so doesn't belong in this patch.   I'd also split the
+dev_dbg into two paths both to reduce modification and because people
+might grep for "unsupported by driver"
 
---
 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+>  	}
+>  }
+>  
+> @@ -695,11 +706,12 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
+>  		}
+>  
+>  		rc = cxl_xfer_log(cxlds, &uuid, size, log);
+> -		if (rc) {
+> +		if (rc < 0) {
 
---Sig_/vqs.jyD9W5E=3qeQNzhxo_h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Feels like passing in size as a pointer that is then updated might be cleaner.
 
------BEGIN PGP SIGNATURE-----
+>  			kvfree(log);
+>  			goto out;
+>  		}
+>  
+> +		size = (u32)rc;
+>  		cxl_walk_cel(cxlds, size, log);
+>  		kvfree(log);
+>  
 
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmPBRkIACgkQAR8vZIA0
-zr2AXwf/T4uUIY2bpV+qMXldZk8K/BXHzCf1wpH+/GjLC4/sREZevkZ0Ue+RXscQ
-NoUvoHxusq3F3XJk23m2Zt/dmvMOf764iQFDGPu+V5H2n2qLTH1ecT9u5F3woiIR
-8fg/wHC8xBFUBoWe4/BQWpxGMrdExxi29f/4zG4zxf+7aIUCRSKEwr/msr/muvKS
-f+9xk5A2D7JxJqNQBgMzwFdk1wt4uq4R+tNnYvPd32Mqjor56QAtA7Co7RKT8izW
-kmkXYMve93T1kCmZKX+3laYGxj779c0JQAVLPsg7K6m5Oqj6IkaPi9B+21ldEk54
-bjCHhQJ0YS/Mco1gmpWIn4cNwYrLMQ==
-=Fh38
------END PGP SIGNATURE-----
-
---Sig_/vqs.jyD9W5E=3qeQNzhxo_h--
