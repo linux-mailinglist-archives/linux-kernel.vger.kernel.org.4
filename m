@@ -2,191 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3A766A0EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA1A66A0EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 18:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjAMRoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 12:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
+        id S229690AbjAMRoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 12:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjAMRnL (ORCPT
+        with ESMTP id S229698AbjAMRnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 12:43:11 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF93E6C051
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673630974; x=1705166974;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=13rDlRrWtSaYMdkY5P+PHEVg2xd/vRWLrnc0TqjnqHE=;
-  b=n+hglCmV/37XU2riL74OQcmOZM991MxKDJpEGn5ml/qbCDfK3Sbt8ZLd
-   Uzl6cZcT9PyNV6/RK0+4dRghKO8Q6R1UAJCn8AZQtc5CQ9CN4ZZA42Dj1
-   Mt9s8uyu2U8oRkHCAuaJNIXbleg8zubpqXrTFJfBxzJMcNh/iF93+QGVC
-   G2AUYwSM/mLrcfelYbdbnNqZIIgxeTl9S8nVRpkEXpRH+9aBybiKOaVfR
-   ca+ecaWqEkpHOoVShHTZq25v9dqlBZbrrlxtTb/MyLskc5NXj8SrvrrLk
-   krM2SPwYNFjfsuygVYb28zzUbv6pY6dnvGfDbAXktY0V73cK4vCWCvbEZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="304430038"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="304430038"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:29:33 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="766089937"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="766089937"
-Received: from araj-ucode.jf.intel.com ([10.23.0.19])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 09:29:33 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: [PATCH v1 Part2 5/5] x86/microcode: Provide an option to override minrev enforcement
-Date:   Fri, 13 Jan 2023 09:29:20 -0800
-Message-Id: <20230113172920.113612-6-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230113172920.113612-1-ashok.raj@intel.com>
-References: <20230113172920.113612-1-ashok.raj@intel.com>
+        Fri, 13 Jan 2023 12:43:12 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1756C05B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:29:40 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id a25so12446241qto.10
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 09:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pefoley.com; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3CFe1t4P+3FfzM80rDpGLVDJnMv8e1UCNX7pPuC4XSU=;
+        b=XEAHraYnZZnyAOjUopJsKlc6GJZ3bSMSBGMIjhsUB26AHbVdASIA1RQu+GM1h8v68g
+         uKhKuA9JHTpBC7J000kpZ4EEDmCvbv1d34Ur5c/gHet/SwbmhzkfKf4kuGhNbejt4310
+         /Z7obismOr3B01ZxVI836oH6m3Xvw2jYwXl3M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3CFe1t4P+3FfzM80rDpGLVDJnMv8e1UCNX7pPuC4XSU=;
+        b=M45cfIYVrDfNN1Q/v04rNczsSm/E4vYxCIVLBPtG0SAGisgc36bFnon33XYU7zy1as
+         C02APfCO1AXDIFPzgT3TkRJZOHV8LU8WwlOUAhsh0qV+iwQKcmP2CQfA4DPg9EDYs5XL
+         CAjB8VhyT2lRvroccNhAglmNybNecDHroENdJnGEgSx5qOjw3m6h7gY9r937p8KUMeD7
+         scrirhSryjt4GZOCa7j0A8vc+GW1qOkKq1ui4LbRXgH5NZeBX6KLWYpjVWbB7/Ei79D4
+         EKmZJ+egPRm1vg29OhyzwmR3h5NJgf9dD+4oi8HnpUi90kghInLYJPWnZu9tJhVj9TJW
+         2tYQ==
+X-Gm-Message-State: AFqh2kpRb1TmPFqXLIXn0Vvf0YAmK+VGY4co+OkyromM1zB7T8hA0rFz
+        Jk3h52SEWWpTMun+cT4IogQwQg==
+X-Google-Smtp-Source: AMrXdXvRV69bnVP6msDnCyGfW+FutPKf4g24ZRCpSaFPk5yEjX2/jRqgXCvJ3fj2c2HED+o0GqBzsw==
+X-Received: by 2002:ac8:785:0:b0:3a9:81f7:2d7f with SMTP id l5-20020ac80785000000b003a981f72d7fmr104698600qth.11.1673630979086;
+        Fri, 13 Jan 2023 09:29:39 -0800 (PST)
+Received: from [192.168.1.3] ([2600:4040:29fb:d300:887b:7eff:fe74:68b2])
+        by smtp.gmail.com with ESMTPSA id l6-20020ac81486000000b003a981f7315bsm10853389qtj.44.2023.01.13.09.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 09:29:38 -0800 (PST)
+From:   Peter Foley <pefoley2@pefoley.com>
+Date:   Fri, 13 Jan 2023 12:29:36 -0500
+Subject: [PATCH] scripts: coccicheck: Avoid warning about spurious escape
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230113-cocci-v1-1-0f4ae50494d3@pefoley.com>
+X-B4-Tracking: v=1; b=H4sIAACVwWMC/x2NSQqAMAwAvyI5W+gCgn5FPLQxag5WSUQE8e9Wj
+ 8MMzA1KwqTQVTcInay85QKurgCXmGcyPBYGb32wzgWDGyIb59vQJI+2wQClTVHJJIkZl69eox4k
+ n9iFJr7+QT88zwtagJvxcAAAAA==
+To:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>
+Cc:     cocci@inria.fr, linux-kernel@vger.kernel.org,
+        Peter Foley <pefoley2@pefoley.com>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673630978; l=833;
+ i=pefoley2@pefoley.com; s=20230111; h=from:subject:message-id;
+ bh=v5ElnF2s+TFSKaksEa19tLKUsIOtwh2WjBET16twCuw=;
+ b=1iFr8Ne5IpvgtFtEYGYG8MAj2N/lI6CDyjwiBXfV8ia3RDLcii2hvzzqXYK6VOeP6VTuTX5mfhGq
+ 7gxgpzQuBpFLX7t0s0VMeq+1u8Ua2XtBQzSwLUtdR5WkCLiARM3M
+X-Developer-Key: i=pefoley2@pefoley.com; a=ed25519;
+ pk=DCQqIdN6rHnvfQH58WQiQzJFfGUo1HyWSvdYG8vnO5o=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minimum Required Revision (minrev) is enforced strictly. All new patches
-will have a minrev that is not zero. But there might be a transition time
-for some that need this enforcement to be relaxed.
+e.g.
+grep: warning: stray \ before -
 
-When the override is enabled, the kernel will be tainted.
-
-Provide a debugfs variable to override the minrev enforcement.
-
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-Cc: x86 <x86@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Alison Schofield <alison.schofield@intel.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Thomas Gleixner (Intel) <tglx@linutronix.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Stefan Talpalaru <stefantalpalaru@yahoo.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Peter Zilstra (Intel) <peterz@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
+Signed-off-by: Peter Foley <pefoley2@pefoley.com>
 ---
-This patch is optional.
----
- arch/x86/include/asm/microcode.h      |  2 ++
- arch/x86/kernel/cpu/microcode/core.c  | 13 ++++++++++++-
- arch/x86/kernel/cpu/microcode/intel.c |  8 ++++++++
- 3 files changed, 22 insertions(+), 1 deletion(-)
+ scripts/coccicheck | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
-index 3d48143e84a9..d82f22d50ebd 100644
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -16,6 +16,8 @@ struct ucode_patch {
+diff --git a/scripts/coccicheck b/scripts/coccicheck
+index 2956fce8fa4f..fb492f032c5f 100755
+--- a/scripts/coccicheck
++++ b/scripts/coccicheck
+@@ -18,7 +18,7 @@ fi
+ SPATCH_VERSION=$($SPATCH --version | head -1 | awk '{print $3}')
  
- extern struct list_head microcode_cache;
+ USE_JOBS="no"
+-$SPATCH --help | grep "\-\-jobs" > /dev/null && USE_JOBS="yes"
++$SPATCH --help | grep -e "--jobs" > /dev/null && USE_JOBS="yes"
  
-+extern bool override_minrev;
-+
- struct cpu_signature {
- 	unsigned int sig;
- 	unsigned int pf;
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 446ddf3fcc29..5ed60c6c8e8d 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -24,6 +24,7 @@
- #include <linux/miscdevice.h>
- #include <linux/capability.h>
- #include <linux/firmware.h>
-+#include <linux/debugfs.h>
- #include <linux/kernel.h>
- #include <linux/delay.h>
- #include <linux/mutex.h>
-@@ -44,7 +45,9 @@
- #define DRIVER_VERSION	"2.2"
- 
- static struct microcode_ops	*microcode_ops;
-+static struct dentry		*dentry_ucode;
- static bool dis_ucode_ldr = true;
-+bool override_minrev;
- 
- bool initrd_gone;
- 
-@@ -497,7 +500,11 @@ static ssize_t reload_store(struct device *dev,
- 		pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
- 		pr_err("You should switch to early loading, if possible.\n");
- 		ret = -EINVAL;
--		goto put;
-+
-+		if (!override_minrev)
-+			goto put;
-+
-+		pr_err("Overriding minrev\n");
- 	}
- 
- 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
-@@ -688,7 +695,11 @@ static int __init microcode_init(void)
- 	cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN, "x86/microcode:online",
- 				  mc_cpu_online, mc_cpu_down_prep);
- 
-+	dentry_ucode = debugfs_create_dir("microcode", NULL);
-+	debugfs_create_bool("override_minrev", 0644, dentry_ucode, &override_minrev);
-+
- 	pr_info("Microcode Update Driver: v%s.", DRIVER_VERSION);
-+	pr_info("Override minrev %s\n", override_minrev ? "enabled" : "disabled");
- 
- 	return 0;
- 
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 68a3c5569cd2..172e1f166844 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -141,6 +141,14 @@ static int is_lateload_safe(struct microcode_header_intel *mc_header)
- {
- 	struct ucode_cpu_info uci;
- 
-+	/*
-+	 * If minrev is bypassed via debugfs, then allow late-load.
-+	 */
-+	if (override_minrev) {
-+		pr_info("Bypassing minrev enforcement via debugfs\n");
-+		return 0;
-+	}
-+
- 	/*
- 	 * When late-loading, ensure the header declares a minimum revision
- 	 * required to perform a late-load.
+ # The verbosity may be set by the environmental parameter V=
+ # as for example with 'make V=1 coccicheck'
+
+---
+base-commit: d9fc1511728c15df49ff18e49a494d00f78b7cd4
+change-id: 20230113-cocci-12936b2c06c3
+
+Best regards,
 -- 
-2.34.1
-
+Peter Foley <pefoley2@pefoley.com>
