@@ -2,262 +2,524 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DC26698F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CD26698FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 14:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbjAMNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 08:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S241783AbjAMNru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 08:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbjAMNq4 (ORCPT
+        with ESMTP id S241734AbjAMNrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 08:46:56 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DA05E093;
-        Fri, 13 Jan 2023 05:40:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A+RvfWSnTRaB/bQA/HW40H2AyzT/b9ULdg1UXqsPl/WGkV/aGBhWnyfmtQTqwTSUcE8xsTqsruTe+koLX27yRAFGguWU8mWG5JMSVo59GW+S/LjBBOfOvhzBMB7HyOQ/nqQniLBn6xWDe2RB3maSUc4We1jlcasyL7PhNW6P01sXu/H+vJ2dNoHrcZl4tl7fm2GlgcIu3ZhD/ry5djrAiLgQCPdjkR02Ve7Wyly/2VQ0ou+uMuO5D+VjWqob7WHuUrYlZt95QFp4od0wc2S2xq01cL9zmlmBHcOhvuVjAJq/iiBiTaQP7UjR9X4vWze93RA2qAQfIkGDXKOr18R3rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kPT+XP8Lp4eFki6YHoEQd22Po/zA5nsslrV1vkEBSS8=;
- b=QQvW0gGRKsPaIbFfuIlp1+NkRzk4YgIFRiiLiS9GjM+wi71Xbuf266ScIhwzKQPM4pmuUeng9JQsmklv4WnonyY5qZFcZRKIBjdVrY1oV0ePdTFmumSmF5ot/AJ+OXTaw/OU0KkajtH8g91vI2FUKTPiSEMLZBnLRylFT/7cLpBoW1RWzKhrJv7r/+vschx++yhvupDXrRkyr/W+0XS9CJ/4bGtF3650wVvnMs7BkpeWrXm7Pl17vclSR7gFXTG2prJ3+k3YsDsjLkvP6FML4leG7zbfFizRaCSP1jA5LkiCc6wVNswNRiEVMcaRAu4QZCp2UBypuQ5e8PFSVgtnFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kPT+XP8Lp4eFki6YHoEQd22Po/zA5nsslrV1vkEBSS8=;
- b=gS91bJgmy4Wxew/8+IWuIyIBFN7a+b2Mk+NgzQ161ZapS9Qa0ACIKfrMy0EYEOv0rxVIoW+6rgFhk3bAnCdU3p4MKrW4N9aMctXFR9NyP/yiDKfrWJH7etB/TH+qNQNKXuEKar0gyEiNkBf4KpuT0dXcbWul6EsKtqZta5nVrRQ=
-Received: from DM6PR17CA0020.namprd17.prod.outlook.com (2603:10b6:5:1b3::33)
- by SA1PR12MB7270.namprd12.prod.outlook.com (2603:10b6:806:2b9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Fri, 13 Jan
- 2023 13:40:10 +0000
-Received: from DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b3:cafe::b8) by DM6PR17CA0020.outlook.office365.com
- (2603:10b6:5:1b3::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.16 via Frontend
- Transport; Fri, 13 Jan 2023 13:40:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT048.mail.protection.outlook.com (10.13.173.114) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 13:40:09 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 13 Jan
- 2023 07:40:07 -0600
-Date:   Fri, 13 Jan 2023 14:40:04 +0100
-From:   Robert Richter <rrichter@amd.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] cxl/mbox: Fix Payload Length check for Get Log command
-Message-ID: <Y8FfNA2Se9UIVJAJ@rric.localdomain>
-References: <20230104202954.1163366-1-rrichter@amd.com>
- <20230113115354.00003d5a@Huawei.com>
+        Fri, 13 Jan 2023 08:47:14 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF84C111A
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 05:40:54 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 05817604FB;
+        Fri, 13 Jan 2023 14:40:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673617252; bh=rdTC9g3nWPwqAhksPk4k+TJ28OdGPA7Wty7qseWtYzY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NUSY+ErfJJkGc9yZAWdX/TsGnNJ2AwL8ueI007j/cpsP8Ch6ei2pw/Zz0QXUgHwrj
+         g3WYuDhJWhQw8u86qGCXSyaM9bjxDh7wlk4dP1pazLbGyBkMSS2DZodY6O2GwmdHWQ
+         alVQdONKAacjnOKZXAjGF/pwSHN2B+oOdobvNiUykhWMqFNlJL2jT/CouM3zXLjJMH
+         yCO//NQVzf1+VA0nkuqMLnTWqaStP4ovkGXk27jNEanFKY96rQ/RDJy8FF+bobJ+rF
+         7gCF83EjzgV08ROV1Hls2tNI9jFPAjYYr4/7lJpuCvcrWNZA/LsD2gRzzzN6Q/yjyD
+         swSRqi1WUIy3g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KFV6BvPmbmbT; Fri, 13 Jan 2023 14:40:48 +0100 (CET)
+Received: from [161.53.83.51] (pc-mtodorov.grf.hr [161.53.83.51])
+        by domac.alu.hr (Postfix) with ESMTPSA id 95AE0604FA;
+        Fri, 13 Jan 2023 14:40:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673617248; bh=rdTC9g3nWPwqAhksPk4k+TJ28OdGPA7Wty7qseWtYzY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eBkjEjrq6QqjuUB1ge8+DwOj8P7rjwqHLQUDP6P+J+pzcqw9LodAS9y+R+fsy49sI
+         hUAXmSmckeVoH7THHOd874voHCPAN9QEiJ92KMGdt2TbLRvYJEeLODUfxfgaZPvYqE
+         HnZCQmiaU4/EN6yNHfdF7xVmuQZXSJjOUlpeiENGfJT0KTpSCYXW0l1J3uF9t0PxlZ
+         AK+9G/6KEeqYVUr1mu8Miu4PpTKclI73Z0O0ItYk+rvcJEHvQ6FFLKXuvMmCi24rUM
+         wb6cuAoe3HpPDyUd9Bky0mDk5oFySLAwQWT5GMp2WDzBW1eBRfUU1z1kMPnO0Afspl
+         UdGckAKICunEQ==
+Message-ID: <2c677d85-820c-d41a-fc98-7d3974b49e42@alu.unizg.hr>
+Date:   Fri, 13 Jan 2023 14:40:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230113115354.00003d5a@Huawei.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT048:EE_|SA1PR12MB7270:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36b34a0a-a0bb-4e05-3e27-08daf56bb068
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5o9K2bu/j394JavZDuyaiMiU39Eh2y8VYEV7uYUo16KSfhXyI/Lb6VYMeC/a3iD7HqdkbHKcMkCzOvqdtma+3UM2076QdV3rDbnnlwHArMebtdIGvMcQdrqYXiaUV3Ym5oIiyX9PagOYuQ6HAEZYR5RMK6/dUOgAPajvT78gvdEFl02VJ5F2IfIMkAptw6wAF8WPddvdMfMi17eqiLhv3ZnGwk8LHQg7k0BMeaU0XeNsCHn4pYdPU5MvltOsBP1LAEcDo28lai6wF03+X0/1PoaUMCf12zr3i+Vzal2m8BWi5qEWZ0cmsiR5r8HaEB9f7OJX8YvLcm+lREG43zrKswh500v65pyxJjuq7Hg3KjlI58Fp7cgxsPLz0CYCGP2rP5JBtrxsRd7LmtLydcFMLGa3A+rOfUGOG98O6ZgxS7SyF/jTjyaQlm2JiPW7SsZ8q7hOfO15aHvGE+Q5Pm7v5O7a08MJcY5GBKO6utTVqE1gQaLp0bVMYUrrzlWY4LtmKn25DnCF0rBhtTi69uRYEgybE0ZYlwyTjqJ6JvJOoQLhzQKViHukoacvR+4H3GZb+cwSboU+HacrgIuQRXOq/fR3rjg8P8WxapPYQw31tIz47qzWZd90L9HjELf7I0de5UkB3e57VXfQwuqpvlXeEnOtWNRuMap26b7NLBTSx3IMLOiXYZg2+m426RlNEQHKviid9X9WVpwCX9FC+JPKlmzZDiXT1WLE8KkfA5UVMkk=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(451199015)(36840700001)(46966006)(40470700004)(4326008)(8936002)(55016003)(40480700001)(5660300002)(336012)(426003)(47076005)(36860700001)(41300700001)(7696005)(83380400001)(26005)(16526019)(9686003)(478600001)(6666004)(53546011)(186003)(8676002)(82740400003)(70586007)(316002)(70206006)(82310400005)(6916009)(81166007)(40460700003)(356005)(2906002)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 13:40:09.5648
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36b34a0a-a0bb-4e05-3e27-08daf56bb068
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7270
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: =?UTF-8?B?UmU6IOetlOWkjTog562U5aSNOiBJTkZPOiBbQklTRUNURURdIFJlZ3Jl?=
+ =?UTF-8?Q?ssion=3a_A_Problem_with_/sys/kernel/debug/kmemleak_output=3a_back?=
+ =?UTF-8?Q?trace_not_printed_since_6=2e2=2e0-rc1?=
+Content-Language: en-US
+To:     =?UTF-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
+        <zhaoyang.huang@unisoc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
+ <4c467851-8080-44d3-d017-b0e283896119@alu.unizg.hr>
+ <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
+ <3ba5f8ee-d9bd-69ae-bb3a-c61e47020e2c@alu.unizg.hr>
+ <314a477e7f0644fbaf8fc607daefe70e@BJMBX01.spreadtrum.com>
+ <c26ecfcf-383c-2f51-6641-2b7b30a76b62@alu.unizg.hr>
+ <9d0a089db61b4943a47b45b3975790be@BJMBX01.spreadtrum.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <9d0a089db61b4943a47b45b3975790be@BJMBX01.spreadtrum.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.01.23 11:53:54, Jonathan Cameron wrote:
-> On Wed, 4 Jan 2023 21:29:54 +0100
-> Robert Richter <rrichter@amd.com> wrote:
+On 13.1.2023. 11:14, 黄朝阳 (Zhaoyang Huang) wrote:
+>> On 13.1.2023. 7:20, 黄朝阳 (Zhaoyang Huang) wrote:
+>>>> /sys/kernel/debug/kmemleak output: backtrace not printed since
+>>>> 6.2.0-rc1
+>>>>
+>>>>
+>>>>> On 12. 01. 2023. 20:50, Mirsad Todorovac wrote:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> there seems to be a problem with the output of
+>>>>> /sys/kernel/debug/kmemleak:
+>>>>>>
+>>>>>> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak unreferenced
+>>>>>> object 0xffff951c118568b0 (size 16):
+>>>>>>     comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
+>>>>>>     hex dump (first 16 bytes):
+>>>>>>       6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
+>>>>>>     backtrace:
+>>>>>> [root@pc-mtodorov ~]#
+>>>>>>
+>>>>>> Apparently, backtrace of called functions on the stack is no longer
+>>>>>> printed
+>>>>> with the list of memory leaks.
+>>>>>>
+>>>>>> This appeared on Lenovo desktop 10TX000VCR, with AlmaLinux 8.7 and
+>>>>>> BIOS version M22KT49A (11/10/2022) and 6.2-rc1 and 6.2-rc2 builds.
+>>>>>>
+>>>>>> This worked on 6.1 with the same CONFIG_KMEMLEAK=y and MGLRU
+>>>>> enabled
+>>>>>> on a vanilla mainstream kernel from Mr. Torvalds' tree. I don't
+>>>>>> know if this is
+>>>>> deliberate feature for some reason or a bug.
+>>>>>>
+>>>>>> Please find attached the config, lshw and kmemleak output.
+>>>>>>
+>>>>>> The bisection gave this commit as the culprit for the severed stack
+>>>>>> backtrace print in /sys/kernel/debug/kmemleak:
+>>>>>>
+>>>>>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect good
+>>>>>> 56a61617dd2276cbc56a6c868599716386d70041 is the first bad commit
+>>>>>> commit 56a61617dd2276cbc56a6c868599716386d70041
+>>>>>> Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>>>>>> Date:   Thu Oct 27 17:50:24 2022 +0800
+>>>>>>
+>>>>>>       mm: use stack_depot for recording kmemleak's backtrace
+>>>>>>
+>>>>>>       Using stack_depot to record kmemleak's backtrace which has
+>> been
+>>>>>>       implemented on slub for reducing redundant information.
+>>>>>>
+>>>>>> The complete bisect log is:
+>>>>>>
+>>>>>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git bisect log git
+>>>>>> bisect start '--' 'mm'
+>>>>>> # good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1 git
+>>>>>> bisect good 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+>>>>>> # bad: [1b929c02afd37871d5afb9d498426f83432e71c2] Linux 6.2-rc1 git
+>>>>>> bisect bad 1b929c02afd37871d5afb9d498426f83432e71c2
+>>>>>> # good: [8b9ed79c2d587bec5f603d66801478a5af9af842] Merge tag
+>>>>>> 'x86_asm_for_v6.2' of
+>>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>>>>> git bisect good 8b9ed79c2d587bec5f603d66801478a5af9af842
+>>>>>> # good: [e83b39d6bbdb6d25bd6f5c258832774635d29b47] mm: make
+>>>>>> drop_caches keep reclaiming on all nodes git bisect good
+>>>>>> e83b39d6bbdb6d25bd6f5c258832774635d29b47
+>>>>>> # good: [9997bc017549acd6425e32300eff28424ffeeb6b] zsmalloc:
+>>>>> implement
+>>>>>> writeback mechanism for zsmalloc git bisect good
+>>>>>> 9997bc017549acd6425e32300eff28424ffeeb6b
+>>>>>> # good: [6287b7dae80944bfa37784a8f9d6861a4facaa6e] mm,thp,rmap:
+>> fix
+>>>>>> races between updates of subpages_mapcount git bisect good
+>>>>>> 6287b7dae80944bfa37784a8f9d6861a4facaa6e
+>>>>>> # good: [8fa590bf344816c925810331eea8387627bbeb40] Merge tag
+>>>>>> 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm
+>>>>>> git bisect good 8fa590bf344816c925810331eea8387627bbeb40
+>>>>>> # good: [4f292c4de4f6fb83776c0ff22674121eb6ddfa2f] Merge tag
+>>>>>> 'x86_mm_for_6.2_v2' of
+>>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>>>>>> git bisect good 4f292c4de4f6fb83776c0ff22674121eb6ddfa2f
+>>>>>> # bad: [1ea9d333ba475041efe43d9d9bc32e64aea2ea2b] Merge tag
+>>>>>> 'mm-stable-2022-12-17-2' of
+>>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>>>>>> git bisect bad 1ea9d333ba475041efe43d9d9bc32e64aea2ea2b
+>>>>>> # bad: [56a61617dd2276cbc56a6c868599716386d70041] mm: use
+>>>>> stack_depot
+>>>>>> for recording kmemleak's backtrace git bisect bad
+>>>>>> 56a61617dd2276cbc56a6c868599716386d70041
+>>>>>> # good: [61b963b52f59524e27692bc1c14bfb2459e32eb3] mm/gup_test:
+>>>>> free
+>>>>>> memory allocated via kvcalloc() using kvfree() git bisect good
+>>>>>> 61b963b52f59524e27692bc1c14bfb2459e32eb3
+>>>>>> # first bad commit: [56a61617dd2276cbc56a6c868599716386d70041]
+>> mm:
+>>>>> use
+>>>>>> stack_depot for recording kmemleak's backtrace # good:
+>>>>>> [9102b78b6f6ae6af3557114c265c266b312c1319] maple_tree: update
+>>>>>> copyright dates for test code git bisect good
+>>>>>> 9102b78b6f6ae6af3557114c265c266b312c1319
+>>>>>> # first bad commit: [56a61617dd2276cbc56a6c868599716386d70041]
+>> mm:
+>>>>> use
+>>>>>> stack_depot for recording kmemleak's backtrace You have mail in
+>>>>>> /var/mail/mtodorov mtodorov@domac:~/linux/kernel/linux_torvalds$
+>>>>>>
+>>>>>> The platform is 10TX000VCR
+>>>>> (LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB)
+>>>>>> running AlmaLinux 8.7 (CentOS clone) and BIOS M22KT49A.
+>>>>>>
+>>>>>> GCC used was:
+>>>>>>
+>>>>>> mtodorov@domac:~/linux/kernel/linux_torvalds$ gcc --version gcc
+>>>>>> (Debian 8.3.0-6) 8.3.0 Copyright (C) 2018 Free Software Foundation,
+>>>>>> Inc.
+>>>>>> This is free software; see the source for copying conditions.
+>>>>>> There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+>>>>> PARTICULAR PURPOSE.
+>>>>>> mtodorov@domac:~/linux/kernel/linux_torvalds$
+>>>>>>
+>>>>>> Hope this helps.
+>>>>>>
+>>>>>> I lack the insight to pinpoint the exact fault in the patch.
+>>>>>
+>>>>> P.S.
+>>>>>
+>>>>> To further complicate things, on Ubuntu 22.10 Lenovo Ideapad 3
+>>>>> 15ITL6 laptop the kmemleak stack backtrace is printed correctly with
+>>>>> the same kernels (but .deb instead of .rpm for the same build):
+>>>>>
+>>>>> unreferenced object 0xffff94ca88e042d0 (size 80):
+>>>>>    comm "thermald", pid 768, jiffies 4294893592 (age 78581.504s)
+>>>>>    hex dump (first 32 bytes):
+>>>>>      00 00 00 00 00 00 00 00 0d 01 2d 00 00 00 00 00  ..........-.....
+>>>>>      af 07 01 80 fd ac ff ff 00 00 00 00 00 00 00 00  ................
+>>>>>    backtrace:
+>>>>>      [<ffffffffa0dcb921>] slab_post_alloc_hook+0x91/0x320
+>>>>>      [<ffffffffa0dcfb79>] kmem_cache_alloc+0x169/0x2f0
+>>>>>      [<ffffffffa12b1def>] acpi_os_acquire_object+0x2c/0x32
+>>>>>      [<ffffffffa12b1ea2>] acpi_ps_alloc_op+0x4a/0x99
+>>>>>      [<ffffffffa12af5c8>] acpi_ps_get_next_arg+0x611/0x761
+>>>>>      [<ffffffffa12afbbc>] acpi_ps_parse_loop+0x494/0x8d7
+>>>>>      [<ffffffffa12b1434>] acpi_ps_parse_aml+0x1bb/0x561
+>>>>>      [<ffffffffa12b24c8>] acpi_ps_execute_method+0x20f/0x2d5
+>>>>>      [<ffffffffa12a7acf>] acpi_ns_evaluate+0x34d/0x4f3
+>>>>>      [<ffffffffa12ad6a3>] acpi_evaluate_object+0x180/0x3ae
+>>>>>      [<ffffffffa1269ca8>] acpi_run_osc+0x128/0x250
+>>>>>      [<ffffffffc0bbb14f>] int3400_thermal_run_osc+0x6f/0xc0
+>>>>> [int3400_thermal]
+>>>>>      [<ffffffffc0bbb293>] current_uuid_store+0xe3/0x120
+>> [int3400_thermal]
+>>>>>      [<ffffffffa13b8ed4>] dev_attr_store+0x14/0x30
+>>>>>      [<ffffffffa0ee0458>] sysfs_kf_write+0x38/0x50
+>>>>>      [<ffffffffa0edf516>] kernfs_fop_write_iter+0x146/0x1d0 You have
+>>>>> new mail in /var/mail/root
+>>>>> root@marvin-IdeaPad-3-15ITL6:/home/marvin#
+>>>>>
+>>>>> Regards,
+>>>>> Mirsad
+>>>>
+>>>> thanks for head up. Could you please help to check If
+>>>> CONFIG_STACKTRACE and CONFIG_STACKDEPOT is enabled on the fault
+>> kernel?
+>>> Please try the patch below if the configs are right. I think it should
+>>> be caused by the late ready for kmemleak
+>>>
+>>> commit 556eb1927da99ab366e370d593fc32da946768c3
+>>> Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>>> Date:   Fri Jan 13 14:13:39 2023 +0800
+>>>
+>>>       mm: instroduce a flag to indicate stack_depot's ready
+>>>
+>>>       try to solve the kmemleak's late ready issue.
+>>>
+>>> diff --git a/mm/kmemleak.c b/mm/kmemleak.c index 762b91f..7eb24bc
+>>> 100644
+>>> --- a/mm/kmemleak.c
+>>> +++ b/mm/kmemleak.c
+>>> @@ -216,6 +216,7 @@ struct kmemleak_object {  static int
+>> kmemleak_warning;
+>>>    /* set if a fatal kmemleak error has occurred */  static int
+>>> kmemleak_error;
+>>> +static int kmemleak_stadep_initialized;
+>>>
+>>>    /* minimum and maximum address that may be valid pointers */  static
+>> unsigned long min_addr = ULONG_MAX; @@ -601,7 +602,7 @@ static noinline
+>> depot_stack_handle_t set_track_prepare(void)
+>>>           unsigned long entries[MAX_TRACE];
+>>>           unsigned int nr_entries;
+>>>
+>>> -       if (!kmemleak_initialized)
+>>> +       if (!kmemleak_stadep_initialized)
+>>>                   return 0;
+>>>           nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
+>>>           trace_handle = stack_depot_save(entries, nr_entries,
+>> GFP_NOWAIT); @@ -2110,6 +2111,7 @@ void __init kmemleak_init(void)
+>>>                   create_object((unsigned long)__start_ro_after_init,
+>>>                                 __end_ro_after_init -
+>> __start_ro_after_init,
+>>>                                 KMEMLEAK_GREY, GFP_ATOMIC);
+>>> +       kmemleak_stadep_initialized = 1;
+>>>    }
+>>
+>> Hi, Zhaoyang,
+>>
+>> Sorry, applied the patch and rebuilt, but it didn't work for me:
+>>
+>> [root@pc-mtodorov marvin]# uname -rms
+>> Linux 6.2.0-rc3-mglru-kmemlk-patch-zhaoyang1+ x86_64 [root@pc-mtodorov
+>> marvin]# cat /sys/kernel/debug/kmemleak [root@pc-mtodorov marvin]# echo
+>> scan | tee !$ echo scan | tee /sys/kernel/debug/kmemleak scan
+>> [root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak unreferenced
+>> object 0xffff98938fed1ee0 (size 16):
+>>    comm "kworker/u12:2", pid 57, jiffies 4294894053 (age 66.616s)
+>>    hex dump (first 16 bytes):
+>>      6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00  memstick0.......
+>>    backtrace:
+>> [root@pc-mtodorov marvin]#
+>>
+>> Still the stack backtrace list is severed.
+>> CONFIG_STACKDEPOT and CONFIG_STACKTRACE are both "=y":
+>>
+>> [root@pc-mtodorov marvin]# grep -E 'CONFIG_(STACKTRACE|STACKDEPOT)'
+>> /boot/config-6.2.0-rc3-mglru-kmemlk-patch-zhaoyang1+
+>> CONFIG_STACKTRACE_SUPPORT=y
+>> CONFIG_STACKDEPOT=y
+>> # CONFIG_STACKTRACE_BUILD_ID is not set
+>> CONFIG_STACKTRACE=y
+>> [root@pc-mtodorov marvin]#
+>>
+>> Your patch was successfully applied (after some tweaks):
+>>
+>> mtodorov@domac:~/linux/kernel/linux_torvalds$ git diff mm diff --git
+>> a/mm/kmemleak.c b/mm/kmemleak.c index 92f670edbf51..78fd3b89b057
+>> 100644
+>> --- a/mm/kmemleak.c
+>> +++ b/mm/kmemleak.c
+>> @@ -216,6 +216,7 @@ static int kmemleak_initialized;
+>>   static int kmemleak_warning;
+>>   /* set if a fatal kmemleak error has occurred */
+>>   static int kmemleak_error;
+>> +static int kmemleak_stadep_initialized;
+>>
+>>   /* minimum and maximum address that may be valid pointers */
+>>   static unsigned long min_addr = ULONG_MAX; @@ -601,7 +602,7 @@ static
+>> noinline depot_stack_handle_t set_track_prepare(void)
+>>          unsigned long entries[MAX_TRACE];
+>>          unsigned int nr_entries;
+>>
+>> -       if (!kmemleak_initialized)
+>> +       if (!kmemleak_stadep_initialized)
+>>                  return 0;
+>>          nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
+>>          trace_handle = stack_depot_save(entries, nr_entries,
+>> GFP_NOWAIT); @@ -2110,6 +2111,7 @@ void __init kmemleak_init(void)
+>>                  create_object((unsigned long)__start_ro_after_init,
+>>                                __end_ro_after_init -
+>> __start_ro_after_init,
+>>                                KMEMLEAK_GREY, GFP_ATOMIC);
+>> +       kmemleak_stadep_initialized = 1;
+>>   }
+>>
+>>   /*
+>> mtodorov@domac:~/linux/kernel/linux_torvalds$
+>>
+>> Please verify that the above is correct.
+> It is correct. Another reason could be the stack is less than 3 layers which could be surpassed by stack_trace_save. Could you please try to modify the code as bellow and try again.
+> static noinline depot_stack_handle_t set_track_prepare(void)
+> {
+> 	depot_stack_handle_t trace_handle;
+> 	unsigned long entries[MAX_TRACE];
+> 	unsigned int nr_entries;
 > 
-> > Commit 2aeaf663b85e introduced strict checking for variable length
-> > payload size validation. The payload length of received data must
-> > match the size of the requested data by the caller except for the case
-> > where the min_out value is set.
-> > 
-> > The Get Log command does not have a header with a length field set.
-> > The Log size is determined by the Get Supported Logs command (CXL 3.0,
-> > 8.2.9.5.1). However, the actual size can be smaller and the number of
-> > valid bytes in the payload output must be determined reading the
-> > Payload Length field (CXL 3.0, Table 8-36, Note 2).
-> > 
-> > Two issues arise: The command can successfully complete with a payload
-> > length of zero. And, the valid payload length must then also be
-> > consumed by the caller.
-> > 
-> > Change cxl_xfer_log() to pass the number of payload bytes back to the
-> > caller to determine the number of log entries. Implement the payload
-> > handling as a special case where mbox_cmd->size_out is consulted when
-> > cxl_internal_send_cmd() returns -EIO. A WARN_ONCE() is added to check
-> > that -EIO is only returned in case of an unexpected output size.
-> > 
-> > Logs can be bigger than the maximum payload length and multiple Get
-> > Log commands can be issued. If the received payload size is smaller
-> > than the maximum payload size we can assume all valid bytes have been
-> > fetched. Stop sending further Get Log commands then.
-> > 
-> > On that occasion, change debug messages to also report the opcodes of
-> > supported commands.
-> > 
-> > The variable payload commands GET_LSA and SET_LSA could be also
-> > affected by this strict check, but SET_LSA cannot be broken because
-> > SET_LSA does not return an output payload, and GET_LSA never expects
-> > short reads.
-> > 
-> > Fixes: 2aeaf663b85e ("cxl/mbox: Add variable output size validation for internal commands")
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> Hi Robert, a few comments inline.
+> 	if (!kmemleak_initialized)
+> 		return 0;
+> -	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
+> +	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> 	trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
+> 
+> 	return trace_handle;
+> }
 
-Oh, just found your comments here after replying to the other mail
-thread.
+Tried that, rebuilt, still no luck:
 
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-> > ---
-> >  drivers/cxl/core/mbox.c | 28 ++++++++++++++++++++--------
-> >  1 file changed, 20 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > index b03fba212799..e93df0d39022 100644
-> > --- a/drivers/cxl/core/mbox.c
-> > +++ b/drivers/cxl/core/mbox.c
-> > @@ -170,6 +170,8 @@ int cxl_internal_send_cmd(struct cxl_dev_state *cxlds,
-> >  	out_size = mbox_cmd->size_out;
-> >  	min_out = mbox_cmd->min_out;
-> >  	rc = cxlds->mbox_send(cxlds, mbox_cmd);
-> > +	if (WARN_ONCE(rc == -EIO, "Bad return code: -EIO"))
-> 
-> This is unusual. Why the WARN_ONCE?  How can an error code
-> be bad?  It may well panic.  Fine to have a dev_err() or similar
-> but this seems excessive.
+[root@pc-mtodorov marvin]# uname -rms
+Linux 6.2.0-rc3-mglru-kmemlk-patch-zhaoyang2+ x86_64
+[root@pc-mtodorov marvin]# cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff8e8c86483c00 (size 16):
+   comm "kworker/u12:5", pid 364, jiffies 4294894029 (age 135.024s)
+   hex dump (first 16 bytes):
+     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00  memstick0.......
+   backtrace:
+unreferenced object 0xffff8e8c8edb3f70 (size 16):
+   comm "kworker/u12:5", pid 364, jiffies 4294894033 (age 135.008s)
+   hex dump (first 16 bytes):
+     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00  memstick0.......
+   backtrace:
+[root@pc-mtodorov marvin]#
 
-This function should only return -EIO if the size is unexpected. The
-mbox_send() function doesn't have a size information and should never
-return with -EIO. I think a comment is need here?
+What I have here is:
 
-> 
-> 
-> > +		return -ENXIO;
-> >  	if (rc)
-> >  		return rc;
-> >  
-> > @@ -576,6 +578,17 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
-> >  		};
-> >  
-> >  		rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> > +
-> > +		/*
-> > +		 * The output payload length that indicates the number
-> > +		 * of valid bytes can be smaller than the Log buffer
-> > +		 * size.
-> > +		 */
-> > +		if (rc == -EIO && mbox_cmd.size_out < xfer_size) {
-> > +			offset += mbox_cmd.size_out;
-> > +			break;
-> > +		}
-> > +
-> >  		if (rc < 0)
-> >  			return rc;
-> >  
-> > @@ -584,7 +597,7 @@ static int cxl_xfer_log(struct cxl_dev_state *cxlds, uuid_t *uuid, u32 size, u8
-> >  		offset += xfer_size;
-> >  	}
-> >  
-> > -	return 0;
-> > +	return offset;
-> >  }
-> >  
-> >  /**
-> > @@ -608,13 +621,11 @@ static void cxl_walk_cel(struct cxl_dev_state *cxlds, size_t size, u8 *cel)
-> >  		u16 opcode = le16_to_cpu(cel_entry[i].opcode);
-> >  		struct cxl_mem_command *cmd = cxl_mem_find_command(opcode);
-> >  
-> > -		if (!cmd) {
-> > -			dev_dbg(cxlds->dev,
-> > -				"Opcode 0x%04x unsupported by driver", opcode);
-> > -			continue;
-> > -		}
-> > +		if (cmd)
-> > +			set_bit(cmd->info.id, cxlds->enabled_cmds);
-> >  
-> > -		set_bit(cmd->info.id, cxlds->enabled_cmds);
-> > +		dev_dbg(cxlds->dev, "Opcode 0x%04x %ssupported by driver",
-> > +			opcode, cmd ? "" : "un");
-> 
-> Unrelated change so doesn't belong in this patch.   I'd also split the
-> dev_dbg into two paths both to reduce modification and because people
-> might grep for "unsupported by driver"
+static noinline depot_stack_handle_t set_track_prepare(void)
+{
+         depot_stack_handle_t trace_handle;
+         unsigned long entries[MAX_TRACE];
+         unsigned int nr_entries;
 
-I will send a separate patch for this and also rework this section.
+         if (!kmemleak_stadep_initialized)
+                 return 0;
+         nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+         trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
 
-> 
-> 
-> >  	}
-> >  }
-> >  
-> > @@ -695,11 +706,12 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
-> >  		}
-> >  
-> >  		rc = cxl_xfer_log(cxlds, &uuid, size, log);
-> > -		if (rc) {
-> > +		if (rc < 0) {
-> 
-> Feels like passing in size as a pointer that is then updated might be cleaner.
+         return trace_handle;
+}
 
-I can do that.
+Maybe this will help (dmesg says that Stack Depot is disabled due to errors?):
 
-Thanks,
+[    0.072031] Memory: 16152080K/16658536K available (18432K kernel code, 4118K rwdata, 7184K rodata, 4420K init, 7684K bss, 506196K 
+reserved, 0K cma-reserved)
+[    0.072219] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=6, Nodes=1
+[    0.072222] Stack Depot allocating hash table of 1048576 entries with kvcalloc
+[    0.072226] swapper: vmalloc error: size 8388608, vm_struct allocation failed, mode:0xdc0(GFP_KERNEL|__GFP_ZERO), 
+nodemask=(null),cpuset=(null),mems_allowed=0-1023
+[    0.072235] CPU: 0 PID: 0 Comm: swapper Not tainted 6.2.0-rc3-mglru-kmemlk-patch-zhaoyang2+ #23
+[    0.072237] Hardware name: LENOVO 10TX000VCR/3140, BIOS M22KT49A 11/10/2022
+[    0.072238] Call Trace:
+[    0.072240]  <TASK>
+[    0.072242]  dump_stack_lvl+0x49/0x63
+[    0.072248]  dump_stack+0x10/0x16
+[    0.072250]  warn_alloc.cold.161+0x75/0xe8
+[    0.072255]  ? __get_vm_area_node+0x14d/0x160
+[    0.072260]  __vmalloc_node_range+0x5e5/0x7d0
+[    0.072264]  ? stack_depot_init.cold.2+0x7e/0xb3
+[    0.072267]  ? __kmalloc_large_node+0xf8/0x150
+[    0.072270]  ? kvmalloc_node+0x4f/0xe0
+[    0.072274]  kvmalloc_node+0xb1/0xe0
+[    0.072276]  ? stack_depot_init.cold.2+0x7e/0xb3
+[    0.072278]  stack_depot_init.cold.2+0x7e/0xb3
+[    0.072280]  kmemleak_init+0x1b/0x114
+[    0.072284]  start_kernel+0x710/0x9dc
+[    0.072288]  x86_64_start_reservations+0x24/0x2a
+[    0.072290]  x86_64_start_kernel+0xf2/0xfd
+[    0.072292]  secondary_startup_64_no_verify+0xe5/0xeb
+[    0.072297]  </TASK>
+[    0.072298] Mem-Info:
+[    0.072299] active_anon:0 inactive_anon:0 isolated_anon:0
+                 active_file:0 inactive_file:0 isolated_file:0
+                 unevictable:0 dirty:0 writeback:0
+                 slab_reclaimable:0 slab_unreclaimable:26
+                 mapped:0 shmem:0 pagetables:0
+                 sec_pagetables:0 bounce:0
+                 kernel_misc_reclaimable:0
+                 free:4037994 free_pcp:0 free_cma:0
+[    0.072303] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB 
+isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB 
+kernel_stack:0kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
+[    0.072307] Node 0 DMA free:14336kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB 
+active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15992kB managed:14336kB mlocked:0kB bounce:0kB 
+free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.072311] lowmem_reserve[]: 0 0 0 0 0
+[    0.072314] Node 0 DMA32 free:2085160kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB 
+inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:2257392kB managed:2085160kB mlocked:0kB 
+bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.072318] lowmem_reserve[]: 0 0 0 0 0
+[    0.072321] Node 0 Normal free:14052480kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB 
+inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:14385152kB managed:14052844kB 
+mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.072325] lowmem_reserve[]: 0 0 0 0 0
+[    0.072328] Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 2*1024kB (UM) 2*2048kB (M) 2*4096kB (M) = 14336kB
+[    0.072338] Node 0 DMA32: 8*4kB (M) 9*8kB (M) 8*16kB (M) 8*32kB (M) 7*64kB (M) 7*128kB (M) 8*256kB (M) 7*512kB (M) 5*1024kB (M) 
+6*2048kB (M) 503*4096kB (M) = 2085160kB
+[    0.072352] Node 0 Normal: 8*4kB (UM) 8*8kB (M) 2*16kB (UM) 2*32kB (M) 1*64kB (M) 3*128kB (UM) 2*256kB (M) 4*512kB (UM) 2*1024kB 
+(UM) 3*2048kB (UM) 3428*4096kB (M) = 14052480kB
+[    0.072366] 0 total pagecache pages
+[    0.072367] 0 pages in swap cache
+[    0.072367] Free swap  = 0kB
+[    0.072368] Total swap = 0kB
+[    0.072369] 4164634 pages RAM
+[    0.072369] 0 pages HighMem/MovableOnly
+[    0.072370] 126549 pages reserved
+[    0.072371] 0 pages hwpoisoned
+[    0.072372] Stack Depot hash table allocation failed, disabling
 
--Robert
+I have rebooted in the kernel 6.1.0-9102b78b6f6a build on
+"git checkout 9102b78b6f6ae6af3557114c265c266b312c1319", and this dmesg Stack Depot error
+disappeared. :-/
 
-> 
-> >  			kvfree(log);
-> >  			goto out;
-> >  		}
-> >  
-> > +		size = (u32)rc;
-> >  		cxl_walk_cel(cxlds, size, log);
-> >  		kvfree(log);
-> >  
-> 
+There is nothing in between of commit 9102b78b6f6ae6af3557114c265c266b312c1319
+and your commit 56a61617dd2276cbc56a6c868599716386d70041:
+
+commit 56a61617dd2276cbc56a6c868599716386d70041 (refs/bisect/bad)
+Author: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Date:   Thu Oct 27 17:50:24 2022 +0800
+
+     mm: use stack_depot for recording kmemleak's backtrace
+
+     Using stack_depot to record kmemleak's backtrace which has been
+     implemented on slub for reducing redundant information.
+
+     [akpm@linux-foundation.org: fix build - remove now-unused __save_stack_trace()]
+     [zhaoyang.huang@unisoc.com: v3]
+       Link: https://lkml.kernel.org/r/1667101354-4669-1-git-send-email-zhaoyang.huang@unisoc.com
+     [akpm@linux-foundation.org: fix v3 layout oddities]
+     [akpm@linux-foundation.org: coding-style cleanups]
+     Link: https://lkml.kernel.org/r/1666864224-27541-1-git-send-email-zhaoyang.huang@unisoc.com
+     Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+     Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+     Cc: ke.wang <ke.wang@unisoc.com>
+     Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+     Cc: Vlastimil Babka <vbabka@suse.cz>
+     Cc: Zhaoyang Huang <huangzhaoyang@gmail.com>
+     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+
+commit 9102b78b6f6ae6af3557114c265c266b312c1319 (refs/bisect/good-9102b78b6f6ae6af3557114c265c266b312c1319)
+Author: Liam Howlett <liam.howlett@oracle.com>
+Date:   Tue Oct 25 17:37:23 2022 +0000
+
+     maple_tree: update copyright dates for test code
+
+     Add the span to the year of the development.
+
+     Link: https://lkml.kernel.org/r/20221025173709.2718725-1-Liam.Howlett@oracle.com
+     Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+     Cc: Matthew Wilcox <willy@infradead.org>
+     Cc: Joe Perches <joe@perches.com>
+     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+
+Maybe I'm doing something wrong? I have used the same .config for all builds, just
+changed CONFIG_LOCALVERSION.
+
+Regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+--
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
