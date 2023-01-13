@@ -2,89 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A126697D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95396697D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 13:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241671AbjAMM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 07:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S241650AbjAMM6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 07:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241310AbjAMM4x (ORCPT
+        with ESMTP id S241721AbjAMM5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 07:56:53 -0500
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2AC5FBD
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 04:44:53 -0800 (PST)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 78CCAA0040;
-        Fri, 13 Jan 2023 13:44:50 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 78CCAA0040
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1673613890; bh=TzCYWekeVeO9uFmb65AitJ1O7hak5JCY5nBfZC0eV1Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=2EgLb8RA/MNOulgcS+OV5eUJHrwhU9C2VKHd17CiF9fB4tkYFCq1Z5t1tj2S6fZOK
-         tP/6usu8adIUGz/VmcFjD1ccQaNU/0a4bAKYIQaYOs+dJU7CqL9Qw7O7TcaxBiW4CW
-         AnbN8H2RPZzlmNvF7su8SpNATtU2yJvByQzN4FBA=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Fri, 13 Jan 2023 13:44:46 +0100 (CET)
-Message-ID: <abe92f46-d4d7-4d9d-82b3-d8c9e7e26181@perex.cz>
-Date:   Fri, 13 Jan 2023 13:44:45 +0100
+        Fri, 13 Jan 2023 07:57:08 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3BFA16584;
+        Fri, 13 Jan 2023 04:45:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B491CFEC;
+        Fri, 13 Jan 2023 04:45:55 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.46.126])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C4BE3F587;
+        Fri, 13 Jan 2023 04:45:12 -0800 (PST)
+Date:   Fri, 13 Jan 2023 12:45:04 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Thomas Gleixner <tglx@linotronix.de>, stable@vger.kernel.org,
+        Yogesh Lal <quic_ylal@quicinc.com>
+Subject: Re: [PATCH] clocksource/drivers/arm_arch_timer: Update sched_clock
+ when non-boot CPUs need counter workaround
+Message-ID: <Y8FSUOC7k3ChMazG@FVFF77S0Q05N>
+References: <20230113111648.1977473-1-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] ALSA: pcm: Move rwsem lock inside snd_ctl_elem_read to
- prevent UAF
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org, Clement Lecigne <clecigne@google.com>
-References: <20230113120745.25464-1-tiwai@suse.de>
-From:   Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <20230113120745.25464-1-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113111648.1977473-1-maz@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 01. 23 13:07, Takashi Iwai wrote:
-> From: Clement Lecigne <clecigne@google.com>
-> 
-> Takes rwsem lock inside snd_ctl_elem_read instead of snd_ctl_elem_read_user
-> like it was done for write in commit 1fa4445f9adf1 ("ALSA: control - introduce
-> snd_ctl_notify_one() helper"). Doing this way we are also fixing the following
-> locking issue happening in the compat path which can be easily triggered and
-> turned into an use-after-free.
-> 
-> 64-bits:
-> snd_ctl_ioctl
->    snd_ctl_elem_read_user
->      [takes controls_rwsem]
->      snd_ctl_elem_read [lock properly held, all good]
->      [drops controls_rwsem]
-> 
-> 32-bits:
-> snd_ctl_ioctl_compat
->    snd_ctl_elem_write_read_compat
->      ctl_elem_write_read
->        snd_ctl_elem_read [missing lock, not good]
-> 
-> CVE-2023-0266 was assigned for this issue.
-> 
-> Cc: stable@kernel.org # 5.13+
-> Signed-off-by: Clement Lecigne <clecigne@google.com>
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Hi Marc,
 
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+On Fri, Jan 13, 2023 at 11:16:48AM +0000, Marc Zyngier wrote:
+> When booting on a CPU that has a countertum on the counter read,
+> we use the arch_counter_get_cnt{v,p}ct_stable() backend which
+> applies the workaround.
+> 
+> However, we don't do the same thing when an affected CPU is
+> a secondary CPU, and we're stuck with the standard sched_clock()
+> backend that knows nothing about the workaround.
+> 
+> Fix it by always indirecting sched_clock(), making arch_timer_read_counter
+> a function instead of a function pointer. In turn, we update the
+> pointer (now private to the driver code) when detecting a new
+> workaround.
 
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+Unfortunately, I don't think this is sufficient.
+
+I'm pretty sure secondary CPUs might call sched_clock() before getting to
+arch_counter_register(), so there'll be a window where this could go wrong.
+
+If we consider late onlining on a preemptible kernel we'll also have a race at
+runtime:
+
+| sched_clock() {
+| 	arch_timer_read_counter() {
+| 		// reads __arch_timer_read_counter == arch_counter_get_cntvct;
+| 		
+| 		arch_counter_get_cntvct() {
+| 			
+| 			< PREEMPTED >
+| 			< CPU requiring workaround onlined >
+| 			< RESCHEDULED on affected CPU >
+| 
+| 			MRS xN, CNTVCT_EL0	// reads junk here
+| 		}
+| 	}
+| }
+
+I think we need to reconsider the approach.
+
+Since the accessor is out-of-line anyway, we could use a static key *within*
+the accessor to handle that, e.g.
+
+| u64 arch_timer_get_cntvct(void)
+| {
+| 	u64 val = read_sysreg(cntvct_el0);
+| 	if (!static_branch_unlikely(use_timer_workaround))
+| 		return val;
+| 
+| 	// do stablisation workaround here
+| 	
+| 	return val;
+| }
+
+... and we'd need to transiently enable the workaround when beinging a CPU
+online in case it needs the workaround. We could use the static key inc / dec
+helpers from the CPU invoking the hotplug to manage that.
+
+With that, we should never perform the first read on an affected core without
+also deciding to perform the workaround.
+
+Does that make sound plausible?
+
+Thanks,
+Mark.
+
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@kernel.org>
+> Cc: Thomas Gleixner <tglx@linotronix.de>
+> Cc: stable@vger.kernel.org
+> Reported-by: Yogesh Lal <quic_ylal@quicinc.com>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Fixes: 0ea415390cd3 ("clocksource/arm_arch_timer: Use arch_timer_read_counter to access stable counters")
+> Link: https://lore.kernel.org/r/ca4679a0-7f29-65f4-54b9-c575248192f1@quicinc.com
+> ---
+>  drivers/clocksource/arm_arch_timer.c | 56 +++++++++++++++++-----------
+>  include/clocksource/arm_arch_timer.h |  2 +-
+>  2 files changed, 36 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+> index e09d4427f604..5272db86bef5 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -217,7 +217,12 @@ static notrace u64 arch_counter_get_cntvct(void)
+>   * to exist on arm64. arm doesn't use this before DT is probed so even
+>   * if we don't have the cp15 accessors we won't have a problem.
+>   */
+> -u64 (*arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
+> +static u64 (*__arch_timer_read_counter)(void) __ro_after_init = arch_counter_get_cntvct;
+> +
+> +u64 arch_timer_read_counter(void)
+> +{
+> +	return __arch_timer_read_counter();
+
+Since the function pointer can be modified concurrently, we'll need to use 
+	return READ_ONCE(__arch_timer_read_counter)();
+
+SInce this could change dynamically, we
+> +}
+>  EXPORT_SYMBOL_GPL(arch_timer_read_counter);
+>  
+>  static u64 arch_counter_read(struct clocksource *cs)
+> @@ -230,6 +235,28 @@ static u64 arch_counter_read_cc(const struct cyclecounter *cc)
+>  	return arch_timer_read_counter();
+>  }
+>  
+> +static bool arch_timer_counter_has_wa(void);
+> +
+> +static u64 (*arch_counter_get_read_fn(void))(void)
+> +{
+> +	u64 (*rd)(void);
+> +
+> +	if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+> +	    arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+> +		if (arch_timer_counter_has_wa())
+> +			rd = arch_counter_get_cntvct_stable;
+> +		else
+> +			rd = arch_counter_get_cntvct;
+> +	} else {
+> +		if (arch_timer_counter_has_wa())
+> +			rd = arch_counter_get_cntpct_stable;
+> +		else
+> +			rd = arch_counter_get_cntpct;
+> +	}
+> +
+> +	return rd;
+> +}
+> +
+>  static struct clocksource clocksource_counter = {
+>  	.name	= "arch_sys_counter",
+>  	.id	= CSID_ARM_ARCH_COUNTER,
+> @@ -571,8 +598,10 @@ void arch_timer_enable_workaround(const struct arch_timer_erratum_workaround *wa
+>  			per_cpu(timer_unstable_counter_workaround, i) = wa;
+>  	}
+>  
+> -	if (wa->read_cntvct_el0 || wa->read_cntpct_el0)
+> -		atomic_set(&timer_unstable_counter_workaround_in_use, 1);
+> +	if (wa->read_cntvct_el0 || wa->read_cntpct_el0) {
+> +		__arch_timer_read_counter = arch_counter_get_read_fn();
+> +		atomic_set_release(&timer_unstable_counter_workaround_in_use, 1);
+> +	}
+>  
+>  	/*
+>  	 * Don't use the vdso fastpath if errata require using the
+> @@ -641,7 +670,7 @@ static bool arch_timer_counter_has_wa(void)
+>  #else
+>  #define arch_timer_check_ool_workaround(t,a)		do { } while(0)
+>  #define arch_timer_this_cpu_has_cntvct_wa()		({false;})
+> -#define arch_timer_counter_has_wa()			({false;})
+> +static bool arch_timer_counter_has_wa(void)		{ return false; }
+>  #endif /* CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND */
+>  
+>  static __always_inline irqreturn_t timer_handler(const int access,
+> @@ -1079,25 +1108,10 @@ static void __init arch_counter_register(unsigned type)
+>  
+>  	/* Register the CP15 based counter if we have one */
+>  	if (type & ARCH_TIMER_TYPE_CP15) {
+> -		u64 (*rd)(void);
+> -
+> -		if ((IS_ENABLED(CONFIG_ARM64) && !is_hyp_mode_available()) ||
+> -		    arch_timer_uses_ppi == ARCH_TIMER_VIRT_PPI) {
+> -			if (arch_timer_counter_has_wa())
+> -				rd = arch_counter_get_cntvct_stable;
+> -			else
+> -				rd = arch_counter_get_cntvct;
+> -		} else {
+> -			if (arch_timer_counter_has_wa())
+> -				rd = arch_counter_get_cntpct_stable;
+> -			else
+> -				rd = arch_counter_get_cntpct;
+> -		}
+> -
+> -		arch_timer_read_counter = rd;
+> +		__arch_timer_read_counter = arch_counter_get_read_fn();
+>  		clocksource_counter.vdso_clock_mode = vdso_default;
+>  	} else {
+> -		arch_timer_read_counter = arch_counter_get_cntvct_mem;
+> +		__arch_timer_read_counter = arch_counter_get_cntvct_mem;
+>  	}
+>  
+>  	width = arch_counter_get_width();
+> diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_arch_timer.h
+> index 057c8964aefb..ec331b65ba23 100644
+> --- a/include/clocksource/arm_arch_timer.h
+> +++ b/include/clocksource/arm_arch_timer.h
+> @@ -85,7 +85,7 @@ struct arch_timer_mem {
+>  #ifdef CONFIG_ARM_ARCH_TIMER
+>  
+>  extern u32 arch_timer_get_rate(void);
+> -extern u64 (*arch_timer_read_counter)(void);
+> +extern u64 arch_timer_read_counter(void);
+>  extern struct arch_timer_kvm_info *arch_timer_get_kvm_info(void);
+>  extern bool arch_timer_evtstrm_available(void);
+>  
+> -- 
+> 2.34.1
+> 
