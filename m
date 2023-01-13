@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1449668F29
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D23668F31
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 08:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240314AbjAMHX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 02:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S240932AbjAMHYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 02:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240932AbjAMHWy (ORCPT
+        with ESMTP id S241253AbjAMHXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 02:22:54 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6C571883;
-        Thu, 12 Jan 2023 23:14:20 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 78A2D68D07; Fri, 13 Jan 2023 08:14:13 +0100 (CET)
-Date:   Fri, 13 Jan 2023 08:14:13 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
-Message-ID: <20230113071413.GA25637@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de> <20230113062339.1909087-3-hch@lst.de> <Y8EEbCP6PRMzWP5y@kroah.com>
+        Fri, 13 Jan 2023 02:23:44 -0500
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A522972886;
+        Thu, 12 Jan 2023 23:14:32 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 2210F80FA;
+        Fri, 13 Jan 2023 07:14:32 +0000 (UTC)
+Date:   Fri, 13 Jan 2023 09:14:30 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] usb: remove OMAP USB Device Controller and OHCI
+ support for OMAP1/2 chips
+Message-ID: <Y8EE1qQ3uArtYc+w@atomide.com>
+References: <20230112083746.9551-1-lukas.bulwahn@gmail.com>
+ <20230112083746.9551-4-lukas.bulwahn@gmail.com>
+ <3f2663ff-ff3f-4632-853a-ba4d38df9701@app.fastmail.com>
+ <Y7/YiMPIDN0Cf5Ky@atomide.com>
+ <c9821df0-cd3e-43a0-b903-430d1251d51c@app.fastmail.com>
+ <20230112140524.GK730856@darkstar.musicnaut.iki.fi>
+ <179739a0-5d75-412b-964b-16d5cb6d306d@app.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8EEbCP6PRMzWP5y@kroah.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <179739a0-5d75-412b-964b-16d5cb6d306d@app.fastmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,14 +51,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 08:12:44AM +0100, Greg Kroah-Hartman wrote:
-> Do you want all of these to go through a single tree, or can they go
-> through the different driver subsystem trees?
+* Arnd Bergmann <arnd@arndb.de> [230112 14:31]:
+> On Thu, Jan 12, 2023, at 15:05, Aaro Koskinen wrote:
+> > On Thu, Jan 12, 2023 at 11:19:53AM +0100, Arnd Bergmann wrote:
+> >> On Thu, Jan 12, 2023, at 10:53, Tony Lindgren wrote:
+> >> 
+> >> So if we want to kill off the old DMA stuff there is actually
+> >> a choice between either making omap_udc PIO-only or converting
+> >> it to use the standard dmaengine interface.
+> >
+> > I use this driver on Palm TE and 770, and without it those boards would
+> > be useless for my use cases. Also DMA doubles the throughput, probably
+> > also power usage is smaller.
 > 
-> If single:
-> 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> If not, I'll be glad to take this.
+> Ok, if the performance is important, converting to dmaengine
+> is probably best. Do you know if this is just a straightforward
+> replacement of the function calls, or are there technical reasons
+> why it's not using the dmaengine interface yet?
 
-I think taking all the patches together would make most sense.
+Yes I agree dmaengine is the best solution. Seems like this is the
+last driver using the old api that never got updated probably because
+it's not used on the newer SoCs.
+
+I don't think there are any technical reasons to not use dmaengine
+here.
+
+FYI, the last blocker for dmaengine use was for drivers using
+port_window that got added with the drivers/usb/musb/tusb6010_omap.c
+dmaengine conversion a few years back.
+
+Regards,
+
+Tony
