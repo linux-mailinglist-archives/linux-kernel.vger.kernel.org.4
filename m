@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8D36689CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 03:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507956689D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 04:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbjAMC6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 12 Jan 2023 21:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S240196AbjAMDAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 12 Jan 2023 22:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjAMC6A (ORCPT
+        with ESMTP id S240194AbjAMDAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 12 Jan 2023 21:58:00 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F0E13C;
-        Thu, 12 Jan 2023 18:58:00 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c85so11942551pfc.8;
-        Thu, 12 Jan 2023 18:58:00 -0800 (PST)
+        Thu, 12 Jan 2023 22:00:49 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D003054D8D
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:00:47 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ss4so42015482ejb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 12 Jan 2023 19:00:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mee5x+TzKZU45VGjFqeVteM5ZCKLRyiZXfLHukw8M3k=;
-        b=oYWPJzP238s97TSXJag1xwjIiVYJxo/G0/LL7JwXWVT35sWx499HniPLgQsyc4Yrhk
-         C9BnQZiwAvm4FzQrgv7qEqbqs+AWOmGxCDZekSjimd7EIaQyJVVvlyPBBom7vLEPzHjg
-         FXpolbq/rXpVoHSUDCQD51h0M3WdTUPIRqjlqEgXK2ykerqbVtiXrq4NqVfxSzuJEF3g
-         64MmbQqF2edpbF0n5NKAQ1eENITINSx0LqGQ/xb9dxzqsmlCGWX3nW705JxUGn26CHMS
-         4iARacNl1EvZDCOnkuR6uLqT4aJ23snbJGvu8xIsX+TPAlmFy7fLP4bUA+b5nzABqHe6
-         TnlQ==
+        d=futuring-girl-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4qDazh6QwMY3LvG+D+8H3mKX/MyNkX+etoMzkezwE8=;
+        b=pYTE8kAoX/zWZB4SBkbDjTTBh9UWIFd+P6SC5jQkDEeDj7PdVlns9VanBfpC7qY5kO
+         MiGmJTQ7FQnjxnzX6GW5X28SLY8Q3CMu+fFKhPhJ3ItVJa0BivOqTLXojoCrL+IjSgGn
+         5Pa6324U9cLfYcL+Csd2ytA4CDUMZ+D+3GkubrvDJFdkcX3m4/o5hQ0D8s1LKCIMS7mV
+         H9ZEgSXw+J/DMm1ojfv4nYY8stBifqXGnU/lYH+GGkwCCji7nxKvLSSx4VpPL9QbRy/m
+         D7QCeR+kr056reSnTMDH8uD34/UwFZwHU9Hu63SSd4eTfpWLyFlHWs7OvOgtkd5RytIX
+         Kosw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mee5x+TzKZU45VGjFqeVteM5ZCKLRyiZXfLHukw8M3k=;
-        b=yLMXDBZBLUHxXOVa4sRa8yKoECyUXkDb01zHRoyToM6SP0V3NSwbbMRduj7qG/WkaC
-         4WdmzmRTzZeYnJwKRqZpBGLYYxa/FLedzrom6wXXAxUX7KxgKMCJJaMjUouwQeM+ZbFw
-         u6AVkOvqX79dIeSUP0fqQVN7sz3swYPwjjfdJjgOQt1ojtHK15TKUmWV9cPdUKtNz8b7
-         BIME2kFlJIgFwV+NuKbZmEC+AOhHey7hIGuWdA1HIfe5KidM1n6Wc2byAsu9fRqOmYIZ
-         LNMXOPEcEnT4IBbkKsLxJ1SDO5rgjz0C70Q7HVGtLDtD+l0fDomlyMH9/ghW4oayiCf8
-         Yuwg==
-X-Gm-Message-State: AFqh2kr1ERN76QqPGgnd9H8Hmkw9Am+AZq3OC6PFtsChHUdZxQRko7Yd
-        JQKfC0ofUlDeEiGG52m1hME=
-X-Google-Smtp-Source: AMrXdXuZya7ZgKdKnlxEW/kpPEjRJRcz4KdAIgfIiKih5OjloRHoW0IVJKtkZdwDaIidqUCt0KxeMg==
-X-Received: by 2002:a62:2544:0:b0:589:8fac:cfe5 with SMTP id l65-20020a622544000000b005898faccfe5mr13779054pfl.13.1673578679595;
-        Thu, 12 Jan 2023 18:57:59 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-19.three.co.id. [180.214.233.19])
-        by smtp.gmail.com with ESMTPSA id q17-20020aa79611000000b00575b6d7c458sm897877pfg.21.2023.01.12.18.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 18:57:58 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5A7F0104054; Fri, 13 Jan 2023 09:57:55 +0700 (WIB)
-Date:   Fri, 13 Jan 2023 09:57:54 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Gongwei Li <lifangpi@hotmail.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 972624427@qq.com,
-        Gongwei Li <ligongwei@kylinos.cn>
-Subject: Re: [PATCH V2] usb: Fix typo in comment
-Message-ID: <Y8DIslifX/8cN98K@debian.me>
-References: <SI2PR02MB4603F6E3B7E062EF76656956DDED9@SI2PR02MB4603.apcprd02.prod.outlook.com>
- <Y6wZ+FWhuV8pVl1E@kroah.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4qDazh6QwMY3LvG+D+8H3mKX/MyNkX+etoMzkezwE8=;
+        b=CTvQMkk3z1QrDfZUXszmJvP/6BRrv3tatneh5ZYqrniYgLXYtxOHPqAoKvsBwSxHWS
+         nrk7b2HYUR9CE56p2r0+iEGJQwhLvH1PnxuA4L8F/1bgAuK2zT2jDQ+h+I2moVk+cS0T
+         +we46kKcuofx88IzqRS8puGweCspNeNRwawqNrwyJ8wantUFVeg4WYmfSiCYtwAkmPsW
+         O84HKiM29PCxgaPIT852NN80GDfWDX/HqLuaZ/VW/4gI5AM7IXsxC1rlJsA3KdOs/VjH
+         Mov7JEKAZpCX5H/1MI9Rq51zTIq9dMHX2bbmnYpD/gFTTAs0fN+aTg2bcRpVi985erjE
+         K1kg==
+X-Gm-Message-State: AFqh2kojCQKquWHHY+6J5SKrSJZzE2ooJLQ2J57mSkbQlS3qegrDjt9n
+        8m+S6fArN5RdyaPA2pYMI6NeJ5lmkmr8FWgQJfWhsQ==
+X-Google-Smtp-Source: AMrXdXsbh24iYUuFadTTe1PMFifWTOQcuum+A9Uz95nsAZ60lsYQu66zxBEUz4ouiTYVDeR6nqEhn+NNkGF3JuYlD0s=
+X-Received: by 2002:a17:906:3b5a:b0:82c:356c:c4c8 with SMTP id
+ h26-20020a1709063b5a00b0082c356cc4c8mr4396513ejf.649.1673578846300; Thu, 12
+ Jan 2023 19:00:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1TqxldWz8/riEIdb"
-Content-Disposition: inline
-In-Reply-To: <Y6wZ+FWhuV8pVl1E@kroah.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230112135326.981869724@linuxfoundation.org>
+In-Reply-To: <20230112135326.981869724@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Fri, 13 Jan 2023 12:02:42 +0900
+Message-ID: <CAKL4bV6F5KmT0iE4MLVVW0o_SMyFN1dj-Y+Rt6xN63yAhXtAXA@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/10] 6.1.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg
 
---1TqxldWz8/riEIdb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> This is the start of the stable review cycle for the 6.1.6 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 14 Jan 2023 13:53:18 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.6-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-On Wed, Dec 28, 2022 at 11:27:04AM +0100, Greg KH wrote:
-> On Tue, Dec 27, 2022 at 02:59:30PM +0800, Gongwei Li wrote:
-> > From: Gongwei Li <ligongwei@kylinos.cn>
->=20
-> Please fix your corporate email systems so that you do not have to use
-> a hotmail.com account.  Otherwise how can we verify that this email
-> address really is the one to be attributed to this change?
->=20
+6.1.6-rc1 tested.
 
-Hi Greg,
+x86_64
 
-I have seen an example of reply message sent from @kylinos.cn at [1].
-The Received: header contains reference to mailgw:
+build successfully completed
+boot successfully completed
 
-> Received: from [192.168.1.105] [(183.242.54.212)] by mailgw
->         (envelope-from <jianghaoran@kylinos.cn>)
->         (Generic MTA)
->         with ESMTP id 1962507765; Sat, 01 Oct 2022 08:47:44 +0800
+Lenovo ThinkPad X1 Nano Gen1(Intel i5-1130G7, arch linux)
 
-However, mailgw [2] is a "10-minute mail" temporary mail inbox service.
-The mailbox expires and refreshes every 10 minutes. That means, people have=
- to
-reply within 10 minutes window before messages there will be permanently
-deleted. Consequently, for @kylinos.cn people, they have to either Cc: (or
-Reply-to:) their personal addresses or send patches from such addresses in
-order to keep receiving ML traffic.
+Thanks
 
-Thanks.
-
-[1]: https://lore.kernel.org/lkml/7b707ba4-c3f2-dd17-e3f2-e4d143b76245@kyli=
-nos.cn/raw
-[2]: https://mail.gw/en/
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---1TqxldWz8/riEIdb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8DIqAAKCRD2uYlJVVFO
-o5UjAP4rgmABJ5PAthRmHCAbqASDYVQv+Q5LAbyQ+IDE42PiPwD+JRNVGT3/4cCE
-lqaJU4Ne3SYr8MfGWSTnJKo6H7pFXA4=
-=lKrD
------END PGP SIGNATURE-----
-
---1TqxldWz8/riEIdb--
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
