@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B528C66A4F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D1E66A4F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjAMVOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S229992AbjAMVOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjAMVNX (ORCPT
+        with ESMTP id S231365AbjAMVN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:13:23 -0500
+        Fri, 13 Jan 2023 16:13:26 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DB0F8CBEA
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:12:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 531228CD27
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:12:44 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E039EFEC;
-        Fri, 13 Jan 2023 13:13:23 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22234106F;
+        Fri, 13 Jan 2023 13:13:26 -0800 (PST)
 Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED8D83F587;
-        Fri, 13 Jan 2023 13:12:39 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 304343F587;
+        Fri, 13 Jan 2023 13:12:42 -0800 (PST)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
@@ -30,9 +30,9 @@ Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
         tarek.el-sherbiny@arm.com, quic_kshivnan@quicinc.com,
         cristian.marussi@arm.com
-Subject: [PATCH v7 14/17] firmware: arm_scmi: Reject SCMI drivers while in Raw mode
-Date:   Fri, 13 Jan 2023 21:11:32 +0000
-Message-Id: <20230113211135.2530064-15-cristian.marussi@arm.com>
+Subject: [PATCH v7 15/17] firmware: arm_scmi: Call Raw mode hooks from the core stack
+Date:   Fri, 13 Jan 2023 21:11:33 +0000
+Message-Id: <20230113211135.2530064-16-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230113211135.2530064-1-cristian.marussi@arm.com>
 References: <20230113211135.2530064-1-cristian.marussi@arm.com>
@@ -46,32 +46,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reject SCMI driver registration when SCMI Raw mode support is configured,
-so as to avoid interferences between the SCMI Raw mode transactions and the
-normal SCMI stack operations.
+Add a few call sites where, if SCMI Raw mode access had been enabled in
+Kconfig, the needed SCMI Raw initialization and hooks are called.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/bus.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+v5 --> v6
+- fix error path for RAW mode in scmi_probe
+- use new debugfs Raw rootdir
+v4 --> v5
+- rework to use multiple SCMI instances
+v3 --> v4
+- add call hooks to support polled transports
+v1 --> v2
+- fixes need to use multiple cinfo if available
+---
+ drivers/firmware/arm_scmi/driver.c | 53 +++++++++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-index 6228f1581fe3..8601d75f5b9b 100644
---- a/drivers/firmware/arm_scmi/bus.c
-+++ b/drivers/firmware/arm_scmi/bus.c
-@@ -59,6 +59,12 @@ static int scmi_protocol_device_request(const struct scmi_device_id *id_table)
- 	pr_debug("Requesting SCMI device (%s) for protocol %x\n",
- 		 id_table->name, id_table->protocol_id);
+diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+index f6b0d45152f4..7c7baae85686 100644
+--- a/drivers/firmware/arm_scmi/driver.c
++++ b/drivers/firmware/arm_scmi/driver.c
+@@ -37,6 +37,8 @@
+ #include "common.h"
+ #include "notify.h"
+ 
++#include "raw_mode.h"
++
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/scmi.h>
+ 
+@@ -150,6 +152,7 @@ struct scmi_debug_info {
+  *		bus
+  * @devreq_mtx: A mutex to serialize device creation for this SCMI instance
+  * @dbg: A pointer to debugfs related data (if any)
++ * @raw: An opaque reference handle used by SCMI Raw mode.
+  */
+ struct scmi_info {
+ 	int id;
+@@ -175,6 +178,7 @@ struct scmi_info {
+ 	/* Serialize device creation process for this instance */
+ 	struct mutex devreq_mtx;
+ 	struct scmi_debug_info *dbg;
++	void *raw;
+ };
+ 
+ #define handle_to_scmi_info(h)	container_of(h, struct scmi_info, handle)
+@@ -890,6 +894,11 @@ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
+ 			   xfer->hdr.protocol_id, xfer->hdr.seq,
+ 			   MSG_TYPE_NOTIFICATION);
  
 +	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
-+		pr_warn("SCMI Raw mode active. Rejecting '%s'/0x%02X\n",
-+			id_table->name, id_table->protocol_id);
-+		return -EINVAL;
++		xfer->hdr.seq = MSG_XTRACT_TOKEN(msg_hdr);
++		scmi_raw_message_report(info->raw, xfer, SCMI_RAW_NOTIF_QUEUE);
 +	}
 +
- 	/*
- 	 * Search for the matching protocol rdev list and then search
- 	 * of any existent equally named device...fails if any duplicate found.
+ 	__scmi_xfer_put(minfo, xfer);
+ 
+ 	scmi_clear_channel(info, cinfo);
+@@ -903,6 +912,9 @@ static void scmi_handle_response(struct scmi_chan_info *cinfo,
+ 
+ 	xfer = scmi_xfer_command_acquire(cinfo, msg_hdr);
+ 	if (IS_ERR(xfer)) {
++		if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
++			scmi_raw_error_report(info->raw, cinfo, msg_hdr, priv);
++
+ 		if (MSG_XTRACT_TYPE(msg_hdr) == MSG_TYPE_DELAYED_RESP)
+ 			scmi_clear_channel(info, cinfo);
+ 		return;
+@@ -936,6 +948,16 @@ static void scmi_handle_response(struct scmi_chan_info *cinfo,
+ 		complete(&xfer->done);
+ 	}
+ 
++	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
++		/*
++		 * When in polling mode avoid to queue the Raw xfer on the IRQ
++		 * RX path since it will be already queued at the end of the TX
++		 * poll loop.
++		 */
++		if (!xfer->hdr.poll_completion)
++			scmi_raw_message_report(info->raw, xfer, SCMI_RAW_REPLY_QUEUE);
++	}
++
+ 	scmi_xfer_command_release(info, xfer);
+ }
+ 
+@@ -1050,6 +1072,14 @@ static int scmi_wait_for_reply(struct device *dev, const struct scmi_desc *desc,
+ 					    "RESP" : "resp",
+ 					    xfer->hdr.seq, xfer->hdr.status,
+ 					    xfer->rx.buf, xfer->rx.len);
++
++			if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT)) {
++				struct scmi_info *info =
++					handle_to_scmi_info(cinfo->handle);
++
++				scmi_raw_message_report(info->raw, xfer,
++							SCMI_RAW_REPLY_QUEUE);
++			}
+ 		}
+ 	} else {
+ 		/* And we wait for the response. */
+@@ -2666,9 +2696,25 @@ static int scmi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto clear_dev_req_notifier;
+ 
+-	if (scmi_top_dentry)
++	if (scmi_top_dentry) {
+ 		info->dbg = scmi_debugfs_common_setup(info);
+ 
++		if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT) && info->dbg) {
++			info->raw = scmi_raw_mode_init(handle,
++						       info->dbg->top_dentry,
++						       info->id, info->desc,
++						       info->tx_minfo.max_msg);
++			if (IS_ERR(info->raw)) {
++				dev_err(dev, "Failed to initialize SCMI RAW Mode !\n");
++
++				ret = PTR_ERR(info->raw);
++				goto clear_dev_req_notifier;
++			}
++
++			return 0;
++		}
++	}
++
+ 	if (scmi_notification_init(handle))
+ 		dev_err(dev, "SCMI Notifications NOT available.\n");
+ 
+@@ -2726,6 +2772,8 @@ static int scmi_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ notification_exit:
++	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
++		scmi_raw_mode_cleanup(info->raw);
+ 	scmi_notification_exit(&info->handle);
+ clear_dev_req_notifier:
+ 	blocking_notifier_chain_unregister(&scmi_requested_devices_nh,
+@@ -2745,6 +2793,9 @@ static int scmi_remove(struct platform_device *pdev)
+ 	struct scmi_info *info = platform_get_drvdata(pdev);
+ 	struct device_node *child;
+ 
++	if (IS_ENABLED(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT))
++		scmi_raw_mode_cleanup(info->raw);
++
+ 	mutex_lock(&scmi_list_mutex);
+ 	if (info->users)
+ 		dev_warn(&pdev->dev,
 -- 
 2.34.1
 
