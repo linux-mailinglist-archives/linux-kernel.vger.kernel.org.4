@@ -2,193 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C568366A539
-	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A5A66A548
+	for <lists+linux-kernel@lfdr.de>; Fri, 13 Jan 2023 22:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbjAMVkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 16:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        id S229526AbjAMVpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 16:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjAMVkA (ORCPT
+        with ESMTP id S229678AbjAMVpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 16:40:00 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6D4B851
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:39:58 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4db05a4db9bso80162137b3.10
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:39:58 -0800 (PST)
+        Fri, 13 Jan 2023 16:45:49 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F5910B5D
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:45:48 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id s3so14617199pfd.12
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 13:45:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yzardt2FwxVZJ2DLRLd08YoMu52l4Jh0UvvdOlCjplY=;
-        b=iQhKtL//flevk+6/GtQbGu8Xu7LsQCBFmA0aDjZHOnt61jKeEU9gB0YLspV/MazHxT
-         KrHu4enP10I2nUWw1hgYajR6OToC1jmU8vCOEcY518ydHc25eOmG1R2cQZiLEH5T3ybc
-         e8ssePUWA3E7hXlV84SNK0Zj25DLk3Op0A7pNWvppIzpQmn76o+tdCLj1BsnKZMz+yov
-         G+w+jbd19wF2VTvKfQkmBoicmKcrxBgjRKy7Eq5LBM4sKuYBFen3+GAUnXYIAS/94NDJ
-         eHO11cgriEurn4ieb5tG4oWw6QAaqvHgcE5eKOA4sUsSdu+0lt0itgNo4/7o5zLbT41g
-         IMlQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fLpE4svXD3XQQRSXVJzXdGhWxSRO6yXuEUgvAKhMVl4=;
+        b=seXJpHkX75LLjeAQGGDYlo3npZTN5KBqgznJsS+O6gpK2NmQ8Yi8U38tzdE+sC0EtR
+         5QNoTpmSeSffYXeoVSQnn2DDfEUU15bx7u8Rc9mQ7+nG4BrIVuqxpf1JQJStGuZpibXL
+         us0R/zMDHhkDokII30bM1n/PGIAWgWXSABq5bm53ejqYhpqMuyX2VG9tuy7tkBOcBPXr
+         IG/Grxqr1iz8WOBM4TaI5wMisBoRkN7/HNxFv0u7XrxoEJZ8VtsAoxndPL1Ch+k+o3w2
+         q2AwPfjhCwZUciSBXNwm+cYaZBpI27vZHdYtB1+MOOaRomdw7nEBN/HbhoNBnskedaKr
+         hCSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yzardt2FwxVZJ2DLRLd08YoMu52l4Jh0UvvdOlCjplY=;
-        b=SkzuNpTxsPhLV73PUp4Ksepct+C1ggVC/ucMMzCPmRfAidiY2CgB+LD83KAUl+hBvl
-         nOr0VO3Pj95DENY91utsbZd6ATxTsgjTzVclB6229mNgfKS5zb7eJ9TlhIxlf1hwH55W
-         QmOC+CSlVuiKEL7iqzPuYhsp4O9ctR1CFS+5e5Z89bNgrqj6JarmbT3nTBqA+RdLBe0e
-         mRIVfPu7rwlhnmZnMolhkpqxdNP23hILInCQ5a+iKWpsAEjgrDWFeMloAMZCIBguqTQs
-         zeLimsagv5+2J3qmKHHnlp6uV8lXncGYGW/M3TlppS/kkAsTqJsgfj5Gmf5Obm/t6BNa
-         vkJQ==
-X-Gm-Message-State: AFqh2kpU7dgBewqUAnaBRdjqyz2KBOLeBZHgRVbVmFVbiAt7po+L9AI/
-        J6/afpIgXn5JEUTHqdGUf/vRx9DQ52yKcZigUdhXzQAE0cQ=
-X-Google-Smtp-Source: AMrXdXvqaBu1ymnZDBo8FrrhNrNPpRPqiSpOwjb2/qXu0kGwbt7CZ4WEItfhIo7LDXlirPTsfyKOrmH/6QmgM3c0HK0=
-X-Received: by 2002:a05:690c:e21:b0:4d0:f843:c376 with SMTP id
- cp33-20020a05690c0e2100b004d0f843c376mr1927433ywb.63.1673645997872; Fri, 13
- Jan 2023 13:39:57 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fLpE4svXD3XQQRSXVJzXdGhWxSRO6yXuEUgvAKhMVl4=;
+        b=pNWpkHNWLaIBKEGO/VXWqC/w1bAzH9GazDo58Te+l79xlEMqzAhnkL9I2qyLkVtwuv
+         TY5aJXKYeyShguVXepfwNVqIFBwajOxqdiVWhSJ/fsEnXACcOTKhsolCmJhOE91Gveiq
+         1Qfoq4Bld+j9v4TwBWB/XZn9cuJBb8pekOB6l9DXAtBjfDsDeoc8sDfUWWornk4bG0rR
+         DW/hv5oRbItChm564XAA4Sh+zjxh1EHC7OCZN6IMd4kJuLYrGFksWhWqOrZ6YfTA/0/v
+         8nxQomhVnPr9kagXqeObZarNFOX3uUZ2b8/M5jR0FlL0OsK8yo1DBqZGHpCtf93cM7uC
+         VjEw==
+X-Gm-Message-State: AFqh2kq/Mnjh+WyzQiH7klvc3juuoHPt5dvl8jtyzZlj5yBhrckiJPSY
+        gUpe4HsYWcXF6qUStgac12EmgQ==
+X-Google-Smtp-Source: AMrXdXsrIOvOzBb3717HQB1WC3lU2RR/DE+Mjyapbas+eMRFoGzQr3ZhpTdppsDT513yxfgfdqZIMg==
+X-Received: by 2002:a62:6001:0:b0:582:33b4:4c57 with SMTP id u1-20020a626001000000b0058233b44c57mr11213692pfb.33.1673646347798;
+        Fri, 13 Jan 2023 13:45:47 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:d88b:1f:16ba:1ee7])
+        by smtp.gmail.com with ESMTPSA id e8-20020aa79808000000b005897f5436c0sm9309127pfl.118.2023.01.13.13.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 13:45:47 -0800 (PST)
+Date:   Fri, 13 Jan 2023 14:45:44 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Hari Nagalla <hnagalla@ti.com>
+Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com, praneeth@ti.com,
+        nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com, j-luthra@ti.com,
+        devarsht@ti.com
+Subject: Re: [PATCH v2 0/2] Add C7xv DSP for AM62A
+Message-ID: <20230113214544.GA2956142@p14s>
+References: <20221230132453.32022-1-hnagalla@ti.com>
 MIME-Version: 1.0
-References: <20230110213010.2683185-1-avagin@google.com> <20230110213010.2683185-3-avagin@google.com>
- <Y7+4S9umCo5I+Ty7@chenyu5-mobl1>
-In-Reply-To: <Y7+4S9umCo5I+Ty7@chenyu5-mobl1>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Fri, 13 Jan 2023 13:39:46 -0800
-Message-ID: <CANaxB-wcpKS64q6_0+r+OwoZupRN-A-PQvPRiVsMmEgB1TRSrw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] sched: add WF_CURRENT_CPU and externise ttwu
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Andrei Vagin <avagin@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230132453.32022-1-hnagalla@ti.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 11:36 PM Chen Yu <yu.c.chen@intel.com> wrote:
+On Fri, Dec 30, 2022 at 07:24:51AM -0600, Hari Nagalla wrote:
+> AM62A SoC family has a C7xv DSP subsystem with Analytics engine. This
+> susbystem is intended for deep learning purposes. C7xv is similar to C71
+> DSPs on K3 J7 SoCs with additional harware accelerators and IP updates
+> for deep learining.
+> 
+> Hari Nagalla (1):
+>   dt-bindings: remoteproc: k3-dsp: update bindings for AM62A SoCs
+> 
+> Jai Luthra (1):
+>   remoteproc: k3-c7x: Add support for C7xv DSP on AM62A SoC
+> 
+>  .../bindings/remoteproc/ti,k3-dsp-rproc.yaml         |  3 +++
+>  drivers/remoteproc/ti_k3_dsp_remoteproc.c            | 12 ++++++++++++
+>  2 files changed, 15 insertions(+)
 >
-> On 2023-01-10 at 13:30:07 -0800, Andrei Vagin wrote:
-> > From: Peter Oskolkov <posk@google.com>
-> >
-> > Add WF_CURRENT_CPU wake flag that advices the scheduler to
-> > move the wakee to the current CPU. This is useful for fast on-CPU
-> > context switching use cases.
-> >
-> > In addition, make ttwu external rather than static so that
-> > the flag could be passed to it from outside of sched/core.c.
-> >
-> > Signed-off-by: Peter Oskolkov <posk@google.com>
-> > Signed-off-by: Andrei Vagin <avagin@gmail.com>
-> > @@ -7380,6 +7380,10 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
-> >       if (wake_flags & WF_TTWU) {
-> >               record_wakee(p);
-> >
-> > +             if ((wake_flags & WF_CURRENT_CPU) &&
-> > +                 cpumask_test_cpu(cpu, p->cpus_ptr))
-> > +                     return cpu;
-> I agree that cross-CPU wake up brings pain to fast context switching
-> use cases,  especially on high core count system. We suffered from this
-> issue as well, so previously we presented this issue as well. The difference
-> is that we used some dynamic "WF_CURRENT_CPU" mechanism[1] to deal with it.
-> That is, if the waker/wakee are both short duration tasks, let the waker wakes up
-> the wakee on current CPU. So not only seccomp but also other components/workloads
-> could benefit from this without having to set the WF_CURRENT_CPU flag.
->
-> Link [1]:
-> https://lore.kernel.org/lkml/cover.1671158588.git.yu.c.chen@intel.com/
 
-Thanks for the link. I like the idea, but this change has no impact on the
-seccom notify case.  I used the benchmark from the fifth patch. It is
-a ping-pong
-benchmark in which one process triggers system calls, and another process
-handles them. It measures the number of system calls that can be processed
-within a specified time slice.
+Applied - thanks
+Mathieu
 
-$ cd tools/testing/selftests/seccomp/
-$ make
-$ ./seccomp_bpf  2>&1| grep user_notification_sync
-#  RUN           global.user_notification_sync ...
-# seccomp_bpf.c:4281:user_notification_sync:basic: 8489 nsec/syscall
-# seccomp_bpf.c:4281:user_notification_sync:sync: 3078 nsec/syscall
-#            OK  global.user_notification_sync
-ok 51 global.user_notification_sync
-
-The results are the same with and without your change. I expected that
-your change improves
-the basic case so that it reaches the sync one.
-
-I did some experiments and found that we can achieve the desirable
-outcome if we move the "short-task" checks prior to considering waking
-up on prev_cpu.
-
-For example, with this patch:
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 2f89e44e237d..af20b58e3972 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6384,6 +6384,11 @@ static int wake_wide(struct task_struct *p)
- static int
- wake_affine_idle(int this_cpu, int prev_cpu, int sync)
- {
-+       /* The only running task is a short duration one. */
-+       if (cpu_rq(this_cpu)->nr_running == 1 &&
-+           is_short_task(cpu_curr(this_cpu)))
-+               return this_cpu;
-+
-        /*
-         * If this_cpu is idle, it implies the wakeup is from interrupt
-         * context. Only allow the move if cache is shared. Otherwise an
-@@ -6405,11 +6410,6 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
-        if (available_idle_cpu(prev_cpu))
-                return prev_cpu;
-
--       /* The only running task is a short duration one. */
--       if (cpu_rq(this_cpu)->nr_running == 1 &&
--           is_short_task(cpu_curr(this_cpu)))
--               return this_cpu;
--
-        return nr_cpumask_bits;
- }
-
-@@ -6897,6 +6897,10 @@ static int select_idle_sibling(struct
-task_struct *p, int prev, int target)
-            asym_fits_cpu(task_util, util_min, util_max, target))
-                return target;
-
-+       if (!has_idle_core && cpu_rq(target)->nr_running == 1 &&
-+           is_short_task(cpu_curr(target)) && is_short_task(p))
-+               return target;
-+
-        /*
-         * If the previous CPU is cache affine and idle, don't be stupid:
-         */
-
-
-the basic test case shows almost the same results as the sync one:
-
-$ ./seccomp_bpf  2>&1| grep user_notification_sync
-#  RUN           global.user_notification_sync ...
-# seccomp_bpf.c:4281:user_notification_sync:basic: 3082 nsec/syscall
-# seccomp_bpf.c:4281:user_notification_sync:sync: 2690 nsec/syscall
-#            OK  global.user_notification_sync
-ok 51 global.user_notification_sync
-
-If you want to do any experiments, you can find my tree here:
-[1] https://github.com/avagin/linux-task-diag/tree/wip/seccom-notify-sync-and-shed-short-task
-
-Thanks,
-Andrei
+> -- 
+> 2.17.1
+> 
