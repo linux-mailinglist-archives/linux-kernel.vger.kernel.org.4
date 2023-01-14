@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C8166AB7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2075366AB8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjANNQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 08:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S229674AbjANN0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 08:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjANNQy (ORCPT
+        with ESMTP id S229535AbjANN0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 08:16:54 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A21722;
-        Sat, 14 Jan 2023 05:16:52 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id g10so16879559wmo.1;
-        Sat, 14 Jan 2023 05:16:52 -0800 (PST)
+        Sat, 14 Jan 2023 08:26:32 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C5659FD;
+        Sat, 14 Jan 2023 05:26:31 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bk16so23371823wrb.11;
+        Sat, 14 Jan 2023 05:26:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xbToiHr9DoIKWP2GgDy4WohTZnzZoHKjsA3gXbib5fo=;
-        b=OaPLKp4Ie/8AfLYBX0BtBIC9bU6e2Z2YGUE8/QNdUYrCCLooz5BnBB9SNCQBmHSpH2
-         XXwGWmEAgk2WcMj8OC+2dyjSJMkMmPTNEqFUhcD0qD0D+yW/JTDYv446AIx/1UxpDjQ0
-         ggW+LpPcVSVJbNgLMGSd+J5WTM1mFJ/PIQHVx09l24UX7Q5Xb/vDurYCqE2UuW9BBEdF
-         /Rg5xG06BuxuSsvJj7qTSCY+1nsTTPfFsSXTpAS1Dt6upkgipZJ7B2j4oxDEmqcoYPDH
-         kojQ7px7Ysv6twZBuVXPG6lX/RuGn/5kajPuk4fQKNL4zyaakz0/dAPsOygCqVXw1DzA
-         lP8A==
+        bh=g99//iPDMyFvy/+oL6QKSbCjazZl6KWjaU9oRhSg69A=;
+        b=Qb7HH+w7rp3xAgJR1Gpka6RuRPxxIMArkq/4xD/AB7fEVE8B4m4GoBFgPabInQxP24
+         DGKmJ/RNF0ofRA7EbLR0FltGrB0oHAjOS952ahiUaA38sxS7zJrL2y8l2OYlP+VKnFIT
+         vJ1ieL8AhvquLoVyYHMJBg7Xmpm04JT+ACxPHRx0NxnznlK+xp9RYCtHVV5jkg4660Px
+         kAMLrBX8wbiXOeAquft79WbwSiVN9BahjAa7fPabLMo/IvpAGKUK5cENcc8V4A4eatUx
+         gxjTdBq0YBJQMDbYt2tI1JFiKb8lC3y4azvtL/dxpPBoeGosZO296wLAxZSPk5joGCb4
+         qaOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xbToiHr9DoIKWP2GgDy4WohTZnzZoHKjsA3gXbib5fo=;
-        b=PDMg5u5JgE+JMq9njm8prY0Q7n99eW2bUNQtP3MwtxJyKjL96MEMdFVorKEi/EcB5o
-         HwN0BsSnm3+sW8098Epjgje0NvrUJ+P6a7k3iWEtiJ37C3Y8iwUkBn+esfZGwoilMbx5
-         xeaLfiBqILnuiGNL1UylavDt2fIepPllKr8Dpm0kxLCquKzQuBVldxmtO5YK+sATirLh
-         gB11W8PEspQB3k9n6ZEq02uId+HpvjhDgA+SHmT5zvL9dz9sb9x4C7tZcY4Ip6MBL6Jj
-         Pfd3DKle4IiPbj28TuCrj6lHEPCU61KsiTuwhD/FOBOHko8XVV5egO2kapf9xcT7T1u0
-         vlcg==
-X-Gm-Message-State: AFqh2koPUrdrvf1i2vKqDQyG6sCPBUov0xmGkVFo9CgFaDXjMkkR82ap
-        EJxfodcC819K2MwapJ+DuGA=
-X-Google-Smtp-Source: AMrXdXsGWyK6Z963mFvsy7yeSVwO7/fRyW5g7cbsff5sksXWR6BIiIgk3lJ1VtDnnfMaXE6/EsHD9Q==
-X-Received: by 2002:a05:600c:1e1e:b0:3d2:3b4d:d619 with SMTP id ay30-20020a05600c1e1e00b003d23b4dd619mr61333449wmb.15.1673702211137;
-        Sat, 14 Jan 2023 05:16:51 -0800 (PST)
-Received: from lucifer.home (host86-164-169-89.range86-164.btcentralplus.com. [86.164.169.89])
-        by smtp.googlemail.com with ESMTPSA id fc14-20020a05600c524e00b003a3442f1229sm37188672wmb.29.2023.01.14.05.16.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Jan 2023 05:16:50 -0800 (PST)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Jakub Matena <matenajakub@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v5] selftest/vm: add mremap expand merge offset test
-Date:   Sat, 14 Jan 2023 13:16:46 +0000
-Message-Id: <8ff3ba3cadc0b6c1b2688ae5c851bf73aa062d57.1673701836.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        bh=g99//iPDMyFvy/+oL6QKSbCjazZl6KWjaU9oRhSg69A=;
+        b=7RI0sPHPBqFJej9YqWy4iM8Ywgh+PJbp+ksRBIpEbQVfVX/Q7Rj+M8XS1ZXhTLA5EX
+         4qz7X8VIXwNsSN0oOWaZ7CcOsYdIBv3kXt4qfkE3m0HQm+wEddXywK87TNcmxxkHvdSF
+         BHLtrvGQgarnenicpORD0phzr0jG5GgnwPQVJyzOckgj3w52q8hhMY7iWM2psHRBc2Ss
+         nDyHQEkNkPeu1HnruauO1ko7Y+ry0AQsQnR9xdKultSOQ/xKoCpQlfFHA9rLPdRhSPeG
+         1Q1LLLPC0unyNrtdLtn9bdQNAjKTD2r+NHE8RvB2AQ7TRfvCTKOTRrg4xnjyQSiN0kN4
+         J6IA==
+X-Gm-Message-State: AFqh2ko5Vwj6GipM+WYjn9wYI7TZesw9gdJjwjH2MXI9JLOjObCjk5LN
+        QJyTK9gHYpOFEoNagoeIJR0w3q6rDiE=
+X-Google-Smtp-Source: AMrXdXsBc/LGTR4mKUdrY1ifZw+/ZCsvICxAoo41zGYSM6mx6uQfPVXS7JeG3YiQyGR7HodrV5+GWQ==
+X-Received: by 2002:adf:f44f:0:b0:2bd:c6ce:7bf9 with SMTP id f15-20020adff44f000000b002bdc6ce7bf9mr10462091wrp.33.1673702789767;
+        Sat, 14 Jan 2023 05:26:29 -0800 (PST)
+Received: from localhost ([176.234.9.57])
+        by smtp.gmail.com with UTF8SMTPSA id k6-20020a5d5186000000b002bbddb89c71sm17643370wrv.67.2023.01.14.05.26.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Jan 2023 05:26:29 -0800 (PST)
+From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
+To:     u.kleine-koenig@pengutronix.de, thierry.reding@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sasha Finkelstein <fnkl.kernel@gmail.com>
+Subject: [PATCH v7 0/5] PWM and keyboard backlight driver for ARM Macs
+Date:   Sat, 14 Jan 2023 16:25:03 +0300
+Message-Id: <20230114132508.96600-1-fnkl.kernel@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,196 +73,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test to assert that we can mremap() and expand a mapping starting
-from an offset within an existing mapping. We unmap the last page in a 3
-page mapping to ensure that the remap should always succeed, before
-remapping from the 2nd page.
+Hi,
 
-This is additionally a regression test for the issue solved in "mm, mremap:
-fix mremap() expanding vma with addr inside vma" and confirmed to fail
-prior to the change and pass after it.
+This is the v7 of the patch series to add PWM and keyboard backlight
+driver for ARM macs. No significant changes this time.
 
-Finally, this patch updates the existing mremap expand merge test to check
-error conditions and reduce code duplication between the two tests.
+Here is hoping that this time, the paint on this shed is up
+to everyone's standards.
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-Acked-by: David Hildenbrand <david@redhat.com>
----
+Changes in v1:
+Addressing the review comments.
 
-v5: Increment num_expand_tests so test doesn't complain about unexpected
-    tests being run.
+Changes in v2:
+Added the reviewed-by and acked-by tags.
+Addressing a review comment.
 
- tools/testing/selftests/vm/mremap_test.c | 119 ++++++++++++++++++-----
- 1 file changed, 96 insertions(+), 23 deletions(-)
+Changes in v3 and v4:
+Addressing the review comments.
 
-diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index 9496346973d4..5c3773de9f0f 100644
---- a/tools/testing/selftests/vm/mremap_test.c
-+++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -119,47 +119,109 @@ static unsigned long long get_mmap_min_addr(void)
- }
- 
- /*
-- * This test validates that merge is called when expanding a mapping.
-- * Mapping containing three pages is created, middle page is unmapped
-- * and then the mapping containing the first page is expanded so that
-- * it fills the created hole. The two parts should merge creating
-- * single mapping with three pages.
-+ * Using /proc/self/maps, assert that the specified address range is contained
-+ * within a single mapping.
-  */
--static void mremap_expand_merge(unsigned long page_size)
-+static bool is_range_mapped(FILE *maps_fp, void *start, void *end)
- {
--	char *test_name = "mremap expand merge";
--	FILE *fp;
- 	char *line = NULL;
- 	size_t len = 0;
- 	bool success = false;
--	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
--
--	munmap(start + page_size, page_size);
--	mremap(start, page_size, 2 * page_size, 0);
- 
--	fp = fopen("/proc/self/maps", "r");
--	if (fp == NULL) {
--		ksft_test_result_fail("%s\n", test_name);
--		return;
--	}
-+	rewind(maps_fp);
- 
--	while (getline(&line, &len, fp) != -1) {
-+	while (getline(&line, &len, maps_fp) != -1) {
- 		char *first = strtok(line, "- ");
- 		void *first_val = (void *)strtol(first, NULL, 16);
- 		char *second = strtok(NULL, "- ");
- 		void *second_val = (void *) strtol(second, NULL, 16);
- 
--		if (first_val == start && second_val == start + 3 * page_size) {
-+		if (first_val <= start && second_val >= end) {
- 			success = true;
- 			break;
- 		}
- 	}
-+
-+	return success;
-+}
-+
-+/*
-+ * This test validates that merge is called when expanding a mapping.
-+ * Mapping containing three pages is created, middle page is unmapped
-+ * and then the mapping containing the first page is expanded so that
-+ * it fills the created hole. The two parts should merge creating
-+ * single mapping with three pages.
-+ */
-+static void mremap_expand_merge(FILE *maps_fp, unsigned long page_size)
-+{
-+	char *test_name = "mremap expand merge";
-+	bool success = false;
-+	char *remap, *start;
-+
-+	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-+		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+
-+	if (start == MAP_FAILED) {
-+		ksft_print_msg("mmap failed: %s\n", strerror(errno));
-+		goto out;
-+	}
-+
-+	munmap(start + page_size, page_size);
-+	remap = mremap(start, page_size, 2 * page_size, 0);
-+	if (remap == MAP_FAILED) {
-+		ksft_print_msg("mremap failed: %s\n", strerror(errno));
-+		munmap(start, page_size);
-+		munmap(start + 2 * page_size, page_size);
-+		goto out;
-+	}
-+
-+	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
-+	munmap(start, 3 * page_size);
-+
-+out:
-+	if (success)
-+		ksft_test_result_pass("%s\n", test_name);
-+	else
-+		ksft_test_result_fail("%s\n", test_name);
-+}
-+
-+/*
-+ * Similar to mremap_expand_merge() except instead of removing the middle page,
-+ * we remove the last then attempt to remap offset from the second page. This
-+ * should result in the mapping being restored to its former state.
-+ */
-+static void mremap_expand_merge_offset(FILE *maps_fp, unsigned long page_size)
-+{
-+
-+	char *test_name = "mremap expand merge offset";
-+	bool success = false;
-+	char *remap, *start;
-+
-+	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-+		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+
-+	if (start == MAP_FAILED) {
-+		ksft_print_msg("mmap failed: %s\n", strerror(errno));
-+		goto out;
-+	}
-+
-+	/* Unmap final page to ensure we have space to expand. */
-+	munmap(start + 2 * page_size, page_size);
-+	remap = mremap(start + page_size, page_size, 2 * page_size, 0);
-+	if (remap == MAP_FAILED) {
-+		ksft_print_msg("mremap failed: %s\n", strerror(errno));
-+		munmap(start, 2 * page_size);
-+		goto out;
-+	}
-+
-+	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
-+	munmap(start, 3 * page_size);
-+
-+out:
- 	if (success)
- 		ksft_test_result_pass("%s\n", test_name);
- 	else
- 		ksft_test_result_fail("%s\n", test_name);
--	fclose(fp);
- }
- 
- /*
-@@ -380,11 +442,12 @@ int main(int argc, char **argv)
- 	int i, run_perf_tests;
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 	unsigned int pattern_seed;
--	int num_expand_tests = 1;
-+	int num_expand_tests = 2;
- 	struct test test_cases[MAX_TEST];
- 	struct test perf_test_cases[MAX_PERF_TEST];
- 	int page_size;
- 	time_t t;
-+	FILE *maps_fp;
- 
- 	pattern_seed = (unsigned int) time(&t);
- 
-@@ -458,7 +521,17 @@ int main(int argc, char **argv)
- 		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
- 				     pattern_seed);
- 
--	mremap_expand_merge(page_size);
-+	maps_fp = fopen("/proc/self/maps", "r");
-+
-+	if (maps_fp == NULL) {
-+		ksft_print_msg("Failed to read /proc/self/maps: %s\n", strerror(errno));
-+		exit(KSFT_FAIL);
-+	}
-+
-+	mremap_expand_merge(maps_fp, page_size);
-+	mremap_expand_merge_offset(maps_fp, page_size);
-+
-+	fclose(maps_fp);
- 
- 	if (run_perf_tests) {
- 		ksft_print_msg("\n%s\n",
+Changes in v5:
+Added t600x device tree changes
+
+v1: https://www.spinics.net/lists/linux-pwm/msg19500.html
+v2: https://www.spinics.net/lists/linux-pwm/msg19562.html
+v3: https://www.spinics.net/lists/linux-pwm/msg19901.html
+v4: https://www.spinics.net/lists/linux-pwm/msg20093.html
+v5: https://www.spinics.net/lists/linux-pwm/msg20150.html
+v6: https://www.spinics.net/lists/linux-pwm/msg20190.html
+
+
+Sasha Finkelstein (5):
+  dt-bindings: pwm: Add Apple PWM controller
+  pwm: Add Apple PWM controller
+  arm64: dts: apple: t8103: Add PWM controller
+  arm64: dts: apple: t600x: Add PWM controller
+  MAINTAINERS: Add entries for Apple PWM driver
+
+ .../bindings/pwm/apple,s5l-fpwm.yaml          |  51 ++++++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi     |   9 +
+ .../arm64/boot/dts/apple/t600x-j314-j316.dtsi |  18 ++
+ arch/arm64/boot/dts/apple/t8103-j293.dts      |  17 ++
+ arch/arm64/boot/dts/apple/t8103-j313.dts      |  17 ++
+ arch/arm64/boot/dts/apple/t8103.dtsi          |   9 +
+ drivers/pwm/Kconfig                           |  12 ++
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-apple.c                       | 159 ++++++++++++++++++
+ 10 files changed, 295 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+ create mode 100644 drivers/pwm/pwm-apple.c
+
 -- 
-2.39.0
+2.37.1 (Apple Git-137.1)
 
