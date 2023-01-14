@@ -2,76 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBDF66ABA0
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58ED66ABA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjANNaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 08:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S229895AbjANNa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 08:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjANN37 (ORCPT
+        with ESMTP id S229535AbjANNa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 08:29:59 -0500
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7C45250
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 05:29:58 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id GgbSpJmw5dQkSGgbTppFc9; Sat, 14 Jan 2023 14:29:49 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 14 Jan 2023 14:29:49 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <c039de1b-0412-320c-8e91-d74ab1ffbc02@wanadoo.fr>
-Date:   Sat, 14 Jan 2023 14:29:46 +0100
+        Sat, 14 Jan 2023 08:30:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7856B5243
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 05:30:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35D63B8049B
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 13:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02559C433EF;
+        Sat, 14 Jan 2023 13:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673703022;
+        bh=cF7w2WUjmCAVcs3N4RrigyXBTZrsAH/r+Y+h/2zIfU4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mrKXKdj+3eVMbtpQIdnTLPEtzap8aSycMgtqXjM0xlGQqRzfOsh65Iz7b3JZLKvgM
+         BfjtbumvOcatP1JoyrMkwNXItaL87LCJaIGlkdAWqTl6rYvdW9ysn7l25K/Mdhs1fg
+         AuFZ5D7sogO+3BMM3A3/KZZsy5CBzyuMdVwY9bbAOOlfgh5LWYYfp7Wv1A0Njdp0xw
+         gVDRq0Di2DIwV8vYYSOxZSaPe7kwerjVhlWlsNBsfvw0Ht8+PaykuetAVcxLXbYZIL
+         Ue5AGIhB65FmDFLuxGw89jls2Dz4rO1It/zDQ6MyzzZQnDG9fOM0JR9me+SQUJ5uJx
+         xV+kmElfJf5Dw==
+Date:   Sat, 14 Jan 2023 15:30:11 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Aaron Thompson <dev@aaront.org>, Mike Rapoport <rppt@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] memblock: fix release of deferred pages in
+ memblock_free_late()
+Message-ID: <Y8KuYwE9S3zLsqVl@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 24/30] arm64: cpufeature: Use kstrtobool() instead of
- strtobool()
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <5a1b329cda34aec67615c0d2fd326eb0d6634bf7.1667336095.git.christophe.jaillet@wanadoo.fr>
- <Y2J0xJ61iclx6WZG@arm.com>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Y2J0xJ61iclx6WZG@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 02/11/2022 à 14:46, Catalin Marinas a écrit :
-> On Tue, Nov 01, 2022 at 10:14:12PM +0100, Christophe JAILLET wrote:
->> strtobool() is the same as kstrtobool().
->> However, the latter is more used within the kernel.
->>
->> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
->> the other function name.
->>
->> While at it, include the corresponding header file (<linux/kstrtox.h>)
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> 
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> 
+Hi Linus,
 
-Hi,
+The following changes since commit fa81ab49bbe4e1ce756581c970486de0ddb14309:
 
-This has been A-b 2 months ago, and I've just resent patches in this 
-serie that have neither been merged in -next, nor A-b or R-b.
+  memblock: Fix doc for memblock_phys_free (2023-01-04 12:31:22 +0200)
 
-So for this one, it is just a polite reminder. :)
+are available in the Git repository at:
 
-Do you have visibility on when it should be merged?
+  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/fixes-2023-01-14
 
-CJ
+for you to fetch changes up to 115d9d77bb0f9152c60b6e8646369fa7f6167593:
+
+  mm: Always release pages to the buddy allocator in memblock_free_late(). (2023-01-08 18:49:33 +0200)
+
+----------------------------------------------------------------
+memblock: always release pages to the buddy allocator in memblock_free_late()
+
+If CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled, memblock_free_pages()
+only releases pages to the buddy allocator if they are not in the
+deferred range. This is correct for free pages (as defined by
+for_each_free_mem_pfn_range_in_zone()) because free pages in the
+deferred range will be initialized and released as part of the deferred
+init process. memblock_free_pages() is called by memblock_free_late(),
+which is used to free reserved ranges after memblock_free_all() has
+run. All pages in reserved ranges have been initialized at that point,
+and accordingly, those pages are not touched by the deferred init
+process. This means that currently, if the pages that
+memblock_free_late() intends to release are in the deferred range, they
+will never be released to the buddy allocator. They will forever be
+reserved.
+
+In addition, memblock_free_pages() calls kmsan_memblock_free_pages(),
+which is also correct for free pages but is not correct for reserved
+pages. KMSAN metadata for reserved pages is initialized by
+kmsan_init_shadow(), which runs shortly before memblock_free_all().
+
+For both of these reasons, memblock_free_pages() should only be called
+for free pages, and memblock_free_late() should call __free_pages_core()
+directly instead.
+
+One case where this issue can occur in the wild is EFI boot on
+x86_64. The x86 EFI code reserves all EFI boot services memory ranges
+via memblock_reserve() and frees them later via memblock_free_late()
+(efi_reserve_boot_services() and efi_free_boot_services(),
+respectively). If any of those ranges happens to fall within the
+deferred init range, the pages will not be released and that memory will
+be unavailable.
+
+For example, on an Amazon EC2 t3.micro VM (1 GB) booting via EFI:
+
+v6.2-rc2:
+Node 0, zone      DMA
+      spanned  4095
+      present  3999
+      managed  3840
+Node 0, zone    DMA32
+      spanned  246652
+      present  245868
+      managed  178867
+
+v6.2-rc2 + patch:
+Node 0, zone      DMA
+      spanned  4095
+      present  3999
+      managed  3840
+Node 0, zone    DMA32
+      spanned  246652
+      present  245868
+      managed  222816   # +43,949 pages
+
+----------------------------------------------------------------
+Aaron Thompson (1):
+      mm: Always release pages to the buddy allocator in memblock_free_late().
+
+ mm/memblock.c                     | 8 +++++++-
+ tools/testing/memblock/internal.h | 4 ++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+-- 
+Sincerely yours,
+Mike.
