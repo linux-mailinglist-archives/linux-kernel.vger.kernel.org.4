@@ -2,304 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944DE66A8A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 03:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39AC66A8A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 03:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjANCUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 21:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S230174AbjANCYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 21:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbjANCT7 (ORCPT
+        with ESMTP id S230473AbjANCYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 21:19:59 -0500
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AAA8CBC8;
-        Fri, 13 Jan 2023 18:19:56 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VZW9rHd_1673662790;
-Received: from 30.27.94.170(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VZW9rHd_1673662790)
-          by smtp.aliyun-inc.com;
-          Sat, 14 Jan 2023 10:19:52 +0800
-Message-ID: <d6ec50c4-5fc3-eb17-e9e8-fce334038193@linux.alibaba.com>
-Date:   Sat, 14 Jan 2023 10:19:50 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] workqueue: Add WQ_SCHED_FIFO
-To:     Nathan Huckleberry <nhuck@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Sandeep Dhavale <dhavale@google.com>,
-        Daeho Jeong <daehojeong@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org
-References: <20230113210703.62107-1-nhuck@google.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230113210703.62107-1-nhuck@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 13 Jan 2023 21:24:16 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F2C8CBC7
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 18:24:14 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230114022409epoutp044f7103b27acfc1dfdcd9a85bc00cb41e~6C6z74E_53211832118epoutp04U
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 02:24:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230114022409epoutp044f7103b27acfc1dfdcd9a85bc00cb41e~6C6z74E_53211832118epoutp04U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1673663049;
+        bh=M7nDTLny6qwuEJCs3Z2LwxKMomMYxDRsSLLed5tPFuY=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=TXBnjnZOD2WvvFq4KvQmlWc9o3WjX5Sxvmgft5De6VPBSHTqWHw4jn2K650GHtH5p
+         LPbrMFDSh+LisMxLzsv3IIgKG3GLkHbQOQ56TGAhpOw94/Ho1scI566zQwz+AY+c64
+         wADY0YvlwMXVr+GVLLUhqjFkuUk2jQ/Oc9RthxI8=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20230114022408epcas5p4cfa350b8886d8847accb9b4f914bf4c5~6C6zLrlyx0644906449epcas5p4f;
+        Sat, 14 Jan 2023 02:24:08 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Nv2Cq1HZyz4x9Pv; Sat, 14 Jan
+        2023 02:24:07 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7D.32.62806.64212C36; Sat, 14 Jan 2023 11:24:07 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe~6C6xHkfe60743407434epcas5p4f;
+        Sat, 14 Jan 2023 02:24:06 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230114022406epsmtrp2ee4de19a21b18ffc1335dafcdb9472a9~6C6xG7H_D2642526425epsmtrp2r;
+        Sat, 14 Jan 2023 02:24:06 +0000 (GMT)
+X-AuditID: b6c32a4a-ea5fa7000000f556-be-63c21246cf51
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        14.E1.02211.54212C36; Sat, 14 Jan 2023 11:24:05 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230114022405epsmtip1b0b1c2703f82eeda7f0fafc657f0cbf5~6C6wIyYJt1655416554epsmtip1C;
+        Sat, 14 Jan 2023 02:24:04 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH] include: ufs: Remove duplicate entry
+Date:   Sat, 14 Jan 2023 07:50:10 +0530
+Message-Id: <20230114022010.27088-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLKsWRmVeSWpSXmKPExsWy7bCmhq670KFkgxMLmC0ezNvGZvHy51U2
+        i2kffjJbXN41h82i+/oONovlx/8xObB5XL7i7fHx6S0Wj74tqxg9Pm+S82g/0M0UwBqVbZOR
+        mpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdICSQlliTilQ
+        KCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj+b5/
+        zAVPWCqO/VvK1MDYwNLFyMEhIWAiMeG6ehcjF4eQwG5GiQOXD7BCOJ8YJQ5v+cMC4XxjlPi3
+        9gF7FyMnWMei1kYmiMReRokf/XPYIZxmJokrX3+ygFSxCWhL3J2+hQlkh4iAjUTTNzCTWaBA
+        4vkMC5AKYQFTiYP9TUwgNouAqkRn8xs2EJsXqPrP1YdMELvkJVZvOMAMMl5CYBG7xMMzH1gh
+        Ei4SF24dYoSwhSVeHd8CdZyUxOd3e9kgXvOQWPRHCiKcIfF2+XqocnuJA1fmsECcoymxfpc+
+        SJhZgE+i9/cTJohOXomONiGIalWJ5ndXWSBsaYmJ3d1QB3hIrDkzjxnEFhKIleh4+pxpAqPM
+        LIShCxgZVzFKphYU56anFpsWGOWllsMjJjk/dxMjOB1pee1gfPjgg94hRiYOxkOMEhzMSiK8
+        e47uTxbiTUmsrEotyo8vKs1JLT7EaAoMpYnMUqLJ+cCEmFcSb2hiaWBiZmZmYmlsZqgkzpu6
+        dX6ykEB6YklqdmpqQWoRTB8TB6dUAxOryc6MW2L+DGJfzRe88BJscgx9xZmzIK086cycIPFj
+        vz7qeEX8N9/meDqpqKH2RLduaF64x74tK4t+lj7wYDXmtI/fcMiytsrru8aEpgCWxrXMabfS
+        eFwq7l4w2vTZxHbW7rYY6xqz1Qn5aWfeuvIczmR7vP4B0+mghNml7IEyTGVi8h3Tuh6Lf100
+        02fVtj01v999OKN7rS3WMUdjxeUnhy4zRWp3Ltjbuiy7eD2nwNmH306s3M5jV7T2hy+Pdmm8
+        y/eqSfy9l9+Iy7yu3uv5QkwlU9/+aNdu+2d3gnSbV3F9Td954+Ju9aspDDzzXiX6rPoxY12C
+        1YUTC/+UR9zlya969c++zqGdIVwgX4mlOCPRUIu5qDgRAKFlOM7QAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJJMWRmVeSWpSXmKPExsWy7bCSnK6r0KFkg1enrSwezNvGZvHy51U2
+        i2kffjJbXN41h82i+/oONovlx/8xObB5XL7i7fHx6S0Wj74tqxg9Pm+S82g/0M0UwBrFZZOS
+        mpNZllqkb5fAlfF83z/mgicsFcf+LWVqYGxg6WLk5JAQMJFY1NrI1MXIxSEksJtRYsqUh0wQ
+        CWmJ6xsnsEPYwhIr/z1nhyhqZJJ4e+4FWBGbgLbE3elbwGwRATuJ9sdXGUFsZoESiUVfWsDi
+        wgKmEgf7m8BsFgFVic7mN2wgNq+AjcSfqzDL5CVWbzjAPIGRZwEjwypGydSC4tz03GLDAsO8
+        1HK94sTc4tK8dL3k/NxNjODQ0dLcwbh91Qe9Q4xMHIyHGCU4mJVEePcc3Z8sxJuSWFmVWpQf
+        X1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUAxP3kn3vz1dl2DzLPBh+Qyuo
+        z7/N+tvrgPd2N8682XHzqVnYyZ+ej8U6/LuWtL+ZPOPcVvOMOx/YdX8cD/k4w8p13eqZYYf+
+        HONYUbyw+pxj74lrwVncYffiG70l976ffWer+hz177ttTzLFNIhW8+mmrO6rWMsiXN14zvyD
+        ZbNpa8eygtwd9T33r/7Ue/bQ/tXbtcz2stzP+jqjAlLuy/awhhxda8y+pPbhpAnyGSzarKrH
+        FosVFF1+pbHnxbEPkxLV1jrM/HPCRoPXJK0jylRp14a3RZ/05/Aryp+a3x66W/MOf21o8eur
+        k9XunVkbbCazYcmS3UcO7a7TPeLQdKA2xGHKo9ZN11ynfe4o+t6hxFKckWioxVxUnAgA7f/Z
+        rowCAAA=
+X-CMS-MailID: 20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe
+References: <CGME20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe@epcas5p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan!
+PA_GRANULARITY is duplicated, let's delete one of the entry.
 
-On 2023/1/14 05:07, Nathan Huckleberry wrote:
-> Add a WQ flag that allows workqueues to use SCHED_FIFO with the least
-> imporant RT priority.  This can reduce scheduler latency for IO
-> post-processing when the CPU is under load without impacting other RT
-> workloads.  This has been shown to improve app startup time on Android
-> [1].
+Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+---
+ include/ufs/unipro.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thank you all for your effort on this.  Unfortunately I have no time to
-setup the test [1] until now.  If it can be addressed as a new workqueue
-feature, that would be much helpful to me.  Otherwise, I still need to
-find a way to resolve the latest Android + EROFS latency problem.
+diff --git a/include/ufs/unipro.h b/include/ufs/unipro.h
+index 6c553f98fe57..dc9dd1d23f0f 100644
+--- a/include/ufs/unipro.h
++++ b/include/ufs/unipro.h
+@@ -141,7 +141,6 @@
+ #define PA_SAVECONFIGTIME	0x15A4
+ #define PA_RXHSUNTERMCAP	0x15A5
+ #define PA_RXLSTERMCAP		0x15A6
+-#define PA_GRANULARITY		0x15AA
+ #define PA_HIBERN8TIME		0x15A7
+ #define PA_LOCALVERINFO		0x15A9
+ #define PA_GRANULARITY		0x15AA
+-- 
+2.25.1
 
-> 
-> Scheduler latency affects several drivers as evidenced by [1], [2], [3],
-> [4].  Some of these drivers have moved post-processing into IRQ context.
-> However, this can cause latency spikes for real-time threads and jitter
-> related jank on Android.  Using a workqueue with SCHED_FIFO improves
-> scheduler latency without causing latency problems for RT threads.
-
-softirq context is actually mainly for post-interrupt handling I think.
-but considering decompression/verification/decryption all workload are much
-complex than that and less important than real post-interrupt handling.
-I don't think softirq context is the best place to handle these
-CPU-intensive jobs.  Beside, it could cause some important work moving to
-softirqd unexpectedly in the extreme cases.  Also such many post-processing
-jobs are as complex as they could sleep so that softirq context is
-unsuitable as well.
-
-Anyway, I second this proposal if possible:
-
-Acked-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Thanks,
-Gao Xiang
-
-> 
-> [1]:
-> https://lore.kernel.org/linux-erofs/20230106073502.4017276-1-dhavale@google.com/
-> [2]:
-> https://lore.kernel.org/linux-f2fs-devel/20220802192437.1895492-1-daeho43@gmail.com/
-> [3]:
-> https://lore.kernel.org/dm-devel/20220722093823.4158756-4-nhuck@google.com/
-> [4]:
-> https://lore.kernel.org/dm-crypt/20200706173731.3734-1-ignat@cloudflare.com/
-> 
-> This change has been tested on dm-verity with the following fio config:
-> 
-> [global]
-> time_based
-> runtime=120
-> 
-> [do-verify]
-> ioengine=sync
-> filename=/dev/testing
-> rw=randread
-> direct=1
-> 
-> [burn_8x90%_qsort]
-> ioengine=cpuio
-> cpuload=90
-> numjobs=8
-> cpumode=qsort
-> 
-> Before:
-> clat (usec): min=13, max=23882, avg=29.56, stdev=113.29 READ:
-> bw=122MiB/s (128MB/s), 122MiB/s-122MiB/s (128MB/s-128MB/s), io=14.3GiB
-> (15.3GB), run=120001-120001msec
-> 
-> After:
-> clat (usec): min=13, max=23137, avg=19.96, stdev=105.71 READ:
-> bw=180MiB/s (189MB/s), 180MiB/s-180MiB/s (189MB/s-189MB/s), io=21.1GiB
-> (22.7GB), run=120012-120012msec
-> 
-> Cc: Sandeep Dhavale <dhavale@google.com>
-> Cc: Daeho Jeong <daehojeong@google.com>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-> ---
->   Documentation/core-api/workqueue.rst | 12 ++++++++++
->   include/linux/workqueue.h            |  9 +++++++
->   kernel/workqueue.c                   | 36 +++++++++++++++++++++-------
->   3 files changed, 48 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/core-api/workqueue.rst b/Documentation/core-api/workqueue.rst
-> index 3b22ed137662..26faf2806c66 100644
-> --- a/Documentation/core-api/workqueue.rst
-> +++ b/Documentation/core-api/workqueue.rst
-> @@ -216,6 +216,18 @@ resources, scheduled and executed.
->   
->     This flag is meaningless for unbound wq.
->   
-> +``WQ_SCHED_FIFO``
-> +  Work items of a fifo wq are queued to the fifo
-> +  worker-pool of the target cpu.  Fifo worker-pools are
-> +  served by worker threads with scheduler policy SCHED_FIFO and
-> +  the least important real-time priority.  This can be useful
-> +  for workloads where low latency is imporant.
-> +
-> +  A workqueue cannot be both high-priority and fifo.
-> +
-> +  Note that normal and fifo worker-pools don't interact with
-> +  each other.  Each maintains its separate pool of workers and
-> +  implements concurrency management among its workers.
->   
->   ``max_active``
->   --------------
-> diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-> index ac551b8ee7d9..43a4eeaf8ff4 100644
-> --- a/include/linux/workqueue.h
-> +++ b/include/linux/workqueue.h
-> @@ -134,6 +134,10 @@ struct workqueue_attrs {
->   	 * @nice: nice level
->   	 */
->   	int nice;
-> +	/**
-> +	 * @sched_fifo: is using SCHED_FIFO
-> +	 */
-> +	bool sched_fifo;
->   
->   	/**
->   	 * @cpumask: allowed CPUs
-> @@ -334,6 +338,11 @@ enum {
->   	 * http://thread.gmane.org/gmane.linux.kernel/1480396
->   	 */
->   	WQ_POWER_EFFICIENT	= 1 << 7,
-> +	/*
-> +	 * Low real-time priority workqueues can reduce scheduler latency
-> +	 * for latency sensitive workloads like IO post-processing.
-> +	 */
-> +	WQ_SCHED_FIFO		= 1 << 8,
->   
->   	__WQ_DESTROYING		= 1 << 15, /* internal: workqueue is destroying */
->   	__WQ_DRAINING		= 1 << 16, /* internal: workqueue is draining */
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> index 5dc67aa9d696..99c5e0a3dc28 100644
-> --- a/kernel/workqueue.c
-> +++ b/kernel/workqueue.c
-> @@ -85,7 +85,7 @@ enum {
->   	WORKER_NOT_RUNNING	= WORKER_PREP | WORKER_CPU_INTENSIVE |
->   				  WORKER_UNBOUND | WORKER_REBOUND,
->   
-> -	NR_STD_WORKER_POOLS	= 2,		/* # standard pools per cpu */
-> +	NR_STD_WORKER_POOLS	= 3,		/* # standard pools per cpu */
->   
->   	UNBOUND_POOL_HASH_ORDER	= 6,		/* hashed by pool->attrs */
->   	BUSY_WORKER_HASH_ORDER	= 6,		/* 64 pointers */
-> @@ -1949,7 +1949,8 @@ static struct worker *create_worker(struct worker_pool *pool)
->   
->   	if (pool->cpu >= 0)
->   		snprintf(id_buf, sizeof(id_buf), "%d:%d%s", pool->cpu, id,
-> -			 pool->attrs->nice < 0  ? "H" : "");
-> +			 pool->attrs->sched_fifo ? "F" :
-> +			 (pool->attrs->nice < 0  ? "H" : ""));
->   	else
->   		snprintf(id_buf, sizeof(id_buf), "u%d:%d", pool->id, id);
->   
-> @@ -1958,7 +1959,11 @@ static struct worker *create_worker(struct worker_pool *pool)
->   	if (IS_ERR(worker->task))
->   		goto fail;
->   
-> -	set_user_nice(worker->task, pool->attrs->nice);
-> +	if (pool->attrs->sched_fifo)
-> +		sched_set_fifo_low(worker->task);
-> +	else
-> +		set_user_nice(worker->task, pool->attrs->nice);
-> +
->   	kthread_bind_mask(worker->task, pool->attrs->cpumask);
->   
->   	/* successful, attach the worker to the pool */
-> @@ -4323,9 +4328,17 @@ static void wq_update_unbound_numa(struct workqueue_struct *wq, int cpu,
->   
->   static int alloc_and_link_pwqs(struct workqueue_struct *wq)
->   {
-> -	bool highpri = wq->flags & WQ_HIGHPRI;
-> +	int pool_index = 0;
->   	int cpu, ret;
->   
-> +	if (wq->flags & WQ_HIGHPRI && wq->flags & WQ_SCHED_FIFO)
-> +		return -EINVAL;
-> +
-> +	if (wq->flags & WQ_HIGHPRI)
-> +		pool_index = 1;
-> +	if (wq->flags & WQ_SCHED_FIFO)
-> +		pool_index = 2;
-> +
->   	if (!(wq->flags & WQ_UNBOUND)) {
->   		wq->cpu_pwqs = alloc_percpu(struct pool_workqueue);
->   		if (!wq->cpu_pwqs)
-> @@ -4337,7 +4350,7 @@ static int alloc_and_link_pwqs(struct workqueue_struct *wq)
->   			struct worker_pool *cpu_pools =
->   				per_cpu(cpu_worker_pools, cpu);
->   
-> -			init_pwq(pwq, wq, &cpu_pools[highpri]);
-> +			init_pwq(pwq, wq, &cpu_pools[pool_index]);
->   
->   			mutex_lock(&wq->mutex);
->   			link_pwq(pwq);
-> @@ -4348,13 +4361,13 @@ static int alloc_and_link_pwqs(struct workqueue_struct *wq)
->   
->   	cpus_read_lock();
->   	if (wq->flags & __WQ_ORDERED) {
-> -		ret = apply_workqueue_attrs(wq, ordered_wq_attrs[highpri]);
-> +		ret = apply_workqueue_attrs(wq, ordered_wq_attrs[pool_index]);
->   		/* there should only be single pwq for ordering guarantee */
->   		WARN(!ret && (wq->pwqs.next != &wq->dfl_pwq->pwqs_node ||
->   			      wq->pwqs.prev != &wq->dfl_pwq->pwqs_node),
->   		     "ordering guarantee broken for workqueue %s\n", wq->name);
->   	} else {
-> -		ret = apply_workqueue_attrs(wq, unbound_std_wq_attrs[highpri]);
-> +		ret = apply_workqueue_attrs(wq, unbound_std_wq_attrs[pool_index]);
->   	}
->   	cpus_read_unlock();
->   
-> @@ -6138,7 +6151,8 @@ static void __init wq_numa_init(void)
->    */
->   void __init workqueue_init_early(void)
->   {
-> -	int std_nice[NR_STD_WORKER_POOLS] = { 0, HIGHPRI_NICE_LEVEL };
-> +	int std_nice[NR_STD_WORKER_POOLS] = { 0, HIGHPRI_NICE_LEVEL, 0 };
-> +	bool std_sched_fifo[NR_STD_WORKER_POOLS] = { false, false, true };
->   	int i, cpu;
->   
->   	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long));
-> @@ -6158,8 +6172,10 @@ void __init workqueue_init_early(void)
->   			BUG_ON(init_worker_pool(pool));
->   			pool->cpu = cpu;
->   			cpumask_copy(pool->attrs->cpumask, cpumask_of(cpu));
-> -			pool->attrs->nice = std_nice[i++];
-> +			pool->attrs->nice = std_nice[i];
-> +			pool->attrs->sched_fifo = std_sched_fifo[i];
->   			pool->node = cpu_to_node(cpu);
-> +			i++;
->   
->   			/* alloc pool ID */
->   			mutex_lock(&wq_pool_mutex);
-> @@ -6174,6 +6190,7 @@ void __init workqueue_init_early(void)
->   
->   		BUG_ON(!(attrs = alloc_workqueue_attrs()));
->   		attrs->nice = std_nice[i];
-> +		attrs->sched_fifo = std_sched_fifo[i];
->   		unbound_std_wq_attrs[i] = attrs;
->   
->   		/*
-> @@ -6183,6 +6200,7 @@ void __init workqueue_init_early(void)
->   		 */
->   		BUG_ON(!(attrs = alloc_workqueue_attrs()));
->   		attrs->nice = std_nice[i];
-> +		attrs->sched_fifo = std_sched_fifo[i];
->   		attrs->no_numa = true;
->   		ordered_wq_attrs[i] = attrs;
->   	}
