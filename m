@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B3166AB5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1B466AB5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjANMaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 07:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S229850AbjANMbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 07:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjANMaB (ORCPT
+        with ESMTP id S230015AbjANMbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 07:30:01 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67A68A4E;
-        Sat, 14 Jan 2023 04:29:59 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id p188so25393525yba.5;
-        Sat, 14 Jan 2023 04:29:59 -0800 (PST)
+        Sat, 14 Jan 2023 07:31:05 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B8E86B4
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:31:03 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4d19b2686a9so192795627b3.6
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:31:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=faXJuelmEPQHepNci7Jyq7Zd60hd8EQZYiBQ3z2kjyM=;
-        b=Mv4WwHts0zZ87qmpPESPpNVuOiak+8Mi8GHbbqSVveqBLufVJi3hJtRm1kLVm7e5oX
-         Dxl76OkqbtpLZvqZXqMe2wQ2CQ4Ssivnpmjau27M6b1c8xOWANkI7c+Fxb+C6ESEhWCm
-         yBZqKxlrJUkyyykLu6l1E8R2m5xDyx3UkddmrfOF0TJ+pX2nsOWJ8199rSliNeiOsA+t
-         My4PtdGYHcb+fHmUelhtuTPlIoZxoApmg4xvmWU7B/aLVO30I0OYEOIkAUYMvEobJjqm
-         1Vmu7YpKa9V1oCr/0X0E420H8mkQMyPTKEdgMLfQFss17nKNcsUJ0kWrf1+CmTXN0Ec2
-         A+xg==
+        bh=k9xLkTMI9Dcw74WWZqD71q9ICTNXt71hGXm91D407rY=;
+        b=GxO5I3CHoEtnA8sgxfwfe5pFOaM+1UMNlQft5BFB2MVhPjGh+X8Uyg40VQ5bW5BXz/
+         IQ+nKgbevjTLZP9Uq32GVjrqKW5hvb9sKeEWpvd/oFnJ/Go6TQoolv+wg8k0inJtq8Hu
+         viUFslco5P+VEfLY9JtJXM06jg+YI5sMf87VjlPMzSGmPmwkDeyPiS7Sk0OwOoJOlyjl
+         lroflmKx9BEs/qfeUir/TX/cb/6GmYuUNVIrFkMyaiY5E/Ns1iXjM3sSWbhnVaoXQ8ue
+         HgdPfD872/w0AmBpvX1Y7svTj1rKZ0JgbthNPv46UvntGwQw26PpjQne8q6GpcoV25zN
+         HraQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=faXJuelmEPQHepNci7Jyq7Zd60hd8EQZYiBQ3z2kjyM=;
-        b=QKHwLMp6/hHEJc+bZuNwEvwjzOCqz2M9qJibx3z/YrOry1/dha+8bTma4SJBNr/M8Q
-         pr177gWGkPogJKCgzvjRzI7AZsgfBjchcxr+JNcXzqxh1SDCAFLEkK0Z1r8eLZ6lrqKf
-         9uavSkBhyJaNli44yW1SZk+bWq2ECEhhqQsXk36+pxvSy9PN5noitpWVYXuU9WGpF6U7
-         B4dKY+JYGMAAsVR/4BI4dzPbleX2t1dqC8SABWx/oewLYKQjWrezoG+Gm3jBkIbn2/BW
-         fv2i0ichCfIucGdOrcuyzAyBpslihacRHm6222J4sXnGHbnbpkixDRf+rToh9Ft048Kv
-         OUGA==
-X-Gm-Message-State: AFqh2krgmI2ULZwAQPy0WIP4m6JBweIL1+GV9UGIejyRj/nC4+fGvCUZ
-        LjYO9MNi93Xjjp6UWS8+/cIBlBLdApaOylzbFDGZZs/hTfjOHJgNdZ4=
-X-Google-Smtp-Source: AMrXdXtTAEe2Q9D7PS3afx+B9DMLHW/45KNCK72GApiDL/C7HrWhTH7bnh91qr/0KBqaxTnUVjQyS8i7xRfk0HqaLmA=
-X-Received: by 2002:a25:7e84:0:b0:7cd:5175:cb53 with SMTP id
- z126-20020a257e84000000b007cd5175cb53mr519452ybc.581.1673699399206; Sat, 14
- Jan 2023 04:29:59 -0800 (PST)
+        bh=k9xLkTMI9Dcw74WWZqD71q9ICTNXt71hGXm91D407rY=;
+        b=1AU/Xcf8YSAWhtTv1JaUxLOa7F5d+MKQuuTjqqZEBj0dhcQYV42g08GGLgPRAvIfDp
+         or1g4TZIvKMHU4AKWz8kFYgZe93Ty26y1LT1kX93n0aSqi7dsubXK6PNYs68BlKj8n+V
+         gXztd/9jewQcbx3cnQeJ9DwvDO3uwr+ZIwdepQ2ntDmyutBsqqWYP0KvwqxCM2WhGMa3
+         DMlP7RcZtTLkKWtaJBuQ4nCpEfTeBO1EF2uzfaXbR1Gn1+0aLWDVteT9W4Fs4ZagJlJH
+         25cgf/VctHspzcyCA3SC7OLEBV0iamnkTxvixWCXDx7tLFkTDa+b1oOPrfxGoxlTGUX6
+         d4kA==
+X-Gm-Message-State: AFqh2kp7Iv08EHx6PiulzvYQ5Ka5n83JMADCZX+iHunJaQq9BkiuTiyS
+        lWZ0dLrJTK9BEGr67Y9wDhaRiMWJC4oAlrF9pyneww==
+X-Google-Smtp-Source: AMrXdXtPNha87rWQC+fUfQ7fgUrf0HXmqT1TD2hQ2/NYaroh9yWnT4VEVZeW+VOTKgy7opoCTzVXCn1io/Kh4AMRPSc=
+X-Received: by 2002:a81:6ac2:0:b0:4db:1408:a90c with SMTP id
+ f185-20020a816ac2000000b004db1408a90cmr952332ywc.55.1673699462696; Sat, 14
+ Jan 2023 04:31:02 -0800 (PST)
 MIME-Version: 1.0
-References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
- <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com>
- <Y7i1h3lCMKfxB532@zn.tnic> <CANiq72khMLU6tF8vGD9fs7mLNAAQu8wJ2n1SLM3th2QMMfGPPA@mail.gmail.com>
- <Y8Ax/I5qOcVDZljG@zn.tnic> <20230114021835.06749ef7.gary@garyguo.net>
-In-Reply-To: <20230114021835.06749ef7.gary@garyguo.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 14 Jan 2023 13:29:48 +0100
-Message-ID: <CANiq72=ZPTiiG-8+TjBdpi1tP=3+JfLsO7JRR-F-UOqF4Awf_Q@mail.gmail.com>
-Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
- transitively contain a `#[repr(align)]` type
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        rust-for-linux@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yujie Liu <yujie.liu@intel.com>
+References: <20230112065336.41034-1-kerneljasonxing@gmail.com>
+ <CANn89iKQjN1YiHqBTV3+zDYo0G11p-6=p7C-1GvFCp8Y=r4nvQ@mail.gmail.com> <CAL+tcoACCg+UQG+PAGh1k+-mTJdZ-5jNez5hSGO_i2oWjr7=+w@mail.gmail.com>
+In-Reply-To: <CAL+tcoACCg+UQG+PAGh1k+-mTJdZ-5jNez5hSGO_i2oWjr7=+w@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sat, 14 Jan 2023 13:30:51 +0100
+Message-ID: <CANn89iKR6XoB6tfJ2wLK1LqkNE1FboFO-PeOpuLNM1_5KOM53Q@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: avoid the lookup process failing to get sk in
+ ehash table
+To:     Jason Xing <kerneljasonxing@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org--cc, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,13 +71,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 3:19 AM Gary Guo <gary@garyguo.net> wrote:
+()
+
+On Sat, Jan 14, 2023 at 1:06 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
 >
-> This is a definitely a bindgen bug. I'll have a think about how to fix
-> it...
+> On Sat, Jan 14, 2023 at 5:45 PM Eric Dumazet <edumazet@google.com> wrote:
+> >
+> > On Thu, Jan 12, 2023 at 7:54 AM Jason Xing <kerneljasonxing@gmail.com> wrote:
+> > >
+> > > From: Jason Xing <kernelxing@tencent.com>
+> > >
+> > > While one cpu is working on looking up the right socket from ehash
+> > > table, another cpu is done deleting the request socket and is about
+> > > to add (or is adding) the big socket from the table. It means that
+> > > we could miss both of them, even though it has little chance.
+> > >
+> > > Let me draw a call trace map of the server side.
+> > >    CPU 0                           CPU 1
+> > >    -----                           -----
+> > > tcp_v4_rcv()                  syn_recv_sock()
+> > >                             inet_ehash_insert()
+> > >                             -> sk_nulls_del_node_init_rcu(osk)
+> > > __inet_lookup_established()
+> > >                             -> __sk_nulls_add_node_rcu(sk, list)
+> > >
+> > > Notice that the CPU 0 is receiving the data after the final ack
+> > > during 3-way shakehands and CPU 1 is still handling the final ack.
+> > >
+> > > Why could this be a real problem?
+> > > This case is happening only when the final ack and the first data
+> > > receiving by different CPUs. Then the server receiving data with
+> > > ACK flag tries to search one proper established socket from ehash
+> > > table, but apparently it fails as my map shows above. After that,
+> > > the server fetches a listener socket and then sends a RST because
+> > > it finds a ACK flag in the skb (data), which obeys RST definition
+> > > in RFC 793.
+> > >
+> > > Many thanks to Eric for great help from beginning to end.
+> > >
+> > > Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+> > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > ---
+> > >  net/ipv4/inet_hashtables.c | 10 ++++++++++
+> > >  1 file changed, 10 insertions(+)
+> > >
+> > > diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> > > index 24a38b56fab9..18f88cb4efcb 100644
+> > > --- a/net/ipv4/inet_hashtables.c
+> > > +++ b/net/ipv4/inet_hashtables.c
+> > > @@ -650,7 +650,16 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+> > >         spin_lock(lock);
+> > >         if (osk) {
+> > >                 WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+> > > +               if (sk_hashed(osk))
+> > > +                       /* Before deleting the node, we insert a new one to make
+> > > +                        * sure that the look-up=sk process would not miss either
+> > > +                        * of them and that at least one node would exist in ehash
+> > > +                        * table all the time. Otherwise there's a tiny chance
+> > > +                        * that lookup process could find nothing in ehash table.
+> > > +                        */
+> > > +                       __sk_nulls_add_node_rcu(sk, list);
+> >
+> > In our private email exchange, I suggested to insert sk at the _tail_
+> > of the hash bucket.
+> >
+>
+> Yes, I noticed that. At that time I kept considering the race
+> condition of the RCU itself, not the scene you mentioned as below.
+>
+> > Inserting it at the _head_ would still leave a race condition, because
+> > a concurrent reader might
+> > have already started the bucket traversal, and would not see 'sk'.
+>
+> Thanks for the detailed explanation. Now I see why. I'll replace it
+> with __sk_nulls_add_node_tail_rcu() function and send the v2 patch.
+>
+> By the way, I checked the removal of TIMEWAIT socket which is included
+> in this patch.
+> I write down the call-trace:
+> inet_hash_connect()
+>     -> __inet_hash_connect()
+>         -> if (sk_unhashed(sk)) {
+>                 inet_ehash_nolisten(sk, (struct sock *)tw, NULL);
+>                     -> inet_ehash_insert(sk, osk, found_dup_sk);
+> Therefore, this patch covers the timewait case.
 
-Added your PR to the list at
-https://github.com/Rust-for-Linux/linux/issues/353, thanks Gary!
+This is the path handling the TIME_WAIT ---> ESTABLISH case.
 
-Cheers,
-Miguel
+I was referring to the more common opposite case which is the case
+where a race could possibly happen.
+
+This is inet_twsk_hashdance, and I suspect we want something like:
+
+diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+index 1d77d992e6e77f7d96bd061be6dbb802c2566b3f..6d681ef52bb24b984a9dbda25b19291fc4393914
+100644
+--- a/net/ipv4/inet_timewait_sock.c
++++ b/net/ipv4/inet_timewait_sock.c
+@@ -91,10 +91,10 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
+ }
+ EXPORT_SYMBOL_GPL(inet_twsk_put);
+
+-static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
++static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
+                                   struct hlist_nulls_head *list)
+ {
+-       hlist_nulls_add_head_rcu(&tw->tw_node, list);
++       hlist_nulls_add_tail_rcu(&tw->tw_node, list);
+ }
+
+ static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
+@@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock
+*tw, struct sock *sk,
+
+        spin_lock(lock);
+
+-       inet_twsk_add_node_rcu(tw, &ehead->chain);
++       inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
+
+        /* Step 3: Remove SK from hash chain */
+        if (__sk_nulls_del_node_init_rcu(sk))
