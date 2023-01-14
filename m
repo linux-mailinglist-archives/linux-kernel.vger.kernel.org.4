@@ -2,78 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D1266AD16
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 18:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF7366AD18
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 18:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjANRgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 12:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S230168AbjANRkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 12:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjANRgg (ORCPT
+        with ESMTP id S229732AbjANRkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 12:36:36 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A50D44AE;
-        Sat, 14 Jan 2023 09:36:34 -0800 (PST)
-Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 133AE419E9D1;
-        Sat, 14 Jan 2023 17:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 133AE419E9D1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1673717791;
-        bh=QNbLvYRd7r/KjTcK2MsGuCJX9/CO/nTDz1fspNQ7yyI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNKepNMDDVHkDZP6WcR/P4sRocfpt0CNfcyV9d1RkURQ3XlvRbih2UNh7dgx0l/Db
-         PURiJ49IeSSTRQ0LsQ6Y9qDgawK0fHktHOGK1w6LN+iLRBL1TSo+g6CdMR85rWQ+T2
-         Pgqbj6katobvUNAE5Kj2O9Vq4IhxbrNjiWmGyR0I=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>, robin@protonic.nl,
-        linux@rempel-privat.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH net] can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
-Date:   Sat, 14 Jan 2023 20:35:46 +0300
-Message-Id: <20230114173546.38340-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20210910124005.GJ26100@pengutronix.de>
-References: 
+        Sat, 14 Jan 2023 12:40:41 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C31A9658F
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 09:40:39 -0800 (PST)
+Received: (qmail 67313 invoked by uid 1000); 14 Jan 2023 12:40:39 -0500
+Date:   Sat, 14 Jan 2023 12:40:39 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y8LpF9O2tta86hEr@rowland.harvard.edu>
+References: <20220921173109.GA1214281@paulmck-ThinkPad-P17-Gen-1>
+ <YytfFiMT2Xsdwowf@rowland.harvard.edu>
+ <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <Y77QbG9lVXX9/B87@rowland.harvard.edu>
+ <4c1abc7733794519ad7c5153ae8b58f9@huawei.com>
+ <Y8GGmstFlgg91RMp@rowland.harvard.edu>
+ <20230113200706.GI4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230113203241.GA2958699@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113203241.GA2958699@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jan 13, 2023 at 12:32:41PM -0800, Paul E. McKenney wrote:
+> > Making LKMM correctly model all of this has been on my todo list for an
+> > embarrassingly long time.
+> 
+> But there is no time like the present...
+> 
+> Here is what mainline has to recognize SRCU read-side critical sections:
+> 
+> ------------------------------------------------------------------------
+> 
+> (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+> let srcu-rscs = let rec
+> 	    unmatched-locks = Srcu-lock \ domain(matched)
+> 	and unmatched-unlocks = Srcu-unlock \ range(matched)
+> 	and unmatched = unmatched-locks | unmatched-unlocks
+> 	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
+> 	and unmatched-locks-to-unlocks =
+> 		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
+> 	and matched = matched | (unmatched-locks-to-unlocks \
+> 		(unmatched-po ; unmatched-po))
+> 	in matched
+> 
+> (* Validate nesting *)
+> flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
+> flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
+> 
+> (* Check for use of synchronize_srcu() inside an RCU critical section *)
+> flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+> 
+> (* Validate SRCU dynamic match *)
+> flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
+> 
+> ------------------------------------------------------------------------
+> 
+> And here is what I just now tried:
+> 
+> ------------------------------------------------------------------------
+> 
+> (* Compute matching pairs of Srcu-lock and Srcu-unlock *)
+> let srcu-rscs = ([Srcu-lock] ; rfi ; [Srcu-unlock]) & loc
 
-On Fri, 10 Sep 2021 14:40:05 +0200, Oleksij Rempel wrote:
-> Ok, I see, this warning makes sense only if session will actually be
-> deactivated.
->
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
->
-> Thank you!
+This doesn't make sense.  Herd treats srcu_read_lock() as a load
+operation (it takes a pointer as argument and returns a value) and
+srcu_read_unlock() as a store operation (it takes both a pointer and a
+value as arguments and returns nothing).  So you can't connect them
+with an rfi link; stores don't "read-from" loads.
 
-As Ziyang Xuan stated, the patch was not applied to upstream.
+I suppose you might be able to connect them with a data dependency,
+though.  But then how would you handle situations where two unlock
+calls both use the value returned from a single lock call?  You'd have
+to check explicitly that srcu-rscs connected each lock with only one
+unlock.
 
-Usage of WARN_ON_ONCE in this case is actually discouraged: it erroneusly
-complains in a valid situation.
+Alan
 
-So the macro should be removed with the aforementioned patch. If it makes
-some sense for debugging purposes, WARN_ON_ONCE can be replaced with
-netdev_warn/netdev_notice but anyway discard of WARN_ON_ONCE.
-
---
-Regards,
-
-Fedor
+> (* Validate nesting *)
+> flag empty srcu-rscs as no-srcu-readers
+> flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
+> flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
+> 
+> (* Check for use of synchronize_srcu() inside an RCU critical section *)
+> flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+> 
+> (* Validate SRCU dynamic match *)
+> flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
+> 
+> ------------------------------------------------------------------------
+> 
+> This gets me "Flag no-srcu-readers" when running this litmus test:
+> 
+> ------------------------------------------------------------------------
+> 
+> C C-srcu-nest-1
+> 
+> (*
+>  * Result: Never
+>  *)
+> 
+> {}
+> 
+> P0(int *x, int *y, struct srcu_struct *s)
+> {
+> 	int r1;
+> 	int r2;
+> 	int r3;
+> 
+> 	r3 = srcu_read_lock(s);
+> 	r1 = READ_ONCE(*x);
+> 	srcu_read_unlock(s, r3);
+> 	r3 = srcu_read_lock(s);
+> 	r2 = READ_ONCE(*y);
+> 	srcu_read_unlock(s, r3);
+> }
+> 
+> P1(int *x, int *y, struct srcu_struct *s)
+> {
+> 	WRITE_ONCE(*y, 1);
+> 	synchronize_srcu(s);
+> 	WRITE_ONCE(*x, 1);
+> }
+> 
+> locations [0:r1]
+> exists (0:r1=1 /\ 0:r2=0)
+> 
+> ------------------------------------------------------------------------
+> 
+> So what did I mess up this time?  ;-)
+> 
+> 							Thanx, Paul
