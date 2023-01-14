@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2B766A878
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05FF266A87D
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjANB6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 20:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S231440AbjANB7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 20:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjANB6m (ORCPT
+        with ESMTP id S231476AbjANB7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 20:58:42 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2EB7458F
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:58:40 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VZWAukk_1673661515;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VZWAukk_1673661515)
-          by smtp.aliyun-inc.com;
-          Sat, 14 Jan 2023 09:58:37 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2 2/2] erofs: remove linux/buffer_head.h dependency
-Date:   Sat, 14 Jan 2023 09:58:12 +0800
-Message-Id: <20230114015812.96836-2-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20230114015812.96836-1-hsiangkao@linux.alibaba.com>
-References: <20230114015812.96836-1-hsiangkao@linux.alibaba.com>
+        Fri, 13 Jan 2023 20:59:03 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79038BF22;
+        Fri, 13 Jan 2023 17:58:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0Pch1iBSVz8G2YPFpmLPOf5HGOsU4koEPM8DeuS1iMg=; b=UhBaYATi8IehORYPIY4qgjJCXu
+        0+nCD0LPdd9/yWS1hebEZHlpz+0cl8i8P0pwXkRguJyHSBR5m5JQlSgPVsBD8Z7aLwYTB04/hwQ7T
+        Ewb9k7ggNAfDJIahAMrzRfThZ5fOxkhsF6dDoTbcOhx4dZ9nNXl7LpGdvbDQGJbsErnuqRvqaYyvj
+        uJftPkXCBmRTx2YHjXSLRQoFYsHG6SEraiSqYBXveF+eTzxbAYRV6wV8YRAUNwjJD+WMwPF1MFuEm
+        VzIRytohdr2xeG96TZNbF8xDfzJLNPmHucXjKH3HTkqylW8dpE/zdJ+pdJ+eYG2hVHmQEIsr0OkzI
+        6OXZpzew==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pGVoV-001llh-1A;
+        Sat, 14 Jan 2023 01:58:31 +0000
+Date:   Sat, 14 Jan 2023 01:58:31 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Bart Van Assche <bart.vanassche@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Douglas Gilbert <dgilbert@interlog.com>
+Subject: Re: [PATCH v5 3/9] iov_iter: Use IOCB/IOMAP_WRITE if available
+ rather than iterator direction
+Message-ID: <Y8IMR8BK3bLnr9ps@ZenIV>
+References: <Y7+8r1IYQS3sbbVz@infradead.org>
+ <167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk>
+ <167344727810.2425628.4715663653893036683.stgit@warthog.procyon.org.uk>
+ <15330.1673519461@warthog.procyon.org.uk>
+ <Y8AUTlRibL+pGDJN@infradead.org>
+ <Y8BFVgdGYNQqK3sB@ZenIV>
+ <c6f4014e-d199-d5e8-515c-5ffcd9946c80@gmail.com>
+ <yq1ilh9ucg3.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yq1ilh9ucg3.fsf@ca-mkp.ca.oracle.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-EROFS actually never uses buffer heads, therefore just get rid of
-BH_xxx definitions and linux/buffer_head.h inclusive.
+On Fri, Jan 13, 2023 at 08:34:50PM -0500, Martin K. Petersen wrote:
+> 
+> Bart,
+> 
+> > I'm not sure that we still need the double copy in the sg driver. It
+> > seems obscure to me that there is user space software that relies on
+> > finding "0xec" in bytes not originating from a SCSI
+> > device. Additionally, SCSI drivers that do not support residuals
+> > should be something from the past.
+> 
+> Yeah. I'm not aware of anything that relies on this still. But obviously
+> Doug has more experience in the app dependency department.
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/internal.h | 20 ++++++--------------
- fs/erofs/super.c    |  1 -
- 2 files changed, 6 insertions(+), 15 deletions(-)
-
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 168c21f16383..b4cc40fa3803 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -12,7 +12,6 @@
- #include <linux/mm.h>
- #include <linux/pagemap.h>
- #include <linux/bio.h>
--#include <linux/buffer_head.h>
- #include <linux/magic.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
-@@ -388,25 +387,18 @@ extern struct file_system_type erofs_fs_type;
- extern const struct address_space_operations erofs_raw_access_aops;
- extern const struct address_space_operations z_erofs_aops;
- 
--enum {
--	BH_Encoded = BH_PrivateStart,
--	BH_FullMapped,
--	BH_Fragment,
--	BH_Partialref,
--};
--
- /* Has a disk mapping */
--#define EROFS_MAP_MAPPED	(1 << BH_Mapped)
-+#define EROFS_MAP_MAPPED	0x0001
- /* Located in metadata (could be copied from bd_inode) */
--#define EROFS_MAP_META		(1 << BH_Meta)
-+#define EROFS_MAP_META		0x0002
- /* The extent is encoded */
--#define EROFS_MAP_ENCODED	(1 << BH_Encoded)
-+#define EROFS_MAP_ENCODED	0x0004
- /* The length of extent is full */
--#define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
-+#define EROFS_MAP_FULL_MAPPED	0x0008
- /* Located in the special packed inode */
--#define EROFS_MAP_FRAGMENT	(1 << BH_Fragment)
-+#define EROFS_MAP_FRAGMENT	0x0010
- /* The extent refers to partial decompressed data */
--#define EROFS_MAP_PARTIAL_REF	(1 << BH_Partialref)
-+#define EROFS_MAP_PARTIAL_REF	0x0020
- 
- struct erofs_map_blocks {
- 	struct erofs_buf buf;
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 481788c24a68..36b795f1ad44 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -5,7 +5,6 @@
-  * Copyright (C) 2021, Alibaba Cloud
-  */
- #include <linux/module.h>
--#include <linux/buffer_head.h>
- #include <linux/statfs.h>
- #include <linux/parser.h>
- #include <linux/seq_file.h>
--- 
-2.24.4
-
+Are we guaranteed to know the accurate amount of data that got transferred
+for all surviving drivers?  If we do, we can do accurate copy-out and all
+apps will keep seeing what they currently do.  If we don't, the best we
+can do is replacing copy-in + IO + copy-out with memset + IO + copy-out.
