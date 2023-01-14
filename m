@@ -2,104 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEF666ABA9
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA23F66ABAE
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjANNgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 08:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S229985AbjANNm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 08:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjANNgT (ORCPT
+        with ESMTP id S229739AbjANNmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 08:36:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFD05243;
-        Sat, 14 Jan 2023 05:36:18 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A977F1EC03D6;
-        Sat, 14 Jan 2023 14:36:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673703376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=DEFsrMm3DLTdKh3zb7F3HNijkt8nR2QiS45lmW3e2VY=;
-        b=EzuDwkn+pg0pF4E9/A31/WQ7r1mZ6Om+kkQ94XyavGyp7ulEsVZUyLry2AtVt2ICrB+ZHh
-        oaW9r+H5tOxcBNGaLaqD3I1ls4+jqM+NR29UBlYyQlblkLmom+zY0Js1Hs6I781fWNYNEy
-        x2dAQv2azjJR33ZbNW/5jk6S5d4DZpM=
-Date:   Sat, 14 Jan 2023 14:36:16 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
-        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
-Subject: Re: [PATCH v5 16/17] qcom: llcc/edac: Support polling mode for ECC
- handling
-Message-ID: <Y8Kv0GIk69MhcOjT@zn.tnic>
-References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
- <20221228084028.46528-17-manivannan.sadhasivam@linaro.org>
+        Sat, 14 Jan 2023 08:42:54 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A25524F;
+        Sat, 14 Jan 2023 05:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673703772; x=1705239772;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EgsloK4GNcROOIjStl6+TFXiEnL7mEEToz3XHFGbjvg=;
+  b=wBTby1kHpL/lBUZ8up8AhK9AUz5zDG4ejyBn/4/TFtghMJwQtOMrRxGq
+   OZHfYY8zPi285kD1/TE5fAbyUKtgUqOvY6qzlrh5ca731VGLbWYkL25yh
+   y3XGDKwkxBCixLgoUJ0rzFZRyOZRpmPUYaxFM88fwyS5DsKJB1C9gKiaW
+   79CiF51rmCDrlUQlyG5TTYRuIcpwZH60pwHA/yHkgmkSL8870doqSDFCd
+   KK6bGv3BYE89Uywz+SeET6tpeoPt+gS15cvYSlGDxioyjsFXxFdtKiczp
+   eU7SwIpIIBXrP3a5gVEzaZIyeUqXBzrgcZ8eum1aW76+aaEoeFpJmJeVP
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,216,1669100400"; 
+   d="scan'208";a="192264067"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2023 06:42:51 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 14 Jan 2023 06:42:49 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Sat, 14 Jan 2023 06:42:46 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next v4 0/8] Add support for two classes of VCAP rules
+Date:   Sat, 14 Jan 2023 14:42:34 +0100
+Message-ID: <20230114134242.3737446-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221228084028.46528-17-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 02:10:27PM +0530, Manivannan Sadhasivam wrote:
->  static int qcom_llcc_edac_probe(struct platform_device *pdev)
->  {
->  	struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
-> @@ -355,22 +361,31 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
->  	edev_ctl->ctl_name = "llcc";
->  	edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
->  
-> +	/* Check if LLCC driver has passed ECC IRQ */
-> +	ecc_irq = llcc_driv_data->ecc_irq;
-> +	if (ecc_irq > 0) {
-> +		/* Use interrupt mode if IRQ is available */
-> +		edac_op_state = EDAC_OPSTATE_INT;
-> +	} else {
-> +		/* Fall back to polling mode otherwise */
-> +		edac_op_state = EDAC_OPSTATE_POLL;
-> +		edev_ctl->poll_msec = ECC_POLL_MSEC;
-> +		edev_ctl->edac_check = llcc_ecc_check;
-> +	}
-> +
->  	rc = edac_device_add_device(edev_ctl);
->  	if (rc)
->  		goto out_mem;
->  
->  	platform_set_drvdata(pdev, edev_ctl);
->  
-> -	/* Request for ecc irq */
-> -	ecc_irq = llcc_driv_data->ecc_irq;
-> -	if (ecc_irq < 0) {
-> -		rc = -ENODEV;
-> -		goto out_dev;
-> -	}
-> -	rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-> +	/* Request ECC IRQ if available */
-> +	if (ecc_irq > 0) {
-> +		rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
->  			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
+This adds support for two classes of VCAP rules:
 
-You need to request the IRQ first and then set edac_op_state above. I.e., this
-devm_request_irq() needs to move in the if (ecc_irq > 0) branch above.
+- Permanent rules (added e.g. for PTP support)
+- TC user rules (added by the TC userspace tool)
+
+For this to work the VCAP Loopups must be enabled from boot, so that the
+"internal" clients like PTP can add rules that are always active.
+
+When the TC tool add a flower filter the VCAP rule corresponding to this
+filter will be disabled (kept in memory) until a TC matchall filter creates
+a link from chain 0 to the chain (lookup) where the flower filter was
+added.
+
+When the flower filter is enabled it will be written to the appropriate
+VCAP lookup and become active in HW.
+
+Likewise the flower filter will be disabled if there is no link from chain
+0 to the chain of the filter (lookup), and when that happens the
+corresponding VCAP rule will be read from the VCAP instance and stored in
+memory until it is deleted or enabled again.
+
+Version History:
+================
+v4      Removed a leftover 'Fixes' tag from v2.  No functional changes.
+
+v3      Removed the change that allowed rules to always be added in the
+        LAN996x even though the lookups are not enabled (Horatiu Vultur).
+        This was sent separately to net instead.
+
+        Removed the 'Fixes' tags due to the patch sent to net by Horatiu
+        Vultur.
+
+        Added a check for validity of the chain source when enabling a
+        lookup.
+
+v2      Adding a missing goto exit in vcap_add_rule (Dan Carpenter).
+        Added missing checks for error returns in vcap_enable_rule.
+
+v1      Initial version
+
+
+Steen Hegelund (8):
+  net: microchip: vcap api: Erase VCAP cache before encoding rule
+  net: microchip: sparx5: Reset VCAP counter for new rules
+  net: microchip: vcap api: Always enable VCAP lookups
+  net: microchip: vcap api: Convert multi-word keys/actions when
+    encoding
+  net: microchip: vcap api: Use src and dst chain id to chain VCAP
+    lookups
+  net: microchip: vcap api: Check chains when adding a tc flower filter
+  net: microchip: vcap api: Add a storage state to a VCAP rule
+  net: microchip: vcap api: Enable/Disable rules via chains in VCAP HW
+
+ .../ethernet/microchip/lan966x/lan966x_goto.c |  10 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |   3 +-
+ .../microchip/lan966x/lan966x_tc_flower.c     |  30 +-
+ .../microchip/lan966x/lan966x_tc_matchall.c   |  16 +-
+ .../microchip/lan966x/lan966x_vcap_impl.c     |  21 +-
+ .../microchip/sparx5/sparx5_tc_flower.c       |  28 +-
+ .../microchip/sparx5/sparx5_tc_matchall.c     |  16 +-
+ .../microchip/sparx5/sparx5_vcap_debugfs.c    |   2 +-
+ .../microchip/sparx5/sparx5_vcap_impl.c       |  29 +-
+ .../net/ethernet/microchip/vcap/vcap_api.c    | 767 +++++++++++++-----
+ .../net/ethernet/microchip/vcap/vcap_api.h    |   5 -
+ .../ethernet/microchip/vcap/vcap_api_client.h |   8 +-
+ .../microchip/vcap/vcap_api_debugfs.c         |  57 +-
+ .../microchip/vcap/vcap_api_debugfs_kunit.c   |  10 +-
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  |  32 +-
+ .../microchip/vcap/vcap_api_private.h         |  12 +-
+ 16 files changed, 699 insertions(+), 347 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.39.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
