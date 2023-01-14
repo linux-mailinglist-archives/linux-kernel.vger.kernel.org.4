@@ -2,720 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A0466AE2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 22:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDD466AE32
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 22:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjANV0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 16:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S230366AbjANVep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 16:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjANV0J (ORCPT
+        with ESMTP id S230344AbjANVen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 16:26:09 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706BB59C3
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 13:26:06 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b3so37798902lfv.2
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 13:26:06 -0800 (PST)
+        Sat, 14 Jan 2023 16:34:43 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DAD9ED3
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 13:34:42 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30EL1jxj006082;
+        Sat, 14 Jan 2023 21:34:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=6/6V24s28TCB2t91zNhdK8JM5M4ffaT1pMYZt9YdkHU=;
+ b=gBe05I7G6kNTjfNaC19tvxc1bk1nRWtOBmMKh23flr2wS9Tw7zZ4aHhy+XO48PMYueCi
+ ccF8hPkp+jSa4edeqlLBKlCAoOBUWY6LI1knsBo6X/x31hMCjisP61+clXN7SbSMdpoO
+ eoXQ6CFUq/EkYSEYYbO4Nbf238gYuB8V0n2gMZa0MMTV4WKRi1GKRLOoHRQe+hWgW3ZW
+ 53wYJE92FwwYIXOjkShVBR9j/8gvbbpjgWKbqhY5yZ4GRt6jEH+MLpGY10Azwa84rDOs
+ L4SK7P/uzr22lVeLDbgsjTiomoaDpKh0JqN3f511tY2rjSHxj1dnNm4lL3XmUKnfOg5F /g== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3mxt0mw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 21:34:33 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30ELS9fo013279;
+        Sat, 14 Jan 2023 21:34:32 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n44b4r28w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 21:34:32 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IcOiBa/JHhi0IV6qfizFQ21ko3iHBwtpv57IBbBWeizTm959Y4KrOJ9TZs8fGjYLn0kIRZw6UVFdihOMMnIjkxCFaiZ1x+tCJP+p0kGwZdwm4UL7YXbRQB6xtsH0/5dY6e3SmIpTj1+LT+UuwRFffAtnHbncWQc4dV49aJaSCJKPw2f8QJK0aAky5R/35TBUGjk6PGO1ERTjtDeLiWaIFp7GZ5w9Jc45Qh/W0SS/80eKdkkYn8C+EqyGYdQKhKfUPqnd6CtAT0BsslcO54wAkyk8HmLnjWbdM7hNwO2DO5575b9+vi8U/23eOqSgQ3KCjaCj2gpsL/SBU8FRmJhKZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6/6V24s28TCB2t91zNhdK8JM5M4ffaT1pMYZt9YdkHU=;
+ b=C7srCIpLvrocUKLILtj3wm13hwouyv5wyY7u0d07CtHZsVO1ayXt9YrI+mgI2G0R0fo0KpyfluPgeQdB4xklyeUDpUWTWZlYWMe0D4tZXvby31gCzkjJYGS9qqI6qHSBmeL/Z21gY0eN2zBvtaSxlMEkwdQMT/y5ULP4vNmFGuPFYpIIDK50haiIQc08spXFdOF7g9UCTBrUg4xdX+3Sr+iQ7Q03NXQpAWYRWKY7nHze2p8bZlECnYVlTIoIytM1LIF4QnaU4QymIkKB+1i5Hf0Cz8QM8Qu0wVCNmHTyegtX+lUPXblDeluKYlyzGCIDKJi+/lj/RpW2InBkr/x2EQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/rkFL4JQ6qmwO5yG7gvrFL3poPk1NvmBJ8ZqbA8Y98k=;
-        b=dk3Qm3Ddkj//E3O3I/e7iSHjy64hiqQMTxIQgctztPXtir7JN0KwZBNlQleLZgb4YD
-         NQIxD3tV7wYW3+7SDRSOS3Whrseer9JvOrnaNDayzTdzORWzFSX6gtHWpBqGmZTppYmX
-         7jZ6J7iNrGjmkzZ4blAKASrykjU3imDlecGHBle9DltBY7/9BWqth9tHJRMWgmTgTrxy
-         NZLkz/Zmc+8fKHvNwfDJl6cCjly/XmyT1GXgpSr8wQ9kGGRo8bppdY6NygtzJN0vd++4
-         kopcdaxJNjgwakDH6c6PN1WD7e1KZUdLV7YiPNaJvtyHY43U8FtkVSJi/CD/e5MNdMlu
-         x5tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rkFL4JQ6qmwO5yG7gvrFL3poPk1NvmBJ8ZqbA8Y98k=;
-        b=UYW4dhOKx97HdHmfts4P4NboHO5vqUMeNgsMFYZBExkEeHOrfvD9CEuDqV5ivRpx04
-         g/19S2uzDELrcwu4fPXLjGzYIqgQhNG2NxO/bVgCSnlZBxMyotO26bvt0t697fGw2AYe
-         MIm0qZVUxy2Y+UiQ29MNyWT5exOcF4G74iR71QPbXaFnvInAZDf4A2nSnLFKDLTJHYj2
-         +U7CdlRHdm6q24UHbFm+l87gcTWztv2UQ+BgwtXGWlYTduDQR6SbdSXkXJ6g/a35wFr1
-         znMVCCGJD2WjLIzKlKIMOsPe819YaH61lvnVBEbjwp2S5BHaCAntkmvQtbRL4EduXtmo
-         bU2w==
-X-Gm-Message-State: AFqh2koj6sMREPHTxK+oDinDJTZXj797Gmw6HReXbfd+WpMz2sQb+Y+X
-        PekqpwQSAo28w6ytpUwcf2BZcQ==
-X-Google-Smtp-Source: AMrXdXvSsEr66mKYO8Ho4y+4QlkwbfAhaR3kWi7qLvmTWbKBORi2sQjVQnKykCo8/gqCNNTVeOLZiQ==
-X-Received: by 2002:a19:7008:0:b0:4b5:7d49:4a05 with SMTP id h8-20020a197008000000b004b57d494a05mr21752108lfc.0.1673731564777;
-        Sat, 14 Jan 2023 13:26:04 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056512344f00b004b56bebdc4esm4456632lfr.14.2023.01.14.13.26.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Jan 2023 13:26:04 -0800 (PST)
-Message-ID: <323b9519-38e4-a7ca-f45d-96cef06fd9bf@linaro.org>
-Date:   Sat, 14 Jan 2023 22:26:01 +0100
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6/6V24s28TCB2t91zNhdK8JM5M4ffaT1pMYZt9YdkHU=;
+ b=EvuOBd2kpoJ0Kbb0xmT3r96OaYOCWG+NO7tQ2SAdMj/6wktMsU00Pos/ffqsRcNBNVVVp3KJYvfIByjA1wbazY5tavZsQWk9nd4mMb9MxiCrb6S6a5VqpT0F3MftGj/OJVUZjyU4XV4/8T8cBSScdLCPbCcqRvWg0DrJHfqF4LI=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BN0PR10MB4824.namprd10.prod.outlook.com (2603:10b6:408:12f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Sat, 14 Jan
+ 2023 21:34:30 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14%8]) with mapi id 15.20.6002.012; Sat, 14 Jan 2023
+ 21:34:28 +0000
+Date:   Sat, 14 Jan 2023 13:34:25 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 0/4] zsmalloc: make zspage chain size configurable
+Message-ID: <Y8Mf4f2TTH8yY8Ic@monkey>
+References: <20230109033838.2779902-1-senozhatsky@chromium.org>
+ <Y8G3nJ9+k2lB0kas@monkey>
+ <Y8JU8iGlu5uLGdDt@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8JU8iGlu5uLGdDt@google.com>
+X-ClientProxiedBy: MW4PR04CA0178.namprd04.prod.outlook.com
+ (2603:10b6:303:85::33) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add debug related nodes
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20230114210754.353912-1-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230114210754.353912-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BN0PR10MB4824:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7daa3e98-25ed-4297-9423-08daf6771d8b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XXIEnf319b/vwRwYd7zPgirz7ewtqGHY65DbpvcSkWoX0xuDyQlghDMZsAT8yXI4Az2qxfGGlOp2wRZzdItNVpIz4oxXNKRlqjEdoSH1qXwzse2wzmW486PLzAc8ce8KzwgEWaGSqaJgxywkvhMBcHyOx0sO6C2MGDPee5G+EyeM7ZkUd/oEeK7Wkb5oGUF2X4iTFi2e6UncT8yspttfQykMYc/5puWpucXretkwMrTwDrsq3NMPk9TEe0+V+No9NN0PPu0WDbkACQ10q+yKCXGjqnsOgD328hgphLcJEEeHcHMcNpB0NI1N0mbGgVvNAFhYZAlDhaldIFGchrZAAuOnvK+IykfxPAv3hGpgPjqDpMwNMEr9QV1XODQrTExje12PN5/oNneY+yiS2iGuwxY46Yhv0pIgnYzbMamcKE8el6HQsCdh9Ts1/01KUKPoz6+mE/tewFYLHkEJB0e1KZwogv7hhcoq0j30gDENMgTk6m0ie9sCmWNCv/Se1FrNfHh1K52cWA/MnXSA7Uf104GN32Pdw3EawZfWf7JFhMNOc96MN4Dg+Csik1+SFKWyke6iNoDriVHldNVAnzBGXSvBwqOD7Q2zUv2Ln0chmeCJWsJp3yagYGeqNZhI75rhfEKkpHu8XjCgLFcuzm1QxQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(366004)(136003)(396003)(346002)(39860400002)(451199015)(33716001)(86362001)(54906003)(316002)(26005)(6916009)(66476007)(66556008)(66946007)(478600001)(6486002)(9686003)(186003)(6512007)(6506007)(8676002)(6666004)(53546011)(38100700002)(83380400001)(8936002)(5660300002)(41300700001)(44832011)(2906002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pa9NeueYbnkKc4y3oy1fZjbAkWD2qoJhtBdCtzgZcAUDK4IBoaZVUyw3HqW1?=
+ =?us-ascii?Q?zZLg2jdRTXBX9yrAfgjjJ7ranSXHpY39GvA39nxpxaof2QrchHbTz8Zo7jE8?=
+ =?us-ascii?Q?JJN8BioEqCdspV7iWbwxX1kGtWg/XkKk0Ij+EnMzL2IawRqscBA6hu/RFqjY?=
+ =?us-ascii?Q?hzY2e06pZuAIvA0GM4ZA4kR9cyebA/VdvR5dyUvgd+tqpqD/+gC4P8BSZGgO?=
+ =?us-ascii?Q?mG0zpSFdjZtL7feDCWs7gxOl25CZKwJZKpZqiQolmIf9F//pmEdSszvZxaUf?=
+ =?us-ascii?Q?ZSmQf9wEYWttmTet5rqyTxW32gCExu4TmQ+mmYM+csGAHBc0ihj24PkkLlhE?=
+ =?us-ascii?Q?4HSYGdprGwhYcbZctlOcz3xEjPFAPPXxHx35n1AphMVa78/EsQlzq4v5VhUN?=
+ =?us-ascii?Q?lrbnmkSGvmB7sXjtQhVYS+ExuspQ/7s1fxK5hJ9Wn3CO7Cm9WNASkTQwf3mb?=
+ =?us-ascii?Q?vmXx5tMIyg7JtqJZdmZ8pjr6Ay98IhFuEzwRV0i2cZnG+wVwEs4jDdtHsTlO?=
+ =?us-ascii?Q?EpWOH8fEGkemBGOQSbADZnScLK3C7BJ9ghqFLVREW52AB39MvbvPUhyDqDhQ?=
+ =?us-ascii?Q?KBev7x4fwyPjmCTW/GFSeHNUDispO9Zjiyz0F+VdKSsSuzgkUllguFZcGoU5?=
+ =?us-ascii?Q?IY93fGlw0zurCwF04xbyaljfVTR1jVdVyNUsnRcwBrnW2TbcEGevf7qQq8Do?=
+ =?us-ascii?Q?EmcYaEFJPEdXqOeAaG2rGcGNtCP48Gzyyz+NTm+4GgtPZnryMkC7e1uNx3H0?=
+ =?us-ascii?Q?HY633UE6SlI35+5Po/TPiWhSD0GMyCPpErIhNsvd+8DhYSicvghP+AKxwWzM?=
+ =?us-ascii?Q?oQ/vIAeD2GNTkwTpTHLJqJJK04Bp6oMWsVvc6mUqEbBQaRchsV8EdlbcTWU9?=
+ =?us-ascii?Q?97bbWNM3DNXGl1zBZUPYyEhd0r2lVchRLvQFZMpdfWrx1c2o5/RWGoQifEN/?=
+ =?us-ascii?Q?g8heZeTczy11M7nrmicg8nMnAbktH5lekNkTbGpHDnP2+5D5aWv9gay6uiJS?=
+ =?us-ascii?Q?4TSK40+LbqDrwRivICZ2JSrE/vIrhTguX1gHG+uao4D438BCBzioFFFj4+bp?=
+ =?us-ascii?Q?lppXWbAoplju0y2ko1kCgk2jOte2EF9gAn8Uj7L2yfoWuCU6CWWkLyvutnDJ?=
+ =?us-ascii?Q?0trc9oRP2K1iAoe4kineEQzgUOrPp1gOkN52ts8aE1D/DZE+f+ol3TfEOpoT?=
+ =?us-ascii?Q?AJo+pmL1HYgo5uD1afcnLCgG13hdgAhSCl8B+3w9gbVZJuEgFzC+qqD0SRvD?=
+ =?us-ascii?Q?NuIBcZ8Ukpl54E+YlXHmQEuj0hPHUNpiPmYVX+klxBc4LqIDLX2kMGikYByf?=
+ =?us-ascii?Q?H2myUlf9QTRFLKs3moxXz1BDGj//5OWRQ0Q+5SPf1bMj3v+j6CaybAPC1sVf?=
+ =?us-ascii?Q?T1u3VigHPba9/Nxw2mt5T9KJP5XRCCN20aCRZwxwsxKuFan7xq/yE9BTcTQv?=
+ =?us-ascii?Q?UGZGt6mEAxqOuEV2mstABb9HigslWjjWeYn9Gt8Bfy6hZgaV9X9A6Pjpi4hm?=
+ =?us-ascii?Q?Wyai0jMtYirpcYmeUT3ImWQ5KUzzrmy/gnpIP4zr40mhfxsBkumd4a56tniw?=
+ =?us-ascii?Q?QhxfP5IF1jZb16AtSZfQY+ZiJPgQOYcFrkPfKzmJoUNtu9Sbgpz5hvZCaJbg?=
+ =?us-ascii?Q?8Q=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: Rj4+Jaorh4TaqE2qtf28TwZ7lyvYhy6zf8F3cXXnr4gpNKblddYcB7vG5IfoJyEyJyQ3Yxx7FJNPSCuBoOgaJb680tAiwFm8eTIEN1mDe0q5D0zLV8kVWuw+9QIl+BeA85vtbVKapZlQH0pWOnTKNdNBbPsXFtI9PiH3RIldwOP1G44qXez2nAgsc/8H22tvR9LT5Vhys+FvX4T2gNBhgSe5rnEkSszjtlNIN9JfsVXLupjCoTFg9WtrLG4ncFx/XHhNe2oxMixYR/Xh8gwFtRIbkV2GU+pQPah0UrF2w+JeiedIjIrGNgV1130NzE/0pGejDF6yUZRvqoMCaYlA5F+eDv5nyz1xfV6SoyFe8ivIIQKOnbRMrdBVWCrvXv4uSN9gTV8MURUrJR5E3kmxyliqjdyyvZ3ksvLe5+U5G5WeyZzJ8MlDOXZjP2JqiCxPCg41VL+PXGZibvYUvjHA9jOId6B+5sinXU1iy3hnlzLlh3bnxsxal8I6r9/ewgykxqZjVba4YPM4jxjTSx9o19Ves4FTyJTJwFj0wnRV8ZI3WyVMZOa/RMZBCwT2Db9p10XYByh4/RNLG5+iYnttibPMSsKqEuqol+idQd9rTg4G1RhHyWeGOqhuGBDP3j3q+tSKCOVzA2WvQmT8j36I3uweLMe/x2S3lFj0wG7z7vxPpWDw0IbMF+BpuL6DXl9H9WMe+gL9EXO6qSoQp0uls5+306jl9MRh75+IqzciWVx40vXQ1/nwrfATptEEXVsJZEHUSMFMKq4pI96dvhOS8txkt/KQ8oYHUOGAWNBZ9IzUzsyh5ItQf+wFAtzUXKa5xwCGvL9eVSjs5q9iAHods65zq8LJJJVEh4hWq6aHvsmQUOxLhUv98YWL6cZpcTfq/gRTugV+4HIgd8Yh+EOXrA==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7daa3e98-25ed-4297-9423-08daf6771d8b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2023 21:34:28.6554
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CEsA1n5rdHut4RT8inlJNG0t2ViiLI+r4ti6i82SJPhWN5D9vVx29H6yUThFjSHLXTzWOlqhTDjiKjHWRqnwXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4824
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-14_08,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=695
+ phishscore=0 bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301140158
+X-Proofpoint-GUID: zd2lQfXHSteh04yWBGsOzpDugATT45ZT
+X-Proofpoint-ORIG-GUID: zd2lQfXHSteh04yWBGsOzpDugATT45ZT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14.01.2023 22:07, Bhupesh Sharma wrote:
-> Add dtsi nodes related to coresight debug units such
-> as cti, etm, etr, funnel(s), replicator(s), etc. for
-> Qualcomm sm6115 SoC.
+On 01/14/23 16:08, Sergey Senozhatsky wrote:
+> On (23/01/13 11:57), Mike Kravetz wrote:
+> > Hi Sergey,
+> > 
+> > The following BUG shows up after this series in linux-next.  I can easily
+> > recreate by doing the following:
+> > 
+> > # echo large_value > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > where 'large_value' is a so big that there could never possibly be that
+> > many 2MB huge pages in the system.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 612 +++++++++++++++++++++++++++
->  1 file changed, 612 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 478c5d009272..5067910b18ab 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -1237,6 +1237,618 @@ dispcc: clock-controller@5f00000 {
->  			#power-domain-cells = <1>;
->  		};
->  
-> +		cti0: cti@8010000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08010000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti1: cti@8011000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08011000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti2: cti@8012000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08012000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti3: cti@8013000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08013000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti4: cti@8014000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08014000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti5: cti@8015000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08015000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti6: cti@8016000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08016000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti7: cti@8017000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08017000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti8: cti@8018000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08018000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti9: cti@8019000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x08019000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti10: cti@801a000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x0801a000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti11: cti@801b000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x0801b000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti12: cti@801c000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x0801c000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti13: cti@801d000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x0801d000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti14: cti@801e000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x0801e000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		cti15: cti@801f000 {
-> +			compatible = "arm,coresight-cti", "arm,primecell";
-> +			reg = <0x0801f000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		replicator@8046000 {
-> +			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-> +			reg = <0x08046000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					replicator_out: endpoint {
-> +						remote-endpoint = <&etr_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port {
-> +					replicator_in: endpoint {
-> +						remote-endpoint = <&etf_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etf@8047000 {
-> +			compatible = "arm,coresight-tmc", "arm,primecell";
-> +			reg = <0x08047000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			in-ports {
-> +				port {
-> +					etf_in: endpoint {
-> +						remote-endpoint = <&merge_funnel_out>;
-> +					};
-> +				};
-> +			};
-> +
-> +			out-ports {
-> +				port {
-> +					etf_out: endpoint {
-> +						remote-endpoint = <&replicator_in>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etr@8048000 {
-> +			compatible = "arm,coresight-tmc", "arm,primecell";
-> +			reg = <0x08048000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			in-ports {
-> +				port {
-> +					etr_in: endpoint {
-> +						remote-endpoint = <&replicator_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		stm@8002000 {
-This one node is out of order
+> I get migration warnins with the zsmalloc series reverted.
+> I guess the problem is somewhere else. Can you double check
+> on you side?
 
-I *think* the rest looks good overall... so:
+I did the following:
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+- Start with clean v6.2-rc3
+  Perform echo, did not see issue
 
-Konrad
-> +			compatible = "arm,coresight-stm", "arm,primecell";
-> +			reg = <0x08002000 0x1000>,
-> +			      <0x0e280000 0x180000>;
-> +			reg-names = "stm-base", "stm-stimulus-base";
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					stm_out: endpoint {
-> +						remote-endpoint = <&funnel_in0_in>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@8041000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0x08041000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel_in0_out: endpoint {
-> +						remote-endpoint = <&merge_funnel_in0>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port {
-> +					funnel_in0_in: endpoint {
-> +						remote-endpoint = <&stm_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@8042000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0x08042000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel_in1_out: endpoint {
-> +						remote-endpoint = <&merge_funnel_in1>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port {
-> +					funnel_in1_in: endpoint {
-> +						remote-endpoint = <&funnel_apss1_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@8045000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0x08045000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					merge_funnel_out: endpoint {
-> +						remote-endpoint = <&etf_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-> +					merge_funnel_in0: endpoint {
-> +						remote-endpoint = <&funnel_in0_out>;
-> +					};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +					merge_funnel_in1: endpoint {
-> +						remote-endpoint = <&funnel_in1_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9040000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09040000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU0>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm0_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in0>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9140000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09140000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU1>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm1_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in1>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9240000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09240000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU2>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm2_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in2>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9340000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09340000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU3>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm3_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in3>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9440000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09440000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU4>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm4_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in4>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9540000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09540000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU5>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm5_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in5>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9640000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09640000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU6>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm6_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in6>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		etm@9740000 {
-> +			compatible = "arm,coresight-etm4x", "arm,primecell";
-> +			reg = <0x09740000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +			arm,coresight-loses-context-with-cpu;
-> +
-> +			cpu = <&CPU7>;
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					etm7_out: endpoint {
-> +						remote-endpoint = <&funnel_apss0_in7>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@9800000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0x09800000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel_apss0_out: endpoint {
-> +						remote-endpoint = <&funnel_apss1_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-> +					funnel_apss0_in0: endpoint {
-> +						remote-endpoint = <&etm0_out>;
-> +					};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +					funnel_apss0_in1: endpoint {
-> +						remote-endpoint = <&etm1_out>;
-> +					};
-> +				};
-> +
-> +				port@2 {
-> +					reg = <2>;
-> +					funnel_apss0_in2: endpoint {
-> +						remote-endpoint = <&etm2_out>;
-> +					};
-> +				};
-> +
-> +				port@3 {
-> +					reg = <3>;
-> +					funnel_apss0_in3: endpoint {
-> +						remote-endpoint = <&etm3_out>;
-> +					};
-> +				};
-> +
-> +				port@4 {
-> +					reg = <4>;
-> +					funnel_apss0_in4: endpoint {
-> +						remote-endpoint = <&etm4_out>;
-> +					};
-> +				};
-> +
-> +				port@5 {
-> +					reg = <5>;
-> +					funnel_apss0_in5: endpoint {
-> +						remote-endpoint = <&etm5_out>;
-> +					};
-> +				};
-> +
-> +				port@6 {
-> +					reg = <6>;
-> +					funnel_apss0_in6: endpoint {
-> +						remote-endpoint = <&etm6_out>;
-> +					};
-> +				};
-> +
-> +				port@7 {
-> +					reg = <7>;
-> +					funnel_apss0_in7: endpoint {
-> +						remote-endpoint = <&etm7_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		funnel@9810000 {
-> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +			reg = <0x09810000 0x1000>;
-> +
-> +			clocks = <&rpmcc RPM_SMD_QDSS_CLK>;
-> +			clock-names = "apb_pclk";
-> +
-> +			status = "disabled";
-> +
-> +			out-ports {
-> +				port {
-> +					funnel_apss1_out: endpoint {
-> +						remote-endpoint = <&funnel_in1_in>;
-> +					};
-> +				};
-> +			};
-> +
-> +			in-ports {
-> +				port {
-> +					funnel_apss1_in: endpoint {
-> +						remote-endpoint = <&funnel_apss0_out>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		apps_smmu: iommu@c600000 {
->  			compatible = "qcom,sm6115-smmu-500", "qcom,smmu-500", "arm,mmu-500";
->  			reg = <0x0c600000 0x80000>;
+- Applied your 5 patches (includes the zsmalloc: turn chain size config option
+  into UL constant patch).  Took default value for ZSMALLOC_CHAIN_SIZE of 8.
+  Performed echo, recreated issue.
+
+- Changed ZSMALLOC_CHAIN_SIZE to 1.
+  Perform echo, did not see issue
+
+I have not looked into the details of your patches or elsewhere.  Just thought
+it might be related to your series because of the above.  And, since your
+series was fresh in your mind this may trigger some thought/explanation.
+
+It is certainly possible that root cause could be elsewhere and your series is
+just exposing that.  I can take a closer look on Monday.
+
+Thanks,
+-- 
+Mike Kravetz
