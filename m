@@ -2,154 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265A766A7D5
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 01:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F13266A7D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjANA70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 19:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        id S230391AbjANBA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 20:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjANA7X (ORCPT
+        with ESMTP id S229641AbjANBA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 19:59:23 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E7B7A397
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:59:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673657962; x=1705193962;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eehD+Oq2sCZCUcSiHpgC4Zf1RklOmGarh8EqBH0N1mo=;
-  b=ajw3g9e5hsGuj/7hVE9mySFXQ/VgyHA1tKx/jVhI4UIohYpV7JVcJ7L1
-   CYOA3snJ0HYOsELTOEClup+zgjOLP3MD+JwYuLYcNuIGWaDshFKEB6eq+
-   X4+ilNnREcZ+SFOunaxDCOEXUrWm8UVLP7Y8Rs+2Q2HNnY5lh0eMf57xM
-   B3qbIzgu7kj4gcIrMWT+wMxp05aKQuGAHnm1IceNhQKeuPlHDqevBB8PS
-   k+U+pp/SKfyUrJ30o8AcsWnilytwkHokGomdF2vWfpvRCPV/3V/o/l2t5
-   O0L6iJqrfaaai3oZpHEZDM3yeCRqWibijWAJH+Qp3GLUH8lZqaGU1XSTu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="351376741"
-X-IronPort-AV: E=Sophos;i="5.97,215,1669104000"; 
-   d="scan'208";a="351376741"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 16:59:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="782332235"
-X-IronPort-AV: E=Sophos;i="5.97,215,1669104000"; 
-   d="scan'208";a="782332235"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jan 2023 16:59:20 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pGUtE-000BaA-07;
-        Sat, 14 Jan 2023 00:59:20 +0000
-Date:   Sat, 14 Jan 2023 08:58:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- 0e26e1de0032779e43929174339429c16307a299
-Message-ID: <63c1fe40.84FZcSmZYmLJ5zkZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 13 Jan 2023 20:00:26 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F8F6084B
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:00:25 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id i1so8090829ilu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M97B1poe5E1m8pRKPWmlzH7xdRB/G7s4vd7sxOh8JfU=;
+        b=iCpVgOW0Qk7d39TEoAOHyhjb8/9UP9uv+s2E0M9CdmFRAT3u+1r+IUvnkCllC2ZGzu
+         ZXg20Jpls8I0DfZGWFIX2pglh4cMNeO/cmpNf8biDpdM30lGwubkmav09F26N6t3bIK5
+         owfVc6PdFHphzx9l6UpIm3FO/7qCxveL4n5MXxTNW8FnJCu8JWLQQf12ijLb9fjzfeac
+         ymixjL2QcF8AxgbLTuWTwOvBedmkN+hPbK1GZ9QMsEYqgcy58kyYgwtEvjVh0TLwCRI9
+         tI5CRzvwbYlQ4id7m1Bg4KVjX12zAe58SyUD6l0Zcb21sX0LH1+HTppRxSTgwpLEzhCB
+         TrHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M97B1poe5E1m8pRKPWmlzH7xdRB/G7s4vd7sxOh8JfU=;
+        b=w+wDUwasvcGE1dcrhXCbgzrxaR//Rkc+mYZD5YMlmY62a23eLSHx9uLKyAMeCR7miK
+         2JkBhx2JT3YNqhagBGJ9JBFaISD8eufiIvCbn+UIldjKUHfxhdEo4b9fP+6J0LkeDu4n
+         zgt7/58k0vg3P0ZJAhjBv+7ADP3rbdDhAbuwkXXNL/OLR98LRcJi3tTZaKU4zX1TN4v4
+         /eVZBY8TFPfhILAdj6ak16Bji1T5iQ2eeNzjoMjSjxCMXs8ZmDISLrADZBRzX8REOZOF
+         Mlo1rjI9h0P2sljVGlVZ22lBgz36B7cE8Ntou7mpp40kG7fs5tfm6DA6aaBtlMgnJUcv
+         mMSA==
+X-Gm-Message-State: AFqh2kpR1l3T82t1+xVioKLhHEDjmPGvFSCb1Vl+Mf3dYZb4DdS4STj2
+        pq3SEch8wdIUZN4pfCkfaBIY8FOmAo0=
+X-Google-Smtp-Source: AMrXdXs4tO6gubNamHO0YTrHBNKzl7KOApYhShlUDiJyp9pUHqFWHMYvjSSYIC4F9zr3L+Gs6pyv7w==
+X-Received: by 2002:a92:de0a:0:b0:30c:699e:7f42 with SMTP id x10-20020a92de0a000000b0030c699e7f42mr25924210ilm.9.1673658024476;
+        Fri, 13 Jan 2023 17:00:24 -0800 (PST)
+Received: from localhost ([2607:fea8:a2df:3d00::6463])
+        by smtp.gmail.com with ESMTPSA id m9-20020a92cac9000000b003036d1ee5cbsm1787300ilq.41.2023.01.13.17.00.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 17:00:23 -0800 (PST)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Mentz <danielmentz@google.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Richard Acayan <mailingradian@gmail.com>
+Subject: [RFC PATCH v2 0/2] drm/dsi-mipi: 16-bit Brightness Endianness Fix
+Date:   Fri, 13 Jan 2023 20:00:04 -0500
+Message-Id: <20230114010006.50471-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: 0e26e1de0032779e43929174339429c16307a299  context_tracking: Fix noinstr vs KASAN
+Changes since v1:
+ - move 16-bit brightness handling to new functions and revert API
+   change (1/2)
+ - remove Change-Id in compliance with checkpatch.pl (1/2)
+ - separate panel driver changes (2/2)
 
-elapsed time: 724m
+This series adds proper support for 16-bit MIPI DSI brightness and
+cleans up existing panel drivers.
 
-configs tested: 71
-configs skipped: 2
+I cannot test the SOFEF00 change, although I tested an equivalent change
+to an external S6E3FA7 driver generated with the same generator. Both
+setting and getting works on S6E3FA7.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Daniel Mentz (1):
+  drm/dsi-mipi: Fix byte order of DCS set/get brightness
 
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-arc                                 defconfig
-um                             i386_defconfig
-alpha                               defconfig
-um                           x86_64_defconfig
-x86_64                        randconfig-a006
-s390                                defconfig
-powerpc                           allnoconfig
-s390                             allmodconfig
-riscv                randconfig-r042-20230112
-arm                  randconfig-r046-20230113
-arc                  randconfig-r043-20230112
-i386                          randconfig-a001
-arc                  randconfig-r043-20230113
-i386                          randconfig-a003
-s390                 randconfig-r044-20230112
-s390                             allyesconfig
-i386                          randconfig-a005
-i386                                defconfig
-ia64                             allmodconfig
-arm                                 defconfig
-x86_64                        randconfig-a013
-i386                             allyesconfig
-x86_64                        randconfig-a011
-sh                               allmodconfig
-x86_64                        randconfig-a015
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64                           rhel-8.3-syz
-arc                              allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-alpha                            allyesconfig
-x86_64                           rhel-8.3-bpf
-i386                          randconfig-a014
-arm64                            allyesconfig
-mips                             allyesconfig
-i386                          randconfig-a012
-powerpc                          allmodconfig
-i386                          randconfig-a016
-arm                              allyesconfig
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-i386                          randconfig-c001
-arm                            hisi_defconfig
-arm                          pxa3xx_defconfig
+Richard Acayan (1):
+  drm/panel: sofef00: Use 16-bit panel brightness
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r041-20230113
-arm                  randconfig-r046-20230112
-hexagon              randconfig-r041-20230112
-i386                          randconfig-a002
-hexagon              randconfig-r045-20230113
-hexagon              randconfig-r045-20230112
-i386                          randconfig-a004
-riscv                randconfig-r042-20230113
-s390                 randconfig-r044-20230113
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-x86_64                          rhel-8.3-rust
+ drivers/gpu/drm/drm_mipi_dsi.c                | 52 +++++++++++++++++++
+ drivers/gpu/drm/panel/panel-samsung-sofef00.c |  9 +---
+ include/drm/drm_mipi_dsi.h                    |  4 ++
+ 3 files changed, 58 insertions(+), 7 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.39.0
+
