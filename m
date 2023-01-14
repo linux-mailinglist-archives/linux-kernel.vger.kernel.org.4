@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB2166AB4E
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B1A66AB51
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjANMMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 07:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S229820AbjANMSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 07:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjANMMd (ORCPT
+        with ESMTP id S229723AbjANMSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 07:12:33 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D6E658F;
-        Sat, 14 Jan 2023 04:12:32 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4d4303c9de6so169104287b3.2;
-        Sat, 14 Jan 2023 04:12:32 -0800 (PST)
+        Sat, 14 Jan 2023 07:18:02 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750946591
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:18:00 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id mp20so11411214ejc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ocG+aQYX3J6pPZiaecLuAdSLxqQP2C97Q6clgYMlPSQ=;
-        b=NnTUf4zMPGcuJ6iWKPXSOQftiob0xB7Hg/1iZUp5RaIZwPisRkMZ6aSHAyd6P+G6xf
-         0bj0mYQz7wfvxYCF9HSGHnF2Nwde7H5fkl3u1aEznXqeS/D22qj95sAETiNhl3PVZW4n
-         FuLhGW4vqCUSBXe824IQ1DVGVf0kJIiMKLtQcK0dvW5uoVfY02T7pZ+wia4FKYqSm821
-         l6FLI1h9zFMCtK37fOWufwrXnEIL8HxipROm+S+n6akXZ1hJevJAuyq6JZPs7RA6ryfi
-         UktJFQaaI5z+IuSw31GbU1wqvS+4x9gVGjcTZk0I36dxhAq0QailGg+nDEh00yjzWl+9
-         OEjw==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q9YuksUftZM7Mr4U6pqPjOciGDwe5IYDlYl6UJ9PPnk=;
+        b=synd+Iggo1DQo5udzPz0uQKpvVSlRqvBUZi2YQV/McwbYALis2UlgTDQDUR6izBCC2
+         l1bZPDxHIVWe9BlDJugSUyRI2tB8w+sHRdISa8ozgnxqwNFMCIzMgif57A4S+wEYoIRn
+         sBDlRAINr7z8unXoQgqiE3xTPECg3H1Zt6zBE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ocG+aQYX3J6pPZiaecLuAdSLxqQP2C97Q6clgYMlPSQ=;
-        b=CYTJxEyZ1wGLGKVR7mXRh7gBXqoZcko/O6SnihERIMQX+XJMRTAzAZPwcdu4VUCZ1w
-         HA0sOY6lliur8+zmWrr+12DsZQC4nVjlVHB1bN5Sz9mrXEW+ix4zeJsgcu2SAee3W/lv
-         2g5yNIFMJNyH/bvqc7kSR5P2tkDrWybtxjUV0+y6WWqUbH+z7Y9kssWFDZK3AuTxoYYm
-         Zg+UpyBZwgdsMxNjl5D/Bm11HVRGrkAAyayg8oyf5psORsLgs/Zjmzo1MyFxuDS/pjIz
-         wrsAy/oXORC4bm68alcGAq8mRo3Cg0ak3ATwJzhjD0ouE7PAZTz6tGZz0L4lWyFj35dC
-         9gJg==
-X-Gm-Message-State: AFqh2kqyYIfFXCu1hrW40x7KqdTPbFSuOLkv2l4YwT1mivkm/AdGkdSD
-        vwKC8tF/cGoQxLlP+nt/po/XU4MBTutqvvOyKRA=
-X-Google-Smtp-Source: AMrXdXuMmb7KLM5QgZsTcsQwoQKe4cn16T9y85eLJUWL3VYmrFA94ufuFZpeh1+313LveyMesX8TLRkUmKEG37iM/w0=
-X-Received: by 2002:a81:b60b:0:b0:45c:d900:f30c with SMTP id
- u11-20020a81b60b000000b0045cd900f30cmr3752622ywh.256.1673698351831; Sat, 14
- Jan 2023 04:12:31 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q9YuksUftZM7Mr4U6pqPjOciGDwe5IYDlYl6UJ9PPnk=;
+        b=jQjWFSHtHlgKd4PHaHcmzrGrb8bfD3uhyPwZis54z3WLyY+yPhbOhlzudUi8Z0UuBI
+         EMY2M+bxirk6BZzpaYDwkwrm1f3SkgPWQOQM29pX+ihw8ExbzR4reP6VhUIFwzabgzM5
+         UC79Iuhis1ghyXw7GMBAdADWKq/FFYf72ZyhJLMFcymQHiezxzfgsm411xzdVhmCjago
+         WDrJW/eU3AxbjwQuWkdnb63WTBI8gT3fuL6ecABzS1G78xi7o371ifiyWLO0MvecUUFs
+         kZDeTzW7ljL9hgVoKZ/2VU+btNCYHmTE8eVdGI19D5hD0HRro/mDvIYVRGmkyVmwlTXK
+         MxiA==
+X-Gm-Message-State: AFqh2kpAHJm4mafFITulwHheuWwCr+5uTGJMGR/C+sxOo+F7E1XWgRn0
+        wEo2Fksg2dhVTM0EVIN8VEWGY9ChI3ReUr1vRqfRrA==
+X-Google-Smtp-Source: AMrXdXvOei0aOBB3VZW2CgQOSb70AyAl1/B9kFZ6iYcyI2Yi7BxLttLgs8zTqS4nD1yrRe//DV3jMt5l4sDPgo+VyYc=
+X-Received: by 2002:a17:906:3186:b0:84c:4d1:5e9a with SMTP id
+ 6-20020a170906318600b0084c04d15e9amr4237385ejy.297.1673698678984; Sat, 14 Jan
+ 2023 04:17:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-3-ojeda@kernel.org>
-In-Reply-To: <20230109204520.539080-3-ojeda@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 14 Jan 2023 13:12:20 +0100
-Message-ID: <CANiq72nZ0YUYOUO4NAKDzQKisxguovb=f2f4uNcL3TqwEWRQeg@mail.gmail.com>
-Subject: Re: [PATCH 3/6] kbuild: rust_is_available: add check for `bindgen` invocation
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Alexandru Radovici <msg4alex@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        =?UTF-8?Q?Fran=C3=A7ois_Valenduc?= <francoisvalenduc@gmail.com>
+References: <20230112-inet_hash_connect_bind_head-v2-1-5ec926ddd985@diag.uniroma1.it>
+ <CANn89iJekPT_HsJ6vfQf=Vk8AXqgQjoU=FscBHGVSRcvdfaKDA@mail.gmail.com>
+In-Reply-To: <CANn89iJekPT_HsJ6vfQf=Vk8AXqgQjoU=FscBHGVSRcvdfaKDA@mail.gmail.com>
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Sat, 14 Jan 2023 13:17:48 +0100
+Message-ID: <CAEih1qWQf1JK4vbdzcTb1yXADxTV4+AqtJkvnK1T895obUTtOQ@mail.gmail.com>
+Subject: Re: [PATCH v2] inet: fix fast path in __inet_hash_connect()
+To:     Eric Dumazet <edumazet@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 9:45 PM Miguel Ojeda <ojeda@kernel.org> wrote:
+On Fri, 13 Jan 2023 at 13:16, Eric Dumazet <edumazet@google.com> wrote:
+> 1) Given this path was never really used, we have no coverage.
 >
-> Reported-by: fvalenduc (@fvalenduc)
+> 2) Given that we do not check inet_ehash_nolisten() return code here.
 
-Cc'ing Fran=C3=A7ois who gave emailed me his name and address, thus a
-better tag can be written here for v2.
+It seems there are a bunch of call sites where inet_ehash_nolisten() return
+code is not checked, thus I didn't think of it to be a problem.
 
-Cheers,
-Miguel
+>
+> I would recommend _not_ adding the Fixes: tag, and target net-next tree
+>
+> In fact, I would remove this dead code, and reduce complexity.
+>
+
+This makes a lot of sense. I can post a v3 patch completely removing
+the fast path.
+
+However, this patch's v1 was already reviewed by
+Kuniyuki Iwashima <kuniyu@amazon.com>, v2 is a nit, if posting a v3
+I think I should remove the Reviewed-by: since it would completely
+change the patch, but what is the preferred fix?
+
+Best regards,
+Pietro
