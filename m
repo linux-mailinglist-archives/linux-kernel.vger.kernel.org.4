@@ -2,144 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DFD66A82C
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4981066A834
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjANBYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 20:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
+        id S231259AbjANB0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 20:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjANBYW (ORCPT
+        with ESMTP id S230119AbjANB0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 20:24:22 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687C188DEE
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:24:20 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so2172316wmc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:24:20 -0800 (PST)
+        Fri, 13 Jan 2023 20:26:37 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34649FF5;
+        Fri, 13 Jan 2023 17:26:35 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DNdxq4007591;
+        Sat, 14 Jan 2023 01:26:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=WuEyVEzKPY1dz///J0HkhbPrC46V8MUbVfgSoSmK5oM=;
+ b=kJOp4rWFXdfjw2opCLulAHK4OrATRWhny8qxMSSfg7hB5Wtr/EZq+R+qpn/bR0ov0Ymg
+ BWwh8Mg2h7DPITnoCF7ijLRmdzWV7hz9UV2dwsWDaYRLI1fgxDVC8DQl35UlkcHbNvIg
+ ggH0nXWJWsuMTrMjHt5pBH4W4yfkhQssnEKc4DRSuXplokAWgQ+GGydYmN67YLUbEvdA
+ 3Hdrp3uCsL9eS4fFgfYqF7XaGhlWlbRwxlafVB/5EJei+cySeuY87fI+7mUZ047FRhI8
+ KZeVyWXDDMdCIJJU3Qlkw6D6P32HSbz67UOTBpbjm3oLP6WfBqpe0kWEezC+Ztvvwkqn bQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3my0scp1tc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 01:26:30 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30E1J3ff002679;
+        Sat, 14 Jan 2023 01:26:29 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n3jm983nu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 01:26:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OOe/YyJtVrMxMznICVjv+d5Pa9MqDPpAo5cvJ15AFUUw3HRkeY4Hk/bh2z3/xdbALKTCRVXAPYx1FnGdo69WRwtifFTTknpJ8ucLWCmWG5C92JSuMtQaKvue/sWMeCsbj5bnSWMgtY8m3ti0BpuQnZV+TFLX1x5aE6ZamnwdAPf8Livkps/ftfnWg5a9uSeSLsHK21K2I863rBlxmc7i5t9sazVtWqC2WgAp1GvU4YmdjZLwXpzrtdzyzAZaZ7Qb3KtiAEdMnproLlUYz5DAOZ5bAi2hiw115l+0eo/s9kXhyskNk+L3atCDUvIRcMBKCmf5o0ybK/Od2driiGcAsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WuEyVEzKPY1dz///J0HkhbPrC46V8MUbVfgSoSmK5oM=;
+ b=aWwrCypQCSK0l4zpfpkNvk3J6C+pQIcj339lrceuKwGdjTrllLLFdmtnDP7F7sYGdNeBA/u03eGmuznnxwqgMT2yu0X1Ud/BtxmkH/01Okg1qlQyXb9zABtH/tHYC4NcaRXnV2aFfNYwbiFg9BnyOZ1zB1f7M1xp/SoGCT1MJBtToYYL+7BdZaQFyHrVNZmSD0pthygkr8hBaCBBPgESheEuWg5XC2h6k5kVDqZQpzWatB6r96HD1DahTTEgZsuyhAewUVL+LH+ABDUhUl2fQxNZ49KRta/3UtmKyHDDDwn4oRCpuWTlrKc/dJmQj2VetM4ScUEpM8xH0ppo7KEHqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xU2XxeDGk6YX3FC/ojl/3L4B1JJ6TXtbrbSc+4+VUa4=;
-        b=qC7hlNkAIWl9Oy5DRJmCgSuEvLpAWFr4wou/sSBdg0pRISSBrszsF31X7WmpvoWMRk
-         4esGZqCRo2RINTRBLm+WDPdxR0loHhwjIsW3sBsHQgznm7z3m+X9628FzLq/0qxJyydq
-         GUnsbH7z70pI5BNxQnotTOQoB0aZKfCooqe6gAkczQPafkKjY7JyP13ZWCDlyUqAqmTi
-         opHbTho/oeseNuxdSDoBKscg1pKNJYAgGOujP3d+jpnH8/Y++7CmvsVuqhYwQOWzbmw3
-         P65sX1h6lWIKs1ceDnEWn2RDCtp3oGpCBiBdsAMX76hIRkpcsAZQSCZnU24m1To120+e
-         2qxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xU2XxeDGk6YX3FC/ojl/3L4B1JJ6TXtbrbSc+4+VUa4=;
-        b=qt7mcuZRhCgplsFChYPn56nyAZlnkzNqwRGKCWK/yJRxTxitftH7m9WFojBU9q+3C2
-         /MiL/PyYJTFhnmNGnqgNPnVz3G+o8p11Y6ckjI9Dq8cM2hy30KQVIVn50duu4iiNes1U
-         Rr244Q+aDCx15xWwG9fE5DW7G6myecqUBb29c4/lRfvFe1rxXspg2D2CloTb1IebMymS
-         A5mB2a04dvEmISHVD98zCSbo2XWlVMIujEqdmdBlAxMsHLac2UZPHP1qBVG7E5PB46EI
-         SYllO4Eby859779ozGVekmcJsn3zPFUrlWu7Ba1qZXML/1IEaM9JkgAucausYzkGDrWr
-         dFaw==
-X-Gm-Message-State: AFqh2kqgFecrFGtaO2nma9H2UqOxr1ioPogdVumInRO0YQlYNL0fa8ZQ
-        EPN6kLcvDzsuc7CfBU5AP1sUDg==
-X-Google-Smtp-Source: AMrXdXvI7+ihPxe9K9yveY6NBWcd/Dmo4UaXeaByYpciCo7OwIIinu8o07kuSr4MojVJHZsozjB0Ig==
-X-Received: by 2002:a05:600c:3509:b0:3cf:93de:14e8 with SMTP id h9-20020a05600c350900b003cf93de14e8mr58850335wmq.39.1673659458927;
-        Fri, 13 Jan 2023 17:24:18 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003b4ff30e566sm3405990wms.3.2023.01.13.17.24.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 17:24:18 -0800 (PST)
-Message-ID: <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
-Date:   Sat, 14 Jan 2023 01:24:17 +0000
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WuEyVEzKPY1dz///J0HkhbPrC46V8MUbVfgSoSmK5oM=;
+ b=HOCq37H2xul37wsnyqP1P0OO3aVQdxR4hclFs5diAzIQTIi1EDraFGmtPgjP0BVQfT7b/3ZP72jGV95vW+5UjTlhwQmrKDFfoS/cFpEP7Fn+0eFaTuuiFpEoZVwH+8rocI7evG6/BRRiOh2aHj4fvaBhduFDNP79zTUTYhV8Ptc=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DS7PR10MB4862.namprd10.prod.outlook.com (2603:10b6:5:38c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Sat, 14 Jan
+ 2023 01:26:27 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c7e9:609f:7151:f4a6]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c7e9:609f:7151:f4a6%8]) with mapi id 15.20.6002.013; Sat, 14 Jan 2023
+ 01:26:27 +0000
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: uapi: Replace 0-length array with flexible array
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1tu0tucsm.fsf@ca-mkp.ca.oracle.com>
+References: <20230105233042.never.913-kees@kernel.org>
+Date:   Fri, 13 Jan 2023 20:26:24 -0500
+In-Reply-To: <20230105233042.never.913-kees@kernel.org> (Kees Cook's message
+        of "Thu, 5 Jan 2023 15:30:46 -0800")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0154.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::9) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
-Content-Language: en-US
-To:     Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
-Cc:     quic_mdtipton@quicinc.com, quic_okukatla@quicinc.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DS7PR10MB4862:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ed5f5bf-fc35-4ce6-7354-08daf5ce5b71
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BGqFq9MPq3jnkuEtKO3Qjtk7bx2PBf+Tl0e/zanz4sUPuKnYL83dF1ljfnQPA4eUp+pABgMR3dOaipBZvBrzPK1bc10Iu+giIJJLSa6hELev7cJmFK7rkpuJPgc30kdFL5Q8ez71lL7YLESYYcFjvcBAHojdvtjNlDTDw8gaDBKtKGl8MJzsJTHKOOExCfCvwOuDy4n3saIAImxBm6m+waJtcdXCUHWVC4KTTvZW12GdtmrIbA4H5D64glrMySS35WUz+OjgY7Ra34VWM/bTFqM7I7SOOUMVRPtR9L4TReVnjUVKanbiNN195kljrswaqyaAXusYwoOXUcpKzF21Rk75gsbAvoLNQAbia05+tPXGazj8cb7OV+HqqdFOm0BQN3qAFx/Mjco8d7+OwaYFCc2/5BIiuBT4BycU2xl1vPlwiBjfzWi4iCSaN+64kHHfE2qVz2mJLVDFTD1O4cm0whjE9M2RKiEIu0NXO1qyDFTl3M26IeTc20/o9ruUsSYU0v+UGf53hHxrS1qlAIzsy1IQ9rKkpzDTlVpbiQQI/V/zFrBNF5RPmcOZ94k8/PuG9ku/AGeadnPQfJ0TP2rvtaMFWQmCZc387FYw+bTuw2I8tsuRYie8mw9ybGPrgN9Dr5pvD3+Z85T9rceDvDC9EQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(136003)(376002)(39860400002)(346002)(451199015)(8936002)(86362001)(6486002)(558084003)(5660300002)(4326008)(36916002)(83380400001)(6506007)(26005)(478600001)(186003)(6512007)(6666004)(38100700002)(6916009)(66556008)(8676002)(66476007)(66946007)(41300700001)(316002)(2906002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nqK2wpEjUqcfxYLyEqN70AetwopZkYudjjs4EDEl77VyHkcOoBlZkhKgL3bD?=
+ =?us-ascii?Q?cdhT1Brr9ZGxFRPhm2fj8iZ+7A9X3HQ4DwQQevZribsSFQNeWzhHtmkr82fm?=
+ =?us-ascii?Q?QsAvyt33vDDORD+1r06IrnWK7vDKa08Je4h53wQPwQ+QHpgQ4H5t3u9M8CQA?=
+ =?us-ascii?Q?43DVT8pfg+m3xF5hH/N6HZePeL0210opCD637tykdV2gzqTVAEjOcvz9sq88?=
+ =?us-ascii?Q?lpiuFElI5mbWB8nlMB9VoOdndx9T9vXcC46GGwv67FHG0uFztweUTSMhX1So?=
+ =?us-ascii?Q?nVj0+4H9fuH69JyInU3PgTUnHtQo3n1AQeDJYm/wUbiF+sI3LqmWSA9lzzDw?=
+ =?us-ascii?Q?KN/g7swpl7trJnh9q9LJb6Nq6Fmh6RXK749j6+LyHsWM1DJqc4zxhhssoXGk?=
+ =?us-ascii?Q?Q7MKQ1YJSPQWLoYHYqU93HLy35QbGahOqNOJezS+5rjXeF11BK3O1RLg9lgq?=
+ =?us-ascii?Q?xyTdNLQCaT1nsfZDNTgw+RA+fsa1lzRJjMdmoDfyPHal3RTNfNJE+rxl4khX?=
+ =?us-ascii?Q?s9W2u46zTixIBcnn7t0bG1nTMhtbOLnhSzx1a98/UHpVUeM6CZHr3EuI4CuK?=
+ =?us-ascii?Q?wQG5aCscmVSAmfC9KNTeReIks0eMb+owy8XMbJEMHx7aexsAMNdK2gtlIRHG?=
+ =?us-ascii?Q?Z2ejmT6NhFcA+xQjZ9XMK2g4u+jbIjCT/XdVVWvxa7J4jvU7zrcdds7YEDib?=
+ =?us-ascii?Q?p1hLpHxiN75epG9Yls0LuuX2xWebMCu/ktSJrvYOEv2Nb17f1qUy7wlLljT3?=
+ =?us-ascii?Q?G/Q5ksTLLyxJ8pzgFGoUH13ginn3NLjdpi04zL/zL/tzqosuTlizh1qG1ZsM?=
+ =?us-ascii?Q?P+nkv9aXgdHmLmmihHxcTnItLPxYnfZljka5+m/hDSVCsBhnIwo58zdxg0mY?=
+ =?us-ascii?Q?gWzeDdym13Gta+1xnqbHKPqYOgRXJ+pVxzbvj9iF+lKv+4LgEbszA4+7Gl45?=
+ =?us-ascii?Q?NrPZbihk4020O/1RQKPYIsem+81QwJ07IRgCzKMMY3GLX3KUPASei3WWTj9P?=
+ =?us-ascii?Q?iRwcM00OZLe5E+NpR6Nfu6OTgtJ+tt21r9MTYDuEDZoFhBB0P55g8PAaKF2q?=
+ =?us-ascii?Q?Kbz10SEvJYqdg3xjsoZfZVYvCUnnfCbqsjFsgJu/A6SMP5UZyZAsXWFjPdCk?=
+ =?us-ascii?Q?2uNyM5A97pxiVbATJXWCDvrfN4HD+5VBJAfCavgiqoEvK6jDyPGmyOrl9fsz?=
+ =?us-ascii?Q?WJI6fXV9kDodj2VPClELgZUSmylZ3R/lf4OIQo+K8cmE4X9i6SP4HvIljl9t?=
+ =?us-ascii?Q?TLMkLlb2QzLoaoUw+vdv0Kegiilwk0uWnVfv4dA0KvupVCqPyOHqmADTjEDR?=
+ =?us-ascii?Q?ZuAI5uqU47mJXOn5GEjXRqNkxLfz0q84s/n/71yHIbtaScQXMia4tr15zSIC?=
+ =?us-ascii?Q?rMR/3rQmD1HV4MULOr+pyQlRmibpM+l94yaGD702kk2SumqeEE9MYQ6SWK83?=
+ =?us-ascii?Q?xnJTFYJQNI3vYlmTIpkcKAOr9sta/eAoU+zD8Yu2KupFxWoAX4peWoHVlPOv?=
+ =?us-ascii?Q?Sxrr1RFaLEWqEXRR7LjuKX4if4zS1ENjL+K0JyjjN4w0ygB911nMUQlIzkpx?=
+ =?us-ascii?Q?EW8I3RzTWVAuHQbnhABQqX3IyfYYfejvGlLngN31OgHH3P7EmhIC7HV4MORW?=
+ =?us-ascii?Q?3A=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: cXodfAbslrKeKyY7+Fl6z9UnB4ZU5gkwhUeeHon+i7k79Ib51vGVeRMH1R1I5cNRCMfiYqpKXhw9GkWK1P93XdAjJuVUVLRNR1OqAaRjsCd2xaGybSjrJ7buvRx8qaPr3ntmCPCp1JaDBndv0PQE2PKfuTd/N4NU4duFfCVDpFlfr9FukIGgFrZbAFg27MNshuJtrTEi7TfV+RtCNA/RMPUKdbTb0vZqd0QS6IClhoOUt/WHbmoT+K/eLZgsxsKPdl0+T23mlPOoOO5ynAgLRclrWYINvrMv+hMZXXn+g6zeuBPWA0jqcbycctifRHwjLm7Y3ZGmCSZcBNz+k4XhNnNIS9m0IraUXief8jwx6jwhTjFX+bOy+7WJX4mCAGV8cj8Ipbrb1TQ+sDI3Toj7zOzsyF4k63oYUzM6Ck8mUoo2DDJBLMC+cuELjUmsbNX46eWY9VNSsklHafMqoKiY0R59kwEIfIVr37TlKlm10r9BUjaE/EbuAB3Ffp9F6TzaRnABix9EtaqJSmn7/tmPAeLUXUufA9cmIMUGAC08JJqAPvlC7M+rt9WwSSXYSxSNw53ETDr9b8DhFFWy1E2S3O/1TFGNTg9Q9GYwCeECYaf/IZj6wpNArqGkab/YcN/OYh7qO76b1o3JywJyY0fAXDHddjo9rtzjnNarxpHFx+AG7Jx8YKOccae7F5fNNU7zudSlRxw14VBvrygAarImn7lN+VJlrFJK/TjhCT1/VWDp9zuRZ7XD1+MHydmxNvQLnRNvdmMM7+m3zeDYdH1gh1KWvihZujsXE0xSZgYqqA0h2y/8gmQcv/u9Et5fEbDAT6ysKZhTXspC/EIf1yLE2HzOeg9cZeO+N0Px2A5G0x4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ed5f5bf-fc35-4ce6-7354-08daf5ce5b71
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2023 01:26:27.5089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MEcnfKCsDBZN2J3wdGtTGhL0g/dZ+z5GKB1I+AnKcJ35rBTi7bPzc1e77eX12MiEdxhJE3i2jFCsb3KtTDxqzmX2pNQdDaT7yESodpapwkQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4862
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_12,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=755 phishscore=0 mlxscore=0 adultscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301140007
+X-Proofpoint-GUID: XowjRDbQDoMxcIziej7MfC9iL_CLqCy3
+X-Proofpoint-ORIG-GUID: XowjRDbQDoMxcIziej7MfC9iL_CLqCy3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 22:07, Vivek Aknurwar wrote:
-> Currently framework sets bw even when init bw requirements are zero during
-> provider registration, thus resulting bulk of set bw to hw.
-> Avoid this behaviour by skipping provider set bw calls if init bw is zero.
-> 
-> Signed-off-by: Vivek Aknurwar <quic_viveka@quicinc.com>
-> ---
->   drivers/interconnect/core.c | 17 ++++++++++-------
->   1 file changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 25debde..43ed595 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -977,14 +977,17 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->   	node->avg_bw = node->init_avg;
->   	node->peak_bw = node->init_peak;
->   
-> -	if (provider->pre_aggregate)
-> -		provider->pre_aggregate(node);
-> -
-> -	if (provider->aggregate)
-> -		provider->aggregate(node, 0, node->init_avg, node->init_peak,
-> -				    &node->avg_bw, &node->peak_bw);
-> +	if (node->avg_bw || node->peak_bw) {
-> +		if (provider->pre_aggregate)
-> +			provider->pre_aggregate(node);
-> +
-> +		if (provider->aggregate)
-> +			provider->aggregate(node, 0, node->init_avg, node->init_peak,
-> +					    &node->avg_bw, &node->peak_bw);
-> +		if (provider->set)
-> +			provider->set(node, node);
-> +	}
->   
-> -	provider->set(node, node);
->   	node->avg_bw = 0;
->   	node->peak_bw = 0;
->   
 
-I have the same comment/question for this patch that I had for the qcom 
-arch specific version of it. This patch seems to be doing at a higher 
-level what the patch below was doing at a lower level.
+Kees,
 
-https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m0c90588d0d1e2ab88c39be8f5f3a8f0b61396349
+> Zero-length arrays are deprecated[1]. Replace struct
+> fc_bsg_host_vendor_reply's "vendor_rsp" 0-length array with a flexible
+> array. Detected with GCC 13, using -fstrict-flex-arrays=3:
 
-what happens to earlier silicon - qcom silicon which previously made 
-explicit zero requests ?
+Applied to 6.3/scsi-staging, thanks!
 
-https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m589e8280de470e038249bb362634221771d845dd
-
-https://lkml.org/lkml/2023/1/3/1232
-
-Isn't it a better idea to let lower layer drivers differentiate what 
-they do ?
-
-For example on pre 5.4 qcom kernel silicon we might choose to set the 
-value to zero "because that's what the reference code did" but on newer 
-silicon we might opt to skip the zero configuration ?
-
-I'm happy to be shown the error of my ways but, absent testing to *show* 
-it doesn't impact existing legacy silicon, I think we should be wary of 
-this change.
-
----
-bod
+-- 
+Martin K. Petersen	Oracle Linux Engineering
