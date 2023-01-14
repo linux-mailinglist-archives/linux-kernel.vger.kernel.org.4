@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C41366AE49
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 23:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8080B66AE52
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 23:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjANW1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 17:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S230408AbjANWju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 17:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjANW10 (ORCPT
+        with ESMTP id S230367AbjANWjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 17:27:26 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043259EFE;
-        Sat, 14 Jan 2023 14:27:25 -0800 (PST)
-Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 4643740737B2;
-        Sat, 14 Jan 2023 22:27:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 4643740737B2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1673735243;
-        bh=MVG9UIHgr7Ddx6rqmvo9/b6OwiqdYnOMCtD9ezoSTZU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ri7ZgccehZLIphbbIpraaPu3cHWgT64hVlpWxfK1dNSdDuX12IHInQl7eDBz9/n93
-         z50zaES8k/c5WxTV/xdjIWnZcIwNZKoOkd1LnmN6UKAH8jVLMkzBzSCE21jiUvcnX+
-         mQESoYirS423bSVfLM2olWpbZKwkrIAVfXWAmdH4=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: [PATCH 5.10 1/1] block: fix and cleanup bio_check_ro
-Date:   Sun, 15 Jan 2023 01:27:09 +0300
-Message-Id: <20230114222709.180795-2-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230114222709.180795-1-pchelkin@ispras.ru>
-References: <20230114222709.180795-1-pchelkin@ispras.ru>
+        Sat, 14 Jan 2023 17:39:41 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93599A5F0
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:39:40 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id q8so5708728wmo.5
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:39:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0yzC8ZlGvRmgReUtkQlOS8z9agGk4HR8CX9kDFJuDeY=;
+        b=KYfAF+1UgLuuLeMR43j+XU2GWx0P59DA4XS0dEkOV0S8nCfYfWytWv1439IOuYwbVc
+         +z+/F+o/nWghbbVtFilc2W+Vk+i4zzKYx+BD9Px4WUR5HGuDya2C/VJesGjoXhizHjfp
+         +2Atk3cdDvdBJi8QQqyjOGW2xsziQt4NWfxSxIBpLWJ/8NzwTfYVkmaAvhuSRKDs00mK
+         LJhLUgCfdrMu20+tb2y3RiwSGDPluHMblXd5nCtDpdZXu287uN6b5mXsqIl6XgpHvpzo
+         22/GtNGDPB/HS8B2FdM9TkIYGUgKL2Yd7R6bLqwAfLrFIwUyfuw4S69vOvfZJe6Izfm2
+         1I4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0yzC8ZlGvRmgReUtkQlOS8z9agGk4HR8CX9kDFJuDeY=;
+        b=Lh1KD9n8XVW/TrzGZPPhv2aaOz3rb+Fghi8lTALgq9IE8rl/4qb7OH2/9o6KnCy3xC
+         +IrpPR++Jo3hyx7oBvj8EokE7i8qo+HX/Cyz2sRa2rrj64Ely+nHz4/dR/I3zwNZJzT5
+         6jcpGh4Gw31PNNrsGU/s+2wV2gvvadxjLR4Q+XtsTX4uuEL/xBTUh8d3gjkzObEfDdLm
+         bC+7p4C2yYoptM/Y+GfAI/A+G/5PIotfuQVLddh09Q6MoHD2FEhzCcEdwN9cl+kIO/Rr
+         2ivT8NICykhh3jq3/LcRm1t8rO2gFyT8O8kxwQkV8FrgmmlTkUQU8h/CHTPr9udPh4eB
+         dtAQ==
+X-Gm-Message-State: AFqh2kqs9QHxy4gDv8LG+6DgGDEGiEpvdXQfLKtVyBhuPzYILLmrqBgK
+        4nrBVXgMHEeFDlj/ETfPERgbQf016hw04tDEtDqY5A==
+X-Google-Smtp-Source: AMrXdXvkG0GgV6L4b0qlqq2w/S82FF0IdiIsQvPw96Yyo/z3BCx2VZG53lj4IsPusQN06EybyGoWgTi1N+etc+PnunQ=
+X-Received: by 2002:a05:600c:3b04:b0:3d0:50c4:432c with SMTP id
+ m4-20020a05600c3b0400b003d050c4432cmr4337596wms.67.1673735978906; Sat, 14 Jan
+ 2023 14:39:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com> <1673601740-122788-3-git-send-email-renyu.zj@linux.alibaba.com>
+In-Reply-To: <1673601740-122788-3-git-send-email-renyu.zj@linux.alibaba.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 14 Jan 2023 14:39:26 -0800
+Message-ID: <CAP-5=fUgKMcjgB3jsdtxdmSomt_K0XMKgHcc0Jjc6oR7ixJu4w@mail.gmail.com>
+Subject: Re: [PATCH v7 2/9] perf jevent: Add general metrics support
+To:     Jing Zhang <renyu.zj@linux.alibaba.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+On Fri, Jan 13, 2023 at 1:22 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
+>
+> Add general metrics support, so that some general metrics applicable
+> to multiple architectures can be defined in the public json file like
+> general events, and then add general metrics through "arch_std_event"
+> in json file of different architecture.
+>
+> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
 
-commit 57e95e4670d1126c103305bcf34a9442f49f6d6a upstream.
+Acked-by: Ian Rogers <irogers@google.com>
 
-Don't use a WARN_ONCE when printing a potentially user triggered
-condition.
+Thanks,
+Ian
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Link: https://lore.kernel.org/r/20220304180105.409765-2-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- block/blk-core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 26664f2a139e..921d436fa3c6 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -701,8 +701,7 @@ static inline bool bio_check_ro(struct bio *bio, struct hd_struct *part)
- 		if (op_is_flush(bio->bi_opf) && !bio_sectors(bio))
- 			return false;
- 
--		WARN_ONCE(1,
--		       "Trying to write to read-only block-device %s (partno %d)\n",
-+		pr_warn("Trying to write to read-only block-device %s (partno %d)\n",
- 			bio_devname(bio, b), part->partno);
- 		/* Older lvm-tools actually trigger this */
- 		return false;
--- 
-2.34.1
-
+> ---
+>  tools/perf/pmu-events/jevents.py | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> index 4c398e0..0416b74 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -358,6 +358,8 @@ def preprocess_arch_std_files(archpath: str) -> None:
+>        for event in read_json_events(item.path, topic=''):
+>          if event.name:
+>            _arch_std_events[event.name.lower()] = event
+> +        if event.metric_name:
+> +          _arch_std_events[event.metric_name.lower()] = event
+>
+>
+>  def print_events_table_prefix(tblname: str) -> None:
+> --
+> 1.8.3.1
+>
