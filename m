@@ -2,141 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D936966AB79
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C8166AB7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjANNMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 08:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        id S229714AbjANNQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 08:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjANNMN (ORCPT
+        with ESMTP id S229553AbjANNQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 08:12:13 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A46E85
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 05:12:09 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id cf18so51817445ejb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 05:12:09 -0800 (PST)
+        Sat, 14 Jan 2023 08:16:54 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A21722;
+        Sat, 14 Jan 2023 05:16:52 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id g10so16879559wmo.1;
+        Sat, 14 Jan 2023 05:16:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TA5irrJ97Zm1pKOtsaRcVAWqWkukQuvBG068G/jV9M0=;
-        b=LpVRFjJjAm0OwujEHeVao7WLsD0eVoWBg0v6mpYCslEPyfsIIzLBGaLlt+xj6Lbsgn
-         1yZvHYbZEG7rs8TFeR066CITO5q22INXtET1BZ0B0eAg728q3Z9IkdRQnzGh/9zQBgns
-         5iXhHDd8Px3f80eu6Na/FKeu5Xl8OeOinj9F0=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xbToiHr9DoIKWP2GgDy4WohTZnzZoHKjsA3gXbib5fo=;
+        b=OaPLKp4Ie/8AfLYBX0BtBIC9bU6e2Z2YGUE8/QNdUYrCCLooz5BnBB9SNCQBmHSpH2
+         XXwGWmEAgk2WcMj8OC+2dyjSJMkMmPTNEqFUhcD0qD0D+yW/JTDYv446AIx/1UxpDjQ0
+         ggW+LpPcVSVJbNgLMGSd+J5WTM1mFJ/PIQHVx09l24UX7Q5Xb/vDurYCqE2UuW9BBEdF
+         /Rg5xG06BuxuSsvJj7qTSCY+1nsTTPfFsSXTpAS1Dt6upkgipZJ7B2j4oxDEmqcoYPDH
+         kojQ7px7Ysv6twZBuVXPG6lX/RuGn/5kajPuk4fQKNL4zyaakz0/dAPsOygCqVXw1DzA
+         lP8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TA5irrJ97Zm1pKOtsaRcVAWqWkukQuvBG068G/jV9M0=;
-        b=Z2D226MDdFyjY7k1K12AIGOViDOESRoYHCiv26V2u3MaNmQ5YzVWYeeRHOZYXeTAxu
-         ++IeeJbTiva9FbXrXAiU1PBRHkGQgr7c8aKLWBWwtIqPVJzX15OlNWkyckYN0+ECEpjP
-         TWx3Y6aunxKtVBtwmNxhR0Jdbk9XUuPMMnG2I9mfBoioAbeaYR8RCVGfoH6MwnZWkHpk
-         hU83xPgh8UHD8bjzC1ur4TWt2VLFitWeaMw6dnySYTc1AGDe7PBqf8aevU6+ObxLPlRr
-         z6ZGuRvR5Sm5OfkLXYrl4tyT0IbjkY5J2+BlcAY/bOtRCGCOURt9a9lFPON8V5y/avGM
-         0rMg==
-X-Gm-Message-State: AFqh2kpgzRBVFi42rzFItFA/mXdFPCs//fjVcNTjOIMTcmg3+KarwTjf
-        WDHFJcmhK9ckpGo3dFA2SOfaBw==
-X-Google-Smtp-Source: AMrXdXvvxApPCP+ySbwSqzRgDVGCJglvbxaTNamdf0Grt4bc2WUN//7WN3B9nBiQgillujYPfKOmGw==
-X-Received: by 2002:a17:906:da09:b0:7c0:e5c6:2a6d with SMTP id fi9-20020a170906da0900b007c0e5c62a6dmr6425666ejb.39.1673701927984;
-        Sat, 14 Jan 2023 05:12:07 -0800 (PST)
-Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id p4-20020a17090653c400b0084ca4bd745esm9658956ejo.35.2023.01.14.05.12.07
+        bh=xbToiHr9DoIKWP2GgDy4WohTZnzZoHKjsA3gXbib5fo=;
+        b=PDMg5u5JgE+JMq9njm8prY0Q7n99eW2bUNQtP3MwtxJyKjL96MEMdFVorKEi/EcB5o
+         HwN0BsSnm3+sW8098Epjgje0NvrUJ+P6a7k3iWEtiJ37C3Y8iwUkBn+esfZGwoilMbx5
+         xeaLfiBqILnuiGNL1UylavDt2fIepPllKr8Dpm0kxLCquKzQuBVldxmtO5YK+sATirLh
+         gB11W8PEspQB3k9n6ZEq02uId+HpvjhDgA+SHmT5zvL9dz9sb9x4C7tZcY4Ip6MBL6Jj
+         Pfd3DKle4IiPbj28TuCrj6lHEPCU61KsiTuwhD/FOBOHko8XVV5egO2kapf9xcT7T1u0
+         vlcg==
+X-Gm-Message-State: AFqh2koPUrdrvf1i2vKqDQyG6sCPBUov0xmGkVFo9CgFaDXjMkkR82ap
+        EJxfodcC819K2MwapJ+DuGA=
+X-Google-Smtp-Source: AMrXdXsGWyK6Z963mFvsy7yeSVwO7/fRyW5g7cbsff5sksXWR6BIiIgk3lJ1VtDnnfMaXE6/EsHD9Q==
+X-Received: by 2002:a05:600c:1e1e:b0:3d2:3b4d:d619 with SMTP id ay30-20020a05600c1e1e00b003d23b4dd619mr61333449wmb.15.1673702211137;
+        Sat, 14 Jan 2023 05:16:51 -0800 (PST)
+Received: from lucifer.home (host86-164-169-89.range86-164.btcentralplus.com. [86.164.169.89])
+        by smtp.googlemail.com with ESMTPSA id fc14-20020a05600c524e00b003a3442f1229sm37188672wmb.29.2023.01.14.05.16.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Jan 2023 05:12:07 -0800 (PST)
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Sat, 14 Jan 2023 13:11:41 +0000
-Subject: [PATCH net-next v3] inet: fix fast path in __inet_hash_connect()
+        Sat, 14 Jan 2023 05:16:50 -0800 (PST)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Jakub Matena <matenajakub@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v5] selftest/vm: add mremap expand merge offset test
+Date:   Sat, 14 Jan 2023 13:16:46 +0000
+Message-Id: <8ff3ba3cadc0b6c1b2688ae5c851bf73aa062d57.1673701836.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230112-inet_hash_connect_bind_head-v3-1-b591fd212b93@diag.uniroma1.it>
-X-B4-Tracking: v=1; b=H4sIAA2qwmMC/5XOQQ6CMBQE0KuQri2hJUhx5T2MIaX90L/gY9pKM
- IS7W3DrQpeTSd7MygJ4hMAu2co8zBhwohTKU8aM0zQAR5syk4UsCyEkR4LYOh1cayYiMLHtkGzr
- QFuuemlNo/pCdYIlodMBeOc1Gbcbow4R/F48PPS4HLM3lkBOsER2T43DECf/Ov7M4uh/mp4FF7y
- G0tR1IaraqKtFPeRPQj+NWuT44Wf5BykTWYFp5Nla26jqC7lt2xsxIc0pQwEAAA==
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>
-Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>
-X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673701927; l=2061;
- i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=8v/y9dezeD4bGg+sLXesbdVfw+jitR6F8rl/F0ZYHVI=;
- b=ckGjINy49k27kdG5mt+R5zuKdRjUsFOmYQWCPHQpwRNFW4KGOGVWC/7F3XrPfXsc4pp7b5kTiQxT
- q+FrBtUcCperCfbiGJ2MiJTDNIZ1WjwFYLRhA4LZshdS1Qa7QUVW
-X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
- pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__inet_hash_connect() has a fast path taken if sk_head(&tb->owners) is
-equal to the sk parameter.
-sk_head() returns the hlist_entry() with respect to the sk_node field.
-However entries in the tb->owners list are inserted with respect to the
-sk_bind_node field with sk_add_bind_node().
-Thus the check would never pass and the fast path never execute.
+Add a test to assert that we can mremap() and expand a mapping starting
+from an offset within an existing mapping. We unmap the last page in a 3
+page mapping to ensure that the remap should always succeed, before
+remapping from the 2nd page.
 
-This fast path has never been executed or tested as this bug seems
-to be present since commit 1da177e4c3f4 ("Linux-2.6.12-rc2"), thus
-remove it to reduce code complexity.
+This is additionally a regression test for the issue solved in "mm, mremap:
+fix mremap() expanding vma with addr inside vma" and confirmed to fail
+prior to the change and pass after it.
 
-Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+Finally, this patch updates the existing mremap expand merge test to check
+error conditions and reduce code duplication between the two tests.
+
+Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 ---
-Changes in v3:
-- remove the fast path to reduce code complexity
-- Link to v2: https://lore.kernel.org/r/20230112-inet_hash_connect_bind_head-v2-1-5ec926ddd985@diag.uniroma1.it
 
-Changes in v2:
-- nit: s/list_entry/hlist_entry/
-- Link to v1: https://lore.kernel.org/r/20230112-inet_hash_connect_bind_head-v1-1-7e3c770157c8@diag.uniroma1.it
----
- net/ipv4/inet_hashtables.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+v5: Increment num_expand_tests so test doesn't complain about unexpected
+    tests being run.
 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index d039b4e732a3..b832e7a545d4 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -994,17 +994,7 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 	u32 index;
+ tools/testing/selftests/vm/mremap_test.c | 119 ++++++++++++++++++-----
+ 1 file changed, 96 insertions(+), 23 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+index 9496346973d4..5c3773de9f0f 100644
+--- a/tools/testing/selftests/vm/mremap_test.c
++++ b/tools/testing/selftests/vm/mremap_test.c
+@@ -119,47 +119,109 @@ static unsigned long long get_mmap_min_addr(void)
+ }
  
- 	if (port) {
--		head = &hinfo->bhash[inet_bhashfn(net, port,
--						  hinfo->bhash_size)];
--		tb = inet_csk(sk)->icsk_bind_hash;
--		spin_lock_bh(&head->lock);
--		if (sk_head(&tb->owners) == sk && !sk->sk_bind_node.next) {
--			inet_ehash_nolisten(sk, NULL, NULL);
--			spin_unlock_bh(&head->lock);
--			return 0;
--		}
--		spin_unlock(&head->lock);
--		/* No definite answer... Walk to established hash table */
-+		local_bh_disable();
- 		ret = check_established(death_row, sk, port, NULL);
- 		local_bh_enable();
- 		return ret;
-
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230112-inet_hash_connect_bind_head-8f2dc98f08b1
-
-Best regards,
+ /*
+- * This test validates that merge is called when expanding a mapping.
+- * Mapping containing three pages is created, middle page is unmapped
+- * and then the mapping containing the first page is expanded so that
+- * it fills the created hole. The two parts should merge creating
+- * single mapping with three pages.
++ * Using /proc/self/maps, assert that the specified address range is contained
++ * within a single mapping.
+  */
+-static void mremap_expand_merge(unsigned long page_size)
++static bool is_range_mapped(FILE *maps_fp, void *start, void *end)
+ {
+-	char *test_name = "mremap expand merge";
+-	FILE *fp;
+ 	char *line = NULL;
+ 	size_t len = 0;
+ 	bool success = false;
+-	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
+-			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+-
+-	munmap(start + page_size, page_size);
+-	mremap(start, page_size, 2 * page_size, 0);
+ 
+-	fp = fopen("/proc/self/maps", "r");
+-	if (fp == NULL) {
+-		ksft_test_result_fail("%s\n", test_name);
+-		return;
+-	}
++	rewind(maps_fp);
+ 
+-	while (getline(&line, &len, fp) != -1) {
++	while (getline(&line, &len, maps_fp) != -1) {
+ 		char *first = strtok(line, "- ");
+ 		void *first_val = (void *)strtol(first, NULL, 16);
+ 		char *second = strtok(NULL, "- ");
+ 		void *second_val = (void *) strtol(second, NULL, 16);
+ 
+-		if (first_val == start && second_val == start + 3 * page_size) {
++		if (first_val <= start && second_val >= end) {
+ 			success = true;
+ 			break;
+ 		}
+ 	}
++
++	return success;
++}
++
++/*
++ * This test validates that merge is called when expanding a mapping.
++ * Mapping containing three pages is created, middle page is unmapped
++ * and then the mapping containing the first page is expanded so that
++ * it fills the created hole. The two parts should merge creating
++ * single mapping with three pages.
++ */
++static void mremap_expand_merge(FILE *maps_fp, unsigned long page_size)
++{
++	char *test_name = "mremap expand merge";
++	bool success = false;
++	char *remap, *start;
++
++	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
++		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++
++	if (start == MAP_FAILED) {
++		ksft_print_msg("mmap failed: %s\n", strerror(errno));
++		goto out;
++	}
++
++	munmap(start + page_size, page_size);
++	remap = mremap(start, page_size, 2 * page_size, 0);
++	if (remap == MAP_FAILED) {
++		ksft_print_msg("mremap failed: %s\n", strerror(errno));
++		munmap(start, page_size);
++		munmap(start + 2 * page_size, page_size);
++		goto out;
++	}
++
++	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
++	munmap(start, 3 * page_size);
++
++out:
++	if (success)
++		ksft_test_result_pass("%s\n", test_name);
++	else
++		ksft_test_result_fail("%s\n", test_name);
++}
++
++/*
++ * Similar to mremap_expand_merge() except instead of removing the middle page,
++ * we remove the last then attempt to remap offset from the second page. This
++ * should result in the mapping being restored to its former state.
++ */
++static void mremap_expand_merge_offset(FILE *maps_fp, unsigned long page_size)
++{
++
++	char *test_name = "mremap expand merge offset";
++	bool success = false;
++	char *remap, *start;
++
++	start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
++		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++
++	if (start == MAP_FAILED) {
++		ksft_print_msg("mmap failed: %s\n", strerror(errno));
++		goto out;
++	}
++
++	/* Unmap final page to ensure we have space to expand. */
++	munmap(start + 2 * page_size, page_size);
++	remap = mremap(start + page_size, page_size, 2 * page_size, 0);
++	if (remap == MAP_FAILED) {
++		ksft_print_msg("mremap failed: %s\n", strerror(errno));
++		munmap(start, 2 * page_size);
++		goto out;
++	}
++
++	success = is_range_mapped(maps_fp, start, start + 3 * page_size);
++	munmap(start, 3 * page_size);
++
++out:
+ 	if (success)
+ 		ksft_test_result_pass("%s\n", test_name);
+ 	else
+ 		ksft_test_result_fail("%s\n", test_name);
+-	fclose(fp);
+ }
+ 
+ /*
+@@ -380,11 +442,12 @@ int main(int argc, char **argv)
+ 	int i, run_perf_tests;
+ 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
+ 	unsigned int pattern_seed;
+-	int num_expand_tests = 1;
++	int num_expand_tests = 2;
+ 	struct test test_cases[MAX_TEST];
+ 	struct test perf_test_cases[MAX_PERF_TEST];
+ 	int page_size;
+ 	time_t t;
++	FILE *maps_fp;
+ 
+ 	pattern_seed = (unsigned int) time(&t);
+ 
+@@ -458,7 +521,17 @@ int main(int argc, char **argv)
+ 		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
+ 				     pattern_seed);
+ 
+-	mremap_expand_merge(page_size);
++	maps_fp = fopen("/proc/self/maps", "r");
++
++	if (maps_fp == NULL) {
++		ksft_print_msg("Failed to read /proc/self/maps: %s\n", strerror(errno));
++		exit(KSFT_FAIL);
++	}
++
++	mremap_expand_merge(maps_fp, page_size);
++	mremap_expand_merge_offset(maps_fp, page_size);
++
++	fclose(maps_fp);
+ 
+ 	if (run_perf_tests) {
+ 		ksft_print_msg("\n%s\n",
 -- 
-Pietro Borrello <borrello@diag.uniroma1.it>
+2.39.0
+
