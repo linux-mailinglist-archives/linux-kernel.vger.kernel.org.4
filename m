@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2225B66ABE5
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 15:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0AC66ABEE
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 15:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjANORd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 09:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S229777AbjANOlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 09:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjANOR1 (ORCPT
+        with ESMTP id S229553AbjANOlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 09:17:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F62A7EFC;
-        Sat, 14 Jan 2023 06:17:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C48460B4B;
-        Sat, 14 Jan 2023 14:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9176EC433D2;
-        Sat, 14 Jan 2023 14:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673705845;
-        bh=wKCGa5m67Vuqc8IYj87M1TAXthmZQYqZPMLynHu6HJU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=BVRmBExRWWaLqIrNYYULcDl3MeO3avPhbBABdl4Gtzv3psOUWf19lWEf6jAHPX7qc
-         juyebr2sX5yDzw5+DUPo97FJ/xK2ga1RGFYa7u2dGcX6J+HoAR5rmib4BFvIcAZAPh
-         o8QHxERGTeDKPjiVNtuk3ZuhrYeqwEnW+SMnLOqS1la2gIWC+2yA8Mp0wWJ1BhY+lt
-         EuuzEhPN13BvRk4F9EfNDaz95/AGR7GRdlMMyjelbjiVfOHDnlf76XF9d2T/b1n7Cd
-         tRDbRZNC6+RGd1V12ykxu23UvPDHZoPjQnc70w4HAd2LPEfZLZIEitaDA4yuoHyGEz
-         pd2w1cbytGGRw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E3A1C395C8;
-        Sat, 14 Jan 2023 14:17:25 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mvwNTHEfbr2DNW8HCx=pdJxNCG5vSO+qk8qxv6Hbcy9rQ@mail.gmail.com>
-References: <CAH2r5mvwNTHEfbr2DNW8HCx=pdJxNCG5vSO+qk8qxv6Hbcy9rQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mvwNTHEfbr2DNW8HCx=pdJxNCG5vSO+qk8qxv6Hbcy9rQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.2-rc3-smb3-client-fixes
-X-PR-Tracked-Commit-Id: a152d05ae4a71d802d50cf9177dba34e8bb09f68
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b35ad63eeccadbcc83f295a64a029f7e7188444f
-Message-Id: <167370584550.24149.10871171774912685074.pr-tracker-bot@kernel.org>
-Date:   Sat, 14 Jan 2023 14:17:25 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 14 Jan 2023 09:41:01 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617E25242
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 06:40:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1673707251; bh=KawwwvIcAopLS+CUzfaq6FN0lch5RTPmyrMhaJt02v0=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=DWoGChTmpx8Hi/MvtApluGi9U0dqxY3ffHnPILbm+q1GnR7v92R9rHCICpnryyDkH
+         jFtRNYbEHSmjwqLSxSqBMYRbCbcxydOdpyrDx5uI9lXmLZgk11INjHQWVkZ7zbSkUY
+         MN+pMEspXGbyIB6tifuURqG0eYgOvaBMyQ8oy+Xc=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 14 Jan 2023 15:40:51 +0100 (CET)
+X-EA-Auth: cIwL7Ka0hJ+AGbeVlaowRBnhJqla2UVvoZQAoVUfAHAR2tdceZTOQcTouU8Ku1/wcCtCCVf10W/RRSSg8uSEN/NIgoADa2h8
+Date:   Sat, 14 Jan 2023 20:10:43 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: nvkm_devinit_func.disable() to be made void
+Message-ID: <Y8K+61ZOag5fXu8M@ubun2204.myguest.virtualbox.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 13 Jan 2023 19:19:09 -0600:
+Hello,
+It appears that the callback function disable() of struct nvkm_devinit_func does
+not need return U64 and can be transformed to be a void. This will impact a few
+drivers that have currently implementation of this callback since those always
+return 0ULL. So,
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/6.2-rc3-smb3-client-fixes
+Change from
+	  8 struct nvkm_devinit_func {
+		... ...
+	15          u64  (*disable)(struct nvkm_devinit *);
+	  1 };
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b35ad63eeccadbcc83f295a64a029f7e7188444f
+Change to
+	  8 struct nvkm_devinit_func {
+		... ...
+	15          void  (*disable)(struct nvkm_devinit *);
+	  1 };
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+I am unsure if this change will have any UAPI impact. Hence wanted to confirm
+with you if you think this transformation is useful. If yes, I will be happy to
+submit a patch for your consideration.
+
+Please let me know.
+
+Thank you,
+./drv
+
+
