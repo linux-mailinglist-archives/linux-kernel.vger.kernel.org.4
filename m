@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675D266AAB4
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 10:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B2766AAC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 10:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjANJtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 04:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S230204AbjANJxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 04:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjANJtl (ORCPT
+        with ESMTP id S229950AbjANJxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 04:49:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206A34495;
-        Sat, 14 Jan 2023 01:49:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4D853CE094D;
-        Sat, 14 Jan 2023 09:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A94C433D2;
-        Sat, 14 Jan 2023 09:49:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673689777;
-        bh=TT7LW8NCfKZAZ5tbf26aWuoR1X/W1r0kjlbWoecMFvQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ixzhz22seGNw/OP0JpgNyx/ah7L3JyrV6HZxGOsyv9U53FnmT+2AyfotkEyBXd/9T
-         C1QV5Xg58Azz/jTLhy7qNhErPV+/FLBI1TYB3ImiRwCaUp1zUZpWUYNfbM6pC6+dWa
-         jycK19ZGi2ZeybUJ4firnEn0q/mVtZu/a6N8+iK8=
-Date:   Sat, 14 Jan 2023 10:49:34 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     stable@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
-        kvm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Darren Kenny <darren.kenny@oracle.com>,
-        Liam Merwick <liam.merwick@oracle.com>
-Subject: Re: 5.15.y backport request to fix compilation error in selftests/kvm
-Message-ID: <Y8J6rmzmwoZq4g19@kroah.com>
-References: <2322a626-ac5a-9400-82bf-3aaccc5fddb7@oracle.com>
+        Sat, 14 Jan 2023 04:53:21 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A557A83
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 01:53:19 -0800 (PST)
+Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 30E9rHhX010636;
+        Sat, 14 Jan 2023 18:53:17 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
+ Sat, 14 Jan 2023 18:53:17 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
+Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 30E9rHHu010632
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 14 Jan 2023 18:53:17 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e68b4c88-a278-90d0-0ce0-9d4e161366cc@I-love.SAKURA.ne.jp>
+Date:   Sat, 14 Jan 2023 18:53:15 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2322a626-ac5a-9400-82bf-3aaccc5fddb7@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 (repost)] locking/lockdep: add
+ debug_show_all_lock_holders()
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <41f43b27-d910-78e0-c0b3-f2885fe1cd22@I-love.SAKURA.ne.jp>
+ <Y8J3gAXLf4yc0FcL@gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Y8J3gAXLf4yc0FcL@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 03:32:25PM +0530, Harshit Mogalapalli wrote:
-> Hi,
+On 2023/01/14 18:36, Ingo Molnar wrote:
+> Yeah, so note how you introduce a function with a parameter:
 > 
-> On arm machine we have a compilation error while building
-> tools/testing/selftests/kvm/ with LTS 5.15.y kernel
+> 	void __debug_show_all_locks(bool show_stack)
 > 
-> rseq_test.c: In function ‘main’:
-> rseq_test.c:236:33: warning: implicit declaration of function ‘gettid’; did
-> you mean ‘getgid’? [-Wimplicit-function-declaration]
->           (void *)(unsigned long)gettid());
->                                  ^~~~~~
->                                  getgid
-> /tmp/cc4Wfmv2.o: In function `main':
-> /home/test/linux/tools/testing/selftests/kvm/rseq_test.c:236: undefined
-> reference to `gettid'
-> collect2: error: ld returned 1 exit status
-> make: *** [../lib.mk:151:
-> /home/test/linux/tools/testing/selftests/kvm/rseq_test] Error 1
-> make: Leaving directory '/home/test/linux/tools/testing/selftests/kvm'
+> ... only to then *hide* the new parameter via helper functions:
 > 
+> 	static inline void debug_show_all_locks(void)
+> 	{
+> 		__debug_show_all_locks(false);
+> 	}
 > 
-> This is fixed by commit 561cafebb2cf97b0927b4fb0eba22de6200f682e upstream.
-> Kernel version to apply: 5.15.y LTS
+> 	static inline void debug_show_all_lock_holders(void)
+> 	{
+> 		__debug_show_all_locks(true);
+> 	}
 > 
-> Could we please backport the above fix onto 5.15.y LTS. It applies cleanly
-> and the kvm selftests compile properly after applying the patch.
+> ... which is a *strong* hint by our universe that the new parameter was 
+> probably a bad idea to begin with.
+> 
+> Given how small debug_show_all_locks() is to begin with, I'd suggest simply 
+> duplicating the loop into debug_show_all_lock_holders() or so.
 
-Now queued up, thanks.
+Initial version at https://lkml.kernel.org/r/82af40cc-bf85-2b53-b8f9-dfc12e66a781@I-love.SAKURA.ne.jp
+was duplicating the loop.
 
-greg k-h
+Waiman Long suggested me not to duplicate the loop at
+https://lkml.kernel.org/r/3e027453-fda4-3891-3ec3-5623f1525e56@redhat.com .
+
+Please talk with Waiman. I'm fine with either approach.
+
