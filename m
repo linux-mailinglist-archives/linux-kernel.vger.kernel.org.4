@@ -2,153 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37BF66A869
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB3466A86F
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 02:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjANBk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 20:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S231339AbjANBu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 20:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjANBkY (ORCPT
+        with ESMTP id S229883AbjANBuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 20:40:24 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88FC7F462
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:40:22 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id r2so22566040wrv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 17:40:22 -0800 (PST)
+        Fri, 13 Jan 2023 20:50:25 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092A42675;
+        Fri, 13 Jan 2023 17:50:24 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z11so33561224ede.1;
+        Fri, 13 Jan 2023 17:50:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3BE2U/BpfWFrvPlxtKLOz5b9WboEgquhdVC53R/Grpo=;
-        b=sBi00uOOOpjs7dkU85dc73iWeJm+lQFX0AKJT0bZrc75jRgWd/4cqYKlZDA9xvDOFV
-         PGs9BvGgFtGtSAC4rkH3Ik8f1VvHJWOR/x6oTlXOH2mZZnk2lZbbSwmZzpdTSKZuhsxm
-         xyYk1B0uHP0r9TMZcyhyi+ybTtYMt0jg7E9P0fj8YMHjkyV/2xhWcZ8UNKOBFXt6TVxU
-         L6ffL96s55WMBtyOll6X6qkHIMUNgqBqGbOAFI+k68T0J7EcJdPE/XZtSGTf+ZGczbKC
-         FTIHB8JljNBOejqJyTGNO/N2NOtuXx2sFlwjqh02wfKoSTGX6jFfVJNZer5zZQtPdLYY
-         mTlQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kYP4ZfEP0gORAR9U9oC13zcVN959Hbpaca5T0mpAJ5k=;
+        b=p8daRuwqCOXWWND7Uef3Y7rosGQKh3EfhYHuTWpei/CJHJGLAUFO/12zn0/zO761Ah
+         KiSyirU71RS0To7tm/AEK+a+uYEVDXa5V5NJWYbp+yd/lu2tGhFbsIeMNEAkcFbOuPNA
+         Ev/V9P/JAMmPZdLfyYBuO+VdsQK4tpH1R4eahJoIbQHCUbeNkwX8j9eDZ0m3S/DL9FzR
+         RFnqFAV7tyaCu2so7h4YEQqd7rxRJCD840SR1khkz5i4qjhPK38AJe+tvzJq55UudvxV
+         8lMzcmhh9eDTwwSJhQXHWzXZ1gsQGXZ0KTIx/ZH0YUbOU9pjo+g8IkoyJZ/b+OjD23wq
+         ZOdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BE2U/BpfWFrvPlxtKLOz5b9WboEgquhdVC53R/Grpo=;
-        b=1/02uvYRx+HJFzSXiEJ0+it6d1DIYMU1nQCEM7bhqWIOZCfFeK/esIn0ECpNbENw+0
-         dLETLtyvNLw4K23z2UamoEeU6qtvUpwwv1Xw6kK+A3PiSI70vn2c7Jriq/tPyBZDlsoD
-         PwTY9qvhMDt5TGzwQKsfTgg5fBUiLtkDxfHvGvi16NofidW9FPuFbR2Nir7YeufHQpXL
-         PDtxAZUATBd2mFO6xcDgKZo3aXpfNrTVkh8xaQTWwdW53fRgZgIpGg0um51GLlsAn3ps
-         Ifqc+sKSB4yHiTndNtYSyIZTpfk/yqHBgWXhJ8tOwON1mzyk2IdnYPU2I4h4+cyIP/yp
-         nCdg==
-X-Gm-Message-State: AFqh2kqze1IP/iglaQk0WUbeU+xcS2CoTdaeTT8qTVaCW3m3tsTsnZN0
-        Gvl98j9gw9KUxf6c13MMWUNIzQ==
-X-Google-Smtp-Source: AMrXdXv6kNTDJkTh0x9q4QGdu19j8o8OqwfCJeVEjhLQXiN/T/cqO7FZPfw3a9NeKphGoHPb8VcHTA==
-X-Received: by 2002:adf:f1c6:0:b0:2bb:c50f:6381 with SMTP id z6-20020adff1c6000000b002bbc50f6381mr17515639wro.6.1673660421170;
-        Fri, 13 Jan 2023 17:40:21 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d14-20020adffbce000000b002bddd75a83fsm3061349wrs.8.2023.01.13.17.40.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 17:40:20 -0800 (PST)
-Message-ID: <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
-Date:   Sat, 14 Jan 2023 01:40:19 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kYP4ZfEP0gORAR9U9oC13zcVN959Hbpaca5T0mpAJ5k=;
+        b=Q/NUJR8zmTWLYM18NT3YKo73SenVJ/nWViEsswXG8D+x3VSPfEQRNk7tDpKx6d5YtV
+         J7WXqRhTw2zfh4iwAd20tAQsJ+M7rAULQykw27YQVcRthVhrZzzyIXl3S/xxHV7A2rdg
+         TkD5Ng8PJDnQo8TpoTNkZETbAFoPdZ+eAXmZQXOQlBqnFygSCIlACldDqpY/QcW+PUaQ
+         RhkpzmNey7AUBP84az/4ObijFIQXihrL9c7dj18grRnmKV7NGBoedjHgQXeEKpv0SD0W
+         lE/V/0+B/kIhPHZJiIu5G9H0G3e9aBqM2uRUKdV3DnW4dUF++sjq1Y9HXDe2jw+3W4FL
+         jRzQ==
+X-Gm-Message-State: AFqh2koHJBqkjUqrG0aTy32+iPxPY9mCZr0o3Yei4iB21bYm9TaTLodv
+        fo56PNy5eZFbW/yDgVXFptHK8KV6KuapWYKW1CbOKQ==
+X-Google-Smtp-Source: AMrXdXsTRVmsYHcLdorBZdC5HgTMf2fWxXN7YQ3UIdHsOFlFVfd66JgE2Xx4f9yYji9bUbTjGICcNw==
+X-Received: by 2002:a05:6402:1cca:b0:49c:d620:4bf8 with SMTP id ds10-20020a0564021cca00b0049cd6204bf8mr3413099edb.24.1673661022403;
+        Fri, 13 Jan 2023 17:50:22 -0800 (PST)
+Received: from localhost ([77.48.28.204])
+        by smtp.gmail.com with ESMTPSA id bm15-20020a0564020b0f00b00499e797f613sm3341583edb.59.2023.01.13.17.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 17:50:21 -0800 (PST)
+Date:   Sat, 14 Jan 2023 03:50:04 +0200
+From:   Maxim Mikityanskiy <maxtram95@gmail.com>
+To:     Rahul Rameshbabu <rrameshbabu@nvidia.com>
+Cc:     Hariprasad Kelam <hkelam@marvell.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        pabeni@redhat.com, edumazet@google.com, sgoutham@marvell.com,
+        lcherian@marvell.com, gakula@marvell.com, jerinj@marvell.com,
+        sbhatta@marvell.com, Naveen Mamindlapalli <naveenm@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>
+Subject: Re: [net-next PATCH 1/5] sch_htb: Allow HTB priority parameter in
+ offload mode
+Message-ID: <Y8IKTP1hf21oLYvL@mail.gmail.com>
+References: <20230112173120.23312-1-hkelam@marvell.com>
+ <20230112173120.23312-2-hkelam@marvell.com>
+ <Y8FMWs3XKuI+t0zW@mail.gmail.com>
+ <87k01q400j.fsf@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
-Cc:     quic_mdtipton@quicinc.com, quic_okukatla@quicinc.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
- <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
-In-Reply-To: <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k01q400j.fsf@nvidia.com>
+X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/01/2023 01:24, Bryan O'Donoghue wrote:
-> On 13/01/2023 22:07, Vivek Aknurwar wrote:
->> Currently framework sets bw even when init bw requirements are zero 
->> during
->> provider registration, thus resulting bulk of set bw to hw.
->> Avoid this behaviour by skipping provider set bw calls if init bw is 
->> zero.
->>
->> Signed-off-by: Vivek Aknurwar <quic_viveka@quicinc.com>
->> ---
->>   drivers/interconnect/core.c | 17 ++++++++++-------
->>   1 file changed, 10 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->> index 25debde..43ed595 100644
->> --- a/drivers/interconnect/core.c
->> +++ b/drivers/interconnect/core.c
->> @@ -977,14 +977,17 @@ void icc_node_add(struct icc_node *node, struct 
->> icc_provider *provider)
->>       node->avg_bw = node->init_avg;
->>       node->peak_bw = node->init_peak;
->> -    if (provider->pre_aggregate)
->> -        provider->pre_aggregate(node);
->> -
->> -    if (provider->aggregate)
->> -        provider->aggregate(node, 0, node->init_avg, node->init_peak,
->> -                    &node->avg_bw, &node->peak_bw);
->> +    if (node->avg_bw || node->peak_bw) {
->> +        if (provider->pre_aggregate)
->> +            provider->pre_aggregate(node);
->> +
->> +        if (provider->aggregate)
->> +            provider->aggregate(node, 0, node->init_avg, 
->> node->init_peak,
->> +                        &node->avg_bw, &node->peak_bw);
->> +        if (provider->set)
->> +            provider->set(node, node);
->> +    }
->> -    provider->set(node, node);
->>       node->avg_bw = 0;
->>       node->peak_bw = 0;
+On Fri, Jan 13, 2023 at 01:06:52PM -0800, Rahul Rameshbabu wrote:
+> On Fri, 13 Jan, 2023 14:19:38 +0200 Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
+> > On Thu, Jan 12, 2023 at 11:01:16PM +0530, Hariprasad Kelam wrote:
+> >> From: Naveen Mamindlapalli <naveenm@marvell.com>
+> >> 
+> >> The current implementation of HTB offload returns the EINVAL error
+> >> for unsupported parameters like prio and quantum. This patch removes
+> >> the error returning checks for 'prio' parameter and populates its
+> >> value to tc_htb_qopt_offload structure such that driver can use the
+> >> same.
+> >> 
+> >> Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
+> >> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> >> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> >> ---
+> >>  include/net/pkt_cls.h | 1 +
+> >>  net/sched/sch_htb.c   | 7 +++----
+> >>  2 files changed, 4 insertions(+), 4 deletions(-)
+> >> 
+> >> diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+> >> index 4cabb32a2ad9..02afb1baf39d 100644
+> >> --- a/include/net/pkt_cls.h
+> >> +++ b/include/net/pkt_cls.h
+> >> @@ -864,6 +864,7 @@ struct tc_htb_qopt_offload {
+> >>  	u16 qid;
+> >>  	u64 rate;
+> >>  	u64 ceil;
+> >> +	u8 prio;
+> >>  };
+> >>  
+> >>  #define TC_HTB_CLASSID_ROOT U32_MAX
+> >> diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
+> >> index 2238edece1a4..f2d034cdd7bd 100644
+> >> --- a/net/sched/sch_htb.c
+> >> +++ b/net/sched/sch_htb.c
+> >> @@ -1806,10 +1806,6 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
+> >>  			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the quantum parameter");
+> >>  			goto failure;
+> >>  		}
+> >> -		if (hopt->prio) {
+> >> -			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the prio parameter");
+> >> -			goto failure;
+> >> -		}
+> >
+> > The check should go to mlx5e then.
+> >
 > 
-> I have the same comment/question for this patch that I had for the qcom 
-> arch specific version of it. This patch seems to be doing at a higher 
-> level what the patch below was doing at a lower level.
+> Agreed. Also, I am wondering in general if its a good idea for the HTB
+> offload implementation to be dictating what parameters are and are not
+> supported.
 > 
-> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m0c90588d0d1e2ab88c39be8f5f3a8f0b61396349
-> 
-> what happens to earlier silicon - qcom silicon which previously made 
-> explicit zero requests ?
-> 
-> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m589e8280de470e038249bb362634221771d845dd
-> 
-> https://lkml.org/lkml/2023/1/3/1232
-> 
-> Isn't it a better idea to let lower layer drivers differentiate what 
-> they do ?
-> 
-> For example on pre 5.4 qcom kernel silicon we might choose to set the 
-> value to zero "because that's what the reference code did" but on newer 
-> silicon we might opt to skip the zero configuration ?
-> 
-> I'm happy to be shown the error of my ways but, absent testing to *show* 
-> it doesn't impact existing legacy silicon, I think we should be wary of 
-> this change.
-> 
-> ---
-> bod
+> 	if (q->offload) {
+> 		/* Options not supported by the offload. */
+> 		if (hopt->rate.overhead || hopt->ceil.overhead) {
+> 			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the overhead parameter");
+> 			goto failure;
+> 		}
+> 		if (hopt->rate.mpu || hopt->ceil.mpu) {
+> 			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the mpu parameter");
+> 			goto failure;
+> 		}
+> 		if (hopt->quantum) {
+> 			NL_SET_ERR_MSG(extack, "HTB offload doesn't support the quantum parameter");
+> 			goto failure;
+> 		}
+> 	}
 
-Oh, and what is the effect on Samsung and i.MX silicon interconnect 
-providers of skipping the zero set ?
+Jakub asked for that [1], I implemented it [2].
 
----
-bod
+[1]: https://lore.kernel.org/all/20220113110801.7c1a6347@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net/
+[2]: https://lore.kernel.org/all/20220125100654.424570-1-maximmi@nvidia.com/
+
+I think it's a good idea, unless you want to change the API to pass all
+HTB parameters to drivers, see the next paragraph.
+
+> Every time a vendor introduces support for a new offload parameter,
+> netdevs that cannot support said parameter are affected. I think it
+> would be better to remove this block and expect each driver to check
+> what parameters are and are not supported for their offload flow.
+
+How can netdevs check unsupported parameters if they don't even receive
+them from HTB? The checks in HTB block parameters that aren't even part
+of the API. If you extend the API (for example, with a new parameter),
+you have to make sure existing drivers are not broken.
+
+> 
+> >>  	}
+> >>  
+> >>  	/* Keeping backward compatible with rate_table based iproute2 tc */
+> >> @@ -1905,6 +1901,7 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
+> >>  					TC_HTB_CLASSID_ROOT,
+> >>  				.rate = max_t(u64, hopt->rate.rate, rate64),
+> >>  				.ceil = max_t(u64, hopt->ceil.rate, ceil64),
+> >> +				.prio = hopt->prio,
+> >>  				.extack = extack,
+> >>  			};
+> >>  			err = htb_offload(dev, &offload_opt);
+> >> @@ -1925,6 +1922,7 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
+> >>  					TC_H_MIN(parent->common.classid),
+> >>  				.rate = max_t(u64, hopt->rate.rate, rate64),
+> >>  				.ceil = max_t(u64, hopt->ceil.rate, ceil64),
+> >> +				.prio = hopt->prio,
+> >>  				.extack = extack,
+> >>  			};
+> >>  			err = htb_offload(dev, &offload_opt);
+> >> @@ -2010,6 +2008,7 @@ static int htb_change_class(struct Qdisc *sch, u32 classid,
+> >>  				.classid = cl->common.classid,
+> >>  				.rate = max_t(u64, hopt->rate.rate, rate64),
+> >>  				.ceil = max_t(u64, hopt->ceil.rate, ceil64),
+> >> +				.prio = hopt->prio,
+> >>  				.extack = extack,
+> >>  			};
+> >>  			err = htb_offload(dev, &offload_opt);
+> >> -- 
+> >> 2.17.1
+> >> 
