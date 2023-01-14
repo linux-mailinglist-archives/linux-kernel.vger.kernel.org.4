@@ -2,92 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C68866ADD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 21:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A4F66ADD8
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 21:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjANUtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 15:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S230416AbjANUtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 15:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjANUtI (ORCPT
+        with ESMTP id S230402AbjANUtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 15:49:08 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86C35255
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 12:49:06 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 661921EC03D6;
-        Sat, 14 Jan 2023 21:49:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673729345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=DfVTsxZCeN35tH4Z4isb1sKi8CCdb0TNdIbmOMJDUqI=;
-        b=rRl3bvNQTkW5FqYkIvhcqwUQ/qGUiwgyWSknOkBJTSSeUTbpCGqEZ6+tFlaPj1UJVLrmtT
-        Dw4lB70t1RKtE48fPGBIxl2EQTcSNqfdLI/bXo1K3g5jD7g3ZcmgGBSSVC5IwoYL5PRGTL
-        ru0w1Xz7sUQwsAgijuHGIl3QSy7Wzvk=
-Date:   Sat, 14 Jan 2023 21:49:01 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Daniel Verkamp <dverkamp@chromium.org>
-Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86: combine memmove FSRM and ERMS alternatives
-Message-ID: <Y8MVPcgWLZspXJxq@zn.tnic>
-References: <20230113203427.1111689-1-dverkamp@chromium.org>
- <Y8KE2h8LSKsrkJhX@zn.tnic>
- <Y8LVmIeUP4cw0oJS@zn.tnic>
+        Sat, 14 Jan 2023 15:49:49 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D227C5586;
+        Sat, 14 Jan 2023 12:49:47 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id 18so35775329edw.7;
+        Sat, 14 Jan 2023 12:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DvZ3HDWEbSKbM8raiD/XH7gqGZhbY908ZCMh75F2fsQ=;
+        b=JlvR5ilk61BKQptQmY6ItOyU8nzaIPRXm2aJnextJTZmtULbCswL8rIK7aqyjxcyaZ
+         NCzsOMSwnwbqNcnR6mOctf0uvR14Q5UXozJnLXJ+klVjVw46yy3PZ9vcyqEPI9N7vh+3
+         W/NnBObK6ZAZ/EypxLI/4Idh0tDoX/qiA2g1gnl5O/UIUcGKsbjg6lt+9aTePMwc6CjG
+         bDTLmcMvVMYRHrWFoBirQvnmlziTkVu8O+opJwOKdV5I14SoII+fiWZUlDsjjO7Eu0nT
+         qzBa7PLh8qPkD2J73CwV8CFi7p2JGyz7MtSJcR3BdEBWtxHEwgnMgkYGJBkzHzNAA6AA
+         kH4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DvZ3HDWEbSKbM8raiD/XH7gqGZhbY908ZCMh75F2fsQ=;
+        b=KWSoymMcZAnq/j1F+L7LCVMoDET1j+Jq4/8d+9E4Kf6DM/m2IC/DqnbYVD1pF+xqin
+         nw/5BPDdiIjZL3Lm2i6aWDS0JN+fru9DZPjy8em5u5ESsl0OsDzQlMxVpiJT/9POuUnD
+         oyr9EzNpuvVyHXdkNtqQTGmMnu/nsOhzi3hx0L9pF/Cn/OQqZ0JRKlr2ejIj4OaZVE12
+         WjZ/t8zi8Abk2OWI5G8msICq53ELepqEIh0a2nOgfhsyUUJ1NWJMqWab6ln3cXk5x0m0
+         xr85kuXFiSWe8spcditU2NRKKkQtFv3KL9Mmx8Z9/ixJ1mJpcc1lwbSbCyuyh3YgmtEJ
+         yMug==
+X-Gm-Message-State: AFqh2kokGQmwmldWFTIQ/w9WPUUpqTLXTwcAFKI5P6CDI0PQovXHfM+L
+        0Pown2v8bJhN9c42FGVaMxc=
+X-Google-Smtp-Source: AMrXdXtk+7nUv1cs0FbuNaIip/FCPofZ9H1JbLbFwm01iT4P2Nhprq4ur4KoBrOhWALNr2dPnJ1QNg==
+X-Received: by 2002:a05:6402:5515:b0:491:6ea2:e875 with SMTP id fi21-20020a056402551500b004916ea2e875mr33029792edb.35.1673729386276;
+        Sat, 14 Jan 2023 12:49:46 -0800 (PST)
+Received: from skbuf ([188.27.184.249])
+        by smtp.gmail.com with ESMTPSA id el14-20020a056402360e00b00458b41d9460sm9331281edb.92.2023.01.14.12.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 12:49:45 -0800 (PST)
+Date:   Sat, 14 Jan 2023 22:49:43 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jerry Ray <jerry.ray@microchip.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>, jbe@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v6 2/6] dsa: lan9303: move Turbo Mode bit init
+Message-ID: <20230114204943.jncpislrqjqvinie@skbuf>
+References: <20230109211849.32530-1-jerry.ray@microchip.com>
+ <20230109211849.32530-1-jerry.ray@microchip.com>
+ <20230109211849.32530-3-jerry.ray@microchip.com>
+ <20230109211849.32530-3-jerry.ray@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8LVmIeUP4cw0oJS@zn.tnic>
+In-Reply-To: <20230109211849.32530-3-jerry.ray@microchip.com>
+ <20230109211849.32530-3-jerry.ray@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 05:17:28PM +0100, Borislav Petkov wrote:
-> On Sat, Jan 14, 2023 at 11:42:13AM +0100, Borislav Petkov wrote:
-> > Or, altenatively (pun intended), you can do what copy_user_generic() does and
-> > move all that logic into C and inline asm. Which I'd prefer, actually, instead of
-> > doing ugly asm hacks. Depends on how ugly it gets...
+On Mon, Jan 09, 2023 at 03:18:45PM -0600, Jerry Ray wrote:
+> In preparing to remove the .adjust_link api, I am moving the one-time
+> initialization of the device's Turbo Mode bit into a different execution
+> path. This code clears (disables) the Turbo Mode bit which is never used
+> by this driver. Turbo Mode is a non-standard mode that would allow the
+> 100Mbps RMII interface to run at 200Mbps.
 > 
-> Alternatively #2, you can do the below as a minimal fix for stable along with
-> explaining what we're doing there and why and then do the other things I
-> suggested - if you'd like, that is - later and with no pressure.
-> 
-> Thx.
-> 
+> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
 > ---
-> diff --git a/arch/x86/lib/memmove_64.S b/arch/x86/lib/memmove_64.S
-> index 02661861e5dd..d6ffb4164cdb 100644
-> --- a/arch/x86/lib/memmove_64.S
-> +++ b/arch/x86/lib/memmove_64.S
-> @@ -38,10 +38,9 @@ SYM_FUNC_START(__memmove)
->  	cmp %rdi, %r8
->  	jg 2f
+>  drivers/net/dsa/lan9303-core.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+> index 5a21fc96d479..50470fb09cb4 100644
+> --- a/drivers/net/dsa/lan9303-core.c
+> +++ b/drivers/net/dsa/lan9303-core.c
+> @@ -886,6 +886,12 @@ static int lan9303_check_device(struct lan9303 *chip)
+>  		return ret;
+>  	}
 >  
-> -	/* FSRM implies ERMS => no length checks, do the copy directly */
->  .Lmemmove_begin_forward:
->  	ALTERNATIVE "cmp $0x20, %rdx; jb 1f", "", X86_FEATURE_FSRM
-> -	ALTERNATIVE "", "jmp .Lmemmove_erms", X86_FEATURE_ERMS
-> +	ALTERNATIVE "cmp $0x20, %rdx; jb 1f", "jmp .Lmemmove_erms", X86_FEATURE_ERMS
+> +	/* Virtual Phy: Remove Turbo 200Mbit mode */
+> +	lan9303_read(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, &reg);
+> +
+> +	reg &= ~LAN9303_VIRT_SPECIAL_TURBO;
+> +	regmap_write(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, reg);
+> +
 
-Forget what I said - now that I think of it this is bull.
+Isn't a function whose name is lan9303_check_device() being abused for
+this purpose (device initialization)?
 
-The more and more I think about it, the more I like the copy_user_generic() idea
-but lemme see how ugly it gets...
+>  	return 0;
+>  }
+>  
+> @@ -1050,7 +1056,6 @@ static int lan9303_phy_write(struct dsa_switch *ds, int phy, int regnum,
+>  static void lan9303_adjust_link(struct dsa_switch *ds, int port,
+>  				struct phy_device *phydev)
+>  {
+> -	struct lan9303 *chip = ds->priv;
+>  	int ctl;
+>  
+>  	if (!phy_is_pseudo_fixed_link(phydev))
+> @@ -1073,14 +1078,6 @@ static void lan9303_adjust_link(struct dsa_switch *ds, int port,
+>  		ctl &= ~BMCR_FULLDPLX;
+>  
+>  	lan9303_phy_write(ds, port, MII_BMCR, ctl);
+> -
+> -	if (port == chip->phy_addr_base) {
+> -		/* Virtual Phy: Remove Turbo 200Mbit mode */
+> -		lan9303_read(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, &ctl);
+> -
+> -		ctl &= ~LAN9303_VIRT_SPECIAL_TURBO;
+> -		regmap_write(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, ctl);
+> -	}
+>  }
+>  
+>  static int lan9303_port_enable(struct dsa_switch *ds, int port,
+> -- 
+> 2.17.1
+> 
 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
