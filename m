@@ -2,234 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2AD66ADBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 21:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E09366ADC2
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 21:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjANUjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 15:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S230404AbjANUml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 15:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjANUj2 (ORCPT
+        with ESMTP id S230334AbjANUmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 15:39:28 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBB04C18
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 12:39:27 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so30303183pjk.3
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 12:39:27 -0800 (PST)
+        Sat, 14 Jan 2023 15:42:39 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD2A4C30
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 12:42:38 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x40so3631853lfu.12
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 12:42:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbKDCRgNEfgCHfxlIVQsMZIrnKO3PYaTMZWeGCn7HBk=;
-        b=Dq7sI1MCb7m+toEuGHv7fmLsNDpu1aD0LgfJl4mK/ULRILTbZi9WqqeyUK2tZXV4LB
-         EliCegLE5tdxRu72nSg1PDaFTq/OrwtISbZ7ydfYR1WbN5kzh2ahd/1ymLGEwZqQYNxh
-         kBYRPjsFTAApQ2BoqPcG249umzlhB/j/vc+ug=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgHwj85eFYM/emcDXAR9MgKYKwUi6SnINYZdhujPNvU=;
+        b=Xh4WEvlixndZIokrw6upxP1LScp25MsWlIdp/AWNkz44hj/2l3jzFFBOEUayPUaqSl
+         tqFbYwrV+JQgoB11DoqWPF6RiHVNSj7Gh7mc4ZLL3ouhqsA1hJD7Qr4ewAq5afQa3kNr
+         JvpfXV5CfQgh2aw7qk6Ooc5Wycbk9tnepDG5FvdYWMeBCFbmHk76NGPkYVxFQjOJhT+O
+         5e7LepM6+B+R0z/JGFPUFuzPjq0boV616V2dHtgwbjJG/9MrhDqIiZ89NlipgxJa58QJ
+         l8GA1d2RRng9pRaqWcj8FXig2fhKErhDe/QGR+DumVD1BkQqdidzVqqJsd8YqdQhrj2v
+         onMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cbKDCRgNEfgCHfxlIVQsMZIrnKO3PYaTMZWeGCn7HBk=;
-        b=7jrUACvAPfH7ltFwyB05mvxJ0zWkAeQ/iFK9wNKmux7Ta6HdlnFqJ+f6NKquqhZ2hM
-         obKKcwAGGJ+Kdpo7ssKXGfvEYrUrYFeRGp1ID2bDebU1qDIyV0KgGOkEFFmOaKWLjEKd
-         k6oTQBxkSkvKNqjKmlp7V8WZues/ylXVn8NfgYFUe5m29Qe+wOynNxH8DvHQh7YnYvRC
-         mID/VNWlwz1igLiuOorVaN8Iug4+plTyRRk0+RBWlWri9RBkLD/QhdCAxupJYagRN633
-         azypfuVV3NhK3+x1D5mbC+FdS/2XdEiJAllgBLdT2REqdrPsDodU69z84lQynzNZrHoF
-         gpxw==
-X-Gm-Message-State: AFqh2koKDRJICeKY4TiAzJKEleJKSJBrXCVJsJ29OwVI94PmipJR3UOm
-        xKoF0/Hq+JPQWL11BokW4UfXAn4Ds+Dua0Fs3HXtVg==
-X-Google-Smtp-Source: AMrXdXuwYZ5X20003vRknVuxJXaQNHwfcP+UKKDKUGqxK6HR3DQ7nq7ypodOttkbxJ+rgEvrBvPitmdzDnF5l4400JM=
-X-Received: by 2002:a17:902:c215:b0:193:2c1b:337c with SMTP id
- 21-20020a170902c21500b001932c1b337cmr273485pll.76.1673728767005; Sat, 14 Jan
- 2023 12:39:27 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZgHwj85eFYM/emcDXAR9MgKYKwUi6SnINYZdhujPNvU=;
+        b=R9szPDl7clx5B678WX2VBWQt8y3vo78RSobSEu+29Hv23g2Uu27AMWASOSwAVyKsL9
+         Ghf71z4xf7nkWFtPq6/JoRqZkRWRDWGb4BertXH8gDPBJQGUXZlprEau8hic9f2RZ3aV
+         jxvFHy2lYhCnnm2Cx99otCB2eWE9kM5Yp6y06NDOII1w7MQGE9BC9c6ARAH/WU9F7neh
+         Zr/fLZqryD+1eNF5B9yDdVgBafO6VW5oWR6H5km03FEN54z2xxZOS1a+/tk+UCfOYnX+
+         LadIL3FtTCX+mF1eTfttHHkG90DqsEIgZiNIQkw2g2/nJqPbz+O9ksIXd0tzcMtyiyND
+         m8aQ==
+X-Gm-Message-State: AFqh2koPlAmDNBbtwdQTIA/GDlGx/Z66Hj+rspQpdorrbBKfEVJtrPhk
+        2tg/oY/hkisBMXGjobaBdEM9NQ==
+X-Google-Smtp-Source: AMrXdXuXdTJIkfJc12QFUyrmVUWaa1q+jzMzd4UNhv5TF31ZY094XFq4st2S7GPzHkEHqSF5HfUbrQ==
+X-Received: by 2002:a05:6512:3247:b0:4cd:f558:1f8a with SMTP id c7-20020a056512324700b004cdf5581f8amr3098694lfr.29.1673728956580;
+        Sat, 14 Jan 2023 12:42:36 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id h15-20020a05651211cf00b00498fc3d4d15sm4421027lfr.190.2023.01.14.12.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Jan 2023 12:42:35 -0800 (PST)
+Message-ID: <685937dd-6265-1f57-f7aa-e6dd0cf3a49f@linaro.org>
+Date:   Sat, 14 Jan 2023 21:42:34 +0100
 MIME-Version: 1.0
-References: <20230112202939.19562-1-ajit.khaparde@broadcom.com>
- <20230112202939.19562-2-ajit.khaparde@broadcom.com> <20230113221042.5d24bdde@kernel.org>
-In-Reply-To: <20230113221042.5d24bdde@kernel.org>
-From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
-Date:   Sat, 14 Jan 2023 12:39:09 -0800
-Message-ID: <CACZ4nhuKo-h_dcSGuzAm4vJJuuxmnVo8jYO2scCxfqtktbCjfw@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 1/8] bnxt_en: Add auxiliary driver support
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        michael.chan@broadcom.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, selvin.xavier@broadcom.com,
-        Leon Romanovsky <leonro@nvidia.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a3c77d05f23f588b"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/2] cpufreq: qcom-hw: Ensure only freq-domain regs are
+ counted in num_domains
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
+ <20230111205125.1860858-2-konrad.dybcio@linaro.org>
+ <20230112153704.6d37dygm4yfexdq6@builder.lan>
+ <7dec47af-0981-7d70-3926-69419f5d1c8e@linaro.org>
+ <20230113194132.GA2806609-robh@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230113194132.GA2806609-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a3c77d05f23f588b
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jan 13, 2023 at 10:10 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 12 Jan 2023 12:29:32 -0800 Ajit Khaparde wrote:
-> > Add auxiliary driver support.
-> > An auxiliary device will be created if the hardware indicates
-> > support for RDMA.
-> > The bnxt_ulp_probe() function has been removed and a new
-> > bnxt_rdma_aux_device_add() function has been added.
-> > The bnxt_free_msix_vecs() and bnxt_req_msix_vecs() will now hold
-> > the RTNL lock when they call the bnxt_close_nic()and bnxt_open_nic()
-> > since the device close and open need to be protected under RTNL lock.
-> > The operations between the bnxt_en and bnxt_re will be protected
-> > using the en_ops_lock.
-> > This will be used by the bnxt_re driver in a follow-on patch
-> > to create ROCE interfaces.
->
-> > --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > @@ -13178,6 +13178,9 @@ static void bnxt_remove_one(struct pci_dev *pdev)
-> >       struct net_device *dev = pci_get_drvdata(pdev);
-> >       struct bnxt *bp = netdev_priv(dev);
-> >
-> > +     bnxt_rdma_aux_device_uninit(bp);
-> > +     bnxt_aux_dev_free(bp);
->
-> You still free bp->aux_dev synchronously..
->
-> > +void bnxt_aux_dev_free(struct bnxt *bp)
-> > +{
-> > +     kfree(bp->aux_dev);
->
-> .. here. Which is called on .remove of the PCI device.
->
-> > +     bp->aux_dev = NULL;
-> > +}
-> > +
-> > +static struct bnxt_aux_dev *bnxt_aux_dev_alloc(struct bnxt *bp)
-> > +{
-> > +     return kzalloc(sizeof(struct bnxt_aux_dev), GFP_KERNEL);
-> > +}
-> > +
-> > +void bnxt_rdma_aux_device_uninit(struct bnxt *bp)
-> > +{
-> > +     struct bnxt_aux_dev *bnxt_adev;
-> > +     struct auxiliary_device *adev;
-> > +
-> > +     /* Skip if no auxiliary device init was done. */
-> > +     if (!(bp->flags & BNXT_FLAG_ROCE_CAP))
-> > +             return;
-> > +
-> > +     bnxt_adev = bp->aux_dev;
-> > +     adev = &bnxt_adev->aux_dev;
-> > +     auxiliary_device_delete(adev);
-> > +     auxiliary_device_uninit(adev);
-> > +     if (bnxt_adev->id >= 0)
-> > +             ida_free(&bnxt_aux_dev_ids, bnxt_adev->id);
-> > +}
-> > +
-> > +static void bnxt_aux_dev_release(struct device *dev)
-> > +{
-> > +     struct bnxt_aux_dev *bnxt_adev =
-> > +             container_of(dev, struct bnxt_aux_dev, aux_dev.dev);
-> > +     struct bnxt *bp = netdev_priv(bnxt_adev->edev->net);
-> > +
-> > +     bnxt_adev->edev->en_ops = NULL;
-> > +     kfree(bnxt_adev->edev);
->
-> And yet the reference counted "release" function accesses the bp->adev
-> like it must exist.
->
-> This seems odd to me - why do we need refcounting on devices at all
-> if we can free them synchronously? To be clear - I'm not sure this is
-> wrong, just seems odd.
-I followed the existing implementations in that regard. Thanks
 
->
-> > +     bnxt_adev->edev = NULL;
-> > +     bp->edev = NULL;
-> > +}
+On 13.01.2023 20:41, Rob Herring wrote:
+> On Thu, Jan 12, 2023 at 04:41:50PM +0100, Konrad Dybcio wrote:
+>>
+>>
+>> On 12.01.2023 16:37, Bjorn Andersson wrote:
+>>> On Wed, Jan 11, 2023 at 09:51:25PM +0100, Konrad Dybcio wrote:
+>>>> In preparation for CPRh-aware OSM programming, change the probe
+>>>> function so that we determine the number of frequency domains by
+>>>> counting the number of reg-names entries that begin with
+>>>> "freq-domain", as the aforementioned changes require introduction
+>>>> of non-freq-domain register spaces.
+>>>>
+>>>
+>>> Requiring reg-names would break backwards compatibility with at least
+>>> sc7280 and sm6115.
+>> Ouch, you're correct..
+>>
+>> Does checking for reg-names and applying the code flow proposed in this
+>> patch if found and the existing one if not sound good?
+> 
+> Why support 2 ways?
+Targets that are supported by the current revision of this driver
+(which only specify frequency-domain-N MMIO spaces as reg
+entries) assume that ARRAY_SIZE(reg) == the number of frequency
+domains. These usually range from 1 to 3.
 
---000000000000a3c77d05f23f588b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+We can either hardcode the number of frequency domains on targets
+that require more, different register spaces (for manual hardware
+programming, which also happens on currently supported hardware,
+just that the secure firmware does it for us.. see [1])
+or check with reg-names. Requiring reg-names would break backwards
+compatibility with older DTs for at least two SoCs.
 
-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
-pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
-K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
-xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
-OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
-aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
-KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
-aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
-u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
-4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEibUqxCGK9air9IRdJh
-VJAzXnZiw5eY68irRfOGHJs1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIzMDExNDIwMzkyN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCUjVLbJ2n+KT1gZ1aztUY9nkpJZl9QKbPmHm/K
-+MpeuwePxnWHOE7Gpse8MaE1IeeT5JdtXlEBqCdd9jgTleiK4OtHf/iPvb9taon9uBAl3f2MBMPH
-kDA/jMgIhdpp9w4/DKgwjmg8GSNgVybMHSgjvAmq2wzDGgDj0Cy2MVtQzcmfsNxYVd2A9KVLf04a
-xYuilQa1lxBkPyvbR1TdPLTfhGO0ZOChFTSWaO23ryDgEpORKMt5JIqN1TMinn5a+8lXIp97Tr31
-bihWgfN403TdKTuE79gLygVO31GRQ6k8mF9AptilTpVmD3nqfOSPtq2h4I1C7kD0aoHhpqe32ESy
---000000000000a3c77d05f23f588b--
+
+> 
+> 
+>> Konrad
+>>>
+>>> Regards,
+>>> Bjorn
+>>>
+>>>> Fixes: 1a6a8b0080b0 ("cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2")
+>>>> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>  drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++---------
+>>>>  1 file changed, 24 insertions(+), 10 deletions(-)
+>>>>
+>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+>>>> index 9505a812d6a1..89d5ed267399 100644
+>>>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>>>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>>>> @@ -651,8 +651,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>>>>  	struct device *dev = &pdev->dev;
+>>>>  	struct device_node *soc_node;
+>>>>  	struct device *cpu_dev;
+>>>> +	const char *reg_name;
+>>>>  	struct clk *clk;
+>>>> -	int ret, i, num_domains, reg_sz;
+>>>> +	int ret, i, num_reg_names, num_domains = 0;
+>>>>  
+>>>>  	clk = clk_get(dev, "xo");
+>>>>  	if (IS_ERR(clk))
+>>>> @@ -684,19 +685,32 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>>>>  	if (!soc_node)
+>>>>  		return -EINVAL;
+>>>>  
+>>>> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
+>>>> -	if (ret)
+>>>> +	num_reg_names = of_property_count_strings(dev->of_node, "reg-names");
+>>>> +	if (num_reg_names <= 0) {
+>>>> +		ret = num_reg_names ? num_reg_names : -ENODATA;
+>>>>  		goto of_exit;
+>>>> +	}
+>>>>  
+>>>> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
+>>>> -	if (ret)
+>>>> -		goto of_exit;
+>>>> +	for (i = 0; i < num_reg_names; i++) {
+>>>> +		ret = of_property_read_string_index(dev->of_node, "reg-names", i, &reg_name);
+>>>> +		if (ret < 0)
+>>>> +			goto of_exit;
+>>>>  
+>>>> -	reg_sz += i;
+>>>> +		/*
+>>>> +		 * Check if the i-th reg is a freq-domain base, no need to add 1
+>>>> +		 * more byte for idx, as sizeof counts \0 whereas strlen does not.
+>>>> +		 */
+>>>> +		if (strlen(reg_name) == sizeof("freq-domain")) {
+>>>> +			/* Check if this reg-name begins with "freq-domain" */
+>>>> +			if (!strncmp(reg_name, "freq-domain", sizeof("freq-domain") - 1))
+>>>> +				num_domains++;
+>>>> +		}
+>>>> +	}
+>>>>  
+>>>> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
+> 
+> This code was not great to begin with. Any code parsing 'reg' on it's 
+> own is suspect IMO. It's a standard property and all parsing of it 
+> should be in drivers/of/address.c. (Yes, I know there are other cases.)
+> 
+> The reg entries are already available as platform_device resources? Why 
+> don't you use that? There's also of_address_count(), but I prefer if 
+> there's a platform device equivalent like we have for interrupts.
+Hm.. I knew this was suspiciously bare-dt-operation, but never quite
+connected the dots.. perhaps that's a good idea to pursue..
+
+Konrad
+
+[1] https://patchwork.kernel.org/project/linux-pm/patch/20210701105730.322718-7-angelogioacchino.delregno@somainline.org/
+> 
+> Rob
