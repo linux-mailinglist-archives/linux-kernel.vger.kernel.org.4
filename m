@@ -2,45 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A9766AA57
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 10:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B8166AA58
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 10:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjANJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 04:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S229853AbjANJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 04:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjANJLP (ORCPT
+        with ESMTP id S229574AbjANJQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 04:11:15 -0500
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D752A35B9
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 01:11:14 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id GcZDpq3gg29hWGcZDp72BO; Sat, 14 Jan 2023 10:11:13 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 14 Jan 2023 10:11:13 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2] Bluetooth: hci_debugfs: Use kstrtobool() instead of strtobool()
-Date:   Sat, 14 Jan 2023 10:11:04 +0100
-Message-Id: <58207d5b81c5739c037c030893fb08ea3dbedc57.1673687451.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 14 Jan 2023 04:16:27 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAE446A0;
+        Sat, 14 Jan 2023 01:16:26 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id f34so36290258lfv.10;
+        Sat, 14 Jan 2023 01:16:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XdiofrC+ATWa4bXfwZPlfeQteX2qmyBDEfYiwPvOT2M=;
+        b=bf7r8yphtF/ory3pQEKwACVU/WJB8QYbpm7A5skYKK8nMbG3ufoSXAG+OC5Z/FXZap
+         3ylOwVXPzzi0jQiYDC9Ssd5sQeWRN9eAFhu8w1hLP1lpvbymiioKt1+V7pvnHynflC7H
+         NBKppxPzZfaXBQ8XdJHtaZK1a7ijFrsfnFmjJrYZFo49FXiZMDTpsVSR3yW3w+2lxIZz
+         1edx8vaYtb+GkFd3KUNxylK5HHHwFmm0iwVPUk7eyeQvT5BHZi6VPgj4OCGyntZaH+ic
+         KvuVOcxh8UP5FjElc47rYjLKmx5GtSlrrPaEW7SYpseJxarSvVL9+YkOs6ua6JmxAcrd
+         /zGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XdiofrC+ATWa4bXfwZPlfeQteX2qmyBDEfYiwPvOT2M=;
+        b=VUfZDHJ7A6G5vhwWlUW6ETgQEdHJ4VfAI2/5hSyChsfrwF5pRw3rv/i7efnpdOYJ08
+         3vzkrYGhbap1NIypGsCW7RKJeIYmq4w4cZ8nUh2m+PXTRbcrp+8PnokkY1EQnPLrrD33
+         MxMmRTWPv31g3ujCBv6etY2uWGUVj9H9LtcHhicdcWOg5J6j85rMwBFNPs+vinP4+l+U
+         E/L7zWhcpsxfcCNkWbFYJmm9/QEgrTGBwaPmE3BIKtdntwVQ59094DlIae1xkY2jDwP8
+         hvvsTHl5Svt8ChM3+XRI9YdUJbl6qlrQ6i/8xcXwXth+dEjEWd3jgmorEV/+gAo/7tDg
+         Q3Eg==
+X-Gm-Message-State: AFqh2kr69msdTIn+MFUrBnxeMfmbrsQE/jknqEbw3zaEDst3jB2H+QZc
+        fGu6+U/ZQ+7KhcM4niLN3LU=
+X-Google-Smtp-Source: AMrXdXu25Vj0070/Gb/nYu42EBGKOKSz3fL9sJYyNE1qbJeXlVDfxQm5X6g/GWym3aWuPKUdiCscqg==
+X-Received: by 2002:a05:6512:6d0:b0:4c8:d65:da85 with SMTP id u16-20020a05651206d000b004c80d65da85mr7034362lff.2.1673687784229;
+        Sat, 14 Jan 2023 01:16:24 -0800 (PST)
+Received: from localhost (88-113-32-99.elisa-laajakaista.fi. [88.113.32.99])
+        by smtp.gmail.com with ESMTPSA id j11-20020a056512344b00b004cafd4cc1fdsm4240267lfr.5.2023.01.14.01.16.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 01:16:24 -0800 (PST)
+Date:   Sat, 14 Jan 2023 11:16:21 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <20230114111621.00001840@gmail.com>
+In-Reply-To: <Y8F1uPsW56fVdhmC@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+        <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
+        <20230113151258.00006a6d@gmail.com>
+        <Y8F1uPsW56fVdhmC@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,54 +81,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strtobool() is the same as kstrtobool().
-However, the latter is more used within the kernel.
+On Fri, 13 Jan 2023 15:16:08 +0000
+Sean Christopherson <seanjc@google.com> wrote:
 
-In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-the other function name.
+> On Fri, Jan 13, 2023, Zhi Wang wrote:
+> > On Thu, 12 Jan 2023 08:31:26 -0800 isaku.yamahata@intel.com wrote:
+> > > +static void tdx_reclaim_td_page(unsigned long td_page_pa)
+> > > +{
+> > > +	if (!td_page_pa)
+> > > +		return;
+> > > +	/*
+> > > +	 * TDCX are being reclaimed.  TDX module maps TDCX with HKID
+> > > +	 * assigned to the TD.  Here the cache associated to the TD
+> > > +	 * was already flushed by TDH.PHYMEM.CACHE.WB before here,
+> > > So
+> > > +	 * cache doesn't need to be flushed again.
+> > > +	 */
+> > > +	if (WARN_ON(tdx_reclaim_page(td_page_pa, false, 0)))
+> 
+> The WARN_ON() can go, tdx_reclaim_page() has WARN_ON_ONCE() +
+> pr_tdx_error() in all error paths.
+> 
+> > > +		/* If reclaim failed, leak the page. */
+> > 
+> > Better add a FIXME: here as this has to be fixed later.
+> 
+> No, leaking the page is all KVM can reasonably do here.  An improved
+> comment would be helpful, but no code change is required.
+> tdx_reclaim_page() returns an error if and only if there's an
+> unexpected, fatal error, e.g. a SEAMCALL with bad params, incorrect
+> concurrency in KVM, a TDX Module bug, etc.  Retrying at a later point is
+> highly unlikely to be successful.
 
-While at it, include the corresponding header file (<linux/kstrtox.h>)
+Hi:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch was already sent as a part of a serie ([1]) that axed all usages
-of strtobool().
-Most of the patches have been merged in -next.
+The word "leaking" sounds like a situation left unhandled temporarily.
 
-I synch'ed with latest -next and re-send the remaining ones as individual
-patches.
+I checked the source code of the TDX module[1] for the possible reason to
+fail when reviewing this patch:
 
-Changes in v2:
-  - No change
+tdx-module-v1.0.01.01.zip\src\vmm_dispatcher\api_calls\tdh_phymem_page_reclaim.c
+tdx-module-v1.0.01.01.zip\src\vmm_dispatcher\api_calls\tdh_phymem_page_wbinvd.c
 
-[1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
+a. Invalid parameters. For example, page is not aligned, PA HKID is not zero...
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- net/bluetooth/hci_debugfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_debugfs.c b/net/bluetooth/hci_debugfs.c
-index b7f682922a16..f1ef60ddd4a6 100644
---- a/net/bluetooth/hci_debugfs.c
-+++ b/net/bluetooth/hci_debugfs.c
-@@ -22,6 +22,7 @@
- */
+For invalid parameters, a WARN_ON_ONCE() + return value is good enough as
+that is how kernel handles similar situations. The caller takes the
+responsibility.
  
- #include <linux/debugfs.h>
-+#include <linux/kstrtox.h>
- 
- #include <net/bluetooth/bluetooth.h>
- #include <net/bluetooth/hci_core.h>
-@@ -1152,7 +1153,7 @@ static ssize_t force_no_mitm_write(struct file *file,
- 		return -EFAULT;
- 
- 	buf[buf_size] = '\0';
--	if (strtobool(buf, &enable))
-+	if (kstrtobool(buf, &enable))
- 		return -EINVAL;
- 
- 	if (enable == hci_dev_test_flag(hdev, HCI_FORCE_NO_MITM))
--- 
-2.34.1
+b. Locks has been taken in TDX module. TDR page has been locked due to another
+SEAMCALL, another SEAMCALL is doing PAMT walk and holding PAMT lock... 
 
+This needs to be improved later either by retry or taking tdx_lock to avoid
+TDX module fails on this.
+
+[1] https://www.intel.com/content/www/us/en/download/738875/738876/intel-trust-domain-extension-intel-tdx-module.html
