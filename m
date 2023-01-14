@@ -2,119 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4790566AB77
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D936966AB79
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 14:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjANNK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 08:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S229537AbjANNMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 08:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjANNKx (ORCPT
+        with ESMTP id S229609AbjANNMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 08:10:53 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C09D65B7;
-        Sat, 14 Jan 2023 05:10:51 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so13670383otp.9;
-        Sat, 14 Jan 2023 05:10:51 -0800 (PST)
+        Sat, 14 Jan 2023 08:12:13 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6A46E85
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 05:12:09 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id cf18so51817445ejb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 05:12:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r3MdNdF8Xsr/CFhUD2SEaMu/iBQ2k8zQdq8AYu1J6uI=;
-        b=OLi2UW1aWjvyBrAY/TiZZY1hKnBfV/RxNxbeXS+GLpx1w6Beqn/fmA/Ze8RilYSM/R
-         yL2+AXHufL/2dYE67umsxSk9jW7Q7Lebi3wt/Pv0wS8N8up/BGiV5HvGsGVvP2sVcuj8
-         D7w6d2JXEsdLu3Qgqoxw0yR+F7PHneSA5M8WG3FpqJByh9gg3YLZAwRNrmI1G/hqVsFM
-         efF3RnuzKKCdNreblBZprq8/7KP2JTwswqd1T5wl4ioxCEkxb2aNS4tssrpSR3hWXT0G
-         Mfc7tmQEdXbRa2VWO8MFbxf1hIr2B37Ve7sa7th9aaT/0ZFU2QPfwH4/SIzCG/qkLRS4
-         7q4g==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TA5irrJ97Zm1pKOtsaRcVAWqWkukQuvBG068G/jV9M0=;
+        b=LpVRFjJjAm0OwujEHeVao7WLsD0eVoWBg0v6mpYCslEPyfsIIzLBGaLlt+xj6Lbsgn
+         1yZvHYbZEG7rs8TFeR066CITO5q22INXtET1BZ0B0eAg728q3Z9IkdRQnzGh/9zQBgns
+         5iXhHDd8Px3f80eu6Na/FKeu5Xl8OeOinj9F0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=r3MdNdF8Xsr/CFhUD2SEaMu/iBQ2k8zQdq8AYu1J6uI=;
-        b=YCLVN9XBUBn0Gy6tgrRrVR7ltjvYJ/NFlx+hp8O7qxpgIhvBnWlcmywK4C3O2NW1Kh
-         eByN4qV2KXp60n729E0z82sslmvTzDIiJ4e1lvg0X0j+gQM+/qiBBvDQpD+coKYyIKxZ
-         ITC2xSbibTOkg3ojFjONgR6VlmUvh+gf6CFJ1mSj5T/Wpz1arCqbS5hYxYfmmMn8u3s2
-         nzMuds3cvYaAu+wwCtFMqdf+SIISPen64yWr63FoW72+ZSXGAd3qh591rRat6zkGKg/E
-         PNDyXgYKL3FR4WBpMZEhJG93lX1YvUXcEptAriYBwUO5WDvseao8l5twnAJqhA2OJi7j
-         l7/g==
-X-Gm-Message-State: AFqh2kqFGYaBVCRKrleOUpi3flm5z1cT8Zg+2ZCCp1gFclMz8b1yNuM0
-        tclFYFEiAHFqi7HERMVoH5cCru1fFB9fC4i4LyI=
-X-Google-Smtp-Source: AMrXdXtp0vKi2W4302CMvaPhUPuAY6QwMhuCCRpuhABUJqkTKmdOIAxKBAPjHcz36zLcyFEm7Cy1c0ZYVY10oeVAQm8=
-X-Received: by 2002:a9d:61ca:0:b0:670:6dc1:6c2c with SMTP id
- h10-20020a9d61ca000000b006706dc16c2cmr5073968otk.375.1673701850925; Sat, 14
- Jan 2023 05:10:50 -0800 (PST)
+        bh=TA5irrJ97Zm1pKOtsaRcVAWqWkukQuvBG068G/jV9M0=;
+        b=Z2D226MDdFyjY7k1K12AIGOViDOESRoYHCiv26V2u3MaNmQ5YzVWYeeRHOZYXeTAxu
+         ++IeeJbTiva9FbXrXAiU1PBRHkGQgr7c8aKLWBWwtIqPVJzX15OlNWkyckYN0+ECEpjP
+         TWx3Y6aunxKtVBtwmNxhR0Jdbk9XUuPMMnG2I9mfBoioAbeaYR8RCVGfoH6MwnZWkHpk
+         hU83xPgh8UHD8bjzC1ur4TWt2VLFitWeaMw6dnySYTc1AGDe7PBqf8aevU6+ObxLPlRr
+         z6ZGuRvR5Sm5OfkLXYrl4tyT0IbjkY5J2+BlcAY/bOtRCGCOURt9a9lFPON8V5y/avGM
+         0rMg==
+X-Gm-Message-State: AFqh2kpgzRBVFi42rzFItFA/mXdFPCs//fjVcNTjOIMTcmg3+KarwTjf
+        WDHFJcmhK9ckpGo3dFA2SOfaBw==
+X-Google-Smtp-Source: AMrXdXvvxApPCP+ySbwSqzRgDVGCJglvbxaTNamdf0Grt4bc2WUN//7WN3B9nBiQgillujYPfKOmGw==
+X-Received: by 2002:a17:906:da09:b0:7c0:e5c6:2a6d with SMTP id fi9-20020a170906da0900b007c0e5c62a6dmr6425666ejb.39.1673701927984;
+        Sat, 14 Jan 2023 05:12:07 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id p4-20020a17090653c400b0084ca4bd745esm9658956ejo.35.2023.01.14.05.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 05:12:07 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Sat, 14 Jan 2023 13:11:41 +0000
+Subject: [PATCH net-next v3] inet: fix fast path in __inet_hash_connect()
 MIME-Version: 1.0
-References: <20230106215613.7159-1-apantykhin@gmail.com> <a6a2e8b1-7194-75f1-d59c-7c8bc059174a@intel.com>
-In-Reply-To: <a6a2e8b1-7194-75f1-d59c-7c8bc059174a@intel.com>
-From:   Alexander Pantyukhin <apantykhin@gmail.com>
-Date:   Sat, 14 Jan 2023 17:10:39 +0400
-Message-ID: <CAPi66w__aD7DqueUGA=yXfY-puW6nSKGSjEPA+n28U39j7r=ig@mail.gmail.com>
-Subject: Re: [PATCH] tools:perf:scripts:python:intel-pt-events del unusedvar
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     peterz@infradead.org, akpm@linux-foundation.org, mingo@redhat.com,
-        namhyung@kernel.org, jolsa@kernel.org, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230112-inet_hash_connect_bind_head-v3-1-b591fd212b93@diag.uniroma1.it>
+X-B4-Tracking: v=1; b=H4sIAA2qwmMC/5XOQQ6CMBQE0KuQri2hJUhx5T2MIaX90L/gY9pKM
+ IS7W3DrQpeTSd7MygJ4hMAu2co8zBhwohTKU8aM0zQAR5syk4UsCyEkR4LYOh1cayYiMLHtkGzr
+ QFuuemlNo/pCdYIlodMBeOc1Gbcbow4R/F48PPS4HLM3lkBOsER2T43DECf/Ov7M4uh/mp4FF7y
+ G0tR1IaraqKtFPeRPQj+NWuT44Wf5BykTWYFp5Nla26jqC7lt2xsxIc0pQwEAAA==
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.11.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673701927; l=2061;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=8v/y9dezeD4bGg+sLXesbdVfw+jitR6F8rl/F0ZYHVI=;
+ b=ckGjINy49k27kdG5mt+R5zuKdRjUsFOmYQWCPHQpwRNFW4KGOGVWC/7F3XrPfXsc4pp7b5kTiQxT
+ q+FrBtUcCperCfbiGJ2MiJTDNIZ1WjwFYLRhA4LZshdS1Qa7QUVW
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+__inet_hash_connect() has a fast path taken if sk_head(&tb->owners) is
+equal to the sk parameter.
+sk_head() returns the hlist_entry() with respect to the sk_node field.
+However entries in the tb->owners list are inserted with respect to the
+sk_bind_node field with sk_add_bind_node().
+Thus the check would never pass and the fast path never execute.
 
->
-> On 6/01/23 23:56, Alexander Pantyukhin wrote:
-> > The event_attr is never used later, the var is ok be deleted.
-> > Additional code simplification is to substitute string slice comparison
-> > with "substring" function. This case no need to know the length specific
-> > words.
-> >
-> > Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
-> > ---
-> >  tools/perf/scripts/python/intel-pt-events.py | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/perf/scripts/python/intel-pt-events.py b/tools/perf/scripts/python/intel-pt-events.py
-> > index 08862a2582f4..28d08e2fb7cd 100644
-> > --- a/tools/perf/scripts/python/intel-pt-events.py
-> > +++ b/tools/perf/scripts/python/intel-pt-events.py
-> > @@ -340,7 +340,6 @@ def print_srccode(comm, param_dict, sample, symbol, dso, with_insn):
-> >       print(start_str, src_str)
-> >
-> >  def do_process_event(param_dict):
-> > -     event_attr = param_dict["attr"]
->
-> Should really be moved to the "Unused fields:" comment
-> section a few lines below.
+This fast path has never been executed or tested as this bug seems
+to be present since commit 1da177e4c3f4 ("Linux-2.6.12-rc2"), thus
+remove it to reduce code complexity.
 
-Fixed in the patch v2.
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+---
+Changes in v3:
+- remove the fast path to reduce code complexity
+- Link to v2: https://lore.kernel.org/r/20230112-inet_hash_connect_bind_head-v2-1-5ec926ddd985@diag.uniroma1.it
 
->
-> >       sample     = param_dict["sample"]
-> >       raw_buf    = param_dict["raw_buf"]
-> >       comm       = param_dict["comm"]
-> > @@ -359,13 +358,13 @@ def do_process_event(param_dict):
-> >               print(glb_switch_str[cpu])
-> >               del glb_switch_str[cpu]
-> >
-> > -     if name[0:12] == "instructions":
-> > +     if name.startswith("instructions"):
-> >               if glb_src:
-> >                       print_srccode(comm, param_dict, sample, symbol, dso, True)
-> >               else:
-> >                       print_instructions_start(comm, sample)
-> >                       print_common_ip(param_dict, sample, symbol, dso)
-> > -     elif name[0:8] == "branches":
-> > +     elif name.startswith("branches"):
-> >               if glb_src:
-> >                       print_srccode(comm, param_dict, sample, symbol, dso, False)
-> >               else:
->
+Changes in v2:
+- nit: s/list_entry/hlist_entry/
+- Link to v1: https://lore.kernel.org/r/20230112-inet_hash_connect_bind_head-v1-1-7e3c770157c8@diag.uniroma1.it
+---
+ net/ipv4/inet_hashtables.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index d039b4e732a3..b832e7a545d4 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -994,17 +994,7 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+ 	u32 index;
+ 
+ 	if (port) {
+-		head = &hinfo->bhash[inet_bhashfn(net, port,
+-						  hinfo->bhash_size)];
+-		tb = inet_csk(sk)->icsk_bind_hash;
+-		spin_lock_bh(&head->lock);
+-		if (sk_head(&tb->owners) == sk && !sk->sk_bind_node.next) {
+-			inet_ehash_nolisten(sk, NULL, NULL);
+-			spin_unlock_bh(&head->lock);
+-			return 0;
+-		}
+-		spin_unlock(&head->lock);
+-		/* No definite answer... Walk to established hash table */
++		local_bh_disable();
+ 		ret = check_established(death_row, sk, port, NULL);
+ 		local_bh_enable();
+ 		return ret;
+
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230112-inet_hash_connect_bind_head-8f2dc98f08b1
+
+Best regards,
+-- 
+Pietro Borrello <borrello@diag.uniroma1.it>
