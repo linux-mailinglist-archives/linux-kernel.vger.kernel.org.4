@@ -2,135 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB46666AB26
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 12:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BD866AB28
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 12:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjANLVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 06:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S229489AbjANLYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 06:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjANLVw (ORCPT
+        with ESMTP id S229655AbjANLYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 06:21:52 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5796EBF;
-        Sat, 14 Jan 2023 03:21:51 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id y25so36535911lfa.9;
-        Sat, 14 Jan 2023 03:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J5fd62izaRzYKahE51Ez8OS6iAYgUaFPo+1VfaByxNo=;
-        b=M8/CANIF4UP/MqZe9a6Ypax6eHzS9U0jbDs0VRK9lrRiFwQKSHxYtVUR+MSn2g5lfj
-         exO7IfrsR8HQZFnTkeNMNl8HPXdr7FEWmgJiiGqddEtbmajuoLv3YDu63CKWyy5T6fgX
-         d78+dqBnrOgIJ4Gqhqp+f4b/96PhKB1fLDfaqX+eSnJ5OXf45qiy9Cx6zU4BxFv/zPX+
-         XxEvAQXefPG0EYeCmd6+3qaTwEevnOn9sf8jzYvqwIsVdCD0TRX0f6qxfEpsRDfUK5BH
-         LMxvQ7H+k0IIbqp+2suqxhoGnHKJOCNV31mqVk5viTezddRTnEbLwdK3pfIYr4arv5ux
-         RPig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J5fd62izaRzYKahE51Ez8OS6iAYgUaFPo+1VfaByxNo=;
-        b=DHvkObHCE+UxeTE5ceNLdpoxqhd+N0VFjtRYET3nRSPHxvvNwazGiDUTZFrJiSObTG
-         fkglqpltGvxetIzUvLBBbOQxNk0DWJhm37dF1jCQc9P/awaumFsNvAMW5Heidxkott3z
-         E81DcOtMrGHgLUCifJkmBsCPhXWZviI7YLunSo7LyScWQUmqoxMv58WGhBEhfTW3mxSW
-         o7hPQT8zYDqNWAszqf37qHdBTv4NB53w2DaNN/T9hspDtPLR89lXOFmOI3HSOGBCRJeV
-         5RsC7g5iidGuL76fs5DoLpmjXE7ZlTtxvU1cS5fjogQxnwI2AtxSTQgJ0tJluY3ei7YQ
-         CY9w==
-X-Gm-Message-State: AFqh2kqF6PBEfAS4NvC7B9ArZVPcwYm57NDyFph+EQI7V5sWln16wp5m
-        G2nTVSdwYDZPZg/cGvYAGv0xqCYxmhs=
-X-Google-Smtp-Source: AMrXdXvBzvrH+tjRI+9mhSpvuGwwi4mrGueZ5fbQE+C8+qYsOCNm6qLBRvm3aoaG55oEz0Lf+C79KA==
-X-Received: by 2002:a05:6512:1049:b0:4b0:a1e7:915a with SMTP id c9-20020a056512104900b004b0a1e7915amr27257766lfb.49.1673695309242;
-        Sat, 14 Jan 2023 03:21:49 -0800 (PST)
-Received: from localhost.localdomain ([2a05:3580:f312:6c02:b940:4283:cb3e:a3e8])
-        by smtp.gmail.com with ESMTPSA id f16-20020a056512361000b004cb27d8edd1sm4281728lfs.85.2023.01.14.03.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Jan 2023 03:21:48 -0800 (PST)
-From:   Andrey Skvortsov <andrej.skvortzov@gmail.com>
-To:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andrey Skvortsov <andrej.skvortzov@gmail.com>
-Subject: [PATCH] media: ov5640: Update last busy timestamp to reset autosuspend timer
-Date:   Sat, 14 Jan 2023 14:21:09 +0300
-Message-Id: <20230114112109.982005-1-andrej.skvortzov@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Sat, 14 Jan 2023 06:24:08 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F174769F;
+        Sat, 14 Jan 2023 03:24:07 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MA844-1pR9Ir05Ck-00Bcor; Sat, 14 Jan 2023 12:23:51 +0100
+Message-ID: <4b01c9ae-1603-6f42-431d-1158286557b5@i2se.com>
+Date:   Sat, 14 Jan 2023 12:23:49 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] pinctrl: bcm: bcm2835: Switch to use
+ ->add_pin_ranges()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+References: <20230113171051.19309-1-andriy.shevchenko@linux.intel.com>
+ <916654ca-e70f-5663-f3a3-9b370c24aea9@i2se.com>
+ <Y8HNpokX5qCQTRqu@smile.fi.intel.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <Y8HNpokX5qCQTRqu@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:6HKAfuNQkaBL9orJNFnJWW+PACCYyx98Cn1d4oFQCAd5tGj93Fk
+ xcWGVZ/wlrd8FN1VmUHvj9pmlUGqcyQKJydlPJuJ0O4w7Lp32lkkue5Hzt6YmL3ah2aYJ4T
+ 0P5yHBUcOxc32dXI3v0Q9iKkQM1+HXS2ooySbtPOtyaqJHart2SEPK05IhvU/+kvWRu2Rb8
+ ke+diAtd9wU+WJxOCWoDQ==
+UI-OutboundReport: notjunk:1;M01:P0:ZW4NK6Ra+8Q=;9XIQMnrNtwC35e4tgE10nkovu6+
+ O+vVi7ZEAxButdOpskyzbMGwVxGX4hop43zoLCB4j3dx2r07XKp0dTefmr+Rw6SWBbAaF57hz
+ JnXw5I5XFCAjNrW5n2ixsCaYjoxvf42LQOisz7KiY3p60mjRX4MZIInL9Sya5dXJNXN/Nemvv
+ vg5ODh6VrQGTZ96FWjBYFKidYuyWZJorHAE1MvsK60nvwBGFrgOyga0ErgKve8EWxcSZczuDs
+ KdvgdFIn0y4gzEx/WH5Il2qMcsOsSUI4TUEIMFRdg/5/wZNA50sIqt2cH72Mk678sKjKc9qVQ
+ WIubwXDfcvv9Kd9kjjUR/oibgFQhIBA5cM96tLGI7XJXfH7/zYu/GDOUqI63oL7wAiXnfsjiO
+ dfDHFGTRIfKZjm/Xe0Sq3hEAhUZUDnIeyptUCWyV1TWwZ2K2sFQsy+3nb4g7hitTcbX7MYZt2
+ GjvhUg8ClI1+qq2+1Iyl9UUoeEpzJoaXV27ddfvGrqPHZwa6Wtp12psJcuYSFC0TIsPMt+Z2H
+ 6D9raVBv4DXqdGNNRazAKkIq+H+wTuhxWoR2UcqR6II/uy4w2NmqpwEWg234kFlW2/gvZXEov
+ HPbSCSjmP3L5J3Nded7jahulbAg2mZ1nPjkzP4e+8lZcN0fgPwZbTLdBwxWG/OspNxFCI1bwp
+ GW88xHhyGCbSRFhXCpxX8k6aALg2ig9gT2dD/qvaUg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise autosuspend delay doesn't work and power is cut off
-immediately as device is freed.
+Hi Andy,
 
-Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
----
- drivers/media/i2c/ov5640.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Am 13.01.23 um 22:31 schrieb Andy Shevchenko:
+> On Fri, Jan 13, 2023 at 09:13:23PM +0100, Stefan Wahren wrote:
+>> Am 13.01.23 um 18:10 schrieb Andy Shevchenko:
+> ...
+>
+>>> v2: fixed compilation issues (LKP), Cc'ed to the author of original code
+>>>
+>>> Btw, the commit d2b67744fd99 ("pinctrl: bcm2835: implement hook for
+>>> missing gpio-ranges") seems problematic in the fist place due to
+>>> odd of_node_put() call. I dunno how that part had been tested, or
+>>> how it's supposed to work, i.e. where is the counterpart of_node_get().
+>>> Anyway this change drops it for good.
+>> The countpart is in of_pinctrl_get(). I was just following the pattern like
+>> in other drivers like gpio-rockchip. The original commit has been tested by
+>> Florian Fainelli and me. I'm not sure if it's safe to drop it completely.
+> Please, elaborate how of_pinctrl_get() increases refcount of the parameter.
+> Maybe I'm looking into a wrong place?
+>
+>> Btw this is not the only platform affected by the gpio-ranges compatibility
+>> issue [1].
+> This is the only one that uses unnecessary added callback.
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index ac35350..f71c0f7 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -1238,6 +1238,7 @@ static int ov5640_write_reg(struct ov5640_dev *sensor, u16 reg, u8 val)
- 		return ret;
- 	}
- 
-+	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
- 	return 0;
- }
- 
-@@ -1305,6 +1306,7 @@ static int ov5640_read_reg(struct ov5640_dev *sensor, u16 reg, u8 *val)
- 	}
- 
- 	*val = buf[0];
-+	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
- 	return 0;
- }
- 
-@@ -3615,6 +3617,7 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
- 		break;
- 	}
- 
-+	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
- 	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
- 
- 	return 0;
-@@ -3702,6 +3705,7 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
- 		break;
- 	}
- 
-+	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
- 	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
- 
- 	return ret;
-@@ -4034,8 +4038,10 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
- out:
- 	mutex_unlock(&sensor->lock);
- 
--	if (!enable || ret)
-+	if (!enable || ret) {
-+		pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
- 		pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
-+	}
- 
- 	return ret;
- }
-@@ -4203,6 +4209,7 @@ static int ov5640_probe(struct i2c_client *client)
- 
- 	pm_runtime_set_autosuspend_delay(dev, 1000);
- 	pm_runtime_use_autosuspend(dev);
-+	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_put_autosuspend(dev);
- 
- 	return 0;
+i didn't have access to any of the other platforms which were also 
+affected. So i thought providing a general solution would be good idea. 
+I wasn't aware of add_pin_ranges().
+
+Since i was annoyed that nobody cared about DTB backward compatibility, 
+i send out a RFC series to fix the GPIO hog regression which breaks the 
+LEDs on the Raspberry Pi. Nobody complained about it.
+
+>
+>>> Perhaps we can check gpio-ranges property presence inside the GPIO
+>>> library, so this ->add_pin_ranges() won't be called at all.
+>> I thought this could be very platform specific, so i implemented a hook. But
+>> yes my initial hack modified gpiolib-of [2].
+> The point is that possibly documentation of ->add_pin_ranges() should be
+> amended to take care of the cases like this. We don't need two or more
+> hooks to do the same, esp. taking into account that OF specific doesn't
+> cover other cases.
+>
+>> [1] - https://patchwork.kernel.org/project/linux-arm-msm/patch/20180412190138.12372-1-chunkeey@gmail.com/
+>>
+>> [2] - https://lore.kernel.org/linux-arm-kernel/75266ed1-666a-138b-80f1-ae9a06b7bdf3@i2se.com/
+>>
+>>> Also I would like to understand the dance around checking for pin
+>>> control device. The original commit lacks of comments in the non-trivial
+>>> code.
+> Any comment on this?
+Do you mean the NULL check? of_pinctrl_get() could return NULL, but 
+pinctrl_dev_get_devname() directly access the dev member.
