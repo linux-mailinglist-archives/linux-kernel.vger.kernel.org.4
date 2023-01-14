@@ -2,104 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D34C66AB55
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B1066AB58
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjANMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 07:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S229973AbjANM3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 07:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjANMVt (ORCPT
+        with ESMTP id S229852AbjANM3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 07:21:49 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B5B7A86
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:21:48 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4e4a6af2d99so579237b3.4
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1XRB9Z8Nuy71yiH8EPDjVXeUBRtoHs+NvP31YvwCoe8=;
-        b=rVYa2xWKYMSKdIlDPT4CH9fgwT3e3nv/iSO1D3Gp2bbhoVgxm/GV8aOZvZDeZW5tLA
-         whvdK5uSGxpa4Ui3U2wqXOSntAlD257c4hPdQk/r3oXW2a/PRycAoYPEkcJL+kKyZDmQ
-         4iJMWkfIUuRLX9NGd3IiY0A44Qd2V60Wsu70ym3tiH3ouy92Q9/dHSoUuli8ie08w1sr
-         hgeznc+rYnWlRJsJ66Rs50hiHySjWkOqHYACxzBob34VhdcH4UQWsCa7jKTAzFxOdLat
-         iddW9DhgkRd5rJKqhCqpE+sCuoW1yZxfbZuc/h2eBLkB6X53oXSsXAoGgc0EqMPp0d4n
-         jzwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1XRB9Z8Nuy71yiH8EPDjVXeUBRtoHs+NvP31YvwCoe8=;
-        b=zeeGHRbYW0zFvx+OkNwDt86Sx5aooqV2Q8AcpaMpRbx9BcwFDkSIXSKabS4uaQbA8J
-         bU4ofXKSTnxLVnLlGEjdE+OudFY8N4MfxIk+X3s4S5CD56zCYO7zbgErpOR7RS6jyWyb
-         dXCXmrlUNfjr4LCNdbx+DyZmwgs2LxxiW83lm3b9AE51xXSSzJqedxhiWLrYM2+8AMSj
-         01I9cP9ppl1NkdDgmKwCBjRW/y4UWlFhQXCBSdJI41ZH/pKAiyJGqsndmX2ryMqb4ThI
-         b0KEQuNPhIy7NjxAFiL+104aNOeEa3fRIWzttqTWpLIl5sDBPClJlgpSDKA4TarzAQk0
-         eX0A==
-X-Gm-Message-State: AFqh2krVUzQglXRxGXRLNKKmkYuyhSsP/ftIzzGWudy3f+9w8356JAFp
-        Xov/XVbr2vixYZ1vzlIXD4LPni0ZI85Q9HmsR5zHVg==
-X-Google-Smtp-Source: AMrXdXsAkZiQ9nvWwuLDJi+xSWAqG3UFx5K8zjZMZ/bDUk0Unojd4EwuFYzbXAGl3mgImYtsPOlrj/VTnzTT7RtLIlI=
-X-Received: by 2002:a81:6d85:0:b0:3f2:e8b7:a6ec with SMTP id
- i127-20020a816d85000000b003f2e8b7a6ecmr3222938ywc.332.1673698907680; Sat, 14
- Jan 2023 04:21:47 -0800 (PST)
+        Sat, 14 Jan 2023 07:29:19 -0500
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA707683;
+        Sat, 14 Jan 2023 04:29:18 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 5B0801B001E0;
+        Sat, 14 Jan 2023 14:29:15 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1673699355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RX8+ULODkz65zJx9VQad95+VUhDEkgtu+lSo5Iwr/n0=;
+        b=JnJCNzzzsU6UNbHk1CGRtCt03M2x4NisqjMC180sM+8ma3Fwua5GOAswFA8ZVsLCbR+mDL
+        FNDyPGv9718q0vwtlsJ2iRyv5uqJc31rs0wE2Np0e9j5hCqU2uiTFChjzCdZFeYWrExaI7
+        fX1Mn0QQR45AcfJveDzN3mbsDl0qPVAKXPit2ELu8aPy1xtYOrmQ1XB5QlZkc153EfSBxp
+        VsEoSXGGSMJU2yt4O3231shH6///IQXZB5g1cYN1p7tGbAS/l0qdupI7bPyZmQwdwxOml5
+        1UlvQoIoGTQNfiLmARzglIHOKDXNf8lEzefMGrznd9fXsgyl8xKq5xZ6S7fSaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1673699355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RX8+ULODkz65zJx9VQad95+VUhDEkgtu+lSo5Iwr/n0=;
+        b=skDo4sKgBahs/EN+ztEyq2UfLh+/LxzcoLOVubc2WtkB3m9wGTrNpvxPN1RxcDxG5hgrjz
+        +ZMyg+gpuCcQEVj55ZgJAgzjTDZc111eDJb61B703QjkOHduvgpTCKwT/fDV4N8H0/WBR/
+        eBjdKOvv5BSYA3CIhsT1zCsOhZLvV3j0xJd2k+avvQdALA/Da1ko6TsT1icC8XxVKWM3Ck
+        x4mK034lFJJ4yPcumgFoPUsRx1z+siAzugMu7mHgHlOVN6SNtsXUApvUeNUslxZIRNDTD0
+        EVlMRRwmhxfOqIpOya9iYeKSWfLA65HmQnZVeHvfojS/eiI3nNlq83oPJaMZHQ==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1673699355; a=rsa-sha256;
+        cv=none;
+        b=eJtpfH4q7M1iM0+iL2czkqKv2sJxL62fwjzQ/BwIuw57xisz5VsgUIdg0hlpM9eWQ/0kP3
+        jXd2v+/x+JqQNExoLEAw76qJNfDkN6b8tayo7VyPRiPL1HFXfcyYoAkHDHlEez8zRREEZf
+        yfrdg3onSXcFn65XMjjnTzdx05joMOEqM0En/WNarNZr2E5wnBz1yqCtI7Fa3PiksyXfKZ
+        n0WxsBrKeCitaWsa4R/SEpzaayOQMD8no/+/X4q5gCXcOgUGjnQ7eONLLsNJOSGU4GK4KO
+        ihVvH+6fjbVW3hViZwJHmFxSArnWGnNSSRaUpypaFhvTYPAMEnlrYKi6YGowSw==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 0790A634C91;
+        Sat, 14 Jan 2023 14:29:15 +0200 (EET)
+Date:   Sat, 14 Jan 2023 14:29:14 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Andrey Skvortsov <andrej.skvortzov@gmail.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ov5640: Update last busy timestamp to reset
+ autosuspend timer
+Message-ID: <Y8KgGhu0e/+xIfDm@valkosipuli.retiisi.eu>
+References: <20230114112109.982005-1-andrej.skvortzov@gmail.com>
 MIME-Version: 1.0
-References: <20230112-inet_hash_connect_bind_head-v2-1-5ec926ddd985@diag.uniroma1.it>
- <CANn89iJekPT_HsJ6vfQf=Vk8AXqgQjoU=FscBHGVSRcvdfaKDA@mail.gmail.com> <CAEih1qWQf1JK4vbdzcTb1yXADxTV4+AqtJkvnK1T895obUTtOQ@mail.gmail.com>
-In-Reply-To: <CAEih1qWQf1JK4vbdzcTb1yXADxTV4+AqtJkvnK1T895obUTtOQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sat, 14 Jan 2023 13:21:36 +0100
-Message-ID: <CANn89iJCphvKBWcV1iGdTe9OXWiv1gQCTub60b1v2qi=pYLoSw@mail.gmail.com>
-Subject: Re: [PATCH v2] inet: fix fast path in __inet_hash_connect()
-To:     Pietro Borrello <borrello@diag.uniroma1.it>
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230114112109.982005-1-andrej.skvortzov@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 1:18 PM Pietro Borrello
-<borrello@diag.uniroma1.it> wrote:
->
-> On Fri, 13 Jan 2023 at 13:16, Eric Dumazet <edumazet@google.com> wrote:
-> > 1) Given this path was never really used, we have no coverage.
-> >
-> > 2) Given that we do not check inet_ehash_nolisten() return code here.
->
-> It seems there are a bunch of call sites where inet_ehash_nolisten() return
-> code is not checked, thus I didn't think of it to be a problem.
->
-> >
-> > I would recommend _not_ adding the Fixes: tag, and target net-next tree
-> >
-> > In fact, I would remove this dead code, and reduce complexity.
-> >
->
-> This makes a lot of sense. I can post a v3 patch completely removing
-> the fast path.
->
-> However, this patch's v1 was already reviewed by
-> Kuniyuki Iwashima <kuniyu@amazon.com>, v2 is a nit, if posting a v3
-> I think I should remove the Reviewed-by: since it would completely
-> change the patch, but what is the preferred fix?
->
+Hi Andrey,
 
-Yes, remove it, and Kuniyuki will review it again, thanks.
+On Sat, Jan 14, 2023 at 02:21:09PM +0300, Andrey Skvortsov wrote:
+> Otherwise autosuspend delay doesn't work and power is cut off
+> immediately as device is freed.
+> 
+> Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+> ---
+>  drivers/media/i2c/ov5640.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index ac35350..f71c0f7 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -1238,6 +1238,7 @@ static int ov5640_write_reg(struct ov5640_dev *sensor, u16 reg, u8 val)
+>  		return ret;
+>  	}
+>  
+> +	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
+>  	return 0;
+>  }
+>  
+> @@ -1305,6 +1306,7 @@ static int ov5640_read_reg(struct ov5640_dev *sensor, u16 reg, u8 *val)
+>  	}
+>  
+>  	*val = buf[0];
+> +	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
+
+I wouldn't add these calls to register accesses. It's generally relevant
+with autosuspend_put().
+
+The rest seems fine to me.
+
+>  	return 0;
+>  }
+>  
+> @@ -3615,6 +3617,7 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> +	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
+>  	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
+>  
+>  	return 0;
+> @@ -3702,6 +3705,7 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> +	pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
+>  	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
+>  
+>  	return ret;
+> @@ -4034,8 +4038,10 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+>  out:
+>  	mutex_unlock(&sensor->lock);
+>  
+> -	if (!enable || ret)
+> +	if (!enable || ret) {
+> +		pm_runtime_mark_last_busy(&sensor->i2c_client->dev);
+>  		pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -4203,6 +4209,7 @@ static int ov5640_probe(struct i2c_client *client)
+>  
+>  	pm_runtime_set_autosuspend_delay(dev, 1000);
+>  	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_mark_last_busy(dev);
+>  	pm_runtime_put_autosuspend(dev);
+>  
+>  	return 0;
+
+-- 
+Kind regards,
+
+Sakari Ailus
