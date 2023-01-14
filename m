@@ -2,135 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A9266AE53
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 23:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE99066AE93
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 00:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjANWks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 17:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S230368AbjANXAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 18:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjANWkp (ORCPT
+        with ESMTP id S230260AbjANXAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 17:40:45 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01327BB86
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:40:43 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id r9so1368246wrw.4
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:40:43 -0800 (PST)
+        Sat, 14 Jan 2023 18:00:32 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70E9E3BC
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 15:00:31 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id d16so9054037qtw.8
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 15:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nYgARAkWs9iZ0B/4FRwpMpPs9S0XV3huLCtOhLAUC8Y=;
-        b=Ds1XNBqgWBP3mtifRGvLh1owkfZbiDW4h5dggRxSHpmJ9J2KOfn/ZCCvW0yQYjw7t2
-         BrB0oOoRzRcraQqleGmC+Mfg3hVBklyxNEiR38vK7o35DUoOnVHsDOLoGoetmLvmvGXP
-         Dc5qNQRLBi6JMugRudC6hv7Ei7YlQCQ2jVXeYk0xl7KzfmjHgEJDK7n9gIPtgpwbreqi
-         2rEySAnXmZ5CT5v6V45TREUuqDoQe3nmLgAb7HvWyPO8LunM1+DlK8f8choZ4DB2FNcO
-         OR1PSQ4yGCrITZaDbs495MdLLHG75+cv4jb21A6M966VabvXDlr4+glAmt9yJmEdZbzQ
-         fwuA==
+        d=pefoley.com; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F3XCi6AfxSAqS5zfTvqe8suxE7tzF8peDwUROyvJdd0=;
+        b=DCvz3bkLZakEpTkPpr0XwSu/dWqJzzD2YWAY+4X20tODPd+44+2woBDINF6C7uavGE
+         AFTr9bhlIK4sYaWzqEJmomyk79njyBOlnElNd3+5Rps98ZI84gaEsfE9zyATVnfNXZYK
+         W+UnBkv5gQcCvTEjV02mQ9yo4neMJ3xGyVMrA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nYgARAkWs9iZ0B/4FRwpMpPs9S0XV3huLCtOhLAUC8Y=;
-        b=5sHLqZsj5gQy5XuFspAqdZUKEyskbV5dqr+MmuFab/llzotiN0mA3ujd4NAzo8a9/P
-         VOeNZdNmqjMc+tu2nynEl/XRiXhxnJz2ivsuxKPzIjaT84nYlWLllxC4m7i8ED3v7o36
-         T/WzkdPjofcgknGm0qo4xhzKQRx0rGpy70prB76/ZB71c2z02Jeg2WQkm5+6hlhCkd4w
-         bNIltJxafFiiDE6M9QYzHNjXYxlRSCbHRVcQxn4KFgiXO9xw8/AVJdTzbxjQ967N8JUQ
-         XqpOy7pdbarwu4tf/ERcMTvEhBFQxTHVNU30LvTSVvxYwaSuECJk/X+ZF2DGeOu33a9w
-         61Lw==
-X-Gm-Message-State: AFqh2kqA0h6D24X2anWT93JsYpe80IzKKNPhDw1X6dn1YYwHn1CImN/m
-        j1eqDNbdm+h0b+m8DZwhzRQER4lFxcXx4C19xtR2XA==
-X-Google-Smtp-Source: AMrXdXvXNemnyUUfmSCSvj4wkjdakrffiCb1jSHQJNLz46dk53LCwcZ/W7SXiBwaW6CZIwIMd2/h1+8oNAvijZD9DWo=
-X-Received: by 2002:a5d:614d:0:b0:2bc:7ed4:cd50 with SMTP id
- y13-20020a5d614d000000b002bc7ed4cd50mr964423wrt.40.1673736042305; Sat, 14 Jan
- 2023 14:40:42 -0800 (PST)
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F3XCi6AfxSAqS5zfTvqe8suxE7tzF8peDwUROyvJdd0=;
+        b=lLktVYkfQPuQQaUsGc9d4DBOSykCti4G5xUNKDmlXYBhBOU3pB/Ua4agHP7XkkhBWV
+         de3hExmGZXZL0Ig0hPt0EMYAtvuOs2qJkb6Mua81DyAa4ZBWY7OtfGX8LXNBSBeLdOHP
+         7FK0SwpnlfrImd/VWFEmZkP5Bd/WlCXPA4iJx8R/zAt5i3Hjrd/3XlaqJyLi4v5iJxYM
+         id0ma+H34d2Ix0UIdN8aexvUCbpNfSn7cF9g25vxaAFR3yW1KkRCyw+3T+ezlJcEqJT3
+         yxTxB3y5lWrYkxhihCxnTtylI141fZ4ZFEKaPFtzrCvEpTy/709GabnBqI1JbYvXtME6
+         AolQ==
+X-Gm-Message-State: AFqh2kph7Uz+7+x8qVofWLeUVhTojxnYxz0b5cQOKZ81MBfoPIpzvdZR
+        QppFOxLMdvNepaYisLuPZYmSAg==
+X-Google-Smtp-Source: AMrXdXtV8kzhjM0mYYtQvEKOs5VCP5FkGjdffWhpq0GZ23j78oKYxQYXe68DedpEtslq0G1ShXI9ig==
+X-Received: by 2002:a05:622a:4d47:b0:3a6:46b4:2a6b with SMTP id fe7-20020a05622a4d4700b003a646b42a6bmr132730359qtb.27.1673737230600;
+        Sat, 14 Jan 2023 15:00:30 -0800 (PST)
+Received: from [192.168.1.3] ([2600:4040:29fb:d300:887b:7eff:fe74:68b2])
+        by smtp.gmail.com with ESMTPSA id s1-20020a05620a0bc100b006fa4ac86bfbsm15132169qki.55.2023.01.14.15.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 15:00:30 -0800 (PST)
+From:   Peter Foley <pefoley2@pefoley.com>
+Date:   Sat, 14 Jan 2023 18:00:18 -0500
+Subject: [PATCH] tools: bpf: Disable stack protector
 MIME-Version: 1.0
-References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
- <d33086a5-233f-f591-c9da-5f1a2e8aaf54@oracle.com> <7498a6b1-01d0-0e12-82d3-c75250e09161@linux.alibaba.com>
-In-Reply-To: <7498a6b1-01d0-0e12-82d3-c75250e09161@linux.alibaba.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 14 Jan 2023 14:40:30 -0800
-Message-ID: <CAP-5=fVQC=cBxN_-23KRRQGpQieMt1CA2N1UL60X9SXobV3x8w@mail.gmail.com>
-Subject: Re: [PATCH v7 0/9] Add metrics for neoverse-n2-v2
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
+X-B4-Tracking: v=1; b=H4sIAAI0w2MC/x2MQQqEMAwAvyI5b8FUobpfkT2kGjUHu5KICOLfr
+ R6HGeYEYxU2+BYnKO9i8k8Z8FNAP1Oa2MmQGXzpqxKxdnEdXYsNMfoQQyDIZSRjF5VSPz/tQrax
+ PmJVHuV4993vum5craNsbgAAAA==
+To:     Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Peter Foley <pefoley2@pefoley.com>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1673737229; l=1810;
+ i=pefoley2@pefoley.com; s=20230111; h=from:subject:message-id;
+ bh=QjHX5cBfbMx9A2AI5fA8Eg+Dzw4jlnZ+WyV+BAFRgnE=;
+ b=SEteZLNsaPCTQYt40+vXrNdYOdi+lpPaAj0mBIbbUzFE4hE2tqD65Jb57PS7BkA4E8FTe4SJf0h+
+ PnvXw2BLD200psGUovhBHMkygtVbohD3sm4+bOBG6vI4565haZmp
+X-Developer-Key: i=pefoley2@pefoley.com; a=ed25519;
+ pk=DCQqIdN6rHnvfQH58WQiQzJFfGUo1HyWSvdYG8vnO5o=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 8:32 AM Jing Zhang <renyu.zj@linux.alibaba.com> wro=
-te:
->
->
->
-> =E5=9C=A8 2023/1/13 =E4=B8=8B=E5=8D=885:59, John Garry =E5=86=99=E9=81=93=
-:
-> > On 13/01/2023 09:22, Jing Zhang wrote:
-> >> Changes since v6:
-> >> - Split patch #1 into 3 smaller patches as suggested by Ian.
-> >> - Change perf_pmu__get_slots into perf_pmu__cpu_slots_per_cycle,
-> >>    per John's suggestion;
-> >> - Return NAN instead of 0 in perf_pmu__cpu_slots_per_cycle weak
-> >>    function, per John's suggestion;
-> >> - Factor out pmu_core__find_same function, per John's suggestion.
-> >> - Link:https://urldefense.com/v3/__https://lore.kernel.org/all/1673017=
-529-1429208-1-git-send-email-renyu.zj@linux.alibaba.com/__;!!ACWV5N9M2RV99h=
-Q!LhBq67uDCOsz1k7ZF4aQPHF0Bp8FsMr-ZNgCnBSUKF4qJTFODfnkId7lw_NXqB4qZUCpu-jbY=
-8z8LTckoqFGz2Q8bA$
-> >
-> > This looks fine. But for this code:
-> >
-> > On 13/01/2023 09:22, Jing Zhang wrote:
-> >> +double perf_pmu__cpu_slots_per_cycle(void)
-> >> +{
-> >> +    char path[PATH_MAX];
-> >> +    unsigned long long slots =3D 0;
-> >
-> > I would prefer if this returned NAN (and not 0) for when we can't find =
-a pmu or the value from ./caps/slots is zero, but I am not going to get too=
- hung up on that.
-> >
->
-> Ok, I like this way too.
->
-> > For series:
-> >
-> > Reviewed-by: John Garry <john.g.garry@oracle.com>
->
-> Thank you very much indeed!
+Avoid build errors on distros that force the stack protector on by
+default.
+e.g.
+  CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
+skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__stack_chk_fail' is not supported.
+int iter(struct bpf_iter__task_file *ctx)
+    ^
+1 error generated.
 
-Aside a naming nit in 1/9 for series:
+Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+---
+ tools/bpf/bpftool/Makefile    | 1 +
+ tools/bpf/runqslower/Makefile | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Acked-by: Ian Rogers <irogers@google.com>
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index f610e184ce02a..36ac0002e386f 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
+ 		-I$(or $(OUTPUT),.) \
+ 		-I$(srctree)/tools/include/uapi/ \
+ 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
++		-fno-stack-protector \
+ 		-g -O2 -Wall -target bpf -c $< -o $@
+ 	$(Q)$(LLVM_STRIP) -g $@
+ 
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 8b3d87b82b7a2..f7313cc966a04 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+ 	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+ 
+ $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+-	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
+-		 -c $(filter %.c,$^) -o $@ &&				      \
++	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
++		 -fno-stack-protector 					\
++		 -c $(filter %.c,$^) -o $@ &&				\
+ 	$(LLVM_STRIP) -g $@
+ 
+ $(OUTPUT)/%.o: %.c | $(OUTPUT)
 
-Thanks,
-Ian
+---
+base-commit: 97ec4d559d939743e8af83628be5af8da610d9dc
+change-id: 20230114-bpf-918ae127b77a
+
+Best regards,
+-- 
+Peter Foley <pefoley2@pefoley.com>
