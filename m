@@ -2,61 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BEA66A77E
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 01:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488C566A77F
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 01:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjANA32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 19:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S231142AbjANAb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 19:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjANA3Z (ORCPT
+        with ESMTP id S230252AbjANAbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 19:29:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3CA10F9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:29:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673656164; x=1705192164;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=t3GwNhC7motvp+RSlnAdQh8JcZfScPJWmG1CM6duiQ0=;
-  b=MygKYgB/MycqA7KSugXNpchChw6FPrAG0xjoeaPLt7T5M9iPAThHT0VK
-   umk7phQsRFjaoCOYRw4SBKfbrJ02Vb3a6jrcw/Tsqv+XDcSBFSFDsnIXi
-   w/nOi5jpFYGMgfMCbfMlAbIiP5hJXV6cKQErnBci4yMxWkIMNgvUIM0+y
-   NIRK5SMxg9OlsHuuMf/mLvrOdjV81p7b7ed8trILJRDzM7lnwsUpKLzi0
-   FQ6IL3lkqe9pEa5t9wvMINAgSiN1ZMhIS6tK3vAuqIslQNIcfbJKM166H
-   8XwGdXqDt7b/Qrsk0QqJ7ynx7Y6ruxUL3HmnaeoRRWf32vSWiPN2mpiTH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="351372452"
-X-IronPort-AV: E=Sophos;i="5.97,215,1669104000"; 
-   d="scan'208";a="351372452"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 16:29:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="782329186"
-X-IronPort-AV: E=Sophos;i="5.97,215,1669104000"; 
-   d="scan'208";a="782329186"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jan 2023 16:29:21 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pGUQC-000BYq-2w;
-        Sat, 14 Jan 2023 00:29:20 +0000
-Date:   Sat, 14 Jan 2023 08:28:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/urgent] BUILD SUCCESS
- da07d2f9c153e457e845d4dcfdd13568d71d18a4
-Message-ID: <63c1f73a.2AJ5ii9IYFQcE1P9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 13 Jan 2023 19:31:24 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D46C06F;
+        Fri, 13 Jan 2023 16:31:22 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 140455C00A7;
+        Fri, 13 Jan 2023 19:31:19 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 13 Jan 2023 19:31:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1673656279; x=1673742679; bh=06oSer/hbIX+e8ixGpELbsOVt
+        s3pi8H+tRTjkc7QSco=; b=d2NkJzL1JwBETuvfrCBMhHNw91k9PEmBfKLJc81Gn
+        qZBJ/dTpzWX1uNkywAsErH1obEYD6+W3XSqpb0SjEQ0Re87mW2jYm3HKyRARU6XR
+        DLsVNRsz6Lr8fsIGxuILrXSShPJ+3XoJ7I4pvTtY+A46Xrkzd3TibguPUoEerSAu
+        6nw80dJmRNexmL6rg3TJndYhU0eE/OK3MSLjZ+gaw8T03AjcHKLKfyUt/sXMICkc
+        9O252C5oFKxYQg1l0HH0ADUg7NaS/l7YINW6WRPUJHfpS8bG+83999h1vjMQzjaq
+        UKON3SmPXQgiqT9hwnVCcngTvQx6gxLj/e5iXm350gvvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1673656279; x=1673742679; bh=06oSer/hbIX+e8ixGpELbsOVts3pi8H+tRT
+        jkc7QSco=; b=OgLKE3xTvIREhVSDtMWTJj5enSFDb9I41shZnityxl7dkfv+vao
+        9KNQr8Y7gP/O2mJwSuoE4qsfrOBtZGVjVx/9cb4iUu1G0eAQRx1AfpQI3lBLov5D
+        ynETmT3m1ZHdsCtNED6wYkfReHJ+OQ26uZc6t3Q7pVjjHtWm8uVN8WxTCyZl0rMr
+        tdDa5y3ZlqKpjYyecAZbKo5mczg6d4MJRC9LdwmL2HGNEiRdA0MAGDi7ecgGYiKu
+        E8TahxaMd4uFYBGqJ+J8yXVHU+fA+3uzibiGf4P+GZc1Kg4MRjo3xnytaxXsL5iI
+        mLYUsvgrra2J3Byfkt4pREX7lvLn4yaXUow==
+X-ME-Sender: <xms:1ffBY5GekTrmQNbnKtYZiHgyjnvNBR9vUiN8PI_3MX2PuBTycpYBHw>
+    <xme:1ffBY-XlGPiC-fOHc9PWgHhcxXmfTkakFnzQ1WZrpVS0vgWDGeaq-xCzEF5eiaWEG
+    zwis_AVunJGYSC81H0>
+X-ME-Received: <xmr:1ffBY7L4oX1LS7QU59v-Arro1fp1phsHQEuGk4opMqihtEkf0p8Fb9mrmH4j_DiXWbXCXDGFsFtN2hLn_tPJ3BXBJfoaq1VvdmSKjAMcspKP2VHk3gAlzD-Lfg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleelgddvgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflrghrrhgrhhcu
+    ifhoshgsvghllhcuoehkvghrnhgvlhesuhhnuggvfhdrthhoohhlsheqnecuggftrfgrth
+    htvghrnhepjeeuvefgjeefgefhhfefhedvffelteehkeekvdefheeiteeutdehveeghfeg
+    kefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkh
+    gvrhhnvghlsehunhguvghfrdhtohholhhs
+X-ME-Proxy: <xmx:1ffBY_E7Yui-m0Qql0NNBgfk59W7rops_-ItwjoFJyKNq8ifiKKrIQ>
+    <xmx:1ffBY_XPHbC453p9rAmA4QVkK6PCh2-o40NE9Ccew8lcaiMkihYGgA>
+    <xmx:1ffBY6NFSnL3O8AIuuI6xnA2XjXRj_o4TJKC-iBrjwRlJDVXjBXx2w>
+    <xmx:1_fBY7pxaNJxadzhpnd7UrlFjHR1ccmRI8mDgv6JPFaDI7iZalfyvA>
+Feedback-ID: id76147eb:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Jan 2023 19:31:14 -0500 (EST)
+From:   Jarrah Gosbell <kernel@undef.tools>
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>,
+        Jarrah Gosbell <kernel@undef.tools>
+Subject: [PATCH] ASoC: codec: rt5640: Resolve failure to set DMIC clock after playback
+Date:   Sat, 14 Jan 2023 00:30:54 +0000
+Message-Id: <20230114003053.401274-1-kernel@undef.tools>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,84 +86,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
-branch HEAD: da07d2f9c153e457e845d4dcfdd13568d71d18a4  sched/fair: Fixes for capacity inversion detection
+From: Ondrej Jirman <megi@xff.cz>
 
-elapsed time: 726m
+rt5640_set_dai_sysclk is called with freq == 0 when playback stops. This
+causes DMIC setup code to fail. I2S interface doesn't need to be active
+for codec to work, so don't clear rt5640->sysclk after
+rt5640_set_dai_sysclk is called with freq == 0.
 
-configs tested: 63
-configs skipped: 2
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
+---
+ sound/soc/codecs/rt5640.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-ia64                             allmodconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-x86_64                           allyesconfig
-powerpc                           allnoconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                            allnoconfig
-sh                               allmodconfig
-mips                             allyesconfig
-m68k                             allyesconfig
-powerpc                          allmodconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arc                  randconfig-r043-20230112
-riscv                randconfig-r042-20230112
-s390                 randconfig-r044-20230112
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                                defconfig
-arm                                 defconfig
-x86_64                        randconfig-a004
-i386                          randconfig-a005
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a002
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a006
-x86_64                           rhel-8.3-bpf
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                          randconfig-a014
-i386                          randconfig-a012
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                          randconfig-a016
-i386                             allyesconfig
-i386                          randconfig-c001
-
-clang tested configs:
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-arm                  randconfig-r046-20230112
-hexagon              randconfig-r041-20230112
-hexagon              randconfig-r045-20230112
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a006
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-
+diff --git a/sound/soc/codecs/rt5640.c b/sound/soc/codecs/rt5640.c
+index 18e01949f20e..054de41ceccb 100644
+--- a/sound/soc/codecs/rt5640.c
++++ b/sound/soc/codecs/rt5640.c
+@@ -1839,6 +1839,9 @@ static int rt5640_set_dai_sysclk(struct snd_soc_dai *dai,
+ 	unsigned int reg_val = 0;
+ 	unsigned int pll_bit = 0;
+ 
++	if (freq == 0)
++		return 0;
++
+ 	switch (clk_id) {
+ 	case RT5640_SCLK_S_MCLK:
+ 		reg_val |= RT5640_SCLK_SRC_MCLK;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.39.0
+
