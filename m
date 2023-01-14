@@ -2,166 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5892E66AD80
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 20:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A848B66AD8B
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 20:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjANTsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 14:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S230244AbjANT6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 14:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbjANTry (ORCPT
+        with ESMTP id S229971AbjANT6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 14:47:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D64DA5C9;
-        Sat, 14 Jan 2023 11:47:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08284B80A36;
-        Sat, 14 Jan 2023 19:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1236C433D2;
-        Sat, 14 Jan 2023 19:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673725670;
-        bh=h5oj8uz2mcobJK2H+Hm87QzyJogghFxebdxYASXr6cM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KiDrcBr9xYYjYZegA2r59TFavCdH1lJzSKxoSZ6AnPCL95MfbvVcN/2vpGfdMQsPS
-         cEQ2xGXQikIXt/oa7BuEOV6UUTZwitOmkFZ/IQb+AHojukxeVTNXd7gT4AN+4AE5TF
-         xNB1KvHvAWsJJQiJjtrAHEfQ7gL3a2YeYtcoQ+/mKfhDWWwOGZOAOFuWdRRkKcBSR0
-         1oLifEXl8Pf53b4bHvQbdXl5r9PY9o9nUOziEzSMP57fwtK63MPFONd5i1qND5Tz2V
-         HfKNpJPuqhUU/n0FFCruuQnRLZajl/DjGHd0wL593NZ07RyNMpUnjrPASGFfUoszoq
-         wt6ROkuSivsgA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-crypto@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 2/2] Docs: Add some missing SPDX license identifiers of subsystem docs
-Date:   Sat, 14 Jan 2023 19:47:41 +0000
-Message-Id: <20230114194741.115855-2-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230114194741.115855-1-sj@kernel.org>
-References: <20230114194741.115855-1-sj@kernel.org>
+        Sat, 14 Jan 2023 14:58:31 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3ACB05B8C
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 11:58:30 -0800 (PST)
+Received: (qmail 71149 invoked by uid 1000); 14 Jan 2023 14:58:29 -0500
+Date:   Sat, 14 Jan 2023 14:58:29 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <Y8MJZX/Png1zfYG0@rowland.harvard.edu>
+References: <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
+ <114ECED5-FED1-4361-94F7-8D9BC02449B7>
+ <Y77QbG9lVXX9/B87@rowland.harvard.edu>
+ <4c1abc7733794519ad7c5153ae8b58f9@huawei.com>
+ <Y8GGmstFlgg91RMp@rowland.harvard.edu>
+ <20230113200706.GI4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230113203241.GA2958699@paulmck-ThinkPad-P17-Gen-1>
+ <136d019d8c8049f6b737627df830e66f@huawei.com>
+ <20230114175343.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230114181537.GA493203@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230114181537.GA493203@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some subsystem documents are missing SPDX license identifiers.  Add
-those.
+On Sat, Jan 14, 2023 at 10:15:37AM -0800, Paul E. McKenney wrote:
+> > > Perhaps the closest to what you want is to express that as a data dependency if you know how to teach herd that Srcu-unlock is a read and Srcu-lock depends on its second input :D (I have no idea how to do that, hence the questions above)
+> > 
+> > Given that both you and Alan suggested it, I must try it.  ;-)
+> 
+> And it works as desired on these litmus tests:
+> 
+> manual/kernel/C-srcu-nest-*.litmus
+> 
+> In this repository:
+> 
+> https://github.com/paulmckrcu/litmus
+> 
+> However, this has to be dumb luck because herd7 does not yet provide
+> the second argument to srcu_read_unlock().
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- Documentation/crypto/index.rst     | 2 ++
- Documentation/driver-api/index.rst | 2 ++
- Documentation/gpu/index.rst        | 2 ++
- Documentation/hwmon/index.rst      | 2 ++
- Documentation/input/index.rst      | 2 ++
- Documentation/mm/index.rst         | 2 ++
- Documentation/scheduler/index.rst  | 2 ++
- Documentation/sound/index.rst      | 2 ++
- 8 files changed, 16 insertions(+)
+Yes it does.  Grep for srcu_read_unlock in linux-kernel.def and you'll 
+see two arguments.
 
-diff --git a/Documentation/crypto/index.rst b/Documentation/crypto/index.rst
-index da5d5ad2bdf3..95b0870e09b8 100644
---- a/Documentation/crypto/index.rst
-+++ b/Documentation/crypto/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- ==========
- Crypto API
- ==========
-diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
-index b208e0dac3a0..7a2584ab63c4 100644
---- a/Documentation/driver-api/index.rst
-+++ b/Documentation/driver-api/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- ==============================
- Driver implementer's API guide
- ==============================
-diff --git a/Documentation/gpu/index.rst b/Documentation/gpu/index.rst
-index eee5996acf2c..ff06a6b12c5e 100644
---- a/Documentation/gpu/index.rst
-+++ b/Documentation/gpu/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- ============================
- GPU Driver Developer's Guide
- ============================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index c2b3c1a822dd..2186d732654f 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- ===================
- Hardware Monitoring
- ===================
-diff --git a/Documentation/input/index.rst b/Documentation/input/index.rst
-index 35581cd18e91..d60bf9cfe005 100644
---- a/Documentation/input/index.rst
-+++ b/Documentation/input/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- ===================
- Input Documentation
- ===================
-diff --git a/Documentation/mm/index.rst b/Documentation/mm/index.rst
-index 5a94a921ea40..c4e9fbacaf38 100644
---- a/Documentation/mm/index.rst
-+++ b/Documentation/mm/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- ===============================
- Memory Management Documentation
- ===============================
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index 1aac972a652f..ae0229f5a9cf 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- =========
- Scheduler
- =========
-diff --git a/Documentation/sound/index.rst b/Documentation/sound/index.rst
-index 5abed5fc6485..7e67e12730d3 100644
---- a/Documentation/sound/index.rst
-+++ b/Documentation/sound/index.rst
-@@ -1,3 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
- =============================
- Sound Subsystem Documentation
- =============================
--- 
-2.25.1
+>  My guess is that the herd7
+> is noting the dependency that is being carried by the pointers to the
+> srcu_struct structures.
 
+That is not a dependency.
+
+>  This guess stems in part from the fact that
+> I get "Flag unbalanced-srcu-locking" when I have one SRCU read-side
+> critical section following another in the same process, both using the
+> same srcu_struct structure.
+> 
+> Nevertheless, here is the resulting .bell fragment:
+> 
+> ------------------------------------------------------------------------
+> 
+> (* Compute matching pairs of Srcu-lock and Srcu-unlock *)
+> let srcu-rscs = ([Srcu-lock] ; data ; [Srcu-unlock]) & loc
+> 
+> (* Validate nesting *)
+> flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
+> flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
+> 
+> (* Check for use of synchronize_srcu() inside an RCU critical section *)
+> flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+> 
+> (* Validate SRCU dynamic match *)
+> flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
+> 
+> ------------------------------------------------------------------------
+> 
+> I also created a C-srcu-nest-*.litmus as shown below, and LKMM does
+> complain about one srcu_read_lock() feeding into multiple instances of
+> srcu_read_unlock().
+
+It shouldn't; that doesn't happen in the litmus test below.  But the 
+test does contain an srcu_read_lock() that doesn't match any instances 
+of srcu_read_unlock(), so you should be getting an 
+"unbalanced-srcu-locking" complaint -- and indeed, you mentioned above 
+that this does happen.
+
+Also, your bell file doesn't contain a check for a lock matched with 
+multiple unlocks, so there's no way for herd to complain about it.
+
+>  The complaint comes from the different_values()
+> check, which presumably complains about any duplication in the domain
+> or range of the specified relation.
+
+No; different_values() holds when the values of the two events 
+linked by srcu-rscs are different.  It has nothing to do with 
+duplication.
+
+> But still working by accident!  ;-)
+> 
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> C C-srcu-nest-3
+> 
+> (*
+>  * Result: Flag srcu-bad-nesting
+>  *
+>  * This demonstrates erroneous matching of a single srcu_read_lock()
+>  * with multiple srcu_read_unlock() instances.
+>  *)
+> 
+> {}
+> 
+> P0(int *x, int *y, struct srcu_struct *s1, struct srcu_struct *s2)
+> {
+> 	int r1;
+> 	int r2;
+> 	int r3;
+> 	int r4;
+> 
+> 	r3 = srcu_read_lock(s1);
+> 	r2 = READ_ONCE(*y);
+> 	r4 = srcu_read_lock(s2);
+> 	r5 = srcu_read_lock(s2);
+> 	srcu_read_unlock(s1, r3);
+> 	r1 = READ_ONCE(*x);
+> 	srcu_read_unlock(s2, r4);
+> }
+
+This has 3 locks and 2 unlocks.  The first lock matches the the first 
+unlock (r3 and s3), the second lock matches the second unlock (r4 and 
+s2), and the third lock doesn't match any unlock (r5 and s2).
+
+Alan
+
+> 
+> P1(int *x, int *y, struct srcu_struct *s2)
+> {
+> 	WRITE_ONCE(*y, 1);
+> 	synchronize_srcu(s2);
+> 	WRITE_ONCE(*x, 1);
+> }
+> 
+> locations [0:r1]
+> exists (0:r1=1 /\ 0:r2=0)
