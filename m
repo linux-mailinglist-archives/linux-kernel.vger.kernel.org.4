@@ -2,123 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BD866AB28
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 12:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447B266AB34
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 12:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjANLYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 06:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S229754AbjANLhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 06:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjANLYI (ORCPT
+        with ESMTP id S229627AbjANLhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 06:24:08 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F174769F;
-        Sat, 14 Jan 2023 03:24:07 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.41]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MA844-1pR9Ir05Ck-00Bcor; Sat, 14 Jan 2023 12:23:51 +0100
-Message-ID: <4b01c9ae-1603-6f42-431d-1158286557b5@i2se.com>
-Date:   Sat, 14 Jan 2023 12:23:49 +0100
+        Sat, 14 Jan 2023 06:37:33 -0500
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E093A9E
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 03:37:32 -0800 (PST)
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 5CB211B001E6;
+        Sat, 14 Jan 2023 13:37:26 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1673696246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OHAgeT9fE6pOE0z6NcA1m9r1NboS0o+w2mo9Eni7BvQ=;
+        b=sQvy3jfvIqc2lkU3dbT/bE8QTrS7qfEW3nQXZ1/K5w0vELaBiVRWIas59OlQuUl5Tefiry
+        u+jzN6AqWgJ4UZcBqTQybX/wl+0lyEBtZ2oxvF4zihFDB7swhT+Hc/68vyPQAb2jk4/0zn
+        oGmp54bVWfYC60c1ZJwN0/bvvMeOzAG3DGk8Hz1IQBdnUGzx5VoEsxZYLaQzg2iHiedI/C
+        mrxruitVUMWA25TnuciTMhq/MD7r6eu7beMGYR3rQLQ4Z3Sau7+4oKEXh/w1xYpvmJWfEr
+        YV2OJHP8Ku2wXOYC1UTIDq4ZD8vFzZ+ZHkv0HONyqq2kX5Tb8N+c2+Od3gAZhg==
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 39D2220168;
+        Sat, 14 Jan 2023 13:37:20 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1673696240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OHAgeT9fE6pOE0z6NcA1m9r1NboS0o+w2mo9Eni7BvQ=;
+        b=GaRZ/vTu/Tn20PMGAhFIsqlIGYo21OqQRUC5wgSp25c6/fcYI2hBUvrsvpuZF2FwskOFmd
+        m1jJv9SaTWuoMe2VheT7TqkWdyfo3TgHxhyMyYooLsA3KdEBWMlHDfuR9e8sWLZmP+EjV6
+        EuvkSQhlS3z39h8xMsGfDfeGsWEyH/c=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1673696240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OHAgeT9fE6pOE0z6NcA1m9r1NboS0o+w2mo9Eni7BvQ=;
+        b=oe3W7Jqg1knHnxvxEBhC07XE1JgbdYVR+RJSeYdIAYDg5E7fVKTL1yCrbPitjdWDyD+Ei1
+        YDLcEKD9yqOUwUme2xsvjIDDIjbsV9VMyB+NfSNe0pPznCr2y+RLSwInTZfZ9ncVSnXJwt
+        G/l8H/Iic05i0AtPzlpzOSBFpbyAlaU=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1673696240; a=rsa-sha256; cv=none;
+        b=YzUkxOzOcio//uqVPj2pHJ5q5tHfE32chgttuV1UVBZm16aDnWcGle9Yl2XsGRhkgu3B96
+        o39dnSCVlkhSyAHWo4Cn0ugfdr6rNcRZlo+gC8TiP8iNIJ3OS60mAcZSW190uIeMEx6VLb
+        Bu6DynnZOjEFpXpRSS7dLinpsuhm3Hs=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id A0448634C91;
+        Sat, 14 Jan 2023 13:37:19 +0200 (EET)
+Date:   Sat, 14 Jan 2023 13:37:19 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     shravan kumar <shravan.chippa@microchip.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 4/4] media: i2c: imx334: update pixel and link
+ frequency
+Message-ID: <Y8KT70qSSVnFiQJG@valkosipuli.retiisi.eu>
+References: <20230113010135.2620818-1-shravan.chippa@microchip.com>
+ <20230113010135.2620818-5-shravan.chippa@microchip.com>
+ <20230113093133.6lqbnlhqkyhzhwyd@uno.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] pinctrl: bcm: bcm2835: Switch to use
- ->add_pin_ranges()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-References: <20230113171051.19309-1-andriy.shevchenko@linux.intel.com>
- <916654ca-e70f-5663-f3a3-9b370c24aea9@i2se.com>
- <Y8HNpokX5qCQTRqu@smile.fi.intel.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <Y8HNpokX5qCQTRqu@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:6HKAfuNQkaBL9orJNFnJWW+PACCYyx98Cn1d4oFQCAd5tGj93Fk
- xcWGVZ/wlrd8FN1VmUHvj9pmlUGqcyQKJydlPJuJ0O4w7Lp32lkkue5Hzt6YmL3ah2aYJ4T
- 0P5yHBUcOxc32dXI3v0Q9iKkQM1+HXS2ooySbtPOtyaqJHart2SEPK05IhvU/+kvWRu2Rb8
- ke+diAtd9wU+WJxOCWoDQ==
-UI-OutboundReport: notjunk:1;M01:P0:ZW4NK6Ra+8Q=;9XIQMnrNtwC35e4tgE10nkovu6+
- O+vVi7ZEAxButdOpskyzbMGwVxGX4hop43zoLCB4j3dx2r07XKp0dTefmr+Rw6SWBbAaF57hz
- JnXw5I5XFCAjNrW5n2ixsCaYjoxvf42LQOisz7KiY3p60mjRX4MZIInL9Sya5dXJNXN/Nemvv
- vg5ODh6VrQGTZ96FWjBYFKidYuyWZJorHAE1MvsK60nvwBGFrgOyga0ErgKve8EWxcSZczuDs
- KdvgdFIn0y4gzEx/WH5Il2qMcsOsSUI4TUEIMFRdg/5/wZNA50sIqt2cH72Mk678sKjKc9qVQ
- WIubwXDfcvv9Kd9kjjUR/oibgFQhIBA5cM96tLGI7XJXfH7/zYu/GDOUqI63oL7wAiXnfsjiO
- dfDHFGTRIfKZjm/Xe0Sq3hEAhUZUDnIeyptUCWyV1TWwZ2K2sFQsy+3nb4g7hitTcbX7MYZt2
- GjvhUg8ClI1+qq2+1Iyl9UUoeEpzJoaXV27ddfvGrqPHZwa6Wtp12psJcuYSFC0TIsPMt+Z2H
- 6D9raVBv4DXqdGNNRazAKkIq+H+wTuhxWoR2UcqR6II/uy4w2NmqpwEWg234kFlW2/gvZXEov
- HPbSCSjmP3L5J3Nded7jahulbAg2mZ1nPjkzP4e+8lZcN0fgPwZbTLdBwxWG/OspNxFCI1bwp
- GW88xHhyGCbSRFhXCpxX8k6aALg2ig9gT2dD/qvaUg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113093133.6lqbnlhqkyhzhwyd@uno.localdomain>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hi Jacopo, Shravan,
 
-Am 13.01.23 um 22:31 schrieb Andy Shevchenko:
-> On Fri, Jan 13, 2023 at 09:13:23PM +0100, Stefan Wahren wrote:
->> Am 13.01.23 um 18:10 schrieb Andy Shevchenko:
-> ...
->
->>> v2: fixed compilation issues (LKP), Cc'ed to the author of original code
->>>
->>> Btw, the commit d2b67744fd99 ("pinctrl: bcm2835: implement hook for
->>> missing gpio-ranges") seems problematic in the fist place due to
->>> odd of_node_put() call. I dunno how that part had been tested, or
->>> how it's supposed to work, i.e. where is the counterpart of_node_get().
->>> Anyway this change drops it for good.
->> The countpart is in of_pinctrl_get(). I was just following the pattern like
->> in other drivers like gpio-rockchip. The original commit has been tested by
->> Florian Fainelli and me. I'm not sure if it's safe to drop it completely.
-> Please, elaborate how of_pinctrl_get() increases refcount of the parameter.
-> Maybe I'm looking into a wrong place?
->
->> Btw this is not the only platform affected by the gpio-ranges compatibility
->> issue [1].
-> This is the only one that uses unnecessary added callback.
+On Fri, Jan 13, 2023 at 10:31:33AM +0100, Jacopo Mondi wrote:
+> Hi Shravan
+> 
+> On Fri, Jan 13, 2023 at 06:31:35AM +0530, shravan kumar wrote:
+> > From: Shravan Chippa <shravan.chippa@microchip.com>
+> >
+> > Update pixel_rate and link frequency for 1920x1080@30
+> > while changing mode.
+> >
+> > Add dummy ctrl cases for pixel_rate and link frequency
+> > to avoid error while changing the modes dynamically
+> >
+> > Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
+> > Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+> > ---
+> >  drivers/media/i2c/imx334.c | 17 +++++++++++++----
+> >  1 file changed, 13 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+> > index 4ab1b9eb9a64..373022fbd6b2 100644
+> > --- a/drivers/media/i2c/imx334.c
+> > +++ b/drivers/media/i2c/imx334.c
+> > @@ -49,7 +49,8 @@
+> >  #define IMX334_INCLK_RATE	24000000
+> >
+> >  /* CSI2 HW configuration */
+> > -#define IMX334_LINK_FREQ	891000000
+> > +#define IMX334_LINK_FREQ_891M	891000000
+> > +#define IMX334_LINK_FREQ_445M	445500000
+> 
+> Good!
+> 
+> >  #define IMX334_NUM_DATA_LANES	4
+> >
+> >  #define IMX334_REG_MIN		0x00
+> > @@ -144,7 +145,8 @@ struct imx334 {
+> >  };
+> >
+> >  static const s64 link_freq[] = {
+> > -	IMX334_LINK_FREQ,
+> > +	IMX334_LINK_FREQ_891M,
+> > +	IMX334_LINK_FREQ_445M,
+> >  };
+> >
+> >  /* Sensor mode registers */
+> > @@ -468,7 +470,7 @@ static const struct imx334_mode supported_modes[] = {
+> >  		.vblank_min = 45,
+> >  		.vblank_max = 132840,
+> >  		.pclk = 297000000,
+> > -		.link_freq_idx = 0,
+> > +		.link_freq_idx = 1,
+> >  		.reg_list = {
+> >  			.num_of_regs = ARRAY_SIZE(mode_1920x1080_regs),
+> >  			.regs = mode_1920x1080_regs,
+> > @@ -598,6 +600,11 @@ static int imx334_update_controls(struct imx334 *imx334,
+> >  	if (ret)
+> >  		return ret;
+> >
+> > +	ret = __v4l2_ctrl_modify_range(imx334->pclk_ctrl, mode->pclk,
+> > +				       mode->pclk, 1, mode->pclk);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	ret = __v4l2_ctrl_modify_range(imx334->hblank_ctrl, mode->hblank,
+> >  				       mode->hblank, 1, mode->hblank);
+> >  	if (ret)
+> > @@ -698,6 +705,8 @@ static int imx334_set_ctrl(struct v4l2_ctrl *ctrl)
+> >  		pm_runtime_put(imx334->dev);
+> >
+> >  		break;
+> > +	case V4L2_CID_PIXEL_RATE:
+> > +	case V4L2_CID_LINK_FREQ:
+> >  	case V4L2_CID_HBLANK:
+> >  		ret = 0;
+> >  		break;
+> > @@ -1102,7 +1111,7 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
+> >  	}
+> >
+> >  	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
+> > -		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ)
+> > +		if (bus_cfg.link_frequencies[i] == IMX334_LINK_FREQ_891M)
+> 
+> Is it legit to specify 445MHz in device tree ? I think so, as it's one
+> of the frequencies the sensor can operate at. If that's the case the
+> code here will fail, as it only recognize 891MHz ?
+> 
+> The DTS property serve to specify a sub-set of all the link-frequencies the
+> driver can to operate at. If a dtb specifies 445MHz only, it means
+> your driver cannot operate at 891MHz full resolution mode. Sakari, is
+> my understanding correct here ?
+> 
+> In theory you could require dtbs to support both frequencies, but
+> old dtbs will only have 891MHz specified, should they continue to work but
+> with only the full resolution mode available ?
 
-i didn't have access to any of the other platforms which were also 
-affected. So i thought providing a general solution would be good idea. 
-I wasn't aware of add_pin_ranges().
+The driver should enable only those frequencies present in DT here, and one
+matching frequency is enough for the driver to work.
 
-Since i was annoyed that nobody cared about DTB backward compatibility, 
-i send out a RFC series to fix the GPIO hog regression which breaks the 
-LEDs on the Raspberry Pi. Nobody complained about it.
+Also the CCS driver does this but it does quite a bit more as well. The
+code below seems good to me, too (see comments).
 
->
->>> Perhaps we can check gpio-ranges property presence inside the GPIO
->>> library, so this ->add_pin_ranges() won't be called at all.
->> I thought this could be very platform specific, so i implemented a hook. But
->> yes my initial hack modified gpiolib-of [2].
-> The point is that possibly documentation of ->add_pin_ranges() should be
-> amended to take care of the cases like this. We don't need two or more
-> hooks to do the same, esp. taking into account that OF specific doesn't
-> cover other cases.
->
->> [1] - https://patchwork.kernel.org/project/linux-arm-msm/patch/20180412190138.12372-1-chunkeey@gmail.com/
->>
->> [2] - https://lore.kernel.org/linux-arm-kernel/75266ed1-666a-138b-80f1-ae9a06b7bdf3@i2se.com/
->>
->>> Also I would like to understand the dance around checking for pin
->>> control device. The original commit lacks of comments in the non-trivial
->>> code.
-> Any comment on this?
-Do you mean the NULL check? of_pinctrl_get() could return NULL, but 
-pinctrl_dev_get_devname() directly access the dev member.
+> 
+> A possible way out is to:
+> 
+> 1) Collect the allowed frequencies at dtbs probe time
+> 
+>         static const s64 link_freq[] = {
+>                 IMX334_LINK_FREQ_891M,
+>                 IMX334_LINK_FREQ_445M,
+
+This should go to the control framework menu.
+
+>         };
+>         static s64 enabled_link_freq[ARRAY_SIZE(link_freq)] = {};
+> 
+> 
+>         ...
+> 
+>   	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
+>                 for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
+>                         if (bus_cfg.link_frequencies[i] == link_freq[j])
+>                                 enabled_link_frequencies[j] = link_freq[j];
+
+I'd use a bit mask you can pass to the control framework directly.
+
+>                 }
+>         }
+> 
+>         for (i = 0; i < ARRAY_SIZE(link_freq); i++) {
+>                 if (enabled_link_freq[i] != 0)
+>                         break;
+
+With a bitmask, you can remove this entirely loop.
+
+>         }
+>         if (i == ARRAY_SIZE(link_freq)) {
+> 		dev_err(imx334->dev, "no valid link frequencies in DTS");
+> 		ret = -EINVAL;
+> 		goto done_endpoint_free;
+>         }
+> 
+>         ...
+> 
+> 2) When enumerating or setting mode, make sure the mode's
+>    enabled_link_freq[mode->link_freq_idx] != 0
+> 
+>    but this might quickly get complex and error prone.
+> 
+> Sakari, what is the best way to handle situations like this one ?
+> The driver is upstream working with a single link_frequency of 891MHz.
+> A new link frequency is added, and it is now allowed to have DTS
+> specify both frequencies, or just one of them. Should the driver rule
+> out all modes that require a link_frequency not specified in DTS ?
+> 
+> There are several examples of drivers handling multiple link_freqs in
+> media/i2c/ but I haven't find out that filters the modes according to
+> the specified frequencies (I admit I only quickly looked).
+
+-- 
+Kind regards,
+
+Sakari Ailus
