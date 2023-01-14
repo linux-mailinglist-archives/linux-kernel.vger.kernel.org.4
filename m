@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8080B66AE52
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 23:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A9266AE53
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 23:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjANWju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 17:39:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S230432AbjANWks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 17:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbjANWjl (ORCPT
+        with ESMTP id S230368AbjANWkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 17:39:41 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93599A5F0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:39:40 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id q8so5708728wmo.5
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:39:40 -0800 (PST)
+        Sat, 14 Jan 2023 17:40:45 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01327BB86
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:40:43 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id r9so1368246wrw.4
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 14:40:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0yzC8ZlGvRmgReUtkQlOS8z9agGk4HR8CX9kDFJuDeY=;
-        b=KYfAF+1UgLuuLeMR43j+XU2GWx0P59DA4XS0dEkOV0S8nCfYfWytWv1439IOuYwbVc
-         +z+/F+o/nWghbbVtFilc2W+Vk+i4zzKYx+BD9Px4WUR5HGuDya2C/VJesGjoXhizHjfp
-         +2Atk3cdDvdBJi8QQqyjOGW2xsziQt4NWfxSxIBpLWJ/8NzwTfYVkmaAvhuSRKDs00mK
-         LJhLUgCfdrMu20+tb2y3RiwSGDPluHMblXd5nCtDpdZXu287uN6b5mXsqIl6XgpHvpzo
-         22/GtNGDPB/HS8B2FdM9TkIYGUgKL2Yd7R6bLqwAfLrFIwUyfuw4S69vOvfZJe6Izfm2
-         1I4g==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nYgARAkWs9iZ0B/4FRwpMpPs9S0XV3huLCtOhLAUC8Y=;
+        b=Ds1XNBqgWBP3mtifRGvLh1owkfZbiDW4h5dggRxSHpmJ9J2KOfn/ZCCvW0yQYjw7t2
+         BrB0oOoRzRcraQqleGmC+Mfg3hVBklyxNEiR38vK7o35DUoOnVHsDOLoGoetmLvmvGXP
+         Dc5qNQRLBi6JMugRudC6hv7Ei7YlQCQ2jVXeYk0xl7KzfmjHgEJDK7n9gIPtgpwbreqi
+         2rEySAnXmZ5CT5v6V45TREUuqDoQe3nmLgAb7HvWyPO8LunM1+DlK8f8choZ4DB2FNcO
+         OR1PSQ4yGCrITZaDbs495MdLLHG75+cv4jb21A6M966VabvXDlr4+glAmt9yJmEdZbzQ
+         fwuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0yzC8ZlGvRmgReUtkQlOS8z9agGk4HR8CX9kDFJuDeY=;
-        b=Lh1KD9n8XVW/TrzGZPPhv2aaOz3rb+Fghi8lTALgq9IE8rl/4qb7OH2/9o6KnCy3xC
-         +IrpPR++Jo3hyx7oBvj8EokE7i8qo+HX/Cyz2sRa2rrj64Ely+nHz4/dR/I3zwNZJzT5
-         6jcpGh4Gw31PNNrsGU/s+2wV2gvvadxjLR4Q+XtsTX4uuEL/xBTUh8d3gjkzObEfDdLm
-         bC+7p4C2yYoptM/Y+GfAI/A+G/5PIotfuQVLddh09Q6MoHD2FEhzCcEdwN9cl+kIO/Rr
-         2ivT8NICykhh3jq3/LcRm1t8rO2gFyT8O8kxwQkV8FrgmmlTkUQU8h/CHTPr9udPh4eB
-         dtAQ==
-X-Gm-Message-State: AFqh2kqs9QHxy4gDv8LG+6DgGDEGiEpvdXQfLKtVyBhuPzYILLmrqBgK
-        4nrBVXgMHEeFDlj/ETfPERgbQf016hw04tDEtDqY5A==
-X-Google-Smtp-Source: AMrXdXvkG0GgV6L4b0qlqq2w/S82FF0IdiIsQvPw96Yyo/z3BCx2VZG53lj4IsPusQN06EybyGoWgTi1N+etc+PnunQ=
-X-Received: by 2002:a05:600c:3b04:b0:3d0:50c4:432c with SMTP id
- m4-20020a05600c3b0400b003d050c4432cmr4337596wms.67.1673735978906; Sat, 14 Jan
- 2023 14:39:38 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nYgARAkWs9iZ0B/4FRwpMpPs9S0XV3huLCtOhLAUC8Y=;
+        b=5sHLqZsj5gQy5XuFspAqdZUKEyskbV5dqr+MmuFab/llzotiN0mA3ujd4NAzo8a9/P
+         VOeNZdNmqjMc+tu2nynEl/XRiXhxnJz2ivsuxKPzIjaT84nYlWLllxC4m7i8ED3v7o36
+         T/WzkdPjofcgknGm0qo4xhzKQRx0rGpy70prB76/ZB71c2z02Jeg2WQkm5+6hlhCkd4w
+         bNIltJxafFiiDE6M9QYzHNjXYxlRSCbHRVcQxn4KFgiXO9xw8/AVJdTzbxjQ967N8JUQ
+         XqpOy7pdbarwu4tf/ERcMTvEhBFQxTHVNU30LvTSVvxYwaSuECJk/X+ZF2DGeOu33a9w
+         61Lw==
+X-Gm-Message-State: AFqh2kqA0h6D24X2anWT93JsYpe80IzKKNPhDw1X6dn1YYwHn1CImN/m
+        j1eqDNbdm+h0b+m8DZwhzRQER4lFxcXx4C19xtR2XA==
+X-Google-Smtp-Source: AMrXdXvXNemnyUUfmSCSvj4wkjdakrffiCb1jSHQJNLz46dk53LCwcZ/W7SXiBwaW6CZIwIMd2/h1+8oNAvijZD9DWo=
+X-Received: by 2002:a5d:614d:0:b0:2bc:7ed4:cd50 with SMTP id
+ y13-20020a5d614d000000b002bc7ed4cd50mr964423wrt.40.1673736042305; Sat, 14 Jan
+ 2023 14:40:42 -0800 (PST)
 MIME-Version: 1.0
-References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com> <1673601740-122788-3-git-send-email-renyu.zj@linux.alibaba.com>
-In-Reply-To: <1673601740-122788-3-git-send-email-renyu.zj@linux.alibaba.com>
+References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <d33086a5-233f-f591-c9da-5f1a2e8aaf54@oracle.com> <7498a6b1-01d0-0e12-82d3-c75250e09161@linux.alibaba.com>
+In-Reply-To: <7498a6b1-01d0-0e12-82d3-c75250e09161@linux.alibaba.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 14 Jan 2023 14:39:26 -0800
-Message-ID: <CAP-5=fUgKMcjgB3jsdtxdmSomt_K0XMKgHcc0Jjc6oR7ixJu4w@mail.gmail.com>
-Subject: Re: [PATCH v7 2/9] perf jevent: Add general metrics support
+Date:   Sat, 14 Jan 2023 14:40:30 -0800
+Message-ID: <CAP-5=fVQC=cBxN_-23KRRQGpQieMt1CA2N1UL60X9SXobV3x8w@mail.gmail.com>
+Subject: Re: [PATCH v7 0/9] Add metrics for neoverse-n2-v2
 To:     Jing Zhang <renyu.zj@linux.alibaba.com>
 Cc:     John Garry <john.g.garry@oracle.com>,
         Xing Zhengjun <zhengjun.xing@linux.intel.com>,
@@ -73,6 +75,7 @@ Cc:     John Garry <john.g.garry@oracle.com>,
         Shuai Xue <xueshuai@linux.alibaba.com>,
         Zhuo Song <zhuo.song@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -84,37 +87,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 1:22 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
+On Fri, Jan 13, 2023 at 8:32 AM Jing Zhang <renyu.zj@linux.alibaba.com> wro=
+te:
 >
-> Add general metrics support, so that some general metrics applicable
-> to multiple architectures can be defined in the public json file like
-> general events, and then add general metrics through "arch_std_event"
-> in json file of different architecture.
 >
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>
+> =E5=9C=A8 2023/1/13 =E4=B8=8B=E5=8D=885:59, John Garry =E5=86=99=E9=81=93=
+:
+> > On 13/01/2023 09:22, Jing Zhang wrote:
+> >> Changes since v6:
+> >> - Split patch #1 into 3 smaller patches as suggested by Ian.
+> >> - Change perf_pmu__get_slots into perf_pmu__cpu_slots_per_cycle,
+> >>    per John's suggestion;
+> >> - Return NAN instead of 0 in perf_pmu__cpu_slots_per_cycle weak
+> >>    function, per John's suggestion;
+> >> - Factor out pmu_core__find_same function, per John's suggestion.
+> >> - Link:https://urldefense.com/v3/__https://lore.kernel.org/all/1673017=
+529-1429208-1-git-send-email-renyu.zj@linux.alibaba.com/__;!!ACWV5N9M2RV99h=
+Q!LhBq67uDCOsz1k7ZF4aQPHF0Bp8FsMr-ZNgCnBSUKF4qJTFODfnkId7lw_NXqB4qZUCpu-jbY=
+8z8LTckoqFGz2Q8bA$
+> >
+> > This looks fine. But for this code:
+> >
+> > On 13/01/2023 09:22, Jing Zhang wrote:
+> >> +double perf_pmu__cpu_slots_per_cycle(void)
+> >> +{
+> >> +    char path[PATH_MAX];
+> >> +    unsigned long long slots =3D 0;
+> >
+> > I would prefer if this returned NAN (and not 0) for when we can't find =
+a pmu or the value from ./caps/slots is zero, but I am not going to get too=
+ hung up on that.
+> >
+>
+> Ok, I like this way too.
+>
+> > For series:
+> >
+> > Reviewed-by: John Garry <john.g.garry@oracle.com>
+>
+> Thank you very much indeed!
+
+Aside a naming nit in 1/9 for series:
 
 Acked-by: Ian Rogers <irogers@google.com>
 
 Thanks,
 Ian
-
-> ---
->  tools/perf/pmu-events/jevents.py | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> index 4c398e0..0416b74 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-> @@ -358,6 +358,8 @@ def preprocess_arch_std_files(archpath: str) -> None:
->        for event in read_json_events(item.path, topic=''):
->          if event.name:
->            _arch_std_events[event.name.lower()] = event
-> +        if event.metric_name:
-> +          _arch_std_events[event.metric_name.lower()] = event
->
->
->  def print_events_table_prefix(tblname: str) -> None:
-> --
-> 1.8.3.1
->
