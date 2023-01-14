@@ -2,72 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F78966AB60
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C5D66AB64
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjANMcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 07:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S229820AbjANMea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 07:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjANMcT (ORCPT
+        with ESMTP id S229973AbjANMe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 07:32:19 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5868A42
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:32:18 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id h2-20020a92c262000000b0030eebc83de4so1533546ild.8
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:32:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rrH8E7z8KFr7sdSJka+xwS5NaY7jiDN7jsuk026sCg=;
-        b=rD5wbIOc4xIOUwTUWfvGuM481elbL5DdPIrcrHEVW7GtMkGf+baYu5EMqudos8bz7T
-         pWi6Eox8EAmXJCXCepZD67NKBPTd7E1XRZtgSOhB8cBBmvSsVl/XrZfHjiRU1ITWI4Io
-         RqX8nkNyCo2ILDYOlqDPepX0Zw0uPRiVxNyG3RvTDSSOLSPAPReaMaMfx1i9V7bKfp6o
-         kKIu6Fgv46x2FOXd4/zMd0cPO438BPwqeYzY29WENU7MYvW3CBkULE19jiIpuoNxxzcG
-         0f5ik9GAi9z8bD99yrYdH59jfuJ3tRNGNpqaKROGoUwJnVIUarbQmWoULzadamoGarxL
-         lymg==
-X-Gm-Message-State: AFqh2kostESlurAZtPzqIH7vJhIzsiKLhR4Yy+/AcjNDmrcgVrF4qhUR
-        6uUroAePsy1f5eXsfeNyHkCodRmgEvaIhLD7jNZyKOK8S/MD
-X-Google-Smtp-Source: AMrXdXv6HNwqIuObDUPfqN+h4ASY8HHZr38ZqY5WF8kkLMoeFtB20/F6mdbhQKjqkTwhbxJfiflIOlPTWaAN+aJisVQh9XeJt5iC
+        Sat, 14 Jan 2023 07:34:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F6B869E;
+        Sat, 14 Jan 2023 04:34:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5829CB807E8;
+        Sat, 14 Jan 2023 12:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEC1C43392;
+        Sat, 14 Jan 2023 12:34:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673699663;
+        bh=4hogCgx26O6O66FhdhmvB8UE2W3v4MDEQPIa4tPZ7wg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=S23PGG2Hrb07B5ZjmoVblAHiG7+WSQvjOSRlZBPyRME5RxG8uB54fQbPX1Z4ObGfr
+         xoyg4MZNsmIXIDr/Dcs1JxvOTPsG7msX2q9aLI55eyzW57U1EjZsBm+5OTpWcxNpLY
+         NAoXxYcFdKrrybubfWk8SxmqugfIKih1D7+gNh5jwVjc72ZKoVi9oklyn4F0xzE26h
+         gE0K8bLzrZub0mCYECqOz/PFkkhSlowDsB02qAtgiPMMciQrU5xu6CmR8FICzL14kH
+         z1k8YdhnIZSCrN4+R8YhX1m/nso9qc2r2u3CH/tfqwjX75LGPPTkPzlGYFOLzOEjlT
+         bc+6Diy1C83Tw==
+Received: by mail-oi1-f170.google.com with SMTP id s124so2872730oif.1;
+        Sat, 14 Jan 2023 04:34:23 -0800 (PST)
+X-Gm-Message-State: AFqh2kqzzEjZjs77TiywL42K1WAhSEQWfvd/WoIyaHnQftUZsvTmHtes
+        zZLfFrGUKv1yBmpBqay7j8uPOwFCrW5eiKiv6II=
+X-Google-Smtp-Source: AMrXdXuObkR9oQqxl9vnf+el/NKIwPtqYJCa8ifp41xFh4Xjg1eIDi8pMipHHu+sN/pnkq8+yvVJCnxFcm1jqZOAvBE=
+X-Received: by 2002:a05:6808:1510:b0:364:5d10:7202 with SMTP id
+ u16-20020a056808151000b003645d107202mr799454oiw.194.1673699662783; Sat, 14
+ Jan 2023 04:34:22 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:389b:b0:374:25b8:6fb with SMTP id
- b27-20020a056638389b00b0037425b806fbmr9844594jav.28.1673699538194; Sat, 14
- Jan 2023 04:32:18 -0800 (PST)
-Date:   Sat, 14 Jan 2023 04:32:18 -0800
-In-Reply-To: <20230114114702.1311-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006f598105f2388aa1@google.com>
-Subject: Re: [syzbot] general protection fault in pn533_out_complete
-From:   syzbot <syzbot+1e608ba4217c96d1952f@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-4-ojeda@kernel.org>
+ <CAK7LNARuGz=oFukWH4g=7zg1EbWP9rxpVXPgPrJBKHzLQW4N1Q@mail.gmail.com> <CANiq72=Evg9pQLCdtr+kTsr4fEewjKCkBw2dBYTB7WbPVy2wtg@mail.gmail.com>
+In-Reply-To: <CANiq72=Evg9pQLCdtr+kTsr4fEewjKCkBw2dBYTB7WbPVy2wtg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 14 Jan 2023 21:33:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARnNEJVuBKaFnE2TL60ku_6F03C749BVjzr8E6-khPTJg@mail.gmail.com>
+Message-ID: <CAK7LNARnNEJVuBKaFnE2TL60ku_6F03C749BVjzr8E6-khPTJg@mail.gmail.com>
+Subject: Re: [PATCH 4/6] kbuild: rust_is_available: check if the script was
+ invoked from Kbuild
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Jan 14, 2023 at 8:12 AM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Thu, Jan 12, 2023 at 6:29 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > I do not like this.
+> > We do not need to cater to every oddity.
+> >
+> > Checking MAKEFLAGS is too much.
+>
+> I agree we should not attempt to catch every possible mistake in the
+> script, but there have been several people hitting precisely this case
+> (the latest is in the linked thread in the commit message), i.e. some
+> people read the `Makefile` and notice the script invocation, and go
+> execute it, but they are unlikely to be aware of the target in that
+> case.
+>
+> > You can check RUSTC/BINDGEN/CC if you persist in this.
+>
+> This is fine, and actually we should do it regardless of `MAKEFLAGS`.
+> I can add it to v2.
+>
+> However, that does not cover the same thing as `MAKEFLAGS` is trying
+> to here. The reason is that even if they see e.g. "RUSTC is not set",
+> they will not know about how to call the script properly, i.e. through
+> the `Makefile` target.
+>
+> For `RUSTC` and `BINDGEN`, it does not really matter (and we could
+> give a default to the variable, since the name rarely would be
+> different). However, for `CC`, the logic that Kbuild uses is more
+> complex, so it seems best to me to let Kbuild tell us what the actual
+> compiler is.
+>
+> Cheers,
+> Miguel
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+1e608ba4217c96d1952f@syzkaller.appspotmail.com
+OK, you maintain this script, so it is up to you.
 
-Tested on:
 
-commit:         435bf71a Add linux-next specific files for 20230110
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11e59ca6480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2de08b99ad4f49c
-dashboard link: https://syzkaller.appspot.com/bug?extid=1e608ba4217c96d1952f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1686c691480000
 
-Note: testing is done by a robot and is best-effort only.
+-- 
+Best Regards
+Masahiro Yamada
