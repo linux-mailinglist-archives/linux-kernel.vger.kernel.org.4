@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751B466A970
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 06:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01D766A980
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 06:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjANFkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 00:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S229607AbjANFua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 00:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjANFkT (ORCPT
+        with ESMTP id S229495AbjANFu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 00:40:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD43A8E;
-        Fri, 13 Jan 2023 21:40:18 -0800 (PST)
+        Sat, 14 Jan 2023 00:50:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F893A8F;
+        Fri, 13 Jan 2023 21:50:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 051C360B32;
-        Sat, 14 Jan 2023 05:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4B480C43396;
-        Sat, 14 Jan 2023 05:40:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2717CB82314;
+        Sat, 14 Jan 2023 05:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A663AC433F0;
+        Sat, 14 Jan 2023 05:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673674817;
-        bh=GJEDDtDl7ZFnDSTIqRsw2iU2A2L1JrS7LCb9GEhmBpo=;
+        s=k20201202; t=1673675418;
+        bh=opp2z8DhH7GhBl1WVDSZx7oeRGBPac71PULhGVMa5rc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JQcdXJRm3VPscjTlg8ulMkyFJuPu6XpLCv/3pyfFOP1ns9GSf59UHDMS63w7QBAdN
-         JEHrLE8rvxEP/OoAWsdwrutYE08ewLovEfdCJaC+W6GEkdd92nVfLRQ6rodtETYFgE
-         uZljtqfzLqMODO71Ubb+o2lhKv9yhxJhcGoNq943tP0hXVrJDus/UKh1hOXj7k+b+A
-         Jv7lW04LiViqX28/x3T0HF25NyJkq3Mkzs245SVfN4HD+OWWWh3ooeBRdkPDPMg8dC
-         Y+CUPQqSzl82j4I6NGE4gjo9Kj/41/8gPWgPvSgpSODZd94ZUjsTn+8hH9CjhoSnJT
-         Y8ko7MNnxRVzw==
+        b=ermLpVtlRIK/2DT2t5FxkTnWWHz3NOQ93hXC6StetYcXmu9EdahdfhKz562c4X1FO
+         QYCs3brifBI9nFU5+pGpV+WWajje99OmV2CEeXEtRfJ+P7c6m+Ttjh7WFYz8f6lgcf
+         MK5lKIzJTW824vyPWOPWsdZy7ClKkY95zP9f5csi4u6WETfbGlaXhn3bWV3N7QzkfD
+         Sq2oihkQ+1+1aCP1VHTfDnj7dQd7tK9rpFX6K9slvTEeO3/tFHFxlAhxse/UZbDOVQ
+         lZzCLDo5SSu/8GHLbt/U3GczXsMOJCPyYRPtvaOVjAhuyQzQwjWtsAGCzdx0czyukU
+         BBet+xBUvsaSA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 364AFC395C8;
-        Sat, 14 Jan 2023 05:40:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 83EEEC395C8;
+        Sat, 14 Jan 2023 05:50:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next v2] ipv6: remove max_size check inline with ipv4
+Subject: Re: [PATCH v3 net-next 1/1] plca.c: fix obvious mistake in checking
+ retval
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167367481721.11900.11121412923866916372.git-patchwork-notify@kernel.org>
-Date:   Sat, 14 Jan 2023 05:40:17 +0000
-References: <20230112012532.311021-1-jmaxwell37@gmail.com>
-In-Reply-To: <20230112012532.311021-1-jmaxwell37@gmail.com>
-To:     Jonathan Maxwell <jmaxwell37@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        martin.lau@kernel.org, joel@joelfernandes.org, paulmck@kernel.org,
-        eyal.birger@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrea.mayer@uniroma2.it
+Message-Id: <167367541853.15756.10963343311125406484.git-patchwork-notify@kernel.org>
+Date:   Sat, 14 Jan 2023 05:50:18 +0000
+References: <f2277af8951a51cfee2fb905af8d7a812b7beaf4.1673616357.git.piergiorgio.beruto@gmail.com>
+In-Reply-To: <f2277af8951a51cfee2fb905af8d7a812b7beaf4.1673616357.git.piergiorgio.beruto@gmail.com>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, o.rempel@pengutronix.de,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,20 +68,22 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 12 Jan 2023 12:25:32 +1100 you wrote:
-> v2: Correct syntax error in net/ipv6/route.c
+On Fri, 13 Jan 2023 14:26:35 +0100 you wrote:
+> Revert a wrong fix that was done during the review process. The
+> intention was to substitute "if(ret < 0)" with "if(ret)".
+> Unfortunately, the intended fix did not meet the code.
+> Besides, after additional review, it was decided that "if(ret < 0)"
+> was actually the right thing to do.
 > 
-> In ip6_dst_gc() replace:
-> 
-> if (entries > gc_thresh)
-> 
-> With:
+> Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
+> Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v2] ipv6: remove max_size check inline with ipv4
-    https://git.kernel.org/netdev/net-next/c/af6d10345ca7
+  - [v3,net-next,1/1] plca.c: fix obvious mistake in checking retval
+    https://git.kernel.org/netdev/net-next/c/28dbf774bc87
 
 You are awesome, thank you!
 -- 
