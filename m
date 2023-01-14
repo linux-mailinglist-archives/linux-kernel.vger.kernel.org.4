@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E120566AC9B
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 17:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92D166AC9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 17:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjANQZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 11:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S230243AbjANQ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 11:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjANQZZ (ORCPT
+        with ESMTP id S230096AbjANQ1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 11:25:25 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D059019;
-        Sat, 14 Jan 2023 08:25:24 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 14 Jan 2023 11:27:49 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82BC5A5CE
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 08:27:48 -0800 (PST)
+Received: from 8bytes.org (p200300c277327f0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7732:7f00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5324B374;
-        Sat, 14 Jan 2023 16:25:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5324B374
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1673713523; bh=lXjetQxvduNoZX1DzzPlMMuJyy3ZRghkv/XFdbhFN/8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=AlCIlwBWw5ipPp4ENLIzNu7yem45wANuCWr2V0IvfIksuwYSLaudiUeN1l+KytxE4
-         6tJz2WqWRvx90go62ZalPqlzshtQ575WTSMRd2z9RLTFlpdiwLVOxIx4RfgExF9RcE
-         zWfGWNJ7IY3LAkJCicGqZWPiQc4xZXJafGp9ZSaK5s/GxpysJudhGluF1HH9zP7UM1
-         GBbIsMlMIV0Hr+rHMCu87Kqn+H71xBzhdoXqggd85oPAlqprz+1oDtd5twlXzLNSXr
-         Me+SZLYmsAgWVV7f0aDZtWhLhTgoc45prHemsMf2/Rfp7UWbUAmOjXH/EYs9/7F16Z
-         M9qhX/N3y24AQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Peter Foley <pefoley2@pefoley.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Peter Foley <pefoley2@pefoley.com>
-Subject: Re: [PATCH] Documentation: Avoid duplicate Kconfig inclusion
-In-Reply-To: <20230114-doc-v1-1-efec2689e423@pefoley.com>
-References: <20230114-doc-v1-1-efec2689e423@pefoley.com>
-Date:   Sat, 14 Jan 2023 09:25:22 -0700
-Message-ID: <87edrxgk25.fsf@meer.lwn.net>
+        by mail.8bytes.org (Postfix) with ESMTPSA id D8DCC262023;
+        Sat, 14 Jan 2023 17:27:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1673713666;
+        bh=vULKOkbp9CZBwY7oIAXxQR1kopxTS17Ty9VeKoVt+Vg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=A3EHKNmXqEbms4/YLd8gYwVLxMaWLUnTdsLbjMmR1KtPbtSQCwuw2iEHN7XOQ3xnP
+         7z20tvMF2LJwjP4IBVvPmcTilRXJBuFfOUPEu7eHzw1xzwAwW6o6TLb5PWepiiMbXs
+         ovCU5xcOR0+ptv+juSxWDgQhBB7dDjLOhqf/uQS6gsBJ40lHwmok7+V3bn624r9jVR
+         YRcXBJOzAXCEnXWE9qIyAkBAnrJ86Q22ig5mWcf2vGTpkJBf88+yq7CAfvOP/WIH/X
+         wlTDlBSll8ZAOKA7GdWObbauNYWkeTUGknGSyHNes84SE//PGHVucMj4Zg1Y1UetMb
+         b+M3uso+4XFlg==
+Date:   Sat, 14 Jan 2023 17:27:45 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: [git pull] IOMMU Fixes for Linux v6.2-rc3
+Message-ID: <Y8LYARivqaRbWWja@8bytes.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jOjp5fKZ3QeU4oJL"
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -51,33 +51,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Foley <pefoley2@pefoley.com> writes:
 
-> Documentation/Kconfig is already included from lib/Kconfig.debug, avoid
-> including it again and polluting the top-level menu.
->
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
-> ---
->  Kconfig | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/Kconfig b/Kconfig
-> index 745bc773f5670..97ed6389c9211 100644
-> --- a/Kconfig
-> +++ b/Kconfig
-> @@ -28,5 +28,3 @@ source "crypto/Kconfig"
->  source "lib/Kconfig"
->  
->  source "lib/Kconfig.debug"
-> -
-> -source "Documentation/Kconfig"
->
+--jOjp5fKZ3QeU4oJL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The duplicate inclusion does seem worth fixing, but I wonder if you're
-deleting the right one?  Having the documentation Kconfig under lib
-seems a bit strange, somehow; Documentation/ is a top-level directory,
-after all.
+Hi Linus,
+
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
+
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v6.2-rc3
+
+for you to fetch changes up to 142e821f68cf5da79ce722cb9c1323afae30e185:
+
+  iommu/mediatek-v1: Fix an error handling path in mtk_iommu_v1_probe() (2023-01-13 13:46:32 +0100)
+
+----------------------------------------------------------------
+IOMMU Fixes for Linux v6.2-rc3
+
+Including:
+
+	- Core: Fix an iommu-group refcount leak
+
+	- Fix overflow issue in IOVA alloc path
+
+	- ARM-SMMU fixes from Will:
+
+	  - Fix VFIO regression on NXP SoCs by reporting IOMMU_CAP_CACHE_COHERENCY
+
+	  - Fix SMMU shutdown paths to avoid device unregistration race
+
+	- Error handling fix for Mediatek IOMMU driver
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      iommu/mediatek-v1: Fix an error handling path in mtk_iommu_v1_probe()
+
+Miaoqian Lin (1):
+      iommu: Fix refcount leak in iommu_device_claim_dma_owner
+
+Robin Murphy (1):
+      iommu/arm-smmu: Report IOMMU_CAP_CACHE_COHERENCY even betterer
+
+Vladimir Oltean (2):
+      iommu/arm-smmu: Don't unregister on shutdown
+      iommu/arm-smmu-v3: Don't unregister on shutdown
+
+Yunfei Wang (1):
+      iommu/iova: Fix alloc iova overflows issue
+
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  4 +++-
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       | 32 ++++++++++++++++++++---------
+ drivers/iommu/iommu.c                       |  8 +++++---
+ drivers/iommu/iova.c                        |  4 ++--
+ drivers/iommu/mtk_iommu_v1.c                |  4 +++-
+ 5 files changed, 35 insertions(+), 17 deletions(-)
+
+Please pull.
 
 Thanks,
 
-jon
+	Joerg
+
+--jOjp5fKZ3QeU4oJL
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmPC2AEACgkQK/BELZcB
+GuOhnBAArnqzlOLtYDzYKAC7B2/X3bIMD0LtchDIg5+TG0I860XFvCPOStV5Mmgv
+B4bHAFF7upNUfCyrPGfM1bk0dSHfrk5rtW9FV40xgZpliLdCHcYW8sAYCO24HhYw
+4LOvzEYlB9jiEOZUuAOXmTdN24wvKRJIYEX5psMYVhm5pz+yqWvgYLvI2TMjRtVD
+FiBQwcIgkBipxx7zoLspg2oX2rVCMyG8gMNHuPdOEuR4u8VggBI+nZWBXRqsVxha
+eTgAKSs4Xgo5PBtXmKbOeJSsQ0FZmkiOZqhXQzOSq2AApQIb/Nfv55rgUtn4V7Ku
+iRF9fO2JsGNHceybeBUs55wvw86qYAUYc/AMENgXr6/qn4fxLIrBtPHR5iiifbyF
+aGwWxkWeFgxlBA4XG1mHuPKOtHEkNzE3VIY/Itkf6+ccjrfpQrfFRG0sN1+eb1m6
+sXVBROvbL+ShbeXApkbbmxMFu4SPdInTj7lkHN27zICIfDSJPgJ3C9p05wkyTXfy
+UdCd1RFm+7XWm5kaIzSm7p7wGd3x7vi9CC1hWTKYgFftTjhjrggUwXegS1wXv2EM
+OdLuk+njlD7Eot8xtGAspS3pmnkggb5r2ZKWrVDJK1ROjGzWYL8T6H2wIopjGJwc
+hbm2KxINwFqTJoVvGl2n7e0o7JHmQstexJdtk+d4SQu0YS2UIOA=
+=tqwf
+-----END PGP SIGNATURE-----
+
+--jOjp5fKZ3QeU4oJL--
