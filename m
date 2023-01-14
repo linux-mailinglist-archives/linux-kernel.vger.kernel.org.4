@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A848B66AD8B
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 20:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248D466AD9C
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 21:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjANT6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 14:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S230281AbjANUTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 15:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjANT6b (ORCPT
+        with ESMTP id S229627AbjANUTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 14:58:31 -0500
+        Sat, 14 Jan 2023 15:19:07 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3ACB05B8C
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 11:58:30 -0800 (PST)
-Received: (qmail 71149 invoked by uid 1000); 14 Jan 2023 14:58:29 -0500
-Date:   Sat, 14 Jan 2023 14:58:29 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 049846597
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 12:19:06 -0800 (PST)
+Received: (qmail 71784 invoked by uid 1000); 14 Jan 2023 15:19:06 -0500
+Date:   Sat, 14 Jan 2023 15:19:06 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
@@ -33,7 +33,7 @@ Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
         Kernel development list <linux-kernel@vger.kernel.org>
 Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
  test)
-Message-ID: <Y8MJZX/Png1zfYG0@rowland.harvard.edu>
+Message-ID: <Y8MOOrrHntA9TyUk@rowland.harvard.edu>
 References: <YywXuzZ/922LHfjI@hirez.programming.kicks-ass.net>
  <114ECED5-FED1-4361-94F7-8D9BC02449B7>
  <Y77QbG9lVXX9/B87@rowland.harvard.edu>
@@ -58,35 +58,6 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sat, Jan 14, 2023 at 10:15:37AM -0800, Paul E. McKenney wrote:
-> > > Perhaps the closest to what you want is to express that as a data dependency if you know how to teach herd that Srcu-unlock is a read and Srcu-lock depends on its second input :D (I have no idea how to do that, hence the questions above)
-> > 
-> > Given that both you and Alan suggested it, I must try it.  ;-)
-> 
-> And it works as desired on these litmus tests:
-> 
-> manual/kernel/C-srcu-nest-*.litmus
-> 
-> In this repository:
-> 
-> https://github.com/paulmckrcu/litmus
-> 
-> However, this has to be dumb luck because herd7 does not yet provide
-> the second argument to srcu_read_unlock().
-
-Yes it does.  Grep for srcu_read_unlock in linux-kernel.def and you'll 
-see two arguments.
-
->  My guess is that the herd7
-> is noting the dependency that is being carried by the pointers to the
-> srcu_struct structures.
-
-That is not a dependency.
-
->  This guess stems in part from the fact that
-> I get "Flag unbalanced-srcu-locking" when I have one SRCU read-side
-> critical section following another in the same process, both using the
-> same srcu_struct structure.
-> 
 > Nevertheless, here is the resulting .bell fragment:
 > 
 > ------------------------------------------------------------------------
@@ -103,76 +74,16 @@ That is not a dependency.
 > 
 > (* Validate SRCU dynamic match *)
 > flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
-> 
-> ------------------------------------------------------------------------
-> 
-> I also created a C-srcu-nest-*.litmus as shown below, and LKMM does
-> complain about one srcu_read_lock() feeding into multiple instances of
-> srcu_read_unlock().
 
-It shouldn't; that doesn't happen in the litmus test below.  But the 
-test does contain an srcu_read_lock() that doesn't match any instances 
-of srcu_read_unlock(), so you should be getting an 
-"unbalanced-srcu-locking" complaint -- and indeed, you mentioned above 
-that this does happen.
+I forgot to mention...  An appropriate check for one srcu_read_lock() 
+matched to more than one srcu_read_unlock() would be something like 
+this:
 
-Also, your bell file doesn't contain a check for a lock matched with 
-multiple unlocks, so there's no way for herd to complain about it.
-
->  The complaint comes from the different_values()
-> check, which presumably complains about any duplication in the domain
-> or range of the specified relation.
-
-No; different_values() holds when the values of the two events 
-linked by srcu-rscs are different.  It has nothing to do with 
-duplication.
-
-> But still working by accident!  ;-)
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> C C-srcu-nest-3
-> 
-> (*
->  * Result: Flag srcu-bad-nesting
->  *
->  * This demonstrates erroneous matching of a single srcu_read_lock()
->  * with multiple srcu_read_unlock() instances.
->  *)
-> 
-> {}
-> 
-> P0(int *x, int *y, struct srcu_struct *s1, struct srcu_struct *s2)
-> {
-> 	int r1;
-> 	int r2;
-> 	int r3;
-> 	int r4;
-> 
-> 	r3 = srcu_read_lock(s1);
-> 	r2 = READ_ONCE(*y);
-> 	r4 = srcu_read_lock(s2);
-> 	r5 = srcu_read_lock(s2);
-> 	srcu_read_unlock(s1, r3);
-> 	r1 = READ_ONCE(*x);
-> 	srcu_read_unlock(s2, r4);
-> }
-
-This has 3 locks and 2 unlocks.  The first lock matches the the first 
-unlock (r3 and s3), the second lock matches the second unlock (r4 and 
-s2), and the third lock doesn't match any unlock (r5 and s2).
+flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-unlocks
 
 Alan
 
-> 
-> P1(int *x, int *y, struct srcu_struct *s2)
-> {
-> 	WRITE_ONCE(*y, 1);
-> 	synchronize_srcu(s2);
-> 	WRITE_ONCE(*x, 1);
-> }
-> 
-> locations [0:r1]
-> exists (0:r1=1 /\ 0:r2=0)
+PS: Do you agree that we should change the names of the first two flags 
+above to unbalanced-srcu-lock and unbalanced-srcu-unlock, respectively 
+(and similarly for the rcu checks)?  It might help to be a little more 
+specific about how the locking is wrong when we detect an error.
