@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6D766A98F
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 07:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A7866A994
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 07:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjANGJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 01:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S229469AbjANGKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 01:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjANGIy (ORCPT
+        with ESMTP id S229498AbjANGKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 01:08:54 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119230DC
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 22:08:53 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id k11so3664662qth.3
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 22:08:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pefoley.com; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3+2LAaOxNQuhC+S8GRJpCwLfoqVevt1c8Xbyr6vRhjU=;
-        b=gFnpBpSkC70sxHenDkPzNMijYG/24BmL8bGnUIuoE13k3qT7qn/PAOuHK/80vnAL2H
-         E5If086c3G8wGYctQ921urUJs0LqxYH76Kbq//y2cnKhZJUniTly09Sq4POIuq/sKqW2
-         DEfU+MChdgcpc3ZKTsl4gbejqfhI1wK1xQrrs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3+2LAaOxNQuhC+S8GRJpCwLfoqVevt1c8Xbyr6vRhjU=;
-        b=4aX85PhRFuk34y7jHTyYk6PvsFLUMYHWOIN684/wazZwtt3PdU3i5DSuBOz76rgdiA
-         i5tp8e75bYZasm7akkRmgpEOxdRV3I23cqFV6A9G1OaCKaAGWT/2XA0cMn6yreyqta04
-         gSoPrKMV2REV58AJJUbDsn3BFUC7nPGDnJmXLIOoQpOk/9RsB5tAEsa6bvq9Vp5vHqvu
-         k4Yao97+EQeUoxvilI8iKYmB/zjX/4qsU/atRbO0W14Z/Y05Lchds0l8LTYtx1vfgo+P
-         o6VlIiXn6kSwmQcIWxRshGHkKx7X3kSwcE/eRoF6DtZ22QXtvkihfzR0/OwpV+eCYAkd
-         TnbA==
-X-Gm-Message-State: AFqh2kpQcAuqa/A1vUYQ787foeiMtVDAGfFy+YY6v9FCVlGbMeCoDhDr
-        A0VabOZ/+t4TZV/5if10rq3r1g==
-X-Google-Smtp-Source: AMrXdXtmFUppigjwv0C/k5mQlzbCkvyuCL8GIlLqzgqKplS56HkGm+iznQF/skNIo+h34mxAUORiTQ==
-X-Received: by 2002:a05:622a:1aa1:b0:3b5:77ff:fbff with SMTP id s33-20020a05622a1aa100b003b577fffbffmr89441qtc.37.1673676532448;
-        Fri, 13 Jan 2023 22:08:52 -0800 (PST)
-Received: from [192.168.1.3] ([2600:4040:29fb:d300:887b:7eff:fe74:68b2])
-        by smtp.gmail.com with ESMTPSA id z26-20020ac8101a000000b003a70a675066sm11553086qti.79.2023.01.13.22.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 22:08:52 -0800 (PST)
-From:   Peter Foley <pefoley2@pefoley.com>
-Date:   Sat, 14 Jan 2023 01:08:41 -0500
-Subject: [PATCH] Documentation: Avoid duplicate Kconfig inclusion
+        Sat, 14 Jan 2023 01:10:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C4C30DB;
+        Fri, 13 Jan 2023 22:10:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2E0360B50;
+        Sat, 14 Jan 2023 06:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98ABCC433D2;
+        Sat, 14 Jan 2023 06:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673676644;
+        bh=LDlKC7jMT4LJfIORAw5P71w/p4Kkb+Uq8n7pEU6mECI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fC96JrbbfYv8nAkOwZsw+JZmrP6EI1rD2z/janUSnK0Q0Bfnysxm57j5mLXDCcbjD
+         oOAbrUGILNL5qJDYoF5oM2Q+48Du3iGKMPDZy+NhEdoT/fTuYwPGNbl/hBT0aqJY3G
+         LU/nmaOapAoal0C5ZgwWBW1PuVqbkWAFyQ1mUIhhjKoJ88u9u2eLdj2IFIU8Ed4iyu
+         qlAVaPUHtyXA5uiT/+ZfuDyW0EA8lN+wRAferYX7XXp6sRhVEwEiQZPakOFM2S26Ms
+         uz2Wg9EKQNFXE0ozc1lJY5cIeZEb0DfMfE5pCUgDsm07bES4mwuV3F7T5Yr014CgU7
+         kfiwR9/eNBntg==
+Date:   Fri, 13 Jan 2023 22:10:42 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
+Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        michael.chan@broadcom.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, selvin.xavier@broadcom.com,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [PATCH net-next v7 1/8] bnxt_en: Add auxiliary driver support
+Message-ID: <20230113221042.5d24bdde@kernel.org>
+In-Reply-To: <20230112202939.19562-2-ajit.khaparde@broadcom.com>
+References: <20230112202939.19562-1-ajit.khaparde@broadcom.com>
+        <20230112202939.19562-2-ajit.khaparde@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230114-doc-v1-1-efec2689e423@pefoley.com>
-X-B4-Tracking: v=1; b=H4sIAOlGwmMC/x2MSQqAMAwAvyI5W2hdQP2KeIht1ByskogI4t+tH
- ocZ5gYlYVLoshuETlbeYgKXZ+AXjDMZDomhsEVpnatM2Lyxtg5Thb5xbQmpHFHJjILRL1+7oh4k
- n9iFJr7+fT88zwsoAllAbgAAAA==
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Peter Foley <pefoley2@pefoley.com>
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673676531; l=634;
- i=pefoley2@pefoley.com; s=20230111; h=from:subject:message-id;
- bh=cT2yd4HoZ95mdHyqj3Z2j/xAavuANzfRGr7ZZ7U0xB0=;
- b=tS0PDOXdiSBNHvVvN1q7KitOv6SCfxJJupFDvSaky/lTE5HpdWF4YoDDoA3u5+DHRwXHMJrOc+7Z
- KSUI3/QbBGZ3KG4NFu2ONZHhUEPUaah8qJ5F1YF884p1y0aMeghR
-X-Developer-Key: i=pefoley2@pefoley.com; a=ed25519;
- pk=DCQqIdN6rHnvfQH58WQiQzJFfGUo1HyWSvdYG8vnO5o=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,29 +58,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Documentation/Kconfig is already included from lib/Kconfig.debug, avoid
-including it again and polluting the top-level menu.
+On Thu, 12 Jan 2023 12:29:32 -0800 Ajit Khaparde wrote:
+> Add auxiliary driver support.
+> An auxiliary device will be created if the hardware indicates
+> support for RDMA.
+> The bnxt_ulp_probe() function has been removed and a new
+> bnxt_rdma_aux_device_add() function has been added.
+> The bnxt_free_msix_vecs() and bnxt_req_msix_vecs() will now hold
+> the RTNL lock when they call the bnxt_close_nic()and bnxt_open_nic()
+> since the device close and open need to be protected under RTNL lock.
+> The operations between the bnxt_en and bnxt_re will be protected
+> using the en_ops_lock.
+> This will be used by the bnxt_re driver in a follow-on patch
+> to create ROCE interfaces.
 
-Signed-off-by: Peter Foley <pefoley2@pefoley.com>
----
- Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -13178,6 +13178,9 @@ static void bnxt_remove_one(struct pci_dev *pdev)
+>  	struct net_device *dev = pci_get_drvdata(pdev);
+>  	struct bnxt *bp = netdev_priv(dev);
+>  
+> +	bnxt_rdma_aux_device_uninit(bp);
+> +	bnxt_aux_dev_free(bp);
 
-diff --git a/Kconfig b/Kconfig
-index 745bc773f5670..97ed6389c9211 100644
---- a/Kconfig
-+++ b/Kconfig
-@@ -28,5 +28,3 @@ source "crypto/Kconfig"
- source "lib/Kconfig"
- 
- source "lib/Kconfig.debug"
--
--source "Documentation/Kconfig"
+You still free bp->aux_dev synchronously..
 
----
-base-commit: 97ec4d559d939743e8af83628be5af8da610d9dc
-change-id: 20230114-doc-005df4ac8193
+> +void bnxt_aux_dev_free(struct bnxt *bp)
+> +{
+> +	kfree(bp->aux_dev);
 
-Best regards,
--- 
-Peter Foley <pefoley2@pefoley.com>
+.. here. Which is called on .remove of the PCI device.
+
+> +	bp->aux_dev = NULL;
+> +}
+> +
+> +static struct bnxt_aux_dev *bnxt_aux_dev_alloc(struct bnxt *bp)
+> +{
+> +	return kzalloc(sizeof(struct bnxt_aux_dev), GFP_KERNEL);
+> +}
+> +
+> +void bnxt_rdma_aux_device_uninit(struct bnxt *bp)
+> +{
+> +	struct bnxt_aux_dev *bnxt_adev;
+> +	struct auxiliary_device *adev;
+> +
+> +	/* Skip if no auxiliary device init was done. */
+> +	if (!(bp->flags & BNXT_FLAG_ROCE_CAP))
+> +		return;
+> +
+> +	bnxt_adev = bp->aux_dev;
+> +	adev = &bnxt_adev->aux_dev;
+> +	auxiliary_device_delete(adev);
+> +	auxiliary_device_uninit(adev);
+> +	if (bnxt_adev->id >= 0)
+> +		ida_free(&bnxt_aux_dev_ids, bnxt_adev->id);
+> +}
+> +
+> +static void bnxt_aux_dev_release(struct device *dev)
+> +{
+> +	struct bnxt_aux_dev *bnxt_adev =
+> +		container_of(dev, struct bnxt_aux_dev, aux_dev.dev);
+> +	struct bnxt *bp = netdev_priv(bnxt_adev->edev->net);
+> +
+> +	bnxt_adev->edev->en_ops = NULL;
+> +	kfree(bnxt_adev->edev);
+
+And yet the reference counted "release" function accesses the bp->adev
+like it must exist.
+
+This seems odd to me - why do we need refcounting on devices at all 
+if we can free them synchronously? To be clear - I'm not sure this is
+wrong, just seems odd.
+
+> +	bnxt_adev->edev = NULL;
+> +	bp->edev = NULL;
+> +}
