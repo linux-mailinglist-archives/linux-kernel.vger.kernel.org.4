@@ -2,160 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784EF66AA0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 09:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD6866AA29
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 09:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjANIVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 03:21:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S229674AbjANI1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 03:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjANIVQ (ORCPT
+        with ESMTP id S229571AbjANI1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 03:21:16 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083B1173A
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 00:21:12 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VZX-xcu_1673684468;
-Received: from 192.168.31.66(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VZX-xcu_1673684468)
-          by smtp.aliyun-inc.com;
-          Sat, 14 Jan 2023 16:21:09 +0800
-Message-ID: <57611d57-121c-9fe4-777f-d20c96374e75@linux.alibaba.com>
-Date:   Sat, 14 Jan 2023 16:21:08 +0800
+        Sat, 14 Jan 2023 03:27:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4DF59DF
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 00:27:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C8DFB8075A
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 08:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC62C433D2;
+        Sat, 14 Jan 2023 08:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673684770;
+        bh=AfDe41uy1V7K3U3P9L5xIYaJ/vF5JFektelnpV5N+wk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bKMT6lIAZhaEr0oPDrySRwwTDnko4WNfXkQDxwPownF54HfAXt2mgI18eSLD0UrUL
+         ywGLctUPg1hsgtJ4B8wXode90vP6vypKznt7FB5+79k6z/6BsiGFfdeFDHIicw5F9v
+         k2+X3hQElL+rphOFHbxzI1S5n3p+CcNsso2VH1mc=
+Date:   Sat, 14 Jan 2023 09:26:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Michal Simek <michal.simek@amd.com>,
+        Kris Chaplin <kris.chaplin@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Reg the next LTS kernel (6.1?)
+Message-ID: <Y8JnHyKNTHMjsHSb@kroah.com>
+References: <CAPDLWs9KWKs_-fpAp2=97uBARYqrHSYTPEU6RbqtWjAD8NpqgQ@mail.gmail.com>
+ <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
+ <Y53BputYK+3djDME@kroah.com>
+ <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
+ <96e41e6d-bec9-f8cf-22ed-1fa5d9022238@amd.com>
+ <Y8FAFAwB9gBzQXQG@kroah.com>
+ <314489f6-cb54-fb3b-6557-d69b1284fa4d@amd.com>
+ <Y8GFYEnIy0Wbh/n6@kroah.com>
+ <Y8HPw2t+TbdXa83C@mit.edu>
+ <20230114071412.GB5088@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] erofs: clean up erofs_iget()
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <20230113065226.68801-1-hsiangkao@linux.alibaba.com>
-Content-Language: en-US
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-In-Reply-To: <20230113065226.68801-1-hsiangkao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230114071412.GB5088@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/13/23 2:52 PM, Gao Xiang wrote:
-> Move inode hash function into inode.c and simplify erofs_iget().
+On Sat, Jan 14, 2023 at 08:14:12AM +0100, Willy Tarreau wrote:
+> On Fri, Jan 13, 2023 at 04:40:19PM -0500, Theodore Ts'o wrote:
+> > On Fri, Jan 13, 2023 at 05:22:56PM +0100, Greg KH wrote:
+> > > > I am just saying that developers/driver owners can simple do calculation to
+> > > > identify LTS version. When they know it they also know time when their
+> > > > deadline is for upstreaming work. It means if patch is accepted between
+> > > > 6.0-r1 and 6.0-rc5/6 they know that it will get to 6.1 merge window.
+> > > 
+> > > That is what I am afraid of and if it causes problems I will purposfully
+> > > pick the previous release.  This has happened in the past and is never
+> > > an excuse to get anything merged.  Code gets merged when it is ready,
+> > > not based on a LTS release.
+> > 
+> > This is probably the best reason not to preannounce when the LTS
+> > release will be ahead of time --- because it can be abused by
+> > developers who try to get not-ready-for-prime-time features into what
+> > they think will be the LTS kernel, with the result that the last
+> > release of the year could be utterly unsitable for that perpose.
 > 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> We know this risk exists but since Greg never makes promises on any
+> version, it remains reasonable.
 
-Since the v2 triggers the compiling error, this v1 is also acceptable
-for me.
+I have to _not_ make promises because in the past when I did, people
+threw crap into the kernel with the "justification" that they had to get
+it in this specific kernel because it was going to be the LTS one.
 
-Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+We can't have nice things, because people abuse it :(
 
-> ---
->  fs/erofs/inode.c    | 40 +++++++++++++++++++++-------------------
->  fs/erofs/internal.h |  9 ---------
->  2 files changed, 21 insertions(+), 28 deletions(-)
-> 
-> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-> index d3b8736fa124..57328691582e 100644
-> --- a/fs/erofs/inode.c
-> +++ b/fs/erofs/inode.c
-> @@ -308,47 +308,49 @@ static int erofs_fill_inode(struct inode *inode)
->  }
->  
->  /*
-> - * erofs nid is 64bits, but i_ino is 'unsigned long', therefore
-> - * we should do more for 32-bit platform to find the right inode.
-> + * ino_t is 32-bits on 32-bit arch. We have to squash the 64-bit value down
-> + * so that it will fit.
->   */
-> -static int erofs_ilookup_test_actor(struct inode *inode, void *opaque)
-> +static ino_t erofs_squash_ino(erofs_nid_t nid)
->  {
-> -	const erofs_nid_t nid = *(erofs_nid_t *)opaque;
-> +	ino_t ino = (ino_t)nid;
-> +
-> +	if (sizeof(ino_t) < sizeof(erofs_nid_t))
-> +		ino ^= nid >> (sizeof(erofs_nid_t) - sizeof(ino_t)) * 8;
-> +	return ino;
-> +}
->  
-> -	return EROFS_I(inode)->nid == nid;
-> +static int erofs_iget5_eq(struct inode *inode, void *opaque)
-> +{
-> +	return EROFS_I(inode)->nid == *(erofs_nid_t *)opaque;
->  }
->  
-> -static int erofs_iget_set_actor(struct inode *inode, void *opaque)
-> +static int erofs_iget5_set(struct inode *inode, void *opaque)
->  {
->  	const erofs_nid_t nid = *(erofs_nid_t *)opaque;
->  
-> -	inode->i_ino = erofs_inode_hash(nid);
-> +	inode->i_ino = erofs_squash_ino(nid);
-> +	EROFS_I(inode)->nid = nid;
->  	return 0;
->  }
->  
->  struct inode *erofs_iget(struct super_block *sb, erofs_nid_t nid)
->  {
-> -	const unsigned long hashval = erofs_inode_hash(nid);
->  	struct inode *inode;
->  
-> -	inode = iget5_locked(sb, hashval, erofs_ilookup_test_actor,
-> -		erofs_iget_set_actor, &nid);
-> +	inode = iget5_locked(sb, erofs_squash_ino(nid), erofs_iget5_eq,
-> +			     erofs_iget5_set, &nid);
->  	if (!inode)
->  		return ERR_PTR(-ENOMEM);
->  
->  	if (inode->i_state & I_NEW) {
-> -		int err;
-> -		struct erofs_inode *vi = EROFS_I(inode);
-> -
-> -		vi->nid = nid;
-> +		int err = erofs_fill_inode(inode);
->  
-> -		err = erofs_fill_inode(inode);
-> -		if (!err) {
-> -			unlock_new_inode(inode);
-> -		} else {
-> +		if (err) {
->  			iget_failed(inode);
-> -			inode = ERR_PTR(err);
-> +			return ERR_PTR(err);
->  		}
-> +		unlock_new_inode(inode);
->  	}
->  	return inode;
->  }
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index bb8501c0ff5b..168c21f16383 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -480,15 +480,6 @@ int erofs_map_blocks(struct inode *inode,
->  		     struct erofs_map_blocks *map, int flags);
->  
->  /* inode.c */
-> -static inline unsigned long erofs_inode_hash(erofs_nid_t nid)
-> -{
-> -#if BITS_PER_LONG == 32
-> -	return (nid >> 32) ^ (nid & 0xffffffff);
-> -#else
-> -	return nid;
-> -#endif
-> -}
-> -
->  extern const struct inode_operations erofs_generic_iops;
->  extern const struct inode_operations erofs_symlink_iops;
->  extern const struct inode_operations erofs_fast_symlink_iops;
-
--- 
-Thanks,
-Jingbo
+greg k-h
