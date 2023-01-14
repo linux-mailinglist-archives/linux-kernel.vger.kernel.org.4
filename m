@@ -2,66 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A717866A76B
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 01:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6064166A76D
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 01:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjANAQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 19:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S230418AbjANASM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 19:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjANAQb (ORCPT
+        with ESMTP id S230252AbjANASK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 19:16:31 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DBD26F1
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:16:29 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d9so24997105pll.9
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:16:29 -0800 (PST)
+        Fri, 13 Jan 2023 19:18:10 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C52526EC
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:18:09 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id bp44so20573705qtb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 16:18:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R11gpIsoLjoJPx/bJDZSX3qFzcN1YPIoVj3Kg++9jRA=;
-        b=P3XFIbjS9O2iFLNHs9KwE1VQ8werQuyrNARUhLmH0lCVNRZJ2rk7sgZT+Zn/CV3aO9
-         n8NosQbbujPD1yTLzY2UtT/orCnuHWy7JhAv4QCSPiGNheHs2ZNcWCweXjNj0NCFqodH
-         Xz2SipLoimvA1UTBTssbm8XWZ8xtLfiLHZwIdk9wyWIUkEEnyVwoQOahZlGWgFgcbv1v
-         vdMyCUandgKkyl6eDOY3ntLLrn6MzeGGOX03JuITzAcChJZuNGQh9FnQ05DZoIPVVoeT
-         fH3iJEksq5Dz+dM+HeaMJPuXGVstuBYeICD8N7ANsSkrBqLXmgyUzhVmF9vR2+cf6V9N
-         DOKQ==
+        bh=VKT6Jyn0vegt0kR4LKLQ0ILIcSuUkGIYOHtcvaoWHv0=;
+        b=NCB5c8oqUMOINCFtJeTt9mCtyRETsgMlAvmjdFpR1ZVH11ttUYQbMpvk1mL6Qsasta
+         sRm22kK07ft74kQgkdUph3tjWD/aFvioAyc97OsnUCLdpy6GAPbK6fjABRwyvr2/medY
+         E0Z18NfiPqxFjrL8DNe4h2CFjKdL/A7u6YYhrlw+kzukkxZibyeGRn4daqhzsMwf25/l
+         jauLDuJZZzr0MV/46UjnPflzcHLTtjkynlUnGX0BoUEkxAUcmxcGHwUtCRfaAQFMX9uQ
+         CO31weqoKXABEfM++wszv9tEdd4V0fx0EnRea9UJ8bSfpPVrTWDZuXoIXMYhhqmP8UBa
+         gxyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R11gpIsoLjoJPx/bJDZSX3qFzcN1YPIoVj3Kg++9jRA=;
-        b=aZGpfvk/wkE8tbmR0j/PO34m9DeBixGDuBL4lPdE7C2ju8WkUkj3wECnUzJIgpuC+D
-         k3jDx7w+izq/EXuPSGQG12bja8Kff22hE/Vr0l+Pk/gU2no+tmYXXvMexTBdvNsJ2VSi
-         WQ043haAMvFiovc0iK545+cJmGTmPoQLgeLU4301JNtvF+AXPt6uZ5AAmg3y6ImRJzjA
-         rCLa9KErIbxVPWujtd2ctuex3lELuZPCpmlxbgeMCANhhUi9LxjSCMffNaapk2+Ejryq
-         fWf0HW2bBdwaLIChCXjComdsOw7lH/KepOkpvSP4MYhrFxkwFWGz9KqKsNQUCWkMnK+W
-         KTSQ==
-X-Gm-Message-State: AFqh2krqx7Bgv21W7KlrwCmO1khlDOBmzojKvlc2x+vfFDca6u7QMV5J
-        Qii7dmVgs2fEzA5zuO4IxlY=
-X-Google-Smtp-Source: AMrXdXuuoqgSVenxCxLXxH+0fhWynqRedNaei9TXcehDD/NR+Z5Pd9hEF7ldxqIfPwbvyTb/zrcE3g==
-X-Received: by 2002:a05:6a20:43a2:b0:b6:71f6:a4c0 with SMTP id i34-20020a056a2043a200b000b671f6a4c0mr9808650pzl.1.1673655388607;
-        Fri, 13 Jan 2023 16:16:28 -0800 (PST)
-Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::2e58])
-        by smtp.googlemail.com with ESMTPSA id nl5-20020a17090b384500b0020b21019086sm4064541pjb.3.2023.01.13.16.16.27
+        bh=VKT6Jyn0vegt0kR4LKLQ0ILIcSuUkGIYOHtcvaoWHv0=;
+        b=y9efbPO8VqLQDQXQk6IiyqCnhay5oGm7758JTkH469werXyjRk4GQiWip8Dz2mR8mf
+         2bcfUexEQqr/39tsB8Jq7bD+sqZuhl2cT9iXAffQKYb3z7Vm6/zKh3qoygXI4Ld0KArG
+         QW9EYIpINTjpST56PNKUSSA6Iyxr19k4kX1RVQMd8m9fooNLZex92Q29EfZzR0H1HT5H
+         DCldJnOEfNag8QIbP7C2UCina+RCLFTfa09e82/5xfybZIxWaO4x2GwxQ1xRjOZFH00Q
+         JkeY4KQjY9Pa8/hXAdeJDYUfPogxDwSVvyA+ws2YS7RPArquTJZ16AlmhP2ZggHFz8Ou
+         2StA==
+X-Gm-Message-State: AFqh2kqMT29X2fj7D9l9D3sOTw04tNguZvGybLEI4/zavBI+JbTpYbBC
+        VCpMXQGhEQwKy4ge87yeewQ=
+X-Google-Smtp-Source: AMrXdXv+6CBlJbBKdnPCkoKW5oQ9ZMHU+YpWxYUOcqAizF16zBDzaGvD8/x+EXnoIDEAyMA25OTFBg==
+X-Received: by 2002:ac8:43d2:0:b0:3a8:137e:2963 with SMTP id w18-20020ac843d2000000b003a8137e2963mr23183028qtn.20.1673655488414;
+        Fri, 13 Jan 2023 16:18:08 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id c14-20020ac84e0e000000b003ae450e43acsm2941352qtw.12.2023.01.13.16.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 16:16:28 -0800 (PST)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH 2/2] mm/khugepaged: Convert release_pte_pages() to use folios
-Date:   Fri, 13 Jan 2023 16:15:56 -0800
-Message-Id: <20230114001556.43795-2-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230114001556.43795-1-vishal.moola@gmail.com>
-References: <20230114001556.43795-1-vishal.moola@gmail.com>
+        Fri, 13 Jan 2023 16:18:07 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 5881127C005B;
+        Fri, 13 Jan 2023 19:18:07 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 13 Jan 2023 19:18:07 -0500
+X-ME-Sender: <xms:vvTBYzHizRO0J86xEMaLtPxvuAfGj6LUnsiXXPclTiO4keLYji9PpQ>
+    <xme:vvTBYwVxA7P3e2T0rPmBg_yOFz_2Ny0FycrnyUil3wi6jsJL8YBn3ZRu_W_smjsbD
+    483Hk4hWYXQg921lg>
+X-ME-Received: <xmr:vvTBY1L1_c3M2tAxzj6PRwCQPTIliCmZgxVkxy0Dk4LySHdrgj7DM2Eao_Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleelgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudff
+    iedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:vvTBYxGMBGitZqYEYuPixGdttjb1xPagj1_Rbzp7f3VdoeV1u98vhw>
+    <xmx:vvTBY5Wttnk9Q1Yb2fttzlhRUwjmRsU1AWIMn3cL7bxPGFALVeqGwA>
+    <xmx:vvTBY8Ni_q4LENmqyE8liG8hPcvUjqx00EWuuXpiQWOkN4aRtQtTww>
+    <xmx:v_TBY7I1rCyrgGJa8XSRRidnly61v8HqLYbrfDjF6MoU4IuWClLNEg>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Jan 2023 19:18:06 -0500 (EST)
+Date:   Fri, 13 Jan 2023 16:17:59 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 2/3] rcu: Equip sleepable RCU with lockdep dependency
+ graph checks
+Message-ID: <Y8H0twLVEnM6jkgq@boqun-archlinux>
+References: <20230113065955.815667-1-boqun.feng@gmail.com>
+ <20230113130330.1027-1-hdanton@sina.com>
+ <20230113235809.1085-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113235809.1085-1-hdanton@sina.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,45 +104,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converts release_pte_pages() to use folios instead of pages.
+On Sat, Jan 14, 2023 at 07:58:09AM +0800, Hillf Danton wrote:
+> On 13 Jan 2023 09:58:10 -0800 Boqun Feng <boqun.feng@gmail.com>
+> > On Fri, Jan 13, 2023 at 09:03:30PM +0800, Hillf Danton wrote:
+> > > On 12 Jan 2023 22:59:54 -0800 Boqun Feng <boqun.feng@gmail.com>
+> > > > --- a/kernel/rcu/srcutree.c
+> > > > +++ b/kernel/rcu/srcutree.c
+> > > > @@ -1267,6 +1267,8 @@ static void __synchronize_srcu(struct srcu_struct *ssp, bool do_norm)
+> > > >  {
+> > > >  	struct rcu_synchronize rcu;
+> > > >  
+> > > > +	srcu_lock_sync(&ssp->dep_map);
+> > > > +
+> > > >  	RCU_LOCKDEP_WARN(lockdep_is_held(ssp) ||
+> > > >  			 lock_is_held(&rcu_bh_lock_map) ||
+> > > >  			 lock_is_held(&rcu_lock_map) ||
+> > > > -- 
+> > > > 2.38.1
+> > > 
+> > > The following deadlock is able to escape srcu_lock_sync() because the
+> > > __lock_release folded in sync leaves one lock on the sync side.
+> > > 
+> > > 	cpu9		cpu0
+> > > 	---		---
+> > > 	lock A		srcu_lock_acquire(&ssp->dep_map);
+> > > 	srcu_lock_sync(&ssp->dep_map);
+> > > 			lock A
+> > 
+> > But isn't it just the srcu_mutex_ABBA test case in patch #3, and my run
+> > of lockdep selftest shows we can catch it. Anything subtle I'm missing?
+> 
+> I am leaning to not call it ABBA deadlock, because B is unlocked.
+> 
+> 	task X		task Y
+> 	---		---
+> 	lock A
+> 	lock B
+> 			lock B
+> 	unlock B
+> 	wait_for_completion E
+> 
+> 			lock A
+> 			complete E
+> 
+> And no deadlock should be detected/caught after B goes home.
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- mm/khugepaged.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Your example makes me more confused.. given the case:
 
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 4888e8688401..27d010431ece 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -509,20 +509,20 @@ static void release_pte_page(struct page *page)
- static void release_pte_pages(pte_t *pte, pte_t *_pte,
- 		struct list_head *compound_pagelist)
- {
--	struct page *page, *tmp;
-+	struct folio *folio, *tmp;
- 
- 	while (--_pte >= pte) {
- 		pte_t pteval = *_pte;
- 
--		page = pte_page(pteval);
-+		folio = pfn_folio(pte_pfn(pteval));
- 		if (!pte_none(pteval) && !is_zero_pfn(pte_pfn(pteval)) &&
--				!PageCompound(page))
--			release_pte_page(page);
-+				!folio_test_large(folio))
-+			release_pte_folio(folio);
- 	}
- 
--	list_for_each_entry_safe(page, tmp, compound_pagelist, lru) {
--		list_del(&page->lru);
--		release_pte_page(page);
-+	list_for_each_entry_safe(folio, tmp, compound_pagelist, lru) {
-+		list_del(&folio->lru);
-+		release_pte_folio(folio);
- 	}
- }
- 
--- 
-2.38.1
+	task X		task Y
+	---		---
+	mutex_lock(A);
+			srcu_read_lock(B);
+	synchronze_srcu(B);
+			mutex_lock(A);
 
+isn't it a deadlock? If your example, A, B or E which one is srcu?
+
+Regards,
+Boqun
