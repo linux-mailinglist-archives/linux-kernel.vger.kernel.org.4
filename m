@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C2666AB3F
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 12:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FA866AB44
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjANLyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 06:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S229723AbjANMG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 07:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjANLyb (ORCPT
+        with ESMTP id S229747AbjANMGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 06:54:31 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B781B769F;
-        Sat, 14 Jan 2023 03:54:30 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-4c15c4fc8ccso319531087b3.4;
-        Sat, 14 Jan 2023 03:54:30 -0800 (PST)
+        Sat, 14 Jan 2023 07:06:23 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F101722;
+        Sat, 14 Jan 2023 04:06:22 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id y19so1063363edc.2;
+        Sat, 14 Jan 2023 04:06:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvI+CeRWVTNSV0B6ZD8unPvEj5NWZi+Y8Deb7v55YoY=;
-        b=obs3qgE0+zvSCRapk7kQUptHOZhGx5/1ml6Sv6M8tfTLW78/OpEGuIF6ivNT2DznoN
-         qc0h6Jk/gUOb99J8LHLS8RlW//6Qxukx+XIY9WxxdPu5jvP8Xwlv+eUl92CQOJqlXGms
-         VsfQ0HmgeAdCLUFypUlITrFEjD+UYkUGs8WP8NpgGabqrp/SG45OHx4lzpgFxRUIPebA
-         /1oVaBvgIRzzJGYJxyMjRt12mUQJ2a3G7A7EBfbr1QIV8Z0yud82o/vpacYRKYDukKq7
-         lK8PxPjKHp77iQGZ+niHI2AyKhh5V0f5CNWLN0LiyOqF69HmEvCab0jjE1Zi0TOmwCpD
-         h0Qg==
+        bh=WDsjkLeKel2pUOLcNMvCwbBxuOd8nTCUkWVNrN0y/N4=;
+        b=oJs2SeTw3bP/IgcPw8sEJ1PeHd/THXpumPmAfZR3C7Ltr3V4MxNKcBcBBY0i4j6fi2
+         lNAsPEug0QoEgPXBd544cRERgQdsyLPs7UUivYFnU6KwVDzdqjAXsb5tPBOgDI3ipyvk
+         rReuvkPhN9iWfXfeBb7D0QBORrgtrHh/0sJiIRHAThTafSCOsWx4vWiWH/9pKm8Ql1Gf
+         U/0h5fKeRGJ4gwiudK2tjtGsMM4w36vG4DVPDGLNrTVZfhMWv5VGqqICspkNcHZtEt9A
+         bsfOFolcBApDGsTjtbhKrqmVXugJZHYNghOT2Cab6RRuCXQF1SWCs6xfKXBty1CUTX2Z
+         idVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DvI+CeRWVTNSV0B6ZD8unPvEj5NWZi+Y8Deb7v55YoY=;
-        b=Z0nES67nGhfbOFoFyd77BMhLNk9gz7xKqiikQUDenDkG7Jt5WQHCQGuqf56IhA3RVY
-         o3X6/2rw5/fNM/0Et6J9YwxvasmZafJy9mQjiyuKr9RnP5ffyuQcXhqVS+7y3MApdirG
-         /gu83RDX+WDwsTSqSes5Tb2vrciFbp/IKLYufXUhs+Z88L1/+wvE3DQv3M4QqLM/3xH/
-         YQXsXHDDReXaOR4jpp1Lm9QZczYhc60+vGNl3r28FyeWgY8iQQYpFsG3GR06QPBjAz6L
-         uQxgZBVZmBPUZ0ibR4+fYHSm6pwR/+TAaBqLu8Unf6+hcxcVobKhdxLmCUzokOwq8M2L
-         QLFQ==
-X-Gm-Message-State: AFqh2kqSklKOKbxlphn1OaYPSHxruskUpkW8cxsLvh1P7d0ZjZSrn9Y0
-        Z/uJqAjHruoxfsC9vS37ptkRKxzhewwUoIP2njdlYaQIuSYqf6+8rTw=
-X-Google-Smtp-Source: AMrXdXsHvE5WGQ376cJ83wcrMjHUP7gkRhA+MFh3+5ocRmga++VS9xB2WtHu9iAZtBiT5ohucaA0SFrAXQvxtbrJr14=
-X-Received: by 2002:a0d:fb07:0:b0:3bc:7270:cb70 with SMTP id
- l7-20020a0dfb07000000b003bc7270cb70mr2902582ywf.83.1673697269958; Sat, 14 Jan
- 2023 03:54:29 -0800 (PST)
+        bh=WDsjkLeKel2pUOLcNMvCwbBxuOd8nTCUkWVNrN0y/N4=;
+        b=oN6GjDQO8/5OZMKZO14aUFMhzR2TzzfuUbcAeeYBlIGOHZrZY4oDQ6DhNpi8tbrPml
+         VXRc3LzbrCrPgdkTIr0nEeUbFajBEnHTn/DadsiARL5EjE+QxURAUA9sR/RF1WD++Yuz
+         j8LUh/1Elm32UBDq0KbkR4N6cd/dV/EQjJ/nhzXhIwrsSMPsqq2n6xXBrptjVl41eqaP
+         NaX0Itp+Ba6bn+681f5KJgT/og1wjv762pGvkAdbH9VAthdAOz5nxT3vh6kwtlE2A/1A
+         TtaVTKe7es6Pmlx878RF0tjQbX45FtDlgDv58i868Bin0+WEctThSEOnrYee9N1Lbwzb
+         GJJQ==
+X-Gm-Message-State: AFqh2krauQ/4KjVBcYlTt2QzNBrDtM1CtN8YPNbfCyUk0sD5F9Q1Uxqk
+        qXSTJcBR8AneJt6+uCfeO4krmLnFI1SEpwttGrc=
+X-Google-Smtp-Source: AMrXdXv6OER/KDFv92Xi3F82DJ5D/K31GnDdv/LmTwJphZ0E2SezjdcJ3ZJhkrc49J5V1CkYLneLjXraBXnVVETgaGw=
+X-Received: by 2002:aa7:c497:0:b0:49d:aca5:9ae0 with SMTP id
+ m23-20020aa7c497000000b0049daca59ae0mr202832edq.106.1673697980814; Sat, 14
+ Jan 2023 04:06:20 -0800 (PST)
 MIME-Version: 1.0
-References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
- <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com>
- <Y7i1h3lCMKfxB532@zn.tnic> <CANiq72khMLU6tF8vGD9fs7mLNAAQu8wJ2n1SLM3th2QMMfGPPA@mail.gmail.com>
- <Y8Ax/I5qOcVDZljG@zn.tnic>
-In-Reply-To: <Y8Ax/I5qOcVDZljG@zn.tnic>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 14 Jan 2023 12:54:18 +0100
-Message-ID: <CANiq72kXpDwRO3R+tjqYgOcbFT7rwnpH=KhVyry-+CUsJa7mRQ@mail.gmail.com>
-Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
- transitively contain a `#[repr(align)]` type
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yujie Liu <yujie.liu@intel.com>,
-        =?UTF-8?Q?Emilio_Cobos_=C3=81lvarez?= <emilio@crisal.io>
+References: <20230112065336.41034-1-kerneljasonxing@gmail.com> <CANn89iKQjN1YiHqBTV3+zDYo0G11p-6=p7C-1GvFCp8Y=r4nvQ@mail.gmail.com>
+In-Reply-To: <CANn89iKQjN1YiHqBTV3+zDYo0G11p-6=p7C-1GvFCp8Y=r4nvQ@mail.gmail.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Sat, 14 Jan 2023 20:05:44 +0800
+Message-ID: <CAL+tcoACCg+UQG+PAGh1k+-mTJdZ-5jNez5hSGO_i2oWjr7=+w@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: avoid the lookup process failing to get sk in
+ ehash table
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org--cc, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,77 +69,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 5:14 PM Borislav Petkov <bp@alien8.de> wrote:
+On Sat, Jan 14, 2023 at 5:45 PM Eric Dumazet <edumazet@google.com> wrote:
 >
-> Right, or at least the repro instructions should state it clear.
+> On Thu, Jan 12, 2023 at 7:54 AM Jason Xing <kerneljasonxing@gmail.com> wrote:
+> >
+> > From: Jason Xing <kernelxing@tencent.com>
+> >
+> > While one cpu is working on looking up the right socket from ehash
+> > table, another cpu is done deleting the request socket and is about
+> > to add (or is adding) the big socket from the table. It means that
+> > we could miss both of them, even though it has little chance.
+> >
+> > Let me draw a call trace map of the server side.
+> >    CPU 0                           CPU 1
+> >    -----                           -----
+> > tcp_v4_rcv()                  syn_recv_sock()
+> >                             inet_ehash_insert()
+> >                             -> sk_nulls_del_node_init_rcu(osk)
+> > __inet_lookup_established()
+> >                             -> __sk_nulls_add_node_rcu(sk, list)
+> >
+> > Notice that the CPU 0 is receiving the data after the final ack
+> > during 3-way shakehands and CPU 1 is still handling the final ack.
+> >
+> > Why could this be a real problem?
+> > This case is happening only when the final ack and the first data
+> > receiving by different CPUs. Then the server receiving data with
+> > ACK flag tries to search one proper established socket from ehash
+> > table, but apparently it fails as my map shows above. After that,
+> > the server fetches a listener socket and then sends a RST because
+> > it finds a ACK flag in the skb (data), which obeys RST definition
+> > in RFC 793.
+> >
+> > Many thanks to Eric for great help from beginning to end.
+> >
+> > Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > ---
+> >  net/ipv4/inet_hashtables.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> > index 24a38b56fab9..18f88cb4efcb 100644
+> > --- a/net/ipv4/inet_hashtables.c
+> > +++ b/net/ipv4/inet_hashtables.c
+> > @@ -650,7 +650,16 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+> >         spin_lock(lock);
+> >         if (osk) {
+> >                 WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+> > +               if (sk_hashed(osk))
+> > +                       /* Before deleting the node, we insert a new one to make
+> > +                        * sure that the look-up=sk process would not miss either
+> > +                        * of them and that at least one node would exist in ehash
+> > +                        * table all the time. Otherwise there's a tiny chance
+> > +                        * that lookup process could find nothing in ehash table.
+> > +                        */
+> > +                       __sk_nulls_add_node_rcu(sk, list);
 >
-> Btw, this is part of a long-running feedback process we're giving to the 0day
-> bot in order to make their reports as user friendly as possible.
-
-Sounds very useful, thanks for the effort!
-
-> Well, I find having an --explain option too much. But there are perhaps reasons
-> for it.
+> In our private email exchange, I suggested to insert sk at the _tail_
+> of the hash bucket.
 >
-> One improvement could be, IMHO, they could turn on --explain automatically when
-> it results in a build error. So that you don't have to do it yourself.
+
+Yes, I noticed that. At that time I kept considering the race
+condition of the RCU itself, not the scene you mentioned as below.
+
+> Inserting it at the _head_ would still leave a race condition, because
+> a concurrent reader might
+> have already started the bucket traversal, and would not see 'sk'.
+
+Thanks for the detailed explanation. Now I see why. I'll replace it
+with __sk_nulls_add_node_tail_rcu() function and send the v2 patch.
+
+By the way, I checked the removal of TIMEWAIT socket which is included
+in this patch.
+I write down the call-trace:
+inet_hash_connect()
+    -> __inet_hash_connect()
+        -> if (sk_unhashed(sk)) {
+                inet_ehash_nolisten(sk, (struct sock *)tw, NULL);
+                    -> inet_ehash_insert(sk, osk, found_dup_sk);
+Therefore, this patch covers the timewait case.
+
+Thanks,
+Jason
+
 >
-> What would be better, tho, is if there were no --explain option at all and the
-> warnings are as human readable as possible.
-
-Sometimes one can get quite a few errors/warnings, so printing all the
-docs for all those would be probably too much.
-
-I think `--explain` is intended to provide a way to have longer
-documentation about a particular diagnostic message without filling
-the terminal too much those that already know what the error/warning
-is about (in this particular case, the error first line looks fine to
-me -- but of course the machine-translated bindings from `bindgen` are
-harder to read due to the generated identifiers).
-
-> so the struct is:
+> Thanks.
 >
-> struct alt_instr {
->         s32 instr_offset;       /* original instruction */
->         s32 repl_offset;        /* offset to replacement instruction */
->
->         union {
->                 struct {
->                         u32 cpuid: 16;  /* CPUID bit set for replacement */
->                         u32 flags: 16;  /* patching control flags */
->                 };
->                 u32 ft_flags;
->         };
->
->         u8  instrlen;           /* length of original instruction */
->         u8  replacementlen;     /* length of new instruction */
-> } __packed;
->
-> and everything is naturally aligned.
->
-> So I'm guessing this is a rust bindings glue shortcoming or so...
-
-Yeah, this is https://github.com/rust-lang/rust-bindgen/issues/2179 (I
-mentioned it in my reply to Alexander above, in case you didn't see
-it, as well as the usual workarounds we use).
-
-There are also other related issues related to GCC's `packed` and
-`aligned` attributes: aligned fields in general are not supported
-(including just adding the attribute), neither are structs declared
-both packed and aligned. So only a subset of possibilities are handled
-properly. I collected some links to related issues at
-https://github.com/Rust-for-Linux/linux/issues/353.
-
-From what I could tell reading some old discussions the other day, the
-`bindgen` maintainer (Cc'ing Emilio) is aware of the issues but nobody
-has put the time to solve it within the bindings generator.
-
-Ideally, I think, Rust could support providing alignment for
-individual members in `repr(C)` structs in order to tweak its
-described layout algorithm, in order for users to mimic GCC/MSVC/...
-extensions as needed. That way it can be useful also for everyone
-(even those not using `bindgen`), and `bindgen`'s implementation would
-be easier, I imagine.
-
-Cheers,
-Miguel
+> >                 ret = sk_nulls_del_node_init_rcu(osk);
+> > +               goto unlock;
+> >         } else if (found_dup_sk) {
+> >                 *found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
+> >                 if (*found_dup_sk)
+> > @@ -660,6 +669,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+> >         if (ret)
+> >                 __sk_nulls_add_node_rcu(sk, list);
+> >
+> > +unlock:
+> >         spin_unlock(lock);
+> >
+> >         return ret;
+> > --
+> > 2.37.3
+> >
