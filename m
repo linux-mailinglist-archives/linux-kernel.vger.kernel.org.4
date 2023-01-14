@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49BC66AD39
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 19:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2BE66AD3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 19:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjANSLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 13:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S230381AbjANSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 13:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjANSLa (ORCPT
+        with ESMTP id S230367AbjANSMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 13:11:30 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727F7B77B;
-        Sat, 14 Jan 2023 10:11:29 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id x37so25746969ljq.1;
-        Sat, 14 Jan 2023 10:11:29 -0800 (PST)
+        Sat, 14 Jan 2023 13:12:30 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73150B77B;
+        Sat, 14 Jan 2023 10:12:29 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id x40so3324989lfu.12;
+        Sat, 14 Jan 2023 10:12:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NSlRoDTtSoPSgCdi+CZiZS3Sznec9wySQ545Pko7j/k=;
-        b=Z8eXvudrG4nQzD8PfAyoxIhxbLNvVxnIrofwEXoHf8uz02oXhL2i5BvN8zAV8V8rJt
-         u3C7YyUb2MeYY1GPqWkxpAhkdLEpe3SI8T94/ysVfIuMSXInnJQNGSONIP4GwqoJiD7N
-         uF5buMMj6oOJi+bbO74m8kS/N7/SMzZfnF73Nu+8W/9tFDFfzS58t1DbCy+uD2xxaNX7
-         IqoIYVHxDBhke6+gQRog682Z1+qLVD3ZLU8ysy09+MBIZTsJNCEmZ6XJVkLCUIlOhPOq
-         O34XYAadIUNwFcmFh8UVkOT9MyHTEssVtdXFsi5J4aNBoACjcBSQ6oQiq4QhApMvkQ+S
-         lNLg==
+        bh=tJ4I2+kGQp0jFq18r3oaQbBG/6QGMIIEVSgmjg/A278=;
+        b=oIJsRpbpWfMnyX/de9Bi+AJ54jTQbu01aSmy8M0BinUy4WyTKc3JWn540INVhymiei
+         mQwuSMIPg6Ulqz+wkw3AidX+ddfn6+GL78EdyW9WwHHmgukIkaHLdjxpaQwhspEZVVK/
+         En3rjKfzhyZx1geu1ku1Dz9FTPV8OmTlcK4QJmi06DuhQ7WnLtJwRNKLxoTj1KvELDvu
+         osrNncObjMw6e8PyT48aJQKJKcZ3ugT3Lm5TVyg4vJz6+R+iWjW+TJD2tkpSVyVxq2po
+         LEiDlI/ui+bvFCpwuFZoJJq1+E3AyQzO7QAqR71u6OwN9wlg3ePgoExTqTSjKMP74k8s
+         4WfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NSlRoDTtSoPSgCdi+CZiZS3Sznec9wySQ545Pko7j/k=;
-        b=A/Y0mNDhr0lxRfttqbtlUxO5asx81zJntC6HqqLB/IGNfUJDZU6itha59914Xm9XBJ
-         xf/xcOHvShNR+XsGVjiqEmphkCKeD9i/F5bHjs7yyQJKqF7uQ3X48be4K647zGTCUYy1
-         SOdMwTlSGxwXNNSA6D/pSB1HDOSrtberzJQe2R0+Yse5ro39P0jIy6xRzWzuWm6LoDDF
-         zjS93X6MCNIXa3E9oUQKQ6hy96Wz2VKrWAUowq0HDTudMjWyW8Vs4EhDZ3jYqPtJYaJC
-         N5kdolAlpkvZmWGNvHltSS6y7O11IuEcafaJzaHS1gdZBfmAKV01/ku9hXF5iIUw1jQN
-         2MLg==
-X-Gm-Message-State: AFqh2ko0DkPf4YQIc+lACrunYuiWAPrBBoahUY+pXp3yILl8MOG56Wtu
-        j1TtOwIeRiD8v3MD7oFDl3HkqFJTcramFb0Gea8=
-X-Google-Smtp-Source: AMrXdXsegW3pLvFHzGQ24UgODjHyhq7rdd1Hqg+NWXOoist8eCemWI9UMRmUSycI6TzREF0sM3CTiOZ+G+VfBIPYeA0=
-X-Received: by 2002:a2e:988b:0:b0:28b:7925:3d2 with SMTP id
- b11-20020a2e988b000000b0028b792503d2mr48626ljj.229.1673719887512; Sat, 14 Jan
- 2023 10:11:27 -0800 (PST)
+        bh=tJ4I2+kGQp0jFq18r3oaQbBG/6QGMIIEVSgmjg/A278=;
+        b=5MaZqlBPVIPDTKLrsKqFimzU5Eev5Zc71RmtoCimyRDhpZJlqXnlqCNQBb0AQlcazu
+         o7quUtVYdXgCAbyvTeg+339c+dPhl2GCXCuz13PuypbDW5mkjqqZUAgncJEpLFFyqfnZ
+         e5uCes7XsXOMe+8v7N/PbcMaOiDC68Naf3DN4hqlZ6/F9ZeujHJnZIXVEdBUJe2D4dL0
+         MMgKFnosZcmV7Y/kLd2Re3EUI0f4VyNW4cN4009E1c0m3+r1GEijO18nQoQlq2iCnvwJ
+         4U9SkDOP99LDFjwm2LVU+VrU2rk7ygM8ehd4eRJ1xIhi1TFIMCY1vFPza848pBz8vRVr
+         O7Nw==
+X-Gm-Message-State: AFqh2krfY7uI7a423mDHnMFILS6ePmBucocMYI42IB8VPFH7Frp8zzhj
+        KO22wH0me4FLNmVgmt+iGDhBlLBgODxQNEy64cQIpeBd
+X-Google-Smtp-Source: AMrXdXvyH2VlCP28geTu0pnQSHpRJp5HLHtbdEpNMOm7rUlMmDhlBsdso4n9j/SemhctQimd8Rfcd8ey04XyrzykRjw=
+X-Received: by 2002:a05:6512:14d:b0:4cb:3a2f:26d1 with SMTP id
+ m13-20020a056512014d00b004cb3a2f26d1mr2121991lfo.303.1673719947706; Sat, 14
+ Jan 2023 10:12:27 -0800 (PST)
 MIME-Version: 1.0
-References: <b4cb5ccc96332ca81d6732b3063942186614eaa6.1673686651.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <b4cb5ccc96332ca81d6732b3063942186614eaa6.1673686651.git.christophe.jaillet@wanadoo.fr>
+References: <Y7zBtCZ/eRJCpjBf@work> <202301121449.1C2AEFC2E7@keescook>
+In-Reply-To: <202301121449.1C2AEFC2E7@keescook>
 From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 14 Jan 2023 12:11:16 -0600
-Message-ID: <CAH2r5mvvVwSFf7y=YB0=gxGPOhVaN2zwNvFdRSh_E5Dk7hAMEg@mail.gmail.com>
-Subject: Re: [PATCH v2] cifs: Use kstrtobool() instead of strtobool()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+Date:   Sat, 14 Jan 2023 12:12:16 -0600
+Message-ID: <CAH2r5mt=DLrN2F0wwhPpMicHZsGJF5nQXQk0ptYTJy2a9xWcwA@mail.gmail.com>
+Subject: Re: [PATCH][next] cifs: Replace zero-length arrays with
+ flexible-array members
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
         Ronnie Sahlberg <lsahlber@redhat.com>,
         Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
+        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -73,69 +75,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 merged into cifs-2.6.git for-next
 
-On Sat, Jan 14, 2023 at 2:58 AM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Thu, Jan 12, 2023 at 4:52 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
+> On Mon, Jan 09, 2023 at 07:39:00PM -0600, Gustavo A. R. Silva wrote:
+> > Zero-length arrays are deprecated[1] and we are moving towards
+> > adopting C99 flexible-array members instead. So, replace zero-length
+> > arrays in a couple of structures with flex-array members.
+> >
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [2].
+> >
+> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays [1]
+> > Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
+> > Link: https://github.com/KSPP/linux/issues/78
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 >
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 >
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch was already sent as a part of a serie ([1]) that axed all usages
-> of strtobool().
-> Most of the patches have been merged in -next.
->
-> I synch'ed with latest -next and re-send the remaining ones as individual
-> patches.
->
-> Changes in v2:
->   - synch with latest -next.
->
-> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  fs/cifs/cifs_debug.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/cifs/cifs_debug.c b/fs/cifs/cifs_debug.c
-> index 56b23def4c95..612f0bb284c9 100644
-> --- a/fs/cifs/cifs_debug.c
-> +++ b/fs/cifs/cifs_debug.c
-> @@ -8,6 +8,7 @@
->  #include <linux/fs.h>
->  #include <linux/string.h>
->  #include <linux/ctype.h>
-> +#include <linux/kstrtox.h>
->  #include <linux/module.h>
->  #include <linux/proc_fs.h>
->  #include <linux/uaccess.h>
-> @@ -787,7 +788,7 @@ static ssize_t cifsFYI_proc_write(struct file *file, const char __user *buffer,
->         rc = get_user(c[0], buffer);
->         if (rc)
->                 return rc;
-> -       if (strtobool(c, &bv) == 0)
-> +       if (kstrtobool(c, &bv) == 0)
->                 cifsFYI = bv;
->         else if ((c[0] > '1') && (c[0] <= '9'))
->                 cifsFYI = (int) (c[0] - '0'); /* see cifs_debug.h for meanings */
-> @@ -947,7 +948,7 @@ static ssize_t cifs_security_flags_proc_write(struct file *file,
->
->         if (count < 3) {
->                 /* single char or single char followed by null */
-> -               if (strtobool(flags_string, &bv) == 0) {
-> +               if (kstrtobool(flags_string, &bv) == 0) {
->                         global_secflags = bv ? CIFSSEC_MAX : CIFSSEC_DEF;
->                         return count;
->                 } else if (!isdigit(flags_string[0])) {
 > --
-> 2.34.1
->
+> Kees Cook
+
 
 
 -- 
