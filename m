@@ -2,87 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F99966AA2E
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 09:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B87EA66AA2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 09:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjANIr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 03:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S229620AbjANItq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 03:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjANIr0 (ORCPT
+        with ESMTP id S229468AbjANIto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 03:47:26 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57DEF4EC2
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 00:47:25 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30E8lJUw006072;
-        Sat, 14 Jan 2023 09:47:19 +0100
-Date:   Sat, 14 Jan 2023 09:47:19 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Michal Simek <michal.simek@amd.com>,
-        Kris Chaplin <kris.chaplin@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Reg the next LTS kernel (6.1?)
-Message-ID: <20230114084719.GA6057@1wt.eu>
-References: <CAPDLWs9CoWw7NLfrtCfMsRAdCSfBgomVELRhM70QWVca99z65A@mail.gmail.com>
- <Y53BputYK+3djDME@kroah.com>
- <c6c4787f-f0c6-7285-f782-d36bd86b1e01@amd.com>
- <96e41e6d-bec9-f8cf-22ed-1fa5d9022238@amd.com>
- <Y8FAFAwB9gBzQXQG@kroah.com>
- <314489f6-cb54-fb3b-6557-d69b1284fa4d@amd.com>
- <Y8GFYEnIy0Wbh/n6@kroah.com>
- <Y8HPw2t+TbdXa83C@mit.edu>
- <20230114071412.GB5088@1wt.eu>
- <Y8JnHyKNTHMjsHSb@kroah.com>
+        Sat, 14 Jan 2023 03:49:44 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C32659E4
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 00:49:42 -0800 (PST)
+Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NvBkZ55lSz16Mm9;
+        Sat, 14 Jan 2023 16:47:50 +0800 (CST)
+Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sat, 14 Jan
+ 2023 16:49:29 +0800
+Subject: Re: [PATCH] coresight: etm4x: Fix accesses to TRCSEQRSTEVR and
+ TRCSEQSTR
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>
+References: <20230110125101.10533-1-hejunhao3@huawei.com>
+ <f2886dd2-c98c-cbe0-0816-0d7926edd2f0@arm.com>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
+        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <5a834f93-f32b-c926-2bec-e00e35aa864f@huawei.com>
+Date:   Sat, 14 Jan 2023 16:49:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8JnHyKNTHMjsHSb@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f2886dd2-c98c-cbe0-0816-0d7926edd2f0@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.44]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 09:26:07AM +0100, Greg KH wrote:
-> On Sat, Jan 14, 2023 at 08:14:12AM +0100, Willy Tarreau wrote:
-> > On Fri, Jan 13, 2023 at 04:40:19PM -0500, Theodore Ts'o wrote:
-> > > On Fri, Jan 13, 2023 at 05:22:56PM +0100, Greg KH wrote:
-> > > > > I am just saying that developers/driver owners can simple do calculation to
-> > > > > identify LTS version. When they know it they also know time when their
-> > > > > deadline is for upstreaming work. It means if patch is accepted between
-> > > > > 6.0-r1 and 6.0-rc5/6 they know that it will get to 6.1 merge window.
-> > > > 
-> > > > That is what I am afraid of and if it causes problems I will purposfully
-> > > > pick the previous release.  This has happened in the past and is never
-> > > > an excuse to get anything merged.  Code gets merged when it is ready,
-> > > > not based on a LTS release.
-> > > 
-> > > This is probably the best reason not to preannounce when the LTS
-> > > release will be ahead of time --- because it can be abused by
-> > > developers who try to get not-ready-for-prime-time features into what
-> > > they think will be the LTS kernel, with the result that the last
-> > > release of the year could be utterly unsitable for that perpose.
-> > 
-> > We know this risk exists but since Greg never makes promises on any
-> > version, it remains reasonable.
-> 
-> I have to _not_ make promises because in the past when I did, people
-> threw crap into the kernel with the "justification" that they had to get
-> it in this specific kernel because it was going to be the LTS one.
-> 
-> We can't have nice things, because people abuse it :(
 
-Absolutely, that was exactly my point :-)
+On 2023/1/12 11:48, Anshuman Khandual wrote:
+>
+> On 1/10/23 18:21, Junhao He wrote:
+>> The TRCSEQRSTEVR and TRCSEQSTR register is not implemented if the
+> s/register is/registers are/
+Ok, will fix it.
+Thanks.
+>> TRCIDR5.NUMSEQSTATE == 0. Skip accessing the register in such cases.
+> s/register/registers/
+Ok, will fix it.
+Thanks.
 
-And quite frankly it's better the current way, because you have the
-flexibility to change your mind on a given version if during the first
-months you discover it's too crappy and will be a maintenance nightmare.
+>> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>
+>> ---
+>>   .../hwtracing/coresight/coresight-etm4x-core.c | 18 ++++++++++++------
+>>   1 file changed, 12 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> index 80fefaba58ee..c7a65d1524fc 100644
+>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> @@ -424,8 +424,10 @@ static int etm4_enable_hw(struct etmv4_drvdata *drvdata)
+>>   		etm4x_relaxed_write32(csa, config->vipcssctlr, TRCVIPCSSCTLR);
+>>   	for (i = 0; i < drvdata->nrseqstate - 1; i++)
+>>   		etm4x_relaxed_write32(csa, config->seq_ctrl[i], TRCSEQEVRn(i));
+>> -	etm4x_relaxed_write32(csa, config->seq_rst, TRCSEQRSTEVR);
+>> -	etm4x_relaxed_write32(csa, config->seq_state, TRCSEQSTR);
+>> +	if (drvdata->nrseqstate) {
+>> +		etm4x_relaxed_write32(csa, config->seq_rst, TRCSEQRSTEVR);
+>> +		etm4x_relaxed_write32(csa, config->seq_state, TRCSEQSTR);
+>> +	}
+>>   	etm4x_relaxed_write32(csa, config->ext_inp, TRCEXTINSELR);
+>>   	for (i = 0; i < drvdata->nr_cntr; i++) {
+>>   		etm4x_relaxed_write32(csa, config->cntrldvr[i], TRCCNTRLDVRn(i));
+>> @@ -1631,8 +1633,10 @@ static int __etm4_cpu_save(struct etmv4_drvdata *drvdata)
+>>   	for (i = 0; i < drvdata->nrseqstate - 1; i++)
+>>   		state->trcseqevr[i] = etm4x_read32(csa, TRCSEQEVRn(i));
+>>   
+>> -	state->trcseqrstevr = etm4x_read32(csa, TRCSEQRSTEVR);
+>> -	state->trcseqstr = etm4x_read32(csa, TRCSEQSTR);
+>> +	if (drvdata->nrseqstate) {
+>> +		state->trcseqrstevr = etm4x_read32(csa, TRCSEQRSTEVR);
+>> +		state->trcseqstr = etm4x_read32(csa, TRCSEQSTR);
+>> +	}
+>>   	state->trcextinselr = etm4x_read32(csa, TRCEXTINSELR);
+>>   
+>>   	for (i = 0; i < drvdata->nr_cntr; i++) {
+>> @@ -1760,8 +1764,10 @@ static void __etm4_cpu_restore(struct etmv4_drvdata *drvdata)
+>>   	for (i = 0; i < drvdata->nrseqstate - 1; i++)
+>>   		etm4x_relaxed_write32(csa, state->trcseqevr[i], TRCSEQEVRn(i));
+>>   
+>> -	etm4x_relaxed_write32(csa, state->trcseqrstevr, TRCSEQRSTEVR);
+>> -	etm4x_relaxed_write32(csa, state->trcseqstr, TRCSEQSTR);
+>> +	if (drvdata->nrseqstate) {
+>> +		etm4x_relaxed_write32(csa, state->trcseqrstevr, TRCSEQRSTEVR);
+>> +		etm4x_relaxed_write32(csa, state->trcseqstr, TRCSEQSTR);
+>> +	}
+>>   	etm4x_relaxed_write32(csa, state->trcextinselr, TRCEXTINSELR);
+>>   
+>>   	for (i = 0; i < drvdata->nr_cntr; i++) {
+> .
+>
 
-Willy
