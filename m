@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA2866A925
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 05:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4299166A92F
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 05:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjANENs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 13 Jan 2023 23:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S231473AbjANEVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 13 Jan 2023 23:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjANENn (ORCPT
+        with ESMTP id S231156AbjANEU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 13 Jan 2023 23:13:43 -0500
+        Fri, 13 Jan 2023 23:20:26 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E706A9E
-        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 20:13:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75465CF;
+        Fri, 13 Jan 2023 20:20:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FA70B822C0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:13:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F40EC433EF;
-        Sat, 14 Jan 2023 04:13:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3840AB822C3;
+        Sat, 14 Jan 2023 04:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E254BC433D2;
+        Sat, 14 Jan 2023 04:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673669619;
-        bh=rDUUQRNZS3av5hs/mcvGAWdmXs7ftndncmP3Hclnl2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ViHxZIuHwugxSwoXZ+MpoOLvlz1n9U1vCYlVZQRDMXcMlUj2MskgeGNLyqBD4BpQT
-         l9yBHLG9Q+M9V+DVQTgns+tcKybQGtdOrZqEDwvhcCa6yl2TTKhrMWBc+rfBxReoyr
-         5LqKzEz5uO4v6jq0I3FrLJlRQPfjoHOK3lj6+Q3LOOI6+iopOcBBm7V+Nd7wGZrVa1
-         85XpqrWKc76QX98pKK5u680vaLZQyVvDg+Du5qQcSsLPmqSkwQXa8+3+eo9moE61DY
-         nUJxNPoggdGqLp+Vl/GyOSTF2apP1mi9hIYdtQnpv3cSvbRnOm0zm2LfQp9ElUVKZv
-         juYF2YyX7d0Pw==
-Date:   Sat, 14 Jan 2023 12:13:33 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     kernel test robot <lkp@intel.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] erofs: cleanup erofs_iget()
-Message-ID: <Y8Ir7ditI6TPcuwI@debian>
-Mail-Followup-To: kernel test robot <lkp@intel.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>, LKML <linux-kernel@vger.kernel.org>,
-        oe-kbuild-all@lists.linux.dev
-References: <20230114015812.96836-1-hsiangkao@linux.alibaba.com>
- <202301141147.AYezdBCD-lkp@intel.com>
+        s=k20201202; t=1673670018;
+        bh=0dhxVKVYAQCb3I8V/YstF7Gf/H5D9l/vkiCFM10OCHw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OMSOfAul4s8g9qt1FUnfo3pZ8uH212gnkdbgTCxGys3iARj92IsifxSXm9SDBoRJ9
+         qylKkPxR0CDJtPiy/P1kSNjInaJDmnC4HJRBXvBVy5AfSc2dKokm7QUM6utqMYlnxJ
+         Dk5ljJ75xqPsebqC7dxtKLDRcTfkcmb47lN3vQrNdm7ovksTmtidljOGOFALLH6+w3
+         ROzNJeZONvNfa0hRRMk7zlCnfURctDnvXzgmd9EqMquu8f92WmLeLdanoVx4+mi8Gx
+         jw7FCi9aXjoSyUfGacei0e5FKM7BNISNFMftGCzygZ4XonH6bsKgLvzdmNir70RtsS
+         jIXb3+71AjUWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE181C395CA;
+        Sat, 14 Jan 2023 04:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202301141147.AYezdBCD-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix
+ rv1126 compatible warning
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167367001777.13418.2773898976513419135.git-patchwork-notify@kernel.org>
+Date:   Sat, 14 Jan 2023 04:20:17 +0000
+References: <20230111172437.5295-1-anand@edgeble.ai>
+In-Reply-To: <20230111172437.5295-1-anand@edgeble.ai>
+To:     Anand Moon <anand@edgeble.ai>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        david.wu@rock-chips.com, jagan@edgeble.ai, jbx6244@gmail.com,
+        robh@kernel.org, krzysztof.kozlowski@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,47 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 11:59:41AM +0800, kernel test robot wrote:
-> Hi Gao,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on xiang-erofs/dev-test]
-> [also build test WARNING on xiang-erofs/dev xiang-erofs/fixes linus/master v6.2-rc3 next-20230113]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Gao-Xiang/erofs-remove-linux-buffer_head-h-dependency/20230114-100018
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-> patch link:    https://lore.kernel.org/r/20230114015812.96836-1-hsiangkao%40linux.alibaba.com
-> patch subject: [PATCH v2 1/2] erofs: cleanup erofs_iget()
-> config: ia64-allyesconfig
-> compiler: ia64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/ede350f68141cc6bdc88c627e0f8f992f1b26307
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Gao-Xiang/erofs-remove-linux-buffer_head-h-dependency/20230114-100018
->         git checkout ede350f68141cc6bdc88c627e0f8f992f1b26307
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash fs/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    fs/erofs/inode.c: In function 'erofs_squash_ino':
-> >> fs/erofs/inode.c:319:28: warning: right shift count >= width of type [-Wshift-count-overflow]
->      319 |                 ino ^= nid >> sizeof(ino_t) * 8;
->          |                            ^~
+Hello:
 
-Okay, I think I have to stick to v1 since v2 causes a
-compile warning.
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks,
-Gao Xiang
+On Wed, 11 Jan 2023 17:24:31 +0000 you wrote:
+> Fix compatible string for RV1126 gmac, and constrain it to
+> be compatible with Synopsys dwmac 4.20a.
+> 
+> fix below warning
+> $ make CHECK_DTBS=y rv1126-edgeble-neu2-io.dtb
+> arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
+> 		 compatible: 'oneOf' conditional failed, one must be fixed:
+>         ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
+>         'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
+> 
+> [...]
+
+Here is the summary with links:
+  - [v5,linux-next,1/4] dt-bindings: net: rockchip-dwmac: fix rv1126 compatible warning
+    https://git.kernel.org/netdev/net-next/c/e471d83e1fa0
+  - [v5,linux-next,3/4] ARM: dts: Add Ethernet GMAC node for RV1126 SoC
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
