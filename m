@@ -2,468 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0459E66A9B0
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 07:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3245D66A9B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 07:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjANGkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 01:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
+        id S229623AbjANGlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 01:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjANGjp (ORCPT
+        with ESMTP id S229722AbjANGkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 01:39:45 -0500
-Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196444ECF;
-        Fri, 13 Jan 2023 22:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1673678381;
-        bh=LoHcNcNBm454Xb58IODkRejrbBSItfWpQRmpyrOreb8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=x7TUfCiPnwXpZiSOeRMLWd0IUwEnjt1o0lEwCiDh5dpV+fk2lLA7BPIJ3cWFvIyXC
-         i2jzaYCI7PMRtoT/DlY0dmnUO8TY/2DGgle/P2wAXK9PKF1Wt/V9IvoOhB6FSVylZi
-         1NQHsBSBnXQUX+pWpC/KOwMRcUdCg90sSfKJRMy8=
-Received: from localhost.localdomain ([111.60.247.106])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id 9D611E2E; Sat, 14 Jan 2023 14:39:22 +0800
-X-QQ-mid: xmsmtpt1673678377td2ciffeo
-Message-ID: <tencent_AB776DFEB1B993E8B3F0BD5A4BF420600407@qq.com>
-X-QQ-XMAILINFO: NafziRg7Bx69Vf9z4k7XGSrblza44G8FUoObSmRwFY6VtfKlonHOc/GBpk/u6R
-         oj8OXrE0vmtoHDQLGjKU1rxCicqBosCt9DPy3rKCiNKdwidErA2/OJ/YT4A6rnwcNxJ1Dftwb3+y
-         1W3xzlrvNcuSvzGrVoSQqMcXy9F0BKHQ9ydKTi1pKfA/Z51RLho490dB61N11wARRgxXirnpvzX1
-         wL0q/XoVdonVBBG0GCQ3JEn13ckrKFbg5Gs27Rq+EGGfm8cYlHgcUNZP3M7a+g4GLosfXOs1UYA9
-         DOoE3+M1A3RjueCmGlOA1/pRy+L+s7kCWZ/tuC4MHyVFD0HVgqwPU8PTwXadteIHpvkUO4DVKWD6
-         Q3ef60X+/v+EvxwVcNH1C0KjVEDoM+yhReolFOx7h/Dg6IfZlLZ7xZZSqZBNt2daMtHsjugyPyFQ
-         RLcYj1fDZogWMglXqJLmM7BiQ1AFfAf5e+5hC/N7FLaPy2e6Brp+NaWxUNymdlHI5Q09XJj+qOwT
-         YRhkbizmqe8ubFPha43OzWkYlDAh+tdHn91fRBXm8qPDK0ACxQ3qYwp9HXqAToM74owMR4M2mLKg
-         Fr+UYTkwDBtxiSzptT7Mr4MCiV97PAFM+M23J03mc+QCEA4OiwbFbf7vJrgJQ/WnQHb7J88aLh9L
-         wba9ouPAgjdCdoMHiiIqjCQh+77HJhwONz9RLHRdIgGkxHy0L0P6kLNXlvLRqxOoFcZZ4gG3KrFb
-         S9rtPCKDFUBCOn1H1oAnOKhKmwaIWarvrXeVIub8FmPvYcNu3oH1asoN99hluyRFNZvxtnB7X8VO
-         opopan7Nm8IYjfQvzKKlpMm1JFU9ji8Xt7vzj7m5HLL7eiJo4tfeejlLiLn/HPwqLAWCQ5bQLz2W
-         ZB2/OflHAMM/HpqHg/PqQbepJLxHR2yi0u1YfE/aNX6bt9QGYbkqlyPaog1eU/Du2WphdV97t5xn
-         1Vj9N17ybBQgDDdfUQ0RXt18JQ6J3VkvQXr+PNOIfgHT65DXZVDrUzox5IqVu1LqOah08A0MPZWw
-         TJhZjtAGT1IWS2oJ5d
-From:   Yang Xiwen <forbidden405@foxmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sat, 14 Jan 2023 01:40:43 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BE984694
+        for <linux-kernel@vger.kernel.org>; Fri, 13 Jan 2023 22:40:32 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8CxYvBeTsJjtpoBAA--.5628S3;
+        Sat, 14 Jan 2023 14:40:30 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxjb5cTsJjIk0ZAA--.50993S3;
+        Sat, 14 Jan 2023 14:40:29 +0800 (CST)
+Subject: Re: [PATCH 2/4] LoongArch: Add JUMP_LINK_ADDR macro implementation to
+ avoid using la.abs
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xi Ruoyao <xry111@xry111.site>
+Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Cc:     Yang Xiwen <forbidden405@foxmail.com>,
-        Jaime Breva <jbreva@nayarsystems.com>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v4 3/3] arm64: dts: qcom: msm8916-thwc: Add initial device trees
-Date:   Sat, 14 Jan 2023 14:38:46 +0800
-X-OQ-MSGID: <20230114063846.2633-4-forbidden405@foxmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230114063846.2633-1-forbidden405@foxmail.com>
-References: <20230114063846.2633-1-forbidden405@foxmail.com>
+References: <1673255274-18238-1-git-send-email-tangyouling@loongson.cn>
+ <1673255274-18238-3-git-send-email-tangyouling@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <c54bc8ac-fcc2-1cd4-56bc-167b094aec45@loongson.cn>
+Date:   Sat, 14 Jan 2023 14:40:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <1673255274-18238-3-git-send-email-tangyouling@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Bxjb5cTsJjIk0ZAA--.50993S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ur1Dtw4DAw47Zw1ktF4Utwb_yoW8Kw1rpr
+        n0vF1kGa18WFs7AFy5Kw17ur4DX3Z7Ca1ag3Zrt34Ikr4aqryvvw10kr4DXF1Dt3yrGr40
+        9F1Sgw4Sqa1UJa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04
+        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU82g43UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds support for the ufi-001C and uf896 WiFi/LTE dongle made by
-Tong Heng Wei Chuang based on MSM8916.
-uf896 is another variant for the usb stick. The board design
-differs by using different gpios for the keys and leds.
 
-Note: The original firmware does not support 64-bit OS. It is necessary
-to flash 64-bit TZ firmware to boot arm64.
+On 2023-01-09 17:07, Youling Tang wrote:
+> Add JUMP_LINK_ADDR macro implementation to avoid using la.abs.
+>
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> ---
+>   arch/loongarch/include/asm/stackframe.h |  8 ++++++++
+>   arch/loongarch/kernel/head.S            | 10 ++++------
+>   arch/loongarch/power/suspend_asm.S      |  5 ++---
+>   3 files changed, 14 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
+> index 96c94035b5d0..f538b3a6d680 100644
+> --- a/arch/loongarch/include/asm/stackframe.h
+> +++ b/arch/loongarch/include/asm/stackframe.h
+> @@ -216,4 +216,12 @@
+>   	RESTORE_SP_AND_RET \docfi
+>   	.endm
+>   
+> +/* Jump to the virtual address of the link. */
+> +	.macro JUMP_LINK_ADDR
 
-Currently supported:
-- All CPU cores
-- Buttons
-- LEDs
-- Modem
-- SDHC
-- USB Device Mode
-- UART
+Hi, Youling
 
-Co-developed-by: Jaime Breva <jbreva@nayarsystems.com>
-Signed-off-by: Jaime Breva <jbreva@nayarsystems.com>
-Co-developed-by: Nikita Travkin <nikita@trvn.ru>
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |   2 +
- .../boot/dts/qcom/msm8916-thwc-uf896.dts      |  39 +++
- .../boot/dts/qcom/msm8916-thwc-ufi001c.dts    |  39 +++
- arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi     | 250 ++++++++++++++++++
- 4 files changed, 330 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
- create mode 100644 arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index e442a81895d04..d83e02c84d42c 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -22,6 +22,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-e7.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-grandmax.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
-new file mode 100644
-index 0000000000000..c492db8561904
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-ufi.dtsi"
-+
-+/ {
-+	model = "uf896 4G Modem Stick";
-+	compatible = "thwc,uf896", "qcom,msm8916";
-+};
-+
-+&button_restart {
-+	gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
-+};
-+
-+&led_r {
-+	gpios = <&msmgpio 82 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_g {
-+	gpios = <&msmgpio 83 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_b {
-+	gpios = <&msmgpio 81 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&button_default {
-+	pins = "gpio35";
-+	bias-pull-up;
-+};
-+
-+&gpio_leds_default {
-+	pins = "gpio81", "gpio82", "gpio83";
-+};
-+
-+&sim_ctrl_default {
-+	pins = "gpio1", "gpio2";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-new file mode 100644
-index 0000000000000..700cf81cbf8c0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/dts-v1/;
-+
-+#include "msm8916-ufi.dtsi"
-+
-+/ {
-+	model = "ufi-001c/ufi-001b 4G Modem Stick";
-+	compatible = "thwc,ufi001c", "qcom,msm8916";
-+};
-+
-+&button_restart {
-+	gpios = <&msmgpio 37 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_r {
-+	gpios = <&msmgpio 22 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_g {
-+	gpios = <&msmgpio 21 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&led_b {
-+	gpios = <&msmgpio 20 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&button_default {
-+	pins = "gpio37";
-+	bias-pull-down;
-+};
-+
-+&gpio_leds_default {
-+	pins = "gpio20", "gpio21", "gpio22";
-+};
-+
-+&sim_ctrl_default {
-+	pins = "gpio1", "gpio2";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-new file mode 100644
-index 0000000000000..790a9696da9de
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-@@ -0,0 +1,250 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "msm8916-pm8916.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	chassis-type = "embedded";
-+
-+	aliases {
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0";
-+	};
-+
-+	reserved-memory {
-+		mpss_mem: mpss@86800000 {
-+			reg = <0x0 0x86800000 0x0 0x5500000>;
-+			no-map;
-+		};
-+
-+		gps_mem: gps@8bd00000 {
-+			reg = <0x0 0x8bd00000 0x0 0x200000>;
-+			no-map;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&button_default>;
-+		pinctrl-names = "default";
-+
-+		label = "GPIO Buttons";
-+
-+		/* GPIO is board-specific */
-+		button_restart: button-restart {
-+			label = "Restart";
-+			linux,code = <KEY_RESTART>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		/*
-+		 * GPIOs are board-specific.
-+		 * Functions and default-states defined here are fallbacks.
-+		 * Feel free to override them if your board is different.
-+		 */
-+		led_r: led-r {
-+			color = <LED_COLOR_ID_RED>;
-+			default-state = "on";
-+			function = LED_FUNCTION_POWER;
-+		};
-+
-+		led_g: led-g {
-+			color = <LED_COLOR_ID_GREEN>;
-+			default-state = "off";
-+			function = LED_FUNCTION_WLAN;
-+		};
-+
-+		led_b: led-b {
-+			color = <LED_COLOR_ID_BLUE>;
-+			default-state = "off";
-+			function = LED_FUNCTION_WAN;
-+		};
-+	};
-+};
-+
-+&bam_dmux {
-+	status = "okay";
-+};
-+
-+&bam_dmux_dma {
-+	status = "okay";
-+};
-+
-+&blsp1_uart2 {
-+	status = "okay";
-+};
-+
-+/* Remove &dsi_phy0 from clocks to make sure that gcc probes with display disabled */
-+&gcc {
-+	clocks = <&xo_board>, <&sleep_clk>, <0>, <0>, <0>, <0>, <0>;
-+};
-+
-+&mpss {
-+	pinctrl-0 = <&sim_ctrl_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&pm8916_usbin {
-+	status = "okay";
-+};
-+
-+&pronto {
-+	status = "okay";
-+};
-+
-+&sdhc_1 {
-+	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
-+	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
-+	pinctrl-names = "default", "sleep";
-+
-+	status = "okay";
-+};
-+
-+&usb {
-+	extcon = <&pm8916_usbin>;
-+	dr_mode = "peripheral";
-+
-+	status = "okay";
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&pm8916_usbin>;
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1_l2_l3-supply = <&pm8916_s3>;
-+	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-+	vdd_l7-supply = <&pm8916_s4>;
-+
-+	s3 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1300000>;
-+	};
-+
-+	s4 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2100000>;
-+	};
-+
-+	l1 {
-+		regulator-min-microvolt = <1225000>;
-+		regulator-max-microvolt = <1225000>;
-+	};
-+
-+	l2 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	l4 {
-+		regulator-min-microvolt = <2050000>;
-+		regulator-max-microvolt = <2050000>;
-+	};
-+
-+	l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l8 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	l9 {
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l10 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2800000>;
-+	};
-+
-+	l11 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+		regulator-system-load = <200000>;
-+		regulator-allow-set-load;
-+	};
-+
-+	l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+	};
-+
-+	l13 {
-+		regulator-min-microvolt = <3075000>;
-+		regulator-max-microvolt = <3075000>;
-+	};
-+
-+	l14 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l15 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	l18 {
-+		regulator-min-microvolt = <2700000>;
-+		regulator-max-microvolt = <2700000>;
-+	};
-+};
-+
-+&msmgpio {
-+	/* pins are board-specific */
-+	button_default: button-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+	};
-+
-+	gpio_leds_default: gpio-leds-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	sim_ctrl_default: sim-ctrl-default-state {
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		output-low;
-+	};
-+};
--- 
-2.39.0
+IMHO the JUMP_CACHE_ADDR is more suitable. And it not clear higt bits,
+although the result always true currently. Lastly, this macro clobbers
+t0 and t1, I'd suggest pass them in as args.
+
+
+Thanks,
+
+Jinyang
+
+> +	li.d	t0, CACHE_BASE
+> +	pcaddi	t1, 0
+> +	or	t0, t0, t1
+> +	jirl	zero, t0, 0xc
+> +	.endm
+> +
+>   #endif /* _ASM_STACKFRAME_H */
+> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> index aa6181714ec3..e8a4bf9d7599 100644
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -52,9 +52,8 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
+>   
+>   	/* We might not get launched at the address the kernel is linked to,
+>   	   so we jump there.  */
+> -	la.abs		t0, 0f
+> -	jr		t0
+> -0:
+> +	JUMP_LINK_ADDR
+> +
+>   	/* Enable PG */
+>   	li.w		t0, 0xb0		# PLV=0, IE=0, PG=1
+>   	csrwr		t0, LOONGARCH_CSR_CRMD
+> @@ -106,9 +105,8 @@ SYM_CODE_START(smpboot_entry)
+>   	li.d		t0, CSR_DMW1_INIT	# CA, PLV0
+>   	csrwr		t0, LOONGARCH_CSR_DMWIN1
+>   
+> -	la.abs		t0, 0f
+> -	jr		t0
+> -0:
+> +	JUMP_LINK_ADDR
+> +
+>   	/* Enable PG */
+>   	li.w		t0, 0xb0		# PLV=0, IE=0, PG=1
+>   	csrwr		t0, LOONGARCH_CSR_CRMD
+> diff --git a/arch/loongarch/power/suspend_asm.S b/arch/loongarch/power/suspend_asm.S
+> index eb2675642f9f..596a682a7924 100644
+> --- a/arch/loongarch/power/suspend_asm.S
+> +++ b/arch/loongarch/power/suspend_asm.S
+> @@ -78,9 +78,8 @@ SYM_INNER_LABEL(loongarch_wakeup_start, SYM_L_GLOBAL)
+>   	li.d		t0, CSR_DMW1_INIT	# CA, PLV0
+>   	csrwr		t0, LOONGARCH_CSR_DMWIN1
+>   
+> -	la.abs		t0, 0f
+> -	jr		t0
+> -0:
+> +	JUMP_LINK_ADDR
+> +
+>   	la.pcrel	t0, acpi_saved_sp
+>   	ld.d		sp, t0, 0
+>   	SETUP_WAKEUP
 
