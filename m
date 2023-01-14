@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796A366AB4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FA066AB4C
+	for <lists+linux-kernel@lfdr.de>; Sat, 14 Jan 2023 13:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjANMJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 07:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S229676AbjANMMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 07:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjANMJZ (ORCPT
+        with ESMTP id S229682AbjANML6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 07:09:25 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5889B44A0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:09:22 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso29549151pjt.0
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 04:09:22 -0800 (PST)
+        Sat, 14 Jan 2023 07:11:58 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA80658F;
+        Sat, 14 Jan 2023 04:11:58 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-4b718cab0e4so319895957b3.9;
+        Sat, 14 Jan 2023 04:11:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dilger-ca.20210112.gappssmtp.com; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R+o3aaAuolf2/uRomR6WtHUNv1uFhVkDXFlfeWDDe0E=;
-        b=XemS6r+6V5QQxqi/VYBPu+Lkm/RatFiqztHVe/R15ZAk7LT8pwa76EPm5b+Z2kZTgT
-         uD1qgKoMk00wAGyZoMZ/6n8G9FPxV4Sk6UztEG19nU8cMqhywx51wzrDMhvnICL2sCjB
-         qw9yjagJV0sLJJsw3jGFCNk2G9IPiTLfbYi8ZF2j2QclHATEg0M+clTiG9SiHe7tjRNd
-         CjM3afg0SfE316bT/q0VJoVjyV6bc/y8cvjksB3/JJ3bwIQt2E2Zm5+hhvEmUgKecYy8
-         rWzBafdXsOVoFi36U1BWtVkivfZtoEN3nXdzSDa8PFkUndYxvKzstjDui5P9+Yse5ylw
-         rrQA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qadApUskd1cmnf3V0uX5pB2OviK6XICzMAvYb4D0ACk=;
+        b=M8tRVcsnUUjmGQBAPSt+T9H0jGs8nH+t+8hiN5SYI2LHcyzNswtdQQ3Drv8cMPyUcn
+         s3SdC+JPZxQcKd5mydvVkEkDbgfo0cTws8Scju/gyWs9Wd0+LmOCck8RcnxWjMrwE6Cu
+         mDG0S2BIeJeIqf6GZNQSePK3t3WBSBNwcHwWLrtfIVzxqOQyraX22PcHV9LYzkGryp5x
+         rL8LqYKtiykkaFXA4+YAO2vhYfxcro0+05XqqE4lxiaIty551MI6nmoxrpzSebqp0Q9z
+         IGJNWmVnlf9QQdEOY93ENXZserVaLj7rDN5jYsLE03q1cALsG/gqbpH2i+WLeOhJAhXn
+         2G0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R+o3aaAuolf2/uRomR6WtHUNv1uFhVkDXFlfeWDDe0E=;
-        b=Kq1l9mBlX6neZCcNxqLYkOgRIZtwshPGY4PzCHDnpfo+ev+wuVUHuU42Lby5k0B1VI
-         6pepggajsKs9a79mkvJ+6jWhBhFxfZfOpF0uGtbVOImKZcsl3wRqKySBBPoQNzcqlHLn
-         DUJk1QEKjjlSJ3zjJWnKMjScRJa05YyOmUgr2V8DxkXuBUq16OmRq5PrE1TftBx7HyoN
-         h7obz3jfYP3f76BpGmpfEmrxzt880264kQmp7csNF0wiK7Zs+84CZdBN6zFaBW5hAavu
-         MzK9l/leXYsY/rfUWAAaEy2pE+MKdCchKF/rVcHYNvogSblGxOvdqelkdDXdWJtomGtC
-         Vu0Q==
-X-Gm-Message-State: AFqh2kp7mLfxuz8/jP3FWpNuK8uImytJxpArXV0kbZn41KP/4onccTfr
-        /8HuOI2LUa6+MGd1p5n2SkgbZg==
-X-Google-Smtp-Source: AMrXdXtK5wXM0KcfuPhTmm7EQ3X4jDr1pU5000kNB7pAPFaSlyJ4FnFnuAIrM36BhM9z2aR9TWyBcQ==
-X-Received: by 2002:a17:90b:1958:b0:227:1d0e:3696 with SMTP id nk24-20020a17090b195800b002271d0e3696mr20742421pjb.11.1673698161833;
-        Sat, 14 Jan 2023 04:09:21 -0800 (PST)
-Received: from smtpclient.apple (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
-        by smtp.gmail.com with ESMTPSA id j14-20020a17090a318e00b00226d0165d97sm15434011pjb.22.2023.01.14.04.09.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Jan 2023 04:09:21 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andreas Dilger <adilger@dilger.ca>
-Mime-Version: 1.0 (1.0)
-Subject: Re: Should we orphan JFS?
-Date:   Sat, 14 Jan 2023 05:09:10 -0700
-Message-Id: <393B8E4A-8C9A-4941-9AFF-FAC9C0D0B2DA@dilger.ca>
-References: <f99e5221-4493-dba3-3e80-e85ada6b3545@oracle.com>
-Cc:     Harald Arnesen <harald@skogtun.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <f99e5221-4493-dba3-3e80-e85ada6b3545@oracle.com>
-To:     Dave Kleikamp <dave.kleikamp@oracle.com>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qadApUskd1cmnf3V0uX5pB2OviK6XICzMAvYb4D0ACk=;
+        b=VUXHqB4w1ur1hLRLqu1bpSfl3rxdIvJgUeHsUt0/a7DYKD56PHfQxAKnMsHIlx6aBp
+         KMcIFEWLmP6oWrWIBYrqarSuk2/rkhGn4ehc7qse6157EfwmxAdyU884AdPpwoPSZaM1
+         C8RI6XYfNcBDQlu6B+vrtAsfC/UDJmv0vn3fiHPq/fmnenbPdhfeOKsP7BhdacKOl14c
+         wtvEY+2J+p2U6lFR4L3c33rw+kDu2TTL7YPott9rKZz7HL+QLkjzwBeZa1KA/n+kVu1I
+         dn9ulIrqd3ag/EB99n1iCgEGgG58gW6iV81/2bskmN2dlYdvKAxTEQAEOv+0HiptQECx
+         GXlQ==
+X-Gm-Message-State: AFqh2kpLNElJspdbGBZTHENfwC30x2LBQwB7q3j2DS+eK+Z/EE5c6GJg
+        7SyLYz/oXTm07YQRCwiDT4CXivq735Vs3iF7V9w=
+X-Google-Smtp-Source: AMrXdXvskHzenVRqRLn+Wh7NzU6ue6GUkYyPPdOgZ2b+ge/bwI1705ql2ufw1IejiURmm52e6z7nQdxJKKQAa7E5/fQ=
+X-Received: by 2002:a81:a110:0:b0:484:a94f:210 with SMTP id
+ y16-20020a81a110000000b00484a94f0210mr1543433ywg.129.1673698317372; Sat, 14
+ Jan 2023 04:11:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-3-ojeda@kernel.org>
+ <CAK7LNATVJ5e=DnbJ++03iEMk0bN3-UvODBLkEKcYdSnJZa_tmA@mail.gmail.com>
+ <CAK7LNASDu+i4G88TYYa6feg-bha-_cLv1si_ujuSMbWuyUve0Q@mail.gmail.com>
+ <CANiq72k6jCf_LP5vmBHKEpZ5njmH+u1HpJUjs_GyFi1a4B94ew@mail.gmail.com> <CAK7LNAS-5UaBX4CYrt_VFZrfHxLy=M=CpT8Hb-LpH4EAntRRSw@mail.gmail.com>
+In-Reply-To: <CAK7LNAS-5UaBX4CYrt_VFZrfHxLy=M=CpT8Hb-LpH4EAntRRSw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 14 Jan 2023 13:11:46 +0100
+Message-ID: <CANiq72mRkJV37b+WP1PtpiOVUkRG5w9mJyVQfzJQRGKXvHOKng@mail.gmail.com>
+Subject: Re: [PATCH 3/6] kbuild: rust_is_available: add check for `bindgen` invocation
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Alexandru Radovici <msg4alex@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,35 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jan 13, 2023, at 08:15, Dave Kleikamp <dave.kleikamp@oracle.com> wrote:
->=20
-> =EF=BB=BFOn 1/13/23 7:08AM, Harald Arnesen wrote:
->> Christoph Hellwig [13/01/2023 06.42]:
->>> Hi all,
->>>=20
->>> A while ago we've deprecated reiserfs and scheduled it for removal.
->>> Looking into the hairy metapage code in JFS I wonder if we should do
->>> the same.  While JFS isn't anywhere as complicated as reiserfs, it's
->>> also way less used and never made it to be the default file system
->>> in any major distribution.  It's also looking pretty horrible in
->>> xfstests, and with all the ongoing folio work and hopeful eventual
->>> phaseout of buffer head based I/O path it's going to be a bit of a drag.=
+On Sat, Jan 14, 2023 at 10:44 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Ah, I see.
+>
+> How about this?
+>
+> bindgen_libclang_output=$(LC_ALL=C "$BINDGEN" $(dirname
+> $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null) \
+>          || bindgen_libclang_code=$?
+>
+> You can get the error code of bindgen without toggling -e.
 
->>> (Which also can be said for many other file system, most of them being
->>> a bit simpler, though).
->> The Norwegian ISP/TV provider used to have IPTV-boxes which had JFS on th=
-e hard disk that was used to record TV programmes.
->> However, I don't think these boxes are used anymore.
->=20
-> I know at one time it was one of the recommended filesystems for MythTV. I=
- don't know of any other major users of JFS. I don't know if there is anyone=
- familiar with the MythTV community that could weigh in.
->=20
-> Obviously, I haven't put much effort into JFS in a long time and I would n=
-ot miss it if it were to be removed.
+As you prefer -- personally I tend to avoid assigning two variables in
+a single "statement" (like in C), but I am also happy avoiding to
+toggle `-e` since it is global state and therefore ugly too anyway.
 
-I've used MythTV for many years but haven't seen any particular recommendati=
-ons for JFS there. Mainly ext4 and XFS are the common filesystems to follow t=
-he main distros (Ubuntu in particular).=20
-
-Cheers, Andreas=
+Cheers,
+Miguel
