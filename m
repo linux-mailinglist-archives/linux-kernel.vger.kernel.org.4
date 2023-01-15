@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9625866B41C
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F5D66B423
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjAOVRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 16:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S230501AbjAOVZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 16:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbjAOVRN (ORCPT
+        with ESMTP id S231482AbjAOVZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 16:17:13 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96C71448C;
-        Sun, 15 Jan 2023 13:17:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 15 Jan 2023 16:25:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3A2144A4;
+        Sun, 15 Jan 2023 13:25:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nw7Jl3yylz4wgq;
-        Mon, 16 Jan 2023 08:17:11 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673817431;
-        bh=Np8kNhbrGPM6N2nh77Hc88jD9JeBw4Oihpkd6V9ffpY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hLoxkyFtrOdxUMAmpzV2DVdHAQa2Lgmux+G6gwV4lCi68H9oPvOq5g6sAPQKmQrkr
-         alj9z7XZNr44Pf5HudPxEv0z9QV+SxaORPIZiqple9rWFntd/sHsZhIEMgBEkqT2Ei
-         z3B/Z57AFGJaRo7ZNMU5tf4asulg9j//97p3npgfFcb9Yu5HFY8IFbTXL2JsCuXhHg
-         jndPiphuZKQx+hoeZ5bubLS5ppf00RGu5r/kf3h8TdTeoGXPL1FSEugwUqk7jt0b3T
-         hQ2lcusr/gyeggR5Y5SmLP+5tujD04AqExFk5BSneoXJTmpz6s3j5KikjTsiIgxLsX
-         tcv+I7XmgjvsA==
-Date:   Mon, 16 Jan 2023 08:17:10 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the amdgpu tree
-Message-ID: <20230116081710.7800a5c5@canb.auug.org.au>
+        by sin.source.kernel.org (Postfix) with ESMTPS id B45FBCE0C4C;
+        Sun, 15 Jan 2023 21:25:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90613C433D2;
+        Sun, 15 Jan 2023 21:25:07 +0000 (UTC)
+Date:   Sun, 15 Jan 2023 16:25:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        fweisbec@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and
+ suspend
+Message-ID: <20230115162504.08ef72b0@rorschach.local.home>
+In-Reply-To: <20230112005223.2329802-1-joel@joelfernandes.org>
+References: <20230112005223.2329802-1-joel@joelfernandes.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/86Ua=.MDY6UmE3VJfphzANj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/86Ua=.MDY6UmE3VJfphzANj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 12 Jan 2023 00:52:22 +0000
+"Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
 
-Hi all,
+> -- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -144,8 +144,45 @@ bool rcu_gp_is_normal(void)
+>  }
+>  EXPORT_SYMBOL_GPL(rcu_gp_is_normal);
+>  
+> -static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
+> +static atomic_t rcu_async_hurry_nesting = ATOMIC_INIT(1);
+> +/*
+> + * Should call_rcu() callbacks be processed with urgency or are
+> + * they OK being executed with arbitrary delays?
+> + */
+> +bool rcu_async_should_hurry(void)
+> +{
+> +	return !IS_ENABLED(CONFIG_RCU_LAZY) ||
+> +	       atomic_read(&rcu_async_hurry_nesting);
+> +}
+> +EXPORT_SYMBOL_GPL(rcu_async_should_hurry);
+> +
+> +/**
+> + * rcu_async_hurry - Make future async RCU callbacks not lazy.
+> + *
+> + * After a call to this function, future calls to call_rcu()
+> + * will be processed in a timely fashion.
+> + */
+> +void rcu_async_hurry(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_RCU_LAZY))
+> +		atomic_inc(&rcu_async_hurry_nesting);
+> +}
+> +EXPORT_SYMBOL_GPL(rcu_async_hurry);
+>  
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+Where do you plan on calling these externally, as they are being
+marked exported?
 
-  08e60fac1d8c ("drm/amdgpu: Fix potential NULL dereference")
-  3693c1aea9b7 ("drm/amd/pm: add the missing mapping for PPT feature on SMU=
-13.0.0 and 13.0.7")
-  40794dfd20e0 ("drm/amdgpu: Fixed bug on error when unloading amdgpu")
-  45bf79719f1f ("drm/amd/pm/smu13: BACO is supported when it's in BACO stat=
-e")
-  7f347e3f8217 ("drm/amdkfd: Fix NULL pointer error for GC 11.0.1 on mGPU")
-  8ce1d255147a ("drm/amdkfd: Add sync after creating vram bo")
-  b7cdb41e7d25 ("drm/amd: Delay removal of the firmware framebuffer")
-  c595637f8a7c ("drm/amd/pm: correct the reference clock for fan speed(rpm)=
- calculation")
+If you allow random drivers to enable this, I can see something
+enabling it and hitting an error path that causes it to never disable
+it.
 
---=20
-Cheers,
-Stephen Rothwell
+I wouldn't have EXPORT_SYMBOL_GPL() unless you really know that it is
+needed externally. In fact, is this really needed outside of the RCU
+subsystem?
 
---Sig_/86Ua=.MDY6UmE3VJfphzANj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-- Steve
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPEbVYACgkQAVBC80lX
-0Gz0fwf+M9o38fhV8UPgxlbLqjd1bXljeh2RpUwfZsH1sOvjyjB0VhSIN162d5AA
-46PZX2xj7+PS/NYWXI8ALcmb1o/WdvxXq3FpmMXxM0hIDUSmisGce5PhEE95sWI8
-Pla6lF+nwFE4GLrSR5p1AGbEqG54MZzdhy9rBAugV7ULwtrfgpF1w1zkjEnQB0bg
-tKTX6TLkGu5Bpp8IOQxDVpW+MgnmzNadnm77XzcpUQBOvEhm5IcNoQW0POTMvIYQ
-u81mZ/RGp2QRGXDv43S3+wc9EYjzyljWa9npPnToEyX0FmDBMsSjlAJKiv3n7ota
-2RKkRy2yUkQiKP6/ElRuq/E0f7Y2Hw==
-=up08
------END PGP SIGNATURE-----
-
---Sig_/86Ua=.MDY6UmE3VJfphzANj--
+> +/**
+> + * rcu_async_relax - Make future async RCU callbacks lazy.
+> + *
+> + * After a call to this function, future calls to call_rcu()
+> + * will be processed in a lazy fashion.
+> + */
+> +void rcu_async_relax(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_RCU_LAZY))
+> +		atomic_dec(&rcu_async_hurry_nesting);
+> +}
+> +EXPORT_SYMBOL_GPL(rcu_async_relax);
+> +
+> +static atomic_t rcu_expedited_nesting = ATOMIC_INIT(1);
