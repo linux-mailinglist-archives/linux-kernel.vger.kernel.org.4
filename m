@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4136266AEED
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 01:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1411866AF12
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 03:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjAOAn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 19:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S230462AbjAOC17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 21:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjAOAnY (ORCPT
+        with ESMTP id S230042AbjAOC14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 19:43:24 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8696165B8
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id r132so10004258oif.10
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
+        Sat, 14 Jan 2023 21:27:56 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44243A247;
+        Sat, 14 Jan 2023 18:27:55 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so38313348lfv.2;
+        Sat, 14 Jan 2023 18:27:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
-        b=AWOVJoTRCZIzDDPEVrLicc1SKpwl7KTn8Ol48utvExDUblpnjljkkxvHgz5x7ZXre+
-         8m1djuSOUoerjvNlDkOsvOoru5Slmn51JdtG4yWzqApm65GcAawUt0a4970Ve8qE/PbE
-         WIpzUe/igEignY6RXJsMefYQMCJguWlv4sRLkistNu2yHDIEgQ5le/hWruMQxtCBR8qR
-         R0Xe1ZeaqdcCUIm6QnssL2hDeKkpiOJ4cANGy/HkgZiIyg5h2uIoq1Znienu3k+LNYC0
-         mG/pqdest+Z0kWbWIAyWD+qrcbh4pkalGKoAU1Y3Z3G0iffow+5qADIIMc/6gwB/2uWn
-         mYPA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nzYqmUGWdkiR3nac7b6eSL5nUmL6qwhST1HTV4blflI=;
+        b=fyri0enoH/SF3/a+qtxyARzTfbUg9eHnkUKa+pLSldjFf2wYQxTueZccRJVLzG2SEM
+         vhoZvAMbtc4/jH9fUtf7PKfHu+Ur8wfq9w9dFzaxU8nxxzArQwWgkVryARvDMeI7IIoR
+         4YXQprO4KDhqChp7DESRuhUBRFYfDIDm5UySq6JRR09V1JSaRXVd8ZZ3ExrRAuwir5ru
+         5CthD0mkHt9+Bw0y1NkfErxAV9qfO8TJMmpkYbvVeq46inZyBvnbz7535LLHBq+0O4Bf
+         fgPfaC/p9pc+hEebjtnFI/Xq8Vhd2ce8zdA0+xEA0hhQHr3XdfTHdtoMzWUkVGsyUYt1
+         Np2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
-        b=6nE3ZcC0s2LnAOOe9fBL0HlodFRPSTj8hFw79o9ck37xsciCE7VB8EAzbqZg6jymd4
-         iRCN4kz5gVFH+ZzlGbC+E4cHNRy55pWM95wPEiCxL5NYfAqJ8jQCGw0nvIuqtdAwZige
-         lWweDaSN8pHua/+Opr+xLTvCKO9tdNBiXR0pQUDBpT6RWEUhuZ6P5p9D2Bf/nwdULPAt
-         K+G5m8cjrFwCqYcI/xupq+df/zHZwhqTy+WmmeKkDxsF5PeaCfdvFVIVBCTLhyuIP1kR
-         Xwy8TVsit2AT4denpnEQ9R2z0Yc6zZpIzrVzbkUtPpkZfJ4F8dRV+hgbjmM44ol7zyr+
-         twqA==
-X-Gm-Message-State: AFqh2kqXKF3pdXVx4RHyuaa/3kZDhgWlB5tKkL27B6AMOWafeE4IJmmJ
-        hlOjuDrJu43mBOFkGGwvIGXTFg==
-X-Google-Smtp-Source: AMrXdXtmlbzCnjvw02a750r61CcJJIRVFXhgi7CC+Te697GM+nVvImU+iajKPZiIXIE5Si7tn9Lk3Q==
-X-Received: by 2002:aca:c189:0:b0:35a:6005:3dc5 with SMTP id r131-20020acac189000000b0035a60053dc5mr35396207oif.51.1673743401843;
-        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056808020a00b00360e46a1edasm10935583oie.22.2023.01.14.16.43.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
-Message-ID: <fe206345-9445-f1be-02c1-b3cc39a533ef@landley.net>
-Date:   Sat, 14 Jan 2023 18:55:31 -0600
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nzYqmUGWdkiR3nac7b6eSL5nUmL6qwhST1HTV4blflI=;
+        b=4FOKG58lZ3toB/xEREgRv4r2GK23jK2ondeQa3TSPYUVlUHDGdYV4LQ+MgBcZexu0M
+         4Oh8a0+p+NXfF0+CY/eWB8dI28ze8dIc4gTeHVbBKJDL5iN7L6zYnYOq2QNo/r+a8OYL
+         4INhJPwsuhFbXv1pZPfO+j6U3QLl+fTP+n0Ff0n+A1lc+FdwTHnkML/B9Q5uk5nXsRSD
+         Raxv992ylakLTZ3zvFWHINLkc13HigQbhRDvqf1I1GyHMwJ5JtW4eIYC49Oi1o3mFi4A
+         izCDBDCMrNQ4uhAhFS+hwjOkSfJ/HBXgwWm8GiGNB0vMWPWMR74jNOtTs1CSBM80b0oq
+         EZ0A==
+X-Gm-Message-State: AFqh2kowUgxMhncxaX7IOCskj12pfVn8ryjPoBxBZBsxI2mNJZzWOif2
+        J9a9dorgRY+Zo6qgwNvnrsFlYzSgZ/qnF4RM
+X-Google-Smtp-Source: AMrXdXvNXEOnpFLcMCJjUNODd/oXq02pdnP/px4PPidZ7iBZxQL0ANdvRk1KB6a0uJF/YKqhCw5gnA==
+X-Received: by 2002:ac2:4f12:0:b0:4b5:b5d0:36e4 with SMTP id k18-20020ac24f12000000b004b5b5d036e4mr27909321lfr.13.1673749673498;
+        Sat, 14 Jan 2023 18:27:53 -0800 (PST)
+Received: from fedora.36 ([78.10.207.59])
+        by smtp.gmail.com with ESMTPSA id o16-20020ac24e90000000b004b5323639d8sm4510478lfr.155.2023.01.14.18.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 18:27:52 -0800 (PST)
+From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mchl.grzlk@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lars@metafoo.de, Michael.Hennerich@analog.com,
+        cosmin.tanislav@analog.com, jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?q?Micha=C5=82=20Grzelak?= <mchl.grzlk@gmail.com>
+Subject: [PATCH] dt-bindings: iio: addac: adi,74115: Add missing maxItems
+Date:   Sun, 15 Jan 2023 03:25:58 +0100
+Message-Id: <20230115022558.145076-1-mchl.grzlk@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <20230113062339.1909087-3-hch@lst.de> <Y8EEbCP6PRMzWP5y@kroah.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <Y8EEbCP6PRMzWP5y@kroah.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Running 'make dt_binding_check' gives following warnings:
+iio/addac/adi,ad74115.example.dtb:
+addac@0: adi,conv2-range-microvolt: 'oneOf' conditional failed, one must
+be fixed:
+        4282967296 is not one of [-2500000, 0]
+        4282967296 is not one of [-12000000, 0]
+        -2500000 was expected
+        -104000 was expected
+        625000 was expected
 
+addac@0: Unevaluated properties are not allowed
+('adi,conv2-range-microvolt' was unexpected)
+        From schema: iio/addac/adi,ad74115.yaml
 
-On 1/13/23 01:12, Greg Kroah-Hartman wrote:
-> On Fri, Jan 13, 2023 at 07:23:19AM +0100, Christoph Hellwig wrote:
->> USB_OHCI_SH is a dummy option that never builds any code, remove it.
->> 
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->> ---
->>  drivers/usb/host/Kconfig | 11 -----------
->>  1 file changed, 11 deletions(-)
->> 
->> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
->> index 8d799d23c476e1..ca5f657c092cf4 100644
->> --- a/drivers/usb/host/Kconfig
->> +++ b/drivers/usb/host/Kconfig
->> @@ -548,17 +548,6 @@ config USB_OHCI_HCD_SSB
->>  
->>  	  If unsure, say N.
->>  
->> -config USB_OHCI_SH
->> -	bool "OHCI support for SuperH USB controller (DEPRECATED)"
->> -	depends on SUPERH || COMPILE_TEST
->> -	select USB_OHCI_HCD_PLATFORM
->> -	help
->> -	  This option is deprecated now and the driver was removed, use
->> -	  USB_OHCI_HCD_PLATFORM instead.
->> -
->> -	  Enables support for the on-chip OHCI controller on the SuperH.
->> -	  If you use the PCI OHCI controller, this option is not necessary.
->> -
->>  config USB_OHCI_EXYNOS
->>  	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
->>  	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
->> -- 
->> 2.39.0
->> 
-> 
-> Do you want all of these to go through a single tree, or can they go
-> through the different driver subsystem trees?
+As every property with standard suffix has inferred type of array of
+cells, adi,conv2-range-microvolt is required by meta-schemas/cell.yaml
+to have maxItems >= 2. Fix these errors by setting maxItems to 2.
 
-Neither please. Multiple people are objecting.
+Signed-off-by: Michał Grzelak <mchl.grzlk@gmail.com>
+---
+ Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Rob
+diff --git a/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml b/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
+index 72d2e910f206..cdeb04184f5a 100644
+--- a/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
++++ b/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
+@@ -87,6 +87,7 @@ properties:
+ 
+   adi,conv2-range-microvolt:
+     description: Conversion range for ADC conversion 2.
++    maxItems: 2
+     oneOf:
+       - items:
+           - enum: [-2500000, 0]
+-- 
+2.37.3
+
