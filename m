@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F124966AF4B
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 05:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E3666AF51
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 05:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjAOEO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 23:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S230501AbjAOEVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 23:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjAOEOv (ORCPT
+        with ESMTP id S230368AbjAOEVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 23:14:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF18A4682;
-        Sat, 14 Jan 2023 20:14:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7A5460C60;
-        Sun, 15 Jan 2023 04:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B87C433D2;
-        Sun, 15 Jan 2023 04:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673756089;
-        bh=jshOld5XYZnlYZ5Q1vGZgYzaUHooncGiPJkhdHvwGnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GlKDgDw4UK6bis7dDczAhcW0tZpvRZF/4PjNy2XepuS+wgvMDr8Sdy/84GRDFo8c1
-         E56yjitEBYf0r4tCYMkG14O5x7ZciKdwmTpq4+EP1Fyp+8BtydX1kT8avdtD3gJW/B
-         jLcZSzwY2O3x00CLCQxkVt7pLvqWYgw+PDHaTZ0UuD+nOfcqAkoyAlNpd4hkKoBcm0
-         PE8RFxjlYbccyMDABZopGKIhVdpJiUxm1eWbGTidWKWeseX+rQoTh7xUfvHsjQUYLu
-         zieAyFZcoY3kMRzaDUp6fTC67Syt12jj6lX5iUXydxidd4Q4VKqaUWLrLxbjmlbHQS
-         tvktp6T1mwoIw==
-Date:   Sun, 15 Jan 2023 09:44:40 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/5] dt-bindings: mailbox: qcom-ipcc: Add sc8280xp
- compatible
-Message-ID: <20230115041440.GE6568@thinkpad>
-References: <20221016090035.565350-1-luca@z3ntu.xyz>
- <20221016090035.565350-3-luca@z3ntu.xyz>
+        Sat, 14 Jan 2023 23:21:40 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A0D4689
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 20:21:39 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 200so12621946pfx.7
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 20:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ALsjGopWf+hZuhs7nMXhO/pSXNTGv/26Xn0WdBaHFYg=;
+        b=b0b/7owMlcYKKx6n44kgErJ0X4MpjPnAodIgILqAjx2U7yjvSdxiXkLLbGACuOgZc4
+         yrCdHqkodXVWTtbOoqjItH+Jr5TRL1BkFhbY6sZrJsCah3dE4BjAgVj7nWl/2Zk0QdDX
+         TvlVurRKhQhnZb/t78+SPyHJcARCWA0BwVd20=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ALsjGopWf+hZuhs7nMXhO/pSXNTGv/26Xn0WdBaHFYg=;
+        b=RURKao52aLzNiJBrBP9Ocktb/y5Rdb2OHvafPI0mYtlrJQHgRUefvlwd8k7IbfQzXC
+         xJGeETFpdGuNBhD7D7PpoUtDqZB5POHCf3m4lrUhJaLoLDZ21PROmaLrZZHtLeSc4ION
+         3XJxavyguyj6oh/znhx4C1+kJKO0G/OxkzXCv37JeVYoBgDmgTXuWIhljqlHzl18DNSD
+         72jv0zfnPehoU/9TKSWxVEc3TtesI5XjR+UxehxsUnWXthzBB7JTCCV1LARy6yRG+vqz
+         ir4g+a8tM9awAJA+3NEKI9fEjHQX/m9MwUND5bKRePTYWC2uxpH4Vb/WXhktAsH5e36a
+         UlUw==
+X-Gm-Message-State: AFqh2krBq6hFkwVuWA2rcOkUCoI+VnaYCqh6b1tG0fQGNjqHyxnwbYUs
+        tbJo1K47z8MzRZ1zrDg24zNI+Q==
+X-Google-Smtp-Source: AMrXdXuMdyba1c18pSrzjUQQ67d8ohp6Yo5Xgp4BKX9lppikXZ/3+a5X6b5bAAytRkPdXQaa7xt2iA==
+X-Received: by 2002:a62:1684:0:b0:587:8d47:acdd with SMTP id 126-20020a621684000000b005878d47acddmr21290384pfw.34.1673756498581;
+        Sat, 14 Jan 2023 20:21:38 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id 4-20020a620404000000b00576ee69c130sm15797537pfe.4.2023.01.14.20.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 20:21:37 -0800 (PST)
+Date:   Sun, 15 Jan 2023 13:21:33 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCHv2 0/4] zsmalloc: make zspage chain size configurable
+Message-ID: <Y8N/Te/t9aLkKi90@google.com>
+References: <20230109033838.2779902-1-senozhatsky@chromium.org>
+ <Y8G3nJ9+k2lB0kas@monkey>
+ <Y8JU8iGlu5uLGdDt@google.com>
+ <Y8Mf4f2TTH8yY8Ic@monkey>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221016090035.565350-3-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y8Mf4f2TTH8yY8Ic@monkey>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +72,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 11:00:32AM +0200, Luca Weiss wrote:
-> Document the sc8280xp compatible, and at the same time also make sure
-> the list is sorted alphabetically.
+On (23/01/14 13:34), Mike Kravetz wrote:
+> I did the following:
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks,
-Mani
-
-> ---
->  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> - Start with clean v6.2-rc3
+>   Perform echo, did not see issue
 > 
-> diff --git a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> index baca4786ff94..bc599a864637 100644
-> --- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> @@ -24,12 +24,13 @@ properties:
->    compatible:
->      items:
->        - enum:
-> +          - qcom,sc7280-ipcc
-> +          - qcom,sc8280xp-ipcc
->            - qcom,sm6350-ipcc
->            - qcom,sm6375-ipcc
->            - qcom,sm8250-ipcc
->            - qcom,sm8350-ipcc
->            - qcom,sm8450-ipcc
-> -          - qcom,sc7280-ipcc
->        - const: qcom,ipcc
->  
->    reg:
-> -- 
-> 2.38.0
+> - Applied your 5 patches (includes the zsmalloc: turn chain size config option
+>   into UL constant patch).  Took default value for ZSMALLOC_CHAIN_SIZE of 8.
+>   Performed echo, recreated issue.
 > 
+> - Changed ZSMALLOC_CHAIN_SIZE to 1.
+>   Perform echo, did not see issue
 
--- 
-மணிவண்ணன் சதாசிவம்
+The patch set basically just adjusts $NUM in calculate_zspage_chain_size():
+
+		for (i = 1; i <= $NUM; i++)
+
+It changes default 4 to 8. Can't really see how this can cause problems.
