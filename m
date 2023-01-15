@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED71966B279
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3D566B27B
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjAOQMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 11:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S231537AbjAOQNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 11:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjAOQMC (ORCPT
+        with ESMTP id S230508AbjAOQNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:12:02 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A458CC19
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 08:12:01 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 203so27761231yby.10
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 08:12:01 -0800 (PST)
+        Sun, 15 Jan 2023 11:13:20 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C13A72B8;
+        Sun, 15 Jan 2023 08:13:18 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-15b9c93848dso18764669fac.1;
+        Sun, 15 Jan 2023 08:13:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gYIq1cNRboBs2JYmx3+VNbJ7kJEXsaYlguTW8wp2/tg=;
-        b=o3nklv7d8wtaIT7f/cQNajXlS/mLwByD9FpqHVDy9lQ9NIBG7fhzTfJVeiJQSrT5/b
-         Ih6zXoSUfy/avdW+12de6xjtfP1oGOcQ0A4MjnfKFCBc0ipwiTEuZNJ5fVEI2dVL3Ty0
-         x6nIvkVRCAjxbPFdlhgs3g3sUVmU1WdgOzgB4/A+fQS7o1z2BLZZoz+qNz6wUX9+cRPl
-         z3MIrrQSU9FAAnP388mc+1ymY+pPIxOx8TyzhlbOyPWgxLw+j117axmFMtJztaweJUKJ
-         Icz9ewkptiGPHd/GQH6Rt/KN8pKtggl1/Q1EHtdhjnRLTGNd7HdcqoXjC3Nt8tai05/l
-         4TVg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dKDWNfyaCCVlqTNLhcNrknSAUVDiMextrN4qIAT2sVw=;
+        b=ciJQkbJebkxZGds0qPuqu3bQPB6g0z5hzjptry52/3kRDFyk0y6IMbAunHIfR9kEtk
+         rPsS3L9o+fEdFYkJ+dsrG2UOw+Tp+vOkcSg0V6E0SUFigis4b8Zpf2dVp2dz5dBW7vWj
+         XeN5d1Y/RJ93IYcXchAUhCMPunhGglcW5NIwUx+XrRDe2mdZfciSSRn/pn0fDMB9xcff
+         Ml/c1i8u3nfBkvLRdp20lDLcnBfEUDvlh1Vje7Oa9qsT/u48+bdGGnNn2okOJCMmXVkJ
+         RFrRegh8rAhzkA5YHxqOOHemVdhUX3ZfE38baPyNKa3dqeFzVvSAC/Co9mS9/DKqv2M+
+         W3JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gYIq1cNRboBs2JYmx3+VNbJ7kJEXsaYlguTW8wp2/tg=;
-        b=XmRr96W4F5BQ+C3F6JyEigKWYXLytYlvrLcM2ted5nZIsFD/VG3CzvJpzKrYN8Z0C/
-         +s3ANAgTd6DisoAuLNQWl758GF4wRFxq+xC387Cv654p5XdIy1H35D7YLbMNjrvHf/pC
-         RkFOpER1hBjURncxwnDvULAwxy/aI26Hj3kBOZOFcxmUAJeHHji1h6UHCJhoe/k+HX/T
-         rl49+CRGaxFZR1Ahwl7OmYrzmPmnKGHk2HftNnn3Q/1jbBeQ50mapINGXTMmxNi0LzJS
-         7E4FORcZiTqD0EI8woMWI1moMn6gGon/mM76fsYF5QAzCJABk+ryF3i/itI86XTgHO0P
-         m5Vw==
-X-Gm-Message-State: AFqh2kqUdsp/5Oo1Sz/zcVoa5d09iFGBaXJsnxXL6NwVyvxilIWXB6qx
-        IU9iKd5657f9/dRDvelb1jRVUkReLhOKJRKfun9nGg==
-X-Google-Smtp-Source: AMrXdXtLxYYleTmBEgpzFYr2/75sjuNk5VSr20IYJzYWRC2080wHsKVTUF5eNKqIh0eq52dG5NhTCOuuH3RwYj+zWWE=
-X-Received: by 2002:a25:32d7:0:b0:7d5:dc31:81ed with SMTP id
- y206-20020a2532d7000000b007d5dc3181edmr475055yby.407.1673799120226; Sun, 15
- Jan 2023 08:12:00 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dKDWNfyaCCVlqTNLhcNrknSAUVDiMextrN4qIAT2sVw=;
+        b=MXlgE+6qQdY/OZqBM+bHFyuy/iXsvxgG6ocmRqttTAf/FcxtI/ZQWpf3ZxNdkvZKGI
+         ZOrwyV3RGkjTUuN8RJ/IgFbyFt54GNa43pI4hG2qNBfhgNUQSTGFe5gLQsilHd9CqAvo
+         zSZpNg8MNpuUgxK1cFKAYDLEqvLEuGqLM8uF+c9eCD0Og/Cr2gCAF+HmYi5ezYBb9UkI
+         KHnJq1XbkHG7wfJF8aMsK8FUbI+469GZJtk8dS8DELGBSgFDL8p17fJ5CHtMsCzJcRKH
+         9rojEmaIx1KNBNly+q7DO2TQvxBzIGxj+P63iVgB+oqiTU9aLtku9tP8qVO8gqSWxh/g
+         b24g==
+X-Gm-Message-State: AFqh2krv3sWWgOwKWtncgRwuFz/CLIUBgEXkjMiUslfnb9ouGdRA4Iwz
+        Ob1xmDuLta3Ee0MhqUp4lOSDu6Nt8U4=
+X-Google-Smtp-Source: AMrXdXu6+ZKqabhHWDfj5mCvlJ1iBpEAASg1GQkQc07c9T86jozs80H1dDgkNScnxntjc7vCl0bp6g==
+X-Received: by 2002:a05:6870:7908:b0:15b:9ab8:2cd4 with SMTP id hg8-20020a056870790800b0015b9ab82cd4mr13406252oab.44.1673799197884;
+        Sun, 15 Jan 2023 08:13:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z36-20020a056870d6a400b00144bb1013e6sm13222236oap.4.2023.01.15.08.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 08:13:17 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 15 Jan 2023 08:13:16 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     XU pengfei <xupengfei@nfschina.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: ibmpex: remove unnecessary (void*) conversions
+Message-ID: <20230115161316.GA1246652@roeck-us.net>
+References: <20230111043605.3726-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
-References: <20230114132705.78400-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20230114132705.78400-1-kerneljasonxing@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sun, 15 Jan 2023 17:11:48 +0100
-Message-ID: <CANn89iJ+KW+=Z13o_K4RpZfoxO8rGaXRXQ07jZfpE5RMH0Uweg@mail.gmail.com>
-Subject: Re: [PATCH v2 net] tcp: avoid the lookup process failing to get sk in
- ehash table
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111043605.3726-1-xupengfei@nfschina.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +74,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 2:27 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <kernelxing@tencent.com>
->
->
-> Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
-> ---
-> v2:
-> 1) adding the sk node into the tail of list to prevent the race.
-> 2) fix the race condition when handling time-wait socket hashdance.
-> ---
->  net/ipv4/inet_hashtables.c    | 10 ++++++++++
->  net/ipv4/inet_timewait_sock.c |  6 +++---
->  2 files changed, 13 insertions(+), 3 deletions(-)
->
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index 24a38b56fab9..b0b54ad55507 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -650,7 +650,16 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
->         spin_lock(lock);
->         if (osk) {
->                 WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
-> +               if (sk_hashed(osk))
+On Wed, Jan 11, 2023 at 12:36:06PM +0800, XU pengfei wrote:
+> Pointer variables of void * type do not require type cast.
+> 
+> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
 
+Applied to hwmon-next.
 
-nit: this should be:
-
-if (sk_hashed(osk)) {  [1]
-    /* multi-line ....
-     * .... comment.
-     */
-   ret = sk_nulls_del_node_init_rcu(osk);
-   goto unlock;
-}
-if (found_dup_sk) {  [2]
-
-1) parentheses needed in [1]
-2) No else if in [2], since you added a "goto unlock;"
-
-> +                       /* Before deleting the node, we insert a new one to make
-> +                        * sure that the look-up-sk process would not miss either
-> +                        * of them and that at least one node would exist in ehash
-> +                        * table all the time. Otherwise there's a tiny chance
-> +                        * that lookup process could find nothing in ehash table.
-> +                        */
-> +                       __sk_nulls_add_node_tail_rcu(sk, list);
->                 ret = sk_nulls_del_node_init_rcu(osk);
-> +               goto unlock;
->         } else if (found_dup_sk) {
->                 *found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
->                 if (*found_dup_sk)
-> @@ -660,6 +669,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
->         if (ret)
->                 __sk_nulls_add_node_rcu(sk, list);
->
-> +unlock:
->         spin_unlock(lock);
-
-Thanks.
+Thanks,
+Guenter
