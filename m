@@ -2,61 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AA866B1A2
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2603E66B1A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjAOOrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 09:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S231271AbjAOOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 09:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjAOOrJ (ORCPT
+        with ESMTP id S230322AbjAOOtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 09:47:09 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB45125A3;
-        Sun, 15 Jan 2023 06:47:04 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pH4He-0007bK-Dk; Sun, 15 Jan 2023 15:46:54 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Lucas Tanure <lucas.tanure@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Fix RX delay for ethernet phy
-Date:   Sun, 15 Jan 2023 15:46:51 +0100
-Message-Id: <167379396100.36245.4453692262088268079.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113130220.662194-1-lucas.tanure@collabora.com>
-References: <20230113130220.662194-1-lucas.tanure@collabora.com>
+        Sun, 15 Jan 2023 09:49:12 -0500
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6304F10401;
+        Sun, 15 Jan 2023 06:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1673794143;
+        bh=ndxiOKIjgMog/hMr4F9xvx2c1YwIDASPYXvZJKXmyfg=;
+        h=From:To:Cc:Subject:Date;
+        b=MjZRB76581YOWXPquSibalgaepyv0r2leB0d7VhYYoeFMwA2uS6oRWR3Us4KZAErm
+         8l/b53y95jRNe1v2J1+1C7qeAuVQ0Emn4OGdc9omJePDkp1MY9c+aO/QLVUALiECsT
+         dyxvHllwuPv5kYhyo2G3XjhR2/k4Dih37QlUf7eE=
+Received: from localhost.localdomain ([119.4.52.193])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id C41B8881; Sun, 15 Jan 2023 22:49:01 +0800
+X-QQ-mid: xmsmtpt1673794141t4gkux1a8
+Message-ID: <tencent_B0E8F40B6620BFE2E79CAA06EAADA085C907@qq.com>
+X-QQ-XMAILINFO: OKkKo7I1HxIeJ98xPC2ML3gxFdU9GLYGLIJpFY6vbaR9HG+2YTSlQeNnZX6DLb
+         ypj1mQKa+3bunvAFHycNbTWFcJb0vtW3ODdtiQM0ThhY7UrnEJzPbdQkilLP8AElJnRcVvc51Xvf
+         qgeSoeX0ICRgnlTSRHWovj/9Tjx8gCPWaXWEaWGOmzDSlzmPD7uj2TaZ9uvFdcJwZJV8UBauT916
+         i7o2j3OKzl179IDiXs2eAZc53Zs3oUt56uURkOcb3Wlo1kMDW11UndPJ2tbhEijNuSmPV/LB5mpx
+         XFmZI5xNGGu+jLOLL2m1yckbBVXcFvJhcqbZxbQqwXqDnUPxo4p5f20oEBBA9R/giO3ZIjjKHiCT
+         afbES7PnVCXwnhfFdJdRVgOpQ8cCRh5bSkZUwqP/oGlo/xwzI4vCUB9bWM3QSaxtph+M1LwSIjr8
+         tLTNNICrMXgNr1U78uIrn14M2oCczfigG2QReV7tlIv3KqDQTV7eKxVyP5CjZRqSTRnYEkiiCgJG
+         TPwOw33K3gw95A1LnJ54SwH2apzf/vTgFX9jVjMIbV3ESw8WLj9Nx+aAwb2eY3/MNL0kLjzn/csr
+         iykufJr1GFnA0OkaQ9kaUJFNz1EYS7xCVvoh421urNAH2kTuD9O0Q+Nu9x2t7B/0r1AX/82900ik
+         Yr7ebZgOfdsSkloGnYl8EF6gnxhGEpwr59/+IZkFtylaChozbV+WoeTYumL/dbcnSxGcqRmECM/5
+         QfYhWthFXTNSf3XETAAR2n2TXBrOPulGyFoOchhhf4rzMIqH6dcpOV5TdG+hTzOLFqAzGLHslKN5
+         m8jOVLlHr7lENggsYUgkxVDcLiCRP6m9vt0kw1Lrl4CdZUmGAFeQaYagmEvXOG5SCsL22D6bUFmP
+         IjSWAwK3BJbsK6C+dJsWybDE1Bh+lGLKmFSWL4KjREkX7wEsfBTQXoRoIYobRb4gG8U1UDt55XYA
+         1OPwcawgSUdmE23hA7Q2R2vw3scoq7
+From:   wenyang.linux@foxmail.com
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v2] eventfd: use a generic helper instead of an open coded wait_event
+Date:   Sun, 15 Jan 2023 22:48:29 +0800
+X-OQ-MSGID: <20230115144829.9786-1-wenyang.linux@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023 13:02:20 +0000, Lucas Tanure wrote:
-> Add network PHY rx delay and change type to rgmii, so
-> that it is applied. This fixes packet loss when more
-> than a few packets are exchanged.
-> 
-> 
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-Applied, thanks!
+Use wait_event_interruptible_locked_irq() in the eventfd_{write,read} to
+avoid the longer, open coded equivalent.
 
-[1/1] arm64: dts: rockchip: Fix RX delay for ethernet phy
-      commit: 0b86f9570e7713faaa32f2775eb04021d1213018
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: kernel test robot <lkp@intel.com>
+Cc: Dan Carpenter <error27@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+v2:
+- fix smatch warnings: eventfd_read() warn: inconsistent returns '&ctx->wqh.lock'.
 
-Best regards,
+ fs/eventfd.c | 41 +++++++----------------------------------
+ 1 file changed, 7 insertions(+), 34 deletions(-)
+
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index 249ca6c0b784..c5bda3df4a28 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -228,7 +228,6 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
+ 	struct file *file = iocb->ki_filp;
+ 	struct eventfd_ctx *ctx = file->private_data;
+ 	__u64 ucnt = 0;
+-	DECLARE_WAITQUEUE(wait, current);
+ 
+ 	if (iov_iter_count(to) < sizeof(ucnt))
+ 		return -EINVAL;
+@@ -239,23 +238,11 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
+ 			spin_unlock_irq(&ctx->wqh.lock);
+ 			return -EAGAIN;
+ 		}
+-		__add_wait_queue(&ctx->wqh, &wait);
+-		for (;;) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			if (ctx->count)
+-				break;
+-			if (signal_pending(current)) {
+-				__remove_wait_queue(&ctx->wqh, &wait);
+-				__set_current_state(TASK_RUNNING);
+-				spin_unlock_irq(&ctx->wqh.lock);
+-				return -ERESTARTSYS;
+-			}
++
++		if (wait_event_interruptible_locked_irq(ctx->wqh, ctx->count)) {
+ 			spin_unlock_irq(&ctx->wqh.lock);
+-			schedule();
+-			spin_lock_irq(&ctx->wqh.lock);
++			return -ERESTARTSYS;
+ 		}
+-		__remove_wait_queue(&ctx->wqh, &wait);
+-		__set_current_state(TASK_RUNNING);
+ 	}
+ 	eventfd_ctx_do_read(ctx, &ucnt);
+ 	current->in_eventfd = 1;
+@@ -275,7 +262,6 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 	struct eventfd_ctx *ctx = file->private_data;
+ 	ssize_t res;
+ 	__u64 ucnt;
+-	DECLARE_WAITQUEUE(wait, current);
+ 
+ 	if (count < sizeof(ucnt))
+ 		return -EINVAL;
+@@ -288,23 +274,10 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 	if (ULLONG_MAX - ctx->count > ucnt)
+ 		res = sizeof(ucnt);
+ 	else if (!(file->f_flags & O_NONBLOCK)) {
+-		__add_wait_queue(&ctx->wqh, &wait);
+-		for (res = 0;;) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			if (ULLONG_MAX - ctx->count > ucnt) {
+-				res = sizeof(ucnt);
+-				break;
+-			}
+-			if (signal_pending(current)) {
+-				res = -ERESTARTSYS;
+-				break;
+-			}
+-			spin_unlock_irq(&ctx->wqh.lock);
+-			schedule();
+-			spin_lock_irq(&ctx->wqh.lock);
+-		}
+-		__remove_wait_queue(&ctx->wqh, &wait);
+-		__set_current_state(TASK_RUNNING);
++		res = wait_event_interruptible_locked_irq(ctx->wqh,
++							  ULLONG_MAX - ctx->count > ucnt);
++		if (!res)
++			res = sizeof(ucnt);
+ 	}
+ 	if (likely(res > 0)) {
+ 		ctx->count += ucnt;
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.25.1
+
