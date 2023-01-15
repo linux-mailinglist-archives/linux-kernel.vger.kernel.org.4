@@ -2,110 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06C766B1B3
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3A666B1BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbjAOOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 09:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S230401AbjAOO53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 09:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjAOOzj (ORCPT
+        with ESMTP id S231197AbjAOO51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 09:55:39 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AB6CDF9
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:55:37 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id b9-20020a17090a7ac900b00226ef160dcaso27073753pjl.2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:55:37 -0800 (PST)
+        Sun, 15 Jan 2023 09:57:27 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C508510406
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:57:24 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id bk15so5156390ejb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:57:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rxQBoQ4zwsDYiqotDumPSxrrObK/piv54Nf9p66paMI=;
-        b=BwmFLvWusNYl48KgQ2+NqlCI2Z6alcbJhxv0QLXzIvyowbdh7aofFk3vioIi3zSzP/
-         jtnF3LI17FlyrI3OPeUAxxRslbiI7L8VnMB1rGnhcYPGeP+mqev2YK2IQdqacrj8KKPx
-         7Cehm7uqaPhNClaEirTg21MJgz8gdZ4H6UZis=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u5z9xvpyQwb/p3wmCjJHVAevXOfS6soyNwcx7EqDQqA=;
+        b=oTHoYu/uuq+H4sxlXkVSLcqO31mFInw32z0ZpNSNm+SxwsM2Rj+l8Vureeu3CgmNjR
+         mPtFQb4hlzo4wuI2aX9NqagTuK4gcUaGou5GLB04OtBsokaQ8SSN67Qrk2ofk75lliKz
+         Oy88Qo1z1psk9x/HLFp3Mq8/iB2zU85Q5cQQEY12+qGvtRDqGAPUhWJtJeOxWQprgVh4
+         z12LM82EjlU+S54uvfdba1Q9Lm5x7ZfbdoZN9eOFQqOV1rQvTEcrDwPj4jcME/Gj7h+M
+         7WZNrAgpZ44Cj4oM0rDfJLXcqbKXNq7jklY80fA2qMHzQAiuiIE5JCZDg1RSXlsaBiJJ
+         zc0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rxQBoQ4zwsDYiqotDumPSxrrObK/piv54Nf9p66paMI=;
-        b=zixPu0RLhilhg9Z1PYIEbSzHB2qnlnbtbPh+u6JvvsL2rGkJ16tqy9O0R4cn/a7yua
-         jXcRskGpp+PsUc6n5YriSM9Pt2W4/c2lkl3yRzFnw3Owm+dU8ra38CgRuSw06zZo5YNv
-         JmPbmei9DuLqTYGMwDxOJqIZiAPnq7vlW7+bOoA3guvYeVAYlqqlElBY8yoCRJb45fDB
-         McozFSTHTkBPRRV4/aeZ40pJZrmamuDGhA8lzxx0u/Ka54H6k3Sp+VvzNPiDZfSdXQOY
-         wv7zwvwXlcqQVNlqp1MOkUkguO4C0XVwwU9N6kdpw50f6nfejxStSgzdiZyloLvTWEN/
-         HwRQ==
-X-Gm-Message-State: AFqh2kqh9Hmz3q6C8VWjudv5wxzBzEzDcx9Gqkwd0wrAwdKZ2QxITzsa
-        Wz1uGD5XCe3PcZjLY+tBihF24Q==
-X-Google-Smtp-Source: AMrXdXunSU7OWCSqkir5WAjEpH9oWdYZa3bVxfv2t+WybCWGEH8h3zGa3Xzk7COxFQja7AbYith8sQ==
-X-Received: by 2002:a17:902:e80a:b0:193:38ce:7bb8 with SMTP id u10-20020a170902e80a00b0019338ce7bb8mr25038960plg.37.1673794536919;
-        Sun, 15 Jan 2023 06:55:36 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00189422a6b8bsm17500374pln.91.2023.01.15.06.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 06:55:36 -0800 (PST)
-Date:   Sun, 15 Jan 2023 23:55:32 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv2 0/4] zsmalloc: make zspage chain size configurable
-Message-ID: <Y8QT5IWy1Gx1bbVi@google.com>
-References: <20230109033838.2779902-1-senozhatsky@chromium.org>
- <Y8G3nJ9+k2lB0kas@monkey>
- <Y8JU8iGlu5uLGdDt@google.com>
- <Y8Oo3+9UmZ4ac8sW@google.com>
- <Y8P55Ks8p8SL56VR@casper.infradead.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u5z9xvpyQwb/p3wmCjJHVAevXOfS6soyNwcx7EqDQqA=;
+        b=cQzMmtq299q+RvFWCdOikx8lpVSFaz0dvbCnMOTcOJifpYKQFGFmtLbYytw0hqVM0+
+         Vmj54WJUht8kQuf67a/10cc8OiNOH0UdQB6EqeW+WffYDXQugiigR6ienVbM3cggORhD
+         gJP2cYoPW+5FtbpM13rygyuLNGUG90dnN9N1v/FBBUJGvG6wlgrqF7pXCNLQkEEYrZpo
+         /upEp4jwOnjxbhKlT+C4iKAHts3WL7bxGVvaiVDPbfui3d/Gi+GJgO80GtiGO9tdjVzD
+         1qTpHVOfNfbNoFs7CcuY+qJEG7h9gcRGgFW7xD9HegJUOn34fUW5PIpAQJzHhjXYrJkF
+         O9xw==
+X-Gm-Message-State: AFqh2kpiktQ3KQtmmWkQhY3MQWAEovQk9eG9ZIbauXp+2daOh/fWRI9p
+        ja/oB+icGeCEDmQ/U/ZmJ43VauNfuF4vY5F+
+X-Google-Smtp-Source: AMrXdXuLjqA27067ErXhBepaZR4Dis+ZqnVxCxeRaM2NcThdEVfQzmcIxYEWVBqdiwu9aFF4IeScGA==
+X-Received: by 2002:a17:906:944a:b0:7c1:23f2:5b51 with SMTP id z10-20020a170906944a00b007c123f25b51mr8487730ejx.60.1673794643394;
+        Sun, 15 Jan 2023 06:57:23 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s5-20020a170906c30500b008552bc8399dsm6853290ejz.172.2023.01.15.06.57.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Jan 2023 06:57:22 -0800 (PST)
+Message-ID: <dee8fbdc-5399-d5ce-8d01-2c48e85e2919@linaro.org>
+Date:   Sun, 15 Jan 2023 15:57:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8P55Ks8p8SL56VR@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 2/2] dt-bindings: iio: adc: add Texas Instruments
+ ADS7924
+Content-Language: en-US
+To:     Hugo Villeneuve <hugo@hugovil.com>, hvilleneuve@dimonoff.com,
+        jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230113194959.3276433-1-hugo@hugovil.com>
+ <20230113194959.3276433-3-hugo@hugovil.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113194959.3276433-3-hugo@hugovil.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/01/15 13:04), Matthew Wilcox wrote:
-> On Sun, Jan 15, 2023 at 04:18:55PM +0900, Sergey Senozhatsky wrote:
-> > So this warning is move_to_new_folio() being called on un-isolated
-> > src folio. I had DEBUG_VM disabled so VM_BUG_ON_FOLIO(!folio_test_isolated(src))
-> > did nothing, however after mops->migrate_page() it would trigger WARN_ON()
-> > because it evaluates folio_test_isolated(src) one more time:
-> > 
-> > [   59.500580] page:0000000097d97a42 refcount:2 mapcount:1665 mapping:0000000000000000 index:0xffffea00185ce940 pfn:0x113dc4
-> > [   59.503239] flags: 0x8000000000000001(locked|zone=2)
-> > [   59.505060] raw: 8000000000000001 ffffea00044f70c8 ffffc90000ba7c20 ffffffff81c22582
-> > [   59.507288] raw: ffffea00185ce940 ffff88809183fdb0 0000000200000680 0000000000000000
+On 13/01/2023 20:49, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> That is quite the messed-up page.  mapcount is positive, but higher than
-> refcount.  And not just a little bit; 1665 vs 2.  But mapping is NULL,
-> so it's not anon or file memory.  Makes me think it belongs to a driver
-> that's using ->mapcount for its own purposes.  It's not PageSlab.
+> Add device tree bindings document for the Texas Instruments ADS7924
+> ADC.
 > 
-> Given that you're working on zsmalloc, I took a look and:
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  .../bindings/iio/adc/ti,ads7924.yaml          | 112 ++++++++++++++++++
+>  1 file changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
 > 
-> static inline void set_first_obj_offset(struct page *page, unsigned int offset)
-> {
->         page->page_type = offset;
-> }
-> 
-> (page_type aliases with mapcount).  So I'm pretty sure this is a
-> zsmalloc page.  But mapping should point to zsmalloc_mops.  Not
-> really sure what's going on here.  Can you bisect?
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> new file mode 100644
+> index 000000000000..24bbf95383b4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/ti,ads7924.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI ADS7924 4 channels 12 bits I2C analog to digital converter
+> +
+> +maintainers:
+> +  - Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> +
+> +description: |
+> +  Texas Instruments ADS7924 4 channels 12 bits I2C analog to digital converter
+> +
+> +  Specifications:
+> +    https://www.ti.com/lit/gpn/ads7924
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,ads7924
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  vref-supply:
+> +    description:
+> +      The regulator supply for the ADC reference voltage (AVDD)
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +patternProperties:
+> +  "^channel@[0-3]+$":
+> +    $ref: adc.yaml
+> +
+> +    description: |
+> +      Represents the external channels which are connected to the ADC.
+> +
+> +    properties:
+> +      reg:
+> +        description: |
+> +          The channel number. It can have up to 4 channels numbered from 0 to 3.
+> +        items:
+> +          - minimum: 0
+> +            maximum: 3
+> +
+> +      label:
+> +        description: |
+> +          Unique name to identify the channel.
 
-Thanks.
+Drop description, it's coming from adc.yaml. Just "label: true"
 
-Let me try bisecting. From what I can tell it seems that
-tags/next-20221226 is the last good and tags/next-20230105
-is the first bad kernel.
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: false
 
-I'll try to narrow it down from here.
+You are not allowing anything else from adc.yaml. Is it on purpose?
+
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - vref-supply
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+
+Best regards,
+Krzysztof
+
