@@ -2,115 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0665B66AF7B
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 06:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAC166AF7D
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 06:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjAOFc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 00:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S230443AbjAOFen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 00:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjAOFc4 (ORCPT
+        with ESMTP id S230344AbjAOFek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 00:32:56 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8EBBB6
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 21:32:55 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id q23-20020a17090a065700b002290913a521so8678336pje.5
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 21:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pV+Lc/D2szFMSqw+ADbk9E95BAdnQD4U8oWvWD9EP0=;
-        b=UsjVTg8UKzR4bqwwTKuexbqPD1K8c7rYDjqkBdbFTSxrx2z6wdrNX0rYuViUtvpSLV
-         aaTQxaoUuT4GWrqxIzEBSwTzVfq97lPKXME7jRoptzIp/axAt1lrlRmLuOo5bQrVrS4a
-         GJLrzFIf55B1ja1GDXVtB6vuIGHlmafdSBUCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6pV+Lc/D2szFMSqw+ADbk9E95BAdnQD4U8oWvWD9EP0=;
-        b=3FJ/YEAAcEJff09xnNtRMoEdFPiAt8IE6KbwqPcaVO2DuZhnyYljnt8/yO0uT0fVD1
-         Owukr5RXVAXo8vkF574xBqPOmsDVqRpyxL7xcHdWI/yIvU8BdwFRWCNoSzkQJngftEF6
-         FccpQAtl5mKuuNDEE9FH4qgCdCO6cb4MwG+0vo9pjh8fe8MR1UoTkGQFAPsccu3jsiOb
-         WKjxUgmDvKLqN9PuKTKQu2HlaAi0wkXUonu+9mHx1PvxB4EU9LjM+CP2NJWeJ5rgs9Bc
-         u187so9EG9Ugb8OpWiviP/psOR5YohomnIQDWoW2TR10n7O6B3SHlrJp4rsHzvQEOE9s
-         npag==
-X-Gm-Message-State: AFqh2kpaDpHjTVpZUu4m/ji4l6YIJV8GcWEFoAdAQ7Y/iHBQ58HrauRY
-        AjSgp9B7XkXfmGk2VfS+1tXrUg==
-X-Google-Smtp-Source: AMrXdXu476ANBdQERztD+vprQduoY6AMavWCXl/BPijSPZwRKQxObo9GyB33wyLGp+GtSOUJky208A==
-X-Received: by 2002:a17:902:ccc5:b0:185:441e:4cfc with SMTP id z5-20020a170902ccc500b00185441e4cfcmr100561742ple.44.1673760775240;
-        Sat, 14 Jan 2023 21:32:55 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id s1-20020a170902ea0100b001913c5fc051sm5646253plg.274.2023.01.14.21.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Jan 2023 21:32:54 -0800 (PST)
-Date:   Sun, 15 Jan 2023 14:32:50 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCHv2 0/4] zsmalloc: make zspage chain size configurable
-Message-ID: <Y8OQAl6rfjoKhwxm@google.com>
-References: <20230109033838.2779902-1-senozhatsky@chromium.org>
- <Y8G3nJ9+k2lB0kas@monkey>
- <Y8JU8iGlu5uLGdDt@google.com>
- <Y8Mf4f2TTH8yY8Ic@monkey>
- <Y8N/Te/t9aLkKi90@google.com>
+        Sun, 15 Jan 2023 00:34:40 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B274BBB6
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 21:34:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673760879; x=1705296879;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dRbFyPRcH+37UzJoUsKYdpJtHTdJG4NkBURNj4I11MU=;
+  b=KBEcgt+WloFn2+KNsRuDiv6BZJyFYA2AXdZf9Ak9pTX4nCMHGyQxEQfA
+   lr6cgMYHw4B1oF+TAi/k0Oa05AvhaEuGpWho2zOmNs5tUjwkk4BZHkFiF
+   hpz7WtQE8zscU7aKoV5EJcxMdnZwtO4QX8dTR8wOE0fH7oun1Dk09WHHh
+   kWOnUSiUkCTFptMJhohm5/kxskoL4qED3pvZlf/CC0EDNQ03rmTE8WSP+
+   7utqm+rdgFq1XGBlfp9zukJDTKaWKykYJTX8VgZfNrZD/4IJBrGLr1RJl
+   ZaKePdz3ztTgMNKH0SpxUS09XQnK6Q7mbKpLaUdw15xe0noFj4N+/goUd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10590"; a="303966394"
+X-IronPort-AV: E=Sophos;i="5.97,218,1669104000"; 
+   d="scan'208";a="303966394"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2023 21:34:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10590"; a="801025167"
+X-IronPort-AV: E=Sophos;i="5.97,218,1669104000"; 
+   d="scan'208";a="801025167"
+Received: from lkp-server01.sh.intel.com (HELO 82361ecceba2) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Jan 2023 21:34:37 -0800
+Received: from kbuild by 82361ecceba2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pGvfA-00006o-2E;
+        Sun, 15 Jan 2023 05:34:36 +0000
+Date:   Sun, 15 Jan 2023 13:34:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.01.12a] BUILD SUCCESS
+ f7bc7c9aba2d47ec051aabb0aaecb5613422aa07
+Message-ID: <63c39064.I9aBTjrqL+BkONQu%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8N/Te/t9aLkKi90@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/01/15 13:21), Sergey Senozhatsky wrote:
-> On (23/01/14 13:34), Mike Kravetz wrote:
-> > I did the following:
-> > 
-> > - Start with clean v6.2-rc3
-> >   Perform echo, did not see issue
-> > 
-> > - Applied your 5 patches (includes the zsmalloc: turn chain size config option
-> >   into UL constant patch).  Took default value for ZSMALLOC_CHAIN_SIZE of 8.
-> >   Performed echo, recreated issue.
-> > 
-> > - Changed ZSMALLOC_CHAIN_SIZE to 1.
-> >   Perform echo, did not see issue
-> 
-> The patch set basically just adjusts $NUM in calculate_zspage_chain_size():
-> 
-> 		for (i = 1; i <= $NUM; i++)
-> 
-> It changes default 4 to 8. Can't really see how this can cause problems.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.01.12a
+branch HEAD: f7bc7c9aba2d47ec051aabb0aaecb5613422aa07  Merge with "rcutorture: Add SRCU deadlock scenarios"
 
-OK, I guess it overflows zspage isolated counter, which is a 3 bit
-integer, so the max chain-size we can have is b111 == 7.
+elapsed time: 723m
 
-We probably need something like below (this should not increase sizeof
-zspage):
+configs tested: 97
+configs skipped: 3
 
----
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 290053e648b0..86b742a613ee 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -129,7 +129,7 @@
- #define HUGE_BITS      1
- #define FULLNESS_BITS  2
- #define CLASS_BITS     8
--#define ISOLATED_BITS  3
-+#define ISOLATED_BITS  5
- #define MAGIC_VAL_BITS 8
- 
- #define MAX(a, b) ((a) >= (b) ? (a) : (b))
+gcc tested configs:
+powerpc                           allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+ia64                             allmodconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a006
+x86_64                    rhel-8.3-kselftests
+x86_64                            allnoconfig
+sh                               allmodconfig
+x86_64                        randconfig-a004
+x86_64                          rhel-8.3-func
+m68k                             allmodconfig
+i386                                defconfig
+x86_64                        randconfig-a002
+sh                                  defconfig
+arc                        vdk_hs38_defconfig
+alpha                            allyesconfig
+sh                           se7780_defconfig
+x86_64                           allyesconfig
+m68k                             allyesconfig
+i386                          randconfig-a001
+arm                        trizeps4_defconfig
+mips                             allyesconfig
+i386                          randconfig-a003
+arm                                 defconfig
+arc                              allyesconfig
+sh                        apsh4ad0a_defconfig
+powerpc                          allmodconfig
+arm                           h3600_defconfig
+sh                           se7712_defconfig
+x86_64                        randconfig-a013
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+arc                                 defconfig
+s390                             allmodconfig
+x86_64                        randconfig-a015
+alpha                               defconfig
+i386                          randconfig-a012
+s390                                defconfig
+i386                          randconfig-a016
+s390                             allyesconfig
+powerpc                    adder875_defconfig
+arm64                            allyesconfig
+riscv                             allnoconfig
+arm                              allyesconfig
+i386                             allyesconfig
+sh                               alldefconfig
+riscv                    nommu_virt_defconfig
+x86_64                           rhel-8.3-bpf
+arm                             pxa_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                            hisi_defconfig
+mips                           xway_defconfig
+m68k                       bvme6000_defconfig
+openrisc                    or1ksim_defconfig
+nios2                         3c120_defconfig
+powerpc                       maple_defconfig
+powerpc                 canyonlands_defconfig
+sh                               j2_defconfig
+alpha                             allnoconfig
+mips                            ar7_defconfig
+m68k                          hp300_defconfig
+mips                         bigsur_defconfig
+sh                             shx3_defconfig
+sh                            hp6xx_defconfig
+i386                          randconfig-c001
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+mips                malta_qemu_32r6_defconfig
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+x86_64                        randconfig-a003
+powerpc                    gamecube_defconfig
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+i386                          randconfig-a006
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a011
+x86_64                        randconfig-a014
+i386                          randconfig-a004
+i386                          randconfig-a015
+arm                      tct_hammer_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                     mpc5200_defconfig
+mips                  cavium_octeon_defconfig
+arm                                 defconfig
+arm                       versatile_defconfig
+riscv                            alldefconfig
+arm                         palmz72_defconfig
+arm                            dove_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
