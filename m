@@ -2,91 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4695866B227
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 16:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D042766B246
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjAOPiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 10:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S231466AbjAOQAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 11:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjAOPiJ (ORCPT
+        with ESMTP id S231181AbjAOQAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 10:38:09 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C159D6
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 07:38:08 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id z13so182454plg.6
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 07:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6QOLLt/AgarnsEi8wtpFns6047FYGiFoqRAoVOMkf78=;
-        b=1dloYt1ncy975LIBvXlb8bdI119j0ILdmPLfntQgM2rIWn+qOYtRJJBCqyBgmX94hq
-         7OWs81xwiGJNNCp30EuwPaXgAyegqGslUuEOOlysufymT19JmjCLuYbEXMawxmCMokbQ
-         OGts3s2cs4gmdy2Pi6AEWQfPUmxMnsnmSKij5l5YeKTC+HezEMw4rLkAlvk8BuS7mSw8
-         9KSZIME6AXHC32eThUqQiDAG9NjGx6fNBmttgHOBQtRyc6aJW35RFkqUpmzvZVmIotwZ
-         CmfmPrFH7N7GhDTbXMNVAaAWz18ZPmmL882flGQh8zvsChGCbUMIzgvv0LWWf0J79xAh
-         iTRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6QOLLt/AgarnsEi8wtpFns6047FYGiFoqRAoVOMkf78=;
-        b=L5oFvmlSiBq00BbDV1MgO6TL23iVmhqSe8iXKAIjCysGhZyrVMrpgrUlsWytJnt6o1
-         byWaUxd/odgt/xfIaNaPSASrEzLywtCW0ypbupN/Zki2T5omMgdPvHiD490aTWdDhGBX
-         hRSRDXuPDHTi55Ysz3R3MZxjmVEXeQ/4pHN7n527PwQFF7vCM3uREXXCwQJPH0DwTwhe
-         kpm5OL8XbsXLCog6B4I+fTHNuMKtEsupuCgJPuBwGmXlUZDwqhGGG2oHm6aBppsxzBLX
-         b0WSOz8nlnUnbBDMx/j7hQpJjzY71f38KowXCD5iVdqilBReKyUos0a3Crtpq6zyCd4Z
-         DKUw==
-X-Gm-Message-State: AFqh2krB3R5fZlty9ol0sl4Qaq3l1Of/HkkDEEekGCML2523dwhkH15/
-        U7H/A3O8rHhSXSMkKy+Iu9ehCR0Xh+G7vTrx
-X-Google-Smtp-Source: AMrXdXseWfZYCInUIQnnmf/FJ1bD08hOq9FUPA79HcigY0YKSzRxFd4xRAmF0O2mkcfF/zwS/NzJgA==
-X-Received: by 2002:a17:90a:f0c9:b0:229:560:9ffc with SMTP id fa9-20020a17090af0c900b0022905609ffcmr3000035pjb.1.1673797088022;
-        Sun, 15 Jan 2023 07:38:08 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n35-20020a17090a2ca600b0021904307a53sm15673165pjd.19.2023.01.15.07.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 07:38:07 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     asml.silence@gmail.com, Quanfa Fu <quanfafu@gmail.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230115071519.554282-1-quanfafu@gmail.com>
-References: <20230115071519.554282-1-quanfafu@gmail.com>
-Subject: Re: [PATCH] io_uring: make io_sqpoll_wait_sq return void
-Message-Id: <167379708711.240357.6386972081559602417.b4-ty@kernel.dk>
-Date:   Sun, 15 Jan 2023 08:38:07 -0700
+        Sun, 15 Jan 2023 11:00:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77396EC6F;
+        Sun, 15 Jan 2023 08:00:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31BBDB80B86;
+        Sun, 15 Jan 2023 16:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2731DC433F0;
+        Sun, 15 Jan 2023 16:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673798411;
+        bh=E+NZhD2hCGi+e43+lqEhMCRkDpuYWfFvgKHNmrbFjxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fTrLoZC/tNtzy1yAhQC5tKiDcsbSjEnQflv8MplgvfWlhXA/7Vql1PkTWk0SFCM6p
+         /6dELs+DwZtzQlN+vcLfe5mHwAWe9vijw+kQgIzKWYqu3jw+GHA4bUpYZVx4MZZGTK
+         ZGCLvX0Cc9BVPyXx3rcplLNJjuT6pcNb3cgrD0YMXRl/bXiliVnXXShkdxMf0NSCvJ
+         uIv6DiTarFAnNhCcRGaORh9qCWyHeblRmyw3keBYCOQzrL5OGwwiFznzWi9Yp/tft7
+         35Th42qu6O/oDoFMbjQUpiTyxbit0gIG+jZwkHslVR87Mc5BdGmPL1ASaFWcPoHXat
+         ycv58ip3taVNA==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: [PATCH v4 00/13] riscv: improve boot time isa extensions handling
+Date:   Sun, 15 Jan 2023 23:49:40 +0800
+Message-Id: <20230115154953.831-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-78c63
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Generally, riscv ISA extensions are fixed for any specific hardware
+platform, so a hart's features won't change after booting, this
+chacteristic makes it straightforward to use a static branch to check
+a specific ISA extension is supported or not to optimize performance.
 
-On Sun, 15 Jan 2023 15:15:19 +0800, Quanfa Fu wrote:
-> Change the return type to void since it always return 0, and no need
-> to do the checking in syscall io_uring_enter.
-> 
-> 
+However, some ISA extensions such as SVPBMT and ZICBOM are handled
+via. the alternative sequences.
 
-Applied, thanks!
+Basically, for ease of maintenance, we prefer to use static branches
+in C code, but recently, Samuel found that the static branch usage in
+cpu_relax() breaks building with CONFIG_CC_OPTIMIZE_FOR_SIZE[1]. As
+Samuel pointed out, "Having a static branch in cpu_relax() is
+problematic because that function is widely inlined, including in some
+quite complex functions like in the VDSO. A quick measurement shows
+this static branch is responsible by itself for around 40% of the jump
+table."
 
-[1/1] io_uring: make io_sqpoll_wait_sq return void
-      commit: 19d49cb3be0d03cd19f02fd5a0760a53bcc2ae25
+Samuel's findings pointed out one of a few downsides of static branches
+usage in C code to handle ISA extensions detected at boot time:
+static branch's metadata in the __jump_table section, which is not
+discarded after ISA extensions are finalized, wastes some space.
 
-Best regards,
+I want to try to solve the issue for all possible dynamic handling of
+ISA extensions at boot time. Inspired by Mark[2], this patch introduces
+riscv_has_extension_*() helpers, which work like static branches but
+are patched using alternatives, thus the metadata can be freed after
+patching.
+
+
+Since v3
+ - collect Reviewed-by tag and remove Heiko's reviewed-by from patch5
+ - address Conor and Andrew comments
+ - fix two building errors of !MMU and RV32 
+
+Since v2
+ - rebase on riscv-next
+ - collect Reviewed-by tag
+ - fix jal imm construction
+ - combine Heiko's code and my code for jal patching, thus add
+   Co-developed-by tag
+ - address comments from Conor
+
+Since v1
+ - rebase on v6.1-rc7 + Heiko's alternative improvements[3]
+ - collect Reviewed-by tag
+ - add one patch to update jal offsets in patched alternatives
+ - add one patch to switch to relative alternative entries
+ - add patches to patch vdso
+
+[1]https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+[2]https://lore.kernel.org/linux-arm-kernel/20220912162210.3626215-8-mark.rutland@arm.com/
+[3]https://lore.kernel.org/linux-riscv/20221130225614.1594256-1-heiko@sntech.de/
+
+
+Andrew Jones (1):
+  riscv: KVM: Switch has_svinval() to riscv_has_extension_unlikely()
+
+Jisheng Zhang (12):
+  riscv: fix jal offsets in patched alternatives
+  riscv: move riscv_noncoherent_supported() out of ZICBOM probe
+  riscv: cpufeature: detect RISCV_ALTERNATIVES_EARLY_BOOT earlier
+  riscv: hwcap: make ISA extension ids can be used in asm
+  riscv: cpufeature: extend riscv_cpufeature_patch_func to all ISA
+    extensions
+  riscv: introduce riscv_has_extension_[un]likely()
+  riscv: fpu: switch has_fpu() to riscv_has_extension_likely()
+  riscv: module: move find_section to module.h
+  riscv: switch to relative alternative entries
+  riscv: alternative: patch alternatives in the vDSO
+  riscv: cpu_relax: switch to riscv_has_extension_likely()
+  riscv: remove riscv_isa_ext_keys[] array and related usage
+
+ arch/riscv/errata/sifive/errata.c           |  3 +-
+ arch/riscv/errata/thead/errata.c            | 11 ++-
+ arch/riscv/include/asm/alternative-macros.h | 20 ++---
+ arch/riscv/include/asm/alternative.h        | 17 ++--
+ arch/riscv/include/asm/errata_list.h        |  9 +-
+ arch/riscv/include/asm/hwcap.h              | 97 +++++++++++----------
+ arch/riscv/include/asm/insn.h               | 27 ++++++
+ arch/riscv/include/asm/module.h             | 16 ++++
+ arch/riscv/include/asm/switch_to.h          |  3 +-
+ arch/riscv/include/asm/vdso.h               |  4 +
+ arch/riscv/include/asm/vdso/processor.h     |  2 +-
+ arch/riscv/kernel/alternative.c             | 56 ++++++++++++
+ arch/riscv/kernel/cpufeature.c              | 78 +++--------------
+ arch/riscv/kernel/module.c                  | 15 ----
+ arch/riscv/kernel/setup.c                   |  3 +
+ arch/riscv/kernel/vdso.c                    |  5 --
+ arch/riscv/kernel/vdso/vdso.lds.S           |  7 ++
+ arch/riscv/kvm/tlb.c                        |  3 +-
+ 18 files changed, 214 insertions(+), 162 deletions(-)
+
 -- 
-Jens Axboe
-
-
+2.38.1
 
