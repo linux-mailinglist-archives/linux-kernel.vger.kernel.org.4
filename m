@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C959666B0AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 12:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723FB66B0B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 12:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjAOLfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 06:35:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S231208AbjAOLgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 06:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjAOLfm (ORCPT
+        with ESMTP id S231175AbjAOLga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 06:35:42 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9962FF777;
-        Sun, 15 Jan 2023 03:35:40 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Sun, 15 Jan 2023 06:36:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02928A50;
+        Sun, 15 Jan 2023 03:36:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CB38C1EC04DA;
-        Sun, 15 Jan 2023 12:35:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673782538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=r7Z4sZZrZgvcOmaLX+z/jIVuq5xc+bsmOVIj8nr9DDs=;
-        b=jVKt/qtDVKoJrmzNod80yaHgorlXI9xCF3szJb0Eum2k+HySagAnANQm2b3YOs9iQQyxS7
-        DERZb+njcGI6t2ACdkFibhPbqhubwaljyUJNqiCfZILUQtSw/U7URKmUmAmUzqUJrXn+xk
-        JmTVXkAZfz+CJ294+yRKCtSAKfRrP8g=
-Date:   Sun, 15 Jan 2023 12:35:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC urgent for v6.2-rc4
-Message-ID: <Y8PlBfg2sdjP1OIb@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AF7160C91;
+        Sun, 15 Jan 2023 11:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126B2C433D2;
+        Sun, 15 Jan 2023 11:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673782588;
+        bh=pOckkEQYG5TtPGNWhz6DJdFf29q23zF0lPbvKh712jg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=pyvF68SkuPs0PKw817jRJ8I0vpeD77qfWIOetcLGcqJyxyKnYUoAqi3eI+IMgdkuq
+         crnlaWcykE71lG+AHSvXqfx+G+Jsrbczbz4pTtsa5CgaWj+tKBnhDma72OAzTB8THE
+         RHGBDYOqpUVlB8CEz48BXRd1Hte5uClFHyGeEMo2TDGbr0ubNg4EjjjIQdBd3Kb4W/
+         Wg/KsOgDzc5jnkq8Ncv4hgHflpjL3vnqnSbmu6IORYOrG/VypDp/BbHLGbe6/bBo5I
+         nRGbMiMxtgfJpzru0UdFxO3yMmYabyPvheYuBuf/rHEdQoeokuRk8QHpokH663JPVb
+         j86pJo7P72u2Q==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Cheng Xu <chengyou@linux.alibaba.com>,
+        Kai Shen <kaishen@linux.alibaba.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+In-Reply-To: <Y7zCBqwC1LtabRJ9@work>
+References: <Y7zCBqwC1LtabRJ9@work>
+Subject: Re: [PATCH][next] RDMA/erdma: Replace zero-length arrays with
+ flexible-array members
+Message-Id: <167378258448.161439.10223371948659974585.b4-ty@kernel.org>
+Date:   Sun, 15 Jan 2023 13:36:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-a055d
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-please pull two urgent EDAC fixes for 6.2.
+On Mon, 09 Jan 2023 19:40:22 -0600, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated[1] and we are moving towards
+> adopting C99 flexible-array members instead. So, replace zero-length
+> arrays, in a couple of structures, with flex-array members.
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [2].
+> 
+> [...]
 
-Thx.
+Applied, thanks!
 
----
+[1/1] RDMA/erdma: Replace zero-length arrays with flexible-array members
+      https://git.kernel.org/rdma/rdma/c/ed73a505480d54
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.2_rc4
-
-for you to fetch changes up to e7a293658c20a7945014570e1921bf7d25d68a36:
-
-  EDAC/highbank: Fix memory leak in highbank_mc_probe() (2023-01-03 17:03:57 +0100)
-
-----------------------------------------------------------------
-- Fix the EDAC device's confusion in the polling setting units
-
-- Fix a memory leak in highbank's probing function
-
-----------------------------------------------------------------
-Eliav Farber (1):
-      EDAC/device: Fix period calculation in edac_device_reset_delay_period()
-
-Miaoqian Lin (1):
-      EDAC/highbank: Fix memory leak in highbank_mc_probe()
-
- drivers/edac/edac_device.c      | 17 ++++++++---------
- drivers/edac/edac_module.h      |  2 +-
- drivers/edac/highbank_mc_edac.c |  7 +++++--
- 3 files changed, 14 insertions(+), 12 deletions(-)
-
+Best regards,
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Leon Romanovsky <leon@kernel.org>
