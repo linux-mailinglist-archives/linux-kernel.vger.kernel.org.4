@@ -2,190 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC12266B284
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D0D66B287
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjAOQWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 11:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S231372AbjAOQWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 11:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjAOQWQ (ORCPT
+        with ESMTP id S230508AbjAOQWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:22:16 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC861CC16;
-        Sun, 15 Jan 2023 08:22:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=8Fdnn7sKGqcviCF0H7RfsyM2qTzk8owu5NRuBUVHcw0=; b=PoLjoNpv4avvW0vvtCL7SdGJpP
-        IXC2RWLhQEarrUzCb8dQjR9ZO+8LmywQ6yOSaX3oxTwrP2b5cZKsycTrru6vFGQawdwcGlldE4PcQ
-        v4qwWfMEzvBgGZ8vMCrvcfecIoLWer9svYiGpK8T3x8QeaJQfm0fQPXvaNF3dK9F4AVM=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41194 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pH5lm-0007oU-2e; Sun, 15 Jan 2023 11:22:07 -0500
-Date:   Sun, 15 Jan 2023 11:22:05 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     hvilleneuve@dimonoff.com, jic23@kernel.org, lars@metafoo.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        Sun, 15 Jan 2023 11:22:45 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F245ECDC9;
+        Sun, 15 Jan 2023 08:22:44 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id i5so3256313oih.11;
+        Sun, 15 Jan 2023 08:22:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vFEz1YP7mDc9kIKl/6A2QBgCrlrE/z2Z4ocdAtEZchg=;
+        b=bEsHg3JCZix5DkhIkbp6nBcz3upD/6u3PSPteaCoEgjgQkh4JHm2tTL4dGezmc+6fj
+         S+qW0/5zA3kD5RxOGHopVsB6K+UQrMxTZ714y6oPF+39nRq1AeiGirt6OlAM3oaHXxgO
+         4RUEsKKS4gb43s/qHbRstmuvZXJxN6coQmgsrUIqPY8BTChIeweYrlMpUualrkqmJwHY
+         6rw8RLAYFjGINuUwH/oVc+e9BEF6nFgr5YfLyE+tzis+Jpv1TaCuUFD/04/E2B3cbRne
+         srr/ucfgPVIFxmrysf+3a0MrcejUiF7Zy4HCbdaPMgifdejCRNPiIw2Molwic7UEPC7G
+         lq4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vFEz1YP7mDc9kIKl/6A2QBgCrlrE/z2Z4ocdAtEZchg=;
+        b=JUMB++Jfv+7gbYAO+bMbiSOaPk7rEcpxkG/+17CQjrqsuY2wZeClGHy8PTp8xeY1Ef
+         girBDpubIURb6gp2vkf6Xn23KqfzQ4f2Hcy7N55aTdZudOyRbO6lLTi1oCVylM6UofIw
+         c4q7h1BfrMu/Gcpu9j9PjCWPz6VYpAk9HGPyeo9aoAyoP6H6Rt/O/voca00GPdgQlTDN
+         ahzjw8XaxwJVvvZgZw5AwFMTKsXN4ntFElfgInScvVALV/u8rDVwxaqDlz7AsCDprZLH
+         YSDWr/8FvU0WQT2Ny+red7d8DKQUh+gQvIySryCfq0CanRdeKp1aW59HLZx1z2M8ldMo
+         Tbig==
+X-Gm-Message-State: AFqh2krp24GGbYoM3F4whg7+JiALFXXAsmkLVSi3hU4CzsbfGQTdzzQD
+        Fg3dja60+oTu2SxrcjqJSbFV7MvwUv4=
+X-Google-Smtp-Source: AMrXdXt2QAqDmJc0mKv8dTh6IJS40oBg8dcJJE57YisFcaKKAEnbGuvwpfT8xnm5bfC/4Nveovw59A==
+X-Received: by 2002:a05:6808:1b06:b0:364:b2bb:8951 with SMTP id bx6-20020a0568081b0600b00364b2bb8951mr4586523oib.24.1673799764341;
+        Sun, 15 Jan 2023 08:22:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 73-20020a9d04cf000000b00684a10970adsm8057801otm.16.2023.01.15.08.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 08:22:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 15 Jan 2023 08:22:42 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Message-Id: <20230115112205.e46ab8d017b99dd987d003e4@hugovil.com>
-In-Reply-To: <dee8fbdc-5399-d5ce-8d01-2c48e85e2919@linaro.org>
-References: <20230113194959.3276433-1-hugo@hugovil.com>
-        <20230113194959.3276433-3-hugo@hugovil.com>
-        <dee8fbdc-5399-d5ce-8d01-2c48e85e2919@linaro.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Subject: Re: [PATCH v2 1/3] hwmon: (ftsteutates) Convert to
+ devm_hwmon_device_register_with_info()
+Message-ID: <20230115162242.GA1247464@roeck-us.net>
+References: <20230105225107.58308-1-W_Armin@gmx.de>
+ <20230105225107.58308-2-W_Armin@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230105225107.58308-2-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 2/2] dt-bindings: iio: adc: add Texas Instruments
- ADS7924
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 Jan 2023 15:57:21 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-> On 13/01/2023 20:49, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Add device tree bindings document for the Texas Instruments ADS7924
-> > ADC.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../bindings/iio/adc/ti,ads7924.yaml          | 112 ++++++++++++++++++
-> >  1 file changed, 112 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
-> > new file mode 100644
-> > index 000000000000..24bbf95383b4
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
-> > @@ -0,0 +1,112 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/iio/adc/ti,ads7924.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: TI ADS7924 4 channels 12 bits I2C analog to digital converter
-> > +
-> > +maintainers:
-> > +  - Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > +
-> > +description: |
-> > +  Texas Instruments ADS7924 4 channels 12 bits I2C analog to digital converter
-> > +
-> > +  Specifications:
-> > +    https://www.ti.com/lit/gpn/ads7924
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: ti,ads7924
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  vref-supply:
-> > +    description:
-> > +      The regulator supply for the ADC reference voltage (AVDD)
-> > +
-> > +  reset-gpios:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> > +
-> > +  "#io-channel-cells":
-> > +    const: 1
-> > +
-> > +patternProperties:
-> > +  "^channel@[0-3]+$":
-> > +    $ref: adc.yaml
-> > +
-> > +    description: |
-> > +      Represents the external channels which are connected to the ADC.
-> > +
-> > +    properties:
-> > +      reg:
-> > +        description: |
-> > +          The channel number. It can have up to 4 channels numbered from 0 to 3.
-> > +        items:
-> > +          - minimum: 0
-> > +            maximum: 3
-> > +
-> > +      label:
-> > +        description: |
-> > +          Unique name to identify the channel.
+On Thu, Jan 05, 2023 at 11:51:05PM +0100, Armin Wolf wrote:
+> Convert driver to use devm_hwmon_device_register_with_info()
+> to reduce module size by ~30%.
 > 
-> Drop description, it's coming from adc.yaml. Just "label: true"
-
-Done.
-
-> > +
-> > +    required:
-> > +      - reg
-> > +
-> > +    additionalProperties: false
+> Tested on a Fujitsu DS3401-B1.
 > 
-> You are not allowing anything else from adc.yaml. Is it on purpose?
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-I am really not an expert with this Yaml stuff, and reading the documentation makes me probably more confused than before reading it :)
+Applied to hwmon-next.
 
-But one thing that is for sure is that these other properties in adc.yaml are not used in my driver:
-
-  bipolar
-  diff-channels
-  settling-time-us
-  oversampling-ratio
-
-So is it Ok then to use "additionalProperties: false"? I think so, but what is your recommandation?
-
-Thank you,
-Hugo.
-
-
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - vref-supply
-> > +  - "#address-cells"
-> > +  - "#size-cells"
-> > +
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+Thanks,
+Guenter
