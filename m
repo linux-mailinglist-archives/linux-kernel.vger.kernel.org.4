@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE40E66B3B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 20:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E5566B3B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 20:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjAOTj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 14:39:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S231546AbjAOTwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 14:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbjAOTjY (ORCPT
+        with ESMTP id S231315AbjAOTwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 14:39:24 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C918F9EE6
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 11:39:23 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 33F901EC01E0;
-        Sun, 15 Jan 2023 20:39:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673811562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dL7LqB7aW6y9NbE/YU3vhj9TnSPiHu5prudMXC6OMZk=;
-        b=deEwjQAj33LZR389CrNBE5LoAzOKgDAyse/2bjq+/GR4VghWvzL24hFcMMGNjV7ecoQx8Y
-        Bfzu6MfL64XYWYsdKoA+eVcnp+BbLbdI3pG1fsr9N8VAIJ0zB8xUiZ/MtDfo0LMTxDJsUs
-        AGGLzZXO4o406D0S8IIbJSJnyp2n/FY=
-Date:   Sun, 15 Jan 2023 20:39:18 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ingo Molnar <mingo@kernel.org>, alison.schofield@intel.com,
-        reinette.chatre@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v4 4/6] x86/microcode/intel: Use a plain revision
- argument for print_ucode_rev()
-Message-ID: <Y8RWZu/SGYV7Eqst@zn.tnic>
-References: <20230109153555.4986-1-ashok.raj@intel.com>
- <20230109153555.4986-5-ashok.raj@intel.com>
+        Sun, 15 Jan 2023 14:52:30 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C11A12854;
+        Sun, 15 Jan 2023 11:52:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yZfYvCeRQR/OkCJqdsPpVkd0rVFb184AMOYWRElkTgg=; b=roXQKhd93TuC0Nkqt4sAaj0Fis
+        J2PUjIL5dTVZ0+Cu0xIj1j9o1PO1Ib2yyqaVt2wUaTlv+8/EbxMoTXsS/jcZuvCh4Aoavz/t5ux68
+        tF9XZrXWJNSd5hzPhou8iUePgZ6iiD10nIkjdYwJEYLhNsghSTfOBqnu10tBBDl7Pi12jJyiKF/wS
+        kNa41E9mz+QIphFZdobMAkYMhcas2De7ECrgdzkiWbTDWMVAsnEGkcUSTd8UF5A6OOJAiZ6FBiBO2
+        zk7DjM+fM7wxieB+hpBEKIjuaNv6VYzQk57PUf/SNfbEcP7HmmYFl1m1/0GnEJ02kEOBifY51KjDn
+        2TlB0aow==;
+Received: from p200300ccff407d001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff40:7d00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pH938-0001CG-NS; Sun, 15 Jan 2023 20:52:14 +0100
+Received: from andi by aktux with local (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pH938-00AcCe-21; Sun, 15 Jan 2023 20:52:14 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v3] dt-bindings: mmc: fsl-imx-esdhc: Add some compatible fallbacks
+Date:   Sun, 15 Jan 2023 20:52:12 +0100
+Message-Id: <20230115195212.2530087-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230109153555.4986-5-ashok.raj@intel.com>
+X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,43 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 07:35:53AM -0800, Ashok Raj wrote:
-> @@ -334,7 +331,7 @@ void show_ucode_info_early(void)
->  
->  	if (delay_ucode_info) {
->  		intel_cpu_collect_info(&uci);
-> -		print_ucode_info(&uci, current_mc_date);
-> +		print_ucode_info(uci.cpu_sig.rev. current_mc_date);
+Currently make dtbs_check shows lots of errors because imx*.dtsi does
+not use single compatibles but combinations of them.
 
-You must be kidding:
+Add fallbacks for imx6sll/ull which are useful for U-Boot.
 
-arch/x86/kernel/cpu/microcode/intel.c: In function ‘show_ucode_info_early’:
-arch/x86/kernel/cpu/microcode/intel.c:332:49: error: request for member ‘current_mc_date’ in something not a structure or union
-  332 |                 print_ucode_info(uci.cpu_sig.rev. current_mc_date);
-      |                                                 ^
-arch/x86/kernel/cpu/microcode/intel.c:332:17: error: too few arguments to function ‘print_ucode_info’
-  332 |                 print_ucode_info(uci.cpu_sig.rev. current_mc_date);
-      |                 ^~~~~~~~~~~~~~~~
-arch/x86/kernel/cpu/microcode/intel.c:311:13: note: declared here
-  311 | static void print_ucode_info(unsigned int new_rev, unsigned int date)
-      |             ^~~~~~~~~~~~~~~~
-arch/x86/kernel/cpu/microcode/intel.c: In function ‘print_ucode’:
-arch/x86/kernel/cpu/microcode/intel.c:343:33: error: unused variable ‘mc’ [-Werror=unused-variable]
-  343 |         struct microcode_intel *mc;
-      |                                 ^~
-cc1: all warnings being treated as errors
-make[5]: *** [scripts/Makefile.build:252: arch/x86/kernel/cpu/microcode/intel.o] Error 1
-make[4]: *** [scripts/Makefile.build:504: arch/x86/kernel/cpu/microcode] Error 2
-make[4]: *** Waiting for unfinished jobs....
-make[3]: *** [scripts/Makefile.build:504: arch/x86/kernel/cpu] Error 2
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.build:504: arch/x86/kernel] Error 2
-make[1]: *** [scripts/Makefile.build:504: arch/x86] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:2008: .] Error 2
+This will significantly reduce noise on make dtbs_check.
 
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+Changes in v3:
+- simplify things by using enums
+
+Changes in v2:
+- allow only combinations with fallback compatible
+- reduce them to the cases where they are actually useful
+
+ Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index dc6256f04b42..3423e1cd8b5d 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -29,14 +29,17 @@ properties:
+           - fsl,imx53-esdhc
+           - fsl,imx6q-usdhc
+           - fsl,imx6sl-usdhc
+-          - fsl,imx6sll-usdhc
+           - fsl,imx6sx-usdhc
+-          - fsl,imx6ull-usdhc
+           - fsl,imx7d-usdhc
+           - fsl,imx7ulp-usdhc
+           - fsl,imx8mm-usdhc
+           - fsl,imxrt1050-usdhc
+           - nxp,s32g2-usdhc
++      - items:
++          - enum:
++              - fsl,imx6sll-usdhc
++              - fsl,imx6ull-usdhc
++          - const: fsl,imx6sx-usdhc
+       - items:
+           - enum:
+               - fsl,imx8mq-usdhc
 -- 
-Regards/Gruss,
-    Boris.
+2.30.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
