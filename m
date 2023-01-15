@@ -2,173 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26E366AFDE
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 09:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D713966AFE0
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 09:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjAOIKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 03:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S230009AbjAOITb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 03:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjAOIKd (ORCPT
+        with ESMTP id S229945AbjAOIT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 03:10:33 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2053.outbound.protection.outlook.com [40.107.243.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4352104;
-        Sun, 15 Jan 2023 00:10:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DiCC73LJN7EcA4h5ty37prcB5NLn8pNkozCEc3SukWlULsh0cNKvSYAz/V7cDEqwLYqE/Q7j2qG3DCSknjQliZvteUVTh8KA0dA5HMaiwHXFbEKD/BFcyoGgCAxWwcDsJHTi2dlF8oG4RK7Qpbv4FhUP/ZqjfMDbQB2w157MmJ9towZaEs4WwEfoJTZg0zxWLH4ANPRZfajnE0xHEEf/7QsYOxdNqpnnuSglB3/ldps2gIicNw2czV9QkuEI1cxdSzSCLym2/gVKRRGBkaKs96rJ0j4YBTx94cm1CR93zpOb3qv5JFAR80nZl/R7Ua4oiG3m63SN/DP4mfcNgLF6oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AWLLvi3cyRipsi82fKt6R1PKuKSA6cG6ZiphzFJ7bbk=;
- b=hLMBWwJhJcggKNosVZDkSz3hsqmBx6Yo4rx6iN0qHbU34hG6jO2pwllTMHUgtr7oKIHt4qHj2pRQS77dmA88V5wzqxao6tcWhZE1xV/86ZtQcOw/KUsC+u0qNwvroN/MY881kZoAI5xUhPHH/hyLf35yshnc5LExvXYlgSny54OMt/qY3+q79Nr3hmmjqOfLSpUyBerUMVT2N3FIMnNIa5De0NZCuAFKr4KbSvYb2+cHP1ULbFkBD5wOTZIYyNW6dLaIL3WEMcGlv+Pr83/w/n9/KgyNSzu7NIBcTwoEJiVbQbL+VycR9uhg8X7HhmYVBYEBDEoeNIdjaUIrM8bsNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AWLLvi3cyRipsi82fKt6R1PKuKSA6cG6ZiphzFJ7bbk=;
- b=beHURAvlLjWjHSBmwAnjbuW//LNca+WtBM8rzT4IrGg2DmCyc8hFt32L3YMWZ0RiopgH55w7feW+R72G5JjFGFyB/QK6yRYwpnPPaGU5C4+UbcHD4L8dR4uIlFff/bcl66s0MB7hZnPUYSPCLfW4AHFjn8tfqa004EMkRzY2rA151VUvUbj9HXWskF4i2xnc4DqRCvLuukClUinRO66arzyWhwmeDRgncFam4sJv5sCN8i2cLOalqLwGj+A9xmCpjnftFpPaume9j+fLv/t9bgPkBT3VTrJTWbiATekMDZ6tt4HO2xYrEWCVmGp0KvrHvnUm8xSsO6zI3CyahjVhJA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH0PR12MB5330.namprd12.prod.outlook.com (2603:10b6:610:d5::7)
- by CY8PR12MB8193.namprd12.prod.outlook.com (2603:10b6:930:71::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Sun, 15 Jan
- 2023 08:10:21 +0000
-Received: from CH0PR12MB5330.namprd12.prod.outlook.com
- ([fe80::db1d:e068:3fd6:ed08]) by CH0PR12MB5330.namprd12.prod.outlook.com
- ([fe80::db1d:e068:3fd6:ed08%6]) with mapi id 15.20.5986.023; Sun, 15 Jan 2023
- 08:10:21 +0000
-Message-ID: <dee7f7b8-2566-6452-6f71-1fe05216a774@nvidia.com>
-Date:   Sun, 15 Jan 2023 10:10:12 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101
- Thunderbird/109.0
-Subject: Re: [PATCH 5.15 049/230] net/mlx5e: Check action fwd/drop flag exists
- also for nic flows
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dann frazier <dann.frazier@canonical.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Ran Drori <rdrori@nvidia.com>,
-        Frode Nordahl <frode.nordahl@canonical.com>
-References: <20220711090604.055883544@linuxfoundation.org>
- <20220711090605.473699898@linuxfoundation.org> <Y8CEv90mCZkmuFAq@xps13.dannf>
- <Y8Ky/3oq4HG0pe0x@kroah.com>
-Content-Language: en-US
-From:   Roi Dayan <roid@nvidia.com>
-In-Reply-To: <Y8Ky/3oq4HG0pe0x@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0600.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:295::20) To CH0PR12MB5330.namprd12.prod.outlook.com
- (2603:10b6:610:d5::7)
+        Sun, 15 Jan 2023 03:19:28 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFC393F1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 00:19:27 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gz9-20020a17090b0ec900b002290bda1b07so4293704pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 00:19:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZJrV6D33u8S5NvCgphHrVPuXRpbI3fo9eNceub/HsNg=;
+        b=hPDCcv3VZ+lH4UGnu63+7WtxFwDzfWwNCXJ0mnHQtcDG98USroDBto4UKsHyUNqrGX
+         jPfMdOG+P197mRVTNPEik195FcH1pHEVWNKSeY2+n9zgZHWYjPsXIsQwaWD2cgVfevEl
+         L0RDxEve9DdJRTyC/DmU2mFu5//9jwEwpw5JI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZJrV6D33u8S5NvCgphHrVPuXRpbI3fo9eNceub/HsNg=;
+        b=49UNxjdhv8HsAiTMUIcy3CFRgzwli8ttbYobL3mXkySRClg1Eec2o7rrNGnkcWOBj1
+         AUaHJ7NNXFKYdSiQWJj+0aKg8OKa17E8BOQHgCi4wDxzfCU6jKcSFgd27tbkQhUEymLG
+         8NdAGKXb6DhxrLmDUbgwME1kjhV6r/OKryhE7f/WhlR0xeevafnLknJeJpB3dLMYGtxm
+         WYGuaxTap1gXnlza2yaYJG4Hc1PvbssxdtQTQG3BlIZyPg9hSg1ndwIA/YKFPhPuV0xf
+         9aoCd6ppzPCNtiY1IfpCwDVnRb3JbAWgKsNbH+gJr8BI6P+uahGwomP/+LzpR6ZTw0d4
+         eowA==
+X-Gm-Message-State: AFqh2koZPGU2fhjcQyA4LshlaC2OLHM36MIzR6hQzEI0yTtXdYxsgUpZ
+        gGP8BmP2hKEnivvaArmdRgaVog==
+X-Google-Smtp-Source: AMrXdXsTQIJXcaNrvFZIORqPYdd0czBX4+SX6ijHLQ9AyLxtWJgcKqljBfNftibGJ6Mk12rDiuHxYQ==
+X-Received: by 2002:a17:902:a406:b0:189:6ab3:9e75 with SMTP id p6-20020a170902a40600b001896ab39e75mr87350558plq.15.1673770766708;
+        Sun, 15 Jan 2023 00:19:26 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170902eb8b00b00189c93ce5easm16953658plg.166.2023.01.15.00.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 00:19:25 -0800 (PST)
+Date:   Sun, 15 Jan 2023 17:19:21 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCHv2 0/4] zsmalloc: make zspage chain size configurable
+Message-ID: <Y8O3Cbj/QLBRtAJK@google.com>
+References: <20230109033838.2779902-1-senozhatsky@chromium.org>
+ <Y8G3nJ9+k2lB0kas@monkey>
+ <Y8JU8iGlu5uLGdDt@google.com>
+ <Y8Oo3+9UmZ4ac8sW@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5330:EE_|CY8PR12MB8193:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1df6c2f-d978-44d6-8244-08daf6cff1be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tJwIroBOfRu9C9mL0EKGoPDxxZkqXyeytoWe/VUBNDvilLuvIH6QRx5bjbOBUHf0COyktGqZ6bv992EHC73fLzWAtDxmi5f+ITYLTOyoOSy9kK4gc3b6dr9bFzGiIjCV3Yw64DEefNkCMdjCCWHDVtcyMNC0ahety/f1eNodnCUTvUr5AkALuV8KSBxaD0Q71jEoDIKlf0B9xvpKncbiEHzvGqQ8M64MhItk8OTRHqpQEcFy3mFO2d/PLYjZ1MEodZUjgZnV7asil80r6dEmjC0WnZ2+R3qPx5LT8aLRkhzTN4NHqnsaYpglk+aUdDQJMUM6zZMRhRQvMu4j1E9lP8X8VwnxbbymDJwfVJPZVIPxAm+FYNpCXUcr1lg2p2K96o7fZAJGNx0+N6k9Mqp77lVhAYRtEemCXnAPwX6m8FRvGhmQQ1UdJqVSYOGqUYnE04wbRsbihAAyRSnLWZuzTCDQdxZ7p0emcJ8s7lYMStOX+cOhjghKAG64aE5jQf5hq9Lg+23DbqsNQjaS50G8OsG8wenwr1/TuWon7pkDhQbXk34wk7sBf4N50ScN1AbidQxsrKT1ty1/s4a1hWR0ybxrtuZpLSTzEamDMR38Xj8A6qO/xGnJKFWGRJhiA/4jx5QYppbJ4IUjCXiielDP4beweQg/KR2l5Ul8aV0QEoB+iiGEv4EnPTdELOfyJPpbo0Dv/SNlpqfdbOtvz1vh8MhV8Afsi2vINWT+I3PyZgc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5330.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199015)(38100700002)(8936002)(5660300002)(31686004)(6486002)(41300700001)(478600001)(316002)(8676002)(66476007)(66946007)(4326008)(66556008)(36756003)(86362001)(54906003)(2906002)(2616005)(110136005)(6666004)(6506007)(53546011)(26005)(6512007)(186003)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0tHQ3duNXJiTkRIUGF6RlRYZFBMay9yRGk0R0g5LzlucFByQVdLcUhZcS93?=
- =?utf-8?B?Kzc3VnNtYWlZeXkrZzd6NzRsUGxOUE9sOEZzV1FWYzQrRlg1YnRlSGlTQnQ3?=
- =?utf-8?B?UDdnQUVlenF6aThlSzhKZVFxM3VqakZPQ0NKTGRZNE1peXFWTEYwbmVpLzZK?=
- =?utf-8?B?WFQ5MkR3c0tra0RDQWZKbkR4bElGYmloaVdSVDNXbGV1UWhaMDYwSWdJR3Ry?=
- =?utf-8?B?NW1iUjJMeHRxTms2d2tWd3JETXFjKzlqMEl0NUxuVmdRMS9vSVVSOXZKaU4v?=
- =?utf-8?B?aUNsS2RydFlaeUY3YVhsZG96TVlmRFMvL1VlODhycTU1QkQ5SVBZckh6SGRl?=
- =?utf-8?B?Y2d4cS9acUVSSzQvV24wSW40RXJqcUpNN2trVHlmcU0zb3BFTTVhZkw3Y29R?=
- =?utf-8?B?MWlxK3J1RXBNUnRnV2VYNWNTVWRnenlUSDBKdHBMMWFrTFVadnZEU0dIVkxo?=
- =?utf-8?B?TmZSVXk2alBidWU3VGNRNnRSY2UwTjZxSmZUc0tlRFpsTDExRXJKSFlnNEJw?=
- =?utf-8?B?bkxsbzJYaW1qcEd2Z25JNktoQzg4ZDI3bmlVQVFyRFpUNU1IblJkU0E1emgw?=
- =?utf-8?B?Qy9jUHV3V25uNUxFZGl0UlVQNTBCLzNqL3FTc3YzSm85cHRDR3ZJdDJaeWY4?=
- =?utf-8?B?dDlJeU92aFo2ODIzejR3SVd6dDFNSmV5Y2E5RnB5WUxnNU9NRXU4dHcxQk5Y?=
- =?utf-8?B?blFuMzA0cGxRRVpNclZPYjJ2d0xlRFIyR1grNVl2L2JpWENSeDN3eGlvekhv?=
- =?utf-8?B?ajhuVmlCMU1Mcm53VGpqSTJsVXJTcGVnS2Y0QVpxcnI3S3R0bXljOUppb2Fp?=
- =?utf-8?B?RWtGc01BQjBRcnhUL29sVldBNjFBUDNJWDNILzJ1eSs4T1hNUWVtNXhTRkJj?=
- =?utf-8?B?ZXBUMTh1WmgzU0U0Mm5uRG9aRlQ4RXFtVFJsemNwbWNhN2RBV1NxYWpsZ0I1?=
- =?utf-8?B?L1ZsNXJQVW5UOTk0KzJxdXZheEpjVU5aOERCclAyWnZzOWdJMHdLN0dWbGlP?=
- =?utf-8?B?RmE2Qjh4MGVreGhITHVabnlNM211eGpNNmwxTXIyMlJsZDA0RnR3Q0poQVA0?=
- =?utf-8?B?YTVtb3ZqN280L20rVUdjT29jc21NOFBEckcyUW1qdW9wdWFnMEZFWGEwcWhR?=
- =?utf-8?B?dTYrS25hVnVKcmFsbDlnWGR5Ky9vQU0waVY3cHprRkNkUnZHc1ZBVmwrVXZw?=
- =?utf-8?B?S21MUk1Ybzh2TGl0SUxwNnU5M1p3Z2EySzhUZ3JJUG0wOG8vY1FVYXVvck52?=
- =?utf-8?B?NEwzU1JHRnNDYnBzOUhKRW40TDA0VzVaQXRhQVdtNVRLZ3ZCcStHc0F4ZGQ4?=
- =?utf-8?B?dHJGNk5IeGZ2WXBET2g3ODhUMmM0cmNrbTB6eFBWeGNwYnZqS2tqOWZVZnZI?=
- =?utf-8?B?RjNsZ01ZQzQwMWVyZWVpTzdlTVVzaGJoQ0hPYlg5YTJjbnJLOTMweDV2N3lI?=
- =?utf-8?B?Y2xpZEdtbE9CSGZFa1RBa24rOXJCWWtZRU9jbjE2aHpPcXJoRjd6cUZBdFo3?=
- =?utf-8?B?SmsxU0NYcExSRisra3hnSktEQ2RnbU1Tc1RyZVNUN2Vva1R3RHBtV08rQ1ZJ?=
- =?utf-8?B?UEsweXN4OEVEQzNLZnRpS0VVeEc4STZOYjhzYmlWdi9qOU9MU2tNZnF3SU43?=
- =?utf-8?B?WXpSNncybHdFbEVQZnBSakY1dUR1U3RTbXhHM3crZGIzOVFzR2hJRUMwQjVs?=
- =?utf-8?B?Rzcvb3p0MHpwdmV6a0JMWXk1UmVDLy9kbTRkNzM5K1dqVmhOaDNWQnJ4UlRI?=
- =?utf-8?B?V0VXblRRaXIzSUlzOElHV2psZUNmOVBpUUtxVHFTODBJU0YvbzZxS2lBOTFI?=
- =?utf-8?B?ZWJIZndZOEhVTGtDU3VCdTVEWlVOQU9WSVFVeUlVcndRVW0rRlMwSWk5VCsx?=
- =?utf-8?B?cVVEeVhkckpYa0U2N3ZyUy9Qemc2djM3QWFtVkRzZW5yWGsxM2lzbld3UEJK?=
- =?utf-8?B?L2NjaUExcStKcjJ4NVVaZDFYUUhxelpZTzlmVlA5SWR1SU54Q01DMXpqVkta?=
- =?utf-8?B?dWFRYnVZVllkREJGS0JmOGI4S0JyNzdYNXh0aUVUM0pRSGpEdmZ5YVdEdmxq?=
- =?utf-8?B?dlFBOFNhYWt6bWhLTktxcitVT1lvSFRnemk0Zll6MWRaclY5Tm05aHdIRnlp?=
- =?utf-8?Q?8k3A+gPFXeYxepUxZ8A47W/It?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1df6c2f-d978-44d6-8244-08daf6cff1be
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5330.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2023 08:10:20.3772
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CgGj8pD2H88oBfO3yD+Pz1GiLYQNjOyRhFyq68xchQsMFzqD7DTnqqAGuJbW1xxi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8193
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8Oo3+9UmZ4ac8sW@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++ Huang Ying,
 
-
-On 14/01/2023 15:49, Greg Kroah-Hartman wrote:
-> On Thu, Jan 12, 2023 at 03:07:59PM -0700, dann frazier wrote:
->> On Mon, Jul 11, 2022 at 11:05:05AM +0200, Greg Kroah-Hartman wrote:
->>> From: Roi Dayan <roid@nvidia.com>
->>>
->>> [ Upstream commit 6b50cf45b6a0e99f3cab848a72ecca8da56b7460 ]
->>>
->>> The driver should add offloaded rules with either a fwd or drop action.
->>> The check existed in parsing fdb flows but not when parsing nic flows.
->>> Move the test into actions_match_supported() which is called for
->>> checking nic flows and fdb flows.
->>>
->>> Signed-off-by: Roi Dayan <roid@nvidia.com>
->>> Reviewed-by: Maor Dickman <maord@nvidia.com>
->>> Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
->>> Signed-off-by: Sasha Levin <sashal@kernel.org>
->>
->> hey Sasha,
->>
->>   A contact at Nvidia tells me that this has caused a regression w/
->> OVN HW offload. To fix that, commit 7f8770c7 ("net/mlx5e: Set action
->> fwd flag when parsing tc action goto") is also required.
->>
->>  I'm not really sure what flagged this patch for stable, so I don't
->> know whether to suggest it be reverted, or that additonal patch be
->> applied. Roi - what's your thought?
+> On (23/01/14 16:08), Sergey Senozhatsky wrote:
+> > [   87.208255] ------------[ cut here ]------------
+> > [   87.209431] WARNING: CPU: 18 PID: 300 at mm/migrate.c:995 move_to_new_folio+0x1ef/0x260
+> > [   87.211993] Modules linked in: deflate zlib_deflate zstd zstd_compress zram
+> > [   87.214287] CPU: 18 PID: 300 Comm: kcompactd0 Tainted: G                 N 6.2.0-rc3-next-20230113+ #385
+> > [   87.217529] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> > [   87.220131] RIP: 0010:move_to_new_folio+0x1ef/0x260
+> > [   87.221892] Code: 84 c0 74 78 48 8b 43 18 44 89 ea 48 89 de 4c 89 e7 ff 50 06 85 c0 0f 85 a9 fe ff ff 48 8b 03 a9 00 00 04 00 0f 85 7a fe ff ff <0f> 0b e9 73 fe ff ff 48 8b 03 f6 c4 20 74 2a be c0 0c 00 00 48 89
+> > [   87.226514] RSP: 0018:ffffc90000b9fb08 EFLAGS: 00010246
+> > [   87.227879] RAX: 4000000000000021 RBX: ffffea0000890500 RCX: 0000000000000000
+> > [   87.230948] RDX: 0000000000000000 RSI: ffffffff81e6f950 RDI: ffffea0000890500
+> > [   87.233026] RBP: ffffea0000890500 R08: 0000001e82ec3c3e R09: 0000000000000001
+> > [   87.235517] R10: 00000000ffffffff R11: 00000000ffffffff R12: ffffea00015a26c0
+> > [   87.237807] R13: 0000000000000001 R14: ffffea00015a2680 R15: ffffea00008904c0
+> > [   87.239438] FS:  0000000000000000(0000) GS:ffff888624200000(0000) knlGS:0000000000000000
+> > [   87.241303] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   87.242627] CR2: 00007fe537ebbdb8 CR3: 0000000110a0a004 CR4: 0000000000770ee0
+> > [   87.244283] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > [   87.245913] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > [   87.247559] PKRU: 55555554
+> > [   87.248269] Call Trace:
+> > [   87.248862]  <TASK>
+> > [   87.249370]  ? lock_is_held_type+0xd9/0x130
+> > [   87.250377]  migrate_pages_batch+0x553/0xc80
+> > [   87.251513]  ? move_freelist_tail+0xc0/0xc0
+> > [   87.252545]  ? isolate_freepages+0x290/0x290
+> > [   87.253654]  ? trace_mm_migrate_pages+0xf0/0xf0
+> > [   87.254901]  migrate_pages+0x1ae/0x330
+> > [   87.255877]  ? isolate_freepages+0x290/0x290
+> > [   87.257015]  ? move_freelist_tail+0xc0/0xc0
+> > [   87.258213]  compact_zone+0x528/0x6a0
+> > [   87.260911]  proactive_compact_node+0x87/0xd0
+> > [   87.262090]  kcompactd+0x1ca/0x360
+> > [   87.263018]  ? swake_up_all+0xe0/0xe0
+> > [   87.264101]  ? kcompactd_do_work+0x240/0x240
+> > [   87.265243]  kthread+0xec/0x110
+> > [   87.266031]  ? kthread_complete_and_exit+0x20/0x20
+> > [   87.267268]  ret_from_fork+0x1f/0x30
+> > [   87.268243]  </TASK>
+> > [   87.268984] irq event stamp: 311113
+> > [   87.269930] hardirqs last  enabled at (311125): [<ffffffff810da6c2>] __up_console_sem+0x52/0x60
+> > [   87.272235] hardirqs last disabled at (311134): [<ffffffff810da6a7>] __up_console_sem+0x37/0x60
+> > [   87.275707] softirqs last  enabled at (311088): [<ffffffff819d2b2c>] __do_softirq+0x21c/0x31f
+> > [   87.278450] softirqs last disabled at (311083): [<ffffffff81070b8d>] __irq_exit_rcu+0xad/0x120
+> > [   87.280555] ---[ end trace 0000000000000000 ]---
 > 
-> I've queued up the additional change now, thanks.
+> So this warning is move_to_new_folio() being called on un-isolated
+> src folio. I had DEBUG_VM disabled so VM_BUG_ON_FOLIO(!folio_test_isolated(src))
+> did nothing, however after mops->migrate_page() it would trigger WARN_ON()
+> because it evaluates folio_test_isolated(src) one more time:
 > 
-> greg k-h
-
-
-right. thanks.
-I'm also not sure why the first commit added to stable but
-it caused checking the fwd flag earlier in the code and
-the missing commit added the fwd flag earlier.
-Both commits were in the same series when submitted.
-
+> [   59.500580] page:0000000097d97a42 refcount:2 mapcount:1665 mapping:0000000000000000 index:0xffffea00185ce940 pfn:0x113dc4
+> [   59.503239] flags: 0x8000000000000001(locked|zone=2)
+> [   59.505060] raw: 8000000000000001 ffffea00044f70c8 ffffc90000ba7c20 ffffffff81c22582
+> [   59.507288] raw: ffffea00185ce940 ffff88809183fdb0 0000000200000680 0000000000000000
+> [   59.509622] page dumped because: VM_BUG_ON_FOLIO(!folio_test_isolated(src))
+> [   59.511845] ------------[ cut here ]------------
+> [   59.513181] kernel BUG at mm/migrate.c:988!
+> [   59.514821] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> 
+> [   59.523018] RIP: 0010:move_to_new_folio+0x362/0x3b0
+> [   59.524160] Code: ff ff e9 55 fd ff ff 48 89 df e8 69 d8 ff ff f0 80 60 02 fb 31 c0 e9 65 fd ff ff 48 c7 c6 00 f5 e9 81 48 89 df e8 be c0 f9 ff <0f> 0b 48 c7 c6 00 f5 e9 81 48 89 df e8 ad c0 f9 ff 0f 0b b8 f5 ff
+> [   59.528349] RSP: 0018:ffffc90000ba7af8 EFLAGS: 00010246
+> [   59.529551] RAX: 000000000000003f RBX: ffffea00044f7100 RCX: 0000000000000000
+> [   59.531186] RDX: 0000000000000000 RSI: ffffffff81e8dcf1 RDI: 00000000ffffffff
+> [   59.532790] RBP: ffffea00184f1140 R08: 00000000ffffbfff R09: 00000000ffffbfff
+> [   59.534392] R10: ffff888621ca0000 R11: ffff888621ca0000 R12: 8000000000000001
+> [   59.536026] R13: 0000000000000001 R14: 0000000000000000 R15: ffffea00184f1140
+> [   59.537646] FS:  0000000000000000(0000) GS:ffff888626a00000(0000) knlGS:0000000000000000
+> [   59.539484] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   59.540785] CR2: 00007ff7fbed8000 CR3: 0000000101a26001 CR4: 0000000000770ee0
+> [   59.542412] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   59.544030] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   59.545637] PKRU: 55555554
+> [   59.546261] Call Trace:
+> [   59.546833]  <TASK>
+> [   59.547371]  ? lock_is_held_type+0xd9/0x130
+> [   59.548331]  migrate_pages_batch+0x650/0xdc0
+> [   59.549326]  ? move_freelist_tail+0xc0/0xc0
+> [   59.550281]  ? isolate_freepages+0x290/0x290
+> [   59.551289]  ? folio_flags.constprop.0+0x50/0x50
+> [   59.552348]  migrate_pages+0x3fa/0x4d0
+> [   59.553224]  ? isolate_freepages+0x290/0x290
+> [   59.554214]  ? move_freelist_tail+0xc0/0xc0
+> [   59.555173]  compact_zone+0x51b/0x6a0
+> [   59.556031]  proactive_compact_node+0x8e/0xe0
+> [   59.557033]  kcompactd+0x1c3/0x350
+> [   59.557842]  ? swake_up_all+0xe0/0xe0
+> [   59.558699]  ? kcompactd_do_work+0x260/0x260
+> [   59.559703]  kthread+0xec/0x110
+> [   59.560450]  ? kthread_complete_and_exit+0x20/0x20
+> [   59.561582]  ret_from_fork+0x1f/0x30
+> [   59.562427]  </TASK>
+> [   59.562966] Modules linked in: deflate zlib_deflate zstd zstd_compress zram
+> [   59.564591] ---[ end trace 0000000000000000 ]---
+> [   59.565661] RIP: 0010:move_to_new_folio+0x362/0x3b0
+> [   59.566802] Code: ff ff e9 55 fd ff ff 48 89 df e8 69 d8 ff ff f0 80 60 02 fb 31 c0 e9 65 fd ff ff 48 c7 c6 00 f5 e9 81 48 89 df e8 be c0 f9 ff <0f> 0b 48 c7 c6 00 f5 e9 81 48 89 df e8 ad c0 f9 ff 0f 0b b8 f5 ff
+> [   59.571048] RSP: 0018:ffffc90000ba7af8 EFLAGS: 00010246
+> [   59.572257] RAX: 000000000000003f RBX: ffffea00044f7100 RCX: 0000000000000000
+> [   59.573906] RDX: 0000000000000000 RSI: ffffffff81e8dcf1 RDI: 00000000ffffffff
+> [   59.575544] RBP: ffffea00184f1140 R08: 00000000ffffbfff R09: 00000000ffffbfff
+> [   59.577236] R10: ffff888621ca0000 R11: ffff888621ca0000 R12: 8000000000000001
+> [   59.578893] R13: 0000000000000001 R14: 0000000000000000 R15: ffffea00184f1140
+> [   59.580593] FS:  0000000000000000(0000) GS:ffff888626a00000(0000) knlGS:0000000000000000
+> [   59.582432] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   59.583767] CR2: 00007ff7fbed8000 CR3: 0000000101a26001 CR4: 0000000000770ee0
+> [   59.585437] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   59.587082] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   59.588738] PKRU: 55555554
