@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0B466B056
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 11:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995B266B05A
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 11:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbjAOKcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 05:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S230517AbjAOKc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 05:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjAOKcV (ORCPT
+        with ESMTP id S230137AbjAOKcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 05:32:21 -0500
+        Sun, 15 Jan 2023 05:32:22 -0500
 Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2097.outbound.protection.outlook.com [40.92.98.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B50C16B;
-        Sun, 15 Jan 2023 02:32:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0B2CDC2;
+        Sun, 15 Jan 2023 02:32:21 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NEZf39pkFpQmVt7Qku3LGFX/wlJeiKGbRoTCJR/QBnjCbtQaK9elkjpi6WUWG/PzzUpLBFItKkycUhOomsRXOgYfiG7hsZ/qsUpCgZjbX5l70SODEzbPEBpoZaBk6eh0EfW7b2YrXq5M9GT8XpInqnFBBXqQXB+4PFAKIuKyXnsAJuLFztc3lPxzpkCjN7/9L11DWrjZ08sxzDWZLhdloRYcGlXALvdwZzCqbmlJ5+9/cgmA6qn1uUEBMM2PBSlMNJeqeeizkcAgm8JOaOuR2JAvKYC/vDv8CXiNafQnn1X3kayhfXRH/G58GH7MO5DnCcTp0ASaAnMpV2jpYrr8tA==
+ b=jNymLNCiGEc8vHZHt+pLzXCPIQkAj2tjvupXd5vVv2N5fhoID6wtqMLilB1bm8GmZwkjz3oBnG20N+cRYeVPpzLu2P/Ar/c8qnhh2+/O/ExjgFAbNKqczdzpFD52En32wJHdKM31Ri5uNHUjvIwKZXK1TzPCVqkMpZw7iGDQ/uQEkxOgLEnhtFjQn6L2n/NNaCg37sV4KJM3GVu9QXcdxk0gzUv/AOeCdIYfWXzXVcmW79pW5YW6eBdpP8D6NITt4bV+TXpiyAL70laGPLEClsWMDJMiHvbyEoxsVIhIZN3jHTM9jBQbwfc42XwX27Dy88/jgrzr5sJQC2KWUhQpTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c1/qUEJuTjNq9et9JCnYcwWdMajyUbf3L6UqtV1eIp4=;
- b=Mccrh7vEp/6ftJpRCk9BSWfH3e6z912cNmM14h+rY9saqx7RuU2BCeFaFmGrU5pMV4MybQvXBGLRKFfNWmBM/2hrMSCmDiQy8tNlpMd1X4A4roYE2j02sByGmLDU4SgvX+nT4lwIRRoJAnzhNiGtrzhf3DBpmqP1DPURReoUzKE8fw9oBBUaX7C5zgSygL5qqABMpBS5ak3zDI1Sak/csPsRICtfDnDns3yVQXjOT/PpcJGZ76JAf1bTkPpCiUKI0vlbe8lSi8znlT9ocDc9hgr9SbgI3S0PI3LzzvsE2MhBFOMzWPiI6EaEWFyeEsOUxUGsBzYIECOHb4lNjdyelA==
+ bh=1bCwXQROHXsw8VYvL5v6AwzG2CGy/x/ZiC0wL0JZbLU=;
+ b=bIUEILg4heRl67xANwrWIicmUJ927vm4afg5QfFMLC3pA2Y0uYlTtsR8h+89UpMQ26rxiWKukpSAImqzLHnS/tTqZjxuvtdL7mf/SuJLvmGfva3+HCBnewTfrCPcO7buPXu7hWC7bXBuxW+hckw3nzvQbUXoak779MwRMEIPl+YBebkzseZT1DTQOtDGxKbhN6aqHcqQuGegujtDBn6BeAD/gbzkDgqP0vXzqB3b9ma566tJ8ThuboftCltUGK9GjfzvszIDvvYJcsU+YTKZ8egNImY3vZ2U+fvKY6yOSLMPPiIbmr/uCzB4ahGzipNIWA69H2nzGhUHGUEa1eRA4A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c1/qUEJuTjNq9et9JCnYcwWdMajyUbf3L6UqtV1eIp4=;
- b=SytVcgIeqhgV2Jevs+zT6f/1W8ZZ/Tq3UbJxrkR2DVE5hvdKL5xWNfIS1aHT7xQJxJ1FDV/NTFNCG3NO5aumCDJtBGcNMYWeLEwKfogKoRaJlr0Pp5JkFRK/1vVh8CYJxTJ9tc2hFsMDIgmog3ytEjguuMhay4X0Qd6gFNSBAnFCDWGzGj/NcsJv4KvqeaKxDXPLbILcA3u8SSlBioip4qIIZ0DLO9KlPCMg9MCFGrbSdcGfoBedhW0Pp9gzI8t+acvr4GkBZX5H8Ui9U986JXSngjgDm5YGFQkMGdyySPG+EWeNSvhwMLTME/EKQR5h7WIhYCIPLV7nRjr8WMvZ8g==
+ bh=1bCwXQROHXsw8VYvL5v6AwzG2CGy/x/ZiC0wL0JZbLU=;
+ b=HtOv+DBJNy4CIGhSM+5lsPTpGdUjCDBCjwqgTln8SWDes+BGLe3YhJZ9glpOCY+EnpB7gMDGeJ4AMq8UWi5Z6Gy1+t4U3Y3NkSjurZuFIKuwpU/XSiT9pnxoM2c8BDIFwsQzi/wANKc0TUHrwtCopD6BT7RW0AyecJNnCXoqtNH1Jomt2zkEpdx67ETvnGuN0OnkRiCDzqHooWKKVskMB0EMUll28Cy3g85xJ9dOyh1SeDHM82bqzrq3oKAZMUUBvnp3NwZ+ums5OSTIDUgWu/SNcvPJto5ENfU342EbIlng0liOKmyTBw51D7mQqK8EhfGzGv69hKQXNMg/0UdAuQ==
 Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
  by OS3P286MB2025.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1a0::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Sun, 15 Jan
- 2023 10:32:17 +0000
+ 2023 10:32:18 +0000
 Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
  ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
  ([fe80::ff96:9cb6:e047:c605%4]) with mapi id 15.20.6002.012; Sun, 15 Jan 2023
- 10:32:17 +0000
+ 10:32:18 +0000
 From:   Dawei Li <set_pte_at@outlook.com>
 To:     linkinjeon@kernel.org, sfrench@samba.org
 Cc:     senozhatsky@chromium.org, tom@talpey.com, hyc.lee@gmail.com,
         linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/6]  ksmbd: Minor performance improvement & code cleanup
-Date:   Sun, 15 Jan 2023 18:32:03 +0800
-Message-ID: <TYCP286MB23239EE29037F6051CFE5691CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Subject: [PATCH 1/6] ksmbd: Implements sess->ksmbd_chann_list as xarray
+Date:   Sun, 15 Jan 2023 18:32:04 +0800
+Message-ID: <TYCP286MB2323634A443AA87EE5768018CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230115103209.146002-1-set_pte_at@outlook.com>
+References: <20230115103209.146002-1-set_pte_at@outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [d0E2ssGt2yAPHeaClCLOtElkHUHTRapm371fmQ2f9gE=]
+X-TMN:  [d7LqBg5C+xsn7ZcKt51vzaRYyK0so46QxmVWZm5BlJ0=]
 X-ClientProxiedBy: TYAPR01CA0210.jpnprd01.prod.outlook.com
  (2603:1096:404:29::30) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20230115103209.146002-1-set_pte_at@outlook.com>
+X-Microsoft-Original-Message-ID: <20230115103209.146002-2-set_pte_at@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|OS3P286MB2025:EE_
-X-MS-Office365-Filtering-Correlation-Id: dcedf621-c5db-4596-4dc6-08daf6e3c637
+X-MS-Office365-Filtering-Correlation-Id: 08094b11-7137-4ed4-7dab-08daf6e3c712
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TtBlAQDgVmtVMz+TFqCyVSyQ0xzeffJpKOmoTH39AJhEUnYkXAeT9ivN7aLAlhL8FvRwLXI1OFGyf7OgsqyxKV0LF9LYlrRH6AIq6bPY58YSc0frFem1a+xAJe/suJhayIxWRp1MXcCcOk2TgxAONDAjY8f3+u7OGzuM2Wkgset9ORU4EGK53Sz7sp8AI3s7GkL/vuaWCYIVXy0fURB6ZI4b6BM8iZcO4+ZwUMi4nonjT5i/n2TDlg3wwR+lgAw49syfZFCbpwNaQzOfVG7kM22Vk9OIt8ovZTQCqjlLOpj9YXSleyofznNp1C02m2OQKAtU2CRUt5GpLqc5TcBWKH2waxnWMBui/J6mSTCvlzBf4AadGFsMTSKA7sjko1bWImwTBTZrohf6CvEYEKe21kCS162uw62FWAHvcZ2xF8yekb5r5/l45EXRcoTqGwUYqfpn8wqvQ83KmGtnTS89t7tORIfA6aD4tE436YNesdYs8DrpYe81wP4Z6TbYFDUn5hUGj4W5VTtJ53W/UxJ1zgtUwvbNsITS8wL4yW/jfaDabBS8+7f87nuzL9p3tvbjw8KF9EWsF+bpoXrRe2gLpXF0kwdG4d6OrujgMxF43OQ=
+X-Microsoft-Antispam-Message-Info: 3yWdVFZ8laLo6bCijX4InFwEZli2FLOkju5xJUVfzi0rx1SRZHNnF96yM0n+tKM6qLh+iJZaB/WGMmNDZ7azSnm2+zvIKoZ4w134448rH7TKw5oz+BqkhNTc7aUkKSlLBYVov286UjkypviARlTYrvGvZurflOt5abshtpYNyvQRu1AJ2YjkWmRaUcOBoDsmUrJC7nZ7fMiiflX7VjkLdHIIGImx/s7twZ2rv4oMsv2yVOwBGUftGL7LGEl7mf+2dT/JZRcNB6MhdgnUYwkrudB19IB3s0vksNob9DvHGaHq+4M00Dq/gJQneO8hejWA2gl3HniINkN3P+LKEehV4HvgiHHHYUOcnvoSmBhGtxxvJniWjrxKDV+ZMZxggkXc254iyxzfOQ85wB9IWNHIJB65TKWUtgkxHyyrmNAj+897d0omVUzMKjNW1mEflG+rkQ6Ir8GJ6OgVgcpB9VDUUTlLu3dbWvIe2luLKrIKpcUaufJM2r4iuBJxwl4bYjXmtW09CnpqNHCGaZJkOLSEOQiVj/Tiu88QTPd9h4YwUZJIJlN7xO+zoMzJc+diaQcI+8p/QJBnPkKWrDk5wSNdU7OzR8Rd0UQKYEkUUJs7pz0=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IErFZmZA3crEKhBWJ6z40le1oHxMkPT0dpa65/X3lp+ZigqxwLp2XBp7BshN?=
- =?us-ascii?Q?21kRKRTflm3r95lMeF7OzfpED9zV0KA6c1K0EgGojiEsjlwaV9r/ZJjQ42Sk?=
- =?us-ascii?Q?3zJWE3MA2A1G2/7EbkYt68u7O/CVfkyMCbWDXhr1txxcXX0jG9JGSkMpxTHZ?=
- =?us-ascii?Q?DTtf+grql97ujnOtaxA7ECD2xaWddoFn6/lpsIlTXxirgwLcJ6uGXKvyZ1Nr?=
- =?us-ascii?Q?/ZiZZSUXgGVWhkLOY8H6yKgnrnAmNnWiIUpk83egjoYedwnlyNkSFcVb7My6?=
- =?us-ascii?Q?SrVoAQ6rD3klUce54cq5dY2fc7ee+HftzCzRSxCW3DJgF2Nhtb1lKCT7rw+u?=
- =?us-ascii?Q?XhgFgNDHFhaoYV09OgGMUIWx4rwTb/eY1LgGx25jLUK8NLxiWg7EsCvelfGc?=
- =?us-ascii?Q?kivvIeRUOlx1VHJ1KXWf/VGKvIgSkERH2Kb/dBKivRJ1U6ywu5ZrruX3Pn8y?=
- =?us-ascii?Q?L2tPdTnA6rXuCsYFa0A/EBCZXJL/saTnWE7y9Lfca82K3yqyXrNfffJoEedm?=
- =?us-ascii?Q?XYZFIppprYmA7TmKzqQl7j1/pVXdgg4T8ABxEt5PBsRhNBRE36bK2uwas7KO?=
- =?us-ascii?Q?tJAsL5ag5epTRRWf/5yZ7GMWTu0/JAi0l00vaf4BT5kUHtUAdvNJ7HWiKQGH?=
- =?us-ascii?Q?kGCw3HCyhzuf13VnNOpBAv1pZWf2iYWDrzGnWaAxZgbO30sd+ZZRBbW+Z8g2?=
- =?us-ascii?Q?gIdNYw8fsis32mfCXM2VYriiW/bDKnTbsoEBvOPqdHx6e+pLk9XKpWHYl+ON?=
- =?us-ascii?Q?u9sHnfpVF5sVaEAymlr9WgEFsY1kRLbo7/4Ygab/TbWWWCPmzVQJOL9dmEvy?=
- =?us-ascii?Q?xUagrt3nxrc2rkhOYS6/NoRPu29IlFM7xicLD0/x1DsIpxGu3KPzRKZ4wtSd?=
- =?us-ascii?Q?JvV1ajyqE1YOsBk6c4ckYzBYU3KZNKLF6B4tAaBepp0UpZRfX9+Dfrss4l/X?=
- =?us-ascii?Q?J4hmv4AasrP4MKo19I8C0FjPC0j+H0CnfLmT/V0g1J51vV9Wk/rwujGt9mf5?=
- =?us-ascii?Q?ROXU3iDBt6j0o65Ptsw918+ffw5S1ZL9P7jK6gR5xGSiSMR/qQKCpFuJLjUm?=
- =?us-ascii?Q?b36VfiKRhHe+oEA7czZWCQjfAhdttLjjyRWMHXfNSF2EXV5PRqqxT1H/zlWp?=
- =?us-ascii?Q?nGw9O1QRP5SmQ8URQbyQDVILhGyycpdND4HYSeN+2r/QRTFWOUcVLIKo+2+f?=
- =?us-ascii?Q?PgsskelHf3YR/S2t7mSsUUAuyavqeRSVA4WJRfb4tjDCZZdvTfPrAtLw/WDG?=
- =?us-ascii?Q?3zesNK8Pl2GPZH6/r9y0YYbb8rnsM/sS0dfse9ho4mSzs9AvzwRhn8QC6i1d?=
- =?us-ascii?Q?ex8=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qVRSJOnFHo+Ar4/bIZFRinpn/6itWDsFyWDkzoRHyeQWTuf4CBeFhBSb/ygo?=
+ =?us-ascii?Q?EJFuTBvVj0AbRU+cpRKaRJyizJh1d1zYgqmr4tbR0qZoRZkGfoyZGTevmgCe?=
+ =?us-ascii?Q?Sm7ovX4Zwf0wWr5Dg0HI9BuGuKVhFkX8bc24ijTg9FdFkuEn3kHfv4PYnkpt?=
+ =?us-ascii?Q?2ACJKIrVJ3wALPfFwRjqm6gGNAAufp3PAkIdlSB/hytidEsJpzXDdTfVc6E/?=
+ =?us-ascii?Q?2rrx7nwwm/8T+jzJjrBSpvA+GSDW1ln3wsm4g8S0sojtyc2KCko8I6wDCFwQ?=
+ =?us-ascii?Q?EAsejo1+6CAHCg6tkBuhlugtnUNIXGgQCNEiwdADraSaXTmaX4w1OfrLCIus?=
+ =?us-ascii?Q?mrhVKLMrVzQOKb2brs82JoUH6EJ9HAJc9+qcDuRI2px23GM2D4f1HIt9PUFK?=
+ =?us-ascii?Q?rwX3jaHXRm8BodR0kzi1FPJ4qJjlnASUWMfgHAQuX+EQlo9Q6LVf+kahNU3V?=
+ =?us-ascii?Q?W7Pq3ait2A6+dZRPcXjxZ1GhooJwVMziJf3fS5MaTXDt1hIIHIMPx4xwqoQL?=
+ =?us-ascii?Q?eTRYF6vVgri9qbbKf0E3AwI3sJ+gupPl7e9Vx2VQmDBLb+LGW9xlcKadt1dk?=
+ =?us-ascii?Q?eLQM5i+oH6lsnIxZ6nm6fsQ2RvZAwtq/wzDfGEpnA8chL9d3CzvB35MDvnCp?=
+ =?us-ascii?Q?SBL28kUMyvzFhdXjocxQQxMfLTQcWRduiQ5x66SIt1pErJgOqzxlA3gB+hqH?=
+ =?us-ascii?Q?ozyu85zfIbkJ6EyCeG44NvryTWLUZXV0DmkBpKW1QODL0nT866FoNA8RbB7Z?=
+ =?us-ascii?Q?W+nIJiq9cvqSWj1xYQn6XbAGQssXYK+QqxVGhaB/sY3/+aGTxQbm/lilfbUd?=
+ =?us-ascii?Q?D8/+jWScrj8zbt/clh7mHgojhEd7tvfvCPuTFTRWVcGpds0qJUWKOZpl/+Ya?=
+ =?us-ascii?Q?rzlxrralN+SJVRw5jJeA6Fb4h/vznT40B3k9SQVafMpi/uK99eD2AKu8qQ0V?=
+ =?us-ascii?Q?tlRPFFFNWgY7VT+ugV2NN4ZUzazRVD7iJyYE2N1ulJQ5BsEd1jjqZ/1VLYjj?=
+ =?us-ascii?Q?gIMKzy3e+iHamJ+WaX9j8kFu3J4EOJ2UzEny+nigWBIsaWISI6vHE/TV6n4/?=
+ =?us-ascii?Q?broSYX/0IQpGesbVKD6pqWOUm4feIyYHHHH+KgwppGc/12wbNLCzICMQZdu8?=
+ =?us-ascii?Q?wi55midd5rJe0sZhvXjUFAJRCk6TVL7JmwvZfu7DBxUB1LEVae+BoPcEpg5Y?=
+ =?us-ascii?Q?vJ33p2KVFqqKFmtZDeL6lEn7dUPs/WYz5dBd94Sb0xl7PWUV3MK7d2Ti/OhN?=
+ =?us-ascii?Q?Kfo3gykEODHMVDCYeafeLHUiQ4frOIpR9OjidkV+Rrtkr1CehEjnH+ucumq0?=
+ =?us-ascii?Q?KTY=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcedf621-c5db-4596-4dc6-08daf6e3c637
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08094b11-7137-4ed4-7dab-08daf6e3c712
 X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2023 10:32:17.3141
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2023 10:32:18.7514
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -104,36 +106,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's a small series mostly aimed at performance improvement and code
-cleanup.
+For some ops on channel:
+1. lookup_chann_list(), possibly on high frequency.
+2. ksmbd_chann_del().
 
-Among which, First three ones are performance related commits, and
-other ones are minor code cleanup.
+Connection is used as indexing key to lookup channel, in that case,
+linear search based on list may suffer a bit for performance.
 
-1 & 2: list => xarray, acclerating index based lookup.
-3: rwlock => rcu primitive, enabling write & read concurrency.
-4: Simple duplicated code removal.
-5: Minor code rework and exception handling.
-6: Simple typo fix.
+Implements sess->ksmbd_chann_list as xarray.
 
-Dawei Li (6):
-  ksmbd: Implements sess->ksmbd_chann_list as xarray
-  ksmbd: Implements sess->rpc_handle_list as xarray
-  ksmbd: replace rwlock with rcu for concurrenct access on conn list
-  ksmbd: Remove duplicated codes
-  ksmbd: improve exception handling and avoid redundant sanity check in
-    loop
-  ksmbd: fix typo, syncronous->synchronous
+Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+---
+ fs/ksmbd/mgmt/user_session.c | 61 ++++++++++++++----------------------
+ fs/ksmbd/mgmt/user_session.h |  4 +--
+ fs/ksmbd/smb2pdu.c           | 34 +++-----------------
+ 3 files changed, 30 insertions(+), 69 deletions(-)
 
- fs/ksmbd/asn1.c              | 19 ++++---
- fs/ksmbd/connection.c        | 54 +++++++++++---------
- fs/ksmbd/connection.h        |  1 -
- fs/ksmbd/ksmbd_work.h        |  2 +-
- fs/ksmbd/mgmt/user_session.c | 98 ++++++++++++++----------------------
- fs/ksmbd/mgmt/user_session.h |  6 +--
- fs/ksmbd/smb2pdu.c           | 52 ++++++-------------
- 7 files changed, 93 insertions(+), 139 deletions(-)
-
+diff --git a/fs/ksmbd/mgmt/user_session.c b/fs/ksmbd/mgmt/user_session.c
+index 92b1603b5abe..a2b128dedcfc 100644
+--- a/fs/ksmbd/mgmt/user_session.c
++++ b/fs/ksmbd/mgmt/user_session.c
+@@ -30,15 +30,15 @@ struct ksmbd_session_rpc {
+ 
+ static void free_channel_list(struct ksmbd_session *sess)
+ {
+-	struct channel *chann, *tmp;
++	struct channel *chann;
++	unsigned long index;
+ 
+-	write_lock(&sess->chann_lock);
+-	list_for_each_entry_safe(chann, tmp, &sess->ksmbd_chann_list,
+-				 chann_list) {
+-		list_del(&chann->chann_list);
++	xa_for_each(&sess->ksmbd_chann_list, index, chann) {
++		xa_erase(&sess->ksmbd_chann_list, index);
+ 		kfree(chann);
+ 	}
+-	write_unlock(&sess->chann_lock);
++
++	xa_destroy(&sess->ksmbd_chann_list);
+ }
+ 
+ static void __session_rpc_close(struct ksmbd_session *sess,
+@@ -190,21 +190,15 @@ int ksmbd_session_register(struct ksmbd_conn *conn,
+ 
+ static int ksmbd_chann_del(struct ksmbd_conn *conn, struct ksmbd_session *sess)
+ {
+-	struct channel *chann, *tmp;
+-
+-	write_lock(&sess->chann_lock);
+-	list_for_each_entry_safe(chann, tmp, &sess->ksmbd_chann_list,
+-				 chann_list) {
+-		if (chann->conn == conn) {
+-			list_del(&chann->chann_list);
+-			kfree(chann);
+-			write_unlock(&sess->chann_lock);
+-			return 0;
+-		}
+-	}
+-	write_unlock(&sess->chann_lock);
++	struct channel *chann;
++
++	chann = xa_erase(&sess->ksmbd_chann_list, (long)conn);
++	if (!chann)
++		return -ENOENT;
+ 
+-	return -ENOENT;
++	kfree(chann);
++
++	return 0;
+ }
+ 
+ void ksmbd_sessions_deregister(struct ksmbd_conn *conn)
+@@ -234,7 +228,7 @@ void ksmbd_sessions_deregister(struct ksmbd_conn *conn)
+ 	return;
+ 
+ sess_destroy:
+-	if (list_empty(&sess->ksmbd_chann_list)) {
++	if (xa_empty(&sess->ksmbd_chann_list)) {
+ 		xa_erase(&conn->sessions, sess->id);
+ 		ksmbd_session_destroy(sess);
+ 	}
+@@ -320,6 +314,9 @@ static struct ksmbd_session *__session_create(int protocol)
+ 	struct ksmbd_session *sess;
+ 	int ret;
+ 
++	if (protocol != CIFDS_SESSION_FLAG_SMB2)
++		return NULL;
++
+ 	sess = kzalloc(sizeof(struct ksmbd_session), GFP_KERNEL);
+ 	if (!sess)
+ 		return NULL;
+@@ -329,30 +326,20 @@ static struct ksmbd_session *__session_create(int protocol)
+ 
+ 	set_session_flag(sess, protocol);
+ 	xa_init(&sess->tree_conns);
+-	INIT_LIST_HEAD(&sess->ksmbd_chann_list);
++	xa_init(&sess->ksmbd_chann_list);
+ 	INIT_LIST_HEAD(&sess->rpc_handle_list);
+ 	sess->sequence_number = 1;
+-	rwlock_init(&sess->chann_lock);
+-
+-	switch (protocol) {
+-	case CIFDS_SESSION_FLAG_SMB2:
+-		ret = __init_smb2_session(sess);
+-		break;
+-	default:
+-		ret = -EINVAL;
+-		break;
+-	}
+ 
++	ret = __init_smb2_session(sess);
+ 	if (ret)
+ 		goto error;
+ 
+ 	ida_init(&sess->tree_conn_ida);
+ 
+-	if (protocol == CIFDS_SESSION_FLAG_SMB2) {
+-		down_write(&sessions_table_lock);
+-		hash_add(sessions_table, &sess->hlist, sess->id);
+-		up_write(&sessions_table_lock);
+-	}
++	down_write(&sessions_table_lock);
++	hash_add(sessions_table, &sess->hlist, sess->id);
++	up_write(&sessions_table_lock);
++
+ 	return sess;
+ 
+ error:
+diff --git a/fs/ksmbd/mgmt/user_session.h b/fs/ksmbd/mgmt/user_session.h
+index 8934b8ee275b..44a3c67b2bd9 100644
+--- a/fs/ksmbd/mgmt/user_session.h
++++ b/fs/ksmbd/mgmt/user_session.h
+@@ -21,7 +21,6 @@ struct ksmbd_file_table;
+ struct channel {
+ 	__u8			smb3signingkey[SMB3_SIGN_KEY_SIZE];
+ 	struct ksmbd_conn	*conn;
+-	struct list_head	chann_list;
+ };
+ 
+ struct preauth_session {
+@@ -50,8 +49,7 @@ struct ksmbd_session {
+ 	char				sess_key[CIFS_KEY_SIZE];
+ 
+ 	struct hlist_node		hlist;
+-	rwlock_t			chann_lock;
+-	struct list_head		ksmbd_chann_list;
++	struct xarray			ksmbd_chann_list;
+ 	struct xarray			tree_conns;
+ 	struct ida			tree_conn_ida;
+ 	struct list_head		rpc_handle_list;
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 38fbda52e06f..771e045c8d4a 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -74,14 +74,7 @@ static inline bool check_session_id(struct ksmbd_conn *conn, u64 id)
+ 
+ struct channel *lookup_chann_list(struct ksmbd_session *sess, struct ksmbd_conn *conn)
+ {
+-	struct channel *chann;
+-
+-	list_for_each_entry(chann, &sess->ksmbd_chann_list, chann_list) {
+-		if (chann->conn == conn)
+-			return chann;
+-	}
+-
+-	return NULL;
++	return xa_load(&sess->ksmbd_chann_list, (long)conn);
+ }
+ 
+ /**
+@@ -595,6 +588,7 @@ static void destroy_previous_session(struct ksmbd_conn *conn,
+ 	struct ksmbd_session *prev_sess = ksmbd_session_lookup_slowpath(id);
+ 	struct ksmbd_user *prev_user;
+ 	struct channel *chann;
++	long index;
+ 
+ 	if (!prev_sess)
+ 		return;
+@@ -608,10 +602,8 @@ static void destroy_previous_session(struct ksmbd_conn *conn,
+ 		return;
+ 
+ 	prev_sess->state = SMB2_SESSION_EXPIRED;
+-	write_lock(&prev_sess->chann_lock);
+-	list_for_each_entry(chann, &prev_sess->ksmbd_chann_list, chann_list)
++	xa_for_each(&prev_sess->ksmbd_chann_list, index, chann)
+ 		chann->conn->status = KSMBD_SESS_EXITING;
+-	write_unlock(&prev_sess->chann_lock);
+ }
+ 
+ /**
+@@ -1519,19 +1511,14 @@ static int ntlm_authenticate(struct ksmbd_work *work)
+ 
+ binding_session:
+ 	if (conn->dialect >= SMB30_PROT_ID) {
+-		read_lock(&sess->chann_lock);
+ 		chann = lookup_chann_list(sess, conn);
+-		read_unlock(&sess->chann_lock);
+ 		if (!chann) {
+ 			chann = kmalloc(sizeof(struct channel), GFP_KERNEL);
+ 			if (!chann)
+ 				return -ENOMEM;
+ 
+ 			chann->conn = conn;
+-			INIT_LIST_HEAD(&chann->chann_list);
+-			write_lock(&sess->chann_lock);
+-			list_add(&chann->chann_list, &sess->ksmbd_chann_list);
+-			write_unlock(&sess->chann_lock);
++			xa_store(&sess->ksmbd_chann_list, (long)conn, chann, GFP_KERNEL);
+ 		}
+ 	}
+ 
+@@ -1606,19 +1593,14 @@ static int krb5_authenticate(struct ksmbd_work *work)
+ 	}
+ 
+ 	if (conn->dialect >= SMB30_PROT_ID) {
+-		read_lock(&sess->chann_lock);
+ 		chann = lookup_chann_list(sess, conn);
+-		read_unlock(&sess->chann_lock);
+ 		if (!chann) {
+ 			chann = kmalloc(sizeof(struct channel), GFP_KERNEL);
+ 			if (!chann)
+ 				return -ENOMEM;
+ 
+ 			chann->conn = conn;
+-			INIT_LIST_HEAD(&chann->chann_list);
+-			write_lock(&sess->chann_lock);
+-			list_add(&chann->chann_list, &sess->ksmbd_chann_list);
+-			write_unlock(&sess->chann_lock);
++			xa_store(&sess->ksmbd_chann_list, (long)conn, chann, GFP_KERNEL);
+ 		}
+ 	}
+ 
+@@ -8409,14 +8391,11 @@ int smb3_check_sign_req(struct ksmbd_work *work)
+ 	if (le16_to_cpu(hdr->Command) == SMB2_SESSION_SETUP_HE) {
+ 		signing_key = work->sess->smb3signingkey;
+ 	} else {
+-		read_lock(&work->sess->chann_lock);
+ 		chann = lookup_chann_list(work->sess, conn);
+ 		if (!chann) {
+-			read_unlock(&work->sess->chann_lock);
+ 			return 0;
+ 		}
+ 		signing_key = chann->smb3signingkey;
+-		read_unlock(&work->sess->chann_lock);
+ 	}
+ 
+ 	if (!signing_key) {
+@@ -8476,14 +8455,11 @@ void smb3_set_sign_rsp(struct ksmbd_work *work)
+ 	    le16_to_cpu(hdr->Command) == SMB2_SESSION_SETUP_HE) {
+ 		signing_key = work->sess->smb3signingkey;
+ 	} else {
+-		read_lock(&work->sess->chann_lock);
+ 		chann = lookup_chann_list(work->sess, work->conn);
+ 		if (!chann) {
+-			read_unlock(&work->sess->chann_lock);
+ 			return;
+ 		}
+ 		signing_key = chann->smb3signingkey;
+-		read_unlock(&work->sess->chann_lock);
+ 	}
+ 
+ 	if (!signing_key)
 -- 
 2.25.1
 
