@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570B666AF19
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 03:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0818D66AF1F
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 03:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjAOCkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 21:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S230344AbjAOCtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 21:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjAOCkC (ORCPT
+        with ESMTP id S230393AbjAOCsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 21:40:02 -0500
+        Sat, 14 Jan 2023 21:48:55 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA2A248;
-        Sat, 14 Jan 2023 18:40:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF3859D2;
+        Sat, 14 Jan 2023 18:48:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE79660BDC;
-        Sun, 15 Jan 2023 02:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC6AC433F1;
-        Sun, 15 Jan 2023 02:40:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 908AF60C12;
+        Sun, 15 Jan 2023 02:48:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C385AC43398;
+        Sun, 15 Jan 2023 02:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673750400;
-        bh=0TIlpXUyLjXgCWJoz/frRR9jRP9rDDMVSVFqtR3tMeA=;
+        s=k20201202; t=1673750932;
+        bh=kgaY6jbQpeo2Rmou/wW3RuGDXgok5CczcJfarE0vI8Y=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u3QZQEsTqOENmtWwRPaMnAqKojLu2ZcEpTbuaJn5T7141w0ECFE67bSBG/MhHITmQ
-         su607huar2CJEEYnnvyDc4t+pmLIrTajd+ugnd3td9218542nDk2t7AjbaKeH5f4y+
-         aK4OcTvgltK3zRD0uKBns0lF68tb0+BDk+MezEjM1Q+ROIzrnv/rAquczd04gnhJTl
-         QCkAV4ThOvNGdpDsCLVyZQtX5BBTUA11CbrGjEWrVDVLXerAQhYulwzDVTdTHgsD4S
-         1W3t/qnoSj674g9xGSa/tdji22kBu26q/CHuNbgqE9LyDfjYaaSpE4mSScGRot43OZ
-         qDYiQ5XJYLhjw==
-Received: by mail-ot1-f42.google.com with SMTP id p17-20020a9d6951000000b00678306ceb94so14364540oto.5;
-        Sat, 14 Jan 2023 18:39:59 -0800 (PST)
-X-Gm-Message-State: AFqh2ko8yOICMu+lY0Io/c6hxwwI300uYaaJFaf/+yjvtEvy4MHoWEvd
-        c2VwaJMNOuwGsGs8kjlk07B+YraQ61myETMT5Gg=
-X-Google-Smtp-Source: AMrXdXtoyZNoBhCTlW2oVmTW6Au80Bu7uDXtz+FY9yhcsQaPhStbX/RPkg215wnou5HpVqBqN5lA8VUlPXTllDvcaFI=
-X-Received: by 2002:a05:6830:14c7:b0:684:a3ad:87e8 with SMTP id
- t7-20020a05683014c700b00684a3ad87e8mr1046643otq.225.1673750399222; Sat, 14
- Jan 2023 18:39:59 -0800 (PST)
+        b=sBL5XlTf28rpF3PCr8Re4z/72+iDc+0PDzJNRTWB1UTOHsChRGH+zBWkn0tqJWCfd
+         8K+McSv0Us+qyBMhCT4GtYopGHU98GMEeFAtWuBTwuo/POF8lESXYSef8jcwyWGbZC
+         DxTft7d1pbfC8wTvxJG8VbqFEPUIKwD5QEhQ2lIrIFIKSOhdOFzqdIaQgG0v1X8ZK0
+         ec3iNFqyMP3cgOueOfSaeUyD6Ov4gPh17cv0x4jon4byxvNBrY4lrCAbRzQeQ+zXYJ
+         6TFoO0Bu39U4KoFaGniq2loG7g/3+ZPU9a0me3oPEc1i2HE9g26AM/UKYjWOG6mM8f
+         2V+ucnScA+MKA==
+Received: by mail-oi1-f181.google.com with SMTP id n8so20706176oih.0;
+        Sat, 14 Jan 2023 18:48:52 -0800 (PST)
+X-Gm-Message-State: AFqh2kr6bTTaPwfeWHJT8cPjvLyM0p1wyWFzMd6z5ssoumVOXtiZ1o25
+        dx0lpOmCKYgrljGaPRr63ucR/Cfs9Kch2mWI6fI=
+X-Google-Smtp-Source: AMrXdXsm9gUnwpvlhutyPpDTsOvXTiSoz/kxV5XIxQNp8ZH6wuffaVTW/E19Fs510l1dx+TMHxotrQpBFbYtyjei9Rg=
+X-Received: by 2002:aca:3755:0:b0:35e:7c55:b015 with SMTP id
+ e82-20020aca3755000000b0035e7c55b015mr5439109oia.287.1673750931973; Sat, 14
+ Jan 2023 18:48:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-5-ojeda@kernel.org>
- <CAK7LNAQj_WykFWcrj=L3wJYxDhOCGs+JHPB4E2vzWcx8y_at0w@mail.gmail.com> <CANiq72=MsV8EXV9cib+GJd0AXbpF8YSGdDd723m7=ON4jhjXxQ@mail.gmail.com>
-In-Reply-To: <CANiq72=MsV8EXV9cib+GJd0AXbpF8YSGdDd723m7=ON4jhjXxQ@mail.gmail.com>
+References: <20230109204520.539080-1-ojeda@kernel.org> <20230109204520.539080-6-ojeda@kernel.org>
+ <CAK7LNAQYk6s11MASRHW6oxtkqF00EJVqhHOP=5rynWt-QDUsXw@mail.gmail.com> <CANiq72kyUr9PGYqHTsNzYn0_cyuYA0vAxHLC08ivxKo5XvOESg@mail.gmail.com>
+In-Reply-To: <CANiq72kyUr9PGYqHTsNzYn0_cyuYA0vAxHLC08ivxKo5XvOESg@mail.gmail.com>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 15 Jan 2023 11:39:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQo=w3F=VXNGYyo6-A4c8Sees6yVHrsaFXLknCrO0ET3Q@mail.gmail.com>
-Message-ID: <CAK7LNAQo=w3F=VXNGYyo6-A4c8Sees6yVHrsaFXLknCrO0ET3Q@mail.gmail.com>
-Subject: Re: [PATCH 5/6] kbuild: rust_is_available: fix confusion when a
- version appears in the path
+Date:   Sun, 15 Jan 2023 11:48:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASawny3wSTvjB8-CZJ2Mw8UnB0C4k5-X8yC8TyrmsM8RQ@mail.gmail.com>
+Message-ID: <CAK7LNASawny3wSTvjB8-CZJ2Mw8UnB0C4k5-X8yC8TyrmsM8RQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] kbuild: rust_is_available: normalize version matching
 To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc:     Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
@@ -70,63 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 8:13 AM Miguel Ojeda
+On Sat, Jan 14, 2023 at 8:15 AM Miguel Ojeda
 <miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> On Thu, Jan 12, 2023 at 6:32 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> On Thu, Jan 12, 2023 at 7:23 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 > >
-> > +set -- ${bindgen_libclang_output#**clang version}
-> > +bindgen_libclang_cversion=$(get_canonical_version $1)
-> >  bindgen_libclang_min_version=$($min_tool_version llvm)
-> > -bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
+> > Maybe, your purpose is to use sed consistently, but
+> > perhaps you can avoid forking sed if you know the
+> > format of the first line.
 >
-> Nice trick :) To be honest, I am not really fond of `set`, and in this
-> case it means the command is not symmetric (we remove the prefix using
-> parameter expansion, and the suffix via positional argument
-> selection), but if you prefer it that way, I think it would be fine.
-
-
-I just tend to write efficient code.
-(scripts/{cc,ld,as}-version.sh do not use sed or grep at all.)
-
-Especially, I avoid unneeded process forks
-in the process forks.
-
-
-
-
-
-
-> However, why the double asterisk? One already matches any string,
-> including spaces, no?
-
-
-Sorry, it is my mistake.
-
-I meant double pound.
-
-
-  set -- ${bindgen_libclang_output##*clang version}
-
-
-
-The double pound strips "the longest matching pattern",
-just in case "clang version" is contained in the file path.
-(but if a space is contained in the directory path,
-it would have failed earlier.
-
-
-
-
-
-
+> The most unknown format would be the one of the libclang check, where
+> there may be other lines before the one we are interested in. However,
+> the pattern expansion would still match newlines, right?
 >
+> > BTW, what is missing here is, you do not check if
+> > ${RUSTC} is really rustc.
+> >
+> > I can fool this script to print
+> > "arithmetic expression: expecting primary: "100000 *  + 100 *  + "
+>
+> We can test if nothing was printed by `sed` for that (or do it with
+> shell builtins).
+>
+> Having said that, I would say fooling the script on purpose is an more
+> of an oddity compared to the case `MAKEFLAGS` attempts to cover
+> (please see my reply on the other patch). So if we cover this, then I
+> would say we should really cover the other one.
+
+
+
+get_canonical_version() in scripts/as-version.sh has
+a little more trick to avoid
+"arithmetic expression: expecting primary: "100000 *  + 100 *  + "
+but it is up to you.
+
+
+
+
 > Cheers,
 > Miguel
 
 
 
-
---
+-- 
 Best Regards
 Masahiro Yamada
