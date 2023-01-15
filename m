@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587DC66B44B
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 23:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB1C66B458
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 23:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjAOWFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 17:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
+        id S230354AbjAOW0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 17:26:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjAOWFF (ORCPT
+        with ESMTP id S231243AbjAOW0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 17:05:05 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D861B543
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 14:05:05 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id b3so40349035lfv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 14:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DCbXwGfUPe/3mHsmMZsXWr2naFY4gcVo+DgJt9qnP7k=;
-        b=RmU0D9sMQGH1qbOjumNV/Jfrn4Cch8i7v/b5zO48V8Bdq/aqwO+nL3ak7hiBMTfF1y
-         aB3Rp7mnY3a4+p2TkCA6v00kje8m/OK8lCQqX7hm7FNmdI5uPs34op19jr1/k5/cm5+e
-         WEfQ9xkAPD19TmmtDuu7xd/ewvd7TEZuOaOYKlEcxSwpEYLi+jyDLJqiT3W/mgDGgjgM
-         iG+7wNY7w7IHCbSnVigXgOPglPDzSUBWiZBPk1sPspwI7GcoLrZu5eZ1Gj4pMeRdvpBf
-         mm5waWSkBWKwEFIhateYSLhXy8mv6w8r+9++kuxMgyF727j1VZ4C0imjH8eqnG4NLgly
-         d/sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DCbXwGfUPe/3mHsmMZsXWr2naFY4gcVo+DgJt9qnP7k=;
-        b=VygFdVPBwieuNbagGEAkSRkqJ5rRl3gVxdd505aWv4nqLUK/vckvOnFoUNmc/pi0Or
-         RSI1GEboO3ixPX8lUtDAPSnTOaXlAYyGalmJc+2Rj2YL3nBv2pLj2ljtMvpsIZ5aJ/ig
-         OPzz5BlqzPKpN8JNB/+6lLmvnzOOIlvBDWGxQYil++z2CVviEKZyGC1aTPuI+ho0Wlw7
-         b5d0MldoUR2kwVa9eqaBZL7Z+UBjPcU11DSchEatZ4P24K01pbm7oFzKdpxGfWWR2o6B
-         9d8RZAsTtVc53XRqIh3UFqMGiOiG7FNNAi9taCOq551mfhGsI2IBaN3p4dATLa6u2PFt
-         TovQ==
-X-Gm-Message-State: AFqh2kofHRkqjZ8aaSRl+AirtcbWT+N90T0pogEZPaakhVQ7KPC79ziY
-        C59LeeOa/Mm7rEUkl0obP8lDk5QnEn+t9UflP7F6iqYl6eY=
-X-Google-Smtp-Source: AMrXdXsOve3sb66oFmuJWIgItxAajZcBkCtnzRXb7qPBVlHy6JxkT4zcoQElBrBJmml6EiUCOeFlnU62Sg7bPb3M8n8=
-X-Received: by 2002:a17:907:584:b0:7b2:b992:694d with SMTP id
- vw4-20020a170907058400b007b2b992694dmr5612456ejb.651.1673819822492; Sun, 15
- Jan 2023 13:57:02 -0800 (PST)
+        Sun, 15 Jan 2023 17:26:38 -0500
+X-Greylist: delayed 1665 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 Jan 2023 14:26:37 PST
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699E316307
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 14:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=7S7Q3114fxcLMvDP1hObBsSTzMGq4gxDhSezguM5qFQ=; b=LnS6bfzr3ecvlym+Fb7ppwRho/
+        oS2+gB57uYJrXb6i9LPoS0WKqVvjLcz9xhDsvOHRWJpbWFvk+oAANLRLT+iBKDxb8i7vLfoZmQGVh
+        aWZhUPlgFAbDxaOAWFpeQXmCNWZaOr+HSRRkSbi1/ZM4O/Chfdua/cWUeuJptcMy/o84SYKgvDBsm
+        JKoG7hmcdi5YHLx5wvMIaN0z+59p9UOEEIhw3LAe8+5je4LCxpzpMQXZ5fNBmuVC4q80LOvqSXy8K
+        v3AvRnj9eFN07gT4qwAw7IaQCYp5sglxZBXk5HqRg5CrTRU14URijTxYH5BC32ctuO2dfCWJSCL2Y
+        d6gH+y6Q==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1pHB1b-000P34-NM; Sun, 15 Jan 2023 22:58:47 +0100
+Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1pHB1b-000RAN-5X; Sun, 15 Jan 2023 22:58:47 +0100
+Message-ID: <f691f339-9e50-b968-01e1-1821a2f696e7@metafoo.de>
+Date:   Sun, 15 Jan 2023 13:58:43 -0800
 MIME-Version: 1.0
-Sender: ushaman235@gmail.com
-Received: by 2002:a50:41d:0:b0:1eb:5b9a:63df with HTTP; Sun, 15 Jan 2023
- 13:57:01 -0800 (PST)
-From:   "Mr. Daniel Kafando" <daniekafando001@gmail.com>
-Date:   Sun, 15 Jan 2023 21:57:01 +0000
-X-Google-Sender-Auth: lnvexteC64whT8w5gLQkLRPYeOo
-Message-ID: <CAAZU8jfXsb+ajPfwq47V_QR8PiURnjrd-SZbLQQru_Ho1Vm06Q@mail.gmail.com>
-Subject: Am Waiting to hear from you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DEAR_FRIEND,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,NA_DOLLARS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:133 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ushaman235[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [daniekafando001[at]gmail.com]
-        *  1.5 NA_DOLLARS BODY: Talks about a million North American dollars
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Pierluigi Passaro <pierluigi.passaro@gmail.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.p@variscite.com
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <Y8QzI2VUY6//uBa/@lunn.ch>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <Y8QzI2VUY6//uBa/@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26782/Sun Jan 15 09:20:34 2023)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,I'm deeply sorry to berg into your privacy as we haven't
-met before I am Mr.Daniel kafando.and I work with UNITED BANK OF
-AFRICA.Can you use ATM Visa card to withdraw money at ATM cash machine
-in your country? I want to transfer money to you from my country; it=E2=80=
-=99s
-part of money taken by some old politician that was forced out of
-power.
+On 1/15/23 09:08, Andrew Lunn wrote:
+> On Sun, Jan 15, 2023 at 05:10:06PM +0100, Pierluigi Passaro wrote:
+>> When the reset gpio is defined within the node of the device tree
+>> describing the PHY, the reset is initialized and managed only after
+>> calling the fwnode_mdiobus_phy_device_register function.
+>> However, before calling it, the MDIO communication is checked by the
+>> get_phy_device function.
+>> When this happen and the reset GPIO was somehow previously set down,
+>> the get_phy_device function fails, preventing the PHY detection.
+>> These changes force the deassert of the MDIO reset signal before
+>> checking the MDIO channel.
+>> The PHY may require a minimum deassert time before being responsive:
+>> use a reasonable sleep time after forcing the deassert of the MDIO
+>> reset signal.
+>> Once done, free the gpio descriptor to allow managing it later.
+> This has been discussed before. The problem is, it is not just a reset
+> GPIO. There could also be a clock which needs turning on, a regulator,
+> and/or a linux reset controller. And what order do you turn these on?
+>
+> The conclusions of the discussion is you assume the device cannot be
+> found by enumeration, and you put the ID in the compatible. That is
+> enough to get the driver to load, and the driver can then turn
+> everything on in the correct order, with the correct delays, etc.
 
-I will change the account details to yours, and apply for a visa card
-with your details in our bank, they will send the visa card to you and
-you will be withdrawing money with it and always send my own
-percentage of the money, and the money we are talking about is
-$4.2Million us dollars.
+I've been running into this same problem again and again over the past 
+years.
 
-Whatever amount you withdraw daily, you will send 50% to me and you
-will take 50%, the visa card and the bank account will be on your
-name,I expect your response. promptly so that I will give you further
-details. Best Regards, Mr.Daniel.
+Specifying the ID as part of the compatible string works for clause 22 
+PHYs, but for clause 45 PHYs it does not work. The code always wants to 
+read the ID from the PHY itself. But I do not understand things well 
+enough to tell whether that's a fundamental restriction of C45 or just 
+our implementation and the implementation can be changed to fix it.
+
+Do you have some thoughts on this?
+
