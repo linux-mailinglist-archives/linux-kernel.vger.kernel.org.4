@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F64766B28C
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EF466B29C
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjAOQYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 11:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S230359AbjAOQiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 11:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbjAOQYj (ORCPT
+        with ESMTP id S231241AbjAOQil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:24:39 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120FACC3F;
-        Sun, 15 Jan 2023 08:24:39 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id s124so4686873oif.1;
-        Sun, 15 Jan 2023 08:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=061THNsgAzdYUYCWXtpbIXJENDrwSeWOCg61cRkldE8=;
-        b=n8bRVm/Po5sj0Ss87AF9yZnjNRq3VzYjMCRn223DrCawc94Mb9EtV+TiyFe99SKd/P
-         jKeaSW4Nq1RD6Bz+F7beykVuvwAXTtMwFnTHGu4zwlquL9XmySHhcZjgQKlwR/vgAP8p
-         dwmDa+dtdY361Iv6E4/8Nq22oC7HBiIiYaHbUDm0ru++3sEpGhrJtyfu5/xOoAah6nGP
-         9thmvMuurw/D1b16wWtwStkBDUFaYDqeKPgtXqyuwI5Vp49xHS9lS8AzjvqVTcYQL3Gj
-         /3EzBPgm8+Rge46nTGh40Ma+TpURYEtGrSsLzizICCkuptkNcGJWQO3oQ3RDfJzuBGG7
-         1DdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=061THNsgAzdYUYCWXtpbIXJENDrwSeWOCg61cRkldE8=;
-        b=QR3T4jkMW/4KdACUTtgx7i+u7hQx3odSmlOnwU1K4HJr8GNdbcvioRExpf4ZM/hytd
-         jXNQaNP6+cj6b4t3mJ8KPv7aRcM1ZNvFct80pgg10dUyz/TGb5RcUz2JWJBZRTtSune9
-         uMQUNm+NXHiYo+5sGw9vTMa9+3vIP154lGhQAdS9Qp0Kw8k0MkCthxunaZFzF8OMQIbN
-         B799PBh46axNwJWwp/5N88i+/Qi+ssaAkXT70LbDeO2K/NG+JzqrGf5wSR6EsfRm8ek8
-         TpV8rHq7P6DExh2wy2FG/cPEM1xXcXsphUSK7v64+cU11g9VeKd89WwcSVZQ6QNieSTr
-         Tbkw==
-X-Gm-Message-State: AFqh2krODB7yJBjve5PCoebGkvHN1dkSIsjsIP60PH4Su108R4f6L1PF
-        IfZyvEE/H0DMKraFTFQx6Z60JI5CLOw=
-X-Google-Smtp-Source: AMrXdXtt8bt2Xj7ihFc/CII2EXtE0/DmuFGnpK4a9HMUtIf1GKaI6S42XrZtbKdN+pHXndPvb+RaEA==
-X-Received: by 2002:a05:6808:1a16:b0:364:64e9:b483 with SMTP id bk22-20020a0568081a1600b0036464e9b483mr11405119oib.14.1673799878424;
-        Sun, 15 Jan 2023 08:24:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z12-20020a056808028c00b0035a81480ffcsm11641922oic.38.2023.01.15.08.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 08:24:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 15 Jan 2023 08:24:36 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (ftsteutates) Add support for fanX_fault
- attributes
-Message-ID: <20230115162436.GA1247826@roeck-us.net>
-References: <20230105225107.58308-1-W_Armin@gmx.de>
- <20230105225107.58308-4-W_Armin@gmx.de>
+        Sun, 15 Jan 2023 11:38:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CB1C65D
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 08:38:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D81F60C84
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 16:38:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C396C433D2;
+        Sun, 15 Jan 2023 16:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673800709;
+        bh=4CyV238BW6buQA/dtLPqJucBf3kAZWi8xQWfny1Z+yo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PQKd8QgV6dvP8P301dN0tE5afY5Wm9uXtm+/6WQV/iWzp3Quxx3vYQySiASSvQkC8
+         FbvHfLy3VREXlVn3JNf7LMLvT3+/BEylZzY+rGg3X6wuXE478LUha2AhQ7sFYLGRsO
+         te+kkuWk3/HQbnnCxT48UeZ40o1MWVccAXniOAknsm15KuZGIZtjabm3Ve35IFKYbL
+         KfxFbd7dkb9FjyWnU5IUXHNu1pQixVEnTdIdfCbYmBLkaJJncgU2IIOFzduzy4wrad
+         EJAkjJ5AF7alpCje0fvesrGUlJNOQBVzNXfBV+/fjBS5h+hN/4BKMaR9wKO7OKl/WV
+         8sEGJ3CBR/DGg==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv: alternative: proceed one more instruction for auipc/jalr pair
+Date:   Mon, 16 Jan 2023 00:28:11 +0800
+Message-Id: <20230115162811.3146-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230105225107.58308-4-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 11:51:07PM +0100, Armin Wolf wrote:
-> The driver knows internally when a fan is not connected,
-> but does not export this knowledge to userspace. Use the
-> standard fanX_fault attributes to notify userspace if a
-> fan is not connected.
-> 
-> Tested on a Fujitsu DS3401-B1.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+If we patched auipc + jalr pair, we'd better proceed one more
+instruction. Andrew pointed out "There's not a problem now, since
+we're only adding a fixup for jal, not jalr, but we should
+future-proof this and there's no reason to revisit an already fixed-up
+instruction anyway."
 
-Applied to hwmon-next.
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+---
+ arch/riscv/kernel/alternative.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Guenter
+diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+index fc341b69bf62..2354c69dc7d1 100644
+--- a/arch/riscv/kernel/alternative.c
++++ b/arch/riscv/kernel/alternative.c
+@@ -122,6 +122,7 @@ void riscv_alternative_fix_offsets(void *alt_ptr, unsigned int len,
+ 
+ 			riscv_alternative_fix_auipc_jalr(alt_ptr + i * sizeof(u32),
+ 							 insn, insn2, patch_offset);
++			i++;
+ 		}
+ 
+ 		if (riscv_insn_is_jal(insn)) {
+-- 
+2.38.1
+
