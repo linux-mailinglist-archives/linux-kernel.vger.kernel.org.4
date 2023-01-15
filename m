@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6F866B33F
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 18:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D570B66B340
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 18:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjAORlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 12:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S231229AbjAORlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 12:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjAORlR (ORCPT
+        with ESMTP id S231346AbjAORlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 12:41:17 -0500
+        Sun, 15 Jan 2023 12:41:18 -0500
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA1EC17E;
-        Sun, 15 Jan 2023 09:41:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEDAC643;
+        Sun, 15 Jan 2023 09:41:17 -0800 (PST)
 Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30FDngTQ005019;
-        Sun, 15 Jan 2023 12:41:06 -0500
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30FDngTS005019;
+        Sun, 15 Jan 2023 12:41:07 -0500
 Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n3t6bcxg1-1
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3n3t6bcxg1-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 Jan 2023 12:41:05 -0500
+        Sun, 15 Jan 2023 12:41:07 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JSH19R9SxhN6NrSZoYSPn9EDGAkeeSQ8PNaTOdn7uuqlyBQqHFZQvvqWbzuaFIrAahCLZwnQKTnkVNOjCTx9U29GalBPTrxwNtCYaEzBbJBpl2FYWsuj+aMCwRwsbp3TQSYxBZLWuI5R5+SAuUsb+N9Eh5WDjnpGlmYxgW66kqaLbAj8t+3Y1qUDhzv2XOXasjU9jhLnGMa/3Os1fEOkrpzT9LEVG5t+BnjngHLQ8guVrUrRsF3cyLHxWyOGI2RdFXhllZxQ8XeIzQRH0q1TBRBRsjdS/+CXoe40SIM74kE2WwWUd4ZVR7gtHCh8BBZJDnMF4NT8v/5zr7LzbfY54A==
+ b=K/yQtvfDRYbD1UUrGylCmfoSW88WHzUMGxp2Tobii/v51yZI6e17VH7opOFUizt2AmeocnM/u+M2fyxEMexDwnA6QzWxjer2RT/fj6VRz/nP+w+TPtNiDcq7aIvhVpWW0IAc7Xn1D7FLHYP05S45votT1cAkFjJojjyOFw0r/vdsuPPjEXhg14yGKI5w+erp71PtmI7Erq/TM3nK0ANx2WxY2+ooQmIklGr6hIWYtAPbLYrcmPlh9TAFwY3K0QAqIkaP5Um57s0F+8nj8EUZo9fC/tjY67GZ4lpIvxyzanQRdsCqGVlmsaCQlBleUelQG2mYz/0bl4XmZmFTW12jXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wpyIzx+1RLydPa2U2gbV2G/NCZceldxeqlkNfcn6IP0=;
- b=ZvdV1Hep5sdphLL7ceus+U0dN1I30Sei6xsXRKIwAaJCXFEnEywNBINcGxEyDtENKcplRCXQDsT5b48HhsTwNyIZDe4s/LiIyQsac7d0ruy+/g9hfhVQXnk3jMpsoT04ybTrlk/X/MvwjWVB0IVfPlAgLd5VZ+OaJT9BktMbRJrBgoJS/24N3LTZYcAGF14hhjQY17G6Gcc/hTSpImwp68t5AwAqqBlkfaIxKEQGxI/XunpmXZH79pzqKea0iQbqjcRFxgup8oceUjUgTppt3O5aRRZvRSCQG6357ZcpjxOt+bUCpUCXwth3dcw4n6hjvXViBj2LxM7eqYjuQhGDMw==
+ bh=P5pw/3J27HcamFOVPHR22xWVdp8aJPYl4RXcrLztkJc=;
+ b=RRly9k3pqG41WNG6VYkPyuo148dLQPUQ9hwTAA5qowGD/oQ/cFgQb6p78sfqAlS88WUzPiQt6mrSQxHAFrUJhr34t4vGlbsF3v71J/HfjdFz5zJv6PtKMNQdS0k/vG/EUtRrejSu1FjO4xhywLxRxH/3Gu0I8bE+9be/O7qXCCNU4VQYqgS/BksszaxHRzvkKQSabj0kycVV+m3q5SLKNpK9DHNg2lud0DKJ3ieQoy7WVtis7DlFeJCSPOIIjP7ddNyI5kwnPsvCFpsYUVaC3+9+texX8glm4c7DUNk2rDkFiDESodM5I0QsGG2JhOULRlgASHgkUXwD1cr1r/dC0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
  dkim=pass header.d=analog.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wpyIzx+1RLydPa2U2gbV2G/NCZceldxeqlkNfcn6IP0=;
- b=i5fqI+SRx/bMk2FEE/h4s4PB+R41QQ+Eax5ObzNI1QrmWY8Av6bZOQGUXHZbCFlT1grbK6OfMVCpzha9vIn8AxOZmV4s8JUGAOB3S0p8a8ZCDYqB4H8QHdk4sVfjj6o0fd+mVo7bbkAWfwNZnr+nTcGql0RSgqXkJwW8h23Ft2U=
+ bh=P5pw/3J27HcamFOVPHR22xWVdp8aJPYl4RXcrLztkJc=;
+ b=tqJl5gFAbHlb+LqE15qnPvn0iPYVADDM7bWzIbkO9t5UKAnDSToNSyr8fz8d+UOaRI96wbqWK6puq2bDuNKwDTVVZy4U4py9A61ih/RoYKkHibcfx6fzrUaNBL1c5bXjtJPRfIOgCYr7zAaMg9JQ3ZZMxXvPZ9OlQrbKfvAy1gI=
 Received: from MN2PR03MB5168.namprd03.prod.outlook.com (2603:10b6:208:1ec::19)
  by SA1PR03MB6532.namprd03.prod.outlook.com (2603:10b6:806:1c7::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Sun, 15 Jan
- 2023 17:41:01 +0000
+ 2023 17:41:03 +0000
 Received: from MN2PR03MB5168.namprd03.prod.outlook.com
  ([fe80::2f8c:567f:c6cc:dbd9]) by MN2PR03MB5168.namprd03.prod.outlook.com
  ([fe80::2f8c:567f:c6cc:dbd9%3]) with mapi id 15.20.6002.013; Sun, 15 Jan 2023
- 17:41:00 +0000
+ 17:41:03 +0000
 From:   "Sahin, Okan" <Okan.Sahin@analog.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:MAXIM MAX77541 PMIC MFD DRIVER" 
+        "open list:VOLTAGE AND CURRENT REGULATOR FRAMEWORK" 
         <linux-kernel@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v2 2/5] dt-bindings: mfd: adi,max77541.yaml Add MAX77541
- bindings
-Thread-Topic: [PATCH v2 2/5] dt-bindings: mfd: adi,max77541.yaml Add MAX77541
- bindings
-Thread-Index: AQHZGXrkC62bruN7tUqRwbXPu776mq6BXbkAgB5m/EA=
-Date:   Sun, 15 Jan 2023 17:40:59 +0000
-Message-ID: <MN2PR03MB51689EC83FF462C5CE903567E7C09@MN2PR03MB5168.namprd03.prod.outlook.com>
+Subject: RE: [PATCH v2 4/5] dt-bindings: regulator:
+ adi,max77541-regulator.yaml Add MAX77541 Regulator bindings
+Thread-Topic: [PATCH v2 4/5] dt-bindings: regulator:
+ adi,max77541-regulator.yaml Add MAX77541 Regulator bindings
+Thread-Index: AQHZGXrq9GaVXcoaG0SgDZ9yfIPnAK6BXoEAgB4y4JA=
+Date:   Sun, 15 Jan 2023 17:41:03 +0000
+Message-ID: <MN2PR03MB51688C9858CC8CA7CACCDB22E7C09@MN2PR03MB5168.namprd03.prod.outlook.com>
 References: <20221226223839.103460-1-okan.sahin@analog.com>
- <20221226223839.103460-3-okan.sahin@analog.com>
- <88ba15e1-ee03-bd61-fc7d-d00c8c6ae72e@linaro.org>
-In-Reply-To: <88ba15e1-ee03-bd61-fc7d-d00c8c6ae72e@linaro.org>
+ <20221226223839.103460-5-okan.sahin@analog.com>
+ <74fd9706-119e-c6c3-4c64-c7ee419ce4bb@linaro.org>
+In-Reply-To: <74fd9706-119e-c6c3-4c64-c7ee419ce4bb@linaro.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcb2thbi5zYWhp?=
  =?us-ascii?Q?blxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4?=
- =?us-ascii?Q?NGJhMjllMzViXG1zZ3NcbXNnLWMzODljMjJkLTk0ZmItMTFlZC1iZTkyLTkw?=
- =?us-ascii?Q?MmUxNjI0NzhjNlxhbWUtdGVzdFxjMzg5YzIyZi05NGZiLTExZWQtYmU5Mi05?=
- =?us-ascii?Q?MDJlMTYyNDc4YzZib2R5LnR4dCIgc3o9IjU0NjYiIHQ9IjEzMzE4Mjc4MDU2?=
- =?us-ascii?Q?NjgxMzY4MyIgaD0iTitqYUFnU3hWSjBUZlhRc1phdTlBcU5LZjhrPSIgaWQ9?=
+ =?us-ascii?Q?NGJhMjllMzViXG1zZ3NcbXNnLWMzODljMjMwLTk0ZmItMTFlZC1iZTkyLTkw?=
+ =?us-ascii?Q?MmUxNjI0NzhjNlxhbWUtdGVzdFxjMzg5YzIzMi05NGZiLTExZWQtYmU5Mi05?=
+ =?us-ascii?Q?MDJlMTYyNDc4YzZib2R5LnR4dCIgc3o9IjM2ODgiIHQ9IjEzMzE4Mjc4MDYx?=
+ =?us-ascii?Q?NjIxNDgzMiIgaD0iVXlQQ0dma2JlOXhRVG0zRExaWk5La3o5MVpvPSIgaWQ9?=
  =?us-ascii?Q?IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFBRW9D?=
- =?us-ascii?Q?QUFEek8rS0ZDQ25aQWR5V3pOR1oyNTBIM0piTTBabmJuUWNEQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBd0NkU0lDQ25aQWZ5K1plSGlFdzZBL0w1bDRlSVREb0FEQUFBQUFBQUFB?=
  =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUhBQUFBRGFBUUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
  =?us-ascii?Q?QUFBQUVBQVFBQkFBQUFSczFnRlFBQUFBQUFBQUFBQUFBQUFKNEFBQUJoQUdR?=
  =?us-ascii?Q?QWFRQmZBSE1BWlFCakFIVUFjZ0JsQUY4QWNBQnlBRzhBYWdCbEFHTUFkQUJ6?=
@@ -97,56 +99,56 @@ x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcb2thbi5zY
 x-dg-rorf: true
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: MN2PR03MB5168:EE_|SA1PR03MB6532:EE_
-x-ms-office365-filtering-correlation-id: 94314423-eaef-41a0-d879-08daf71faa46
+x-ms-office365-filtering-correlation-id: 5745410d-0f0f-45f1-fafa-08daf71fac36
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dzliCZ2Cwl/Trr+95T0iknqimsFBBLDZ3diNT4jnHeaip5nxV+JRPW2btRmzSk/Val8BJLU6h3P6VkFBWX8t/BaKTbC+n2GwoM9luDJYeX1R8V06dBtI7yExpAWZ6iBu4R75+Z7AHdiHgVDQ0IUtf5etUsqNdxbIjV79l0axSf5zr46M95TLEfn1U03HK8VDmBqNPh/A3E5k83Gw7jyVfu9xeviLYo2wL7nngbC0WEb5x9Ykw8SEYTsDQfLn9GMcqJB0Nu/MqYe+IwsSj3cRSg6k/AOLOCVTTRDVG3criM8Mpjj96F4IW36ig58WTXrsIvAoVD1n/rxVIr42E/Cz3x9DaqDmJQa5SEUiWz7eYoze0edgvx6Q3/fzvQ0UVxJydsa5rdqvYkBAi89AAqVWQvHSbBjaDj2VcZwMQbW9yWVFJOtdGhFq8iSvl+qmNjM15eA3YFJMr6AsIMnYQ2BrC9DSaNZNoJWWsUw5tHPGlVpEZrb9RttgXMcX401uom81igcuKZmHjqVhgLofOOD9wjwduqYddlldJXNKIV/66ALMONp67LEHr8UqBRwDblKkk7RcjgJIb313CMiGAcZXwtgP3QPe0X1W2qMg51dSQ65gasDI8vfaMwKroOTIhBWO4eUlX2b5mTfzHy19jIfAYhEUCm+pcytcg32juj7IuLJ52pzEK5K0a795EhHhH50Tk2o65bjzeAWiY4T/VTqcqRkMOOVzQWy2wvu1TPSBGpal2iDQuQghsUkGLoQ38d9Y6xaNg/aTbYbJxhTZTEeAVQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR03MB5168.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(136003)(39850400004)(451199015)(38100700002)(122000001)(9686003)(33656002)(86362001)(8936002)(52536014)(5660300002)(41300700001)(66446008)(64756008)(316002)(66946007)(4326008)(66476007)(66556008)(6916009)(76116006)(8676002)(2906002)(55016003)(7696005)(83380400001)(38070700005)(71200400001)(54906003)(53546011)(478600001)(186003)(26005)(6506007);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: ojIUjvzJAAPiOwCuKYuGeTop4E5T9Te2yl2cppbf+gXczHTKwhDO9e1hovRs3LYQGRpzlr623LpimJGiR9qJJp/o1NHSQk8blZ3ziP71mSHsBB6xsBvUMj/p+8EzcvRxOxQEKqJgVCZWRXV/M5KSl9oN9lshBUJgrw6Uhhk9Par53QtdoYf23TvAtshf1GVM6QRDIDokvwZsRCuESEQILYdBHSEs52xZ4GCnKsJfG+tLmuFzzYpGyyZKu8IQjd8ETri27TwygameBGdsDdNuxm17+s1UEHOMs3FR23wS3TJNL/ccRCbTzzK1l6FGzHwFKQXc3vJVyI0UGWa1Fp+bUgKG9n/FnScCnxwg2hyj3XtTlwx677M/fDvjf+MLQHYZrm82lGC+TulO7UZiAwWalG8Jca4MTtYNWQ23LtZZQ7cOmdsSc3BGjHr2RS2lh+tv8vo6ONTk5Zst7jb6egpJfp6Ke9uKpYfN+WwrxlSc6oAdis8hJdvcRp05a/43ywNt+wIMATzehciHyv5bmC+MqNq7DOw6/4ot+02diuiEEePTmVanRGEwN1692fSDnaZ5GkwqA/VPsYv8++W3Tjg8FGU3HRQNbOedzq1Ru1tljzRufpxYEHZnujOADpKd37JW6/rLjnDDqVXHZjCz11DfpRr1HP3T03GwKFGophaS2wTIz1k8AN4FnatZOkSyAjh3mA2vVVbWDAWVigqj7nriDIseIdm6LQKrv5llDsx5HjG5hH4OI2lwjBZ/pCG0Zynef2DEJ0hAulHcv0rwRG64zA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR03MB5168.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(136003)(39850400004)(451199015)(38100700002)(122000001)(9686003)(33656002)(86362001)(8936002)(52536014)(5660300002)(41300700001)(19627235002)(66446008)(64756008)(316002)(66946007)(4326008)(66476007)(66556008)(6916009)(76116006)(8676002)(2906002)(55016003)(7696005)(83380400001)(38070700005)(71200400001)(54906003)(53546011)(478600001)(186003)(26005)(6506007)(966005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cJEe3YzoheqzzANfcnFGujgdAEWRK8+LkRll689PNIXLoIw2In0KOSsUhUdt?=
- =?us-ascii?Q?TnPK5xVanaIQKLRkHbnyavXsDRsjpK5oGDgefmQGp0NYvUM0WkwvDHH357/U?=
- =?us-ascii?Q?hnoF5Kyci92zFolq0ZpsDf/g320lcjpeGyNUkgNUvI6M/f40hrQfWG2vMZhw?=
- =?us-ascii?Q?QGjc6HbS2yRUJFRHGF02gpmbJfqlNz7rQXFoYz9GloxzE6zoXaHLlvHb7E9r?=
- =?us-ascii?Q?R2DkqhL4pkFPRGvMD5NW6/17k6/Ry37dhK8HAeandhHWZMCmqP28fV7xSuHB?=
- =?us-ascii?Q?ykvBTZDUG4o7DqdWe1yoVr/MN+iweEGdyu/1xInk9ON8/TTWfMiri+IKSwjh?=
- =?us-ascii?Q?UAB/D+NAM5X0R2uUefk8JxlZJlXn1dOfaMRJBLyxkyIeri/z/ykWZYQlSH9j?=
- =?us-ascii?Q?zRKmao9sEdjWeSALHZ3IL7HfX2rq9FQyTXvWSbdTRFS1pl72XTXnIWwdierY?=
- =?us-ascii?Q?6DzFMBkAnk6DNshUlpBRDLBwvnpjh/Ej+dYPMQ9TnhD5j+MDRS70VxQoQpep?=
- =?us-ascii?Q?FwCf61QD0ojmccuydqs8J3mLjf46Va+XxWnqypkAMaWcQaZqq0KG+cw6ML9B?=
- =?us-ascii?Q?C+fwKRkeaj52mhp54yE9828aKWFZuPSmWKDn45s401dow4XHRDRqj6omUF4u?=
- =?us-ascii?Q?Gz/jB5LgC76OxH77C8QSFyFJsbp7ID7f9+FlE0nTgIBYlDyQIp+4Deu2AU1T?=
- =?us-ascii?Q?GxstydnFbPRRx6QPEXLP+QFfpKMjfPytChhub9nbu+kn3iUYHr1Qh+RbG/hr?=
- =?us-ascii?Q?pPNODbzXE7b7fYiSSWaTHGtkecqA2730uG7wEaqxq0FAnZQtBuF6jLziq/eY?=
- =?us-ascii?Q?cMq3ajIoYFUrZYsYmI+gRPrOHzYuloKj+is9shNeg7V+wRc/SPgLJ76EtwCn?=
- =?us-ascii?Q?GOYh3W7+VzBlAncg3vl0Z9jPrcyE4tPR6ICFhvogqGoSy13NS7OOFg6G6tsR?=
- =?us-ascii?Q?S+NAkrHLA2isT5RSEagYX0Gx0N8hMCbX0hhRjDsDBPNYNjFFSpk8MaeuW5gz?=
- =?us-ascii?Q?8xDFTrhDbeHSMhlDroZpar1XmP62inoTS86ul24qlX+YCySqytZtNTp5dxF1?=
- =?us-ascii?Q?UPptdUQt0qZMZtvTdTh2lOAjDVPRb4epxUgAg+dFGDC5llte1cIHkS7ha60E?=
- =?us-ascii?Q?RmLG69wTh6nE1iInkZJOCEWXKuzNocV7dQaFIcUoCUCw0cNHGKEXZRa8tQg6?=
- =?us-ascii?Q?oZ7o6vV3Utyxa6YibzH6MjRSXkbh9coyCpw2EgLr84Q+9CytfrSzclSUXxAX?=
- =?us-ascii?Q?Cr5XsdLUw5eQEVVy4Ay+xPhhrUOxXTfYkbmZxuQ8w9mjGvekbujx8A+Iwqh/?=
- =?us-ascii?Q?egSqHVt7sVQ836PVeGsPXNe5aDE7zyu3Co8gKQSj4yxPHZG9DVk1Ha8DGqM6?=
- =?us-ascii?Q?34hOrU36Uy+o7FUYxzydG4rzh05DGXzWoPLhTVRsBbcsENFO8gVGz/dJLK8k?=
- =?us-ascii?Q?F6eunXnoMdzqnIIPt8HRRKODBMlPtLXRuPvQWPfvCy9Rn9W7F9m+d1OKfbGo?=
- =?us-ascii?Q?TKZnZJTCNtXAzA+8TuDFyiQ49h3Ck2w0CzzfuukR66N6/pRYPtKwD4VvLJSd?=
- =?us-ascii?Q?2G1cGthGbJ3TrAdJxSsuv5+YUW7rQ0D8UFkieVZM?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/RVywQZkyYqezMwW8Qn06c91kNtHNK1qIFuGjscI2zUWwuQd4o94JklRa7gt?=
+ =?us-ascii?Q?QQkZqlGuqP8QGpg9trYhfCH63vUQYL4FFvf5pApkGWFoXDfmuKnXdHSjoZQ4?=
+ =?us-ascii?Q?x4Mwxv2b6kUU3H89HaMK8+lcof3IJ7Vg3Pgim14zEqMfdaQ4mO70aQxxzJKA?=
+ =?us-ascii?Q?ry7O9W4YV3/+tFJWlTCxjuGIlAvnFpXyiQ1j0N4Y9OG8Axv/cmUO33rSZgzb?=
+ =?us-ascii?Q?hM+RsIALPkylcHYw3yqkGMkbxLhs8eYhbZC2+I9hhUSdn6GEF9ZmW+s5YtaM?=
+ =?us-ascii?Q?FKYhKkVsLCulQHhT7le6b/3xBuoNSFHNREB19WBxTTg4HTEj2P3nawVWlK+G?=
+ =?us-ascii?Q?KOCEAJGa5nk96zRsEb3PzlPVgsCQDn+j8gbBX0BDHYOr04n30d7cBg6kjXlt?=
+ =?us-ascii?Q?aQEMxcmY+NyyvtDApIxP8ge+loBh2fjkrjSu8PBMfUiLmCcSyOFHNBbEUdpm?=
+ =?us-ascii?Q?dfqx3zQakgEht6HC4252Ilnf+4MQGghTtW4Qq5J9PMSmO9nuX84Yz9n3NAw2?=
+ =?us-ascii?Q?ei0X321uTC2/usNNOZG5mNJkxthWom+6vVTlXT94+Qo+0820ORNX6K1I/7Is?=
+ =?us-ascii?Q?I4J/X/Ks7KrZQ1IBOK2ZZW/iKeilCIU+eg7eYattp1fOH72MMTsG5kdFrQSD?=
+ =?us-ascii?Q?46CPGJYiFtpw9CrkNhRNj46oRKEmht3/qnZf+SPWsnjuY1qiKimB4BkCz2LY?=
+ =?us-ascii?Q?8nv6ISdcrigrTk8ReiSLJZIjbbZht8msZkcR/81comsI1zzkF1HRpRRNcTxZ?=
+ =?us-ascii?Q?7WcY5UxhJowpZ8OQnHf6OR01xHiJKD3cyhfQHKX3VFanB0tyDEgh0s1VIERw?=
+ =?us-ascii?Q?dXvDGHCsweMflRpz0vPKQqNs+K3BVpwfsg6BKfZlSt/oF1szLYxTGO7J1tKc?=
+ =?us-ascii?Q?hIIKfmxkgVQNW0dVSIw3MPdbv6nFt4TnywM7imG1lzC6soPKrw4vaJc+GI58?=
+ =?us-ascii?Q?Keh5rHqGRV3mKTz3imvWVi9hKNBjSRgJiEZPS9gsy+jBfuJwoIYLIxjCo2/U?=
+ =?us-ascii?Q?gUYBcKR1XXihwqkLzdDPOBO7y+fGzjxvpLhI4lErLyvpuy0EhYC2XZe7vcik?=
+ =?us-ascii?Q?Y9U7EAUSuGIyVwzimoOMMxrZ1aqVURLG/F0xloGtT5qgv2iVotkA+BoBpz+x?=
+ =?us-ascii?Q?vNkQCc0YvohaO58kEMNlh6jw3OnAFa0+iN1vJSAwGC4EULypsD16Phtor3ko?=
+ =?us-ascii?Q?RXSGd2GOLrLUPvGxUgAKKpcoOEPRLC7zA19rUOyL7ndXKVNhYqWLFAF0BTJz?=
+ =?us-ascii?Q?o37hGxN3DKfHCyO6k2nGGKfdJUvoPZzL3yPjxbyyI7GaB1ZRVICZS2cdj4j7?=
+ =?us-ascii?Q?2dwvkTrj/8kZ595c/wfWPJNl38MwyEWuPzRN4gnTq49nyFNX4FyFr+jym9F7?=
+ =?us-ascii?Q?T1ik6bNMEpuF4IsS99X4pQqxvcl87t8Hfj/sswChenYcHb8b1lcEHoUFKeN8?=
+ =?us-ascii?Q?YMzgUd2QNtSDe3aomvX1TU5g1MO0knpc5h0fKxA1WwONZledhYt0tpfFu8a2?=
+ =?us-ascii?Q?Yr3jMEX/8Qgt3/GBkNXCsFDPWc20K/BSc6UoNyjWqi4jdXL9aQifdoCie9Hi?=
+ =?us-ascii?Q?TGHu+P2BkgTO8ldD4G5V/VIlSL+kbkrkAQqtCeW4?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: analog.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR03MB5168.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94314423-eaef-41a0-d879-08daf71faa46
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2023 17:40:59.8850
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5745410d-0f0f-45f1-fafa-08daf71fac36
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2023 17:41:03.1520
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 66+7SqZxWgT8SsB21lCwL++UBzJ+HtN2zc//OC+drNa73g4MLkzFJM81gFiHdhBwu/E/a5qVN6XccBgOFdHWZw==
+X-MS-Exchange-CrossTenant-userprincipalname: Cwqym+61lZuSTNbjYIcuj+QRjIU5JoLfchsg9Ls/s3pVl4VJUUv0FikUkqLBitLpI/nHYBnYlPXDBUzXbAyYDQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR03MB6532
-X-Proofpoint-GUID: CkI1rqko2i76AFxCBl9ZSIvjmfVRQZ4s
-X-Proofpoint-ORIG-GUID: CkI1rqko2i76AFxCBl9ZSIvjmfVRQZ4s
+X-Proofpoint-GUID: uR4RRntPYqxtDDZWt4Fg-tp3pVHJeyyk
+X-Proofpoint-ORIG-GUID: uR4RRntPYqxtDDZWt4Fg-tp3pVHJeyyk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-15_13,2023-01-13_02,2022-06-22_01
@@ -166,182 +168,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-Thank you for your feedback and efforts. I apologize for some missing point=
-s of v2 patch. I tried to do my best. I will be more careful to fix all fee=
-dback before sending new patch so I want to ask a few things before sending=
- v3 patch
+Thank you for your feedback and efforts. I also have a few question below.
 
-On Tue, 27 Dec 2022 10:54 AM
+On Tue, 27 Dec 2022 10:57 AM
 Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
 > On 26/12/2022 23:38, Okan Sahin wrote:
-> > The bindings for MAX77541 MFD driver. It also
+> > The bindings for MAX77541 and MAX77540 regulator drivers.
+>=20
+> 1. Again:
+> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.17.1/sour=
+ce/D
+> ocumentation/process/submitting-
+> patches.rst*L95__;Iw!!A3Ni8CS0y2Y!7nAM0w0tZiMzaqSFijTSs6_FiIcbPVz-
+> n0BajxVC1WDh0GfsgL7XoVFoFToHza-Cy2_p8o0UEEc82BOnwgesjPcas_9m$
+>=20
+> 2. Please wrap commit message according to Linux coding style / submissio=
+n
+> process (neither too early nor over the limit):
+> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.18-
+> rc4/source/Documentation/process/submitting-
+> patches.rst*L586__;Iw!!A3Ni8CS0y2Y!7nAM0w0tZiMzaqSFijTSs6_FiIcbPVz-
+> n0BajxVC1WDh0GfsgL7XoVFoFToHza-Cy2_p8o0UEEc82BOnwgesjE6sDUk6$
+>=20
+> 3. Subject: drop second, redundant "bindings".
 >=20
 >=20
-> 1. You did not follow entirely my advice here. Read again what I asked yo=
-u to fix
-> in commit msg.
->=20
-> 2. No improvements in subject - ignored comment.
->=20
->=20
-> > includes MAX77540 driver whose regmap is covered by MAX77541.
+I will update like you suggest. Is there any command that you can advise to=
+ check format of commit is suitable or not by using check_patch?
+I just added checkpatch into .git/hooks/post-commit file.
 > >
 > > Signed-off-by: Okan Sahin <okan.sahin@analog.com>
 > > ---
-> >  .../devicetree/bindings/mfd/adi,max77541.yaml | 102 ++++++++++++++++++
-> >  MAINTAINERS                                   |   1 +
-> >  2 files changed, 103 insertions(+)
+> >  .../regulator/adi,max77541-regulator.yaml     | 44 +++++++++++++++++++
+> >  MAINTAINERS                                   |  1 +
+> >  2 files changed, 45 insertions(+)
 > >  create mode 100644
-> > Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+> > Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yam
+> > l
 > >
-> > diff --git a/Documentation/devicetree/bindings/mfd/adi,max77541.yaml
-> > b/Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+> > diff --git
+> > a/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.y
+> > aml
+> > b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.y
+> > aml
 > > new file mode 100644
-> > index 000000000000..50f93cb0bb66
+> > index 000000000000..67d48bfcb627
 > > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/adi,max77541.yaml
-> > @@ -0,0 +1,102 @@
+> > +++ b/Documentation/devicetree/bindings/regulator/adi,max77541-regulat
+> > +++ or.yaml
+> > @@ -0,0 +1,44 @@
 > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
 > > +---
 > > +$id:
-> > +https://urldefense.com/v3/__http://devicetree.org/schemas/mfd/adi,max
-> >
-> +77541.yaml*__;Iw!!A3Ni8CS0y2Y!5i9A0O1bNDHqRib46J285KCGbVLbqULqRRa
-> 153Q
-> > +XIaclV3BEUrMbK0XAuXk3meed6XG3y7HigRu81P9dqjnUsb9S3g2t$
+> > +https://urldefense.com/v3/__http://devicetree.org/schemas/regulator/a
+> > +di,max77541-
+> regulator.yaml*__;Iw!!A3Ni8CS0y2Y!7nAM0w0tZiMzaqSFijTSs6_
+> > +FiIcbPVz-n0BajxVC1WDh0GfsgL7XoVFoFToHza-
+> Cy2_p8o0UEEc82BOnwgesjKsOQbIb
+> > +$
 > > +$schema:
 > > +https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.y
-> >
-> +aml*__;Iw!!A3Ni8CS0y2Y!5i9A0O1bNDHqRib46J285KCGbVLbqULqRRa153QXIa
-> clV3
-> > +BEUrMbK0XAuXk3meed6XG3y7HigRu81P9dqjnUsRlxWY6o$
+> > +aml*__;Iw!!A3Ni8CS0y2Y!7nAM0w0tZiMzaqSFijTSs6_FiIcbPVz-
+> n0BajxVC1WDh0G
+> > +fsgL7XoVFoFToHza-Cy2_p8o0UEEc82BOnwgesjEgbPQFe$
 > > +
-> > +title: MAX77540/MAX77541 PMIC from ADI.
->=20
-> Drop tralling full stop.
->=20
+> > +title: Buck Converter for MAX77540/MAX77541
 > > +
 > > +maintainers:
 > > +  - Okan Sahin <okan.sahin@analog.com>
 > > +
 > > +description: |
-> > +  MAX77540 is a Power Management IC with 2 buck regulators.
+> > +  This is a part of device tree bindings for ADI MAX77540/MAX77541
 > > +
-> > +  MAX77541 is a Power Management IC with 2 buck regulators and 1 ADC.
+> > +  The buck converter is represented as a sub-node of the PMIC node on =
+the
+> device tree.
+> > +
+> > +  The device has two buck regulators.
+> > +  See also Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+> > + for  additional information and example.
 > > +
 > > +properties:
 > > +  compatible:
 > > +    enum:
-> > +      - adi,max77540
-> > +      - adi,max77541
+> > +      - adi,max77540-regulator
+> > +      - adi,max77541-regulator
 > > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  regulators:
-> > +    $ref: ../regulator/adi,max77541-regulator.yaml#
+> > +patternProperties:
+> > +  "^BUCK[12]$":
 >=20
-> Wrong path - it should be full path with /schemas/ just like it was last =
-time.
-> However such file does not exist, so again as I said - you did not test t=
-his patch.
-> It's non-bisectable patchset. Order it properly. don't ignore the comment=
-s.
->=20
-> > +
-> > +  adc:
-> > +    type: object
-> > +    additionalProperties: false
-> > +    properties:
-> > +      compatible:
-> > +        const: adi,max77541-adc
->=20
-> This is a friendly reminder during the review process.
->=20
-> It seems my previous comments were not fully addressed. Maybe my feedback
-> got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all reques=
-ted
-> changes or keep discussing them.
->=20
-> Thank you.
-Honestly, I don't quite understand what you're suggesting regarding the adc=
- part. I thought I should add the adc as an object since it is in the mfd d=
-evice. Do I need to remove this part?
->=20
-> > +
-> > +    required:
-> > +      - compatible
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: adi,max77540
-> > +    then:
-> > +      properties:
-> > +        regulator:
-> > +          properties:
-> > +            compatible:
-> > +              const: adi,max77540-regulator
-> > +    else:
-> > +      properties:
-> > +        regulator:
-> > +          properties:
-> > +            compatible:
-> > +              const: adi,max77541-regulator
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        pmic@69 {
-> > +            compatible =3D "adi,max77541";
-> > +            reg =3D <0x69>;
-> > +            interrupt-parent =3D <&gpio>;
-> > +            interrupts =3D <16 IRQ_TYPE_EDGE_FALLING>;
-> > +
-> > +            regulators {
-> > +                BUCK1 {
-> > +                    regulator-min-microvolt =3D <500000>;
-> > +                    regulator-max-microvolt =3D <5200000>;
-> > +                    regulator-boot-on;
-> > +                    regulator-always-on;
-> > +                };
-> > +                BUCK2 {
-> > +                    regulator-min-microvolt =3D <500000>;
-> > +                    regulator-max-microvolt =3D <5200000>;
-> > +                    regulator-boot-on;
-> > +                    regulator-always-on;
-> > +                };
-> > +            };
-> > +
-> > +            adc {
-> > +                compatible =3D "adi,max77541-adc";
-> > +            };
-> > +        };
-> > +    };
-> > +
->=20
-> Stray new line. Drop it.
+> Old DT example was correct - lowercase node names.
+Actually, I did not change this part of the patch. I checked other examples=
+, and it looks like using upper case under regulators node seems correct to=
+ me. Additionally, there is no warning or error after "make dt_binding_chec=
+k".
 >=20
 > Best regards,
 > Krzysztof
+
 Best regards,
 Okan
+
