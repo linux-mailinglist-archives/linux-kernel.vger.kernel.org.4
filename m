@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5016666B3ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A6B66B3F0
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjAOUqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 15:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S231561AbjAOUs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 15:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjAOUqk (ORCPT
+        with ESMTP id S231462AbjAOUsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 15:46:40 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA63413511;
-        Sun, 15 Jan 2023 12:46:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1673815583; bh=DP/1nuJOTE9gH1Zhyg7I2is4AeYaxDt/PxArbptl+Xs=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=atG7FCQFYgQtTtBmJq9FYBNKK94PVv/fHkFie+e5rI5f3pYu00aMxSM4vsQZvbcy9
-         ZPd+/YlBVZBW34z9pjgFripPUNnCm/x4PzeiyVecMNhk2ywWYgY8zmzeWa5wv4CyZa
-         sjo4BLB4ccW85OYueS2yF4AsdWgmkQFJpvZOFBipDkWJ1W1F7sfTEnafCyT9jD5fKp
-         KYzbAVmti3Vb1xksmqlCRh71I8V3az8SPFNgxTnmsuFJzq4xks5x+rNRT5A+3UpUi5
-         GEMcxfTZKr9PNdLLYZLgOOzCP78/4+z6Jli/GRR44wrTa0lqMNtNmVrbRlJSaqKUED
-         22hI5MfmXl1Dg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.161.25]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mj8qj-1olggk2lj3-00f7nS; Sun, 15
- Jan 2023 21:46:23 +0100
-Message-ID: <a3e368c5-3b4c-fe05-394b-50d1a1c01389@gmx.de>
-Date:   Sun, 15 Jan 2023 21:46:21 +0100
+        Sun, 15 Jan 2023 15:48:55 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A280413512;
+        Sun, 15 Jan 2023 12:48:53 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id d10so18346277pgm.13;
+        Sun, 15 Jan 2023 12:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MIkd2tMIqbl7DAxJsCwkxSiR7cv8R+Xwzf9xXdLwdvw=;
+        b=ehnqfS3nWLQtL0guJ0ycBgulw4xjhbNma55ULp/G8DJuYbtDRgzRaFPf3kqHaOX6Bs
+         WzxOSEULv9A2HRlHksKOJCs7nqOQXk/Xa+fjrWqGGlKsveeBbSriQxj7XuqwkJHgpTsC
+         RnQuCgwSfXyrekYgh9SfT5v+WtnpMySyx/lvLEvnJglb8l+Z8YOjng51pySwnwSHy6ke
+         TuLRTIwGObtWeEu4QraCIjGbv2E3U0u/BM4ZgWlfyLasLEmf9em+6ABe5q+cvvArTm1p
+         HiRIOUReY5n+ODvjmfyK2C9Kp69ysZK2g0Z65oRMR3P9cX94rsXLNZtL5eOEyis1/+nr
+         ExCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MIkd2tMIqbl7DAxJsCwkxSiR7cv8R+Xwzf9xXdLwdvw=;
+        b=OcBwzCCSya+r8AlEuYIEw5AD+vCeHCWtFpDeOHXLG8Zn9evlUU4o4RqEJinDWdEy4e
+         PCcJO1TymJaKEVicw6tSStTZ4M5aKWC9dZToa6DrttBzaJ3vK1cMi+CTGlXAGZljpEqE
+         41G7aM0Qu7BLrGJ8TEeRlavVmSfRFB0AUEl6I9Y/95GYNK/f8sJ/09o8NubXV8nQCaUY
+         zA/xcwNSI/6jXCisihwzrwgANft+Nyev2OSLjq2Zw5b11iBpkrnWd/v412bKCOEVMxHX
+         OzuxoJIDMbRgHvxicnpzr2NIkZm6X8uHkSGY7Ugu7oH8CGfSBE5WR/AECmbCdJ62xsKh
+         z7WA==
+X-Gm-Message-State: AFqh2koX+yy8zkN3gTF4+PG0P3PPEUr7R68RQdDfv4Mim38Zsan8QFsd
+        JDUVs2DleIAOJMEZESWP09y+UnPPm/z5ozNpGdM=
+X-Google-Smtp-Source: AMrXdXvWyvpXV5dLUF+hc/n/3eVOPJVL9z3kWOSuXuFG8siScyfsnWEajTwnwIP8AvxMoFyyyiRYT2lICAflIwow2Ns=
+X-Received: by 2002:aa7:8157:0:b0:583:3c8d:266a with SMTP id
+ d23-20020aa78157000000b005833c8d266amr3155570pfn.72.1673815733109; Sun, 15
+ Jan 2023 12:48:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fbdev/g364fb: Fix a compilation issue
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>, xurui <xurui@kylinos.cn>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        linux-mips@vger.kernel.org
-References: <20230105094039.1474255-1-xurui@kylinos.cn>
- <CAMuHMdX174erGgrCUBv2WdX67H=mig-hi=SOdeMJ=0__thC_fw@mail.gmail.com>
- <CAMuHMdVdCBxZ39BbtLDPeiMK9BK4M0W5hynrYLFx6+ibunyxGw@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAMuHMdVdCBxZ39BbtLDPeiMK9BK4M0W5hynrYLFx6+ibunyxGw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Dv6Nk/b9mmPf1W7hYeG8O+pCiMM+daiwzKYotwx+ScqZyXtQjgX
- Z6GUo9bnwKFF5agwFfckUMINAbt8mJElX1DtdKYo+rc99J+x894aI/lWCcrUQ/Hr9q2A9nL
- FoqQmH2y8dFAuOyu1HyPQEtxecuThxtp37QTs4J4v4eeNaiBHuf0fHyTT2/g/hHUtt9XSMr
- 6QrvXdSxxWdOilXI8g/ZA==
-UI-OutboundReport: notjunk:1;M01:P0:JhfJtG26gX8=;CebJ7tLwaEfjeNX0T75Z3Ga6S7z
- tyuFPNI9Vk8Syp0h7QAeESs9MvMGs9gYgvkMms01AJ9ypOrBBwajeH4S2cJ939euZZYdj5Xuj
- Y1qzfOOZg7sRVogS7/xPMm4/Lgx7Q4/VW2UWZKBYLqYotMS7aVY8ZVJ4DuZIH0jB9otzyqCRT
- DhpdF3O2SjMAKW70WqmcxbpWe7cnJEY6evYFhaThc8R6sklfylJAQTVECv+qJ26/+2hbCINAm
- UeasWkmiQ/pVEPHWeLJ9Jw7GmiY8IRxhh7L0+FiKmlSZFHYd09j+Ca5CZg2Z7uOAxciCGIDDl
- TIuwUeqI+aO78ubqBdLWLjjpYh1xsJ0QolLFcKJeSMfWTuehM/zU+n11SAflN7Taa8wxcHmqX
- bjA1o5znJEmk2uEMp8Nqm3no6ZyJUXsl5yoOUS7/efLoLgp8tP9Sfn3j+7aJQ9YeHNW3AM/ZE
- H5tEFWEmZp/pFWLDbJ6l609e2HLzg3J6kZgNTy3MsuQG3XpqjlUu1NG/BpUnaSHmnQzeKQj2r
- jJnSY85hMri2TlPyTJEkAp7VjLbx+EhUseJVBc9FVigObR/Lk8dIofUzgNFmyYN2MvqewWgkk
- HATHaCI/efFCmThr0MrMnEJ6dYgrR0I6s35RbTVu6KIBw96HUHgZo4Yvah5H76BWXtnNNl8ug
- /j+xjm8FE5HiD8kekeLUA5tswzzdOryMKLSuvc/LC3XzUCB1KBn5ugsJ3QwDiMUJiFcpZafLT
- uZno9JP7pHzJvvo72j0FYNA5ngC7Dy0o2wGWHxdzDDLgt9kQjT6T1lmhESTe6X1jwDPTS9Y7H
- WRmMOj7EB6rmTMjDHnfdqW/8eMT+w8SvQdi9qP+858zF7Sx4T8ho6H9UxJARe/gNaQD3dsUTc
- qih88DeJdUuehmtmpjwsKlfsirdwe55NoYjius88o3c3pvUlpDt0l0XJGE968+/d0tP7Zg73L
- iCOQHg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230115103217.9232-1-pierluigi.p@variscite.com> <CAOMZO5CdG=Tx98DVYo9QZFM7Y65b0KGLNc=XskYDuRqORBiLSg@mail.gmail.com>
+In-Reply-To: <CAOMZO5CdG=Tx98DVYo9QZFM7Y65b0KGLNc=XskYDuRqORBiLSg@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sun, 15 Jan 2023 17:48:41 -0300
+Message-ID: <CAOMZO5BLoCibdbmBV5Sysfc7seCnYu7Mvu+Yar-YUvDrjJuNCA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mm: Fix pad control for UART1_DTE_RX
+To:     Pierluigi Passaro <pierluigi.passaro@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-imx@nxp.com, pierluigi.p@variscite.com, marex@denx.de,
+        peng.fan@nxp.com, marcel.ziswiler@toradex.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, eran.m@variscite.com,
+        nate.d@variscite.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xurui,
+Hi Pierluigi,
 
-On 1/9/23 11:04, Geert Uytterhoeven wrote:
-> This time with the new linux-mips mailing list address...
+On Sun, Jan 15, 2023 at 9:27 AM Fabio Estevam <festevam@gmail.com> wrote:
 >
-> On Mon, Jan 9, 2023 at 11:01 AM Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
->>
->> Hi Xurui,
->>
->> On Thu, Jan 5, 2023 at 10:45 AM xurui <xurui@kylinos.cn> wrote:
->>> drivers/video/fbdev/g364fb.c:202:4: error: cast to pointer from intege=
-r of different size [-Werror=3Dint-to-pointer-cast]
->>>
->>> Signed-off-by: xurui <xurui@kylinos.cn>
->>
->> Thanks for your patch!
->>
->>> --- a/drivers/video/fbdev/g364fb.c
->>> +++ b/drivers/video/fbdev/g364fb.c
->>> @@ -175,7 +175,8 @@ int __init g364fb_init(void)
->>>   {
->>>          volatile unsigned int *curs_pal_ptr =3D
->>>              (volatile unsigned int *) CURS_PAL_REG;
->>> -       int mem, i;
->>> +       int mem;
->>> +       uintptr_t i;
->>
->> This doesn't look like the right fix to me.
->>
->> The line the compiler[1] complains about is:
->>
->>                  *(unsigned short *) (CURS_PAT_REG + i * 8) =3D 0;
->>
->> Interestingly, it doesn't complain about:
->>
->>          *(unsigned short *) (CURS_PAT_REG + 14 * 64) =3D 0xffff;
->>
->> This driver uses raw memory writes to write to hardware registers.
->> Probably it should use writel() instead.
+> Hi Pierluigi,
+>
+> Thanks for the patch.
+>
+> On Sun, Jan 15, 2023 at 7:32 AM Pierluigi Passaro
+> <pierluigi.passaro@gmail.com> wrote:
+> >
+> > According section
+> >     8.2.5.313 Select Input Register (IOMUXC_UART1_RXD_SELECT_INPUT)
+> > of
+> >     i.MX 8M Mini Applications Processor Reference Manual, Rev. 3, 11/2020
+> > the required setting for this specific pin configuration is "1"
+>
+> Fixes: c1c9d41319c3 ("dt-bindings: imx: Add pinctrl binding doc for imx8mm")
+>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-Xurui, I'll drop this patch from fbdev git tree for now.
+./scripts/checkpatch.pl shows the following problem with your patch:
 
-Please check if the driver can be converted to writel() or similiar.
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Pierluigi
+Passaro <pierluigi.passaro@gmail.com>' != 'Signed-off-by: Pierluigi
+Passaro <pierluigi.p@variscite.com>'
 
-Thanks,
-Helge
+Please adjust this, add the Fixes tag and send a v2.
 
->> [1] mips64-linux-gnuabi64-gcc version 10.3.0 (Ubuntu 10.3.0-1ubuntu1)
->>      jazz_defconfig + CONFIG_64BIT=3Dy
-
+Thanks
