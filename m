@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF5B66B3C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8740F66B3C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjAOULy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 15:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
+        id S231356AbjAOUTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 15:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjAOULu (ORCPT
+        with ESMTP id S230354AbjAOUTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 15:11:50 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78058C656;
-        Sun, 15 Jan 2023 12:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=cvNXeaeCC5O59TGsImznClAMJlVEir/QjNf7tHMV21g=; b=YgDLNPNTweV8YUE1WGXn5/IyeN
-        IMygWskAvoJzgyilaqSQFWoMg4WZR5uv/hmqAKWX3GyXCootyk2TqWk2feqgAUXTBUvmzdLka7gxf
-        WkWrlKIM8ut8Eo3Ls9pnmPZ2Hx47oJIAANPAOrhSLO8Tnk/aIMJIbBXCvOwRDH7D68oI=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:47782 helo=asus64.hugovil.com)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pH9Lw-0001ge-9v; Sun, 15 Jan 2023 15:11:40 -0500
-Date:   Sun, 15 Jan 2023 15:11:39 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>, hvilleneuve@dimonoff.com,
-        lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20230115151139.4056356363b5fcff6c42f3ea@hugovil.com>
-In-Reply-To: <e30a869a-5585-901b-6a56-3e327e0cf60a@linaro.org>
-References: <20230113194959.3276433-1-hugo@hugovil.com>
-        <20230113194959.3276433-3-hugo@hugovil.com>
-        <dee8fbdc-5399-d5ce-8d01-2c48e85e2919@linaro.org>
-        <20230115112205.e46ab8d017b99dd987d003e4@hugovil.com>
-        <20230115164326.7f03f6d9@jic23-huawei>
-        <20230115113250.d8a0ec5a2638e24c1208539c@hugovil.com>
-        <e30a869a-5585-901b-6a56-3e327e0cf60a@linaro.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Sun, 15 Jan 2023 15:19:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA6C12F16
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:19:17 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id u19so63643853ejm.8
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x4G80CZkEtDJ5S8nHN2azZRr/qBNRSSzTfZc/Vq/ilM=;
+        b=iuJpBybHuMlWTqaA2THUY8UH5zLu5bYXFfK+MLnSqBqQD3FXmHnRU4KYn5oryl75iA
+         i/YpfDS2JFjOtTZQEjKK6IlZxrPtdnshy7X+gUfy7r1erDLO7//+FyTUoKA/mrk8CVD1
+         FLx8C55Mp49mEtH5ssB7D5EZTQWB3lmzjnnh0iNQzP2A1FvrThv2Zvqtas1n8S4xwT6p
+         LW2bz9JG5v3BksIOqJxfqVsCeumGBAfZ7y5t4bVujV+5QE6IvwA2OH6juaquALx5KRkI
+         w0JbaRYVQro8QC7JlhNwdwg98z7YP5nEQMJUm4yVipBiKQm3dATpiPtI80W2rFbYgIyy
+         rt2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x4G80CZkEtDJ5S8nHN2azZRr/qBNRSSzTfZc/Vq/ilM=;
+        b=Z5/MucQRpUgAeqYQD4ZJ8OxSixAvN7PAAacUDm5cCkxLwKaA8E+W3KBp6yzirRjmaa
+         zj72gnYhrPR/4QrdrRDZD88eZewAhJiBAUiSd69N1LSVWk3oQA4wYNg3MIQNawKBg80y
+         oEYnKlsHiDaJm6W8lyVnUuwjdQgLUqRox42xFS3MLvyd9rc7RWQ1ivQ4W0lmpxGzDEyr
+         MkUtBo7kyVX6sKL0X1+G8bD7FSH+XXRiLup4exFgZ8gXz4ulu0I3KPoPeeYXqZielifQ
+         k1F0ds3cloMxfxKAn5V7/mLtH7KhQSNHekUDTCls2RC9Yprobkt6K/SShnLU8DoM0hxB
+         J8mg==
+X-Gm-Message-State: AFqh2kqqYfBy8ALH6sCWR1opZVTMhZM5ustu16iu9n2Gt8bLFR4eP7yg
+        AsbRqk8IWqS2kSdzypsggCOBQOBHm4w=
+X-Google-Smtp-Source: AMrXdXvWkZnCqKSawa+yWFdf6lcM288lPoTwtYAOjylBJu4j+yCdv+doI5wXP74gEclActakL9+xmQ==
+X-Received: by 2002:a17:906:d109:b0:870:839d:224f with SMTP id b9-20020a170906d10900b00870839d224fmr362331ejz.4.1673813956454;
+        Sun, 15 Jan 2023 12:19:16 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b007a9c3831409sm10966129ejd.137.2023.01.15.12.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 12:19:15 -0800 (PST)
+Date:   Sun, 15 Jan 2023 21:19:14 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] staging: rtl8192e: Rename variables from r8192_priv
+ start with bDynamicTx..
+Message-ID: <cover.1673812849.git.philipp.g.hortmann@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 2/2] dt-bindings: iio: adc: add Texas Instruments
- ADS7924
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 Jan 2023 20:17:24 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Rename variables to avoid CamelCase which is not accepted by checkpatch.
 
-> On 15/01/2023 17:32, Hugo Villeneuve wrote:
-> >>>>> +    required:
-> >>>>> +      - reg
-> >>>>> +
-> >>>>> +    additionalProperties: false  
-> >>>>
-> >>>> You are not allowing anything else from adc.yaml. Is it on purpose?  
-> >>>
-> >>> I am really not an expert with this Yaml stuff, and reading the documentation makes me probably more confused than before reading it :)
-> >>>
-> >>> But one thing that is for sure is that these other properties in adc.yaml are not used in my driver:
-> >>>
-> >>>   bipolar
-> >>>   diff-channels
-> >>>   settling-time-us
-> >>>   oversampling-ratio
-> >>>
-> >>> So is it Ok then to use "additionalProperties: false"? I think so, but what is your recommandation?
-> >>
-> >> Makes sense to me.  Whilst there are lots of things a channel can support, most
-> >> of them are hardware related and not universal.
-> > 
-> > Ok, I think I am finally beginning to see the light here :)
-> > 
-> > So I will then leave "additionalProperties: false".
-> > 
-> > I will send a V4 soon with all the latest changes.
-> > 
-> 
-> Just to clarify - we talk about hardware, not your Linux driver. What
-> your driver uses or doesn't, should not matter here that much.
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
 
-Hi,
-the following properties are definitely not supported by the hardware:
-    bipolar
-    diff-channels
-    oversampling-ratio
+Philipp Hortmann (10):
+  staging: rtl8192e: Rename bDynamicTxHig.., bDynamicTxL.. and
+    bLastDTPF..
+  staging: rtl8192e: Rename bLastDTPFlag_Low, OFDM_index and CCK_index
+  staging: rtl8192e: Rename Record_CCK_2.., Record_CCK_4.. and
+    DefaultIn..
+  staging: rtl8192e: Rename rateCountDi.., ContinueDif.. and TxCounter
+  staging: rtl8192e: Rename bResetInPro.., framesyncMo.. and
+    nCur40MhzPri..
+  staging: rtl8192e: Rename SetBWModeIn.., SwChnlInPro.. and
+    ThermalMet..
+  staging: rtl8192e: Rename CrystalCap, EEPROMLegacyHTT.. and
+    EEPROMCrys..
+  staging: rtl8192e: Rename EEPROMTherma.., EEPROMAntPw.. and
+    EEPROMTxPow..
+  staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF.. and
+    SilentReset..
+  staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF.. and
+    SilentReset..
 
-does this means that we should add these lines?
-    bipolar: false
-    diff-channels: false
-    oversampling-ratio: false
-
-as for settling-time-us, I am not sure of its usage and if its related to this hardware.
-
-Hugo.
-
-
-> Best regards,
-> Krzysztof
-> 
-> 
-
+ .../rtl8192e/rtl8192e/r8190P_rtl8256.c        |   4 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  92 +++++------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  52 +++----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  10 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  60 ++++----
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 144 +++++++++---------
+ 6 files changed, 181 insertions(+), 181 deletions(-)
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+2.39.0
+
