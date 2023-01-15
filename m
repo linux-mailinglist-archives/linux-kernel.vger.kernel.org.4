@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0EC66B42B
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C4A66B42E
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjAOVcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 16:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S231592AbjAOVdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 16:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjAOVcu (ORCPT
+        with ESMTP id S231604AbjAOVdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 16:32:50 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCCF1631E;
-        Sun, 15 Jan 2023 13:32:49 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id d62so12164473ybh.8;
-        Sun, 15 Jan 2023 13:32:49 -0800 (PST)
+        Sun, 15 Jan 2023 16:33:16 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4BB1632D
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 13:33:15 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id bf43so40295334lfb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 13:33:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ilnTix6mWBqHe/oVeIQUIcilmxo7YfvSR3WJgS0DE/8=;
-        b=SFyPWgR4h+zOq5TdDmqx2LprVCLFjPOI29OigwtuV054QFbGDVlmAqVxJzyOtUDDEw
-         4BNX96ROEiX7dAKuCFcljAk++zJhr4qlayGktJmZ57rQH0xALjIF6MhvmRfZUgnDyaWQ
-         gOsSDPAfnY35YkCRm+dewKvT5Y6mu1R5YMjGNy3CmyWpacHSyPbl6Ggm6TolidfSFvQs
-         scPIaoUIFOH7hysEw3rN49PAKljIaggeNbjJWXJr++JaISClvx1v3ErGIGSaq4b9xhOg
-         EIAgAr8opb08phMNndYMLBCqMYXBoejwCD4wZef3z7FyzKQaMMxOMtrjFPeWZCXq7pPr
-         HuTQ==
+        bh=Uc2KB+6JnGN5CN8ZL6/iTxWjXrR49/KupSA1DnyxAcw=;
+        b=dFJ4DuC4tiRUc97fmPGTiiz2pqctG2BFyrK4qKR8YhVmdPGybh1oT2dng+mxsgz8sI
+         /DpslqS9lOwbizluHoDusyDfX9EcqLRICJiBsXvuUuZsyOL5n9yPKR6+gyuMHG96o4lT
+         XqOb988Rr8gUHOJ3BHeFsNYSyXCnkhYnSCjevqSYWal0vBL830UqL4tvW+c/i2IaVDEU
+         pH8FqLPg+ZR9KKefK1yJGK7WFfmFCfpnuHghQwtOtNASBHzB5iHKKqyF5BZwQyq+Fqzr
+         VvpSAjTr3cTEK65ofH2zpHdRGYrR3Vbpz3RoN2Ma4AXZdZIONIGUTjRJCLZiD0TmwBC8
+         wdlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ilnTix6mWBqHe/oVeIQUIcilmxo7YfvSR3WJgS0DE/8=;
-        b=oaNt55nFjlrVe6uAXZmSrbBb7V8pExD8L1L30/OK7g2qAUt/YI2pbsZUogk8hTaoga
-         ieFB6fUGbDlEyjcR2Wh7JEJBkO2D+kq2hmDSFvLGq9i5SV+F4leJPgh0N2gldDC2iEm2
-         yZwkzuxYnImyLbcYPqhqMe10mxMw01paTWe5oGkIHcomzkrjte7StWeoR4DNHtLi9+P8
-         8uk4rfLvScB2t4sbyVzwgvc5S04cZNgsZG6CjzVFM0WzmpwWVwvGv9lVWpKbJiPDsHXE
-         5suINhHYe8LyAAHssYed7JNpCZVzrfk+B3rp7rehi/nJ8ny/30h2sMlMKv9+ROqdro1N
-         6Dxw==
-X-Gm-Message-State: AFqh2koAycFilLBbNLAk6hsza9DitAlotLO66aZwFmxqGnIlnIrzv1Tf
-        je8y6sclDyJzNrkANr3Ozz6RQYiq8s6pTtZAHjw=
-X-Google-Smtp-Source: AMrXdXvDd4gzHGpiVTk6lJtkLc+geAyUAQIReeZNNBY4nWWmsZBoj8l5IYRODMerfaXfJGlYdOPs+eh7k2KY1ARJvSE=
-X-Received: by 2002:a25:b78c:0:b0:7e1:ed59:4e43 with SMTP id
- n12-20020a25b78c000000b007e1ed594e43mr185418ybh.323.1673818369117; Sun, 15
- Jan 2023 13:32:49 -0800 (PST)
+        bh=Uc2KB+6JnGN5CN8ZL6/iTxWjXrR49/KupSA1DnyxAcw=;
+        b=hI+njzCDcQW50jka4iGJUiWspWW0ymztKliv9GvHgWDIigePOVVUXfWYGn1LaqCIZZ
+         biSI9c3bczPKnmQX8HAPge++PrJYEUa8dgBishrCTHfRN6UQcIzvVXmY48ACv24BtQXA
+         76PuSXlA1kyoeDQ+BJIz+zFvm1IC7slRBIySW165oL4ob0VU0zcYXeTFhF51oY4aGKCm
+         xNLaLCffm2NbSLAqSRZ0ctbvG8HJoGtrfeSrHEhdnWgSeyKlctgEUcGlKli5pEeY0eXJ
+         5IW82kfCasStwjvrvZ+oFasvEfFqUlO752LOvp3YnhUM+8la46jOoyYN7CULP6wMDF+A
+         JNSQ==
+X-Gm-Message-State: AFqh2kqeAyV7l2VGK/jPXN4OBblp2DxXBtkfv+4rt3wDc2mWX5wiIeUP
+        xNrJGQrzOiuBbrRTGNKA5t5fG3c5LNky/sWWc/k7qA==
+X-Google-Smtp-Source: AMrXdXvEYNNPSdXfMPIBcHLU2o+DgI9dKFo66ir/dhuo0bqe4WYAvtuL7IqrevDujkz1Fw4cPJgl2Smg3X0zbGA5Rr8=
+X-Received: by 2002:a05:6512:128a:b0:4d3:4e4b:c8ce with SMTP id
+ u10-20020a056512128a00b004d34e4bc8cemr679788lfs.376.1673818393850; Sun, 15
+ Jan 2023 13:33:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20230109135828.879136-1-mark.rutland@arm.com> <20230109135828.879136-2-mark.rutland@arm.com>
- <CANiq72kgmFYEO_EB_NxAF=S7VOf45KM7W3uwxxvftVErwfWzjg@mail.gmail.com>
- <Y77/qVgvaJidFpYt@FVFF77S0Q05N> <Y7/xKbOZYztcqz2b@FVFF77S0Q05N> <Y8FTXyKkI77nFIMJ@FVFF77S0Q05N>
-In-Reply-To: <Y8FTXyKkI77nFIMJ@FVFF77S0Q05N>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 15 Jan 2023 22:32:38 +0100
-Message-ID: <CANiq72kEow5hBBfzSL7=yihgU1Xm=DiKqeV7A8p8h_qW_f18cg@mail.gmail.com>
-Subject: Re: [PATCH 1/8] Compiler attributes: GCC function alignment workarounds
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        ndesaulniers@google.com, ojeda@kernel.org, peterz@infradead.org,
-        rafael.j.wysocki@intel.com, revest@chromium.org,
-        robert.moore@intel.com, rostedt@goodmis.org, will@kernel.org
+References: <20230113201038.267449-1-bhupesh.sharma@linaro.org> <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+In-Reply-To: <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Mon, 16 Jan 2023 03:03:02 +0530
+Message-ID: <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
+ '#size-cells' related dt-binding error
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 1:49 PM Mark Rutland <mark.rutland@arm.com> wrote:
+On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> It turns out that was a red herring; GCC is actually implicitly marking the
-> abort() function as cold, and as Linux's implementation happened to be marked
-> as weak I assumed that was the culprit.
+> On 13/01/2023 21:10, Bhupesh Sharma wrote:
+> > Fix the following '#address-cells' & '#size-cells' related
+> > dt-binding error:
+> >
+> >    $ make dtbs_check
+> >
+> >    From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+> >         arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+> >               #address-cells:0:0: 2 was expected
+> >       From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>
+> Don't we want rather to unify the soc address range?
 
-That and your previous message probably explains probably why I
-couldn't reproduce it.
+Well, the assumption in the original dt-bindings was that every reg
+variable is 4 * u32 wide (as most new qcom SoCs set #address- and
+#size-cells to <2>). However, that is not the case for all of the
+SoCs.
 
-Thanks a lot for all the details -- the `cold` issue is reproducible
-since gcc 4.6 at least: https://godbolt.org/z/PoxazzT9T
+So, ideally we shouldn't set the  "#address-cells" and  "#size-cells":
+as const: 2 in the bindings.
 
-The `abort` case appears to happen since gcc 8.1.
+See as an example:
+https://www.kernel.org/doc/Documentation/devicetree/bindings/usb/usb-device.yaml
 
-Cheers,
-Miguel
+Thanks.
