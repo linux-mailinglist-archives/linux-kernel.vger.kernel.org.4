@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFE966AF42
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 05:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2F966AF45
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 05:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjAOEIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 23:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S230368AbjAOELX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 23:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjAOEIf (ORCPT
+        with ESMTP id S229715AbjAOELQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 23:08:35 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77E1728A
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 20:08:34 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so30827303pjk.3
-        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 20:08:34 -0800 (PST)
+        Sat, 14 Jan 2023 23:11:16 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F17D44BE
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 20:11:15 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id v23so26124557pju.3
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 20:11:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=DRIGaGwIEVC04sLYWcSi38AK8s1IVg2cHJh95N515UM=;
-        b=HKcb9eK2oTEucFQqOgW+aFuLByrEEfTxbvgtdixpiC9ooB+0bllwFV/10FtH1AFcrv
-         75oOW9m7Nqqscl470DLAMEOePP9xdbsP8gyfEk/Hqpg+UqOVaECCdf/Beb/Dhz8hTRel
-         ef5mC6cE0hy1lnk134qfLOggW8plLAR6Ke2C8bkug5azRUwKIl6CEdX+XHgyHeqHbrQ7
-         NH2kHpLPJBsZnpAlzBzE6bRZKsuNyPdGU5umkB8cpbYcNWyFKVh2Fq8lezPP/dIjMIOZ
-         v8QnjCVju5ItltpmmCWi1EKINE+KUswTAXXVD7EkANxLXiX6uJIE5j9dY+csruxdk4a8
-         4ZxA==
+        bh=TUsBOWy5UhAp6xbtUsJklT0rm4uS/PjlVjvwS2k1vhM=;
+        b=Dzk0wkd85xOIYqkdj9F5B3jGt7WyjeYBbeLNDtQxVMited8KnFCsWXXuWfpLk+to4w
+         d9OvAObapEUD/jCOC55y56boBHkRR8diez+KxCk5zjS/cGyEX2/LT/auz5Xy7PAyUUcL
+         x2TxCsUPTKsv/6Ce/tuxIAb/zYFOjab99D5Cb+/F29xlWYcSTc1Dh1o32TVVYw+AWa2e
+         jN1FK1spq5/fnt7IgjkHKaTg+bvBnSP43Dx3kx63HadrBMegyYtTrq/qd/MPqtQbBaDk
+         iUiG7ewyAP2xZrrlDCTbU7LOzS7Bx7PyOx7W+JUDuEAjE3WC9SlUZO2j45IRMav4MBWQ
+         hmaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRIGaGwIEVC04sLYWcSi38AK8s1IVg2cHJh95N515UM=;
-        b=N7PJ/wAlIYnSPCqaXWdRQkRhW0nYZnvnnolqe/o5vD5n7ZOOzKk6YH7H01PV2jpjQ1
-         aE2K+J6rXmDvgwCpSjcdugvzIqyirtW5Qt5gXnGAAxPOf/1aXnG4kdp+YG/6q6uHMyPO
-         LtUISqeKX5yotVXJA3IMemqCQ8C/3DSsOtMbxJzQ006BcGVPStjUUIitLcxEGXfoeNqM
-         2O/dInRKxa+zdyn7LsdQQtCG8sg64KkOeTVp2uvLbOI2FhG9EwCKHM7GRzbELw1xsgyO
-         Mrwnd7HTL4meGe+gL2Zt76o1rXK5ulbH5oMxkaBhLprQEjO3Dcp4O+a7MId421sAxnnz
-         Yj0Q==
-X-Gm-Message-State: AFqh2kpx6KyjdPpY+C0lFcZn7h3wMeghs87S/KWaxe1Ap+s+jh1MWFCH
-        q7y5KeNeh6XVxSB0Zj8K5RrG
-X-Google-Smtp-Source: AMrXdXt1wr5bOBd1Lfe0cgIaOglyRZ+Ab9hHIbzgBDkbrRX8LxOl7Omu7bxEFjjz492AQfYqqpXgjQ==
-X-Received: by 2002:a17:90a:72c4:b0:229:19f7:a60d with SMTP id l4-20020a17090a72c400b0022919f7a60dmr9722406pjk.0.1673755714240;
-        Sat, 14 Jan 2023 20:08:34 -0800 (PST)
+        bh=TUsBOWy5UhAp6xbtUsJklT0rm4uS/PjlVjvwS2k1vhM=;
+        b=EEDvtoddYMADS0DZHwnEfr7q2famut0V2DeS3Zt03AxkDfObIPXaNDGPfVG2EDGFGo
+         xoimfuAogMGr3bEhoUP10P8raymsLxwgYdU+GENUDVaW2Xi1Gqz7tgM2IeiV6czobiHp
+         q0VkR+81a7D2k/vvYFICUhU+NYa8sq2zpbFdmG6CzvPwqL/w9qk/XWrPTIY3EtSq1oBh
+         GtFhxNGzWGk5GSyXNO0TqXbow5q4UuCj7cLVLML35feM+OwFWwDREkPt3mGkeDkBNr8j
+         FmGjhV+k/vy4nX2kI+ifZor4+ytUw8u47gnAPdY8A134CWi1LBC9nixL4GEyKqPY4L+7
+         vQgA==
+X-Gm-Message-State: AFqh2kpeFQKlWYCYmUL7sPa7QVgop3qT+NHwXu6NGbUcW9arBz4ueobS
+        h7GzfMz6FYbumwbimnqIcB1z
+X-Google-Smtp-Source: AMrXdXsA3fJe2SPgDEtu9fgDT3kXG4YnvJbnAd/7UZy+gQv4RJpihOeO7IzDYN13SQVotVY5fGaDQA==
+X-Received: by 2002:a17:902:f0d1:b0:192:8c85:54fa with SMTP id v17-20020a170902f0d100b001928c8554famr14363437pla.31.1673755874753;
+        Sat, 14 Jan 2023 20:11:14 -0800 (PST)
 Received: from thinkpad ([220.158.159.143])
-        by smtp.gmail.com with ESMTPSA id y7-20020a17090a474700b00219463262desm14324402pjg.39.2023.01.14.20.08.28
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902714200b00178143a728esm16605379plm.275.2023.01.14.20.11.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Jan 2023 20:08:33 -0800 (PST)
-Date:   Sun, 15 Jan 2023 09:38:25 +0530
+        Sat, 14 Jan 2023 20:11:13 -0800 (PST)
+Date:   Sun, 15 Jan 2023 09:41:08 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
-        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
-Subject: Re: [PATCH v5 16/17] qcom: llcc/edac: Support polling mode for ECC
- handling
-Message-ID: <20230115040825.GB6568@thinkpad>
-References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
- <20221228084028.46528-17-manivannan.sadhasivam@linaro.org>
- <Y8Kv0GIk69MhcOjT@zn.tnic>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Define CMA region for CRD
+ and X13s
+Message-ID: <20230115041108.GC6568@thinkpad>
+References: <20230113041025.4188910-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y8Kv0GIk69MhcOjT@zn.tnic>
+In-Reply-To: <20230113041025.4188910-1-quic_bjorande@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -80,59 +78,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 02:36:16PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 28, 2022 at 02:10:27PM +0530, Manivannan Sadhasivam wrote:
-> >  static int qcom_llcc_edac_probe(struct platform_device *pdev)
-> >  {
-> >  	struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
-> > @@ -355,22 +361,31 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
-> >  	edev_ctl->ctl_name = "llcc";
-> >  	edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
-> >  
-> > +	/* Check if LLCC driver has passed ECC IRQ */
-> > +	ecc_irq = llcc_driv_data->ecc_irq;
-> > +	if (ecc_irq > 0) {
-> > +		/* Use interrupt mode if IRQ is available */
-> > +		edac_op_state = EDAC_OPSTATE_INT;
-> > +	} else {
-> > +		/* Fall back to polling mode otherwise */
-> > +		edac_op_state = EDAC_OPSTATE_POLL;
-> > +		edev_ctl->poll_msec = ECC_POLL_MSEC;
-> > +		edev_ctl->edac_check = llcc_ecc_check;
-> > +	}
-> > +
-> >  	rc = edac_device_add_device(edev_ctl);
-> >  	if (rc)
-> >  		goto out_mem;
-> >  
-> >  	platform_set_drvdata(pdev, edev_ctl);
-> >  
-> > -	/* Request for ecc irq */
-> > -	ecc_irq = llcc_driv_data->ecc_irq;
-> > -	if (ecc_irq < 0) {
-> > -		rc = -ENODEV;
-> > -		goto out_dev;
-> > -	}
-> > -	rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-> > +	/* Request ECC IRQ if available */
-> > +	if (ecc_irq > 0) {
-> > +		rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-> >  			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
+On Thu, Jan 12, 2023 at 08:10:25PM -0800, Bjorn Andersson wrote:
+> Booting the CRD needs roughly 64MB CMA, rather than relying on people
+> adding boot parameters etc define a region for this, to remove the
+> allocation errors from e.g. NVME.
 > 
-> You need to request the IRQ first and then set edac_op_state above. I.e., this
-> devm_request_irq() needs to move in the if (ecc_irq > 0) branch above.
+> While fixing the CRD define the same region for the X13s.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-May I know why? I also checked other drivers, most of them are doing the same.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
 Mani
 
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts                | 9 +++++++++
+>  .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts      | 9 +++++++++
+>  2 files changed, 18 insertions(+)
 > 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index b29c02307839..e30a37c73b90 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -128,6 +128,15 @@ vreg_wwan: regulator-wwan {
+>  
+>  		regulator-boot-on;
+>  	};
+> +
+> +	reserved-memory {
+> +		linux,cma {
+> +			compatible = "shared-dma-pool";
+> +			size = <0x0 0x8000000>;
+> +			reusable;
+> +			linux,cma-default;
+> +		};
+> +	};
+>  };
+>  
+>  &apps_rsc {
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 78e61a8184c5..5bfd1f0b2a24 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -153,6 +153,15 @@ vreg_wwan: regulator-wwan {
+>  		regulator-boot-on;
+>  	};
+>  
+> +	reserved-memory {
+> +		linux,cma {
+> +			compatible = "shared-dma-pool";
+> +			size = <0x0 0x8000000>;
+> +			reusable;
+> +			linux,cma-default;
+> +		};
+> +	};
+> +
+>  	thermal-zones {
+>  		skin-temp-thermal {
+>  			polling-delay-passive = <250>;
 > -- 
-> Regards/Gruss,
->     Boris.
+> 2.37.3
 > 
-> https://people.kernel.org/tglx/notes-about-netiquette
 
 -- 
 மணிவண்ணன் சதாசிவம்
