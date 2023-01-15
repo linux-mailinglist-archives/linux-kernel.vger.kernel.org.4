@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F9266B3CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2236866B3D0
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbjAOUVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 15:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S231608AbjAOUVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 15:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbjAOUVF (ORCPT
+        with ESMTP id S231584AbjAOUV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 15:21:05 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A84CCDC7
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:21:01 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id ss4so56438129ejb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:21:01 -0800 (PST)
+        Sun, 15 Jan 2023 15:21:26 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FC012F24
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:21:10 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id bk15so6207332ejb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:21:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DrcHpDAznuQD/6gaEXJ1kSYqjTyGuN9vC1MPEK+KavU=;
-        b=HCBHzCmySYICU8fJw3pW7HWruJ7N3jyNt6rtktF+esocEOTMfhIInjQhr+DIGx2VrF
-         vcEcfutoXXGM2O1unBl4+5gpprq5LTAFjSUuBBUORpezLJ/nifBcg9YJXEdNUuaQgtcY
-         mFt+58sL6+Q6MMrKdLYdXoe82A17LlnC6cW4pgWwWn3DKiDvlucc2ccYu1bxLdygFzaP
-         eTJe+9PYPBGYnK+NPXhvT8B3xYJr37pUoTMCGzTzMY33YeZK/Ik4odEZj2bWr7Tkhq5D
-         jjMkJoUe6doYPHuOMUJj1aZDeqjlVAfnjoV1bkfMIxPJWn3fukE027rDw6ZKwulNxpUW
-         oCdg==
+        bh=zIxHz0r1/Yq7Juo2j3DUvAGGJxlMsy7WNAR58hhY6OM=;
+        b=NYi/Bs8CBj2l9N41+UF6lF0VbthfjqI9PnVAnp0jaqm4VWm8RLGygg90ZiQTOi0eLn
+         T/9XiR7vNKS2HK1BckW6TwnP5w0UnFOy5m8bAgQ9alDTDKDcqKJgFOPCTuy4MbwoHHDU
+         +buYWwx6mC4ZmnJ4IsAlzG+aReczuE7VHpRZdQV5SEeNCcWXkq9qUL8EUgtu0NIWkd78
+         gdh0BIM9M/ttIvPFNVOJvc9bzltBSmG5txqLw4APi/dO/uyQ+3xkCQJW/goWcu/O1aUO
+         JLWdvKnJUkFDOCLfKAK1d64isNPY1cbQ7K35rBPQDgtaQEwpjlT2dPn2AqkiKEQRsK9S
+         kjAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DrcHpDAznuQD/6gaEXJ1kSYqjTyGuN9vC1MPEK+KavU=;
-        b=fP4UKK8Tx9laDrbwnt3s2O/VPW1H6QgIFV8s0+2pTFv9B3L0DlpfhAEuTjxYJBBZnK
-         K90LEfQt5/SDpEtn4C5pNquPbEaD0suz4ggB/MeCPWgD2DintEgNvcCaeicPl8qp6bG9
-         /uLOesf+yu96BKXv2cMY8FLg4XwCEPwKxCClkuZ+1zscKRDbflfQ77/srzTVY+iyIPK7
-         2HAveUAb8jb4Pm35Gd3C4eC1berbka/+YDZt7Kfddm3Yn94I5fTkR4nDMfY9Lcr3b2tF
-         HAEsKvAFCRrrY/7kkVI1nYk0rfau2V6DKKYdp9h4yNV7h/SjPNUA3BgHUp3KjHyyeG3f
-         WHuQ==
-X-Gm-Message-State: AFqh2koVjVhroxtNEVY9Ofv+0YA+xIMSoeuB6llnc7kpK4Qs7tWuqB6J
-        7T9a+9vs52EW6n+4gbjNpmA=
-X-Google-Smtp-Source: AMrXdXvL4w3nHAuHA3Yw8EuR0m70zgg8hIbGbFq2qz4vUpdj7MSscRkilh8NhayPJzkldNF/ZptjgA==
-X-Received: by 2002:a17:906:3512:b0:862:e612:f00e with SMTP id r18-20020a170906351200b00862e612f00emr3446078eja.5.1673814060810;
-        Sun, 15 Jan 2023 12:21:00 -0800 (PST)
+        bh=zIxHz0r1/Yq7Juo2j3DUvAGGJxlMsy7WNAR58hhY6OM=;
+        b=3Bh4Gw3946EH7qWnb7f10Hh4fsRh9//GxUr3ZOmcT8qETI841HVweBGysEhU1O365q
+         AdCGI0FszzFWYyZkX6gImfG1YmJH/JvQ1Y0Lxn0jA5pTxJZg0eo5tsoHfJXkB8+1cFeY
+         Z6jQGyw/6SvHIf+AadtE20qpP9/aBBPaNJlspBvoEPMhp3jTRlXCFQ6pIUsYgz7awTwc
+         vx+xclky2F0+FdI2GmfTwr60ypgc7IPIAw7LRLwHUolqVZxgkB49D7S74Ln+or1vJBxp
+         9rJs4bb3xxiInMwNVbQysaYSC6ULn/6MYB3yDYz0qzQrlDPQvoxjbQWJybTiT9ErH6Nl
+         QiAg==
+X-Gm-Message-State: AFqh2kpsASEWmIeQHFazPHMWFAXlSG45oUkks7VD971Qx5ieA4U2K/Xg
+        Oi69nCa5v/vYLRF4QdngTsCTWyZl1w8=
+X-Google-Smtp-Source: AMrXdXut9KkjM2r4GrMHz35eEONHDU14UYIgGtIqFJdrxkRqzyZ0lbS6+k4GeCXjLdeQE9VREBnJgw==
+X-Received: by 2002:a17:906:280d:b0:837:c290:eb83 with SMTP id r13-20020a170906280d00b00837c290eb83mr19100862ejc.2.1673814069409;
+        Sun, 15 Jan 2023 12:21:09 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
-        by smtp.gmail.com with ESMTPSA id la19-20020a170907781300b007aee7ca1199sm11059196ejc.10.2023.01.15.12.21.00
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0077a8fa8ba55sm10928478ejf.210.2023.01.15.12.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 12:21:00 -0800 (PST)
-Date:   Sun, 15 Jan 2023 21:20:58 +0100
+        Sun, 15 Jan 2023 12:21:08 -0800 (PST)
+Date:   Sun, 15 Jan 2023 21:21:07 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/10] staging: rtl8192e: Rename EEPROMTherma..,
- EEPROMAntPw.. and EEPROMTxPow..
-Message-ID: <f708533cc24af1e08f34b681b9e8e8c01dc7b8f5.1673812850.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 09/10] staging: rtl8192e: Rename EEPROMTxPower.., AutoloadF..
+ and SilentReset..
+Message-ID: <328bdd5fd16ba000d2083473e16e89ce2e2521ee.1673812850.git.philipp.g.hortmann@gmail.com>
 References: <cover.1673812849.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,115 +71,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable EEPROMThermalMeter to eeprom_thermal_meter,
-EEPROMAntPwDiff to eeprom_ant_pwr_diff and EEPROMTxPowerLevelOFDM24G to
-eeprom_tx_pwr_level_ofdm24g to avoid CamelCase which is not accepted by
+Rename variable EEPROMTxPowerLevelCCK to eeprom_tx_pwr_level_cck,
+AutoloadFailFlag to autoload_fail_flag and SilentResetRxStuckEvent to
+silent_reset_rx_stuck_event to avoid CamelCase which is not accepted by
 checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 28 +++++++++----------
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 30 +++++++++----------
  drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  6 ++--
- 2 files changed, 17 insertions(+), 17 deletions(-)
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index df8cdea5ee95..655a7966a876 100644
+index 655a7966a876..8522a4b9b8f1 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -366,22 +366,22 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+@@ -292,12 +292,12 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 	if (EEPROMId != RTL8190_EEPROM_ID) {
+ 		netdev_err(dev, "%s(): Invalid EEPROM ID: %x\n", __func__,
+ 			   EEPROMId);
+-		priv->AutoloadFailFlag = true;
++		priv->autoload_fail_flag = true;
+ 	} else {
+-		priv->AutoloadFailFlag = false;
++		priv->autoload_fail_flag = false;
+ 	}
+ 
+-	if (!priv->AutoloadFailFlag) {
++	if (!priv->autoload_fail_flag) {
+ 		priv->eeprom_vid = rtl92e_eeprom_read(dev, EEPROM_VID >> 1);
+ 		priv->eeprom_did = rtl92e_eeprom_read(dev, EEPROM_DID >> 1);
+ 
+@@ -331,7 +331,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 		priv->eeprom_chnl_plan = 0;
+ 	}
+ 
+-	if (!priv->AutoloadFailFlag) {
++	if (!priv->autoload_fail_flag) {
+ 		u8 addr[ETH_ALEN];
+ 
+ 		for (i = 0; i < 6; i += 2) {
+@@ -352,7 +352,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 	priv->rf_type = RTL819X_DEFAULT_RF_TYPE;
+ 
+ 	if (priv->card_8192_version > VERSION_8190_BD) {
+-		if (!priv->AutoloadFailFlag) {
++		if (!priv->autoload_fail_flag) {
+ 			tempval = (rtl92e_eeprom_read(dev,
+ 						      (EEPROM_RFInd_PowerDiff >> 1))) & 0xff;
+ 			priv->eeprom_legacy_ht_tx_pwr_diff = tempval & 0xf;
+@@ -365,7 +365,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 			priv->eeprom_legacy_ht_tx_pwr_diff = 0x04;
  		}
  
- 		if (!priv->AutoloadFailFlag)
--			priv->EEPROMThermalMeter = ((rtl92e_eeprom_read(dev,
-+			priv->eeprom_thermal_meter = ((rtl92e_eeprom_read(dev,
+-		if (!priv->AutoloadFailFlag)
++		if (!priv->autoload_fail_flag)
+ 			priv->eeprom_thermal_meter = ((rtl92e_eeprom_read(dev,
  						   (EEPROM_ThermalMeter>>1))) &
  						   0xff00) >> 8;
- 		else
--			priv->EEPROMThermalMeter = EEPROM_Default_ThermalMeter;
--		priv->tssi_13dBm = priv->EEPROMThermalMeter * 100;
-+			priv->eeprom_thermal_meter = EEPROM_Default_ThermalMeter;
-+		priv->tssi_13dBm = priv->eeprom_thermal_meter * 100;
+@@ -374,7 +374,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 		priv->tssi_13dBm = priv->eeprom_thermal_meter * 100;
  
  		if (priv->epromtype == EEPROM_93C46) {
- 			if (!priv->AutoloadFailFlag) {
+-			if (!priv->AutoloadFailFlag) {
++			if (!priv->autoload_fail_flag) {
  				usValue = rtl92e_eeprom_read(dev,
  					  EEPROM_TxPwDiff_CrystalCap >> 1);
--				priv->EEPROMAntPwDiff = usValue & 0x0fff;
-+				priv->eeprom_ant_pwr_diff = usValue & 0x0fff;
- 				priv->eeprom_crystal_cap = (usValue & 0xf000)
- 							 >> 12;
- 			} else {
--				priv->EEPROMAntPwDiff =
-+				priv->eeprom_ant_pwr_diff =
- 					 EEPROM_Default_AntTxPowerDiff;
- 				priv->eeprom_crystal_cap =
- 					 EEPROM_Default_TxPwDiff_CrystalCap;
-@@ -402,7 +402,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 						(EEPROM_TxPwIndex_OFDM_24G + i) >> 1);
+ 				priv->eeprom_ant_pwr_diff = usValue & 0x0fff;
+@@ -388,16 +388,16 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 			}
+ 
+ 			for (i = 0; i < 14; i += 2) {
+-				if (!priv->AutoloadFailFlag)
++				if (!priv->autoload_fail_flag)
+ 					usValue = rtl92e_eeprom_read(dev,
+ 						  (EEPROM_TxPwIndex_CCK + i) >> 1);
  				else
  					usValue = EEPROM_Default_TxPower;
--				*((u16 *)(&priv->EEPROMTxPowerLevelOFDM24G[i]))
-+				*((u16 *)(&priv->eeprom_tx_pwr_level_ofdm24g[i]))
- 							 = usValue;
+-				*((u16 *)(&priv->EEPROMTxPowerLevelCCK[i])) =
++				*((u16 *)(&priv->eeprom_tx_pwr_level_cck[i])) =
+ 								 usValue;
  			}
- 		}
-@@ -411,18 +411,18 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 			for (i = 0; i < 14; i += 2) {
+-				if (!priv->AutoloadFailFlag)
++				if (!priv->autoload_fail_flag)
+ 					usValue = rtl92e_eeprom_read(dev,
+ 						(EEPROM_TxPwIndex_OFDM_24G + i) >> 1);
+ 				else
+@@ -409,7 +409,7 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
+ 		if (priv->epromtype == EEPROM_93C46) {
+ 			for (i = 0; i < 14; i++) {
  				priv->tx_pwr_level_cck[i] =
- 					 priv->EEPROMTxPowerLevelCCK[i];
+-					 priv->EEPROMTxPowerLevelCCK[i];
++					 priv->eeprom_tx_pwr_level_cck[i];
  				priv->tx_pwr_level_ofdm_24g[i] =
--					 priv->EEPROMTxPowerLevelOFDM24G[i];
-+					 priv->eeprom_tx_pwr_level_ofdm24g[i];
+ 					 priv->eeprom_tx_pwr_level_ofdm24g[i];
  			}
- 			priv->legacy_ht_tx_pwr_diff =
- 					 priv->eeprom_legacy_ht_tx_pwr_diff;
--			priv->antenna_tx_pwr_diff[0] = priv->EEPROMAntPwDiff & 0xf;
--			priv->antenna_tx_pwr_diff[1] = (priv->EEPROMAntPwDiff &
-+			priv->antenna_tx_pwr_diff[0] = priv->eeprom_ant_pwr_diff & 0xf;
-+			priv->antenna_tx_pwr_diff[1] = (priv->eeprom_ant_pwr_diff &
- 							0xf0) >> 4;
--			priv->antenna_tx_pwr_diff[2] = (priv->EEPROMAntPwDiff &
-+			priv->antenna_tx_pwr_diff[2] = (priv->eeprom_ant_pwr_diff &
- 							0xf00) >> 8;
- 			priv->crystal_cap = priv->eeprom_crystal_cap;
--			priv->thermal_meter[0] = priv->EEPROMThermalMeter & 0xf;
--			priv->thermal_meter[1] = (priv->EEPROMThermalMeter &
-+			priv->thermal_meter[0] = priv->eeprom_thermal_meter & 0xf;
-+			priv->thermal_meter[1] = (priv->eeprom_thermal_meter &
- 						     0xf0) >> 4;
- 		} else if (priv->epromtype == EEPROM_93C56) {
+@@ -2126,21 +2126,21 @@ bool rtl92e_is_rx_stuck(struct net_device *dev)
+ 	SlotIndex = (priv->SilentResetRxSlotIndex++)%SilentResetRxSoltNum;
  
-@@ -462,8 +462,8 @@ static void _rtl92e_read_eeprom_info(struct net_device *dev)
- 			priv->antenna_tx_pwr_diff[1] = 0;
- 			priv->antenna_tx_pwr_diff[2] = 0;
- 			priv->crystal_cap = priv->eeprom_crystal_cap;
--			priv->thermal_meter[0] = priv->EEPROMThermalMeter & 0xf;
--			priv->thermal_meter[1] = (priv->EEPROMThermalMeter &
-+			priv->thermal_meter[0] = priv->eeprom_thermal_meter & 0xf;
-+			priv->thermal_meter[1] = (priv->eeprom_thermal_meter &
- 						     0xf0) >> 4;
+ 	if (priv->rx_ctr == RegRxCounter) {
+-		priv->SilentResetRxStuckEvent[SlotIndex] = 1;
++		priv->silent_reset_rx_stuck_event[SlotIndex] = 1;
+ 
+ 		for (i = 0; i < SilentResetRxSoltNum; i++)
+-			TotalRxStuckCount += priv->SilentResetRxStuckEvent[i];
++			TotalRxStuckCount += priv->silent_reset_rx_stuck_event[i];
+ 
+ 		if (TotalRxStuckCount == SilentResetRxSoltNum) {
+ 			bStuck = true;
+ 			for (i = 0; i < SilentResetRxSoltNum; i++)
+ 				TotalRxStuckCount +=
+-					 priv->SilentResetRxStuckEvent[i];
++					 priv->silent_reset_rx_stuck_event[i];
  		}
+ 
+ 
+ 	} else {
+-		priv->SilentResetRxStuckEvent[SlotIndex] = 0;
++		priv->silent_reset_rx_stuck_event[SlotIndex] = 0;
  	}
+ 
+ 	priv->rx_ctr = RegRxCounter;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 4a2b4f01507e..9cb717892dcb 100644
+index 9cb717892dcb..bd524a818776 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -423,13 +423,13 @@ struct r8192_priv {
+@@ -406,7 +406,7 @@ struct r8192_priv {
+ 	u8 check_roaming_cnt;
+ 
+ 	u32 SilentResetRxSlotIndex;
+-	u32 SilentResetRxStuckEvent[MAX_SILENT_RESET_RX_SLOT_NUM];
++	u32 silent_reset_rx_stuck_event[MAX_SILENT_RESET_RX_SLOT_NUM];
+ 
+ 	u16 basic_rate;
+ 	u8 short_preamble;
+@@ -414,7 +414,7 @@ struct r8192_priv {
+ 	u8 slot_time;
+ 	u16 SifsTime;
+ 
+-	bool AutoloadFailFlag;
++	bool autoload_fail_flag;
+ 
+ 	short	epromtype;
+ 	u16 eeprom_vid;
+@@ -422,7 +422,7 @@ struct r8192_priv {
+ 	u8 eeprom_CustomerID;
  	u16 eeprom_chnl_plan;
  
- 	u8 EEPROMTxPowerLevelCCK[14];
--	u8 EEPROMTxPowerLevelOFDM24G[14];
-+	u8 eeprom_tx_pwr_level_ofdm24g[14];
+-	u8 EEPROMTxPowerLevelCCK[14];
++	u8 eeprom_tx_pwr_level_cck[14];
+ 	u8 eeprom_tx_pwr_level_ofdm24g[14];
  	u8 EEPROMRfACCKChnl1TxPwLevel[3];
  	u8 EEPROMRfAOfdmChnlTxPwLevel[3];
- 	u8 EEPROMRfCCCKChnl1TxPwLevel[3];
- 	u8 EEPROMRfCOfdmChnlTxPwLevel[3];
--	u16 EEPROMAntPwDiff;
--	u8 EEPROMThermalMeter;
-+	u16 eeprom_ant_pwr_diff;
-+	u8 eeprom_thermal_meter;
- 	u8 eeprom_crystal_cap;
- 
- 	u8 eeprom_legacy_ht_tx_pwr_diff;
 -- 
 2.39.0
 
