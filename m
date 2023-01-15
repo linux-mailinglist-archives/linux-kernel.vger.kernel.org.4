@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4EA66B191
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA5F66B195
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjAOOil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 09:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S231312AbjAOOlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 09:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjAOOii (ORCPT
+        with ESMTP id S231175AbjAOOly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 09:38:38 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CEB113F9
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:38:37 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id bk15so5097768ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:38:37 -0800 (PST)
+        Sun, 15 Jan 2023 09:41:54 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC201258E;
+        Sun, 15 Jan 2023 06:41:53 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id v127so22377704vsb.12;
+        Sun, 15 Jan 2023 06:41:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ciei+9RK1lP1ir2O6VrlKkT6Olp4GCKQ9yN4RQZHNxc=;
-        b=UF9T6/XDnO2y+7mSMLLO3flansazxWXJIU1S3Uardt/Isqon5iFZ1kyCnrEH3ZsyuH
-         7u6t8k5yY0F3qhqmXu8T9wJcZaWEx6qpbd5MkZe9KoMyTcU3m80HXiKmTMXPhHGPo2Ge
-         s51mkktv4D+9gwg2+kfo5a4sMaAsM0f27EaLfC6cWbyHABXJED9Sa0kUw8BOxe+qH7/D
-         FuJi9WcxM3ZPdlbLJdRekr7MxWFulU4d+HC49WSjK8fJLUID/wPj+4WIpdLV5LdhHVg2
-         ro4cdQU00K3bNnb6+/b57X2uMYU1sTdrYfiNlZ5e/QFtGep1fqwXB6nI8wlbzfOM8CcA
-         YbpQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UKRXr+WXrA/dL1K0gomkMRErU+ynIR4YAhv6r9tMF9E=;
+        b=Epey5OmKyMV6pdasJF5nWoBZ0HGriVSB3rNH+Qe3l81/QR+Hn0Y8qdrx/S2W0MM0cB
+         MfFsTJrZZdgjpzzory/7vMpsSbC5iPSrIFZwJcKw77Tyn+d/729Lthn2XngwtQ3WHJDm
+         yeaRCZf5k3TkfBC35jdz0O345F6SxGJUPfJ7Sj03w8illfbhI9ZWYRzXBSJyRl/E2oB/
+         yex8iZljXao0O7Oaio+/J3F0iRjyhF92V2fGCdiSKboHsxhTVvxIlbjfmLpR3UIVDJ1v
+         13WWwLH5X0zO2jqY0wEK09Af3Y4vpDnlTMvhr14x0KTABRF9xODbay8Phk3SKz44u/I8
+         l27g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ciei+9RK1lP1ir2O6VrlKkT6Olp4GCKQ9yN4RQZHNxc=;
-        b=5tcdG5GDp/TuUTLjMRej/as3y+op2PmnRErD3pl4qBUSyhgCHAAg8/OOYNGDaK4pRj
-         OdOIH0+j+A9IfPpXVDe31s60VAk2AxauUTofsUcbZbzZK8M/pZXmzsfi8hViHoEykF9J
-         gSo+HfYEa/DaxiWa2FmJQ7Y/2qwGXXTFxIF/s23dZ+6bvvLkRhduWpxa2E4+RDDErd+N
-         7ZrFD/1q+LEBvPy75Nqwlow3cavxTdW73nafO/fnCMKkFLD+nF1deFodiBinx4XMrtnQ
-         IlgMVedi3T+fpE3tQU8JbT76DnEf9DkgZS61MEP321f9Co7zZ5eiPV0bEXCdv5R6WaBs
-         XpTQ==
-X-Gm-Message-State: AFqh2koypiRoQt01d+v+njj5xw9K6xaDJ0qoqwyHqHN1eSIaTZh1kZxO
-        xDy7paITa3iTkWH/jd9a0z5GWA==
-X-Google-Smtp-Source: AMrXdXuA43mEvs+xddNRHWH4r6rh3XmWCN4ygPgTA2hYxPxnsVuVFNHY9JTMig4VsAowVle69yinow==
-X-Received: by 2002:a17:906:2993:b0:86c:e53a:d20b with SMTP id x19-20020a170906299300b0086ce53ad20bmr5286286eje.21.1673793515741;
-        Sun, 15 Jan 2023 06:38:35 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p14-20020a17090653ce00b0085ea718a81bsm5362037ejo.198.2023.01.15.06.38.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Jan 2023 06:38:35 -0800 (PST)
-Message-ID: <9f4994de-e468-43ea-f8db-d4a37ebc30e0@linaro.org>
-Date:   Sun, 15 Jan 2023 15:38:33 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UKRXr+WXrA/dL1K0gomkMRErU+ynIR4YAhv6r9tMF9E=;
+        b=mCNhf9jZaxQmtcJpmh8LgvqICOhSc5S47ntgR+l2jLSj1VchwHv9UQREL21OPw8EYR
+         43ijFZusO6uXqcJcSqYPSMnSkhtvuVSy4xw7I42tEonX7I+LKdWg0BnQ5J1CM/dremR+
+         DTvEKw7cvTbFhATkcMe7Uo4IUopzajx/QJwYV7I4sLSsvURCVxQURuRW1Gr/Rk9+yu/9
+         BQhTjpSe/n+AK8+lsCYBGB2JcYTZtnXHZHJOLe5DYhkLMMW0ItIc+X3p87/x9gtfzKGX
+         qbL+oWAO25uANh5z5ckhqcLtIq7zyPs0rDmcrXhafP8yw+XKWw5Si4rCs5+DQWM821Ht
+         p8VQ==
+X-Gm-Message-State: AFqh2krO6WQxuJFZqVAyf0BXkS4qu7RDeRGDQYYDdgf0D5Y/GkTWqXrU
+        jgZhEMRjE3s1fRDouuirgzDFBGp5arfY07SaBfY=
+X-Google-Smtp-Source: AMrXdXsxpSdGaiA4L/vixK7taV2LSGUy7wESiesQ9ao9FbsrSM8r+EXws52J/xETSjmjax7A3sAf7biUGwD9y5CHSOE=
+X-Received: by 2002:a05:6102:34d3:b0:3d2:3863:6363 with SMTP id
+ a19-20020a05610234d300b003d238636363mr489520vst.47.1673793712344; Sun, 15 Jan
+ 2023 06:41:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] dt-bindings: sram: Tightly Coupled Memory (TCM) bindings
-Content-Language: en-US
-To:     Tanmay Shah <tanmays@amd.com>, Tanmay Shah <tanmay.shah@amd.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-References: <20230113073045.4008853-1-tanmay.shah@amd.com>
- <6f43e320-b533-e5fb-3886-1b6ccc7f9548@linaro.org>
- <b79f7e0a-8048-d0e1-ad0b-d15d72288fde@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b79f7e0a-8048-d0e1-ad0b-d15d72288fde@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+ <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+ <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+ <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <CAHSSk058UoBY2nDx8U7-siG_dbjNSKZaPukZVjSnq=f=CBSKsw@mail.gmail.com>
+In-Reply-To: <CAHSSk058UoBY2nDx8U7-siG_dbjNSKZaPukZVjSnq=f=CBSKsw@mail.gmail.com>
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Sun, 15 Jan 2023 08:41:41 -0600
+Message-ID: <CAFftDdooms8AfKRhp3N8G7roCQUaV3CHayeF14gXVqoK3PeTwA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Matthew Garrett <mgarrett@aurora.tech>
+Cc:     jejb@linux.ibm.com, Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 19:08, Tanmay Shah wrote:
-> 
-> On 1/12/23 11:52 PM, Krzysztof Kozlowski wrote:
->> On 13/01/2023 08:30, Tanmay Shah wrote:
->>> This patch introduces bindings for TCM memory address space on AMD-xilinx
->>> platforms. As of now TCM addresses are hardcoded in xilinx remoteproc
->>> driver. This bindings will help in defining TCM in device-tree and
->>> make it's access platform agnostic and data-driven from the driver.
->>>
->> Subject: drop second/last, redundant "bindings". The "dt-bindings"
->> prefix is already stating that these are bindings.
-> 
-> Ack.
-> 
-> 
->>
->> Where is driver or DTS? Are you now adding a dead binding without users?
-> 
-> 
-> TCM is used by drivers/remoteproc/xlnx_r5_remoteproc.c driver. Howerver, 
-> we have hardcode addresses in TCM as bindings are not available yet.
+On Sat, Jan 14, 2023 at 9:05 PM Matthew Garrett <mgarrett@aurora.tech> wrote:
+>
+> On Sat, Jan 14, 2023 at 6:55 AM James Bottomley <jejb@linux.ibm.com> wrote:
+> > Can we go back again to why you can't use locality?  It's exactly
+> > designed for this since locality is part of creation data.  Currently
+> > everything only uses locality 0, so it's impossible for anyone on Linux
+> > to produce a key with anything other than 0 in the creation data for
+> > locality.  However, the dynamic launch people are proposing that the
+> > Kernel should use Locality 2 for all its operations, which would allow
+> > you to distinguish a key created by the kernel from one created by a
+> > user by locality.
+> >
+> > I think the previous objection was that not all TPMs implement
+> > locality, but then not all laptops have TPMs either, so if you ever
+> > come across one which has a TPM but no locality, it's in a very similar
+> > security boat to one which has no TPM.
+>
+> It's not a question of TPM support, it's a question of platform
+> support. Intel chipsets that don't support TXT simply don't forward
+> requests with non-0 locality. Every Windows-sticker laptop since 2014
+> has shipped with a TPM, but the number that ship with TXT support is a
+> very small percentage of that. I agree that locality is the obvious
+> solution for a whole bunch of problems, but it's just not usable in
+> the generic case.
 
-I don't see usage of these compatibles there. You also did not supply
-DTS here. Please provide users of bindings within the same patchset.
-
-
-Best regards,
-Krzysztof
-
+Instead of walling off a PCR, why not wall off an NV Index PCR and
+use a policy?
