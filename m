@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0499D66B37C
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 19:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF3466B37D
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 19:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjAOSiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 13:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S231570AbjAOSjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 13:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbjAOSiv (ORCPT
+        with ESMTP id S231496AbjAOSiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 15 Jan 2023 13:38:51 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5562112843;
-        Sun, 15 Jan 2023 10:38:50 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id s8so10037562qkj.6;
-        Sun, 15 Jan 2023 10:38:50 -0800 (PST)
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6F71285A
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 10:38:50 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso5185584pjb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 10:38:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dA3K3JQjPRreM+nPzpJ70e+z9tgmP77Og8tezrTxSTU=;
-        b=MdITaKjcTrMAh5/3U10JvGk93Exj0vtMmlXkOLWo/GqBCUXrH5f8uwAj+Rv8pMZYGE
-         ii8jXn7M0T9xp4d0//tNP4MCxPHLZR6YX61s8q3kelVpTQA77jJr2A2som0JM2kVvvwx
-         yyaHJEMawG+bB1f1TX3/Jc4ZqMZr3cydQOYsYeR0pHYyn+J/tC1qfAuyS69flOFLBXW+
-         zzeaQL7M+wN46K/WtdmUTVFHTCckWJ0zeWR0Eo0meOLvRZvavs1sX9dZkS8fwEfzej1Q
-         SSy3dvlfxO0v7UYzFPoI/K2A2wEkljwRFzvMhg0SZWSMe52BWiAktT3X9okKeeskiiR/
-         xh8A==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgDu1UZCFEKonHoSuKGNi3twt6bIZItIIeZhKOBbBGs=;
+        b=gkJDbq/ocZLiukS/yFhQc7DFgrsi/wU7+B60LLQ0yVk2fGvngqJ0I8n0saVhRbpLAO
+         nyMcnviK+58KEzFnzPrAi+4FHmTgZiPNflvg9AiSW8O48md9PYAWQBjasWA99CTzOSE6
+         j0IrMNu+3GgK0giZqW7lR+R6+rcITGuSNFVFw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dA3K3JQjPRreM+nPzpJ70e+z9tgmP77Og8tezrTxSTU=;
-        b=UgwmU1MhV0B9Ks905QiW0dgvrNdp8pXfaC9axr2JjR7FIny7SVAx7IFyQ++AJya1tY
-         lGI36QfhR/eBAD4bKe1JMffBpE/G+B5Cvy+384kWSMB8wpFj072hFRqAWPjKC6ZRRgMI
-         4PaydCDot6rNtp9mC9qZPofNlnQftGW0clonL0Mxr61ui0NQ3nu+4iV78mH/rDmoMmdF
-         stO2R/qHFh7fFAfc9uBY+bme8vAehZ7PlnYU62EM0ij8TnQPRSYCxiVvYeH5TAgOu3ag
-         xfUNaK8GA11UBmUYnJhFjXKUbHOsHNSJeqrAHtYQjxC6SZ/JdWc3VlKzgK96Xl3buAT6
-         63Dw==
-X-Gm-Message-State: AFqh2koyrHQQFddDObgAz0Mi1aVsvV/H+zKmJnA0c7pcPuhP6EkpXze0
-        Ou8zS9WsAwg+jLvCLvGbpz/+HesT5b60519xLsQ=
-X-Google-Smtp-Source: AMrXdXtaYwL2VZUH0BsVxwP2weVcIpWZTudvW2qfgwUiV3CJzmB7cAvPfZYqAik0izlKOZsyt0rlR8l+tgrIO05eMVk=
-X-Received: by 2002:a37:68f:0:b0:706:4c72:42b4 with SMTP id
- 137-20020a37068f000000b007064c7242b4mr223599qkg.425.1673807929200; Sun, 15
- Jan 2023 10:38:49 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wgDu1UZCFEKonHoSuKGNi3twt6bIZItIIeZhKOBbBGs=;
+        b=u4YXnWgUlAhnLlLnU+++qsgltK7Z7RHjJvnXE7heMQclrEBS09cX0E4g7mbAiUvHj0
+         aDUjCimoYy46ZrB+NxARsSeE9yJPeBycUFerGQc3ko2+tjLDEtZhWM47iq73ypt/qdU+
+         gElPxFfWNOxuIOWCenzyv3kESgqyRykFSmahDaXT/Ii1uCdbG3pC/xHR59GBeQEF72wS
+         U8rmZrAj1dmJkukwtsZbWNwMRsYirLyBNpnalQd3wfFZjxsuJiWnMC3mMdDGqsBeznoA
+         kbmiyIy+b/JTK1PBG96G96LMMA/VVsexxFcoQUOVk6ei7hVaJ0zjXxz11bzS0Hq9qCJy
+         KL2w==
+X-Gm-Message-State: AFqh2kofG/UksmRnGVZqNqOrRFkRXE4wZ+WEKfAr0kBeLtb0uvyKSsOX
+        5KV1F1njz7OApZ9iB65ZUkLBbQ==
+X-Google-Smtp-Source: AMrXdXtwKryXCthfydUDvdFpoMDIWaa6UrOSYCiX1dvWpYv/ubTXTOmRJMZx563hFxmifVBujT/O1A==
+X-Received: by 2002:a17:902:aa8e:b0:191:4575:48aa with SMTP id d14-20020a170902aa8e00b00191457548aamr82447502plr.11.1673807930314;
+        Sun, 15 Jan 2023 10:38:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902680d00b001947ba0ac8fsm3160052plk.236.2023.01.15.10.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 10:38:49 -0800 (PST)
+Date:   Sun, 15 Jan 2023 10:38:48 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ACPICA: Replace fake flexible arrays with flexible array
+ members
+Message-ID: <202301151037.20CC3F0@keescook>
+References: <20221118181538.never.225-kees@kernel.org>
 MIME-Version: 1.0
-References: <20230115161006.16431-1-pierluigi.p@variscite.com> <Y8QzI2VUY6//uBa/@lunn.ch>
-In-Reply-To: <Y8QzI2VUY6//uBa/@lunn.ch>
-From:   Pierluigi Passaro <pierluigi.passaro@gmail.com>
-Date:   Sun, 15 Jan 2023 19:38:38 +0100
-Message-ID: <CAJ=UCjX0YzVgedO1hDu_NsFAGhxe8HouUmHmbO6AXZqT=OUYLg@mail.gmail.com>
-Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eran.m@variscite.com, nate.d@variscite.com,
-        francesco.f@variscite.com, pierluigi.p@variscite.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118181538.never.225-kees@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 6:08 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> On Sun, Jan 15, 2023 at 05:10:06PM +0100, Pierluigi Passaro wrote:
-> > When the reset gpio is defined within the node of the device tree
-> > describing the PHY, the reset is initialized and managed only after
-> > calling the fwnode_mdiobus_phy_device_register function.
-> > However, before calling it, the MDIO communication is checked by the
-> > get_phy_device function.
-> > When this happens and the reset GPIO was somehow previously set down,
-> > the get_phy_device function fails, preventing the PHY detection.
-> > These changes force the deassert of the MDIO reset signal before
-> > checking the MDIO channel.
-> > The PHY may require a minimum deassert time before being responsive:
-> > use a reasonable sleep time after forcing the deassert of the MDIO
-> > reset signal.
-> > Once done, free the gpio descriptor to allow managing it later.
->
-> This has been discussed before. The problem is, it is not just a reset
-> GPIO. There could also be a clock which needs turning on, a regulator,
-> and/or a linux reset controller. And what order do you turn these on?
->
-> The conclusion of the discussion is you assume the device cannot be
-> found by enumeration, and you put the ID in the compatible. That is
-> enough to get the driver to load, and the driver can then turn
-> everything on in the correct order, with the correct delays, etc.
->
-Can you provide any reference to this discussion?
-From our investigation, the MDIO communication is checked before managing
-the "reset" gpio .
-This behaviour is generally not visible, but easily reproducible with all NXP
-platforms with dual fec (iMX28, iMX6UL, iMX7, iMX8QM, iMX8QXP)
-where the MDIO bus is owned by the 1st interface but shared with the 2nd.
-When the 1st interface is probed, this causes the probe of the MDIO bus
-when the 2nd interface is not yet set up.
-Here a reference configuration
-https://github.com/varigit/linux-imx/blob/5.15-2.0.x-imx_var01/arch/arm64/boot/dts/freescale/imx8qm-var-spear.dtsi#L168-L219
-Without this patch, the above settings can fail simply forcing the reset GPIOs
-to zero in u-boot.
-Please let me know if further details are needed.
->
-> I think there has been some work on generic power sequencing. I've not
-> being following it, so I've no idea how far it has got. If that could
-> be used to solve this problem for all the possible controls of a PHY,
-> i would be open for such patches.
->
->       Andrew
+On Fri, Nov 18, 2022 at 10:15:51AM -0800, Kees Cook wrote:
+> Functionally identical to ACPICA upstream pull request 813:
+> https://github.com/acpica/acpica/pull/813
+
+Any update on this? Upstream is currently unbuildable since October.
+
+> One-element arrays (and multi-element arrays being treated as
+> dynamically sized) are deprecated[1] and are being replaced with
+> flexible array members in support of the ongoing efforts to tighten the
+> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> 
+> Replace one-element array with flexible-array member in struct
+> acpi_resource_extended_irq. Replace 4-byte fixed-size array with 4-byte
+> padding in a union with a flexible-array member in struct
+> acpi_pci_routing_table.
+> 
+> This results in no differences in binary output.
+
+In the meantime, can you take this patch for Linux, and we can wait for
+ACPICA to catch up?
+
+Thanks!
+
+-Kees
+
+> 
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Robert Moore <robert.moore@intel.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
+> Cc: devel@acpica.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/acpi/acrestyp.h | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/acpi/acrestyp.h b/include/acpi/acrestyp.h
+> index a7fb8ddb3dc6..ee945084d46e 100644
+> --- a/include/acpi/acrestyp.h
+> +++ b/include/acpi/acrestyp.h
+> @@ -332,7 +332,7 @@ struct acpi_resource_extended_irq {
+>  	u8 wake_capable;
+>  	u8 interrupt_count;
+>  	struct acpi_resource_source resource_source;
+> -	u32 interrupts[1];
+> +	u32 interrupts[];
+>  };
+>  
+>  struct acpi_resource_generic_register {
+> @@ -679,7 +679,10 @@ struct acpi_pci_routing_table {
+>  	u32 pin;
+>  	u64 address;		/* here for 64-bit alignment */
+>  	u32 source_index;
+> -	char source[4];		/* pad to 64 bits so sizeof() works in all cases */
+> +	union {
+> +		char pad[4];	/* pad to 64 bits so sizeof() works in all cases */
+> +		DECLARE_FLEX_ARRAY(char, source);
+> +	};
+>  };
+>  
+>  #endif				/* __ACRESTYP_H__ */
+> -- 
+> 2.34.1
+> 
+
+-- 
+Kees Cook
