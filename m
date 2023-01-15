@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EA966B3E0
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9B966B3E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjAOUe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 15:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S231641AbjAOUfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 15:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjAOUez (ORCPT
+        with ESMTP id S231610AbjAOUfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 15:34:55 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C2212F23;
-        Sun, 15 Jan 2023 12:34:54 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30FEDgwq015903;
-        Sun, 15 Jan 2023 20:34:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=1xzxUn5io4MOqbVROavDWiLZH9RakxX9HiJJQ5zs4R0=;
- b=gHYGsTdgXOFi3d/kiz4uWUuU2aNW/E/tJDJQdqiLHW/uCiBaSZiaRjkJ2bdxmh9Fp3ZE
- uwQc2NA/PCxCA11mBnznC4FfMyZGt+BrIdPeYWAINTtMadsJIgR8JYew1t2a1r3Nmp60
- i0jNPq5L4BuvsOfWn9npOVctn2+4Tib3/8/xF2Dt+vBLl+mD6ZS9Ls8l3jWcXdcIDSkI
- Z1uLdEiZUxQEtiM4BhYJZ5QGG26bQ1kTKFLZ4yuvvNZpCHzq7/hujqC3yyaejGOfybYY
- Bkpf7yI23g8TN2GF6lXcLMAym3oSOSIB/OdcKlzVrE0b7CRj7cac4GC2ISPdApbD9pmY XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n48nt5239-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 Jan 2023 20:34:53 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30FKYq8R031007;
-        Sun, 15 Jan 2023 20:34:52 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n48nt522y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 Jan 2023 20:34:52 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30FARtKM002192;
-        Sun, 15 Jan 2023 20:34:51 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n3knf95qy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 15 Jan 2023 20:34:51 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30FKYlEQ50790670
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 15 Jan 2023 20:34:47 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 460BE20043;
-        Sun, 15 Jan 2023 20:34:47 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8DAB20040;
-        Sun, 15 Jan 2023 20:34:46 +0000 (GMT)
-Received: from osiris (unknown [9.171.18.28])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Sun, 15 Jan 2023 20:34:46 +0000 (GMT)
-Date:   Sun, 15 Jan 2023 21:34:45 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH] s390/ipl: Use kstrtobool() instead of strtobool()
- (second step)
-Message-ID: <Y8RjZQBqWxug5nn8@osiris>
-References: <58a3ed2e21903a93dfd742943b1e6936863ca037.1673708887.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58a3ed2e21903a93dfd742943b1e6936863ca037.1673708887.git.christophe.jaillet@wanadoo.fr>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: I7znFn07prtoGb1HtUXgBGn0dYevvsug
-X-Proofpoint-ORIG-GUID: hawnuB-sNZ1KU4KQbCKgkbETYqZHikC_
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 15 Jan 2023 15:35:11 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFFE12F2C;
+        Sun, 15 Jan 2023 12:35:09 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id y8so18444944qvn.11;
+        Sun, 15 Jan 2023 12:35:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YsO2LsRKgK20s4o7iDJGIbwEqRob1KRtlORzs1GZn9Y=;
+        b=cJ7CkpaYEy1CX51VQAht4bwOyTMWHAFV5pbq17NYUDnUDmOVPeDZe46oE/uXPxln1A
+         FETGmutcmVcUYqeVQOgDtKdWRxhqr2jBMyQgFaiFqQbFcXKSU21jTaT3zobeW3bq6uPz
+         G+7lweSH7jetI64CxbUSivNMTVXEm4tW43Ceh7ANFldQR+XMksWc4lSm8TMI1T2vXbSN
+         tyi/BTGtFneyfa0JQQUW3DA3JLzzgw0Kszu+g+/XnS1r2Bu4zw3xx0vHVbFD/3Twgt5V
+         3iHYjQyQDEmF70snRx4+TvBzJx7pvg94lhalY8YoSLe7fUUoBqnCp94pwfkFc6jdIg4D
+         94cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YsO2LsRKgK20s4o7iDJGIbwEqRob1KRtlORzs1GZn9Y=;
+        b=00jITPn2CH7R/+6AhzPTXSZmfoxvV8+DTzIQFhBaPm3iiSCdLQTYqPU1aHwvJwgXL9
+         NsS3GOUdn0/WtCtF5BEiK7htPHiRskgY8ftwxGuZVZHmkCwYYnfeMfETPFuAh56FcrH1
+         irtwm9cRI6sIak54LQp2LeKR+2ZjKEPf1gvO+r7BDCfqhIUtOVRtLhA/pzPt5IhPsp04
+         dLcFyWdFriiZKih+eKeu6QfR3+9jGrvQpNnRgz42/O8p/r0Igjh81p/GVGtIgAx0K0rb
+         TqWfInm3SqKXflVsShowM0XYpTbwbeMjlyfZvJN6v5LGWOEO3QzKr5GZEC9BF5qWvhWc
+         wR7w==
+X-Gm-Message-State: AFqh2kp6rgYZ11PQGsB+JrhI8eL/ri4KQNVoJov1ZcFc4zvUPsyYYduJ
+        rDcrk/n6dY0ho/omyPgYqGWsmpkaEONq+GoPTZU=
+X-Google-Smtp-Source: AMrXdXuAuOQMpz/K5yvYyTHZJ6TqRNFT1Z5mX5LUcj+XjLD7BkXLVkcXEUFa3hCYIzHUUIiqHlL/5xSayYht2VhgWaE=
+X-Received: by 2002:a05:6214:184f:b0:534:1fe5:6060 with SMTP id
+ d15-20020a056214184f00b005341fe56060mr1117452qvy.71.1673814908543; Sun, 15
+ Jan 2023 12:35:08 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-15_15,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxscore=0 malwarescore=0 spamscore=0 impostorscore=0
- mlxlogscore=748 clxscore=1011 lowpriorityscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301150163
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <Y8QzI2VUY6//uBa/@lunn.ch> <CAJ=UCjX0YzVgedO1hDu_NsFAGhxe8HouUmHmbO6AXZqT=OUYLg@mail.gmail.com>
+ <Y8RNzIuiNdAi0dnV@lunn.ch>
+In-Reply-To: <Y8RNzIuiNdAi0dnV@lunn.ch>
+From:   Pierluigi Passaro <pierluigi.passaro@gmail.com>
+Date:   Sun, 15 Jan 2023 21:34:57 +0100
+Message-ID: <CAJ=UCjXr=GBieTvUE7O2LqEg4Q_UpmOEAxUVwy2wuitfHT+2ow@mail.gmail.com>
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.p@variscite.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 04:08:22PM +0100, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
-> 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is similar to the serie ([1]) that tries to axed all usages
-> of strtobool().
-> Most of the patches have been merged in -next.
-> 
-> Commit d9b25bdf57e4 ("s390/ipl: Use kstrtobool() instead of strtobool()")
-> already fixed this file, but a new usage has been introduce by commit
-> 87fd22e0ae92 ("s390/ipl: add eckd support").
-> 
-> This patch has been cross-compiled with make.cross.
-> 
-> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
-> ---
->  arch/s390/kernel/ipl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied, thanks!
+On Sun, Jan 15, 2023 at 8:02 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > This behaviour is generally not visible, but easily reproducible with all NXP
+> > platforms with dual fec (iMX28, iMX6UL, iMX7, iMX8QM, iMX8QXP)
+> > where the MDIO bus is owned by the 1st interface but shared with the 2nd.
+> > When the 1st interface is probed, this causes the probe of the MDIO bus
+> > when the 2nd interface is not yet set up.
+>
+> This sounds like a different issue.
+>
+> We need to split the problem up into two.
+>
+> 1) Does probing the MDIO bus find both PHYs?
+>
+> 2) Do the MACs get linked to the PHYs.
+>
+> If the reset is asserted at the point the MDIO bus is probed, you
+> probably don't find the PHY because it does not respond to register
+> reads. Your patch probably ensures it is out of reset so it is
+> enumerated.
+>
+You are perfectly right: this patch fixes only the 1st problem.
+For the 2nd problem, I've already sent a dedicated patch:
+https://lore.kernel.org/all/20230115174910.18353-1-pierluigi.p@variscite.com/
+>
+> For fec1, if the PHY is found during probe, connecting to the PHY will
+> work without issues. However, fec2 can potentially have ordering
+> issues. Has the MDIO bus finished being probed by the time fec2 looks
+> for it? If it is not there you want to return -EPROBE_DEFERED so that
+> the driver code will try again later.
+>
+> There have been patches to do with ordering recently, but they have
+> been more to do with suspend/resume. So please make sure you are
+> testing net-next, if ordering is your real problem. You also appear to
+> be missing a lot of stable patches, so please bring you kernel up to
+> date on the 5.15 branch, you are way out of date.
+>
+>      Andrew
