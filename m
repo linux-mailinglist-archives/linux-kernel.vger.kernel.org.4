@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784DA66B166
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48B066B15D
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjAOOJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 09:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S230359AbjAOOCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 09:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjAOOJn (ORCPT
+        with ESMTP id S229895AbjAOOCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 09:09:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC37113DA;
-        Sun, 15 Jan 2023 06:09:42 -0800 (PST)
+        Sun, 15 Jan 2023 09:02:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE85113D9
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:02:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7C2060C9F;
-        Sun, 15 Jan 2023 14:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E1AC433D2;
-        Sun, 15 Jan 2023 14:09:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D39EB80B44
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 14:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8111C433D2;
+        Sun, 15 Jan 2023 14:02:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673791781;
-        bh=zRcvm8EavOwpoEQYu0yKJXbKuP4uobFu5WALEjpcP2A=;
+        s=k20201202; t=1673791365;
+        bh=Iz7nC6DDEeDN9U0y1HI37zzfchxJz+j/YXBBMI+uEng=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Me+1CzjEHuvOGX9tmzeZvwmy5/Ye7+OtsoY4qhSzsvUluuntBMZ1kbsKyo4DZkpv3
-         8LHx+kzUAMUd4Qf9yUJsCRPG4RRXxmVooWzr3jOMA7UMr9lLUMW1PS4dopDMxkqj7+
-         3BnGofdmns+q2gJnKMgd2iZXZ1dyoW9UAr2jg1Q2dbcGvNNI928OF+pyKGTt36uH4C
-         AngzjQTQ+bFdxQiADUiLXSWnX41/QS4YDGosNavH1BjHb14X8wkAcu2Aubbl2irbVf
-         6rwBBW/RzYJPNHDltGMPBlWbutzQHG2jrHhr50PyytTzgwrrC08aejhj3HEDL3XZ/d
-         oqcEZFVj7mDWw==
-Date:   Sun, 15 Jan 2023 21:59:18 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 05/13] riscv: cpufeature: extend
- riscv_cpufeature_patch_func to all ISA extensions
-Message-ID: <Y8QGtlnZKk5rp+fg@xhacker>
-References: <20230111171027.2392-1-jszhang@kernel.org>
- <20230111171027.2392-6-jszhang@kernel.org>
- <2398293.3Lj2Plt8kZ@diego>
- <20230112092136.f2g43hrhmrqouy4y@orel>
+        b=S9UU0i3Z9VC1fchiKPWZ4R2wyM/Mq9yTMKMwkmW04WRnyeRBukQcnBZCuMMgd0b6i
+         zhwPUtDBE3iL98MqBIoMkna3SL5pGPodjkablrc5hbqe6Nvq4ZzXE00yUnBzumLQrs
+         rk4s2Myu/Q1bSUzwx0YhlsgIsDUtqYfoYFlYqJ3oQLht1vBHAgwp0XkO4753kVW5Ul
+         5MqNhAQruZreXZQ1pgfx1eMVFVMezP7V0tYemst7R5eKTks2pNHM2/xaSEfvtzAlig
+         Z2OyIvV14ep5BQ8Eq83eJBEAA2fj3czPeyfWQHyuvp12xxZ8IK3qUmRnRSUn47jSdu
+         ymKCKyS2T1BDQ==
+Date:   Sun, 15 Jan 2023 16:02:34 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] memblock: Make finding index faster when modify
+ regions.
+Message-ID: <Y8QHehG1L+kuyqoR@kernel.org>
+References: <20230113082659.65276-1-zhangpeng.00@bytedance.com>
+ <20230113082659.65276-3-zhangpeng.00@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230112092136.f2g43hrhmrqouy4y@orel>
+In-Reply-To: <20230113082659.65276-3-zhangpeng.00@bytedance.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,83 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:21:36AM +0100, Andrew Jones wrote:
-> On Thu, Jan 12, 2023 at 12:29:57AM +0100, Heiko Stübner wrote:
-> > Hi Jisheng.
-> > 
-> > Am Mittwoch, 11. Januar 2023, 18:10:19 CET schrieb Jisheng Zhang:
-> > > riscv_cpufeature_patch_func() currently only scans a limited set of
-> > > cpufeatures, explicitly defined with macros. Extend it to probe for all
-> > > ISA extensions.
-> > > 
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > > ---
-> > >  arch/riscv/include/asm/errata_list.h |  9 ++--
-> > >  arch/riscv/kernel/cpufeature.c       | 63 ++++------------------------
-> > >  2 files changed, 11 insertions(+), 61 deletions(-)
-> > 
-> > hmmm ... I do see a somewhat big caveat for this.
-> > and would like to take back my Reviewed-by for now
-> > 
-> > 
-> > With this change we would limit the patchable cpufeatures to actual
-> > riscv extensions. But cpufeatures can also be soft features like
-> > how performant the core handles unaligned accesses.
-> 
-> I agree that this needs to be addressed and Jisheng also raised this
-> yesterday here [*]. It seems we need the concept of cpufeatures, which
-> may be extensions or non-extensions.
-> 
-> [*] https://lore.kernel.org/all/Y77xyNPNqnFQUqAx@xhacker/
-> 
-> > 
-> > See Palmer's series [0].
-> > 
-> > 
-> > Also this essentially codifies that each ALTERNATIVE can only ever
-> > be attached to exactly one extension.
-> > 
-> > But contrary to vendor-errata, it is very likely that we will need
-> > combinations of different extensions for some alternatives in the future.
-> 
-> One possible approach may be to combine extensions/non-extensions at boot
-> time into pseudo-cpufeatures. Then, alternatives can continue attaching to
-> a single "feature". (I'm not saying that's a better approach than the
-> bitmap, I'm just suggesting it as something else to consider.)
+Hi,
 
-When swtiching pgtable_l4_enabled to static key for the first time, I
-suggested bitmap for cpufeatures which cover both ISA extensions
-and non-extensions-but-some-cpu-related-features [1],
-but it was rejected at that time, it seems we need to revisit the idea.
+On Fri, Jan 13, 2023 at 04:26:58PM +0800, Peng Zhang wrote:
+> We can use binary search to find the index to modify regions in
+> memblock_add_range() and memblock_isolate_range(). Because the
+> arrangement of regions is ordered. It may be faster when there are
+> many regions. So implemented a binary search and a new macro to walk
+> regions.
 
-[1] https://lore.kernel.org/linux-riscv/20220508160749.984-1-jszhang@kernel.org/
+Did you see a measurable speedup with this optimization?
+I'm not in favor of micro-optimizations that complicate code.
 
+> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> ---
+>  mm/memblock.c | 33 +++++++++++++++++++++++++++++----
+>  1 file changed, 29 insertions(+), 4 deletions(-)
 > 
-> Thanks,
-> drew
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 6eedcfc5dcc1..cb92770ac22e 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -149,6 +149,11 @@ static __refdata struct memblock_type *memblock_memory = &memblock.memory;
+>  	     i < memblock_type->cnt;					\
+>  	     i++, rgn = &memblock_type->regions[i])
+>  
+> +#define for_each_memblock_type_start(i, start, memblock_type, rgn)	\
+> +	for (i = start, rgn = &memblock_type->regions[i];		\
+> +	     i < memblock_type->cnt;					\
+> +	     i++, rgn = &memblock_type->regions[i])
+> +
+>  #define memblock_dbg(fmt, ...)						\
+>  	do {								\
+>  		if (memblock_debug)					\
+> @@ -181,6 +186,24 @@ static unsigned long __init_memblock memblock_addrs_overlap(phys_addr_t base1, p
+>  	return ((base1 < (base2 + size2)) && (base2 < (base1 + size1)));
+>  }
+>  
+> +/*
+> + * Binary search for the first region not to the left of @base.
+> + */
+> +static unsigned long __init_memblock memblock_lower_bound_region(struct memblock_type *type,
+> +								 phys_addr_t base)
+> +{
+> +	unsigned long idx, low_idx = 0, high_idx = type->cnt;
+> +
+> +	while (low_idx < high_idx) {
+> +		idx = (low_idx + high_idx) >> 1;
+> +		if (type->regions[idx].base + type->regions[idx].size <= base)
+> +			low_idx = idx + 1;
+> +		else
+> +			high_idx = idx;
+> +	}
+> +	return low_idx;
+> +}
+> +
+>  bool __init_memblock memblock_overlaps_region(struct memblock_type *type,
+>  					phys_addr_t base, phys_addr_t size)
+>  {
+> @@ -581,7 +604,7 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+>  	bool insert = false;
+>  	phys_addr_t obase = base;
+>  	phys_addr_t end = base + memblock_cap_size(base, &size);
+> -	int idx, nr_new;
+> +	int idx, start_idx, nr_new;
+>  	struct memblock_region *rgn;
+>  
+>  	if (!size)
+> @@ -607,6 +630,7 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+>  	 */
+>  	if (type->cnt * 2 + 1 <= type->max)
+>  		insert = true;
+> +	start_idx = memblock_lower_bound_region(type, base);
+>  
+>  repeat:
+>  	/*
+> @@ -617,7 +641,7 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+>  	base = obase;
+>  	nr_new = 0;
+>  
+> -	for_each_memblock_type(idx, type, rgn) {
+> +	for_each_memblock_type_start(idx, start_idx, type, rgn) {
+>  		phys_addr_t rbase = rgn->base;
+>  		phys_addr_t rend = rbase + rgn->size;
+>  
+> @@ -737,7 +761,7 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+>  					int *start_rgn, int *end_rgn)
+>  {
+>  	phys_addr_t end = base + memblock_cap_size(base, &size);
+> -	int idx;
+> +	int idx, start_idx;
+>  	struct memblock_region *rgn;
+>  
+>  	*start_rgn = *end_rgn = 0;
+> @@ -750,7 +774,8 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+>  		if (memblock_double_array(type, base, size) < 0)
+>  			return -ENOMEM;
+>  
+> -	for_each_memblock_type(idx, type, rgn) {
+> +	start_idx = memblock_lower_bound_region(type, base);
+> +	for_each_memblock_type_start(idx, start_idx, type, rgn) {
+>  		phys_addr_t rbase = rgn->base;
+>  		phys_addr_t rend = rbase + rgn->size;
+>  
+> -- 
+> 2.20.1
 > 
-> > 
-> > In my optimization quest, I found that it's actually pretty neat to
-> > convert the errata-id for cpufeatures to a bitfield [1], because then it's
-> > possible to just combine extensions into said bitfield [2]:
-> > 
-> > 	ALTERNATIVE_2("nop",
-> > 		      "j strcmp_zbb_unaligned", 0, CPUFEATURE_ZBB | CPUFEATURE_FAST_UNALIGNED, 0, CONFIG_RISCV_ISA_ZBB,
-> > 		      "j variant_zbb", 0, CPUFEATURE_ZBB, CPUFEATURE_FAST_UNALIGNED, CONFIG_RISCV_ISA_ZBB)
-> > 
-> > [the additional field there models a "not" component]
-> > 
-> > So I really feel this would limit us quite a bit.
-> > 
-> > 
-> > Heiko
-> > 
-> > 
-> > 
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=riscv-hwprobe-v1&id=510c491cb9d87dcbdc91c63558dc704968723240
-> > [1] https://github.com/mmind/linux-riscv/commit/f57a896122ee7e666692079320fc35829434cf96
-> > [2] https://github.com/mmind/linux-riscv/commit/8cef615dab0c00ad68af2651ee5b93d06be17f27#diff-194cb8a86f9fb9b03683295f21c8f46b456a9f94737f01726ddbcbb9e3aace2cR12
-> > 
-> > 
+
+-- 
+Sincerely yours,
+Mike.
