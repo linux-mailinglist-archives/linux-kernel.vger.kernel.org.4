@@ -2,69 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EF166B448
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 587DC66B44B
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 23:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjAOV4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 16:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S231633AbjAOWFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 17:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjAOV4r (ORCPT
+        with ESMTP id S231600AbjAOWFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 16:56:47 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C65918177;
-        Sun, 15 Jan 2023 13:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=IIANEC2vOrokwtWoEbldipND1bJMaHfk76CpGlzeLAM=; b=tyuBwT0QOLSlcLcuNzFWyCu8kb
-        5nKDdf9APVJIA9CGRXrsJ1bFZtYleyktI/SDACMv7S0ggHZyocZGzFrpk8kWpv7swR+GXnsQsp8au
-        i2uZ89dH3X4WXpbYWSythY5av9jNcBUIhHMDqjZkXlowOjleSSQcrq5GcwVC74wttj2o=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pHAzR-0029lB-QA; Sun, 15 Jan 2023 22:56:33 +0100
-Date:   Sun, 15 Jan 2023 22:56:33 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pierluigi Passaro <pierluigi.p@variscite.com>
-Cc:     wei.fang@nxp.com, shenwei.wang@nxp.com, xiaoning.wang@nxp.com,
-        linux-imx@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, eran.m@variscite.com,
-        nate.d@variscite.com, francesco.f@variscite.com,
-        pierluigi.passaro@gmail.com
-Subject: Re: [PATCH v2] net: fec: manage corner deferred probe condition
-Message-ID: <Y8R2kQMwgdgE6Qlp@lunn.ch>
-References: <20230115213804.26650-1-pierluigi.p@variscite.com>
+        Sun, 15 Jan 2023 17:05:05 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D861B543
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 14:05:05 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id b3so40349035lfv.2
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 14:05:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DCbXwGfUPe/3mHsmMZsXWr2naFY4gcVo+DgJt9qnP7k=;
+        b=RmU0D9sMQGH1qbOjumNV/Jfrn4Cch8i7v/b5zO48V8Bdq/aqwO+nL3ak7hiBMTfF1y
+         aB3Rp7mnY3a4+p2TkCA6v00kje8m/OK8lCQqX7hm7FNmdI5uPs34op19jr1/k5/cm5+e
+         WEfQ9xkAPD19TmmtDuu7xd/ewvd7TEZuOaOYKlEcxSwpEYLi+jyDLJqiT3W/mgDGgjgM
+         iG+7wNY7w7IHCbSnVigXgOPglPDzSUBWiZBPk1sPspwI7GcoLrZu5eZ1Gj4pMeRdvpBf
+         mm5waWSkBWKwEFIhateYSLhXy8mv6w8r+9++kuxMgyF727j1VZ4C0imjH8eqnG4NLgly
+         d/sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DCbXwGfUPe/3mHsmMZsXWr2naFY4gcVo+DgJt9qnP7k=;
+        b=VygFdVPBwieuNbagGEAkSRkqJ5rRl3gVxdd505aWv4nqLUK/vckvOnFoUNmc/pi0Or
+         RSI1GEboO3ixPX8lUtDAPSnTOaXlAYyGalmJc+2Rj2YL3nBv2pLj2ljtMvpsIZ5aJ/ig
+         OPzz5BlqzPKpN8JNB/+6lLmvnzOOIlvBDWGxQYil++z2CVviEKZyGC1aTPuI+ho0Wlw7
+         b5d0MldoUR2kwVa9eqaBZL7Z+UBjPcU11DSchEatZ4P24K01pbm7oFzKdpxGfWWR2o6B
+         9d8RZAsTtVc53XRqIh3UFqMGiOiG7FNNAi9taCOq551mfhGsI2IBaN3p4dATLa6u2PFt
+         TovQ==
+X-Gm-Message-State: AFqh2kofHRkqjZ8aaSRl+AirtcbWT+N90T0pogEZPaakhVQ7KPC79ziY
+        C59LeeOa/Mm7rEUkl0obP8lDk5QnEn+t9UflP7F6iqYl6eY=
+X-Google-Smtp-Source: AMrXdXsOve3sb66oFmuJWIgItxAajZcBkCtnzRXb7qPBVlHy6JxkT4zcoQElBrBJmml6EiUCOeFlnU62Sg7bPb3M8n8=
+X-Received: by 2002:a17:907:584:b0:7b2:b992:694d with SMTP id
+ vw4-20020a170907058400b007b2b992694dmr5612456ejb.651.1673819822492; Sun, 15
+ Jan 2023 13:57:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230115213804.26650-1-pierluigi.p@variscite.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: ushaman235@gmail.com
+Received: by 2002:a50:41d:0:b0:1eb:5b9a:63df with HTTP; Sun, 15 Jan 2023
+ 13:57:01 -0800 (PST)
+From:   "Mr. Daniel Kafando" <daniekafando001@gmail.com>
+Date:   Sun, 15 Jan 2023 21:57:01 +0000
+X-Google-Sender-Auth: lnvexteC64whT8w5gLQkLRPYeOo
+Message-ID: <CAAZU8jfXsb+ajPfwq47V_QR8PiURnjrd-SZbLQQru_Ho1Vm06Q@mail.gmail.com>
+Subject: Am Waiting to hear from you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,NA_DOLLARS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:133 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ushaman235[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [daniekafando001[at]gmail.com]
+        *  1.5 NA_DOLLARS BODY: Talks about a million North American dollars
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 10:38:04PM +0100, Pierluigi Passaro wrote:
-> For dual fec interfaces, external phys can only be configured by fec0.
-> When the function of_mdiobus_register return -EPROBE_DEFER, the driver
-> is lately called to manage fec1, which wrongly register its mii_bus as
-> fec0_mii_bus.
-> When fec0 retry the probe, the previous assignement prevent the MDIO bus
-> registration.
-> Use a static boolean to trace the orginal MDIO bus deferred probe and
-> prevent further registrations until the fec0 registration completed
-> succesfully.
+Dear Friend,I'm deeply sorry to berg into your privacy as we haven't
+met before I am Mr.Daniel kafando.and I work with UNITED BANK OF
+AFRICA.Can you use ATM Visa card to withdraw money at ATM cash machine
+in your country? I want to transfer money to you from my country; it=E2=80=
+=99s
+part of money taken by some old politician that was forced out of
+power.
 
-The real problem here seems to be that fep->dev_id is not
-deterministic. I think a better fix would be to make the mdio bus name
-deterministic. Use pdev->id instead of fep->dev_id + 1. That is what
-most mdiobus drivers use.
+I will change the account details to yours, and apply for a visa card
+with your details in our bank, they will send the visa card to you and
+you will be withdrawing money with it and always send my own
+percentage of the money, and the money we are talking about is
+$4.2Million us dollars.
 
-	Andrew
+Whatever amount you withdraw daily, you will send 50% to me and you
+will take 50%, the visa card and the bank account will be on your
+name,I expect your response. promptly so that I will give you further
+details. Best Regards, Mr.Daniel.
