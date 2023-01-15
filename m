@@ -2,112 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539EB66B1E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 16:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DDB66B1E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 16:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbjAOPLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 10:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
+        id S231349AbjAOPNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 10:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjAOPLr (ORCPT
+        with ESMTP id S231241AbjAOPNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 10:11:47 -0500
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1161ECDFB;
-        Sun, 15 Jan 2023 07:11:46 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso14870384oto.11;
-        Sun, 15 Jan 2023 07:11:46 -0800 (PST)
+        Sun, 15 Jan 2023 10:13:46 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC8F768
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 07:13:44 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id l22so32999479eja.12
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 07:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aFcwOmEFlKwz+PgBDJg3oPEza0ShiNrJoHvCTAjQ6D0=;
+        b=u5MeUGD1SllOGGSGeF0Ev6qqHPNz8QOA87zzGYt0CikM0TX9RbBDUdxzGXGov+KrSz
+         /sAWYXqTulK7wz3AHsnsxRrUAtt9Czrg/Uio30iZp3W6q2f9Q/UDxS1n1wWn0nq0efoI
+         TVXOiWyEPV4CdpJvDJnaDnqEHWhay/21Fk4TS57l2L7ai2BZACO71+ztpRj5Xrh/SdU5
+         fHnOV9N+YJZAGCA3+5I7h/Xrzn4W9IYiG1VvX5lmeLQXILvOFSYq1M0cSvK9NOBDx0U8
+         A3+XXIkZpuLFZxlGDs9JxLvHFbU80lA0NxoEGmXIOaKN7yeraJnRcn7YTNVxk3HPKGQX
+         wyng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1SvPkdrRqclnIiQLKFR8JacZ9XIaTQnycEJaLqb6Sc4=;
-        b=qnuHVtPiwMQQiC8xy38c1DnYwaOeAewRelfYXiiwBHePwg25+ubx7xHAmwn2K1wQpW
-         I/x69nnRycUif3oEtuje59YCbjXArQWnK6Cdk3VGwKxTbila+BiVpmZN1HF5BpStjBki
-         wtrl0S+ckROQ58OlCaLlBjtck/BIUM7y+Qs2CbncGQymrjlgMy04eQvAo12JVLNTVKu/
-         T9SjRe65Pa0qM7FiCYcDpA4nF3J9bsxIlOWBG0+ofDAqMrxnEgSJMwD5KF7CGNmD+NIX
-         2t5AxzjmmBoo2l9F1BttLf3OsjwJgLohM9TFyXzKh5Oxb8wBQw813e6LPF82PXavrun2
-         8CPA==
-X-Gm-Message-State: AFqh2kpkiPSsfTSbHBnD3tE16/p3ac+jWWN6p5ltaULQ1Ap5Vfuu+T82
-        3yYdFxPrQcwB2VFhqiwl1Q==
-X-Google-Smtp-Source: AMrXdXsh6dWqsMlGqRqeH89BB+VTpx1Pk6bCOFikeZ/Yr6Ctmk10iCTGB8c1G6BR+K7Vku/zamfzHQ==
-X-Received: by 2002:a9d:6353:0:b0:684:eca3:fa4a with SMTP id y19-20020a9d6353000000b00684eca3fa4amr774789otk.31.1673795505175;
-        Sun, 15 Jan 2023 07:11:45 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bm10-20020a056830374a00b0066e868dbc2esm13603695otb.46.2023.01.15.07.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 07:11:44 -0800 (PST)
-Received: (nullmailer pid 2300324 invoked by uid 1000);
-        Sun, 15 Jan 2023 15:11:43 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aFcwOmEFlKwz+PgBDJg3oPEza0ShiNrJoHvCTAjQ6D0=;
+        b=OtXmk1WhbbVxAQJyppqe6aWoRj2sJi8+aY/y4L5S3rfHCB0uv920LgRWTXts6B6VPG
+         yYKU9+9k6wjk6wdtQfZHHabqhpKZfFORVEGxTQWDrbtBdlv4pmRKuEGe1i15XZXs63H8
+         bKyE2HWdb5REZeRf4yq3WHx9XDLKJmUEPwcbyMQ/n0M8vtGVrYhzL0ynFrx9rzTwNk2r
+         l2KsTwYnoVHZtj3lCHYoGxWFg398qGE+K/IsaMwufzd/bD5Uhw17V3HRO5bF4FcQRypA
+         2sD8jO9w9jVPDOuSGCTRnyseV1goaBqa83qMpBtqiOH+1KoyNu3P2/4xShBGZt9h926j
+         BbmQ==
+X-Gm-Message-State: AFqh2kplA0N/kfEG7VMo7orisZnmbrZ5n5IF009mXhXIAqLyu7oNop2i
+        eMmMmrQDtmtjdWRX+zZr3eMuYQ==
+X-Google-Smtp-Source: AMrXdXu/F/jtw1O3KaRZM9kWFq1sZIWwFot/ex8kGfpUsTUc8dsdAEHIVbOCwskmw4xisrO7ttRaGQ==
+X-Received: by 2002:a17:906:6881:b0:84d:4d6c:a462 with SMTP id n1-20020a170906688100b0084d4d6ca462mr21181417ejr.25.1673795622740;
+        Sun, 15 Jan 2023 07:13:42 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e2-20020a170906314200b007c08439161dsm10694392eje.50.2023.01.15.07.13.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Jan 2023 07:13:42 -0800 (PST)
+Message-ID: <dc5487d8-d31e-28c6-07e8-8d1ff54a4ba4@linaro.org>
+Date:   Sun, 15 Jan 2023 16:13:40 +0100
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        quic_pkondeti@quicinc.com, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        quic_harshq@quicinc.com, Philipp Zabel <p.zabel@pengutronix.de>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-In-Reply-To: <20230115114146.12628-2-quic_kriskura@quicinc.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
-Message-Id: <167379535756.2296593.3352224696296396152.robh@kernel.org>
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
-Date:   Sun, 15 Jan 2023 09:11:43 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
+ (=> interconnect issue)
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20220902043511.17130-1-quic_rjendra@quicinc.com>
+ <20220902043511.17130-5-quic_rjendra@quicinc.com>
+ <Y8Ggh6RObbB1cxSS@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y8Ggh6RObbB1cxSS@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Sun, 15 Jan 2023 17:11:42 +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Snps Dwc3 controller.
+On 13/01/2023 19:18, Matthias Kaehlcke wrote:
+> Hi,
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
->  1 file changed, 47 insertions(+), 6 deletions(-)
+> On Fri, Sep 02, 2022 at 10:05:11AM +0530, Rajendra Nayak wrote:
+>> Add cpu and llcc BWMON nodes and their corresponding
+>> OPP tables for sc7280 SoC.
+>>
+>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
+> I found that with a v6.1 kernel AOSS on sc7280 doesn't reach it's low
+> power state during system. This can be observed on herobrine based
+> boards on which the AP_SUSPEND signal should transition to 1 during
+> system suspend. If it doesn't the Embedded Controller (EC) notices
+> it and wakes the system up again.
+> 
+> Bisection points to this patch, the issue only occurs when
+> CONFIG_QCOM_ICC_BWMON is *not* set. One might think the patch shouldn't
+> have any impact at all when the driver is not enabled, but it does.
+> 
+> Debugging shows that the issue is interconnect related. A bare platform
+> device is created for each bwmon devices, which results in the average
+> and peak bandwidth of the interconnect link to be set 'initially' to
+> INT_MAX. The driver is supposed to call icc_sync_state() during probe,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This is for interconnect providers, not consumers.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+> which would set the initially bandwidths to 0 and determine the actually
+> needed bandwidth. But since the driver isn't probed the initial
+> bandwidths stay at INT_MAX.
+> 
+> This isn't actually an issue with this patch, but how the interconnect
+> framework deals with devices that are registered on the bus, but aren't
+> probed (yet). Not sure how this would be best fixed. Georgi, do you have
+> any ideas?
 
-dtschema/dtc warnings/errors:
+Why the device is not probed (yet)? If it is registered, it will come
+soon during boot up.
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230115114146.12628-2-quic_kriskura@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Best regards,
+Krzysztof
 
