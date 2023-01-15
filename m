@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E191866B097
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 12:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A3D66B09E
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 12:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjAOLYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 06:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S230478AbjAOL1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 06:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjAOLY0 (ORCPT
+        with ESMTP id S230488AbjAOL1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 06:24:26 -0500
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012CC1732
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 03:24:24 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id H17bpDGm8IopLH17bpa0Ms; Sun, 15 Jan 2023 12:24:23 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 15 Jan 2023 12:24:23 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Bean Huo <beanhuo@micron.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: ufs: core: Fix an error handling path in ufshcd_read_desc_param()
-Date:   Sun, 15 Jan 2023 12:24:17 +0100
-Message-Id: <2c6e42205e5ec22e5e8c7c85c6deb8fde31c74da.1673781835.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 15 Jan 2023 06:27:48 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B1FF770
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 03:27:46 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id u19so61963261ejm.8
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 03:27:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z7PMxCsJkAb5zQbRqwSXZpv3C+Wn4fU0jkcRwYX713M=;
+        b=rIySFykUfWGYkFwiPEQBuQY1wcbV/spapzk7yC2TgMBXItfkAdcx3xt9QrzCimtYqP
+         ab+UU/N2yr4kLb8AKlIXAnezibB/pmpY7LO5AP5/EIlNy0w2oBHX71BIPRc24YexWXJm
+         hLJ+V1rUuu+OMPtEYGaNqzwfuSCcqg+kUd+hRYME2EB72LN244c63HqKWBfiHXEu2MuR
+         FofzhNTxMc7zsddKuPJMwqPgqSX9nrwcbB/ZFHom9Y2sSlgRhcGo7apoXCuXbMDID3MN
+         pJjPpwxtfFfTVI7TXLBorILiFMMY6Z2O8lut/gXiUSIVTVP7g222E9G2/4hTsj+URcla
+         UCQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7PMxCsJkAb5zQbRqwSXZpv3C+Wn4fU0jkcRwYX713M=;
+        b=ghLS4vSKVu6AIsRQ2wzDGKA4xVHdreNVwOjA9I/x0qv9u8sLG4BzbbPNNfSnc7Rv0g
+         eAAuUeRIdLhDgZDe+9aCzmxBzMVZGT3dYtBDdOy3tShWAWXOPO5o6Vhvy8Mrk44As6uV
+         wFkHf4584MYzc587HyRFTNTCUAEd/AIZ6j26u8JMufbbWL0dxkqDX/BKR3TQNU98/AHm
+         WenHaLfDqfOQEnl4q1W7W9C1ZnI1tMITVCxjTlT/1zbysCDW3nSG6zgqnR09+q07AxrR
+         kN7QaWaqiWjuK2rtogzhxqCA15xdkit1C60s5Sltu4R4X3UMmzYVeDXjpAK1Nixaoaxa
+         JefA==
+X-Gm-Message-State: AFqh2kr01AgxQHOyUQCOCAkpvi2z4Llic/KgEY65C5vEH5RHdWaVXQ58
+        bNynPd42dVAvAWNnnAcTF6D1hA==
+X-Google-Smtp-Source: AMrXdXtFQYrU3vox5pa2TLu8mIB/4/EHzl+qM0gUfAC2BhQ6WOmoJrEabT2e49RH4k51j7LrglEA+A==
+X-Received: by 2002:a17:906:7e0c:b0:86c:df3:4bbc with SMTP id e12-20020a1709067e0c00b0086c0df34bbcmr6363079ejr.4.1673782065346;
+        Sun, 15 Jan 2023 03:27:45 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b0084c7f96d023sm10713809ejd.147.2023.01.15.03.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Jan 2023 03:27:44 -0800 (PST)
+Message-ID: <48785391-2da5-08b3-6bc4-b485aacdf231@linaro.org>
+Date:   Sun, 15 Jan 2023 12:27:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] dt-bindings: PCI: qcom,pcie-ep: correct
+ qcom,perst-regs
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-pci@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh@kernel.org>
+References: <20230113224749.GA1867364@bhelgaas>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113224749.GA1867364@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs, some memory may need to be freed, as in the other
-error handling paths.
+On 13/01/2023 23:47, Bjorn Helgaas wrote:
+>   dt-bindings: PCI: qcom: add MSM8998 specific compatible
+>   dt-bindings: PCI: qcom: Add sm8350 to bindings
+> 
+> I asked about splitting the first and if you did that, I missed it,
+> and in the meantime I got distracted by my E820/EfiMemoryMappedIO
+> regression.
+> 
+> In any event, I updated "next" with this.  Check my conflict
+> resolution because I'm not a DT expert:
+> 
+> https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/qcom,pcie.yaml?id=25cfdd48a4bd
 
-Before the commit in the Fixes tag, this test was done before the memory
-allocation, so there was no issue.
+Look good, thanks!
 
-Fixes: 16ed9d312b42 ("scsi: ufs: core: Remove ufshcd_map_desc_id_to_length()")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/ufs/core/ufshcd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 6ec65dcdd689..097f2489bc91 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -3452,7 +3452,8 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 	if (param_offset >= buff_len) {
- 		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
- 			__func__, param_offset, desc_id, buff_len);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 
- 	/* Sanity check */
--- 
-2.34.1
+Best regards,
+Krzysztof
 
