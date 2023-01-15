@@ -2,137 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1E366B290
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB8666B29A
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjAOQ3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 11:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S231318AbjAOQdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 11:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjAOQ3N (ORCPT
+        with ESMTP id S231197AbjAOQc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:29:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21C24C13;
-        Sun, 15 Jan 2023 08:29:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF6BCB80B32;
-        Sun, 15 Jan 2023 16:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4ECEC433D2;
-        Sun, 15 Jan 2023 16:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673800149;
-        bh=Wt8nQy5JPCP9oRkQ5+sBiko1fzkFcMk22feZiNjlTU4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hIshr8csUdqzGm8TkqeW8l06ROROLC2+1nMTcDzIuXx3x6Kl2wvCMjNlppAl2RNIc
-         ozTVuTuPF50cWUHfS+E7u9koqaCZe96ws8Yjth0tUdzxzDwnkJM4tmJpanVOGcNacG
-         A0VbWO6qgqVh96lzVTHX1f6eHu6WZlbEbQxzryl0huIBEh6HExUbZYm80rqAxhDKpg
-         jzj39Zx4c3ReasolUUx5gTgttnu9itQ2L5ljgfOZdgDp8BS/iH8E6bN7vk485qOYA3
-         T4PwRqyJPV1yCPPpcBuZcSfeGFRadOdiHE1P3Ir1EIJQb6NWmgEE98miwhslidJpRk
-         fAGSsk31XECtg==
-Date:   Sun, 15 Jan 2023 16:29:04 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 06/13] riscv: introduce
- riscv_has_extension_[un]likely()
-Message-ID: <Y8Qp0NcIPPGqUDGl@spud>
-References: <20230115154953.831-1-jszhang@kernel.org>
- <20230115154953.831-7-jszhang@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HUUCBRPY9dF6efL2"
-Content-Disposition: inline
-In-Reply-To: <20230115154953.831-7-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 15 Jan 2023 11:32:59 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A7DC64E;
+        Sun, 15 Jan 2023 08:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=T4etuF3fqWD3zYNvu+FNCk5e1+phUaWKtANCgu8gUIM=; b=FiGiKfahqnN5hNp006hZkJBe4d
+        dr49K+/LZq1NXlPkNKDfUnMXtEctty+m3NrLFQ5BOj1AhoGwubCOswRYnyGzYXg6MaoChIWjGBpWn
+        pQt9smnww+6VWmWFcVK6I4D9/kq6QHmL2v09/P3O1ASIvAOlocJoV702EbMoD+OaZU9I=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41196 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pH5wB-0007rh-6P; Sun, 15 Jan 2023 11:32:52 -0500
+Date:   Sun, 15 Jan 2023 11:32:50 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        hvilleneuve@dimonoff.com, lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20230115113250.d8a0ec5a2638e24c1208539c@hugovil.com>
+In-Reply-To: <20230115164326.7f03f6d9@jic23-huawei>
+References: <20230113194959.3276433-1-hugo@hugovil.com>
+        <20230113194959.3276433-3-hugo@hugovil.com>
+        <dee8fbdc-5399-d5ce-8d01-2c48e85e2919@linaro.org>
+        <20230115112205.e46ab8d017b99dd987d003e4@hugovil.com>
+        <20230115164326.7f03f6d9@jic23-huawei>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 2/2] dt-bindings: iio: adc: add Texas Instruments
+ ADS7924
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 15 Jan 2023 16:43:26 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
---HUUCBRPY9dF6efL2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Sun, 15 Jan 2023 11:22:05 -0500
+> Hugo Villeneuve <hugo@hugovil.com> wrote:
+> 
+> > On Sun, 15 Jan 2023 15:57:21 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > 
+> > > On 13/01/2023 20:49, Hugo Villeneuve wrote:  
+> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > 
+> > > > Add device tree bindings document for the Texas Instruments ADS7924
+> > > > ADC.
+> > > > 
+> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > ---
+> > > >  .../bindings/iio/adc/ti,ads7924.yaml          | 112 ++++++++++++++++++
+> > > >  1 file changed, 112 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..24bbf95383b4
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > > > @@ -0,0 +1,112 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/iio/adc/ti,ads7924.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: TI ADS7924 4 channels 12 bits I2C analog to digital converter
+> > > > +
+> > > > +maintainers:
+> > > > +  - Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > +
+> > > > +description: |
+> > > > +  Texas Instruments ADS7924 4 channels 12 bits I2C analog to digital converter
+> > > > +
+> > > > +  Specifications:
+> > > > +    https://www.ti.com/lit/gpn/ads7924
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: ti,ads7924
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  vref-supply:
+> > > > +    description:
+> > > > +      The regulator supply for the ADC reference voltage (AVDD)
+> > > > +
+> > > > +  reset-gpios:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  interrupts:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  "#address-cells":
+> > > > +    const: 1
+> > > > +
+> > > > +  "#size-cells":
+> > > > +    const: 0
+> > > > +
+> > > > +  "#io-channel-cells":
+> > > > +    const: 1
+> > > > +
+> > > > +patternProperties:
+> > > > +  "^channel@[0-3]+$":
+> > > > +    $ref: adc.yaml
+> > > > +
+> > > > +    description: |
+> > > > +      Represents the external channels which are connected to the ADC.
+> > > > +
+> > > > +    properties:
+> > > > +      reg:
+> > > > +        description: |
+> > > > +          The channel number. It can have up to 4 channels numbered from 0 to 3.
+> > > > +        items:
+> > > > +          - minimum: 0
+> > > > +            maximum: 3
+> > > > +
+> > > > +      label:
+> > > > +        description: |
+> > > > +          Unique name to identify the channel.  
+> > > 
+> > > Drop description, it's coming from adc.yaml. Just "label: true"  
+> > 
+> > Done.
+> > 
+> > > > +
+> > > > +    required:
+> > > > +      - reg
+> > > > +
+> > > > +    additionalProperties: false  
+> > > 
+> > > You are not allowing anything else from adc.yaml. Is it on purpose?  
+> > 
+> > I am really not an expert with this Yaml stuff, and reading the documentation makes me probably more confused than before reading it :)
+> > 
+> > But one thing that is for sure is that these other properties in adc.yaml are not used in my driver:
+> > 
+> >   bipolar
+> >   diff-channels
+> >   settling-time-us
+> >   oversampling-ratio
+> > 
+> > So is it Ok then to use "additionalProperties: false"? I think so, but what is your recommandation?
+> 
+> Makes sense to me.  Whilst there are lots of things a channel can support, most
+> of them are hardware related and not universal.
 
-Hey Jisheng,
+Ok, I think I am finally beginning to see the light here :)
 
-On Sun, Jan 15, 2023 at 11:49:46PM +0800, Jisheng Zhang wrote:
-> Generally, riscv ISA extensions are fixed for any specific hardware
-> platform, so a hart's features won't change after booting. This
-> chacteristic makes it straightforward to use a static branch to check
-> if a specific ISA extension is supported or not to optimize
-> performance.
->=20
-> However, some ISA extensions such as SVPBMT and ZICBOM are handled
-> via. the alternative sequences.
->=20
-> Basically, for ease of maintenance, we prefer to use static branches
-> in C code, but recently, Samuel found that the static branch usage in
-> cpu_relax() breaks building with CONFIG_CC_OPTIMIZE_FOR_SIZE[1]. As
-> Samuel pointed out, "Having a static branch in cpu_relax() is
-> problematic because that function is widely inlined, including in some
-> quite complex functions like in the VDSO. A quick measurement shows
-> this static branch is responsible by itself for around 40% of the jump
-> table."
->=20
-> Samuel's findings pointed out one of a few downsides of static branches
-> usage in C code to handle ISA extensions detected at boot time:
-> static branch's metadata in the __jump_table section, which is not
-> discarded after ISA extensions are finalized, wastes some space.
->=20
-> I want to try to solve the issue for all possible dynamic handling of
-> ISA extensions at boot time. Inspired by Mark[2], this patch introduces
-> riscv_has_extension_*() helpers, which work like static branches but
-> are patched using alternatives, thus the metadata can be freed after
-> patching.
->=20
-> Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@s=
-holland.org/ [1]
-> Link: https://lore.kernel.org/linux-arm-kernel/20220912162210.3626215-8-m=
-ark.rutland@arm.com/ [2]
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+So I will then leave "additionalProperties: false".
 
-It'd be great, if, in the future, you would hold off on sending new
-versions of patchsets where the previous version is still being
-discussed [3].
-~3 days between versions is not very much, especially when that includes
-a weekend!
-I know you replied there earlier today with your opinion, but please
-give people a chance to read and respond, before resubmitting, so as not
-to split discussion between several threads.
+I will send a V4 soon with all the latest changes.
 
-3 - https://lore.kernel.org/linux-riscv/2398293.3Lj2Plt8kZ@diego/
-
-Thanks,
-Conor.
+Thank you,
+Hugo.
 
 
---HUUCBRPY9dF6efL2
-Content-Type: application/pgp-signature; name="signature.asc"
+> Jonathan
+> 
+> > 
+> > Thank you,
+> > Hugo.
+> > 
+> > 
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +  - vref-supply
+> > > > +  - "#address-cells"
+> > > > +  - "#size-cells"
+> > > > +  
+> > > 
+> > > Best regards,
+> > > Krzysztof
+> > > 
+> > >   
+> > 
+> > 
+> 
+> 
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8Qp0AAKCRB4tDGHoIJi
-0pPnAQCsIsNUGq5IDZkIgbOznwtHyiQL3aKdAxLmntEOJDBOJgD/dvpGPPetV8gc
-DnsHNxe/93fMhhgnj9EtBjFUkmIeug0=
-=naIL
------END PGP SIGNATURE-----
-
---HUUCBRPY9dF6efL2--
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
