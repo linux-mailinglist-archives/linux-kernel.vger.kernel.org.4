@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A7666B425
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB2766B429
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 22:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbjAOV3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 16:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S231229AbjAOVcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 16:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbjAOV3v (ORCPT
+        with ESMTP id S231356AbjAOVcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 16:29:51 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1ED1630B
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 13:29:50 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id p25so21978303ljn.12
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 13:29:50 -0800 (PST)
+        Sun, 15 Jan 2023 16:32:18 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4213616314;
+        Sun, 15 Jan 2023 13:32:17 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s3so237810edd.4;
+        Sun, 15 Jan 2023 13:32:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=imIrwUXXSpGxJHX2IXIa4NzC1jMkxA/rgCDVCw5pEFE=;
-        b=RWVPMLhj3nzukWBHC/0nsGVSXNfSsDSgW+QuchB/+fHdme4dQ77rAF0NrXjm/cnSO2
-         +BxKMpMgJY85/EBZEaFUcTlSWeJ8CLONuZIKfYc0s00ztKHQhXEVDA8sMmdOyx/O21v8
-         Kk6vJ1oidhdWGFl/HL5l5WvkmJvKlPhfletg0=
+        bh=n8tWmcU0b5fCDaTVTd0CKviDtOIBj5n4E8it6ot+1cI=;
+        b=TnPnt5c8/Jxn0HmkGujuci8y99eMOvK2OVIftaWvvJuOWqhCg8YjnmsNLbND6/+vrs
+         GvzmsgA2ngiwH4jsor1Z9w0Z8nJ4rF7BWGB2MsZ9EhMQs788nssIibehk9I7yTVuPvOK
+         R1IU+jgxwrzFQvKsNLUHzst3njireRs7Y8hueO8bpnjM0uT9D66ilYq+y7m37+lI4MBL
+         UmBfbN7voygoayetVOYG16v4lGgiPiNM8B1TFLUyLdiGpNMHr5p1LZQJ3IX6dOMJHaMR
+         x5RP6eJLTFYAE6nRmVDlFCkXwObdDkhyRePtO150uCZOM3qTrm8PKub0FAlpon6k5Ce6
+         0Jjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=imIrwUXXSpGxJHX2IXIa4NzC1jMkxA/rgCDVCw5pEFE=;
-        b=JQOyHRu5aasmVZrwkAlJlgzsMN/534Vacq/QKUjAqkbMM6b3oqmtRylKq5CGdLVNdh
-         SiQ29kFLtqa161R4Zh0YldqKTaBbix3N+7t9I2krz+j94CX2vJNjHLK8/Stfm7yttLx4
-         XvZRxTr4kGtAzmHtVKibwjUCa1stKijzEMkpza1azle9l57uCGXw4iLDPzknXNa5Qds/
-         YYrvtN9qCRxUryU2dgpyIiv8bZ4ak7RqhTWEbian05SCubqdNSYSF4LuKHR+2BzZxeVC
-         AVa7lwKsQi5Tm4UHK8/mtQqvydvVDsXMVPF3aJ9NRC31tmZBhbn2y+37nxe8WhmyV9Kr
-         3fsQ==
-X-Gm-Message-State: AFqh2kqhWvyIE13+wT8RSy7AHUgMoaleMbuQ99Uvseb8Zx6zbeGOUZpx
-        Hh9CvFsGpWBsPkf8ZfKQZ7LciOlzkL+nDgabnjsJFQ==
-X-Google-Smtp-Source: AMrXdXvdy3taN11/dVs1uCoBkLM5Z3BbpAjjzT+Zg+zoauO3zWwSUCc2PjBReQ+vjgGadCr0ti/wUuBGWqao0CT5PVk=
-X-Received: by 2002:a2e:964c:0:b0:284:6390:1f8 with SMTP id
- z12-20020a2e964c000000b00284639001f8mr2589023ljh.167.1673818188816; Sun, 15
- Jan 2023 13:29:48 -0800 (PST)
+        bh=n8tWmcU0b5fCDaTVTd0CKviDtOIBj5n4E8it6ot+1cI=;
+        b=yV8DMNI9bn9Hm9/MuyJxwDDoEOtHiJfUljO5QWWCy/qHymylgDqbURnOaXrp5UntbP
+         ODY3NuhoKOrY/yE+kQdJaOThHIxLZtahW8fSpZlF8CsYVkQ22IjnunhDLkm8fmI/xKCC
+         H8uvVt0yLOoQhDCemaV3znpzgvMjmNNLQjX0FrVAHXxHfb8O3Qj1TiGHbBXRQE3vMxNq
+         hEj9NwtFZcioN/znIJl4XYOiiPrSiQ65shjiEj6GYFFEySP71MKzBUKQ84IIgvKvvUQB
+         +jrgT56/V1dWc057yD+2PVwimlmMPw2VeAlPqwsadTrUdq68eQrcZYZWU6PSYPisssQG
+         C7PQ==
+X-Gm-Message-State: AFqh2krZxPTDBXkxnLqiJYWaGKLzOUhDQB1JtiG6HbJra2I+3ue0TmN+
+        k5JyRkQXzTc0eaonfmlwX80E/e+NgfTorx5tZJo=
+X-Google-Smtp-Source: AMrXdXv790MuohmN6lXSu7rpoy1rkJOw+qexGvmcpLTKtvZcaUhi+wGOcbwOLtPLIrpsbU0CwiDLwqI5Ok8kiBznSck=
+X-Received: by 2002:a05:6402:500f:b0:46a:e6e3:b3cf with SMTP id
+ p15-20020a056402500f00b0046ae6e3b3cfmr8470722eda.333.1673818335737; Sun, 15
+ Jan 2023 13:32:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20230112005223.2329802-1-joel@joelfernandes.org>
- <20230112005223.2329802-2-joel@joelfernandes.org> <20230115155455.0fb66c12@rorschach.local.home>
-In-Reply-To: <20230115155455.0fb66c12@rorschach.local.home>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 15 Jan 2023 16:29:38 -0500
-Message-ID: <CAEXW_YRjV0CqoALU6F_9LZKD_e84gWQ3a8juucmXxLUuDQ7DHw@mail.gmail.com>
-Subject: Re: [PATCH v2 rcu/dev 2/2] rcu: Disable laziness if lazy-tracking
- says so
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        fweisbec@gmail.com, urezki@gmail.com
+References: <SJ0PR04MB7248C599DE6F006F94997CF180C39@SJ0PR04MB7248.namprd04.prod.outlook.com>
+In-Reply-To: <SJ0PR04MB7248C599DE6F006F94997CF180C39@SJ0PR04MB7248.namprd04.prod.outlook.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 15 Jan 2023 13:32:04 -0800
+Message-ID: <CAADnVQK4ucv=LugqZ3He9ubwdxDu6ohaBKr2E=TX0UT65+7WpQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Add CONFIG_BPF_HELPER_STRICT
+To:     Roland <kernel.pwn@outlook.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>, bsegall@google.com,
+        Mel Gorman <mgorman@suse.de>, bristot <bristot@redhat.com>,
+        vschneid@redhat.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 3:55 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Jan 13, 2023 at 11:53 PM Roland <kernel.pwn@outlook.com> wrote:
 >
-> On Thu, 12 Jan 2023 00:52:23 +0000
-> "Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
->
-> >
-> >  static void
-> > -__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
-> > +__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
-> >  {
-> >       static atomic_t doublefrees;
-> >       unsigned long flags;
-> >       struct rcu_data *rdp;
-> > -     bool was_alldone;
-> > +     bool was_alldone, lazy;
->
-> I'm curious to why the the extra variable.
->
-> >
-> >       /* Misaligned rcu_head! */
-> >       WARN_ON_ONCE((unsigned long)head & (sizeof(void *) - 1));
-> > @@ -2622,6 +2622,7 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
-> >       kasan_record_aux_stack_noalloc(head);
-> >       local_irq_save(flags);
-> >       rdp = this_cpu_ptr(&rcu_data);
-> > +     lazy = lazy_in && !rcu_async_should_hurry();
->
-> Wouldn't just having:
->
->         lazy = lazy && !rcu_async_should_hurry();
->
-> be sufficient?
+> In container environment, ebpf helpers could be used maliciously to
+>    leak information, DOS, even escape from containers.
+>    CONFIG_BPF_HELPER_STRICT is as a mitigation of it.
+>    Related Link: https://rolandorange.zone/report.html
 
-I prefer to not overwrite function arguments, it makes debugging harder IMHO.
-
- - Joel
-
-
-
->
-> -- Steve
->
-> >
-> >       /* Add the callback to our list. */
-> >       if (unlikely(!rcu_segcblist_is_enabled(&rdp->cblist))) {
-> > --
+The link is arguing that a process with CAP_SYS_ADMIN permissions
+can read memory of user processes, leak kernel addresses, etc.
+And this is somehow an issue with bpf helpers?
+and your suggested "temporary mitigation" is to CONFIG_BPF=n ?
+While this patch is a "proper fix" ?
+Sorry, but please stay with your "temporary mitigation" forever.
