@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73FD66B011
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 10:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C6D66B015
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 10:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjAOJGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 04:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S230254AbjAOJHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 04:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjAOJGk (ORCPT
+        with ESMTP id S230332AbjAOJG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 04:06:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B71EB455
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 01:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673773549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Sun, 15 Jan 2023 04:06:57 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0310B745;
+        Sun, 15 Jan 2023 01:06:53 -0800 (PST)
+Date:   Sun, 15 Jan 2023 09:06:49 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673773610;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SgGQvfVNgJuj9/GzR9Kg0QVkCdAd9T5sROwhixs1ZQs=;
-        b=IsdV8GZsLm3Hyw2XUyLUu334BBsCQlC4qYQcvTR7JwStjx9C/r2ag4WCZ1Ju8x7bleisl1
-        Km4E3vZPLh6pXWiYUBSWo5QQ7jQVK36KQJmvS00BtY/FeUTfMA/VAhHOTYXhDOVGO6Q3jd
-        +NElTyJaGz0EsnPYaH1bneL5PKaHzbc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-462-Coq5AnWjNHySFV5INHhA0Q-1; Sun, 15 Jan 2023 04:05:47 -0500
-X-MC-Unique: Coq5AnWjNHySFV5INHhA0Q-1
-Received: by mail-wm1-f71.google.com with SMTP id k38-20020a05600c1ca600b003da1c24f23cso5003390wms.8
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 01:05:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SgGQvfVNgJuj9/GzR9Kg0QVkCdAd9T5sROwhixs1ZQs=;
-        b=Pf7apNoTI9mAAokDYvOeNJmozCOpFnXN0mJAyKWJxwWzsnqqTaClfrxmEI84FxvsJb
-         WRlXtQMRsDLKnyiOC+VELCjAIieNxT/G4FpQDoVMtzk+Mikhl5+ymUJeQ2HL1bdtz+0Z
-         FJzWijvUAHhT4/3LojWslRWfHmNrtsoKfKj24aI62V3WzcGhhqz5yUDulbacnbfAd72Y
-         px8+eY0jZ/HzovcGiPdVvxMROvejgh3HZikYgJfWknE/nd1hHWsbWEPXml4eucqLlnCd
-         +eNV6FvRLMUqb/CCYUnsm+msyLQvKtAZxpuTxUI/S0QNxefVgnaS2gFzom2b1jRg3uQE
-         1ewQ==
-X-Gm-Message-State: AFqh2kpJ5RkJfCL6Vjv5hIUfbCq+9fUqf2+b4FuL9rPY70raNKBn2L5e
-        o6zMNP4kxEoSyQw/wIeCd/M28EfBT9pPWPBvJLH34EwW26TOd8fcqHsxByfRGzB60FalgYPNdPE
-        khigr68hU+RVskjQEl5UF7tpl
-X-Received: by 2002:a05:600c:4f48:b0:3c6:f7ff:6f87 with SMTP id m8-20020a05600c4f4800b003c6f7ff6f87mr64595626wmq.11.1673773546717;
-        Sun, 15 Jan 2023 01:05:46 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvG0UTe3PnFsXLNSWaN/0Y8lIxlhLDD8rQaPYwl7/ETxnfRiEClOA1ADPWsTTif+A21ALm0Qw==
-X-Received: by 2002:a05:600c:4f48:b0:3c6:f7ff:6f87 with SMTP id m8-20020a05600c4f4800b003c6f7ff6f87mr64595609wmq.11.1673773546510;
-        Sun, 15 Jan 2023 01:05:46 -0800 (PST)
-Received: from starship ([89.237.103.62])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003d1e1f421bfsm13685107wmo.10.2023.01.15.01.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 01:05:45 -0800 (PST)
-Message-ID: <49b74c43e4d6ba065b48f4a7c82759e28b4acc0f.camel@redhat.com>
-Subject: Re: [PATCH v2 00/11] SVM: vNMI (with my fixes)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Sun, 15 Jan 2023 11:05:43 +0200
-In-Reply-To: <20221129193717.513824-1-mlevitsk@redhat.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        bh=GvZmeTyhLrh/x15CvyWb5V4GzfxinH27mW5DVzh4sOs=;
+        b=OMJlEiDgfzwg/CwsPccOjMMf0xmIhAxd5UAfTgGvW9b0fOYH5QMcT4hj2RkBxtIlXZ6eBA
+        mdengPvjSjrtC11oUsbyy22oDZ/RVnLbCiGZAmEp4meuqF/tpSHmRFcTZ+AOQ/jZo+8H1F
+        2s3gqAEdDJYuhzogEJntn6j3jJZ7Pbu4fZ8dzexpoLyzOmXKXVpEHrlHkxkcx+ZeLjOwXB
+        vNdg/FG/vJ6oXTqp+um9xXhYxsCONTKrALHORHQs1bLKJs1aoBFQcRFOmD1zZcBZvDD0tB
+        bIxpQTm8JWh0tn16u22WHuOF8ezo5MvaNlQDf3dr611o3w6AS82Z+S9iF6CnPQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673773610;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GvZmeTyhLrh/x15CvyWb5V4GzfxinH27mW5DVzh4sOs=;
+        b=GhXJeylMjTkGKp6dEdJqhQIIkIteTzskpULxKSlGtxGQPZ61wM69qHS7/7bwNlX/KqsQtp
+        QnuuvFwMD2OQhfBA==
+From:   "tip-bot2 for Vincent Guittot" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/fair: Limit sched slice duration
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230113133613.257342-1-vincent.guittot@linaro.org>
+References: <20230113133613.257342-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
+Message-ID: <167377360979.4906.12177832193233588440.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 21:37 +0200, Maxim Levitsky wrote:
-> Hi!
-> 
-> This is the vNMI patch series based on Santosh Shukla's vNMI patch series.
-> 
-> In this version of this patch series I addressed most of the review feedback
-> added some more refactoring and also I think fixed the issue with migration.
-> 
-> I only tested this on a machine which doesn't have vNMI, so this does need
-> some testing to ensure that nothing is broken.
-> 
-> Best regards,
->        Maxim Levitsky
-> 
-> Maxim Levitsky (9):
->   KVM: nSVM: don't sync back tlb_ctl on nested VM exit
->   KVM: nSVM: clean up the copying of V_INTR bits from vmcb02 to vmcb12
->   KVM: nSVM: explicitly raise KVM_REQ_EVENT on nested VM exit if L1
->     doesn't intercept interrupts
->   KVM: SVM: drop the SVM specific H_FLAGS
->   KVM: x86: emulator: stop using raw host flags
->   KVM: SVM: add wrappers to enable/disable IRET interception
->   KVM: x86: add a delayed hardware NMI injection interface
->   KVM: SVM: implement support for vNMI
->   KVM: nSVM: implement support for nested VNMI
-> 
-> Santosh Shukla (2):
->   x86/cpu: Add CPUID feature bit for VNMI
->   KVM: SVM: Add VNMI bit definition
-> 
->  arch/x86/include/asm/cpufeatures.h |   1 +
->  arch/x86/include/asm/kvm-x86-ops.h |   2 +
->  arch/x86/include/asm/kvm_host.h    |  24 +++--
->  arch/x86/include/asm/svm.h         |   7 ++
->  arch/x86/kvm/emulate.c             |  11 +--
->  arch/x86/kvm/kvm_emulate.h         |   7 +-
->  arch/x86/kvm/smm.c                 |   2 -
->  arch/x86/kvm/svm/nested.c          | 102 ++++++++++++++++---
->  arch/x86/kvm/svm/svm.c             | 154 ++++++++++++++++++++++-------
->  arch/x86/kvm/svm/svm.h             |  41 +++++++-
->  arch/x86/kvm/x86.c                 |  50 ++++++++--
->  11 files changed, 318 insertions(+), 83 deletions(-)
-> 
-> -- 
-> 2.26.3
-> 
-> 
-Another kind ping on this patch series.
+The following commit has been merged into the sched/core branch of tip:
 
-Best regards,
-	Maxim Levitsky
+Commit-ID:     79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
+Gitweb:        https://git.kernel.org/tip/79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
+Author:        Vincent Guittot <vincent.guittot@linaro.org>
+AuthorDate:    Fri, 13 Jan 2023 14:36:13 +01:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Sun, 15 Jan 2023 09:59:00 +01:00
 
+sched/fair: Limit sched slice duration
+
+In presence of a lot of small weight tasks like sched_idle tasks, normal
+or high weight tasks can see their ideal runtime (sched_slice) to increase
+to hundreds ms whereas it normally stays below sysctl_sched_latency.
+
+2 normal tasks running on a CPU will have a max sched_slice of 12ms
+(half of the sched_period). This means that they will make progress
+every sysctl_sched_latency period.
+
+If we now add 1000 idle tasks on the CPU, the sched_period becomes
+3006 ms and the ideal runtime of the normal tasks becomes 609 ms.
+It will even become 1500ms if the idle tasks belongs to an idle cgroup.
+This means that the scheduler will look for picking another waiting task
+after 609ms running time (1500ms respectively). The idle tasks change
+significantly the way the 2 normal tasks interleave their running time
+slot whereas they should have a small impact.
+
+Such long sched_slice can delay significantly the release of resources
+as the tasks can wait hundreds of ms before the next running slot just
+because of idle tasks queued on the rq.
+
+Cap the ideal_runtime to sysctl_sched_latency to make sure that tasks will
+regularly make progress and will not be significantly impacted by
+idle/background tasks queued on the rq.
+
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lore.kernel.org/r/20230113133613.257342-1-vincent.guittot@linaro.org
+---
+ kernel/sched/fair.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e9d906a..d4db72f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4896,7 +4896,13 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+ 	struct sched_entity *se;
+ 	s64 delta;
+ 
+-	ideal_runtime = sched_slice(cfs_rq, curr);
++	/*
++	 * When many tasks blow up the sched_period; it is possible that
++	 * sched_slice() reports unusually large results (when many tasks are
++	 * very light for example). Therefore impose a maximum.
++	 */
++	ideal_runtime = min_t(u64, sched_slice(cfs_rq, curr), sysctl_sched_latency);
++
+ 	delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
+ 	if (delta_exec > ideal_runtime) {
+ 		resched_curr(rq_of(cfs_rq));
