@@ -2,124 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7780566B29E
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B976A66B294
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 17:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjAOQly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 11:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S231372AbjAOQ3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 11:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjAOQlw (ORCPT
+        with ESMTP id S231199AbjAOQ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 11:41:52 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903AB8A57
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 08:41:51 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so20579361wms.2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 08:41:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyXeq2MEr1J+e0QY6nAt4hvGGGXhRFe/SJyt1uQjd+M=;
-        b=HVKsp/vf0AVRuU856/IGt6skrRZgxXhP5I4Y/qoLNwpTmzYThPiVRxsVlvJJmA2Hg8
-         tV7IHYq1EnC+YIpW7nqTWWsd259d0i6s++jbssfomjbxGF0jqnK5YIE9DH/SkAO3JLxM
-         uS3s6sDNNElol4/q/sxBwK4HKwEwolb4mt0ZDnNTvQYzoD6hXCHFYV8wQWFiWwjYg7Rl
-         uoYg9AkFXmyKNC4d7x4HjFxlkLF43etPXh1w5UD9EU9MiBBJ1CV7f6PikjHHNpIaCbMk
-         Hgh+DGvyf19Jvt03Vhtv6xgnvLiGGsToOPXr97ilY6D6nQjhYAwKouUCVxcIeq3VXDwf
-         A3bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wyXeq2MEr1J+e0QY6nAt4hvGGGXhRFe/SJyt1uQjd+M=;
-        b=VrMc5yGBNZqh5OMm/t8d0nXBU0gzww7aj4EvgLwLgZYXswaVj31DFVQ0dGebQLe9U1
-         TREfHiHBDDqM+bLbQ92aGWrPivsI+/5ksWnmvfZyhkqRCzMdgVJe1wWCbIi7wdntk90n
-         pEZgA6UzZXOhe6BLV4OXuw+u6QZ5dX1xWP+sz/s+Rbd6t6vhQoB9/Qc5i0QDLksrk69z
-         rNGU8noE8Gj5D5IYPrZ8XlhmEJ9WPdONnFF4WgQh3aUf/NuVktnXBakGxXU7JSbx8fQf
-         xn6En0YSmWa5vZQs0gV7AnQdPvCceoNSKLs5bK1AolwctnlVXXnGv0xXs5BPsPA1JD6B
-         feGw==
-X-Gm-Message-State: AFqh2kogmzbSvYF/X802VsZyB6lNwjJ0krscD+pZmChqufHYARNofCV2
-        F7am164vhwuh4/ADdhdlg/Ne2Q==
-X-Google-Smtp-Source: AMrXdXuLY36cyQqAcwRVTO690f1UhyNmBsCwlXmkS44xRrGENHV8GwdmqHv1oESJrNIujBaVma3e0A==
-X-Received: by 2002:a05:600c:34d3:b0:3c6:e61e:ae74 with SMTP id d19-20020a05600c34d300b003c6e61eae74mr76812959wmq.4.1673800910197;
-        Sun, 15 Jan 2023 08:41:50 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003d9dee823a3sm34029777wmq.5.2023.01.15.08.41.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jan 2023 08:41:49 -0800 (PST)
-Date:   Sun, 15 Jan 2023 16:41:48 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>, peterz@infradead.org,
-        mingo@redhat.com, rostedt@goodmis.org, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org, lizefan@huawei.com,
-        longman@redhat.com, dietmar.eggemann@arm.com,
-        cgroups@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>
-Subject: Re: [PATCH v9 3/8] cpuset: Rebuild root domain deadline accounting
- information
-Message-ID: <20230115164148.lnoqfpg7em334ts3@airbuntu>
-References: <20190719140000.31694-1-juri.lelli@redhat.com>
- <20190719140000.31694-4-juri.lelli@redhat.com>
- <20221216233501.gh6m75e7s66dmjgo@airbuntu>
- <CAKfTPtA0M5XOP4UdkFeSNen98e842OfKTBDOt0r-y_TD4w54jw@mail.gmail.com>
- <20221220114309.coi2o4ewosgouy6o@airbuntu>
+        Sun, 15 Jan 2023 11:29:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971CF4C13;
+        Sun, 15 Jan 2023 08:29:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EBCCB80B44;
+        Sun, 15 Jan 2023 16:29:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57535C433D2;
+        Sun, 15 Jan 2023 16:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673800189;
+        bh=x59QNQkzRFydhNJ0KSrECEek2bWlpqijMNmdomWH5Rs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IomDEpPNMCAxftMpTd92Rs6tZCiEu3jA9RDI7u/zrqXoDld/uGJ4vUDKTOtw9q2mX
+         r8vlHR6FlbtnqrdPP/F+lRvAxK+1WUtoFDOwf1sPl/7OGG85ZF5hrSvpMtfFmHFFZT
+         8pEV0xnIA1IMkC0OLI5bDwFkihDKWvHBIBIaBDIHSLT8F4T+IOGcUoAC7KsPyUIhEy
+         EbBJkIhrXYYMqjMpvpr+yxT9jZ0Q6U6XxcNcjbw+70qP9xoUtCV+CAFEzwKTTa6lMh
+         OgRihrzCJhfOlh41s53Lu7g/1jwEFh/RxazdXJG7o0cB1cRT41e3WhAp0bgnezQ44H
+         9Ac0hwZtNq9XA==
+Date:   Sun, 15 Jan 2023 16:43:26 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        hvilleneuve@dimonoff.com, lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: iio: adc: add Texas Instruments
+ ADS7924
+Message-ID: <20230115164326.7f03f6d9@jic23-huawei>
+In-Reply-To: <20230115112205.e46ab8d017b99dd987d003e4@hugovil.com>
+References: <20230113194959.3276433-1-hugo@hugovil.com>
+        <20230113194959.3276433-3-hugo@hugovil.com>
+        <dee8fbdc-5399-d5ce-8d01-2c48e85e2919@linaro.org>
+        <20230115112205.e46ab8d017b99dd987d003e4@hugovil.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221220114309.coi2o4ewosgouy6o@airbuntu>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/22 11:43, Qais Yousef wrote:
-> On 12/19/22 09:07, Vincent Guittot wrote:
-> > On Sat, 17 Dec 2022 at 00:35, Qais Yousef <qyousef@layalina.io> wrote:
-> > >
-> > > Hi
-> > >
-> > > On 07/19/19 15:59, Juri Lelli wrote:
-> > > > When the topology of root domains is modified by CPUset or CPUhotplug
-> > > > operations information about the current deadline bandwidth held in the
-> > > > root domain is lost.
-> > > >
-> > > > This patch addresses the issue by recalculating the lost deadline
-> > > > bandwidth information by circling through the deadline tasks held in
-> > > > CPUsets and adding their current load to the root domain they are
-> > > > associated with.
-> > > >
-> > > > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > > > Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> > > > ---
-> > >
-> > > We see that rebuild_root_domain() can take 10+ ms (I get a max of 20ms quite
-> > > consistently) on suspend/resume.
-> > >
-> > > Do we actually need to rebuild_root_domain() if we're going through
-> > > a suspend/resume cycle?
-> > 
-> > During suspend to ram, there are cpus hotplug operation but If you use
-> > suspend to idle, you will skip cpus hotplug operation and its
-> > associated rebuild.
+On Sun, 15 Jan 2023 11:22:05 -0500
+Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+> On Sun, 15 Jan 2023 15:57:21 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> Thanks Vincent. I'll check on that - but if we want to keep suspend to ram?
-> Do we really to incur this hit?
+> > On 13/01/2023 20:49, Hugo Villeneuve wrote:  
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > 
+> > > Add device tree bindings document for the Texas Instruments ADS7924
+> > > ADC.
+> > > 
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > ---
+> > >  .../bindings/iio/adc/ti,ads7924.yaml          | 112 ++++++++++++++++++
+> > >  1 file changed, 112 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > > new file mode 100644
+> > > index 000000000000..24bbf95383b4
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads7924.yaml
+> > > @@ -0,0 +1,112 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/iio/adc/ti,ads7924.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: TI ADS7924 4 channels 12 bits I2C analog to digital converter
+> > > +
+> > > +maintainers:
+> > > +  - Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > +
+> > > +description: |
+> > > +  Texas Instruments ADS7924 4 channels 12 bits I2C analog to digital converter
+> > > +
+> > > +  Specifications:
+> > > +    https://www.ti.com/lit/gpn/ads7924
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: ti,ads7924
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  vref-supply:
+> > > +    description:
+> > > +      The regulator supply for the ADC reference voltage (AVDD)
+> > > +
+> > > +  reset-gpios:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  "#address-cells":
+> > > +    const: 1
+> > > +
+> > > +  "#size-cells":
+> > > +    const: 0
+> > > +
+> > > +  "#io-channel-cells":
+> > > +    const: 1
+> > > +
+> > > +patternProperties:
+> > > +  "^channel@[0-3]+$":
+> > > +    $ref: adc.yaml
+> > > +
+> > > +    description: |
+> > > +      Represents the external channels which are connected to the ADC.
+> > > +
+> > > +    properties:
+> > > +      reg:
+> > > +        description: |
+> > > +          The channel number. It can have up to 4 channels numbered from 0 to 3.
+> > > +        items:
+> > > +          - minimum: 0
+> > > +            maximum: 3
+> > > +
+> > > +      label:
+> > > +        description: |
+> > > +          Unique name to identify the channel.  
+> > 
+> > Drop description, it's coming from adc.yaml. Just "label: true"  
+> 
+> Done.
+> 
+> > > +
+> > > +    required:
+> > > +      - reg
+> > > +
+> > > +    additionalProperties: false  
+> > 
+> > You are not allowing anything else from adc.yaml. Is it on purpose?  
+> 
+> I am really not an expert with this Yaml stuff, and reading the documentation makes me probably more confused than before reading it :)
+> 
+> But one thing that is for sure is that these other properties in adc.yaml are not used in my driver:
+> 
+>   bipolar
+>   diff-channels
+>   settling-time-us
+>   oversampling-ratio
+> 
+> So is it Ok then to use "additionalProperties: false"? I think so, but what is your recommandation?
 
-Using s2idle is not an option actually. I'll prepare v2 to address Waiman
-comment if I don't get more feedback in the next few days.
+Makes sense to me.  Whilst there are lots of things a channel can support, most
+of them are hardware related and not universal.
 
+Jonathan
 
-Thanks!
+> 
+> Thank you,
+> Hugo.
+> 
+> 
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - vref-supply
+> > > +  - "#address-cells"
+> > > +  - "#size-cells"
+> > > +  
+> > 
+> > Best regards,
+> > Krzysztof
+> > 
+> >   
+> 
+> 
 
---
-Qais Yousef
