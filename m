@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C313366B062
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 11:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D49C66B063
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 11:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjAOKcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 05:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S231226AbjAOKcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 05:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjAOKc1 (ORCPT
+        with ESMTP id S231136AbjAOKc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 05:32:27 -0500
+        Sun, 15 Jan 2023 05:32:28 -0500
 Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2045.outbound.protection.outlook.com [40.92.98.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAC1CDF4;
-        Sun, 15 Jan 2023 02:32:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C73C16B;
+        Sun, 15 Jan 2023 02:32:27 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jgBx+uSFDs3IRKmTXkP822He34PEHT84/IOiMSGekMG0kKmjweShw3scks6P8dv6yG4zax0jzIjThC4CBzjm2a9hom9YPTTcWTmVnWP0vI/haTUutme55YVNPeQFy3hM6262FiH5aLD1hq6oIhZxBSdVOxDtkvTGygeUZxw0axmkVsjaAQUxif+QQ89/5OqgNsmk+EZVZLOcuZ7LgOv836+9lJoHV6641t3e992X4vB3Obc3l98RYD+1eDB5wI+vbWBTl+NxoGHhpumhMerg940F8wQi+4krBauMV1tfqYtbMeq2szv0v6BLOZkKqaWE+op7UH6cbDw4HpuaUgzeug==
+ b=WNvxOQXFMha0J2Yus+H/566VSrKVCG72eYBEim0ZiLu1CCfjt4A6xWMdgYXcc0oXmZfhr+7Fp359oGqBvo2Ow45JcP2gH6FFCNgC9wX8sf6Bv2dW5sJxaqygNcjutOuZhZSjKVOP6+4H8ALIq5Z3AG09SoMj1k/PJ8Y5nhbSDvdb1Y3e8sgqUyjyDDiPgqfUnPRMYFvfLPWIq819+t1Y0jeTUWJlnibq47ayepqULt2X6/jKNUxNyi6c/2CyyOb/vUB5B7fmehNB8F1gBTLXLH1Ca4ybCq1vwW2joWvtalYAhqk4QCpVX0HYSZHFvcfwqRofYIGC2TAPqHIuCAkqfA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yBv7BL9Uf6cXj9khn04VzCBRpFusMoYQVfaaytM5MVY=;
- b=DezYgFGylCN+WWPi8yreaLdjNh3uvO+MV2m7EoOrVfNZ3tBKHQatbO3hLVvG/WFqehbDx4Q1csDoxTz3gzGTzVx8Tyeqnchc7XyYTfB8xvNaWj/oPoYGXowf9utWLf8IRNNpqwZEe+v1rg9bkwGSBw1Rf82yGeYzrPPG/sde8XcqvmpQxORYWWoVCCMs5xMoyT1LLejIICtojP1Cbp4DUmevW50qLvRHA/DJ35jZ2kjkRsVknmVgt1Ch6BosdEfo8gLHnOGoYYabk7cSAuCp720K89M3EHJJUm57PK+L0DpvI/oMmQN7YliK6vXu+aamv5o4HYEClyZfhckhSomMVQ==
+ bh=sskbBFcb3YFm14/Jh/anX8frm80C4yL2TYzqKanaQG4=;
+ b=cLp99XLUNr0MIRuuBTnD+iiYyRi6Ga51SiBRrpDjmqXRQwN61U0y6LgIXuOPuI6/kiP23nZzE3KSMNxrK6x0Dv1yJin5KLQv9MNgqAERrS8S2UIHHEUap+teo3QVue+67FV3LkqTh8G511EckY3hCb6kq6ldzwAg0LEgkvtHkeLWvRrkb5oNAOAvH7VIGCl4D0gpfjCkezJ3BdVlkI4yRhXC2slSqrpbQNQKjTqxvacYYxYffq2+AY0ZXGr/bdSgtGpUxJg/jy7rXmSfjzvgNywEi4IzsGXCu2hwO5/ozajZ2l5KeG8f3jTaYrYMwF6CPLTYr8g+OFNB//OTeNaYjg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yBv7BL9Uf6cXj9khn04VzCBRpFusMoYQVfaaytM5MVY=;
- b=HtRWhX87r/IiFjroNNQQTkq7uROq4LkixilqMwVib7Z5hRLSW9+fNVvM9HZIdHo6F5lNr++teX20VOcgPBLoGwsGEc3uPMjLSWky3SWDnMvCTTL2FBuI5sMbGxdw4yPsTSmsVQ9G3BSUTontwmn8+ZYEgMSoaFB88CMrzyXfAowTjGXAaAkR0T5wW0pect+fGe39J815n+/u6NiIKJZYCqEWa4LHNbdu0hx/1IxCw1w9/ryEUSismo0aQ4kkEqvWSwCDDvtTagpPTMAYEcLMm2bg9XthUzTDk1U3oq67kZe+J89iuJhZk4Xxyg3ux7lP2d64SD3SUAeevrTCxmIThA==
+ bh=sskbBFcb3YFm14/Jh/anX8frm80C4yL2TYzqKanaQG4=;
+ b=EvkFWcF8VH+/OtlugYXZcqDyxC3qsGYdKVVn2niQC95KgRlHvEv4qemTZLR/hz1ZRY+YZ2F8jv6KG3HnGhnYCa5oo9IFZMLbFofklCNVHHNgLbgcTFSfp919lUS1x8b8Qc73DFNhIPWO6V7rkz5BnPrgaUKqHUJSc/hkGIg4s2qzCsFODCMxZSe2NGRUbo4nNtmz+qBAUX4mqfcmmh2ohHzyrNzApxxxBLCqKPTPJkfi10GOJRRxYLHfNvsgsiqpV9Es3jmCs3jDnZLGQFavJOh+PrtPX6FdZlacVrYAv2BLUpEyV8Z0eFAK6yTwYWovll+B2qR55UriHnl73NHslQ==
 Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
  by OS3P286MB2025.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1a0::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Sun, 15 Jan
- 2023 10:32:24 +0000
+ 2023 10:32:25 +0000
 Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
  ([fe80::ff96:9cb6:e047:c605]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
  ([fe80::ff96:9cb6:e047:c605%4]) with mapi id 15.20.6002.012; Sun, 15 Jan 2023
- 10:32:24 +0000
+ 10:32:25 +0000
 From:   Dawei Li <set_pte_at@outlook.com>
 To:     linkinjeon@kernel.org, sfrench@samba.org
 Cc:     senozhatsky@chromium.org, tom@talpey.com, hyc.lee@gmail.com,
         linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] ksmbd: improve exception handling and avoid redundant sanity check in loop
-Date:   Sun, 15 Jan 2023 18:32:08 +0800
-Message-ID: <TYCP286MB23233D324DE28E57E376228ECAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Subject: [PATCH 6/6] ksmbd: fix typo, syncronous->synchronous
+Date:   Sun, 15 Jan 2023 18:32:09 +0800
+Message-ID: <TYCP286MB2323A6AB80B9EFE1CAB86003CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230115103209.146002-1-set_pte_at@outlook.com>
 References: <20230115103209.146002-1-set_pte_at@outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [TLUMQ9VmFG2iXlqBs9WdQk1N+GaLwOZxb/cH16lS/eA=]
+X-TMN:  [BvRQ8v6enCF2LInju5goHaOM1AOCSujnMOrAgMz9Sqk=]
 X-ClientProxiedBy: TYAPR01CA0210.jpnprd01.prod.outlook.com
  (2603:1096:404:29::30) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20230115103209.146002-6-set_pte_at@outlook.com>
+X-Microsoft-Original-Message-ID: <20230115103209.146002-7-set_pte_at@outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|OS3P286MB2025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5a957baa-ecf4-4f4a-86f3-08daf6e3ca51
+X-MS-Office365-Filtering-Correlation-Id: 10bc98bc-f777-4ae2-9c63-08daf6e3cb12
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VmSD1IAij1wTEhBFvMyP6VgzZg+Kzd0P5HQpsMkes71SiOF6BOk+cSxen4/T40okNhVcSqBXpyvG/6NK0thvVn/xDCZan7HdKCPoODYPa7qMqEMdB/liFkJRcuAm5x1buYy52ZlCfr8i9ocpkBZXezuUsYiXvst7mUWJG7yYZbK8e40AfRkJjj+BTRXAv0D93QGGpuiPbaetI4ycWsjo2yJR2PvrLMgLOkQQXmKIbomM4xHs1NCful9Z3DchPxgr+KMkoGOfhRFnfCkivLqi/yiuVEnm5jvtSSgGioGjdlgfGq2wFEcyL1XX1PurJ8PToeo5ldMuc10Jotd+winhf7URRPPxvSjjPm6OAYbWvLv7NsWSHCYF9RKDmIdiFet1v5p7PNErpEyLPq7EdeTf4OG205tRKN+gvrtrIXE52Erfg0meIrOHi9fwNbJ8kYcTnRRv1TMP5yZKPTh+IDI6yRngdaqQpj/rVICHzIYOHwn6EDNrrn8VV7PNOwdmKFzCiaEqU7ZNIFVSuS74sXJDP7F1WVAGZOd65B2riGI5UB2n53Rrbv/SgCJ6sYHzhgAwvbnKiNqfI8xtGDzWKcjaYYmfd02Ahe67LURpJqAn0HQ=
+X-Microsoft-Antispam-Message-Info: +shUgAg6YJVrKILYKvkc6agH7zvfdZdGL99LEBjpSXsj+CiATf4UbEsezuXKQ1Xsu0PIfJoTePqQRZAc/WbcO339L0tKjqo1JpHhTvep9K2YwgjlnBr04AIlcvj+2LUo+jF6+cmPTkPOaMGpsM52MUdFdscfzCVWPBq/HeW7JbUrs97LPWBiRIBqWrl35BpUxFyq+asr1DutrdZFfXwvJKHlWUq5Mr4JL5lqnyDnGXs0tYgIabx3TtY4dQErqI7yj+0D2qZTo25xp+BaaPhjxDEGxUKG8uO3RH0XWnqf1ICDPAZVDoawfpwcEEH9Nwhxv/3RmYOVOL0zinV1qXKVDx/ep6RIIHtE6/kx4S9jCokAdwSb00zB1mWZUYVU+BxFXaq/Bw3CZS4d3FoDce8gOLwdfJXZGbGUel1I+59UkN/owe2gx7bkSyyXtm94uxj0vuukGfuIV6NpwQYtQhgkXiHwy+qDyp0UwVgJp635nfMxQLq9/YVs1f2RVi23zzBmL9ssvLUrZZ9DG2h1U1eibjKjq+XHkldIWx/hGWV6JedpCxjNX/aLjw13fGfJeOHgmWVtqZOipgxVqIVMfkBEaVM+my6mRsJyLjoRLq5QYpc=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DKlU+EVUHF653wYuNemROsio4rKomrRwmGlW3nLdjJZ9HbL7ZtlE1Rz/VoTC?=
- =?us-ascii?Q?ssjhI8DQTEL9uDsvBGzPHxd6y4Beg+p6Xo6E5tbsKJzjAJmUbo+W7nO6xlwb?=
- =?us-ascii?Q?lzpsJ5gkawkKxxc4BWyw8fmAcXh7Q5vf6mqPsQA5wTaOHqxpmNRZ2K/bIj1T?=
- =?us-ascii?Q?9lFvAjN+Qmr/9170VbwEnKHZqhGsjAJ5JLnzfbarx1hbr5LnN34jzOzdeXiw?=
- =?us-ascii?Q?+PFDWsn6eeky/C8WTGu3VCMEigaXXvP/JfEZRfbz6TSQd5Co28Q4Vopyb/HI?=
- =?us-ascii?Q?/1VVqj5XmH0TBhPqWWcwWjc6jChvrL+N4EoeHOnNoq/zZitI8Bblvra+I9Hf?=
- =?us-ascii?Q?RVb29RggH0dvkN546g5ih/RPrG1mmLSfwq26easq/K3BqzsuUgOkb35QgSiO?=
- =?us-ascii?Q?Dnq6zS7OJizCvc/UWF4Z8/6hTvnz1/SNm/X7WslJEvP6h4S0SQopLHqhnbKZ?=
- =?us-ascii?Q?pErwSoPetWqUG6mLSvmOlKMvSmy9O4bapfISAk7eQb8UdtZmdAwJcCS76sbb?=
- =?us-ascii?Q?LqAN1Qdes4zO5hmJGv2Fyz/TuYQgn4MsDe76Pqx5JSXvvYcRnq/V0YMbio1S?=
- =?us-ascii?Q?t/Q7HLkjCv+Kjoo8t81XGA5MIsEpKloXMWGrJJBNlB/cBEUQ11tjUdgXZw6A?=
- =?us-ascii?Q?F9SsR0ZYt+MeDprjK2u6iOWfrEXyPPyPUJzvq4EDd6A+E9mGQeXZhrO+e09p?=
- =?us-ascii?Q?HhqMwhOjYMs/1BR/Ow2GWouWSXOkPMoCy1L0tjSLvmEP9NxZHD3jY1mY1R4h?=
- =?us-ascii?Q?wQSv417nF+6yeg1N8pHROUxG/okCIepdSuqc9MGrH8yQMX/qPCcOXbbwRTZC?=
- =?us-ascii?Q?8xDKYt1FEtzpbhyy/LChNMjSOQ0G90DjF/Ij6AIBNfbrbpMJUd826kek0Vvo?=
- =?us-ascii?Q?YQtRqPnPuSJrGmOGt/ziT6hYOKyVp5ruJ3vKUgjsP5puPrH6d1tPAYnttXxu?=
- =?us-ascii?Q?ta8PutpxfyT+gocGTtEWVQOwQxwjLT/0rXow5tQYQ+y3kf1DsHbW8lhwcEDC?=
- =?us-ascii?Q?Y6/G6oY7DxhWjbC4KqhHs57u0+MRadtNhBh1UkpwzcpNX+nWSIHccFNyZ/Sm?=
- =?us-ascii?Q?/T4eVCFf8pU0zvQwcg2MCPNfkIn7uDr+fm7eha/6l9JvoHD32nOzW/2loRYF?=
- =?us-ascii?Q?S77FYuM3pzA9vu8/zA5Eu205yMX0yhe/3BOmpWH9vAP5CbztNszhWsnkUNAR?=
- =?us-ascii?Q?mizIhVj2Z+ee7mVnL/6rprdb8TJ5DDahcPo3lmp5PGwhxaBvWg1m35atRCeV?=
- =?us-ascii?Q?as9y17bHAEDvam7XzWGcvp3qIA5KSmZiXOngeHW8AgztfFukE0tAAjHrZeru?=
- =?us-ascii?Q?GEY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eqcFZ16X3EvDI19BqBn0XGyozwdhAI0XpmajfoA+AdBpL2wp/ThJNG5othf5?=
+ =?us-ascii?Q?u+lsrWjsuP0c4Qt785nAwDVrJWGYsgq6y0ZwFKhCtEZNNAHI2vlkbj/EFG3/?=
+ =?us-ascii?Q?ZGo0BXhgiPt5igBIm1YrbfeylXYxIZwBjZRtoZmhigViHu+Ufo7YRooLzzEi?=
+ =?us-ascii?Q?AACMWPQ+0mTYFLJrLFfeoS2pwNV1uuaVyPy8GtV7fuz8JAYGchQwcZIEvBnd?=
+ =?us-ascii?Q?EZAGWijL1OOQmx0EsnkPIZqgTVb69Yjf07Jo8rnnuwPIpYYOUopIjgYFL7bb?=
+ =?us-ascii?Q?L7NVfmgGqq+mmrTVD7t2XuXy1DzveWUmYCNm6Z1nPvEfujBEWU2msFIm2ril?=
+ =?us-ascii?Q?rtOwr0rWdoKzzr3Ed2HQScqeeEjB9HQ28INfSzV21rqVXhjzOYrde6p1l9Iv?=
+ =?us-ascii?Q?wQqhTwGBeoHwNfvJ6IevpYCiOUXBuxlKH7P2iS+0CQBm5jdVHetklLR+So/H?=
+ =?us-ascii?Q?cDxbauPfb2CWqsAOFYnLuCOCP0FV36FgBEpiC0lZo2a7cdWi99aWv0A6v11d?=
+ =?us-ascii?Q?fbZ5qkVOy6DAELV5zlbbJZaMNhfhN3YK5CcDMXbMjJbyYfIjm73s9JAvBasA?=
+ =?us-ascii?Q?z/XBk8XOBAIc414M46fABzSZQkt71XJYUeyo3sP5ETf+RtvVVHI1UndzAONe?=
+ =?us-ascii?Q?fFtMo6kwEB1cv6gAq1rs57acO7JCWNyWc3yzLvUQJEmy3n70lDnEucdVlIem?=
+ =?us-ascii?Q?CNol7DqPGSzHg9UohUOmcIsK3BDsN1AWoF/AUxjrAgBGsP+wC1lUqlycdZhp?=
+ =?us-ascii?Q?0rmzARbALHLOhbqBpdP++I/LrSfkRNOfxT4qzcXid9fOmkrPwcPEyhmRsyc8?=
+ =?us-ascii?Q?+7UOPApxX5jJlcWAvFgePGOTgZ2vd3WMZ+RFIMY4MfnTYaNyYkN87OmMrcwv?=
+ =?us-ascii?Q?R+R1KWOHZJul+GzoXDFjq/kT1asiXUCHe7BnMD0g1C/CaxKEGuy4dkQUX5Kr?=
+ =?us-ascii?Q?Cbz+vMNTSjggyyPk5KsshRV4Zx7Li9PnSPaj4eAFi2amkd5IbyNdaMOudTQ9?=
+ =?us-ascii?Q?yMWm0+SY7dpOXsAZse3Kq3JkCXW7Jqtjg4XRRKZDldvikoGqfT2EcTz6WasW?=
+ =?us-ascii?Q?cY/C+kf6Tr8tino49n7h1uI9m7x3h3fn8x2DIviOHqSaeV4+6t9H3QMjeGfT?=
+ =?us-ascii?Q?Xv66he3YV8he+WUmBqxVPJkyExB9Zc2p6yADX30arfgC+EGa5fQ1wBjdHgp4?=
+ =?us-ascii?Q?Lp1P2G1Te9KLwBd80iCE7ijiXan6u3J53elVXAA221URmyZBpZHxzdADWKJO?=
+ =?us-ascii?Q?OeJxw9nXKbjXRpT3ipDGRUN6wY6ZT6yPDGCtHQHPLX1fUWD2vU7JtJvP955/?=
+ =?us-ascii?Q?KD0=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a957baa-ecf4-4f4a-86f3-08daf6e3ca51
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10bc98bc-f777-4ae2-9c63-08daf6e3cb12
 X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2023 10:32:24.0883
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2023 10:32:25.4018
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -106,72 +106,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Sanity check on validity of hook is supposed to be static,
-   move it from looping.
-
-2. If exception occurs after kvmalloc(), kvfree() is supposed
-   to reclaim memory to avoid mem leak.
+syncronous->synchronous
 
 Signed-off-by: Dawei Li <set_pte_at@outlook.com>
 ---
- fs/ksmbd/connection.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ fs/ksmbd/connection.c | 4 ++--
+ fs/ksmbd/ksmbd_work.h | 2 +-
+ fs/ksmbd/smb2pdu.c    | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/fs/ksmbd/connection.c b/fs/ksmbd/connection.c
-index 36d1da273edd..b302de5db990 100644
+index b302de5db990..0fcc20ce0852 100644
 --- a/fs/ksmbd/connection.c
 +++ b/fs/ksmbd/connection.c
-@@ -287,6 +287,12 @@ int ksmbd_conn_handler_loop(void *p)
- 	mutex_init(&conn->srv_mutex);
- 	__module_get(THIS_MODULE);
+@@ -114,7 +114,7 @@ void ksmbd_conn_enqueue_request(struct ksmbd_work *work)
  
-+	if (unlikely(!default_conn_ops.process_fn)) {
-+		pr_err("No connection request callback\n");
-+		module_put(THIS_MODULE);
-+		return -EINVAL;
-+	}
-+
- 	if (t->ops->prepare && t->ops->prepare(t))
- 		goto out;
- 
-@@ -324,8 +330,10 @@ int ksmbd_conn_handler_loop(void *p)
- 			break;
- 
- 		memcpy(conn->request_buf, hdr_buf, sizeof(hdr_buf));
--		if (!ksmbd_smb_request(conn))
-+		if (!ksmbd_smb_request(conn)) {
-+			pr_err("Invalid smb request\n");
- 			break;
-+		}
- 
- 		/*
- 		 * We already read 4 bytes to find out PDU size, now
-@@ -343,22 +351,18 @@ int ksmbd_conn_handler_loop(void *p)
- 			continue;
- 		}
- 
--		if (!default_conn_ops.process_fn) {
--			pr_err("No connection request callback\n");
--			break;
--		}
--
- 		if (default_conn_ops.process_fn(conn)) {
- 			pr_err("Cannot handle request\n");
- 			break;
- 		}
+ 	if (conn->ops->get_cmd_val(work) != SMB2_CANCEL_HE) {
+ 		requests_queue = &conn->requests;
+-		work->syncronous = true;
++		work->synchronous = true;
  	}
  
-+	kvfree(conn->request_buf);
-+	conn->request_buf = NULL;
- out:
--	/* Wait till all reference dropped to the Server object*/
-+	/* Wait till all reference dropped to the Server object */
- 	wait_event(conn->r_count_q, atomic_read(&conn->r_count) == 0);
+ 	if (requests_queue) {
+@@ -139,7 +139,7 @@ int ksmbd_conn_try_dequeue_request(struct ksmbd_work *work)
+ 	spin_lock(&conn->request_lock);
+ 	if (!work->multiRsp) {
+ 		list_del_init(&work->request_entry);
+-		if (work->syncronous == false)
++		if (!work->synchronous)
+ 			list_del_init(&work->async_request_entry);
+ 		ret = 0;
+ 	}
+diff --git a/fs/ksmbd/ksmbd_work.h b/fs/ksmbd/ksmbd_work.h
+index 5ece58e40c97..3234f2cf6327 100644
+--- a/fs/ksmbd/ksmbd_work.h
++++ b/fs/ksmbd/ksmbd_work.h
+@@ -68,7 +68,7 @@ struct ksmbd_work {
+ 	/* Request is encrypted */
+ 	bool                            encrypted:1;
+ 	/* Is this SYNC or ASYNC ksmbd_work */
+-	bool                            syncronous:1;
++	bool                            synchronous:1;
+ 	bool                            need_invalidate_rkey:1;
  
--
- 	if (IS_ENABLED(CONFIG_UNICODE))
- 		utf8_unload(conn->um);
- 	unload_nls(conn->local_nls);
+ 	unsigned int                    remote_key;
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index c60cfb360f42..2ae153de4a9c 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -498,7 +498,7 @@ int init_smb2_rsp_hdr(struct ksmbd_work *work)
+ 	rsp_hdr->SessionId = rcv_hdr->SessionId;
+ 	memcpy(rsp_hdr->Signature, rcv_hdr->Signature, 16);
+ 
+-	work->syncronous = true;
++	work->synchronous = true;
+ 	if (work->async_id) {
+ 		ksmbd_release_id(&conn->async_ida, work->async_id);
+ 		work->async_id = 0;
+@@ -644,7 +644,7 @@ int setup_async_work(struct ksmbd_work *work, void (*fn)(void **), void **arg)
+ 		pr_err("Failed to alloc async message id\n");
+ 		return id;
+ 	}
+-	work->syncronous = false;
++	work->synchronous = false;
+ 	work->async_id = id;
+ 	rsp_hdr->Id.AsyncId = cpu_to_le64(id);
+ 
 -- 
 2.25.1
 
