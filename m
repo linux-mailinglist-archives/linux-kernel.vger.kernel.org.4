@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F0C66AF33
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 04:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCA566AF31
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 04:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjAODFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 14 Jan 2023 22:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S230445AbjAODFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 14 Jan 2023 22:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjAODF1 (ORCPT
+        with ESMTP id S229906AbjAODFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 14 Jan 2023 22:05:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FB2A27E;
-        Sat, 14 Jan 2023 19:05:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC2C4B80B14;
-        Sun, 15 Jan 2023 03:05:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B98C43396;
-        Sun, 15 Jan 2023 03:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673751922;
-        bh=DiQUF6QpzAR13IMywXmegzc2eHmYnlOkhoDZnGZrCFE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MGz7x1eNkP8dj+dOJSA5VQ5ykzoAOuF/MiRqr00HfxrPUlhXjQqffmJ+ESVGlvNlZ
-         K2lsEG5FI2YmJd54l369+N4BXThpxDxC7lycSrUrAlz6sOddZHmNz5LOwSX3PrUVvK
-         Au/pdyNquAwNfrdaqFHtXGzBwvFwSxs6TM1J3cpKbM7tV4mLEE78J4bFfKtoj5l93Q
-         gtg3m68haHUTuf0VruCEHyvGnG7XIUM1PSNbwcD6DvPqPxnSFApjz54WrvcxE27L0T
-         iz6A/TRDH2YC4UYRwTyoFiYrxCRIYUl03fZiWZ+z+9GQW59OoaNVISMn7hrKjL/NCg
-         TtFWOCHuNxLCA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-142b72a728fso26173187fac.9;
-        Sat, 14 Jan 2023 19:05:22 -0800 (PST)
-X-Gm-Message-State: AFqh2kqmPzvtB+/srWoyol1ht9jxxcG035XuE58tq91KyYyF5OT4yp6Y
-        j1lu9j7yEMJ9PiBTcJthKn6WRJY+s6hMaI42OHA=
-X-Google-Smtp-Source: AMrXdXuhmnexbTK1zw0fHAGXIP3hshtIpGp4shEbMvVFuWPdx9jxVG2EXbyBkZf4uelrrBgsXumoVUNaOwephiEPFIk=
-X-Received: by 2002:a05:6870:50a:b0:15b:9941:ac30 with SMTP id
- j10-20020a056870050a00b0015b9941ac30mr2001023oao.287.1673751921572; Sat, 14
- Jan 2023 19:05:21 -0800 (PST)
+        Sat, 14 Jan 2023 22:05:17 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655D6A260
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 19:05:16 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w14so19089982edi.5
+        for <linux-kernel@vger.kernel.org>; Sat, 14 Jan 2023 19:05:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aurora.tech; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EH090np8Bxqv0c4tiln2a2Jkj01lR68xoqEAzkjHOQs=;
+        b=ADqrq2bRHD6bWqlePVTckbpGSwn1Q/L9k+JpMyRf7MJmd9aqHCPYFvAewGitMOfTMS
+         jMrmVjmTDrObohAP2QJP2ISuLbcMJpir7gLp5tI9dxFSydo4Nx/sBbGJYMKOwyZWDGaP
+         /OOjUjSAfOwZhlfclxO9MjB33uTEZx9Iv07HoSDn0qP6FlSxYsN5E+M+dM5N+389NAC5
+         9V11RsxEuqBMDrIaIZgcS5NDk8uz6Vp85KzrffjjtTUszeWrCz9KE8v+/i9WlIyCzy6T
+         m/gfPEaTjq2u9GmIexjSWI7mldtYbP13kWwpGFjqND+VkCxbltXTxPRDlIG51uIp7uDw
+         fQNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EH090np8Bxqv0c4tiln2a2Jkj01lR68xoqEAzkjHOQs=;
+        b=Ct23DUoKsOF7tJXRJs9ZhDz7Nylvq/T3ECjJ7PPVUWlqTTzr3zs4zHg3nUSoQOkG7W
+         YvMbYRlIx/sRLChCeKnOdO/UgfO5+6O5y5eNIwHocfBp97+fkVc6VlwqDUYGaYtvwEV5
+         oSFtEirUFJF5cfGOJSawxKoA584ezVcFD0uUtKVLmnT3HI7WceQS5ZVdrAcYuSbIvH1/
+         pZFZSqvD97oG0tiRWS4eZfgrq+0UhH/eCwC5lHNHpXXwRbrgZHt6T4kXKhnAbYbu92/h
+         yPCKGJjdDvEGPU45zO6scgaJqO8suz9spj6DC40ORaF7TCz4i4DT67qjEUUeQ3v2oovd
+         spsA==
+X-Gm-Message-State: AFqh2krYduNy+BOf0ivyJzn+sdNzI/3rnRuOIJ9GL3WF/ILTPEMAlrUA
+        zR9V+X0AhG/zfFA4e4yQax9YHjHCVnf2WtlfhEhpiQ==
+X-Google-Smtp-Source: AMrXdXt99fPJ3tuWP1S7jqBQHH6YawIC5z8VL4T14v8EEC2myfyKRNQoUMIRdXgGM6xQZqt+5+wm5zu4U6bFHkl8Tx8=
+X-Received: by 2002:a05:6402:6d9:b0:499:7efc:1d78 with SMTP id
+ n25-20020a05640206d900b004997efc1d78mr2170774edy.81.1673751914709; Sat, 14
+ Jan 2023 19:05:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20230112023006.1873859-1-masahiroy@kernel.org> <202301121403.599806C597@keescook>
-In-Reply-To: <202301121403.599806C597@keescook>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 15 Jan 2023 12:04:45 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARaXH9gJVCJKR5GLuyEiJarxhcXoUyxXDo=MZYKLxFmyA@mail.gmail.com>
-Message-ID: <CAK7LNARaXH9gJVCJKR5GLuyEiJarxhcXoUyxXDo=MZYKLxFmyA@mail.gmail.com>
-Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+ <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+ <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+ <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com> <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+In-Reply-To: <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+From:   Matthew Garrett <mgarrett@aurora.tech>
+Date:   Sat, 14 Jan 2023 19:05:03 -0800
+Message-ID: <CAHSSk058UoBY2nDx8U7-siG_dbjNSKZaPukZVjSnq=f=CBSKsw@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     jejb@linux.ibm.com
+Cc:     William Roberts <bill.c.roberts@gmail.com>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 7:06 AM Kees Cook <keescook@chromium.org> wrote:
+On Sat, Jan 14, 2023 at 6:55 AM James Bottomley <jejb@linux.ibm.com> wrote:
+> Can we go back again to why you can't use locality?  It's exactly
+> designed for this since locality is part of creation data.  Currently
+> everything only uses locality 0, so it's impossible for anyone on Linux
+> to produce a key with anything other than 0 in the creation data for
+> locality.  However, the dynamic launch people are proposing that the
+> Kernel should use Locality 2 for all its operations, which would allow
+> you to distinguish a key created by the kernel from one created by a
+> user by locality.
 >
-> On Thu, Jan 12, 2023 at 11:30:06AM +0900, Masahiro Yamada wrote:
-> >     def main():
-> >         try:
-> >             # simulate large output (your code replaces this loop)
-> >             for x in range(10000):
-> >                 print("y")
-> >             # flush output here to force SIGPIPE to be triggered
-> >             # while inside this try block.
-> >             sys.stdout.flush()
-> >         except BrokenPipeError:
-> >             # Python flushes standard streams on exit; redirect remaini=
-ng output
-> >             # to devnull to avoid another BrokenPipeError at shutdown
-> >             devnull =3D os.open(os.devnull, os.O_WRONLY)
-> >             os.dup2(devnull, sys.stdout.fileno())
-> >             sys.exit(1)  # Python exits with error code 1 on EPIPE
->
-> I still think this is wrong -- they should not continue piping, and
-> should just die with SIGPIPE. It should simply be:
->
-> signal(SIGPIPE, SIG_DFL);
->
-> Nothing else needed. No wasted CPU cycles, shell handling continues as
-> per normal.
+> I think the previous objection was that not all TPMs implement
+> locality, but then not all laptops have TPMs either, so if you ever
+> come across one which has a TPM but no locality, it's in a very similar
+> security boat to one which has no TPM.
 
-
-I prefer try-and-except because it is Python's coding style,
-and we can do something before the exit.
-(for example, clean up temporary files)
-
-
->
-> >     if __name__ =3D=3D '__main__':
-> >         main()
-> >
-> >   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avoid
-> >   BrokenPipeError. Doing that would cause your program to exit
-> >   unexpectedly whenever any socket connection is interrupted while
-> >   your program is still writing to it.
->
-> This advise is for socket programs, not command-line tools.
-
-
-I still do not understand what is bad
-about using this for command-line tools.
-
-
->
-> -Kees
->
-> --
-> Kees Cook
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+It's not a question of TPM support, it's a question of platform
+support. Intel chipsets that don't support TXT simply don't forward
+requests with non-0 locality. Every Windows-sticker laptop since 2014
+has shipped with a TPM, but the number that ship with TXT support is a
+very small percentage of that. I agree that locality is the obvious
+solution for a whole bunch of problems, but it's just not usable in
+the generic case.
