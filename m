@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3A166B046
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 11:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946BA66B048
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 11:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjAOKN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 05:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S230445AbjAOKOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 05:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjAOKNX (ORCPT
+        with ESMTP id S230338AbjAOKOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 05:13:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC00CCDE1;
-        Sun, 15 Jan 2023 02:13:22 -0800 (PST)
+        Sun, 15 Jan 2023 05:14:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD465CDE1;
+        Sun, 15 Jan 2023 02:14:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CC7960C85;
-        Sun, 15 Jan 2023 10:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C3CC433EF;
-        Sun, 15 Jan 2023 10:13:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49608B8055F;
+        Sun, 15 Jan 2023 10:14:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D7AC433EF;
+        Sun, 15 Jan 2023 10:14:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673777601;
-        bh=PF45Ke28dIqcsl7XoD+NZxQPtsTjmtK6BDHKZ+5CuoA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EOvLPR2/beXntT0buCCFsjz2uyHmaZGmcW4JqHWy4wjZkAHadstnfLOiEi1+ajNiF
-         5CjrPckGNCzJw2+v3gd5r2JSZG0PWUge5UjqDRiFJNH2fe292eU/XaK6WeEzmjMRdW
-         Rto1FgRSywQba6SCD9i3jGZIVZU8+TuV7y1BDTvxvAY92a8juMdDGEX5/EVYPDRN6+
-         SXXOyKBKbMavYnjCK6w/hFDmq4Qp1Cx7cmRX0ToSE+qPTNxR+x4bByzc95U+/BKiah
-         mBbij7KshS5eJr/It9rua+IAU0vPjUbwaSwhUYpfAiAFKSD2P0CQogY2rVmYucST6t
-         +5En82xdAuZNA==
-Date:   Sun, 15 Jan 2023 12:13:17 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Potnuri Bharat Teja <bharat@chelsio.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] RDMA/cxgb4: Replace 0-length arrays with flexible arrays
-Message-ID: <Y8PRvay5o3iG22pr@unreal>
-References: <20230105223225.never.252-kees@kernel.org>
- <Y7qyVPlNBQaGbInf@unreal>
- <202301131703.D2D667E3@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202301131703.D2D667E3@keescook>
+        s=k20201202; t=1673777683;
+        bh=54ot+Q4UUpKGiz2VrVYJQCr+tpIHvLOfk0VKKBwnPgk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PuqOkB3rtqoObtmUANycFl6RBVCuW32fR+YJlLZYu/s/W65mb04Uup8kRAlQwehV6
+         J0ZIIi8vyOEfRZ0azf9W1oflODMawgTG2Uw65FjNEXdKotr51BOB192kNeffKAJ6Yy
+         cW0XKo727txChOKSfmsmT2ERzI5eITvMnf2yNmDP1wsccQAPlQtItX+zLxIpg5n0py
+         P9B9FWsogij6NUT7IsdVBaOnyAJmEXvLk7qwVazt3MUGdX+LP1/izGJ8XzKLtqq0Sm
+         lmeDjqTy8cVoJ+a0kZTYAjJmBoKzB/Ub9OAYi3kxdcIM/3SqA/OdTTszhcN7b76dsS
+         F9s/lOoeDAEsw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pH02C-001t1A-HN;
+        Sun, 15 Jan 2023 10:14:40 +0000
+Date:   Sun, 15 Jan 2023 10:13:35 +0000
+Message-ID: <87fsccds1c.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pascal Paillet <p.paillet@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: [PATCH 3/3] optee core: add irq chip using optee async notification
+In-Reply-To: <CAN5uoS-Q5ePtNcJ2-8BBV+rxUK6xcbU1ywtcRfYf=sRbWShNpg@mail.gmail.com>
+References: <20230112145424.3791276-1-etienne.carriere@linaro.org>
+        <20230112145424.3791276-4-etienne.carriere@linaro.org>
+        <86a62mokkq.wl-maz@kernel.org>
+        <CAN5uoS-Q5ePtNcJ2-8BBV+rxUK6xcbU1ywtcRfYf=sRbWShNpg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: etienne.carriere@linaro.org, linux-kernel@vger.kernel.org, jens.wiklander@linaro.org, sumit.garg@linaro.org, op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, p.paillet@foss.st.com, fabrice.gasnier@foss.st.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,76 +74,418 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 05:03:48PM -0800, Kees Cook wrote:
-> On Sun, Jan 08, 2023 at 02:08:52PM +0200, Leon Romanovsky wrote:
-> > On Thu, Jan 05, 2023 at 02:32:32PM -0800, Kees Cook wrote:
-> > > Zero-length arrays are deprecated[1]. Replace all remaining
-> > > 0-length arrays with flexible arrays. Detected with GCC 13, using
-> > > -fstrict-flex-arrays=3:
-> > > 
-> > > In function 'build_rdma_write',
-> > >     inlined from 'c4iw_post_send' at ../drivers/infiniband/hw/cxgb4/qp.c:1173:10:
-> > > ../drivers/infiniband/hw/cxgb4/qp.c:597:38: warning: array subscript 0 is outside array bounds of 'struct fw_ri_immd[0]' [-Warray-bounds=]
-> > >   597 |                 wqe->write.u.immd_src[0].r2 = 0;
-> > >       |                 ~~~~~~~~~~~~~~~~~~~~~^~~
-> > > ../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h: In function 'c4iw_post_send':
-> > > ../drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:567:35: note: while referencing 'immd_src'
-> > >   567 |                 struct fw_ri_immd immd_src[0];
-> > >       |                                   ^~~~~~~~
-> > > 
-> > > Additionally drop the unused C99_NOT_SUPPORTED ifndef lines.
-> > > 
-> > > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
-> > > 
-> > > Cc: Potnuri Bharat Teja <bharat@chelsio.com>
-> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Cc: Leon Romanovsky <leon@kernel.org>
-> > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > > Cc: linux-rdma@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+On Fri, 13 Jan 2023 15:27:22 +0000,
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> 
+> Hello Marc,
+> 
+> Thanks for the review.
+> 
+> 
+> On Fri, 13 Jan 2023 at 10:22, Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Thu, 12 Jan 2023 14:54:24 +0000,
+> > Etienne Carriere <etienne.carriere@linaro.org> wrote:
+> > >
+> > > Adds an irq chip in optee driver to generate interrupts from OP-TEE
+> > > notified interrupt events based on optee async notification. Upon such
+> > > notification, optee driver invokes OP-TEE to query a pending interrupt
+> > > event. If an interrupt notification is pending the invocation return
+> > > OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_IT and optee driver can get the pending
+> > > interrupt number with SMC function ID OPTEE_SMC_FUNCID_GET_IT_VALUE.
+> > >
+> > > SMC function ID OPTEE_SMC_FUNCID_SET_IT_MASK allows Linux to mask/unmask
+> > > an interrupt notification services.
+> > >
+> > > The optee irq_chip if flagged IRQCHIP_SKIP_SET_WAKE to skip set_wake
+> > > as optee interrupt notifications doesn't support the set_wake option.
+> > > In case a device is using the optee irq and is marked as wakeup source,
+> > > this result in an "Unbalanced IRQ xx wake disable" backtrace, since:
+> > > - in irq_set_irq_wake(ON), wake_depth gets incremented, then reset due to
+> > >   set_irq_wake_real() returns an error (irq_set_wake() isn't implemented)
+> > > - in irq_set_irq_wake(OFF), wake_depth is always 0, hence the warning
+> >
+> > Is this relevant information?
+> 
+> The description is maybe too specific to the setup used for this feature.
+> I'll rephrase that, unless IRQCHIP_SKIP_SET_WAKE flag is not relevant here.
+
+IRQCHIP_SKIP_SET_FLAG is used when the irqchip doesn't provide any
+wake-up mechanism, but also isn't *denying* its use (there is a
+separate way to wake up from such an interrupt). I don't think you
+need to document that something goes wrong when you're doing something
+wrong.
+
+> >
+> > >
+> > > Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
+> > > Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+> > > Co-developed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> > > Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 > > > ---
-> > >  drivers/infiniband/hw/cxgb4/t4fw_ri_api.h | 26 ++++++-----------------
-> > >  1 file changed, 6 insertions(+), 20 deletions(-)
-> > 
-> > <...>
-> > 
-> > >  #define FW_RI_SEND_WR_SENDOP_S		0
-> > > @@ -618,12 +606,10 @@ struct fw_ri_rdma_write_cmpl_wr {
-> > >  		struct fw_ri_isgl isgl_src;
-> > >  	} u_cmpl;
-> > >  	__be64 r3;
-> > > -#ifndef C99_NOT_SUPPORTED
-> > >  	union fw_ri_write {
-> > > -		struct fw_ri_immd immd_src[0];
-> > > -		struct fw_ri_isgl isgl_src[0];
-> > > +		DECLARE_FLEX_ARRAY(struct fw_ri_immd, immd_src);
-> > > +		DECLARE_FLEX_ARRAY(struct fw_ri_isgl, isgl_src);
-> > 
-> > smatch built from commit 40351132df3b ("strlen: add __builtin and
-> > __fortify functions") produces the following warning:
-> > drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:575:17: warning: array of flexible structures
-> > 
-> > Is it expected? What will prevent from getting this warning from 0-day
-> > build bots?
+> > >  drivers/tee/optee/optee_private.h |   2 +
+> > >  drivers/tee/optee/optee_smc.h     |  78 +++++++++++++++-
+> > >  drivers/tee/optee/smc_abi.c       | 142 ++++++++++++++++++++++++++++--
+> > >  3 files changed, 216 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> > > index e5bd3548691f..2a146d884d27 100644
+> > > --- a/drivers/tee/optee/optee_private.h
+> > > +++ b/drivers/tee/optee/optee_private.h
+> > > @@ -112,6 +112,7 @@ struct optee_pcpu {
+> > >   * @optee_pcpu               per_cpu optee instance for per cpu work or NULL
+> > >   * @notif_pcpu_wq    workqueue for per cpu aynchronous notification or NULL
+> > >   * @notif_pcpu_work  work for per cpu asynchronous notification
+> > > + * @domain           interrupt domain registered by OP-TEE driver
+> > >   */
+> > >  struct optee_smc {
+> > >       optee_invoke_fn *invoke_fn;
+> > > @@ -121,6 +122,7 @@ struct optee_smc {
+> > >       struct optee_pcpu __percpu *optee_pcpu;
+> > >       struct workqueue_struct *notif_pcpu_wq;
+> > >       struct work_struct notif_pcpu_work;
+> > > +     struct irq_domain *domain;
+> > >  };
+> > >
+> > >  /**
+> > > diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+> > > index 73b5e7760d10..0cf83d5a2931 100644
+> > > --- a/drivers/tee/optee/optee_smc.h
+> > > +++ b/drivers/tee/optee/optee_smc.h
+> > > @@ -226,7 +226,8 @@ struct optee_smc_get_shm_config_result {
+> > >   * a3        Bit[7:0]: Number of parameters needed for RPC to be supplied
+> > >   *             as the second MSG arg struct for
+> > >   *             OPTEE_SMC_CALL_WITH_ARG
+> > > - *   Bit[31:8]: Reserved (MBZ)
+> > > + *   Bit[23:8]: The maximum interrupt event notification number
+> > > + *   Bit[31:24]: Reserved (MBZ)
+> > >   * a4-7      Preserved
+> > >   *
+> > >   * Error return register usage:
+> > > @@ -254,6 +255,11 @@ struct optee_smc_get_shm_config_result {
+> > >  #define OPTEE_SMC_SEC_CAP_ASYNC_NOTIF                BIT(5)
+> > >  /* Secure world supports pre-allocating RPC arg struct */
+> > >  #define OPTEE_SMC_SEC_CAP_RPC_ARG            BIT(6)
+> > > +/* Secure world supports interrupt events notification to normal world */
+> > > +#define OPTEE_SMC_SEC_CAP_IT_NOTIF           BIT(7)
+> > > +
+> > > +#define OPTEE_SMC_SEC_CAP_MAX_NOTIF_IT_MASK  GENMASK(23, 8)
+> > > +#define OPTEE_SMC_SEC_CAP_MAX_NOTIF_IT_SHIFT 8
+> > >
+> > >  #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES       9
+> > >  #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
+> > > @@ -416,6 +422,12 @@ struct optee_smc_disable_shm_cache_result {
+> > >   */
+> > >  #define OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_BOTTOM_HALF   0
+> > >
+> > > +/*
+> > > + * Notification that OP-TEE triggers an interrupt event to Linux kernel
+> > > + * for an interrupt consumer.
+> > > + */
+> > > +#define OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_IT            1
+> > > +
+> > >  #define OPTEE_SMC_FUNCID_GET_ASYNC_NOTIF_VALUE       17
+> > >  #define OPTEE_SMC_GET_ASYNC_NOTIF_VALUE \
+> > >       OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_GET_ASYNC_NOTIF_VALUE)
+> > > @@ -426,6 +438,70 @@ struct optee_smc_disable_shm_cache_result {
+> > >  /* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
+> > >  #define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG  19
+> > >
+> > > +/*
+> > > + * Retrieve the interrupt number of the pending interrupt event notified to
+> > > + * non-secure world since the last call of this function.
+> > > + *
+> > > + * OP-TEE keeps a record of all posted interrupt notification events. When the
+> > > + * async notif interrupt is received by non-secure world, this function should
+> > > + * be called until all pended interrupt events have been retrieved. When an
+> > > + * interrupt event is retrieved it is cleared from the record in secure world.
+> > > + *
+> > > + * It is expected that this function is called from an interrupt handler
+> > > + * in normal world.
+> > > + *
+> > > + * Call requests usage:
+> > > + * a0        SMC Function ID, OPTEE_SMC_GET_IT_NOTIF_VALUE
+> > > + * a1-6      Not used
+> > > + * a7        Hypervisor Client ID register
+> > > + *
+> > > + * Normal return register usage:
+> > > + * a0        OPTEE_SMC_RETURN_OK
+> > > + * a1        IT_NOTIF interrupt identifier value
+> > > + * a2        Bit[0]: OPTEE_SMC_IT_NOTIF_VALID if the value in a1 is
+> > > + *           valid, else 0 if no interrupt event were pending
+> > > + * a2        Bit[1]: OPTEE_SMC_IT_NOTIF_PENDING if another interrupt event
+> > > + *           value is pending, else 0.
+> > > + *   Bit[31:2]: MBZ
+> > > + * a3-7      Preserved
+> > > + *
+> > > + * Not supported return register usage:
+> > > + * a0        OPTEE_SMC_RETURN_ENOTAVAIL
+> > > + * a1-7      Preserved
+> > > + */
+> > > +#define OPTEE_SMC_IT_NOTIF_VALID             BIT(0)
+> > > +#define OPTEE_SMC_IT_NOTIF_PENDING           BIT(1)
+> > > +
+> > > +#define OPTEE_SMC_FUNCID_GET_IT_NOTIF_VALUE  20
+> > > +#define OPTEE_SMC_GET_IT_NOTIF_VALUE \
+> > > +     OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_GET_IT_NOTIF_VALUE)
+> > > +
+> > > +/*
+> > > + * Mask or unmask an interrupt notification event.
+> > > + *
+> > > + * It is expected that this function is called from an interrupt handler
+> > > + * in normal world.
+> > > + *
+> > > + * Call requests usage:
+> > > + * a0        SMC Function ID, OPTEE_SMC_SET_IT_NOTIF_MASK
+> > > + * a1        Interrupt identifier value
+> > > + * a2        Bit[0]: 1 if interrupt event is to be masked, 0 if it is to be unmasked
+> > > + * a2   Bit[31:1] MBZ
+> > > + * a3-6      Not used
+> > > + * a7        Hypervisor Client ID register
+> > > + *
+> > > + * Normal return register usage:
+> > > + * a0        OPTEE_SMC_RETURN_OK
+> > > + * a1-7      Preserved
+> > > + *
+> > > + * Not supdealed ported return register usage:
+> > > + * a0        OPTEE_SMC_RETURN_ENOTAVAIL
+> > > + * a1-7      Preserved
+> > > + */
+> > > +#define OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK   21
+> > > +#define OPTEE_SMC_SET_IT_NOTIF_MASK \
+> > > +     OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_SET_IT_NOTIF_MASK)
+> > > +
+> > >  /*
+> > >   * Resume from RPC (for example after processing a foreign interrupt)
+> > >   *
+> > > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> > > index 8c2d58d605ac..0360afde119f 100644
+> > > --- a/drivers/tee/optee/smc_abi.c
+> > > +++ b/drivers/tee/optee/smc_abi.c
+> > > @@ -977,6 +977,112 @@ static int optee_smc_stop_async_notif(struct tee_context *ctx)
+> > >   * 5. Asynchronous notification
+> > >   */
+> > >
+> > > +static u32 get_it_value(optee_invoke_fn *invoke_fn, bool *value_valid,
+> > > +                     bool *value_pending)
+> >
+> > What value? If this is supposed to return a set of pending bits, just
+> > name the function to reflect that.
 > 
-> Err, I'm not sure I understand? Does smatch define "C99_NOT_SUPPORTED"?
+> Communication between Linux kernel and OP-TEE is this case is rather
+> basic here, no shared memory used, only few CPU registers can be used
+> to shared information. So Linux invokes OP-TEE for each pending optee
+> interrupt event: each invocation returns a interrupt event number (an
+> integer value) and a status whether another interrupt event is pending
+> and shall be retrieved invoking OP-TEE again. In case Linux invoke
+> OP-TEE for a pending interrupt and none is pending, a last status is
+> also provided: 'value_valid'.
+> 
+> I could maybe change the prototype to something like:
+> static u32 get_pending_it_number(optee_invoke_fn *invoke_fn, bool
+> *it_number_valid, bool *more_pending_it)
 
-Why should it define? You removed C99_NOT_SUPPORTED.
+What does 'it' mean? Interrupt? Spell it out. Really, this should read as:
 
-Just download smatch, build from scratch and run over this patch. It
-generates new warning.
-
-➜  kernel git:(wip/leon-for-next) mkt ci --no-sparse --no-extra-warnings
-ccdbefcf661e (HEAD -> build) RDMA/cxgb4: Replace 0-length arrays with flexible arrays
-WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-#11:
-    inlined from 'c4iw_post_send' at ../drivers/infiniband/hw/cxgb4/qp.c:1173:10:
-
-drivers/infiniband/hw/cxgb4/t4fw_ri_api.h:558:17: warning: array of flexible structures
-....
-
+	get_pending_irq()
 
 
 > 
-> -- 
-> Kees Cook
+> >
+> > Also, at no point do you explain that each PPI is only a mux interrupt
+> > for a bunch of chained interrupts.
+> 
+> Sorry, I don't understand your question.
+> The "it notif" feature proposed in this change is not straight related a PPI.
+> Previous patch in this series is indeed related to PPI: it propose
+> optee driver can use a single PPI instead of a signle SPI for the
+> OP-TEE "asyn notification" feature.
+> This change allows to mux interrupts events (from OP-TEE to Linux
+> optee driver) over "OP-TEE async notif" means, which is using a single
+> SPI or PPI.
+> Maybe I should have submitted both changes separately :(
+
+Surely a less cryptic explaination would have helped.
+
+> 
+> >
+> > > +{
+> > > +     struct arm_smccc_res res;
+> > > +
+> > > +     invoke_fn(OPTEE_SMC_GET_IT_NOTIF_VALUE, 0, 0, 0, 0, 0, 0, 0, &res);
+> > > +
+> > > +     if (res.a0)
+> > > +             return 0;
+> > > +
+> > > +     *value_valid = res.a2 & OPTEE_SMC_IT_NOTIF_VALID;
+> > > +     *value_pending = res.a2 & OPTEE_SMC_IT_NOTIF_PENDING;
+> > > +     return res.a1;
+> > > +}
+> > > +
+> > > +static u32 set_it_mask(optee_invoke_fn *invoke_fn, u32 it_value, bool mask)
+> > > +{
+> > > +     struct arm_smccc_res res;
+> > > +
+> > > +     invoke_fn(OPTEE_SMC_SET_IT_NOTIF_MASK, it_value, mask, 0, 0, 0, 0, 0, &res);
+> > > +
+> > > +     if (res.a0)
+> > > +             return 0;
+> > > +
+> > > +     return res.a1;
+> > > +}
+> > > +
+> > > +static int handle_optee_it(struct optee *optee)
+> > > +{
+> > > +     bool value_valid;
+> > > +     bool value_pending;
+> > > +     u32 it;
+> > > +
+> > > +     do {
+> > > +             struct irq_desc *desc;
+> > > +
+> > > +             it = get_it_value(optee->smc.invoke_fn, &value_valid, &value_pending);
+> > > +             if (!value_valid)
+> > > +                     break;
+> > > +
+> > > +             desc = irq_to_desc(irq_find_mapping(optee->smc.domain, it));
+> > > +             if (!desc) {
+> > > +                     pr_err("no desc for optee IT:%d\n", it);
+> > > +                     return -EIO;
+> > > +             }
+> > > +
+> > > +             handle_simple_irq(desc);
+> > > +
+> >
+> > What is this? Please use generic_handle_domain_irq(), like any other
+> > driver. Why is the flow handler handle_simple_irq()? You need to
+> > explain what the signalling is for the secure-provided interrupts.
+> 
+> My fault. I thought handle_simple_irq() would better apply here since
+> its description:
+>  * Simple interrupts are either sent from a demultiplexing interrupt
+>  * handler or come from hardware, where no interrupt hardware control
+>  * is necessary.
+
+Why isn't masking necessary? What is the signalling between OPTEE and
+NS? Does the "get_it_value" function *consume* the pending bits? You
+need to answer and document all of that, and only then pick the flow
+that matches these requirements.
+
+> 
+> OP-TEE secure world has already dealt with the HW interrupt resources
+> (ack/etc...) before it notifies Linux kernel of the event.
+> 
+> >
+> > > +     } while (value_pending);
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static void optee_it_irq_mask(struct irq_data *d)
+> > > +{
+> > > +     struct optee *optee = d->domain->host_data;
+> > > +
+> > > +     set_it_mask(optee->smc.invoke_fn, d->hwirq, true);
+> > > +}
+> > > +
+> > > +static void optee_it_irq_unmask(struct irq_data *d)
+> > > +{
+> > > +     struct optee *optee = d->domain->host_data;
+> > > +
+> > > +     set_it_mask(optee->smc.invoke_fn, d->hwirq, false);
+> > > +}
+> > > +
+> > > +static struct irq_chip optee_it_irq_chip = {
+> > > +     .name = "optee-it",
+> > > +     .irq_disable = optee_it_irq_mask,
+> > > +     .irq_enable = optee_it_irq_unmask,
+> > > +     .flags = IRQCHIP_SKIP_SET_WAKE,
+> >
+> > Is it a mask or a disable? These are different beasts.
+> 
+> Indeed, thanks for catching that. I think we need to 4
+> (enable/disable/mask/unmask).
+> I'll fix.
+
+What does enable do differently from unmask?
+
+> 
+> >
+> > > +};
+> > > +
+> > > +static int optee_it_alloc(struct irq_domain *d, unsigned int virq,
+> > > +                       unsigned int nr_irqs, void *data)
+> > > +{
+> > > +     struct irq_fwspec *fwspec = data;
+> > > +     irq_hw_number_t hwirq;
+> > > +
+> > > +     hwirq = fwspec->param[0];
+> > > +
+> > > +     irq_domain_set_hwirq_and_chip(d, virq, hwirq, &optee_it_irq_chip, d->host_data);
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static const struct irq_domain_ops optee_it_irq_domain_ops = {
+> > > +     .alloc = optee_it_alloc,
+> > > +     .free = irq_domain_free_irqs_common,
+> > > +};
+> > > +
+> > > +static int optee_irq_domain_init(struct platform_device *pdev, struct optee *optee, u_int max_it)
+> > > +{
+> > > +     struct device *dev = &pdev->dev;
+> > > +     struct device_node *np = dev->of_node;
+> > > +
+> > > +     optee->smc.domain = irq_domain_add_linear(np, max_it, &optee_it_irq_domain_ops, optee);
+> > > +     if (!optee->smc.domain) {
+> > > +             dev_err(dev, "Unable to add irq domain\n");
+> > > +             return -ENOMEM;
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > >  static u32 get_async_notif_value(optee_invoke_fn *invoke_fn, bool *value_valid,
+> > >                                bool *value_pending)
+> > >  {
+> > > @@ -1008,13 +1114,15 @@ static irqreturn_t notif_irq_handler(int irq, void *dev_id)
+> > >       }
+> > >
+> > >       do {
+> > > -             value = get_async_notif_value(optee->smc.invoke_fn,
+> > > -                                           &value_valid, &value_pending);
+> > > +             value = get_async_notif_value(optee->smc.invoke_fn, &value_valid, &value_pending);
+> > >               if (!value_valid)
+> > >                       break;
+> > >
+> > >               if (value == OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_BOTTOM_HALF)
+> > >                       do_bottom_half = true;
+> > > +             else if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_IT_NOTIF &&
+> > > +                      value == OPTEE_SMC_ASYNC_NOTIF_VALUE_DO_IT)
+> > > +                     handle_optee_it(optee);
+> >
+> > NAK. This isn't how we deal with chained interrupts. Definitely not in
+> > an interrupt handler.
+> 
+> My apologies, what is wrong in this sequence. My expectations are:
+> 1- Something happens on OP-TEE secure side that should be reported to
+> Linux as a software interrupt event
+
+Why? There is nothing Linux-specific in OPTEE. Why should OPTEE be
+prescriptive of the way this is handled?
+
+> 2- OP-TEE (secure world) raises an HW interrupt to notify Linux optee
+> driver that event(s) are pending
+> 3- optee driver threade_irq handler is called and asks OP-TEE which
+> are the pending events. This is done event per event until all pending
+> event are consumed.
+
+Why is this done in a thread? I'd expect the *handlers* to be
+threaded, but not the irqchip part of it (which is crucially missing
+here).
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
