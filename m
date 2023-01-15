@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D4566B14E
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 14:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F151666B153
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 14:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjAONo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 08:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S230307AbjAONzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 08:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjAONoz (ORCPT
+        with ESMTP id S229941AbjAONzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 08:44:55 -0500
-X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 Jan 2023 05:44:54 PST
+        Sun, 15 Jan 2023 08:55:11 -0500
+X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 Jan 2023 05:55:09 PST
 Received: from hyperium.qtmlabs.xyz (hyperium.qtmlabs.xyz [194.163.182.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C70EC61
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 05:44:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511C3113CE;
+        Sun, 15 Jan 2023 05:55:08 -0800 (PST)
 Received: from dong.kernal.eu (unknown [14.231.159.199])
-        by hyperium.qtmlabs.xyz (Postfix) with ESMTPSA id 7F35B82002E;
-        Sun, 15 Jan 2023 14:34:23 +0100 (CET)
+        by hyperium.qtmlabs.xyz (Postfix) with ESMTPSA id 2B80882002E;
+        Sun, 15 Jan 2023 14:47:22 +0100 (CET)
 Received: from localhost (unknown [27.67.17.21])
-        by dong.kernal.eu (Postfix) with ESMTPSA id 243FA44496AC;
-        Sun, 15 Jan 2023 20:34:15 +0700 (+07)
+        by dong.kernal.eu (Postfix) with ESMTPSA id E53B444496AC;
+        Sun, 15 Jan 2023 20:47:14 +0700 (+07)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=syka;
-        t=1673789655;
+        t=1673790435;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jjxt+FsgG+EBJq1B4OVQNkvSIphuNLp2z8Syfe3Ynng=;
-        b=XYBDUDlb3m3V/40fMSwJ7HgEDj9fNDCfOmFPu3VZ6PFeJ2qZsFB7Ufo9ErkL99R2dM8Ckp
-        9NBT9Saei/VXSOFPP2h9jSdaHyZbLMm55Y2J7w2rKTPzbEcPpeLlYvCK4ygueuUHVgkUHQ
-        rRtnBlTypdUZGzTn1khCmhitbK6OB204VvA/nNua0KwlpWY/CC27gQqo8knZBmGbEuiomv
-        yo2npnTETwwuxWUhcu9bMHKTBz/z/a2AfQx6oIvTHgUWTU/GKC4BkqLAFeekCRCugBoVB8
-        QrogIzN9JghUvyVwAhy7Gsm1PelvP2n4RctOTuoXrZb4E8OQNsgq2TLQwKzW9w==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w6EKJoObFcrtpqataf2ECSd4za5g5SqLfqnitH5hlCc=;
+        b=dFMzTtBsZct7nmlEnkqo1mU/L61bporDl8O4E2oPKqhhQ3ZiPaT08YE9Ed3mwKQbqdmp0R
+        n6Ef43ThUxavW1ScrgUi85XmfVPfz+S2QndjzxzMR5nhqM8XFIn0QXXlhU/e8B1BHU+qzK
+        a/g0H0x4tljXjBMu219GtOpQuJud0ixq519yOImZwcGvhFq4kcyS3hTlRrEadt4+fAkrUx
+        rTQv1ArqEJt2D6Ojd+T6RE6Gb5k6Ox9sKYI0UeFMfIAKKtO8F095QzVqCAw5fHFt0fyoAi
+        CiVt94JBwwEgo45ZbpWsGC0Hv4ZXKt5YDwO006O98S3F5pZAMtxn12/pUANOBA==
 From:   msizanoen1 <msizanoen@qtmlabs.xyz>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yu Zhao <yuzhao@google.com>, msizanoen <msizanoen@qtmlabs.xyz>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: do not try to migrate lru_gen if it's not associated with a memcg
-Date:   Sun, 15 Jan 2023 20:33:31 +0700
-Message-Id: <20230115133330.28420-1-msizanoen@qtmlabs.xyz>
+Cc:     Yu Zhao <yuzhao@google.com>, msizanoen1 <msizanoen@qtmlabs.xyz>,
+        stable@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mm: do not try to migrate lru_gen if it's not associated with a memcg
+Date:   Sun, 15 Jan 2023 20:46:51 +0700
+Message-Id: <20230115134651.30028-1-msizanoen@qtmlabs.xyz>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230115133330.28420-1-msizanoen@qtmlabs.xyz>
+References: <20230115133330.28420-1-msizanoen@qtmlabs.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-
-From: msizanoen <msizanoen@qtmlabs.xyz>
 
 In some cases, memory cgroup migration can be initiated by userspace
 right after a process was created and right before `lru_gen_add_mm()` is
@@ -185,7 +187,11 @@ right cgroup anyway.
 
 [1]: https://gitlab.freedesktop.org/benzea/uresourced/-/blob/master/cgroupify/cgroupify.c
 
+v2:
+        Added stable cc tags
+
 Signed-off-by: N/A (patch should not be copyrightable)
+Cc: stable@vger.kernel.org
 ---
  mm/vmscan.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
