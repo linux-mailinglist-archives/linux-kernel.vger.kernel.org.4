@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A6B66B3F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A6366B3F3
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 21:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjAOUs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 15:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S231593AbjAOUwU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 15 Jan 2023 15:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbjAOUsz (ORCPT
+        with ESMTP id S231356AbjAOUwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 15:48:55 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A280413512;
-        Sun, 15 Jan 2023 12:48:53 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id d10so18346277pgm.13;
-        Sun, 15 Jan 2023 12:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MIkd2tMIqbl7DAxJsCwkxSiR7cv8R+Xwzf9xXdLwdvw=;
-        b=ehnqfS3nWLQtL0guJ0ycBgulw4xjhbNma55ULp/G8DJuYbtDRgzRaFPf3kqHaOX6Bs
-         WzxOSEULv9A2HRlHksKOJCs7nqOQXk/Xa+fjrWqGGlKsveeBbSriQxj7XuqwkJHgpTsC
-         RnQuCgwSfXyrekYgh9SfT5v+WtnpMySyx/lvLEvnJglb8l+Z8YOjng51pySwnwSHy6ke
-         TuLRTIwGObtWeEu4QraCIjGbv2E3U0u/BM4ZgWlfyLasLEmf9em+6ABe5q+cvvArTm1p
-         HiRIOUReY5n+ODvjmfyK2C9Kp69ysZK2g0Z65oRMR3P9cX94rsXLNZtL5eOEyis1/+nr
-         ExCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MIkd2tMIqbl7DAxJsCwkxSiR7cv8R+Xwzf9xXdLwdvw=;
-        b=OcBwzCCSya+r8AlEuYIEw5AD+vCeHCWtFpDeOHXLG8Zn9evlUU4o4RqEJinDWdEy4e
-         PCcJO1TymJaKEVicw6tSStTZ4M5aKWC9dZToa6DrttBzaJ3vK1cMi+CTGlXAGZljpEqE
-         41G7aM0Qu7BLrGJ8TEeRlavVmSfRFB0AUEl6I9Y/95GYNK/f8sJ/09o8NubXV8nQCaUY
-         zA/xcwNSI/6jXCisihwzrwgANft+Nyev2OSLjq2Zw5b11iBpkrnWd/v412bKCOEVMxHX
-         OzuxoJIDMbRgHvxicnpzr2NIkZm6X8uHkSGY7Ugu7oH8CGfSBE5WR/AECmbCdJ62xsKh
-         z7WA==
-X-Gm-Message-State: AFqh2koX+yy8zkN3gTF4+PG0P3PPEUr7R68RQdDfv4Mim38Zsan8QFsd
-        JDUVs2DleIAOJMEZESWP09y+UnPPm/z5ozNpGdM=
-X-Google-Smtp-Source: AMrXdXvWyvpXV5dLUF+hc/n/3eVOPJVL9z3kWOSuXuFG8siScyfsnWEajTwnwIP8AvxMoFyyyiRYT2lICAflIwow2Ns=
-X-Received: by 2002:aa7:8157:0:b0:583:3c8d:266a with SMTP id
- d23-20020aa78157000000b005833c8d266amr3155570pfn.72.1673815733109; Sun, 15
- Jan 2023 12:48:53 -0800 (PST)
+        Sun, 15 Jan 2023 15:52:18 -0500
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499E1CC09
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 12:52:17 -0800 (PST)
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay04.hostedemail.com (Postfix) with ESMTP id 55F981A0A53;
+        Sun, 15 Jan 2023 20:52:15 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id A6A8832;
+        Sun, 15 Jan 2023 20:52:11 +0000 (UTC)
+Message-ID: <33ecbe8971bb9c90d72c67d43ca740abac160908.camel@perches.com>
+Subject: Re: [PATCH] drm/amd/display: Simplify same effect if/else blocks
+From:   Joe Perches <joe@perches.com>
+To:     Deepak R Varma <drv@mailo.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Date:   Sun, 15 Jan 2023 12:52:10 -0800
+In-Reply-To: <Y8POxreeC3EvOXhC@ubun2204.myguest.virtualbox.org>
+References: <Y8POxreeC3EvOXhC@ubun2204.myguest.virtualbox.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <20230115103217.9232-1-pierluigi.p@variscite.com> <CAOMZO5CdG=Tx98DVYo9QZFM7Y65b0KGLNc=XskYDuRqORBiLSg@mail.gmail.com>
-In-Reply-To: <CAOMZO5CdG=Tx98DVYo9QZFM7Y65b0KGLNc=XskYDuRqORBiLSg@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sun, 15 Jan 2023 17:48:41 -0300
-Message-ID: <CAOMZO5BLoCibdbmBV5Sysfc7seCnYu7Mvu+Yar-YUvDrjJuNCA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mm: Fix pad control for UART1_DTE_RX
-To:     Pierluigi Passaro <pierluigi.passaro@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-imx@nxp.com, pierluigi.p@variscite.com, marex@denx.de,
-        peng.fan@nxp.com, marcel.ziswiler@toradex.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, eran.m@variscite.com,
-        nate.d@variscite.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: A6A8832
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Rspamd-Server: rspamout03
+X-Stat-Signature: nmp5jzgs6mbr4ybrsoi3t7kdy77pzftq
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+vcIh7h853zIRDiyU/iVp2UCz25hch+jM=
+X-HE-Tag: 1673815931-499090
+X-HE-Meta: U2FsdGVkX1/EeyVIfaSREYkP20+/ZisoRlOpWZ33AFH9Y7nb5ddC0nDiZ8wdYjIk0gbCITI5svD3Yr3xHWrKTg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierluigi,
+On Sun, 2023-01-15 at 15:30 +0530, Deepak R Varma wrote:
+> The if / else block code has same effect irrespective of the logical
+> evaluation.  Hence, simply the implementation by removing the unnecessary
+> conditional evaluation. While at it, also fix the long line checkpatch
+> complaint. Issue identified using cond_no_effect.cocci Coccinelle
+> semantic patch script.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Please note: The proposed change is compile tested only. If there are any
+> inbuilt test cases that I should run for further verification, I will appreciate
+> guidance about it. Thank you.
 
-On Sun, Jan 15, 2023 at 9:27 AM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi Pierluigi,
->
-> Thanks for the patch.
->
-> On Sun, Jan 15, 2023 at 7:32 AM Pierluigi Passaro
-> <pierluigi.passaro@gmail.com> wrote:
-> >
-> > According section
-> >     8.2.5.313 Select Input Register (IOMUXC_UART1_RXD_SELECT_INPUT)
-> > of
-> >     i.MX 8M Mini Applications Processor Reference Manual, Rev. 3, 11/2020
-> > the required setting for this specific pin configuration is "1"
->
-> Fixes: c1c9d41319c3 ("dt-bindings: imx: Add pinctrl binding doc for imx8mm")
->
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Preface: I do not know the code.
 
-./scripts/checkpatch.pl shows the following problem with your patch:
+Perhaps Rodrigo Siqueira made a copy/paste error submitting the code for
+commit 9114b55fabae ("drm/amd/display: Fix SubVP control flow in the MPO context")
+as the code prior to this change is identical.
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Pierluigi
-Passaro <pierluigi.passaro@gmail.com>' != 'Signed-off-by: Pierluigi
-Passaro <pierluigi.p@variscite.com>'
+Perhaps one of the false uses should be true or dependent on the
+interdependent_update_lock state.
 
-Please adjust this, add the Fixes tag and send a v2.
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+[]
+> @@ -3470,14 +3470,9 @@ static void commit_planes_for_stream(struct dc *dc,
+>  		/* Since phantom pipe programming is moved to post_unlock_program_front_end,
+>  		 * move the SubVP lock to after the phantom pipes have been setup
+>  		 */
+> -		if (should_lock_all_pipes && dc->hwss.interdependent_update_lock) {
+> -			if (dc->hwss.subvp_pipe_control_lock)
+> -				dc->hwss.subvp_pipe_control_lock(dc, context, false, should_lock_all_pipes, NULL, subvp_prev_use);
+> -		} else {
+> -			if (dc->hwss.subvp_pipe_control_lock)
+> -				dc->hwss.subvp_pipe_control_lock(dc, context, false, should_lock_all_pipes, NULL, subvp_prev_use);
+> -		}
+> -
 
-Thanks
+Perhaps something like:
+
+		if (dc->hwss.subvp_pipe_control_lock)
+			dc->hwss.subvp_pipe_control_lock(dc, context,
+							 should_lock_all_pipes &&
+							 dc->hwss.interdependent_update_lock,
+							 should_lock_all_pipes, NULL, subvp_prev_use);
+
+> +		if (dc->hwss.subvp_pipe_control_lock)
+> +			dc->hwss.subvp_pipe_control_lock(dc, context, false, should_lock_all_pipes,
+> +							 NULL, subvp_prev_use);
+>  		return;
+>  	}
+>  
+
