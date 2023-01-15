@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5379E66B1D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 16:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539EB66B1E3
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 16:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjAOPGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 10:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S231339AbjAOPLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 10:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjAOPGk (ORCPT
+        with ESMTP id S231136AbjAOPLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 10:06:40 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486A99EF6
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 07:06:39 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id u19so62630818ejm.8
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 07:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6mV2i5/nB+6SQc3dRdfPMP5cMJSxy5rQiGnmFtQCfgQ=;
-        b=Gxs+wgA/dB9MSMphhEcVZMGRdxcy+UPE25FznZluA2FOhVqJ8U4Eo6zqWEi5g8q+A6
-         T2YCrsRaw2aw287emFzJt2/ALkOUorBkXUkLb7nQcm3aMpYdWdY34Y4e9tzVftHi5pB/
-         QUiyVIb7EhiDGlRUBHdxbLoXoux/oAaLuWbDE8nUnxECJO1s2AgEyv89Zw85RCoGuqky
-         1c006IJMXIKKrHw8onTaVEqeCArUieCwzFrrPxeH/Ev52mY+GtzWhHq6Jh5u7Jm63qbQ
-         BtuEzdm7hMKrDoNu9eA8iDVemEFbPuV1wjrMIIAv1Yngxj7XKL/ZayYJEs7BRku/+Al0
-         C56g==
+        Sun, 15 Jan 2023 10:11:47 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1161ECDFB;
+        Sun, 15 Jan 2023 07:11:46 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id v15-20020a9d69cf000000b006709b5a534aso14870384oto.11;
+        Sun, 15 Jan 2023 07:11:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6mV2i5/nB+6SQc3dRdfPMP5cMJSxy5rQiGnmFtQCfgQ=;
-        b=ZGn+CI+ohv9vwEAcBwYQcrybA50+TMUnM3FCPo1DZXI6oFhTz7jFbVdjAxlcw6ohcR
-         8HrN1YQjvwMDDRUJPWXcEQhUjILKmpaUiHM0VzbT/7DjSY5ONvcWmJ1IUTV1D1zHIfYt
-         8IcE0Yrmraz5klw33BJrpyAzZZj1+Ruw/6oGwJuW6xbSpdqpROuJMNfpgBGKU1HK0eif
-         SkY6MoyXWrjbyoZeLso2XTjFeAyT+0WgYHiZMX8JwA8QtsmRe6oJ+WqeFfzqCnZws+up
-         f4yfoTkIMT/Khfa2MMw5/JQeXLYzx/OpA6YWR9kffkW7PlNSaSrMmb86t/CZ89bkU7dl
-         O/4A==
-X-Gm-Message-State: AFqh2koSRy8+t5QFWNezUEcBCde1XXZdcK9oDvVqtvWj90uRuEStU0VJ
-        AvjVQvL+a6HM6MtdOe2NgncNFA==
-X-Google-Smtp-Source: AMrXdXtoJE1Ir5Xn52Iji4CbQo6oLweEklRVp9bvVaH0Nk2PtWen++DWHI0yZaagkGlYpbUC+Ijg7A==
-X-Received: by 2002:a17:906:b108:b0:843:a9fe:f115 with SMTP id u8-20020a170906b10800b00843a9fef115mr79416292ejy.32.1673795197836;
-        Sun, 15 Jan 2023 07:06:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id kz14-20020a17090777ce00b007c17b3a4163sm10914026ejc.15.2023.01.15.07.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Jan 2023 07:06:37 -0800 (PST)
-Message-ID: <a4982e06-a6a4-a8c9-3b24-24f798c61f73@linaro.org>
-Date:   Sun, 15 Jan 2023 16:06:34 +0100
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1SvPkdrRqclnIiQLKFR8JacZ9XIaTQnycEJaLqb6Sc4=;
+        b=qnuHVtPiwMQQiC8xy38c1DnYwaOeAewRelfYXiiwBHePwg25+ubx7xHAmwn2K1wQpW
+         I/x69nnRycUif3oEtuje59YCbjXArQWnK6Cdk3VGwKxTbila+BiVpmZN1HF5BpStjBki
+         wtrl0S+ckROQ58OlCaLlBjtck/BIUM7y+Qs2CbncGQymrjlgMy04eQvAo12JVLNTVKu/
+         T9SjRe65Pa0qM7FiCYcDpA4nF3J9bsxIlOWBG0+ofDAqMrxnEgSJMwD5KF7CGNmD+NIX
+         2t5AxzjmmBoo2l9F1BttLf3OsjwJgLohM9TFyXzKh5Oxb8wBQw813e6LPF82PXavrun2
+         8CPA==
+X-Gm-Message-State: AFqh2kpkiPSsfTSbHBnD3tE16/p3ac+jWWN6p5ltaULQ1Ap5Vfuu+T82
+        3yYdFxPrQcwB2VFhqiwl1Q==
+X-Google-Smtp-Source: AMrXdXsh6dWqsMlGqRqeH89BB+VTpx1Pk6bCOFikeZ/Yr6Ctmk10iCTGB8c1G6BR+K7Vku/zamfzHQ==
+X-Received: by 2002:a9d:6353:0:b0:684:eca3:fa4a with SMTP id y19-20020a9d6353000000b00684eca3fa4amr774789otk.31.1673795505175;
+        Sun, 15 Jan 2023 07:11:45 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bm10-20020a056830374a00b0066e868dbc2esm13603695otb.46.2023.01.15.07.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 07:11:44 -0800 (PST)
+Received: (nullmailer pid 2300324 invoked by uid 1000);
+        Sun, 15 Jan 2023 15:11:43 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 4/5] arm64: dts: fsd: Add codec node for Tesla FSD
-Content-Language: en-US
-To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, rcsekar@samsung.com,
-        aswani.reddy@samsung.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20230113121749.4657-1-p.rajanbabu@samsung.com>
- <CGME20230113121830epcas5p4cc336a48f4597ba84ab1352774242f75@epcas5p4.samsung.com>
- <20230113121749.4657-5-p.rajanbabu@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230113121749.4657-5-p.rajanbabu@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_pkondeti@quicinc.com, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        quic_harshq@quicinc.com, Philipp Zabel <p.zabel@pengutronix.de>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+In-Reply-To: <20230115114146.12628-2-quic_kriskura@quicinc.com>
+References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
+ <20230115114146.12628-2-quic_kriskura@quicinc.com>
+Message-Id: <167379535756.2296593.3352224696296396152.robh@kernel.org>
+Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
+ properties
+Date:   Sun, 15 Jan 2023 09:11:43 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 13:17, Padmanabhan Rajanbabu wrote:
-> Add device tree node support for codec on Tesla FSD platform.
+
+On Sun, 15 Jan 2023 17:11:42 +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Snps Dwc3 controller.
 > 
-> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
->  arch/arm64/boot/dts/tesla/fsd-evb.dts | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
+>  1 file changed, 47 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> index cf5f2ce4d2a7..2f211a1ad50d 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> @@ -10,6 +10,7 @@
->  
->  /dts-v1/;
->  #include "fsd.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
->  
->  / {
->  	model = "Tesla Full Self-Driving (FSD) Evaluation board";
-> @@ -34,6 +35,17 @@
->  	clock-frequency = <24000000>;
->  };
->  
-> +&hsi2c_5 {
-> +	status = "okay";
-> +
-> +	tlv320aic3x: codec@18 {
-> +		compatible = "ti,tlv320aic3104";
-> +		reg = <0x18>;
-> +		#sound-dai-cells = <0>;
-> +		reset-gpios = <&gpg1 6 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
-> +
 
-Why there is i2s here? What was the base of this patch?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
-Best regards,
-Krzysztof
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230115114146.12628-2-quic_kriskura@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
