@@ -2,193 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023C866B167
-	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7DB66B16B
+	for <lists+linux-kernel@lfdr.de>; Sun, 15 Jan 2023 15:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjAOOJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 09:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S230498AbjAOONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 09:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjAOOJy (ORCPT
+        with ESMTP id S230307AbjAOONB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 09:09:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33583CDCE
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 06:09:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673791746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uYsStTjUz3WGDaAYUWg24ZE611xTjkecNGKieBDCjA8=;
-        b=XUH/7gibccB4H7CIQoU9JzTPwDBUcU+NS9cUI9p9yTLQ45arO75CHjkUw6pS6JY0Z+7OLB
-        KfrhuZgOy6GX9asv9JI40ZCFy7etNwRUQLnc5Re64L2DxDPO1geL1rfa7sCrxNKK7oUjqq
-        abFGeAjmLYrS8BkOhZVKcOJ2IFx7+Ik=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-486-Ziwo1vRyNbeAEKupitVnJw-1; Sun, 15 Jan 2023 09:09:00 -0500
-X-MC-Unique: Ziwo1vRyNbeAEKupitVnJw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08B351C07543;
-        Sun, 15 Jan 2023 14:09:00 +0000 (UTC)
-Received: from localhost (ovpn-12-229.pek2.redhat.com [10.72.12.229])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 16FD640C6EC4;
-        Sun, 15 Jan 2023 14:08:58 +0000 (UTC)
-Date:   Sun, 15 Jan 2023 22:08:55 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, linux-mm@kvack.org, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        urezki@gmail.com, lstoakes@gmail.com, stephen.s.brennan@oracle.com,
-        willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y8QI977QBDbuuGW5@fedora>
-References: <20230113031921.64716-4-bhe@redhat.com>
- <202301132345.KVjvHMFq-lkp@intel.com>
+        Sun, 15 Jan 2023 09:13:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EFBF768;
+        Sun, 15 Jan 2023 06:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OOTmTEZ5tSYiLE0Aufj+nlndsvBbI3BEiPky8VVv93w=; b=KwUOt/Nw5GaPANM4wZ26yailqU
+        2IrfIAai3ZAYJBbtzFDTwfW6uMtL+7SJRiVSfYRNVXhyBYD9bgE58ZgrMMXKIyrR1pIAvQ4U2irfg
+        ZnRaY1LJfeyTNtqBdr4IYkbgAyMEh1cTRwl9yr/GbPwTiLeucfOboLMJar99XxmqNVYE+zgDTWPt4
+        JwFk8ZzbJGj35RUjyWkeReh0Soo6DSzsPJEWNyggCoHKdOSm4/CIm4+PlVqkICTGb6AcunGoG15fr
+        OTejiZc++bXwB2vmAiO21saI28Eb/veLOiSLjRTqlpnGdXYKkXaeUumREQmjilHWm96BikBCcJXPM
+        HFG87D4Q==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pH3ks-007tbH-UF; Sun, 15 Jan 2023 14:13:03 +0000
+Message-ID: <55f581345df465a73d6469f44d3512d9ccac7ffc.camel@infradead.org>
+Subject: Re: [patch V2 30/46] x86/xen: Wrap XEN MSI management into irqdomain
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        xen-devel <xen-devel@lists.xensource.com>
+Cc:     Dimitri Sivanich <sivanich@hpe.com>, linux-hyperv@vger.kernel.org,
+        Steve Wahl <steve.wahl@hpe.com>, linux-pci@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Baolu Lu <baolu.lu@intel.com>, Marc Zyngier <maz@kernel.org>,
+        x86@kernel.org, Jason Gunthorpe <jgg@mellanox.com>,
+        Megha Dey <megha.dey@intel.com>,
+        xen-devel@lists.xenproject.org, Kevin Tian <kevin.tian@intel.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Jon Derrick <jonathan.derrick@intel.com>,
+        Juergen Gross <jgross@suse.com>, Russ Anderson <rja@hpe.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        iommu@lists.linux-foundation.org,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 15 Jan 2023 14:12:48 +0000
+In-Reply-To: <20200826112333.622352798@linutronix.de>
+References: <20200826111628.794979401@linutronix.de>
+         <20200826112333.622352798@linutronix.de>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-DTVWzgYGVALze2v8okE9"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301132345.KVjvHMFq-lkp@intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
 
-On 01/14/23 at 10:57am, Dan Carpenter wrote:
-> Hi Baoquan,
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-vmalloc-c-add-used_map-into-vmap_block-to-track-space-of-vmap_block/20230113-112149
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230113031921.64716-4-bhe%40redhat.com
-> patch subject: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
-> config: i386-randconfig-m021
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
-> 
-> smatch warnings:
-> mm/vmalloc.c:3682 vread() error: we previously assumed 'vm' could be null (see line 3664)
+--=-DTVWzgYGVALze2v8okE9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for checking this. I went through the code flow again, personally
-think that the issue and risk pointed out could not exist. Please see
-the comment at below.
+On Wed, 2020-08-26 at 13:16 +0200, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+>=20
+> To allow utilizing the irq domain pointer in struct device it is necessar=
+y
+> to make XEN/MSI irq domain compatible.
+>=20
+> While the right solution would be to truly convert XEN to irq domains, th=
+is
+> is an exercise which is not possible for mere mortals with limited XENolo=
+gy.
+>=20
+> Provide a plain irqdomain wrapper around XEN. While this is blatant
+> violation of the irqdomain design, it's the only solution for a XEN igora=
+nt
+> person to make progress on the issue which triggered this change.
+>=20
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Acked-by: Juergen Gross <jgross@suse.com>
 
-> 
-> vim +/vm +3682 mm/vmalloc.c
-> 
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3630  long vread(char *buf, char *addr, unsigned long count)
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3631  {
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3632  	struct vmap_area *va;
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3633  	struct vm_struct *vm;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3634  	char *vaddr, *buf_start = buf;
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3635  	unsigned long buflen = count;
-> 129dbdf298d7383 Baoquan He              2023-01-13  3636  	unsigned long n, size, flags;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3637  
-> 4aff1dc4fb3a5a3 Andrey Konovalov        2022-03-24  3638  	addr = kasan_reset_tag(addr);
-> 4aff1dc4fb3a5a3 Andrey Konovalov        2022-03-24  3639  
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3640  	/* Don't allow overflow */
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3641  	if ((unsigned long) addr + count < count)
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3642  		count = -(unsigned long) addr;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3643  
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3644  	spin_lock(&vmap_area_lock);
-> f181234a5a21fd0 Chen Wandun             2021-09-02  3645  	va = find_vmap_area_exceed_addr((unsigned long)addr);
-> f608788cd2d6cae Serapheim Dimitropoulos 2021-04-29  3646  	if (!va)
-> f608788cd2d6cae Serapheim Dimitropoulos 2021-04-29  3647  		goto finished;
-> f181234a5a21fd0 Chen Wandun             2021-09-02  3648  
-> f181234a5a21fd0 Chen Wandun             2021-09-02  3649  	/* no intersects with alive vmap_area */
-> f181234a5a21fd0 Chen Wandun             2021-09-02  3650  	if ((unsigned long)addr + count <= va->va_start)
-> f181234a5a21fd0 Chen Wandun             2021-09-02  3651  		goto finished;
-> f181234a5a21fd0 Chen Wandun             2021-09-02  3652  
-> f608788cd2d6cae Serapheim Dimitropoulos 2021-04-29  3653  	list_for_each_entry_from(va, &vmap_area_list, list) {
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3654  		if (!count)
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3655  			break;
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3656  
-> 129dbdf298d7383 Baoquan He              2023-01-13  3657  		vm = va->vm;
-> 129dbdf298d7383 Baoquan He              2023-01-13  3658  		flags = va->flags & VMAP_FLAGS_MASK;
-> 129dbdf298d7383 Baoquan He              2023-01-13  3659  
-> 129dbdf298d7383 Baoquan He              2023-01-13  3660  		if (!vm && !flags)
->                                                                             ^^^
-> vm can be NULL if a flag in VMAP_FLAGS_MASK is set.
-> 
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3661  			continue;
+I think it broke MSI-X support, because xen_pci_msi_domain_info is
+lacking a .flags =3D MSI_FLAGS_PCI_MSIX?
 
-Right, after the 'continue;' line, only two cases could happen when it
-comes here. (vm != null) or (vm->flags & VMAP_RAM) is true.
+> ---
+> Note: This is completely untested, but it compiles so it must be perfect.
 
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3662  
-> 129dbdf298d7383 Baoquan He              2023-01-13  3663  		vaddr = (char *) va->va_start;
-> 129dbdf298d7383 Baoquan He              2023-01-13 @3664  		size = vm ? get_vm_area_size(vm) : va_size(va);
->                                                                                ^^
-> 
-> 129dbdf298d7383 Baoquan He              2023-01-13  3665  
-> 129dbdf298d7383 Baoquan He              2023-01-13  3666  		if (addr >= vaddr + size)
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3667  			continue;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3668  		while (addr < vaddr) {
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3669  			if (count == 0)
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3670  				goto finished;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3671  			*buf = '\0';
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3672  			buf++;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3673  			addr++;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3674  			count--;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3675  		}
-> 129dbdf298d7383 Baoquan He              2023-01-13  3676  		n = vaddr + size - addr;
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3677  		if (n > count)
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3678  			n = count;
-> 129dbdf298d7383 Baoquan He              2023-01-13  3679  
-> 129dbdf298d7383 Baoquan He              2023-01-13  3680  		if (flags & VMAP_RAM)
-> 
-> assume VMAP_RAM is not set
 
-OK, then vm is not null.
-> 
-> 129dbdf298d7383 Baoquan He              2023-01-13  3681  			vmap_ram_vread(buf, addr, n, flags);
-> 129dbdf298d7383 Baoquan He              2023-01-13 @3682  		else if (!(vm->flags & VM_IOREMAP))
->                                                                                    ^^^^^^^^^
-> Unchecked dereference.  Should this be "flags" instead of "vm->flags"?
+I'm working on making it simple for you to test that, by hosting Xen
+HVM guests natively in qemu (under KVM=C2=B9).=C2=A0
 
-Thus, here, in 'else if', vm is not null. And in this 'else if', we are
-intending to check vm->flags. I don't see issue or risk here. Please
-help check if I miss anything.
+But I'm absolutely not going to try hacking on both guest and host side
+at the same time when I'm trying to ensure compatibility =E2=80=94 that way
+lies madness.
 
-Thanks
-Baoquan
+So for now I'm going to test qemu with older kernels, and maybe someone
+(J=C3=BCrgen}? can test MSI-X to PIRQ support under real Xen?) FWIW if I ad=
+d
+the missing MSI_FLAGS_PCI_MSIX flag then under my qemu I get:
 
-> 
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3683  			aligned_vread(buf, addr, n);
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3684  		else /* IOREMAP area is treated as memory hole */
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3685  			memset(buf, 0, n);
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3686  		buf += n;
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3687  		addr += n;
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3688  		count -= n;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3689  	}
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3690  finished:
-> e81ce85f960c2e2 Joonsoo Kim             2013-04-29  3691  	spin_unlock(&vmap_area_lock);
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3692  
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3693  	if (buf == buf_start)
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3694  		return 0;
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3695  	/* zero-fill memory holes */
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3696  	if (buf != buf_start + buflen)
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3697  		memset(buf, 0, buflen - (buf - buf_start));
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3698  
-> d0107eb07320b5d KAMEZAWA Hiroyuki       2009-09-21  3699  	return buflen;
-> ^1da177e4c3f415 Linus Torvalds          2005-04-16  3700  }
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
-> 
+ 38:       3180          0  xen-pirq    -msi-x     ens4-rx-0
+ 39:          0       3610  xen-pirq    -msi-x     ens4-tx-0
+ 40:          1          0  xen-pirq    -msi-x     ens4
 
+But without the flags I get:
+
+[    8.464212] e1000e 0000:00:04.0 ens4: Failed to initialize MSI interrupt=
+s.  Falling back to legacy interrupts.
+
+=C2=B9 https://lore.kernel.org/qemu-devel/20230110122042.1562155-1-dwmw2@in=
+fradead.org/
+
+--=-DTVWzgYGVALze2v8okE9
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMTE1MTQxMjQ4WjAvBgkqhkiG9w0BCQQxIgQguO82t4IS
+f+uoEXQbT4rRlZ6ifrAfYnPW74lNGbcKO8Awgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAeL6Dy2c7VdfjtqZJMCg0pa64/NdfSW9w5
+Cg7C83Bd5vV5tP2diRd4FM/rDByCqYeyDvsV1wg4h+dRSMs1ogl2nr6uys1d+2faKJwPlVtLrhuL
+owjq0407WyZECN2t7Nq+O5sBOh2qjBS/uw8FeJXmerOSnhP3A9RgYaSd4EEkfdwhAaZdwLpnGQp5
+rd0RS2WkBnyGZx2XSr2eN4C8nmG3rDU3VGqFLtkQW7jZykAD9KC/oSrJeuXbOGcyq3MfAw2QgNh5
+oolfMRczPOz7QBcctdKO10gr/6Oe4Ig+ojEP74Jh5r7R+tbJZEM4IBlp5OSyU1hNMj9tuuguJ2vg
+bRUbM4+N0Pk1mzJnceGKLn709Lxod3V++sMaQpA4b6TGIvLc8hsG4iiAQkJTMznW0BQklhJ3ELT6
++P5Bt//RkuMpA2SUPXlmnq6Xx4kbDqRr0ZsvWZBFx+rPswkGmIXWn04+yZ5GjFspkedMO3pvn/u5
+Vcp8ulIZ6vywMda6cBXmM21Lt/H8q5+B1QJufHdPS3lxnHMUrkbcaDtlmG0W0itxazAma8lDiYVv
+CTHb75A9v1l6y+JZIBjbQKdZ0sFYcMCQ3CukZSfLtium4lvGBpTCvKzDPmElohsBfRGn+BVoM0nV
+g1qcbcRN5UA0jR3EHujU7TfJNj1NIemxbK9LfmIsDgAAAAAAAA==
+
+
+--=-DTVWzgYGVALze2v8okE9--
