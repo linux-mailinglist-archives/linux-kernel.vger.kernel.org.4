@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4083866BBB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BFB66BBB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjAPK3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        id S230166AbjAPKaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjAPK3a (ORCPT
+        with ESMTP id S229928AbjAPKaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:29:30 -0500
-Received: from outbound-smtp03.blacknight.com (outbound-smtp03.blacknight.com [81.17.249.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85DB1A94F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:29:27 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp03.blacknight.com (Postfix) with ESMTPS id 19EC0C0C31
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:29:26 +0000 (GMT)
-Received: (qmail 31739 invoked from network); 16 Jan 2023 10:29:25 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 Jan 2023 10:29:25 -0000
-Date:   Mon, 16 Jan 2023 10:29:23 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Michal Hocko <mhocko@suse.com>, Linux-MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/7] mm/page_alloc: Give GFP_ATOMIC and non-blocking
- allocations access to reserves
-Message-ID: <20230116102923.krilmcwrclshbm5e@techsingularity.net>
-References: <20230109151631.24923-1-mgorman@techsingularity.net>
- <20230109151631.24923-7-mgorman@techsingularity.net>
- <Y77cikPSHepZ/GQj@dhcp22.suse.cz>
- <20230111170552.5b7z5hetc2lcdwmb@techsingularity.net>
- <167373421396.4602.14376527067766958302@noble.neil.brown.name>
+        Mon, 16 Jan 2023 05:30:19 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7531A94F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:30:18 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id g10so19639030wmo.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qTooUq4cMjOEihCYLJFBqFS7hAzRSHaf73G77gKeBmo=;
+        b=MO3oc2rD84K0LdlR/IJAprDxtYLFJ0sNfcuUaS64tDCx0pC1g5CWuVu353jpTPr+II
+         J/4aDi3i78oIZsLXVb855d7PvVYzL29M1yaa5Uielj1i4B4mLdsFFfYI6PKdgMfePD+V
+         36/47gK3jCqbwYRHK40grP4D/ba0t6/iUpuWhob1RvE0znhZYXtbHNnLkQCHqzuxsnjs
+         +GQ/uEwiJRnlrY8+BhgQBk7GgOngbW51EWsdWqAkGozHHqgl4Qoq6upQ8e3Dm3mLX0oS
+         qSop9GgV3WsSfXyIPX8aUkpUa163Goy9LG+lTNqJNpV1VaJEOE700LCiKLyrFyg+Hr/J
+         TPzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qTooUq4cMjOEihCYLJFBqFS7hAzRSHaf73G77gKeBmo=;
+        b=CU4iKpeexc7BTE2P9qoKKyqY8Vg+K2y6Z+N4ml370euGSpuL38iU3IS4QBRkWMnwqN
+         0xqMBsm6Ek4MLggKBVAEgeh7dGZwAmMxgg5sfz01ugcTjxcMUOV1uBlOqUAwC/tSXRwN
+         q9qu7cisjNq4JgXrPutrLnK8gu/zj7o25oheDw30dgnxrWwcHXnyp7FmUCl5MAOoBZtU
+         Zeg6gdWYJdhZ8kz0nVb4YgiJ9cmYXac8CrnEvgbWgwU9z4tzlYvhPa5j1AY+xuvV9Gd9
+         bWGOJZjq5X1w4lF4kSY1vesjLJ3K8Slfl2qxO1v5W+jHJk5sPO6Y3b4Kn8PlxelfoRsU
+         Xq7g==
+X-Gm-Message-State: AFqh2kq8LuiY5dV7vu+X3CyACiYHStLdvsXD6eDBv00gUlEPSiZuFdmM
+        bEIMRJuQN0IIlpggyqOc3D6QyQ==
+X-Google-Smtp-Source: AMrXdXsYyTyvcOBn4REIZA5fHuv68tyqOAxd2gu3QvrZVRzS7158AX8poyUv1J5fgE+WZ6npAJXv/w==
+X-Received: by 2002:a05:600c:b95:b0:3da:fa42:bbf2 with SMTP id fl21-20020a05600c0b9500b003dafa42bbf2mr3401950wmb.28.1673865016776;
+        Mon, 16 Jan 2023 02:30:16 -0800 (PST)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003d1f3e9df3csm40561236wmo.7.2023.01.16.02.30.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 02:30:16 -0800 (PST)
+Message-ID: <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
+Date:   Mon, 16 Jan 2023 10:30:15 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <167373421396.4602.14376527067766958302@noble.neil.brown.name>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] tools: bpf: Disable stack protector
+Content-Language: en-GB
+To:     Peter Foley <pefoley2@pefoley.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 09:10:13AM +1100, NeilBrown wrote:
-> On Thu, 12 Jan 2023, Mel Gorman wrote:
-> > On Wed, Jan 11, 2023 at 04:58:02PM +0100, Michal Hocko wrote:
-> > > On Mon 09-01-23 15:16:30, Mel Gorman wrote:
-> > > > Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
-> > > > vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
-> > > > other non-blocking allocation requests equal access to reserve.  Rename
-> > > > ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
-> > > > means.
-> > > 
-> > > GFP_NOWAIT can be also used for opportunistic allocations which can and
-> > > should fail quickly if the memory is tight and more elaborate path
-> > > should be taken (e.g. try higher order allocation first but fall back to
-> > > smaller request if the memory is fragmented). Do we really want to give
-> > > those access to memory reserves as well?
-> > 
-> > Good question. Without __GFP_ATOMIC, GFP_NOWAIT only differs from GFP_ATOMIC
-> > by __GFP_HIGH but that is not enough to distinguish between a caller that
-> > cannot sleep versus one that is speculatively attempting an allocation but
-> > has other options.
+2023-01-14 18:00 UTC-0500 ~ Peter Foley <pefoley2@pefoley.com>
+> Avoid build errors on distros that force the stack protector on by
+> default.
+> e.g.
+>   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
+> skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__stack_chk_fail' is not supported.
+> int iter(struct bpf_iter__task_file *ctx)
+>     ^
+> 1 error generated.
 > 
-> Isn't that a distinction without a difference?
-
-Ideally yes but it's not always clear what the consequences of failure are.
-
-> A caller than cannot sleep MUST have other options, because failure is
-> always possible.
-> The "other option" might be failure (error to user space, dropped packets
-> etc), but sometimes failure IS an option.
+> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+> ---
+>  tools/bpf/bpftool/Makefile    | 1 +
+>  tools/bpf/runqslower/Makefile | 5 +++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index f610e184ce02a..36ac0002e386f 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
+>  		-I$(or $(OUTPUT),.) \
+>  		-I$(srctree)/tools/include/uapi/ \
+>  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
+> +		-fno-stack-protector \
+>  		-g -O2 -Wall -target bpf -c $< -o $@
+>  	$(Q)$(LLVM_STRIP) -g $@
+>  
 
-True, but it varies how gracefully it's handled and there is some cut&paste
-involved and other cases where the GFP_ATOMIC usage predated the existance
-or awareness of NOWAIT.
+For bpftool, a similar patch was already submitted and merged to the
+bpf-next tree last Friday: 878625e1c7a1 ("bpftool: Always disable stack
+protection for BPF objects").
 
-> So the difference between ATOMIC and NOWAIT boils down to the perceived
-> cost of the "other options".  If that cost is high, then include
-> __GFP_HIGH to get GFP_ATOMIC.  If that cost is low, then don't include
-> __GFP_HIGH and get GFP_NOWAIT.
-> 
+> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+> index 8b3d87b82b7a2..f7313cc966a04 100644
+> --- a/tools/bpf/runqslower/Makefile
+> +++ b/tools/bpf/runqslower/Makefile
+> @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+>  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+>  
+>  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+> -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
+> -		 -c $(filter %.c,$^) -o $@ &&				      \
+> +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
+> +		 -fno-stack-protector 					\
+> +		 -c $(filter %.c,$^) -o $@ &&				\
+>  	$(LLVM_STRIP) -g $@
+>  
+>  $(OUTPUT)/%.o: %.c | $(OUTPUT)
 
-Again, ideally yes but not necessary true. It depends on how careful
-the caller was. The core appears to get it right in the cases I checked,
-I'm less sure about drivers.
+This one looks good, thanks!
 
-> I don't think there is any useful third option that is worth supporting.
-> 
+I note a few more places in the repository where we compile to BPF using
+clang. Given that there have been patches to add -fno-stack-protector at
+several locations already, have you checked if any of these also need
+the flag, by any chance, so we could fix this once and for all?
 
-That's what we'll find out over time once the series hits a released
-kernel.
-
--- 
-Mel Gorman
-SUSE Labs
+$ git grep -l 'target bpf ' | egrep -v '(Documentation|bpftool)'
+kernel/bpf/preload/iterators/Makefile
+samples/bpf/Makefile
+samples/bpf/test_lwt_bpf.sh
+tools/bpf/runqslower/Makefile
+tools/build/feature/Makefile
+tools/perf/Makefile.perf
+tools/perf/util/llvm-utils.c
+tools/testing/selftests/bpf/Makefile
+tools/testing/selftests/net/bpf/Makefile
+tools/testing/selftests/tc-testing/Makefile
