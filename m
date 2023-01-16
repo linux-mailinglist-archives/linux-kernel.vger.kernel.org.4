@@ -2,94 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F94766B84C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5F966B84E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjAPHhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 02:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S231965AbjAPHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjAPHh2 (ORCPT
+        with ESMTP id S231658AbjAPHi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 02:37:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C563A449C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:37:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 30BB8CE0EAF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A505C433EF;
-        Mon, 16 Jan 2023 07:37:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673854644;
-        bh=Tl6jLwg9ODlFWmZcwhzVGr7C/u1X+6fbamRRbNhBmw8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m8qsO75donOoh2XLqMaXotNJX+0a2mfQExgIP8AZfyfLQq+yD1Pf5CP6Ni/T3XcQh
-         OSVostHbcmVZ+jGtmz48pdlDvQxZ2LUemKCczVSjotUr0/9Jhg45YQVmtKexP9aIxv
-         K9qRj+aTgdwXZjAE8uzkFKmQWsVNA8QhLG3jBQpbvldFXLOBIzIWEG9VN+yDzyz/MV
-         PNIIJ5O1NDAuXhQIvEnCHve3RNz+3DWRvzFsyUojqcZv9mCB1yGfp8fE5/PsdUdCNZ
-         NC2k15EYGjFGsKiaEk+rmQuLfL8LbyvLwIgjmfrsJSqNMCRaUDV4hT69fsKqotbLFU
-         gj5yF0jfEkHvA==
-Date:   Mon, 16 Jan 2023 09:37:13 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] memblock: Make finding index faster when modify
- regions.
-Message-ID: <Y8T+qWlUT1KTeFNI@kernel.org>
-References: <20230113082659.65276-1-zhangpeng.00@bytedance.com>
- <20230113082659.65276-3-zhangpeng.00@bytedance.com>
- <Y8QHehG1L+kuyqoR@kernel.org>
- <acbfecf4-e3ee-4df2-6685-6cefca38bde6@bytedance.com>
+        Mon, 16 Jan 2023 02:38:26 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271AAEC5A;
+        Sun, 15 Jan 2023 23:38:26 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id a184so20328616pfa.9;
+        Sun, 15 Jan 2023 23:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wg2T7VbG1bTB43Zc6Xhxiu8pDGnHxwrmqsD8uohWqzI=;
+        b=c/o2eejMpCEX9+LbXr0G3W+lLXEAq4aJO5DeAj/rq6nDlhFyWsdWwFMtsrqPALIkdZ
+         tO+Y9ltQyunuUhqscifD/9mjbBvIyKUYr3Nvba6fJnXI7hNfRERcmUyB8r/a5skNHOg/
+         e3CDBO2QkkgI54Ta0X3Y4NgO5NkOw4i0ktxzKy1cVoiaUWeb0SuRwRQhSUsSyjlKoyOc
+         sPtFlq0uLnvuFNqiakRog1fj1jI4fyuv0LE0x7Ub/b7tw0SqIDOFU/BgUo+wADZiAE5H
+         ozJmFiDkd/KBJgNeqgD4jwFECBqETrj12WCr1W/ybTb7APyrK83CvkwBfjBCLfdP1pt8
+         qItQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wg2T7VbG1bTB43Zc6Xhxiu8pDGnHxwrmqsD8uohWqzI=;
+        b=Dctd58H+AR8+tvfRIzR8c8jfuzyUkPH8CLggVd0PVOksYqTbDaPeIdZZEfyTcX8OzT
+         QnfuD+mJGAOo3ylHQOlikWydI0+VN7T8uHjrigLrUR78PbPQQ9iyoesOT4aJYjmbUTcO
+         URig7/iJKQ6yNKrLCOWfulHk+672o+SOKPRUbUFuv6XyDYB3KE5a0gcberpwg5s8DOcr
+         eCzrbiJqzDUBqexTCRGS0qk+PN1xoAY+sFfiaQ9JoDCId6VMyXQErJHcwQ+EuhkpcCkA
+         Kfda5CClJ0L9pnEQP7okhzp7dkKsvXPuszQ0XiBtJ2dY7Hg6/J+brzhA6Q7F/S5BEYoo
+         L1tA==
+X-Gm-Message-State: AFqh2kqyHy/AXI8sxUrrd6heZ/FC3Jl12D9iM4Q8z+UErhXDW2YG7e5+
+        jYj1VCVT+jFJmJQXq+AqEQE=
+X-Google-Smtp-Source: AMrXdXuA1AF7GFtm9Vbyh7WL1RWa6Q2O0F8ZmIdRf8KnJWCmui4roXckeQ41N3CzYX+F7LLWJGPq9w==
+X-Received: by 2002:a05:6a00:bf5:b0:57c:2ab7:2c0b with SMTP id x53-20020a056a000bf500b0057c2ab72c0bmr12295617pfu.28.1673854705586;
+        Sun, 15 Jan 2023 23:38:25 -0800 (PST)
+Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
+        by smtp.gmail.com with ESMTPSA id 65-20020a621844000000b005877d374069sm15020304pfy.10.2023.01.15.23.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 23:38:25 -0800 (PST)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH v4 net] tcp: avoid the lookup process failing to get sk in ehash table
+Date:   Mon, 16 Jan 2023 15:38:13 +0800
+Message-Id: <20230116073813.24097-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <acbfecf4-e3ee-4df2-6685-6cefca38bde6@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:17:40AM +0800, Peng Zhang wrote:
-> 
-> 
-> 在 2023/1/15 22:02, Mike Rapoport 写道:
-> > Hi,
-> > 
-> > On Fri, Jan 13, 2023 at 04:26:58PM +0800, Peng Zhang wrote:
-> > > We can use binary search to find the index to modify regions in
-> > > memblock_add_range() and memblock_isolate_range(). Because the
-> > > arrangement of regions is ordered. It may be faster when there are
-> > > many regions. So implemented a binary search and a new macro to walk
-> > > regions.
-> > 
-> > Did you see a measurable speedup with this optimization?
-> > I'm not in favor of micro-optimizations that complicate code.
-> > 
-> Thank you for your reply. I haven't measured this patch yet, theoretically
-> this small optimization might be difficult to observe.
-> If you think this patch complicates the code, you can ignore this patch.
-> 
-> These three patches are independent and they can be applied independently.
-> The logic of the third patch is very simple. It will not complicate the
-> code. It is tested by the default configuration of qemu. The total number of
-> iterations of memblock_merge_regions() in the third patch is reduced from
-> more than one thousand to more than one hundred, this is only in the case of
-> a small number of regions. Can you consider the third patch?
+From: Jason Xing <kernelxing@tencent.com>
 
-Can you please send the numbers and show how did you obtained them?
+While one cpu is working on looking up the right socket from ehash
+table, another cpu is done deleting the request socket and is about
+to add (or is adding) the big socket from the table. It means that
+we could miss both of them, even though it has little chance.
 
-> Sincerely yours,
-> Peng.
+Let me draw a call trace map of the server side.
+   CPU 0                           CPU 1
+   -----                           -----
+tcp_v4_rcv()                  syn_recv_sock()
+                            inet_ehash_insert()
+                            -> sk_nulls_del_node_init_rcu(osk)
+__inet_lookup_established()
+                            -> __sk_nulls_add_node_rcu(sk, list)
 
+Notice that the CPU 0 is receiving the data after the final ack
+during 3-way shakehands and CPU 1 is still handling the final ack.
+
+Why could this be a real problem?
+This case is happening only when the final ack and the first data
+receiving by different CPUs. Then the server receiving data with
+ACK flag tries to search one proper established socket from ehash
+table, but apparently it fails as my map shows above. After that,
+the server fetches a listener socket and then sends a RST because
+it finds a ACK flag in the skb (data), which obeys RST definition
+in RFC 793.
+
+Besides, Eric pointed out there's one more race condition where it
+handles tw socket hashdance. Only by adding to the tail of the list
+before deleting the old one can we avoid the race if the reader has
+already begun the bucket traversal and it would possibly miss the head.
+
+Many thanks to Eric for great help from beginning to end.
+
+Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+---
+v4:
+1) adjust the code style and make it easier to read.
+
+v3:
+1) get rid of else-if statement.
+
+v2:
+1) adding the sk node into the tail of list to prevent the race.
+2) fix the race condition when handling time-wait socket hashdance.
+---
+ net/ipv4/inet_hashtables.c    | 18 ++++++++++++++++--
+ net/ipv4/inet_timewait_sock.c |  6 +++---
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 24a38b56fab9..c64eec874b31 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -650,8 +650,21 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+ 	spin_lock(lock);
+ 	if (osk) {
+ 		WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+-		ret = sk_nulls_del_node_init_rcu(osk);
+-	} else if (found_dup_sk) {
++		if (sk_hashed(osk)) {
++			/* Before deleting the node, we insert a new one to make
++			 * sure that the look-up-sk process would not miss either
++			 * of them and that at least one node would exist in ehash
++			 * table all the time. Otherwise there's a tiny chance
++			 * that lookup process could find nothing in ehash table.
++			 */
++			__sk_nulls_add_node_tail_rcu(sk, list);
++			sk_nulls_del_node_init_rcu(osk);
++		} else {
++			ret = false;
++		}
++		goto unlock;
++	}
++	if (found_dup_sk) {
+ 		*found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
+ 		if (*found_dup_sk)
+ 			ret = false;
+@@ -660,6 +673,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+ 	if (ret)
+ 		__sk_nulls_add_node_rcu(sk, list);
+ 
++unlock:
+ 	spin_unlock(lock);
+ 
+ 	return ret;
+diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+index 1d77d992e6e7..6d681ef52bb2 100644
+--- a/net/ipv4/inet_timewait_sock.c
++++ b/net/ipv4/inet_timewait_sock.c
+@@ -91,10 +91,10 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
+ }
+ EXPORT_SYMBOL_GPL(inet_twsk_put);
+ 
+-static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
++static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
+ 				   struct hlist_nulls_head *list)
+ {
+-	hlist_nulls_add_head_rcu(&tw->tw_node, list);
++	hlist_nulls_add_tail_rcu(&tw->tw_node, list);
+ }
+ 
+ static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
+@@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
+ 
+ 	spin_lock(lock);
+ 
+-	inet_twsk_add_node_rcu(tw, &ehead->chain);
++	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
+ 
+ 	/* Step 3: Remove SK from hash chain */
+ 	if (__sk_nulls_del_node_init_rcu(sk))
 -- 
-Sincerely yours,
-Mike.
+2.37.3
+
