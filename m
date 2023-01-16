@@ -2,196 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C0066D0ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0327366D0F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234525AbjAPV3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S234493AbjAPV3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbjAPV2v (ORCPT
+        with ESMTP id S234410AbjAPV3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:28:51 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C528B29E0C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:28:49 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id z8-20020a056e02088800b0030c247efc7dso21598415ils.15
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:28:49 -0800 (PST)
+        Mon, 16 Jan 2023 16:29:30 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3E52BEF9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:29:10 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x40so10325947lfu.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:29:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FqTPgVEI+/l0Z2M0FqNHN/wbtlAyAwzZL0OO5z8BaCc=;
+        b=jhMWQjDKGdbCHydqu5ubgmaJLHdxpngHI5nIJF0VbdiS0N39R/lmWztXM0FfDp/deu
+         9W+CdGTu3IqFjDdhFus0JXhdV1t8Afe4N3GXQNZgkaOwo3waflvGyJRpE4Z2/NiQvbhw
+         pnxs7b1q0YWuQgkDeRHi8tXd+keSvtCEb+IoDiE8PJ+5kxdHUnYEVDsQF781coj2Xu+y
+         UwYTNj69ieAKeoZ7BLs0fYqxYrol4bv7oWT3XoNzlJFI7I3AEgbesFMWqZgKNAEph5Uu
+         isYn0HT2hOwcdFvWvZT/2vju2xbuxMW9HttRClnJoqXQ89KrMieXnDQLFK37RzrB6V26
+         VtYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2XCwDhtAn7jFlbT/UnBt4PISFMusnU1tJQ4/TMA1T0g=;
-        b=S5pwomoUfzNXc1hRbfCVa6q+UtMzPwuOsqDqkgO3CBA+5TLGWgr1GDwFoTqoB8/qF/
-         24ae6/9M4btp4Td96y+gSYDFWSkrkNaQkm1lXyy3b3z2bjx7f4kHrp5fKapNgNhWDBFr
-         MIXu/QEN2+TyFP4UUJ/ImU32cZcT8FwhEIZ5slV+AQg7XjiCilGjsBhvhttpxjLzFXYC
-         r3NXhCp5ygjYiseK4RBTk/SIQChwhmOjs7ygofZT3jTw6q4QtVQEbIciXCqfsBD2Dzfp
-         v+jadHpplTjWrLWVTjhkBXdjaDZcdW0JuV9BTGQspjun9tyE7nL6Jh+hsKPOeqRRGYh1
-         5iRg==
-X-Gm-Message-State: AFqh2ko9nFnS10D48yb3Mu3qHNRKfBdnrqvtwweXr7hCc1OGhhPtsQex
-        50SuDkXqfrYNRis4Zx4j4tDSKzmcpgezEo6ik38ClEDWB06I
-X-Google-Smtp-Source: AMrXdXv482S15UmyPtDD+qmSxm86zoKq+p8wQhtrV8IVRZtWPlwG6GH7RPwh600RvablVQVxhYvjTrblXD1FEi5oW00bSJFBcgZR
+        bh=FqTPgVEI+/l0Z2M0FqNHN/wbtlAyAwzZL0OO5z8BaCc=;
+        b=Kd1ufkSzOlJIQgJ/1Ndvq1Gp1W8o9pdZHYLuLkjjaE5IlmgXO0XZZ8ixSFNa6BOuP9
+         UqAJOrgjnQYXhh25wNYSLNNO7Rw/natBUUrtMXhgIAJuwrgImq1orEEUKnsAsk7kId7L
+         ZTGu2UzK4qKNye1AXv1dlu6mudZBX19GtBT+TUy3853zH3qvZctcXPPO9eEnegAvRV+O
+         dFQ9MxfXQa8m1O/hsp5Cc2kj1tjeq1dlx9mwnWtar/KdI3uUad25OMheX/k+aj4xOjqX
+         xpManAprZQ//WnOYS/wASRTnKl78JZRVIq0LvHkPjGTn+fu+Id71/vIAukMFbQ0+wsOc
+         Lgqw==
+X-Gm-Message-State: AFqh2krukUmmqCwBUzQCR82jZghCiwCbKUs3+t8/PASMAcN+nf15d42C
+        meX55ay5XgOmeyzjBHWm5oHm2A==
+X-Google-Smtp-Source: AMrXdXuufVRubDriD/2a/Gz86R2bSzUvxoguE9Cq9tfcujYu1aRL76EHwPDPPYn9I3UYwcsO/DL6hw==
+X-Received: by 2002:ac2:4f04:0:b0:4a4:68b8:f4bd with SMTP id k4-20020ac24f04000000b004a468b8f4bdmr143452lfr.3.1673904548546;
+        Mon, 16 Jan 2023 13:29:08 -0800 (PST)
+Received: from [127.0.0.1] (85-76-18-55-nat.elisa-mobile.fi. [85.76.18.55])
+        by smtp.gmail.com with ESMTPSA id j11-20020a056512344b00b004d580823c25sm128540lfr.11.2023.01.16.13.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 13:29:08 -0800 (PST)
+Date:   Mon, 16 Jan 2023 23:29:04 +0200
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v7 1/7] dt-bindings: clock: Convert qcom,krait-cc to yaml
+User-Agent: K-9 Mail for Android
+In-Reply-To: <63c5bf92.050a0220.bca9b.5439@mx.google.com>
+References: <20230116204751.23045-1-ansuelsmth@gmail.com> <20230116204751.23045-2-ansuelsmth@gmail.com> <CAA8EJppdYqwM6n+6BdKtjO+TTerqeodLO7CEpBVNW45yduFV0g@mail.gmail.com> <63c5bf92.050a0220.bca9b.5439@mx.google.com>
+Message-ID: <E690C301-63D8-4563-8A82-43D2EB996D10@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d74c:0:b0:30d:a23a:604f with SMTP id
- e12-20020a92d74c000000b0030da23a604fmr105030ilq.139.1673904529168; Mon, 16
- Jan 2023 13:28:49 -0800 (PST)
-Date:   Mon, 16 Jan 2023 13:28:49 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9606605f2684493@google.com>
-Subject: [syzbot] possible deadlock in lapb_disconnect_request
-From:   syzbot <syzbot+c9450e09c6b15886782c@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-x25@vger.kernel.org,
-        ms@dev.tdt.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+16 =D1=8F=D0=BD=D0=B2=D0=B0=D1=80=D1=8F 2023 =D0=B3=2E 23:20:17 GMT+02:00, =
+Christian Marangi <ansuelsmth@gmail=2Ecom> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>On Mon, Jan 16, 2023 at 11:14:10PM +0200, Dmitry Baryshkov wrote:
+>> On Mon, 16 Jan 2023 at 22:48, Christian Marangi <ansuelsmth@gmail=2Ecom=
+> wrote:
+>> >
+>> > Convert qcom,krait-cc to yaml Documentation=2E
+>> >
+>> > Signed-off-by: Christian Marangi <ansuelsmth@gmail=2Ecom>
+>> > Reviewed-by: Krzysztof Kozlowski <krzk@kernel=2Eorg>
+>> > Acked-by: Rob Herring <robh@kernel=2Eorg>
+>>=20
+>> I know this has been reviewed already=2E I checked again my apq8064
+>> branch and noticed that the bindings are not compatible with the
+>> apq8064=2E The SoC in question is a 4-core device, so this is what I ha=
+d
+>> in mind:
+>>=20
+>>        kraitcc: clock-controller {
+>>                compatible =3D "qcom,krait-cc-v1";
+>>                clocks =3D <&gcc PLL9>, /* hfpll0 */
+>>                         <&gcc PLL10>, /* hfpll1 */
+>>                         <&gcc PLL16>, /* hfpll2 */
+>>                         <&gcc PLL17>, /* hfpll3 */
+>>                         <&gcc PLL12>, /* hfpll_l2 */
+>>                         <&acc0>,
+>>                         <&acc1>,
+>>                         <&acc2>,
+>>                         <&acc3>,
+>>                         <&l2cc>;
+>>                clock-names =3D "hfpll0",
+>>                              "hfpll1",
+>>                              "hfpll2",
+>>                              "hfpll3",
+>>                              "hfpll_l2",
+>>                              "acpu0_aux",
+>>                              "acpu1_aux",
+>>                              "acpu2_aux",
+>>                              "acpu3_aux",
+>>                              "acpu_l2_aux";
+>>                #clock-cells =3D <1>;
+>>        };
+>>=20
+>
+>Oh wow=2E=2E=2E Wasn't aware, but I wonder if a good idea would be to pat=
+ch
+>the yaml if and when this series is merged? This is a direct conversion
+>of the krait-cc txt=2E=2E=2E
+>
+>If we really want I can send a v8 with adding these extra stuff to the
+>just converted yaml in a different commit? (afaik conversion should not
+>add more info if the documentation is not broken enough and can be
+>converted)
 
-syzbot found the following issue on:
+I think we can ask Bjorn to pick the rest of the patches (if they are acke=
+d/reviewed, they look good to me) and work on this one=2E It might make sen=
+se to add per-SoC compatibles=2E Also note, the qsb clock=2E Which block ge=
+nerates it on ipq8064?
 
-HEAD commit:    358a161a6a9e Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=150ef54a480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2573056c6a11f00d
-dashboard link: https://syzkaller.appspot.com/bug?extid=c9450e09c6b15886782c
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1760c716480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a8500e480000
+>
+>> > ---
+>> >  =2E=2E=2E/bindings/clock/qcom,krait-cc=2Etxt          | 34 ---------=
+--
+>> >  =2E=2E=2E/bindings/clock/qcom,krait-cc=2Eyaml         | 59 +++++++++=
+++++++++++
+>> >  2 files changed, 59 insertions(+), 34 deletions(-)
+>> >  delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krai=
+t-cc=2Etxt
+>> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,krai=
+t-cc=2Eyaml
+>> >
+>> > diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc=2E=
+txt b/Documentation/devicetree/bindings/clock/qcom,krait-cc=2Etxt
+>> > deleted file mode 100644
+>> > index 030ba60dab08=2E=2E000000000000
+>> > --- a/Documentation/devicetree/bindings/clock/qcom,krait-cc=2Etxt
+>> > +++ /dev/null
+>> > @@ -1,34 +0,0 @@
+>> > -Krait Clock Controller
+>> > -
+>> > -PROPERTIES
+>> > -
+>> > -- compatible:
+>> > -       Usage: required
+>> > -       Value type: <string>
+>> > -       Definition: must be one of:
+>> > -                       "qcom,krait-cc-v1"
+>> > -                       "qcom,krait-cc-v2"
+>> > -
+>> > -- #clock-cells:
+>> > -       Usage: required
+>> > -       Value type: <u32>
+>> > -       Definition: must be 1
+>> > -
+>> > -- clocks:
+>> > -       Usage: required
+>> > -       Value type: <prop-encoded-array>
+>> > -       Definition: reference to the clock parents of hfpll, secondar=
+y muxes=2E
+>> > -
+>> > -- clock-names:
+>> > -       Usage: required
+>> > -       Value type: <stringlist>
+>> > -       Definition: must be "hfpll0", "hfpll1", "acpu0_aux", "acpu1_a=
+ux", "qsb"=2E
+>> > -
+>> > -Example:
+>> > -
+>> > -       kraitcc: clock-controller {
+>> > -               compatible =3D "qcom,krait-cc-v1";
+>> > -               clocks =3D <&hfpll0>, <&hfpll1>, <&acpu0_aux>, <&acpu=
+1_aux>, <qsb>;
+>> > -               clock-names =3D "hfpll0", "hfpll1", "acpu0_aux", "acp=
+u1_aux", "qsb";
+>> > -               #clock-cells =3D <1>;
+>> > -       };
+>> > diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc=2E=
+yaml b/Documentation/devicetree/bindings/clock/qcom,krait-cc=2Eyaml
+>> > new file mode 100644
+>> > index 000000000000=2E=2E8caa5a677394
+>> > --- /dev/null
+>> > +++ b/Documentation/devicetree/bindings/clock/qcom,krait-cc=2Eyaml
+>> > @@ -0,0 +1,59 @@
+>> > +# SPDX-License-Identifier: GPL-2=2E0-only OR BSD-2-Clause
+>> > +%YAML 1=2E2
+>> > +---
+>> > +$id: http://devicetree=2Eorg/schemas/clock/qcom,krait-cc=2Eyaml#
+>> > +$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
+>> > +
+>> > +title: Qualcomm Krait Clock Controller
+>> > +
+>> > +maintainers:
+>> > +  - Christian Marangi <ansuelsmth@gmail=2Ecom>
+>> > +
+>> > +description: |
+>> > +  Qualcomm Krait Clock Controller used to correctly scale the CPU an=
+d the L2
+>> > +  rates=2E
+>> > +
+>> > +properties:
+>> > +  compatible:
+>> > +    enum:
+>> > +      - qcom,krait-cc-v1
+>> > +      - qcom,krait-cc-v2
+>> > +
+>> > +  clocks:
+>> > +    items:
+>> > +      - description: phandle to hfpll for CPU0 mux
+>> > +      - description: phandle to hfpll for CPU1 mux
+>> > +      - description: phandle to CPU0 aux clock
+>> > +      - description: phandle to CPU1 aux clock
+>> > +      - description: phandle to QSB fixed clk
+>> > +
+>> > +  clock-names:
+>> > +    items:
+>> > +      - const: hfpll0
+>> > +      - const: hfpll1
+>> > +      - const: acpu0_aux
+>> > +      - const: acpu1_aux
+>> > +      - const: qsb
+>> > +
+>> > +  '#clock-cells':
+>> > +    const: 1
+>> > +
+>> > +required:
+>> > +  - compatible
+>> > +  - clocks
+>> > +  - clock-names
+>> > +  - '#clock-cells'
+>> > +
+>> > +additionalProperties: false
+>> > +
+>> > +examples:
+>> > +  - |
+>> > +    clock-controller {
+>> > +      compatible =3D "qcom,krait-cc-v1";
+>> > +      clocks =3D <&hfpll0>, <&hfpll1>,
+>> > +               <&acpu0_aux>, <&acpu1_aux>, <&qsb>;
+>> > +      clock-names =3D "hfpll0", "hfpll1",
+>> > +                    "acpu0_aux", "acpu1_aux", "qsb";
+>> > +      #clock-cells =3D <1>;
+>> > +    };
+>> > +=2E=2E=2E
+>> > --
+>> > 2=2E37=2E2
+>> >
+>>=20
+>>=20
+>> --=20
+>> With best wishes
+>> Dmitry
+>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/99d14e0f4c19/disk-358a161a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/23275b612976/vmlinux-358a161a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ed79195fac61/Image-358a161a.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c9450e09c6b15886782c@syzkaller.appspotmail.com
-
-8021q: adding VLAN 0 to HW filter on device bond1475
-============================================
-WARNING: possible recursive locking detected
-6.2.0-rc3-syzkaller-16369-g358a161a6a9e #0 Not tainted
---------------------------------------------
-syz-executor129/7388 is trying to acquire lock:
-ffff0000fff929c0 (&lapb->lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff0000fff929c0 (&lapb->lock){+.-.}-{2:2}, at: lapb_disconnect_request+0xc0/0x1d4 net/lapb/lapb_iface.c:356
-
-but task is already holding lock:
-ffff0000fff571c0 (&lapb->lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff0000fff571c0 (&lapb->lock){+.-.}-{2:2}, at: lapb_device_event+0x108/0x380 net/lapb/lapb_iface.c:471
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&lapb->lock);
-  lock(&lapb->lock);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-7 locks held by syz-executor129/7388:
- #0: ffff80000da1a2f8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:75 [inline]
- #0: ffff80000da1a2f8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x458/0x82c net/core/rtnetlink.c:6138
- #1: ffff0000fff571c0 (&lapb->lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
- #1: ffff0000fff571c0 (&lapb->lock){+.-.}-{2:2}, at: lapb_device_event+0x108/0x380 net/lapb/lapb_iface.c:471
- #2: ffff80000d645548 (rcu_read_lock_bh){....}-{1:2}, at: rcu_lock_acquire+0x18/0x54 include/linux/rcupdate.h:324
- #3: ffff80000d645520 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x10/0x4c include/linux/rcupdate.h:324
- #4: ffff80000d645548 (rcu_read_lock_bh){....}-{1:2}, at: rcu_lock_acquire+0x18/0x54 include/linux/rcupdate.h:324
- #5: ffff0000ff325ed8 (_xmit_X25#2){+...}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
- #5: ffff0000ff325ed8 (_xmit_X25#2){+...}-{2:2}, at: __netif_tx_lock include/linux/netdevice.h:4316 [inline]
- #5: ffff0000ff325ed8 (_xmit_X25#2){+...}-{2:2}, at: __dev_queue_xmit+0x79c/0xdb8 net/core/dev.c:4245
- #6: ffff0000ffd76cc0 (&lapbeth->up_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
- #6: ffff0000ffd76cc0 (&lapbeth->up_lock){+...}-{2:2}, at: lapbeth_xmit+0x30/0x2b0 drivers/net/wan/lapbether.c:190
-
-stack backtrace:
-CPU: 0 PID: 7388 Comm: syz-executor129 Not tainted 6.2.0-rc3-syzkaller-16369-g358a161a6a9e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- __lock_acquire+0x808/0x3084
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x54/0x6c kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- lapb_disconnect_request+0xc0/0x1d4 net/lapb/lapb_iface.c:356
- lapbeth_xmit+0x8c/0x2b0 drivers/net/wan/lapbether.c:211
- __netdev_start_xmit include/linux/netdevice.h:4865 [inline]
- netdev_start_xmit include/linux/netdevice.h:4879 [inline]
- xmit_one net/core/dev.c:3583 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3599
- __dev_queue_xmit+0x83c/0xdb8 net/core/dev.c:4249
- bond_start_xmit+0x708/0xca0 drivers/net/bonding/bond_main.c:5457
- __netdev_start_xmit include/linux/netdevice.h:4865 [inline]
- netdev_start_xmit include/linux/netdevice.h:4879 [inline]
- xmit_one net/core/dev.c:3583 [inline]
- dev_hard_start_xmit+0xd4/0x1ec net/core/dev.c:3599
- __dev_queue_xmit+0x83c/0xdb8 net/core/dev.c:4249
- dev_queue_xmit include/linux/netdevice.h:3035 [inline]
- lapbeth_data_transmit+0xd0/0xe4 drivers/net/wan/lapbether.c:259
- lapb_data_transmit+0x3c/0x60 net/lapb/lapb_iface.c:447
- lapb_transmit_buffer+0x154/0x1a0 net/lapb/lapb_out.c:149
- lapb_send_control+0x170/0x18c net/lapb/lapb_subr.c:251
- lapb_establish_data_link+0x50/0x70
- lapb_device_event+0x2ac/0x380
- notifier_call_chain kernel/notifier.c:87 [inline]
- raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
- call_netdevice_notifiers_info net/core/dev.c:1944 [inline]
- call_netdevice_notifiers_extack net/core/dev.c:1982 [inline]
- call_netdevice_notifiers net/core/dev.c:1996 [inline]
- dev_open+0xec/0x168 net/core/dev.c:1458
- bond_enslave+0x7cc/0x1824 drivers/net/bonding/bond_main.c:1963
- do_set_master net/core/rtnetlink.c:2617 [inline]
- do_setlink+0x564/0x17a4 net/core/rtnetlink.c:2820
- __rtnl_newlink net/core/rtnetlink.c:3590 [inline]
- rtnl_newlink+0x98c/0xa08 net/core/rtnetlink.c:3637
- rtnetlink_rcv_msg+0x484/0x82c net/core/rtnetlink.c:6141
- netlink_rcv_skb+0xfc/0x1e8 net/netlink/af_netlink.c:2564
- rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6159
- netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1330
- netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1356
- netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1932
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0x2f8/0x440 net/socket.c:2476
- ___sys_sendmsg net/socket.c:2530 [inline]
- __sys_sendmsg+0x1ac/0x228 net/socket.c:2559
- __do_sys_sendmsg net/socket.c:2568 [inline]
- __se_sys_sendmsg net/socket.c:2566 [inline]
- __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2566
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-bond1475: (slave lapb2942): Enslaving as an active interface with an up link
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
