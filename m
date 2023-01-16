@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D43A66CEBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B85F66CECD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbjAPSZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S232867AbjAPS1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjAPSYX (ORCPT
+        with ESMTP id S233024AbjAPS0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:24:23 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 781EB13D72
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:11:42 -0800 (PST)
-Received: (qmail 135386 invoked by uid 1000); 16 Jan 2023 13:11:41 -0500
-Date:   Mon, 16 Jan 2023 13:11:41 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Mon, 16 Jan 2023 13:26:41 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958EC3A58B;
+        Mon, 16 Jan 2023 10:13:21 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 177A81EC054E;
+        Mon, 16 Jan 2023 19:13:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673892800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i/kh1ilFTWPtG8UywoZ6jYpIHXmqf2pU9jgg6W4/tcs=;
+        b=BRT1B4yyAW2z+g8WbQ/stM+fatfcjgjLyNkdp+OUWrixORtyBSH0Kh6dDVwJm6rM+DnuXk
+        mXc5FpQRMgx5fR09DlWEwDIqF6jYvwkasW8eQ0P0kvsYtUkOoGPp6YnAyL56laqkWWepY8
+        QrALCXN4/E/JMamNCWpaqbRcjCGGeoA=
+Date:   Mon, 16 Jan 2023 19:13:15 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kim Phillips <kim.phillips@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
-References: <20230113203241.GA2958699@paulmck-ThinkPad-P17-Gen-1>
- <136d019d8c8049f6b737627df830e66f@huawei.com>
- <20230114175343.GF2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230114181537.GA493203@paulmck-ThinkPad-P17-Gen-1>
- <Y8MOOrrHntA9TyUk@rowland.harvard.edu>
- <20230115051510.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8Qog8qf7wIx2Kve@rowland.harvard.edu>
- <20230115181052.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8RmEtBnwqOzNhsK@rowland.harvard.edu>
- <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/7] x86/cpu, kvm: Move the LFENCE_RDTSC / LFENCE
+ always serializing feature
+Message-ID: <Y8WTnx/ukvdAEeoe@zn.tnic>
+References: <20230110224643.452273-1-kim.phillips@amd.com>
+ <20230110224643.452273-5-kim.phillips@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230110224643.452273-5-kim.phillips@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 08:23:29PM -0800, Paul E. McKenney wrote:
-> On Sun, Jan 15, 2023 at 03:46:10PM -0500, Alan Stern wrote:
-> > On Sun, Jan 15, 2023 at 10:10:52AM -0800, Paul E. McKenney wrote:
-> > > On Sun, Jan 15, 2023 at 11:23:31AM -0500, Alan Stern wrote:
-> > > > On Sat, Jan 14, 2023 at 09:15:10PM -0800, Paul E. McKenney wrote:
-> > > > > What am I missing here?
-> > > > 
-> > > > I don't think you're missing anything.  This is a matter for Boqun or 
-> > > > Luc; it must have something to do with the way herd treats the 
-> > > > srcu_read_lock() and srcu_read_unlock() primitives.
-> > > 
-> > > It looks like we need something that tracks (data | rf)* between
-> > > the return value of srcu_read_lock() and the second parameter of
-> > > srcu_read_unlock().  The reason for rf rather than rfi is the upcoming
-> > > srcu_down_read() and srcu_up_read().
-> > 
-> > Or just make herd treat srcu_read_lock(s) as an annotated equivalent of 
-> > READ_ONCE(&s) and srcu_read_unlock(s, v) as an annotated equivalent of 
-> > WRITE_ONCE(s, v).  But with some special accomodation to avoid 
-> > interaction with the new carry-dep relation.
+On Tue, Jan 10, 2023 at 04:46:39PM -0600, Kim Phillips wrote:
+> The LFENCE_RDTSC / LFENCE always serializing feature was a scattered bit
+> and open-coded for KVM in __do_cpuid_func().  Add it to its newly added
+> CPUID leaf 0x80000021 EAX proper, and propagate it in kvm_set_cpu_caps()
+> instead.
 > 
-> This is a modification to herd7 you are suggesting?  Otherwise, I am
-> suffering a failure of imagination on how to properly sort it from the
-> other READ_ONCE() and WRITE_ONCE() instances.
-
-srcu_read_lock and srcu_read_unlock events would be distinguished from 
-other marked loads and stores by belonging to the Srcu-lock and 
-Srcu-unlock sets.  But I don't know whether this result can be 
-accomplished just by modifying the .def file -- it might require changes 
-to herd7.  (In fact, as far as I know there is no documentation at all 
-for the double-underscore operations used in linux-kernel.def.  Hint 
-hint!)
-
-As mentioned earlier, we should ask Luc or Boqun.
-
-
-> > > Or is there some better intermediate position that could be taken?
-> > 
-> > Do you mean go back to the current linux-kernel.bell?  The code you 
-> > wrote above is different, since it prohibits nesting.
+> Also drop the bit description comments now it's more self-describing.
 > 
-> Not to the current linux-kernel.bell, but, as you say, making the change
-> to obtain a better approximation by prohibiting nesting.
+> Whilst there, switch to using the more efficient cpu_feature_enabled()
+> instead of static_cpu_has().
+> 
+> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+> ---
+>  arch/x86/include/asm/cpufeatures.h | 3 ++-
+>  arch/x86/kvm/cpuid.c               | 9 ++++-----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 0cd7b4afd528..79da8e492c0f 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -97,7 +97,7 @@
+>  #define X86_FEATURE_SYSENTER32		( 3*32+15) /* "" sysenter in IA32 userspace */
+>  #define X86_FEATURE_REP_GOOD		( 3*32+16) /* REP microcode works well */
+>  #define X86_FEATURE_AMD_LBR_V2		( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
+> -#define X86_FEATURE_LFENCE_RDTSC	( 3*32+18) /* "" LFENCE synchronizes RDTSC */
+> +/* FREE, was #define X86_FEATURE_LFENCE_RDTSC		( 3*32+18) "" LFENCE synchronizes RDTSC */
+>  #define X86_FEATURE_ACC_POWER		( 3*32+19) /* AMD Accumulated Power Mechanism */
+>  #define X86_FEATURE_NOPL		( 3*32+20) /* The NOPL (0F 1F) instructions */
+>  #define X86_FEATURE_ALWAYS		( 3*32+21) /* "" Always-present feature */
+> @@ -428,6 +428,7 @@
+>  
+>  /* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
+>  #define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" AMD No Nested Data Breakpoints */
+> +#define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
 
-Why do you want to prohibit nesting?  Why would that be a better 
-approximation?
+Hmm, a synthetic bit which gets replaced with a vendor one and then the other
+vendors set it too. I don't see why that cannot work but we probably should be
+careful here.
 
-Alan
+dhansen, am I missing an angle?
+
+Also, X86_FEATURE_LFENCE_RDTSC gets set in init_amd() along with setting
+DE_CFG[1]. I think you should check the new flag here first and avoid the
+setting if that flag is set. Just for good measure - not that it changes
+anything but still, it is cheap to do.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
