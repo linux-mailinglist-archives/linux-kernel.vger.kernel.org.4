@@ -2,146 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD666C86F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566A966C87D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbjAPQjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S233661AbjAPQjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjAPQik (ORCPT
+        with ESMTP id S233633AbjAPQjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:38:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503812B63C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:26:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673886411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 16 Jan 2023 11:39:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34452C650;
+        Mon, 16 Jan 2023 08:27:52 -0800 (PST)
+Date:   Mon, 16 Jan 2023 16:27:49 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673886470;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r2boqvfD+RJ61HpS/wHyE329kUvwll2CIPBJV6eZl4c=;
-        b=IDjmgHopGyiIonvakEi5RH1XTKJynlefCM8gCCgv3IkRDnrFsn8eHM3cdtLzevA610m6AY
-        BoBdPpdTfnU6t+Kqz/fkCTVmcw/Ij/HM9LH0ubwdZEGXra5om8fly76wPFnJmZU3LbLIjC
-        sLJhK09JlB3X6D/6uBQb92BgmQRr17o=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-92-P-SDitaZM-OwPeXhG3cslQ-1; Mon, 16 Jan 2023 11:26:50 -0500
-X-MC-Unique: P-SDitaZM-OwPeXhG3cslQ-1
-Received: by mail-lj1-f198.google.com with SMTP id b25-20020a2e9899000000b002877a271a9dso5248707ljj.20
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:26:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r2boqvfD+RJ61HpS/wHyE329kUvwll2CIPBJV6eZl4c=;
-        b=ra5DhixLrTSDsEm9eKOdYwaNax8Kmqu9hX/THFVhoDV1vtExhNfkoFlBEMv4/N6G2T
-         pppZo6pKdLcWI7vbbztXLAc8corKlVpuvfVmu6Q4wlfRgzWxopSDzDAADJtO5o/BMx3L
-         A/weDb7w8MBsLVG3ruxZFnGkqe78Vd1Z5qv3NKpiSUCUbopY/Fw3B/nJEsBrNtnIjPRP
-         3Y4v3t6DiGjlyp3arzdhi9t8PdagsexH/+e0q6M7mp5h+KQ7wSjzjqwy6TldOn3v+vPv
-         Va82vADhFkx/f1budDK2DYI4AoYOTCu9IwLezlsVWK/RDHsM2hirRb03oIu9h8ikXnC+
-         KPJg==
-X-Gm-Message-State: AFqh2kpYeOqgZi6QPsb2zJ8ZE39ozw675qQniePzMCR59gVheUrkKP4t
-        z50sZsZfBX67NDDzaVDWinNnyR2KC7ZT1mhg9LCF3glym68/KBrz0z3kqw7UKNzdHZeC913bMLI
-        nDfrXLTEKyAKc4w1IswTMNc0q9sE9vK5coM5bYMAk
-X-Received: by 2002:a05:6512:7c:b0:4d5:7b89:7b67 with SMTP id i28-20020a056512007c00b004d57b897b67mr110385lfo.17.1673886408806;
-        Mon, 16 Jan 2023 08:26:48 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsl3G5delLpsUSEikj3rrvMcC9LUAx6uCt/IgZvb4ulTe/2Bhgjm8AC830LNMSyFXE01XKOE/f4hSEa4jTVlHk=
-X-Received: by 2002:a05:6512:7c:b0:4d5:7b89:7b67 with SMTP id
- i28-20020a056512007c00b004d57b897b67mr110384lfo.17.1673886408656; Mon, 16 Jan
- 2023 08:26:48 -0800 (PST)
+        bh=pQQL6K9+g3nFmYTxhhPBdAWY0ZIqAkC6J7tK4XIrDaU=;
+        b=4u6LSUXNyZSxsGSltzZE00kMT/aUmQ+VxdSsJ4DfrJUjWUwti00Yh60m/MD0HDMhouXc+4
+        4/jsDYItlUPEgpzN447amyAKlEW3CtjeV/FBzJyq3mMimdh2OXjIK1eQwhvkMvgQl75pqC
+        3nKQZD+J/1cpDX1IIU/qkt1KAE+YIYCGdze5SE1a56Z0QFnSVOwlhCf6CAilmA4g6dxM25
+        RP6jsAIP//uumxjvV+vOAamJGuWM61sxOD/d13sgdLpXrkUfu8KvBBIiYhrdZ+7ZQJJyA+
+        1Lr6wOYgiRJbrFleUBVOFIgUQFWrlaYzShpXUahw7tpclwTpTMun/bIPKPmTRw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673886470;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQQL6K9+g3nFmYTxhhPBdAWY0ZIqAkC6J7tK4XIrDaU=;
+        b=sgeWZOaocyIlaAYRTu9ifRlcpmZvVtfxIx7xVVr5adfXPXKlhAl4gx/4lB5+qBfKHpHGU3
+        Sn4I8c7cqemL0FDg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/i8259: Mark legacy PIC interrupts with IRQ_LEVEL
+Cc:     Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <87mt6rjrra.ffs@tglx>
+References: <87mt6rjrra.ffs@tglx>
 MIME-Version: 1.0
-References: <20230103234835.never.378-kees@kernel.org> <Y7TNtQqunHIW8her@work> <CACO55tsyCtf-_mCPVEo-4Dj_mAu-tnNTTjP75wx=9n+TS1XVvw@mail.gmail.com>
-In-Reply-To: <CACO55tsyCtf-_mCPVEo-4Dj_mAu-tnNTTjP75wx=9n+TS1XVvw@mail.gmail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Mon, 16 Jan 2023 17:26:37 +0100
-Message-ID: <CACO55tvuhLzbtg-wzy24Y7Y4k4CN_3JZM5VZ-9VPFNZK3skKCg@mail.gmail.com>
-Subject: Re: [RESEND][PATCH] drm/nouveau/fb/ga102: Replace zero-length array
- of trailing structs with flex-array
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-hardening@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
-        Gourav Samaiya <gsamaiya@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <167388646935.4906.13609836242653190947.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 5:24 PM Karol Herbst <kherbst@redhat.com> wrote:
->
-> On Wed, Jan 4, 2023 at 1:52 AM Gustavo A. R. Silva
-> <gustavoars@kernel.org> wrote:
-> >
-> > On Tue, Jan 03, 2023 at 03:48:36PM -0800, Kees Cook wrote:
-> > > Zero-length arrays are deprecated[1] and are being replaced with
-> > > flexible array members in support of the ongoing efforts to tighten the
-> > > FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> > > with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
-> > >
-> > > Replace zero-length array with flexible-array member.
-> > >
-> > > This results in no differences in binary output.
-> > >
-> > > [1] https://github.com/KSPP/linux/issues/78
-> > >
-> > > Cc: Ben Skeggs <bskeggs@redhat.com>
-> > > Cc: Karol Herbst <kherbst@redhat.com>
-> > > Cc: Lyude Paul <lyude@redhat.com>
-> > > Cc: David Airlie <airlied@gmail.com>
-> > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > Cc: Gourav Samaiya <gsamaiya@nvidia.com>
-> > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > > Cc: dri-devel@lists.freedesktop.org
-> > > Cc: nouveau@lists.freedesktop.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> >
-> > Here is my RB again:
-> >
-> > Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> >
->
-> Reviewed-by: Karol Herbst <kherbst@redhat.com>
->
-> will push in a moment
->
+The following commit has been merged into the x86/urgent branch of tip:
 
-just noticed it's the same change than the other one... anyway, will
-push the oldest one
+Commit-ID:     5fa55950729d0762a787451dc52862c3f850f859
+Gitweb:        https://git.kernel.org/tip/5fa55950729d0762a787451dc52862c3f850f859
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 09 Jan 2023 22:57:13 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 16 Jan 2023 17:24:56 +01:00
 
-> > Thanks!
-> > --
-> > Gustavo
-> >
-> > > ---
-> > > Sent before as: https://lore.kernel.org/all/20221118211207.never.039-kees@kernel.org/
-> > > ---
-> > >  drivers/gpu/drm/nouveau/include/nvfw/hs.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/nouveau/include/nvfw/hs.h b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
-> > > index 8c4cd08a7b5f..8b58b668fc0c 100644
-> > > --- a/drivers/gpu/drm/nouveau/include/nvfw/hs.h
-> > > +++ b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
-> > > @@ -52,7 +52,7 @@ struct nvfw_hs_load_header_v2 {
-> > >       struct {
-> > >               u32 offset;
-> > >               u32 size;
-> > > -     } app[0];
-> > > +     } app[];
-> > >  };
-> > >
-> > >  const struct nvfw_hs_load_header_v2 *nvfw_hs_load_header_v2(struct nvkm_subdev *, const void *);
-> > > --
-> > > 2.34.1
-> > >
-> >
+x86/i8259: Mark legacy PIC interrupts with IRQ_LEVEL
 
+Baoquan reported that after triggering a crash the subsequent crash-kernel
+fails to boot about half of the time. It triggers a NULL pointer
+dereference in the periodic tick code.
+
+This happens because the legacy timer interrupt (IRQ0) is resent in
+software which happens in soft interrupt (tasklet) context. In this context
+get_irq_regs() returns NULL which leads to the NULL pointer dereference.
+
+The reason for the resend is a spurious APIC interrupt on the IRQ0 vector
+which is captured and leads to a resend when the legacy timer interrupt is
+enabled. This is wrong because the legacy PIC interrupts are level
+triggered and therefore should never be resent in software, but nothing
+ever sets the IRQ_LEVEL flag on those interrupts, so the core code does not
+know about their trigger type.
+
+Ensure that IRQ_LEVEL is set when the legacy PCI interrupts are set up.
+
+Fixes: a4633adcdbc1 ("[PATCH] genirq: add genirq sw IRQ-retrigger")
+Reported-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Baoquan He <bhe@redhat.com>
+Link: https://lore.kernel.org/r/87mt6rjrra.ffs@tglx
+---
+ arch/x86/kernel/i8259.c   | 1 +
+ arch/x86/kernel/irqinit.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/i8259.c b/arch/x86/kernel/i8259.c
+index 3aa5304..4d8aff0 100644
+--- a/arch/x86/kernel/i8259.c
++++ b/arch/x86/kernel/i8259.c
+@@ -114,6 +114,7 @@ static void make_8259A_irq(unsigned int irq)
+ 	disable_irq_nosync(irq);
+ 	io_apic_irqs &= ~(1<<irq);
+ 	irq_set_chip_and_handler(irq, &i8259A_chip, handle_level_irq);
++	irq_set_status_flags(irq, IRQ_LEVEL);
+ 	enable_irq(irq);
+ 	lapic_assign_legacy_vector(irq, true);
+ }
+diff --git a/arch/x86/kernel/irqinit.c b/arch/x86/kernel/irqinit.c
+index beb1bad..c683666 100644
+--- a/arch/x86/kernel/irqinit.c
++++ b/arch/x86/kernel/irqinit.c
+@@ -65,8 +65,10 @@ void __init init_ISA_irqs(void)
+ 
+ 	legacy_pic->init(0);
+ 
+-	for (i = 0; i < nr_legacy_irqs(); i++)
++	for (i = 0; i < nr_legacy_irqs(); i++) {
+ 		irq_set_chip_and_handler(i, chip, handle_level_irq);
++		irq_set_status_flags(i, IRQ_LEVEL);
++	}
+ }
+ 
+ void __init init_IRQ(void)
