@@ -2,129 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF58966CA42
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B89666CA58
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbjAPRAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S231191AbjAPRCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbjAPRAW (ORCPT
+        with ESMTP id S229731AbjAPRBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:00:22 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46A459E45
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:43:05 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id i65so17900408pfc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ikxZNlHUgNrbKf+8U/yVt2M8Gk6i+Q3n7f7a9saNKsI=;
-        b=Rtmn/zdGuLDgMj9Slnnpf/54DTVzbMzb9eHnyHiw5BIn7frY+F06y/ZUr7E2DEiGju
-         0OLsAEXiAIesVl3aafeOMfq1wvVH5CIgDcXikCoKMenFqkwvcpsnnHIbJlZc2Ng5s6JF
-         68+3y6ajiz5CKq+RXJ6oQW7/Yqq6cnXskjOg60jZmKhqcc6FrKjfu3M/jw2yT06dr4Ix
-         lKPmxGQnowZBWOFQ3HXiTsLMmZdQcMLExfpj905OpC9K/cnV5MOI3zELibeReHU4OepM
-         ZRwUw//CFbaOWL/A68cWT7cbUcuHMztzkjRDfluApD9d2CuSG4LMouUwUkPXwOynzJ6/
-         tWxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ikxZNlHUgNrbKf+8U/yVt2M8Gk6i+Q3n7f7a9saNKsI=;
-        b=TmY+W/1aaDKKPyNKnMA2EWDO3WKRddCptMvccaTzSzW0kbUlg7XlTFAM8LaxS5jRYo
-         oD2RzSlbHwJU9jXK+DcGNGdWBgrh7hH2nNJB5s4ggkSLuNu7mBxumWYdo7HeL27ATnSP
-         1QSKnoNA3iZivT6JJjZzYCz+uRaCoVZ3IOF/3vQQonF0k872pcb3FMngbxijsMZAMG4N
-         YwXovYcZgoFD6yfDCGa6rEC0nGdNHccsBNnEo6nh3PXZrJrBqOOWN4WfK/6KLOvZcleQ
-         4Wwph4H7HwzeIxIHNTJTlrxgcid8spObgEey6V1lA1GQTV2177xhihca4+IGI+KBvper
-         n/sw==
-X-Gm-Message-State: AFqh2kpcjNDTzApcW2ac1+L31PgxD1KaiI0+j8PU1KeMP+sFJa5NMJFw
-        6xtekv6DkuZGKrbgurNpjV70hw==
-X-Google-Smtp-Source: AMrXdXsGM+JKHBOueEKiRd1ruDWOukTMmYx3k3dePs3jQNUQPeyMRIKpRFmIUfTREkNd6WyzHXbCbg==
-X-Received: by 2002:a05:6a00:179a:b0:58b:bc3a:622a with SMTP id s26-20020a056a00179a00b0058bbc3a622amr16498632pfg.21.1673887385170;
-        Mon, 16 Jan 2023 08:43:05 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:32ab:eb7f:cea:1014])
-        by smtp.gmail.com with ESMTPSA id w124-20020a626282000000b005769b23260fsm18932094pfb.18.2023.01.16.08.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:43:04 -0800 (PST)
-Date:   Mon, 16 Jan 2023 09:43:01 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Devarsh Thakkar <devarsht@ti.com>
-Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
-        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com, hnagalla@ti.com,
-        praneeth@ti.com, nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com,
-        j-luthra@ti.com
-Subject: Re: [PATCH v6 1/3] remoteproc: k3-r5: Simplify single core config set
-Message-ID: <20230116164301.GA3239767@p14s>
-References: <20230116151906.549384-1-devarsht@ti.com>
- <20230116151906.549384-2-devarsht@ti.com>
+        Mon, 16 Jan 2023 12:01:52 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C1F39B95;
+        Mon, 16 Jan 2023 08:43:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gFuyelicB2QFX6LrQoE6wpQRJWFtNcb69z+Tk9PIWPc=; b=RDZdnm0nIbvuFgz3GKJ/cdtdS0
+        he7c3RzhKJPfipw1gAHWAMTZfzt8GXsgPd3o9jpcr2eLLorRcO9btRUbLlYy4mjQ7sduzF6TEo1Hx
+        tn39KTtJ2LNc5HpYym0zTdAkxu3I8kNLyzLM++kFs+B2pjCx3ENhLM6QNcBSTLcBwoZqHXZyRJwwP
+        Xdr0cqR6uOQakXpVnJoJDVkrYJ0xa+TJCxBcIFVUEQllmDSyPdn6V3AsL1fVZQp15Bt9l6Q3bIA+b
+        sg0cX7CdCRDG/Uyg/Asw3oSQmD+N11GQavK8H4G18E3dNGWT3V54JyJLgHskHQTStSckFAX+vajYv
+        om6G1E0g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36134)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pHSZx-0005RP-Gn; Mon, 16 Jan 2023 16:43:25 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pHSZq-0006AQ-29; Mon, 16 Jan 2023 16:43:18 +0000
+Date:   Mon, 16 Jan 2023 16:43:18 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y8V+pvWlV6pSuDX/@shell.armlinux.org.uk>
+References: <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
+ <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
+ <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
+ <87o7qy39v5.fsf@miraculix.mork.no>
+ <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
+ <87h6wq35dn.fsf@miraculix.mork.no>
+ <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
+ <87bkmy33ph.fsf@miraculix.mork.no>
+ <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
+ <875yd630cu.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230116151906.549384-2-devarsht@ti.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <875yd630cu.fsf@miraculix.mork.no>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 08:49:04PM +0530, Devarsh Thakkar wrote:
-> The config PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE
-> is set only when cluster mode is set to
-> CLUSTER_MODE_SINGLECPU and cluster mode
-> is already configured before setting this config.
+On Mon, Jan 16, 2023 at 05:33:53PM +0100, Bjørn Mork wrote:
+> "Russell King (Oracle)" <linux@armlinux.org.uk> writes:
 > 
-> So directly check for cluster mode instead of checking
-> soc_data->single_cpu_mode first and then checking
-> cluster mode.
+> > On Mon, Jan 16, 2023 at 04:21:30PM +0100, Bjørn Mork wrote:
+> >> [   54.539438] mtk_soc_eth 15100000.ethernet wan: Link is Down
+> >> [   56.619937] mtk_sgmii_select_pcs: id=1
+> >> [   56.623690] mtk_pcs_config: interface=4
+> >> [   56.627511] offset:0 0x140
+> >> [   56.627513] offset:4 0x4d544950
+> >> [   56.630215] offset:8 0x20
+> >> [   56.633340] forcing AN
+> >> [   56.638292] mtk_pcs_config: rgc3=0x0, advertise=0x1 (changed), link_timer=1600000,  sgm_mode=0x103, bmcr=0x1000, use_an=1
+> >> [   56.649226] mtk_pcs_link_up: interface=4
+> >> [   56.653135] offset:0 0x81140
+> >> [   56.653137] offset:4 0x4d544950
+> >> [   56.656001] offset:8 0x1
+> >> [   56.659137] mtk_soc_eth 15100000.ethernet wan: Link is Up - 1Gbps/Full - flow control rx/tx
+> >
+> > Thanks - there seems to be something weird with the bmcr value printed
+> > above in the mtk_pcs_config line.
+> >
+> > You have bmcr=0x1000, but the code sets two bits - SGMII_AN_RESTART and
+> > SGMII_AN_ENABLE which are bits 9 and 12, so bmcr should be 0x1200, not
+> > 0x1000. Any ideas why?
 > 
-> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
-> ---
-> V6: No change
-> ---
->  drivers/remoteproc/ti_k3_r5_remoteproc.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
+> No, not really
 > 
-> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> index 0481926c6975..036c9dc217f3 100644
-> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> @@ -875,15 +875,14 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->  	boot_vec = 0x0;
->  	if (core == core0) {
->  		clr_cfg = PROC_BOOT_CFG_FLAG_R5_TEINIT;
-> -		if (cluster->soc_data->single_cpu_mode) {
-> -			/*
-> -			 * Single-CPU configuration bit can only be configured
-> -			 * on Core0 and system firmware will NACK any requests
-> -			 * with the bit configured, so program it only on
-> -			 * permitted cores
-> -			 */
-> -			if (cluster->mode == CLUSTER_MODE_SINGLECPU)
-> -				set_cfg = PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE;
-> +		/*
-> +		 * Single-CPU configuration bit can only be configured
-> +		 * on Core0 and system firmware will NACK any requests
-> +		 * with the bit configured, so program it only on
-> +		 * permitted cores
-> +		 */
-> +		if (cluster->mode == CLUSTER_MODE_SINGLECPU) {
-> +			set_cfg = PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE;
+> > Can you also hint at what the bits in the PHY register you quote mean
+> > please?
+> 
+> This could very well be a red herring.  It's the only difference I've
+> been able to spot, but I have no idea what it means.
+> 
+> This is an attempt at reformatting the pdf tables for email.  Hope it's
+> readable: 
 
-This is exactly the kind of buggy situation I want to avoid by asking to use
-soc_data->single_cpu_mode only in probe().
+I found the document for the PHY at:
 
->  		} else {
->  			/*
->  			 * LockStep configuration bit is Read-only on Split-mode
-> -- 
-> 2.34.1
-> 
+https://assets.maxlinear.com/web/documents/617792_gpy212b1vc_gpy212c0vc_ds_rev1.3.pdf
+
+It seems as I suspected, the PHY has not completed SGMII AN. Please
+can you read register 8 when operating at 1G speeds as well
+(VSPEC1_SGMII_CTRL)? Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
