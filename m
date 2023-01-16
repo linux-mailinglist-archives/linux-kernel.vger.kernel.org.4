@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7384166C155
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9823966C0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjAPOKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S231709AbjAPOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbjAPOIg (ORCPT
+        with ESMTP id S231743AbjAPODR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:08:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91088241E0;
-        Mon, 16 Jan 2023 06:04:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C329B80E93;
-        Mon, 16 Jan 2023 14:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE667C433EF;
-        Mon, 16 Jan 2023 14:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673877839;
-        bh=ex2P9mjaiy1ixyTthepQ1ud7mfFrU8jTvWyvwFpzCFQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NgYUoTFEWARhKkV9lP1hEh+scVZRbcJVx+YOW2tbHEsglHJFpR1PfF84uBpaghYej
-         SfybkqU2mUA+RP1/He18Kfb8Y5zjFSLj8e/AVwaXa1YR0IJ3PIOFPv/7AhZi+iybRn
-         0CwLh2LnlRM1yvobnj7l3VfqYFXsLOl1GFfDvpbp8P191BJ7MAUnhk1oi+3iMKk6bv
-         Is/30OMg4xx6VVXkytYpC4j3AO7eCqHmPSGXVkkY29QtFxZT/TLMwS4Kl2Aq6UlEg2
-         UFW4wmGaxKKjY3n7FB59Z9js69n72DU60mZd1QyIWRPp9+Qtf0sRLHMxRhj6yzEnuW
-         ak89R8oWxaQAw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jack Rosenthal <jrosenth@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 6.1 53/53] firmware: coreboot: Check size of table entry and use flex-array
-Date:   Mon, 16 Jan 2023 09:01:53 -0500
-Message-Id: <20230116140154.114951-53-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230116140154.114951-1-sashal@kernel.org>
-References: <20230116140154.114951-1-sashal@kernel.org>
+        Mon, 16 Jan 2023 09:03:17 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C422A10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:02:48 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id 203so30339719yby.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TQY8MHuSk9LBg4bjJGXRFvs4IYota2lxSV05jRoM7zo=;
+        b=MjdVdubzz+i+2MVOHNGdAD8LZ924fWZQp6mx+qg4mbRaV3Tb8brgO/8j9miGVpeBPy
+         IN+ytTjX6OQ/fEYgpRBMcZfbq3hheZSTaxcy2ByRQNDhGNj3gS61jYQtxwZi8VVCmjb2
+         BacZDDbMR35CJCjjGtGXAWS8CdKdGWYJ776MPT3mGBmP8RK27ilMf9+/cE5Xca7oz8Wr
+         35vn1URDpG9zdHH5HqXcOHMT3hQafEXjHqm8x1brEXaiYCNC7syCLNZfDbHKXXORkPz2
+         v74fFlbV6rgySBSB6+AVcKxM4HWTfreAT9bTBHQQhfrEeL1U+qWP1/37/A4+fYA2wD4v
+         Tmig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TQY8MHuSk9LBg4bjJGXRFvs4IYota2lxSV05jRoM7zo=;
+        b=6JI0YYTfrdK3izay0gYG6tdO5/QHA5urT24CbN0Viz/sS9uqONf1qnKpUnwrrkkExx
+         THwP/r1iznIPz/uGinw3y0P7X/tgJ7wU7XpVriygiIcens9pWphRJKiE7hizPPrSkEa2
+         Konsw3ZzHox5ihca828J1iYa1Wezt8NKpd30YTLHYSfdaniMunwnyltcuy+xC+Trnfa9
+         jjtYbP2vcWbajMf8AP0scUmj5ByNlvDGcx6UL9DuN5w4fAiolqek/T8ZfhyrvHg5wRxu
+         N7Iv6grxTCIn46MV/0hz1PGpv/ZFz1L1+/jr7TZOUZKzBJmtVtaD+ZTqjWoR+qIikopW
+         kQ9A==
+X-Gm-Message-State: AFqh2koNv2QAyD/zeDarqBMddhp7pWDciQinQ0S2ESAHvC8YK/IJtYON
+        F/OE0BHC7YoIJK3/8WdR1iFynjxfcsHZpDQI7OJ1wufoBe7YhA==
+X-Google-Smtp-Source: AMrXdXtRxz9SmVvead1/eVkMbw6RrkJCIXk2BBeMIoI151jIqjC/5sT2uKdUWsYnn6jtYbpF546JBBYHEHI5GK0uT0E=
+X-Received: by 2002:a25:6b0b:0:b0:7d2:8687:aea5 with SMTP id
+ g11-20020a256b0b000000b007d28687aea5mr1265558ybc.210.1673877767930; Mon, 16
+ Jan 2023 06:02:47 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230112184923.80442-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112184923.80442-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 16 Jan 2023 15:02:36 +0100
+Message-ID: <CACRpkdZua44WU077yW9ZZAj0gV2-pCJQhMD7RC4y_fagPOwr5g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: qcom: lpass-lpi: Remove duplicate
+ assignment of of_gpio_n_cells
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,79 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+On Thu, Jan 12, 2023 at 7:49 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-[ Upstream commit 3b293487b8752cc42c1cbf8a0447bc6076c075fa ]
+> The of_gpio_n_cells default is 2 when ->of_xlate() callback is
+> not defined. No need to assign it explicitly in the driver.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-The memcpy() of the data following a coreboot_table_entry couldn't
-be evaluated by the compiler under CONFIG_FORTIFY_SOURCE. To make it
-easier to reason about, add an explicit flexible array member to struct
-coreboot_device so the entire entry can be copied at once. Additionally,
-validate the sizes before copying. Avoids this run-time false positive
-warning:
+Patch applied!
 
-  memcpy: detected field-spanning write (size 168) of single field "&device->entry" at drivers/firmware/google/coreboot_table.c:103 (size 8)
-
-Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Link: https://lore.kernel.org/all/03ae2704-8c30-f9f0-215b-7cdf4ad35a9a@molgen.mpg.de/
-Cc: Jack Rosenthal <jrosenth@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Julius Werner <jwerner@chromium.org>
-Cc: Brian Norris <briannorris@chromium.org>
-Cc: Stephen Boyd <swboyd@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Julius Werner <jwerner@chromium.org>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Link: https://lore.kernel.org/r/20230107031406.gonna.761-kees@kernel.org
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Jack Rosenthal <jrosenth@chromium.org>
-Link: https://lore.kernel.org/r/20230112230312.give.446-kees@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/firmware/google/coreboot_table.c | 9 +++++++--
- drivers/firmware/google/coreboot_table.h | 1 +
- 2 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/firmware/google/coreboot_table.c b/drivers/firmware/google/coreboot_table.c
-index 9ca21feb9d45..f3694d347801 100644
---- a/drivers/firmware/google/coreboot_table.c
-+++ b/drivers/firmware/google/coreboot_table.c
-@@ -93,7 +93,12 @@ static int coreboot_table_populate(struct device *dev, void *ptr)
- 	for (i = 0; i < header->table_entries; i++) {
- 		entry = ptr_entry;
- 
--		device = kzalloc(sizeof(struct device) + entry->size, GFP_KERNEL);
-+		if (entry->size < sizeof(*entry)) {
-+			dev_warn(dev, "coreboot table entry too small!\n");
-+			return -EINVAL;
-+		}
-+
-+		device = kzalloc(sizeof(device->dev) + entry->size, GFP_KERNEL);
- 		if (!device)
- 			return -ENOMEM;
- 
-@@ -101,7 +106,7 @@ static int coreboot_table_populate(struct device *dev, void *ptr)
- 		device->dev.parent = dev;
- 		device->dev.bus = &coreboot_bus_type;
- 		device->dev.release = coreboot_device_release;
--		memcpy(&device->entry, ptr_entry, entry->size);
-+		memcpy(device->raw, ptr_entry, entry->size);
- 
- 		ret = device_register(&device->dev);
- 		if (ret) {
-diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
-index beb778674acd..4a89277b99a3 100644
---- a/drivers/firmware/google/coreboot_table.h
-+++ b/drivers/firmware/google/coreboot_table.h
-@@ -66,6 +66,7 @@ struct coreboot_device {
- 		struct coreboot_table_entry entry;
- 		struct lb_cbmem_ref cbmem_ref;
- 		struct lb_framebuffer framebuffer;
-+		DECLARE_FLEX_ARRAY(u8, raw);
- 	};
- };
- 
--- 
-2.35.1
-
+Yours,
+Linus Walleij
