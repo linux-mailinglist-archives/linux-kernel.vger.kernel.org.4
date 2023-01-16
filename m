@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0F466BE34
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D266F66BE52
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjAPMwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S231266AbjAPMzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjAPMwN (ORCPT
+        with ESMTP id S231165AbjAPMy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:52:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D11A23122;
-        Mon, 16 Jan 2023 04:50:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3C2FB80DFD;
-        Mon, 16 Jan 2023 12:50:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98CBCC433F0;
-        Mon, 16 Jan 2023 12:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673873433;
-        bh=wRMUs5dA+hlV56z20FbQaU9dm7pCuNaR84xsGGGxgCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U8E2x9IpeZVqLMV3UBBnXzRUbpww9Qc1lfuNztQyPCNGLqTlCDpkgN2Rx2wjhu8r0
-         m8w6gPm/rGP1qQ7bxkw2RGFodtcBouAwVrvyw3A9+8dIMPLqgp29Il7eNXSuBDALZ/
-         88V5SHtyrPQ/5gW//3ZKRtnOjUl0yjPMSCb6RlznVX4QhpQel8hMMJaojcAdPq0TGh
-         kLzyIw7Mo4SVoSp9M1Fsgoy3zLprZKKM4Tezmei83ZACCbiHmUWm1RxFtYSVZLcXLZ
-         sT8tBo6IkLpe0mUkt7DgROuSVE6s5l3H2AwTNDoSuJPT28FjwjYJ/ZaaNGpUJQEhLv
-         2gWIUQ4pV3czA==
-Date:   Mon, 16 Jan 2023 12:50:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH net-next] regmap: Rework regmap_mdio_c45_{read|write} for
- new C45 API.
-Message-ID: <Y8VIFexsNpJiRG11@sirena.org.uk>
-References: <20230116111509.4086236-1-michael@walle.cc>
+        Mon, 16 Jan 2023 07:54:58 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D6C22031
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:52:42 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 20so11068093ybl.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2HwxURQ04QRPHjYFiwUTAY9c1+Tu3uq4SQk4i0sNqu4=;
+        b=BX2XXb6Z/I8uqSGq+V3t+G3jgfTOzjVgOOQsSxDjQGnulfnkLrpeXJgo7xxz7Lk3gb
+         69GvlI+IeJRRULFIykgNvw14q5nFemOJXWUjCtnrpQGB8/270ANcD4Ra9GDwo5kdKXOH
+         njJzNwh14rD6t/8n6V/YIE6klTzC4otbBHzBYR1PM9o7BKsWcaawdYlxMoWwaRVt7do/
+         wP6GtqJt4YNQ6fGZvoxaNJNaMST/Xxs4MhUxU++Z2pu0A4iZCoVs5ZW0GFvP9x47vfPP
+         pNE045klwXHyEJuo2GG7O+uB1ftlF2ixt0ES468NgvgLLGObBloQEGYaqUTWLy3utNVy
+         VdtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2HwxURQ04QRPHjYFiwUTAY9c1+Tu3uq4SQk4i0sNqu4=;
+        b=X9SDzURgz3VV5jNBXx27m/p8l6+VXXQPKLaFqdmvVCCRML1S2wn1liD84pGyKGcVtW
+         Ekj4JZ9WqkVwYxqemibVlX19yWGS0GqKinLZ3ATBZdqpJ+snluW9ZXehfVwg2AuCmAaE
+         Gjs8O/nLqxYHBDE94/P5Auf4oKuZRi/QZNmXJMIG8qO3FtlKDhUZ/jyWagB6knx5a6Fn
+         I/EYzlCjB5hjNx+mif2qu9ErsZW19vUGxCwvM8T0jara2Gb8sbSIioqRUs+BZycYG7ah
+         L5euspTK4y2+GUH1yEkdNvrEXtqHb92kPluEPOBJcGtOGMi4R7joyvpkvJlFLXIU/B5s
+         gl7Q==
+X-Gm-Message-State: AFqh2koSquV3oXaCzUvVppID5jK6QZ+XGGeyLacCP9z2Xpj+XEkLiMEC
+        HsW7gHRKWnDJApaes3/LyU0NZaQi2M0y6ZoGSGZKNw==
+X-Google-Smtp-Source: AMrXdXvVqYBXE+hJ9b7YSEc2muX26rtwXJeHSCkz34eovdTPqEG7jDeQIgdO7eKutLnykzUqqBtiRDwJoRKQOLEeDNM=
+X-Received: by 2002:a25:e648:0:b0:7c2:d9f1:3b04 with SMTP id
+ d69-20020a25e648000000b007c2d9f13b04mr2486434ybh.516.1673873561962; Mon, 16
+ Jan 2023 04:52:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w6utN4xgr9Oraabp"
-Content-Disposition: inline
-In-Reply-To: <20230116111509.4086236-1-michael@walle.cc>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230116115132.348961-1-konrad.dybcio@linaro.org>
+In-Reply-To: <20230116115132.348961-1-konrad.dybcio@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 16 Jan 2023 14:52:30 +0200
+Message-ID: <CAA8EJprNzLMnU7cguMit6Y4sgU0-SOkiiL+=s_BFBZiyvNvsAw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: msm/dsi: Don't require vdds-supply on 7nm PHY
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,33 +75,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 16 Jan 2023 at 13:51, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> On some SoCs (hello SM6375) vdds-supply is not wired to any smd-rpm
+> or rpmh regulator, but instead powered by the VDD_MX/mx.lvl line,
+> which is voted for in the DSI ctrl node.
 
---w6utN4xgr9Oraabp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think we should have an explicit `if compatible then required:
+vdds-supply' clause. WDYT?
 
-On Mon, Jan 16, 2023 at 12:15:09PM +0100, Michael Walle wrote:
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+> index 9c9184f94c44..8e9031bbde73 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+> @@ -48,7 +48,6 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - vdds-supply
+>
+>  unevaluatedProperties: false
+>
+> --
+> 2.39.0
+>
 
-> Mark, could you Ack this instead of taking it through your tree,
-> because it future net-next changes will depend on it. There are
-> currently no in-tree users for this regmap. The Kconfig symbol is
-> never selected.
 
-I can just as easily send a pull request for it?
-
---w6utN4xgr9Oraabp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPFSBQACgkQJNaLcl1U
-h9BEbAf+NgAhrnfcXbvzmlaM/OS03N3s97yM2lw32GgpqbY/KKrmU9PYDzKjSC5O
-QSKQr+ypab6PdydLSu3zHq69svN72JR3J4Rze4rIGMTXApMSk1cbwnQELkr41m50
-PtVxa8o7vPbQ77jVrJUqsMIxdi6W2n0AZH1IhD+ql3yjRtLwTcqolu/uju+SU6Me
-YwSkJwyVLyVxNSe92mz6edr9Vcxfiu3KAPz5F9vyrmxd1eHr2dclFyTa7EAzpOcA
-cDyvHIJlDGUnICTki5bGFcYDH7I8aA2p0xLrXVdiXnMBpRHtlE59Uf05dT2rYeRd
-fVTeul0X37h2RMjgc2f0G17azRVhSQ==
-=LmBI
------END PGP SIGNATURE-----
-
---w6utN4xgr9Oraabp--
+-- 
+With best wishes
+Dmitry
