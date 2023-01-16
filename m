@@ -2,200 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C3766B569
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5158E66B547
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjAPB4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 20:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S231722AbjAPBgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 20:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjAPB4c (ORCPT
+        with ESMTP id S231672AbjAPBgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 20:56:32 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07119EF5
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 17:55:21 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id s12-20020a056e021a0c00b0030efd0ed890so1499273ild.7
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 17:55:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lsTO3Wt6Fuvqtm+5SSngsCyfS6hkMCtHIbCYFCWXt94=;
-        b=n2buXp4w/Myv6vIStIwKN3J47Jc75S5zsRDmIK4AotZ7gDJjVqXaUzzdoLDYZtl77Q
-         +gHFu9X2oi4Tba0A3/uHO5X1JsKE5aNEwRcQt+zwLKZOFTqZeo4XpZ8k3TX1TdwweOq/
-         8ApdqwmfY89AmvNvOZXjRPfiOF8CVqbNuPfR0xrGNZlbpJAq4Ha5J2MtfxdiiEfsVjcK
-         5eXGDpU6ilJTNFt2+RQFkzzQ6OVBL35M+VrdxFZITI+MDIaenp3ynFcaXxJg6Nz28Cdf
-         H18nsDpF6AJP/1JA7G6mrEUxd+qxvz0+mBB0lnuLzdENzTox+yUx/ZqjXUJadVedw0ZX
-         Z07Q==
-X-Gm-Message-State: AFqh2koZ6sR39Nb/5nhH3yBYnMq15hSYR67Q/jNrCUQKUy0/TUBKcbjp
-        OWZoKrhe5mOw3QPVJI99j4QF07jvyUTo3qJDX/q5dFs9wNNC
-X-Google-Smtp-Source: AMrXdXupXx4OHRn5l0n+HZZKivkCTTJl+Afk950OLjfgInGRteLowAU6no549sNnhMddBMEo8ChbwVPakHtKJc0qFapBk7yiziQj
+        Sun, 15 Jan 2023 20:36:04 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812E435A2;
+        Sun, 15 Jan 2023 17:36:02 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NwF3J3p0mz4f3nq9;
+        Mon, 16 Jan 2023 09:35:56 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgBH9CH9qcRjJsKTBg--.6034S4;
+        Mon, 16 Jan 2023 09:35:59 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>,
+        syzbot+68223fe9f6c95ad43bed@syzkaller.appspotmail.com
+Subject: [PATCH v2] ext4: fix WARNING in mb_find_extent
+Date:   Mon, 16 Jan 2023 10:00:15 +0800
+Message-Id: <20230116020015.1506120-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:d5cf:0:b0:30b:b741:205c with SMTP id
- d15-20020a92d5cf000000b0030bb741205cmr8608838ilq.113.1673834121049; Sun, 15
- Jan 2023 17:55:21 -0800 (PST)
-Date:   Sun, 15 Jan 2023 17:55:21 -0800
-In-Reply-To: <20230116012417.1876-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000032bfc305f257e049@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
-From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBH9CH9qcRjJsKTBg--.6034S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3GFW8Wr17Xry8WF4xZFyrWFg_yoW7Cw1rp3
+        W3Ar1UGr4rWr1UuF4fJr1FvF1rGw1xu3W8JrWfur1UXFy7Jw17GFyvyFy8XayqqFWUArnx
+        XFn8Gw4xKr15WaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Ye Bin <yebin10@huawei.com>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Read in io_req_caches_free
+Syzbot found the following issue:
 
-==================================================================
-BUG: KASAN: use-after-free in wq_stack_extract io_uring/slist.h:126 [inline]
-BUG: KASAN: use-after-free in io_alloc_req io_uring/io_uring.h:356 [inline]
-BUG: KASAN: use-after-free in io_req_caches_free+0x199/0x1f2 io_uring/io_uring.c:2750
-Read of size 8 at addr ffff88801da98938 by task kworker/u4:3/46
-
-CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
+EXT4-fs: Warning: mounting with data=journal disables delayed allocation, dioread_nolock, O_DIRECT and fast_commit support!
+EXT4-fs (loop0): orphan cleanup on readonly fs
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5067 at fs/ext4/mballoc.c:1869 mb_find_extent+0x8a1/0xe30
+Modules linked in:
+CPU: 1 PID: 5067 Comm: syz-executor307 Not tainted 6.2.0-rc1-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events_unbound io_ring_exit_work
+RIP: 0010:mb_find_extent+0x8a1/0xe30 fs/ext4/mballoc.c:1869
+RSP: 0018:ffffc90003c9e098 EFLAGS: 00010293
+RAX: ffffffff82405731 RBX: 0000000000000041 RCX: ffff8880783457c0
+RDX: 0000000000000000 RSI: 0000000000000041 RDI: 0000000000000040
+RBP: 0000000000000040 R08: ffffffff82405723 R09: ffffed10053c9402
+R10: ffffed10053c9402 R11: 1ffff110053c9401 R12: 0000000000000000
+R13: ffffc90003c9e538 R14: dffffc0000000000 R15: ffffc90003c9e2cc
+FS:  0000555556665300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056312f6796f8 CR3: 0000000022437000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- wq_stack_extract io_uring/slist.h:126 [inline]
- io_alloc_req io_uring/io_uring.h:356 [inline]
- io_req_caches_free+0x199/0x1f2 io_uring/io_uring.c:2750
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2982
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 5596:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1068
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2421
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3444
+ ext4_mb_complex_scan_group+0x353/0x1100 fs/ext4/mballoc.c:2307
+ ext4_mb_regular_allocator+0x1533/0x3860 fs/ext4/mballoc.c:2735
+ ext4_mb_new_blocks+0xddf/0x3db0 fs/ext4/mballoc.c:5605
+ ext4_ext_map_blocks+0x1868/0x6880 fs/ext4/extents.c:4286
+ ext4_map_blocks+0xa49/0x1cc0 fs/ext4/inode.c:651
+ ext4_getblk+0x1b9/0x770 fs/ext4/inode.c:864
+ ext4_bread+0x2a/0x170 fs/ext4/inode.c:920
+ ext4_quota_write+0x225/0x570 fs/ext4/super.c:7105
+ write_blk fs/quota/quota_tree.c:64 [inline]
+ get_free_dqblk+0x34a/0x6d0 fs/quota/quota_tree.c:130
+ do_insert_tree+0x26b/0x1aa0 fs/quota/quota_tree.c:340
+ do_insert_tree+0x722/0x1aa0 fs/quota/quota_tree.c:375
+ do_insert_tree+0x722/0x1aa0 fs/quota/quota_tree.c:375
+ do_insert_tree+0x722/0x1aa0 fs/quota/quota_tree.c:375
+ dq_insert_tree fs/quota/quota_tree.c:401 [inline]
+ qtree_write_dquot+0x3b6/0x530 fs/quota/quota_tree.c:420
+ v2_write_dquot+0x11b/0x190 fs/quota/quota_v2.c:358
+ dquot_acquire+0x348/0x670 fs/quota/dquot.c:444
+ ext4_acquire_dquot+0x2dc/0x400 fs/ext4/super.c:6740
+ dqget+0x999/0xdc0 fs/quota/dquot.c:914
+ __dquot_initialize+0x3d0/0xcf0 fs/quota/dquot.c:1492
+ ext4_process_orphan+0x57/0x2d0 fs/ext4/orphan.c:329
+ ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+ __ext4_fill_super fs/ext4/super.c:5516 [inline]
+ ext4_fill_super+0x81cd/0x8700 fs/ext4/super.c:5644
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Freed by task 46:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- io_req_caches_free+0x1b5/0x1f2 io_uring/io_uring.c:2752
- io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2982
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+Add some debug information:
+mb_find_extent: mb_find_extent block=41, order=0 needed=64 next=0 ex=0/41/1@3735929054 64 64 7
+block_bitmap: ff 3f 0c 00 fc 01 00 00 d2 3d 00 00 00 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
 
-The buggy address belongs to the object at ffff88801da988c0
- which belongs to the cache io_kiocb of size 224
-The buggy address is located 120 bytes inside of
- 224-byte region [ffff88801da988c0, ffff88801da989a0)
+Acctually, blocks per group is 64, but block bitmap indicate at least has
+128 blocks. Now, ext4_validate_block_bitmap() didn't check invalid block's
+bitmap if set.
+To resolve above issue, add check like fsck "Padding at end of block bitmap is
+not set".
 
-The buggy address belongs to the physical page:
-page:ffffea000076a600 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1da98
-memcg:ffff88801cfa1401
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff88801bf2a280 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000000c000c 00000001ffffffff ffff88801cfa1401
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5596, tgid 5595 (syz-executor.0), ts 93592785724, free_ts 93586502326
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
- __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1068
- io_alloc_req_refill io_uring/io_uring.h:348 [inline]
- io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2421
- __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3444
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2637
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc_lru+0x20e/0x580 mm/slub.c:3483
- alloc_inode_sb include/linux/fs.h:2692 [inline]
- sock_alloc_inode+0x27/0x1d0 net/socket.c:304
- alloc_inode+0x61/0x230 fs/inode.c:260
- new_inode_pseudo+0x17/0x80 fs/inode.c:1019
- sock_alloc+0x40/0x270 net/socket.c:627
- __sock_create+0xbd/0x810 net/socket.c:1479
- io_uring_get_file io_uring/io_uring.c:3604 [inline]
- io_uring_create io_uring/io_uring.c:3785 [inline]
- io_uring_setup.cold+0x1913/0x1d97 io_uring/io_uring.c:3835
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Reported-by: syzbot+68223fe9f6c95ad43bed@syzkaller.appspotmail.com
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/balloc.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Memory state around the buggy address:
- ffff88801da98800: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
- ffff88801da98880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff88801da98900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff88801da98980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88801da98a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
-Tested on:
-
-commit:         0a093b28 Add linux-next specific files for 20230112
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1073daa6480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=17832c5e480000
+diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
+index 8ff4b9192a9f..f2c415f31b75 100644
+--- a/fs/ext4/balloc.c
++++ b/fs/ext4/balloc.c
+@@ -303,6 +303,22 @@ struct ext4_group_desc * ext4_get_group_desc(struct super_block *sb,
+ 	return desc;
+ }
+ 
++static ext4_fsblk_t ext4_valid_block_bitmap_padding(struct super_block *sb,
++						    ext4_group_t block_group,
++						    struct buffer_head *bh)
++{
++	ext4_grpblk_t next_zero_bit;
++	unsigned long bitmap_size = sb->s_blocksize * 8;
++	unsigned int offset = num_clusters_in_group(sb, block_group);
++
++	if (bitmap_size <= offset)
++		return 0;
++
++	next_zero_bit = ext4_find_next_zero_bit(bh->b_data, bitmap_size, offset);
++
++	return (next_zero_bit < bitmap_size ? next_zero_bit : 0);
++}
++
+ /*
+  * Return the block number which was discovered to be invalid, or 0 if
+  * the block bitmap is valid.
+@@ -401,6 +417,15 @@ static int ext4_validate_block_bitmap(struct super_block *sb,
+ 					EXT4_GROUP_INFO_BBITMAP_CORRUPT);
+ 		return -EFSCORRUPTED;
+ 	}
++	blk = ext4_valid_block_bitmap_padding(sb, block_group, bh);
++	if (unlikely(blk != 0)) {
++		ext4_unlock_group(sb, block_group);
++		ext4_error(sb, "bg %u: block %llu: padding at end of block bitmap is not set",
++			   block_group, blk);
++		ext4_mark_group_bitmap_corrupted(sb, block_group,
++						 EXT4_GROUP_INFO_BBITMAP_CORRUPT);
++		return -EFSCORRUPTED;
++	}
+ 	set_buffer_verified(bh);
+ verified:
+ 	ext4_unlock_group(sb, block_group);
+-- 
+2.31.1
 
