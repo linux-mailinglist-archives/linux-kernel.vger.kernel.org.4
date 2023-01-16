@@ -2,188 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C818766CE25
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CBF66CE2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjAPR7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S233718AbjAPR7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjAPR6V (ORCPT
+        with ESMTP id S235200AbjAPR6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:58:21 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2065.outbound.protection.outlook.com [40.107.101.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA172305CB;
-        Mon, 16 Jan 2023 09:39:41 -0800 (PST)
+        Mon, 16 Jan 2023 12:58:49 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2083.outbound.protection.outlook.com [40.107.21.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36E355B8;
+        Mon, 16 Jan 2023 09:42:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VM4FJYNDA+/qBwofI3xjWsiq5wyBDDD+TBCWf+yccNF/ix7bwrqq6Uzex4dIQWkjv8Lf7QQ2KVZlcvDobCsT9n+szYt2tCW2SoLVx1+0r5x1kjwFhRztjXtaHDu4pOlg12g9ZH2BHpzKwimVz22DKFcqRb1tk1awbsUeOV+6kNLPjkgnMhpbO58YN2K5FLcAmxg2UivpD6038mFgsgNz/uLl9WU03ZAeouJ/ImxWbdR4svvPqZZn+muk9OJZZ3bWbkQQ/4Osi2Euhi7YZeK04txzz3zqJpB7e3rhcY5Z4olxXxpOcaQcmr3t/Ptnhvvl8BATWYg76auMumtFrCbgPA==
+ b=enKk6v9O5s1IWh3HTYMmYtF2RfdBTp0fKs5HWKeXcb2W5bYLTwLsDkTxsKdyGdeonDsZwEQpLPHA0yEeEBd0l4liUe9k2fIlrGqJeDHFZ2Vo/rsC4faHCyqXv7W8ba1K3PqTDNSb6mWEIORB74nDXbpmMOtsZ35WuPwL2DmKQgCZB9duTDZEbkppB9zEGF/6Shp7nuOY/iZfAXvffY92H4sCdmgmXZdVCAul8tU4k7dtxCNmU56YfZIK8HJ5OZzCSLfZqlfkpCnp2xDnTAtnNh+79PBXOc7Ofr/aKdILaPWv+DdvgU7b0cJWI9YWCbOseRlY6JRAWFwuCN1T6zGoPw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cj7he6aEHAdV7kojaxUUo6huinQ8kqwxP++8RACu1BY=;
- b=lxsBYa8LTiG+Q5B6tQziR90zV5e+BMxOXx8XYWmnAP8FA/MopeFWMXWda1hcW3zzppEUc+i3lbuRss48BSlRpS1XBkdLlCgOjaslMmvKZkJxt+iXpH8RZXTsIzW0aa9dT+dk73+ZNAStdoWd1QJCxOkKhaylBpPP+6UmasaboQvXh7J3vLt0WxgxlEKE41S7uC9vov3L+cD0upRxYkmr+pdbot5oqrZ/27POTucgHNLhdI2Kh+UtOUs1Q7djGUH+fdFxNvib7XYUswDVDxp1hyOGKI2gnb6KUuH6OQLmj0ezZItZ/xvuxXcynvIMpVCTFl8o/N3Fc45NuLLs0xCt+g==
+ bh=a9NfvHtt94HvuchxsBBYwc9bxTgfNsb+ydFWhknQTTY=;
+ b=X8BVUu1A1wQjYqj4RiIfAfDgHxVC786CALyZbH3tEGsSiGJzOSyzC1XswMKKeiSsh3TvFh2rR52sQC4gISn905ojWvQor+1TqbvMVi2SYsN1cQLgoW6+wURFjSvt1XFXteT3Gw7pt95uQJpQaZl3wwZDKwH8i6YDFUzABzE+rKGsGMsovIvobYzHP5nuGvwVPkaq4Q1h2Yiv6A48K4XUJ+A5IdZV1KHps+x/iwJgMmWrwZ+1+/Yt1cp1LDRhNQqdZQLTSxxC6Bsjrdk8oUkM4hpVsZ5UD44mtBCZBPlrlFmerwEKbmc+st+YcntjJF5fh8lRLvXPptPc/xJ+1j/aww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cj7he6aEHAdV7kojaxUUo6huinQ8kqwxP++8RACu1BY=;
- b=uQExVIfnnlp3oCDmFRY66UEWe6MytmeG+C1g1JD+Pf6s4T3IH+Y8+FLujEmbkElB2c9eQDpyXLtM0UIMdkvUCcOvt2wCwZL1r4vdTVWVGaE9M52uRCK/W3xItHm+xue+fN8dJkMacJtEeWvmRS1uPvVP6/zS/ny9egzThJZ1u2j9CLTEmRS0ciPn1MTeVieTicrEuNcxPhef8rfWKf6TLTRm8cCOUokbOKg1KOkenCuejZx8Sph9iEP3f1I0wYII6lM4ege2DAyCYEvUvfwi3QNxQX323TS+O5wIrEHTUKUpz6w1jo21usPKHZs+4I1qjIfY7fHnt6RIOv9s0BHi/g==
+ bh=a9NfvHtt94HvuchxsBBYwc9bxTgfNsb+ydFWhknQTTY=;
+ b=b05lAYVCc5pJQ6Qqu2mEBmo8vZXcDtPMFBVOwgfM+cZ/XRtlJxaI5ZwTPs0WuTqIhgx9wuoJCGnCBOZ2SbK9pczBlYgFnHsV2wRezvO1wgb1WEv7RjCL0YJMMZ0XftGWqj/4LIJILxIzop/u+0N5LUH2Z2OuTaHJLkONCw/O7qE=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB6564.namprd12.prod.outlook.com (2603:10b6:510:210::22) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PR3PR04MB7353.eurprd04.prod.outlook.com (2603:10a6:102:82::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 16 Jan
- 2023 17:39:40 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
- 17:39:40 +0000
-Date:   Mon, 16 Jan 2023 13:39:38 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Israel Rukshin <israelr@nvidia.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Christoph Hellwig <hch@lst.de>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Mon, 16 Jan
+ 2023 17:42:39 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
+ 17:42:39 +0000
+Date:   Mon, 16 Jan 2023 19:42:34 +0200
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Keith Busch <kbusch@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-rdma@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Selvin Xavier <selvin.xavier@broadcom.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Yishai Hadas <yishaih@nvidia.com>
-Subject: Re: [PATCH rdma-next 03/13] RDMA: Split kernel-only create QP flags
- from uverbs create QP flags
-Message-ID: <Y8WL2gQqqeZdMvr6@nvidia.com>
-References: <cover.1673873422.git.leon@kernel.org>
- <6e46859a58645d9f16a63ff76592487aabc9971d.1673873422.git.leon@kernel.org>
+        Michal Kubecek <mkubecek@suse.cz>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 net-next 04/12] net: ethtool: netlink: retrieve stats
+ from multiple sources (eMAC, pMAC)
+Message-ID: <20230116174234.yzq6cnczs6fxww6q@skbuf>
+References: <20230111161706.1465242-1-vladimir.oltean@nxp.com>
+ <20230111161706.1465242-5-vladimir.oltean@nxp.com>
+ <20230113204336.401a2062@kernel.org>
+ <20230114232214.tj6bsfhmhfg3zjxw@skbuf>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6e46859a58645d9f16a63ff76592487aabc9971d.1673873422.git.leon@kernel.org>
-X-ClientProxiedBy: BL0PR01CA0026.prod.exchangelabs.com (2603:10b6:208:71::39)
- To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+In-Reply-To: <20230114232214.tj6bsfhmhfg3zjxw@skbuf>
+X-ClientProxiedBy: AM4PR0202CA0023.eurprd02.prod.outlook.com
+ (2603:10a6:200:89::33) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB6564:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9709d8e8-c433-4848-edcf-08daf7e8a4d8
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PR3PR04MB7353:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3c80069-75b3-4723-30fb-08daf7e90fb4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dhGqcm+70oF3htcQltI+yuuirQk1+SwHi870pLn25CynUL1WwSYdWiKbPk9sqOX5N4v5IRTOn2yFdBQ0pFyd4oBl87uLRltH1N8DCeIHesFUZ8qvn19CX5OkI8oKBLk48iEhrb1GJuzCxhV8oRt4xxOniAyYS+wD1q90FpHGWO0+vspthmxd4Nt8gO/upMD/MNOtoBJ8rTQh82e/e6gGkQOnsqfWhKF/5M5KNLLwzxIM9rxknStJHsxtlBUYkJQEu3byAU6+sWyScWRfmrHma8/YSt3B0K8GirH9PHRK0LBYPfmZizmckxp9LTXEzIMWtP4552TVrFXs7BQ045a8Zd/14drU2JvKvWjF9VxsXmTMOMMQS+wJFs3+P4QVlUC669sSWfpXgowLw5SEoucvmQO4R2ayv/TO+iq3d1peo4DPY8+MWM5OdhE8ITFPnjEKh2l5B70zKxsHuZ7BFuot5DF6rsXwR+KtOuuF99ARWwC7M9WsEq4ZFlOpYmCC7VsUHzhszd6GiWE6Csc58kqQP1QnUtKjmaNzKMNmC0iKkH07SfjYjN1xhvRB6FfES4u5kKVEdzDKykWpd0VUiFY/FPHwVadp1bR/5Hlx6u0WoOCdewtwwPtaLfmu8BlojxmfSuaaLbm5HO3y/Bvt1dEnHA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(366004)(346002)(396003)(451199015)(6916009)(54906003)(41300700001)(2906002)(38100700002)(316002)(6486002)(107886003)(6506007)(478600001)(83380400001)(66476007)(4326008)(8676002)(66556008)(186003)(26005)(86362001)(6512007)(2616005)(5660300002)(36756003)(7416002)(66946007)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Mh1DUq2k/ay+cWN4uL1uRrYOASL6FXwGiPMkS4USZ2+7CSJI/ML/usoLZ/UiNm03Ou6DQWfUki9stqBY7M+ZZ94Ak99o9/AYCMGN2EEyxaLDq0K8G+wmK46TTN+VqeYXLG8hX42eeluo1++55vUAT1mWezSB3kb+uEFdtUN/TCfc8f0lqSTM/7bIxun6FS4xgGoXoJXU+8lrNHaNqBqeBYT22Sg1W559sGiGVtEqzGbhf/j4nZhpJRZg/YYQNYLEyB8jdLJZCfbKIuDEzD/cEOSay1nMs1L45ULijZY0DjE/T3EMrP4fLzfH12dZXRbGHksA+tHZV1yt9z1bv3XTZERa7AsdNA9ZuGON3RWdrxu7oRcl2xqrpJOKJrIqKtyy4+H6gUnQue8UYquZuy4EhsbRRTlRViWNx1pj6OO/dqnh1FeNxNpb6RpKlZbOxEC5NHKarMgaPgmJSKSoCbcKFP0f1iWvmfvqu+OC678BY3DJWs/O7r4CVDLODul/H/ilrQ6v/PsIJWKu1oSB3SBKvQuIqEii2fSrbnEQrjSe+2FCCTAhO026npeNpzU2UsdDZ7Oz1wQ7mtELgA9UT4PJoEGVuJaB6HyvQldFk4lqMLtSm1iJpOUzvLzRdvnEvG86M6ZhagZeQowpDdEKjvpgdg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199015)(38100700002)(33716001)(86362001)(6486002)(66556008)(9686003)(66946007)(4326008)(6916009)(66476007)(8676002)(186003)(6512007)(26005)(478600001)(54906003)(1076003)(316002)(8936002)(41300700001)(6506007)(83380400001)(44832011)(2906002)(7416002)(5660300002)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2jhN+mgCWVdPrrtULIfZoKmWJd04av+CfUuzhvhIDTyxHDy6tXNv2VyFgAYo?=
- =?us-ascii?Q?6RGri+Z181oeoFM3pZybeX9qOnhv2pyBGypHEBsP1C4rG5xO9nKB/s+2grrx?=
- =?us-ascii?Q?1vj/WQtJefMNLTFsniOig1yF8XB8dioNVr0ntwy700wslMArXfsRowNvn9BI?=
- =?us-ascii?Q?YojU4BkcYjE7QujcdG0yLIVNJEollOG1Mhhkyosw2/qWxFpmkBUWDiRweM8h?=
- =?us-ascii?Q?PmghzLU/B6+JJ+4Lgofozx1WY/h/aLcOu96yicZQyV6u+yiQpOWN7uh65THV?=
- =?us-ascii?Q?dlB3CGOLy6B1esSDaFY0ThbtnUvAS02lS9+Lv9UzOCJ9KXxuEU04S499oB9q?=
- =?us-ascii?Q?pXhhsYP/nZ3OBi1hil0kuLY8FUBdKr0tV0k5hZIE8+3sfkPtF3Kir6ImyMIG?=
- =?us-ascii?Q?OFnCBSbnAxinVmf+jzmKc6ejQMgs/2oJ6YcZ7JFsQdq+IJAHgzYz4uaPqYfZ?=
- =?us-ascii?Q?fFqrk/HcfPE9I+yKfb+m2+ZvglyKrtTOG4gzRCmj7DTaDHka7xxo/OjEasii?=
- =?us-ascii?Q?bULCaV7e2wxZinS50BPLnXclOldbUAaykhn0abH+l3V1nffSsoxLYOVoVoGq?=
- =?us-ascii?Q?X3A9p16KR2ASb+oSr1JR4Z/cMJ2CfCzfLII/TJimEcK4FabU+5WQ8VcwvEDE?=
- =?us-ascii?Q?EquRzzKWyNSrZ8R8ELP51Sqec/qTdkdwFlv9Fpf19BNIIVFJ4bxRFhrkPpT7?=
- =?us-ascii?Q?wVP5gcx09kfQjw5o8HUXZo5s/zX9eVMLoHFqpBiuuQRytPwtGJqE/rJjaea+?=
- =?us-ascii?Q?tBVYnlyKUdnuf+85/UhDgHmLb46Q761KUrpSQKhnrLzypikVipL9dt1ajzS5?=
- =?us-ascii?Q?P+J1F0u1wJeuXPFPpnub7EN6GaCTjsJiOrHOL+fiXgB+I6DWQeIbxzJlUHxQ?=
- =?us-ascii?Q?0s+et1Go1J92LwkG9h4xdC8+GMmJhxGXpNGByRvY9OU2k2nHDAJwqDXqwpMS?=
- =?us-ascii?Q?zQdnLKcH7w4523wu4nFyFCJLeJWmESRnH8l5ou/aDBVcuSEt+lyXyuEzM6+d?=
- =?us-ascii?Q?iuZIUcAfZic8yxqcxtNRSUTD7NG9URQyCa6sPtSS7/ApKnozHRR27dAjmT8d?=
- =?us-ascii?Q?+fLXROHEtGBRP8Ufg12ZNn364tMFd2d8hK/fALjdLOmXB/c3j7QBywCNBwfn?=
- =?us-ascii?Q?JcKnfN5TUIQkK2GhHUraUX9dOk06DEkzS8JNx/y8hSRMpyjYICCbzZvUMbye?=
- =?us-ascii?Q?0kmraPecHxHiDv0NUPOsIprxxe+h8LJ9BLkr0FsZsK5NyC7kkJyyGOH6Qtbr?=
- =?us-ascii?Q?TTRMPXAEq05aIYnONqeRDS/lwpDbOq2sXftwBzHEHXsW8xwX/mAEUKpn67FK?=
- =?us-ascii?Q?ZSIQ9JrPNFbHNOAGiUI7m46cbXXFuj1bIl3MW42JbuYvX7LPJHuPDSS91zyv?=
- =?us-ascii?Q?QPjwwZLqzKDc9x798ArjzEwrOYHTTD73J01/FyCWl7n4c/es2nIRSq+Qe7nF?=
- =?us-ascii?Q?mZrBALgqrknyNPuFAV7E31WXScqttJetD+poWDplG487kj3FV562J/QkiXAn?=
- =?us-ascii?Q?cwlrl5NiAwknmr82lAlyQwSttqtT1Ff0gQ/Eu6jJ3ZYIHQB5z6qu616JI3JS?=
- =?us-ascii?Q?5rZ9VoaXaJrU1Lmhif6JdRfyGtaOGZj2n10HmcjT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9709d8e8-c433-4848-edcf-08daf7e8a4d8
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YvqULhosC9BZZq7unvjYMfUy3iU1Vai7657q7M1Wa68E/F8rJfrHe38QxF7y?=
+ =?us-ascii?Q?P54U1nCpXLql8Ix+ofAumory9V3HAXIXV+95co4Ht9OhbZV7SE/ybQB1Y6s3?=
+ =?us-ascii?Q?euveEtg+v8l35v03r7OYBEchHxNffBa/4R+R4+Y2OVdGZxwBsiY5yane8k3B?=
+ =?us-ascii?Q?v/a1ftq//WGaxaqzAkuNIUGPLcEEL7NGXYaZspn+Hcc1iKm7QPRwcpw3j5Zd?=
+ =?us-ascii?Q?qJ/QAAYH3gYJw6M6iHNcIz1weyo7SLRL4nswIc7IZMHwb4oWeIXN8eB5qfbh?=
+ =?us-ascii?Q?86LU08M07x0tGTCndb9OQmOF87ah+m0Z5NEwhH+hkOxVwI07xPhBCc6ke6iz?=
+ =?us-ascii?Q?qgRuuu+c3MDmv8qli731FDtBF1twLiTrfvo5awS8vX7lz7r4VO6eiiHo4aM8?=
+ =?us-ascii?Q?zaklZFrS2SSY1DsQFfnHF993aQ+v2uFXWBGQNQZKKNU4PhX+ihR4kbZnjCTU?=
+ =?us-ascii?Q?XbYNO/MIvXp7iffxCLwT6S3DvPHJqSkUf4vDtwk/q23RRzsJ6jZzkVG0zHYO?=
+ =?us-ascii?Q?gT0HdYAHtnmwArW5Soh/1V7vO36sKasJJghld3pCo3WPvy1xHnDwwOtuvMo8?=
+ =?us-ascii?Q?YpRMUSlFJgA13lcbwH1uzYe+mgqvhYIyLwUg0mbZ5e3W1p7ydzOm8pdJCFkc?=
+ =?us-ascii?Q?eyHbMqjy+flpSXJO09rx9MnVbjNxT/yJPAdfMsolBBJznGvrMbIZQZykrdTu?=
+ =?us-ascii?Q?QCpIii+AGsZj29HANiIFZV4eB/j11HBx8PKAfBMlrC5694a4bRSoYjEeTVXj?=
+ =?us-ascii?Q?oGgP1SCjDij4avg6Bg8z4tPr36xLrtJal5ZlXpl6LNhlpfmveV0duZvbexmw?=
+ =?us-ascii?Q?w3zCEhE/gYlFO0Tw86fYpDkjenIu1/yEz8VWheqh7hvxbOe2MAaJJifm3CNp?=
+ =?us-ascii?Q?jvGUZ1gpZq6M1dBpo49I+QgjPjiUntjSJ81Pz4LCwEZpg7dkvxdOcVOpG6qM?=
+ =?us-ascii?Q?7x9OBspRusO4mOJpKyd6ouWelQSRi0r2FP+ayXIQCMdXnZwLoRj9ThQhlTyk?=
+ =?us-ascii?Q?OYVrU6XjJTp2NLH8RwWV9RrTL/FPvF+W7rkC8jPIPvjgdMFp7a+ppnGBdx0h?=
+ =?us-ascii?Q?jM51uowKhqTlJnZrs6NbjNVVTuUG4i7MdjXWCFjd1AUafleBb3UCyTYGvLOT?=
+ =?us-ascii?Q?74HwC63EjRwLPO0rTgj+9/wg4ATokqb6dApEq+z7EZTc8MN5LRyWXlOLAhWr?=
+ =?us-ascii?Q?OX9nLBMq+n8N4iuKIVETaKurny4r0W/yvgHspYJI5840lUwJGyBbE3K0LN5x?=
+ =?us-ascii?Q?s42mOGXwLu4apEqM2uj9tjr8jUy3qB4Anonx/iXApVb5uZr9FGsmquTZZOg/?=
+ =?us-ascii?Q?D69754t+2+XpqDVzFoj05KX52B/Ha70k8haU728yY4upWkBXGtfaFneyoydF?=
+ =?us-ascii?Q?d41cLLR0x5ArTxhJqIolmEAArRR5f1N6ZkxoxKwcxPsjVpE5Q83ESevDw+0G?=
+ =?us-ascii?Q?3PCcfcT5rKclT9BxhaIOKE6/x2BT7JxqgWzGz0s7HI/+H/B1ywvI2g7gHBzs?=
+ =?us-ascii?Q?/UH38Q7+cuBOMNYdk+cV9AlV9r8lizf45M2ofjvryJjhwNLDpeuw2ZaVVDUl?=
+ =?us-ascii?Q?0aD9Ud5WI9K2CNyshz/WwD1xhpfGpbJoEnzr6TiMDU7WhYr9hogqocMg0w5R?=
+ =?us-ascii?Q?QA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3c80069-75b3-4723-30fb-08daf7e90fb4
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 17:39:39.8999
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 17:42:39.1129
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qZ9fbuGKhpd9XSKckBlzMqDFIbGo7YfCP1H0f5o6hPVuaC0duDmXP4bFKtgFhZOT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6564
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: LwwpHqRMNuECm3e8DtEOnZeTipwdw81icbYQnW9q5PCwpbdAwTtoqh/o/Io+0oC+6OWZFBUBFEu41V1iX4+ZLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7353
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:05:50PM +0200, Leon Romanovsky wrote:
+On Sun, Jan 15, 2023 at 01:22:14AM +0200, Vladimir Oltean wrote:
+> On Fri, Jan 13, 2023 at 08:43:36PM -0800, Jakub Kicinski wrote:
+> > On Wed, 11 Jan 2023 18:16:58 +0200 Vladimir Oltean wrote:
+> > > +/**
+> > > + * enum ethtool_stats_src - source of ethtool statistics
+> > > + * @ETHTOOL_STATS_SRC_AGGREGATE:
+> > > + *	if device supports a MAC merge layer, this retrieves the aggregate
+> > > + *	statistics of the eMAC and pMAC. Otherwise, it retrieves just the
+> > > + *	statistics of the single (express) MAC.
+> > > + * @ETHTOOL_STATS_SRC_EMAC:
+> > > + *	if device supports a MM layer, this retrieves the eMAC statistics.
+> > > + *	Otherwise, it retrieves the statistics of the single (express) MAC.
+> > > + * @ETHTOOL_STATS_SRC_PMAC:
+> > > + *	if device supports a MM layer, this retrieves the pMAC statistics.
+> > > + */
+> > > +enum ethtool_stats_src {
+> > > +	ETHTOOL_STATS_SRC_AGGREGATE,
+> > > +	ETHTOOL_STATS_SRC_EMAC,
+> > > +	ETHTOOL_STATS_SRC_PMAC,
+> > > +};
+> > 
+> > Should we somehow call it "MAC stats"?
+> > 
+> > Right now its named like a generic attribute, but it's not part of 
+> > the header nest (ETHTOOL_A_HEADER_*).
+> > 
+> > I'm not sure myself which way is better, but feels like either it
+> > should be generic, in the header nest, and parsed by the common code;
+> > or named more specifically and stay in the per-cmd attrs.
+> 
+> Considering that I currently have separate netlink attributes for
+> ETHTOOL_MSG_STATS_GET (ETHTOOL_A_STATS_SRC) and for
+> ETHTOOL_MSG_PAUSE_GET (ETHTOOL_A_PAUSE_STATS_SRC), I'm going to add just
+> a single attribute right under ETHTOOL_A_HEADER_FLAGS for v3 and go from
+> there. Is it ok if I keep naming it ETHTOOL_A_STATS_SRC, or would you
+> prefer something else?
 
-> diff --git a/drivers/infiniband/hw/mlx4/mlx4_ib.h b/drivers/infiniband/hw/mlx4/mlx4_ib.h
-> index 17fee1e73a45..c553bf0eb257 100644
-> --- a/drivers/infiniband/hw/mlx4/mlx4_ib.h
-> +++ b/drivers/infiniband/hw/mlx4/mlx4_ib.h
-> @@ -184,7 +184,7 @@ enum mlx4_ib_qp_flags {
->  	/* Mellanox specific flags start from IB_QP_CREATE_RESERVED_START */
->  	MLX4_IB_ROCE_V2_GSI_QP = MLX4_IB_QP_CREATE_ROCE_V2_GSI,
->  	MLX4_IB_SRIOV_TUNNEL_QP = 1 << 30,
-> -	MLX4_IB_SRIOV_SQP = 1 << 31,
-> +	MLX4_IB_SRIOV_SQP = 1ULL << 31,
->  };
+I'm already lost while trying to implement this change request.
 
-These should be moved to a uapi if we are saying they are userspace
-available
+ETHTOOL_A_STATS_HEADER uses NLA_POLICY_NESTED(ethnl_header_policy),
+while ETHTOOL_A_PAUSE_HEADER uses NLA_POLICY_NESTED(ethnl_header_policy_stats).
 
-But I'm not sure they are?
+The two header nest policies look like this:
 
+const struct nla_policy ethnl_header_policy[] = {
+	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
+	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
+					    .len = ALTIFNAMSIZ - 1 },
+	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
+							  ETHTOOL_FLAGS_BASIC),
+};
 
-> diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
-> index 949cf4ffc536..cc2ddd4e6c12 100644
-> --- a/include/rdma/ib_verbs.h
-> +++ b/include/rdma/ib_verbs.h
-> @@ -1140,16 +1140,15 @@ enum ib_qp_type {
->  	IB_QPT_RESERVED10,
->  };
->  
-> +/*
-> + * bits 0, 5, 6 and 7 may be set by old kernels and should not be used.
-> + */
+const struct nla_policy ethnl_header_policy_stats[] = {
+	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
+	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
+					    .len = ALTIFNAMSIZ - 1 },
+	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
+							  ETHTOOL_FLAGS_STATS),
+};
 
-This is backwards "bits 0 5 6 7 were understood by older kernels and
-should not be used"
+The request seems to be for ETHTOOL_A_PAUSE_HEADER to use a policy like this:
 
->  enum ib_qp_create_flags {
-> -	IB_QP_CREATE_IPOIB_UD_LSO		= 1 << 0,
->  	IB_QP_CREATE_BLOCK_MULTICAST_LOOPBACK	=
->  		IB_UVERBS_QP_CREATE_BLOCK_MULTICAST_LOOPBACK,
->  	IB_QP_CREATE_CROSS_CHANNEL              = 1 << 2,
->  	IB_QP_CREATE_MANAGED_SEND               = 1 << 3,
->  	IB_QP_CREATE_MANAGED_RECV               = 1 << 4,
-> -	IB_QP_CREATE_NETIF_QP			= 1 << 5,
-> -	IB_QP_CREATE_INTEGRITY_EN		= 1 << 6,
-> -	IB_QP_CREATE_NETDEV_USE			= 1 << 7,
->  	IB_QP_CREATE_SCATTER_FCS		=
->  		IB_UVERBS_QP_CREATE_SCATTER_FCS,
->  	IB_QP_CREATE_CVLAN_STRIPPING		=
-> @@ -1159,7 +1158,18 @@ enum ib_qp_create_flags {
->  		IB_UVERBS_QP_CREATE_PCI_WRITE_END_PADDING,
->  	/* reserve bits 26-31 for low level drivers' internal use */
->  	IB_QP_CREATE_RESERVED_START		= 1 << 26,
-> -	IB_QP_CREATE_RESERVED_END		= 1 << 31,
-> +	IB_QP_CREATE_RESERVED_END		= 1ULL << 31,
+ const struct nla_policy ethnl_header_policy_mac_stats[] = {
+ 	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
+ 	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
+ 					    .len = ALTIFNAMSIZ - 1 },
+ 	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
+ 							  ETHTOOL_FLAGS_STATS),
++	[ETHTOOL_A_HEADER_MAC_STATS_SRC] = NLA_POLICY_MASK(NLA_U32,
++							   ETHTOOL_MAC_STATS_SRC_PMAC),
+ };
 
-And these should be shifted to the uapi header
+and for ETHTOOL_A_STATS_HEADER to use a policy like this:
 
-Jason
+const struct nla_policy ethnl_header_policy_mac_stats_src_basic[] = {
+	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
+	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
+					    .len = ALTIFNAMSIZ - 1 },
+	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
+							  ETHTOOL_FLAGS_BASIC),
++	[ETHTOOL_A_HEADER_MAC_STATS_SRC] = NLA_POLICY_MASK(NLA_U32,
++							   ETHTOOL_MAC_STATS_SRC_PMAC),
+};
+
+Did I get this right?
