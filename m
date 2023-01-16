@@ -2,106 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5D266D1A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D39166D1B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbjAPWRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 17:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S230210AbjAPWWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 17:22:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233203AbjAPWQX (ORCPT
+        with ESMTP id S230420AbjAPWV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 17:16:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9DD274A8;
-        Mon, 16 Jan 2023 14:16:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 16 Jan 2023 17:21:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E371CAC8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673907672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kdJEu7MIJ0YE7tvR/uF5pyHEa3dRvgT+GaMoWFZbJiw=;
+        b=RCzAOGfN0zCk49vg4pqDd1n3yjwg+TIrGwgzJ1FT83yr+iUlRg1hVK2KXcWfazNjmnyGI4
+        7Y2JRIB/KyY6Dft7E7rdEhQDrqbUNJqCHer9Gqh1e3E4KKAAkVyxRe3BkjqLMTNfU54htS
+        OwZg4XVJ0ES4pBTCz+BdkrQf715sv18=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-qbuL4ohUPBylS5bkdRswgQ-1; Mon, 16 Jan 2023 17:21:10 -0500
+X-MC-Unique: qbuL4ohUPBylS5bkdRswgQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6947DB80FCD;
-        Mon, 16 Jan 2023 22:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D545C433D2;
-        Mon, 16 Jan 2023 22:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1673907370;
-        bh=fAp1RRQ1TQOiJxJ6yT+4EP8DpJCt64A2ozBpATDf7rI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QkjDoSgF01hWN5FO0jMvhEH/X64ZCw5Y3ulmkynnXYc0jhMJQc9O7SYgKgIs7LG8Z
-         fYIcnx3D94RJZEYA2yBZUNrNy92TbIwL/Ok2FnofVwE99D7o2IP2fybuTZclXoOm53
-         O5bfq4XlXJgh01NrSpdWb54fADzJYKLvyvPWQopM=
-Date:   Mon, 16 Jan 2023 14:16:08 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        maobibo <maobibo@loongson.cn>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        David Howells <dhowells@redhat.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
-Message-Id: <20230116141608.a72015bdd8bbbedd5c50cc3e@linux-foundation.org>
-In-Reply-To: <Y8W9TR5ifZmRADLB@ZenIV>
-References: <20230107012324.30698-1-zhanghongchen@loongson.cn>
-        <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn>
-        <4b140bd0-9b7f-50b5-9e3b-16d8afe52a50@loongson.cn>
-        <Y8TUqcSO5VrbYfcM@casper.infradead.org>
-        <Y8W9TR5ifZmRADLB@ZenIV>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB64E85CBE7;
+        Mon, 16 Jan 2023 22:21:09 +0000 (UTC)
+Received: from [10.22.18.0] (unknown [10.22.18.0])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F004492B00;
+        Mon, 16 Jan 2023 22:21:09 +0000 (UTC)
+Message-ID: <221e35b8-88f5-5fc5-6961-6a8ce060a97b@redhat.com>
+Date:   Mon, 16 Jan 2023 17:21:09 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 4/3] locking/lockdep: Improve the deadlock scenario print
+ for sync and read lock
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Luczaj <mhal@rbox.co>
+References: <20230113065955.815667-1-boqun.feng@gmail.com>
+ <20230113235722.1226525-1-boqun.feng@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230113235722.1226525-1-boqun.feng@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023 21:10:37 +0000 Al Viro <viro@zeniv.linux.org.uk> wrote:
+On 1/13/23 18:57, Boqun Feng wrote:
+> Lock scenario print is always a weak spot of lockdep splats. Improvement
+> can be made if we rework the dependency search and the error printing.
+>
+> However without touching the graph search, we can improve a little for
+> the circular deadlock case, since we have the to-be-added lock
+> dependency, and know whether these two locks are read/write/sync.
+>
+> In order to know whether a held_lock is sync or not, a bit was
+> "stolen" from ->references, which reduce our limit for the same lock
+> class nesting from 2^12 to 2^11, and it should still be good enough.
+>
+> Besides, since we now have bit in held_lock for sync, we don't need the
+> "hardirqoffs being 1" trick, and also we can avoid the __lock_release()
+> if we jump out of __lock_acquire() before the held_lock stored.
+>
+> With these changes, a deadlock case evolved with read lock and sync gets
+> a better print-out from:
+>
+> 	[...]  Possible unsafe locking scenario:
+> 	[...]
+> 	[...]        CPU0                    CPU1
+> 	[...]        ----                    ----
+> 	[...]   lock(srcuA);
+> 	[...]                                lock(srcuB);
+> 	[...]                                lock(srcuA);
+> 	[...]   lock(srcuB);
+>
+> to
+>
+> 	[...]  Possible unsafe locking scenario:
+> 	[...]
+> 	[...]        CPU0                    CPU1
+> 	[...]        ----                    ----
+> 	[...]   rlock(srcuA);
+> 	[...]                                lock(srcuB);
+> 	[...]                                lock(srcuA);
+> 	[...]   sync(srcuB);
+>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>   include/linux/lockdep.h  |  3 ++-
+>   kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
+>   2 files changed, 34 insertions(+), 17 deletions(-)
+>
+> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> index ba09df6a0872..febd7ecc225c 100644
+> --- a/include/linux/lockdep.h
+> +++ b/include/linux/lockdep.h
+> @@ -134,7 +134,8 @@ struct held_lock {
+>   	unsigned int read:2;        /* see lock_acquire() comment */
+>   	unsigned int check:1;       /* see lock_acquire() comment */
+>   	unsigned int hardirqs_off:1;
+> -	unsigned int references:12;					/* 32 bits */
+> +	unsigned int sync:1;
+> +	unsigned int references:11;					/* 32 bits */
+>   	unsigned int pin_count;
+>   };
+>   
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index cffa026a765f..4031d87f6829 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -1880,6 +1880,8 @@ print_circular_lock_scenario(struct held_lock *src,
+>   	struct lock_class *source = hlock_class(src);
+>   	struct lock_class *target = hlock_class(tgt);
+>   	struct lock_class *parent = prt->class;
+> +	int src_read = src->read;
+> +	int tgt_read = tgt->read;
+>   
+>   	/*
+>   	 * A direct locking problem where unsafe_class lock is taken
+> @@ -1907,7 +1909,10 @@ print_circular_lock_scenario(struct held_lock *src,
+>   	printk(" Possible unsafe locking scenario:\n\n");
+>   	printk("       CPU0                    CPU1\n");
+>   	printk("       ----                    ----\n");
+> -	printk("  lock(");
+> +	if (tgt_read != 0)
+> +		printk("  rlock(");
+> +	else
+> +		printk("  lock(");
+>   	__print_lock_name(target);
+>   	printk(KERN_CONT ");\n");
+>   	printk("                               lock(");
+> @@ -1916,7 +1921,12 @@ print_circular_lock_scenario(struct held_lock *src,
+>   	printk("                               lock(");
+>   	__print_lock_name(target);
+>   	printk(KERN_CONT ");\n");
+> -	printk("  lock(");
+> +	if (src_read != 0)
+> +		printk("  rlock(");
+> +	else if (src->sync)
+> +		printk("  sync(");
+> +	else
+> +		printk("  lock(");
+>   	__print_lock_name(source);
+>   	printk(KERN_CONT ");\n");
+>   	printk("\n *** DEADLOCK ***\n\n");
 
-> On Mon, Jan 16, 2023 at 04:38:01AM +0000, Matthew Wilcox wrote:
-> > On Mon, Jan 16, 2023 at 11:16:13AM +0800, maobibo wrote:
-> > > Hongchen,
-> > > 
-> > > I have a glance with this patch, it simply replaces with
-> > > spinlock_irqsave with mutex lock. There may be performance
-> > > improvement with two processes competing with pipe, however
-> > > for N processes, there will be complex context switches
-> > > and ipi interruptts.
-> > > 
-> > > Can you find some cases with more than 2 processes competing
-> > > pipe, rather than only unixbench?
-> > 
-> > What real applications have pipes with more than 1 writer & 1 reader?
-> > I'm OK with slowing down the weird cases if the common cases go faster.
-> 
-> >From commit 0ddad21d3e99c743a3aa473121dc5561679e26bb:
->     While this isn't a common occurrence in the traditional "use a pipe as a
->     data transport" case, where you typically only have a single reader and
->     a single writer process, there is one common special case: using a pipe
->     as a source of "locking tokens" rather than for data communication.
->     
->     In particular, the GNU make jobserver code ends up using a pipe as a way
->     to limit parallelism, where each job consumes a token by reading a byte
->     from the jobserver pipe, and releases the token by writing a byte back
->     to the pipe.
+src can be sync() but not the target. Is there a reason why that is the 
+case?
 
-The author has tested this patch with Linus's test code from 0ddad21d3e
-and the results were OK
-(https://lkml.kernel.org/r/c3cbede6-f19e-3333-ba0f-d3f005e5d599@loongson.cn).
 
-I've been stalling on this patch until Linus gets back to his desk,
-which now appears to have happened.
+> @@ -4530,7 +4540,13 @@ mark_usage(struct task_struct *curr, struct held_lock *hlock, int check)
+>   					return 0;
+>   		}
+>   	}
+> -	if (!hlock->hardirqs_off) {
+> +
+> +	/*
+> +	 * For lock_sync(), don't mark the ENABLED usage, since lock_sync()
+> +	 * creates no critical section and no extra dependency can be introduced
+> +	 * by interrupts
+> +	 */
+> +	if (!hlock->hardirqs_off && !hlock->sync) {
+>   		if (hlock->read) {
+>   			if (!mark_lock(curr, hlock,
+>   					LOCK_ENABLED_HARDIRQ_READ))
+> @@ -4909,7 +4925,7 @@ static int __lock_is_held(const struct lockdep_map *lock, int read);
+>   static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+>   			  int trylock, int read, int check, int hardirqs_off,
+>   			  struct lockdep_map *nest_lock, unsigned long ip,
+> -			  int references, int pin_count)
+> +			  int references, int pin_count, int sync)
+>   {
+>   	struct task_struct *curr = current;
+>   	struct lock_class *class = NULL;
+> @@ -4960,7 +4976,8 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+>   
+>   	class_idx = class - lock_classes;
+>   
+> -	if (depth) { /* we're holding locks */
+> +	if (depth && !sync) {
+> +		/* we're holding locks and the new held lock is not a sync */
+>   		hlock = curr->held_locks + depth - 1;
+>   		if (hlock->class_idx == class_idx && nest_lock) {
+>   			if (!references)
+> @@ -4994,6 +5011,7 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+>   	hlock->trylock = trylock;
+>   	hlock->read = read;
+>   	hlock->check = check;
+> +	hlock->sync = !!sync;
+>   	hlock->hardirqs_off = !!hardirqs_off;
+>   	hlock->references = references;
+>   #ifdef CONFIG_LOCK_STAT
+> @@ -5055,6 +5073,10 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+>   	if (!validate_chain(curr, hlock, chain_head, chain_key))
+>   		return 0;
+>   
+> +	/* For lock_sync(), we are done here since no actual critical section */
+> +	if (hlock->sync)
+> +		return 1;
+> +
+>   	curr->curr_chain_key = chain_key;
+>   	curr->lockdep_depth++;
+>   	check_chain_key(curr);
 
-Hongchen, when convenient, please capture this discussion (as well as
-the testing results with Linus's sample code) in the changelog and send
-us a v4, with Linus on cc?
+Even with sync, there is still a corresponding lock_acquire() and 
+lock_release(), you can't exit here without increasing lockdep_depth. 
+That can cause underflow.
+
+Cheers,
+Longman
 
