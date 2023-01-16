@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B6D66C83C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACD666C86F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbjAPQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S233653AbjAPQjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbjAPQge (ORCPT
+        with ESMTP id S233692AbjAPQik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:36:34 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2668B32E44;
-        Mon, 16 Jan 2023 08:25:30 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id ss4so62015659ejb.11;
-        Mon, 16 Jan 2023 08:25:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FqXjMQkYS4EvIeq90gP/HUPBM251gTsCOw0vQocW76c=;
-        b=f4XeiWEzsAcCtqVk0q1uzAUNea+XDAdF2YH35e6ZNEy4lnsrIjJVLwdJKmztQg3djX
-         nAyAO5wzKJCgrYFQWEKXS9SjSIrnJKNfhDVQr5sF3lXpCMZMHNH61Z0+fPKLFwkwJwW7
-         Y0TleNOVxNHnnuapn5b/0OgDWfIGLzRpCSeRJls7P2M76miN5vky5eQiyRk6POK01fBG
-         gqWnFJjrbYA8MF0zeKols+ddjQHbvlXazqbLrQH43Ex/X2U73vvf9v0UxMdGg3Y+7x2L
-         Ul8hYssEpTYMG1uLeDMtcyCRsud4hrM+hcqa7R+UBS4vq63D99MUmr3w6jFM7LYSTfkA
-         9PnQ==
+        Mon, 16 Jan 2023 11:38:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503812B63C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673886411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r2boqvfD+RJ61HpS/wHyE329kUvwll2CIPBJV6eZl4c=;
+        b=IDjmgHopGyiIonvakEi5RH1XTKJynlefCM8gCCgv3IkRDnrFsn8eHM3cdtLzevA610m6AY
+        BoBdPpdTfnU6t+Kqz/fkCTVmcw/Ij/HM9LH0ubwdZEGXra5om8fly76wPFnJmZU3LbLIjC
+        sLJhK09JlB3X6D/6uBQb92BgmQRr17o=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-92-P-SDitaZM-OwPeXhG3cslQ-1; Mon, 16 Jan 2023 11:26:50 -0500
+X-MC-Unique: P-SDitaZM-OwPeXhG3cslQ-1
+Received: by mail-lj1-f198.google.com with SMTP id b25-20020a2e9899000000b002877a271a9dso5248707ljj.20
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:26:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FqXjMQkYS4EvIeq90gP/HUPBM251gTsCOw0vQocW76c=;
-        b=Yfsg+bhVoOJQdpStyWV+3QrnHVTjwdk9QkOIMVXr50HQ5PUTl5e0E/Bh9xuBW07zp6
-         WT3aoklAfuqJKz5XFwg6dExXzAPBjylTYcMJJ2B4CQKJTofoNhqSTuqFGcZzLyvR0WxJ
-         U8FSVlNqXZxy/+5MoaoXaNa2X7Bb42t2TcrZx+BiArsa6WjT9gEiVSSrarUwfC8oTC0Q
-         QB+5NDg29V0WKJ1Z+0N4/NAMLoB5kbKEzxUgQ+BilqxTdR2fSmo6Fb91J4/HsLCB/MS0
-         qNwDw8ts6fYic7tqou/gRudS9s90u87rtKIDICRWkitZQS9pGfKIngWexQLi45wC9oYs
-         qfxw==
-X-Gm-Message-State: AFqh2kr2a1ut4x05jaAeU4hZ8QOoe/afXFFO51TRvgazIAsPX7Kji7gA
-        eX7CDqWCF74NA/9NWw1RGFCmYvMzByPsfw==
-X-Google-Smtp-Source: AMrXdXthYSAeZE33qLrnytKv7HGXW8TCnicQsE3yRFIkz/ccQ3TFsVQTgsYiSS4pOGTzDkkFAgtiDw==
-X-Received: by 2002:a17:907:395:b0:7c0:d2b2:eb07 with SMTP id ss21-20020a170907039500b007c0d2b2eb07mr12994866ejb.26.1673886328265;
-        Mon, 16 Jan 2023 08:25:28 -0800 (PST)
-Received: from fedora.. ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm10956060ejb.68.2023.01.16.08.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:25:27 -0800 (PST)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] x86/ACPI/boot: use try_cmpxchg in __acpi_{acquire,release}_global_lock
-Date:   Mon, 16 Jan 2023 17:25:22 +0100
-Message-Id: <20230116162522.4072-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        bh=r2boqvfD+RJ61HpS/wHyE329kUvwll2CIPBJV6eZl4c=;
+        b=ra5DhixLrTSDsEm9eKOdYwaNax8Kmqu9hX/THFVhoDV1vtExhNfkoFlBEMv4/N6G2T
+         pppZo6pKdLcWI7vbbztXLAc8corKlVpuvfVmu6Q4wlfRgzWxopSDzDAADJtO5o/BMx3L
+         A/weDb7w8MBsLVG3ruxZFnGkqe78Vd1Z5qv3NKpiSUCUbopY/Fw3B/nJEsBrNtnIjPRP
+         3Y4v3t6DiGjlyp3arzdhi9t8PdagsexH/+e0q6M7mp5h+KQ7wSjzjqwy6TldOn3v+vPv
+         Va82vADhFkx/f1budDK2DYI4AoYOTCu9IwLezlsVWK/RDHsM2hirRb03oIu9h8ikXnC+
+         KPJg==
+X-Gm-Message-State: AFqh2kpYeOqgZi6QPsb2zJ8ZE39ozw675qQniePzMCR59gVheUrkKP4t
+        z50sZsZfBX67NDDzaVDWinNnyR2KC7ZT1mhg9LCF3glym68/KBrz0z3kqw7UKNzdHZeC913bMLI
+        nDfrXLTEKyAKc4w1IswTMNc0q9sE9vK5coM5bYMAk
+X-Received: by 2002:a05:6512:7c:b0:4d5:7b89:7b67 with SMTP id i28-20020a056512007c00b004d57b897b67mr110385lfo.17.1673886408806;
+        Mon, 16 Jan 2023 08:26:48 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsl3G5delLpsUSEikj3rrvMcC9LUAx6uCt/IgZvb4ulTe/2Bhgjm8AC830LNMSyFXE01XKOE/f4hSEa4jTVlHk=
+X-Received: by 2002:a05:6512:7c:b0:4d5:7b89:7b67 with SMTP id
+ i28-20020a056512007c00b004d57b897b67mr110384lfo.17.1673886408656; Mon, 16 Jan
+ 2023 08:26:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230103234835.never.378-kees@kernel.org> <Y7TNtQqunHIW8her@work> <CACO55tsyCtf-_mCPVEo-4Dj_mAu-tnNTTjP75wx=9n+TS1XVvw@mail.gmail.com>
+In-Reply-To: <CACO55tsyCtf-_mCPVEo-4Dj_mAu-tnNTTjP75wx=9n+TS1XVvw@mail.gmail.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Mon, 16 Jan 2023 17:26:37 +0100
+Message-ID: <CACO55tvuhLzbtg-wzy24Y7Y4k4CN_3JZM5VZ-9VPFNZK3skKCg@mail.gmail.com>
+Subject: Re: [RESEND][PATCH] drm/nouveau/fb/ga102: Replace zero-length array
+ of trailing structs with flex-array
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-hardening@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        Gourav Samaiya <gsamaiya@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,68 +76,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
-__acpi_{acquire,release}_global_lock.  x86 CMPXCHG instruction returns
-success in ZF flag, so this change saves a compare after cmpxchg
-(and related move instruction in front of cmpxchg).
+On Mon, Jan 16, 2023 at 5:24 PM Karol Herbst <kherbst@redhat.com> wrote:
+>
+> On Wed, Jan 4, 2023 at 1:52 AM Gustavo A. R. Silva
+> <gustavoars@kernel.org> wrote:
+> >
+> > On Tue, Jan 03, 2023 at 03:48:36PM -0800, Kees Cook wrote:
+> > > Zero-length arrays are deprecated[1] and are being replaced with
+> > > flexible array members in support of the ongoing efforts to tighten the
+> > > FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
+> > > with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
+> > >
+> > > Replace zero-length array with flexible-array member.
+> > >
+> > > This results in no differences in binary output.
+> > >
+> > > [1] https://github.com/KSPP/linux/issues/78
+> > >
+> > > Cc: Ben Skeggs <bskeggs@redhat.com>
+> > > Cc: Karol Herbst <kherbst@redhat.com>
+> > > Cc: Lyude Paul <lyude@redhat.com>
+> > > Cc: David Airlie <airlied@gmail.com>
+> > > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > > Cc: Gourav Samaiya <gsamaiya@nvidia.com>
+> > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > > Cc: dri-devel@lists.freedesktop.org
+> > > Cc: nouveau@lists.freedesktop.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> >
+> > Here is my RB again:
+> >
+> > Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> >
+>
+> Reviewed-by: Karol Herbst <kherbst@redhat.com>
+>
+> will push in a moment
+>
 
-Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
-fails. There is no need to re-read the value in the loop.
+just noticed it's the same change than the other one... anyway, will
+push the oldest one
 
-Note that the value from *ptr should be read using READ_ONCE to prevent
-the compiler from merging, refetching or reordering the read.
-
-No functional change intended.
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
----
- arch/x86/kernel/acpi/boot.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 907cc98b1938..4177577c173b 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -1840,23 +1840,23 @@ early_param("acpi_sci", setup_acpi_sci);
- 
- int __acpi_acquire_global_lock(unsigned int *lock)
- {
--	unsigned int old, new, val;
-+	unsigned int old, new;
-+
-+	old = READ_ONCE(*lock);
- 	do {
--		old = *lock;
- 		new = (((old & ~0x3) + 2) + ((old >> 1) & 0x1));
--		val = cmpxchg(lock, old, new);
--	} while (unlikely (val != old));
-+	} while (!try_cmpxchg(lock, &old, new));
- 	return ((new & 0x3) < 3) ? -1 : 0;
- }
- 
- int __acpi_release_global_lock(unsigned int *lock)
- {
--	unsigned int old, new, val;
-+	unsigned int old, new;
-+
-+	old = READ_ONCE(*lock);
- 	do {
--		old = *lock;
- 		new = old & ~0x3;
--		val = cmpxchg(lock, old, new);
--	} while (unlikely (val != old));
-+	} while (!try_cmpxchg(lock, &old, new));
- 	return old & 0x1;
- }
- 
--- 
-2.39.0
+> > Thanks!
+> > --
+> > Gustavo
+> >
+> > > ---
+> > > Sent before as: https://lore.kernel.org/all/20221118211207.never.039-kees@kernel.org/
+> > > ---
+> > >  drivers/gpu/drm/nouveau/include/nvfw/hs.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/nouveau/include/nvfw/hs.h b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
+> > > index 8c4cd08a7b5f..8b58b668fc0c 100644
+> > > --- a/drivers/gpu/drm/nouveau/include/nvfw/hs.h
+> > > +++ b/drivers/gpu/drm/nouveau/include/nvfw/hs.h
+> > > @@ -52,7 +52,7 @@ struct nvfw_hs_load_header_v2 {
+> > >       struct {
+> > >               u32 offset;
+> > >               u32 size;
+> > > -     } app[0];
+> > > +     } app[];
+> > >  };
+> > >
+> > >  const struct nvfw_hs_load_header_v2 *nvfw_hs_load_header_v2(struct nvkm_subdev *, const void *);
+> > > --
+> > > 2.34.1
+> > >
+> >
 
