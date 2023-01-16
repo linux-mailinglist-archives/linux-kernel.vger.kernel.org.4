@@ -2,120 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9585A66BCD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF3C66BCD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjAPL0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S229772AbjAPL0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjAPL0A (ORCPT
+        with ESMTP id S229891AbjAPL0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:26:00 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D178F1E9CD
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:25:59 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id x4so16570076pfj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X4sfoM8UexvDKPwVhCYShKN5KNRJoIP1y6Y9u4zfqss=;
-        b=Fxw5+VsR4wh5G53dDEPsWOoOwWNJNUr7ABIUZ7aGZOywbTxntj7m/54G7UVMXafTnx
-         sju5VWKoTvX9fMUpIm8Tg6KMO8sZm3cEQ/XpL8peykT0vK+7DNxxwua1P71jVBYpXNy/
-         ha/xlik5XlmY51nm3LwhJc/9gtNoFrem40ZRl/0knwg+uYJkSuaC0/FRFTlULQ7LETGH
-         uIWSB0Mq84qPFifVdxzVys2qHXh1y5PQd8eyF37lyEZxyagu6d2lS4a0gc7RL8YVfuxW
-         7kGkpn3B0655Q/4/bXINACIpT2fiY9yy1dfMexHsaOm9ln0+mTwNidujDjRL0CUy3w1M
-         8PTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X4sfoM8UexvDKPwVhCYShKN5KNRJoIP1y6Y9u4zfqss=;
-        b=tlCfatVSGkPfcS/ICFNu502OktJoWO6D3Qke2oBy+jZ33MzACY/6s54H8r9YEMVOwh
-         O9zImpdo3RXYgQS6bCmdgRC5KoRK6U1uCMGAMc7WhdDiA0XtEuUQpNxkcOI0nEESEMmF
-         sRCXsesRmM25C1vVRtWGTAOU5bUVire8CjHcbHR2HvvMvcqQzT/JIvj7nzeEd3JsEvfO
-         NZt9vjx/Ms0GEfukMNH3En2iTCrsB0QtYpeKd8LN0fvuJIy7/GgG4QUb0j/dNHVNQP2o
-         WVzyBkDgbF1uBtFhzNP8m2/4rlhHxZ1govJxUmjDn1kT0UPxFyrc9yT00dY3uRFyeXOD
-         B7lQ==
-X-Gm-Message-State: AFqh2koB6yB09m5GFHW8l3k0wEvcjUtmhwq9PzgxWVCQDZOkKtzj7UeI
-        tDS/K0oG2xaK2kNNqFcJm/HUngtggshTN6OqNQzDzw==
-X-Google-Smtp-Source: AMrXdXsWnIno0X1cLpYxA/Cb+xNkp0Fg8b6QQOt9rkkLir/H00hqkk49eqeqOWo6kWEif8CDXqhpCQ1mZhR00bcFlYw=
-X-Received: by 2002:a63:e613:0:b0:4b1:e9a3:292a with SMTP id
- g19-20020a63e613000000b004b1e9a3292amr1622507pgh.545.1673868359263; Mon, 16
- Jan 2023 03:25:59 -0800 (PST)
+        Mon, 16 Jan 2023 06:26:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6D916327;
+        Mon, 16 Jan 2023 03:26:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E1660F75;
+        Mon, 16 Jan 2023 11:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0AB9C433D2;
+        Mon, 16 Jan 2023 11:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673868396;
+        bh=P+T/j57X62oNt6U6/JdEWDqDUe0zXgKY6uRbCJmpj6k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dG8b7qxPD7Y1tXny1+jTbCzhBpoyDgRDznhwNTMpnSa6y2O8vQRaIxdn9OaSXnul2
+         8RYofDBUQd1QFA+BY3xaGNBBYrVLyFSY+1FACl0fUXTUzetAN+65OcaRwYFGFmWb7+
+         LEUpqpR/5TJ5kgXkpyC+wczFMx/HHkkCY4Evcb1OlPAcnSWI7djJa0mWuhlWqkhgUV
+         sKQRDCADzWZk67Q/qSXNph16Il3EmM77llmBCmkeeQZXe4wpSSzZMu7UBezpWs2FjN
+         z0Y2rNUcjPEwtnZvjVPRwQ8BQli8obb4WupBZq/1PLvSIT8KfDVdzHxKFUeheq/2xC
+         c2A+3EUhXRYRA==
+Date:   Mon, 16 Jan 2023 13:26:31 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux@armlinux.org.uk, pabeni@redhat.com, rogerq@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
+Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
+ release action
+Message-ID: <Y8U0Z86y0BnBkRBv@unreal>
+References: <20230116044517.310461-1-s-vadapalli@ti.com>
+ <Y8T8+rWrvv6gfNxa@unreal>
+ <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
+ <Y8UhMVPTo3qVgkyc@unreal>
+ <aa578ec2-a8e3-8ad0-7234-971325d1268d@ti.com>
 MIME-Version: 1.0
-References: <20221228165415.3436-1-vincent.guittot@linaro.org>
- <Y8FhfyVyUDZ98hKD@e126311.manchester.arm.com> <CAKfTPtCmDA8WPrhFc8YxFXSOPOKasvvNWA3iOmRYcC2VSyMMrw@mail.gmail.com>
- <20230114211854.nmvmhtd5yz5wgh2a@airbuntu> <487f0252-c697-eb62-989d-57ee731691a2@arm.com>
-In-Reply-To: <487f0252-c697-eb62-989d-57ee731691a2@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 16 Jan 2023 12:25:48 +0100
-Message-ID: <CAKfTPtCBp_HCnsZ-ebupKazyirMNz8NYqTPK0QAE0c6RU6WffQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/fair: unlink misfit task from cpu overutilized
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        mingo@kernel.org, peterz@infradead.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
-        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa578ec2-a8e3-8ad0-7234-971325d1268d@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023 at 10:21, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> On 14/01/2023 22:18, Qais Yousef wrote:
-> > On 01/13/23 15:28, Vincent Guittot wrote:
-> >> Hi Kajetan,
+On Mon, Jan 16, 2023 at 04:07:16PM +0530, Siddharth Vadapalli wrote:
+> 
+> 
+> On 16/01/23 15:34, Leon Romanovsky wrote:
+> > On Mon, Jan 16, 2023 at 01:13:36PM +0530, Siddharth Vadapalli wrote:
 > >>
-> >> On Fri, 13 Jan 2023 at 14:50, Kajetan Puchalski
-> >> <kajetan.puchalski@arm.com> wrote:
->
-> [...]
->
-> >>> sched/uclamp: Fix a uninitialized variable warnings
-> >>> (baseline_ufc) sched/fair: Check if prev_cpu has highest spare cap in feec()
-> >>> sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
-> >>> sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
-> >>> sched/uclamp: Make asym_fits_capacity() use util_fits_cpu()
-> >>> sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
-> >>> sched/uclamp: Fix fits_capacity() check in feec()
-> >>> sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
-> >>> sched/uclamp: Fix relationship between uclamp and migration margin
-> >>> (previous 'baseline' was here)
+> >>
+> >> On 16/01/23 13:00, Leon Romanovsky wrote:
+> >>> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
+> >>>> The am65_cpts_release() function is registered as a devm_action in the
+> >>>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
+> >>>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
+> >>>> actions associated with the am65-cpsw driver's device.
+> >>>>
+> >>>> In the event of probe failure or probe deferral, the platform_drv_probe()
+> >>>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
+> >>>> CPSW's CPTS hardware, both of which share the same power domain. Since the
+> >>>> am65_cpts_disable() function invoked by the am65_cpts_release() function
+> >>>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
+> >>>> hardware is assumed to be powered on at this point. However, the hardware
+> >>>> is powered off before the devm actions are executed.
+> >>>>
+> >>>> Fix this by getting rid of the devm action for am65_cpts_release() and
+> >>>> invoking it directly on the cleanup and exit paths.
+> >>>>
+> >>>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
+> >>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> >>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> >>>> ---
+> >>>> Changes from v1:
+> >>>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
+> >>>>    error was reported by kernel test robot <lkp@intel.com> at:
+> >>>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
+> >>>> 2. Collect Reviewed-by tag from Roger Quadros.
+> >>>>
+> >>>> v1:
+> >>>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
+> >>>>
+> >>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
+> >>>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
+> >>>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
+> >>>>  3 files changed, 18 insertions(+), 10 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>> index 5cac98284184..00f25d8a026b 100644
+> >>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> >>>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
+> >>>>  	return 0;
+> >>>>  }
+> >>>>  
+> >>>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
+> >>>> +{
+> >>>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
 > >>>
-> >>> I omitted the 3 patches relating directly to capacity_inversion but in
-> >
-> > This could lead to confusion. Was there a specific reason for this omission?
-> > Did you hit some problem?
->
-> I thought Vincent's 'split MF from CPU OU' should replace 'CapInv'?
+> >>> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
+> >>> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
+> >>>
+> >>> How is it possible to have common->cpts == NULL?
+> >>
+> >> Thank you for reviewing the patch. I realize now that checking
+> >> CONFIG_TI_K3_AM65_CPTS is unnecessary.
+> >>
+> >> common->cpts remains NULL in the following cases:
+> >> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
+> > 
+> > In this case am65_cpsw_cpts_cleanup() will NOP as well.
+> > 
+> >> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
+> > 
+> > It is an error and all callers unwind properly.
+> > 
+> >> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
+> >> function with a return value of 0 when cpts is disabled.
+> > 
+> > It is disabled by CONFIG_TI_K3_AM65_CPTS, which in turn will make
+> > am65_cpsw_cpts_cleanup() NOP.
+> > 
+> >> 4. The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
+> >> fails with an error.
+> >>
+> >> Of the above cases, the am65_cpsw_cpts_cleanup() function would have to handle
+> >> cases 1 and 3, since the probe might fail at a later point, following which the
+> >> probe cleanup path will invoke the am65_cpts_cpts_cleanup() function. This
+> >> function then checks for common->cpts not being NULL, so that it can invoke the
+> >> am65_cpts_release() function with this pointer.
+> > 
+> > I still don't see how it is possible.
+> 
+> You are right! I apologize for not analyzing the cases well enough. The only
+> case where common->cpts will remain NULL and the am65_cpsw_cpts_cleanup()
+> function is invoked, is the case where the CONFIG_TI_K3_AM65_CPTS config is
+> disabled. As you had pointed it out, in this case, the am65_cpts_release() is
+> NOP, so passing the NULL pointer common->cpts will have no effect.
+> 
+> With this, I understand that the am65_cpsw_cpts_cleanup() function is
+> unnecessary like you had mentioned, and am65_cpts_release() can be directly
+> invoked for common->cpts. Please let me know if my understanding is correct. If
+> so, I will implement this in the v3 patch.
 
-Current patch v3 applies on top of tip/sched/core which includes
-'CapInv'. The end goal being that CapInv becomes useless and can be
-removed
+Yes, you understood me right.
 
->
-> https://lkml.kernel.org/r/20221209164739.GA24368@vingu-book
->
-> ... I have reverted patches:
-> Revert "sched/fair: Detect capacity inversion"
-> Revert "sched/fair: Consider capacity inversion in util_fits_cpu()"
-> Revert "sched/uclamp: Make cpu_overutilized() use util_fits_cpu()" ...
->
-> You also mentioned this in
-> https://lkml.kernel.org/r/<20230115001906.v7uq4ddodrbvye7d@airbuntu
->
-> [...]
+Thanks
+
+> 
+> Regards,
+> Siddharth.
