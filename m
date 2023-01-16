@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F8766D36E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7980466D377
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbjAPXxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 18:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S235554AbjAPX6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbjAPXxQ (ORCPT
+        with ESMTP id S235563AbjAPX5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 18:53:16 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1829D22DE8;
-        Mon, 16 Jan 2023 15:52:52 -0800 (PST)
-Received: from mwalle01.sab.local (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 377561AA3;
-        Tue, 17 Jan 2023 00:52:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1673913171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VAC3lvYePixzcXebo4E3nrWp2H/ZNlz8TyV8NSReGQs=;
-        b=GX7X6H8lc5xEN2+bG0vGPNrbHpUIAQOgt5cogS4U1N7qThjjN2kBzzYQp/8KzT84ti0igo
-        xSB7LtanZuOWOoFLF//R6xu0DEVnKAgh2gmiPE8/wZoeTLTCRdhRpTvFILbtntC9hLuBLj
-        CnLtT1FJ5lt9YoGY5oDs0zZjipTZSuzptW13uvMVmynj6dYqNfnd42XKFSNgMGotGTUKE8
-        BXzciw/3UQuIntlC/9InYkjZ7/KD6wG+fCP+B75yawvNq2My4riw29+tbN+fKgvqe1mdeQ
-        IY10rHas3nLp7tewG0aHGrt5ZwAbQkMfxwLieYn3rr2+MYMWJ09/jxb5QTziBA==
-From:   Michael Walle <michael@walle.cc>
-Date:   Tue, 17 Jan 2023 00:52:27 +0100
-Subject: [PATCH net-next 12/12] net: ethernet: renesas: rswitch: C45 only transactions
+        Mon, 16 Jan 2023 18:57:46 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06231241E2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:55:24 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id s26so6395452ioa.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4y0chPH8XRCcdBF2hAl+UEtCy8CCBFqYOr4KoVIAIlM=;
+        b=SfBunpmYSH2pio7V7AGY4OLtI3BMU0OeuReqnd+dqSv+m52geBOxADryk6lrw5FkNw
+         NO7cCvmWv6ZGPHf/dC6l6XWQLMTx8dUYM5htCknkmemQjYUvrj8FwaVDnXy2l5P4XN15
+         tUOkltIZM7z6dkZAnDnfIukCSz4DqkcfBb534=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4y0chPH8XRCcdBF2hAl+UEtCy8CCBFqYOr4KoVIAIlM=;
+        b=bXTI7okpoBRwJI++rTCTiohwxyHFc/wqlS7wAqIDJ59Qf8RVnH/+Ww5reP9UP6ACJ1
+         YDX63f9XGO0S1VAaT+Eo+2NC/Or68YH+PnFGSUn4y6y502+CNEtTLW6+D36xNkMvz3rX
+         zQ7A2xRt0yh0G4srG77xzFhgUpkxcBH/R1/Tx6nF3F3SrLjJDGQSN5tEdrrXYu/xDM0w
+         3PtT4uEruCZpwoMhtkfcLrqCyFvCTxv7ICcs/m0SA4b3M3/6/8xmI4SHJv/IFAgDqQcs
+         hBp+AqQU2eyNr/IySzUme1sFTolzIJz0cvr4ws+lY+f/utL0Zdlv1cCfkksWEP60cX9o
+         v37A==
+X-Gm-Message-State: AFqh2koeaRcxAAxrPbHTvtqduXa2g4aO9a7xVVKgFOOMJC/JQX1ZNzJV
+        nySIjhn/qJtHTV3WbuW/Q6Wrgg==
+X-Google-Smtp-Source: AMrXdXvyf1g9nsw7GmasQKuYuXvwJox6F7ZgL4FEMbeEbn8Lzozn5Goy89GXORdAto72Z6xYabIrHQ==
+X-Received: by 2002:a6b:e90e:0:b0:704:bbb2:f9f9 with SMTP id u14-20020a6be90e000000b00704bbb2f9f9mr115998iof.1.1673913314577;
+        Mon, 16 Jan 2023 15:55:14 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id o192-20020a0222c9000000b0039e92d559a3sm6516285jao.166.2023.01.16.15.55.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 15:55:13 -0800 (PST)
+Message-ID: <1a01061b-4ccd-0e2a-9e0c-b2ff03fb0f6f@linuxfoundation.org>
+Date:   Mon, 16 Jan 2023 16:55:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230116154803.321528435@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230116154803.321528435@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230116-net-next-c45-seperation-part-3-v1-12-0c53afa56aad@walle.cc>
-References: <20230116-net-next-c45-seperation-part-3-v1-0-0c53afa56aad@walle.cc>
-In-Reply-To: <20230116-net-next-c45-seperation-part-3-v1-0-0c53afa56aad@walle.cc>
-To:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Byungho An <bh74.an@samsung.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        linux-renesas-soc@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Michael Walle <michael@walle.cc>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rswitch MDIO bus driver only supports C45 transfers. Update the
-function names to make this clear, pass the mmd as a parameter, and
-register the accessors to the _c45 ops of the bus driver structure.
+On 1/16/23 08:48, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.7 release.
+> There are 183 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/net/ethernet/renesas/rswitch.c | 28 ++++++----------------------
- 1 file changed, 6 insertions(+), 22 deletions(-)
+Compiled and booted on my test system. No dmesg regressions.
 
-diff --git a/drivers/net/ethernet/renesas/rswitch.c b/drivers/net/ethernet/renesas/rswitch.c
-index 6441892636db..885fdb077b62 100644
---- a/drivers/net/ethernet/renesas/rswitch.c
-+++ b/drivers/net/ethernet/renesas/rswitch.c
-@@ -1024,34 +1024,18 @@ static int rswitch_etha_set_access(struct rswitch_etha *etha, bool read,
- 	return ret;
- }
- 
--static int rswitch_etha_mii_read(struct mii_bus *bus, int addr, int regnum)
-+static int rswitch_etha_mii_read_c45(struct mii_bus *bus, int addr, int devad,
-+				     int regad)
- {
- 	struct rswitch_etha *etha = bus->priv;
--	int mode, devad, regad;
--
--	mode = regnum & MII_ADDR_C45;
--	devad = (regnum >> MII_DEVADDR_C45_SHIFT) & 0x1f;
--	regad = regnum & MII_REGADDR_C45_MASK;
--
--	/* Not support Clause 22 access method */
--	if (!mode)
--		return -EOPNOTSUPP;
- 
- 	return rswitch_etha_set_access(etha, true, addr, devad, regad, 0);
- }
- 
--static int rswitch_etha_mii_write(struct mii_bus *bus, int addr, int regnum, u16 val)
-+static int rswitch_etha_mii_write_c45(struct mii_bus *bus, int addr, int devad,
-+				      int regad, u16 val)
- {
- 	struct rswitch_etha *etha = bus->priv;
--	int mode, devad, regad;
--
--	mode = regnum & MII_ADDR_C45;
--	devad = (regnum >> MII_DEVADDR_C45_SHIFT) & 0x1f;
--	regad = regnum & MII_REGADDR_C45_MASK;
--
--	/* Not support Clause 22 access method */
--	if (!mode)
--		return -EOPNOTSUPP;
- 
- 	return rswitch_etha_set_access(etha, false, addr, devad, regad, val);
- }
-@@ -1142,8 +1126,8 @@ static int rswitch_mii_register(struct rswitch_device *rdev)
- 	mii_bus->name = "rswitch_mii";
- 	sprintf(mii_bus->id, "etha%d", rdev->etha->index);
- 	mii_bus->priv = rdev->etha;
--	mii_bus->read = rswitch_etha_mii_read;
--	mii_bus->write = rswitch_etha_mii_write;
-+	mii_bus->read_c45 = rswitch_etha_mii_read_c45;
-+	mii_bus->write_c45 = rswitch_etha_mii_write_c45;
- 	mii_bus->parent = &rdev->priv->pdev->dev;
- 
- 	mdio_np = rswitch_get_mdio_node(rdev);
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
--- 
-2.30.2
+thanks,
+-- Shuah
