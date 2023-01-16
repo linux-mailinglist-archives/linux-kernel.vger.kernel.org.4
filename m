@@ -2,182 +2,520 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C020566C232
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EAB66C233
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbjAPO24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S232729AbjAPOaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbjAPO2Z (ORCPT
+        with ESMTP id S231956AbjAPO3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:28:25 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FEF22DDD
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:11:21 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id c6so30462504pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:11:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IFQME8/E/AXD3LHu9E0b+WPu1IIOLSjjmuAK8YeSdpg=;
-        b=bvZPLM7+cF/F9sx8yRYX9aPkNGTc8JOMB57AcaXXiOFu0VnLqPzIoxKFRfV7YQWJ92
-         4zDjUfBZRF5vHF7hhCrEdr35e23XoCC1U/ZhD/CK+XxqyfNjI5RpdFYca7KfjvUhjvZA
-         beksWM4OqIc9a86YSq29Zho4JKkHLmJkynWFZj523V/O0FjoXSespYnnBe1dn39str96
-         5x4EF5JKhLCg247rdhKD9gC8bybfI5Jbj/elLm15n1RXf/3bm8eP4wOTP9aTMbfxSO/H
-         P76o3LR5Pqa+tLo3+61oohx/eeRyZv638+Pvgr63jd6kjpDHK/Ncmm7SCIb+nenO5KkE
-         fGkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IFQME8/E/AXD3LHu9E0b+WPu1IIOLSjjmuAK8YeSdpg=;
-        b=mfNpLeobY/q9q/MdgHk9Oas2HooLQHxR8Dx3CUijIGaaBS4BB4B9ho7Uzg/2WrCebV
-         wPQnd5+jK3YXu3KzVYiHwyqa8lCy0ey6Pj4jKGdV7lwcdnQWvspucqzw6wUkmLQ2hvuo
-         ui2i0ABUe+3ymcGGjargQUQwEBcvMaj8XkR492ECbe0vXIg+iC8oOvPeTCfqrpZm5JOW
-         PV8ki8B10eTAFKVJmfxdG1XUvgh8gSVh+Eerlchd6lhi2zwUyR/buJ/uBFVCSH7Xie5k
-         sDKIeYng/X2I5ChH3kezX8ofDdKPPukl5jReSFaG1bpFAQxv9Zsbs42KkeUKcYhAiBuf
-         PEGQ==
-X-Gm-Message-State: AFqh2ko5Y47mlPzO8/R/sqaWzYSZ57VbMcot4YLx6qXTJtt+CECVs5ky
-        gqBqNGoOXAqnrzKlc1sdFK2Se2AD79WuNORyCLz6zw==
-X-Google-Smtp-Source: AMrXdXtcTeoVOEayHTG2AuWtXfilJDtnVUVtVR52b5vBuzSmZw1kuNmvUwFcTZRRNqTkAFqWJjB1WQepkuB/QqE6e8k=
-X-Received: by 2002:a17:90a:7845:b0:229:2074:78e1 with SMTP id
- y5-20020a17090a784500b00229207478e1mr1062973pjl.119.1673878279223; Mon, 16
- Jan 2023 06:11:19 -0800 (PST)
+        Mon, 16 Jan 2023 09:29:48 -0500
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5454672D
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:12:01 -0800 (PST)
+Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
+        by mta-01.yadro.com (Proxmox) with ESMTP id A7A87341A43;
+        Mon, 16 Jan 2023 17:11:44 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=mta-01; bh=rtzT/JvBgTtfHloetf
+        IPkBZfxv8amZUMybC9n2ww2VE=; b=dcBtf/49ALY4ynmT2OXWqlgZVdvX/FCNmv
+        x8Hbm3Yajik7zw4OJwJwbcrgy+481m4dMjC18BuPmqum0bXRB3PEZB4d/FhkXYez
+        fRLGNJl+dr6ZT78OzmvMfKBOHhzFvOH/Efw8CTFuFvpry6v/Vl7P8Z85gzJaJy7Y
+        JUZIYxoZU=
+Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Proxmox) with ESMTPS id 9A44834164E;
+        Mon, 16 Jan 2023 17:11:44 +0300 (MSK)
+Received: from [10.199.21.212] (10.199.21.212) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Mon, 16 Jan
+ 2023 17:11:43 +0300
+Message-ID: <60319111-c5a6-d859-d8c7-62ec15c6e206@yadro.com>
+Date:   Mon, 16 Jan 2023 17:11:43 +0300
 MIME-Version: 1.0
-References: <20230106030108.2542081-1-swboyd@chromium.org> <CAPY8ntA=Dq6GFQ3gEOm9PzPyOa9bHTr8JrpXLibnai7xKqRbpQ@mail.gmail.com>
- <CAE-0n53UFuyYvjJUWViXy9Eex2mpBRJGtt4vGc2cbFZS9i8xFw@mail.gmail.com>
-In-Reply-To: <CAE-0n53UFuyYvjJUWViXy9Eex2mpBRJGtt4vGc2cbFZS9i8xFw@mail.gmail.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Mon, 16 Jan 2023 14:11:02 +0000
-Message-ID: <CAPY8ntCcHG2A7LHT-jVa9SzvPggxBP8z-t_3rEy+YY8UVHNL9A@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: boe-tv101wum-nl6: Ensure DSI writes succeed
- during disable
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        yangcong <yangcong5@huaqin.corp-partner.google.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        patches@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH -next V7 3/7] riscv: ftrace: Reduce the detour code size
+ to half
+Content-Language: en-US
+To:     <guoren@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>, <anup@brainfault.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <conor.dooley@microchip.com>, <heiko@sntech.de>,
+        <rostedt@goodmis.org>, <mhiramat@kernel.org>, <jolsa@redhat.com>,
+        <bp@suse.de>, <jpoimboe@kernel.org>, <suagrfillet@gmail.com>,
+        <andy.chiu@sifive.com>, <linux@yadro.com>
+References: <20230112090603.1295340-1-guoren@kernel.org>
+ <20230112090603.1295340-4-guoren@kernel.org>
+From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
+In-Reply-To: <20230112090603.1295340-4-guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.199.21.212]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen
+Hi,
 
-On Fri, 13 Jan 2023 at 21:12, Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Dave Stevenson (2023-01-13 08:27:29)
-> > Hi Stephen
-> >
-> > On Fri, 6 Jan 2023 at 03:01, Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > The unprepare sequence has started to fail after moving to panel brid=
-ge
-> > > code in the msm drm driver (commit 007ac0262b0d ("drm/msm/dsi: switch=
- to
-> > > DRM_PANEL_BRIDGE")). You'll see messages like this in the kernel logs=
-:
-> > >
-> > >    panel-boe-tv101wum-nl6 ae94000.dsi.0: failed to set panel off: -22
-> > >
-> > > This is because boe_panel_enter_sleep_mode() needs an operating DSI l=
-ink
-> > > to set the panel into sleep mode. Performing those writes in the
-> > > unprepare phase of bridge ops is too late, because the link has alrea=
-dy
-> > > been torn down by the DSI controller in post_disable, i.e. the PHY ha=
-s
-> > > been disabled, etc. See dsi_mgr_bridge_post_disable() for more detail=
-s
-> > > on the DSI .
-> > >
-> > > Split the unprepare function into a disable part and an unprepare par=
-t.
-> > > For now, just the DSI writes to enter sleep mode are put in the disab=
-le
-> > > function. This fixes the panel off routine and keeps the panel happy.
-> >
-> > It is documented that the mipi_dsi_host_ops transfer function should
-> > be called with the host in any state [1], so the host driver is
-> > failing there.
->
-> Thanks for the info! It says "Drivers that need the underlying device to
-> be powered to perform these operations will first need to make sure it=E2=
-=80=99s
-> been properly enabled." Does that mean the panel driver needs to make
-> sure the underlying dsi host device is powered? The sentence is too
-> ambiguous for me to understand what 'drivers' and 'underlying device'
-> are.
+On 12.01.2023 12:05, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Use a temporary register to reduce the size of detour code from 16 bytes to
+> 8 bytes. The previous implementation is from 'commit afc76b8b8011 ("riscv:
+> Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")'.
+> 
+> Before the patch:
+> <func_prolog>:
+>   0: REG_S  ra, -SZREG(sp)
+>   4: auipc  ra, ?
+>   8: jalr   ?(ra)
+> 12: REG_L  ra, -SZREG(sp)
+>   (func_boddy)
+> 
+> After the patch:
+> <func_prolog>:
+>   0: auipc  t0, ?
+>   4: jalr   t0, ?(t0)
+>   (func_boddy)
+> 
+> This patch not just reduces the size of detour code, but also fixes an
+> important issue:
+> 
+> An Ftrace callback registered with FTRACE_OPS_FL_IPMODIFY flag can
+> actually change the instruction pointer, e.g. to "replace" the given
+> kernel function with a new one, which is needed for livepatching, etc.
+> 
+> In this case, the trampoline (ftrace_regs_caller) would not return to
+> <func_prolog+12> but would rather jump to the new function. So, "REG_L
+> ra, -SZREG(sp)" would not run and the original return address would not
+> be restored. The kernel is likely to hang or crash as a result.
+> 
+> This can be easily demonstrated if one tries to "replace", say,
+> cmdline_proc_show() with a new function with the same signature using
+> instruction_pointer_set(&fregs->regs, new_func_addr) in the Ftrace
+> callback.
+> 
+> Link: https://lore.kernel.org/linux-riscv/20221122075440.1165172-1-suagrfillet@gmail.com/
+> Link: https://lore.kernel.org/linux-riscv/d7d5730b-ebef-68e5-5046-e763e1ee6164@yadro.com/
+> Co-developed-by: Song Shuai <suagrfillet@gmail.com>
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Evgenii Shatokhin <e.shatokhin@yadro.com>
+> ---
+>   arch/riscv/Makefile             |  4 +-
+>   arch/riscv/include/asm/ftrace.h | 50 +++++++++++++++++++------
+>   arch/riscv/kernel/ftrace.c      | 65 ++++++++++-----------------------
+>   arch/riscv/kernel/mcount-dyn.S  | 42 ++++++++-------------
+>   4 files changed, 75 insertions(+), 86 deletions(-)
+> 
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index ea5a91da6897..3c9aaf67ed79 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -12,9 +12,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+>          LDFLAGS_vmlinux := --no-relax
+>          KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+>   ifeq ($(CONFIG_RISCV_ISA_C),y)
+> -       CC_FLAGS_FTRACE := -fpatchable-function-entry=8
+> -else
+>          CC_FLAGS_FTRACE := -fpatchable-function-entry=4
+> +else
+> +       CC_FLAGS_FTRACE := -fpatchable-function-entry=2
+>   endif
+>   endif
+> 
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+> index 04dad3380041..9e73922e1e2e 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -42,6 +42,14 @@ struct dyn_arch_ftrace {
+>    * 2) jalr: setting low-12 offset to ra, jump to ra, and set ra to
+>    *          return address (original pc + 4)
+>    *
+> + *<ftrace enable>:
+> + * 0: auipc  t0/ra, 0x?
+> + * 4: jalr   t0/ra, ?(t0/ra)
+> + *
+> + *<ftrace disable>:
+> + * 0: nop
+> + * 4: nop
+> + *
+>    * Dynamic ftrace generates probes to call sites, so we must deal with
+>    * both auipc and jalr at the same time.
+>    */
+> @@ -52,25 +60,43 @@ struct dyn_arch_ftrace {
+>   #define AUIPC_OFFSET_MASK      (0xfffff000)
+>   #define AUIPC_PAD              (0x00001000)
+>   #define JALR_SHIFT             20
+> -#define JALR_BASIC             (0x000080e7)
+> -#define AUIPC_BASIC            (0x00000097)
+> +#define JALR_RA                        (0x000080e7)
+> +#define AUIPC_RA               (0x00000097)
+> +#define JALR_T0                        (0x000282e7)
+> +#define AUIPC_T0               (0x00000297)
+>   #define NOP4                   (0x00000013)
+> 
+> -#define make_call(caller, callee, call)                                        \
+> +#define to_jalr_t0(offset)                                             \
+> +       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_T0)
+> +
+> +#define to_auipc_t0(offset)                                            \
+> +       ((offset & JALR_SIGN_MASK) ?                                    \
+> +       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_T0) :       \
+> +       ((offset & AUIPC_OFFSET_MASK) | AUIPC_T0))
+> +
+> +#define make_call_t0(caller, callee, call)                             \
+>   do {                                                                   \
+> -       call[0] = to_auipc_insn((unsigned int)((unsigned long)callee -  \
+> -                               (unsigned long)caller));                \
+> -       call[1] = to_jalr_insn((unsigned int)((unsigned long)callee -   \
+> -                              (unsigned long)caller));                 \
+> +       unsigned int offset =                                           \
+> +               (unsigned long) callee - (unsigned long) caller;        \
+> +       call[0] = to_auipc_t0(offset);                                  \
+> +       call[1] = to_jalr_t0(offset);                                   \
+>   } while (0)
+> 
+> -#define to_jalr_insn(offset)                                           \
+> -       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_BASIC)
+> +#define to_jalr_ra(offset)                                             \
+> +       (((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_RA)
+> 
+> -#define to_auipc_insn(offset)                                          \
+> +#define to_auipc_ra(offset)                                            \
+>          ((offset & JALR_SIGN_MASK) ?                                    \
+> -       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_BASIC) :    \
+> -       ((offset & AUIPC_OFFSET_MASK) | AUIPC_BASIC))
+> +       (((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_RA) :       \
+> +       ((offset & AUIPC_OFFSET_MASK) | AUIPC_RA))
+> +
+> +#define make_call_ra(caller, callee, call)                             \
+> +do {                                                                   \
+> +       unsigned int offset =                                           \
+> +               (unsigned long) callee - (unsigned long) caller;        \
+> +       call[0] = to_auipc_ra(offset);                                  \
+> +       call[1] = to_jalr_ra(offset);                                   \
+> +} while (0)
+> 
+>   /*
+>    * Let auipc+jalr be the basic *mcount unit*, so we make it 8 bytes here.
+> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+> index 2086f6585773..5bff37af4770 100644
+> --- a/arch/riscv/kernel/ftrace.c
+> +++ b/arch/riscv/kernel/ftrace.c
+> @@ -55,12 +55,15 @@ static int ftrace_check_current_call(unsigned long hook_pos,
+>   }
+> 
+>   static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+> -                               bool enable)
+> +                               bool enable, bool ra)
+>   {
+>          unsigned int call[2];
+>          unsigned int nops[2] = {NOP4, NOP4};
+> 
+> -       make_call(hook_pos, target, call);
+> +       if (ra)
+> +               make_call_ra(hook_pos, target, call);
+> +       else
+> +               make_call_t0(hook_pos, target, call);
+> 
+>          /* Replace the auipc-jalr pair at once. Return -EPERM on write error. */
+>          if (patch_text_nosync
+> @@ -70,42 +73,13 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+>          return 0;
+>   }
+> 
+> -/*
+> - * Put 5 instructions with 16 bytes at the front of function within
+> - * patchable function entry nops' area.
+> - *
+> - * 0: REG_S  ra, -SZREG(sp)
+> - * 1: auipc  ra, 0x?
+> - * 2: jalr   -?(ra)
+> - * 3: REG_L  ra, -SZREG(sp)
+> - *
+> - * So the opcodes is:
+> - * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
+> - * 1: 0x???????? -> auipc
+> - * 2: 0x???????? -> jalr
+> - * 3: 0xff813083 (ld)/0xffc12083 (lw)
+> - */
+> -#if __riscv_xlen == 64
+> -#define INSN0  0xfe113c23
+> -#define INSN3  0xff813083
+> -#elif __riscv_xlen == 32
+> -#define INSN0  0xfe112e23
+> -#define INSN3  0xffc12083
+> -#endif
+> -
+> -#define FUNC_ENTRY_SIZE        16
+> -#define FUNC_ENTRY_JMP 4
+> -
+>   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>   {
+> -       unsigned int call[4] = {INSN0, 0, 0, INSN3};
+> -       unsigned long target = addr;
+> -       unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
+> +       unsigned int call[2];
+> 
+> -       call[1] = to_auipc_insn((unsigned int)(target - caller));
+> -       call[2] = to_jalr_insn((unsigned int)(target - caller));
+> +       make_call_t0(rec->ip, addr, call);
+> 
+> -       if (patch_text_nosync((void *)rec->ip, call, FUNC_ENTRY_SIZE))
+> +       if (patch_text_nosync((void *)rec->ip, call, MCOUNT_INSN_SIZE))
+>                  return -EPERM;
+> 
+>          return 0;
+> @@ -114,15 +88,14 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>   int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>                      unsigned long addr)
+>   {
+> -       unsigned int nops[4] = {NOP4, NOP4, NOP4, NOP4};
+> +       unsigned int nops[2] = {NOP4, NOP4};
+> 
+> -       if (patch_text_nosync((void *)rec->ip, nops, FUNC_ENTRY_SIZE))
+> +       if (patch_text_nosync((void *)rec->ip, nops, MCOUNT_INSN_SIZE))
+>                  return -EPERM;
+> 
+>          return 0;
+>   }
+> 
+> -
+>   /*
+>    * This is called early on, and isn't wrapped by
+>    * ftrace_arch_code_modify_{prepare,post_process}() and therefor doesn't hold
+> @@ -144,10 +117,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+>   int ftrace_update_ftrace_func(ftrace_func_t func)
+>   {
+>          int ret = __ftrace_modify_call((unsigned long)&ftrace_call,
+> -                                      (unsigned long)func, true);
+> +                                      (unsigned long)func, true, true);
+>          if (!ret) {
+>                  ret = __ftrace_modify_call((unsigned long)&ftrace_regs_call,
+> -                                          (unsigned long)func, true);
+> +                                          (unsigned long)func, true, true);
+>          }
+> 
+>          return ret;
+> @@ -159,16 +132,16 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>                         unsigned long addr)
+>   {
+>          unsigned int call[2];
+> -       unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
+> +       unsigned long caller = rec->ip;
+>          int ret;
+> 
+> -       make_call(caller, old_addr, call);
+> +       make_call_t0(caller, old_addr, call);
+>          ret = ftrace_check_current_call(caller, call);
+> 
+>          if (ret)
+>                  return ret;
+> 
+> -       return __ftrace_modify_call(caller, addr, true);
+> +       return __ftrace_modify_call(caller, addr, true, false);
+>   }
+>   #endif
+> 
+> @@ -203,12 +176,12 @@ int ftrace_enable_ftrace_graph_caller(void)
+>          int ret;
+> 
+>          ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+> -                                   (unsigned long)&prepare_ftrace_return, true);
+> +                                   (unsigned long)&prepare_ftrace_return, true, true);
+>          if (ret)
+>                  return ret;
+> 
+>          return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+> -                                   (unsigned long)&prepare_ftrace_return, true);
+> +                                   (unsigned long)&prepare_ftrace_return, true, true);
+>   }
+> 
+>   int ftrace_disable_ftrace_graph_caller(void)
+> @@ -216,12 +189,12 @@ int ftrace_disable_ftrace_graph_caller(void)
+>          int ret;
+> 
+>          ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+> -                                   (unsigned long)&prepare_ftrace_return, false);
+> +                                   (unsigned long)&prepare_ftrace_return, false, true);
+>          if (ret)
+>                  return ret;
+> 
+>          return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+> -                                   (unsigned long)&prepare_ftrace_return, false);
+> +                                   (unsigned long)&prepare_ftrace_return, false, true);
+>   }
+>   #endif /* CONFIG_DYNAMIC_FTRACE */
+>   #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+> index d171eca623b6..125de818d1ba 100644
+> --- a/arch/riscv/kernel/mcount-dyn.S
+> +++ b/arch/riscv/kernel/mcount-dyn.S
+> @@ -13,8 +13,8 @@
+> 
+>          .text
+> 
+> -#define FENTRY_RA_OFFSET       12
+> -#define ABI_SIZE_ON_STACK      72
+> +#define FENTRY_RA_OFFSET       8
+> +#define ABI_SIZE_ON_STACK      80
+>   #define ABI_A0                 0
+>   #define ABI_A1                 8
+>   #define ABI_A2                 16
+> @@ -23,10 +23,10 @@
+>   #define ABI_A5                 40
+>   #define ABI_A6                 48
+>   #define ABI_A7                 56
+> -#define ABI_RA                 64
+> +#define ABI_T0                 64
+> +#define ABI_RA                 72
+> 
+>          .macro SAVE_ABI
+> -       addi    sp, sp, -SZREG
+>          addi    sp, sp, -ABI_SIZE_ON_STACK
+> 
+>          REG_S   a0, ABI_A0(sp)
+> @@ -37,6 +37,7 @@
+>          REG_S   a5, ABI_A5(sp)
+>          REG_S   a6, ABI_A6(sp)
+>          REG_S   a7, ABI_A7(sp)
+> +       REG_S   t0, ABI_T0(sp)
+>          REG_S   ra, ABI_RA(sp)
+>          .endm
+> 
+> @@ -49,24 +50,18 @@
+>          REG_L   a5, ABI_A5(sp)
+>          REG_L   a6, ABI_A6(sp)
+>          REG_L   a7, ABI_A7(sp)
+> +       REG_L   t0, ABI_T0(sp)
+>          REG_L   ra, ABI_RA(sp)
+> 
+>          addi    sp, sp, ABI_SIZE_ON_STACK
+> -       addi    sp, sp, SZREG
+>          .endm
+> 
+>   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>          .macro SAVE_ALL
+> -       addi    sp, sp, -SZREG
+>          addi    sp, sp, -PT_SIZE_ON_STACK
+> 
+> -       REG_S x1,  PT_EPC(sp)
+> -       addi    sp, sp, PT_SIZE_ON_STACK
+> -       REG_L x1,  (sp)
+> -       addi    sp, sp, -PT_SIZE_ON_STACK
+> +       REG_S t0,  PT_EPC(sp)
+>          REG_S x1,  PT_RA(sp)
+> -       REG_L x1,  PT_EPC(sp)
+> -
+>          REG_S x2,  PT_SP(sp)
+>          REG_S x3,  PT_GP(sp)
+>          REG_S x4,  PT_TP(sp)
+> @@ -100,15 +95,11 @@
+>          .endm
+> 
+>          .macro RESTORE_ALL
+> +       REG_L t0,  PT_EPC(sp)
+>          REG_L x1,  PT_RA(sp)
+> -       addi    sp, sp, PT_SIZE_ON_STACK
+> -       REG_S x1,  (sp)
+> -       addi    sp, sp, -PT_SIZE_ON_STACK
+> -       REG_L x1,  PT_EPC(sp)
+>          REG_L x2,  PT_SP(sp)
+>          REG_L x3,  PT_GP(sp)
+>          REG_L x4,  PT_TP(sp)
+> -       REG_L x5,  PT_T0(sp)
+>          REG_L x6,  PT_T1(sp)
+>          REG_L x7,  PT_T2(sp)
+>          REG_L x8,  PT_S0(sp)
+> @@ -137,17 +128,16 @@
+>          REG_L x31, PT_T6(sp)
+> 
+>          addi    sp, sp, PT_SIZE_ON_STACK
+> -       addi    sp, sp, SZREG
+>          .endm
+>   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> 
+>   ENTRY(ftrace_caller)
+>          SAVE_ABI
+> 
+> -       addi    a0, ra, -FENTRY_RA_OFFSET
+> +       addi    a0, t0, -FENTRY_RA_OFFSET
+>          la      a1, function_trace_op
+>          REG_L   a2, 0(a1)
+> -       REG_L   a1, ABI_SIZE_ON_STACK(sp)
+> +       mv      a1, ra
+>          mv      a3, sp
+> 
+>   ftrace_call:
+> @@ -155,8 +145,8 @@ ftrace_call:
+>          call    ftrace_stub
+> 
+>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> -       addi    a0, sp, ABI_SIZE_ON_STACK
+> -       REG_L   a1, ABI_RA(sp)
+> +       addi    a0, sp, ABI_RA
+> +       REG_L   a1, ABI_T0(sp)
+>          addi    a1, a1, -FENTRY_RA_OFFSET
+>   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+>          mv      a2, s0
+> @@ -166,17 +156,17 @@ ftrace_graph_call:
+>          call    ftrace_stub
+>   #endif
+>          RESTORE_ABI
+> -       ret
+> +       jr t0
+>   ENDPROC(ftrace_caller)
+> 
+>   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>   ENTRY(ftrace_regs_caller)
+>          SAVE_ALL
+> 
+> -       addi    a0, ra, -FENTRY_RA_OFFSET
+> +       addi    a0, t0, -FENTRY_RA_OFFSET
+>          la      a1, function_trace_op
+>          REG_L   a2, 0(a1)
+> -       REG_L   a1, PT_SIZE_ON_STACK(sp)
+> +       mv      a1, ra
+>          mv      a3, sp
+> 
+>   ftrace_regs_call:
+> @@ -196,6 +186,6 @@ ftrace_graph_regs_call:
+>   #endif
+> 
+>          RESTORE_ALL
+> -       ret
+> +       jr t0
+>   ENDPROC(ftrace_regs_caller)
+>   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> --
+> 2.36.1
+> 
+> 
 
-The DSI host driver (ie in your case something under
-drivers/gpu/drm/msm/dsi) should ensure that a transfer can be made,
-regardless of state.
+Looks good to me.
 
-I must say that this has been documented as the case, but doesn't
-necessarily reflect reality in a number of drivers.
+I also re-checked if "replacement" of cmdline_proc_show() with a custom 
+function via Ftrace works in this case - it does. Rollback to the 
+original cmdline_proc_show() seems to work OK too.
 
-> >
-> > This sounds like the same issue I was addressing in adding the
-> > prepare_prev_first flag to drm_panel, and pre_enable_prev_first to
-> > drm_bridge via [2].
-> > Defining prepare_prev_first for your panel would result in the host
-> > pre_enable being called before the panel prepare, and therefore the
-> > transfer calls from boe_panel_init_dcs_cmd boe_panel_prepare won't be
-> > relying on the DSI host powering up early. It will also call the panel
-> > unprepare before the DSI host bridge post_disable is called, and
-> > therefore the DSI host will still be powered up and the transfer won't
-> > fail.
-> >
-> > Actually I've just noted the comment at [3]. [2] is that framework fix
-> > that means that the magic workaround isn't required, but it will
-> > require this panel to opt in to the ordering change.
->
-> Cool. Glad that we can clean that up with your series.
->
-> Is it wrong to split unprepare to a disable and unprepare phase? I'm not
-> super keen on fixing 6.1 stable kernels by opting this driver into the
-> ordering change. Splitting the phase into two is small and simple and
-> works. I suspect changing the ordering may uncover more bugs, or be a
-> larger task. I'd be glad to test that series[2] from you to get rid of
-> [3].
+Reviewed-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
 
-Ah, I hadn't realised it was a regression in a released kernel :(
+Regards,
+Evgenii
 
-Splitting into a disable and unprepare is totally fine. Normally
-disable would normally disable the panel and backlight (probably by
-drm_panel before the panel disable call), with unprepare disabling
-power and clocks
-
-Do note that AIUI you will be telling the panel to enter sleep mode
-whilst video is still being transmitted. That should be safe as the
-panel has to still be partially active to handle an exit sleep mode
-command, but actually powering hardware down at that point could cause
-DSI bus arbitration errors as clock or data lanes could be pulled down
-when the host is trying to adopt HS or LP11.
-
-  Dave
-
-> >
-> >
-> > [1] https://www.kernel.org/doc/html/latest/gpu/drm-kms-helpers.html#c.m=
-ipi_dsi_host_ops
-> > [2] https://patchwork.freedesktop.org/series/100252/
-> > [3] https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/msm/d=
-si/dsi_manager.c#L47
-> >
