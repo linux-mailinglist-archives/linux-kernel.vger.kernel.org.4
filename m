@@ -2,95 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0EB66D678
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310B966D7F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235717AbjAQGoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 01:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S235824AbjAQIVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbjAQGn5 (ORCPT
+        with ESMTP id S235840AbjAQIVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 01:43:57 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A229B1EFD5;
-        Mon, 16 Jan 2023 22:43:55 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nwzr504ypz4f3nT6;
-        Tue, 17 Jan 2023 14:43:49 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgDX0R+jQ8ZjDSvYBg--.16287S9;
-        Tue, 17 Jan 2023 14:43:51 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v4 5/5] blk-iocost: change div64_u64 to DIV64_U64_ROUND_UP in ioc_refresh_params()
-Date:   Tue, 17 Jan 2023 15:08:06 +0800
-Message-Id: <20230117070806.3857142-6-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230117070806.3857142-1-yukuai1@huaweicloud.com>
-References: <20230117070806.3857142-1-yukuai1@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDX0R+jQ8ZjDSvYBg--.16287S9
-X-Coremail-Antispam: 1UD129KBjvdXoWruw1DtF4DCw47Aw15WFyxAFb_yoWDAwb_ZF
-        yftw1Iqr18AF17uFsYgFsIvrW29an8JFWDu3sxt3y5AFnxJFWkAan7K397ZrsxAFW5u3y5
-        tF1DWrs7Ars2qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbDAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-        IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-        4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQSdkU
-        UUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+        Tue, 17 Jan 2023 03:21:47 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810CD25E09
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:21:44 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230117082142epoutp048cbf234517489fa9846af76c796c8b3e~7Cu2nqr9R0594905949epoutp048
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:21:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230117082142epoutp048cbf234517489fa9846af76c796c8b3e~7Cu2nqr9R0594905949epoutp048
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1673943702;
+        bh=ENCE8uiLf8l1fHPrs46GI/aw9Xxe4V1T7lZO3YvNhXk=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=DFVfVAV+H6JKsKeHA+GJJQzt2uHWpRmzAc3PW9yGrYICk9GWX043UlIiKlcdiNP6K
+         dObbPlFv01XjfZmt8i38eaaI5RWAOz/vVhJ4qEqUV+BIbu028kISvyXVwtRDiCX7aX
+         mRTLgykmuMiDLU7lqP1WMZJs3G0G+9ZyHC6hrgc0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20230117082141epcas5p476e44f422744ae1abd079e6b6313ee64~7Cu2Bm3Bl0211002110epcas5p4D;
+        Tue, 17 Jan 2023 08:21:41 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Nx2100zPDz4x9Pw; Tue, 17 Jan
+        2023 08:21:40 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8C.49.02301.39A56C36; Tue, 17 Jan 2023 17:21:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230116103841epcas5p17b33f2b6567935d6be59b4d2b5d9f847~6w9KzjTOU1456314563epcas5p1q;
+        Mon, 16 Jan 2023 10:38:41 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230116103841epsmtrp20600063219915088cf83f394d7256cb8~6w9KyrIlu0521705217epsmtrp2D;
+        Mon, 16 Jan 2023 10:38:41 +0000 (GMT)
+X-AuditID: b6c32a49-473fd700000108fd-a1-63c65a93bf2e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        71.F8.10542.13925C36; Mon, 16 Jan 2023 19:38:41 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230116103835epsmtip13afc6816ffd45f4df958c248f3fee2ff~6w9F47GGD0462804628epsmtip18;
+        Mon, 16 Jan 2023 10:38:35 +0000 (GMT)
+From:   Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
+        alim.akhtar@samsung.com, rcsekar@samsung.com,
+        aswani.reddy@samsung.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Subject: [PATCH v4 0/5] ASoC: samsung: fsd: audio support for FSD SoC
+Date:   Mon, 16 Jan 2023 16:08:18 +0530
+Message-Id: <20230116103823.90757-1-p.rajanbabu@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnk+LIzCtJLcpLzFFi42LZdlhTQ3dK1LFkg6ZZLBYP5m1js7hy8RCT
+        xaHNW9ktpj58wmYx/8g5Vou+Fw+ZLb5d6WCyuLxrDpvFjPP7mCyObgy2WLT1C7tF565+VotZ
+        F3awWrTuPcJucfhNO6vFhu9rGR0EPDZ8bmLz2DnrLrvHplWdbB53ru1h89j3dhmbR9+WVYwe
+        67dcZfH4vEkugCMq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnF
+        J0DXLTMH6AMlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5q
+        iZWhgYGRKVBhQnbGo819jAW7eSrenZjK0sB4kbOLkZNDQsBEYu3s56wgtpDAbkaJtfuiuhi5
+        gOxPjBKrD21nhEh8ZpQ42SUP03Dv6E52iKJdjBIvTh1ggnBamSR2vbsM1sEmYCqxak4jK0hC
+        RKCJSaLtzUQWEIdZYCOjxOljD5lAqoQFXCWmf+9nBrFZBFQlfp7dARbnFbCR+Pq6gQlin7zE
+        6g0HmEGaJQQ6OSTWTbvHBpFwkVgzdQ8rhC0s8er4FnYIW0ri87u9UDX5EtM+NkPZFRJtHzdA
+        DbWXOHBlDtBFHEAXaUqs36UPEZaVmHpqHVgJswCfRO/vJ1DlvBI75sHYqhLrl29ihLClJfZd
+        3wtle0i0b18CDa9Yieady5gmMMrOQtiwgJFxFaNkakFxbnpqsWmBYV5qOTymkvNzNzGCU6aW
+        5w7Guw8+6B1iZOJgPMQowcGsJMLrt+twshBvSmJlVWpRfnxRaU5q8SFGU2CYTWSWEk3OBybt
+        vJJ4QxNLAxMzMzMTS2MzQyVx3tSt85OFBNITS1KzU1MLUotg+pg4OKUamNQi+r9qKn298M9I
+        yuJryXK+owu0hKyueGTzTptiEBe7aZug8L29/RYWTe2S74+lz91Zde4h55OKII1bG/dP3JYp
+        NeFkin/h00OKza9rD0lunNxVrHGqVSY7dbJ4KUtp3qtar/mnlvnvc+F9tLR3yom1RbvDGRKZ
+        +htXrxEz39tmui6ew8cz+a3JnTS/z5av2Y783r8zW8Rn3++cby+r4jaubeQzqakJtN7ht8bH
+        lV98xuTAfWlWuQbs9+aYXrlpr6HuGzdhwyWR9TE+1gwal823msR/WOMsW5DXtHqf5hbG/ISf
+        xVLckw1C2bRnLb40JYc9oN4sY5Py3/A9dnEG9blndsxsdjZpO+9mk9OhxFKckWioxVxUnAgA
+        hEGw4CIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFLMWRmVeSWpSXmKPExsWy7bCSnK6h5tFkg74LnBYP5m1js7hy8RCT
+        xaHNW9ktpj58wmYx/8g5Vou+Fw+ZLb5d6WCyuLxrDpvFjPP7mCyObgy2WLT1C7tF565+VotZ
+        F3awWrTuPcJucfhNO6vFhu9rGR0EPDZ8bmLz2DnrLrvHplWdbB53ru1h89j3dhmbR9+WVYwe
+        67dcZfH4vEkugCOKyyYlNSezLLVI3y6BK+PR5j7Ggt08Fe9OTGVpYLzI2cXIySEhYCJx7+hO
+        9i5GLg4hgR2MEs8nH2aBSEhLTO/fwwZhC0us/PecHcQWEmhmkli8SRDEZhMwlVg1p5EVpFlE
+        YAKTxMl3x8CamQW2MkpM/WwEYgsLuEpM/97PDGKzCKhK/Dy7gwnE5hWwkfj6uoEJYoG8xOoN
+        B5gnMPIsYGRYxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHLxaWjsY96z6oHeIkYmD
+        8RCjBAezkgiv367DyUK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJ
+        MnFwSjUwLSmr6krWeTj/4dsJaT1ZjFWPjs9L5pD5PzH694oTqw338xgmR3WJ/GjlPhZT/8G4
+        Pu9NVMo7aWGeIgFPt4B14WcWb372I0PuZpTumiOfFa78rDmsd6wvmVOlJP3AOmWHNo0T1xIi
+        1Pf/rLVX/vI/I0Wi+Er+5Ou3bNW9ktO1jX7Hp/QWvNULmLB9XmbMrICf/YzHrRzqLlUumNSn
+        IFa00+nGuiTVGCtz48KzR3uCDiov+RTYu+WputG8Ny/V0ll7Fv24uvfO1IuFC1RtDzjbX+W+
+        K7M5NmLxjbL7PvoN+cwyR4Md82dP2vlojbuc4AZ+Dr7gqm2f/t7dd9svV+5rQJndZC/PPVPk
+        IxYKTz6vxFKckWioxVxUnAgAJ7JgIc0CAAA=
+X-CMS-MailID: 20230116103841epcas5p17b33f2b6567935d6be59b4d2b5d9f847
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CMS-RootMailID: 20230116103841epcas5p17b33f2b6567935d6be59b4d2b5d9f847
+References: <CGME20230116103841epcas5p17b33f2b6567935d6be59b4d2b5d9f847@epcas5p1.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Nan <linan122@huawei.com>
+This patch series enables audio support on FSD SoC.
 
-vrate_min is calculated by DIV64_U64_ROUND_UP, but vrate_max is calculated
-by div64_u64. Vrate_min may be 1 greater than vrate_max if the input
-values min and max of cost.qos are equal.
+Changes in v4:
+1. Rebased and addressed review comments provided for v3.
 
-Signed-off-by: Li Nan <linan122@huawei.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Acked-by: Tejun Heo <tj@kernel.org>
----
- block/blk-iocost.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v3:
+1. Addressed all the review comments provided for v2 patch.
+2. Fixed compilation warnings reported by kernel test robot.
 
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 4cac0e7bb7cc..1f23480a7a01 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -931,8 +931,8 @@ static bool ioc_refresh_params(struct ioc *ioc, bool force)
- 
- 	ioc->vrate_min = DIV64_U64_ROUND_UP((u64)ioc->params.qos[QOS_MIN] *
- 					    VTIME_PER_USEC, MILLION);
--	ioc->vrate_max = div64_u64((u64)ioc->params.qos[QOS_MAX] *
--				   VTIME_PER_USEC, MILLION);
-+	ioc->vrate_max = DIV64_U64_ROUND_UP((u64)ioc->params.qos[QOS_MAX] *
-+					    VTIME_PER_USEC, MILLION);
- 
- 	return true;
- }
+Changes in v2:
+1. New compatible added in Exynos I2S driver for FSD platform.
+2. Added Fixup support for Exynos I2S CPU DAI.
+3. Migration of manual PSR, OPCLK configuration to Exynos CPU DAI driver as
+fixup.
+4. Migrated from dedicated sound card to simple audio card.
+5. Support added for tlv320aic3x-i2c codec on FSD platform.
+
+Changes in v1:
+1. Add TDM support on samsung I2S interface.
+2. Allow sound card to directly configure I2S prescaler divider instead of
+calculating it from frame clock.
+3. The sound card support for FSD SoC which utilizes samsung I2S interface
+as CPU DAI.
+
+Padmanabhan Rajanbabu (5):
+  ASoC: dt-bindings: Add FSD I2S controller bindings
+  ASoC: samsung: i2s: add support for FSD I2S
+  arm64: dts: fsd: Add I2S DAI node for Tesla FSD
+  arm64: dts: fsd: Add codec node for Tesla FSD
+  arm64: dts: fsd: Add sound card node for Tesla FSD
+
+ .../bindings/sound/samsung-i2s.yaml           |  8 +++
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         | 53 +++++++++++++++++++
+ arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi    | 14 +++++
+ arch/arm64/boot/dts/tesla/fsd.dtsi            | 34 ++++++++++++
+ sound/soc/samsung/i2s-regs.h                  |  1 +
+ sound/soc/samsung/i2s.c                       | 53 +++++++++++++++++++
+ 6 files changed, 163 insertions(+)
+
 -- 
-2.31.1
+2.17.1
 
