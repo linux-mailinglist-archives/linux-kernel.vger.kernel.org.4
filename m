@@ -2,153 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD0366C002
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CCD66C007
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjAPNnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S231302AbjAPNoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjAPNm5 (ORCPT
+        with ESMTP id S231165AbjAPNn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:42:57 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F241C1CF52;
-        Mon, 16 Jan 2023 05:42:54 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 13DCC320046E;
-        Mon, 16 Jan 2023 08:42:51 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 16 Jan 2023 08:42:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1673876570; x=1673962970; bh=UC
-        PpXlC2FNyfKFYm+ug4JseRqO27ZMyvZOVWc30I6Cw=; b=RF7tMbWf+BQMmxPOoY
-        8PYg2uVoJjSdxuv7mr9lhLnO2fT16DiT8/NjlfbLFPRCICmjdGnrZuG9QI/ycw7l
-        k3lTeNnsTf9FM9x3ZNQr2gM9CWrzsrQnkVAMYZG7eGSnD0PV3TjJ5i3o7FkbRJ/H
-        tpP7ceO17wpPTyiEeB68YZxlHylcdlCHlkAA1Q7W16629Hqu+KDJZFUmXzFNgqN1
-        gIdqZCefLICmUyLxhYh3EkswnABedhXZnoROLb/Xs4un2CI1FCXah2P8ivWvMbt2
-        MzRFFy36Rmo1eizlxptUmR//jSAE95GJe9irzyZPLbeRb0uLfR5jTvgzTCDLVKP8
-        dOIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673876570; x=1673962970; bh=UCPpXlC2FNyfKFYm+ug4JseRqO27
-        ZMyvZOVWc30I6Cw=; b=rQRJ50QH9Hlw9W7HrzikGmwoEcaAxJIkvW38BuQ/e0AN
-        j3onD1u9tjAEl1jv8qZHjHQAW7gvsn4efFF5gcz7z5psD7a4Pm2m5/tNap3eTHeD
-        +ZzEz2qQOz6giVjhUqEwF5VqkYDAgMk368blK2RR1A6C3wyCUjksUhlfyJ8se46h
-        KIMo6FHvxO3abJGlwdhKh4dMbZEKWWEjGVxW3ynx1kGfQyC07fJs1s0na/3Ew/9S
-        nQ84ObvOiD40dvXP0kVgub3F58xxp7F6ZxEChGkI0010apgbHYRPZJlncgu4CGX/
-        VDZajJ/JC5Pa8MeF251Rnik3iXlm5If+4O3K6qRbFA==
-X-ME-Sender: <xms:WlTFYwO50Pm2wcUEhvReHTUQIAVCAGa4H7apl84ZlSUOys83yluIwg>
-    <xme:WlTFY2-U0VQXzgIx5al3U9T7ODtoewugv4rq9UVmbZF6N2vJMLCGKJxGEnJK6jIJA
-    2USS66RidNLKTJ909Y>
-X-ME-Received: <xmr:WlTFY3RFTHhG0-y1A1LU4u_Hdrg7QEo2tENtDyueu5THwlAvJbiBE-PFyJ_mYtIiqsXmtA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgedgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:WlTFY4s2s6Jvu5Yyy-pm-ElqOmmp8TKhO-z--dN1wpNyrxR5-Tncag>
-    <xmx:WlTFY4fftlcSNbImWomkllVxWbBAKkY-Xocpfy56dHh2h_2pb1bGJA>
-    <xmx:WlTFY80SC0lGCibR0-X2yNITaQDJUEs9JNRuB7XElQ8KWoO-JI-4MQ>
-    <xmx:WlTFY-2SXjVObZoLG5cmDjPGCEOKCZGMSEy7XbpIeCpRhZUdIgVNOw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 Jan 2023 08:42:49 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 01F39109792; Mon, 16 Jan 2023 16:42:46 +0300 (+03)
-Date:   Mon, 16 Jan 2023 16:42:46 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
-Message-ID: <20230116134246.soworigs56bz5v7o@box.shutemov.name>
-References: <20230113212926.2904735-1-dionnaglaze@google.com>
- <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
- <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
- <20230116123057.wvr6rz7y3ubgcm5z@box.shutemov.name>
- <CAMj1kXGVNHqGN2uhziARu9H3RQiqbPJBE1GxHuWzC5gajJyaeA@mail.gmail.com>
+        Mon, 16 Jan 2023 08:43:57 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261751D93A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:43:56 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id x4so16827328pfj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BNSsmno8e8s9oFCMBiRbmu66VIEr5qjM0vt5oGHy2JU=;
+        b=aAJ7bHocMQ8t2p9/9nDJJWMlvaBtA/p7xcLuCk6+5H4U60Y+ahRYKaDENAtmBXJg2R
+         Rzj9abrDPhI/PjkA1NWGCf5R2brQ5quq2fHOKZ67Meu2L7GQVNp4h+0+7lvrcSDDOyh0
+         DUj1+lQi8cM7c0+KE1iXPgBXktTBdJ7ecW6L9IhZqROSUIcxIQGFnahAbL3yjoKjpp7T
+         cSYHP16YrxF5/xtCLLf9E79uPNnEEwAlTAMCWtMkcHukedu+TwLjeHBmAXfeHwKQaCA7
+         qSLST8E473ecUwRr9vvZWB7/dSHsZHrjtV/wCHKBsUHKPtOPag1kUOunUvnmjHj8/du9
+         ahaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BNSsmno8e8s9oFCMBiRbmu66VIEr5qjM0vt5oGHy2JU=;
+        b=3A4rG8vC902PkPr6aauM8U45ZB8owCo2p77HvavQyuuBgWFGxdy/wirWYnAqDZ8wRY
+         BQeGqYChH0Fh89cHWjuqqRc71FcVLtMrWd0yKzC46FIIkGoI3ffJ8MS8cY5u5yqfsdyF
+         /hGsG9oiaXPCu9icI//HruWiwlzxgphcJGazjf0671lJMUX44owAqLbakal+d+qTwW1Z
+         1rvs5YIUU/6gqjke7dYtwMUJIfPbQV+CA88GH7tqDx8TgHylDnZ6UmnzaZPkRXPeBgc9
+         T5jUTsO/mwOPzecLbSaCtxVEpkzSFsn+2ACrWG/jR3vI98DMHQmENPHciHQ73TzwbUYi
+         NCtw==
+X-Gm-Message-State: AFqh2kp6bKxVve+6TE7/4jJUOuQ3xc4JuM1m5uOYsvbldWbgeXyfzpED
+        InRdZKa2T3g6QZrZ5YVXcug75A==
+X-Google-Smtp-Source: AMrXdXsCDsCqQp0C3v1H7c5m1yd13Zbw4SzK7gfjWP3xAYyzgSBqj5ofeBqknm+ZNqo4ggcMwfMhug==
+X-Received: by 2002:a05:6a00:781:b0:57f:d5d1:41d0 with SMTP id g1-20020a056a00078100b0057fd5d141d0mr20227289pfu.3.1673876635545;
+        Mon, 16 Jan 2023 05:43:55 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y10-20020aa79aea000000b0058ba2ebee12sm2324129pfp.158.2023.01.16.05.43.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 05:43:55 -0800 (PST)
+Message-ID: <4aabf060-e024-7e6f-2037-8b13a35531ca@kernel.dk>
+Date:   Mon, 16 Jan 2023 06:43:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGVNHqGN2uhziARu9H3RQiqbPJBE1GxHuWzC5gajJyaeA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [syzbot] KASAN: use-after-free Read in io_poll_task_func
+Content-Language: en-US
+To:     syzbot <syzbot+cb95143d1d4d788c1941@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000b9f9fd05f25b74ff@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000b9f9fd05f25b74ff@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 02:11:26PM +0100, Ard Biesheuvel wrote:
-> On Mon, 16 Jan 2023 at 13:31, Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> >
-> > On Mon, Jan 16, 2023 at 11:56:48AM +0100, Gerd Hoffmann wrote:
-> > > On Sat, Jan 14, 2023 at 01:20:24AM +0300, Kirill A. Shutemov wrote:
-> > > > On Fri, Jan 13, 2023 at 09:29:26PM +0000, Dionna Glaze wrote:
-> > > > > This patch depends on Kirill A. Shutemov's series
-> > > > >
-> > > > > [PATCHv8 00/14] mm, x86/cc: Implement support for unaccepted memory
-> > > > >
-> > > > > The UEFI v2.9 specification includes a new memory type to be used in
-> > > > > environments where the OS must accept memory that is provided from its
-> > > > > host. Before the introduction of this memory type, all memory was
-> > > > > accepted eagerly in the firmware. In order for the firmware to safely
-> > > > > stop accepting memory on the OS's behalf, the OS must affirmatively
-> > > > > indicate support to the firmware.
-> > > >
-> > > > I think it is a bad idea.
-> > > >
-> > > > This approach breaks use case with a bootloader between BIOS and OS.
-> > > > As the bootloader does ExitBootServices() it has to make the call on
-> > > > behalf of OS when it has no idea if the OS supports unaccepted.
-> > >
-> > > Nothing breaks, it'll error on the safe side.  If the protocol callback
-> > > is not called the firmware will simply accept all memory.  The guest OS
-> > > will only see unaccepted memory if it explicitly asked for it (assuming
-> > > the firmware wants know to support both cases, of course the firmware
-> > > could also enforce the one or the other and just not offer the
-> > > protocol).
-> >
-> > How bootloader suppose to know if OS will ask for unaccepted memory?
-> > It can't. It means the use-case with bootloader cannot ever use
-> > unaccepted memory. That's broken design.
-> >
+On 1/15/23 11:11 PM, syzbot wrote:
+> Hello,
 > 
-> I still don't understand why we need to support every imaginable
-> combination of firmware, bootloader and OS. Unaccepted memory only
-> exists on a special kind of virtual machine, which provides very
-> little added value unless you opt into the security and attestation
-> features, which are all heavily based on firmware protocols. So why
-> should care about a EFI-aware bootloader calling ExitBootServices()
-> and subsequently doing a legacy boot of Linux on such systems?
+> syzbot found the following issue on:
+> 
+> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12fcd936480000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=cb95143d1d4d788c1941
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Why break what works? Some users want it.
-
-This patch adds complexity, breaks what works and the only upside will
-turn into a dead weight soon.
-
-There's alternative to add option to instruct firmware to accept all
-memory from VMM side. It will serve legacy OS that doesn't know about
-unaccepted memory and it is also can be use by latency-sensitive users
-later on (analog of qemu -mem-prealloc).
+syz fix: io_uring/io-wq: only free worker if it was allocated for creation
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Jens Axboe
+
+
