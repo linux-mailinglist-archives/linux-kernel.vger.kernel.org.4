@@ -2,114 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB71966B82C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4BC66B833
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjAPHaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 02:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S231919AbjAPHb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjAPHaL (ORCPT
+        with ESMTP id S229930AbjAPHb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 02:30:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ED2CC3E;
-        Sun, 15 Jan 2023 23:30:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C116B80D4F;
-        Mon, 16 Jan 2023 07:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D346DC433EF;
-        Mon, 16 Jan 2023 07:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673854207;
-        bh=jXP2JXB7Ja6faI+t920dtDx9s48lo99uDFqGi3cMdhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VK+QZeSWbPl0U8+isx6i4jz2rn9oy1VODqKr38KsZXjCMeAqSZA/A4eMJdnwspzkh
-         65MbSoS5WsO/JDgc3cpRkJGE+4/qn51o1kxPtCJ6gmMfzdURyKL9EmcIUy3ZsJrNEf
-         Vjwhlm06y8oA9M18TLEUhavuVDzEaeixoK+azBQ6aix1HBLD0LcSMg1krWKyG7PJVw
-         3T5Li7ET4uf8lXNliDioT+CRNmm9doSo7ioiE1bqt/dfA+MvKLCmDwM7e5u/TxdscZ
-         iQPnGp8x5cbi+8NEwGKKGfph3iz3KmDX4FtYQmfChLXMAHCRG7kRW08j4Hv88Q5DCp
-         1Tubn8uVHcDQA==
-Date:   Mon, 16 Jan 2023 09:30:02 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, rogerq@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
-Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
- release action
-Message-ID: <Y8T8+rWrvv6gfNxa@unreal>
-References: <20230116044517.310461-1-s-vadapalli@ti.com>
+        Mon, 16 Jan 2023 02:31:26 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B8B46B1;
+        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso2095115pjg.2;
+        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
+        b=bNV/0vag1ZvLMpWwA4mawziLzieesOHeeP/uolhRj/Qp/fgoUEgKS7N3HGAUJ0hwEi
+         NNrZZvSk5PRav8zwcMHaV79OCbj1kyAbRLaXuJBlAkL2qROgelytvjsBqXyclWatD66P
+         Ugj2u4a35Qg8LB7A0QOSbJbcpeoiYZd4m2f45lFwkXfct6yFrIw9H9B2+WHzTF0gvm5o
+         AshIWCnV/8OV2oXEADbsYpB4TvdLkd4l84BBzh3/uu9idPKpYXziuWROZgnCLNhU+sJN
+         JRZO8KK8t6UrpaZbxL3OVAvsgPDH3MoIn0oJGJSBPHnnWKgt3Ul15ZHKTohvJxgO9iV7
+         E02Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
+        b=ngHwoVdMQSFl+TZTSIhZJpH1ygpEmiTsy9/PKXu+BHAKTGU8TlX0+GIdRzQnU5On/P
+         zcUINi/9kObNZAL/AKZGuDIwxuY3uiy6ESaN49ylhRGCb2lT5nd1en2Zy03o9QQQjhTL
+         vv3XoJNXPxzKnHJlTaRwmej3V939MS6IZ3sOmzkebvP+9WWMRqwxNbrCL+R0SjKBZk14
+         puoIkveFwnBdvbIeg8tYwAhvtwzwOpwyqIX5W4qBvWS54oM/WLo9XAi2ijYQVX/UQ+Ge
+         wBoA4HjwTjxdIaX98A3lgPElNQGG5d5T8fmOzoUtjpA3YHdEJ+QZlpqZ2tvaFL+XIyTr
+         MjbQ==
+X-Gm-Message-State: AFqh2koQ+8723qi1sLfeMOdWriT51Uj/MskCrUN5ss+WiCwTEyzMiJeV
+        O611GIIC7iZ/0VLnecoOY0GJAM9DG6OaBwq0E6Y=
+X-Google-Smtp-Source: AMrXdXsHaNFvTcwq7IYjoURTRKB9mLY6RlfohU9xRx/ch1k9FfnZTPFe5NEyMuszQC6sWUU/1ki2k4jRifdInbi8kL8=
+X-Received: by 2002:a17:90b:1112:b0:223:dd6f:13b2 with SMTP id
+ gi18-20020a17090b111200b00223dd6f13b2mr6617650pjb.56.1673854283697; Sun, 15
+ Jan 2023 23:31:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116044517.310461-1-s-vadapalli@ti.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
+ <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu> <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
+ <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu> <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
+In-Reply-To: <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Mon, 16 Jan 2023 15:31:11 +0800
+Message-ID: <CAEr6+EC4e5QsodG_SpTVMBoGfW1GDAgUfBphahgrqy52vXFB+Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+To:     Yann Sionneau <ysionneau@kalray.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-audit@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
-> The am65_cpts_release() function is registered as a devm_action in the
-> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
-> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
-> actions associated with the am65-cpsw driver's device.
-> 
-> In the event of probe failure or probe deferral, the platform_drv_probe()
-> function invokes dev_pm_domain_detach() which powers off the CPSW and the
-> CPSW's CPTS hardware, both of which share the same power domain. Since the
-> am65_cpts_disable() function invoked by the am65_cpts_release() function
-> attempts to reset the CPTS hardware by writing to its registers, the CPTS
-> hardware is assumed to be powered on at this point. However, the hardware
-> is powered off before the devm actions are executed.
-> 
-> Fix this by getting rid of the devm action for am65_cpts_release() and
-> invoking it directly on the cleanup and exit paths.
-> 
-> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> ---
-> Changes from v1:
-> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
->    error was reported by kernel test robot <lkp@intel.com> at:
->    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
-> 2. Collect Reviewed-by tag from Roger Quadros.
-> 
-> v1:
-> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
-> 
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
->  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
->  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
->  3 files changed, 18 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> index 5cac98284184..00f25d8a026b 100644
-> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
->  	return 0;
->  }
->  
-> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
-> +{
-> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
+On Mon, Jan 9, 2023 at 11:53 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> On Mon, Jan 9, 2023 at 11:30 PM Yann Sionneau <ysionneau@kalray.eu> wrote=
+:
+> >
+> > Hi Jeff,
+> >
+> > On 1/9/23 16:11, Jeff Xie wrote:
+> > > On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wr=
+ote:
+> > >> Hi Jeff,
+> > >>
+> > >> On 1/7/23 07:25, Jeff Xie wrote:
+> > >>> Hi,
+> > >>>
+> > >>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> =
+wrote:
+> > >>>> [snip]
+> > >>>>
+> > >>>> A kvx toolchain can be built using:
+> > >>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev l=
+ibmpfr-dev
+> > >>>> $ git clone https://github.com/kalray/build-scripts
+> > >>>> $ cd build-scripts
+> > >>>> $ source last.refs
+> > >>>> $ ./build-kvx-xgcc.sh output
+> > >>> I would like to build the kvx-xgcc to compile and test the linux
+> > >>> kernel, but it reported a compile error.
+> > >>> I wonder what version of gcc you are using.
+> > >>>
+> > >>> My build environment:
+> > >>> VERSION=3D"20.04.2 LTS (Focal Fossa)"
+> > >>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
+> > >>>
+> > >>>
+> > >>> Compile error:
+> > >>> $ ./build-kvx-xgcc.sh output
+> > >>>
+> > >>> ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_re=
+place_key_data=E2=80=99:
+> > >>> ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=
+=E2=80=99 undeclared
+> > >>> (first use in this function)
+> > >>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
+> > >>>         |                        ^~~~~~~~
+> > >>> [snip]
+> > >> What SHA1 of https://github.com/kalray/build-scripts are you using?
+> > > I have executed the "source last.refs"
+> >
+> > I was referring to the SHA1 of the repo itself (build-scripts).
+> >
+> > `last.refs` is a symbolic link which can point to several releases,
+> > depending on "when" you did the clone.
+> >
+> > I am asking this because we recently published new toolchains.
+> >
+> > I want to make sure which one you are trying to build.
+>
+> Unfortunately I deleted this repo a few minutes before you asked me ;-(
+> But I remember that I cloned this repo two days ago.
+> it should be:  last.refs -> refs/4.11.0.refs
 
-Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
-am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
+It should be my own environmental problem.
+I reinstalled the system once and it has been able to compile normally ;-)
 
-How is it possible to have common->cpts == NULL?
+In the past few days, I have reviewed almost all the codes,
+which is very meaningful for me to learn, thank you team.
 
-And why do you need special am65_cpsw_cpts_cleanup() which does nothing
-except call to am65_cpts_release()? It will be more intuitive change
-the latter to be exported function.
 
-Thanks
+>
+> > >> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 with=
+out
+> > >> issues, I don't understand why it does not work for you, although in=
+deed
+> > >> the error log you are having pops out on my search engine and seems =
+to
+> > >> be some well known issue.
+> > > Yes, there are many answers on the web, but none of them solve this p=
+roblem.
+> > >
+> > >> If the build-script does not work for you, you can still use the
+> > >> pre-built toolchains generated by the GitHub automated actions:
+> > >> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("lates=
+t"
+> > >> means 22.04)
+> > > Thanks, this is the final solution ;-)
+> > Good to see it helped :)
+> >
+> > Regards,
+> >
+> > --
+> >
+> > Yann
+> >
+> >
+> >
+> >
+> >
+>
+>
+> --
+> Thanks,
+> JeffXie
+
+
+
+--
+Thanks,
+JeffXie
