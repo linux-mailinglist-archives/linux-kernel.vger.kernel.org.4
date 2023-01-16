@@ -2,138 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B6866BC0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B3366BC10
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjAPKoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S229982AbjAPKoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjAPKnD (ORCPT
+        with ESMTP id S231137AbjAPKn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:43:03 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381031A974;
-        Mon, 16 Jan 2023 02:41:32 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 16 Jan 2023 05:43:28 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386A01A4B1;
+        Mon, 16 Jan 2023 02:42:20 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 80CE51EC05BC;
-        Mon, 16 Jan 2023 11:41:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673865690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yEQvkWHdGtRI1RMZOOmWGxvfPmeNlATkYgahQimwKSM=;
-        b=USy4JWwxnyoxCDfKgh1VCFgGGj8GNEYkrDkNHGM4qiHTLPijXA11LEogNKFQCz8rcpBkxA
-        4etIob4nAFGkoxhaflzuO8rUzpMNAQwQYQId+LjrusBTmZlz4HUyojN9CPW+xODSKjj29X
-        FoCADdEP6h13o0GQt+SIo/gVhxyg/e0=
-Date:   Mon, 16 Jan 2023 11:41:26 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
-        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
-Subject: Re: [PATCH v5 16/17] qcom: llcc/edac: Support polling mode for ECC
- handling
-Message-ID: <Y8Up1kjaIRLlxemH@zn.tnic>
-References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
- <20221228084028.46528-17-manivannan.sadhasivam@linaro.org>
- <Y8Kv0GIk69MhcOjT@zn.tnic>
- <20230115040825.GB6568@thinkpad>
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1A84B6602B33;
+        Mon, 16 Jan 2023 10:42:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673865738;
+        bh=xij3rwdRDRnxNe9fbFCug+kKCRkyGZuk5HRqHXMn734=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TuHE446oUwwn8hpiRvkBLfCFnRI5fZhkkArAP7gGM9Gl7YWLAkt4xWOTYx53RP9ni
+         QrHGUTR0Bf1NRJZCjpXo5+SqPv4bU9yIOAFOm1hkZ5gtyenUlJWoFUNWbEyujnazv7
+         c0VSl5ORgrj1QBkTyD6COgmtYLjzxQ24+FYYDxgvDjO9PF/bu5g5SbNF9MpJv1NUuQ
+         gxUkZKoAHsYsC8wmsKSlLZw6OafJlTkQ6C/Qk4cQGS9SpDuC2LIjLwgaTxP1qHDC6G
+         LHg6YvujLLrD8cgOaM3VHPNmI0d32tvaeUWddWSZX5f/VS9fxSjUNHhxnf0PmEd/8F
+         y7ANx7rKh/OJg==
+Message-ID: <2835d8cb-2652-1ac5-fff1-23928c0e569c@collabora.com>
+Date:   Mon, 16 Jan 2023 11:42:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230115040825.GB6568@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 10/12] staging: media: rkvdec: Wrapper for pixel format
+ preparation
+Content-Language: en-US
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Alex Bee <knaerzche@gmail.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Collabora Kernel-domain <kernel@collabora.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+References: <20230101-patch-series-v2-6-2-rc1-v2-0-fa1897efac14@collabora.com>
+ <20230101-patch-series-v2-6-2-rc1-v2-10-fa1897efac14@collabora.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20230101-patch-series-v2-6-2-rc1-v2-10-fa1897efac14@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 09:38:25AM +0530, Manivannan Sadhasivam wrote:
-> > You need to request the IRQ first and then set edac_op_state above. I.e., this
-> > devm_request_irq() needs to move in the if (ecc_irq > 0) branch above.
+Hi Sebastian,
+
+W dniu 12.01.2023 o 13:56, Sebastian Fricke pisze:
+> Reduce code duplication by creating a wrapper around the preparation of
+> the `v4l2_pix_format_mplane` structure and the calculation of the
+> image size.
 > 
-> May I know why? I also checked other drivers, most of them are doing the same.
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> ---
+>   drivers/staging/media/rkvdec/rkvdec.c | 29 +++++++++++++++--------------
+>   1 file changed, 15 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+> index 8d948bcc4e46..b303c6e0286d 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> @@ -27,6 +27,17 @@
+>   #include "rkvdec.h"
+>   #include "rkvdec-regs.h"
+>   
+> +static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
+> +				       struct v4l2_pix_format_mplane *pix_mp)
+> +{
+> +	v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
+> +			    pix_mp->width, pix_mp->height);
+> +	pix_mp->plane_fmt[0].sizeimage += 128 *
+> +		DIV_ROUND_UP(pix_mp->width, 16) *
+> +		DIV_ROUND_UP(pix_mp->height, 16);
+> +	pix_mp->field = V4L2_FIELD_NONE;
+> +}
+> +
+>   static int rkvdec_queue_busy(struct rkvdec_ctx *ctx, enum v4l2_buf_type buf_type)
+>   {
+>   	struct vb2_queue *vq;
+> @@ -248,13 +259,9 @@ static void rkvdec_reset_decoded_fmt(struct rkvdec_ctx *ctx)
+>   
+>   	rkvdec_reset_fmt(ctx, f, valid_fmt);
+>   	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+> -	v4l2_fill_pixfmt_mp(&f->fmt.pix_mp,
+> -			    ctx->coded_fmt_desc->decoded_fmts[0],
+> -			    ctx->coded_fmt.fmt.pix_mp.width,
+> -			    ctx->coded_fmt.fmt.pix_mp.height);
+> -	f->fmt.pix_mp.plane_fmt[0].sizeimage += 128 *
+> -		DIV_ROUND_UP(f->fmt.pix_mp.width, 16) *
+> -		DIV_ROUND_UP(f->fmt.pix_mp.height, 16);
+> +	f->fmt.pix_mp.width = ctx->coded_fmt.fmt.pix_mp.width;
+> +	f->fmt.pix_mp.height = ctx->coded_fmt.fmt.pix_mp.height;
+> +	rkvdec_fill_decoded_pixfmt(ctx, &f->fmt.pix_mp);
 
-If the others do it, that doesn't mean it is clean.
+Strictly technically this function has _not_ been setting pix_mt->field
+to V4L2_FIELD_NONE, but after this change there exists such a "side effect".
+Maybe it is actually desired, or maybe it being missing in the not patched
+version was a mistake in the first place. Just letting you know so that
+you can make sure pix_mp->field being actually set now is ok in the context
+of rkvdec_queue_busy().
 
-What happens to edac_op_state if devm_request_irq() fails?
+Regards,
 
-I know I know, the probe function will fail and the driver won't load but still,
-this is sloppy. And it could come down to bite us later, when someone
-reorganizes that function.
+Andrzej
 
-So, do all the error checking method determination - polling or interrupt - in
-one place.  Something like this (totally untested ofc, pasting here the whole
-thing to show what I mean):
+>   }
+>   
+>   static int rkvdec_enum_framesizes(struct file *file, void *priv,
+> @@ -324,13 +331,7 @@ static int rkvdec_try_capture_fmt(struct file *file, void *priv,
+>   				       &pix_mp->height,
+>   				       &coded_desc->frmsize);
+>   
+> -	v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
+> -			    pix_mp->width, pix_mp->height);
+> -	pix_mp->plane_fmt[0].sizeimage +=
+> -		128 *
+> -		DIV_ROUND_UP(pix_mp->width, 16) *
+> -		DIV_ROUND_UP(pix_mp->height, 16);
+> -	pix_mp->field = V4L2_FIELD_NONE;
+> +	rkvdec_fill_decoded_pixfmt(ctx, pix_mp);
+>   
+>   	return 0;
+>   }
+> 
 
-static int qcom_llcc_edac_probe(struct platform_device *pdev)
-{
-        struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
-        struct edac_device_ctl_info *edev_ctl;
-        struct device *dev = &pdev->dev;
-        int ecc_irq;
-        int rc;
-
-        rc = qcom_llcc_core_setup(llcc_driv_data->bcast_regmap);
-        if (rc)
-                return rc;
-
-        /* Allocate edac control info */
-        edev_ctl = edac_device_alloc_ctl_info(0, "qcom-llcc", 1, "bank",
-                                              llcc_driv_data->num_banks, 1,
-                                              NULL, 0,
-                                              edac_device_alloc_index());
-
-        if (!edev_ctl)
-                return -ENOMEM;
-
-        edev_ctl->dev = dev;
-        edev_ctl->mod_name = dev_name(dev);
-        edev_ctl->dev_name = dev_name(dev);
-        edev_ctl->ctl_name = "llcc";
-        edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
-
-        /* Check if LLCC driver has passed ECC IRQ */
-        ecc_irq = llcc_driv_data->ecc_irq;
-        if (ecc_irq > 0) {
-                rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-                                      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
-                if (!rc) {
-                        edac_op_state = EDAC_OPSTATE_INT;
-                        goto irq_done;
-                }
-        }
-
-        /* Fall back to polling mode otherwise */
-        edev_ctl->poll_msec = ECC_POLL_MSEC;
-        edev_ctl->edac_check = llcc_ecc_check;
-        edac_op_state = EDAC_OPSTATE_POLL;
-
-irq_done:
-        rc = edac_device_add_device(edev_ctl);
-        if (rc) {
-                edac_device_free_ctl_info(edev_ctl);
-                return rc;
-        }
-
-        platform_set_drvdata(pdev, edev_ctl);
-
-        return rc;
-}
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
