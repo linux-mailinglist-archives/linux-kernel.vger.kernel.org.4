@@ -2,234 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4BC66B833
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B1466B834
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbjAPHb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 02:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S231958AbjAPHbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAPHb0 (ORCPT
+        with ESMTP id S231819AbjAPHbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 02:31:26 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B8B46B1;
-        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso2095115pjg.2;
-        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
-        b=bNV/0vag1ZvLMpWwA4mawziLzieesOHeeP/uolhRj/Qp/fgoUEgKS7N3HGAUJ0hwEi
-         NNrZZvSk5PRav8zwcMHaV79OCbj1kyAbRLaXuJBlAkL2qROgelytvjsBqXyclWatD66P
-         Ugj2u4a35Qg8LB7A0QOSbJbcpeoiYZd4m2f45lFwkXfct6yFrIw9H9B2+WHzTF0gvm5o
-         AshIWCnV/8OV2oXEADbsYpB4TvdLkd4l84BBzh3/uu9idPKpYXziuWROZgnCLNhU+sJN
-         JRZO8KK8t6UrpaZbxL3OVAvsgPDH3MoIn0oJGJSBPHnnWKgt3Ul15ZHKTohvJxgO9iV7
-         E02Q==
+        Mon, 16 Jan 2023 02:31:44 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8AAE3A1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:31:39 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id y11-20020a056e02178b00b0030c048d64a7so20462160ilu.1
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:31:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
-        b=ngHwoVdMQSFl+TZTSIhZJpH1ygpEmiTsy9/PKXu+BHAKTGU8TlX0+GIdRzQnU5On/P
-         zcUINi/9kObNZAL/AKZGuDIwxuY3uiy6ESaN49ylhRGCb2lT5nd1en2Zy03o9QQQjhTL
-         vv3XoJNXPxzKnHJlTaRwmej3V939MS6IZ3sOmzkebvP+9WWMRqwxNbrCL+R0SjKBZk14
-         puoIkveFwnBdvbIeg8tYwAhvtwzwOpwyqIX5W4qBvWS54oM/WLo9XAi2ijYQVX/UQ+Ge
-         wBoA4HjwTjxdIaX98A3lgPElNQGG5d5T8fmOzoUtjpA3YHdEJ+QZlpqZ2tvaFL+XIyTr
-         MjbQ==
-X-Gm-Message-State: AFqh2koQ+8723qi1sLfeMOdWriT51Uj/MskCrUN5ss+WiCwTEyzMiJeV
-        O611GIIC7iZ/0VLnecoOY0GJAM9DG6OaBwq0E6Y=
-X-Google-Smtp-Source: AMrXdXsHaNFvTcwq7IYjoURTRKB9mLY6RlfohU9xRx/ch1k9FfnZTPFe5NEyMuszQC6sWUU/1ki2k4jRifdInbi8kL8=
-X-Received: by 2002:a17:90b:1112:b0:223:dd6f:13b2 with SMTP id
- gi18-20020a17090b111200b00223dd6f13b2mr6617650pjb.56.1673854283697; Sun, 15
- Jan 2023 23:31:23 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5LFjPBPQX5VTHahUWFGvW547MY3Vx8HfP9h5GwFmub8=;
+        b=V933kmroj7tMZnNg/Vm62Bo5BVgQ6oq4BX9TkKr2I/maRzYYgXWWWeyifEuBK4Iz8p
+         PDcNyAjxrzFoaPWQygZ9paUUehxpb0mszRJ3IWWiILss4gbUplfYLy7qLb7Qt0sORWGP
+         TNbymFXWBRzeBiGcKZWPvokqrGus+yZ8VbKtaZ/NIfG4/xbZzftQDLZCpq82uOKK65Vf
+         M07ZNAYiz9MSS5yYDGu1YqD6nRbp5jTGLptA+C7mWwf9AowFBVT8rvx80g4awoaS7TCC
+         xPXduaUW154xo0Z3vFrP28/rSNTwKEXPrJsBiUVbfhQpOBFc5paxjLPGqbADEUrulhrr
+         iJ0A==
+X-Gm-Message-State: AFqh2koEYpu3cstNCmWVLy3QHWuPr2E4CXRzdQbkjkQ7X1aR6sxfb4+9
+        XfZG0vXECo6lnWt51TrxFpVizCJyVMAIxMHQ/tW6QXrGa68i
+X-Google-Smtp-Source: AMrXdXu4XZN0wDcSySC8AMwWQl/jizq1t7VTmrIwnoMQySbRGBJlPVF/OqfItPwmXFohrpIxKOWhIyukT3bPjsCoaClxE7eHEXAf
 MIME-Version: 1.0
-References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
- <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu> <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
- <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu> <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
-In-Reply-To: <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 16 Jan 2023 15:31:11 +0800
-Message-ID: <CAEr6+EC4e5QsodG_SpTVMBoGfW1GDAgUfBphahgrqy52vXFB+Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
+X-Received: by 2002:a92:c5a3:0:b0:30e:ec1e:2dac with SMTP id
+ r3-20020a92c5a3000000b0030eec1e2dacmr573106ilt.75.1673854298771; Sun, 15 Jan
+ 2023 23:31:38 -0800 (PST)
+Date:   Sun, 15 Jan 2023 23:31:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e259c105f25c92da@google.com>
+Subject: [syzbot] WARNING: refcount bug in mm_update_next_owner
+From:   syzbot <syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
+        ebiederm@xmission.com, jannh@google.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:53 PM Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> On Mon, Jan 9, 2023 at 11:30 PM Yann Sionneau <ysionneau@kalray.eu> wrote=
-:
-> >
-> > Hi Jeff,
-> >
-> > On 1/9/23 16:11, Jeff Xie wrote:
-> > > On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wr=
-ote:
-> > >> Hi Jeff,
-> > >>
-> > >> On 1/7/23 07:25, Jeff Xie wrote:
-> > >>> Hi,
-> > >>>
-> > >>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> =
-wrote:
-> > >>>> [snip]
-> > >>>>
-> > >>>> A kvx toolchain can be built using:
-> > >>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev l=
-ibmpfr-dev
-> > >>>> $ git clone https://github.com/kalray/build-scripts
-> > >>>> $ cd build-scripts
-> > >>>> $ source last.refs
-> > >>>> $ ./build-kvx-xgcc.sh output
-> > >>> I would like to build the kvx-xgcc to compile and test the linux
-> > >>> kernel, but it reported a compile error.
-> > >>> I wonder what version of gcc you are using.
-> > >>>
-> > >>> My build environment:
-> > >>> VERSION=3D"20.04.2 LTS (Focal Fossa)"
-> > >>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
-> > >>>
-> > >>>
-> > >>> Compile error:
-> > >>> $ ./build-kvx-xgcc.sh output
-> > >>>
-> > >>> ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_re=
-place_key_data=E2=80=99:
-> > >>> ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=
-=E2=80=99 undeclared
-> > >>> (first use in this function)
-> > >>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
-> > >>>         |                        ^~~~~~~~
-> > >>> [snip]
-> > >> What SHA1 of https://github.com/kalray/build-scripts are you using?
-> > > I have executed the "source last.refs"
-> >
-> > I was referring to the SHA1 of the repo itself (build-scripts).
-> >
-> > `last.refs` is a symbolic link which can point to several releases,
-> > depending on "when" you did the clone.
-> >
-> > I am asking this because we recently published new toolchains.
-> >
-> > I want to make sure which one you are trying to build.
->
-> Unfortunately I deleted this repo a few minutes before you asked me ;-(
-> But I remember that I cloned this repo two days ago.
-> it should be:  last.refs -> refs/4.11.0.refs
+Hello,
 
-It should be my own environmental problem.
-I reinstalled the system once and it has been able to compile normally ;-)
+syzbot found the following issue on:
 
-In the past few days, I have reviewed almost all the codes,
-which is very meaningful for me to learn, thank you team.
+HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16a8e102480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=1d4c86ac0fed92e3fc78
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 0 PID: 5316 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+Modules linked in:
+CPU: 0 PID: 5316 Comm: syz-executor.4 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+Code: 0a 31 ff 89 de e8 d4 13 78 fd 84 db 0f 85 2e ff ff ff e8 57 17 78 fd 48 c7 c7 60 87 a6 8a c6 05 e0 ce 54 0a 01 e8 98 a7 b2 05 <0f> 0b e9 0f ff ff ff e8 38 17 78 fd 0f b6 1d ca ce 54 0a 31 ff 89
+RSP: 0018:ffffc90005967d80 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff8880829f3a80 RSI: ffffffff8166972c RDI: fffff52000b2cfa2
+RBP: ffff888082ae3aa8 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88807e520900
+R13: ffff888082ae3fa8 R14: 0000000000000000 R15: ffff888082ae3aa8
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32f23000 CR3: 000000007716c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_add include/linux/refcount.h:199 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ get_task_struct include/linux/sched/task.h:110 [inline]
+ mm_update_next_owner+0x585/0x7b0 kernel/exit.c:504
+ exit_mm kernel/exit.c:562 [inline]
+ do_exit+0x9a4/0x2a90 kernel/exit.c:854
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ __do_sys_exit_group kernel/exit.c:1023 [inline]
+ __se_sys_exit_group kernel/exit.c:1021 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f51f5a8c0c9
+Code: Unable to access opcode bytes at 0x7f51f5a8c09f.
+RSP: 002b:00007ffe3c730ad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 000000000000001e RCX: 00007f51f5a8c0c9
+RDX: 00007f51f5a3df7b RSI: ffffffffffffffb8 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 000000002ed3101e R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000001 R15: 00007ffe3c730bc0
+ </TASK>
 
 
->
-> > >> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 with=
-out
-> > >> issues, I don't understand why it does not work for you, although in=
-deed
-> > >> the error log you are having pops out on my search engine and seems =
-to
-> > >> be some well known issue.
-> > > Yes, there are many answers on the web, but none of them solve this p=
-roblem.
-> > >
-> > >> If the build-script does not work for you, you can still use the
-> > >> pre-built toolchains generated by the GitHub automated actions:
-> > >> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("lates=
-t"
-> > >> means 22.04)
-> > > Thanks, this is the final solution ;-)
-> > Good to see it helped :)
-> >
-> > Regards,
-> >
-> > --
-> >
-> > Yann
-> >
-> >
-> >
-> >
-> >
->
->
-> --
-> Thanks,
-> JeffXie
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-
---
-Thanks,
-JeffXie
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
