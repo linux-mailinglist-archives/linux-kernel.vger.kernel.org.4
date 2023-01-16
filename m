@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D017766D0E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E638A66D0E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjAPVV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S234171AbjAPVWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbjAPVVU (ORCPT
+        with ESMTP id S233904AbjAPVWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:21:20 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D337723C42;
-        Mon, 16 Jan 2023 13:21:18 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id qx13so12520078ejb.13;
-        Mon, 16 Jan 2023 13:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CCEk4uyfLQ6ixPIMnmhnLIi8+lwOJlnHpr806bX8wOs=;
-        b=dKk3o918oQTVmJd2rJ4ABOiqX1kqDqrlSHZtmQLo6RYGqNuOLgtT5JEMpWL5PN6PJP
-         BWhNz+cb5ml7oDjTeksuAsATTZBOFDhw1kOuxYp86+NP0YJfZOXkDyfaJvYezuwiCxP1
-         O57S6AgkwHZXQeZAvsZbhRBLJC7Q7Mew1C4Ob/6RPHSWrHme2kGi05F4wnpaus3s4mJk
-         303ds1cmYyy7acXtYUoW7UsqzJcw5FRt5bxaGMfRQLjN2hQgHnKcTkZD+mR0Jf1hUogh
-         vA5Vranx4BtvnLIyqxlDSc5AmOArrF4kOUliPw7vmghQlnus2HE77ZI7ARub2w4esy32
-         n2xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CCEk4uyfLQ6ixPIMnmhnLIi8+lwOJlnHpr806bX8wOs=;
-        b=PBX6qb/fxu25JuKMNai0bUHJt9XLd6CqFmbnTlj1ktZYk0NhZG+31+tSsLZYUN7Onv
-         Keu1xwhBqjlPajWzusay5yGElpWlOH72uEE30jk84LF58zj0HDcDTULzrnyjRhm6/UFG
-         yiXBx0wseKKwX/Ru7eRAMhd0MXhCdQWnJ+nd4j0uEV0Pv/+CU/OntQTv+jAljZjyGkW7
-         NZSQUo7bjpQgmSw+wItACF3bOmBYxzR7e6YHUwB5Luwu8oiSwZ7nNSRozJAFjTr2fjVa
-         /LIAGuof7tcERDaf2+8GKvFBliWiabVbrnLhpLb2PobiCei6GYIG/2P6I4FbmvqhxnmP
-         Ok1g==
-X-Gm-Message-State: AFqh2kqCoEQdPLyo9qlury7fm5WwijTHU/r+6tL9bEgMVDEYN2FSc/EX
-        l+VL1ovQcVGcq+FshUwpVHo=
-X-Google-Smtp-Source: AMrXdXswPLbR6iTVBBUPWgxTXTyg3hXGgZ2EFt/pXXQ0M8ZnXCAkfqpzJpML16C/cHPpv97GZYIRlg==
-X-Received: by 2002:a17:906:eb8e:b0:871:6b9d:dbc with SMTP id mh14-20020a170906eb8e00b008716b9d0dbcmr470750ejb.21.1673904077291;
-        Mon, 16 Jan 2023 13:21:17 -0800 (PST)
-Received: from f.. (cst-prg-72-175.cust.vodafone.cz. [46.135.72.175])
-        by smtp.gmail.com with ESMTPSA id q18-20020a17090676d200b00857c2c29553sm7961721ejn.197.2023.01.16.13.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 13:21:16 -0800 (PST)
-From:   Mateusz Guzik <mjguzik@gmail.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     serge@hallyn.com, torvalds@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Mateusz Guzik <mjguzik@gmail.com>
-Subject: [PATCH v2 2/2] vfs: avoid duplicating creds in faccessat if possible
-Date:   Mon, 16 Jan 2023 22:21:05 +0100
-Message-Id: <20230116212105.1840362-2-mjguzik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230116212105.1840362-1-mjguzik@gmail.com>
-References: <20230116212105.1840362-1-mjguzik@gmail.com>
+        Mon, 16 Jan 2023 16:22:46 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F3F22031;
+        Mon, 16 Jan 2023 13:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673904165; x=1705440165;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SuTGGIHQH37aq7t2M/pxLpldt78SXV6xIw0m542+wJ4=;
+  b=LWL1IavCrg/tKPTqhBmrg87OYmZbiCzDiJ14+/rYHLnv6WfFl9aDsuMZ
+   /3w8ebr8gj7GfCQGIFxPS1B7exgCh+GHLZKql4a2Ql1PR0oz5Hpbt7Ta7
+   YtPlsgVv+x+rCtAYYlp3M7L4xreswN3MhmgHOlr+7Lo1fzZQgJY+8regQ
+   WAAyyOd1vyuDWsjouwe2Din6cLwSPywxUGEjkC9SHrEMPc4AANP6RxJkx
+   /sEvFjYs0agjkUwJg7PGqX9u3KPwL8AVobXglUo9xxbBce7n+mh3r/2sw
+   BBrha1bCRemhwcUWka1fymQkMCLnh9a38CjvLK5L3Lycua9RwFtYCi5vI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="304244491"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="304244491"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 13:22:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="904433033"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="904433033"
+Received: from paichuan-mobl1.amr.corp.intel.com (HELO [10.209.71.173]) ([10.209.71.173])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 13:22:44 -0800
+Message-ID: <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
+Date:   Mon, 16 Jan 2023 13:22:45 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+Content-Language: en-US
+To:     Gerd Hoffmann <kraxel@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
+        Ard Biescheuvel <ardb@kernel.org>,
+        "Min M. Xu" <min.m.xu@intel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230113212926.2904735-1-dionnaglaze@google.com>
+ <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
+ <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,94 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-access(2) remains commonly used, for example on exec:
-access("/etc/ld.so.preload", R_OK)
+On 1/16/23 02:56, Gerd Hoffmann wrote:
+>> And we add this protocol to address very temporary problem: once
+>> unaccepted memory support get upstream it is just a dead weight.
+> Maybe, maybe not.  unaccepted memory support has a Kconfig switch after
+> all.  If we figure in 3-5 years that all distros have enabled it anyway
+> we can drop it again.  For the transition period it will surely be
+> useful.
 
-or when running gcc: strace -c gcc empty.c
-% time     seconds  usecs/call     calls    errors syscall
------- ----------- ----------- --------- --------- ----------------
-  0.00    0.000000           0        42        26 access
+I agree with Kirill here.
 
-It falls down to do_faccessat without the AT_EACCESS flag, which in turn
-results in allocation of new creds in order to modify fsuid/fsgid and
-caps. This is a very expensive process single-threaded and most notably
-multi-threaded, with numerous structures getting refed and unrefed on
-imminent new cred destruction.
+Having unaccepted memory *AND* this firmware-driven feature really is
+just implementing the same thing twice.
 
-Turns out for typical consumers the resulting creds would be identical
-and this can be checked upfront, avoiding the hard work.
+I'd much rather have the Kconfig option forced on for all guests that
+*might* need unaccepted memory support than carry redundant implementations.
 
-An access benchmark plugged into will-it-scale running on Cascade Lake
-shows:
-test	proc	before	after
-access1	1	1310582	2908735	 (+121%)  # distinct files
-access1	24	4716491	63822173 (+1353%) # distinct files
-access2	24	2378041	5370335	 (+125%)  # same file
+Also, _if_ we allow folks to turn the Kconfig off and get access to all
+their memory, they might get used to that.  Removing this firmware
+interface from the kernel in a few years could be viewed as a
+regression.  Then, we'll be stuck with this forever.
 
-The above benchmarks are not integrated into will-it-scale, but can be
-found in a pull request:
-https://github.com/antonblanchard/will-it-scale/pull/36/files
-
-Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
-
-v2:
-- fix current->cred usage warn reported by the kernel test robot
-Link: https://lore.kernel.org/all/202301150709.9EC6UKBT-lkp@intel.com/
----
- fs/open.c | 32 +++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
-
-diff --git a/fs/open.c b/fs/open.c
-index 82c1a28b3308..3c068a38044c 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -367,7 +367,37 @@ COMPAT_SYSCALL_DEFINE6(fallocate, int, fd, int, mode, compat_arg_u64_dual(offset
-  * access() needs to use the real uid/gid, not the effective uid/gid.
-  * We do this by temporarily clearing all FS-related capabilities and
-  * switching the fsuid/fsgid around to the real ones.
-+ *
-+ * Creating new credentials is expensive, so we try to skip doing it,
-+ * which we can if the result would match what we already got.
-  */
-+static bool access_need_override_creds(int flags)
-+{
-+	const struct cred *cred;
-+
-+	if (flags & AT_EACCESS)
-+		return false;
-+
-+	cred = current_cred();
-+	if (!uid_eq(cred->fsuid, cred->uid) ||
-+	    !gid_eq(cred->fsgid, cred->gid))
-+		return true;
-+
-+	if (!issecure(SECURE_NO_SETUID_FIXUP)) {
-+		kuid_t root_uid = make_kuid(cred->user_ns, 0);
-+		if (!uid_eq(cred->uid, root_uid)) {
-+			if (!cap_isclear(cred->cap_effective))
-+				return true;
-+		} else {
-+			if (!cap_isidentical(cred->cap_effective,
-+			    cred->cap_permitted))
-+				return true;
-+		}
-+	}
-+
-+	return false;
-+}
-+
- static const struct cred *access_override_creds(void)
- {
- 	const struct cred *old_cred;
-@@ -436,7 +466,7 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
- 	if (flags & AT_EMPTY_PATH)
- 		lookup_flags |= LOOKUP_EMPTY;
- 
--	if (!(flags & AT_EACCESS)) {
-+	if (access_need_override_creds(flags)) {
- 		old_cred = access_override_creds();
- 		if (!old_cred)
- 			return -ENOMEM;
--- 
-2.34.1
-
+In any case, the firmware side of things didn't seem like _that_ much
+code.  So, I'm not protesting *that* strongly.  But, I also don't
+believe for a second that this is going to be removed in 3-5 years.
