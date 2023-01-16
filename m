@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FF166C6E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA34566C6FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbjAPQ0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S233191AbjAPQ1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbjAPQZW (ORCPT
+        with ESMTP id S233005AbjAPQ0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:25:22 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11772B2B8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:14:14 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4bf16baa865so386408197b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:14:14 -0800 (PST)
+        Mon, 16 Jan 2023 11:26:54 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE112BF06
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:14:57 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id y1so30790917plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:14:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwmTNyuj4yHwo83fYQ+pdmfn9/U27lDmkbxPGaMI4Rs=;
-        b=sZ5xCg8ZinDV3UFvQgzRmSXBxsymLiAt7ZubDLY6hScZobkywrs0R9WCTiLPXg0fcH
-         CzU3JV/Z95IrKGI6twSF4vY39cv045FbcUFTpT1qaEI3HwPsXSUgfsjhvEjaNORy0prk
-         zPayiHIykmQ7/PVfWcLNe1+N621fmV7Q6h76IKJ3hp1EpV9LaG0wdPtxDXvcKK0ktHCe
-         jfy7NjgHMocMaF962P6efirWOhYgIUYjunLqdnRZ3w0yOEWqyOT2KuuQL2esKjm7OYfm
-         WEt0ZE5bvA16zsIf7GfW1/kdub5e4VEr/eb6kxHG/6bXJyIcRSoUzd8p3XouKQ4rWK1w
-         uHDw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/jf8Sg2gHxOFWnuSxH+dO003oI/dzbWkr5TALiGHmR4=;
+        b=v1i7y5c0CHp3UwsV64LsMRSW/8H+l5ykSrE1KA7zITKaYu6f214W60rdcdwkzKd0XZ
+         nR6hgEj8UKwQD15PQNvf62+qjVHGU9A7H4xpyVOKKE6darQfAV1nt8K7q0tv4AaBZe6x
+         HvsLqleMydoQKWxV4FmsRpYGvrAcWNT8bACL9fZ8K6Sk7TUbtlDGNqfiTVbP2UcRJUjL
+         Ao6UMYXo77kDY+ejw40rDyHNxE9sk69a5voIy/9g7NSTIxCH5Go2W0qoNcHi6fbDr28z
+         J83yxglcqMe4o0I6gBfNAT6GfctJvEajfBkhfD+salXqRnriEFLyPiUHy6CEBD92UOlV
+         QsEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UwmTNyuj4yHwo83fYQ+pdmfn9/U27lDmkbxPGaMI4Rs=;
-        b=qD75GrMW+UsSGJbPQTlGzIj2FFoGr4btmsLXDAFdWHJ93Z1Yt/VgCyz/V3oxR6JuKJ
-         RK4/KTNAyLBtvZmvUkqrJ7yGo2mXfZjZ8zcoAjBhNdN/MS+eiVfGoHLoDPMKKHEcj8PG
-         7Gi5hyhGyIudKDm3Eunm1QuIr69BP4N1OQzUePc+PvHOdk2quclFLRrCofkOA2UcQmXL
-         IErGc03RYRtElATfptwf3X0ynoLs5+8i4ty34RH8toZTbt+ewGeAcUYrXgGrdxaIluJW
-         CKHslP1y12AmS62NQrcrhbWjiRSj/NfMgRgvrXfSaYSdeEGHMlEJN4n/yutoD+ptUB6B
-         FOTA==
-X-Gm-Message-State: AFqh2krFMb81HFISTFIGRApZHLSwshnd1IayyIhrVHNjZvFn5PCXT18q
-        pv5dgPVUzg50x0PbjjzikQqpBcoW6qhJSyZ7TXa0vg==
-X-Google-Smtp-Source: AMrXdXs7jXfmcaCNvvpXxEqGdAKbIDPDdmqjFitTjT/gRAGj25faeG4GwtkadE4RNaTZbjDfWW///oF4sl9W1lKVX+U=
-X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
- bg19-20020a05690c031300b0037e6806a5f9mr4886054ywb.47.1673885653534; Mon, 16
- Jan 2023 08:14:13 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/jf8Sg2gHxOFWnuSxH+dO003oI/dzbWkr5TALiGHmR4=;
+        b=YRMKjrPIxPpc2jzqBGYOIhACX7tkdafbuJwFFHTOFYopQuhEO2vfuprnLBkn9AUF99
+         lHMMJzvHdGp6oaGObWoZ/hf83+GHh3RGNKlPE3UCmRZmQ1+Fksr/OecuvdLcTPIWO6GW
+         pXlJ5T0tF2SsYFoOnVCSRhQVohA0Gz52zKAJI+xRauBnw/g4vcbG4BGRMKVdfjwLAipH
+         aFfjubXhbUSRFpmFWf3/Sx/eDggw54rxlWJc1N4MjqGFfN58U7uIlg9QGJajM4e3ntIp
+         SUDmbMyNYpb4f338dHJDEDmj48a79yLp2FzCuDmlWfjfNhHhlD/ftQB1pp+0p8lqqOJ3
+         m14Q==
+X-Gm-Message-State: AFqh2kpOoLQ5ET/77ThBNol70lmhfQq3ubOfnZo8UUKbiCNNRwRMJLwl
+        FJJc1EIqA3PUYWe/W8yyOlqnrw==
+X-Google-Smtp-Source: AMrXdXt0Q/97/T2TkA30U+OajhlMV63TiuCawZyu8eEpa9a/jK78fxREAQLOmk6SiX/ZrnK1WTRbBQ==
+X-Received: by 2002:a17:902:8209:b0:194:a374:31f3 with SMTP id x9-20020a170902820900b00194a37431f3mr72674pln.3.1673885696697;
+        Mon, 16 Jan 2023 08:14:56 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170903124900b00174c1855cd9sm19467171plh.267.2023.01.16.08.14.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 08:14:56 -0800 (PST)
+Message-ID: <05a28cc6-0070-9117-368e-ade7561f6727@kernel.dk>
+Date:   Mon, 16 Jan 2023 09:14:55 -0700
 MIME-Version: 1.0
-References: <20230116145500.44699-1-007047221b@gmail.com>
-In-Reply-To: <20230116145500.44699-1-007047221b@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 16 Jan 2023 17:14:02 +0100
-Message-ID: <CANn89i+QqO6PoYi=S7PPzxUgL=r-RP1=gCXsxXOBfJriU2avuw@mail.gmail.com>
-Subject: Re: [PATCH] ipv6: Remove extra counter pull before gc
-To:     Tanmay Bhushan <007047221b@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] block: check disk flag before setting scan bit
+Content-Language: en-US
+To:     wangjie <wangjie22@lixiang.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230116083832.27305-1-wangjie22@lixiang.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230116083832.27305-1-wangjie22@lixiang.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 3:55 PM Tanmay Bhushan <007047221b@gmail.com> wrote:
->
-> Per cpu entries are no longer used in consideration
-> for doing gc or not. Remove the extra per cpu entries
-> pull to directly check for time and perform gc.
->
-> Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
-> ---
->  net/ipv6/route.c | 4 ----
->  1 file changed, 4 deletions(-)
->
+On 1/16/23 1:38?AM, wangjie wrote:
+> No need to scan partitions for disk who has set flag GENHD_FL_NO_PART in
+> driver code. In disk_scan_partitions function, the same checking is
+> existing, so we believe this change is reasonable.
+> 
+> In our case, some virtual block devices are not managed by GPT, then scan
+> partition operation is not a must. So we set GENHD_FL_NO_PART flag in
+> driver intended to avoid partitions being dropped/added.
+> But GD_NEED_PART_SCAN bit was still set by bdev_check_media_change, which
+> causing problems here.
+> 
+> Signed-off-by: wangjie
 
-OK, please next time specify which tree your patch is targeting (this
-is for net-next tree here)
+Signed-off-by is in the wrong format, and the whole email is badly
+mangled...
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+> ????????????????????????????????????????????????????
+> ????????????????????????????????????????????????????
+> ???????????????????????????????
 
-Thanks.
+This didn't quote well, but the original is also useless. You do realize
+you send this email to a public list? Please get rid of it.
+
+-- 
+Jens Axboe
+
