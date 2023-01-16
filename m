@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D8866B8ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE5C66B8EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjAPIR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 03:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S232195AbjAPISz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 03:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbjAPIRP (ORCPT
+        with ESMTP id S232007AbjAPISw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:17:15 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9252F12053
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:17:13 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id cf18so59810029ejb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:17:13 -0800 (PST)
+        Mon, 16 Jan 2023 03:18:52 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E549113E5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:18:51 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ss4so58931157ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:18:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rvy1b9vZOFy0r6tUkARlg6oXfN9pLw8MDEUtxOSpVyE=;
-        b=qskBwSLuWaqAaxIuzTNCYR9htwKOjbJSDYqxzD2kiK28aLacqvlaaqf+4IwAlft+Ni
-         6QtXN8KrvyP85c7vy+1/J2FrPp/ZPLd8TuATkMfcmLObDlWTaNBhVvgotf8qVha+H2uC
-         AmD5LUcWXio6v3GI401xQ/kE4ti9u+s6uIS+pRWCBNYMZvHtdAvgIuN3LwqvlKUDHxbz
-         ABousjtulrErR8loLDTS9hkww8c534Fv6W4ObRDFzIBW9GojiqpP48kJhius8yeG2A5P
-         3aAPTYl37PczED7PF9/iN2uCWzv1ZPkMnRm+H1SYgWtRgiMwNlwKEx1qWNrUWKwa+5Cl
-         Aebw==
+        bh=V6p/x/I4EmkJyrWU6uByfYEzqIGQxyLxyRt0PyVulSg=;
+        b=vlJdajDS0ExaYlMv9rJbJb2+wJzO1DT3dsAqMFLmpCN4Hna024H6vFlWmZHVImbblv
+         w8sSupyHx/I9IVAyk/m+RgHD5Q/3rcZRTkS4UENjYckjj6ljQIxvDU9AEmgVI+NrQU/c
+         vUAPDuR/lB0Q9TjV6dqrB8Dxl/1We3DEQo7gY4gyWWXZ5wsI0+QOZoLWrS72dN1CVdnI
+         uIj4LdX/whz8WnPykGtxlSqVhnyezmUEM2G8Qsh4Jf3WPThdFJTgo+S/F7yCQaclOu63
+         Mwtet5jagNoCFpVG+agWjgujCjYOJb2vIYLtyxXbve0iS3NVOR+jlF0Bxdo4PvAJ/q+k
+         fRUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rvy1b9vZOFy0r6tUkARlg6oXfN9pLw8MDEUtxOSpVyE=;
-        b=d2naxq168xkGxJ11kbw2jokLisawpNSxhb2LxvLCfcXThWYyqTZcCwSJXDUPk+7rmw
-         qFSfeegEZT34m8i5FNp6961Xmp+o9b/u4hhY+vjKORBCdZwvzOSZiKmFQUzC++hHwKCI
-         KBxpnnAPLO2mIa9Xm/zYexdhJZXbz7hpGAGrWsNVSy+U8vGwGo841ywYl8c0Hw0MyHiO
-         MASiJEMwJ/6cIXJ8/wdBF1MVn5sELlZpcqMur7aV67FQjKa5AqULkM1rds16XTpLIuTF
-         oAR/rOXE51dY5zLs3VWwy6HCH919JayM1bXzec9Mh0/+X7nyTMAlcUK4Ly/ttYcx0Wxm
-         QQXw==
-X-Gm-Message-State: AFqh2krijdCMd2maIR9p70PbR/4Uzgu1mTLb5BrYecAhg/AXbgUh4Cnk
-        YBMGf7/+EiUlDd8lXc8sNqLFqg==
-X-Google-Smtp-Source: AMrXdXvb3vp5afmT5t9Tifmzch+2zItr67oHjMDh96EJZXvzmlYuZPnIqXI2el1Ff42yQ55uGkIsIQ==
-X-Received: by 2002:a17:907:a411:b0:871:89d:75e with SMTP id sg17-20020a170907a41100b00871089d075emr2105110ejc.16.1673857032214;
-        Mon, 16 Jan 2023 00:17:12 -0800 (PST)
+        bh=V6p/x/I4EmkJyrWU6uByfYEzqIGQxyLxyRt0PyVulSg=;
+        b=FTu/gpSSvWlbwqlOg3zSjDoHBIU5VOTVtMyyOLcOQN5CRbsrFenff0Fdywca9A1sr3
+         pxnO9o+mrnobX1NSx/T2StiGCzyiuXyN0+uY3+mM12FWfAO0ouXmPwaTPjwAcyNQ0d6G
+         hpOIu6B7mf1bsgbNcfqnevu+n5mXpko5ie+hsqU+fit+mCbV2zWkf1z3PA0d9btl2XB5
+         Zd37lN0TzXI5B2ZNmk3pjo9RmwxxxHwILLAGWpbjdlQLq8BGhhYpaCUbpB7yDomSU7Qt
+         Rnr5d5x/yOeRMOTHlNKucbaXjIZcbDp8qofBfeuab8HVs98WUB8e4honSA9pvfq7D673
+         mYkw==
+X-Gm-Message-State: AFqh2kpzhANOMDX4Cci3ZS8QPtkGtScsdw1azCIqqFEiabWpP5CC9zFB
+        NyM1Jp9F4CuPtbliRSPao3LsFg==
+X-Google-Smtp-Source: AMrXdXstR8zaZL0n+RvfY1J5te2KQEPsY5E99OmJZMOFLE9Qeq7p2PxMnYEF4VsbrNNogX7tSujqKw==
+X-Received: by 2002:a17:907:7b8d:b0:84d:4e79:e7a with SMTP id ne13-20020a1709077b8d00b0084d4e790e7amr31708993ejc.74.1673857129609;
+        Mon, 16 Jan 2023 00:18:49 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id sh39-20020a1709076ea700b007c0e6d6bd10sm11567984ejc.132.2023.01.16.00.17.10
+        by smtp.gmail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm10454390ejb.68.2023.01.16.00.18.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 00:17:11 -0800 (PST)
-Message-ID: <49f22127-a0ad-ca1e-9923-fe91da4cdf87@linaro.org>
-Date:   Mon, 16 Jan 2023 09:17:09 +0100
+        Mon, 16 Jan 2023 00:18:49 -0800 (PST)
+Message-ID: <ef45a404-a63e-0fb3-d444-f8e8a4e0a8d1@linaro.org>
+Date:   Mon, 16 Jan 2023 09:18:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 2/2] dt-bindings: iio: adc: add Texas Instruments
- ADS7924
+Subject: Re: [PATCH 1/2] dt-bindings: reset: imx-src: add syscon and
+ simple-mfd compatibles
 Content-Language: en-US
-To:     Hugo Villeneuve <hugo@hugovil.com>, hvilleneuve@dimonoff.com,
-        jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230115170623.3680647-1-hugo@hugovil.com>
- <20230115170623.3680647-3-hugo@hugovil.com>
+To:     Bastian Krause <bst@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+References: <20230113-syscon-child-mfd-v1-0-0dd31b7de373@pengutronix.de>
+ <20230113-syscon-child-mfd-v1-1-0dd31b7de373@pengutronix.de>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230115170623.3680647-3-hugo@hugovil.com>
+In-Reply-To: <20230113-syscon-child-mfd-v1-1-0dd31b7de373@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/01/2023 18:06, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 13/01/2023 18:32, Bastian Krause wrote:
+> This allows passing the reboot mode from the OS to the bootloader via the
+> syscon-reboot-mode binding. Add a "simple-mfd" to support probing such a
+> child node. The actual reboot mode node could then be defined in a
+> board device-tree or fixed up by the bootloader.
 > 
-> Add device tree bindings document for the Texas Instruments ADS7924
-> ADC.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> Suggested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> Signed-off-by: Bastian Krause <bst@pengutronix.de>
 > ---
+>  Documentation/devicetree/bindings/reset/fsl,imx-src.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/fsl,imx-src.yaml b/Documentation/devicetree/bindings/reset/fsl,imx-src.yaml
+> index b11ac533f914c..9ec734e14e9f5 100644
+> --- a/Documentation/devicetree/bindings/reset/fsl,imx-src.yaml
+> +++ b/Documentation/devicetree/bindings/reset/fsl,imx-src.yaml
+> @@ -38,6 +38,8 @@ properties:
+>        - items:
+>            - const: "fsl,imx6q-src"
+>            - const: "fsl,imx51-src"
+> +          - const: "syscon"
+> +          - const: "simple-mfd"
 
+1. Why only this variant can be used as suscon-reboot-mode and not others?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2. Drop quotes. In a follow up patch you can also remove quotes from
+other compatibles.
+
 
 Best regards,
 Krzysztof
