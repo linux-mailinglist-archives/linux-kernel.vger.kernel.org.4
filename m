@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA94566C552
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A9A66C55C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjAPQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S232356AbjAPQFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbjAPQEL (ORCPT
+        with ESMTP id S232025AbjAPQEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:04:11 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADF026583
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:02:50 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id i1so6226671pfk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:02:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FaETKaG4apaYn3PDAXtUpXH3jZsRNdmxFYcvGW8yOZQ=;
-        b=vgonzpsOgYGL3UNEUE2LNFypkHIJVKzE/qJdlhQ641+/LU1oMJE2dPymzLjV/QgVdx
-         wL8+xQW23Rdf7r6HMEO25fSw/tlokvE6H2nr1b6b6/Q/ppaD2+6Ih42mx03VAb3BMd3D
-         xp0i5yryfMrByjgr+I+m6JBCh3JWn7xADU+lSqe14Tjjma0AeopBXEEe+2xbIcK5pEPg
-         TfYRNUfw3BiVAC/5DfP495xbHgFyA8CYidRr7Cl2SJ33FV+TCZqP2FS6V8iHHggks9wx
-         5b4etbCFpwcFCSOF8rkOP0KZHMl0aoQFAW3wQzcxD7tJY9QuR4/TDRNWgF9f69KxBemu
-         ofjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FaETKaG4apaYn3PDAXtUpXH3jZsRNdmxFYcvGW8yOZQ=;
-        b=ztGW3sGIaQFTqhJzLrhGBsJVdGCeaA8ThzYcJjJTh/LifPS+EF5XztKA3eJf6Tsho5
-         73gpZPyhfZKE1wtvjt4hYOq4INC0GVupIN1TAfKPDOD40RA9DtpZVpXWWra0dt8prhuW
-         fXc6MUGR75qgJlqrutjevFMvbw9Iajtnf3KjeNz4V6643KzwBtE7uiGTfOLw4JZzlQgt
-         wpz61GXz72TFP02UR2sEI+bxKeb3udP2jSS1tdyq3GFqv1mAwY7N9+tqimCCM4nwRTta
-         SirOjanQp1qvPUT+fhihKLNt1QQkMBRw1i017lQQrVL/ZOJ4b8e4g37CPw/6HqdOptvJ
-         xPQw==
-X-Gm-Message-State: AFqh2koLH4GOKNNhP6WH1U3nn9Ie16ZS76wBokY01RzINM8aTagDtjji
-        0rXHBZi5MUsO3GPq5py9cYG3PA==
-X-Google-Smtp-Source: AMrXdXuIUz9FhPEQSjOKJJcqt2/o7PMFPNB/mOFw2WRvIORt2QaCYxSahy6LtKrW56KNifLo22ENrA==
-X-Received: by 2002:a62:2741:0:b0:58d:bce0:2bdb with SMTP id n62-20020a622741000000b0058dbce02bdbmr105317pfn.7.1673884969367;
-        Mon, 16 Jan 2023 08:02:49 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c60:63d3:2d69:9f71:187e:f085? ([2401:4900:1c60:63d3:2d69:9f71:187e:f085])
-        by smtp.gmail.com with ESMTPSA id w125-20020a626283000000b005815a371177sm17678922pfb.52.2023.01.16.08.02.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 08:02:48 -0800 (PST)
-Message-ID: <6f08d466-9589-ebff-c38d-bf9015a0f6ad@linaro.org>
-Date:   Mon, 16 Jan 2023 21:32:39 +0530
+        Mon, 16 Jan 2023 11:04:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC61C26864;
+        Mon, 16 Jan 2023 08:03:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 671956101F;
+        Mon, 16 Jan 2023 16:03:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72BFC433F0;
+        Mon, 16 Jan 2023 16:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673884989;
+        bh=FrbGjzIWFaVbNv42ogpLWc8HChDfFW9KqzLTwLqXtoo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q9sPxw9psZ4jDIaXyMK9zTVd0Sbq8Ca+SGAcAVC3EYL2abuhMFbPj8yd7TsSp0Sos
+         ecPKZlTsmNDcv6cdIGNJTSevZAfv5YtGdppCc8acJsVOoGh5cRO5Cj4MrT4N0yax7q
+         w1O9vNoU11uwXL1RaA3vytv9Wkg4/D1cVZ0Zj5tUPFb/3n1OwwY8bOKPdNkx25T3xd
+         VDi62/LKeC+IniXiSNhMQeIbEkt6Lv8IEER9GhdZrNsKbfi/eG63W0TweYV8P0wvTZ
+         D69XYiMonjM2bJSeScJaMu8UB+KLXVYzWkWsDuzWCH49KSi/vb2i+j7+sl9/KjZzss
+         jS548WyWws2pA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pHRxI-0004EJ-W8; Mon, 16 Jan 2023 17:03:29 +0100
+Date:   Mon, 16 Jan 2023 17:03:28 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Can Guo <quic_cang@quicinc.com>
+Subject: Re: [PATCH] scsi: ufs: core: fix devfreq deadlocks
+Message-ID: <Y8V1UGzXqqc0CGdq@hovoldconsulting.com>
+References: <20221222102121.18682-1-johan+linaro@kernel.org>
+ <349e3564-10d4-9429-93d2-7bb639253fc2@acm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
- '#size-cells' related dt-binding error
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
- <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
- <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
- <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
- <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
- <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
-Content-Language: en-US
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <349e3564-10d4-9429-93d2-7bb639253fc2@acm.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,56 +62,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/16/23 9:24 PM, Konrad Dybcio wrote:
+On Thu, Jan 05, 2023 at 10:38:58AM -0800, Bart Van Assche wrote:
+> On 12/22/22 02:21, Johan Hovold wrote:
+> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> > index bda61be5f035..5c3821b2fcf8 100644
+> > --- a/drivers/ufs/core/ufshcd.c
+> > +++ b/drivers/ufs/core/ufshcd.c
+> > @@ -1234,12 +1234,14 @@ static int ufshcd_clock_scaling_prepare(struct ufs_hba *hba)
+> >   	 * clock scaling is in progress
+> >   	 */
+> >   	ufshcd_scsi_block_requests(hba);
+> > +	mutex_lock(&hba->wb_mutex);
+> >   	down_write(&hba->clk_scaling_lock);
+> >   
+> >   	if (!hba->clk_scaling.is_allowed ||
+> >   	    ufshcd_wait_for_doorbell_clr(hba, DOORBELL_CLR_TOUT_US)) {
+> >   		ret = -EBUSY;
+> >   		up_write(&hba->clk_scaling_lock);
+> > +		mutex_unlock(&hba->wb_mutex);
+> >   		ufshcd_scsi_unblock_requests(hba);
+> >   		goto out;
+> >   	}
+> > @@ -1251,12 +1253,16 @@ static int ufshcd_clock_scaling_prepare(struct ufs_hba *hba)
+> >   	return ret;
+> >   }
 > 
+> Please add an __acquires(&hba->wb_mutex) annotation for sparse.
 > 
-> On 16.01.2023 16:43, Bhupesh Sharma wrote:
->> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
->>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
->>>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>>
->>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
->>>>>> Fix the following '#address-cells' & '#size-cells' related
->>>>>> dt-binding error:
->>>>>>
->>>>>>     $ make dtbs_check
->>>>>>
->>>>>>     From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>>>>          arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
->>>>>>                #address-cells:0:0: 2 was expected
->>>>>>        From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>>>
->>>>> Don't we want rather to unify the soc address range?
->>>>
->>>> Well, the assumption in the original dt-bindings was that every reg
->>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
->>>> #size-cells to <2>). However, that is not the case for all of the
->>>> SoCs.
->>>
->>> Hm, which device of that SoC cannot be used with address/size cells 2?
->>
->> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
->> be used with address/size cells 2 (See:
->> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
-> SM6115 (and pretty much every other arm64 msm platform newer than 8916)
-> should be using addr/size-cells = 2 along with (dma-)ranges of 36 bit, as
-> that's what their smmus use and otherwise some addresses may get cut off
-> in translation, or so the story went with 845 N years ago.. We can either
-> pursue this patch or I can submit the 2-cell-ification if you don't plan on
-> adding more nodes shortly
+> > -static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
+> > +static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool scale_up)
+> >   {
+> > -	if (writelock)
+> > -		up_write(&hba->clk_scaling_lock);
+> > -	else
+> > -		up_read(&hba->clk_scaling_lock);
+> > +	up_write(&hba->clk_scaling_lock);
+> > +
+> > +	/* Enable Write Booster if we have scaled up else disable it */
+> > +	if (ufshcd_enable_wb_if_scaling_up(hba))
+> > +		ufshcd_wb_toggle(hba, scale_up);
+> > +
+> > +	mutex_unlock(&hba->wb_mutex);
+> > +
+> >   	ufshcd_scsi_unblock_requests(hba);
+> >   	ufshcd_release(hba);
+> >   }
+> 
+> Please add a __releases(&hba->wb_mutex) annotation for sparse.
 
+This would actually introduce new sparse warnings as mutex_lock/unlock()
+are not sparse annotated:
 
-Have you tested this combination on SM6115 like SoCs with various IPs? I 
-have tried a few experiments in the past and not all IPs work well with 
-36-bit DMA ranges (atleast not on the boards I have).
+drivers/ufs/core/ufshcd.c:1254:9: warning: context imbalance in 'ufshcd_clock_scaling_prepare' - wrong count at exit
+drivers/ufs/core/ufshcd.c:1266:9: warning: context imbalance in 'ufshcd_clock_scaling_unprepare' - wrong count at exit
+drivers/ufs/core/ufshcd.c:1281:12: warning: context imbalance in 'ufshcd_devfreq_scale' - wrong count at exit
 
-So, I think it might lead to more breakage (unless we are sure of a 
-well-tested fix). A simpler patch to fix the dt-bindings looks more 
-useful IMO.
+I guess it's not worth adding explicit __acquire()/__release() to these
+helpers either (e.g. as they are only used in one function).
 
-Thanks,
-Bhupesh
+> > @@ -1273,7 +1279,6 @@ static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
+> >   static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+> >   {
+> >   	int ret = 0;
+> > -	bool is_writelock = true;
+> >   
+> >   	ret = ufshcd_clock_scaling_prepare(hba);
+> >   	if (ret)
+> > @@ -1302,15 +1307,8 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+> >   		}
+> >   	}
+> >   
+> > -	/* Enable Write Booster if we have scaled up else disable it */
+> > -	if (ufshcd_enable_wb_if_scaling_up(hba)) {
+> > -		downgrade_write(&hba->clk_scaling_lock);
+> > -		is_writelock = false;
+> > -		ufshcd_wb_toggle(hba, scale_up);
+> > -	}
+> > -
+> >   out_unprepare:
+> > -	ufshcd_clock_scaling_unprepare(hba, is_writelock);
+> > +	ufshcd_clock_scaling_unprepare(hba, scale_up);
+> >   	return ret;
+> >   }
+> 
+> This patch moves the ufshcd_wb_toggle() from before the out_unprepare 
+> label to after the out_unprepare label (into 
+> ufshcd_clock_scaling_unprepare()). Does this change perhaps introduce a 
+> new call to ufshcd_wb_toggle() in error paths?
+
+Thanks for spotting that. I'll leave the setting unchanged on errors in
+v2.
+
+Johan
