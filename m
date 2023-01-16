@@ -2,116 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A360A66BE5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BAA66BE6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjAPM43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S231370AbjAPM5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjAPM4E (ORCPT
+        with ESMTP id S231326AbjAPM4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:56:04 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6361E5D7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:54:49 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id w2so218398ilg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SxhgAvgDMdZQpeBwjT3HHcfCZOqbwGa4aErLEE5tZo=;
-        b=WwyqIv5ugeBGMCRLeuLpLHV07NTeipvLkTInSKY42RrdU1vwWtTEUtYdXEw52BsKUK
-         UWbwuyCoIkqFYwgNoVURc0Qd+yxukDctYsO4kMlxKDHjOhHUUDxij8rPJZdn7baGV7R8
-         IVwBQmT+J8xjrPnEg5xWbuKr7an/po/Xo4dLxEruoxwIofEZklyzkoBABsbLvFeyVXMY
-         saELXXNxzqPU2fIV2Hqg3KsVwrn/54eK6/5MJCNxToqkQApDvz/lHFtoOs4Q/txSM+rL
-         bSn40FZt6uIxSLwD06kXtY7RC8GwxwprFjIrn1reOzSKbr9dWMwZZpaz+jeAOjNsEU9g
-         WxVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3SxhgAvgDMdZQpeBwjT3HHcfCZOqbwGa4aErLEE5tZo=;
-        b=tFqXxBPjKa4E79lBFKCWOALVlJrX9cehnw5sYLQgRnVakOe2DE39t/2PRz++2hns8q
-         cHwvP81MJ6q/V3v563lxGqbX9MeIOC9ySCBTV7Flwutppu+eM2n6usEDuqteaalHEXBT
-         zRJR3KUlkf7u+osGI6i51Bk3dDjGth6MlyCiicyKR+zMbF5hNHr+8oUyqY0gJZfJH5Rn
-         Q38AcuA+Nyfyp0L5aIqC6h71yDymTZmubmahY71vz8UEQyC+wvk9P5fPnMnJ0mBzGJHL
-         GwRHR01O/2p2+rpn9TqUbMhzDH7U1jrH/EXv4XR6/20MCXX5zMhsCUskk5Yl+E5voupV
-         CVCQ==
-X-Gm-Message-State: AFqh2kotd68YQO/zdKLo+G4Q8v/YhOolXEy2x7yuxqdU7FiqPUWMSfZ4
-        wKaBHujD9TsIGX7fIfYaa/OuRVcy281J40rVM36XbQ==
-X-Google-Smtp-Source: AMrXdXtF4fTIbcgFeVqFPRLkNiAKgONng9+vuomJpuOpDmWCrv9ygQHNjTNH4Xz4bhmmGP+Q9IxPNljxO4mKZyYrcZM=
-X-Received: by 2002:a92:c04e:0:b0:30f:12c9:f765 with SMTP id
- o14-20020a92c04e000000b0030f12c9f765mr116249ilf.187.1673873688380; Mon, 16
- Jan 2023 04:54:48 -0800 (PST)
+        Mon, 16 Jan 2023 07:56:46 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8A21F5DE;
+        Mon, 16 Jan 2023 04:55:37 -0800 (PST)
+Received: from mwalle01.sab.local (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id ACA07166C;
+        Mon, 16 Jan 2023 13:55:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1673873735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ykfQZOm+BASL1GRgngyr2+aX6xmiGeCmWuvPVEfYj38=;
+        b=aA2u2Wx7ZKyQuxkNpuPYxgfMS5B+GnVIDNIN0zt/QCu4YlEArWbIuUj1GPucDXwmCAEf+Y
+        LW64GMhF9PVSps9IXsahMzdwBBcHskaGdAVgCZTKTscquNL2binpZ0yUk4+SLET4biR23t
+        9b2HL1qR6ZJkbDFjYIBmYsN4XKzBdPpldXAvm7QEE+Dv6Efv50hndXE0bMdf0heUf5AQKn
+        QBqi1c6Lw709w3D78JQrXFIogAKBWkK/z4e+tRzY2OJmbh1VhZFidD3TWO21LWYEpAf9BC
+        VI6DXXHhh1ej+LTrxSCDkupqF3eaOEpaT5m2s8PUTzkOCeD34Acd0db3+oRK9g==
+From:   Michael Walle <michael@walle.cc>
+Date:   Mon, 16 Jan 2023 13:55:13 +0100
+Subject: [PATCH net-next 1/6] net: mdio: Move mdiobus_scan() within file
 MIME-Version: 1.0
-References: <20230111133351.807024-1-jannh@google.com> <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
- <CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com>
- <20230115190654.mehtlyz2rxtg34sl@box.shutemov.name> <CAG48ez2zeQ4+g1=B4eyrrvZRYMr1S1xKBh2_eAhCjVjhj7Lpfg@mail.gmail.com>
- <20230116123403.fiyv22esqgh7bzp3@box.shutemov.name>
-In-Reply-To: <20230116123403.fiyv22esqgh7bzp3@box.shutemov.name>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 16 Jan 2023 13:54:12 +0100
-Message-ID: <CAG48ez2kAd3_VQRodzNxmME=nceO04TQ=y-E2uDdZzmsXdiMXw@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>, Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230116-net-next-remove-probe-capabilities-v1-1-5aa29738a023@walle.cc>
+References: <20230116-net-next-remove-probe-capabilities-v1-0-5aa29738a023@walle.cc>
+In-Reply-To: <20230116-net-next-remove-probe-capabilities-v1-0-5aa29738a023@walle.cc>
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org, Andrew Lunn <andrew@lunn.ch>,
+        Michael Walle <michael@walle.cc>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+cc mmu-gather maintainers
+From: Andrew Lunn <andrew@lunn.ch>
 
-On Mon, Jan 16, 2023 at 1:34 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> On Mon, Jan 16, 2023 at 01:06:59PM +0100, Jann Horn wrote:
-> > On Sun, Jan 15, 2023 at 8:07 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> > > BTW, I've noticied that you recently added tlb_remove_table_sync_one().
-> > > I'm not sure why it is needed. Why IPI in pmdp_collapse_flush() in not
-> > > good enough to serialize against GUP fast?
-> >
-> > If that sent an IPI, it would be good enough; but
-> > pmdp_collapse_flush() is not guaranteed to send an IPI.
-> > It does a TLB flush, but on some architectures (including arm64 and
-> > also virtualized x86), a remote TLB flush can be done without an IPI.
-> > For example, arm64 has some fancy hardware support for remote TLB
-> > invalidation without IPIs ("broadcast TLB invalidation"), and
-> > virtualized x86 has (depending on the hypervisor) things like TLB
-> > shootdown hypercalls (under Hyper-V, see hyperv_flush_tlb_multi) or
-> > TLB shootdown signalling for preempted CPUs through shared memory
-> > (under KVM, see kvm_flush_tlb_multi).
->
-> I think such architectures must provide proper pmdp_collapse_flush()
-> with the required serialization.
+No functional change, just place it earlier in preparation for some
+refactoring.
 
-FWIW, the IPI that I added is not unconditional;
-tlb_remove_table_sync_one() is a no-op depending on
-CONFIG_MMU_GATHER_RCU_TABLE_FREE, which an architecture can use to
-signal that it uses "Semi RCU freeing of the page directories". The
-kernel has arch-independent support for these semantics in the normal
-TLB flushing code. But yeah, I guess you could move the
-tlb_remove_table_sync_one() calls into pmdp_collapse_flush()
-(including the generic version)? I'm CC-ing the mmu-gather maintainers
-in case they have an opinion.
+While at it, correct the comment format and one typo.
 
-Anyway, I'm not going to do that refactor; feel free to do that if you want.
+Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/net/phy/mdio_bus.c | 101 ++++++++++++++++++++++-----------------------
+ 1 file changed, 50 insertions(+), 51 deletions(-)
 
-> Power and S390 already do that.
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index 902e1c88ef58..61c33c6098a1 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -506,6 +506,56 @@ static int mdiobus_create_device(struct mii_bus *bus,
+ 	return ret;
+ }
+ 
++/**
++ * mdiobus_scan - scan a bus for MDIO devices.
++ * @bus: mii_bus to scan
++ * @addr: address on bus to scan
++ *
++ * This function scans the MDIO bus, looking for devices which can be
++ * identified using a vendor/product ID in registers 2 and 3. Not all
++ * MDIO devices have such registers, but PHY devices typically
++ * do. Hence this function assumes anything found is a PHY, or can be
++ * treated as a PHY. Other MDIO devices, such as switches, will
++ * probably not be found during the scan.
++ */
++struct phy_device *mdiobus_scan(struct mii_bus *bus, int addr)
++{
++	struct phy_device *phydev = ERR_PTR(-ENODEV);
++	int err;
++
++	switch (bus->probe_capabilities) {
++	case MDIOBUS_NO_CAP:
++	case MDIOBUS_C22:
++		phydev = get_phy_device(bus, addr, false);
++		break;
++	case MDIOBUS_C45:
++		phydev = get_phy_device(bus, addr, true);
++		break;
++	case MDIOBUS_C22_C45:
++		phydev = get_phy_device(bus, addr, false);
++		if (IS_ERR(phydev))
++			phydev = get_phy_device(bus, addr, true);
++		break;
++	}
++
++	if (IS_ERR(phydev))
++		return phydev;
++
++	/* For DT, see if the auto-probed phy has a corresponding child
++	 * in the bus node, and set the of_node pointer in this case.
++	 */
++	of_mdiobus_link_mdiodev(bus, &phydev->mdio);
++
++	err = phy_device_register(phydev);
++	if (err) {
++		phy_device_free(phydev);
++		return ERR_PTR(-ENODEV);
++	}
++
++	return phydev;
++}
++EXPORT_SYMBOL(mdiobus_scan);
++
+ /**
+  * __mdiobus_register - bring up all the PHYs on a given bus and attach them to bus
+  * @bus: target mii_bus
+@@ -679,57 +729,6 @@ void mdiobus_free(struct mii_bus *bus)
+ }
+ EXPORT_SYMBOL(mdiobus_free);
+ 
+-/**
+- * mdiobus_scan - scan a bus for MDIO devices.
+- * @bus: mii_bus to scan
+- * @addr: address on bus to scan
+- *
+- * This function scans the MDIO bus, looking for devices which can be
+- * identified using a vendor/product ID in registers 2 and 3. Not all
+- * MDIO devices have such registers, but PHY devices typically
+- * do. Hence this function assumes anything found is a PHY, or can be
+- * treated as a PHY. Other MDIO devices, such as switches, will
+- * probably not be found during the scan.
+- */
+-struct phy_device *mdiobus_scan(struct mii_bus *bus, int addr)
+-{
+-	struct phy_device *phydev = ERR_PTR(-ENODEV);
+-	int err;
+-
+-	switch (bus->probe_capabilities) {
+-	case MDIOBUS_NO_CAP:
+-	case MDIOBUS_C22:
+-		phydev = get_phy_device(bus, addr, false);
+-		break;
+-	case MDIOBUS_C45:
+-		phydev = get_phy_device(bus, addr, true);
+-		break;
+-	case MDIOBUS_C22_C45:
+-		phydev = get_phy_device(bus, addr, false);
+-		if (IS_ERR(phydev))
+-			phydev = get_phy_device(bus, addr, true);
+-		break;
+-	}
+-
+-	if (IS_ERR(phydev))
+-		return phydev;
+-
+-	/*
+-	 * For DT, see if the auto-probed phy has a correspoding child
+-	 * in the bus node, and set the of_node pointer in this case.
+-	 */
+-	of_mdiobus_link_mdiodev(bus, &phydev->mdio);
+-
+-	err = phy_device_register(phydev);
+-	if (err) {
+-		phy_device_free(phydev);
+-		return ERR_PTR(-ENODEV);
+-	}
+-
+-	return phydev;
+-}
+-EXPORT_SYMBOL(mdiobus_scan);
+-
+ static void mdiobus_stats_acct(struct mdio_bus_stats *stats, bool op, int ret)
+ {
+ 	preempt_disable();
 
-What's the call graph from pmdp_collapse_flush() to IPI on powerpc and s390?
+-- 
+2.30.2
