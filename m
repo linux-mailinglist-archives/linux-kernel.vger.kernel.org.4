@@ -2,346 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDDA66B78C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C184366B797
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjAPGle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 01:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S231933AbjAPGnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 01:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjAPGlc (ORCPT
+        with ESMTP id S231861AbjAPGn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 01:41:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D0283D6;
-        Sun, 15 Jan 2023 22:41:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 16 Jan 2023 01:43:29 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1B64495
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 22:43:28 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67EAEB80D0B;
-        Mon, 16 Jan 2023 06:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 939FDC433D2;
-        Mon, 16 Jan 2023 06:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673851288;
-        bh=vxB4hgvvq627D1GhOvSCHeoYC0e4WMhyfKKnraRhV4k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dZ56rODpD4CgQ/qC/beZ23LRaanSycqHyi/na0VCHVyCUbp2JrX1Tnk9adi7mYKXl
-         Xjx7lzX1xFRLmY+7SwK4oxJnHbFOdXYMKNINTudQ1+V3CIfyXwLS0A9ReANwuH1T6p
-         hsMoQ4I8aOZkUVkBW2vv/auxqH0nL+R5mu6nSd34XUInZ8OkxSTMvWFDbF/4TfIjQl
-         G2EXxpxH5jr7o/nf9O9CVXcQbzCPkg0rofgVmW862DV4zQAixYucladTlKPmBCAF1c
-         0BncvOX3fCapcCavMmv0ePE8Y3EHyu2tKY9JZlioghZTbziyn3fL9suNzNlY6GMGxD
-         kSZty1rCtEMpA==
-Date:   Mon, 16 Jan 2023 15:41:23 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: kernel hangs when kprobe memcpy
-Message-Id: <20230116154123.a0ff8d6deaff3fe87b48461b@kernel.org>
-In-Reply-To: <b20cfc27-0e46-7e3b-e4f1-2e185ea516ab@loongson.cn>
-References: <d179086d-78d8-d0e3-e113-9072cffa55f4@loongson.cn>
-        <19666c03-4bf6-7aac-3f1d-cd31ab7de2d5@loongson.cn>
-        <20230112233629.fafdbbe07dddf364f8078df6@kernel.org>
-        <d0484b6e-c8a3-65c8-2157-0da95c17b061@loongson.cn>
-        <20230114143859.7ccc45c1c5d9ce302113ab0a@kernel.org>
-        <b20cfc27-0e46-7e3b-e4f1-2e185ea516ab@loongson.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DA01C34E8C;
+        Mon, 16 Jan 2023 06:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673851406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uqQqkkW8vDqXYBwySLpMuxVJV9a63KYmU1amJWZzGc4=;
+        b=P2wXriVIfUN3At+wL+o1ULRQl7N/2JdPYEOOoKn4IkbYr7aJqKzEAr2DR7fxmzyIWpjuZZ
+        YQUJbqqMFE8so695aDnsbRO0ClAdncmMWZK3pZyfq2ngtcbcuXFdRg+rbAwJJJ31qlnVf6
+        hv0iVP0TVetu/KwwIg71uWDVuXR8TCU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C10B139C2;
+        Mon, 16 Jan 2023 06:43:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /f+PHA7yxGOZXgAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 16 Jan 2023 06:43:26 +0000
+Message-ID: <27d08d32-1a17-0959-203f-39e769f555d1@suse.com>
+Date:   Mon, 16 Jan 2023 07:43:25 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] x86/paravirt: merge activate_mm and dup_mmap callbacks
+To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org
+References: <20230112152132.4399-1-jgross@suse.com>
+ <3fcb5078-852e-0886-c084-7fb0cfa5b757@csail.mit.edu>
+Content-Language: en-US
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <3fcb5078-852e-0886-c084-7fb0cfa5b757@csail.mit.edu>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------f2QYQmcp7oyhJ0GflGkKSPBI"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tiezhu,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------f2QYQmcp7oyhJ0GflGkKSPBI
+Content-Type: multipart/mixed; boundary="------------PYYImwLJ6duLYMmgfXqX04GL";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
+ linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux-foundation.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Alexey Makhalov <amakhalov@vmware.com>,
+ VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, xen-devel@lists.xenproject.org
+Message-ID: <27d08d32-1a17-0959-203f-39e769f555d1@suse.com>
+Subject: Re: [PATCH] x86/paravirt: merge activate_mm and dup_mmap callbacks
+References: <20230112152132.4399-1-jgross@suse.com>
+ <3fcb5078-852e-0886-c084-7fb0cfa5b757@csail.mit.edu>
+In-Reply-To: <3fcb5078-852e-0886-c084-7fb0cfa5b757@csail.mit.edu>
 
-On Sat, 14 Jan 2023 14:53:21 +0800
-Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+--------------PYYImwLJ6duLYMmgfXqX04GL
+Content-Type: multipart/mixed; boundary="------------0z6dtOJSlYZ8eWZSil6wUXCH"
 
-> 
-> 
-> On 01/14/2023 01:38 PM, Masami Hiramatsu (Google) wrote:
-> > Hi Tiezhu,
-> >
-> > On Fri, 13 Jan 2023 14:26:52 +0800
-> > Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> >
-> >>
-> >>
-> >> On 01/12/2023 10:36 PM, Masami Hiramatsu (Google) wrote:
-> >>> Hi Tiezhu,
-> >>>
-> >>> On Thu, 12 Jan 2023 21:32:51 +0800
-> >>> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> >>>
-> >>>>
-> >>>>
-> >>>> On 01/11/2023 07:38 PM, Tiezhu Yang wrote:
-> >>>>> Hi all,
-> >>>>>
-> >>>>> (1) I have the following test environment, kernel hangs when kprobe memcpy:
-> >>>>>
-> >>>>> system: x86_64 fedora 36
-> >>>>> kernel version: Linux 5.7 (compile and update)
-> >>>>> test case: modprobe kprobe_example symbol="memcpy"
-> >>>>> (CONFIG_SAMPLE_KPROBES=m)
-> >>>>>
-> >>>>> In order to fix build errors, it needs to unset CONFIG_NFP and do the
-> >>>>> following changes:
-> >>>>> commit 52a9dab6d892 ("libsubcmd: Fix use-after-free for realloc(..., 0)")
-> >>>>> commit de979c83574a ("x86/entry: Build thunk_$(BITS) only if
-> >>>>> CONFIG_PREEMPTION=y")
-> >>>>>
-> >>>>> (2) Using the latest upstream mainline kernel, no hang problem due to the
-> >>>>> commit e3a9e681adb7 ("x86/entry: Fixup bad_iret vs noinstr") to prohibit
-> >>>>> probing memcpy which is put into the .noinstr.text section.
-> >>>>>
-> >>>>>   # modprobe kprobe_example symbol="memcpy"
-> >>>>>   modprobe: ERROR: could not insert 'kprobe_example': Invalid argument
-> >>>>>
-> >>>>> In my opinion, according to the commit message, the above commit is not
-> >>>>> intended to fix the memcpy hang problem, the problem was fixed by accident.
-> >>>>>
-> >>>>> (3) If make handler_pre() and handler_post() as empty functions in the 5.7
-> >>>>> kernel code, the above hang problem does not exist.
-> >>>
-> >>>
-> >>>>>
-> >>>>> diff --git a/samples/kprobes/kprobe_example.c
-> >>>>> b/samples/kprobes/kprobe_example.c
-> >>>>> index fd346f58ddba..c194171d8a46 100644
-> >>>>> --- a/samples/kprobes/kprobe_example.c
-> >>>>> +++ b/samples/kprobes/kprobe_example.c
-> >>>>> @@ -28,8 +28,6 @@ static struct kprobe kp = {
-> >>>>>  static int __kprobes handler_pre(struct kprobe *p, struct pt_regs *regs)
-> >>>>>  {
-> >>>>>  #ifdef CONFIG_X86
-> >>>>> -    pr_info("<%s> p->addr = 0x%p, ip = %lx, flags = 0x%lx\n",
-> >>>>> -        p->symbol_name, p->addr, regs->ip, regs->flags);
-> >>>>>  #endif
-> >>>>>  #ifdef CONFIG_PPC
-> >>>>>      pr_info("<%s> p->addr = 0x%p, nip = 0x%lx, msr = 0x%lx\n",
-> >>>>> @@ -65,8 +63,6 @@ static void __kprobes handler_post(struct kprobe *p,
-> >>>>> struct pt_regs *regs,
-> >>>>>                  unsigned long flags)
-> >>>>>  {
-> >>>>>  #ifdef CONFIG_X86
-> >>>>> -    pr_info("<%s> p->addr = 0x%p, flags = 0x%lx\n",
-> >>>>> -        p->symbol_name, p->addr, regs->flags);
-> >>>>>  #endif
-> >>>>>  #ifdef CONFIG_PPC
-> >>>>>      pr_info("<%s> p->addr = 0x%p, msr = 0x%lx\n",
-> >>>>>
-> >>>>> I want to know what is the real reason of the hang problem when kprobe
-> >>>>> memcpy,
-> >>>>> I guess it may be kprobe recursion, what do you think? Thank you.
-> >>>>>
-> >>>>> By the way, kprobe memset has no problem whether or not handler_pre() and
-> >>>>> handler_post() are empty functions.
-> >>>>>
-> >>>>> Thanks,
-> >>>>> Tiezhu
-> >>>>
-> >>>> I find out the following call trace:
-> >>>>
-> >>>> handler_pre()
-> >>>>    pr_info()
-> >>>>      printk()
-> >>>>        _printk()
-> >>>>          vprintk()
-> >>>>            vprintk_store()
-> >>>>              memcpy()
-> >>>>
-> >>>> I think it may cause recursive exceptions, so we should
-> >>>> mark memcpy as non-kprobe-able, right?
-> >>>
-> >>> Yes, and the .noinstr.text (noinstr function attribute) is including
-> >>> non-kprobe-able (nokprobe function attribute). I a function is nokprobe
-> >>> and notrace, it should be noinstr. "NOKPROBE_SYMBOL" is used for the
-> >>> symbol which is called in the kprobe processing path (e.g. x86 int3
-> >>> handler etc.).
-> >>>
-> >>> BTW, that the bug you reported is interesting. Even if another kprobe
-> >>> is called inside kprobe pre/post handler, it must be skipped.
-> >>> If you can share your kconfig, I can try to reproduce it.
-> >>>
-> >>> Thank you,
-> >>>
-> >>
-> >> Hi Masami,
-> >>
-> >> Thank you very much for your reply.
-> >>
-> >> Please use the attached config and diff file, here are the steps
-> >> to reproduce kernel hangs when kprobe memcpy on x86_64 fedora 36:
-> >>
-> >> (1) kernel 5.7
-> >> $ wget --no-check-certificate
-> >> https://git.kernel.org/torvalds/t/linux-5.7.tar.gz
-> >> $ ls
-> >> 5.7.config  5.7.diff  linux-5.7.tar.gz
-> >> $ tar xf linux-5.7.tar.gz
-> >> $ cd linux-5.7/
-> >> $ patch -p1 < ../5.7.diff
-> >> $ cp ../5.7.config .config
-> >> $ make -j8
-> >> # make modules_install -j8
-> >> # make install
-> >> # set the default kernel and reboot
-> >> # modprobe kprobe_example symbol="memcpy"
-> >>
-> >> (2) kernel 6.2-rc1
-> >> $ wget --no-check-certificate
-> >> https://git.kernel.org/torvalds/t/linux-6.2-rc1.tar.gz
-> >> $ ls
-> >> 6.2-rc1.config  6.2-rc1.diff  linux-6.2-rc1.tar.gz
-> >> $ tar xf linux-6.2-rc1.tar.gz
-> >> $ cd linux-6.2-rc1/
-> >> $ patch -p1 < ../6.2-rc1.diff
-> >> $ cp ../6.2-rc1.config .config
-> >> $ make -j8
-> >> # make modules_install -j8
-> >> # make install
-> >> # set the default kernel and reboot
-> >> # modprobe kprobe_example symbol="memcpy"
-> >>
-> >> By the way, I am developing and testing kprobe on LoongArch, I met the
-> >> same hang problems when probe some symbols, such as (1) handle_syscall,
-> >> like entry_SYSCALL_64 in arch/x86/entry/entry_64.S, used as syscall
-> >> exception handler, (2) memcpy, it may cause recursive exceptions like
-> >> x86.
-> >
-> > If you saw that without any change, please report it. At least
-> > memcpy is already marked as noinstr.
-> 
-> The current upstream mainline kernel has no problem, because it includes
-> commit e3a9e681adb7 ("x86/entry: Fixup bad_iret vs noinstr"), memcpy is
-> already marked as noinstr. But for the kernel without the above commit,
-> like kernel 5.7, it has problem.
+--------------0z6dtOJSlYZ8eWZSil6wUXCH
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I've confirmed that kernel 5.4.228 (the latest stable tree) did not have
-this issue (it already rejects the memcpy). Since 5.7 is not a stable
-(maintained) tree, we can not send a patch to it.
-Anyway, it is better to add a test case for the recursed probe function.
-I made a patch below. Can your loongarch port pass this test case?
+T24gMTYuMDEuMjMgMDU6MjcsIFNyaXZhdHNhIFMuIEJoYXQgd3JvdGU6DQo+IA0KPiBIaSBK
+dWVyZ2VuLA0KPiANCj4gT24gMS8xMi8yMyA3OjIxIEFNLCBKdWVyZ2VuIEdyb3NzIHdyb3Rl
+Og0KPj4gVGhlIHR3byBwYXJhdmlydCBjYWxsYmFja3MgLm1tdS5hY3RpdmF0ZV9tbSBhbmQg
+Lm1tdS5kdXBfbW1hcCBhcmUNCj4+IHNoYXJpbmcgdGhlIHNhbWUgaW1wbGVtZW50YXRpb25z
+IGluIGFsbCBjYXNlczogZm9yIFhlbiBQViBndWVzdHMgdGhleQ0KPj4gYXJlIHBpbm5pbmcg
+dGhlIFBHRCBvZiB0aGUgbmV3IG1tX3N0cnVjdCwgYW5kIGZvciBhbGwgb3RoZXIgY2FzZXMN
+Cj4+IHRoZXkgYXJlIGEgTk9QLg0KPj4NCj4gDQo+IEkgd2FzIGV4cGVjdGluZyB0aGF0IHRo
+ZSBkdXBsaWNhdGVkIGZ1bmN0aW9ucyB4ZW5fYWN0aXZhdGVfbW0oKSBhbmQNCj4geGVuX2R1
+cF9tbWFwKCkgd291bGQgYmUgbWVyZ2VkIGludG8gYSBjb21tb24gb25lLCBhbmQgdGhhdCBi
+b3RoDQo+IC5tbXUuYWN0aXZhdGVfbW0gYW5kIC5tbXUuZHVwX21tYXAgY2FsbGJhY2tzIHdv
+dWxkIGJlIG1hcHBlZCB0byB0aGF0DQo+IGNvbW1vbiBpbXBsZW1lbnRhdGlvbiBmb3IgWGVu
+IFBWLg0KPiANCj4+IFNvIG1lcmdlIHRoZW0gdG8gYSBjb21tb24gY2FsbGJhY2sgLm1tdS5l
+bnRlcl9tbWFwIChpbiBjb250cmFzdCB0byB0aGUNCj4+IGNvcnJlc3BvbmRpbmcgYWxyZWFk
+eSBleGlzdGluZyAubW11LmV4aXRfbW1hcCkuDQo+Pg0KPiANCj4gSW5zdGVhZCwgdGhpcyBw
+YXRjaCBzZWVtcyB0byBiZSBtZXJnaW5nIHRoZSBjYWxsYmFja3MgdGhlbXNlbHZlcy4uLg0K
+PiANCj4gSSBzZWUgdGhhdCdzIG5vdCBhbiBpc3N1ZSByaWdodCBub3cgc2luY2UgdGhlcmUg
+aXMgbm8gb3RoZXIgYWN0dWFsDQo+IHVzZXIgZm9yIHRoZXNlIGNhbGxiYWNrcy4gQnV0IGFy
+ZSB3ZSBzdXJlIHRoYXQgbWVyZ2luZyB0aGUgY2FsbGJhY2tzDQo+IGp1c3QgYmVjYXVzZSB0
+aGUgY3VycmVudCB1c2VyIChYZW4gUFYpIGhhcyB0aGUgc2FtZSBpbXBsZW1lbnRhdGlvbiBm
+b3INCj4gYm90aCBpcyBhIGdvb2QgaWRlYT8gVGhlIGNhbGxiYWNrcyBhcmUgaW52b2tlZCBh
+dCBkaXN0aW5jdCBwb2ludHMgZnJvbQ0KPiBmb3JrL2V4ZWMsIHNvIHdvdWxkbid0IGl0IGJl
+IHZhbHVhYmxlIHRvIHJldGFpbiB0aGF0IGRpc3RpbmN0aW9uIGluDQo+IHNlbWFudGljcyBp
+biB0aGUgY2FsbGJhY2tzIGFzIHdlbGw/DQo+IA0KPiBIb3dldmVyLCBpZiB5b3UgYmVsaWV2
+ZSB0aGF0IHR3byBzZXBhcmF0ZSBjYWxsYmFja3MgYXJlIG5vdCByZWFsbHkNCj4gcmVxdWly
+ZWQgaGVyZSAoYmVjYXVzZSB0aGVyZSBpcyBubyBzaWduaWZpY2FudCBkaWZmZXJlbmNlIGlu
+IHdoYXQgdGhleQ0KPiBtZWFuLCByYXRoZXIgdGhhbiBiZWNhdXNlIHRoZWlyIGNhbGxiYWNr
+IGltcGxlbWVudGF0aW9ucyBoYXBwZW4gdG8gYmUNCj4gdGhlIHNhbWUgcmlnaHQgbm93KSwg
+dGhlbiBjb3VsZCB5b3UgcGxlYXNlIGV4cGFuZCBvbiB0aGlzIGFuZCBjYWxsIGl0DQo+IG91
+dCBpbiB0aGUgY29tbWl0IG1lc3NhZ2UsIHBsZWFzZT8NCg0KV291bGQgeW91IGJlIGZpbmUg
+d2l0aDoNCg0KICAgSW4gdGhlIGVuZCBib3RoIGNhbGxiYWNrcyBhcmUgbWVhbnQgdG8gcmVn
+aXN0ZXIgYW4gYWRkcmVzcyBzcGFjZSB3aXRoIHRoZQ0KICAgdW5kZXJseWluZyBoeXBlcnZp
+c29yLCBzbyB0aGVyZSBuZWVkcyB0byBiZSBvbmx5IGEgc2luZ2xlIGNhbGxiYWNrIGZvciB0
+aGF0DQogICBwdXJwb3NlLg0KDQoNCkp1ZXJnZW4NCg==
+--------------0z6dtOJSlYZ8eWZSil6wUXCH
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Thank you, 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Date: Mon, 16 Jan 2023 15:19:52 +0900
-Subject: [PATCH] test_kprobes: Add recursed kprobe test case
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Add a recursed kprobe test case to the KUnit test module for kprobes.
-This will probe a function which is called from the pre_handler and
-post_handler itself. If the kprobe is correctly implemented, the recursed
-kprobe handlers will be skipped and the number of skipped kprobe will
-be counted on kprobe::nmissed.
+--------------0z6dtOJSlYZ8eWZSil6wUXCH--
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- lib/test_kprobes.c | 39 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 37 insertions(+), 2 deletions(-)
+--------------PYYImwLJ6duLYMmgfXqX04GL--
 
-diff --git a/lib/test_kprobes.c b/lib/test_kprobes.c
-index 1c95e5719802..0648f7154f5c 100644
---- a/lib/test_kprobes.c
-+++ b/lib/test_kprobes.c
-@@ -14,6 +14,7 @@
- 
- static u32 rand1, preh_val, posth_val;
- static u32 (*target)(u32 value);
-+static u32 (*recursed_target)(u32 value);
- static u32 (*target2)(u32 value);
- static struct kunit *current_test;
- 
-@@ -27,18 +28,27 @@ static noinline u32 kprobe_target(u32 value)
- 	return (value / div_factor);
- }
- 
-+static noinline u32 kprobe_recursed_target(u32 value)
-+{
-+	return (value / div_factor);
-+}
-+
- static int kp_pre_handler(struct kprobe *p, struct pt_regs *regs)
- {
- 	KUNIT_EXPECT_FALSE(current_test, preemptible());
--	preh_val = (rand1 / div_factor);
-+
-+	preh_val = recursed_target(rand1);
- 	return 0;
- }
- 
- static void kp_post_handler(struct kprobe *p, struct pt_regs *regs,
- 		unsigned long flags)
- {
-+	u32 expval = recursed_target(rand1);
-+
- 	KUNIT_EXPECT_FALSE(current_test, preemptible());
--	KUNIT_EXPECT_EQ(current_test, preh_val, (rand1 / div_factor));
-+	KUNIT_EXPECT_EQ(current_test, preh_val, expval);
-+
- 	posth_val = preh_val + div_factor;
- }
- 
-@@ -136,6 +146,29 @@ static void test_kprobes(struct kunit *test)
- 	unregister_kprobes(kps, 2);
- }
- 
-+static struct kprobe kp_missed = {
-+	.symbol_name = "kprobe_recursed_target",
-+	.pre_handler = kp_pre_handler,
-+	.post_handler = kp_post_handler,
-+};
-+
-+static void test_kprobe_missed(struct kunit *test)
-+{
-+	current_test = test;
-+	preh_val = 0;
-+	posth_val = 0;
-+
-+	KUNIT_EXPECT_EQ(test, 0, register_kprobe(&kp_missed));
-+
-+	recursed_target(rand1);
-+
-+	KUNIT_EXPECT_EQ(test, 2, kp_missed.nmissed);
-+	KUNIT_EXPECT_NE(test, 0, preh_val);
-+	KUNIT_EXPECT_NE(test, 0, posth_val);
-+
-+	unregister_kprobe(&kp_missed);
-+}
-+
- #ifdef CONFIG_KRETPROBES
- static u32 krph_val;
- 
-@@ -336,6 +369,7 @@ static int kprobes_test_init(struct kunit *test)
- {
- 	target = kprobe_target;
- 	target2 = kprobe_target2;
-+	recursed_target = kprobe_recursed_target;
- 	stacktrace_target = kprobe_stacktrace_target;
- 	internal_target = kprobe_stacktrace_internal_target;
- 	stacktrace_driver = kprobe_stacktrace_driver;
-@@ -346,6 +380,7 @@ static int kprobes_test_init(struct kunit *test)
- static struct kunit_case kprobes_testcases[] = {
- 	KUNIT_CASE(test_kprobe),
- 	KUNIT_CASE(test_kprobes),
-+	KUNIT_CASE(test_kprobe_missed),
- #ifdef CONFIG_KRETPROBES
- 	KUNIT_CASE(test_kretprobe),
- 	KUNIT_CASE(test_kretprobes),
--- 
-2.39.0.246.g2a6d74b583-goog
+--------------f2QYQmcp7oyhJ0GflGkKSPBI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPE8g0FAwAAAAAACgkQsN6d1ii/Ey8t
+Ngf/d6OpWFNSFigpwYK7Kc+TkmGV5RqwiPEJMARDOsmaX6zjIzYvRHgoC6x2XUwznZlE8lTWf1gV
+EfFTLU3ZqmW3RwxZJp8Be1GKpDJwHlVtIiuK5PUV44QPQbiCWlaqHZtMZ/UV8n5ToaFL8ocXG/sl
+vWEgWlgZps0DvwculC02JvVYmhV4+oiaO48Ko796E5XpXskYzd72e3IP9TuLo+gH6uDPKRaU3fmc
+1QBVa4Da7mcD/JIQ8++Lt5L/DtaApmTFlgk6jqUUjo0xKJumtDzyuoTsV8o/kGXP4PFEgLfKJZy4
+KM8/GTRX4GVomox/Ate31wf6jZCRkibNzLebhhUnIQ==
+=EPIp
+-----END PGP SIGNATURE-----
+
+--------------f2QYQmcp7oyhJ0GflGkKSPBI--
