@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A244B66CE07
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFC666CE0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbjAPRx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S233868AbjAPRxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjAPRwf (ORCPT
+        with ESMTP id S235026AbjAPRwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:52:35 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6537C3B3E0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:35:04 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id f20so30689895lja.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:35:04 -0800 (PST)
+        Mon, 16 Jan 2023 12:52:43 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7C43B658
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:35:05 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id s25so30712219lji.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:35:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WLkKdr7pDQEIzmgkyKtN1Zu++zCyw4Keu9Km6S3sT2o=;
-        b=QasTzb8h2vrOzkCrftuDbLS+D57mrkSyDJFNmvhtJg61QCpXBah5MQQ/klFT+Jr44m
-         OfExarCYmScCqot8/2QoF2Kn6hockeWUu27BKBHaw+Vw6fz+Jow6YpMOSiHlDgxC7qhP
-         EM/wOHX1PS88OTZXj6uG2qMVwZFi3u37IBsUODw2sJtv45GymLllUGbqdIyHat9jZEtp
-         5zGyuiyAQFvvbErrOfKVgcXcmSh4wE+9Wf+/et6R0cs1BNYNaTQaqu1mJphmFK7n2v7q
-         InbhxENc/mnmZeHgZx7q7HwnK4+wdwGzz+9hvYhYU6h+LbB+kKtF52ZSeZA/SVyzh2hW
-         tN6Q==
+        bh=t7F9JKouL1KurTO0QVKHN8g/5zAESWUg12UOdA+LKsI=;
+        b=E3DYP0epTmdQaBr8PG3Lc8mLskVrmA2L1g1uosAju1bFb9Zd1/cbdiapQ5fFkaSZWK
+         o6rwyTvWmoqnqO3GQ/PewcCOeU0+EVt2OCdA60ZsN2J+CeH1ab2BXc3aMXbO3uUsfHzx
+         qv2fyovh8SRghPRZL80Urm0MOg9l7NaqDEA9Wj0/szZhsXkat75oRTQwgH4S2taaVfvI
+         ye2rM+2rYjemoac3jVmVgsJM7q93qCrMpk1DijXEctb18ivK5LdNH+j1ll+sZnNopfVw
+         p5jf7bQUsXQ7jDJbMKnRbGzaygpSujEZUXF/8g/SGPq88bZcs42LLCGQMTgOI04QcHju
+         UK2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WLkKdr7pDQEIzmgkyKtN1Zu++zCyw4Keu9Km6S3sT2o=;
-        b=BriZnccPP7vEJzR7cRfphWFxeZR1523arn0a1DVLrYmCCURP8nS38HuxbzTy1bmUkV
-         3UnFPec8lKdDpbSWowwnwrQeHkjcEGUvcxBKYuFvSHIq9pqInX6m29P7japvnlYoMpoj
-         8wlnGgB9l8PCrHKSM7Ce82JTZnyuqoKnW0L/S8h0qAHB1AvPXqq/HECGPCNvd++KISv5
-         6FgeBzy+Lm7a/J+U+LdSVAOivkMF8ABD4/v2s9ZaQ8lOVx6MPdiKhNJtFUTQBbjt3QsS
-         QsH6HKGF84tWF+PfzCulxajt11v9fAI6IkDjV/+0jh1a6GBsV+HS/3r8d0ai9Ghb1kVo
-         DLyg==
-X-Gm-Message-State: AFqh2kqzRNg94bFEbO6lbqaipbKkgxojRY787RpyFgWSakKq8g7aQcif
-        P8e5M4dvIpcdz5CCfX/7K86LrsGJ9UuYC3lE
-X-Google-Smtp-Source: AMrXdXsY9dU88GrMUZ0keyqwQPbzPga4V1dJtLnUYV90CFWzYZr4I98PrEX0dJGG50/qWJssb6/MCA==
-X-Received: by 2002:a2e:994f:0:b0:281:771:e1cd with SMTP id r15-20020a2e994f000000b002810771e1cdmr3381416ljj.33.1673890502691;
-        Mon, 16 Jan 2023 09:35:02 -0800 (PST)
+        bh=t7F9JKouL1KurTO0QVKHN8g/5zAESWUg12UOdA+LKsI=;
+        b=V3cLLIj0tmvLyjpY6efFbipplufw+Tc1QYO+lzljmb0cIkO5Rxk5MwDoON/mRbg0LT
+         +wIHziQN41fkKeNvQ71sdYOET4B09Wb8cIllvGECGa4JN52jK6EuZLYxlKEH+H93ZO/o
+         JNdYcvONo7ON/iVdYGuTezeuE0T2OtQjUM2MIzkmV5TbThEFAxe8fv7wnv4bojmkEFBU
+         +acXUAa0I6+yGXwD8861LCqLtHQuqfFb87XApm8Ot1Kkl6tuDxSPDLh34WIr1fwKLziH
+         VzTlDKBQ8mq3MPmUly6qMDhu4HX+bMdqRIpiV4QaRhcwVp/4iBg9j14G+kePDjNUebZ2
+         VDug==
+X-Gm-Message-State: AFqh2krBEohxuWAo4f3SrJN1r44W0LZhx2fdKKQ92Pf9gw5gpilbyLmj
+        Xrobs5r1/B+RbN3IWZNq/ARDRaPILz20cXEn
+X-Google-Smtp-Source: AMrXdXuUnMtiRTBXJ6Nfs4XBmV3kM8wxIrl3j8mU01006aaUz85HcnPiZoQhJ+bNzRNdkZ6kmD/RtQ==
+X-Received: by 2002:a2e:90c7:0:b0:28b:77ce:f88b with SMTP id o7-20020a2e90c7000000b0028b77cef88bmr180131ljg.8.1673890504000;
+        Mon, 16 Jan 2023 09:35:04 -0800 (PST)
 Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id k20-20020a2e8894000000b0028b7f51414fsm707333lji.80.2023.01.16.09.35.01
+        by smtp.gmail.com with ESMTPSA id k20-20020a2e8894000000b0028b7f51414fsm707333lji.80.2023.01.16.09.35.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 09:35:02 -0800 (PST)
+        Mon, 16 Jan 2023 09:35:03 -0800 (PST)
 From:   Marcin Wojtas <mw@semihalf.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         netdev@vger.kernel.org
@@ -60,9 +60,9 @@ Cc:     rafael@kernel.org, andriy.shevchenko@linux.intel.com,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
         linux@armlinux.org.uk, hkallweit1@gmail.com, mw@semihalf.com,
         jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
-Subject: [net-next: PATCH v4 4/8] net: mvpp2: initialize port fwnode pointer
-Date:   Mon, 16 Jan 2023 18:34:16 +0100
-Message-Id: <20230116173420.1278704-5-mw@semihalf.com>
+Subject: [net-next: PATCH v4 5/8] device property: introduce fwnode_find_parent_dev_match
+Date:   Mon, 16 Jan 2023 18:34:17 +0100
+Message-Id: <20230116173420.1278704-6-mw@semihalf.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20230116173420.1278704-1-mw@semihalf.com>
 References: <20230116173420.1278704-1-mw@semihalf.com>
@@ -78,29 +78,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As a preparation to switch the DSA subsystem from using
-of_find_net_device_by_node() to its more generic fwnode_ equivalent,
-and later to allow ACPI description, update the port's device structure
-also with its fwnode pointer.
+Add a new generic routine fwnode_find_parent_dev_match that can be used
+e.g. as a callback for class_find_device(). It searches for the struct
+device corresponding to a struct fwnode_handle by iterating over device
+and its parents.
 
 Signed-off-by: Marcin Wojtas <mw@semihalf.com>
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/property.h |  1 +
+ drivers/base/property.c  | 23 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 5f89fcec07b1..a25e90791700 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -6884,7 +6884,7 @@ static int mvpp2_port_probe(struct platform_device *pdev,
- 	dev->min_mtu = ETH_MIN_MTU;
- 	/* 9704 == 9728 - 20 and rounding to 8 */
- 	dev->max_mtu = MVPP2_BM_JUMBO_PKT_SIZE;
--	dev->dev.of_node = port_node;
-+	device_set_node(&dev->dev, port_fwnode);
+diff --git a/include/linux/property.h b/include/linux/property.h
+index 37179e3abad5..4ae20d7c5103 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -109,6 +109,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode);
+ unsigned int fwnode_count_parents(const struct fwnode_handle *fwn);
+ struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwn,
+ 					    unsigned int depth);
++int fwnode_find_parent_dev_match(struct device *dev, const void *data);
+ bool fwnode_is_ancestor_of(struct fwnode_handle *ancestor, struct fwnode_handle *child);
+ struct fwnode_handle *fwnode_get_next_child_node(
+ 	const struct fwnode_handle *fwnode, struct fwnode_handle *child);
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index bbb3e499ff4a..84849d4934cc 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -693,6 +693,29 @@ struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwnode,
+ }
+ EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
  
- 	port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
- 	port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
++/**
++ * fwnode_find_parent_dev_match - look for a device matching the struct fwnode_handle
++ * @dev: the struct device to initiate the search
++ * @data: pointer passed for comparison
++ *
++ * Looks up the device structure corresponding with the fwnode by iterating
++ * over @dev and its parents.
++ * The routine can be used e.g. as a callback for class_find_device().
++ *
++ * Returns: %1 - match is found
++ *          %0 - match not found
++ */
++int fwnode_find_parent_dev_match(struct device *dev, const void *data)
++{
++	for (; dev; dev = dev->parent) {
++		if (device_match_fwnode(dev, data))
++			return 1;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(fwnode_find_parent_dev_match);
++
+ /**
+  * fwnode_is_ancestor_of - Test if @ancestor is ancestor of @child
+  * @ancestor: Firmware which is tested for being an ancestor
 -- 
 2.29.0
 
