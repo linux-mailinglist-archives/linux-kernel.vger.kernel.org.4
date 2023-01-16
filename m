@@ -2,129 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692BA66CE8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B5466CE93
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234902AbjAPSPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:15:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
+        id S232476AbjAPSPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234108AbjAPSO3 (ORCPT
+        with ESMTP id S234525AbjAPSOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:14:29 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E03122A36
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:15 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id q15so1374757qtn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:15 -0800 (PST)
+        Mon, 16 Jan 2023 13:14:31 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC362B0AE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:23 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id g205so4455186pfb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vc4Nv1UCPS28NNVDYePaLaV2Wpsm+mIPEHiAzrTw9MM=;
-        b=hC8rifHiuHXCPgttcmOOf/xO+1ZeeDOeIZfW9Ym8Ory+CkzNJPkrfO/C3JXy2EE1LL
-         2kTaAysayLbTpr+7RDLLrKq0FCECx/EKRPZa3mKY+K67nyLJZ8f7PA4gCRWG73mV4Yn4
-         5cdNgXBpvhk8M9iRXw8+R8fW3tOu/c3Ashp10=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MUThk+A2NPDO7+1yWET3Dp+/IOwZbM2+REhhiQMAGAo=;
+        b=PQacTKx2uULp3FlIoZOF630hD/tc3DZ88f/1CoWVqhGc/sODsb9ATqIqzhrZdndv5X
+         xP1hS4RthofTGpUROHAHzWdfZmojirA655/tuugSFrRMkOsN6szJt/8TXB5S2pade7cF
+         T/2RhAPSYInwrK/Zh1dPmi0/YMD+8PBg7J1dpCGEoRKYuqzVoqwtRn0/oW7lsWLfj2vM
+         xc3U4WNoIqrIHTRz5cGFqPAsw4gw7Ehj/Gu1PVgc5De4AmKhp7toDcpmjc6KkC5mQlxz
+         nylQt4AYCMuXg8QB8iFei8rNABXvPe6gwInZLJLabo6E5sIZTmfWHlryN3y8b0B9CUAD
+         RSlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vc4Nv1UCPS28NNVDYePaLaV2Wpsm+mIPEHiAzrTw9MM=;
-        b=QQpHFO1ZN3pbm+zaYJUorAfPAOM0pMU1mO97f/dq1efEVlFriFOWHwR/JLFTaBWYis
-         sNuFEdVIWVtLT4xH//uz7RbjUNvxChR+w6+8sQlUGf/OeKy1AdSqWw6/DSlohhoDcluo
-         Dkyc40QCpUFSQgjqNfO6cl6t/V0GuzS82OsmuyQp+X3/Q+B5oVhku5iDkT57uWBWn2k1
-         1pEwl0B3szvFBoEjCF+rr/6GDTSR0wGQN1nlWIApO5XEzHHX8Vssq2u5N01QUZy+NhzR
-         c08IZgI+Jc0Rgcmgx/rHI75KbGmLLyGCRvHsher/X90x9vCS5xTPZXoWadEJZYas9Jqr
-         8mnQ==
-X-Gm-Message-State: AFqh2kqGOPQoCEoJkMkZg83W7diKtXNzAR0bOzXfcWb8EYV+aH0dlN97
-        7/lHhn0rKiElXnLh45W/MBaPqoB0V8/ot3qq
-X-Google-Smtp-Source: AMrXdXvI8b3BXT71lCUrE4HSG+Gj5j1Wp/oInpCCm4B+P3G7kIMjczklQyM1Tn0P1iQ9MVkoHO8JIw==
-X-Received: by 2002:ac8:4818:0:b0:3b6:2bb3:fb53 with SMTP id g24-20020ac84818000000b003b62bb3fb53mr9949079qtq.16.1673892074216;
-        Mon, 16 Jan 2023 10:01:14 -0800 (PST)
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com. [209.85.160.175])
-        by smtp.gmail.com with ESMTPSA id u2-20020a05620a0c4200b006f9f3c0c63csm18724183qki.32.2023.01.16.10.01.09
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MUThk+A2NPDO7+1yWET3Dp+/IOwZbM2+REhhiQMAGAo=;
+        b=4zcK/StU30CcpIAGbO6nCsfV+yS2hpM0/CNAqM0aI7xRexV5eWELMQCNGvo0rRgryC
+         SW2ZJM8uGupGj6dQ2WxyVDJqV9zL1JVVFWX69SFDgyKhEakAL5TZoJx0tbFTQjMHPow+
+         Hb6rELSzfCJccDYw2W6CffvPyGeh4XNRY6x8yqWkO9nMJTzD4RWIxppiPzQ8DY90g5Su
+         pAf0GIA/+ie0UV/tRYYUMBfy8FWtmzl3yP4lOtR/7s+UVvVOwrJC9nznAZtCmezmSbxb
+         GiKz4NnD1sOitHOmnsNoKqruXdFzmdDkWp2a9K2GcAB70p2AnCRiWkGluBmgx8UjI7fM
+         Jzgw==
+X-Gm-Message-State: AFqh2kqZW99h4Tp7EA8mzK890Ej7NkOftZpi0ag0mPGT3xGZe9iX0WFl
+        6NSy85oH0qaZAccUakp8Jz+5r/HoFAZqRU6w
+X-Google-Smtp-Source: AMrXdXv5pgb9vWqU7+ifee1xFN2J/GODbUegb6MgCnye8aGNQPoC+pksX2u240aZMDW1TnLmCbNjYw==
+X-Received: by 2002:a62:1c8b:0:b0:58d:995c:9c25 with SMTP id c133-20020a621c8b000000b0058d995c9c25mr106894pfc.3.1673892082674;
+        Mon, 16 Jan 2023 10:01:22 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id z19-20020aa79593000000b00582388bd80csm18508738pfj.83.2023.01.16.10.01.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 10:01:09 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id jr10so17952441qtb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:09 -0800 (PST)
-X-Received: by 2002:a05:622a:250f:b0:3b2:d164:a89b with SMTP id
- cm15-20020a05622a250f00b003b2d164a89bmr364175qtb.452.1673892068650; Mon, 16
- Jan 2023 10:01:08 -0800 (PST)
+        Mon, 16 Jan 2023 10:01:22 -0800 (PST)
+Message-ID: <8cea8a30-00a9-89aa-704c-44e4c95a3b51@kernel.dk>
+Date:   Mon, 16 Jan 2023 11:01:20 -0700
 MIME-Version: 1.0
-References: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
-In-Reply-To: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 16 Jan 2023 10:00:52 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whpkWbdeZE1zask8YPzVYevJU2xOXqOposBujxZsa2-tQ@mail.gmail.com>
-Message-ID: <CAHk-=whpkWbdeZE1zask8YPzVYevJU2xOXqOposBujxZsa2-tQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     linux-kernel@vger.kernel.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
-        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
-        gwan-gyeong.mun@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [syzbot] WARNING: refcount bug in mm_update_next_owner
+Content-Language: en-US
+To:     Jann Horn <jannh@google.com>,
+        syzbot <syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring <io-uring@vger.kernel.org>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
+        ebiederm@xmission.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000e259c105f25c92da@google.com>
+ <CAG48ez23_TUMENLmi5X4F61vb6ZNiL+mfz6YE96U4Y7bgvYnSg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAG48ez23_TUMENLmi5X4F61vb6ZNiL+mfz6YE96U4Y7bgvYnSg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Back from travel, so trying to make sense of this series.. ]
+On 1/16/23 10:53 AM, Jann Horn wrote:
+> All 5 console logs listed on the syzkaller dashboard for this one have
+> io-uring with IORING_OP_POLL_ADD somewhere. Could that be related?
 
-On Sun, Jan 8, 2023 at 7:33 PM Byungchul Park <byungchul.park@lge.com> wrote:
->
-> I've been developing a tool for detecting deadlock possibilities by
-> tracking wait/event rather than lock(?) acquisition order to try to
-> cover all synchonization machanisms. It's done on v6.2-rc2.
+It was just due to a buggy patch that's long since been fixed.
 
-Ugh. I hate how this adds random patterns like
+#syz invalid
 
-        if (timeout == MAX_SCHEDULE_TIMEOUT)
-                sdt_might_sleep_strong(NULL);
-        else
-                sdt_might_sleep_strong_timeout(NULL);
-   ...
-        sdt_might_sleep_finish();
+-- 
+Jens Axboe
 
-to various places, it seems so very odd and unmaintainable.
 
-I also recall this giving a fair amount of false positives, are they all fixed?
-
-Anyway, I'd really like the lockdep people to comment and be involved.
-We did have a fairly recent case of "lockdep doesn't track page lock
-dependencies because it fundamentally cannot" issue, so DEPT might fix
-those kinds of missing dependency analysis. See
-
-    https://lore.kernel.org/lkml/00000000000060d41f05f139aa44@google.com/
-
-for some context to that one, but at teh same time I would *really*
-want the lockdep people more involved and acking this work.
-
-Maybe I missed the email where you reported on things DEPT has found
-(and on the lack of false positives)?
-
-               Linus
