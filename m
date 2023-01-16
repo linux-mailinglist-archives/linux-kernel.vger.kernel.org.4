@@ -2,168 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFA066CE30
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2D766CE38
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjAPSBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S233218AbjAPSDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbjAPSAi (ORCPT
+        with ESMTP id S231707AbjAPSCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:00:38 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBA930EB8;
-        Mon, 16 Jan 2023 09:43:33 -0800 (PST)
+        Mon, 16 Jan 2023 13:02:38 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::71e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597D7274B3;
+        Mon, 16 Jan 2023 09:47:05 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SPyEMnMBdPvQPHib3Slrkh3OoP61y6bZLB90K6q9CG5YgsdTopx1oUoRXQawQa3B+/Iv4KgdrQKh15lRiUXw5c/Wi8Mj8zJUFi64unSfeIl95K8cK58FORc1gGBO1mTi9IdBzAh0LD5vXsfr7PuzSml3KzJgPe2Xl3xJGB+EAoVHO2T2L5O+HC0q0FZdX0GJGm4/wbLzBV8xHbZ06rFD1kS+rgcsWHsPLjYE/2819ey0Zrpuecm+Qpvgn8Ap6bcah4JFfwxdq663Q8KsfsaBWAdJpIYtL1i7HHvDSr1qCGPfg1/OVpIRAmiAqQqRlEawKKB1nrL/nUswMqgrl9oEIw==
+ b=DjFmo+jtOpIIdiBD9XQt9WKos07PfHVt7oklSs7rSxq02Hv6829B93jLCJD+UhZH9SN3k4ywU1y33fSrnRehMui4u8lkjrhqKp4t0bQEsiDvUNAFFfvDz/q/YQ6sYMCyyinOHt0Ezg2zXpqgI1cPiGeerflEqhg8vOeS3EwX2xTmmUO38cxnFNU291f4l5fc2fa11bKL8FpcjPH1fz0SwULnAICT3VJOdszl0Hb9dRgrG2kuobK0MOJ/XVuF8bqBkHkivMR9N4px3RLV04ayaG9ey4MXtIxFPVhU8l9gnp/i0DLzF+yvRTZC0mOo03D1PStCQ7pHxljDFiHtwS7zgw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YC5bs14iov5hgZ6/CQmOu7FlKVST0SQcSfzF9rTVjJY=;
- b=iK0lB+2NCbyh1QhZOdtpbNtMIpHdMCHj9jmfTLQIC7hzGqqvsNUnrA6zPbVKn1veZ53r5Iq9hEAM7nqalWk9WD4Kpb2EhUvMKTaVFWEzlTepXhHPYm4AHXzn93oalb24NXaOoqEXnjvSN9IS8BVN2qJg8MssTNiHsuc2dhEOun121WYzTEz7DMNO83I6uS9LmdY/m5vG4AV9ccEWeb+nuSfch0Sk+dGGRxu6ovhhXODufRfFHTzHLVIAa4FgtBGhz5c5xymYP7udeweS3GdR7a7hwNBxoNNRZT6HmnxWN8FP0Il2rnGGvoka/928GWbqFFAOA9Zu98bfiM5iteYxOA==
+ bh=5f0UBgCPp3tFWqM3s+p8DvuQ09mTPhTTw+4Y7XQLJWk=;
+ b=oCMNqPtLxyiLTBYM5wYc5phbkawZDSZt/HpFWeoj8rCEQoM/bsRard0ENlYrFO6GsRRVmQbP5mLzr9wnjhegaqtVcCVxoS0pYbS9dSLuVasxRe0vssY9ZchOXB6x/yp/HArgJ9DoyfetJAiDaa9XWx6P35H983wPLHHn/XDpXVHPwew5Ll6fvn2Hx797ghKaWjC/BM3+lJU1sQW3ASaPWW1wrJrvda24xYHxJaIeY7FsZMpibmqvsVyzQX8nlbFbb2OAmOXvGCf/rqTIsLsnATsTrHNo1a2HBmoR6X5orCVfpN0X0i9inrGUOyA8NXPzfVkZvixgxnva5uvzgyUeqA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YC5bs14iov5hgZ6/CQmOu7FlKVST0SQcSfzF9rTVjJY=;
- b=dR+NWKv0MrHtC7JQurUDsdWX0fBTE/6kNmZzqsZFMzrRNpdXosqsbmjnFnVS7pDdRsg2UccxBWb8Kdo1N4MD8Ul+nFmqzK2OYi0dKWzZet1x3Cw4f/h24pE+wVdqgcsZGYnUIpp4KH9fZW7/eTEfRfGwofkHoAR5BgGmzIRzmUU=
+ bh=5f0UBgCPp3tFWqM3s+p8DvuQ09mTPhTTw+4Y7XQLJWk=;
+ b=zW+iqsqvWJ+nryGLM4izEhyshGplvmS1bomIzVWmsR0Rj2MmUb/NNhufIUIbKrugcaEgCAatzsICtG9GCr+BRBh5pWd3ifFwunDba+fGe1Tv+BNYPKeT3noySjdmSTlsxMTPaNojIB29Dq3W41bw0SH+yXVwSoCidNrS2zUsEVQ=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
- by DM6PR12MB4531.namprd12.prod.outlook.com (2603:10b6:5:2a4::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.22; Mon, 16 Jan
- 2023 17:43:30 +0000
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::3ddf:d47:b37a:5a7a]) by BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::3ddf:d47:b37a:5a7a%3]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
- 17:43:30 +0000
-Message-ID: <980d9c9c-3dbf-3ebd-28a1-5b3b4b58e93e@amd.com>
-Date:   Mon, 16 Jan 2023 09:43:28 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
- Gecko/20100101 Thunderbird/109.0
-Subject: Re: [PATCH] dt-bindings: sram: Tightly Coupled Memory (TCM) bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tanmay Shah <tanmay.shah@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-References: <20230113073045.4008853-1-tanmay.shah@amd.com>
- <6f43e320-b533-e5fb-3886-1b6ccc7f9548@linaro.org>
- <b79f7e0a-8048-d0e1-ad0b-d15d72288fde@amd.com>
- <9f4994de-e468-43ea-f8db-d4a37ebc30e0@linaro.org>
-Content-Language: en-US
-From:   Tanmay Shah <tanmays@amd.com>
-In-Reply-To: <9f4994de-e468-43ea-f8db-d4a37ebc30e0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0070.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::15) To BY5PR12MB3683.namprd12.prod.outlook.com
- (2603:10b6:a03:1a5::16)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CH2PR10MB4151.namprd10.prod.outlook.com
+ (2603:10b6:610:aa::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.11; Mon, 16 Jan
+ 2023 17:47:02 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2015:3589:3e96:2acd]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2015:3589:3e96:2acd%5]) with mapi id 15.20.6002.012; Mon, 16 Jan 2023
+ 17:47:01 +0000
+Date:   Mon, 16 Jan 2023 07:47:00 -1000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Cc:     John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v7 net-next 00/10] dt-binding preparation for ocelot
+ switches
+Message-ID: <Y8WNlBD+R1J1lAIx@MSI.localdomain>
+References: <20230112175613.18211-1-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112175613.18211-1-colin.foster@in-advantage.com>
+X-ClientProxiedBy: BYAPR07CA0089.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::30) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|DM6PR12MB4531:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab0c9890-ece7-4cdd-461b-08daf7e92e3d
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|CH2PR10MB4151:EE_
+X-MS-Office365-Filtering-Correlation-Id: 89994719-4834-4a12-f8d3-08daf7e9abb4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NzCiqpxWMgmjVmk2xdbMHgnlARPllQuHbuh8kwRxnLewyQyQZUHjSWzV3Lua3+G6h4q9zT8GUKAv83uAN/tUgIrPOdtKprJ/ez0vq/8GY3cNtOQwpuv5TSOAJjVdYr3QAUBCvDegsq6JolaUuaXVYoFOeqHTIOOsotc6SVncjQ+Ln3aBgossnakdu/AupeALb1+rBPD9XcFz2AvHfp9w7QQCeVb6g/mFbDoi/aMn32y/xIN07z3MYJ3QoxngedTb14tt4WtsASUFIX+iMkX/mGbkX0/vzmZ3+dFQYFxEyvPxVIroZuNjA0yC9l4Jyd1pCq4XvjGx4Ri3BaptMh/vuGJwtdYF2Penml31C5T0nNLfJU9NGXb3HPed/3G5DXnC7EpwKwR5snpKhuHE/waCoJou63UjxL1zxAI+kMpsJ5vtmPfkkbgyVotzYVvI10F3CxXaD34PQtK9iqsGG+7dOmqSoRj6FJ2sHRM6jOe5IoE9812o7jR8GZE7CJ5/+t66eW2pa7vzYlL6Q7msm6oli1kYC3zMrHDoGH8Y8Kuomx5tqKqKWTCyCxDiurk1V5/3V7rOyh9RW/na7BqUPDDjVwg2+uqBMAWLXsi0ngNNHB4iT2zOVWMztjPj2JxIOB429ZEjIVGIhjLJ6MqTBNNUgkKYKWY3oFTacWB5kdnNn8DDD2JcWKJF6hEDdKB63Iv7yBclL4JTBHj6ol+oMXQ5c/yJKp0DqEUlnoRUZD9zd0A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(39860400002)(346002)(376002)(451199015)(478600001)(36756003)(4326008)(8676002)(66476007)(66556008)(66946007)(41300700001)(110136005)(316002)(6486002)(38100700002)(6512007)(53546011)(2616005)(6506007)(31696002)(5660300002)(186003)(31686004)(83380400001)(2906002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jkxRWVsFibY+VXIc+gQ6zElsP5uQ6yvht1WTMThSMVWM865RqcuzBK0wZH8MrO/zKY4CnQ+7hPvuJJSexd0Jk/TwwXi6vfb6r0sV9rLxEahRghaye5/OJ327Uxsx8JkGq/7RdamaPcTJcEWJLYj4+bcEq4c9/ymJKq4WGdPnzz3yl1z5Px7U67l9um5CX9qGDi8JcFlHR4kYJ9HIKa3ybOXwMI6vDqB8xi9AHwequ9ifPYiZfXsI4Guqxn8uYYlu6ImGpxnYqwodkbQozBJorSJghQPOidWsALaK7V2RX6LTRgFcPK8XPxvA0dOluJEVtDJK54PW6HCCFkqiuvCqPlc8+B2p2i4xE97A/R4YV441ES1TyOyw3V86rloIwrDwY8w8PwJ60ELpyAilSJuoZJWbIWql/3se3fsWLFCBILBd1hJmJOuV+kUlG+deLcNk0kkR5bZSFG3acsGa+j+BjXIoBw5XIdmsIPyYWM4yVhPtNozMi9hbZVTCGjmtEZ5wRHDk+071Bot06XF6YAZS8+pQz8F4d7VI7NNt3mvzk0jo5a8hHn8M6/CS/AN2YJzmXl/uWMIIox37vcA+2RbN3p0XcAUv7btVoHY0L9NSsb9iLTX0E+4/jyOCnTDipKOqK626jgAzbiWQ6/Fk0Ko+dz72lFUMASwrX8AqtcMoUzxbl5vbwLQl4620RggujbXB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39830400003)(396003)(346002)(366004)(136003)(451199015)(6486002)(478600001)(2906002)(38100700002)(86362001)(6512007)(83380400001)(9686003)(6506007)(66899015)(186003)(66946007)(7406005)(5660300002)(4326008)(7416002)(66476007)(66556008)(41300700001)(8676002)(316002)(8936002)(54906003)(44832011)(67856001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkNweUhvMytzODMvNmcrV2tkK2RpTCsxQkNEVnFmT25jL2Rib0xHcVRQUjU1?=
- =?utf-8?B?QWVDcEE1dlJLQkY1S2pCUUljNXQydk84SG5CaTRMclpTTFhaOFBXN3ZtRU44?=
- =?utf-8?B?UTNNd3I1L0RsbkRHRDRFZ1RybzIzVmdtZVMzRTNKK0lIcTJ5NWxCQ0d0V0FC?=
- =?utf-8?B?SHZkL0Y2T1FFRTEvL3Ayc05tc2E1OFA4RVRSVVdOS0RlaU1wNU5qemg5V2Uz?=
- =?utf-8?B?QTZiNk1TMklEUlR0MjRvVWpmeDhERTF1cFBIUjdKbVloM1ZQcXBKakdFYjBu?=
- =?utf-8?B?d3V5bmFabTc5RDdZSldmZEtVSEtoVms2ak9EM3NmZnpvcGgwdkUvbjA5dFF6?=
- =?utf-8?B?T0kvcmJXWjhlc0pVd0t5dG5nS01uNExFUzZtREQrRnEyL3ozTlpMRmZQQTFK?=
- =?utf-8?B?cWVNVi81cTJmRkJ4ZGE4Tzk2ZU1pc1M5ZUpEQXZSUXJsemN1VkZoajdINVFr?=
- =?utf-8?B?aUk3TS9UWWYzQ2xKYUszY0FhbWNYM01tSjJqUkY3NE9YVjVLaWtVTC93OWNO?=
- =?utf-8?B?RXIvbDRObmxaTXBtT0FOU0pnNUJES0E2YkwvUStxc1djcmpSb2FISVh2TDFt?=
- =?utf-8?B?R1ZvaTVzQVNlcS9tZ3hNazVReTRMUTltM0hPVDFPOHlDdUJha1hJSWJuSW94?=
- =?utf-8?B?dGx6Y3dCL0M2dVpzdS9NbU1zaHFBMHV2elZOMGo0R09ZK0V4dXFGRVFNSTdl?=
- =?utf-8?B?ZGQrTHdnQUcvMHFyK0N6VzV5M2oyVXNsa0VOK3lxeUs3SWd2UnB1b0Frd3JB?=
- =?utf-8?B?Mis2QTIrWU1ac2RiUE1VS2tJdW04cW92SS9SWGxGazVtK1hPb0JaWlFVVWhj?=
- =?utf-8?B?WEdMTGJyUXhqaDVRbE8rVEJ6QXpOQ1Boc0ZQVFVvbmRhTWgwMVRlV1lLNWNJ?=
- =?utf-8?B?ek5yOXl1VFpDRkxjYnVtWGhVNFhzVVpZZWJtdk0vOHExWjZITUZjWWhkdTlq?=
- =?utf-8?B?blE4Z3VSQmQ1NjhyQ3ltVzgxR0I3QWlySUsvNW1GRDUzNkhvRk1wbi9Va3RZ?=
- =?utf-8?B?YnZHL1U1NVp2UmdVN1IwYnVlQTBXaytITlcrVVR4bmYzdEQ5clRzb3lLeTBh?=
- =?utf-8?B?cmhZS2VtK1hXSU5GSDkvNTFDd3VDWGZCTVlLMUtTak5Za1FuUzhoRDROSTBP?=
- =?utf-8?B?dE10WnFlSmxMOStFUzRFbnpwKzlSSGkzNkxMakZ6a1BocUJJcllhVGpDdllL?=
- =?utf-8?B?K2doNURKWXM0bDUwZGhRUXYxSnhqcVNPSVNaREVQc2pML2I2Mlg0UzdhajRK?=
- =?utf-8?B?dlNucjVMTWo4c2YzQnFhMVJZREkxUEpNeWduWjdnN25tUjhWcFU3a2ljWlhx?=
- =?utf-8?B?THQyUDJFdlEvS2xVVmY3VElPVnhwWkN0SjRGQ25rZVl6MmNyYmN2aE15dkZO?=
- =?utf-8?B?OURJcmdyaHoxVnRFbzNya0xWMFptQVFDc2Z4QlduZWxMbWo3WkVuTzJGU2hh?=
- =?utf-8?B?N1Rac25KSzBCckVKeXJzeDF1eTIvZFpVRXhSbXh1bC9Xait3UFdrbGxwS2Vy?=
- =?utf-8?B?dnhDUG8rbWdaNWl3MGJPN295YTFVZ1lIS1A4WnUrV29vS2Q5cFZBeDhjcVZ4?=
- =?utf-8?B?RlRQYWtpUG53dGhYR0hETFByQ1F0dmN0YmFQUWswY0hIbVRrOW15amI0V012?=
- =?utf-8?B?eFdHRmsrVkx1UlhUdVZKVTdINUxwd0ZtZEFNZ1pCd0FubUtkQjQ1N2h4aHY1?=
- =?utf-8?B?eGFFeU5nVHF5MWRsSE9RdnJpTHlJaWZ5dFMrWko4Znc4T3JST2JQa0tRZTF0?=
- =?utf-8?B?eDBOR0J2VTArRnpkWEJkYTg1dTN2VlJvbG9sa0JTUHl2dkcweEc5MEJ6SnNF?=
- =?utf-8?B?Ty9NNWoxRUY1bXlua0ptQytHWHdVSWpTUjVFUTBMT0lldkhhdjl1MjVoUVBa?=
- =?utf-8?B?SXpzTGRnK2NHVXBCNnhhU3FIV1gzWHZ3Q3F4RVlHL1pJZStCaTlFb1FMWVRB?=
- =?utf-8?B?L3RVU0pjSUpJRXNlLzh6ZjUyR09ZYTNiekZrQkVkdUh4dkhiMU5SYWpsTklB?=
- =?utf-8?B?U09MbG56Z3FaZUJXdUdacGwwYVlmZlV3UWNGNmpheDQ2K1ZBVTRvQVdKNEly?=
- =?utf-8?B?OHVEcjFoR1BSMjAyaURhLzMraTdzYW9FQzVrTzF3UnE5NHJ5cWYwNmpWQS95?=
- =?utf-8?B?Y0tNRXl6TmhtcG1UQXVndEt4MGplU2F6UCtWcjFSWjZobTlKTkJraExubDEz?=
- =?utf-8?Q?RFvooKMV4zrjkW2PiKKEJBtXk3AlmI0enx7R3Oc9N+05?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab0c9890-ece7-4cdd-461b-08daf7e92e3d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6Mt/FZjmMD3waVzgCqyU2RGWXLouxqsFRRodjFPX2/jIKjteKbZ+oL98MAnU?=
+ =?us-ascii?Q?6vEt3KWuPrJv5k6gh4duDdYIUwjSgCqTFdRcA/pQQaYUulh0dGoi/zQgSWZQ?=
+ =?us-ascii?Q?tN0e3IGbzhnPXzFopRrn7ZHEbgWGBqWkmW9l+dUkheYNUVYZ9+qauaPE+Ii7?=
+ =?us-ascii?Q?c+UM/u08whvbnmWPpZaYRjsCQ/stAUDzrtB0YqNQhm+DKa0kuKOcXuZ/AvvJ?=
+ =?us-ascii?Q?A+aJWJYPMnNxEI+q2zMQyPSnsywXPQbrfzwG7IPzYOXj1FqoxywDZBHlWRji?=
+ =?us-ascii?Q?RMa6pvz3+xbKDWh/AhPvE2+Y/bRc0LmYn0SQDq5zKXE8L+0rF9E6oOGj6NGY?=
+ =?us-ascii?Q?EbMd2jZZspUr1HMKY1Mw63zJW8SKoA98XRoQddZSV8bpR3JSWT7IW4sY1SqX?=
+ =?us-ascii?Q?1YQPI5yBTcwMchw1Pbe027avIKaczmpV0ZtRmXbUa5vPCM044rnX7LM35p8w?=
+ =?us-ascii?Q?WGKRQNmeyZvZ2Q5mGRQB4ZIGjXEJj2BUUp5jQKrdVD6HaJlXv2gsT6Yyjs7c?=
+ =?us-ascii?Q?D6XF5lVW8VVknOmN+3p1ohOjFGExlj6uooh+DQaE8NCv18u5OiA+VnuorFr9?=
+ =?us-ascii?Q?Gx5Isw1xBOw33qT+NwPrq4L+fhSiNXDxh4xzR8P0cf8yIfT2mnz0EOMV4EQ4?=
+ =?us-ascii?Q?kmS05zpwCwJDMKblLNxKTDukemlTPsoQFmii2wy506Cr/0IRSi+2HZ3h3Ikd?=
+ =?us-ascii?Q?O5xAXa+Hni2wbwewsa0mVgIoudGC4T9qYxAXhAp/ppRidX6Bpvnj8QeZTnzw?=
+ =?us-ascii?Q?obZnzQ6kF71Xp2q4Kpq5wRGKQxk2HIpSff2izyTn/whFwnDMhjmVylyp03jl?=
+ =?us-ascii?Q?YR1w+vWac/B6fuya/dr6+n7bk9zZ6wLLViAUEF71jI2hEsau+KG9ISFymvbE?=
+ =?us-ascii?Q?QZQb50Psd6U70ti7E2RANV+ly63y2WivDCcitVKCGDNdUmGsODByQ77lPQvq?=
+ =?us-ascii?Q?QOjW7N1tWVYf+TBQ8Olvq5xI5j8K+wGn7Sx0rG6pI9m2JiKuFIVgWktYUUv6?=
+ =?us-ascii?Q?3NfthUAwlbqdKGcMucyT5K1YHbpvUDRKgOt3meH3GdQ/9fmNTqr0SKYddG6a?=
+ =?us-ascii?Q?4uJlViEzyGAguY/3KJYNEmh2MbjbMtAf00Og6cavBx9+0dY2jdaj+6LnZ7nu?=
+ =?us-ascii?Q?ixzIjVdz7upaVq5R2jfAQ6y/OJDnDn+Noq+eVYkcAMPODLnYpAtvD3YALhOO?=
+ =?us-ascii?Q?BwDzMsxwCedM2t1n8MSlKdY9NkDqUwc+7yb5GfYMwVlmnQtICmS1Davu+LCY?=
+ =?us-ascii?Q?gR7WT8n8ZTBoFFACmZ21/ffmaGGpQDzi9TY4OeWDikyTBr3bbJLGdzGMDO0+?=
+ =?us-ascii?Q?YeSciJeop6CUdeRfsX3tgLAYX7mJIFBQXqQ8E+MS5ysqaKm6kkRCXBCaaB4m?=
+ =?us-ascii?Q?fs6DiV80/Ti7GwEQFWNkMB7S+7WH26jjsJ9qR9h/fWBBRKAxsG4HIUvSTf5h?=
+ =?us-ascii?Q?cuFG8JV2kfrYQwF0784ELTrGkkIytEZV2zep98d2drE1Wqvqimkc3EJqdvlX?=
+ =?us-ascii?Q?iFDKfdd3qWmiZVAwVVM6IuoBw1bKRpKgrP+BL0dTb3uvMgOUbAdUw8tsVRKi?=
+ =?us-ascii?Q?Bh1tL+QIJUxq5D1NJkzZRr2lcevuCWIC5cejWO9X3rdgSnIu0a5HnJQlG+mR?=
+ =?us-ascii?Q?KZIrWypmiDnkYs5Bik1IJIo/IsgOIhLIffGg5eKSxgUCLkN5dpZWqgd1z0km?=
+ =?us-ascii?Q?ZLEAm4SayB+xUDInPwD9GoUkeEs=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89994719-4834-4a12-f8d3-08daf7e9abb4
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 17:43:30.3117
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 17:47:01.0457
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CgzMfMFRoYI4V22Vo3NoXo3HuR9tAuXLYn6VOINKYo2Een8WT76mzNomBSmE2dj3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4531
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: rZUwMgB5k6AJTZ/2F6SHdwEqMu9BMFSRVhqXWXX8kVIz3fTkw2rQ12j2cm1AoggO46cklIkNKGVc/cjp9kHbocXLCzfvINOqY/PIe1EJugM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4151
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I saw on Patchwork I'd missed Krzysztof's CC. Apologies - I missed it
+in a copy-paste error.
 
-On 1/15/23 6:38 AM, Krzysztof Kozlowski wrote:
-> On 13/01/2023 19:08, Tanmay Shah wrote:
->> On 1/12/23 11:52 PM, Krzysztof Kozlowski wrote:
->>> On 13/01/2023 08:30, Tanmay Shah wrote:
->>>> This patch introduces bindings for TCM memory address space on AMD-xilinx
->>>> platforms. As of now TCM addresses are hardcoded in xilinx remoteproc
->>>> driver. This bindings will help in defining TCM in device-tree and
->>>> make it's access platform agnostic and data-driven from the driver.
->>>>
->>> Subject: drop second/last, redundant "bindings". The "dt-bindings"
->>> prefix is already stating that these are bindings.
->> Ack.
->>
->>
->>> Where is driver or DTS? Are you now adding a dead binding without users?
->>
->> TCM is used by drivers/remoteproc/xlnx_r5_remoteproc.c driver. Howerver,
->> we have hardcode addresses in TCM as bindings are not available yet.
-> I don't see usage of these compatibles there. You also did not supply
-> DTS here. Please provide users of bindings within the same patchset.
-
-
-ACK. I will supply dts as well.
-
-However, Is it ok if I convert this patch to RFC patch, and once 
-bindings are fixed I will send actual patch with driver support.
-
-If bindings design is not correct then I might have to change 
-corresponding driver design lot.
-
-
->
->
-> Best regards,
-> Krzysztof
->
+On Thu, Jan 12, 2023 at 07:56:03AM -1000, Colin Foster wrote:
+> Ocelot switches have the abilitiy to be used internally via
+> memory-mapped IO or externally via SPI or PCIe. This brings up issues
+> for documentation, where the same chip might be accessed internally in a
+> switchdev manner, or externally in a DSA configuration. This patch set
+> is perparation to bring DSA functionality to the VSC7512, utilizing as
+> much as possible with an almost identical VSC7514 chip.
+> 
+> This patch set changed quite a bit from v2, so I'll omit the background
+> of how those sets came to be. Rob offered a lot of very useful guidance.
+> My thanks.
+> 
+> At the end of the day, with this patch set, there should be a framework
+> to document Ocelot switches (and any switch) in scenarios where they can
+> be controlled internally (ethernet-switch) or externally (dsa-switch).
+> 
+> ---
+> 
+> v6 -> v7
+>   * Add Reviewed / Acked on patch 1
+>   * Clean up descriptions on Ethernet / DSA switch port bindings
+> 
+> v5 -> v6
+>   * Rebase so it applies to net-next cleanly.
+>   * No other changes - during the last submission round I said I'd
+>     submit v6 with a change to move $dsa-port.yaml to outside the allOf
+>     list. In retrospect that wasn't the right thing to do, because later
+>     in the patch series the $dsa-port.yaml is removed outright. So I
+>     believe the submission in v5 to keep "type: object" was correct.
+> 
+> v4 -> v5
+>   * Sync DSA maintainers with MAINTAINERS file (new patch 1)
+>   * Undo move of port description of mediatek,mt7530.yaml (patch 4)
+>   * Move removal of "^(ethernet-)?switch(@.*)?$" in dsa.yaml from patch 4
+>     to patch 8
+>   * Add more consistent capitalization in title lines and better Ethernet
+>     switch port description. (patch 8)
+> 
+> v3 -> v4
+>   * Renamed "base" to "ethernet-ports" to avoid confusion with the concept
+>     of a base class.
+>   * Squash ("dt-bindings: net: dsa: mediatek,mt7530: fix port description location")
+>     patch into ("dt-bindings: net: dsa: utilize base definitions for standard dsa
+>     switches")
+>   * Corrections to fix confusion about additonalProperties vs unevaluatedProperties.
+>     See specific patches for details.
+> 
+> v2 -> v3
+>   * Restructured everything to use a "base" iref for devices that don't
+>     have additional properties, and simply a "ref" for devices that do.
+>   * New patches to fix up brcm,sf2, qca8k, and mt7530
+>   * Fix unevaluatedProperties errors from previous sets (see specific
+>     patches for more detail)
+>   * Removed redundant "Device Tree Binding" from titles, where applicable.
+> 
+> v1 -> v2
+>   * Two MFD patches were brought into the MFD tree, so are dropped
+>   * Add first patch 1/6 to allow DSA devices to add ports and port
+>     properties
+>   * Test qca8k against new dt-bindings and fix warnings. (patch 2/6)
+>   * Add tags (patch 3/6)
+>   * Fix vsc7514 refs and properties
+> 
+> ---
+> 
+> Colin Foster (10):
+>   dt-bindings: dsa: sync with maintainers
+>   dt-bindings: net: dsa: sf2: fix brcm,use-bcm-hdr documentation
+>   dt-bindings: net: dsa: qca8k: remove address-cells and size-cells from
+>     switch node
+>   dt-bindings: net: dsa: utilize base definitions for standard dsa
+>     switches
+>   dt-bindings: net: dsa: allow additional ethernet-port properties
+>   dt-bindings: net: dsa: qca8k: utilize shared dsa.yaml
+>   dt-bindings: net: dsa: mediatek,mt7530: remove unnecessary dsa-port
+>     reference
+>   dt-bindings: net: add generic ethernet-switch
+>   dt-bindings: net: add generic ethernet-switch-port binding
+>   dt-bindings: net: mscc,vsc7514-switch: utilize generic
+>     ethernet-switch.yaml
+> 
+>  .../bindings/net/dsa/arrow,xrs700x.yaml       |  2 +-
+>  .../devicetree/bindings/net/dsa/brcm,b53.yaml |  2 +-
+>  .../devicetree/bindings/net/dsa/brcm,sf2.yaml | 15 +++--
+>  .../devicetree/bindings/net/dsa/dsa-port.yaml | 30 ++-------
+>  .../devicetree/bindings/net/dsa/dsa.yaml      | 49 +++++++--------
+>  .../net/dsa/hirschmann,hellcreek.yaml         |  2 +-
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     |  6 +-
+>  .../bindings/net/dsa/microchip,ksz.yaml       |  2 +-
+>  .../bindings/net/dsa/microchip,lan937x.yaml   |  2 +-
+>  .../bindings/net/dsa/mscc,ocelot.yaml         |  2 +-
+>  .../bindings/net/dsa/nxp,sja1105.yaml         |  2 +-
+>  .../devicetree/bindings/net/dsa/qca8k.yaml    | 14 +----
+>  .../devicetree/bindings/net/dsa/realtek.yaml  |  2 +-
+>  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  2 +-
+>  .../bindings/net/ethernet-switch-port.yaml    | 26 ++++++++
+>  .../bindings/net/ethernet-switch.yaml         | 62 +++++++++++++++++++
+>  .../bindings/net/mscc,vsc7514-switch.yaml     | 31 +---------
+>  MAINTAINERS                                   |  2 +
+>  18 files changed, 145 insertions(+), 108 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+>  create mode 100644 Documentation/devicetree/bindings/net/ethernet-switch.yaml
+> 
+> -- 
+> 2.25.1
+> 
