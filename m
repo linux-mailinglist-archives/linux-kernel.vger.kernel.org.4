@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D680D66CE72
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F66466CE77
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjAPSLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S234012AbjAPSMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233528AbjAPSLX (ORCPT
+        with ESMTP id S233336AbjAPSLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:11:23 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90150222D4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:55:59 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-142b72a728fso29562141fac.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:55:59 -0800 (PST)
+        Mon, 16 Jan 2023 13:11:35 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AEF1CF54
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:57:27 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s124so7163274oif.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:57:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hmr/4EGVT6Movw4Gw2eBDFQeNgD1pGHhChAaxlPCJsU=;
-        b=SfTnM2vVsOQnrYLrQD9H+RG2EW9ZSkr0xjOPTijmu0aGqrobYsidOwmjAWl+UKjvYp
-         u5Qel07zihwL3o7ogRlLfYtYLm9CQ39KoEN54v5dBoL9AcWzj/NKt2rJSx82+K1fXdUH
-         kwq1u0PKUTd0iqtVB2XV+N3JgSQlwsfdxrne2dtY+DNLtRwzb4CCs/HMic+3OY7NxxAp
-         61E3JU+1SewSBPbs89B2q3R/A1wm9TQDV1VohQ+ygim0h4CXkBW8taXnDh4ySXm5H3c5
-         r1b1gN1WO0kd2rh25bsyQl3A4QGXc2FyOEBSZVNq9MTM8OJuvt0KOilwPvvOzD1dmL5I
-         W9oA==
+        bh=n5OkHX/Az8Mry0UKCOlHqO4EM33fiMoag3d66F0Eejk=;
+        b=Rg4+a73abcdpBd7XsB2vRpplYYdmV6iqGARh7CQiaUgMxWvIa6FGDtkhjgLjghUsHa
+         P7ECrLgFof/sqwJuhBdQFUbSCMdNKTi2uPkRRUkSBBeznLpZwlXN3G3iRa5HTG8J7H5R
+         l8isod3hoEH2DzBeYtuPcuOd0RcBJ2B0J+rejWzokA0rWnL6IWULCkfNJP4qQVMuYgYA
+         y8K4WUmu/e6tS1rDRGKmT3dTk+0KG7TAap/vIAIrOb441oSeU8Hm4P+RTIXm/jOL7pjJ
+         sW+00I/LkJVhzwWsrVIfhXuGR9BrH9pJH9Wd/R7u/51hcYq460jzDmUP6QAx2pQu/bg0
+         nDWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Hmr/4EGVT6Movw4Gw2eBDFQeNgD1pGHhChAaxlPCJsU=;
-        b=Cfwk/yE+B62jpmZ7ckM4zty7ybKuBQdXch8CbTUTIZMYO/koJYcWdWWYvCRO4wxL0A
-         LHhsa8874ZHsTdEMn4bAJi2g7acOAzpNKUL9sur/c8VpO+qrgcn5/R3Da/42AVD8jZev
-         ZXCgbassaFtaAcYhx0Oon2eKs0YYLQ9U0aX/oAqsXlJxRCQ5z76XkPzWB6C/4evXrNQO
-         0pY6rmCgSAzHw0kDVdsdzGrpbN80xolFnimftGziIAxErOLwuAP1lE0Qzk5RkAX3unxc
-         0UOl35ZH8INQUHM8f4B9nPgEE56kB3b5w3Wm1KOYsiHu8HcgeS2z7/0BM+0wteQ/gcIP
-         GfQA==
-X-Gm-Message-State: AFqh2kogjWK4MsF2IJT4qv/YK1rgQReTZV8Bi0SN8ZbERWzDRhZG7cAU
-        W3bqGFQ+y+CBsmgw3bH8AZWYYerxt2lIfkSZFnQ=
-X-Google-Smtp-Source: AMrXdXtsyr3fZssneo+m+TaFDxl8UcCwFPa0HZ9ecIR2snIjS8XHBcWS8ZqbYDjLLr2NyLRnUaMRQxi7OAUj8r8E+KM=
-X-Received: by 2002:a05:6870:7a18:b0:15f:5509:9a0d with SMTP id
- hf24-20020a0568707a1800b0015f55099a0dmr52425oab.46.1673891758551; Mon, 16 Jan
- 2023 09:55:58 -0800 (PST)
+        bh=n5OkHX/Az8Mry0UKCOlHqO4EM33fiMoag3d66F0Eejk=;
+        b=B+1XxqENuacROmU4Yz0FHRceQWpzwNUJMFzqsQvbZGW/vXwlaeG4jx4G3dp6Boev4a
+         kKAFFRmvVaPDf7SdWCxhU9CnZJQuFthCV1AabDxSakDAXefc7aSxGUcj3NU/ISkD/VPZ
+         xopb74klLdwyLN597hTPDQqS31cRM8XQPUoq3a1ASN8dB5YWLsmNFHWnZ23Qvb+sIidS
+         jI4W9kRGMaCo0ySovZMCc+2jDj5L7JBm2HEI1WPXyVUVwhPjqnuFSwgPlxHxgN09LW5T
+         Q+TFkGVvWmcDFsi6aUM6XZ9z7qUmSgGePRYxdXSvJDOx8lnlHzVSte5ekXrPQqyilIxM
+         /Ndg==
+X-Gm-Message-State: AFqh2kq5JPRRew97cfutVaoRZOSNZQsx4+4Btgo4mPUKN23COp7OUP0b
+        zd9FU2rH/Ov83WPEFCrr67CWpgwJbVfw5kw+t1g=
+X-Google-Smtp-Source: AMrXdXvOkWc2rL8rHfWhUdEhHY8Dl8h0BCl4hvpl0NJmh4GENZy24NQOJn6EpWg7UL7gEpJOCkrHr4MDKELVJafTjtM=
+X-Received: by 2002:aca:2807:0:b0:35b:f5f7:3ed0 with SMTP id
+ 7-20020aca2807000000b0035bf5f73ed0mr8864oix.46.1673891846851; Mon, 16 Jan
+ 2023 09:57:26 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1673766696.git.drv@mailo.com> <DM6PR12MB2619EF8DBE956A8F79A579DCE4C19@DM6PR12MB2619.namprd12.prod.outlook.com>
-In-Reply-To: <DM6PR12MB2619EF8DBE956A8F79A579DCE4C19@DM6PR12MB2619.namprd12.prod.outlook.com>
+References: <Y8PGts5Nku8OSlRN@ubun2204.myguest.virtualbox.org>
+In-Reply-To: <Y8PGts5Nku8OSlRN@ubun2204.myguest.virtualbox.org>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 16 Jan 2023 12:55:47 -0500
-Message-ID: <CADnq5_NuNYcgK1K-5J-cU7ZSNuMrkEMuO_ZkcNzWsESSKH-SaA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] drm/amd/pm/powerplay: use bitwise or for bitmasks addition
-To:     "Quan, Evan" <Evan.Quan@amd.com>
-Cc:     Deepak R Varma <drv@mailo.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
+Date:   Mon, 16 Jan 2023 12:57:15 -0500
+Message-ID: <CADnq5_NyK_O=CypSz+WrAbM2MpsP_7D2RjB6JAu_qmyEnAVc6Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: use swap() helper macro in bios_parser
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>,
         Saurabh Singh Sengar <ssengar@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,47 +78,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Applied.  Thanks!
 
-Alex
-
-On Sun, Jan 15, 2023 at 9:27 PM Quan, Evan <Evan.Quan@amd.com> wrote:
+On Sun, Jan 15, 2023 at 4:26 AM Deepak R Varma <drv@mailo.com> wrote:
 >
-> [AMD Official Use Only - General]
+> Use swap() helper macro instead of open coded swap instructions. The
+> change also facilitates code cleanup and realignment for improved
+> readability.  Issue identified using swap.cocci Coccinelle semantic
+> patch script.
 >
-> Series is reviewed-by: Evan Quan <evan.quan@amd.com>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
 >
-> > -----Original Message-----
-> > From: Deepak R Varma <drv@mailo.com>
-> > Sent: Sunday, January 15, 2023 3:16 PM
-> > To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Koenig, Christian
-> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> > Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; amd-
-> > gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> > kernel@vger.kernel.org
-> > Cc: Saurabh Singh Sengar <ssengar@microsoft.com>; Praveen Kumar
-> > <kumarpraveen@linux.microsoft.com>
-> > Subject: [PATCH 0/3] drm/amd/pm/powerplay: use bitwise or for bitmasks
-> > addition
-> >
-> > The patch series proposes usage of bitwise or "|" operator for addition of
-> > bitmasks instead of using numerial additions. The former is quicker and
-> > cleaner.
-> >
-> > The proposed change is compile tested.
-> >
-> > Deepak R Varma (3):
-> >   drm/amd/pm/powerplay/smumgr: use bitwise or for addition
-> >   drm/amd/pm/powerplay/hwmgr: use bitwise or for bitmasks addition
-> >   drm/amd/pm/powerplay/smumgr/ci: use bitwise or for bitmasks addition
-> >
-> >  drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu7_hwmgr.c      | 8 ++++---
-> > -
-> >  drivers/gpu/drm/amd/pm/powerplay/smumgr/ci_smumgr.c      | 2 +-
-> >  drivers/gpu/drm/amd/pm/powerplay/smumgr/iceland_smumgr.c | 2 +-
-> >  drivers/gpu/drm/amd/pm/powerplay/smumgr/tonga_smumgr.c   | 2 +-
-> >  4 files changed, 7 insertions(+), 7 deletions(-)
-> >
-> > --
-> > 2.34.1
-> >
-> >
+> diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+> index 074e70a5c458..7b5894adbf51 100644
+> --- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+> +++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+> @@ -2929,7 +2929,6 @@ static enum bp_result construct_integrated_info(
+>         struct atom_common_table_header *header;
+>         struct atom_data_revision revision;
+>
+> -       struct clock_voltage_caps temp = {0, 0};
+>         uint32_t i;
+>         uint32_t j;
+>
+> @@ -3032,14 +3031,8 @@ static enum bp_result construct_integrated_info(
+>         for (i = 1; i < NUMBER_OF_DISP_CLK_VOLTAGE; ++i) {
+>                 for (j = i; j > 0; --j) {
+>                         if (info->disp_clk_voltage[j].max_supported_clk <
+> -                               info->disp_clk_voltage[j-1].max_supported_clk
+> -                               ) {
+> -                               /* swap j and j - 1*/
+> -                               temp = info->disp_clk_voltage[j-1];
+> -                               info->disp_clk_voltage[j-1] =
+> -                                       info->disp_clk_voltage[j];
+> -                               info->disp_clk_voltage[j] = temp;
+> -                       }
+> +                           info->disp_clk_voltage[j-1].max_supported_clk)
+> +                               swap(info->disp_clk_voltage[j-1], info->disp_clk_voltage[j]);
+>                 }
+>         }
+>
+> --
+> 2.34.1
+>
+>
+>
