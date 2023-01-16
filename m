@@ -2,92 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635E966CF3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A6E66CF3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbjAPS6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        id S233306AbjAPS6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:58:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjAPS6U (ORCPT
+        with ESMTP id S233901AbjAPS6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:58:20 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ACE234D5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:16 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id d13so20065974qvj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:16 -0800 (PST)
+        Mon, 16 Jan 2023 13:58:49 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8590E25E0E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:48 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id g23so15604615plq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C63mgoRdAtz/YJMR7biI6szW2IE2U19fGXKnn72cZo=;
-        b=L2HXL4cnvlLjL83N5xUbSr+EK6yWGpxzHl3ZGFmGE+GNP3/4yoW1NKAdekC061eGZ0
-         cmx3idM8ioMI7UDqqEECrdX2rzEyuiea/jdKvOD4eniJdHb98Hhzhh5mOQCzw1/Ob3v4
-         9dBP3LyzcytS6pFdyXdBtl1ocFAljciJinO8c=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wMdqQ9WKyEOKQ2nD0q5t9awURcXqCIpB7f7QhoNXh7w=;
+        b=eQxeSlNM8DqlBq2Qx+xzIvO2vXE7sRUAOMnZYL6y9wLHQZ6+3Yt18SkihJVUvYI5hi
+         MONR+Q6Qzo3J2UnVq8YuNZHQkD0H29AwFYbpuuPAPy1j0eSHsdBLiBgnJHKrB4k1SEaV
+         lh4A7l2hwvngf7P2f0Guw5zK91C14nUH5W4DICYKX6IRnQioOKXuuAxQbnImj7cFosgx
+         0bJw87uQhEYEBkeNsbqvsA9As7SPgCHJjYCiVs04Z3i8wfltTN9+Oe9gVh1QtWqQ5cfe
+         htglaIAJa6OlYqo/6b7sXhtRogyD1d9sHFUxUXQQQnU4B8ca8OJq/rEdIaWqN8sUdOIc
+         A7NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7C63mgoRdAtz/YJMR7biI6szW2IE2U19fGXKnn72cZo=;
-        b=4PlgVQbTN7OorxO4uX9nh3uSrjHAl9j7owJjS0C0hEg/plsSi0McpdKlYYSpQt9P+i
-         4K5QeiuvIvYf1KxkCOUJDWGoQ/Z0xPDyN+7TWMcaHzX/9sS0hSYvE64Y4wi0wvWJSt4c
-         s6L+2u0Bf3Xe56ZtbisK3Yqic6Ui+iDTsvO8hb9yezvFvyxL0q/F5bORz7JlU6yD2TNK
-         H+e6/CqqCaaeAAOVe2M2TuHrr2Xef3u5Spz7+VihJ7pHF9wfKUW31tF7OzbpNnF4EvV5
-         gT6f5si2bJSRHnaKWoD7fDTiNHTPr6I9/gZ76F9MpttV1WEAuoU6gdIqtle33wEFNQar
-         xkCA==
-X-Gm-Message-State: AFqh2kqC2McOocx0VLCVbsAArTEtPIagF42StBvJfbtUCzjgwEY0y8AK
-        rT3ySDdDXIQTU3sIjlx8kW5lAThOwGergnDX
-X-Google-Smtp-Source: AMrXdXve02hvHhtVuY9XMelwvLZ6d8Vb+YQbDRp9qXXm0J4ExDSjjf9i/2mD93Uht7WloztC+VVdYA==
-X-Received: by 2002:a0c:fa08:0:b0:532:1caa:3402 with SMTP id q8-20020a0cfa08000000b005321caa3402mr839693qvn.12.1673895495714;
-        Mon, 16 Jan 2023 10:58:15 -0800 (PST)
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05620a454f00b006ce76811a07sm18989439qkp.75.2023.01.16.10.58.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 10:58:15 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id g9so10709584qtu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:15 -0800 (PST)
-X-Received: by 2002:ac8:7252:0:b0:3b2:d164:a89b with SMTP id
- l18-20020ac87252000000b003b2d164a89bmr876qtp.452.1673895495062; Mon, 16 Jan
- 2023 10:58:15 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wMdqQ9WKyEOKQ2nD0q5t9awURcXqCIpB7f7QhoNXh7w=;
+        b=ns2pOr0nS+i33l2Az54i2gRSY8tNCxU0vPibRe0Zji0YX/0Dm5aqhlNaJE+DryNQjU
+         8RbBY/sTGvs9rIqlOZOhnxhzp3xJb0yjIMBykQNbxRgnsosIrQbCqGSNiHWjFMmXlBZ7
+         KctYP6ODNAyga/7Od/L0PDjFJON3HtfDaNYavJOMaY5TQpYOgjXY627KnfuZRcOgVc58
+         O2oNoof+chUHYAmXeJGbZQPaFPq3GhAoKltI8pnlvggmub4rmuvG/gwKaTtPrBOBqfY1
+         on19qmKy5T8oYSI2/IJDn1wUBYxORs4vrNaFW0vu2YcG+lVUVkpq/Fr8+GKXOsLSe/4G
+         7mmg==
+X-Gm-Message-State: AFqh2krMMr+rVuEdUv9mvWJPpGIAJD32yV9A219LqGXbwadb3pkv48CT
+        8DdhT8zSiFqLJmGDyPKOZWwyYEdUZB+QjI5VrIy5CA==
+X-Google-Smtp-Source: AMrXdXvgQkJvZx20Qrm73O1WBO9QQPkNVWCNRY+MTHZzXqBOArJ7mPlGB32zLAUDQ/LLu4EgwsOEmrr1jY0zaGg48Ew=
+X-Received: by 2002:a17:902:cf0e:b0:189:7441:1ada with SMTP id
+ i14-20020a170902cf0e00b0018974411adamr70720plg.13.1673895527893; Mon, 16 Jan
+ 2023 10:58:47 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHk-=wgcOEWvT-WjmRf-zCCXyFJaVVFH=26BPQ+N1OFTTnN=RA@mail.gmail.com>
- <20230116185212.GA2127972@roeck-us.net>
-In-Reply-To: <20230116185212.GA2127972@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 16 Jan 2023 10:57:58 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whgHNt2dmrwmCfNqherZegVcAo1Nin6EpydnW+fm=D79g@mail.gmail.com>
-Message-ID: <CAHk-=whgHNt2dmrwmCfNqherZegVcAo1Nin6EpydnW+fm=D79g@mail.gmail.com>
-Subject: Re: Linux 6.2-rc4
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230116154743.577276578@linuxfoundation.org>
+In-Reply-To: <20230116154743.577276578@linuxfoundation.org>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Mon, 16 Jan 2023 12:58:35 -0600
+Message-ID: <CAEUSe786JgSDJOtCU_tB81ddYxJk_sSfgzM33r7iFccsU7O5QA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:52 AM Guenter Roeck <linux@roeck-us.net> wrote:
+Hello!
+
+On Mon, 16 Jan 2023 at 10:06, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Build results:
->         total: 155 pass: 155 fail: 0
-> Qemu test results:
->         total: 502 pass: 502 fail: 0
+> This is the start of the stable review cycle for the 5.10.164 release.
+> There are 64 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> ... and no runtime warnings.
+> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.164-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Lovely. Fingers crossed that we can keep it this way for the reset of
-the rc series.
+Preliminarily,
 
-I suspect I'll make this a "rc8" release regardless - not because we
-have any particular problem areas, but simply because of the
-effectively lost week or two over the holidays.
+| /builds/linux/drivers/gpu/drm/msm/dp/dp_aux.c: In function 'dp_aux_isr':
+| /builds/linux/drivers/gpu/drm/msm/dp/dp_aux.c:427:14: error: 'isr'
+undeclared (first use in this function); did you mean 'idr'?
+|   427 |         if (!isr)
+|       |              ^~~
+|       |              idr
 
-               Linus
+It's currently failing for arm, arm64, (not i386) and x86, with GCC 8,
+10, 11, 12; Clang 15 and nightly. We'll test the extended set of
+architectures and update momentarily.
+
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
