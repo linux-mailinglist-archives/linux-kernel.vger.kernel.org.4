@@ -2,59 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70EB66D1DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBFD66D1E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbjAPWok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 17:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S234394AbjAPWsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 17:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbjAPWoi (ORCPT
+        with ESMTP id S233256AbjAPWsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 17:44:38 -0500
+        Mon, 16 Jan 2023 17:48:00 -0500
 Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C4223C4F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:44:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCA822033
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:47:59 -0800 (PST)
 Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 68AA3200E8;
-        Mon, 16 Jan 2023 23:44:35 +0100 (CET)
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 18084200E8;
+        Mon, 16 Jan 2023 23:47:58 +0100 (CET)
 Received: from sonata.ens-lyon.org ([127.0.0.1])
         by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DRqu8HdldLja; Mon, 16 Jan 2023 23:44:35 +0100 (CET)
+        with ESMTP id xH3JxpgAhs9M; Mon, 16 Jan 2023 23:47:58 +0100 (CET)
 Received: from begin (adijon-658-1-86-31.w86-204.abo.wanadoo.fr [86.204.233.31])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 31A8F200E2;
-        Mon, 16 Jan 2023 23:44:35 +0100 (CET)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id DBABD200E2;
+        Mon, 16 Jan 2023 23:47:57 +0100 (CET)
 Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pHYDS-0010kh-2N;
-        Mon, 16 Jan 2023 23:44:34 +0100
-Date:   Mon, 16 Jan 2023 23:44:34 +0100
+        (envelope-from <samuel.thibault@aquilenet.fr>)
+        id 1pHYGj-0010sv-1e;
+        Mon, 16 Jan 2023 23:47:57 +0100
+Message-ID: <20230116224637.727271961@ens-lyon.org>
+User-Agent: quilt/0.66
+Date:   Mon, 16 Jan 2023 23:46:28 +0100
 From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     Linux console tools development discussion 
-        <kbd@lists.altlinux.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [kbd] [patch] font: Leverage KD_FONT_OP_GET/SET_TALL font
- operations
-Message-ID: <20230116224434.sjo2ez4j6l4av4bc@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Linux console tools development discussion <kbd@lists.altlinux.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-References: <20221218003209.503539532@ens-lyon.org>
- <20221218003339.263695493@ens-lyon.org>
- <Y78VRTF6cxHhio+s@example.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kbd@lists.altlinux.org
+Cc:     linux-kernel@vger.kernel.org,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>
+Subject: [patch 1/1] font: Leverage KD_FONT_OP_GET/SET_TALL font operations
+References: <20230116224627.724114300@ens-lyon.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y78VRTF6cxHhio+s@example.org>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
+Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,28 +51,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexey Gladkov, le mer. 11 janv. 2023 21:00:05 +0100, a ecrit:
-> > @@ -54,13 +55,13 @@ do_loadfont(struct kfont_context *ctx, i
-> >  	int bad_video_erase_char = 0;
-> >  	int ret;
-> >  
-> > -	if (height < 1 || height > 32) {
-> > -		KFONT_ERR(ctx, _("Bad character height %d"), height);
-> > +	if (height < 1 || height > 64) {
-> > +		KFONT_ERR(ctx, _("Bad character height %d (limit is 64)"), height);
-> 
-> Hm. But max_font_height is 128. Shouldn't it be height > 128 ?
-> 
-> >  		return -EX_DATAERR;
-> >  	}
-> >  
-> > -	if (width < 1 || width > 32) {
-> > -		KFONT_ERR(ctx, _("Bad character width %d"), width);
-> > +	if (width < 1 || width > 128) {
-> > +		KFONT_ERR(ctx, _("Bad character width %d (limit is 128)"), width);
-> 
-> Same here. max_font_width is 64.
+The new KD_FONT_OP_GET/SET_TALL font operations allow to load fonts taller
+than 32 pixels by dropping the VGA-specific vertical pitch limitation.
 
-Oops, sure, fixed it, will send an updated kbd patch for that.
+The new maximum font size has thus been raised to 64x128.
 
-Samuel
+We however continue using the older font operations for smaller fonts, to
+continue supporting older kernels.
+
+Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+
+Index: kbd-2.5.1/src/compat/linux-kd.h
+===================================================================
+--- kbd-2.5.1.orig/src/compat/linux-kd.h
++++ kbd-2.5.1/src/compat/linux-kd.h
+@@ -90,7 +90,8 @@ struct console_font_op {
+ 	unsigned int flags; /* KD_FONT_FLAG_* */
+ 	unsigned int width, height;
+ 	unsigned int charcount;
+-	unsigned char *data; /* font data with height fixed to 32 */
++	unsigned char *data; /* font data with vpitch fixed to 32 for
++                              * KD_FONT_OP_SET/GET */
+ };
+ 
+ #define KD_FONT_OP_SET 0         /* Set font */
+@@ -98,6 +99,8 @@ struct console_font_op {
+ #define KD_FONT_OP_SET_DEFAULT 2 /* Set font to default, \
+                                     data points to name / NULL */
+ #define KD_FONT_OP_COPY 3        /* Copy from another console */
++#define KD_FONT_OP_SET_TALL 4    /* Set font with arbitrary vpitch */
++#define KD_FONT_OP_GET_TALL 5    /* Get font with arbitrary vpitch */
+ 
+ #define KD_FONT_FLAG_OLD 0x80000000 /* Invoked via old interface */
+ #define KD_FONT_FLAG_DONT_RECALC 1  /* Don't call adjust_height() */
+Index: kbd-2.5.1/src/libkfont/kdfontop.c
+===================================================================
+--- kbd-2.5.1.orig/src/libkfont/kdfontop.c
++++ kbd-2.5.1/src/libkfont/kdfontop.c
+@@ -51,19 +51,33 @@ get_font_kdfontop(struct kfont_context *
+ 		unsigned char *buf,
+ 		unsigned int *count,
+ 		unsigned int *width,
+-		unsigned int *height)
++		unsigned int *height,
++		unsigned int *vpitch)
+ {
+ 	struct console_font_op cfo;
+ 
++#ifdef KD_FONT_OP_GET_TALL
++	cfo.op = KD_FONT_OP_GET_TALL;
++#else
+ 	cfo.op = KD_FONT_OP_GET;
++#endif
+ 	cfo.flags = 0;
+-	cfo.width = cfo.height = 32;
++	cfo.width = 64;
++	cfo.height = 128;
+ 	cfo.charcount = *count;
+ 	cfo.data = buf;
+ 
++retry:
+ 	errno = 0;
+ 
+ 	if (ioctl(consolefd, KDFONTOP, &cfo)) {
++#ifdef KD_FONT_OP_GET_TALL
++		if (errno == ENOSYS && cfo.op == KD_FONT_OP_GET_TALL) {
++			/* Kernel before 6.2.  */
++			cfo.op = KD_FONT_OP_GET;
++			goto retry;
++		}
++#endif
+ 		if (errno != ENOSYS && errno != EINVAL) {
+ 			KFONT_ERR(ctx, "ioctl(KDFONTOP): %m");
+ 			return -1;
+@@ -76,6 +90,14 @@ get_font_kdfontop(struct kfont_context *
+ 		*height = cfo.height;
+ 	if (width)
+ 		*width = cfo.width;
++	if (vpitch) {
++#ifdef KD_FONT_OP_GET_TALL
++		if (cfo.op == KD_FONT_OP_GET_TALL)
++			*vpitch = cfo.height;
++		else
++#endif
++			*vpitch = 32;
++	}
+ 	return 0;
+ }
+ 
+@@ -88,16 +110,17 @@ int
+ kfont_get_font(struct kfont_context *ctx, int fd, unsigned char *buf,
+ 		unsigned int *count,
+ 		unsigned int *width,
+-		unsigned int *height)
++		unsigned int *height,
++		unsigned int *vpitch)
+ {
+-	return get_font_kdfontop(ctx, fd, buf, count, width, height);
++	return get_font_kdfontop(ctx, fd, buf, count, width, height, vpitch);
+ }
+ 
+ int unsigned
+ kfont_get_fontsize(struct kfont_context *ctx, int fd)
+ {
+ 	unsigned int count = 0;
+-	if (!kfont_get_font(ctx, fd, NULL, &count, NULL, NULL))
++	if (!kfont_get_font(ctx, fd, NULL, &count, NULL, NULL, NULL))
+ 		return count;
+ 	return 256;
+ }
+@@ -106,11 +129,20 @@ static int
+ put_font_kdfontop(struct kfont_context *ctx, int consolefd, unsigned char *buf,
+ 		unsigned int count,
+ 		unsigned int width,
+-		unsigned int height)
++		unsigned int height,
++		unsigned int vpitch)
+ {
+ 	struct console_font_op cfo;
+ 
+-	cfo.op        = KD_FONT_OP_SET;
++	if (vpitch == 32 && width <= 32)
++		cfo.op        = KD_FONT_OP_SET;
++	else {
++#ifdef KD_FONT_OP_SET_TALL
++		cfo.op        = KD_FONT_OP_SET_TALL;
++#else
++		return 0;
++#endif
++	}
+ 	cfo.flags     = 0;
+ 	cfo.width     = width;
+ 	cfo.height    = height;
+@@ -122,8 +154,14 @@ put_font_kdfontop(struct kfont_context *
+ 	if (!ioctl(consolefd, KDFONTOP, &cfo))
+ 		return 0;
+ 
+-	if (errno == ENOSYS)
++	if (errno == ENOSYS) {
++#ifdef KD_FONT_OP_SET_TALL
++		if (cfo.op == KD_FONT_OP_SET_TALL)
++			/* Let user know that we can't load such font with such kernel version */
++			return 0;
++#endif
+ 		return 1;
++	}
+ 
+ 	int ret = -1;
+ 
+@@ -154,7 +192,7 @@ put_font_kdfontop(struct kfont_context *
+ 
+ int
+ kfont_put_font(struct kfont_context *ctx, int fd, unsigned char *buf, unsigned int count,
+-        unsigned int width, unsigned int height)
++        unsigned int width, unsigned int height, unsigned int vpitch)
+ {
+ 	if (!width)
+ 		width = 8;
+@@ -162,5 +200,5 @@ kfont_put_font(struct kfont_context *ctx
+ 	if (!height)
+ 		height = font_charheight(buf, count, width);
+ 
+-	return put_font_kdfontop(ctx, fd, buf, count, width, height);
++	return put_font_kdfontop(ctx, fd, buf, count, width, height, vpitch);
+ }
+Index: kbd-2.5.1/src/libkfont/kfont.h
+===================================================================
+--- kbd-2.5.1.orig/src/libkfont/kfont.h
++++ kbd-2.5.1/src/libkfont/kfont.h
+@@ -171,7 +171,8 @@ int kfont_load_unicodemap(struct kfont_c
+  * Sets number of glyphs in COUNT, glyph size in WIDTH and HEIGHT.
+  */
+ int kfont_get_font(struct kfont_context *ctx, int consolefd, unsigned char *buf,
+-		unsigned int *count, unsigned int *width, unsigned int *height)
++		unsigned int *count, unsigned int *width, unsigned int *height,
++		unsigned int *vpitch)
+ 	__attribute__((nonnull(1)));
+ 
+ /*
+@@ -180,7 +181,8 @@ int kfont_get_font(struct kfont_context
+  * Return 0 on success, -1 on failure.
+  */
+ int kfont_put_font(struct kfont_context *ctx, int consolefd, unsigned char *buf,
+-		unsigned int count, unsigned int width, unsigned int height)
++		unsigned int count, unsigned int width, unsigned int height,
++		unsigned int vpitch)
+ 	__attribute__((nonnull(1)));
+ 
+ /*
+@@ -239,7 +241,7 @@ void kfont_disactivatemap(int fd);
+ #include <stdio.h>
+ 
+ /* Maximum font size that we try to handle */
+-#define MAXFONTSIZE 65536
++#define MAXFONTSIZE (512*64*128)
+ 
+ /**
+  * readpsffont reads a PSF font.
+Index: kbd-2.5.1/src/libkfont/setfont.c
+===================================================================
+--- kbd-2.5.1.orig/src/libkfont/setfont.c
++++ kbd-2.5.1/src/libkfont/setfont.c
+@@ -45,8 +45,9 @@ findpartialfont(struct kfont_context *ct
+ static int erase_mode = 1;
+ 
+ static int
+-do_loadfont(struct kfont_context *ctx, int fd, const unsigned char *inbuf,
+-		unsigned int width, unsigned int height, unsigned int hwunit,
++try_loadfont(struct kfont_context *ctx, int fd, const unsigned char *inbuf,
++		unsigned int width, unsigned int height, unsigned int vpitch,
++		unsigned int hwunit,
+ 		unsigned int fontsize, const char *filename)
+ {
+ 	unsigned char *buf = NULL;
+@@ -54,13 +55,13 @@ do_loadfont(struct kfont_context *ctx, i
+ 	int bad_video_erase_char = 0;
+ 	int ret;
+ 
+-	if (height < 1 || height > 32) {
+-		KFONT_ERR(ctx, _("Bad character height %d"), height);
++	if (height < 1 || height > 128) {
++		KFONT_ERR(ctx, _("Bad character height %d (limit is 128)"), height);
+ 		return -EX_DATAERR;
+ 	}
+ 
+-	if (width < 1 || width > 32) {
+-		KFONT_ERR(ctx, _("Bad character width %d"), width);
++	if (width < 1 || width > 64) {
++		KFONT_ERR(ctx, _("Bad character width %d (limit is 64)"), width);
+ 		return -EX_DATAERR;
+ 	}
+ 
+@@ -68,8 +69,8 @@ do_loadfont(struct kfont_context *ctx, i
+ 		hwunit = height;
+ 
+ 	if ((ctx->options & (1 << kfont_double_size)) &&
+-	    (height > 16 || width > 16)) {
+-		KFONT_ERR(ctx, _("Cannot double %dx%d font (limit is 16x16)"), width, height);
++	    (height > 64 || width > 32)) {
++		KFONT_ERR(ctx, _("Cannot double %dx%d font (limit is 32x64)"), width, height);
+ 		kfont_unset_option(ctx, kfont_double_size);
+ 	}
+ 
+@@ -78,7 +79,7 @@ do_loadfont(struct kfont_context *ctx, i
+ 		unsigned int kbytewidth = (2 * width + 7) / 8;
+ 		unsigned int charsize   = height * bytewidth;
+ 
+-		kcharsize = 32 * kbytewidth;
++		kcharsize = vpitch * kbytewidth;
+ 		buflen    = kcharsize * ((fontsize < 128) ? 128 : fontsize);
+ 
+ 		buf = calloc(1, buflen);
+@@ -112,7 +113,7 @@ do_loadfont(struct kfont_context *ctx, i
+ 		unsigned int bytewidth = (width + 7) / 8;
+ 		unsigned int charsize  = height * bytewidth;
+ 
+-		kcharsize = 32 * bytewidth;
++		kcharsize = vpitch * bytewidth;
+ 		buflen    = kcharsize * ((fontsize < 128) ? 128 : fontsize);
+ 
+ 		buf = calloc(1, buflen);
+@@ -169,7 +170,7 @@ do_loadfont(struct kfont_context *ctx, i
+ 		KFONT_INFO(ctx, _("Loading %d-char %dx%d (%d) font"),
+ 		       fontsize, width, height, hwunit);
+ 
+-	if (kfont_put_font(ctx, fd, buf, fontsize, width, hwunit) < 0) {
++	if (kfont_put_font(ctx, fd, buf, fontsize, width, hwunit, vpitch) < 1) {
+ 		ret = -EX_OSERR;
+ 		goto err;
+ 	}
+@@ -181,6 +182,20 @@ err:
+ }
+ 
+ static int
++do_loadfont(struct kfont_context *ctx, int fd, const unsigned char *inbuf,
++		unsigned int width, unsigned int height, unsigned int hwunit,
++		unsigned int fontsize, const char *filename)
++{
++	int ret;
++
++	if (height <= 32 && width <= 32)
++		/* This can work with pre-6.2 kernels and its size and vpitch limitations */
++		return try_loadfont(ctx, fd, inbuf, width, height, 32, hwunit, fontsize, filename);
++	else
++		return try_loadfont(ctx, fd, inbuf, width, height, height, hwunit, fontsize, filename);
++}
++
++static int
+ do_loadtable(struct kfont_context *ctx, int fd, struct unicode_list *uclistheads,
+ 		unsigned int fontsize)
+ {
+@@ -585,19 +600,19 @@ save_font(struct kfont_context *ctx, int
+ /* this is the max font size the kernel is willing to handle */
+ 	unsigned char buf[MAXFONTSIZE];
+ 
+-	unsigned int i, ct, width, height, bytewidth, charsize, kcharsize;
++	unsigned int i, ct, width, height, bytewidth, charsize, kcharsize, vpitch;
+ 	int ret;
+ 
+-	ct = sizeof(buf) / (32 * 32 / 8); /* max size 32x32, 8 bits/byte */
++	ct = sizeof(buf) / (64 * 128 / 8); /* max size 64x128, 8 bits/byte */
+ 
+-	if (kfont_get_font(ctx, consolefd, buf, &ct, &width, &height) < 0)
++	if (kfont_get_font(ctx, consolefd, buf, &ct, &width, &height, &vpitch) < 0)
+ 		return -EX_OSERR;
+ 
+ 	/* save as efficiently as possible */
+ 	bytewidth = (width + 7) / 8;
+ 	height    = font_charheight(buf, ct, width);
+ 	charsize  = height * bytewidth;
+-	kcharsize = 32 * bytewidth;
++	kcharsize = vpitch * bytewidth;
+ 
+ /* Do we need a psf header? */
+ /* Yes if ct==512 - otherwise we cannot distinguish
+Index: kbd-2.5.1/src/showconsolefont.c
+===================================================================
+--- kbd-2.5.1.orig/src/showconsolefont.c
++++ kbd-2.5.1/src/showconsolefont.c
+@@ -205,7 +205,7 @@ int main(int argc, char **argv)
+ 	if (info) {
+ 		nr = rows = cols = 0;
+ 
+-		ret = kfont_get_font(kfont, fd, NULL, &nr, &rows, &cols);
++		ret = kfont_get_font(kfont, fd, NULL, &nr, &rows, &cols, NULL);
+ 		if (ret != 0)
+ 			leave(kfont, EXIT_FAILURE);
+ 
+Index: kbd-2.5.1/tests/libtswrap/ioctl.c
+===================================================================
+--- kbd-2.5.1.orig/tests/libtswrap/ioctl.c
++++ kbd-2.5.1/tests/libtswrap/ioctl.c
+@@ -93,6 +93,12 @@ static struct translate_names kd_font_op
+ 	{ KD_FONT_OP_GET, "KD_FONT_OP_GET" },
+ 	{ KD_FONT_OP_SET_DEFAULT, "KD_FONT_OP_SET_DEFAULT" },
+ 	{ KD_FONT_OP_COPY, "KD_FONT_OP_COPY" },
++#ifdef KD_FONT_OP_SET_TALL
++	{ KD_FONT_OP_SET_TALL, "KD_FONT_OP_SET_TALL" },
++#endif
++#ifdef KD_FONT_OP_GET_TALL
++	{ KD_FONT_OP_GET_TALL, "KD_FONT_OP_GET_TALL" },
++#endif
+ 	{ 0, NULL }
+ };
+ 
+
