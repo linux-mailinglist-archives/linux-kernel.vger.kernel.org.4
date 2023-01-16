@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B5466CE93
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BC766CE96
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbjAPSPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:15:36 -0500
+        id S232498AbjAPSQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:16:21 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbjAPSOb (ORCPT
+        with ESMTP id S234753AbjAPSPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:14:31 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC362B0AE
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:23 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id g205so4455186pfb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:01:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MUThk+A2NPDO7+1yWET3Dp+/IOwZbM2+REhhiQMAGAo=;
-        b=PQacTKx2uULp3FlIoZOF630hD/tc3DZ88f/1CoWVqhGc/sODsb9ATqIqzhrZdndv5X
-         xP1hS4RthofTGpUROHAHzWdfZmojirA655/tuugSFrRMkOsN6szJt/8TXB5S2pade7cF
-         T/2RhAPSYInwrK/Zh1dPmi0/YMD+8PBg7J1dpCGEoRKYuqzVoqwtRn0/oW7lsWLfj2vM
-         xc3U4WNoIqrIHTRz5cGFqPAsw4gw7Ehj/Gu1PVgc5De4AmKhp7toDcpmjc6KkC5mQlxz
-         nylQt4AYCMuXg8QB8iFei8rNABXvPe6gwInZLJLabo6E5sIZTmfWHlryN3y8b0B9CUAD
-         RSlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUThk+A2NPDO7+1yWET3Dp+/IOwZbM2+REhhiQMAGAo=;
-        b=4zcK/StU30CcpIAGbO6nCsfV+yS2hpM0/CNAqM0aI7xRexV5eWELMQCNGvo0rRgryC
-         SW2ZJM8uGupGj6dQ2WxyVDJqV9zL1JVVFWX69SFDgyKhEakAL5TZoJx0tbFTQjMHPow+
-         Hb6rELSzfCJccDYw2W6CffvPyGeh4XNRY6x8yqWkO9nMJTzD4RWIxppiPzQ8DY90g5Su
-         pAf0GIA/+ie0UV/tRYYUMBfy8FWtmzl3yP4lOtR/7s+UVvVOwrJC9nznAZtCmezmSbxb
-         GiKz4NnD1sOitHOmnsNoKqruXdFzmdDkWp2a9K2GcAB70p2AnCRiWkGluBmgx8UjI7fM
-         Jzgw==
-X-Gm-Message-State: AFqh2kqZW99h4Tp7EA8mzK890Ej7NkOftZpi0ag0mPGT3xGZe9iX0WFl
-        6NSy85oH0qaZAccUakp8Jz+5r/HoFAZqRU6w
-X-Google-Smtp-Source: AMrXdXv5pgb9vWqU7+ifee1xFN2J/GODbUegb6MgCnye8aGNQPoC+pksX2u240aZMDW1TnLmCbNjYw==
-X-Received: by 2002:a62:1c8b:0:b0:58d:995c:9c25 with SMTP id c133-20020a621c8b000000b0058d995c9c25mr106894pfc.3.1673892082674;
-        Mon, 16 Jan 2023 10:01:22 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa79593000000b00582388bd80csm18508738pfj.83.2023.01.16.10.01.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 10:01:22 -0800 (PST)
-Message-ID: <8cea8a30-00a9-89aa-704c-44e4c95a3b51@kernel.dk>
-Date:   Mon, 16 Jan 2023 11:01:20 -0700
+        Mon, 16 Jan 2023 13:15:18 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E46516AF4;
+        Mon, 16 Jan 2023 10:02:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673892157; x=1705428157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Mjm60n7xCLcyGnAQhcWIofPMSbTPmkROv8KCynD2g6E=;
+  b=l9g2/Y6k4t3smYlHbCiyi7lHHuxqOxT96QoyPLgq8oU6verLXr/SeWtv
+   NDci/JQzQOEI4KcTHRaouon+3yI2cicpiOijBW+PSZpVZOwevrgViirvN
+   2/CkJBG/QZZktfKZa2mMPBtBgm5vvmqC28xKb1ZcAivEmRn74vUlWR1kL
+   v8t4T1QUlov4jRjAOfKLOvUSio+LATDTb501nZl4S12AGixlgmLhMrkAM
+   HvIbFncOhMOvBbDGm7gRrqckOdQxX25E9rtiTgYxwMuosgcZS9pBY3U4X
+   S0AG4sUeKXcNEnEDZ/gG2ZMCpmJjSQ9nYwctvoN35oVvq9Gbu18ABxHXc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="325784096"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="325784096"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 10:01:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="904395780"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="904395780"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jan 2023 10:01:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pHTnR-00ACt7-2L;
+        Mon, 16 Jan 2023 20:01:25 +0200
+Date:   Mon, 16 Jan 2023 20:01:25 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, rafael@kernel.org, sean.wang@mediatek.com,
+        Landen.Chao@mediatek.com, linus.walleij@linaro.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, hkallweit1@gmail.com,
+        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
+Subject: Re: [net-next: PATCH v4 4/8] net: mvpp2: initialize port fwnode
+ pointer
+Message-ID: <Y8WQ9T2O4hL3AmQB@smile.fi.intel.com>
+References: <20230116173420.1278704-1-mw@semihalf.com>
+ <20230116173420.1278704-5-mw@semihalf.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] WARNING: refcount bug in mm_update_next_owner
-Content-Language: en-US
-To:     Jann Horn <jannh@google.com>,
-        syzbot <syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000e259c105f25c92da@google.com>
- <CAG48ez23_TUMENLmi5X4F61vb6ZNiL+mfz6YE96U4Y7bgvYnSg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAG48ez23_TUMENLmi5X4F61vb6ZNiL+mfz6YE96U4Y7bgvYnSg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116173420.1278704-5-mw@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 10:53 AM, Jann Horn wrote:
-> All 5 console logs listed on the syzkaller dashboard for this one have
-> io-uring with IORING_OP_POLL_ADD somewhere. Could that be related?
+On Mon, Jan 16, 2023 at 06:34:16PM +0100, Marcin Wojtas wrote:
+> As a preparation to switch the DSA subsystem from using
+> of_find_net_device_by_node() to its more generic fwnode_ equivalent,
+> and later to allow ACPI description, update the port's device structure
+> also with its fwnode pointer.
 
-It was just due to a buggy patch that's long since been fixed.
+I believe this patch worth to be submitted even before core of this series.
+FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-#syz invalid
+> Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+> ---
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> index 5f89fcec07b1..a25e90791700 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> @@ -6884,7 +6884,7 @@ static int mvpp2_port_probe(struct platform_device *pdev,
+>  	dev->min_mtu = ETH_MIN_MTU;
+>  	/* 9704 == 9728 - 20 and rounding to 8 */
+>  	dev->max_mtu = MVPP2_BM_JUMBO_PKT_SIZE;
+> -	dev->dev.of_node = port_node;
+> +	device_set_node(&dev->dev, port_fwnode);
+>  
+>  	port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
+>  	port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
+> -- 
+> 2.29.0
+> 
 
 -- 
-Jens Axboe
+With Best Regards,
+Andy Shevchenko
 
 
