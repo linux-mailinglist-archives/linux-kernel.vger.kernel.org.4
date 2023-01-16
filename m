@@ -2,195 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3F666BD02
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F8A66BD07
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjAPLkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
+        id S229901AbjAPLlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjAPLjy (ORCPT
+        with ESMTP id S229481AbjAPLlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:39:54 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F451F5C4;
-        Mon, 16 Jan 2023 03:39:51 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g13so42330198lfv.7;
-        Mon, 16 Jan 2023 03:39:51 -0800 (PST)
+        Mon, 16 Jan 2023 06:41:07 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5053310CB
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:41:05 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id s25so29723989lji.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:41:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SYjq5rjyq/gQNXaOnM+SRcPQChR5QlcqEa1dQSiY8Us=;
-        b=hDSkiBpCahfIMkpD8Mo2oQP1Cr6xA1R/Q/4qhlWOY3RfDtR+veuiHI+WtFZwDMMSyL
-         l8qOrNdkYWYA1BMi5fsnxBditnyHeabXyG6Zuk1EXfI06l5dUtbHkVcSh5m2gmLzqmu1
-         XPqzkZcDvM9uWP/eKMKCZgyKiQkm6TFZjeXsiKkZ6gBUFjgjBkvtkVRNZBApZVLYxLFO
-         7XacVW7De7z/tdDiY82nnHFtv9HFlCtBxwJvjJO+U7Fauy4RbAP0hOY7JyTj9CjGRmcm
-         YKEPtgPyWR0FUqx93lyd1TU/stlpQCNxwhYugUvAZ8Cqp9cFXPyC9qpaKu99KOWl9fDF
-         N2GA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bAzr3WbepHH/Xzw3XY7+Qyd2EYJHyzok2hFrIPSgsi8=;
+        b=W3zFXG1CifPHncC3axUe9wXlorA4Z55HvPebPUfGeJXpgJbQG8XOEJ2h45A4eVBHip
+         0x3+QEX/JBeZ+DrmbqnDk/x3ml+kmr6FtH3LaOmTW33IWrqGzAiglQPnb+Yie7+nKhoN
+         6fEiQyWktJLR+nOFWggMUDK7agb2Xl71a62ZqaR1iCrgB2bS/3FLRHYFzDTIhwNE7z3z
+         YTcO/GJihhOH8sFe7/4I1opzLrgzykmByosB9J5fGr2Zv4JWr88NVN+OulPziFYGFNMj
+         izYkzknOqcKf2bSeEJx7EH5rewbX6ildpqYws+7JXUsPvCVobu0WGNJo6mAOawsWE4nN
+         ArnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SYjq5rjyq/gQNXaOnM+SRcPQChR5QlcqEa1dQSiY8Us=;
-        b=MVJ7aoIhkXbsCR33acr1xhoJU5RN9GJFha9HN21prXqljqD/0zyfKijxdhM7T414W2
-         IdYDE+TlLmifFO7zasy37s99ytBdQQ7J+QAoGFTDlUtPq59Ij4lOqY7XQi6/riRKssN7
-         rBURVfaVRsSum5qy3ewNwteHfb7zBkB4mVEZA7rhrZemQdUkrAlNhuYhDA/oDF0oaNCp
-         NREzjicrY3mNbsVwyBj7No89pHacCqkGbDgaLCsgTojxmjKWUPIL3xebGFnmbEWWLvdJ
-         g+GhzajP8GKqYUDbfGg1xKCwgbZWUxgSsoYH07CYDJf2TqBx7a6VBF+IVd98NSK3epCF
-         mQFg==
-X-Gm-Message-State: AFqh2kr0Kq7wf/Ttx3X5XsJjfmO+uD7/uir57jwqpnW8XzjWvKRGy1b0
-        bluzB/V2P95gWoDkNqyKP2c=
-X-Google-Smtp-Source: AMrXdXuKczK/KmpP4p91NxGEK6yF/iCpCPozNoxjx4vxgN+Iy/0cPBVcfDRSHnkjhs+4j6LvV59Uzw==
-X-Received: by 2002:ac2:43b2:0:b0:4cb:22ab:cdf8 with SMTP id t18-20020ac243b2000000b004cb22abcdf8mr3801504lfl.5.1673869190042;
-        Mon, 16 Jan 2023 03:39:50 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id b6-20020ac25626000000b0048afb8b8e53sm4990334lff.80.2023.01.16.03.39.49
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bAzr3WbepHH/Xzw3XY7+Qyd2EYJHyzok2hFrIPSgsi8=;
+        b=QHceNb3Wu/vAMKyemTAkkGIgjvrlCcrhBpdpkWMPtc3lvEaygr90Day8ZkEG2W7YXa
+         tEJ33D6xI1iGjnQ61V2nVdGR56/fg4DIxL9YGQCULYf+7PG+qSIEMjU11XO6S0flPON2
+         AnkCC7x8YDGyo53XQOdjxDSnvLdcq1eWZ0qwzJJh3YhDum5R4DPbodo9J5qZjz/0+iAf
+         LDNBgFq1ZVkVLI+VTeKjpdeo6gFKJ/oWuMer6wZTBr0Hc4hA7akAVN43AFAzY5NFiyDn
+         M9KY2yLKCiJmK/3RdzDGZlYXhD7NbXYbRpvFAfYY7W9c2bD29mtdMTWgttIZ9AA2MaQe
+         dLBw==
+X-Gm-Message-State: AFqh2kouJhIFLWILyGMvymlOaLJtVx9Ylt9h+S4wdVIbrirO32xkk6Ex
+        IFMdtBwWBI+kGdRu+2eGRtjUOQ==
+X-Google-Smtp-Source: AMrXdXuyo8z+lpPJjrE3F6tFchQ8Fr0hXF7Q1C6orut7naGETw7CiURB4lbO1OBvqDWT2nI+dH35AA==
+X-Received: by 2002:a05:651c:1992:b0:27f:b2cf:85a0 with SMTP id bx18-20020a05651c199200b0027fb2cf85a0mr28139431ljb.43.1673869263688;
+        Mon, 16 Jan 2023 03:41:03 -0800 (PST)
+Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id k10-20020a05651c10aa00b0027fb9e64bd0sm918946ljn.86.2023.01.16.03.41.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 03:39:49 -0800 (PST)
-Date:   Mon, 16 Jan 2023 13:39:48 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        bp@alien8.de, mingo@redhat.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, seanjc@google.com,
-        pbonzini@redhat.com, thomas.lendacky@amd.com, michael.roth@amd.com,
-        David Rientjes <rientjes@google.com>, stable@kernel.org
-Subject: Re: [PATCH v5] x86/sev: Add SEV-SNP guest feature negotiation
- support
-Message-ID: <20230116133948.0000474b@gmail.com>
-In-Reply-To: <4bca96ee-3665-5503-bb88-baae98e700e2@amd.com>
-References: <20230112084139.12615-1-nikunj@amd.com>
-        <20230113135326.00006f06@gmail.com>
-        <4bca96ee-3665-5503-bb88-baae98e700e2@amd.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 16 Jan 2023 03:41:03 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: display/msm: Add SM6375 DSI PHY
+Date:   Mon, 16 Jan 2023 12:40:58 +0100
+Message-Id: <20230116114059.346327-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023 13:53:56 +0530
-"Nikunj A. Dadhania" <nikunj@amd.com> wrote:
+SM6375 has a single 7nm DSI PHY. Document it.
 
-> On 13/01/23 17:23, Zhi Wang wrote:
-> > On Thu, 12 Jan 2023 14:11:39 +0530
-> > Nikunj A Dadhania <nikunj@amd.com> wrote:
-> > 
-> 
-> >> diff --git a/Documentation/x86/amd-memory-encryption.rst
-> >> b/Documentation/x86/amd-memory-encryption.rst index
-> >> a1940ebe7be5..b3adc39d7735 100644 ---
-> >> a/Documentation/x86/amd-memory-encryption.rst +++
-> >> b/Documentation/x86/amd-memory-encryption.rst @@ -95,3 +95,39 @@ by
-> >> supplying mem_encrypt=on on the kernel command line.  However, if BIOS
-> >> does not enable SME, then Linux will not be able to activate memory
-> >> encryption, even if configured to do so by default or the mem_encrypt=on
-> >> command line parameter is specified. +
-> >> +Secure Nested Paging (SNP)
-> >> +==========================
-> >> +
-> >> +SEV-SNP introduces new features (SEV_FEATURES[1:63]) which can be
-> >> enabled +by the hypervisor for security enhancements. Some of these
-> >> features need +guest side implementation to function correctly. The
-> >> below table lists the +expected guest behavior with various possible
-> >> scenarios of guest/hypervisor +SNP feature support.
-> >> +
-> 
-> > "guest needs implementation" seems a little bit confusing. I suppose it 
-> > means the feature is mandatory for the guest. 
-> 
-> That is not correct. None of these features are mandatory for the guest.
-> The hypervisor can enable this feature without the knowledge of guest 
-> kernel support. So there should be a mechanism in the guest to detect this
-> and fail the boot if needed.
-> 
-> > If so, on the second row 
-> > guest can boot without it. Some explanation? 
-> 
-> In the first and second row, HV has not enabled the feature, so the 
-> guest should boot fine irrespective of "Guest needs implementation".
-> 
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Feel free to educate me if I understand correctly or not:
-
-There are two kinds of features in SEV_FEATURES:
-
-1. Features that HV can freely enable/disable and they won't distrub the guest.
-
-HV   | Guest needs impl | Guest has impl    | Result
-Y/N          N            X (not necessary)    Boot
-
-2. Features that a guest has to be aware of and handle when HV enables them.
-
-HV   | Guest needs impl | Guest has impl | Result
-N            Y            X (Dont care)     Boot
-Y            Y                  N           Fail
-Y            Y                  Y           Boot
-
-> >> +|      No         |      No       |      No       |     Boot         |
-> 
-> >> +|      No         |      Yes      |      No       |     Boot         |
-> 
-> 
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +| Feature Enabled | Guest needs   | Guest has     | Guest boot       |
-> >> +| by the HV       | implementation| implementation| behaviour        |
-> >> ++=================+===============+===============+==================+>> +|      No         |      No       |      No       |     Boot         |
-> >> +|                 |               |               |                  |
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +|      No         |      Yes      |      No       |     Boot         |
-> >> +|                 |               |               |                  |
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +|      No         |      Yes      |      Yes      |     Boot         |
-> >> +|                 |               |               |                  |
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +|      Yes        |      No       |      No       | Boot with        |
-> >> +|                 |               |               | feature enabled  |
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +|      Yes        |      Yes      |      No       | Graceful boot    |
-> >> +|                 |               |               | failure          |
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +|      Yes        |      Yes      |      Yes      | Boot with        |
-> >> +|                 |               |               | feature enabled  |
-> >> ++-----------------+---------------+---------------+------------------+
-> >> +
-> >> +More details in AMD64 APM[1] Vol 2: 15.34.10 SEV_STATUS MSR
-> >> +
-> >> +[1] https://www.amd.com/system/files/TechDocs/40332_4.05.pdf
-> > 
-> > Probably update the link here as well.
-> 
-> Sure.
-> 
-> >> diff --git a/arch/x86/include/uapi/asm/svm.h
-> >> b/arch/x86/include/uapi/asm/svm.h index f69c168391aa..a04fe07eb9a8 100644
-> >> --- a/arch/x86/include/uapi/asm/svm.h
-> >> +++ b/arch/x86/include/uapi/asm/svm.h
-> >> @@ -116,6 +116,12 @@
-> >>  #define SVM_VMGEXIT_AP_CREATE			1
-> >>  #define SVM_VMGEXIT_AP_DESTROY			2
-> >>  #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
-> >> +#define SVM_VMGEXIT_TERM_REQUEST		0x8000fffe
-> >> +#define SVM_VMGEXIT_TERM_REASON(reason_set, reason_code)	\
-> >> +	/* SW_EXITINFO1[3:0] */					\
-> >> +	(((((u64)reason_set) &  0xf)) |				\
-> >                                ^
-> > One extra space before 0xf should be removed.
-> 
-> Sure.
-> 
-> Thanks for the review.
-> 
-> Nikunj
-> 
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+index 78ab8c410ccd..9c9184f94c44 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+@@ -18,6 +18,7 @@ properties:
+       - qcom,dsi-phy-7nm
+       - qcom,dsi-phy-7nm-8150
+       - qcom,sc7280-dsi-phy-7nm
++      - qcom,sm6375-dsi-phy-7nm
+       - qcom,sm8350-dsi-phy-5nm
+       - qcom,sm8450-dsi-phy-5nm
+       - qcom,sm8550-dsi-phy-4nm
+-- 
+2.39.0
 
