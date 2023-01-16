@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF01E66B69F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F3E66B6A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjAPEfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 23:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S231864AbjAPEiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 23:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjAPEfi (ORCPT
+        with ESMTP id S231686AbjAPEiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 23:35:38 -0500
+        Sun, 15 Jan 2023 23:38:04 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C945F65BC
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 20:35:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B893F72A9;
+        Sun, 15 Jan 2023 20:38:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6X5H5b4mTEHtRm79YlcNwUJw2vmgwvvxhyKoNWNRjmk=; b=IHzhB2qAPOkPwlxaUbIKJeX+AV
-        QXSYncECDy0NAaJ6A4CrkRL5zdeBBP8vyJu1Bf6q157ve+igyBCIcibGfkOik+hzMckBwA1mVtk9f
-        g674es2LWE9nhBvJ3fGgQurXz9XALqnecx8VgaMGCKntm9cvxRv15DUeAqPLhsvrUi8aS+k5cW3Lt
-        YZ9yUzerZUw5tbXQ7TGb80ENjP4B18cHdQ9KQ19qziHAh4ICj29iFbboRUfRJc3JHObIvBNxtVKFU
-        RyWDQcjC+Bj9ZneCe/nxRVLHNiObF3IAsbKX2lMzZVM7A0mskU4zQQw8ViYZiloFj/COlG3tYeKZU
-        +0gL3GWw==;
+        bh=PDkdlvplykONDhtm6dJQ9N1joXtgLBKkIFPyp5U/kn4=; b=Rh9FRGbOBXc8wtDvk20k7DdbHW
+        zvbTl0mBX2a7wrR+XeZaZwQwOzdDzgFpsqH3ENndlxsNKLtB+IHvkz9tF/p9VUEmHCsNwUtcNtTZB
+        GeByJS4I+sWG7Ut9m0rzx/43/mbInl0Hv60JehkUYQfc5pPzb0Jf85bjHpcqhAVz3ht63rABKVcA+
+        b3OIsGBScxCafRSkOn+ACgfqnNh2jN+44l9ddqsArleNjsD9yt/jCHt1fHdKc+YoHwU5u+qwA/nhD
+        Siqf8BcmzF+/GfP1mcjNO0himzCNRbIyK7fEYevlNjl21x8AU/HLfH0bKh4l9NjLt35yMflXTUaNU
+        hUSqmaUw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHHDX-008QM0-L6; Mon, 16 Jan 2023 04:35:31 +0000
-Date:   Mon, 16 Jan 2023 04:35:31 +0000
+        id 1pHHFx-008QQF-WF; Mon, 16 Jan 2023 04:38:02 +0000
+Date:   Mon, 16 Jan 2023 04:38:01 +0000
 From:   Matthew Wilcox <willy@infradead.org>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        haoxin <xhao@linux.alibaba.com>
-Subject: Re: [PATCH -v2 0/9] migrate_pages(): batch TLB flushing
-Message-ID: <Y8TUE3h/IJySDn11@casper.infradead.org>
-References: <20230110075327.590514-1-ying.huang@intel.com>
- <Y74WsWCFGh2wFGji@monkey>
- <Y782h7t10uRVW0RC@monkey>
- <87a62oy5o9.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y79tTXgEeuzzqFho@monkey>
- <87ilhcrzkr.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y8ChvzGVG5Tm9tQQ@monkey>
- <87bkn3rw8v.fsf@yhuang6-desk2.ccr.corp.intel.com>
+To:     maobibo <maobibo@loongson.cn>
+Cc:     Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+Message-ID: <Y8TUqcSO5VrbYfcM@casper.infradead.org>
+References: <20230107012324.30698-1-zhanghongchen@loongson.cn>
+ <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn>
+ <4b140bd0-9b7f-50b5-9e3b-16d8afe52a50@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87bkn3rw8v.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <4b140bd0-9b7f-50b5-9e3b-16d8afe52a50@loongson.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -62,28 +60,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:42:08AM +0800, Huang, Ying wrote:
-> +++ b/mm/migrate.c
-> @@ -1187,10 +1187,13 @@ static int __migrate_folio_move(struct folio *src, struct folio *dst,
->  	int rc;
->  	int page_was_mapped = 0;
->  	struct anon_vma *anon_vma = NULL;
-> +	bool is_lru = !__PageMovable(&src->page);
->  
->  	__migrate_folio_extract(dst, &page_was_mapped, &anon_vma);
->  
->  	rc = move_to_new_folio(dst, src, mode);
-> +	if (!unlikely(is_lru))
-> +		goto out_unlock_both;
+On Mon, Jan 16, 2023 at 11:16:13AM +0800, maobibo wrote:
+> Hongchen,
+> 
+> I have a glance with this patch, it simply replaces with
+> spinlock_irqsave with mutex lock. There may be performance
+> improvement with two processes competing with pipe, however
+> for N processes, there will be complex context switches
+> and ipi interruptts.
+> 
+> Can you find some cases with more than 2 processes competing
+> pipe, rather than only unixbench?
 
-This reads a little awkwardly.  Could it be:
-
-	if (likely(!is_lru))
-
-... but honestly, I think the polarity here is wrong.  LRU pages tend to
-outnumber !LRU pages, so shouldn't this be:
-
-	if (unlikely(!is_lru)) {
-
-just like it is in migrate_folio_unmap()?
-
+What real applications have pipes with more than 1 writer & 1 reader?
+I'm OK with slowing down the weird cases if the common cases go faster.
