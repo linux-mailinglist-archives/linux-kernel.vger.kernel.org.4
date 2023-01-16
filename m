@@ -2,361 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CA066CEFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427EF66CEF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjAPSjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:39:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S233852AbjAPSjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbjAPSi2 (ORCPT
+        with ESMTP id S234921AbjAPSiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:38:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1065326876
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673893739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DfE/0f7WicUarpkQ6xDKer55vlLFOFPNhSrmueY6UH0=;
-        b=hvnaz0NKBdSTqO/EoePrJlgMNEEShLR+7OWKnLE0TWPsAQDda69vk5Oq594oh871BVHFZb
-        a+/EJJUgx1ZODEFUn7xUgo6acx2n0Xo+GG2OatQtapDOszrJrQ+gxCDKoYubuAzZe7lJjN
-        N/XQTH2C2DU/m5UcNtxNGk7lLrJMmlA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-612-OoRXLrCdM3ageupPUjUz7g-1; Mon, 16 Jan 2023 13:28:58 -0500
-X-MC-Unique: OoRXLrCdM3ageupPUjUz7g-1
-Received: by mail-wr1-f70.google.com with SMTP id o11-20020adf8b8b000000b002be143c4827so535105wra.19
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:28:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DfE/0f7WicUarpkQ6xDKer55vlLFOFPNhSrmueY6UH0=;
-        b=h7qN49eT01Ymy8eMm1DeVteWb2BlK6o+bb4VbuJQwb2BuL4ldOQRFJsPa41pyYoiu1
-         BgXISUiXWpdlsNEhEVLoOPBdIOGyDs1Ub4NrywyZ2ZLY0IR4VzcGFvtsZC8qU8Dw4Err
-         iAqN0YupdJuY3Wh3RGJDaQy4RRHgHMxg9H1dBrG3AvWSPheJowYzxxJmHqPD5Yf1LtW3
-         HS88SHNhlOjsGDhmfG7ffWkZn6iKMTgkKDw2Vu4bqqf/9v3p8YgNGJxrc4TqvlwelNMs
-         Ti9Wrqe2H+l0S94RUwiojIYF0qyGMc0cBTOIV91Pvqn/fKciWZ1//HQmAknovg+EjM/p
-         s8yg==
-X-Gm-Message-State: AFqh2kqSpACsBZ941kr+visIYhJjq1vmdBx3Adl1wp96rqWnmmFVJrQa
-        aKvAHJilmrl7HaMYCvrOnkZwUAxKaeXZ9HiOPvsEdfgnllsI/QkENCUAL94YTQC1M5KN4qjwO9N
-        4TvylT/iSfX1ToICjak3AuJg=
-X-Received: by 2002:a1c:7415:0:b0:3da:fd07:1e3 with SMTP id p21-20020a1c7415000000b003dafd0701e3mr418545wmc.22.1673893736365;
-        Mon, 16 Jan 2023 10:28:56 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvV870LGFYDRPc4DzkE5HF0Vy/AvtCIRmRYLTNYiUIhmJUMPByHsR2pTQhgRTCP0dBKTbiKqg==
-X-Received: by 2002:a1c:7415:0:b0:3da:fd07:1e3 with SMTP id p21-20020a1c7415000000b003dafd0701e3mr418524wmc.22.1673893736156;
-        Mon, 16 Jan 2023 10:28:56 -0800 (PST)
-Received: from [192.168.9.16] (net-2-34-30-183.cust.vodafonedsl.it. [2.34.30.183])
-        by smtp.gmail.com with ESMTPSA id d8-20020a05600c34c800b003c5571c27a1sm41738207wmq.32.2023.01.16.10.28.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 10:28:55 -0800 (PST)
-Message-ID: <28f1f1bf-d490-2630-d41f-1344baa0eea9@redhat.com>
-Date:   Mon, 16 Jan 2023 19:28:54 +0100
+        Mon, 16 Jan 2023 13:38:25 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D6417CCE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:30:41 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30GINtE9013456;
+        Mon, 16 Jan 2023 18:30:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=S1zgXRVM6tNIyqVnYLdkAJzgZfeC+2ueH6udzxSSJew=;
+ b=BiES9JW1fQ9tUoNRBqRh6uDzbgpzJe6FuWmHwxjOIG/hAbQAovrGqwAVbRTqClgzRJ5t
+ +osQGp7v1O0mkCDE2hJ6gZ4kjiz/vndeYvkqSJXFE5CbIT/hiYwQXC/XBbkYAPC3Nkke
+ FmtVbbZ3clJJJs6uh8pt+MDnyGdhSSGmQOUkG5arec9kBip1FustGb021jdeDweYYKye
+ S3mvdrQul/pT+PrAHm2Fr2h3RgbhbJLTBicR9mobi95VrFtFp5YBP/RvZ5zfpPGhmEGt
+ QP+VN3Qjk1P3B/ZtygSA4rChfGYgsw5ZPpLiKz5H3LfSJrfAXt8HvnkyVscJAOahOppv 7w== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3medb8a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 18:30:19 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30GGovZo028388;
+        Mon, 16 Jan 2023 18:30:19 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n4s2r6mgn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 18:30:18 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KBC9Q6X+l0iXMPaIEN+2Q7E2rIHfvNLBWqCJKTcVhXXA09IWdKjonwmZRfoxgotfjBCvZRefYNhM+/XnAcGmdDLHBkEc/X1VqD3bdYody+ZSZaaORiUXMBo1SU4/cX5IGVtQ6TtKNTTgDOsG3TXrhBSCHFdLo6l0KV+PP4mD2eGFt1ER3c04AQMv5xmfudsf1ZJspfa2alWXQGwjlm4ayRNYngV/JLcu1McG5pYGIsnH8mec9RY1S4ulkpf02OTPsU+rwoS8t/TkyH1NdMmdMrfMcGulgaiHOrH5kfxA4r/O11XJm+hWYWsWf02g/KT+4RjqYCkOXIt4L2FBQgKxKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S1zgXRVM6tNIyqVnYLdkAJzgZfeC+2ueH6udzxSSJew=;
+ b=SmQmtGa88QjFyb9XdHd2l4TUD1qiBQxotcF7aN11EkkjOf0C1uDR0FNFODfoDogCYgdaD7Bs8oq5Z+BanLCP5ppiKYtucJ6cY9a2Jaq1ZtKS291FJQ71ZKiZv0ex5QR864n1Q+T+Dg94u5Fw3x7L9MqxkHeNLkoH3CkkA0UWdIdQlQwN4BHIRq4clnNQuZEx0WukC0ZDw8l40cn8RNr2q8Y3kIM8pUvlfqXen2t2YBe5NV8/cgujOntS4qSjxY59gR3JNz2VAwG343hO9+B0Ki45yyL2zwx0kFhCLROColHgn+vykLtxtEnKi74BKsxcinMVHMt6JLQlWMRvbsPNhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S1zgXRVM6tNIyqVnYLdkAJzgZfeC+2ueH6udzxSSJew=;
+ b=lfLmhkNqu1HnjFKwJ+SONZnFcGQTfem9cfmJmaLJ6ACj9ybYFNolO71m2JB6lTsViCooEY57CZ6nn8YoX+zlztmKJm6n7d/pYJAG7xuPcB2Sh4/ULOENZi3NkF38SNsJdr4Iqj8glN1G9Bh4NdKKAMMSpK8KNLvf1rGjTuZrKok=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by PH0PR10MB7028.namprd10.prod.outlook.com (2603:10b6:510:281::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 16 Jan
+ 2023 18:30:12 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::3a1:b634:7903:9d14%8]) with mapi id 15.20.6002.012; Mon, 16 Jan 2023
+ 18:30:11 +0000
+Date:   Mon, 16 Jan 2023 10:30:08 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Esina Ekaterina <eesina@astralinux.ru>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH mm v2] mm: hugetlb: Add checks for NULL for vma returned
+ from find_vma.
+Message-ID: <Y8WXsOaR+pclaUNp@monkey>
+References: <20230116103947.73153-1-eesina@astralinux.ru>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116103947.73153-1-eesina@astralinux.ru>
+X-ClientProxiedBy: MW3PR05CA0009.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::14) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v11 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20230115151447.1353428-1-matthew.gerlach@linux.intel.com>
- <20230115151447.1353428-5-matthew.gerlach@linux.intel.com>
-Content-Language: en-US
-Cc:     andriy.shevchenko@linux.intel.com, bagasdotme@gmail.com,
-        basheer.ahmed.muddebihal@intel.com, corbet@lwn.net,
-        geert+renesas@glider.be, gregkh@linuxfoundation.org,
-        hao.wu@intel.com, ilpo.jarvinen@linux.intel.com,
-        jirislaby@kernel.org, johan@kernel.org, linux-doc@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, lukas@wunner.de, macro@orcam.me.uk,
-        marpagan@redhat.com, mdf@kernel.org,
-        niklas.soderlund+renesas@ragnatech.se, russell.h.weight@intel.com,
-        tianfei.zhang@intel.com, trix@redhat.com, yilun.xu@intel.com
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <20230115151447.1353428-5-matthew.gerlach@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB7028:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62fd6bcb-2a06-44b7-26ab-08daf7efb3f8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W6Jubeh2dXI7bgdyYEYenyzHX7xeCdlkwBLBp1CZwiTD7B0o500B/MKye9MR57oLv1USri+4GxtivXa/+Oe4vySOuO3qjsMJry0jMxrqnmQPcdnp05mCZoAm/65tvMxlEwZTCJcFq/xKNzkLh/+6jYZc4PPYLr7eVf3yhFe8NqkTKRcCBi1Un8g4cQqHQ9fshEaYpvyFvLeCk/9ZWe1pZ+lxyEla9oQDViIBipugRCFOpqLtGjW/EcJ/A3HODQM3VL8z6Ly3U4DOe6Mossevx45dFRaRqoRiE9XOjWMMQnNNWdZcmCW98SNH0ypluf35yp3uQWafbmkA5qLSU1sdkQWGfQ31j48Zvsv0sWC+GRAom9dxJEoP9s3Mqg8K5ST05aERt/VnfQd65stIex4GaGtgsqrofYZcTN6BCkiBQ+tNjfh78ZHQ3eJJQN+83CorikTH9fg/qAqETkqERX9WCY5wwnCKQ9YiRBiTjS1B0JgEr66Rd/y0NqN+gKaWqBdfgi7mloxMfLa9UAL1mOxTvM4UOD1e0nqI7K0MHUt6fmaiMkTdbT+K5uN6laNQDdWRpVr/HF4Luo483CMcP/A6F31yrRp0WdlNENCOHFaKjFwII/C2bljoVn3soa0nOL/UlSNqNFSNCXYUQIGKgClUI1dNCPFMBoyQeMSuedHjzW2x5B9bHA6ht4/RJ07TSfwV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(39860400002)(346002)(376002)(366004)(396003)(451199015)(33716001)(6506007)(26005)(6512007)(186003)(9686003)(478600001)(6486002)(44832011)(4744005)(2906002)(316002)(38100700002)(6666004)(83380400001)(4326008)(66476007)(66946007)(8676002)(66556008)(41300700001)(53546011)(6916009)(5660300002)(8936002)(86362001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SoscocU/FKGr197tYrZVtgCPWPmv4h9XS45/jf1y5/bTXm1ATKItPfFjQHD8?=
+ =?us-ascii?Q?bxxXR4G9lav+m1WNa5o3NU3dQ4oxvW41L5zhJY1W+2baWNVnn4IHI83mOYO5?=
+ =?us-ascii?Q?e7Loh6tmnXpqVfwMcsjm//f4xFD3iuW3eDn9W0SitaZeb7QbphTEzGjIKeH0?=
+ =?us-ascii?Q?99OV2tGpuL4N+AqYTipKLU0tTb7RqIDDkjm0JbewZToYWsxH1L/YIDreRBLM?=
+ =?us-ascii?Q?s27qfAXwjpRG6jMK0S0kZUV/pZPkz27jqAvDiIRIA0h7lrJS7fBv92g6KUPH?=
+ =?us-ascii?Q?3OFM4Kcr2yQjXiWYnk894M3A8ku8OTm5tFh/+gp9iyZfdw8Cwulqfjedgzmk?=
+ =?us-ascii?Q?kRVIfwgh7aZuMj0QfoUOOzgX0V33Mmj8pmT9jlIEqytRRxOZmyymnp78aNlP?=
+ =?us-ascii?Q?2WQfVrLBjIvVnTelP0dcbtxVeWmeGoYUsSUx2FGoSC4lTXlgg6ePpvAmw5xN?=
+ =?us-ascii?Q?yaBaQukHGHFJOZaiteMn/+7uUCVg05j9x0jb2j0LbwxAcA+jsV2efRYW6qaL?=
+ =?us-ascii?Q?l6s3Rxk4U2MUcoq1B65IvXARa8gs8FSxx92ImUpTujTPVbNMHTzS7W/Svzze?=
+ =?us-ascii?Q?4XrSB+62/YA+juZimMWqvtK9G2zzoQ/sh28vv7poZ9ZOEbYH2YUglz+BGdSV?=
+ =?us-ascii?Q?OS3GnEUEaUrXhj0bYynCmNhcBW1TT/oLakqBS8ai0EA7Df+uJESeZqDyJ8La?=
+ =?us-ascii?Q?Ty8KiZhnZfyceK/q9WsWvyny+Xl2NVN8rLIl8On1khzkkYgv6iXW+bo05scj?=
+ =?us-ascii?Q?KlrTBzrRwOOltfZI+fEQBovxw6CUCtUYfiqlwSpprectITAeqTFd62avkuOU?=
+ =?us-ascii?Q?FcTO5UoCugq9aSurQTVeckLCMPFfDQpcMfM/2cItRvyYRWMGf5OS2c7RvNiJ?=
+ =?us-ascii?Q?SinTdAR3Hr+4peAg/raHFyIaFUyWV2ebjVnU+vRdfVaI7bGInwzkojC3Zi1p?=
+ =?us-ascii?Q?5XEXcga5+VX/QRz7SCeJU2XPbbGdgpCkuO/3fIPYQDPqsKyhPMj5po04oPbl?=
+ =?us-ascii?Q?EvXhHHhuVYQn5RApSXIIYCMFFFsfigvz7Q4jb5LhTQUB0MwqYBkhNUGlicIg?=
+ =?us-ascii?Q?Zy+8HaBuNdV7i/ixRLaPT5ydlWL8usM6N3FBnTtMsNwM61XyF9fuYW9mofCK?=
+ =?us-ascii?Q?oEXBy7789zYLM/MFeqGNVxNzHCRS6xKin+XqdTqRSiOmlLBye4qBdfetyeyW?=
+ =?us-ascii?Q?WQMk8p8NFaemnWf0ryhS5uRi2IDt9/hVC331/7RxUD54+H/ldMRwVnJCSc4E?=
+ =?us-ascii?Q?sxpYaDIwQv9HkgPjx9PJ5I++MTox05CSSnB6+H5waQJfzAY7WpCtOr3O+6lG?=
+ =?us-ascii?Q?efsO/phbVm+SPvSNkNax+J0eLKmQUsViXW4MkV3olGUGdA4IlhQS+A2GgeGt?=
+ =?us-ascii?Q?vaX1zS+h2UMfUhYEUpLeYIFO9ciKC03ytp6aZcF5wWrZQfL17trEzfCrLL/d?=
+ =?us-ascii?Q?NqamD/JcBs8+fTZhot4r0fovxF0hH6T6ic0UzdrmNI8mxbAJOxFL8M5gcGPP?=
+ =?us-ascii?Q?YLkrRSMBFIEnFoNEUbN6zsijNUBZwXQZl+MPC4kgufEafPD+5BpCBKg1/h9x?=
+ =?us-ascii?Q?HKH9orlIrfb4wGTFtJcYDBqWIagHZbXdaChJlR2IxH432//ZOadDlOHhjoOt?=
+ =?us-ascii?Q?zw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: Qx61PkzfI2tqa5etq/cicM5/sDRrSuzz+NH36PAbjwpTxBs6WF+zaS4i2kkrVVGI7cBs99oOsvbbNFGUe+dlj797l0hsSobLmTSqIZ2tE4Qb9suUx7reGvOUfyJa3Cipj5jTYyWM95sAZsujfXVs67tRleXZTmJTtWINB/qvEU0Uv13mpx7UDwRa6fqLxRK5W337bp1rHvFE3rDwf/oqo/mf+vuuMJsTF078+Jl6jU1TxAONJkvzqv1EL0PcrDUXY7eA/3mriqMzvd7eYBXwrT+johCpkjLwnIP4RXde9tMs2t3oY3Nh58B+EqNIMO6z7nV+p+FDnkwrsjvcbRDjzxgIIsp1MSCKXjpakmeygfcHJSAm9Rc3XnVkUZ0eSR+rtgwCDirXRVKoJTlgiAuj2CRfkZ8LgZPhGt9WVAwTXSD/tWV+9lwfiyHE/6MvX4dOQ+Ddw5sjuTQsquRrPaEvs+Zs3f2c49ff+PsRoQbVJDDup55Ao9deT2kak+d58j/cEFLPT1XszaeY+yeRYv3rWoCx7YcpHn6MiG/x4+30hDEB4liyhiaeLAYYDoqjk8TLkF/YtepgMrhtU4q+STXcgLLywou09Azp3BZ0UKhJSrdUENfN+O+tQYmjUBzRm5zYEUsxzmBD8ftS8fbpI32YZ8nd3SrIVLSzOcHhkfjpE5M9dxap5Au9hnn3ZGgbjIMSDLy5M/20/LsYHGE4pttHbq54PffuPlZtrbE9Zu0Jj3AA4GkngBbqHHtjayknWkEVl62UphBW9pF63jtBaghqsyZaaGrps3qhWFwL2XtC+Bg/NnPpof2+ujnnYHQ/sW0u97MDZ6muPtPcRMubQ2nmXLgNSE1/TNmSQKyt6ciPeUlIkL6aOpf5waCBRQRwA8vvUlwQM8AEkPniw/VSRoScexJLzRub2gOPzUDwl0n1y88=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62fd6bcb-2a06-44b7-26ab-08daf7efb3f8
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 18:30:11.8880
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: scc8hUGBMSlqr0AXk2pvps1KOcPzIjoddqIPAyoPdgxn9RYfopJq/nkN3qb0RiwNh43qEMJZGUBn0BOHrLPKzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB7028
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-16_15,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 mlxlogscore=633
+ suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301160137
+X-Proofpoint-ORIG-GUID: PB17w4UpP0An-PTYrk2zqbmEL2g7-dno
+X-Proofpoint-GUID: PB17w4UpP0An-PTYrk2zqbmEL2g7-dno
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2023-01-15 16:14, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 01/16/23 13:39, Esina Ekaterina wrote:
+> find_vma may return NULL, that's why its return value
+>  is usually checked for NULL. vma should be checked before dereferencing 
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
+> Found by Astra Linux on behalf of Linux Verification Center
+> (linuxtesting.org) with SVACE.
 > 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Marco Pagani <marpagan@redhat.com>
-
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Esina Ekaterina <eesina@astralinux.ru>
 > ---
-> v11: sizeof(u64) -> sizeof(*pval)
->      16650 -> 16550
-> 
-> v10: track change to dfh_find_param()
-> 
-> v9: add Rb Andy Shevchenko
->     move dfh_get_u64_param_vals to static version of dfh_get_u64_param_val
-> 
-> v8: use dfh_get_u64_param_vals()
-> 
-> v7: no change
-> 
-> v6: move driver specific parameter definitions to limit scope
-> 
-> v5: removed unneeded blank line
->     removed unneeded includes
->     included device.h and types.h
->     removed unneeded local variable
->     remove calls to dev_dbg
->     memset -> { }
->     remove space after period
->     explicitly include used headers
->     remove redundant Inc from Copyright
->     fix format specifier
-> 
-> v4: use dev_err_probe() everywhere that is appropriate
->     clean up noise
->     change error messages to use the word, unsupported
->     tried again to sort Makefile and KConfig better
->     reorder probe function for easier error handling
->     use new dfh_find_param API
-> 
-> v3: use passed in location of registers
->     use cleaned up functions for parsing parameters
-> 
-> v2: clean up error messages
->     alphabetize header files
->     fix 'missing prototype' error by making function static
->     tried to sort Makefile and Kconfig better
-> ---
->  drivers/tty/serial/8250/8250_dfl.c | 167 +++++++++++++++++++++++++++++
->  drivers/tty/serial/8250/Kconfig    |  12 +++
->  drivers/tty/serial/8250/Makefile   |   1 +
->  3 files changed, 180 insertions(+)
->  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-> 
-> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-> new file mode 100644
-> index 000000000000..6c5ff019df4b
-> --- /dev/null
-> +++ b/drivers/tty/serial/8250/8250_dfl.c
-> @@ -0,0 +1,167 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for FPGA UART
-> + *
-> + * Copyright (C) 2022 Intel Corporation.
-> + *
-> + * Authors:
-> + *   Ananda Ravuri <ananda.ravuri@intel.com>
-> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/device.h>
-> +#include <linux/dfl.h>
-> +#include <linux/errno.h>
-> +#include <linux/ioport.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/types.h>
-> +
-> +#include <linux/serial.h>
-> +#include <linux/serial_8250.h>
-> +
-> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
-> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
-> +
-> +#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
-> +#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
-> +#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
-> +
-> +struct dfl_uart {
-> +	int line;
-> +};
-> +
-> +static int dfh_get_u64_param_val(struct dfl_device *dfl_dev, int param_id, u64 *pval)
-> +{
-> +	size_t psize;
-> +	u64 *p;
-> +
-> +	p = dfh_find_param(dfl_dev, param_id, &psize);
-> +	if (IS_ERR(p))
-> +		return PTR_ERR(p);
-> +
-> +	if (psize != sizeof(*pval))
-> +		return -EINVAL;
-> +
-> +	*pval = *p;
-> +
-> +	return 0;
-> +}
-> +
-> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
-> +{
-> +	struct device *dev = &dfl_dev->dev;
-> +	u64 fifo_len, clk_freq, reg_layout;
-> +	u32 reg_width;
-> +	int ret;
-> +
-> +	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ, &clk_freq);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "missing CLK_FRQ param\n");
-> +
-> +	uart->port.uartclk = clk_freq;
-> +
-> +	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN, &fifo_len);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "missing FIFO_LEN param\n");
-> +
-> +	switch (fifo_len) {
-> +	case 32:
-> +		uart->port.type = PORT_ALTR_16550_F32;
-> +		break;
-> +
-> +	case 64:
-> +		uart->port.type = PORT_ALTR_16550_F64;
-> +		break;
-> +
-> +	case 128:
-> +		uart->port.type = PORT_ALTR_16550_F128;
-> +		break;
-> +
-> +	default:
-> +		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
-> +	}
-> +
-> +	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT, &reg_layout);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "missing REG_LAYOUT param\n");
-> +
-> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, reg_layout);
-> +	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, reg_layout);
-> +	switch (reg_width) {
-> +	case 4:
-> +		uart->port.iotype = UPIO_MEM32;
-> +		break;
-> +
-> +	case 2:
-> +		uart->port.iotype = UPIO_MEM16;
-> +		break;
-> +
-> +	default:
-> +		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
-> +
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
-> +{
-> +	struct device *dev = &dfl_dev->dev;
-> +	struct uart_8250_port uart = { };
-> +	struct dfl_uart *dfluart;
-> +	int ret;
-> +
-> +	uart.port.flags = UPF_IOREMAP;
-> +	uart.port.mapbase = dfl_dev->mmio_res.start;
-> +	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
-> +
-> +	ret = dfl_uart_get_params(dfl_dev, &uart);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-> +
-> +	if (dfl_dev->num_irqs == 1)
-> +		uart.port.irq = dfl_dev->irqs[0];
-> +
-> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-> +	if (!dfluart)
-> +		return -ENOMEM;
-> +
-> +	dfluart->line = serial8250_register_8250_port(&uart);
-> +	if (dfluart->line < 0)
-> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-> +
-> +	dev_set_drvdata(dev, dfluart);
-> +
-> +	return 0;
-> +}
-> +
-> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
-> +{
-> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-> +
-> +	serial8250_unregister_port(dfluart->line);
-> +}
-> +
-> +#define FME_FEATURE_ID_UART 0x24
-> +
-> +static const struct dfl_device_id dfl_uart_ids[] = {
-> +	{ FME_ID, FME_FEATURE_ID_UART },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-> +
-> +static struct dfl_driver dfl_uart_driver = {
-> +	.drv = {
-> +		.name = "dfl-uart",
-> +	},
-> +	.id_table = dfl_uart_ids,
-> +	.probe = dfl_uart_probe,
-> +	.remove = dfl_uart_remove,
-> +};
-> +module_dfl_driver(dfl_uart_driver);
-> +
-> +MODULE_DESCRIPTION("DFL Intel UART driver");
-> +MODULE_AUTHOR("Intel Corporation");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-> index b0f62345bc84..020ef532940d 100644
-> --- a/drivers/tty/serial/8250/Kconfig
-> +++ b/drivers/tty/serial/8250/Kconfig
-> @@ -370,6 +370,18 @@ config SERIAL_8250_FSL
->  	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
->  	  enables support for ACPI enumeration.
->  
-> +config SERIAL_8250_DFL
-> +	tristate "DFL bus driver for Altera 16550 UART"
-> +	depends on SERIAL_8250 && FPGA_DFL
-> +	help
-> +	  This option enables support for a Device Feature List (DFL) bus
-> +	  driver for the Altera 16550 UART. One or more Altera 16550 UARTs
-> +	  can be instantiated in a FPGA and then be discovered during
-> +	  enumeration of the DFL bus.
-> +
-> +	  To compile this driver as a module, chose M here: the
-> +	  module will be called 8250_dfl.
-> +
->  config SERIAL_8250_DW
->  	tristate "Support for Synopsys DesignWare 8250 quirks"
->  	depends on SERIAL_8250
-> diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-> index 1615bfdde2a0..4e1a32812683 100644
-> --- a/drivers/tty/serial/8250/Makefile
-> +++ b/drivers/tty/serial/8250/Makefile
-> @@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
->  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
->  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
->  obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
-> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
->  obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
->  obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
->  obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
+>  mm/hugetlb.c | 32 ++++++++++++++++++--------------
+>  1 file changed, 18 insertions(+), 14 deletions(-)
 
+This is not the latest version of the code.  What version are you
+targeting?
+
+I would claim that find_vma() can not return NULL in previous versions
+of the code which this patch seems to target.  Why?  This routine is
+called with mmap sema held and we know addr is part of the vma. 
+-- 
+Mike Kravetz
