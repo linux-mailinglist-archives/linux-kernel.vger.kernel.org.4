@@ -2,203 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C516966CE13
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1376066CE1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbjAPRxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S231564AbjAPR6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbjAPRwq (ORCPT
+        with ESMTP id S232172AbjAPR5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:52:46 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3453B667
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:35:08 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bf43so43673890lfb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/pYK289ULrgsf/Jk8COetz13qlDoBjNKsMyxX7loUDw=;
-        b=pKr/SoBpM/X64xXxDigtMbtty8+VxmqTToE5Vgfyx5AgTZCZq/O/SbGt0/wX7GVCqH
-         8Y352t1YrUJsUC0U0+XZJAKlfgZ9tIzBMz22FPxzGHFBmoZDXFHDjmZSgfLN4TyNUx2r
-         cXHZT/0j+ulQkHENMfQFdztFPN+A4US4owf0UHcYCJsGcJySYx9metSlSm7XqrrBHdt+
-         u6ICsAAbnmehCYG+qrRRkflgH1+EvK52yMd3UliLXV6qsGYsOV1GmJdkPHsl4Llphhs3
-         rerp1uohcvhhRwacpNEAMJnFT3aYJqyvlm9IqrgjtIu7vyd0gmBoPRo9jXPJtFr/hesM
-         yPdQ==
+        Mon, 16 Jan 2023 12:57:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4305C0DF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673890607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7aEA9Zb0uDCPpMjGds8ZZV+xITOhP/XEPwhcG9Jlbk=;
+        b=cgiPpwLh4y4qlQIn8LRnxjdmmIWTdtmUyrOJSXxCK/NfAf9gy1sy8vG/yI3QyaDtl6jV9W
+        pJh6baEpv5NaptVsLJPLo/6iFqHSzEFxFmzYU+iKb243VecKN7LJ6xFda2QPLTVLWsO7Ke
+        012DrN9e5+CBDL9NYnsJUj1u+pJeMBI=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-355-DXZO5TfwOK2Q0A52n6Z6nA-1; Mon, 16 Jan 2023 12:36:46 -0500
+X-MC-Unique: DXZO5TfwOK2Q0A52n6Z6nA-1
+Received: by mail-ej1-f70.google.com with SMTP id qa18-20020a170907869200b007df87611618so19852986ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:36:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/pYK289ULrgsf/Jk8COetz13qlDoBjNKsMyxX7loUDw=;
-        b=c6O47BpvTi3/uisCTuxzbpPSHjFczQC3MMEPB2FABvy6VnfKimh/s0SJ2n0UqDcu49
-         p0NyAZ49NUngfR/7iuDWc7o364l1/JvJpS+5iyVZl0wOrdhHtn0FqxIAdWjMZ59ugk4f
-         rBfOSk3ge/rqzRdbAGA3nGEum2EwIHDzYyr6vhWDTL0mVYLPXar+9Xqk4czQ2NLP0pPY
-         mor20Vn/jO+DzBBRRtViSmCIN0WIlXlJdPjSfbaUnZg9PYKUcuumWIY1i9QR7jV7zrz5
-         Mgzgu/ftG31GsxBgwB+VP03sBL6Rjvs/RZVF3bP8UulrSuEK4fwqXVA3CMWtKHf92Iq2
-         uFWw==
-X-Gm-Message-State: AFqh2kpmHEgUAcoJkSx1/3Bph9vvoFo0Ackiad+TqZq3rxtPmhF8NFlP
-        Xwfl3XoBTEu6Qx2m1yzfD0Hr4Gv3+k3cdLtP
-X-Google-Smtp-Source: AMrXdXsKJwqskOP/by0HTMPg+FUXa81A0yDzLkE3gsr+Ks87ZDrAVUjBgQY8fXG4kCztFu/RTIIr8w==
-X-Received: by 2002:a19:f514:0:b0:4b5:61e8:8934 with SMTP id j20-20020a19f514000000b004b561e88934mr23683566lfb.64.1673890507730;
-        Mon, 16 Jan 2023 09:35:07 -0800 (PST)
-Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id k20-20020a2e8894000000b0028b7f51414fsm707333lji.80.2023.01.16.09.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 09:35:07 -0800 (PST)
-From:   Marcin Wojtas <mw@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     rafael@kernel.org, andriy.shevchenko@linux.intel.com,
-        sean.wang@mediatek.com, Landen.Chao@mediatek.com,
-        linus.walleij@linaro.org, andrew@lunn.ch, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, mw@semihalf.com,
-        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
-Subject: [net-next: PATCH v4 8/8] net: dsa: mv88e6xxx: switch to device_/fwnode_ APIs
-Date:   Mon, 16 Jan 2023 18:34:20 +0100
-Message-Id: <20230116173420.1278704-9-mw@semihalf.com>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20230116173420.1278704-1-mw@semihalf.com>
-References: <20230116173420.1278704-1-mw@semihalf.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e7aEA9Zb0uDCPpMjGds8ZZV+xITOhP/XEPwhcG9Jlbk=;
+        b=F2juD9JQ5h0IdPvehbwz//XqkylOVId4D1vw3niYrmvRfsEfiEg9Nt3T6ko2p2bt54
+         hd/5o2OiqueNvP6UO5OPUUQGY5BcYkxzdsXiSBCru79bdJJaAOn8U+OCcuOxkCWhKaJz
+         +pfX6iGV5oJ6wtI8DjNCrbvX4X/HX56zRt3cS1pr7Jepqycttzu59GJUTIqUQ/d645EM
+         dWXhKsDspZYxWQdridU39zWBdtZm49RWWPskOcIxhod8HuVV5ra2ZSo0redN60aCguPG
+         SxqY1MWnLsA7DQmkAcokZsCV1oVnMPcb/9yMiumdzNcVXBak4jnEn9UJ7CVGDvAgpwvc
+         K6Gw==
+X-Gm-Message-State: AFqh2kqgmFu/YFiKxnMY5LRXu/l2dJWq2rxoYjX1TOIs2eL5t0htSlnb
+        5WsYFR2aJQ2eyRGDSYcNIKaSi221AwZwSMt7Gr5wVO2DpiL34hPRpy6zslXvEHSYw6qAP0so3I2
+        Zo0g7lvrCYXuXmtf4yEFNeQg7
+X-Received: by 2002:a17:906:cd0b:b0:84d:463f:3787 with SMTP id oz11-20020a170906cd0b00b0084d463f3787mr26828243ejb.5.1673890605559;
+        Mon, 16 Jan 2023 09:36:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvwkGf/AMfNoy3aPwRb/Z8qBXr1VRjGO1z90RbOn2KENCWUu1gPXT7V040gp3/OtMwrPzsLHg==
+X-Received: by 2002:a17:906:cd0b:b0:84d:463f:3787 with SMTP id oz11-20020a170906cd0b00b0084d463f3787mr26828236ejb.5.1673890605384;
+        Mon, 16 Jan 2023 09:36:45 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id e6-20020a170906314600b00781be3e7badsm12131965eje.53.2023.01.16.09.36.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 09:36:44 -0800 (PST)
+Message-ID: <456f6c15-3043-6da2-349d-c0c3880c1a55@redhat.com>
+Date:   Mon, 16 Jan 2023 18:36:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/3] rcu: Equip sleepable RCU with lockdep dependency
+ graph checks
+Content-Language: en-US
+To:     paulmck@kernel.org, Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        David Woodhouse <dwmw2@infradead.org>, seanjc@google.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Luczaj <mhal@rbox.co>
+References: <20230113065955.815667-1-boqun.feng@gmail.com>
+ <20230113065955.815667-3-boqun.feng@gmail.com>
+ <20230113112949.GX4028633@paulmck-ThinkPad-P17-Gen-1>
+ <Y8GdYgSBtyKwf/qj@boqun-archlinux>
+ <20230113191120.GB4028633@paulmck-ThinkPad-P17-Gen-1>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230113191120.GB4028633@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to support both DT and ACPI in future, modify the
-mv88e6xx driver  code to use device_/fwnode_ equivalent routines.
-No functional change is introduced by this patch.
+On 1/13/23 20:11, Paul E. McKenney wrote:
+> On Fri, Jan 13, 2023 at 10:05:22AM -0800, Boqun Feng wrote:
+>> On Fri, Jan 13, 2023 at 03:29:49AM -0800, Paul E. McKenney wrote:
+>> I prefer that the first two patches go through your tree, because it
+>> reduces the synchronization among locking, rcu and KVM trees to the
+>> synchronization betwen rcu and KVM trees.
+> 
+> Very well, I have queued and pushed these with the usual wordsmithing,
+> thank you!
 
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c | 41 +++++++++-----------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+I'm worried about this case:
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 6731597bded0..1f1dd3dd4012 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3932,10 +3932,11 @@ static int mv88e6xxx_mdio_write_c45(struct mii_bus *bus, int phy, int devad,
- }
- 
- static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
--				   struct device_node *np,
-+				   struct fwnode_handle *fwnode,
- 				   bool external)
- {
- 	static int index;
-+	struct device_node *np = to_of_node(fwnode);
- 	struct mv88e6xxx_mdio_bus *mdio_bus;
- 	struct mii_bus *bus;
- 	int err;
-@@ -4016,18 +4017,18 @@ static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
- }
- 
- static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
--				    struct device_node *np)
-+				    struct fwnode_handle *fwnode)
- {
--	struct device_node *child;
-+	struct fwnode_handle *child;
- 	int err;
- 
- 	/* Always register one mdio bus for the internal/default mdio
- 	 * bus. This maybe represented in the device tree, but is
- 	 * optional.
- 	 */
--	child = of_get_child_by_name(np, "mdio");
-+	child = fwnode_get_named_child_node(fwnode, "mdio");
- 	err = mv88e6xxx_mdio_register(chip, child, false);
--	of_node_put(child);
-+	fwnode_handle_put(child);
- 	if (err)
- 		return err;
- 
-@@ -4035,13 +4036,13 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
- 	 * which say they are compatible with the external mdio
- 	 * bus.
- 	 */
--	for_each_available_child_of_node(np, child) {
--		if (of_device_is_compatible(
--			    child, "marvell,mv88e6xxx-mdio-external")) {
-+	fwnode_for_each_available_child_node(fwnode, child) {
-+		if (fwnode_property_match_string(child, "compatible",
-+						 "marvell,mv88e6xxx-mdio-external") == 0) {
- 			err = mv88e6xxx_mdio_register(chip, child, true);
- 			if (err) {
- 				mv88e6xxx_mdios_unregister(chip);
--				of_node_put(child);
-+				fwnode_handle_put(child);
- 				return err;
- 			}
- 		}
-@@ -7096,18 +7097,14 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	struct dsa_mv88e6xxx_pdata *pdata = mdiodev->dev.platform_data;
- 	const struct mv88e6xxx_info *compat_info = NULL;
- 	struct device *dev = &mdiodev->dev;
--	struct device_node *np = dev->of_node;
-+	struct fwnode_handle *fwnode = dev_fwnode(dev);
- 	struct mv88e6xxx_chip *chip;
- 	int port;
- 	int err;
- 
--	if (!np && !pdata)
--		return -EINVAL;
--
--	if (np)
--		compat_info = of_device_get_match_data(dev);
-+	compat_info = device_get_match_data(dev);
- 
--	if (pdata) {
-+	if (!compat_info && pdata) {
- 		compat_info = pdata_device_get_match_data(dev);
- 
- 		if (!pdata->netdev)
-@@ -7164,9 +7161,9 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	mv88e6xxx_phy_init(chip);
- 
- 	if (chip->info->ops->get_eeprom) {
--		if (np)
--			of_property_read_u32(np, "eeprom-length",
--					     &chip->eeprom_len);
-+		if (fwnode)
-+			device_property_read_u32(dev, "eeprom-length",
-+						 &chip->eeprom_len);
- 		else
- 			chip->eeprom_len = pdata->eeprom_len;
- 	}
-@@ -7177,8 +7174,8 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	if (err)
- 		goto out;
- 
--	if (np) {
--		chip->irq = of_irq_get(np, 0);
-+	if (fwnode) {
-+		chip->irq = fwnode_irq_get(fwnode, 0);
- 		if (chip->irq == -EPROBE_DEFER) {
- 			err = chip->irq;
- 			goto out;
-@@ -7216,7 +7213,7 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
- 	if (err)
- 		goto out_g1_atu_prob_irq;
- 
--	err = mv88e6xxx_mdios_register(chip, np);
-+	err = mv88e6xxx_mdios_register(chip, fwnode);
- 	if (err)
- 		goto out_g1_vtu_prob_irq;
- 
--- 
-2.29.0
+	CPU 0				CPU 1
+	--------------------		------------------
+	lock A				srcu lock B
+	srcu lock B			lock A
+	srcu unlock B			unlock A
+	unlock A			srcu unlock B
+
+While a bit unclean, there is nothing that downright forbids this; as 
+long as synchronize_srcu does not happen inside lock A, no deadlock can 
+occur.
+
+However, if srcu is replaced with an rwlock then lockdep should and does 
+report a deadlock.  Boqun, do you get a false positive or do your 
+patches correctly suppress this?
+
+Paolo
 
