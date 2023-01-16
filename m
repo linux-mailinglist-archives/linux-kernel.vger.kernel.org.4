@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC6C66CDE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6B066CDEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235027AbjAPRsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S233517AbjAPRuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjAPRrs (ORCPT
+        with ESMTP id S235074AbjAPRuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:47:48 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA89B6A5C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:27:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1673890063; bh=ZyzsRjTmVNU34HpfEFF3F1fi30gjsrT8NlXEoNiFzG4=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=PskIGupYHsGySGydCWwj1g6yvoe89GrVo1J6lUcbEdAlmlpXsiwKynoXxu0xygDCN
-         7ZDx0R5BUcYsPFq7324OzfOYBwUgo8G9w6lTeDrLzztQrao3EbplYErmkaCX0gDkMS
-         DBiaJOY9aoHmlb4Bq+m91fkk5TGAlbx9iblybMGk=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 16 Jan 2023 18:27:43 +0100 (CET)
-X-EA-Auth: IrlmOA9GkcWFjpgqVsRSCrnsr/BoN4diJ2pZJNgdxcByJCYAEs5/BOMSTUZ1YPxEeVEJcrhzwYjn3i/AIFr9btK1svqTmKBB
-Date:   Mon, 16 Jan 2023 22:57:33 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: nvkm_devinit_func.disable() to be made void
-Message-ID: <Y8WJBc/tOyGDxe8b@ubun2204.myguest.virtualbox.org>
-References: <Y8K+61ZOag5fXu8M@ubun2204.myguest.virtualbox.org>
+        Mon, 16 Jan 2023 12:50:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E19E3D080
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:32:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0BB4B810A1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 17:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC23C433D2;
+        Mon, 16 Jan 2023 17:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673890321;
+        bh=2GR85MBuqs9vE7Za6dHRX2H1EOHPAUnhojuYunISfnI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=B1T16ntPN+ehulGd9XjbKZ5eozUsdnpcrrfEM8xQQV+2T5M5tGfjj4O9XisV8ehJ9
+         yA7/04+JZc6Ln4Z4DhCGfQ6xm934Y92s4N+qFJCbvaBjqEBvpbbrWr0Dle05pL3BHv
+         sEcrPeGxHx4tAnf7rjnv4wvDr+2pZetg9OZAFrhI4svhpgCROzotybTraN48gD72UO
+         lUKP9eCRej5/5XDZF17GTPIG4pSqpcRHN48iRmYKE3c8QZeP/8EjM5kxSV0krvSCJL
+         oYQTVMdpzXSBq/7OgMFwScaFXqbWiTQt/Jj0i+IMOWkPghhicYaWtvgPh3DSqi+qSD
+         c0DsGbHuMlenQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Huaisheng Ye <huaisheng.ye@intel.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/core: skip apply schemes if empty
+Date:   Mon, 16 Jan 2023 17:31:59 +0000
+Message-Id: <20230116173159.23307-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230116062347.1148553-1-huaisheng.ye@intel.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8K+61ZOag5fXu8M@ubun2204.myguest.virtualbox.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 08:10:43PM +0530, Deepak R Varma wrote:
-> Hello,
-> It appears that the callback function disable() of struct nvkm_devinit_func does
-> not need return U64 and can be transformed to be a void. This will impact a few
-> drivers that have currently implementation of this callback since those always
-> return 0ULL. So,
-> 
-> Change from
-> 	  8 struct nvkm_devinit_func {
-> 		... ...
-> 	15          u64  (*disable)(struct nvkm_devinit *);
-> 	  1 };
-> 
-> Change to
-> 	  8 struct nvkm_devinit_func {
-> 		... ...
-> 	15          void  (*disable)(struct nvkm_devinit *);
-> 	  1 };
-> 
-> 
-> I am unsure if this change will have any UAPI impact. Hence wanted to confirm
-> with you if you think this transformation is useful. If yes, I will be happy to
-> submit a patch for your consideration.
+Hi Huaisheng,
 
-Hello,
-May I request a response on my query? Shall I proceed with submitting a patch
-proposal for consideration?
+On Mon, 16 Jan 2023 14:23:47 +0800 Huaisheng Ye <huaisheng.ye@intel.com> wrote:
 
-Thank you,
-./drv
+> Sometimes there is no scheme in damon's context, for example
+> just use damo record to monitor workload's data access pattern.
+> 
+> If current damon context doesn't have any scheme in the list,
+> kdamond has no need to iterate over list of all targets and regions
+> but do nothing.
+> 
+> So, skip apply schemes when ctx->schemes is empty.
+
+Good finding, thanks!
 
 > 
-> Please let me know.
-> 
-> Thank you,
-> ./drv
-> 
-> 
+> Signed-off-by: Huaisheng Ye <huaisheng.ye@intel.com>
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
 
+Thanks,
+SJ
+
+> ---
+>  mm/damon/core.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index ceec75b88ef9..f338691e4591 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -1230,7 +1230,8 @@ static int kdamond_fn(void *data)
+>  			if (ctx->callback.after_aggregation &&
+>  					ctx->callback.after_aggregation(ctx))
+>  				break;
+> -			kdamond_apply_schemes(ctx);
+> +			if (!list_empty(&ctx->schemes))
+> +				kdamond_apply_schemes(ctx);
+>  			kdamond_reset_aggregated(ctx);
+>  			kdamond_split_regions(ctx);
+>  			if (ctx->ops.reset_aggregated)
+> -- 
+> 2.31.1
+> 
+> 
