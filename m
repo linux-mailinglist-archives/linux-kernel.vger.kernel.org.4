@@ -2,368 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300F366B5CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D5A66B5CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjAPC5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 21:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S231670AbjAPC7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 21:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjAPC5B (ORCPT
+        with ESMTP id S231672AbjAPC7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 21:57:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1758572B2
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 18:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673837773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GmjwdpNBZtieEz46Hk9SYUWIMOloQEYKr9TelWqHDLc=;
-        b=QoIt0Y+XyqCjlPEi6ZxIPk17r7wIkfFch2te5nDE7LOLpGPcvgF7d86ojZ9bF9KhcVsdT4
-        rjz+evhzntcPF7jK4vDThyQEMEs1ZIMozw3KIIpt7RfOISED8kkGsGGbPEC/lRs4TrNH/H
-        whiLVu8T+qErcC05EC+C1u1XqkBVT68=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-620-NmdU-iWnPreicCLqh8rxng-1; Sun, 15 Jan 2023 21:56:10 -0500
-X-MC-Unique: NmdU-iWnPreicCLqh8rxng-1
-Received: by mail-ot1-f70.google.com with SMTP id bt34-20020a05683039e200b006707bbdf1f4so14455085otb.20
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 18:56:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GmjwdpNBZtieEz46Hk9SYUWIMOloQEYKr9TelWqHDLc=;
-        b=pMmS6iH2/7QKtyqYna788NjIsHVvMfUliiFXdYfmmroT7bLpAqW7a/0eyRgvA1al7D
-         h16hMptmbEIzgCQWCw/tvPTQe9gN+lyd5Fgg4e0wxZMptbqMIltIK6cNrm7dvtr7FlG5
-         jdMuBiWpuBHs8Sep+jZdQSlLa+baX3ORJ8GP8ulS89BdAufbaJ/4+QqzV+emqFEe0J7D
-         I28b2j6V+3g6QW0gv4ObGH41PqwRHIvLPqicmD5Qz78HUFtmsXu00vc25a2HHGUNU3mu
-         NSQtWSSO365kDZqs+oad1jXrjAwMA0JSsA4UzkTOqAPhVR0hdQbEgvYxijMj1qEaeCai
-         waAg==
-X-Gm-Message-State: AFqh2kpuxkmPW9MksGzGEJPQ0y6ufHiIPm+LIhl22bIkxG+Rr44RbKXF
-        une9iZn6eFt4a1YtB+BJ5dkAH54vzimV++J/behqwHqm2kFK6tEZKiwlmt93fFeW/5hA5Fq3/2c
-        3Mww6a7EYxuapo2ZsmLCVLBl7gFyj6KsrWj7X8iR8
-X-Received: by 2002:a05:6830:1c9:b0:684:c737:8322 with SMTP id r9-20020a05683001c900b00684c7378322mr710228ota.237.1673837769477;
-        Sun, 15 Jan 2023 18:56:09 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv8oGW6AITcGpwltrSz0I6McbEoR5QpzXynOHOM6z8npGP/RodNzQWuFjyww3qSoSYV/XrmQ7+WpkXwBv8YZcc=
-X-Received: by 2002:a05:6830:1c9:b0:684:c737:8322 with SMTP id
- r9-20020a05683001c900b00684c7378322mr710222ota.237.1673837769135; Sun, 15 Jan
- 2023 18:56:09 -0800 (PST)
+        Sun, 15 Jan 2023 21:59:00 -0500
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF3D30D9;
+        Sun, 15 Jan 2023 18:58:57 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VZbYmeb_1673837931;
+Received: from 30.221.147.208(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZbYmeb_1673837931)
+          by smtp.aliyun-inc.com;
+          Mon, 16 Jan 2023 10:58:52 +0800
+Message-ID: <399e8b83-ee7b-1b24-bd6b-74d274fcda46@linux.alibaba.com>
+Date:   Mon, 16 Jan 2023 10:58:50 +0800
 MIME-Version: 1.0
-References: <20221207145428.31544-1-gautam.dawar@amd.com> <20221207145428.31544-9-gautam.dawar@amd.com>
- <CACGkMEtGCbUBZRFh7EUJyymuWZ9uxiAOeJHA6h-dGa9Y3pDZGw@mail.gmail.com>
- <c5956679-82c1-336b-3190-de32db1c0926@amd.com> <CACGkMEvVnAQ2t4piV3U-hACELvUozRKJOiCCcQLp5ch2TQ9r4w@mail.gmail.com>
- <CACGkMEt866q9CR_4JNUX+35gyV4ykYPiviLHeYfgqKCmrqXZ4A@mail.gmail.com>
- <289dc054-4cb7-e31c-69b4-b02a62a2fe16@amd.com> <CACGkMEv6vy31646YfLYEyLqeeJcn1sKnUy9z_9++2dkTSAEPPw@mail.gmail.com>
- <71066e12-1c5c-c226-bfb7-67bea171a4e1@amd.com>
-In-Reply-To: <71066e12-1c5c-c226-bfb7-67bea171a4e1@amd.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 16 Jan 2023 10:55:58 +0800
-Message-ID: <CACGkMEsEZMhS0zSRY0XviXSmDALd2zons0nAk43DTCBu_iA5tw@mail.gmail.com>
-Subject: Re: [PATCH net-next 08/11] sfc: implement device status related vdpa
- config operations
-To:     Gautam Dawar <gdawar@amd.com>
-Cc:     Gautam Dawar <gautam.dawar@amd.com>, linux-net-drivers@amd.com,
-        netdev@vger.kernel.org, eperezma@redhat.com, tanuj.kamde@amd.com,
-        Koushik.Dutta@amd.com, harpreet.anand@amd.com,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v7 1/9] perf pmu: Add #slots literal support for arm64
+To:     Ian Rogers <irogers@google.com>,
+        John Garry <john.g.garry@oracle.com>
+Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1673601740-122788-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <CAP-5=fWnOGD7CHYeq0Uino4eHte2WP5Pxz9t4YOtvgxrq-_muA@mail.gmail.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <CAP-5=fWnOGD7CHYeq0Uino4eHte2WP5Pxz9t4YOtvgxrq-_muA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 2:33 PM Gautam Dawar <gdawar@amd.com> wrote:
->
->
-> On 1/13/23 11:50, Jason Wang wrote:
-> > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> >
-> >
-> > On Fri, Jan 13, 2023 at 2:11 PM Gautam Dawar <gdawar@amd.com> wrote:
-> >>
-> >> On 1/13/23 09:58, Jason Wang wrote:
-> >>> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> >>>
-> >>>
-> >>> On Wed, Jan 11, 2023 at 2:36 PM Jason Wang <jasowang@redhat.com> wrote:
-> >>>> On Mon, Jan 9, 2023 at 6:21 PM Gautam Dawar <gdawar@amd.com> wrote:
-> >>>>> On 12/14/22 12:15, Jason Wang wrote:
-> >>>>>> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> >>>>>>
-> >>>>>>
-> >>>>>> On Wed, Dec 7, 2022 at 10:57 PM Gautam Dawar <gautam.dawar@amd.com> wrote:
-> >>>>>>> vDPA config opertions to handle get/set device status and device
-> >>>>>>> reset have been implemented.
-> >>>>>>>
-> >>>>>>> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
-> >>>>>>> ---
-> >>>>>>>     drivers/net/ethernet/sfc/ef100_vdpa.c     |   7 +-
-> >>>>>>>     drivers/net/ethernet/sfc/ef100_vdpa.h     |   1 +
-> >>>>>>>     drivers/net/ethernet/sfc/ef100_vdpa_ops.c | 133 ++++++++++++++++++++++
-> >>>>>>>     3 files changed, 140 insertions(+), 1 deletion(-)
-> >>>>>>>
-> >>>>>>> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.c b/drivers/net/ethernet/sfc/ef100_vdpa.c
-> >>>>>>> index 04d64bfe3c93..80bca281a748 100644
-> >>>>>>> --- a/drivers/net/ethernet/sfc/ef100_vdpa.c
-> >>>>>>> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.c
-> >>>>>>> @@ -225,9 +225,14 @@ static int vdpa_allocate_vis(struct efx_nic *efx, unsigned int *allocated_vis)
-> >>>>>>>
-> >>>>>>>     static void ef100_vdpa_delete(struct efx_nic *efx)
-> >>>>>>>     {
-> >>>>>>> +       struct vdpa_device *vdpa_dev;
-> >>>>>>> +
-> >>>>>>>            if (efx->vdpa_nic) {
-> >>>>>>> +               vdpa_dev = &efx->vdpa_nic->vdpa_dev;
-> >>>>>>> +               ef100_vdpa_reset(vdpa_dev);
-> >>>>>> Any reason we need to reset during delete?
-> >>>>> ef100_reset_vdpa_device() does the necessary clean-up including freeing
-> >>>>> irqs, deleting filters and deleting the vrings which is required while
-> >>>>> removing the vdpa device or unloading the driver.
-> >>>> That's fine but the name might be a little bit confusing since vDPA
-> >>>> reset is not necessary here.
-> >>>>
-> >>>>>>> +
-> >>>>>>>                    /* replace with _vdpa_unregister_device later */
-> >>>>>>> -               put_device(&efx->vdpa_nic->vdpa_dev.dev);
-> >>>>>>> +               put_device(&vdpa_dev->dev);
-> >>>>>>>                    efx->vdpa_nic = NULL;
-> >>>>>>>            }
-> >>>>>>>            efx_mcdi_free_vis(efx);
-> >>>>>>> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet/sfc/ef100_vdpa.h
-> >>>>>>> index a33edd6dda12..1b0bbba88154 100644
-> >>>>>>> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
-> >>>>>>> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
-> >>>>>>> @@ -186,6 +186,7 @@ int ef100_vdpa_add_filter(struct ef100_vdpa_nic *vdpa_nic,
-> >>>>>>>                              enum ef100_vdpa_mac_filter_type type);
-> >>>>>>>     int ef100_vdpa_irq_vectors_alloc(struct pci_dev *pci_dev, u16 nvqs);
-> >>>>>>>     void ef100_vdpa_irq_vectors_free(void *data);
-> >>>>>>> +int ef100_vdpa_reset(struct vdpa_device *vdev);
-> >>>>>>>
-> >>>>>>>     static inline bool efx_vdpa_is_little_endian(struct ef100_vdpa_nic *vdpa_nic)
-> >>>>>>>     {
-> >>>>>>> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> >>>>>>> index 132ddb4a647b..718b67f6da90 100644
-> >>>>>>> --- a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> >>>>>>> +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> >>>>>>> @@ -251,6 +251,62 @@ static bool is_qid_invalid(struct ef100_vdpa_nic *vdpa_nic, u16 idx,
-> >>>>>>>            return false;
-> >>>>>>>     }
-> >>>>>>>
-> >>>>>>> +static void ef100_reset_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
-> >>>>>>> +{
-> >>>>>>> +       int i;
-> >>>>>>> +
-> >>>>>>> +       WARN_ON(!mutex_is_locked(&vdpa_nic->lock));
-> >>>>>>> +
-> >>>>>>> +       if (!vdpa_nic->status)
-> >>>>>>> +               return;
-> >>>>>>> +
-> >>>>>>> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_INITIALIZED;
-> >>>>>>> +       vdpa_nic->status = 0;
-> >>>>>>> +       vdpa_nic->features = 0;
-> >>>>>>> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++)
-> >>>>>>> +               reset_vring(vdpa_nic, i);
-> >>>>>>> +}
-> >>>>>>> +
-> >>>>>>> +/* May be called under the rtnl lock */
-> >>>>>>> +int ef100_vdpa_reset(struct vdpa_device *vdev)
-> >>>>>>> +{
-> >>>>>>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
-> >>>>>>> +
-> >>>>>>> +       /* vdpa device can be deleted anytime but the bar_config
-> >>>>>>> +        * could still be vdpa and hence efx->state would be STATE_VDPA.
-> >>>>>>> +        * Accordingly, ensure vdpa device exists before reset handling
-> >>>>>>> +        */
-> >>>>>>> +       if (!vdpa_nic)
-> >>>>>>> +               return -ENODEV;
-> >>>>>>> +
-> >>>>>>> +       mutex_lock(&vdpa_nic->lock);
-> >>>>>>> +       ef100_reset_vdpa_device(vdpa_nic);
-> >>>>>>> +       mutex_unlock(&vdpa_nic->lock);
-> >>>>>>> +       return 0;
-> >>>>>>> +}
-> >>>>>>> +
-> >>>>>>> +static int start_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
-> >>>>>>> +{
-> >>>>>>> +       int rc = 0;
-> >>>>>>> +       int i, j;
-> >>>>>>> +
-> >>>>>>> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
-> >>>>>>> +               if (can_create_vring(vdpa_nic, i)) {
-> >>>>>>> +                       rc = create_vring(vdpa_nic, i);
-> >>>>>> So I think we can safely remove the create_vring() in set_vq_ready()
-> >>>>>> since it's undefined behaviour if set_vq_ready() is called after
-> >>>>>> DRIVER_OK.
-> >>>>> Is this (undefined) behavior documented in the virtio spec?
-> >>>> This part is kind of tricky:
-> >>>>
-> >>>> PCI transport has a queue_enable field. And recently,
-> >>>> VIRTIO_F_RING_RESET was introduced. Let's start without that first:
-> >>>>
-> >>>> In
-> >>>>
-> >>>> 4.1.4.3.2 Driver Requirements: Common configuration structure layout
-> >>>>
-> >>>> It said:
-> >>>>
-> >>>> "The driver MUST configure the other virtqueue fields before enabling
-> >>>> the virtqueue with queue_enable."
-> >>>>
-> >>>> and
-> >>>>
-> >>>> "The driver MUST NOT write a 0 to queue_enable."
-> >>>>
-> >>>> My understanding is that:
-> >>>>
-> >>>> 1) Write 0 is forbidden
-> >>>> 2) Write 1 after DRIVER_OK is undefined behaviour (or need to clarify)
-> >>>>
-> >>>> With VIRTIO_F_RING_RESET is negotiated:
-> >>>>
-> >>>> "
-> >>>> If VIRTIO_F_RING_RESET has been negotiated, after the driver writes 1
-> >>>> to queue_reset to reset the queue, the driver MUST NOT consider queue
-> >>>> reset to be complete until it reads back 0 in queue_reset. The driver
-> >>>> MAY re-enable the queue by writing 1 to queue_enable after ensuring
-> >>>> that other virtqueue fields have been set up correctly. The driver MAY
-> >>>> set driver-writeable queue configuration values to different values
-> >>>> than those that were used before the queue reset. (see 2.6.1).
-> >>>> "
-> >>>>
-> >>>> Write 1 to queue_enable after DRIVER_OK and after the queue is reset is allowed.
-> >>>>
-> >>>> Thanks
-> >>> Btw, I just realized that we need to stick to the current behaviour,
-> >>> that is to say, to allow set_vq_ready() to be called after DRIVER_OK.
-> >> So, both set_vq_ready() and DRIVER_OK are required for vring creation
-> >> and their order doesn't matter. Is that correct?
-> > Yes.
-> >
-> >> Also, will set_vq_ready(0) after DRIVER_OK result in queue deletion?
-> > I think it should be treated as suspended or stopped. Since the device
-> > should survive from kicking the vq even if the driver does
-> > set_vq_ready(0).
-> Ok. Is it expected that a queue restart (set_vq_ready(0) followed by
-> set_vq_ready(1)) will start the queue from the last queue configuration
-> when VIRTIO_F_RING_RESET isn't negotiated?
 
-I think it's better to have this.
 
-Thanks
+在 2023/1/15 上午6:15, Ian Rogers 写道:
+> On Fri, Jan 13, 2023 at 1:22 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
+>>
+>> The slots in each architecture may be different, so add #slots literal
+>> to obtain the slots of different architectures, and the #slots can be
+>> applied in the metric. Currently, The #slots just support for arm64,
+>> and other architectures will return NAN.
+>>
+>> On arm64, the value of slots is from the register PMMIR_EL1.SLOT, which
+>> I can read in /sys/bus/event_source/device/armv8_pmuv3_*/caps/slots.
+>> PMMIR_EL1.SLOT might read as zero if the PMU version is lower than
+>> ID_AA64DFR0_EL1_PMUVer_V3P4 or the STALL_SLOT event is not implemented.
+>>
+>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>> ---
+>>  tools/perf/arch/arm64/util/pmu.c | 34 ++++++++++++++++++++++++++++++++--
+>>  tools/perf/util/expr.c           |  5 +++++
+>>  tools/perf/util/pmu.c            |  6 ++++++
+>>  tools/perf/util/pmu.h            |  1 +
+>>  4 files changed, 44 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+>> index 477e513..5f8667b 100644
+>> --- a/tools/perf/arch/arm64/util/pmu.c
+>> +++ b/tools/perf/arch/arm64/util/pmu.c
+>> @@ -3,8 +3,9 @@
+>>  #include <internal/cpumap.h>
+>>  #include "../../../util/cpumap.h"
+>>  #include "../../../util/pmu.h"
+>> +#include <api/fs/fs.h>
+>>
+>> -const struct pmu_events_table *pmu_events_table__find(void)
+>> +static struct perf_pmu *pmu_core__find_same(void)
+> 
+> I'm not sure "find_same" is the best name here. I suspect it should be
+> "find_core_pmu" which would agree with is_arm_pmu_core. Unfortunately
+> "core" has become an overloaded term sometimes used interchangeably
+> with CPU, hyperthread or SMT thread, it was a model name for Intel and
+> it is used to distinguish a set of SMT threads running together from a
+> single one. Anyway, for consistency I think perf_pmu__find_core_pmu is
+> the most appropriate name (or pmu__find_core_pmu, I'm not sure why we
+> get the extra perf_ prefix sometimes, in general that indicates the
+> functionality is in libperf).
+> 
 
-> >
-> > Thanks
-> >
-> >>> It is needed for the cvq trap and migration for control virtqueue:
-> >>>
-> >>> https://www.mail-archive.com/qemu-devel@nongnu.org/msg931491.html
-> >>>
-> >>> Thanks
-> >>>
-> >>>
-> >>>>> If so, can
-> >>>>> you please point me to the section of virtio spec that calls this order
-> >>>>> (set_vq_ready() after setting DRIVER_OK) undefined? Is it just that the
-> >>>>> queue can't be enabled after DRIVER_OK or the reverse (disabling the
-> >>>>> queue) after DRIVER_OK is not allowed?
-> >>>>>>> +                       if (rc)
-> >>>>>>> +                               goto clear_vring;
-> >>>>>>> +               }
-> >>>>>>> +       }
-> >>>>>>> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_STARTED;
-> >>>>>>> +       return rc;
-> >>>>>>> +
-> >>>>>>> +clear_vring:
-> >>>>>>> +       for (j = 0; j < i; j++)
-> >>>>>>> +               if (vdpa_nic->vring[j].vring_created)
-> >>>>>>> +                       delete_vring(vdpa_nic, j);
-> >>>>>>> +       return rc;
-> >>>>>>> +}
-> >>>>>>> +
-> >>>>>>>     static int ef100_vdpa_set_vq_address(struct vdpa_device *vdev,
-> >>>>>>>                                         u16 idx, u64 desc_area, u64 driver_area,
-> >>>>>>>                                         u64 device_area)
-> >>>>>>> @@ -568,6 +624,80 @@ static u32 ef100_vdpa_get_vendor_id(struct vdpa_device *vdev)
-> >>>>>>>            return EF100_VDPA_VENDOR_ID;
-> >>>>>>>     }
-> >>>>>>>
-> >>>>>>> +static u8 ef100_vdpa_get_status(struct vdpa_device *vdev)
-> >>>>>>> +{
-> >>>>>>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
-> >>>>>>> +       u8 status;
-> >>>>>>> +
-> >>>>>>> +       mutex_lock(&vdpa_nic->lock);
-> >>>>>>> +       status = vdpa_nic->status;
-> >>>>>>> +       mutex_unlock(&vdpa_nic->lock);
-> >>>>>>> +       return status;
-> >>>>>>> +}
-> >>>>>>> +
-> >>>>>>> +static void ef100_vdpa_set_status(struct vdpa_device *vdev, u8 status)
-> >>>>>>> +{
-> >>>>>>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
-> >>>>>>> +       u8 new_status;
-> >>>>>>> +       int rc;
-> >>>>>>> +
-> >>>>>>> +       mutex_lock(&vdpa_nic->lock);
-> >>>>>>> +       if (!status) {
-> >>>>>>> +               dev_info(&vdev->dev,
-> >>>>>>> +                        "%s: Status received is 0. Device reset being done\n",
-> >>>>>>> +                        __func__);
-> >>>>>>> +               ef100_reset_vdpa_device(vdpa_nic);
-> >>>>>>> +               goto unlock_return;
-> >>>>>>> +       }
-> >>>>>>> +       new_status = status & ~vdpa_nic->status;
-> >>>>>>> +       if (new_status == 0) {
-> >>>>>>> +               dev_info(&vdev->dev,
-> >>>>>>> +                        "%s: New status same as current status\n", __func__);
-> >>>>>>> +               goto unlock_return;
-> >>>>>>> +       }
-> >>>>>>> +       if (new_status & VIRTIO_CONFIG_S_FAILED) {
-> >>>>>>> +               ef100_reset_vdpa_device(vdpa_nic);
-> >>>>>>> +               goto unlock_return;
-> >>>>>>> +       }
-> >>>>>>> +
-> >>>>>>> +       if (new_status & VIRTIO_CONFIG_S_ACKNOWLEDGE &&
-> >>>>>>> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
-> >>>>>> As replied before, I think there's no need to check
-> >>>>>> EF100_VDPA_STATE_INITIALIZED, otherwise it could be a bug somewhere.
-> >>>>> Ok. Will remove the check against EF100_VDPA_STATE_INITIALIZED.
-> >>>>>>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_ACKNOWLEDGE;
-> >>>>>>> +               new_status &= ~VIRTIO_CONFIG_S_ACKNOWLEDGE;
-> >>>>>>> +       }
-> >>>>>>> +       if (new_status & VIRTIO_CONFIG_S_DRIVER &&
-> >>>>>>> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
-> >>>>>>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_DRIVER;
-> >>>>>>> +               new_status &= ~VIRTIO_CONFIG_S_DRIVER;
-> >>>>>>> +       }
-> >>>>>>> +       if (new_status & VIRTIO_CONFIG_S_FEATURES_OK &&
-> >>>>>>> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
-> >>>>>>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_FEATURES_OK;
-> >>>>>>> +               vdpa_nic->vdpa_state = EF100_VDPA_STATE_NEGOTIATED;
-> >>>>>> I think we can simply map EF100_VDPA_STATE_NEGOTIATED to
-> >>>>>> VIRTIO_CONFIG_S_FEATURES_OK.
-> >>>>>>
-> >>>>>> E.g the code doesn't fail the feature negotiation by clearing the
-> >>>>>> VIRTIO_CONFIG_S_FEATURES_OK when ef100_vdpa_set_driver_feature fails?
-> >>>>> Ok.
-> >>>>>> Thanks
-> >>>>> Regards,
-> >>>>>
-> >>>>> Gautam
-> >>>>>
->
+The reason for using "pmu_core__find_same" before is to indicate that we're
+only dealing with homogeneous cores. And in the tools/perf/util/pmu.c file,
+most of the static functions have "pmu_" prefix, maybe we can use
+"pmu_find_same_core_pmu"? Ian, John, what do you think?
 
+Thanks,
+Jing
+
+> Aside from that, lgtm. Thanks,
+> Ian
+> 
+>>  {
+>>         struct perf_pmu *pmu = NULL;
+>>
+>> @@ -19,8 +20,37 @@ const struct pmu_events_table *pmu_events_table__find(void)
+>>                 if (pmu->cpus->nr != cpu__max_cpu().cpu)
+>>                         return NULL;
+>>
+>> -               return perf_pmu__find_table(pmu);
+>> +               return pmu;
+>>         }
+>>
+>>         return NULL;
+>>  }
+>> +
+>> +const struct pmu_events_table *pmu_events_table__find(void)
+>> +{
+>> +       struct perf_pmu *pmu = pmu_core__find_same();
+>> +
+>> +       if (pmu)
+>> +               return perf_pmu__find_table(pmu);
+>> +
+>> +       return NULL;
+>> +}
+>> +
+>> +double perf_pmu__cpu_slots_per_cycle(void)
+>> +{
+>> +       char path[PATH_MAX];
+>> +       unsigned long long slots = 0;
+>> +       struct perf_pmu *pmu = pmu_core__find_same();
+>> +
+>> +       if (pmu) {
+>> +               scnprintf(path, PATH_MAX,
+>> +                       EVENT_SOURCE_DEVICE_PATH "%s/caps/slots", pmu->name);
+>> +               /*
+>> +                * The value of slots is not greater than 32 bits, but sysfs__read_int
+>> +                * can't read value with 0x prefix, so use sysfs__read_ull instead.
+>> +                */
+>> +               sysfs__read_ull(path, &slots);
+>> +       }
+>> +
+>> +       return (double)slots;
+>> +}
+>> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+>> index 00dcde3..9d3076a 100644
+>> --- a/tools/perf/util/expr.c
+>> +++ b/tools/perf/util/expr.c
+>> @@ -19,6 +19,7 @@
+>>  #include <linux/zalloc.h>
+>>  #include <ctype.h>
+>>  #include <math.h>
+>> +#include "pmu.h"
+>>
+>>  #ifdef PARSER_DEBUG
+>>  extern int expr_debug;
+>> @@ -448,6 +449,10 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
+>>                 result = topology->core_cpus_lists;
+>>                 goto out;
+>>         }
+>> +       if (!strcmp("#slots", literal)) {
+>> +               result = perf_pmu__cpu_slots_per_cycle() ?: NAN;
+>> +               goto out;
+>> +       }
+>>
+>>         pr_err("Unrecognized literal '%s'", literal);
+>>  out:
+>> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+>> index 2bdeb89..cbb4fbf 100644
+>> --- a/tools/perf/util/pmu.c
+>> +++ b/tools/perf/util/pmu.c
+>> @@ -19,6 +19,7 @@
+>>  #include <regex.h>
+>>  #include <perf/cpumap.h>
+>>  #include <fnmatch.h>
+>> +#include <math.h>
+>>  #include "debug.h"
+>>  #include "evsel.h"
+>>  #include "pmu.h"
+>> @@ -1993,3 +1994,8 @@ int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+>>         *ucpus_ptr = unmatched_cpus;
+>>         return 0;
+>>  }
+>> +
+>> +double __weak perf_pmu__cpu_slots_per_cycle(void)
+>> +{
+>> +       return NAN;
+>> +}
+>> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+>> index 69ca000..fd414ba 100644
+>> --- a/tools/perf/util/pmu.h
+>> +++ b/tools/perf/util/pmu.h
+>> @@ -259,4 +259,5 @@ int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+>>
+>>  char *pmu_find_real_name(const char *name);
+>>  char *pmu_find_alias_name(const char *name);
+>> +double perf_pmu__cpu_slots_per_cycle(void);
+>>  #endif /* __PMU_H */
+>> --
+>> 1.8.3.1
+>>
