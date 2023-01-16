@@ -2,88 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1203766C46D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC8166C473
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjAPPy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S231424AbjAPPzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjAPPyl (ORCPT
+        with ESMTP id S231510AbjAPPyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 10:54:41 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DEB22A0C;
-        Mon, 16 Jan 2023 07:54:37 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D92C433878;
-        Mon, 16 Jan 2023 15:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673884475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+vuORpOHQ+AS7Wy51WLoSsM0R/N2cByB/Ocy0ai6rAo=;
-        b=SiUj34q1jbNV1pskKZDPTBEDEXasyWymprZY8Gy8/EI4uORx0GAZRdz843ns7uHlK07LQx
-        lAiFWYVRoQkbt2va+VX1PEOYN/kTYGdByba+zxf4FXVQakIlkCTUf1aufyvZ56xJAr+sZ2
-        6JOLZ9hblGsM6U7MtgrjWeKTQih/BoQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A30592C1A5;
-        Mon, 16 Jan 2023 15:54:35 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 16:54:32 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the printk tree
-Message-ID: <Y8VzOA9B5kuF3lQH@alley>
-References: <20230116102301.66ccb248@canb.auug.org.au>
+        Mon, 16 Jan 2023 10:54:45 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC58222FB
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:54:43 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id a11so3194553lfg.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/J5BwwFc+cz/TVDnLga/TBpZtC0SR+xIrcvCr3tsklE=;
+        b=mjEe8zC+F2uzPnl/V19BJ86H1CRNDA0hltY9Vvgnodci10MGhKWGVcfnVjG3kMJWq2
+         C6EL8sZ5hOTQsKERCDp+oGg6RRkDkRUOcIg7e7fSwuidSM0XgyhEvG8lXWSoffnZSJYE
+         tBvtE+U6BaD+q8NWWp6OuaqJMf9pN68BYeYepcxtDncxZojcgBJ1ClBKj6ppmrYGdEPS
+         lOOkujclXuQWaQn7wHUNr6sBaR7OJEJx7CuJMgu2edIMVEOGbFMpORghxSA1CLP8F8RD
+         tZa0DHcVYN5xa/Vovk9M7X6YYD82A7D6aUGHrTD/Idbb9ohDkIA9xNOHE9XHUe5QzkF2
+         bE/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/J5BwwFc+cz/TVDnLga/TBpZtC0SR+xIrcvCr3tsklE=;
+        b=GfnriFein3BeV7h/eElcme3cRUdaHRaP+yDNotRB+Vg2ZQNOVbKPhkdetIHojrMTsO
+         gX+PKBH1XPvb3w1tjPDJ3Kb3NmWPaco+4q/kEhY4t07+NbYlFJS3V0DnnNoc8iNERuxG
+         IH2qZ9ELLgmoKNkHEVe+ZaVKaOC/6+TyAkPfjlZa/6dymLBwKJzXl712SQ3nK7mp0NeR
+         ZqhIrAe0R/Q74vCj0fpD5+0mS4GccMgDvE/TqMXk+LV8eLvGA8GuAkTmguwUYoAz62Y0
+         41j+RtXf1yisLaLIvb5aVEdUOZlbgcW42A3g8qaR8tXr64eXhjcN1fkpLPRNcil9hOxb
+         bD3g==
+X-Gm-Message-State: AFqh2krbeAdTmKBnBNYtsDeNcGMhc9lWadrGnYtpcn2w5qSppqtyqg5y
+        tNoaA7V2+i4YGMUB5VfO2gnkaA==
+X-Google-Smtp-Source: AMrXdXsBv/GWU6qRrChpha6bgiHRPoveqk+ry3Qo/ejYePhKMUqXzP3fbH+paG3qpb92rYWDro/jlg==
+X-Received: by 2002:ac2:5fad:0:b0:4b5:964d:499e with SMTP id s13-20020ac25fad000000b004b5964d499emr24222483lfe.8.1673884481873;
+        Mon, 16 Jan 2023 07:54:41 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id d23-20020a056512369700b004cc86bc8f22sm3604692lfs.90.2023.01.16.07.54.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 07:54:41 -0800 (PST)
+Message-ID: <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
+Date:   Mon, 16 Jan 2023 16:54:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116102301.66ccb248@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
+ '#size-cells' related dt-binding error
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
+ <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+ <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
+ <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
+ <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-01-16 10:23:01, Stephen Rothwell wrote:
-> Hi all,
+
+
+On 16.01.2023 16:43, Bhupesh Sharma wrote:
+> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
+>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
+>>>>> Fix the following '#address-cells' & '#size-cells' related
+>>>>> dt-binding error:
+>>>>>
+>>>>>    $ make dtbs_check
+>>>>>
+>>>>>    From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>>         arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+>>>>>               #address-cells:0:0: 2 was expected
+>>>>>       From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>
+>>>> Don't we want rather to unify the soc address range?
+>>>
+>>> Well, the assumption in the original dt-bindings was that every reg
+>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
+>>> #size-cells to <2>). However, that is not the case for all of the
+>>> SoCs.
+>>
+>> Hm, which device of that SoC cannot be used with address/size cells 2?
 > 
-> After merging the printk tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
+> be used with address/size cells 2 (See:
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
+SM6115 (and pretty much every other arm64 msm platform newer than 8916)
+should be using addr/size-cells = 2 along with (dma-)ranges of 36 bit, as
+that's what their smmus use and otherwise some addresses may get cut off
+in translation, or so the story went with 845 N years ago.. We can either
+pursue this patch or I can submit the 2-cell-ification if you don't plan on
+adding more nodes shortly
+
+Konrad
 > 
-> ERROR: modpost: "console_srcu_read_lock_is_held" [drivers/tty/serial/kgdboc.ko] undefined!
-> 
-> Caused by commit
-> 
->   75ffddf01347 ("tty: serial: kgdboc: fix mutex locking order for configure_kgdboc()")
-
-Great catch! Thanks a lot for the report.
-
-It gets fixed by:
-
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -123,6 +123,7 @@ bool console_srcu_read_lock_is_held(void)
- {
- 	return srcu_read_lock_held(&console_srcu);
- }
-+EXPORT_SYMBOL(console_srcu_read_lock_is_held);
- #endif
- 
- enum devkmsg_log_bits {
-
-
-I have added this fix by ammending the problematic commit so that we
-do not break bisection, see
-https://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/commit/?h=rework/console-list-lock&id=3ef5abd9b5c738bc6fa9a65e40331ef2cb03ad9c
-
-Best Regards,
-Petr
+>>> So, ideally we shouldn't set the  "#address-cells" and  "#size-cells":
+>>> as const: 2 in the bindings.
+>>>
+>>> See as an example:
+>>> https://www.kernel.org/doc/Documentation/devicetree/bindings/usb/usb-device.yaml
+>>
+>>
+>> How USB device - so entirely different device, not MMIO! - is related here?
+>>
+>> Best regards,
+>> Krzysztof
+>>
