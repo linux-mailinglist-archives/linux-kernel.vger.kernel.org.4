@@ -2,160 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E290766BB06
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9100E66BB04
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjAPJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S229577AbjAPJzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjAPJz2 (ORCPT
+        with ESMTP id S229648AbjAPJz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:55:28 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DAF17CD4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:54:55 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id a9so12965517ybb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wu9td4ZRw+3rlrum00pYyaH6eULDTV19+cq5J6k5AKE=;
-        b=Br4MTMaSVSXIVN1w+T0iS6EMQBtrqn8dhHIWOvvDY2TFrFtCVOWPsCb7WG366TSIzY
-         9N6KakVUJkyXGTLeOJ4XSJvTNZzazACjXsI4rxsXiLxmZlgqIDZCvPo5RGMBLY0jybPm
-         uLbFcuxtrseJmHu6iAtB/tJw1KN9usHhNhRoWq2OPSinjs61rlKklt7UmrRqH9Wu3z+p
-         Z1E7Cjv/9KZ/eC8JNY1iJkhEHORH5LVDEmsatdcpOxjyL0zVx8ab7lOpcjWpcqALpDNV
-         DIsahZEy7qsZ53Bb8CVea/1VrGse9VFp7P5PUCeDgXT/9UL/k99vv5cFOZ2BEsiOCLS/
-         TG7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wu9td4ZRw+3rlrum00pYyaH6eULDTV19+cq5J6k5AKE=;
-        b=jCUZw9gn2iIrRZn3Q94kWC5dqB78bwesgJXlqkDHc55whPSP+ak45oU7JRafXj1/kn
-         /kdZ4wXBs1ZYah1kjocPlaxP2pDhlmIthhdnyxKz5oq1i5ylvcGo/j0nHmOrf1HCW3NC
-         p5j0RspBpH57OUqpya7bKQGIj/fnp/3H8mokq5YELsLb2GcYMLmNWpqMxLhcT8j+SiIV
-         XFi6ZbBM55ug6i3lDishOzLPdlhQSygnYADUngdeGWwHgulBwTzaElb1pPPcdZyHnbCC
-         71iZFLN2mVd4pC0EGa3pl0rjri5ASrya9x4Cd35waQ6FSn8jb+BV1owDTFj5MzUuysII
-         c5jQ==
-X-Gm-Message-State: AFqh2kqG55Do93I8s3DevtnxxMbn4/C/8h/7w32XVUfwEj1urdQg9dNA
-        YYUCuQzdDcriGPEsh04OVNP1kZFj4+8RFczAbK5c1g==
-X-Google-Smtp-Source: AMrXdXuXhPKdrl4WGoiIw1lBKw8acjyrGEo6zVHGq5YZFzcwBDOFNNSb7N5awMFTZRFxSyFPUvzzB/f78SenjmHA0kM=
-X-Received: by 2002:a25:b7cb:0:b0:7e7:7ad8:2ee8 with SMTP id
- u11-20020a25b7cb000000b007e77ad82ee8mr120309ybj.55.1673862894433; Mon, 16 Jan
- 2023 01:54:54 -0800 (PST)
+        Mon, 16 Jan 2023 04:55:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178D717CC3;
+        Mon, 16 Jan 2023 01:54:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AFAA867640;
+        Mon, 16 Jan 2023 09:54:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673862884; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xi/jusoH+SfQb/aLv3BrlJRJEe2ihoujDNBUkCO8aR4=;
+        b=e1gWyOnlQXi7+yuK0+pmHqv+TAbXl2YsxyTasBYsowUnfZzCS8ax9A4nspC/PgLPt1c9kg
+        uCi7jlwp8Wsyukc/b5raWfxm0TTVZRQFEEsbqTjyeNM9kiuc8KPY7YpNIq2u/VqxEtZ0XB
+        JyYXXCFwTRxkyCAZnirQd3fbxQBiL7M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673862884;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xi/jusoH+SfQb/aLv3BrlJRJEe2ihoujDNBUkCO8aR4=;
+        b=H18sgnI7WJe2w8ESgGwUoGhdRppaI3tu0lZcr5VBmwnXYoRi2KyFIS/qHiqFIE2WI4zZNK
+        3C++/4SdHkxQjkBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9923C138FE;
+        Mon, 16 Jan 2023 09:54:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4NxVJeQexWPePgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 16 Jan 2023 09:54:44 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 16EC7A0746; Mon, 16 Jan 2023 10:54:44 +0100 (CET)
+Date:   Mon, 16 Jan 2023 10:54:44 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
+        Ming Lei <ming.lei@redhat.com>,
+        "yukuai (C)" <yukuai3@huawei.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kbusch@kernel.org, Laibin Qiu <qiulaibin@huawei.com>
+Subject: Re: [PATCH RESEND v2 5/5] sbitmap: correct wake_batch recalculation
+ to avoid potential IO hung
+Message-ID: <20230116095444.z77f6lvvxeys7zdi@quack3>
+References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
+ <20221222143353.598042-6-shikemeng@huaweicloud.com>
+ <20221222134146.khucy5afnxwl75px@quack3>
+ <d00297d7-a77a-770a-1cd7-1632f8ae77e0@huaweicloud.com>
+ <3662b1aa-546b-e4e0-3705-0bc5626067f6@huaweicloud.com>
+ <f8df9153-eeff-f3ca-c4c2-2be0cf876298@huaweicloud.com>
+ <16d02f7b-8e0e-097c-63bc-ef83eb9cb05b@huaweicloud.com>
 MIME-Version: 1.0
-References: <20230116073813.24097-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20230116073813.24097-1-kerneljasonxing@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 16 Jan 2023 10:54:43 +0100
-Message-ID: <CANn89i+qCZOCSaNbqRxirS8zouAWJFpvPX51deT=bG9uxnJ4oA@mail.gmail.com>
-Subject: Re: [PATCH v4 net] tcp: avoid the lookup process failing to get sk in
- ehash table
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <16d02f7b-8e0e-097c-63bc-ef83eb9cb05b@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 8:38 AM Jason Xing <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <kernelxing@tencent.com>
->
-> While one cpu is working on looking up the right socket from ehash
-> table, another cpu is done deleting the request socket and is about
-> to add (or is adding) the big socket from the table. It means that
-> we could miss both of them, even though it has little chance.
->
->
-> Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
-> ---
-> v4:
-> 1) adjust the code style and make it easier to read.
->
-> v3:
-> 1) get rid of else-if statement.
->
-> v2:
-> 1) adding the sk node into the tail of list to prevent the race.
-> 2) fix the race condition when handling time-wait socket hashdance.
-> ---
->  net/ipv4/inet_hashtables.c    | 18 ++++++++++++++++--
->  net/ipv4/inet_timewait_sock.c |  6 +++---
->  2 files changed, 19 insertions(+), 5 deletions(-)
->
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index 24a38b56fab9..c64eec874b31 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -650,8 +650,21 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
->         spin_lock(lock);
->         if (osk) {
->                 WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
-> -               ret = sk_nulls_del_node_init_rcu(osk);
-> -       } else if (found_dup_sk) {
-> +               if (sk_hashed(osk)) {
-> +                       /* Before deleting the node, we insert a new one to make
-> +                        * sure that the look-up-sk process would not miss either
-> +                        * of them and that at least one node would exist in ehash
-> +                        * table all the time. Otherwise there's a tiny chance
-> +                        * that lookup process could find nothing in ehash table.
-> +                        */
-> +                       __sk_nulls_add_node_tail_rcu(sk, list);
-> +                       sk_nulls_del_node_init_rcu(osk);
-> +               } else {
-> +                       ret = false;
+On Mon 16-01-23 10:15:08, Kemeng Shi wrote:
+> 
+> 
+> on 1/3/2023 10:12 AM, Kemeng Shi wrote:
+> > Friendly ping...
+> > 
+> > on 12/26/2022 4:57 PM, Yu Kuai wrote:
+> >> 在 2022/12/26 15:50, Yu Kuai 写道:
+> >>
+> >>>> why using
+> >>>> wake batch of 4 is safe for cards with say 32 tags in case active_users is
+> >>>> currently 32. Because I don't see why that is correct either.
+> >>>>
+> >>
+> >> I see, you guys are worried that during the period that some hctx
+> >> complete all it's not idle yet. It's right waiter might wait for
+> >> other hctx to become idle to be awaken in this case. However, I'm
+> >> not sure which way is better.
+> >>
+> >> Ming, do you have any idea?
+> >>
+> >> Thanks,
+> >> Kuai
+> >>
+> > 
+> Hi Jan. The magic batch 4 seems just for performance initially while
+> lacks of full consideration. And there is no better solution provided
+> in futher. Do you have any suggestion that I can do to make more
+> progress.
 
+Yeah, since there was not any good reasoning behind the magic batch of size
+4, feel free to add:
 
-Well, you added another 'else' statement...
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-What about the following ?
+to this patch.
 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 24a38b56fab9e9d7d893e23b30d26e275359ec70..1bcf5ce8dd1317b2144bcb47a2ad238532b9accf
-100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -650,8 +650,14 @@ bool inet_ehash_insert(struct sock *sk, struct
-sock *osk, bool *found_dup_sk)
-        spin_lock(lock);
-        if (osk) {
-                WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
--               ret = sk_nulls_del_node_init_rcu(osk);
--       } else if (found_dup_sk) {
-+               ret = sk_hashed(osk);
-+               if (ret) {
-+                       __sk_nulls_add_node_tail_rcu(sk, list);
-+                       sk_nulls_del_node_init_rcu(osk);
-+               }
-+               goto unlock;
-+       }
-+       if (found_dup_sk) {
-                *found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
-                if (*found_dup_sk)
-                        ret = false;
-@@ -659,7 +665,7 @@ bool inet_ehash_insert(struct sock *sk, struct
-sock *osk, bool *found_dup_sk)
-
-        if (ret)
-                __sk_nulls_add_node_rcu(sk, list);
--
-+unlock:
-        spin_unlock(lock);
-
-        return ret;
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
