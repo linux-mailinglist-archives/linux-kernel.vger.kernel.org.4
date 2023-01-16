@@ -2,222 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D2066C610
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2F766C5B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjAPQOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S232474AbjAPQJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbjAPQNR (ORCPT
+        with ESMTP id S232530AbjAPQIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:13:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFD12B61A;
-        Mon, 16 Jan 2023 08:07:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A34F61047;
-        Mon, 16 Jan 2023 16:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170E7C43396;
-        Mon, 16 Jan 2023 16:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673885277;
-        bh=TaXKfe7r42NnJSzTx0Oj6fkdFodcwZfrTJqWBd69eSg=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=DR6pijpAwjwluzusTWHAX6e4Q2tir2DM22nScNmot9S7LaQvQJj/m6niUVnaSpcyf
-         wy4yr7vA8OQEm3Vfgzw2x9xHyZs0H10vD0ewIOfu+TbZ4fcfVa3NMYDh6qGnONb0xC
-         F1xlgexSw9g2ihfhgVZ35Q5Iqouw904UadDyLdxMJue1DBjK88joabySX0s46cpUNQ
-         buK5+Yg12vF8vnRKmoQv8E04Veuyv7Hyl27vGeqtvbX4M0hwaXM3Lb4sL4fQtib61D
-         KN5Bszql2LXSyz3IdYJ7VfGDULOpBNl+Oidg+kJbo330iuqFeVfaHlSUwGgBUOtGec
-         ioWhaXvpo2dHw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 16 Jan 2023 16:04:56 +0000
-Subject: [PATCH v4 21/21] kselftest/arm64: Add coverage of SME 2 and 2.1
- hwcaps
+        Mon, 16 Jan 2023 11:08:05 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18242687F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:05:46 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id c3so548444ljh.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tZS1IPgaOjsAe0HlNtSkL3myE8d+s9jinRmiEQ+etLM=;
+        b=E5v4eKvxOikFKkEgv3OlXyCTlr7tjsvKcIgG5qawJ66NTYHvrJIvaehJhqMg4sUuPU
+         gW8qRViNQLQw8riVm4NytWEYbvR6c/+Md5riOxQpUirj+ChSdi9e3JSjztID8vTa3WLn
+         YKzkXJsYjYTqgwJdKREyp37Vad6N8EXoqjm4VurMfJznSQcxlCbhXZgaNyoIQv6v+b/T
+         vzjjTucDg8f5bMWUxUW/CrD/j+yivtXzRl5vpX2QwVXFV23BKHemgqUtgLiTwEDFcu/f
+         XaWxU6BTCMgJvtHmaErAfgGw5Os4wd4pJ+bznKz9n0a8DqFNleZ/Qb+1ZL3RK284Hcn0
+         0pJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tZS1IPgaOjsAe0HlNtSkL3myE8d+s9jinRmiEQ+etLM=;
+        b=hnYYtFu88+5cASDGukxNxdH/yYqL4E+VjWVeCfTmVACbatneKoX5xzU77o3tzdGJiA
+         ZuGqZPjYvGyv489jgbQ1w6fuBVqkRlOg3Gs0QdhDy21/lkeyS9sO2f24tSSxbnLI6S1/
+         fX+yqUGRLdikYfJEc29bOAXiqMijpmRH08BkefH8hwBK34v2ZQpoJFmX/3JWnHPjm05T
+         NtzWrOkaDbZolpYBzn5e1rm7KtVZSBPY6XLTuh06MLTxUgFqdJ4zoDh7fSY+8S1SwUPS
+         nHiKvv9mZJVxhucZicNSLP+RTmiCcY7OJFOFkLJ2e4OmEg9201z71dcqmU5Wt3cLA0CA
+         n9Ig==
+X-Gm-Message-State: AFqh2kpsqXqdF3p3dZw14HJbxRtx/G6/VBWk9YUulofGKaGnz3w8O4ma
+        QbKAGvkGWjrjc0gD+kAn6NbaCg==
+X-Google-Smtp-Source: AMrXdXvNKG+bVjKVZ60ScujsKndTnfD7V0RkcM7g0e/YOX8YG+/gtcIGk+pXjQkaiobRsocf9wDN2g==
+X-Received: by 2002:a2e:9b08:0:b0:27f:d21a:554d with SMTP id u8-20020a2e9b08000000b0027fd21a554dmr3070764lji.10.1673885145247;
+        Mon, 16 Jan 2023 08:05:45 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id bj31-20020a2eaa9f000000b0028b7cc84ad9sm694141ljb.104.2023.01.16.08.05.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 08:05:44 -0800 (PST)
+Message-ID: <64e4b3b0-fc71-1876-9de8-e51d503d6183@linaro.org>
+Date:   Mon, 16 Jan 2023 17:05:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-arm64-sme2-v4-21-f2fa0aef982f@kernel.org>
-References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
-In-Reply-To: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-77e06
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3401; i=broonie@kernel.org;
- h=from:subject:message-id; bh=TaXKfe7r42NnJSzTx0Oj6fkdFodcwZfrTJqWBd69eSg=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhuSjpZsmtQpa808uKEqQ4wp5YBv383vgx53sp2ZnZIk+2jgj
- Y3ZWJ6MxCwMjF4OsmCLL2mcZq9LDJbbOfzT/FcwgViaQKQxcnAIwEfup7P9LLHs4lqXpaU+YO2nVbn
- kx48rgrVkVnbs+3RGYm5HfJFfG9vX/gR8X9O4WbhLI1Kyc87px6TwR3fWR8gzVUavS/oRsc8upS/7O
- edFmV8gEFt1J3AqLOcPPfhbpCtH47SOd/m3l14aflTzMru+uOMzlnWoS9+xu+vIoa05O/nq7dXs79E
- Jdq47Frs3cuD5cWdXlP9duoUmiMhxxGjPr/fU1Ze6Kzy2pOFz+cuWn1UfPaRU9E5tmaykrdEnh5pZc
- 4227theYdVhPZ5GTvPnJulij2/pBl0x/RkjgZK9vnuEWQQwrKkMTP3MvDJ9wyidVUnwqc3hGrvKFQq
- fIYnnGNcsbCw9u8X5+6dKEis/6AA==
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
+ '#size-cells' related dt-binding error
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
+ <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+ <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
+ <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
+ <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+ <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
+ <6f08d466-9589-ebff-c38d-bf9015a0f6ad@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <6f08d466-9589-ebff-c38d-bf9015a0f6ad@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the hwcaps defined by SME 2 and 2.1 to the hwcaps test.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 115 ++++++++++++++++++++++++++++++
- 1 file changed, 115 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index 9f255bc5f31c..93333a90bf3a 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -50,6 +50,78 @@ static void sme_sigill(void)
- 	asm volatile(".inst 0x04bf5800" : : : "x0");
- }
- 
-+static void sme2_sigill(void)
-+{
-+	/* SMSTART ZA */
-+	asm volatile("msr S0_3_C4_C5_3, xzr" : : : );
-+
-+	/* ZERO ZT0 */
-+	asm volatile(".inst 0xc0480001" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
-+static void sme2p1_sigill(void)
-+{
-+	/* SMSTART SM */
-+	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
-+
-+	/* BFCLAMP { Z0.H - Z1.H }, Z0.H, Z0.H */
-+	asm volatile(".inst 0xc120C000" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
-+static void smei16i32_sigill(void)
-+{
-+	/* SMSTART */
-+	asm volatile("msr S0_3_C4_C7_3, xzr" : : : );
-+
-+	/* SMOPA ZA0.S, P0/M, P0/M, Z0.B, Z0.B */
-+	asm volatile(".inst 0xa0800000" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
-+static void smebi32i32_sigill(void)
-+{
-+	/* SMSTART */
-+	asm volatile("msr S0_3_C4_C7_3, xzr" : : : );
-+
-+	/* BMOPA ZA0.S, P0/M, P0/M, Z0.B, Z0.B */
-+	asm volatile(".inst 0x80800008" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
-+static void smeb16b16_sigill(void)
-+{
-+	/* SMSTART */
-+	asm volatile("msr S0_3_C4_C7_3, xzr" : : : );
-+
-+	/* BFADD ZA.H[W0, 0], {Z0.H-Z1.H} */
-+	asm volatile(".inst 0xC1E41C00" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
-+static void smef16f16_sigill(void)
-+{
-+	/* SMSTART */
-+	asm volatile("msr S0_3_C4_C7_3, xzr" : : : );
-+
-+	/* FADD ZA.H[W0, 0], { Z0.H-Z1.H } */
-+	asm volatile(".inst 0xc1a41C00" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
- static void sve_sigill(void)
- {
- 	/* RDVL x0, #0 */
-@@ -158,6 +230,49 @@ static const struct hwcap_data {
- 		.sigill_fn = sme_sigill,
- 		.sigill_reliable = true,
- 	},
-+	{
-+		.name = "SME2",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME2,
-+		.cpuinfo = "sme2",
-+		.sigill_fn = sme2_sigill,
-+		.sigill_reliable = true,
-+	},
-+	{
-+		.name = "SME 2.1",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME2P1,
-+		.cpuinfo = "sme2p1",
-+		.sigill_fn = sme2p1_sigill,
-+	},
-+	{
-+		.name = "SME I16I32",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME_I16I32,
-+		.cpuinfo = "smei16i32",
-+		.sigill_fn = smei16i32_sigill,
-+	},
-+	{
-+		.name = "SME BI32I32",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME_BI32I32,
-+		.cpuinfo = "smebi32i32",
-+		.sigill_fn = smebi32i32_sigill,
-+	},
-+	{
-+		.name = "SME B16B16",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME_B16B16,
-+		.cpuinfo = "smeb16b16",
-+		.sigill_fn = smeb16b16_sigill,
-+	},
-+	{
-+		.name = "SME F16F16",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME_F16F16,
-+		.cpuinfo = "smef16f16",
-+		.sigill_fn = smef16f16_sigill,
-+	},
- 	{
- 		.name = "SVE",
- 		.at_hwcap = AT_HWCAP,
+On 16.01.2023 17:02, Bhupesh Sharma wrote:
+> 
+> On 1/16/23 9:24 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 16.01.2023 16:43, Bhupesh Sharma wrote:
+>>> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
+>>>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
+>>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>>>
+>>>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
+>>>>>>> Fix the following '#address-cells' & '#size-cells' related
+>>>>>>> dt-binding error:
+>>>>>>>
+>>>>>>>     $ make dtbs_check
+>>>>>>>
+>>>>>>>     From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>>>>          arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+>>>>>>>                #address-cells:0:0: 2 was expected
+>>>>>>>        From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>>>
+>>>>>> Don't we want rather to unify the soc address range?
+>>>>>
+>>>>> Well, the assumption in the original dt-bindings was that every reg
+>>>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
+>>>>> #size-cells to <2>). However, that is not the case for all of the
+>>>>> SoCs.
+>>>>
+>>>> Hm, which device of that SoC cannot be used with address/size cells 2?
+>>>
+>>> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
+>>> be used with address/size cells 2 (See:
+>>> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
+>> SM6115 (and pretty much every other arm64 msm platform newer than 8916)
+>> should be using addr/size-cells = 2 along with (dma-)ranges of 36 bit, as
+>> that's what their smmus use and otherwise some addresses may get cut off
+>> in translation, or so the story went with 845 N years ago.. We can either
+>> pursue this patch or I can submit the 2-cell-ification if you don't plan on
+>> adding more nodes shortly
+> 
+> 
+> Have you tested this combination on SM6115 like SoCs with various IPs? I have tried a few experiments in the past and not all IPs work well with 36-bit DMA ranges (atleast not on the boards I have).
+Can you list any specific examples? I've been using it for
+quite some time now and I see nothing wrong..
 
--- 
-2.34.1
+> 
+> So, I think it might lead to more breakage (unless we are sure of a well-tested fix). A simpler patch to fix the dt-bindings looks more useful IMO.
+I'm not saying no, you just have to convince Krzysztof :D
 
+Konrad
+
+> 
+> Thanks,
+> Bhupesh
