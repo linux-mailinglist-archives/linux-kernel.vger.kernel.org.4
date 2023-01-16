@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD21A66CF17
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18D866CF0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbjAPSqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S235049AbjAPSou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:44:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235055AbjAPSp1 (ORCPT
+        with ESMTP id S235040AbjAPSo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:45:27 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9BD3A94;
-        Mon, 16 Jan 2023 10:44:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 16 Jan 2023 13:44:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452F376A3;
+        Mon, 16 Jan 2023 10:40:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 29708339FC;
-        Mon, 16 Jan 2023 18:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673894683;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KuzXrboGb9Lh3VHatlRckTzXSNuP7dF8bfGulO0UsDA=;
-        b=Qc3HIqwzn7Y8Rs2YfGOOZR/F0bPWoOQQBUxFsLiszmxaxG0qhHHThSVR/sXSwoi6jRqrhT
-        DDfK8O3MaJ2eaJ5Jrd3XjoVL+ewy/oTn3G2lYgY+/MhMgW+0CYn8rrA1jx2Kp+ltKFGJ/3
-        tTlOIJAlNkh4Eoj4oCOlR7whuyGJq8Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673894683;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KuzXrboGb9Lh3VHatlRckTzXSNuP7dF8bfGulO0UsDA=;
-        b=7jMZPfo7gt4/CVrAO5/FMc8qluJYPU0PgJJrUG4lIGJ4/EByiFarjtrz2sTclun8XTfA34
-        Gu/ZYiR0gmaBQgCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E99B3138FE;
-        Mon, 16 Jan 2023 18:44:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OgINOBqbxWMOegAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 16 Jan 2023 18:44:42 +0000
-Date:   Mon, 16 Jan 2023 19:39:05 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     ye.xingchen@zte.com.cn
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] btrfs: remove duplicate included header files
-Message-ID: <20230116183905.GY11562@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <202301161558444609146@zte.com.cn>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F3C610A2;
+        Mon, 16 Jan 2023 18:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 437E8C433EF;
+        Mon, 16 Jan 2023 18:40:51 +0000 (UTC)
+Date:   Mon, 16 Jan 2023 18:40:48 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 24/30] arm64: cpufeature: Use kstrtobool() instead of
+ strtobool()
+Message-ID: <Y8WaMDK6lw7cfaZx@arm.com>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <5a1b329cda34aec67615c0d2fd326eb0d6634bf7.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <Y2J0xJ61iclx6WZG@arm.com>
+ <c039de1b-0412-320c-8e91-d74ab1ffbc02@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <202301161558444609146@zte.com.cn>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c039de1b-0412-320c-8e91-d74ab1ffbc02@wanadoo.fr>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:58:44PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Sat, Jan 14, 2023 at 02:29:46PM +0100, Christophe JAILLET wrote:
+> Le 02/11/2022 à 14:46, Catalin Marinas a écrit :
+> > On Tue, Nov 01, 2022 at 10:14:12PM +0100, Christophe JAILLET wrote:
+> > > strtobool() is the same as kstrtobool().
+> > > However, the latter is more used within the kernel.
+> > > 
+> > > In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> > > the other function name.
+> > > 
+> > > While at it, include the corresponding header file (<linux/kstrtox.h>)
+> > > 
+> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > 
+> > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 > 
-> extent-tree.h is included more than once.
+> This has been A-b 2 months ago, and I've just resent patches in this serie
+> that have neither been merged in -next, nor A-b or R-b.
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> So for this one, it is just a polite reminder. :)
+> 
+> Do you have visibility on when it should be merged?
 
-I did not find any other case of duplication, so added to misc-next,
-thanks.
+When large tree-wide series turn up on the list, there's always a
+confusion on how they'd get merged. I guess you are expecting such
+patches to go in via individual maintainer trees. It wasn't obvious from
+to me (I can now see there was some text in the patch description).
+
+I'll add it to my list for 6.3.
+
+-- 
+Catalin
