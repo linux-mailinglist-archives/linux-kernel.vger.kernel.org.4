@@ -2,86 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ADF66BC0E
+	by mail.lfdr.de (Postfix) with ESMTP id F3B6866BC0F
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjAPKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S230195AbjAPKoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjAPKnB (ORCPT
+        with ESMTP id S229660AbjAPKnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:43:01 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E01D1DBBD
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:41:16 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-4d59d518505so205878807b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:41:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4soP/Smn6p/Qzgy2m1Az79ZJJH6mPvlZu2xOB/yiHY0=;
-        b=HnfFdKima0dYSPTrF1v82kAbukMyFOVonb7ctdBnlYd59TpwCawMSILhAVTRZ/XLnk
-         UaxG4M7ao8T6V+3Pg6Pt3464FZ2JXZaWCEzCqPuM/egVf1tZmR/L9OvRNLl26ctWiKB0
-         1yrtlrYffH8KgdarR8fXWyZjX3mVAaAYJBixnLK+olSMhIl0+8ANNpa3T3Y+oU2DtGs5
-         VOU4qx5srgzkM+UsX+kwwAYDFBKstMX4reVl0lwu+xSlss5pThSRGTThchhXNAHQUMQ8
-         5Q2vHI4ehhiP+gYyEX2egtR0fJ8P+/2lriooo2PMeGthxmtTKUPDTkS/I5LTgAArA0g8
-         R5kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4soP/Smn6p/Qzgy2m1Az79ZJJH6mPvlZu2xOB/yiHY0=;
-        b=ak0U7X9j0p6aRoRBJmKJLfla3NgHYdWTZz476bJjkOCqzk08HRVPsfQFROc9F7yHUX
-         0Lcy8FMQhRz61pBTlzGYInnqoj7FphTaIrnUKvlOH+wtud+2k6pkZGpM24N2Jbfn7GuB
-         u6URK7WYULhfx1r4lGUlHkvV7c2bmhxETsZH5r+xbFpLTEyXDZUQMIM5WFUWLXp/aW+K
-         +8c2Byk9iKttJpnSChHF3qoqNqvqjAVYpA0+o4T+JvFjDAD9/mPa2ySbI/zWaV0fc+Ty
-         cd/b3q/Ns1/KICqkHsjfg7Bcf1vP1h5MyTnX4GG6dvIj96ddJit2+er3yacHgJkkAcgm
-         Laow==
-X-Gm-Message-State: AFqh2kqamakb/KzV5wHWIQJPFwGYtFJ15q4cbClP8cbD6OuTTB7hKEHU
-        3wIiEwMvslK1M6+tZu8vK1YGVeMlWfVjjfcLtj2diQ==
-X-Google-Smtp-Source: AMrXdXspgmx249O8TVxAcNuny03DGAUB+V2Yc99sZfMQJoh/65YzhpRklbp6PkiG8js8X67AYdeJP6fFYLwfm58XbuE=
-X-Received: by 2002:a05:690c:b05:b0:467:2f6:4de5 with SMTP id
- cj5-20020a05690c0b0500b0046702f64de5mr5170933ywb.278.1673865675672; Mon, 16
- Jan 2023 02:41:15 -0800 (PST)
+        Mon, 16 Jan 2023 05:43:03 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381031A974;
+        Mon, 16 Jan 2023 02:41:32 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 80CE51EC05BC;
+        Mon, 16 Jan 2023 11:41:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673865690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yEQvkWHdGtRI1RMZOOmWGxvfPmeNlATkYgahQimwKSM=;
+        b=USy4JWwxnyoxCDfKgh1VCFgGGj8GNEYkrDkNHGM4qiHTLPijXA11LEogNKFQCz8rcpBkxA
+        4etIob4nAFGkoxhaflzuO8rUzpMNAQwQYQId+LjrusBTmZlz4HUyojN9CPW+xODSKjj29X
+        FoCADdEP6h13o0GQt+SIo/gVhxyg/e0=
+Date:   Mon, 16 Jan 2023 11:41:26 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
+        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
+        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
+Subject: Re: [PATCH v5 16/17] qcom: llcc/edac: Support polling mode for ECC
+ handling
+Message-ID: <Y8Up1kjaIRLlxemH@zn.tnic>
+References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
+ <20221228084028.46528-17-manivannan.sadhasivam@linaro.org>
+ <Y8Kv0GIk69MhcOjT@zn.tnic>
+ <20230115040825.GB6568@thinkpad>
 MIME-Version: 1.0
-References: <20230116103341.70956-1-kerneljasonxing@gmail.com>
-In-Reply-To: <20230116103341.70956-1-kerneljasonxing@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 16 Jan 2023 11:41:04 +0100
-Message-ID: <CANn89iK+cx+NdBCMG_zH48ZbSpMNnBqm4bNXEEke=ebnLvkvbw@mail.gmail.com>
-Subject: Re: [PATCH v5 net] tcp: avoid the lookup process failing to get sk in
- ehash table
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230115040825.GB6568@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:33 AM Jason Xing <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <kernelxing@tencent.com>
->
-...
+On Sun, Jan 15, 2023 at 09:38:25AM +0530, Manivannan Sadhasivam wrote:
+> > You need to request the IRQ first and then set edac_op_state above. I.e., this
+> > devm_request_irq() needs to move in the if (ecc_irq > 0) branch above.
+> 
+> May I know why? I also checked other drivers, most of them are doing the same.
 
-> Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
-> ---
+If the others do it, that doesn't mean it is clean.
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+What happens to edac_op_state if devm_request_irq() fails?
 
-Thanks !
+I know I know, the probe function will fail and the driver won't load but still,
+this is sloppy. And it could come down to bite us later, when someone
+reorganizes that function.
+
+So, do all the error checking method determination - polling or interrupt - in
+one place.  Something like this (totally untested ofc, pasting here the whole
+thing to show what I mean):
+
+static int qcom_llcc_edac_probe(struct platform_device *pdev)
+{
+        struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
+        struct edac_device_ctl_info *edev_ctl;
+        struct device *dev = &pdev->dev;
+        int ecc_irq;
+        int rc;
+
+        rc = qcom_llcc_core_setup(llcc_driv_data->bcast_regmap);
+        if (rc)
+                return rc;
+
+        /* Allocate edac control info */
+        edev_ctl = edac_device_alloc_ctl_info(0, "qcom-llcc", 1, "bank",
+                                              llcc_driv_data->num_banks, 1,
+                                              NULL, 0,
+                                              edac_device_alloc_index());
+
+        if (!edev_ctl)
+                return -ENOMEM;
+
+        edev_ctl->dev = dev;
+        edev_ctl->mod_name = dev_name(dev);
+        edev_ctl->dev_name = dev_name(dev);
+        edev_ctl->ctl_name = "llcc";
+        edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
+
+        /* Check if LLCC driver has passed ECC IRQ */
+        ecc_irq = llcc_driv_data->ecc_irq;
+        if (ecc_irq > 0) {
+                rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
+                                      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
+                if (!rc) {
+                        edac_op_state = EDAC_OPSTATE_INT;
+                        goto irq_done;
+                }
+        }
+
+        /* Fall back to polling mode otherwise */
+        edev_ctl->poll_msec = ECC_POLL_MSEC;
+        edev_ctl->edac_check = llcc_ecc_check;
+        edac_op_state = EDAC_OPSTATE_POLL;
+
+irq_done:
+        rc = edac_device_add_device(edev_ctl);
+        if (rc) {
+                edac_device_free_ctl_info(edev_ctl);
+                return rc;
+        }
+
+        platform_set_drvdata(pdev, edev_ctl);
+
+        return rc;
+}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
