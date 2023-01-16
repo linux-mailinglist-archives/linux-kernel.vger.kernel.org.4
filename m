@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC5466D09A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C102266D09F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbjAPU76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 15:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S232201AbjAPVBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:01:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbjAPU7v (ORCPT
+        with ESMTP id S231171AbjAPVA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 15:59:51 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F81129E28;
-        Mon, 16 Jan 2023 12:59:50 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id v30so42332083edb.9;
-        Mon, 16 Jan 2023 12:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T5w4k6GgK/MPcdG08vW2aGQ55PObN9+zQUK2bAfgu+w=;
-        b=HKFdIIFYZZzMGkKzonuQFoNoXsAk6kCOB333/L/XbRxLJplHWNyc7dM97mrUcRFbyy
-         MPSnLZlbZOba/9+Hk3hetYHtwI2FjMYwO0Cqi8wF5H1x8xIj3shMTSzobGBl4Gv2mTDQ
-         f1Qe3JD6cc1gTXMI7byIj2aLRTf8dQsIQGJvS4itkjVup5c0Qj24T7eni2ICS2R1CSDF
-         kcxYWjRS1DGB1R9is8ZYs8/sekCAi+DV0zHwX6xloOOjkX29GoK8m7e4aFv8wfjIsDRH
-         He8TMfzJPwGaEu3zozsqoExpBM8dXLdb9z9t9lSkQ3yetpDroV8iy3vqu/DSMoHzNAB1
-         Ag2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T5w4k6GgK/MPcdG08vW2aGQ55PObN9+zQUK2bAfgu+w=;
-        b=DaqY0uFDR4wyHDwgqVJZhUUBI7OK7N80trqD9bGp5XB6GiBXVW6VjzzcBuFP0XZEf2
-         py0rWTeEVe6XMMomigSmiohVHvTxd9MocYelUz5mQFADWt9otkoDsJJ4tB7MBCLTfOIG
-         q4eiDQsllc1OTbE3J1pvKKbzxk3wEOx1QX4SePYxyAC+tDq2P6St7qzlg7oWFiqQA5I2
-         yds+dcUNN7li8Lyxbof+Zgz3vE54waTOdgmB4i34B27un+UqlO2bB/58qdSUQZ4AhfWt
-         avmiWMKpCgwBJ8DTC2fnR8RNZsteZb5C1/KnAqoPQfP6ei6JhT9N6ZPGbz3fzgc29EXC
-         dzDA==
-X-Gm-Message-State: AFqh2krmcxdvJ8ltGAoE44dBzOj0VGN8CPN8DBbW85yl/fOgNA1osKgX
-        s76E2l05RTvJxp3Asd7wnrZ6GIPTcJ99gA==
-X-Google-Smtp-Source: AMrXdXsLFQEoQrT3nQpug+jrJNRvCwFW4bXAZHKNAxZl4GX2OY8MfYZq5UsIdxtV19zb0SB0T3BCaA==
-X-Received: by 2002:a05:6402:5110:b0:499:8849:5fb3 with SMTP id m16-20020a056402511000b0049988495fb3mr815962edd.31.1673902788655;
-        Mon, 16 Jan 2023 12:59:48 -0800 (PST)
-Received: from skbuf ([188.27.185.68])
-        by smtp.gmail.com with ESMTPSA id f4-20020a50ee84000000b00494dcc5047asm11822544edr.22.2023.01.16.12.59.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 12:59:48 -0800 (PST)
-Date:   Mon, 16 Jan 2023 22:59:45 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        arun.ramadoss@microchip.com, hkallweit1@gmail.com,
-        linux@armlinux.org.uk
-Subject: Re: [PATCH net 1/2] net: dsa: microchip: ksz9477: port map
- correction in ALU table entry register
-Message-ID: <20230116205945.fewkozezdxrzhwzs@skbuf>
-References: <20230116100500.614444-1-rakesh.sankaranarayanan@microchip.com>
- <20230116100500.614444-1-rakesh.sankaranarayanan@microchip.com>
- <20230116100500.614444-2-rakesh.sankaranarayanan@microchip.com>
- <20230116100500.614444-2-rakesh.sankaranarayanan@microchip.com>
+        Mon, 16 Jan 2023 16:00:58 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6507035A7;
+        Mon, 16 Jan 2023 13:00:56 -0800 (PST)
+Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 2890F40D403D;
+        Mon, 16 Jan 2023 21:00:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 2890F40D403D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1673902852;
+        bh=aPV6pXyHE8sCh3Ryx3ARXM6RJp4EZ+mnoTRRwaCNjdo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FXCbw/QYuC8QnIz1VNr3ed5sUSwXO+2jdNi2CUXmtNds4aa/CS3hT4oasox2nhI9z
+         jElg7zq6MjptUH5BBY/pSMziVwEJFJWyttGtjKoqkIDocsvibya9FyGhuaIKitkC+k
+         KDFGNPPA51SsCRpn0sViNH0BKo5iiste8F5iYMXw=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH 5.15] block: fix and cleanup bio_check_ro
+Date:   Tue, 17 Jan 2023 00:00:40 +0300
+Message-Id: <20230116210040.804629-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116100500.614444-2-rakesh.sankaranarayanan@microchip.com>
- <20230116100500.614444-2-rakesh.sankaranarayanan@microchip.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:34:59PM +0530, Rakesh Sankaranarayanan wrote:
-> ALU table entry 2 register in KSZ9477 have bit positions reserved for
-> forwarding port map. This field is referred in ksz9477_fdb_del() for
-> clearing forward port map and alu table.
-> 
-> But current fdb_del refer ALU table entry 3 register for accessing forward
-> port map. Update ksz9477_fdb_del() to get forward port map from correct
-> alu table entry register.
-> 
-> With this bug, issue can be observed while deleting static MAC entries.
-> Delete any specific MAC entry using "bridge fdb del" command. This should
-> clear all the specified MAC entries. But it is observed that entries with
-> self static alone are retained.
-> 
-> Tested on LAN9370 EVB since ksz9477_fdb_del() is used common across
-> LAN937x and KSZ series.
-> 
-> Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> ---
+From: Christoph Hellwig <hch@lst.de>
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+commit 57e95e4670d1126c103305bcf34a9442f49f6d6a upstream.
 
-Would be nice to convert the alu_table[] array into a proper structure
-in a net-next patch.
+Don't use a WARN_ON when printing a potentially user triggered
+condition. Also don't print the partno when the block device name
+already includes it, and use the %pg specifier to simplify printing
+the block device name.
+
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Link: https://lore.kernel.org/r/20220304180105.409765-2-hch@lst.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+---
+ block/blk-core.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 13e1fca1e923..ed6271dcc1b1 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -698,14 +698,10 @@ static inline bool should_fail_request(struct block_device *part,
+ static inline bool bio_check_ro(struct bio *bio)
+ {
+ 	if (op_is_write(bio_op(bio)) && bdev_read_only(bio->bi_bdev)) {
+-		char b[BDEVNAME_SIZE];
+-
+ 		if (op_is_flush(bio->bi_opf) && !bio_sectors(bio))
+ 			return false;
+-
+-		WARN_ONCE(1,
+-		       "Trying to write to read-only block-device %s (partno %d)\n",
+-			bio_devname(bio, b), bio->bi_bdev->bd_partno);
++		pr_warn("Trying to write to read-only block-device %pg\n",
++			bio->bi_bdev);
+ 		/* Older lvm-tools actually trigger this */
+ 		return false;
+ 	}
+-- 
+2.34.1
+
