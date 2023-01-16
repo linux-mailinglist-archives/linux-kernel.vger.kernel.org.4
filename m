@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA0D66CF78
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6D166CF7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbjAPTVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S229577AbjAPTWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbjAPTU7 (ORCPT
+        with ESMTP id S233038AbjAPTWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:20:59 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 27751524F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:20:57 -0800 (PST)
-Received: (qmail 137219 invoked by uid 1000); 16 Jan 2023 14:20:57 -0500
-Date:   Mon, 16 Jan 2023 14:20:57 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
-References: <20230114175343.GF2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230114181537.GA493203@paulmck-ThinkPad-P17-Gen-1>
- <Y8MOOrrHntA9TyUk@rowland.harvard.edu>
- <20230115051510.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8Qog8qf7wIx2Kve@rowland.harvard.edu>
- <20230115181052.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8RmEtBnwqOzNhsK@rowland.harvard.edu>
- <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
- <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 16 Jan 2023 14:22:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A6E222ED;
+        Mon, 16 Jan 2023 11:22:09 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673896928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/xRPy2lFgYzK4rQRIIVFPLcqwpR0bB+GwT9J43FZdpM=;
+        b=QEUWF6j5u+1NhckWuR+mgr9v4hj2n0zEuXyboXvSn34zuMH1NDWqp4x6Xg37XzsjC0c5Rh
+        WNoqv2l0pCMKKpQoBJu2TKmmvAIXzgWRljRu/CIoDjyrZgmK2O/SS8C2jkWdZmD8z+MS8y
+        ThiN1BHGg9HCjqTI2lt1qvuZtYXLjoey+DmgRW1YNIRYN4NHKQwUlOjl5UQB7epv1l2got
+        a1K2kj/oN+trWA842lnDJBZpXS0PtXW6DlqtMM84oj7pCcQ2IUTzqVGq694zdIopstvcDf
+        o2c3pySEeDJ5TNbmmyS1E/TLtub1svpU7wex62TMvnlDDi1VL5ktKdYL1zSOIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673896928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/xRPy2lFgYzK4rQRIIVFPLcqwpR0bB+GwT9J43FZdpM=;
+        b=E3CY56ng5AjvLJnjTeTH/SIcAG7tQAejOTkhid6gy/IkjDhcsvcKeMNKlUgyuzP3Bg4btY
+        oLWtXOUok+0V71BA==
+To:     David Woodhouse <dwmw2@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel <xen-devel@lists.xen.org>
+Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: Re: [patch V3 16/22] genirq/msi: Provide new domain id based
+ interfaces for freeing interrupts
+In-Reply-To: <e12002af82e9554e42e876d7b9e813b90e673330.camel@infradead.org>
+References: <20221124225331.464480443@linutronix.de>
+ <20221124230314.337844751@linutronix.de>
+ <1901d84f8f999ac6b2f067360f098828cb8c17cf.camel@infradead.org>
+ <875yd6o2t7.ffs@tglx> <871qnunycr.ffs@tglx>
+ <e12002af82e9554e42e876d7b9e813b90e673330.camel@infradead.org>
+Date:   Mon, 16 Jan 2023 20:22:07 +0100
+Message-ID: <87h6wqmgio.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:06:52AM -0800, Paul E. McKenney wrote:
-> On Mon, Jan 16, 2023 at 01:11:41PM -0500, Alan Stern wrote:
+David!
 
-> > Why do you want to prohibit nesting?  Why would that be a better 
-> > approximation?
-> 
-> Because the current LKMM gives wrong answers for nested critical
-> sections.
+On Mon, Jan 16 2023 at 18:58, David Woodhouse wrote:
 
-I don't agree.  Or at least, it depends on whose definition of "nested 
-critical sections" you adopt.
+> On Mon, 2023-01-16 at 19:11 +0100, Thomas Gleixner wrote:
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.flags=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=3D MSI_FLAG_FREE_MSI_DESCS | MSI_FLAG_DEV_SYSFS,
+> =C2=A0
+> That doesn't apply on top of
+> https://lore.kernel.org/all/4bffa69a949bfdc92c4a18e5a1c3cbb3b94a0d32.came=
+l@infradead.org/
+> and doesn't include the | MSI_FLAG_PCI_MSIX either.
 
->  For example, for the litmus test shown below, mainline
-> LKMM will incorrectly report "Never".  The two SRCU read-side critical
-> sections are independent, so the fact that P1()'s synchronize_srcu() is
-> guaranteed to wait for the first on to complete says nothing about the
-> second having completed.  Therefore, in Linux-kernel SRCU, the "exists"
-> clause could be satisfied.
-> 
-> In contrast, the proposed change flags this as having nesting.
+Indeed. I saw that patch after my reply. :)
 
-In fact, this litmus test has overlapping critical sections, not nested 
-ones.  But the current LKML incorrectly _thinks_ they are nested, 
-because it matches each lock with the first unmatched unlock.
+> With that remedied,
+>
+> Tested-by: David Woodhouse <dwmw@amazon.co.uk>
+>
+> Albeit only under qemu with
+> https://git.infradead.org/users/dwmw2/qemu.git/shortlog/refs/heads/xenfv
+> and not under real Xen.
 
-If you write a litmus test that has properly nested (not overlapping!) 
-read-side critical sections, the current LKMM will match the locks and 
-unlocks correctly and will give the right answer.
-
-So what you really want to do is rule out overlapping, not nesting.  But 
-I guess there's no way to do one without the other.
-
-Alan
-
-> 							Thaxn, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> C C-srcu-nest-5
-> 
-> (*
->  * Result: Sometimes
->  *
->  * This demonstrates non-nesting of SRCU read-side critical sections.
->  * Unlike RCU, SRCU critical sections do not nest.
->  *)
-> 
-> {}
-> 
-> P0(int *x, int *y, struct srcu_struct *s1)
-> {
-> 	int r1;
-> 	int r2;
-> 	int r3;
-> 	int r4;
-> 
-> 	r3 = srcu_read_lock(s1);
-> 	r2 = READ_ONCE(*y);
-> 	r4 = srcu_read_lock(s1);
-> 	srcu_read_unlock(s1, r3);
-> 	r1 = READ_ONCE(*x);
-> 	srcu_read_unlock(s1, r4);
-> }
-> 
-> P1(int *x, int *y, struct srcu_struct *s1)
-> {
-> 	WRITE_ONCE(*y, 1);
-> 	synchronize_srcu(s1);
-> 	WRITE_ONCE(*x, 1);
-> }
-> 
-> locations [0:r1]
-> exists (0:r1=1 /\ 0:r2=0)
+Five levels of emulation. What could possibly go wrong?
