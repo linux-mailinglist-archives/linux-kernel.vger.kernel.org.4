@@ -2,257 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA3E66B75A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F2566B75E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjAPGM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 01:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S231912AbjAPGOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 01:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjAPGMi (ORCPT
+        with ESMTP id S231841AbjAPGOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 01:12:38 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6F8B44B
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 22:11:38 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id y11-20020a056e02178b00b0030c048d64a7so20376636ilu.1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 22:11:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zkSMvX6rVJKCcqoDql0XlKX2nT9Z3jmJcEZLt5iBVTA=;
-        b=tkPXY8n8j/WEKBDCV7JA3nDSKHY2gZORY9QAq0WC88zrmrtlQxZKH0ordLK+VCJgjs
-         xxSV3gOtQpHuIb8N9lSUXTPxUeSctjcDjOWinaRxxF9W0cu37Dhm1eCLQ4HfNvFGrJtk
-         6KMZ+QC79n/k3Pz80XJwcRkF7Reh3fTLt9kPYTQ5vkJg+6ZpOWd9VFl6q66l5ZcETCSS
-         UUi3Hit4jinFgNPGT1/mnE2vIaUoae6Fgj9udyf6Pl08vMhiFbo0BzAHj/MoIUbP/6QZ
-         QBsDk8O2ybcVpfW3GIUq8oMZW1rJ4WUHs2FNKIuziCCG+jirAwMybpdhv6lry1+YfrzI
-         Luig==
-X-Gm-Message-State: AFqh2koLsIlQQv9Z42hd/sCP0odBl7h9NEYXVpstj3J2dNbTc+UUZr2X
-        XiAbFPTMWSLZxVAIPx/xDln/AFOBbBGM8RAfVpkYK1Rx8igL
-X-Google-Smtp-Source: AMrXdXsZ9hdUoIUmsPXRqU0tp+Fa+qnotRkQKHaHyI1IFdVsqxuJOCcRHjXd+1snOl5WkrYDHMDZZ09LBJAHhNjbi26LFslz8NBr
+        Mon, 16 Jan 2023 01:14:42 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4A44483;
+        Sun, 15 Jan 2023 22:14:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673849680; x=1705385680;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fYWke13lKCI4mRfwIKwzjkt+o2kD3ODpPS5FXnrynV0=;
+  b=jKSlyF108jfoVcKLw/I39QYVahW7OwmjMo1kreWkMQVKc9FpYa91QbPE
+   lvN707oee7uCVBN4YOHFSZiiWGgV5ADudZgFEbMjmRbVExxYTc8Neb4+m
+   JlsSzSHmdy3hrNcDxdIzbNhYLDrxKLlXWrzNGXVQhyFWaabQqvlzEfP2y
+   6u7V286/9p0BhU1gawz4j4nIfpfeJRlvkFcEHSvPm7nb6nbX4I2d0F7jy
+   YfcYXm6V+It5vgdIaUpPzDhjsVZ2im6xoha7bL3dUmyMyLgPNOr9ErEBQ
+   lNcs3SaiH2b5Ne7uaymVGm4C8mbMtzH0UC869kkQwN30YdWhj7ZzMKwe0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="307947882"
+X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
+   d="scan'208";a="307947882"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:14:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="832725848"
+X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
+   d="scan'208";a="832725848"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.53.56])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:14:34 -0800
+Message-ID: <cbcb6109-0c23-9270-a534-c4fabdddfbbc@intel.com>
+Date:   Mon, 16 Jan 2023 08:14:29 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a02:8541:0:b0:3a1:bc4e:e164 with SMTP id
- g59-20020a028541000000b003a1bc4ee164mr501166jai.18.1673849497842; Sun, 15 Jan
- 2023 22:11:37 -0800 (PST)
-Date:   Sun, 15 Jan 2023 22:11:37 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b9f9fd05f25b74ff@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in io_poll_task_func
-From:   syzbot <syzbot+cb95143d1d4d788c1941@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.1
+Subject: Re: [RFC 3/4] perf tool: Introduce PERF_RECORD_KMOD_SEC_MAP
+Content-Language: en-US
+To:     Ravi Bangoria <ravi.bangoria@amd.com>, acme@kernel.org
+Cc:     jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        kan.liang@linux.intel.com, peterz@infradead.org,
+        mark.rutland@arm.com, mingo@redhat.com,
+        alexander.shishkin@linux.intel.com, james.clark@arm.com,
+        german.gomez@arm.com, leo.yan@linaro.org,
+        alexey.v.bayduraev@linux.intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com
+References: <20230110055859.685-1-ravi.bangoria@amd.com>
+ <20230110055859.685-4-ravi.bangoria@amd.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230110055859.685-4-ravi.bangoria@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 10/01/23 07:58, Ravi Bangoria wrote:
+> Introduce, perf tool only, synthetic event type PERF_RECORD_KMOD_SEC_MAP.
+> Also add stub code for it. This event will be used to save/restore kernel
+> module section maps to/from perf.data file. This is needed because kernel
+> module elfs does not contain program header table and thus there is no
+> easy way to find out how kernel would have loaded module sections in the
+> memory.
 
-syzbot found the following issue on:
+Currently machine__addnew_module_map() adds a map for a
+module, and then perf_event__synthesize_modules() creates
+an MMAP/MMAP2 event for it.  Why can't we do that for the
+sections?
 
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12fcd936480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb95143d1d4d788c1941
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> ---
+>  tools/lib/perf/Documentation/libperf.txt |  1 +
+>  tools/lib/perf/include/perf/event.h      | 25 ++++++++++++++++++++++++
+>  tools/perf/util/event.c                  |  1 +
+>  tools/perf/util/session.c                | 12 ++++++++++++
+>  tools/perf/util/tool.h                   |  3 ++-
+>  5 files changed, 41 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/lib/perf/Documentation/libperf.txt b/tools/lib/perf/Documentation/libperf.txt
+> index a8f1a237931b..b62730b84cc5 100644
+> --- a/tools/lib/perf/Documentation/libperf.txt
+> +++ b/tools/lib/perf/Documentation/libperf.txt
+> @@ -211,6 +211,7 @@ SYNOPSIS
+>    struct perf_record_time_conv;
+>    struct perf_record_header_feature;
+>    struct perf_record_compressed;
+> +  struct perf_record_kmod_sec_maps;
+>  --
+>  
+>  DESCRIPTION
+> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> index ad47d7b31046..404b23b6902b 100644
+> --- a/tools/lib/perf/include/perf/event.h
+> +++ b/tools/lib/perf/include/perf/event.h
+> @@ -438,6 +438,29 @@ struct perf_record_compressed {
+>  	char			 data[];
+>  };
+>  
+> +/* Kernel module elf section maps */
+> +struct perf_record_kmod_sec_map {
+> +	struct perf_event_header header;
+> +	/* Machine id. Same as synthesized PERF_RECORD_MMAP */
+> +	__u32			 pid;
+> +	/* Section start ip address */
+> +	__u64			 start;
+> +	/* Section length */
+> +	__u64			 len;
+> +	/* Section page offset in kernel module elf file */
+> +	__u64			 pgoff;
+> +	/* Section name length, including '\0' */
+> +	__u16			 sec_name_len;
+> +	/* Kernel module filename(path) length, including '\0' */
+> +	__u16			 filename_len;
+> +	/*
+> +	 * Section name and filename stored as: "sec_name\0filename\0". i.e:
+> +	 * data[0]: Section name
+> +	 * data[sec_name_len + 1]: File name
+> +	 */
+> +	char			 data[];
+> +};
+> +
+>  enum perf_user_event_type { /* above any possible kernel type */
+>  	PERF_RECORD_USER_TYPE_START		= 64,
+>  	PERF_RECORD_HEADER_ATTR			= 64,
+> @@ -459,6 +482,7 @@ enum perf_user_event_type { /* above any possible kernel type */
+>  	PERF_RECORD_HEADER_FEATURE		= 80,
+>  	PERF_RECORD_COMPRESSED			= 81,
+>  	PERF_RECORD_FINISHED_INIT		= 82,
+> +	PERF_RECORD_KMOD_SEC_MAP		= 83,
+>  	PERF_RECORD_HEADER_MAX
+>  };
+>  
+> @@ -499,6 +523,7 @@ union perf_event {
+>  	struct perf_record_time_conv		time_conv;
+>  	struct perf_record_header_feature	feat;
+>  	struct perf_record_compressed		pack;
+> +	struct perf_record_kmod_sec_map		kmod_sec_map;
+>  };
+>  
+>  #endif /* __LIBPERF_EVENT_H */
+> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+> index 1fa14598b916..1b03061440bc 100644
+> --- a/tools/perf/util/event.c
+> +++ b/tools/perf/util/event.c
+> @@ -77,6 +77,7 @@ static const char *perf_event__names[] = {
+>  	[PERF_RECORD_HEADER_FEATURE]		= "FEATURE",
+>  	[PERF_RECORD_COMPRESSED]		= "COMPRESSED",
+>  	[PERF_RECORD_FINISHED_INIT]		= "FINISHED_INIT",
+> +	[PERF_RECORD_KMOD_SEC_MAP]		= "KMOD_SEC_MAP",
+>  };
+>  
+>  const char *perf_event__name(unsigned int id)
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index 7c021c6cedb9..4f5165cd58de 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -563,6 +563,8 @@ void perf_tool__fill_defaults(struct perf_tool *tool)
+>  		tool->compressed = perf_session__process_compressed_event;
+>  	if (tool->finished_init == NULL)
+>  		tool->finished_init = process_event_op2_stub;
+> +	if (tool->kmod_sec_map == NULL)
+> +		tool->kmod_sec_map = process_event_stub;
+>  }
+>  
+>  static void swap_sample_id_all(union perf_event *event, void *data)
+> @@ -997,6 +999,12 @@ static void perf_event__time_conv_swap(union perf_event *event,
+>  	}
+>  }
+>  
+> +static void perf_event_kmod_sec_map_swap(union perf_event *event __maybe_unused,
+> +					  bool sample_id_all __maybe_unused)
+> +{
+> +	/* FIXME */
+> +}
+> +
+>  typedef void (*perf_event__swap_op)(union perf_event *event,
+>  				    bool sample_id_all);
+>  
+> @@ -1035,6 +1043,7 @@ static perf_event__swap_op perf_event__swap_ops[] = {
+>  	[PERF_RECORD_STAT_ROUND]	  = perf_event__stat_round_swap,
+>  	[PERF_RECORD_EVENT_UPDATE]	  = perf_event__event_update_swap,
+>  	[PERF_RECORD_TIME_CONV]		  = perf_event__time_conv_swap,
+> +	[PERF_RECORD_KMOD_SEC_MAP]	  = perf_event_kmod_sec_map_swap,
+>  	[PERF_RECORD_HEADER_MAX]	  = NULL,
+>  };
+>  
+> @@ -1727,6 +1736,9 @@ static s64 perf_session__process_user_event(struct perf_session *session,
+>  		return err;
+>  	case PERF_RECORD_FINISHED_INIT:
+>  		return tool->finished_init(session, event);
+> +	case PERF_RECORD_KMOD_SEC_MAP:
+> +		/* Currently PERF_RECORD_KMOD_SEC_MAP is supported only for host */
+> +		return tool->kmod_sec_map(tool, event, &sample, &session->machines.host);
+>  	default:
+>  		return -EINVAL;
+>  	}
+> diff --git a/tools/perf/util/tool.h b/tools/perf/util/tool.h
+> index c957fb849ac6..8ea7fb85c196 100644
+> --- a/tools/perf/util/tool.h
+> +++ b/tools/perf/util/tool.h
+> @@ -60,7 +60,8 @@ struct perf_tool {
+>  			unthrottle,
+>  			ksymbol,
+>  			bpf,
+> -			text_poke;
+> +			text_poke,
+> +			kmod_sec_map;
+>  
+>  	event_attr_op	attr;
+>  	event_attr_op	event_update;
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cb95143d1d4d788c1941@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in io_poll_check_events io_uring/poll.c:244 [inline]
-BUG: KASAN: use-after-free in io_poll_task_func+0xf77/0x1220 io_uring/poll.c:327
-Read of size 4 at addr ffff888085e21d6c by task kworker/1:8/5241
-
-CPU: 1 PID: 5241 Comm: kworker/1:8 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events io_fallback_req_func
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:417
- kasan_report+0xc0/0xf0 mm/kasan/report.c:517
- io_poll_check_events io_uring/poll.c:244 [inline]
- io_poll_task_func+0xf77/0x1220 io_uring/poll.c:327
- io_fallback_req_func+0xfd/0x204 io_uring/io_uring.c:252
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 22336:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- kmem_cache_alloc_node+0x183/0x350 mm/slub.c:3497
- alloc_task_struct_node kernel/fork.c:171 [inline]
- dup_task_struct kernel/fork.c:979 [inline]
- copy_process+0x3aa/0x7740 kernel/fork.c:2103
- kernel_clone+0xeb/0x9a0 kernel/fork.c:2687
- __do_sys_clone+0xba/0x100 kernel/fork.c:2828
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 5241:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- put_task_struct_many include/linux/sched/task.h:125 [inline]
- __io_put_task+0x155/0x1e0 io_uring/io_uring.c:725
- io_put_task io_uring/io_uring.h:328 [inline]
- __io_req_complete_post+0x7ac/0xcd0 io_uring/io_uring.c:978
- io_req_complete_post+0xf1/0x1a0 io_uring/io_uring.c:992
- io_req_task_complete+0x189/0x260 io_uring/io_uring.c:1623
- io_poll_task_func+0xa95/0x1220 io_uring/poll.c:347
- io_fallback_req_func+0xfd/0x204 io_uring/io_uring.c:252
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Last potentially related work creation:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
- __call_rcu_common.constprop.0+0x99/0x780 kernel/rcu/tree.c:2622
- put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:231
- context_switch kernel/sched/core.c:5304 [inline]
- __schedule+0x25d8/0x5a70 kernel/sched/core.c:6619
- preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6788
- preempt_schedule_thunk+0x1a/0x20 arch/x86/entry/thunk_64.S:34
- __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:160 [inline]
- _raw_spin_unlock_irq+0x40/0x50 kernel/locking/spinlock.c:202
- spin_unlock_irq include/linux/spinlock.h:400 [inline]
- do_group_exit+0x1c5/0x2a0 kernel/exit.c:1009
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Second to last potentially related work creation:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
- __call_rcu_common.constprop.0+0x99/0x780 kernel/rcu/tree.c:2622
- put_task_struct_rcu_user+0x83/0xc0 kernel/exit.c:231
- release_task+0xcc8/0x1870 kernel/exit.c:281
- wait_task_zombie kernel/exit.c:1198 [inline]
- wait_consider_task+0x306d/0x3ce0 kernel/exit.c:1425
- do_wait_thread kernel/exit.c:1488 [inline]
- do_wait+0x7cd/0xd90 kernel/exit.c:1605
- kernel_wait4+0x150/0x260 kernel/exit.c:1768
- __do_sys_wait4+0x13f/0x150 kernel/exit.c:1796
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888085e21d40
- which belongs to the cache task_struct of size 7232
-The buggy address is located 44 bytes inside of
- 7232-byte region [ffff888085e21d40, ffff888085e23980)
-
-The buggy address belongs to the physical page:
-page:ffffea0002178800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x85e20
-head:ffffea0002178800 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-memcg:ffff88802a511441
-anon flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff8880125ec500 0000000000000000 0000000000000001
-raw: 0000000000000000 0000000000040004 00000001ffffffff ffff88802a511441
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 5140, tgid 5140 (syz-executor.4), ts 940002279505, free_ts 939439685406
- prep_new_page mm/page_alloc.c:2549 [inline]
- get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
- __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x350 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- kmem_cache_alloc_node+0x136/0x350 mm/slub.c:3497
- alloc_task_struct_node kernel/fork.c:171 [inline]
- dup_task_struct kernel/fork.c:979 [inline]
- copy_process+0x3aa/0x7740 kernel/fork.c:2103
- kernel_clone+0xeb/0x9a0 kernel/fork.c:2687
- __do_sys_clone+0xba/0x100 kernel/fork.c:2828
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2637
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x175/0x320 mm/slub.c:3476
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:140
- getname_flags include/linux/audit.h:320 [inline]
- getname+0x92/0xd0 fs/namei.c:219
- do_sys_openat2+0xf5/0x4c0 fs/open.c:1305
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1338
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888085e21c00: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff888085e21c80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888085e21d00: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
-                                                          ^
- ffff888085e21d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888085e21e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
