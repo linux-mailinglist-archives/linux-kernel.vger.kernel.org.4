@@ -2,126 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA40166D0F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D424866D0F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbjAPVao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        id S231321AbjAPVex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:34:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbjAPVaX (ORCPT
+        with ESMTP id S232546AbjAPVeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:30:23 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117FF2B63B;
-        Mon, 16 Jan 2023 13:30:19 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0ECD51C09F4; Mon, 16 Jan 2023 22:30:17 +0100 (CET)
-Date:   Mon, 16 Jan 2023 22:30:16 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc1 review
-Message-ID: <Y8XB6E5t/qcKnQb7@duo.ucw.cz>
-References: <20230116154743.577276578@linuxfoundation.org>
- <CAEUSe786JgSDJOtCU_tB81ddYxJk_sSfgzM33r7iFccsU7O5QA@mail.gmail.com>
+        Mon, 16 Jan 2023 16:34:50 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA7AF;
+        Mon, 16 Jan 2023 13:34:48 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Nwlfb0tm5z4xMx;
+        Tue, 17 Jan 2023 08:34:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673904887;
+        bh=5Vjh1SwyZ3SGuFxoq6hteZnhdy95xfFTzvUAFR1cxWQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q5+f7I4WnYpwtbq+vQ9rcdaDJJvFboc3KYkaFsmOY5iYcVNtCQwMlqPcYnGH6Ryg1
+         q88xX0bY9GvhzcrAoNO75/Ov1qD+7feFliycK2Gm+fyXgShGoAvWBqvrp7ehXwQ6DA
+         3youANdi3bEM02ZpRLbz55y/AhhC3sMl/RANqobI+I4yCa/vEgTlkQ7QO59gXay/Mu
+         Pumdn5CPCMqs6Uq0K9ciRDx/9u/RQoJzM5V9e+Dr6HpPpXUdmAg2YQwUl7AqYRevew
+         ZwXikH2w7th36nCSJr1cBuc6bSOZovZu2i20mFKrZjvh0Kv/Eh9V2TsXamURHoS7pN
+         nk1jKLhQ2pGzg==
+Date:   Tue, 17 Jan 2023 08:34:45 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the btrfs-fixes tree
+Message-ID: <20230117083345.7443cbfe@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="H5Vb37xdFkf30kEd"
-Content-Disposition: inline
-In-Reply-To: <CAEUSe786JgSDJOtCU_tB81ddYxJk_sSfgzM33r7iFccsU7O5QA@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hs8UnPzqQfjcAFdjGiNn=Rq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---H5Vb37xdFkf30kEd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/hs8UnPzqQfjcAFdjGiNn=Rq
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Hi all,
 
-> On Mon, 16 Jan 2023 at 10:06, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.10.164 release.
-> > There are 64 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
-h-5.10.164-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
->=20
-> Preliminarily,
->=20
-> | /builds/linux/drivers/gpu/drm/msm/dp/dp_aux.c: In function 'dp_aux_isr':
-> | /builds/linux/drivers/gpu/drm/msm/dp/dp_aux.c:427:14: error: 'isr'
-> undeclared (first use in this function); did you mean 'idr'?
-> |   427 |         if (!isr)
-> |       |              ^~~
-> |       |              idr
->=20
-> It's currently failing for arm, arm64, (not i386) and x86, with GCC 8,
-> 10, 11, 12; Clang 15 and nightly. We'll test the extended set of
-> architectures and update momentarily.
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-CIP testing sees the same build problem:
+  3d223cb5a2f7 ("btrfs: do not abort transaction on failure to write log tr=
+ee when syncing log")
+  46fc636870f4 ("btrfs: fix directory logging due to race with concurrent i=
+ndex key deletion")
+  52bd17801bcb ("btrfs: add missing setup of log for full commit at add_con=
+flicting_inode()")
+  8ba46a395c7f ("btrfs: fix missing error handling when logging directory i=
+tems")
+  b8a4b882f62c ("btrfs: do not abort transaction on failure to update log r=
+oot")
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/7=
-48630506
-
-  CC [M]  drivers/gpu/drm/msm/dp/dp_display.o
-6758drivers/gpu/drm/msm/dp/dp_aux.c: In function 'dp_aux_isr':
-6759drivers/gpu/drm/msm/dp/dp_aux.c:427:7: error: 'isr' undeclared (first u=
-se in this function); did you mean 'idr'?
-6760  427 |  if (!isr)
-6761      |       ^~~
-6762      |       idr
-6763drivers/gpu/drm/msm/dp/dp_aux.c:427:7: note: each undeclared identifier=
- is reported only once for each function it appears in
-6764make[4]: *** [scripts/Makefile.build:286: drivers/gpu/drm/msm/dp/dp_aux=
-=2Eo] Error 1
-6765make[4]: *** Waiting for unfinished jobs....
-6766
-
-
-Best regards,
-								Pavel
 --=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Cheers,
+Stephen Rothwell
 
---H5Vb37xdFkf30kEd
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/hs8UnPzqQfjcAFdjGiNn=Rq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8XB6AAKCRAw5/Bqldv6
-8iloAJ9LoMMCTNXlZWHlhrtunrUHp/OADwCeMzhdXd643Eo2lnCkeaQK/W0yfyQ=
-=NKME
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPFwvUACgkQAVBC80lX
+0GxINAf/SDJlhiH17hwezdtYvjw7Jj2MllTzyFoc8zGEo9McIjjJBRD+Fi3GIQqo
+0qp7LI+nzdiCzQVqyek5xrxlulWZFnV4IuNfKJducawa+gXvwa94f17vOO0WAPqL
+u5E8z0vKKvRDi05KSwJ0oUevmBK8UTuCAGtK/53voFFAWnbFRml7bTJMHQLla6Oi
+TamVu75jAmeT5inDwc3yz215GdD6iALhmmH0XjH9pTtIbt8/33WzL8ILpYafzB8l
++IiHSSDt0PN5FKNcLDU5QWS+gifZZrVQpYWI2nnnLDSlt6elDad8gp7u8sXysch0
+AUV3eX0E4dl9IcpHpMMOEMSA78GJrA==
+=Zgul
 -----END PGP SIGNATURE-----
 
---H5Vb37xdFkf30kEd--
+--Sig_/hs8UnPzqQfjcAFdjGiNn=Rq--
