@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2340B66B4F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 01:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A9666B4FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 01:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjAPAe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 19:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S230354AbjAPAg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 19:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjAPAeY (ORCPT
+        with ESMTP id S230358AbjAPAgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 19:34:24 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C894C2F
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 16:34:24 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id s17-20020a0566022bd100b00704c01f38abso148556iov.0
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 16:34:23 -0800 (PST)
+        Sun, 15 Jan 2023 19:36:53 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0409A6A41;
+        Sun, 15 Jan 2023 16:36:52 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s3so568030edd.4;
+        Sun, 15 Jan 2023 16:36:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3wlPs+VBNuhHts7wgRKDtTEmK1wtfqcqEGfFdEmet68=;
+        b=hDtGW1Qby247h2l3G48B4rVVvhOLDwyCxfMukL5tZqGj1ym2LLIboYUY6+Xb73SM0I
+         5MRfxK1tEFNO2j9ldhaY5mcT1iX0DYQElcxxTYxSOWoUMJN3mCA7g+xzVbJ+I3miand1
+         WqVhNShSyOjHWafS1vPeK5XPPK5iggrbG0tCVYOXbmUZ+keAzn1mZNLV02fN/V6uY+QJ
+         kbxUskUowsoUn9W/Ss9HiJVrjjSiI5NwPEUe2ZkuCf3Ojg9PrZTz+iOuOcCp+otSLa8x
+         gyx0YdwTQ/wGZY4pOToUdV/pQU2JfqYxYS7oo4Gg5jZV1hmLKPkqosAtPSQR/2l1naAf
+         IYdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gms77sXyp4PM9SsI09aImaGSdmPJK2f/lIA2WbC1zTY=;
-        b=M4QoP8sDSTwA97ZJMjp8Cd7SeQlNWS9PXBp26wNVdIZ/GcwDCzCb0KLESVlWe+RX8H
-         uZCPt7nKzmDk6QoV6G119E4mSwxxNCQmM+LFj4c/9HT9FF+ggpcGXorRY9g00ZtvLEfT
-         XzAas1N8s9M1i1mNqclqRoo2rxw05b+2vAI3SEE5BhKFYZUC+0s+S5Au7vm+rkq53Z8x
-         q+T6tSuThF3+PX3HRxi1vxhy+e/yLELu708ZZXMd+V9sbuE6Y/BHcpBWEYDe0+kOkQIF
-         ltR410lucCjz3kaM8xCvYyweau3sz5lRO1AaaMApNrUYeSqJqKcp1QCwC1EVDu0SNNi4
-         Hqrw==
-X-Gm-Message-State: AFqh2krqFLany8CQxOgwfjsREDUbXdYk+y6+h4BRZQoVJFo+JPPd5hAx
-        jWbq9P5n2yzrRVoz3DSC+E8n8M6a3NwOy6UzQOdr4btTeA17
-X-Google-Smtp-Source: AMrXdXvPDjNMwFySN+NdVXgigaWdobbJeVsL1mNw/gZJpeOyFBxKUfwKwGQzTm4Rvgtet40YJlKLsgxChqapVTEJaMr5XZ9nFDl+
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3wlPs+VBNuhHts7wgRKDtTEmK1wtfqcqEGfFdEmet68=;
+        b=FOhk32ozXq+nbWUn853kmh2GNucNnxtpjFKyQynunxANPTIIoPjRTVumTNq8pUrQZH
+         VXIKoIIC9PINQ+geKHuVxQBsAiUm5gT9tOI7oMYrrKEcUKxmCbNG8gajpy+GLxRgDmgz
+         iDJbNDWWPzbQQId4EYkjmdNbTE5o2cJZERKCaVZwMhC+mPh38/s5CMT2Gk+KxnTnyRiv
+         H44mvHCOfnY79IrxellH302VDqsmkS/ao21bY5qVGjM9gajiersgn4EQqiS9ZNuwC/SM
+         Rqa26UrwXqmHRxpPHSfocD8xMYJ5E02JMy5HN6Im7z4wgI2uovQRA07qEi/qDjS0HdQU
+         g2fQ==
+X-Gm-Message-State: AFqh2koqTU1XbcGa/MUJL+7z193SKNdQ+jj5Xn2ZGTs2HwX7gSvISV7m
+        JdgqJaonpBHCmfUP8HOJVmW2BeiN8n4OHgoytp5qbHC6fWg=
+X-Google-Smtp-Source: AMrXdXut7Iattd5nto2m0DjH47QDco0hABb+8wL5UyO7QS9s+Uff6OFDak8mbumkPuE/ZbKjadNzTX7HxeKUQci6vJI=
+X-Received: by 2002:aa7:c497:0:b0:49d:aca5:9ae0 with SMTP id
+ m23-20020aa7c497000000b0049daca59ae0mr688442edq.106.1673829410495; Sun, 15
+ Jan 2023 16:36:50 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:27c:b0:38a:757f:14b4 with SMTP id
- x28-20020a056638027c00b0038a757f14b4mr9076418jaq.307.1673829263312; Sun, 15
- Jan 2023 16:34:23 -0800 (PST)
-Date:   Sun, 15 Jan 2023 16:34:23 -0800
-In-Reply-To: <20230116000718.1809-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a78f3405f256be8b@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
-From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230114132705.78400-1-kerneljasonxing@gmail.com> <CANn89iJ+KW+=Z13o_K4RpZfoxO8rGaXRXQ07jZfpE5RMH0Uweg@mail.gmail.com>
+In-Reply-To: <CANn89iJ+KW+=Z13o_K4RpZfoxO8rGaXRXQ07jZfpE5RMH0Uweg@mail.gmail.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 16 Jan 2023 08:36:14 +0800
+Message-ID: <CAL+tcoD-V-XKrXMMEheBnohD-h6ig12zhtQUAt6ATE4jWcuLvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 net] tcp: avoid the lookup process failing to get sk in
+ ehash table
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jan 16, 2023 at 12:12 AM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Sat, Jan 14, 2023 at 2:27 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
+> >
+> > From: Jason Xing <kernelxing@tencent.com>
+> >
+> >
+> > Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+> > Suggested-by: Eric Dumazet <edumazet@google.com>
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+> > ---
+> > v2:
+> > 1) adding the sk node into the tail of list to prevent the race.
+> > 2) fix the race condition when handling time-wait socket hashdance.
+> > ---
+> >  net/ipv4/inet_hashtables.c    | 10 ++++++++++
+> >  net/ipv4/inet_timewait_sock.c |  6 +++---
+> >  2 files changed, 13 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> > index 24a38b56fab9..b0b54ad55507 100644
+> > --- a/net/ipv4/inet_hashtables.c
+> > +++ b/net/ipv4/inet_hashtables.c
+> > @@ -650,7 +650,16 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+> >         spin_lock(lock);
+> >         if (osk) {
+> >                 WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+> > +               if (sk_hashed(osk))
+>
+>
+> nit: this should be:
+>
+> if (sk_hashed(osk)) {  [1]
+>     /* multi-line ....
+>      * .... comment.
+>      */
+>    ret = sk_nulls_del_node_init_rcu(osk);
+>    goto unlock;
+> }
+> if (found_dup_sk) {  [2]
+>
+> 1) parentheses needed in [1]
+> 2) No else if in [2], since you added a "goto unlock;"
+>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING: ODEBUG bug in __io_put_task
+I'll do that. It looks much better.
 
-IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
-IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
-------------[ cut here ]------------
-ODEBUG: free active (active state 1) object: ffff88802a236ca8 object type: rcu_head hint: 0x0
-WARNING: CPU: 0 PID: 899 at lib/debugobjects.c:509 debug_print_object+0x194/0x2c0 lib/debugobjects.c:509
-Modules linked in:
-CPU: 0 PID: 899 Comm: kworker/0:2 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events io_fallback_req_func
-RIP: 0010:debug_print_object+0x194/0x2c0 lib/debugobjects.c:509
-Code: df 48 89 fe 48 c1 ee 03 80 3c 16 00 0f 85 c7 00 00 00 48 8b 14 dd c0 dc a6 8a 50 4c 89 ee 48 c7 c7 80 d0 a6 8a e8 40 76 ae 05 <0f> 0b 58 83 05 0e 25 66 0a 01 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e
-RSP: 0018:ffffc90004aef950 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff88801eba3a80 RSI: ffffffff8166972c RDI: fffff5200095df1c
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff8a4dd0a0
-R13: ffffffff8aa6d580 R14: ffff888070a92da8 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005639964dc950 CR3: 000000007dcca000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __debug_check_no_obj_freed lib/debugobjects.c:996 [inline]
- debug_check_no_obj_freed+0x305/0x420 lib/debugobjects.c:1027
- slab_free_hook mm/slub.c:1756 [inline]
- slab_free_freelist_hook+0xeb/0x1c0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
- put_task_struct_many include/linux/sched/task.h:125 [inline]
- __io_put_task+0x155/0x1e0 io_uring/io_uring.c:729
- io_put_task io_uring/io_uring.h:328 [inline]
- __io_req_complete_post+0x7ec/0xd20 io_uring/io_uring.c:982
- io_req_complete_post+0xf1/0x1a0 io_uring/io_uring.c:998
- io_req_task_complete+0x189/0x260 io_uring/io_uring.c:1636
- io_poll_task_func+0xa95/0x1220 io_uring/poll.c:347
- io_fallback_req_func+0xfd/0x204 io_uring/io_uring.c:252
- process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
- worker_thread+0x669/0x1090 kernel/workqueue.c:2440
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+Thanks,
+Jason
 
-
-Tested on:
-
-commit:         0a093b28 Add linux-next specific files for 20230112
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a99c7a480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1145447e480000
-
+> > +                       /* Before deleting the node, we insert a new one to make
+> > +                        * sure that the look-up-sk process would not miss either
+> > +                        * of them and that at least one node would exist in ehash
+> > +                        * table all the time. Otherwise there's a tiny chance
+> > +                        * that lookup process could find nothing in ehash table.
+> > +                        */
+> > +                       __sk_nulls_add_node_tail_rcu(sk, list);
+> >                 ret = sk_nulls_del_node_init_rcu(osk);
+> > +               goto unlock;
+> >         } else if (found_dup_sk) {
+> >                 *found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
+> >                 if (*found_dup_sk)
+> > @@ -660,6 +669,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+> >         if (ret)
+> >                 __sk_nulls_add_node_rcu(sk, list);
+> >
+> > +unlock:
+> >         spin_unlock(lock);
+>
+> Thanks.
