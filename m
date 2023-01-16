@@ -2,207 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B3966B6BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BF866B6C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbjAPEqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 23:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S231869AbjAPEzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 23:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjAPEpx (ORCPT
+        with ESMTP id S231857AbjAPEzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 23:45:53 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A857A26D;
-        Sun, 15 Jan 2023 20:45:52 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30G4jMZe041321;
-        Sun, 15 Jan 2023 22:45:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673844322;
-        bh=B7H8aF71bS6Sz69AQiK3GFz08lgnJzSENqOOnco03DE=;
-        h=From:To:CC:Subject:Date;
-        b=NHYKZXGxjFuQbfnVbPsQhKHnL3In/Hyj4++ThccNsFxk9RKH0MKzHRaYgH/qRXsBX
-         JKcejXmzPGgwyppK0MA+KJRfyX8OWD2o7e8zL17Azqz8TSa6KuhcJAO1lQX67RFh67
-         lL1cATTugREPmZ25/9QAoSaj7pBZWsrsxsuLegmU=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30G4jM4M071874
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 15 Jan 2023 22:45:22 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sun, 15
- Jan 2023 22:45:21 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sun, 15 Jan 2023 22:45:22 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30G4jIP0115043;
-        Sun, 15 Jan 2023 22:45:18 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <rogerq@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <s-vadapalli@ti.com>
-Subject: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS release action
-Date:   Mon, 16 Jan 2023 10:15:17 +0530
-Message-ID: <20230116044517.310461-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 15 Jan 2023 23:55:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BA2F559F;
+        Sun, 15 Jan 2023 20:55:16 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Ax3eqz2MRjp84BAA--.5634S3;
+        Mon, 16 Jan 2023 12:55:15 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+Sx2MRjIQ8aAA--.13747S2;
+        Mon, 16 Jan 2023 12:55:14 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Fix undeclared identifier build errors of test_bpf_nf.c
+Date:   Mon, 16 Jan 2023 12:55:08 +0800
+Message-Id: <1673844908-11533-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8AxX+Sx2MRjIQ8aAA--.13747S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7WF13Kr4kCFW3Xr17ZryrWFg_yoW8JFW3pa
+        48Z3s0yFs5Ka1UuFn3CrW2vr4FyFs2vayUJw18ArW3Kr95Xr17tr4xKF47Jr9xGrWFq3s3
+        Za4IgFZrZF18A3JanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxU4Z2-UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The am65_cpts_release() function is registered as a devm_action in the
-am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
-invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
-actions associated with the am65-cpsw driver's device.
+$ make -C tools/testing/selftests/bpf/
 
-In the event of probe failure or probe deferral, the platform_drv_probe()
-function invokes dev_pm_domain_detach() which powers off the CPSW and the
-CPSW's CPTS hardware, both of which share the same power domain. Since the
-am65_cpts_disable() function invoked by the am65_cpts_release() function
-attempts to reset the CPTS hardware by writing to its registers, the CPTS
-hardware is assumed to be powered on at this point. However, the hardware
-is powered off before the devm actions are executed.
+  CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+                bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+                                                       ^
+progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+                bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+                                                       ^
+2 errors generated.
 
-Fix this by getting rid of the devm action for am65_cpts_release() and
-invoking it directly on the cleanup and exit paths.
+Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c
+to fix the above build errors.
 
-Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-Changes from v1:
-1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
-   error was reported by kernel test robot <lkp@intel.com> at:
-   https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
-2. Collect Reviewed-by tag from Roger Quadros.
+ tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-v1:
-https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
-
- drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
- drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
- drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
- 3 files changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 5cac98284184..00f25d8a026b 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index 227e85e..114f961 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -34,6 +34,11 @@ __be16 dport = 0;
+ int test_exist_lookup = -ENOENT;
+ u32 test_exist_lookup_mark = 0;
  
-+static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
-+{
-+	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
-+		am65_cpts_release(common->cpts);
-+}
++enum nf_nat_manip_type {
++	NF_NAT_MANIP_SRC,
++	NF_NAT_MANIP_DST
++};
 +
- static int am65_cpsw_init_cpts(struct am65_cpsw_common *common)
- {
- 	struct device *dev = common->dev;
-@@ -2917,6 +2923,7 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
+ struct nf_conn;
  
- err_free_phylink:
- 	am65_cpsw_nuss_phylink_cleanup(common);
-+	am65_cpsw_cpts_cleanup(common);
- err_of_clear:
- 	of_platform_device_destroy(common->mdio_dev, NULL);
- err_pm_clear:
-@@ -2945,6 +2952,7 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
- 	 */
- 	am65_cpsw_nuss_cleanup_ndev(common);
- 	am65_cpsw_nuss_phylink_cleanup(common);
-+	am65_cpsw_cpts_cleanup(common);
- 	am65_cpsw_disable_serdes_phy(common);
- 
- 	of_platform_device_destroy(common->mdio_dev, NULL);
-diff --git a/drivers/net/ethernet/ti/am65-cpts.c b/drivers/net/ethernet/ti/am65-cpts.c
-index 9535396b28cd..a297890152d9 100644
---- a/drivers/net/ethernet/ti/am65-cpts.c
-+++ b/drivers/net/ethernet/ti/am65-cpts.c
-@@ -929,14 +929,13 @@ static int am65_cpts_of_parse(struct am65_cpts *cpts, struct device_node *node)
- 	return cpts_of_mux_clk_setup(cpts, node);
- }
- 
--static void am65_cpts_release(void *data)
-+void am65_cpts_release(struct am65_cpts *cpts)
- {
--	struct am65_cpts *cpts = data;
--
- 	ptp_clock_unregister(cpts->ptp_clock);
- 	am65_cpts_disable(cpts);
- 	clk_disable_unprepare(cpts->refclk);
- }
-+EXPORT_SYMBOL_GPL(am65_cpts_release);
- 
- struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 				   struct device_node *node)
-@@ -1014,18 +1013,12 @@ struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 	}
- 	cpts->phc_index = ptp_clock_index(cpts->ptp_clock);
- 
--	ret = devm_add_action_or_reset(dev, am65_cpts_release, cpts);
--	if (ret) {
--		dev_err(dev, "failed to add ptpclk reset action %d", ret);
--		return ERR_PTR(ret);
--	}
--
- 	ret = devm_request_threaded_irq(dev, cpts->irq, NULL,
- 					am65_cpts_interrupt,
- 					IRQF_ONESHOT, dev_name(dev), cpts);
- 	if (ret < 0) {
- 		dev_err(cpts->dev, "error attaching irq %d\n", ret);
--		return ERR_PTR(ret);
-+		goto reset_ptpclk;
- 	}
- 
- 	dev_info(dev, "CPTS ver 0x%08x, freq:%u, add_val:%u\n",
-@@ -1034,6 +1027,8 @@ struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 
- 	return cpts;
- 
-+reset_ptpclk:
-+	am65_cpts_release(cpts);
- refclk_disable:
- 	clk_disable_unprepare(cpts->refclk);
- 	return ERR_PTR(ret);
-diff --git a/drivers/net/ethernet/ti/am65-cpts.h b/drivers/net/ethernet/ti/am65-cpts.h
-index bd08f4b2edd2..6e14df0be113 100644
---- a/drivers/net/ethernet/ti/am65-cpts.h
-+++ b/drivers/net/ethernet/ti/am65-cpts.h
-@@ -18,6 +18,7 @@ struct am65_cpts_estf_cfg {
- };
- 
- #if IS_ENABLED(CONFIG_TI_K3_AM65_CPTS)
-+void am65_cpts_release(struct am65_cpts *cpts);
- struct am65_cpts *am65_cpts_create(struct device *dev, void __iomem *regs,
- 				   struct device_node *node);
- int am65_cpts_phc_index(struct am65_cpts *cpts);
-@@ -31,6 +32,10 @@ void am65_cpts_estf_disable(struct am65_cpts *cpts, int idx);
- void am65_cpts_suspend(struct am65_cpts *cpts);
- void am65_cpts_resume(struct am65_cpts *cpts);
- #else
-+static inline void am65_cpts_release(struct am65_cpts *cpts)
-+{
-+}
-+
- static inline struct am65_cpts *am65_cpts_create(struct device *dev,
- 						 void __iomem *regs,
- 						 struct device_node *node)
+ struct bpf_ct_opts___local {
 -- 
-2.25.1
+2.1.0
 
