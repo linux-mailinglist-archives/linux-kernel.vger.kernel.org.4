@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B38966C22D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61BF66C22F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjAPO1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S232760AbjAPO1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbjAPO03 (ORCPT
+        with ESMTP id S232713AbjAPO1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:26:29 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120673FF14
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:10:31 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id u19so68315628ejm.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=95zlwr3oGbEH4PtnU1plJbud3bl8LR5sDmOAyZuPGAY=;
-        b=lWkSxU8i7btY02uxvssR9Id6g+LefUZXI7exjtOGQJzPKF9xYVmP+xn+I5cSI3RN3c
-         Q/9iW9szRIc+I4f80WmGjO6HKhGCRbfvhvpfO2V0xcnzMWEyGCLVW9/utcb2Ed8ZNi7J
-         5kRKBYYbAyER6Q64L0Uo8hqJ5dLN8ImaL203BGmOy7brk1jqACxsRtdQQa3pHsGNlw+3
-         pYaGYAHU+LqDREXxBoZvzgdZBC02zm+rkOGLuY4dIgoP62mPRMgnXdt/iJArkJ7gHD4v
-         N6aYHmNoI8tBuT25ckH1F5siOxmw07CFU+pvE4j9fRgnJHtDhHwQ6OJgRIBY1ZWxsiuZ
-         vmVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=95zlwr3oGbEH4PtnU1plJbud3bl8LR5sDmOAyZuPGAY=;
-        b=WgqjUiDx3woshMrztD8tyk/KWsISmYS8GQLe7zi96cRjSghISmVWxpOc5HAQ1W9gpe
-         Y8BvQ7ksu/5JNP7CMf2Wo7U/+4Z6hqo5GFPy5MYnnY/QoW92/NrbO2f/E5tZ+WCVABBY
-         FHPd+CBaefH/m/Q6IeygJtDUFoYSwHw0T4uK9IXe6xbyJdLIEnhqteNsTRbS9/q0iAlB
-         Wi6xceCi/i01SWxmNy0qPwXFdxBxTnKymOSL9tKJq2mDzbIMKiHJyq8Ren5aXw3TOsgM
-         +xk3OGkh1vzMJvAEaVyYDMoVLEDw246eX2rdBUyNl+VhrZ2UlgviE1phLiAJGFusK1v6
-         dukA==
-X-Gm-Message-State: AFqh2kqFaUK0oKpZxieKiATqedq35NVZ4rrq7Dz8juCh5wDnI2uqjbOc
-        0XZ+N1Iil4cfFZ5aqycDY+H7uw==
-X-Google-Smtp-Source: AMrXdXs84SameYiqULBGYEB5mu8dxG4BBb8wK8cvfQD6pbxMuOECa85lsE69i5TGbXo3Z94apKUUXg==
-X-Received: by 2002:a17:906:8e0a:b0:7c1:1444:da41 with SMTP id rx10-20020a1709068e0a00b007c11444da41mr14602479ejc.40.1673878210955;
-        Mon, 16 Jan 2023 06:10:10 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b0084d368b1628sm10704150ejc.40.2023.01.16.06.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 06:10:10 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH v3 2/2] arm64: dts: qcom: sm8550-mtp: Add UFS host controller and PHY node
-Date:   Mon, 16 Jan 2023 16:10:00 +0200
-Message-Id: <20230116141000.1831351-2-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230116141000.1831351-1-abel.vesa@linaro.org>
-References: <20230116141000.1831351-1-abel.vesa@linaro.org>
+        Mon, 16 Jan 2023 09:27:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9773728846;
+        Mon, 16 Jan 2023 06:10:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9850360FDF;
+        Mon, 16 Jan 2023 14:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E03BFC433D2;
+        Mon, 16 Jan 2023 14:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673878215;
+        bh=XgIJguZ7ZaiVTjSmOPmCve4AczLxN5ZWopM1ZYKEDgs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=l4iQ2KvMVKAhuz7f44UXda2iQI5ZKw8cb0vZyYGWqvdofplX/YCrhfzfhtatcyFF+
+         EFIphvEs1sZXpsDxo0xEPo2yexjeQYLW7YIgFwsz2BN348R+bvD7yipeiUK8XQ1/BP
+         tpvJCwfiDcWW3NnQ+5Kly89BFchZ8FVLULhAovfPiCuvIi2LI5cRcJt9WDRjkLm2D9
+         LKeuhAxX/X7tvM543142XK0Kavw4xqWv8IK4DiFOC5wNvnbVjZhnIX5KqXl0jITMHp
+         QbJjkrqfQWQwaagDVVIiNaFG5wk5AWDGy0ryj9E+++i2OQx1RNsWmg8equjFVKPVZk
+         TA/Me5O1yt3yg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C6346E54D2B;
+        Mon, 16 Jan 2023 14:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [net PATCH v2] octeontx2-pf: Avoid use of GFP_KERNEL in atomic
+ context
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167387821580.26138.13339580254916063174.git-patchwork-notify@kernel.org>
+Date:   Mon, 16 Jan 2023 14:10:15 +0000
+References: <20230113061902.6061-1-gakula@marvell.com>
+In-Reply-To: <20230113061902.6061-1-gakula@marvell.com>
+To:     Geetha sowjanya <gakula@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net,
+        edumazet@google.com, sbhatta@marvell.com, hkelam@marvell.com,
+        sgoutham@marvell.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable UFS host controller and PHY node on SM8550 MTP board.
+Hello:
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index 8586e16d6079..81fcbdc6bdc4 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -399,6 +399,25 @@ &uart7 {
- 	status = "okay";
- };
- 
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 210 GPIO_ACTIVE_LOW>;
-+	vcc-supply = <&vreg_l17b_2p5>;
-+	vcc-max-microamp = <1300000>;
-+	vccq-supply = <&vreg_l1g_1p2>;
-+	vccq-max-microamp = <1200000>;
-+	vccq2-supply = <&vreg_l3g_1p2>;
-+	vccq2-max-microamp = <100>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l1d_0p88>;
-+	vdda-pll-supply = <&vreg_l3e_1p2>;
-+
-+	status = "okay";
-+};
-+
- &xo_board {
- 	clock-frequency = <76800000>;
- };
+On Fri, 13 Jan 2023 11:49:02 +0530 you wrote:
+> Using GFP_KERNEL in preemption disable context, causing below warning
+> when CONFIG_DEBUG_ATOMIC_SLEEP is enabled.
+> 
+> [   32.542271] BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> [   32.550883] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+> [   32.558707] preempt_count: 1, expected: 0
+> [   32.562710] RCU nest depth: 0, expected: 0
+> [   32.566800] CPU: 3 PID: 1 Comm: swapper/0 Tainted: G        W          6.2.0-rc2-00269-gae9dcb91c606 #7
+> [   32.576188] Hardware name: Marvell CN106XX board (DT)
+> [   32.581232] Call trace:
+> [   32.583670]  dump_backtrace.part.0+0xe0/0xf0
+> [   32.587937]  show_stack+0x18/0x30
+> [   32.591245]  dump_stack_lvl+0x68/0x84
+> [   32.594900]  dump_stack+0x18/0x34
+> [   32.598206]  __might_resched+0x12c/0x160
+> [   32.602122]  __might_sleep+0x48/0xa0
+> [   32.605689]  __kmem_cache_alloc_node+0x2b8/0x2e0
+> [   32.610301]  __kmalloc+0x58/0x190
+> [   32.613610]  otx2_sq_aura_pool_init+0x1a8/0x314
+> [   32.618134]  otx2_open+0x1d4/0x9d0
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2] octeontx2-pf: Avoid use of GFP_KERNEL in atomic context
+    https://git.kernel.org/netdev/net/c/87b93b678e95
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
