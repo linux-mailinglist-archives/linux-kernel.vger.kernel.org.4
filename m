@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78DD66D0BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE1366D0C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbjAPVKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S230503AbjAPVLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbjAPVKV (ORCPT
+        with ESMTP id S232797AbjAPVKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:10:21 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358171CAE3;
-        Mon, 16 Jan 2023 13:10:21 -0800 (PST)
-Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 6242740D403D;
-        Mon, 16 Jan 2023 21:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 6242740D403D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1673903419;
-        bh=JgF6PdGUqUIiW+PcAMJiQ/9RP2j3tExghwoZn9wrIig=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KkhWXRfpLeToZU3rkquVnGfm4EHcU1i5LWLYoWHWDVaJtlye4kq/ORrphzAFEKAgt
-         oyzHOsXFLo/2ECq0WOjp58mpa1Dk0AbvotogEbFlnB4XhP5EnWIS4aW5xF4M3dc9+A
-         HTJznExyVaTW8+VfGSzj4IS2Z1kygMCmEAYH2fXg=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH 4.19] block: fix and cleanup bio_check_ro
-Date:   Tue, 17 Jan 2023 00:10:13 +0300
-Message-Id: <20230116211013.822998-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
+        Mon, 16 Jan 2023 16:10:51 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FCE1CAE3;
+        Mon, 16 Jan 2023 13:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tbJsb8AeSzDDqs11g0B47Rm8rooKmyn09jFAV9Yw+ew=; b=rB+0N5Qm4HfhKlL4v0qpenMM2+
+        67T5hKcBYGeI52VwfnVNg1ANcL+Btun64b00eWQRlxmZqHICgaw6yjD2QraBkrEyE5NCsYYXJ/kuI
+        P7lqVK6Gnctzh4QCJnCQmUrItL79nOT6o3Iq0PgrCBkZnpKtVqA4ZGSp9sm3ujPCfEoY6d5sRY5Gk
+        huy65ZOZB5v4haRjmSJjvFFdQEopBgxt1svDD+Sq5KIjA0tuydi3etiMLlvWurqZAM66HtjVjrrvB
+        t/Ggk/bkpkxFvVf521svqtcQciC3n+kITFPVMQnP7SjNAqFy78HivTk1XV/+yt9jxJsv68av3TdUI
+        rL9Ch4Ug==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pHWkX-002Ejr-2z;
+        Mon, 16 Jan 2023 21:10:37 +0000
+Date:   Mon, 16 Jan 2023 21:10:37 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     maobibo <maobibo@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+Message-ID: <Y8W9TR5ifZmRADLB@ZenIV>
+References: <20230107012324.30698-1-zhanghongchen@loongson.cn>
+ <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn>
+ <4b140bd0-9b7f-50b5-9e3b-16d8afe52a50@loongson.cn>
+ <Y8TUqcSO5VrbYfcM@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8TUqcSO5VrbYfcM@casper.infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+On Mon, Jan 16, 2023 at 04:38:01AM +0000, Matthew Wilcox wrote:
+> On Mon, Jan 16, 2023 at 11:16:13AM +0800, maobibo wrote:
+> > Hongchen,
+> > 
+> > I have a glance with this patch, it simply replaces with
+> > spinlock_irqsave with mutex lock. There may be performance
+> > improvement with two processes competing with pipe, however
+> > for N processes, there will be complex context switches
+> > and ipi interruptts.
+> > 
+> > Can you find some cases with more than 2 processes competing
+> > pipe, rather than only unixbench?
+> 
+> What real applications have pipes with more than 1 writer & 1 reader?
+> I'm OK with slowing down the weird cases if the common cases go faster.
 
-commit 57e95e4670d1126c103305bcf34a9442f49f6d6a upstream.
-
-Don't use a WARN_ONCE when printing a potentially user triggered
-condition.
-
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Link: https://lore.kernel.org/r/20220304180105.409765-2-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- block/blk-core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 80f3e729fdd4..4fbf915d9cb0 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -2179,10 +2179,7 @@ static inline bool bio_check_ro(struct bio *bio, struct hd_struct *part)
- 
- 		if (op_is_flush(bio->bi_opf) && !bio_sectors(bio))
- 			return false;
--
--		WARN_ONCE(1,
--		       "generic_make_request: Trying to write "
--			"to read-only block-device %s (partno %d)\n",
-+		pr_warn("Trying to write to read-only block-device %s (partno %d)\n",
- 			bio_devname(bio, b), part->partno);
- 		/* Older lvm-tools actually trigger this */
- 		return false;
--- 
-2.34.1
-
+From commit 0ddad21d3e99c743a3aa473121dc5561679e26bb:
+    While this isn't a common occurrence in the traditional "use a pipe as a
+    data transport" case, where you typically only have a single reader and
+    a single writer process, there is one common special case: using a pipe
+    as a source of "locking tokens" rather than for data communication.
+    
+    In particular, the GNU make jobserver code ends up using a pipe as a way
+    to limit parallelism, where each job consumes a token by reading a byte
+    from the jobserver pipe, and releases the token by writing a byte back
+    to the pipe.
