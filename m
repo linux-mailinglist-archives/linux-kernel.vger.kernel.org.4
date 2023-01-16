@@ -2,125 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1325E66C53D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA94566C552
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjAPQDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S232334AbjAPQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjAPQDD (ORCPT
+        with ESMTP id S232066AbjAPQEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:03:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B656323C6C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673884918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8pukx+I4QrScYN3Z5nRX9xtPFWya2FweofKXHmiiGPg=;
-        b=dlgaO5bCC7tof8NYmTMkn8vGa3+4LIuq7ZtsqHH+kWjseBi257rqqzQ4JYULBptnAKii1E
-        rriehkGj6sDjWCNFJfqJulz7Tr0pzax7msxcTTfs/sIY1j0575B1eOIPxui0obmfs/wJqt
-        bZKbMEw//Z8QTdWirI80zhMQnvzrhxU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-ifNPrZcoO5aLBvu_n-6qtw-1; Mon, 16 Jan 2023 11:01:54 -0500
-X-MC-Unique: ifNPrZcoO5aLBvu_n-6qtw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4ECF91C00426;
-        Mon, 16 Jan 2023 16:01:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9562140C2008;
-        Mon, 16 Jan 2023 16:01:50 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@infradead.org>
-cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-cc:     dhowells@redhat.com
-Subject: Is there a reason why REQ_OP_READ has to be 0?
+        Mon, 16 Jan 2023 11:04:11 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADF026583
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:02:50 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id i1so6226671pfk.3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FaETKaG4apaYn3PDAXtUpXH3jZsRNdmxFYcvGW8yOZQ=;
+        b=vgonzpsOgYGL3UNEUE2LNFypkHIJVKzE/qJdlhQ641+/LU1oMJE2dPymzLjV/QgVdx
+         wL8+xQW23Rdf7r6HMEO25fSw/tlokvE6H2nr1b6b6/Q/ppaD2+6Ih42mx03VAb3BMd3D
+         xp0i5yryfMrByjgr+I+m6JBCh3JWn7xADU+lSqe14Tjjma0AeopBXEEe+2xbIcK5pEPg
+         TfYRNUfw3BiVAC/5DfP495xbHgFyA8CYidRr7Cl2SJ33FV+TCZqP2FS6V8iHHggks9wx
+         5b4etbCFpwcFCSOF8rkOP0KZHMl0aoQFAW3wQzcxD7tJY9QuR4/TDRNWgF9f69KxBemu
+         ofjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FaETKaG4apaYn3PDAXtUpXH3jZsRNdmxFYcvGW8yOZQ=;
+        b=ztGW3sGIaQFTqhJzLrhGBsJVdGCeaA8ThzYcJjJTh/LifPS+EF5XztKA3eJf6Tsho5
+         73gpZPyhfZKE1wtvjt4hYOq4INC0GVupIN1TAfKPDOD40RA9DtpZVpXWWra0dt8prhuW
+         fXc6MUGR75qgJlqrutjevFMvbw9Iajtnf3KjeNz4V6643KzwBtE7uiGTfOLw4JZzlQgt
+         wpz61GXz72TFP02UR2sEI+bxKeb3udP2jSS1tdyq3GFqv1mAwY7N9+tqimCCM4nwRTta
+         SirOjanQp1qvPUT+fhihKLNt1QQkMBRw1i017lQQrVL/ZOJ4b8e4g37CPw/6HqdOptvJ
+         xPQw==
+X-Gm-Message-State: AFqh2koLH4GOKNNhP6WH1U3nn9Ie16ZS76wBokY01RzINM8aTagDtjji
+        0rXHBZi5MUsO3GPq5py9cYG3PA==
+X-Google-Smtp-Source: AMrXdXuIUz9FhPEQSjOKJJcqt2/o7PMFPNB/mOFw2WRvIORt2QaCYxSahy6LtKrW56KNifLo22ENrA==
+X-Received: by 2002:a62:2741:0:b0:58d:bce0:2bdb with SMTP id n62-20020a622741000000b0058dbce02bdbmr105317pfn.7.1673884969367;
+        Mon, 16 Jan 2023 08:02:49 -0800 (PST)
+Received: from ?IPV6:2401:4900:1c60:63d3:2d69:9f71:187e:f085? ([2401:4900:1c60:63d3:2d69:9f71:187e:f085])
+        by smtp.gmail.com with ESMTPSA id w125-20020a626283000000b005815a371177sm17678922pfb.52.2023.01.16.08.02.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 08:02:48 -0800 (PST)
+Message-ID: <6f08d466-9589-ebff-c38d-bf9015a0f6ad@linaro.org>
+Date:   Mon, 16 Jan 2023 21:32:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2117828.1673884910.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 16 Jan 2023 16:01:50 +0000
-Message-ID: <2117829.1673884910@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
+ '#size-cells' related dt-binding error
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
+ <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+ <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
+ <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
+ <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+ <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
+Content-Language: en-US
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens, Christoph,
 
-Do you know if there's a reason why REQ_OP_READ has to be 0?  I'm seeing a
-circumstance where a direct I/O write on a blockdev is BUG'ing in my modif=
-ied
-iov_iter code because the iterator says it's a source iterator (correct), =
-but
-the bio->bi_opf =3D=3D REQ_OP_READ (which should be wrong).
+On 1/16/23 9:24 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 16.01.2023 16:43, Bhupesh Sharma wrote:
+>> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
+>>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
+>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>>
+>>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
+>>>>>> Fix the following '#address-cells' & '#size-cells' related
+>>>>>> dt-binding error:
+>>>>>>
+>>>>>>     $ make dtbs_check
+>>>>>>
+>>>>>>     From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>>>          arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+>>>>>>                #address-cells:0:0: 2 was expected
+>>>>>>        From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>>
+>>>>> Don't we want rather to unify the soc address range?
+>>>>
+>>>> Well, the assumption in the original dt-bindings was that every reg
+>>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
+>>>> #size-cells to <2>). However, that is not the case for all of the
+>>>> SoCs.
+>>>
+>>> Hm, which device of that SoC cannot be used with address/size cells 2?
+>>
+>> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
+>> be used with address/size cells 2 (See:
+>> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
+> SM6115 (and pretty much every other arm64 msm platform newer than 8916)
+> should be using addr/size-cells = 2 along with (dma-)ranges of 36 bit, as
+> that's what their smmus use and otherwise some addresses may get cut off
+> in translation, or so the story went with 845 N years ago.. We can either
+> pursue this patch or I can submit the 2-cell-ification if you don't plan on
+> adding more nodes shortly
 
-I thought I'd move REQ_OP_READ to, say, 4 so that I could try and see if i=
-t's
-just undefined but the kernel BUGs and then panics during boot.
 
-David
+Have you tested this combination on SM6115 like SoCs with various IPs? I 
+have tried a few experiments in the past and not all IPs work well with 
+36-bit DMA ranges (atleast not on the boards I have).
 
-------------[ cut here ]------------
-kernel BUG at mm/filemap.c:1615!
-------------[ cut here ]------------
-invalid opcode: 0000 [#1] PREEMPT SMP PTI
-kernel BUG at mm/filemap.c:1615!
-CPU: 1 PID: 2196 Comm: systemd-udevd Not tainted 6.2.0-rc2-build3+ #12783
-Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
-RIP: 0010:folio_end_writeback+0x30/0x70
-Code: 48 8b 07 48 89 fb 0f ba e0 12 73 0a f0 80 67 02 fb e8 d0 de 00 00 48=
- 89 df e8 fe df ff ff 48 89 df e8 f9 ac 00 00 84 c0 75 02 <0f> 0b 48 8b 03=
- 84 c0 79 0d be 0f 00 00 00 48 89 df e8 44 f3 ff ff
-RSP: 0000:ffff8881091a3db8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffffea0004271d40 RCX: 0000000000001000
-RDX: 0000000000000101 RSI: 0000000000000246 RDI: ffff888107694000
-RBP: ffff888100b6f600 R08: 000000204d567e99 R09: 0000000000000200
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000001000 R15: ffff888107402080
-FS:  00007f65ecde8940(0000) GS:ffff88840fa80000(0000) knlGS:00000000000000=
-00
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb269292ba1 CR3: 0000000107140004 CR4: 00000000001706e0
-Call Trace:
- <TASK>
- mpage_end_io+0x91/0x9b
- blk_update_request+0x200/0x2be
- scsi_end_request+0x27/0xf3
- scsi_io_completion+0x151/0x21e
- blk_complete_reqs+0x41/0x4c
- __do_softirq+0x123/0x27d
- __irq_exit_rcu+0x5a/0xcd
- common_interrupt+0x36/0xbc
- asm_common_interrupt+0x22/0x40
-RIP: 0033:0x7f65edc7ab60
-Code: 00 41 29 c5 4a 8d 14 ed 00 00 00 00 49 8d 34 0c 49 8d 7c 0c f8 e8 d0=
- 5e ff ff 83 6d 20 01 eb 9f 66 2e 0f 1f 84 00 00 00 00 00 <f3> 0f 1e fa 53=
- 48 89 fb 48 83 c7 08 e8 7f 60 ff ff 85 c0 75 0b 48
-RSP: 002b:00007ffe0b70bd88 EFLAGS: 00000202
-RAX: 0000000000000000 RBX: 000055ddc430c5dc RCX: 000055ddc4301f98
-RDX: 00000000000000ff RSI: 000000000000000c RDI: 000055ddc4301f98
-RBP: 00007ffe0b7102d0 R08: 45d54cec8b358fc3 R09: 00544145535f4449
-R10: 000000000000000c R11: f17eedd8cae0d043 R12: 000055ddc4302920
-R13: 000055ddc432091a R14: 000055ddc4308460 R15: 000055ddc42d90dc
- </TASK>
-Modules linked in:
-invalid opcode: 0000 [#2] PREEMPT SMP PTI
+So, I think it might lead to more breakage (unless we are sure of a 
+well-tested fix). A simpler patch to fix the dt-bindings looks more 
+useful IMO.
 
+Thanks,
+Bhupesh
