@@ -2,154 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31C966CF15
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AA766CF41
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbjAPSpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S233548AbjAPS71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbjAPSpP (ORCPT
+        with ESMTP id S233575AbjAPS7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:45:15 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AF14ED2;
-        Mon, 16 Jan 2023 10:43:06 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 188so31245064ybi.9;
-        Mon, 16 Jan 2023 10:43:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rlIydODY/LfpwItZTwtL4rzfyzEiXyrm/RMUswozIX8=;
-        b=OUGKEjvhy/swyG5hBFXyFKBADXRYGg2Tnv2lo9xqvxIfswyC0uVTH4neehdoFiys6K
-         DJttWBjlEft3Ka2XvzsnS6nE2sjau6TTQzhOt7S+AoDcsbqSHdW83chVFdqzwqxtJ3xp
-         5GWtFffSzf6n6eghxZZ/r6n5Tilh49rb+2TgRijjALlKUXK/HaJS4y8mnWCrizJk7m23
-         7Kn3rVt37SzXRMos70rE99Vnn46PJ/RmQJN3g/P7wShJ0ZWNxqUhWt3FmTP1dIH59ec2
-         D/AkWwTkWNKl6w0z9JuQGVst42aOoLec/kyIH3TTDSd+FAWLOVwbsY6qTLz2cN3BlhhU
-         18vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rlIydODY/LfpwItZTwtL4rzfyzEiXyrm/RMUswozIX8=;
-        b=ZRywAQ8nkvfGEf71XLnqrAfLq3xm0ujscOCQtdMzZ6Bwuhsf7UC3KSVx4zHZ1/HHQq
-         wyNhMznZgfzyyVeK3lNnOB9qxUFQcFNz4ygu2ljeaJ1SiPU6lJuPl2+pFk5rlRN2CeuM
-         uZJXoRdKFRSGUA62pF9Rj58xhZN+c7SmrR8QvvVeL3K2j2GYqE+U4peWJr16W/+Dym5u
-         xfet7nI/laHDuw25CzWK01YKBWnTRpWkAtd3Q31E7zu2fgYhfZbmCvBfdVdldmZnhZoB
-         Pq/8Mo7UZvgjmYb/dUuqobdypYl9VVRh8g78KyWLJlRJFGQsrxu9EaB/7sGOAKC/yAZW
-         uwdQ==
-X-Gm-Message-State: AFqh2kodMqn+wmHue2vzyFQl+OMbpARvJdsZhgYeOtYj6d3nLB3DGa5+
-        +/8rKI6YpCXchwRlN5H+jNxXgVK0zkPLGwseNl0=
-X-Google-Smtp-Source: AMrXdXv66G8WXqBNuBYzpHAknsAJtQxSzEtqqiHk7smapGoNCVADxDJchudqYt89nC5nxEOavqo3qPuHbu9lbraGcnY=
-X-Received: by 2002:a25:d505:0:b0:7c0:10aa:961e with SMTP id
- r5-20020a25d505000000b007c010aa961emr70364ybe.346.1673894585852; Mon, 16 Jan
- 2023 10:43:05 -0800 (PST)
+        Mon, 16 Jan 2023 13:59:16 -0500
+X-Greylist: delayed 658 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Jan 2023 10:59:14 PST
+Received: from h5.fbrelay.privateemail.com (h5.fbrelay.privateemail.com [162.0.218.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B26525E28
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:59:13 -0800 (PST)
+Received: from MTA-11-3.privateemail.com (mta-11.privateemail.com [198.54.118.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by h5.fbrelay.privateemail.com (Postfix) with ESMTPS id F3656607D2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 18:48:12 +0000 (UTC)
+Received: from mta-11.privateemail.com (localhost [127.0.0.1])
+        by mta-11.privateemail.com (Postfix) with ESMTP id AA24918000A5;
+        Mon, 16 Jan 2023 13:48:01 -0500 (EST)
+Received: from bpappas-XPS-13-9310.ucf.edu (050-088-208-136.res.spectrum.com [50.88.208.136])
+        by mta-11.privateemail.com (Postfix) with ESMTPA id 4905418000AA;
+        Mon, 16 Jan 2023 13:47:52 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1673894881;
+        bh=7eZ35sq7vCUVk3hra9JJfEa8RywzMOV09hPbJgGfvUU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bl1SddMe0MQndGSlzT/1qEvDmy8b2bDbFoRZIITe/g8u3rsWRJKgiuSqnUpIHmCmM
+         LYhvh+0Hn+IBx2jy1ZdBxNl3tC5Fz3Me63rP9J5OkmHytR7E3BhJWEdQ6E/JMfgf92
+         B9H5xbSs5XEK3GRzRZdUHJoqGMG9Lza9pRsI/fXb0sEXzA5t408mK5gSiCMjhwixAZ
+         1oKup3SFLrua+sSGvJ1bgehrwYJqjaM96+MfOsUSWq7Znf1P+fXmiT1AnBq9SjlGeW
+         NzI7F7JtxzznJ7aFeoVKsp8QbCWzQJbRQVbHpTWCuKBoLfX28T6lAvSBQIzgtmvqxt
+         IUBrcJ2cVMWXg==
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     rmfrfs@gmail.com
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Brent Pappas <bpappas@pappasbrent.com>
+Subject: [PATCH] staging: greybus: gpio: Replace macro irq_data_to_gpio_chip with function
+Date:   Mon, 16 Jan 2023 13:47:06 -0500
+Message-Id: <20230116184707.22302-1-bpappas@pappasbrent.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6918:26c5:b0:10e:d15b:5860 with HTTP; Mon, 16 Jan 2023
- 10:43:05 -0800 (PST)
-In-Reply-To: <20230116101651.jjzz2rcdehs5wvsi@houat>
-References: <20191215165924.28314-5-wens@kernel.org> <20230116100359.4479-1-olecom@gmail.com>
- <20230116101651.jjzz2rcdehs5wvsi@houat>
-From:   Oleg Verych <olecom@gmail.com>
-Date:   Mon, 16 Jan 2023 21:43:05 +0300
-Message-ID: <CAHdV42W58Q_ciCmd5bmoX32KpKCKOh1iuGOE5f-=yc_WOJ=A+g@mail.gmail.com>
-Subject: Re: [PATCH 04/14] media: sun4i-csi: Fix [HV]sync polarity handling
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     wens@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, mark.rutland@arm.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        sakari.ailus@linux.intel.com, wens@csie.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Replace the macro irq_data_to_gpio_chip with a static inline function to comply
+with Linux coding style standards.
 
-On 1/16/23, Maxime Ripard <maxime@cerno.tech> wrote:
-> Hi,
->
-> On Mon, Jan 16, 2023 at 01:03:59PM +0300, Oleg Verych wrote:
->> > -	hsync_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
->> > -	vsync_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
->> > +	/*
->> > +	 * This hardware uses [HV]REF instead of [HV]SYNC. Based on the
->> > +	 * provided timing diagrams in the manual, positive polarity
->> > +	 * equals active high [HV]REF.
->> > +	 *
->> > +	 * When the back porch is 0, [HV]REF is more or less equivalent
->> > +	 * to [HV]SYNC inverted.
->> > +	 */
->> > +	href_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
->> > +	vref_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
->>
->> After this change has been made there is a need of explicit explanation
->> of what "Active high" / "Active low" in dts really mean.
->
-> Why?
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+---
+ drivers/staging/greybus/gpio.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-It will be better understood by a person behind an oscilloscope who is
-trying to figure out the logic behind dts, csi driver, csi controller,
-wire voltage levels by just reading device tree definitions. Because
-dts must be changed in order to connect source / sink devices.
-
->
-> I'm sorry, it's not clear to me what is confusing in those excerpts?
-
-I'm sorry too, maybe that is not clear. Confusion is here:
-
->> > +                        hsync-active = <1>; /* Active high */
->>
->> original CSI driver
-
-i.e. <1> - active high
-
->> > +			hsync-active = <0>; /* Active high */
->>
->> this change patchset
-
-i.e. <0> - active high
-
->> > +				hsync-active = <1>; /* Active high */
->>
->> this patcheset
-
-i.e. <1> - active high
-
-
->> Currently physical high/low voltage levels are like that:
->> (I'm not sure about vsync-active)
->>
->> * hsync-active = <0>; /* HSYNC active 'low' => wire active is 'high' */
->
-> Yes
->
->>   CSI register setting: href_pol: 1,
->
-> Not really, no. It's what this patch commit log is saying: HREF is
-> !HSYNC, so in order to get a hsync pulse active high, you need to set
-> href_pol to 0.
-
-I'm totally confused here. That `hsync-active = <0>` -> `href_pol: 1`
-was found by `printk()`-like debugging.
-
-(This can be not relevant or incorrect) What was found also is that
-active high horizontal wire (whatever it is called in datasheet, PCB,
-dts or driver) from e.g. FPGA corresponds to `href_pol: 1` to
-correctly read image lines sent.
-
-Thanks!
+diff --git a/drivers/staging/greybus/gpio.c b/drivers/staging/greybus/gpio.c
+index 8a7cf1d0e968..833162ceb385 100644
+--- a/drivers/staging/greybus/gpio.c
++++ b/drivers/staging/greybus/gpio.c
+@@ -43,7 +43,11 @@ struct gb_gpio_controller {
+ };
+ #define gpio_chip_to_gb_gpio_controller(chip) \
+ 	container_of(chip, struct gb_gpio_controller, chip)
+-#define irq_data_to_gpio_chip(d) (d->domain->host_data)
++
++static inline void *irq_data_to_gpio_chip(struct irq_data *d)
++{
++	return d->domain->host_data;
++}
+ 
+ static int gb_gpio_line_count_operation(struct gb_gpio_controller *ggc)
+ {
 -- 
-sed 'sh && sed && node.js + olecom = happiness and mirth'  <<  ''
--o--=O`C
- #oo'L O
-<___=E M
+2.34.1
+
