@@ -2,154 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E82566BDA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C8666BDB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjAPMSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S230219AbjAPMTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjAPMRw (ORCPT
+        with ESMTP id S230286AbjAPMTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:17:52 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2047.outbound.protection.outlook.com [40.107.7.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C02E1E29A;
-        Mon, 16 Jan 2023 04:17:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RWvfjPLitYt164zaS7/BjZTfIR8KUZEaTN+QVlOu4AjutT/bJkPz/8jGzaeJuVq/Hb6CwXjoMttFx7syPuKmdvADwdmKvumHlyIZcnJQfBh6HyhodqOOqBpl7cjzpN7CLcEuuuRVQ8niczRhJEa4QPlQq8al+SbzG+kkDKazAOZC2P9H6NIQwtX7VBMYundwL9BlEKRHVzCrTjBgqko6QnOR7fdZFJ3n1TzSz/ZFwEIza6BZtgujuh96uM0aabZT07EsC3iY5V8CPD3EXaj0vpRyKeZu5MTGIpWh6hYZj00nphI9ER78AJ2inrMDQc86U+4TekQn6qZfL0nLZHmq+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Wq2GoUm1Ep3bz/1sRkIXS6kV41mKnZ1Cb4ZCARJAN4=;
- b=X2B+iUwwTVjVe7MzV4IWxWZBGBnZbKFqZQhLCeiioGTnZ2cLa2sqOz2QFDKVa5NPozrIsQyq/NG13SOj0JWNuuuR5rioW65k3wcgTl5uQjcHLyPHhxxV7U816UQrrSDMehjp5BEM0TINzhtBRxg1WEl5sla2t2KTrJd3QoOukCjafp69bP+QcRejwAspaPDDlJPCaEvbls8rTw/rcDx5wjG3UwP0ler/XDpmGYlLZz1zw/Cc8vr2KlxX73TvAGR9/xnYGneSms0hlXkADh4x0HcOW51JI9E1C/kOuSs54Scm1bHU9g+A8vR06sAxBWETFM+HfPZGZLUcOE339ftsTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Wq2GoUm1Ep3bz/1sRkIXS6kV41mKnZ1Cb4ZCARJAN4=;
- b=Qra4NGHZQAznTA1WCB0VauEDgfE9qTQ3sIHypB0NU7rgOsF+uHKLqn3EeCHOp35LH2HvyX2S9tRs+ym81G8ymkAQmuyLVzc97k6LnK/ig6hVsbWeKdFB4DI3HwXLsK+guk6GDtHtPuXL+cX63w3l9Qr7sTuci21SxqsMYBhIAlU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AS4PR04MB9313.eurprd04.prod.outlook.com (2603:10a6:20b:4e4::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 12:17:29 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
- 12:17:29 +0000
-Date:   Mon, 16 Jan 2023 14:17:25 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     "Somisetty, Pranavi" <pranavi.somisetty@amd.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        "Katakam, Harini" <harini.katakam@amd.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH v2 net-next 02/12] net: ethtool: add support for MAC
- Merge layer
-Message-ID: <20230116121725.wsf3hfv3biyozno4@skbuf>
-References: <20230111161706.1465242-1-vladimir.oltean@nxp.com>
- <20230111161706.1465242-3-vladimir.oltean@nxp.com>
- <BN8PR12MB28529854BAE0543212FF8E13F7C19@BN8PR12MB2852.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN8PR12MB28529854BAE0543212FF8E13F7C19@BN8PR12MB2852.namprd12.prod.outlook.com>
-X-ClientProxiedBy: VI1PR04CA0110.eurprd04.prod.outlook.com
- (2603:10a6:803:64::45) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Mon, 16 Jan 2023 07:19:40 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2A01CF6B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:19:38 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id i188so28813298vsi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kazLpMPqIJ8ND7JnzhZsAo9YrM4X5RuRvuloMhNxBiA=;
+        b=fpKI4lR3e0tfEG5mJtj4ykMByxkXE/wybdMyyPQPkzqWy4bPosB37XYkVNEenPnC9n
+         0+X5C0h1shkD3QQCmP1PVsJwsnr34O0mF1LlsfCqnjliDesjuJVnVaE3RtazynpAgpjw
+         epOAd0D9zgYphOKjQ5D3gAnOMoZVakfDR/uQxo+3LbjJCUvrAT7kxMNjFMX+SwQsG5KI
+         sDpu7KRsBWOvxkb4ZLWL0vLFUGV4L3G+BEBAW+U3lISnK4JsyfAljVQeeh5vUb5fTh+Q
+         eYAnMQxWB5tn+uFCjcRqcSSxP1HDFGCTuIWHuwfMPpODXMBN4vveDq6QTtyghgvOkehs
+         4FUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kazLpMPqIJ8ND7JnzhZsAo9YrM4X5RuRvuloMhNxBiA=;
+        b=P7VgODx4TAk3kIaE53j6Vsccm66QTtBIVkcBeovXeVMV0PjN0JwpobYvSzyqLDiG+f
+         CI2VZIpibe+J7fHKjkhH2I6tAzFMD2Vmv1uU2oHR5/0xIFFiBcVHBSil+DbCIMQfxkSa
+         uq+ANnriGlREXcUBjURXC8vcR7HD23Dw1HLV+MXwVMsa/NFw/T9EsSZcalBH64RbLv7U
+         4MtRAFfPYKUdGnNd1UpK9SOpW1XL3GH2dpSri4+yVdIUA39oEFhoBY1R+aDYc2ElMRzS
+         kAjZW7z78cYFeCAHao+wEwJTxKiWh31Sclv9G7Tg9sqex++rFjBru5dICuVOX3MovO9W
+         pQkg==
+X-Gm-Message-State: AFqh2kqXO64DF01iyuFkkUM79d4tlEBvokDn68GLGQoBcEg7gxmCMO5D
+        CAfKxfvdvRaWbdf9I5osF4pLlAdANdQN9mUlcaxQ5w==
+X-Google-Smtp-Source: AMrXdXsh533ytKCqAQBDxz7H2+vm1Pb7F45A1LT5hBKM7IhisMcTex00TP4koRLjkBtwQ2tNVmqT4vA2mF7N+oMFzB0=
+X-Received: by 2002:a05:6102:83b:b0:3d1:3753:9a3c with SMTP id
+ k27-20020a056102083b00b003d137539a3cmr1499276vsb.73.1673871577998; Mon, 16
+ Jan 2023 04:19:37 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AS4PR04MB9313:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa8620d0-d859-4e2f-e391-08daf7bba2eb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 79tgCEDQXdeOITF5FtpwIuDmNMrie/gqU4zmjfKkmWHQQ4t34wDO5H89pY50qPfI7tUoh+18iiUCvWwDJoN9LipTf/PvufHXv42QVTY9ErPivCgiTKuOFGAAF99b7ZShexj0QjP0lEnIgtX9jCGgwaCaz0kUbCMc07R+5TJWzY/IgCo0cl7lj50QKnBq0Z+FXhJ+DXXHWOHINv0/NN4cgIvPJWXcHQAx4rhRil/EVUFPxM1fjxCgabbpsun8uAsN5/7YLoWvxhx7YYbkbWXkSpHhzFjZc5lQfzlSZfT01oL/pLtvu19YGZUGy6oTCc+ZZgEOl+r1wXXR+avRw4Fh5ic60oMDVP0rebMB3hxcfplY3kpqGviUu1bdPWKuRkCapUY5zCwxpzlxyD6H0A3IM3k0VzMXuYAGfmENxQTRdxQSRyGL2KgNOSf6E1zvPpqqpdbFcV8eO4zerIahOXkKaxN67ys3Fj5uOBpcTepWu7Y77CCwmte43Gkv/lhXZlAuE33RmYostXyyf5OWjm4VHZAg5qEuQZe+AUAT8j7wUdkczDJzIiQmzmqd75F9Rn7XFxyQMZMdNT+udWGRs8O73SY/RPeMKsoKJP6xoWf8BqJMXwmElAKEdIthj67dZs10mH5FHRXDgcykYzHb8epGwQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(346002)(396003)(366004)(376002)(136003)(39860400002)(451199015)(86362001)(66556008)(8936002)(44832011)(6916009)(8676002)(66946007)(66476007)(2906002)(5660300002)(7416002)(4326008)(83380400001)(38100700002)(478600001)(6486002)(54906003)(6666004)(316002)(33716001)(41300700001)(1076003)(6512007)(9686003)(26005)(6506007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bU84YpP2HKKgC2gXa3Cu2fUZ+0UsYJ+oBCCcro0fiYql4QrIR8HVGKd0wwvm?=
- =?us-ascii?Q?zsWLi5xZ9rSuq1nPXIDTADLUqxxVlMeZdFc6PNDp/A7NWsZ49G4n2AeFIagT?=
- =?us-ascii?Q?TwQxeamE6WmC/4R2eI43Xw7DsDPblBpxPdoLSLqyo+I5tPkb8tEEsw3ejxdG?=
- =?us-ascii?Q?Y8uAzD+xYE4DpEajWRBMGyEoC+Rc3G7xRQqVRXvDzIusW/OiuM3IMUnRhIZw?=
- =?us-ascii?Q?VpZtRs8x9Czxye8v1pUMrb3Y9xhQ6roixtwyIoW9J3bUas3JLRAtDqFnlCAW?=
- =?us-ascii?Q?8y6qBmIZ+S/LRbXHFWzJqranAxQTFIhuOpd5jt/zXZHlb44F0ausabX6ZttW?=
- =?us-ascii?Q?4hCQAeQJaU0EmIKmR251JINNdpfJ6v7Z1YLNaCdtTpe2jytL9SLQnQEI+MVl?=
- =?us-ascii?Q?6p+LFfBYdnwemo/RwP9Vgqm/3P2dcK0zw9w4YMUNNYA4OE7lCGaHHO+Cc7BF?=
- =?us-ascii?Q?KztDepjFoq9/7x3zIQlkh8KeLZ0Iol5bjHkmzi29fDF0uD9IjHIl3D1IV9/0?=
- =?us-ascii?Q?1IvRT4zvtPBrQU0HBRqwIl6DZ1ORxpfT48DInbters/gFct2nAB5uWKT3MhV?=
- =?us-ascii?Q?k1aoQIUn0f86DaepCPuIJjMdg0XCIphWbTgkOzcsr29/n1Si/6PoN1nwx3Fa?=
- =?us-ascii?Q?itkq7XF4eam3VEdgtFI8nBUf+Nk0TJ8WwPv4fcDYkGHi3nw6doUd64ioASsZ?=
- =?us-ascii?Q?Ur/1wxapWTg7/isXPySVPKq/rk8YH05rDF1oW2VVlI3vXGRRyoSkdfZ86NUX?=
- =?us-ascii?Q?d2Vs3dn4vAQfvyH7MKDZsE0ZodNfVRKcsL2MTaVFbwQ/U4jTdySdkEw6Y9m7?=
- =?us-ascii?Q?f8pJiYqyzVvfgp8irHriYXAdfdJBDkhDsr+DfPmZ72ma4CwPm2ZD6ND9YDLv?=
- =?us-ascii?Q?fto3lSexeu0RueoOy7pSq70K6iyNo/4vOMegKRkle3asm8SrWW0Rfd3GeaqX?=
- =?us-ascii?Q?xgk50SyjAZw5V5XRbfyWQO2ZWEzyVSCOCnDvbF2l3hp1gcT2CVd8+zb61xeN?=
- =?us-ascii?Q?aNe1gV5/o+hp3RmFDiqE8E9QYBJezrH1JBni6WsFmhBK6mAUF5E9p4jWheRc?=
- =?us-ascii?Q?9ZXJ3034MQxZC4VetJ1CeWZ37+sdjM/mY+2wycXbvlzZmQg8CWT+cdZqV0VW?=
- =?us-ascii?Q?mqp9sjrGFGL9nSnpJeMR3qZnD1bmJf+Cpl7MRaIl2lt8zX2hss12YUAUFkY/?=
- =?us-ascii?Q?/EZM/m/clsQSEMOJX3jHM+j4REGT+/YtAD2exI+6gNzzmSplPIo9Pcz1+mAq?=
- =?us-ascii?Q?BiDouGfkwD1yJSC9vKXAU+9UozDyYrjyVo2I7tnSo1jNCA1Aks7SKWR9v2cN?=
- =?us-ascii?Q?1f9ir9873efMuJo3h/LM6uMgYHyGI1f/vB0KK++QE1wpHHySf5vBvviLlLfj?=
- =?us-ascii?Q?ywEyYPzHkkRct5LXRpXl2g8z9Y9X3PHwfRphzrgHRiM7t6iUr4QBuHN0PkTo?=
- =?us-ascii?Q?AVg3H03rjkpPe+y7t44czAE6M0QYrUaKDspyo65LkfpnWxaGOnUrtYD26FnR?=
- =?us-ascii?Q?8qvODEeCSB19BK26NcUeSeG+qJ/16vv+JRGFb2SVOc3h39lirFu4N+cgTkPP?=
- =?us-ascii?Q?w+qud5QfZLYgQ5yq696BADz6OZ8fn4mlD9Jy6EtefRSnQZHwkWQhy++u/qJS?=
- =?us-ascii?Q?EA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa8620d0-d859-4e2f-e391-08daf7bba2eb
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 12:17:29.3784
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tgSoXCpU4cZ5DkTvrd+JUFmxOTo3DYXIymht4ykTw++fGMiys94jl+KwuwnVRugZC+DE7E8U8glDkfFNnnQYdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9313
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+In-Reply-To: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 13:19:27 +0100
+Message-ID: <CAMRc=Mc5YgWqRsmw=n6EV8PW5OZfMZYotiqSy=gSvHH1PbVN4w@mail.gmail.com>
+Subject: Re: spidev regression in 6.2-rc kernel
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Mark Brown <broonie@kernel.org>, bartosz.golaszewski@linaro.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        max.krummenacher@toradex.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 09:02:55AM +0000, Somisetty, Pranavi wrote:
-> Does it make sense to have two separate functions, one to
-> enable/disable pmac and tx preemption status and configure additional
-> fragment size (both parameters can be configured after negotiating
-> with the link partner), and another to modify the verification related
-> parameters, i.e, enable/disable verification and verify time value?
-> 
-> For example, if the user wants to change the verify time value, Is
-> there a way to change it without disturbing the value of the
-> additional fragment size that has been set through LLDP after
-> negotiating with the link partner?
+On Mon, Jan 16, 2023 at 1:06 PM Francesco Dolcini <francesco@dolcini.it> wrote:
+>
+> Hello,
+> we spotted a regression on spidev on latest 6.2-rc kernel.
+>
+> [  214.047619]
+> [  214.049198] ============================================
+> [  214.054533] WARNING: possible recursive locking detected
+> [  214.059858] 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1 Not tainted
+> [  214.065969] --------------------------------------------
+> [  214.071290] spidev_test/1454 is trying to acquire lock:
+> [  214.076530] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x8e0/0xab8
+> [  214.084164]
+> [  214.084164] but task is already holding lock:
+> [  214.090007] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+> [  214.097537]
+> [  214.097537] other info that might help us debug this:
+> [  214.104075]  Possible unsafe locking scenario:
+> [  214.104075]
+> [  214.110004]        CPU0
+> [  214.112461]        ----
+> [  214.114916]   lock(&spidev->spi_lock);
+> [  214.118687]   lock(&spidev->spi_lock);
+> [  214.122457]
+> [  214.122457]  *** DEADLOCK ***
+> [  214.122457]
+> [  214.128386]  May be due to missing lock nesting notation
+> [  214.128386]
+> [  214.135183] 2 locks held by spidev_test/1454:
+> [  214.139553]  #0: c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+> [  214.147524]  #1: c4925e14 (&spidev->buf_lock){+.+.}-{3:3}, at: spidev_ioctl+0x70/0xab8
+> [  214.155493]
+> [  214.155493] stack backtrace:
+> [  214.159861] CPU: 0 PID: 1454 Comm: spidev_test Not tainted 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1
+> [  214.169012] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+> [  214.175555]  unwind_backtrace from show_stack+0x10/0x14
+> [  214.180819]  show_stack from dump_stack_lvl+0x60/0x90
+> [  214.185900]  dump_stack_lvl from __lock_acquire+0x874/0x2858
+> [  214.191584]  __lock_acquire from lock_acquire+0xfc/0x378
+> [  214.196918]  lock_acquire from __mutex_lock+0x9c/0x8a8
+> [  214.202083]  __mutex_lock from mutex_lock_nested+0x1c/0x24
+> [  214.207597]  mutex_lock_nested from spidev_ioctl+0x8e0/0xab8
+> [  214.213284]  spidev_ioctl from sys_ioctl+0x4d0/0xe2c
+> [  214.218277]  sys_ioctl from ret_fast_syscall+0x0/0x1c
+> [  214.223351] Exception stack(0xe75cdfa8 to 0xe75cdff0)
+> [  214.228422] dfa0:                   00000000 00001000 00000003 40206b00 bee266e8 bee266e0
+> [  214.236617] dfc0: 00000000 00001000 006a71a0 00000036 004c0040 004bfd18 00000000 00000003
+> [  214.244809] dfe0: 00000036 bee266c8 b6f16dc5 b6e8e5f6
+>
+>
+> This is not running the latest rc4, but on sha 97ec4d559d93 (this is
+> just what our CI had available when this test was run). I was not able
+> to bisect it, but it seems something that you could have introduced.
+>
+> The log is from an apalis-imx6, but I have the same on other ARM SOC.
+>
+> Can you have a look?
+> Thanks
+>
+> Francesco
+>
 
-Could you please clarify what you mean by "disturbing"? The handler for
-the ETHTOOL_MSG_MM_SET message first calls get_mm(struct ethtool_mm_state),
-then mm_state_to_cfg(struct ethtool_mm_state, struct ethtool_mm_cfg),
-then set_mm(struct ethtool_mm_cfg). In other words, a SET ethtool
-command translates into a read-modify-write in the kernel. If user space
-did not request the modification of the additional fragment size, just
-the verify time, then the set_mm() call will contain the old additional
-fragment size and the new verify time.
+Eek! Yes it's commit 1f4d2dd45b6e ("spi: spidev: fix a race condition
+when accessing spidev->spi"): spidev_ioctl() takes the lock and in
+certain instances can end up calling spidev_compat_ioc_message() which
+takes the same lock again. I'll send a fix shortly.
+
+Bart
