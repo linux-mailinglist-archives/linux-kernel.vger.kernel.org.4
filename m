@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E806466C2B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E31D66C296
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjAPOwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:52:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S231580AbjAPOrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjAPOwM (ORCPT
+        with ESMTP id S230072AbjAPOqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:52:12 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241DD2BF0E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=w9+PAdJk73UH2Fl3uPAAs4wgk5kyO76VlH+ufUk/PX4=; b=OB3RdkQh/z8SFHj5199h+5XxCG
-        thtkjKdk+ckbxf7Iellx2ZelkT1vO3AvWAgAjOiq8fzpCJwR6AC2SkmBx8R0Lr5PfqM/r3BVOSesf
-        iNTTF8J0Dh6dYSuq81Aos7ogKJWM8VOUSyQK3UNQsqCLKlLOI0+qQzX7Hru0M/PxVUOf8M3fiPwcL
-        XUNEPBzCO1X90Eazd5t/tUXX6nnvwXa2NznHU7elGvs2Vf9jjgratRjuPAlLu2YOjbhnfusCUjccb
-        9glOoHYAYwuO41FGkPxDyw2EqP509qne4J5wYOpjcjdfHCeOJ6BFrHWxncvKtAlQKHBLhyYXy8uSD
-        vFlY2FHg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pHQc8-005csz-1j;
-        Mon, 16 Jan 2023 14:37:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 56FD1300C9D;
-        Mon, 16 Jan 2023 15:37:39 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id C252D20EF0A28; Mon, 16 Jan 2023 15:37:38 +0100 (CET)
-Message-ID: <20230116143645.948125465@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 16 Jan 2023 15:25:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, Joan Bruguera <joanbrugueram@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        Jan Beulich <jbeulich@suse.com>,
-        Roger Pau Monne <roger.pau@citrix.com>,
-        Kees Cook <keescook@chromium.org>, mark.rutland@arm.com,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v2 7/7] PM / hibernate: Add minimal noinstr annotations
-References: <20230116142533.905102512@infradead.org>
+        Mon, 16 Jan 2023 09:46:53 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ADE22A23
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:28:37 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id hw16so56647876ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VxLG6TTl8Ic/7g0hQk8ggT8NcHPanULLyMvVruCtN2c=;
+        b=QGlGugyS3UvUwNLlIz8UrjuOagHJQAqHFl0b7LiY3pjSEWd3QV1zO3d7SD+ZdOrza/
+         x5G601a1q2QAghOuPl7OdIp9uPmU80fKtCLExlG0gqWjm6fUeq7GSy9iQGAcg40I4EQD
+         uBAIPv9fIr6E02fF+8KfST95igZxAubbSqvFiLGzsFV1t2wHawhuQyiS4tuxLUNCZVcm
+         IiZ/evYO0C57J+AqkIVIgcTDq3eESoliRyBmTsdEnB5TzNDp3BBNwGSSAMLmo2niFZ2R
+         BjVB1PJEfyiH2hs5yn26f08V0UfgPzYpxG7tmnn7c0kQrvek5qNl7gTTU6p4wQQlV5rJ
+         QJEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VxLG6TTl8Ic/7g0hQk8ggT8NcHPanULLyMvVruCtN2c=;
+        b=j+Mu7d7agyGNH20k+fr6/BlGeAmCoobrKpJyefy3XJbk2YEqnwa2tPllrUfmtHS6EH
+         7EzmY0Xw/1N9JyWnhsMC3hhPi8+odouxSunuCPMLgJSVWWzE6mXJMxiDYdEPuTzRO4fP
+         AXzmNxCuaXIAiIXO+SDxnVGxddxv7WFkbQUA0/JUmoTCPNcpfZG8rfI8RzO01x2tJ9lr
+         tUSnfED1dub1n8qQ8Ug0JndoB5HdB8/uo2CBSKMv1ACgzrP0BKRCVGw+zM1ZQCNl7bG7
+         66psjqG0f6s0efuBXvzvN70fuGVJt5MUmU0fa/W3gdfovxQ/azfuUEuRBkF1JqiCFaCz
+         TGAw==
+X-Gm-Message-State: AFqh2kqh2lK+eaf7qjbSqQHEtCVzh7Dhd4okkDSHPSNHeQcUYu+XHmuT
+        N9NpAFiOb+Vg1UAYow637xxAHA==
+X-Google-Smtp-Source: AMrXdXvhKj+dWSAovh86aIL0ls/STdzn8oZMPR+FmLegGDzAEOO/UU2HiZ10lUEtT+U1aacM+pz0zw==
+X-Received: by 2002:a17:906:5786:b0:7c0:e535:13fc with SMTP id k6-20020a170906578600b007c0e53513fcmr100863185ejq.37.1673879315637;
+        Mon, 16 Jan 2023 06:28:35 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id lb14-20020a170907784e00b007c0fd177c0bsm11753152ejc.46.2023.01.16.06.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 06:28:35 -0800 (PST)
+Date:   Mon, 16 Jan 2023 16:28:33 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>,
+        abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        18701859600@163.com, bsp-development.geo@leica-geosystems.com,
+        Marco Felsch <m.felsch@pengutronix.de>
+Subject: Re: [PATCH V5 1/1] clk: imx8mp: Alias M7 SRC/DIV to M7 CORE
+Message-ID: <Y8VfEfnWwt8+QB1W@linaro.org>
+References: <20230111101030.686885-1-Qing-wu.Li@leica-geosystems.com.cn>
+ <20230111101030.686885-2-Qing-wu.Li@leica-geosystems.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111101030.686885-2-Qing-wu.Li@leica-geosystems.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When resuming there must not be any code between swsusp_arch_suspend()
-and restore_processor_state() since the CPU state is ill defined at
-this point in time.
+On 23-01-11 11:10:30, LI Qingwu wrote:
+> Defined IMX8MP_CLK_M7_SRC and IMX8MP_CLK_M7_DIV in imx8mp-clock.h
+> but never assigned. It will cause the system to hang if using them.
+> Alias IMX8MP_CLK_M7_SRC and IMX8MP_CLK_M7_DIV to IMX8MP_CLK_M7_CORE
+> for backward compatibility.
+> 
+> Fixes: 8c83a8ff4dd9 (clk: imx8mp: use imx8m_clk_hw_composite_core to simplify code)
+> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+> Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/power/hibernate.c |   30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
+Stephen, can you please pick this up yourself?
 
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -280,6 +280,32 @@ __weak int arch_resume_nosmt(void)
- 	return 0;
- }
- 
-+static noinstr int suspend_and_restore(void)
-+{
-+	int error;
-+
-+	/*
-+	 * Strictly speaking swsusp_arch_suspend() should be noinstr too but it
-+	 * is typically written in asm, as such, assume it is good and shut up
-+	 * the validator.
-+	 */
-+	instrumentation_begin();
-+	error = swsusp_arch_suspend();
-+	instrumentation_end();
-+
-+	/*
-+	 * Architecture resume code 'returns' from the swsusp_arch_suspend()
-+	 * call and resumes execution here with some very dodgy machine state.
-+	 *
-+	 * Compiler instrumentation between these two calls (or in
-+	 * restore_processor_state() for that matter) will make life *very*
-+	 * interesting indeed.
-+	 */
-+	restore_processor_state();
-+
-+	return error;
-+}
-+
- /**
-  * create_image - Create a hibernation image.
-  * @platform_mode: Whether or not to use the platform driver.
-@@ -323,9 +349,7 @@ static int create_image(int platform_mod
- 	in_suspend = 1;
- 	save_processor_state();
- 	trace_suspend_resume(TPS("machine_suspend"), PM_EVENT_HIBERNATE, true);
--	error = swsusp_arch_suspend();
--	/* Restore control flow magically appears here */
--	restore_processor_state();
-+	error = suspend_and_restore();
- 	trace_suspend_resume(TPS("machine_suspend"), PM_EVENT_HIBERNATE, false);
- 	if (error)
- 		pr_err("Error %d creating image\n", error);
+Thanks!
 
-
+> ---
+>  drivers/clk/imx/clk-imx8mp.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index 652ae58c2735..601eea7ab99d 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -522,6 +522,8 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MP_CLK_A53_SRC] = hws[IMX8MP_CLK_A53_DIV];
+>  	hws[IMX8MP_CLK_A53_CG] = hws[IMX8MP_CLK_A53_DIV];
+>  	hws[IMX8MP_CLK_M7_CORE] = imx8m_clk_hw_composite_core("m7_core", imx8mp_m7_sels, ccm_base + 0x8080);
+> +	hws[IMX8MP_CLK_M7_DIV] = hws[IMX8MP_CLK_M7_CORE];
+> +	hws[IMX8MP_CLK_M7_SRC] = hws[IMX8MP_CLK_M7_CORE];
+>  	hws[IMX8MP_CLK_ML_CORE] = imx8m_clk_hw_composite_core("ml_core", imx8mp_ml_sels, ccm_base + 0x8100);
+>  	hws[IMX8MP_CLK_GPU3D_CORE] = imx8m_clk_hw_composite_core("gpu3d_core", imx8mp_gpu3d_core_sels, ccm_base + 0x8180);
+>  	hws[IMX8MP_CLK_GPU3D_SHADER_CORE] = imx8m_clk_hw_composite("gpu3d_shader_core", imx8mp_gpu3d_shader_sels, ccm_base + 0x8200);
+> -- 
+> 2.25.1
+> 
