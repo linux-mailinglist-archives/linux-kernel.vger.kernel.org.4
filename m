@@ -2,62 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBDA66CD13
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6E466CD47
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234924AbjAPRdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
+        id S234801AbjAPRf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbjAPRcj (ORCPT
+        with ESMTP id S234953AbjAPRek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:32:39 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 756D52A143;
-        Mon, 16 Jan 2023 09:08:53 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id B88E28108;
-        Mon, 16 Jan 2023 17:08:52 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 19:08:51 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Andreas Kemnade <andreas@kemnade.info>, bcousson@baylibre.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [PATCH] ARM: dts: gta04: fix excess dma channel usage
-Message-ID: <Y8WEoxiOXgZNB1Oc@atomide.com>
-References: <20230113211151.2314874-1-andreas@kemnade.info>
- <CAHCN7xJH+c41Yas+xnWA57KNi9arOOJDxJ=joEDEJr2k6jrRrw@mail.gmail.com>
- <Y8VkjQ2yZQssx/wJ@atomide.com>
- <20230116173922.585904bf@aktux>
- <Y8WBuKt6mw6TN1Cp@atomide.com>
- <CAHCN7x+b2_dnpRs8RarhhgTfBrTVfGfmcQNbfHLoWBwkZ_3Puw@mail.gmail.com>
+        Mon, 16 Jan 2023 12:34:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C95E2A98C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:09:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673888996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i8TyWaBK0rrh9nu6bilmDzmOvJpbEYXbLFcWBZyCEYc=;
+        b=btYoZW14qvAZqTnIweBrT80H7NLy1vP4Mmc93pCM25DWF/kzpPGZ8GibLd7FYmYLq86++L
+        LFSQPEdYPh1dCNUhOBxY0flmPp2UV8Luq0R2Oh7byCwcV0bxAQZa0I/VsJIHMy5cbxZOr1
+        bljJkDfF/rEwRyIJKKqHa5wXho+zEJg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-65-E8n6tBmjPRSb0tjaLJJOKQ-1; Mon, 16 Jan 2023 12:09:55 -0500
+X-MC-Unique: E8n6tBmjPRSb0tjaLJJOKQ-1
+Received: by mail-wr1-f70.google.com with SMTP id u15-20020adfa18f000000b002b129dc55bfso5541055wru.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:09:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i8TyWaBK0rrh9nu6bilmDzmOvJpbEYXbLFcWBZyCEYc=;
+        b=SbwcwTJslViJmHoUg9X3FLKN6n5rVnLrUVu4ldmZdJIj0aecK4xyG4IOHpG3mA2WwN
+         /GQCCuyTBMZ63kpc8nDhWagZ5izkH6ORsG+ZIh8NZe45fKgtfpWa1XJBQiN3Cg77THtw
+         Rg9wE60SIVbdMU+rL3T5yunU/XbXPW8FIFHH4Mq8KMeE8rTFtDDiswLR491Jo6GyqVBw
+         uOYYfOEMP77LxSaoEud2FvGkNc+ES+dOSeggJMhYy2l3ljXjhN8RWvaxK9HVQvpKpZUh
+         RaXGVhz/3J1G0K8zC2DdRsHl5vC8rhz7O1XGxDzkUe8n4D7QIbEziLksDgheOnoELMNS
+         iAPA==
+X-Gm-Message-State: AFqh2kqLnsq0G8P6GP2rSjq93BAFtu8YyJDREnKCinCH/C4ElOAT1mta
+        ASY10xw6/M6N4ELLr2LDm8xWvB5Orcw736Ejfvvyi7SYHscv39+FWSRCzB9W6kopp9gLHGET/k+
+        BlUkP2Ht1C6cvOrjyDriGHXD9
+X-Received: by 2002:adf:e991:0:b0:2b9:1a52:4f50 with SMTP id h17-20020adfe991000000b002b91a524f50mr8239440wrm.6.1673888994007;
+        Mon, 16 Jan 2023 09:09:54 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs7mvXxw8Q84+NmHtR/OTm4Mty+RhE+3nJjPMyUyIkH9Wox+5ZFG6IWOaX4Wg2wSZtWBXwm/w==
+X-Received: by 2002:adf:e991:0:b0:2b9:1a52:4f50 with SMTP id h17-20020adfe991000000b002b91a524f50mr8239421wrm.6.1673888993725;
+        Mon, 16 Jan 2023 09:09:53 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1000:21d5:831d:e107:fbd6? (p200300cbc704100021d5831de107fbd6.dip0.t-ipconnect.de. [2003:cb:c704:1000:21d5:831d:e107:fbd6])
+        by smtp.gmail.com with ESMTPSA id t13-20020adfe10d000000b002b6bcc0b64dsm14372975wrz.4.2023.01.16.09.09.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 09:09:53 -0800 (PST)
+Message-ID: <06185b08-8440-8922-c0aa-f6fb91aa54e0@redhat.com>
+Date:   Mon, 16 Jan 2023 18:09:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHCN7x+b2_dnpRs8RarhhgTfBrTVfGfmcQNbfHLoWBwkZ_3Puw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] mm: do not try to migrate lru_gen if it's not
+ associated with a memcg
+Content-Language: en-US
+To:     Yu Zhao <yuzhao@google.com>, msizanoen1 <msizanoen@qtmlabs.xyz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, stable@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230115133330.28420-1-msizanoen@qtmlabs.xyz>
+ <20230115134651.30028-1-msizanoen@qtmlabs.xyz>
+ <CAOUHufahcS0G_GApTdmzE4_Nb_70LGaCkgV0NR_xJuWN2NdJVg@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAOUHufahcS0G_GApTdmzE4_Nb_70LGaCkgV0NR_xJuWN2NdJVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Adam Ford <aford173@gmail.com> [230116 17:00]:
-> Doesn't this imply the target-module stuff needs to be implemented for
-> the drivers?  It looks like a lot of the omap3 drivers are still using
-> hwmods although some have target-modules. In this case, the mcspi
-> drivers that Andreas is disabling don't appear to have target-module
-> stuff configured.
+On 16.01.23 00:13, Yu Zhao wrote:
+> On Sun, Jan 15, 2023 at 6:47 AM msizanoen1 <msizanoen@qtmlabs.xyz> wrote:
+>>
+>> In some cases, memory cgroup migration can be initiated by userspace
+>> right after a process was created and right before `lru_gen_add_mm()` is
+>> called (e.g. by some program watching a cgroup and moving away any
+>> processes it detects[1]), which results in the following sequence of
+>> WARNs followed by an Oops as the kernel attempts to perform a
+>> `lru_gen_add_mm()` twice on the same `mm`:
+> 
+> ...
+> 
+>> Fix this by simply leaving the lru_gen alone if it has not been
+>> associated with a memcg yet, as it should eventually be assigned to the
+>> right cgroup anyway.
+>>
+>> [1]: https://gitlab.freedesktop.org/benzea/uresourced/-/blob/master/cgroupify/cgroupify.c
+>>
+>> v2:
+>>          Added stable cc tags
+>>
+>> Signed-off-by: N/A (patch should not be copyrightable)
+>> Cc: stable@vger.kernel.org
+> 
+> Thanks for the fix.  Cc'ing stable is the right thing to do. The
+> commit message and the comment styles could be easily adjusted to
+> align with the guidelines.
+> 
+> I don't think the N/A is acceptible though. I fully respect it if you
+> wish to remain anonymous -- I can send a similar fix crediting you
+> as the "anonymous user <msizanoen@qtmlabs.xyz>" who reported this bug.
 
-Sorry I don't remember if omap_device.c ignores status disabled or not.
-But in any case, it should be trivial to update omap3.dtsi to configure
-some of the devices like mcspi to probe with device tree data and ti-sysc
-as needed.
+Not acceptable:
 
-Regards,
+Documentation/process/submitting-patches.rs
 
-Tony
+"using your real name (sorry, no pseudonyms or anonymous contributions.)"
+
+
+-- 
+Thanks,
+
+David / dhildenb
+
