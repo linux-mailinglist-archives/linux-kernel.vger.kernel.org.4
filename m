@@ -2,192 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B790366BBCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CCF66BBCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjAPKd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S230281AbjAPKeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjAPKdx (ORCPT
+        with ESMTP id S230250AbjAPKeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:33:53 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFDC1ABC1;
-        Mon, 16 Jan 2023 02:33:51 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id dw9so27266440pjb.5;
-        Mon, 16 Jan 2023 02:33:51 -0800 (PST)
+        Mon, 16 Jan 2023 05:34:05 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD791ABC1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:34:03 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4d4303c9de6so224043887b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5cUtz3N0x3JZNipLsn4fvRzLAQUyw9ViksturGz/Y1w=;
-        b=EpfoGEWrY4o0hXsJPnY9JrxDdM14yasX0rQreOsV27HppHB8ikJflLOkM19nJ7s3co
-         mKBvOmdl/9scR5WrSgbyA3BjC+j+jDXP/NbcufPXlGNmjeb2Od3HxuyihopDebFs3cPq
-         5/CH3tXqwbw6LD5RI8TF2yv6ks1ZXggt09VKap6tltkDZt3P47By1cgKPpLsaYMiDwbc
-         6MziB/RZ9aKHlFMP1JVI9/J5RRSvycZbLbB1J2opUuReQ4Cq36nlKgATrwYPYNidStB6
-         9IKqhqM4w02IqHUCOmXEYcBuisPQrw8CJvDcBQ0ONCkPZRCJ7pH69OYgFTAs/GGTLRrW
-         D87A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m/tYLsguvhNX76zD17hbPH2qZrPUhffkR6haBjKQqeM=;
+        b=lOAzNQu8eznDMDQrcDCeg8Fr+f4UMLS1VKaRsPuieAhkt0buE9051t1htqoIaxTiPe
+         J2ypkmPum8BdNAzSBXwbQiS/RJgBXZ9uNJNoY9p7/4ECG5i2eJFzWSvxsI7w4VLi95qA
+         65cm9Sgww5hrMlBJO/mkMjzNxRTk/Cl+Kalzz/jTRBSAkeoZSnD85r5K9fe5Y427m9Wy
+         GvpTxzOk4uy1F9NJo5kgPKyKkrs7kCcWQyuGdxvFOlD7611X+u7Zcgpm/7NGRA8MkNaf
+         ZCvdaxDS1JE4r7/uoMTLFgylYdR+JRh1ELrm209maie8TVQlHpLfuGkkkOdZyBAT06X1
+         NhKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5cUtz3N0x3JZNipLsn4fvRzLAQUyw9ViksturGz/Y1w=;
-        b=4PNbbk0QVrQmHsQNUkivLze6/FTCDUPOtvvDGMuoZY1FrerjPnu4cLR+vfQp6NZcLg
-         y1SOhhL2uwhbMSeFBhVR1kfNjehb0E4EqHUl4qt/0/ZmbFvjOm92JlFUlDeGPumKJnLU
-         4tn2ja+flB34Yy7B3/EewBRL4NNPUo0zE7Q+m8emytqcrdx0PIyzM709f5EJ7XJeED0T
-         Zcu+dVYJF1jTLSRxE4VN/RMtXmFnDFllc594HmzDU+LiqFXGMN2EQTsZSSwj+0yXgPSo
-         oBVrbydpG2UGdKh1hyca/iEdmH94W8MASwiXE1O1OxMt0CI/wMGpG5iiSUWq8YAQm2Ot
-         LqSw==
-X-Gm-Message-State: AFqh2kqn/c6N58ANIw5J2tu6bVbQOvUF4LLxygN2tP/uIH9hoWmHfz2a
-        HZsqN3dHIb8fWDY2EVp1gVQ=
-X-Google-Smtp-Source: AMrXdXsAbmsHe6SIKWFiYXfBmlRDdGJKrq0Rwh23NEnGQ0pmUClmbJAl25kGrfkV2dgknKMYvsjkUg==
-X-Received: by 2002:a17:90a:be10:b0:226:d7e8:e122 with SMTP id a16-20020a17090abe1000b00226d7e8e122mr37762188pjs.19.1673865231302;
-        Mon, 16 Jan 2023 02:33:51 -0800 (PST)
-Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id nm21-20020a17090b19d500b00227252ce57fsm11987880pjb.21.2023.01.16.02.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 02:33:50 -0800 (PST)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH v5 net] tcp: avoid the lookup process failing to get sk in ehash table
-Date:   Mon, 16 Jan 2023 18:33:41 +0800
-Message-Id: <20230116103341.70956-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        bh=m/tYLsguvhNX76zD17hbPH2qZrPUhffkR6haBjKQqeM=;
+        b=TjscNOFhz80HC7uAQDECdQBY4LpmnIy1pxN5DGc9TMXmjpmduDlkUH/pnXwOQGO8lP
+         3eMujUIrolHplKA2WjiqyKxDTU2xn/DSqLOPkMp6Hr9L4jZMDLoNLj/z0XBHeeWMVK1+
+         f7eXqPfGVIv/E2ceWCtPo7Ku40ZoU8Uru84ptadpAj11RG9T37CdVoBpW/1bgJ40sXtS
+         1jChxJfdIUf25pKrXYPQApzfIVoOpvaPA2Knt0WaCO0Q4slOCUAWsO5/YaNJMjPoWaMU
+         0JwMFO5AWWtbuoZUCkkzZYP44SYYCNLBfG4lv1vbAQdeb6CludEQI6/6D7j3rsgUzXvt
+         qt5w==
+X-Gm-Message-State: AFqh2koz1IFQP8PNckar0sYSIJ7iqEU/juqhAspxELpXPhNdZ+TWjzAa
+        0cjYK0+zQY2ToErjnPHNXXuqrCuVO69lqQFLSZL27vDWPc5soA==
+X-Google-Smtp-Source: AMrXdXtW6TKCnRsDE0wvhiF6XGnwo0I29h/efOhVdU9ndWaVGtkwJJu/nRXufdrfHsXPEx193xkQYwrYct1AIhwg7Gw=
+X-Received: by 2002:a81:a084:0:b0:4dd:ff06:1358 with SMTP id
+ x126-20020a81a084000000b004ddff061358mr1574748ywg.488.1673865243057; Mon, 16
+ Jan 2023 02:34:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 16 Jan 2023 11:33:51 +0100
+Message-ID: <CACRpkdZLAOfJ4YHWhK2qfcfC7unex0fHRHdxsCRWhgHmkhacAw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] power: supply: collie_battery: Convert to GPIO
+ descriptors (part 2)
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+On Thu, Jan 12, 2023 at 3:02 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-While one cpu is working on looking up the right socket from ehash
-table, another cpu is done deleting the request socket and is about
-to add (or is adding) the big socket from the table. It means that
-we could miss both of them, even though it has little chance.
+> Finish the job started by the commit ba940ed83218 ("power: supply:
+> collie_battery: Convert to GPIO descriptors"), i.e. convert the use
+> of gpio_to_irq() to gpiod_to_irq(). No functional changes intended.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Let me draw a call trace map of the server side.
-   CPU 0                           CPU 1
-   -----                           -----
-tcp_v4_rcv()                  syn_recv_sock()
-                            inet_ehash_insert()
-                            -> sk_nulls_del_node_init_rcu(osk)
-__inet_lookup_established()
-                            -> __sk_nulls_add_node_rcu(sk, list)
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Notice that the CPU 0 is receiving the data after the final ack
-during 3-way shakehands and CPU 1 is still handling the final ack.
-
-Why could this be a real problem?
-This case is happening only when the final ack and the first data
-receiving by different CPUs. Then the server receiving data with
-ACK flag tries to search one proper established socket from ehash
-table, but apparently it fails as my map shows above. After that,
-the server fetches a listener socket and then sends a RST because
-it finds a ACK flag in the skb (data), which obeys RST definition
-in RFC 793.
-
-Besides, Eric pointed out there's one more race condition where it
-handles tw socket hashdance. Only by adding to the tail of the list
-before deleting the old one can we avoid the race if the reader has
-already begun the bucket traversal and it would possibly miss the head.
-
-Many thanks to Eric for great help from beginning to end.
-
-Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-Suggested-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
-Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
----
-v5:
-1) adjust the style once more.
-
-v4:
-1) adjust the code style and make it easier to read.
-
-v3:
-1) get rid of else-if statement.
-
-v2:
-1) adding the sk node into the tail of list to prevent the race.
-2) fix the race condition when handling time-wait socket hashdance.
----
- net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
- net/ipv4/inet_timewait_sock.c |  6 +++---
- 2 files changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 24a38b56fab9..f58d73888638 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
- 	spin_lock(lock);
- 	if (osk) {
- 		WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
--		ret = sk_nulls_del_node_init_rcu(osk);
--	} else if (found_dup_sk) {
-+		ret = sk_hashed(osk);
-+		if (ret) {
-+			/* Before deleting the node, we insert a new one to make
-+			 * sure that the look-up-sk process would not miss either
-+			 * of them and that at least one node would exist in ehash
-+			 * table all the time. Otherwise there's a tiny chance
-+			 * that lookup process could find nothing in ehash table.
-+			 */
-+			__sk_nulls_add_node_tail_rcu(sk, list);
-+			sk_nulls_del_node_init_rcu(osk);
-+		}
-+		goto unlock;
-+	}
-+	if (found_dup_sk) {
- 		*found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
- 		if (*found_dup_sk)
- 			ret = false;
-@@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
- 	if (ret)
- 		__sk_nulls_add_node_rcu(sk, list);
- 
-+unlock:
- 	spin_unlock(lock);
- 
- 	return ret;
-diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-index 1d77d992e6e7..6d681ef52bb2 100644
---- a/net/ipv4/inet_timewait_sock.c
-+++ b/net/ipv4/inet_timewait_sock.c
-@@ -91,10 +91,10 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
- }
- EXPORT_SYMBOL_GPL(inet_twsk_put);
- 
--static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
-+static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
- 				   struct hlist_nulls_head *list)
- {
--	hlist_nulls_add_head_rcu(&tw->tw_node, list);
-+	hlist_nulls_add_tail_rcu(&tw->tw_node, list);
- }
- 
- static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
-@@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
- 
- 	spin_lock(lock);
- 
--	inet_twsk_add_node_rcu(tw, &ehead->chain);
-+	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
- 
- 	/* Step 3: Remove SK from hash chain */
- 	if (__sk_nulls_del_node_init_rcu(sk))
--- 
-2.37.3
-
+Yours,
+Linus Walleij
