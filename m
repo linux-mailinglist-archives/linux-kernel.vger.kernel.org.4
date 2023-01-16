@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A209B66B9BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9969466B9C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbjAPJAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S232524AbjAPJCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjAPI7p (ORCPT
+        with ESMTP id S232428AbjAPJAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:59:45 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C3E166DA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:58:46 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4a263c4ddbaso372473737b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:58:46 -0800 (PST)
+        Mon, 16 Jan 2023 04:00:00 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D352813528
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:59:30 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b3so41755941lfv.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zuSxYEPkMjk82KBC8EhT/h+b6b5l6gYAxOwSeD4dHkA=;
-        b=bd9JoYSEWmsaUlXw5SI+TilBUTUNytWMRwiZ5uU1fh5ZyPbK5QDjdl84glcy4le5ZH
-         xWRTnLZraaQAs5NYmcOtjBKydLtbKp2SRvU06YazRSApqpomlLPBC67Vv/i9PxMz/jUU
-         umO+t88exGvyu4oCrHqB17kiqABuAWQfSinGoO+ZTQIfUU52e0u1KawOLL4kL/jl06l4
-         rdA5xRXo/PTX1II1+TxPN+JdPNeuHKBZ05b+b05x6afLm7MC7KFRK1WoQQSca4zXKETe
-         6ARUrYv4sdSiT+gxLH+HjrCjorXemW8729Vq+oT3097eTyDcr9A9GpDuWmp4hcODD0vj
-         c4Ww==
+        d=norrbonn-se.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EJMjpZ2ePdq4QsXq5r/GaTYNTcCjHGHNdiTm8AbaYvU=;
+        b=kh7H1sgTfLjtAfLKGvuuIC2auIxf2jpKBvP9Arr+XfC1JiASpqc2JmoF+QPbMei0Pm
+         1AbmIJ3nqcIS+Nq2BKmL43CxyrSoHCvcRh5y2vJggefT4qCBTK9M2XnrD0bl+wEi3Pbw
+         zRxBC6aZu8JaRCRktw8JySXLWPXQwFCVDQKaXDYHpIb8fkBmnxWU4blqHtONg606TIFa
+         mGP42tP1dVfJ5FIx3366qAqkuuhcq3pTCujsQ6aejAYopq6+VIqyWLR3Ih+nHY3tJotw
+         q6txA5vycRRzLI78EvgXw0dGtHVbZLRQAba/ox+h/dH41u2M8dKdlOznFavpHIEmDPBC
+         e8kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zuSxYEPkMjk82KBC8EhT/h+b6b5l6gYAxOwSeD4dHkA=;
-        b=UiI7yXa88NG2RYJzaKfCCTrTw8m4y++Y+ZsjNlsHDzymWdzIOa4xbh2TLUGESEKf3H
-         8RB+EYIMn2nUgawoA4MD27kVf6k5fzD7poN66goc02XDVQbLDBjOFKipgkXCP+9kTd7v
-         H52OCreV8kJ1gt0OVVMuPlv0RaYQorFrL5O545USs+kLdph4raFF4Jfqp1pPZyS92Kx/
-         JRnXQcKX+LtwvJEAd9sUNp3klR9lcH1USNlxeCMhzTvoPz0XSLsrAVFJbo7E8NrNY2gZ
-         ZoGx93FYbIhQciNNayVOWXV/prMC7E4Qs42MmdBLOALNqxyrEVOHPHPUmhHpYOFYsoi+
-         LYww==
-X-Gm-Message-State: AFqh2kqQuJiAD34DV3dL6QjTAYAc9Q5Gtgod7Xs57dzgJdWErnM8E54s
-        wFvZZ8Q3zRyK1oSo4eLFZ6MSCBcGSRI/IXXIYUfPcD0/Rz1cds9W
-X-Google-Smtp-Source: AMrXdXsV3yfBLWlyvhYWgw4Q7LnScwDpxiq5VFP+FvT7AJWWDIqQE/v82RBEaY0QsOkz9rv9CcW2cic1Vd4zdMIKmLU=
-X-Received: by 2002:a81:6ac2:0:b0:4db:1408:a90c with SMTP id
- f185-20020a816ac2000000b004db1408a90cmr1518421ywc.55.1673859525201; Mon, 16
- Jan 2023 00:58:45 -0800 (PST)
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EJMjpZ2ePdq4QsXq5r/GaTYNTcCjHGHNdiTm8AbaYvU=;
+        b=GoxBRjb1Dtyqj+iseWetXSL91/+5xBoUaAoHUqr2aEvWhWzHGmuNfucIak8i6QBFm2
+         HY5gU08WKBVlR3ZaBrl5pW72ygAVq5PJfJ6FrcG7ik0yrWt1ZZCcyAsO9YtXH9jNZy2z
+         TwO76ztp0QUpqVIgtlksZx+dmlQOb4ZLZ2ruGqbZmFiAzLWPu+On9/WE4BxBWsAY1X++
+         LstC1edRYQQGs2Wb+TQAtbaP6AaP6rcbeJ0G3OOpxNRZSJFjUfzX3SpD6HqGYsoyHsPU
+         1qaduhvy9LvuETrdh/0fykHwzWq5vRdXKfZDW5DElRZEH9jzugJ3moJSKwPwLhTXnB2R
+         XE+A==
+X-Gm-Message-State: AFqh2kojByj/pokwhDHZ9046/NmgDyuACFeMw1bN10F5j1bIHav9i+yP
+        5UEsHkzfpRhs1kzH/MHONKklmOTTLv2G9IpS
+X-Google-Smtp-Source: AMrXdXvdJaMwzFYKMK5Bij5tk7QpSVgJtVg1Mfmp2izNKI8aAL/gQtJuNrZ1DXmsPOVQMtRdOxsLKw==
+X-Received: by 2002:a05:6512:2308:b0:4b5:6b87:a5ce with SMTP id o8-20020a056512230800b004b56b87a5cemr30341753lfu.46.1673859569205;
+        Mon, 16 Jan 2023 00:59:29 -0800 (PST)
+Received: from [192.168.1.213] (h-155-4-88-185.A159.priv.bahnhof.se. [155.4.88.185])
+        by smtp.gmail.com with ESMTPSA id s10-20020a2e98ca000000b0028837c7a7b7sm2211724ljj.128.2023.01.16.00.59.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 00:59:28 -0800 (PST)
+Message-ID: <75a2cb16-9e39-4123-de8e-b846c9b482f0@norrbonn.se>
+Date:   Mon, 16 Jan 2023 09:59:27 +0100
 MIME-Version: 1.0
-From:   Rick Yiu <rickyiu@google.com>
-Date:   Mon, 16 Jan 2023 16:58:09 +0800
-Message-ID: <CAKns5cVijC_o13H7UM7WS2ckexP2y1aYJviqNcKeCE-y_2mcXQ@mail.gmail.com>
-Subject: [PATCH] sched: Pass flags to cpufreq governor for RT tasks
-To:     mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, Rick Yiu <rickyiu@google.com>,
-        Wei Wang <wvw@google.com>, Quentin Perret <qperret@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+From:   Jonas Bonn <jonas@norrbonn.se>
+Subject: vhost-net
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,85 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now only CFS tasks could pass flags to the cpufreq governor
-but not RT tasks. This limits the ability of cpufreq governor to handle
-RT tasks if it needs to. By passing flags of RT tasks will increase
-the flexibility of the cpufreq governor.
+Hi,
 
-Signed-off-by: Rick Yiu <rickyiu@google.com>
----
- kernel/sched/rt.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+I have a question about using vhost-net with an IFF_TUN device.  I'm 
+uncertain about the behaviour I'm seeing which is:
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index ed2a47e4ddae..6cef87b3d946 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -479,7 +479,7 @@ static inline void rt_queue_push_tasks(struct rq *rq)
- }
- #endif /* CONFIG_SMP */
+i)  on RX, the descriptor contains no Ethernet header, which is what I 
+was expecting
+ii)  on TX, the first 14 bytes of the transmitted _IP_ packet are lost; 
+if I prepend an extra 14 bytes (zeroes) before the IP packet and extend 
+the packet length accordingly, then things appear to work as expected.
 
--static void enqueue_top_rt_rq(struct rt_rq *rt_rq);
-+static void enqueue_top_rt_rq(struct rt_rq *rt_rq, unsigned int flags);
- static void dequeue_top_rt_rq(struct rt_rq *rt_rq, unsigned int count);
+In vhost_net_build_xdp() it appears that the userspace packet data is 
+copied verbatim to an XDP packet structure that assumes the presence of 
+an ethernet header; as such, the IP header is copied into the ethernet 
+header area.  I think this accounts for losing the first 14 bytes of the 
+IP header...
 
- static inline int on_rt_rq(struct sched_rt_entity *rt_se)
-@@ -584,7 +584,7 @@ static void sched_rt_rq_enqueue(struct rt_rq *rt_rq)
+If I set SO_SNDBUF to something less than INT_MAX, then the XDP path is 
+bypassed and transmission of IP packets works.  This means that knowing 
+the value of SO_SNDBUF becomes important in the userspace application in 
+order to know whether an extra 14 bytes needs to be prepended to the IP 
+packet... which is awkward, at best.
 
-  if (rt_rq->rt_nr_running) {
-  if (!rt_se)
-- enqueue_top_rt_rq(rt_rq);
-+ enqueue_top_rt_rq(rt_rq, 0);
-  else if (!on_rt_rq(rt_se))
-  enqueue_rt_entity(rt_se, 0);
+For an IFF_TUN device, should vhost-net not be adding an implicit 
+ethernet header in _build_xdp()?  Can this be done without backward 
+compatibility implications?
 
-@@ -681,7 +681,7 @@ static inline void sched_rt_rq_enqueue(struct rt_rq *rt_rq)
-  if (!rt_rq->rt_nr_running)
-  return;
-
-- enqueue_top_rt_rq(rt_rq);
-+ enqueue_top_rt_rq(rt_rq, 0);
-  resched_curr(rq);
- }
-
-@@ -1102,7 +1102,7 @@ dequeue_top_rt_rq(struct rt_rq *rt_rq, unsigned int count)
- }
-
- static void
--enqueue_top_rt_rq(struct rt_rq *rt_rq)
-+enqueue_top_rt_rq(struct rt_rq *rt_rq, unsigned int flags)
- {
-  struct rq *rq = rq_of_rt_rq(rt_rq);
-
-@@ -1120,7 +1120,7 @@ enqueue_top_rt_rq(struct rt_rq *rt_rq)
-  }
-
-  /* Kick cpufreq (see the comment in kernel/sched/sched.h). */
-- cpufreq_update_util(rq, 0);
-+ cpufreq_update_util(rq, flags);
- }
-
- #if defined CONFIG_SMP
-@@ -1508,7 +1508,7 @@ static void enqueue_rt_entity(struct
-sched_rt_entity *rt_se, unsigned int flags)
-  dequeue_rt_stack(rt_se, flags);
-  for_each_sched_rt_entity(rt_se)
-  __enqueue_rt_entity(rt_se, flags);
-- enqueue_top_rt_rq(&rq->rt);
-+ enqueue_top_rt_rq(&rq->rt, flags);
- }
-
- static void dequeue_rt_entity(struct sched_rt_entity *rt_se, unsigned
-int flags)
-@@ -1525,7 +1525,7 @@ static void dequeue_rt_entity(struct
-sched_rt_entity *rt_se, unsigned int flags)
-  if (rt_rq && rt_rq->rt_nr_running)
-  __enqueue_rt_entity(rt_se, flags);
-  }
-- enqueue_top_rt_rq(&rq->rt);
-+ enqueue_top_rt_rq(&rq->rt, flags);
- }
-
- /*
--- 
-2.39.0.314.g84b9a713c41-goog
+Thanks,
+Jonas
