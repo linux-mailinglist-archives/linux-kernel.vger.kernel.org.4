@@ -2,153 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCA966CE65
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE1E66CE6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjAPSJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S232838AbjAPSLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAPSJb (ORCPT
+        with ESMTP id S234620AbjAPSKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:09:31 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE47B3E62C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:54:22 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id d10so14262799ilc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:54:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPvljqvM2UcSP9Cl25a35r4uBDsPl3z3yfdTzXuhKNM=;
-        b=rlz7btLcACEU80xL0e/C59u2bKVTZryWa5AQ20uRanoDuGuKQdfkqzAHQRF9yLcuV7
-         XuMHUAppqoVc3mM3cqpGnzYcjpKcFAdxqCBTLEdl8DTygEjEwLtrrh2sAhLM9vX2OXM9
-         LC2O5rEbSk73khV3qGnoh4VL131c+/1ZxEpca+YbzrF9q2a3Zoh8OADbvkOKNlJ23w2p
-         4TV3WFm0N04bSPJST584/12NhGsjWtL1IL70zpPU+vR+tHZNo0Xx19ZIlsXVBjQjkQsP
-         KxIjujm144pK0Fr8SY+K4s7sbL9twCtnouax72sKga7TAY1xmygNY6PpHvoLotQLbz8p
-         v/dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JPvljqvM2UcSP9Cl25a35r4uBDsPl3z3yfdTzXuhKNM=;
-        b=QFwOthbOvlRr9eaIbs2WfO12G+q0qFETDpkCqlQaD23k7d4rXV8W7Sd1HNsIYwKIL/
-         bhH7n/s0RBZJu69nMai87Lo0t2dS1gDlc3Py87VZ4jgem523x2UmJYj9g0jprq2GCnTz
-         40TBF6iTs89+aRA2qbFSJzRiSk2M4WPs61V7+YShqUolGNMOtuWWUfv5IuDgBv4GKMOL
-         p3jyEbDqDgnMrsvJjk/MkieSp2IE1NrBJb5LF1fXLX6fUNJnaAXuqoyiU428FDh084gp
-         HwHCs6UI/6VXm9meM3JUKP3RBxFxP/RBIRKdaBye5KywCt2nU8kHv0tTbgCL7aQicQ4M
-         7hpQ==
-X-Gm-Message-State: AFqh2kqAYPCdZFE4QUgF/UbtUJIX3bGwm2pP2YNmcAM0ZtBMe04sbqbD
-        dTlbrayfeAD0GE6Uqoos5ZSIADSouMcUjlLbvMySGw==
-X-Google-Smtp-Source: AMrXdXsLqods1YxC3Cdh8Nt6GJ+RJ9rixb59lYOUT7kPVWwVsWv9Dlkp5l/zGgwJk2awF24rofhYJ/6fvFpzd62JM6U=
-X-Received: by 2002:a05:6e02:5c3:b0:30c:33da:cb53 with SMTP id
- l3-20020a056e0205c300b0030c33dacb53mr27850ils.173.1673891647618; Mon, 16 Jan
- 2023 09:54:07 -0800 (PST)
+        Mon, 16 Jan 2023 13:10:25 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC6E40BDB;
+        Mon, 16 Jan 2023 09:55:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673891709; x=1705427709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nPJ0Oql8v3SfaPq35P3fWDHJnWjk2fijB0EmpflPsqw=;
+  b=T/7TnbW9cHEY4M5nwmUlxgrKhEbRx+wicjzdKw6V7f4X/KuAmu8imczQ
+   MrKry9eYx/ag3Ek7stmLCUiGYv+ke1VfKe4KVeCdLf4ya2kctAIJl8vXj
+   6PajTuB+BIxMK/9xnMe/CD/qzE1aWHlj7zrjxATa0h3QYAXkE7nsI5tl2
+   LeawyRuQy7IJDim7nzjKpW+ySJ0XQtw+aseNJCLFyH3TUxlkKr3pVJsHb
+   JEwLzKX0XGYtuKbhdFyhRFC23/nBtJlNuOrFlISZdxARez6mRKSD6d6Rq
+   2QeR2lqmZFHNFQuiDIjtHNudWFgG2ZehovIIetlZJ0fR1x6lo9aP/EgqX
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="304896132"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="304896132"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 09:54:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="987873528"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="987873528"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Jan 2023 09:54:29 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pHTgh-00ACjM-2z;
+        Mon, 16 Jan 2023 19:54:27 +0200
+Date:   Mon, 16 Jan 2023 19:54:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        "M K, Muralidhara" <Muralidhara.MK@amd.com>,
+        "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
+        "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <Y8WPUyOT1t5ALYth@smile.fi.intel.com>
+References: <YyxrdpUyc+kp48kX@zn.tnic>
+ <33d5cc27-474b-fdec-a6b0-84ac16f7d386@redhat.com>
+ <CAOtMz3M=BTZUTRMHWGULwMDWmGdOzHKo=UcZeg3sP8_ndVYk2g@mail.gmail.com>
+ <YzG657ZFeEvLd6hm@zn.tnic>
+ <CAOtMz3MWnmdMbw_CKxBKVt=TJpLNJuZUzpxvnDi+QnigaLozLA@mail.gmail.com>
+ <Y7v2j92Ol6dL3FLE@zn.tnic>
+ <CAOtMz3PG4nku-O7dh+1U_DA05HAmQboTqwUQkCkrXQLV9bFjPw@mail.gmail.com>
+ <Y8VFVmhqP8dpqZcQ@smile.fi.intel.com>
+ <MN0PR12MB6101E79DA61CB0154C4819B2E2C19@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <Y8WN2ZTnnVDgVlZB@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <000000000000e259c105f25c92da@google.com>
-In-Reply-To: <000000000000e259c105f25c92da@google.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 16 Jan 2023 18:53:31 +0100
-Message-ID: <CAG48ez23_TUMENLmi5X4F61vb6ZNiL+mfz6YE96U4Y7bgvYnSg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING: refcount bug in mm_update_next_owner
-To:     syzbot <syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8WN2ZTnnVDgVlZB@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All 5 console logs listed on the syzkaller dashboard for this one have
-io-uring with IORING_OP_POLL_ADD somewhere. Could that be related?
+On Mon, Jan 16, 2023 at 07:48:10PM +0200, Andy Shevchenko wrote:
+> On Mon, Jan 16, 2023 at 04:22:09PM +0000, Limonciello, Mario wrote:
+> > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Sent: Monday, January 16, 2023 06:39
+> > > To: Jan Dąbroś <jsd@semihalf.com>
+> > > On Mon, Jan 16, 2023 at 11:19:00AM +0100, Jan Dąbroś wrote:
+> 
+> > > > > Make init_amd_nbs() arch_initcall_sync() so that it executes after PCI
+> > > init.
+> > > >
+> > > > I described earlier in this thread why such option is not working -
+> > > > let me quote myself:
+> > > >
+> > > > It's not enough for running init_amd_nbs() to have only
+> > > > pci_arch_init() done. We need the pci bus to be created and registered
+> > > > with all devices found on the bus. We are traversing through them and
+> > > > trying to find northbridge VID/DID. Due to the above, we need to run
+> > > > init_amd_nbs() only after acpi_scan_init() that is invoked from
+> > > > acpi_init() which is registered as subsys_initcall. That's why the
+> > > > trick with switching init_amd_nbs() to arch_initcall_sync will not
+> > > > work.
+> > > >
+> > > > We have a kind of chicken-and-egg problem here. Or is there something I
+> > > missed?
+> > > >
+> > > > I wonder if there is upstreamable option to control order of the
+> > > > drivers' init by forcing link order?
+> > > 
+> > > But what exactly do you need from North Bridge? Is it only its existence or
+> > > do you need to have fully instantiated PCI device (if so, why?)?
+> > 
+> > There is a need to be able to write and read PCI config space.
+> 
+> So, it's available even on early stages, are there some specifics why it can't
+> be done using the respective APIs?
 
-On Mon, Jan 16, 2023 at 8:31 AM syzbot
-<syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16a8e102480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1d4c86ac0fed92e3fc78
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> refcount_t: addition on 0; use-after-free.
-> WARNING: CPU: 0 PID: 5316 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-> Modules linked in:
-> CPU: 0 PID: 5316 Comm: syz-executor.4 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-> Code: 0a 31 ff 89 de e8 d4 13 78 fd 84 db 0f 85 2e ff ff ff e8 57 17 78 fd 48 c7 c7 60 87 a6 8a c6 05 e0 ce 54 0a 01 e8 98 a7 b2 05 <0f> 0b e9 0f ff ff ff e8 38 17 78 fd 0f b6 1d ca ce 54 0a 31 ff 89
-> RSP: 0018:ffffc90005967d80 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff8880829f3a80 RSI: ffffffff8166972c RDI: fffff52000b2cfa2
-> RBP: ffff888082ae3aa8 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000000 R12: ffff88807e520900
-> R13: ffff888082ae3fa8 R14: 0000000000000000 R15: ffff888082ae3aa8
-> FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000001b32f23000 CR3: 000000007716c000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __refcount_add include/linux/refcount.h:199 [inline]
->  __refcount_inc include/linux/refcount.h:250 [inline]
->  refcount_inc include/linux/refcount.h:267 [inline]
->  get_task_struct include/linux/sched/task.h:110 [inline]
->  mm_update_next_owner+0x585/0x7b0 kernel/exit.c:504
->  exit_mm kernel/exit.c:562 [inline]
->  do_exit+0x9a4/0x2a90 kernel/exit.c:854
->  do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
->  __do_sys_exit_group kernel/exit.c:1023 [inline]
->  __se_sys_exit_group kernel/exit.c:1021 [inline]
->  __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f51f5a8c0c9
-> Code: Unable to access opcode bytes at 0x7f51f5a8c09f.
-> RSP: 002b:00007ffe3c730ad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 000000000000001e RCX: 00007f51f5a8c0c9
-> RDX: 00007f51f5a3df7b RSI: ffffffffffffffb8 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: 000000002ed3101e R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-> R13: 0000000000000000 R14: 0000000000000001 R15: 00007ffe3c730bc0
->  </TASK>
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I think I understood the problem with the above. You probably don't know where
+NB can be located in the topology and that's why you can't simply access a
+_fixed_ BDF. So you want to have the topology being scanned beforehand.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
