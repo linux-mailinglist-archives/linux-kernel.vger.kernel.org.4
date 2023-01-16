@@ -2,149 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA7466C2A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84D366C2B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjAPOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S229803AbjAPOvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAPOtS (ORCPT
+        with ESMTP id S230125AbjAPOvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:49:18 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686D02331D;
-        Mon, 16 Jan 2023 06:33:21 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30G8Dvn5007534;
-        Mon, 16 Jan 2023 14:33:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=542D+k7tqkRcUVXgjRN705UX/uUeF7c5CQZCKxR6fRU=;
- b=Yfa2lT/d9/bciJ8Tda7nJKi0FuJynEuwodb7RHld8Ru4xNyMIy3BH5g7yO525mocSEWk
- aX3bM1kv4kJ9jYDLPMq3+WLj789DV+8Rfqh+74WiBV5npAnnMx0MXuLJb5WfrWiKT0Xl
- FOESQXvGCsZyhP83QDACBvZ5hAmIa+bjO2Lw7dIF4SWYs7F9kfzO71lkd//tCIvP/95H
- fzKHAewtzvPBn3GxZRLiORJHZ1237GG5b77KZKS/SsqDsYElhYtUF1/7ANhiTA/+DZgT
- OjAQ/0xVAF/n9f1/yMi9ASGzTqXMz1UJpRz0kqVX88UBvsapRhVJf6aQjHNrKTykv+DJ tA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3medav2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 14:33:09 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30GEK4nY028503;
-        Mon, 16 Jan 2023 14:33:08 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n4s2qyrnk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 14:33:08 +0000
+        Mon, 16 Jan 2023 09:51:22 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2072.outbound.protection.outlook.com [40.107.8.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5FC2BEC6;
+        Mon, 16 Jan 2023 06:35:53 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=adnrpZgWVOwz/DI8w4U2nYieT+/R7ySbfLhWDqfu76QJ7lE6qQHDQz/R3YRNJOyTf3KQXvJ2c4CrBqv1ZasKFOZlmIy3cl0DlVQwwdlIzCh/mWVvn4htqjph8cwuQ7Wmq+g5GRua7Ytbhzw9HIcHnBzZJvkcR6KyQ6TJnDlQq8iMnYt2/xx0ZFcA0xS6OKvNnwUnb450RC+9wO5ZVD68m0y77FZr5/nhUK7O8LUC9ulzdfO9VuAwq70865jLHcRvss4vVW53VczZSHPmsndPWAM7QcHVPMVJMu6ERn+0cNk7WAk3qUc3D4sOPx5fWJioFenL48h5lmI6uposOOIAkg==
+ b=ncS7o659XwAx43dBv37o7q5LvfbhU9B/IZkyEWxxlNBdnRe7arpsTbZCuNjhaGKBbq7jR/p+0uJpScLjg3D2az0ZElKHaPUZtMzCGGAP7rbVdBdA7peHeOEfyU4pCsOS/JDYmSorVKyRXXD0ZuT+f3HrqyeZnsf8DG/MRiHDxNZmLa8SozI/fziDZCoi77ViPSfkN5xfDl//voe7qPnKZMJRvVWhTn57yPSaKhTIYmVnJCtGZlq+/MPLnQSJ15t83yBsckKBuOtyUhjoUS28Z7oMsAJZnNfWxZw+HPMwZUNlua0yBdh09VzONUzYYxwvxnswi0yyXqHpIY6k2pYjKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=542D+k7tqkRcUVXgjRN705UX/uUeF7c5CQZCKxR6fRU=;
- b=f1oG15osmIb8TJQ4uDnMG/mHWUcyF1TgOyWcQMTVTcz0FHfZMVLVvykeOhIT/62I9d7ULCWM8Jq4ueXJew0520FxPEAu27ckrcotvgJMxl7bsaDf82LQ9fWpzHTnwmktJ/yh9T5WzhIBRqXO/RACSdbraKCm5oSVwWQtnbNzRD0+aW3RyhYE0fuYOOodWE+9eyy3mlK14VG+HK5SCkTQ7utHwbpXMV2osUWbPcAzie1LmFVuOdS/J8pezOB6pVC4Pzdo4q/T9a6/A0NphB5EeF2rv26HuYaLNYzlYipZDMhOu8BEL/Xd3nqPPV9FdPycljyjN1QAad2rDleLFJ1ZYA==
+ bh=f291mXhzFupDfcGc40rRiIMiRsIQoK88mZJHpLRt+78=;
+ b=khP/+pdKPQ4IHfMWlbx8sEgFq11jSQLIsZVsIMLi2BwGPYyjfTGvbNkER6flZ487ri/OKd0cexROlpdP8xHCWjXVzKzGBWrkvoRsraGG1qXKIK8a3TgVDXnRwimUkYJe4yHEyGG3qVDXanGmJuN0qALaVs86Edll7OufaP+xVMHfC3d3HMGpnEEwXutliDt1vRDrzEbUTy2Iq7WhIEqAHnUclXRXstNkOYMQDQV++s6hss0le+E9jrYZLDu/VPKSTeAr6BdzqpoEBqYE8f4PAQhZ8hEXBnDfBateAzktO1x377JJLCi7V2fdHt9yBhGv77+kLh4pHlRWMDbu5cTKcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=variscite.com; dmarc=pass action=none
+ header.from=variscite.com; dkim=pass header.d=variscite.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=variscite.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=542D+k7tqkRcUVXgjRN705UX/uUeF7c5CQZCKxR6fRU=;
- b=ketdzqcbhHF3oyqvPipAZ4FRzmq/S1ECBFf5ykwGjMUtgY4FT0q+bMRf6xChzWIlT5cX0rxoaEqi2+SonhbQ/0fjwzC/HsTtX+SVWo65ycBm1lJoFteYaqS8tH+oV21MEL/N2NIFUWWV1EC/g4L38CT3iyTiLGWu+T2uElPCug4=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by BN0PR10MB4952.namprd10.prod.outlook.com (2603:10b6:408:122::13) with
+ bh=f291mXhzFupDfcGc40rRiIMiRsIQoK88mZJHpLRt+78=;
+ b=QfONv9A1gG8px4lDUVasHBvHovx2/4mM8Lw43l1sOSt9oWbrGm3UK82Q2XN4Jd4nBPZpaxXMmfbCuzjOHWxQFBa5u8Ufbz5r9iQIrwz2ggWltm8Z2t5dQYD9NqOSWE89dWwVC12JOqPXqTg/ow57HluO6PIyreK9sWpFwajS2/vGq0P1Xdh/p/VJEIcNZtufQYVpxjY8uneIswzmI34/3Y6GHxlIejb6+3TZTHnOFQyrp4ga1DKY5rBM7CCubU/Dux1orewOegV0fA+jl6jysmYNypPazhDzJ9keYTj0S4zTX+0kI9SMROjCOA1aEbfH833TPmMc0ydKf+snwUXjXg==
+Received: from AM6PR08MB4376.eurprd08.prod.outlook.com (2603:10a6:20b:bb::21)
+ by DBBPR08MB5900.eurprd08.prod.outlook.com (2603:10a6:10:200::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Mon, 16 Jan
- 2023 14:33:06 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::d8a4:336a:21e:40d9]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::d8a4:336a:21e:40d9%5]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
- 14:33:06 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the nfsd tree
-Thread-Topic: linux-next: duplicate patch in the nfsd tree
-Thread-Index: AQHZJtuHjKaXgt/yjkWRrCUo/8ISo66bbLAAgAW0fIA=
-Date:   Mon, 16 Jan 2023 14:33:06 +0000
-Message-ID: <F7CFC18D-6AAC-4DAD-AA43-5C718FC1100E@oracle.com>
-References: <20230113101326.09b1250e@canb.auug.org.au>
- <53DEC27F-0AAC-4EFA-AB6E-0B5D44AACFB9@oracle.com>
-In-Reply-To: <53DEC27F-0AAC-4EFA-AB6E-0B5D44AACFB9@oracle.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Mon, 16 Jan
+ 2023 14:35:48 +0000
+Received: from AM6PR08MB4376.eurprd08.prod.outlook.com
+ ([fe80::4e5b:51c8:1237:1fee]) by AM6PR08MB4376.eurprd08.prod.outlook.com
+ ([fe80::4e5b:51c8:1237:1fee%5]) with mapi id 15.20.6002.012; Mon, 16 Jan 2023
+ 14:35:48 +0000
+From:   Pierluigi Passaro <pierluigi.p@variscite.com>
+To:     kernel test robot <lkp@intel.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        Eran Matityahu <eran.m@variscite.com>,
+        Nate Drude <Nate.D@variscite.com>,
+        Francesco Ferraro <francesco.f@variscite.com>,
+        Pierluigi Passaro <pierluigi.passaro@gmail.com>
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Thread-Topic: [PATCH] net: mdio: force deassert MDIO reset signal
+Thread-Index: AQHZKPvgQPO0npisDkSvgN3jEdgJF66guzCAgABh8uI=
+Date:   Mon, 16 Jan 2023 14:35:48 +0000
+Message-ID: <AM6PR08MB43765B0D11E428F3D4BFF1DAFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <202301161653.hbqd7e0q-lkp@intel.com>
+In-Reply-To: <202301161653.hbqd7e0q-lkp@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=variscite.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|BN0PR10MB4952:EE_
-x-ms-office365-filtering-correlation-id: eac93f79-66aa-4d69-0448-08daf7ce9551
+x-ms-traffictypediagnostic: AM6PR08MB4376:EE_|DBBPR08MB5900:EE_
+x-ms-office365-filtering-correlation-id: fbd1df4c-8049-44db-a041-08daf7cef5e1
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v49q0KfVuhVgpi9dL1BjRtJ0crbOLzmzoJzJN+zpmpUx4bAUX7J940lkiNMWbq8EYSgM8xF6sT7UESHzzqYZocniu1r1FboNJdvTuNsxXwVjX6R7CLyrWeVmceHdGWjCAMaoI4GaGYu7BDDau3DMwLr2odPsnTB+IAWtR0ji1/8lwHEL9SKvKUF8CPrHM078M9lySIc7kfcXGm+gb1WVWlY4P+b87rc6ajrrTlYzqd0RTGII+qLBF7Or15UDbOcclOtNAA8Jgny8KLT/k0NiW3CmG7FTwrPMfU/oIg6SywgYBweoiSZKlMPiRYifo5DFn98z5jtCplrnNfqlBIY5hv9E/DyxcDX3AvGHwVrRV5FGPUXTQFw9aoAAQF22NMYnNmVShdHEa2B+rH04QcEGlOZLs3CjnDUA8swqIGJ/k8YXDtI8R2WhwkqlgN5NZkZnZG573klhLymkOoLq9QYNSVUPQe1Avz8lBkxVs+6/p85tzqWygUV671Y9TdE+JZZ+GexYvxcfl2uxaAkf6Aw1HoEKQ5iIKulB9Do7A6RHq2t1T5PMK5l2q4fg6Z9vyYi9Nye+R5UdyAhwJ6f4lo1oDjz1klC8EJMG6m3OOqew98Nl9WctorBnndCoWdqwfhXJvhF3yZTj2qcH3GW1EiGz6cicGZnIsa4Y6J7VK0JO5Cg1VHRV5dYoleFMiu2S8rfyWV2z1DKkJikKVPMpZFnJI6Cq9+9oQhao7mznhoIxzHE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(86362001)(33656002)(53546011)(26005)(6512007)(4326008)(6916009)(64756008)(91956017)(8676002)(36756003)(186003)(66556008)(76116006)(66476007)(66946007)(41300700001)(66446008)(2616005)(316002)(71200400001)(6506007)(54906003)(478600001)(122000001)(6486002)(38100700002)(4744005)(2906002)(38070700005)(5660300002)(8936002)(45980500001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: DVeTxJH2rW3QqviJ7F4WlWDL0lKOOzXCHYWrMKKWT2L29pAUIWJwJBH6SmodqR6EpEVzOIV4i7yAwbFIHXNMRiHXqYcKBLt4sn4Tf/iWHpsOtCIgCl0YS9o7CWQsZ/K5pjbljBRTM3DB3n6H7CB0wWiUKRT0CkNaOfaeJgpL+KUyYHGa9AUARQoEgfMLT0FCUQ0Zx3+0LOsWFR87BRVt5PD+ZlCLaQ4yjFynyUWuDN/fSd3Se4i7X42CIxFfbjWvsi1DyTZKUNpuNBL1oTIGiJ+MolLCCNEtKESljWhZGFW78jTcYOCyHWXRWqZqigb78FZmFW1OdGrQTApz/bUs8iSvRo6rpSFDt16nndGoa0ZjvPcTUX18XpMw4R252Sa9igNnGA+M4spb9xIfwYCuJT54rQqxyHZG+7lSvX8EhQnuibrB38+ZJEUh/8D8EvFM0waj1HY73oTZWBeX3m0FzNf01CwTmrk2zjJKUP3pWlQqJ/dDi4SinYlBZ/d935Us7Ad7GKBlMCisU4i2o7tjfwSveSHJtLW5bj/OYyHFNI2QHUQdWTj4qnh8Y15Ho7Cn2JYRiQ2mIYNamrygfO1ih91g+mMd2l+03tvNhktQB5NLUAeo0O3/RX8N9Vc3ji+XvZuswTl8vv4jeduadeT+IBnpjsF1FuZapdHG7P0jYWdOYdb+yLOm7O9UqcSOVQv9k+J7gRi8sM2iNqUbE+k5TSt3gTFu8EUfm1qWVvzH2UT2egNpIwWn0yiF0Ea2EM9q
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB4376.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39850400004)(136003)(396003)(346002)(376002)(451199015)(8936002)(26005)(91956017)(76116006)(41300700001)(66556008)(66946007)(8676002)(64756008)(66476007)(66446008)(52536014)(38070700005)(4326008)(6506007)(2906002)(53546011)(316002)(33656002)(5660300002)(7416002)(921005)(54906003)(86362001)(478600001)(966005)(71200400001)(55016003)(186003)(83380400001)(9686003)(110136005)(7696005)(122000001)(38100700002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vINGG0kbgtmhyqHI0On7SZAPHQ8wKVSNxmD8Cd21odbboZMHABmncnin2OhY?=
- =?us-ascii?Q?58EdDTxwrhv0uKtEGdBQ5I/JwYT5zbEkimNosQwE3N2O++o3bdcRRBfwi935?=
- =?us-ascii?Q?sbKBiKrkaCmv8kp7OBNZ7KQ4VWpE31J/6JJFMMZEe7UfXT0UjX3OqbV2BhQz?=
- =?us-ascii?Q?ryPh5+w8nmmMsnyvyooVsp4mRf/w7tA1xORIHhY6k6/e3YwusRlGXqJq4Vu7?=
- =?us-ascii?Q?HoB9wlowzw/G4XoGM6EjZO1hVb3FDtAPVKwrdUYNJWlLFpyjncUH62udW5XE?=
- =?us-ascii?Q?dh4mK4/vjwOC4/SMlwd3i4mllZvq+lqqSHcPHNQYSuOoS5YOVeZSOSyGAU3x?=
- =?us-ascii?Q?6NvERfbraMN0N6a2nWBlX/RYwf6eg6UVm8v2U7w1FK1xHJ8tcRn8KkG7hzNq?=
- =?us-ascii?Q?1hY/KrubJY7f/9Devf8GnSeLX3TcU/6YIXoZvahPJBI4t19nxZPxa6krZzgp?=
- =?us-ascii?Q?Ws7IpaxCYX69G7rQpFni86PFRuiotNc6miFUD+kIhF9RpebNrBcUsEc5J1l3?=
- =?us-ascii?Q?herMJotod7wSHqc8SgvJD6aM+5iAFuxk9P/zSQjuIv1U+r2Jdldov5JJJX9H?=
- =?us-ascii?Q?On3xxa/zHOBKzoCZFBB412VgbqMFnNy05SSGhfhex9ag41thTvK0QFTJcXcJ?=
- =?us-ascii?Q?sQ3PdLkjsIF8kJSCajn3R6SMMVISfTjjK6bfdaH8c6peMzUnI6CZQiUYcANh?=
- =?us-ascii?Q?UAi5SKM0jPpVAYQ7f+U/JHfhN+awLJQ0hPBKKNLM5StoN0lTID2rECxc8cH4?=
- =?us-ascii?Q?f4q7pKeur0l7maoY3X54hHYqseT35D6SwuPXu26Fphifhbj7HQsak73P8jP+?=
- =?us-ascii?Q?n/k1nGFnczTmn7puG93tD28Wu8B9izcKo02x68Pmj3V37gEVIvp/W9SCuwlN?=
- =?us-ascii?Q?o069AN33uJG9zz7zpGPbkXePQSYuk43a5e4pB3P/Hyl/8NtGNopzypEWneGX?=
- =?us-ascii?Q?gPdyIlJm77oF6n35o1wvIP78UdFCVmmzLdaiOk8vhD+WhZ+Fo4FbUnEP3VU8?=
- =?us-ascii?Q?QJFntIOktFjr6D2wmn33O2ynB1SVe7T5u5tof5G7zTBz/EKGKklbU3QY/oot?=
- =?us-ascii?Q?3jznee0zsqfeRsM2wrB0cXm4VVyb5xLq9B9AE4JJxorkXI+RPAYORsGKtQVz?=
- =?us-ascii?Q?U5HL50uIHvWRZBHlQ65GsHyVlOyUci7TbuJbg3isE0s4tzVbpfUvlGFyhmXY?=
- =?us-ascii?Q?zYUeW1qcCCSYvXA3rSCznPQ4pWGjSb6Ti3UqJeleTlKvlVAFDZYLtzGo8L2Z?=
- =?us-ascii?Q?oHMEsFPGZDFcuF/W8KgBxma/K15GB1xNtTbL8P4BdYvmdIKbfVE5U1VzQW6x?=
- =?us-ascii?Q?3pEMTOQPWKWJsMDfLzQnW3xs4lGi50BSm1if0JSKA7cyzzgcX5+NvR8N/dYR?=
- =?us-ascii?Q?na6ohsGdRno6+wzPRqXb7QJHikuEmilH4a7JdQ0gUomOFnUpKdeU1LLN5i49?=
- =?us-ascii?Q?TsYs2kcoIcpEoilcXb4thqDXSvlOpBqqGknZxJ8t9VI06igjehTWEjAyExj0?=
- =?us-ascii?Q?uwgvGWZpOZXK8T2Gmq/rdVgkiexq9iNAfC0OPsnuKFIZzT4GsySSsJeFVSEx?=
- =?us-ascii?Q?FT2Ybq9MOlYLkv1/GjDMVPTifYcZa9KKg2we5X5u6Aw91rUyhv2lPJ9UodEJ?=
- =?us-ascii?Q?6Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C7E24C773C6AF8479C6F34C88685460E@namprd10.prod.outlook.com>
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?TJRdb/sGGuI4kgv67SmYhM/4miOCzVYnRjiltJTRvKUGZu2ppR7yMp4WdS?=
+ =?iso-8859-1?Q?zbqZbMvtjzTTGvtf6xrGlmGpHL/4EtJGa67ClwLWodPbiekMo6d8to42iV?=
+ =?iso-8859-1?Q?lVfIbrcv8ma9BbxmZy+jUCiY80hWNOsp4UMyVqpyhG2s5/l75JJrhwvnb4?=
+ =?iso-8859-1?Q?ExbKFhJIbZmGRKDE9GhIgQM6CukQh5aseyQnt/PoB9Kk6lw6fq1cd6b+ml?=
+ =?iso-8859-1?Q?xhB8hNeIeZeg29cDjDy2EdJSd6DuoQeqs7uyH3FDYgdxSNIGyzHoIJrlK0?=
+ =?iso-8859-1?Q?un0pvLhtgJXg6jKIYiMZxqlWioQKIb8J5zfsUSneIku+4zQqq+PLzKwAmJ?=
+ =?iso-8859-1?Q?l9DbzqPfuHVZAVsvabJgURxRMIzLfQMfkDW7E9efTMzD6fo2BIgfcuHvt2?=
+ =?iso-8859-1?Q?H7jXaIo4uUrDdM9lj+qX7ysO+eK4LiBTISlVuT+1cGxpZpMHBZflCpstpu?=
+ =?iso-8859-1?Q?37y0SjwYc4BDFHAxFkjZR9u+bUecxDLdRcfOb6CvC6+EWLIekDg/Y+aPQ4?=
+ =?iso-8859-1?Q?E5bM+ixPN0A04ZXLByCPrXxyewp8q2avw9cyVd8WB6HAhZnbQgbycsliz6?=
+ =?iso-8859-1?Q?2dIK09oSlsOgpJKzE4cGoeRbdL+8Jlq2dVZ/pTaYK+VXO152xRznK5ElRb?=
+ =?iso-8859-1?Q?WH9iAJCx1opDTufIDUw9kAiIHIzhpVMGIsDGasc4mAfQocTMIZSdpHCxkL?=
+ =?iso-8859-1?Q?maH3RBF//K9Ub0wwP0uSGLh9TFdQGa4d+KytWFu/C0qxMSPgQdEfrI1b7U?=
+ =?iso-8859-1?Q?QeNF6Uk8cqIgL/uosBQI1EwCT20ramsP8ANpdaAa+L+yD2Tz+EeUsBoFWd?=
+ =?iso-8859-1?Q?+yGxbutNt3y+rp64fgej81o942pXo7ihzSMmdfvr/ik6gmd5RC3+ogj/1F?=
+ =?iso-8859-1?Q?eoKGqDROwK9VDRr7w0t0ncZcktwo+I024rrfG4Qfx0IPz9VeMG3TGfb+CC?=
+ =?iso-8859-1?Q?igKQXNasQa5FDsMSuZDs/Z9bT1u66XLwIPEkI5pzG7Xqwhjnfw7N38eqZS?=
+ =?iso-8859-1?Q?OPMm/js4EeTt0GVUNDx7ZDWRoMCdc4S8TPTxPgj/Tt/Q9BOVQ3QZPLQoRg?=
+ =?iso-8859-1?Q?AMldyXBPb89sJ9bj1S7lEuA9g3NJyf7HEmOoXsFMu3hZ370HY7ZPbOc9pq?=
+ =?iso-8859-1?Q?b18Z7ywV502baIRMN2g5ka7mGLoQYXFXS5hgpoElBXcdaz3+eKd/KmoVtV?=
+ =?iso-8859-1?Q?tEyCnEcElZbjIp27r1OTWbA2b7bR2FW6q10/nyv8DjcQ9uWm9XaVtUn8kT?=
+ =?iso-8859-1?Q?lVTQGVbuZVP8gyNDbqC7s8DH2C9EAM3PMrO6fIOifhUEhnqpYxXu0RrR1u?=
+ =?iso-8859-1?Q?OX+MClS5vfSdNj1xqKKvi7uG8Ef6ZLXpO3fs6irpBxVILaJAUiTbL2OoLA?=
+ =?iso-8859-1?Q?5npG6kl/GBcrBTqB3N3zfQvnZcRJmpUiQot7Iy/TsrrhYeBaqb16jdOdpQ?=
+ =?iso-8859-1?Q?nMOksxCaIglHkYXH9Tr/g1CmMohBGCbjym7yGe1sopJcX6YwTtl86zQntz?=
+ =?iso-8859-1?Q?Yr4fkktutT5WdhtGfgGAwNSDPBUuMgTcoyhQF5y2YdZuxGT6xkn3aqQPDj?=
+ =?iso-8859-1?Q?zjOLnkgv/Tfrx8iiXxSSaUvngF3vvAKYk8PxGEhB/G7tA+vQDEemYm2eHf?=
+ =?iso-8859-1?Q?xtuToyNqw5EPSErZern3Ud8AUqBlCLlBLe?=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: nKtr3gURlOf/zcYQSNxxhTmDxEc7HiVQ1DioiNE+xtGB9c4hJnw7Wi6yk1lJ4YOoIBsOLKxXquMCCd0crA3mrU3t+v1x8ZgRwYRlbZuTEq3+miSkJH03OQuRup3jkSUZz/H8b41/uO6W7oaQ+tiCzopG/ADF22dMd6c7zz/McGJm7QFEiiRQAH+UAd9IAUB/YxjA3DdIIxmEO7zMOzAIrLoV6e+apAVn4paPvZ7wWLR8ZX/ZEZvqxyrggnCU9yj+qzLEx1ZDOoDKw39fR2yFNoyw6VvzB1AAgBRWmiHQ9F8ivb7TiY/vKscEww3/KHYqQEs2GQgQ+6qGBEzSwiApC4/HQYXSE5RE7RyPdm9mUTpQTiRenL+tR4IaGdyH38Rgw1UoqMZ0sEsiXQYUbosKlTfJ/HfaDGRCTI3GTN/i66OZR3drH0aLOBRjY5uZmqpaQzl4rnuULmmRy/fPUl9CJzUJP7KVPFky3AwaARpugGhjDoaooeyRaP5nXCvronJApvvjQKDkSH/3CNGvRgDP8R+/SqEKt2iTEvu/SG+LguKCX8ymfhvo45qasMeJP7IuRnW4ccPjjDAV6pVXrYcbGTjAjNvMFZ9wQr3yVue8x5eNFx7MryMQWi/jjyBD56XHtEH6jaSX913BZM+WKyO742M+Wk6w2H/axOkebvR9wUzvfSW/cduJksp5do1YZbBTox9uMarGGmg52qpdH3AObAWAWsLXM+t1IJuBCe7z3px+xTcA1G681EOz1iXY0chO9kqj8PNB4UjSFLLBQoWoLWBSZkYcjOulJCzohmdSF2k0xglfD1c82J9oXH5yjlGJ
-X-OriginatorOrg: oracle.com
+X-OriginatorOrg: variscite.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eac93f79-66aa-4d69-0448-08daf7ce9551
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 14:33:06.6159
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB4376.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbd1df4c-8049-44db-a041-08daf7cef5e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 14:35:48.6562
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-id: 399ae6ac-38f4-4ef0-94a8-440b0ad581de
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pomXjBx6xu3qwPunZPWt5b63Xq8c9WhR0wUZrHgFKSAactXCxx3tZccrvezueniQBKeqEvNaP2TpG+lslEekgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4952
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-16_11,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301160108
-X-Proofpoint-ORIG-GUID: O3mWGtL-xjy2DUAcQoOo0arEqR-Xuia1
-X-Proofpoint-GUID: O3mWGtL-xjy2DUAcQoOo0arEqR-Xuia1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-userprincipalname: stx+xfp/me4GBHGW8sdJP7+9Wt1/qotY/yG9mDLM/0hDuOYwXnLF4Plp5V0wgl9kw7kKuilfNOAdIMmfXCMjc2+EGxluoyEy0xIjeC7uKMY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB5900
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,45 +131,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Jan 12, 2023, at 6:25 PM, Chuck Lever III <chuck.lever@oracle.com> wro=
-te:
->=20
->=20
->=20
->> On Jan 12, 2023, at 6:13 PM, Stephen Rothwell <sfr@canb.auug.org.au> wro=
-te:
->>=20
->> Hi all,
->>=20
->> The following commit is also in cel-fixes tree as a different
->> commit (but the same patch):
->>=20
->> 3927ac397479 ("NFSD: register/unregister of nfsd-client shrinker at nfsd=
- startup/shutdown time")
->>=20
->> (commit f385f7d24413 in the cel-fixes tree).
->=20
-> Once nfsd's for-rc is merged into upstream, I will rebase
-> nfsd's for-next and remove 3927ac397479. I intend to send
-> a PR for for-rc after it's been in linux-next for a few
-> days.
->=20
-> Unfortunately there is a later patch in for-next that
-> depends on 3927ac397479, so I can't remove it right at
-> the moment.
-
-Sorry, I wasn't clear. I need nfsd's for-rc to be picked
-up and merged into linux-next before I send a PR.
-
-I've trimmed for-next to temporarily remove the duplicate
-commit, so you should now be able to continue merging both
-into linux-next without an issue.
-
-
---
-Chuck Lever
-
-
-
+On Mon, Jan 16, 2023 at 9:44 AM kernel test robot <lkp@intel.com> wrote:=0A=
+> Hi Pierluigi,=0A=
+>=0A=
+> Thank you for the patch! Yet something to improve:=0A=
+>=0A=
+> [auto build test ERROR on net-next/master]=0A=
+> [also build test ERROR on net/master linus/master v6.2-rc4 next-20230116]=
+=0A=
+> [If your patch is applied to the wrong git tree, kindly drop us a note.=
+=0A=
+> And when submitting patch, we suggest to use '--base' as documented in=0A=
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]=0A=
+>=0A=
+> url: =A0 =A0https://github.com/intel-lab-lkp/linux/commits/Pierluigi-Pass=
+aro/net-mdio-force-deassert-MDIO-reset-signal/20230116-001044=0A=
+> patch link: =A0 =A0https://lore.kernel.org/r/20230115161006.16431-1-pierl=
+uigi.p%40variscite.com=0A=
+> patch subject: [PATCH] net: mdio: force deassert MDIO reset signal=0A=
+> config: nios2-defconfig=0A=
+> compiler: nios2-linux-gcc (GCC) 12.1.0=0A=
+> reproduce (this is a W=3D1 build):=0A=
+> =A0 =A0 =A0 =A0 wget https://raw.githubusercontent.com/intel/lkp-tests/ma=
+ster/sbin/make.cross -O ~/bin/make.cross=0A=
+> =A0 =A0 =A0 =A0 chmod +x ~/bin/make.cross=0A=
+> =A0 =A0 =A0 =A0 # https://github.com/intel-lab-lkp/linux/commit/3f08f04af=
+6947d4fce17b11443001c4e386ca66e=0A=
+> =A0 =A0 =A0 =A0 git remote add linux-review https://github.com/intel-lab-=
+lkp/linux=0A=
+> =A0 =A0 =A0 =A0 git fetch --no-tags linux-review Pierluigi-Passaro/net-md=
+io-force-deassert-MDIO-reset-signal/20230116-001044=0A=
+> =A0 =A0 =A0 =A0 git checkout 3f08f04af6947d4fce17b11443001c4e386ca66e=0A=
+> =A0 =A0 =A0 =A0 # save the config file=0A=
+> =A0 =A0 =A0 =A0 mkdir build_dir && cp config build_dir/.config=0A=
+> =A0 =A0 =A0 =A0 COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 =
+make.cross W=3D1 O=3Dbuild_dir ARCH=3Dnios2 olddefconfig=0A=
+> =A0 =A0 =A0 =A0 COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 =
+make.cross W=3D1 O=3Dbuild_dir ARCH=3Dnios2 SHELL=3D/bin/bash=0A=
+>=0A=
+> If you fix the issue, kindly add following tag where applicable=0A=
+> | Reported-by: kernel test robot <lkp@intel.com>=0A=
+>=0A=
+patch available here=0A=
+https://lore.kernel.org/all/20230116140811.27201-1-pierluigi.p@variscite.co=
+m/=0A=
+>=0A=
+> All errors (new ones prefixed by >>):=0A=
+>=0A=
+> =A0 =A0nios2-linux-ld: drivers/net/mdio/fwnode_mdio.o: in function `fwnod=
+e_mdiobus_register_phy':=0A=
+> >> drivers/net/mdio/fwnode_mdio.c:164: undefined reference to `gpiochip_f=
+ree_own_desc'=0A=
+> =A0 =A0drivers/net/mdio/fwnode_mdio.c:164:(.text+0x230): relocation trunc=
+ated to fit: R_NIOS2_CALL26 against `gpiochip_free_own_desc'=0A=
+>=0A=
+>=0A=
+> vim +164 drivers/net/mdio/fwnode_mdio.c=0A=
+>=0A=
+> =A0 =A0113=0A=
+> =A0 =A0114 =A0int fwnode_mdiobus_register_phy(struct mii_bus *bus,=0A=
+> =A0 =A0115 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0struct fwnode_handle *child, u32 addr)=0A=
+> =A0 =A0116 =A0{=0A=
+> =A0 =A0117 =A0 =A0 =A0 =A0 =A0struct mii_timestamper *mii_ts =3D NULL;=0A=
+> =A0 =A0118 =A0 =A0 =A0 =A0 =A0struct pse_control *psec =3D NULL;=0A=
+> =A0 =A0119 =A0 =A0 =A0 =A0 =A0struct phy_device *phy;=0A=
+> =A0 =A0120 =A0 =A0 =A0 =A0 =A0bool is_c45 =3D false;=0A=
+> =A0 =A0121 =A0 =A0 =A0 =A0 =A0u32 phy_id;=0A=
+> =A0 =A0122 =A0 =A0 =A0 =A0 =A0int rc;=0A=
+> =A0 =A0123 =A0 =A0 =A0 =A0 =A0int reset_deassert_delay =3D 0;=0A=
+> =A0 =A0124 =A0 =A0 =A0 =A0 =A0struct gpio_desc *reset_gpio;=0A=
+> =A0 =A0125=0A=
+> =A0 =A0126 =A0 =A0 =A0 =A0 =A0psec =3D fwnode_find_pse_control(child);=0A=
+> =A0 =A0127 =A0 =A0 =A0 =A0 =A0if (IS_ERR(psec))=0A=
+> =A0 =A0128 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0return PTR_ERR(psec);=0A=
+> =A0 =A0129=0A=
+> =A0 =A0130 =A0 =A0 =A0 =A0 =A0mii_ts =3D fwnode_find_mii_timestamper(chil=
+d);=0A=
+> =A0 =A0131 =A0 =A0 =A0 =A0 =A0if (IS_ERR(mii_ts)) {=0A=
+> =A0 =A0132 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0rc =3D PTR_ERR(mii_ts);=0A=
+> =A0 =A0133 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0goto clean_pse;=0A=
+> =A0 =A0134 =A0 =A0 =A0 =A0 =A0}=0A=
+> =A0 =A0135=0A=
+> =A0 =A0136 =A0 =A0 =A0 =A0 =A0rc =3D fwnode_property_match_string(child, =
+"compatible",=0A=
+> =A0 =A0137 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0 =A0 =A0 =A0 =A0 =A0"ethernet-phy-ieee802.3-c45");=0A=
+> =A0 =A0138 =A0 =A0 =A0 =A0 =A0if (rc >=3D 0)=0A=
+> =A0 =A0139 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0is_c45 =3D true;=0A=
+> =A0 =A0140=0A=
+> =A0 =A0141 =A0 =A0 =A0 =A0 =A0reset_gpio =3D fwnode_gpiod_get_index(child=
+, "reset", 0, GPIOD_OUT_LOW, "PHY reset");=0A=
+> =A0 =A0142 =A0 =A0 =A0 =A0 =A0if (reset_gpio =3D=3D ERR_PTR(-EPROBE_DEFER=
+)) {=0A=
+> =A0 =A0143 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0dev_dbg(&bus->dev, "reset s=
+ignal for PHY@%u not ready\n", addr);=0A=
+> =A0 =A0144 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0return -EPROBE_DEFER;=0A=
+> =A0 =A0145 =A0 =A0 =A0 =A0 =A0} else if (IS_ERR(reset_gpio)) {=0A=
+> =A0 =A0146 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0if (reset_gpio =3D=3D ERR_P=
+TR(-ENOENT))=0A=
+> =A0 =A0147 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0dev_dbg(&bu=
+s->dev, "reset signal for PHY@%u not defined\n", addr);=0A=
+> =A0 =A0148 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0else=0A=
+> =A0 =A0149 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0dev_dbg(&bu=
+s->dev, "failed to request reset for PHY@%u, error %ld\n", addr, PTR_ERR(re=
+set_gpio));=0A=
+> =A0 =A0150 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0reset_gpio =3D NULL;=0A=
+> =A0 =A0151 =A0 =A0 =A0 =A0 =A0} else {=0A=
+> =A0 =A0152 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0dev_dbg(&bus->dev, "deasser=
+t reset signal for PHY@%u\n", addr);=0A=
+> =A0 =A0153 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0fwnode_property_read_u32(ch=
+ild, "reset-deassert-us",=0A=
+> =A0 =A0154 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0 =A0 =A0 =A0 =A0 &reset_deassert_delay);=0A=
+> =A0 =A0155 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0if (reset_deassert_delay)=
+=0A=
+> =A0 =A0156 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0fsleep(rese=
+t_deassert_delay);=0A=
+> =A0 =A0157 =A0 =A0 =A0 =A0 =A0}=0A=
+> =A0 =A0158=0A=
+> =A0 =A0159 =A0 =A0 =A0 =A0 =A0if (is_c45 || fwnode_get_phy_id(child, &phy=
+_id))=0A=
+> =A0 =A0160 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0phy =3D get_phy_device(bus,=
+ addr, is_c45);=0A=
+> =A0 =A0161 =A0 =A0 =A0 =A0 =A0else=0A=
+> =A0 =A0162 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0phy =3D phy_device_create(b=
+us, addr, phy_id, 0, NULL);=0A=
+> =A0 =A0163=0A=
+> =A0> 164 =A0 =A0 =A0 =A0 =A0gpiochip_free_own_desc(reset_gpio);=0A=
+>=0A=
+> --=0A=
+> 0-DAY CI Kernel Test Service=0A=
+> https://github.com/intel/lkp-tests=
