@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2750366B661
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23A166B620
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjAPDqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 22:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S231939AbjAPD0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 22:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjAPDpR (ORCPT
+        with ESMTP id S231624AbjAPD0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:45:17 -0500
-X-Greylist: delayed 643 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 Jan 2023 19:43:53 PST
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA35A257;
-        Sun, 15 Jan 2023 19:43:53 -0800 (PST)
-Received: by air.basealt.ru (Postfix, from userid 490)
-        id 7442A2F20227; Mon, 16 Jan 2023 03:23:56 +0000 (UTC)
+        Sun, 15 Jan 2023 22:26:11 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DC093CF;
+        Sun, 15 Jan 2023 19:25:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NwHTH157Jz4f459W;
+        Mon, 16 Jan 2023 11:25:07 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgBnFCKTw8RjVwmYBg--.39784S3;
+        Mon, 16 Jan 2023 11:25:09 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] blk-iocost: add refcounting for iocg
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <Y7xbpidpq7+DqJan@slm.duckdns.org>
+ <a71f997f-6cae-d57b-85dd-2fd499d238f6@huaweicloud.com>
+ <Y72wF/b0/xNRmP7f@slm.duckdns.org>
+ <53b30ac8-d608-ba0b-8b1b-7fe5cfed6d61@huaweicloud.com>
+ <Y77s0f741mFfGlTO@slm.duckdns.org>
+ <4aeef320-c6c8-d9b4-8826-d58f00ea6264@huaweicloud.com>
+ <Y8CrloCDGhbU42OH@slm.duckdns.org>
+ <efa1c73b-e94f-373f-e535-2cfc32ce2433@huaweicloud.com>
+ <Y8CwwghZ0adMsHFC@slm.duckdns.org>
+ <ac95dfb8-b1b6-8916-bde8-1edb573e7ca5@huaweicloud.com>
+ <Y8GR3V3RsdS+XYzh@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <e27ea63a-8dd5-afad-b5d6-deabf879d191@huaweicloud.com>
+Date:   Mon, 16 Jan 2023 11:25:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <Y8GR3V3RsdS+XYzh@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBnFCKTw8RjVwmYBg--.39784S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrur4DJw48JF1UXw45uw17ZFb_yoWDJFb_ua
+        4rt34DGw4rWr4kCr13JrnYqa9FgryxJry8Wry0qFyxtryIq3srKFsrGr9xuF4fC3yrAFn8
+        Grs0g3yIq3yUujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUba8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
+        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-Received: from localhost (broadband-188-32-10-232.ip.moscow.rt.ru [188.32.10.232])
-        by air.basealt.ru (Postfix) with ESMTPSA id 4228C2F20226;
-        Mon, 16 Jan 2023 03:23:55 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 06:23:55 +0300
-From:   "Alexey V. Vissarionov" <gremlin@altlinux.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Alexey V. Vissarionov" <gremlin@altlinux.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the pci tree
-Message-ID: <20230116032354.GA8107@altlinux.org>
-References: <20230116081425.43ff9e39@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
-Content-Disposition: inline
-In-Reply-To: <20230116081425.43ff9e39@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---ZGiS0Q5IWpPtfppv
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+在 2023/01/14 1:16, Tejun Heo 写道:
+> As we discussed before, you'd have to order the actual freeing by shifting
+> the ref puts into the free_work. If you move `blkg_put(blkg->parent)` and
+> `list_del_init(&blkg->q_node)` to blkg_free_workfn() (this will require
+> adjustments as these things are used from other places too), the free work
+> items will be ordered and the blkg would remain iterable - IOW,
+> deactivate_policy would be able to see it allowing the two paths to
+> synchronize, right?
 
-On 2023-01-16 08:14:25 +1100, Stephen Rothwell wrote:
- > In commit
- > 58d4c63d0a27 ("PCI/IOV: Enlarge virtfn sysfs name buffer")
- > Fixes tag
- > Fixes: dd7cc44d0 ("PCI: add SR-IOV API for Physical Function driver")
- > has these problem(s):
- > - SHA1 should be at least 12 digits long
+That sounds reasonable to only remove blkg from queue list if
+pd_free_fn() is done.
 
-Full SHA1 is dd7cc44d0bcec5e9c42fe52e88dc254ae62eac8d
-First 12 digits would obviously be dd7cc44d0bce
+It's right this way deactivate_policy will be able to see it, and if
+deactivate_policy is called first, pd_free_fn() can be called here, and
+later blkg_free_workfn() should skip pd_free_fn().
 
+It's glad that we come up with suitable solution finially. 😃
 
---=20
-Alexey V. Vissarionov
-gremlin =F0=F2=E9 altlinux =F4=FE=EB org; +vii-cmiii-ccxxix-lxxix-xlii
-GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
+BTW, it might take some time before I send a new patchset cause Spring
+Festival is coming.
 
---ZGiS0Q5IWpPtfppv
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
+Kuai
+> 
+> Thanks.
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iQIcBAEBCgAGBQJjxMNKAAoJEFv2F9znRj5Kn88P/jelyECGQOvg8aUTlUA5BOZv
-1FsMQwIETjuSf444zZ5zEv3eX0VozqDFSJIis2+RMcL1Kx6HV6v6gia1+RX5nhzG
-sF9BE2qX0yxuBgpDFZ0h3wzfWDEFZiPvtUWwrwr8C76h8NccC9MY/gkXCN/KrFJ+
-XlQ8FnYxXDLgS8Ii6cPBXxUq3fZteAUxsR8m/sYMm78/NY1O9DBqLJOwRHS2iFIF
-RY2bk3kLKsJpjpNiUmT4OG4n7wLRcHzzGSj2785NtJwTJnzydI8kYVfcMoM9EeJL
-9+TJONb1X7JHu0gctRpYnS4vFUtZGJl8/zv9sWee3WoEiFCiph+wG/J2o4VqGDDX
-dnH9fbb/llSf+sOeCZ2k88bZZUiCvMbzRvJeYkrrAPDtF87BmS4Xo1hQUJSlT0nX
-CRuivqXHTqmWHEpW+2OfvPqjeczHBYNAm+vjP52+/8BEuoqmnDgL3Wd4mn4reKxe
-lhqIxa/NNFqAMIJcBw6DzmBj4zegNBeBVMIF0pxtO4CTYk/afhUbBOH/jxCEuWCy
-XbRwww9JIs8VZOOa0K+nU1Rj8NzE0AKiw0nwecvoeXpAIYwUoP0SA/X64+WhPBXg
-PmB0CMmUGJ7iWOagQrTNBp+iO4x7nO7l8KhfxZ5jMs4MN9K09La20toErc2xHceI
-ZTbWit7ZyUb2h0iAet0G
-=bYks
------END PGP SIGNATURE-----
-
---ZGiS0Q5IWpPtfppv--
