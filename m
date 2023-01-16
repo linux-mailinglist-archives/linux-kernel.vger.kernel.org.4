@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC3E66BDC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF0266BDC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjAPMYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S229775AbjAPMZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjAPMYs (ORCPT
+        with ESMTP id S230245AbjAPMZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:24:48 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4321C320
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:24:47 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id t5so22903383wrq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:24:47 -0800 (PST)
+        Mon, 16 Jan 2023 07:25:09 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0CC1CF6A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:25:08 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o15so19854353wmr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:25:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MKTyGhr5JmgZRBNZqt+rjhrZa6A3qTkj64hOZc3GxsU=;
-        b=kuxSNSdGkO43VAT6j74zd5xdCxE/3m5V8FnfXho8FbeGfpyJqCySa+wep5gvpKmXxw
-         yciHP4/gGI59CtxOtQMdahsyXutvSH2jlMoi24mKyJgZ9IcSSxXhRDOlOE7zUiFL1v9J
-         J0BWACi3higPxeMUI4B2jmhTqWlDcClJgyqrAkFvAoioPLxp3EZyq0Su2u34eE8nE00g
-         e0SrgJKZkpv0KohDepUd93Iy4aqYTo/o8rglA/I9JPBGqHs2ClZD8RxUejkAeaws+NKl
-         i+TFaDm2Fs76MQOKHt3n2Tngwr6CK8Io6AjnK5rc7joJAddmceJWKAzsUrsyOnRjS/7+
-         8kzg==
+        bh=lAPYg/ZvWBJjUQwtgLMe2yVs/QOrldZYm/bQtr2RTD4=;
+        b=nlf4mxN6WlnHSI9yZLFFKUieEv+F0BHxIuXsVVf/lguDjouSr9E0dxwEeAcnkKvFs6
+         RZWJKKGqMMHMzdzLpZ1zZjc4L9EwHVw/zu4ut8TaEyhMSmVXOrhlzsmDfZWhq6uPD2xJ
+         M9F9ZQqLY/adKNBoJ/eNHCeT3xXbw1c2peCFV2pvqZ25D2CAoSNWz1bjcAWrDa9rZjlR
+         TWXarLaYQ19gkxu3OW8DdV+aSG063daEUV6ZK/GHS2LtssChbreg7nxUfgSkkW6QjrL0
+         OHgcU3Wa8fM0q2LaA2FiuqYiciAvTDDudOpllXN4Kw8I0Dx1js5l+mHwboSyBj0SIIBs
+         3lSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MKTyGhr5JmgZRBNZqt+rjhrZa6A3qTkj64hOZc3GxsU=;
-        b=rBZlJIRsPyDGJnXl7sgfhha5g+q7hz3A2Q9z5XepB0EKfRDkJNsmh2agKJECXPYH2w
-         TQ+njcbMV1ZsoMEh33vTqcjmbFZeHTsImkeXqF1kLFs75MaXZbgsSavruq3yMuoB+a08
-         srU6KTWvWQJVZIXCZitDtKr/QxZAJXS3doZr3+MRcNepE6Mssu1y4f/0AwY+MWfr5j6n
-         6QD18AP/3B+cwdeydFuZqVpqX0N0i7gWvK69OndufoBJ0uiYQfBMGXXv1xyZDyHnXdHu
-         6Vj6Fwx/rtR7UTfr8zyBlqlidP4jTKH6LcI77YIuJQB/Cp1GmEudfU8NEPzIc143/wQK
-         18+w==
-X-Gm-Message-State: AFqh2kqENgShERj77FEu8Llkzk7USb9OWvjHBWbfMC771mHsqgjTwPKc
-        WWTT7jo1BcNLvTIa41KAGK0=
-X-Google-Smtp-Source: AMrXdXskP1vIMY285an4+fdT7dLABggFQWKCJhFefwTSU9xEEDdBHDYe8jNn4wnnFF1qMiurwwspyQ==
-X-Received: by 2002:adf:f70b:0:b0:2be:34f:4fc4 with SMTP id r11-20020adff70b000000b002be034f4fc4mr3470601wrp.13.1673871885840;
-        Mon, 16 Jan 2023 04:24:45 -0800 (PST)
+        bh=lAPYg/ZvWBJjUQwtgLMe2yVs/QOrldZYm/bQtr2RTD4=;
+        b=neQRo6dW3AsegVrVXbteIpTkpJYeLRm8srSJzQLnBZznD8DYW+BsYX9zZmPk0NF+CA
+         WZhdnNyv2y6KJluaOy5fFneKDgO2o3vh7JUjuELbjcy5AkRuyUj0PvvCApKM0n/vi9N/
+         NM2kL10tbhE2jenSCnAOODTl/00e0n/m3ClmXM9/GB/md/B4cTMZoZRq6OteXPFxd7V6
+         sv8T0dDzdft4C8xZB8xy4dXwH3I/DPCvomppLYeIO98x5rXJ1KeEhzBQIrGyqkFIonXO
+         /nB7Bj33y5VPhZ78UsRExG0m/8kw5PVgEpfe3KDJYNHvrkbZBTlXGHToOcaMRYsoDxcd
+         gzsg==
+X-Gm-Message-State: AFqh2koKGxOh+mW5n5OnTTg82uIRokjMkSTu3oO1xTZval44uK5NsBDU
+        CS69Sxz+n3UZi39ct9yytWNPihLKMt8=
+X-Google-Smtp-Source: AMrXdXuDZx/3P4IJpzil2eHi6fJoaVfDCc/FM92eo7r9oqnkPDgkTEw11YP9bKcAVid1i44ckTdGtg==
+X-Received: by 2002:a05:600c:2142:b0:3d5:365b:773e with SMTP id v2-20020a05600c214200b003d5365b773emr78322318wml.39.1673871906531;
+        Mon, 16 Jan 2023 04:25:06 -0800 (PST)
 Received: from localhost (host86-164-169-89.range86-164.btcentralplus.com. [86.164.169.89])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b0024274a5db0asm26335772wrj.2.2023.01.16.04.24.44
+        by smtp.gmail.com with ESMTPSA id fl12-20020a05600c0b8c00b003dab40f9eafsm6838196wmb.35.2023.01.16.04.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 04:24:45 -0800 (PST)
-Date:   Mon, 16 Jan 2023 12:24:44 +0000
+        Mon, 16 Jan 2023 04:25:05 -0800 (PST)
+Date:   Mon, 16 Jan 2023 12:25:05 +0000
 From:   Lorenzo Stoakes <lstoakes@gmail.com>
 To:     Baoquan He <bhe@redhat.com>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, urezki@gmail.com,
         stephen.s.brennan@oracle.com, willy@infradead.org,
         akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 5/7] mm/vmalloc: skip the uninitilized vmalloc areas
-Message-ID: <Y8VCDD+UVjryP49u@lucifer>
+Subject: Re: [PATCH v3 6/7] powerpc: mm: add VM_IOREMAP flag to the vmalloc
+ area
+Message-ID: <Y8VCIRDcAh33OIvM@lucifer>
 References: <20230113031921.64716-1-bhe@redhat.com>
- <20230113031921.64716-6-bhe@redhat.com>
+ <20230113031921.64716-7-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113031921.64716-6-bhe@redhat.com>
+In-Reply-To: <20230113031921.64716-7-bhe@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,39 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:19:19AM +0800, Baoquan He wrote:
-> For areas allocated via vmalloc_xxx() APIs, it searches for unmapped area
-> to reserve and allocates new pages to map into, please see function
-> __vmalloc_node_range(). During the process, flag VM_UNINITIALIZED is set
-> in vm->flags to indicate that the pages allocation and mapping haven't
-> been done, until clear_vm_uninitialized_flag() is called to clear it.
+On Fri, Jan 13, 2023 at 11:19:20AM +0800, Baoquan He wrote:
+> Currently, for vmalloc areas with flag VM_IOREMAP set, except of the
+> specific alignment clamping in __get_vm_area_node(), they will be
+>  1) Shown as ioremap in /proc/vmallocinfo;
+>  2) Ignored by /proc/kcore reading via vread()
 >
-> For this kind of area, if VM_UNINITIALIZED is still set, let's ignore
-> it in vread() because pages newly allocated and being mapped in that
-> area only contains zero data. reading them out by aligned_vread() is
-> wasting time.
+> So for the io mapping in ioremap_phb() of ppc, we should set VM_IOREMAP
+> in flag to make it handled correctly as above.
 >
 > Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
->  mm/vmalloc.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  arch/powerpc/kernel/pci_64.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 4a10b3b692fa..dbcdcad2276b 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3660,6 +3660,11 @@ long vread(char *buf, char *addr, unsigned long count)
->  		if (!vm && !flags)
->  			continue;
->
-> +		if (vm && (vm->flags & VM_UNINITIALIZED))
-> +			continue;
-> +		/* Pair with smp_wmb() in clear_vm_uninitialized_flag() */
-> +		smp_rmb();
-> +
->  		vaddr = (char *) va->va_start;
->  		size = vm ? get_vm_area_size(vm) : va_size(va);
->
+> diff --git a/arch/powerpc/kernel/pci_64.c b/arch/powerpc/kernel/pci_64.c
+> index 0c7cfb9fab04..fd42059ae2a5 100644
+> --- a/arch/powerpc/kernel/pci_64.c
+> +++ b/arch/powerpc/kernel/pci_64.c
+> @@ -132,7 +132,7 @@ void __iomem *ioremap_phb(phys_addr_t paddr, unsigned long size)
+>  	 * address decoding but I'd rather not deal with those outside of the
+>  	 * reserved 64K legacy region.
+>  	 */
+> -	area = __get_vm_area_caller(size, 0, PHB_IO_BASE, PHB_IO_END,
+> +	area = __get_vm_area_caller(size, VM_IOREMAP, PHB_IO_BASE, PHB_IO_END,
+>  				    __builtin_return_address(0));
+>  	if (!area)
+>  		return NULL;
 > --
 > 2.34.1
 >
