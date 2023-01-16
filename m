@@ -2,96 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2298D66D326
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429AF66D331
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbjAPX3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 18:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S234333AbjAPXeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235593AbjAPX2x (ORCPT
+        with ESMTP id S233795AbjAPXdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 18:28:53 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74553A856;
-        Mon, 16 Jan 2023 15:17:19 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 893865C011A;
-        Mon, 16 Jan 2023 18:17:16 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 16 Jan 2023 18:17:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1673911036; x=1673997436; bh=Uw
-        OeuY6GjuWphYvoJ4W/l9OkICnzVHEBFf/gKxu2bqk=; b=DGCHX44GgRe7zMJQI7
-        tchGnBuDyB5kpIMnXDU37IP84twoeZ5wwF5NLuddk3YKKsSuDdn5odJXWuWHG9Dk
-        0uw5wdHfT5Fwkl3a7VYtnSSpiW+G3RSqnJ1pqdys7xI5BtQg1nsofhOJcuRpBvMo
-        YyKo0kfWPOoAeLbx1nEYjCjzShEFhowTtFl/HhhkLFCXwUc+aPdazT4totzhMBp+
-        Z0uA8ex2vkJJmtasBVC/fxwzDirE9aTtsyCKGY2VfezN7ZkWSWP6hLeXr5gJfTqr
-        19HhqQH/ULvkxHk1JXkei7h1zUF2wHmAZj0CA1n8yBLobcps6/f2NSJXHxccB8xu
-        ztsw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673911036; x=1673997436; bh=UwOeuY6GjuWphYvoJ4W/l9OkICnz
-        VHEBFf/gKxu2bqk=; b=oIe48XbTH8OSqD7pVFo5Ru+5OxKJykXwObLUZ88Q6HGN
-        kdMT3UDZ9kyhM1eBwt7wV5b77csSGH2W917gqoWwH5a9J48afFszuvZhNNnClXa3
-        +hjmMSoBYZY0l5/19LYW4JSsLTggPZLNG4brgFnJ7yNU1pgtRx7i9zkbDU3HFBSE
-        SIn6E0e1gr30rgRfG/Rl20rQEI0N6zK0DNVMUJqB3PbBXXcTzimbvZ0zthFdLmnC
-        Y+L3AnykN31aSf/Sf1uRHL+fZW6ggBBjRNc6b7z1NYB5xPlcotJByqfdXxl+twX/
-        VAs5rs2vdoNqgZzFnv4RCMtHmsiVkUk5PqpvzJlkcg==
-X-ME-Sender: <xms:-9rFY08zYnD9m-Vko62Nh4gqsaIObaCxpDRcg9Pp7-uZPYNQWCtPCg>
-    <xme:-9rFY8vusiq6suDQg9obwnbV7gkllxOzt7bRTMXEA1g_I8zvoAB6h4Uroe9f8gnwx
-    52e_PHY51WJDFuXdQU>
-X-ME-Received: <xmr:-9rFY6BmPhUbVBHaca6QHHsl-v_HR5DqnqdZKVD60V5jcsEZBkHKhFsEszNNmrypbVIjlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddthedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:-9rFY0feKLyk3GC1VO40Thd2LjPCmO63VKhrHPSbQBggwNhTdGE1NA>
-    <xmx:-9rFY5My0oyvlhyzFOc_tfinWWORFk1QV3NBCOXlFmt04N7j0PCKNQ>
-    <xmx:-9rFY-k2WmndQq0oLt3Pj3nfOYFjlzjVKXNbPThUsHxQP5lEtYnFcw>
-    <xmx:_NrFY9ntMx7GdE-1Mq0nNXmXkHOiuDk_jJOKK1yXskyqK192APORsg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 Jan 2023 18:17:15 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 8AA94109792; Tue, 17 Jan 2023 02:17:11 +0300 (+03)
-Date:   Tue, 17 Jan 2023 02:17:11 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
-Message-ID: <20230116231711.cudsnxvnfg6aef3w@box.shutemov.name>
-References: <20230113212926.2904735-1-dionnaglaze@google.com>
- <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
- <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
- <20230116123057.wvr6rz7y3ubgcm5z@box.shutemov.name>
- <CAMj1kXGVNHqGN2uhziARu9H3RQiqbPJBE1GxHuWzC5gajJyaeA@mail.gmail.com>
- <20230116134246.soworigs56bz5v7o@box.shutemov.name>
- <CAAH4kHb6-6QkMnYbcQ6MyMkwSBUN-Q3CcM3fuiStdbbnSfJv1A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAH4kHb6-6QkMnYbcQ6MyMkwSBUN-Q3CcM3fuiStdbbnSfJv1A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Mon, 16 Jan 2023 18:33:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2414D1F4B8;
+        Mon, 16 Jan 2023 15:27:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB84361181;
+        Mon, 16 Jan 2023 23:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4742C433D2;
+        Mon, 16 Jan 2023 23:27:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1673911633;
+        bh=V632Bd28v2EMXk0Fei3rjmAUh17bwMYhoHo8d1S5aSQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MtojZflews1UjvQBHqIM/JsLiZym7kdv1szmh31jd1ofKm+uz7uUqQFX0G6M/2UZ6
+         MihBwRnpCuHRPl74BLCEH4XxHc2Qb2AcSOZadjYkUZD3KjEXnKO5KWHRM0DT28q1MZ
+         3FyJWmi2jm9Gm+yi4RNnIN2ngEeeB4pZ+pXwP8FI=
+Date:   Mon, 16 Jan 2023 15:27:12 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hotfixes for 6.2-rc5
+Message-Id: <20230116152712.612b60d26b497d1d5749f4dc@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,69 +49,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 11:43:15AM -0800, Dionna Amalie Glaze wrote:
-> > > I still don't understand why we need to support every imaginable
-> > > combination of firmware, bootloader and OS. Unaccepted memory only
-> > > exists on a special kind of virtual machine, which provides very
-> > > little added value unless you opt into the security and attestation
-> > > features, which are all heavily based on firmware protocols. So why
-> > > should care about a EFI-aware bootloader calling ExitBootServices()
-> > > and subsequently doing a legacy boot of Linux on such systems?
-> >
-> > Why break what works? Some users want it.
-> >
-> 
-> The users that want legacy boot features will not be broken,
 
-Why do you call boot with a bootloader a legacy feature?
+Linus,
 
-> they'll only get a safe view of the memory map. I don't think it's right
-> to choose unsafe behavior for a legacy setup.
+please merge this batch of hotfixes.  As usual, mostly MM things with a
+handful of non-MM material.
 
-Present memory map with unaccepted memory to OS that doesn't about it is
-perfectly safe. This portion of the memory will be ignored. It is "feature
-not [yet] implemented" case.
+Thanks.
 
-> > This patch adds complexity, breaks what works and the only upside will
-> > turn into a dead weight soon.
-> >
-> > There's alternative to add option to instruct firmware to accept all
-> > memory from VMM side. It will serve legacy OS that doesn't know about
-> > unaccepted memory and it is also can be use by latency-sensitive users
-> > later on (analog of qemu -mem-prealloc).
-> >
-> 
-> This means that users of a distro that has not enabled unaccepted
-> memory support cannot simply start a VM with the usual command, but
-> instead have to know a baroque extra flag to get access to all the
-> memory that they configured the machine (and for a CSP customer, paid
-> for). That's not a good experience.
 
-New features require enabling. It is not something new.
+The following changes since commit b7bfaa761d760e72a969d116517eaa12e404c262:
 
-> With GCE at least, you can't (shouldn't) associate the boot feature
-> flag with a disk image because disks are mutable. If a customer
-> upgrades their kernel after initially starting their VM, they can't
-> remove the flag due to the way image annotations work.
+  Linux 6.2-rc3 (2023-01-08 11:49:43 -0600)
 
-I guess a new VM has to be created, right? Doesn't sound like a big deal
-to me.
+are available in the Git repository at:
 
-The old will not break with upgraded kernel. Just not get benefit of the
-feature.
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-01-16-15-23
 
-> All of this headache goes away by adopting a small patch to the kernel
-> that calls a 0-ary protocol interface and keeping safe acceptance
-> behavior in the firmware. I think Gerd is right here that we should
-> treat it as a transition feature that we can remove later.
+for you to fetch changes up to 19fa92fb72f8bc542f1673862058f3b078114004:
 
-Removing a feature is harder than adding one. How do you define that
-"later" has come?
+  init/Kconfig: fix typo (usafe -> unsafe) (2023-01-11 16:14:23 -0800)
 
-Anyway, I think we walk in a circle. I consider it a misfeature. If you
-want still go this path, please add my
+----------------------------------------------------------------
+21 hotfixes.  Thirteen of these address pre-6.1 issues and hence have
+the cc:stable tag.
 
-Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+----------------------------------------------------------------
+Alexey Dobriyan (1):
+      proc: fix PIE proc-empty-vm, proc-pid-vm tests
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Andrey Konovalov (1):
+      kasan: mark kasan_kunit_executing as static
+
+David Hildenbrand (3):
+      mm/hugetlb: fix PTE marker handling in hugetlb_change_protection()
+      mm/hugetlb: fix uffd-wp handling for migration entries in hugetlb_change_protection()
+      mm/userfaultfd: enable writenotify while userfaultfd-wp is enabled for a VMA
+
+Hugh Dickins (1):
+      mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
+
+James Houghton (1):
+      hugetlb: unshare some PMDs when splitting VMAs
+
+Liam Howlett (3):
+      nommu: fix memory leak in do_mmap() error path
+      nommu: fix do_munmap() error path
+      nommu: fix split_vma() map_count error
+
+Lizzy Fleckenstein (1):
+      init/Kconfig: fix typo (usafe -> unsafe)
+
+Lorenzo Stoakes (1):
+      mm: update mmap_sem comments to refer to mmap_lock
+
+Nhat Pham (1):
+      Docs/admin-guide/mm/zswap: remove zsmalloc's lack of writeback warning
+
+Peter Xu (1):
+      mm/hugetlb: pre-allocate pgtable pages for uffd wr-protects
+
+Randy Dunlap (1):
+      lib/win_minmax: use /* notation for regular comments
+
+Robert Foss (1):
+      MAINTAINERS: update Robert Foss' email address
+
+Ryusuke Konishi (1):
+      nilfs2: fix general protection fault in nilfs_btree_insert()
+
+SeongJae Park (1):
+      include/linux/mm: fix release_pages_arg kernel doc comment
+
+Suren Baghdasaryan (1):
+      mm: fix vma->anon_name memory leak for anonymous shmem VMAs
+
+Zach O'Keefe (2):
+      mm/MADV_COLLAPSE: don't expand collapse when vm_end is past requested end
+      mm/shmem: restore SHMEM_HUGE_DENY precedence over MADV_COLLAPSE
+
+ .mailmap                                     |  1 +
+ Documentation/admin-guide/mm/zswap.rst       |  4 +-
+ MAINTAINERS                                  |  6 +-
+ fs/nilfs2/btree.c                            | 15 ++++-
+ fs/userfaultfd.c                             | 28 ++++++--
+ include/linux/mm.h                           |  6 +-
+ include/linux/mm_inline.h                    |  3 +-
+ include/linux/mm_types.h                     |  2 +-
+ include/linux/page_ref.h                     |  2 +-
+ init/Kconfig                                 |  2 +-
+ lib/win_minmax.c                             |  2 +-
+ mm/hugetlb.c                                 | 99 ++++++++++++++++++----------
+ mm/kasan/report.c                            |  2 +-
+ mm/khugepaged.c                              | 16 ++---
+ mm/madvise.c                                 |  2 +-
+ mm/mmap.c                                    |  8 ++-
+ mm/nommu.c                                   |  9 ++-
+ mm/shmem.c                                   |  6 +-
+ tools/testing/selftests/proc/proc-empty-vm.c | 12 ++--
+ tools/testing/selftests/proc/proc-pid-vm.c   |  9 +--
+ 20 files changed, 146 insertions(+), 88 deletions(-)
+
