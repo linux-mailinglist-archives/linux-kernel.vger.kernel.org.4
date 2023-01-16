@@ -2,142 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943DE66C259
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BA766C264
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjAPOiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S230370AbjAPOkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjAPOiT (ORCPT
+        with ESMTP id S231158AbjAPOkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:38:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BAE92FCF6;
-        Mon, 16 Jan 2023 06:17:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77F94C14;
-        Mon, 16 Jan 2023 06:17:24 -0800 (PST)
-Received: from [10.57.89.182] (unknown [10.57.89.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE3B43F67D;
-        Mon, 16 Jan 2023 06:16:40 -0800 (PST)
-Message-ID: <1896a73b-eb7b-7ffb-272d-115a10adeb71@arm.com>
-Date:   Mon, 16 Jan 2023 14:16:39 +0000
+        Mon, 16 Jan 2023 09:40:01 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97F65D13E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:17:57 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-4b6255ce5baso381626017b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jMWPYbjQSmRVDpKeSGqsCVfuSkZPvGKrSB2oUbUO47s=;
+        b=SYFK53kycJxgo7F4nx8t+Uq1rDJ1llc++BuMPl8M5ZJX2xFkRpK8p5whug2ez8db+A
+         KIPMoV484I7tP9WiCqbxFjGfOd6nez5/aptbCRUbR8qIxZ6txax865rbxwZL6SYCc7Ke
+         RUib9ZIwffT/BYLQey+u5bZmZDr9ohQ3xlBmp0xuWgMMaebTCOU3NB4e/fIZ8RsF3HI7
+         1dmvlBuN8v8tuoQPmaSMsb1vRnWEl+qLXvyJM3t1erv6w8kBP/k9JasPdAPgurI0RfPw
+         XWsgS6ncV+ctoIcTMo0TImuXXSYEym7BQsIGVffj6IWXo1qrVtYaR0iNwrs/FiIEAo29
+         MVzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jMWPYbjQSmRVDpKeSGqsCVfuSkZPvGKrSB2oUbUO47s=;
+        b=13Wsc+DRDiaPC94Ptc8HsmvRA8XdOY9dim40FzAYYo2o1VQjfedSIK8LDHJhCi3mNm
+         z5jx7PsYjE5NN30bw+1DTdsl2aJ3LCcExwpvTXX4nwId5BBtPfH/z6vCSQReCvaCCqqY
+         PExL9N9Q8Y48TpzXOLqfPOiakrQ4Hm08/aW7yl4/tlmNfgjz3775yvsdjEHa17B0IH7W
+         lmheNY0aQPpWtr4ikh2uLynJoGWp1AbG97a48jgp45o9bd7vXZ6SEZvxFaooxlewdP61
+         XKTZpjSjWMwnwCVMtUvMmx51ElAWHmdedlDKx6b0sx/InVjT6ieNaHLuHkzE/r6uaCI2
+         BVdA==
+X-Gm-Message-State: AFqh2krcnUCRdZef4uKCj2lyiedfnFuRyuR+tYN8WDCnf+4Cazk2Aj+c
+        4bvRH+/1gqQ3qIobzM9jQrEXIv/h9HRfg7vt+mhBnjiI3c/mFg==
+X-Google-Smtp-Source: AMrXdXtAh/ZzXCPDoVr/80rB6yvhSPUFDFti/ZSylP6eMttiHYWNAgRlJEvBO/7JBrCK/xVWI3UCXqewXP0ad6lW/PQ=
+X-Received: by 2002:a81:a084:0:b0:4dd:ff06:1358 with SMTP id
+ x126-20020a81a084000000b004ddff061358mr1666940ywg.488.1673878660244; Mon, 16
+ Jan 2023 06:17:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v7 01/15] coresight: trace-id: Add API to dynamically
- assign Trace ID values
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20230116124928.5440-1-mike.leach@linaro.org>
- <20230116124928.5440-2-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230116124928.5440-2-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112144526.66794-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112144526.66794-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 16 Jan 2023 15:17:29 +0100
+Message-ID: <CACRpkdYD-MfgCBUdTdNU0+kx+Z6parEmWwQC_3smDYxG73=XGw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpiolib: Remove unused of_mm_gpiochip_add()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike
+On Thu, Jan 12, 2023 at 4:18 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-On 16/01/2023 12:49, Mike Leach wrote:
-> The existing mechanism to assign Trace ID values to sources is limited
-> and does not scale for larger multicore / multi trace source systems.
-> 
-> The API introduces functions that reserve IDs based on availabilty
-> represented by a coresight_trace_id_map structure. This records the
-> used and free IDs in a bitmap.
-> 
-> CPU bound sources such as ETMs use the coresight_trace_id_get_cpu_id
-> coresight_trace_id_put_cpu_id pair of functions. The API will record
-> the ID associated with the CPU. This ensures that the same ID will be
-> re-used while perf events are active on the CPU. The put_cpu_id function
-> will pend release of the ID until all perf cs_etm sessions are complete.
-> 
-> For backward compatibility the functions will attempt to use the same
-> CPU IDs as the legacy system would have used if these are still available.
-> 
-> Non-cpu sources, such as the STM can use coresight_trace_id_get_system_id /
-> coresight_trace_id_put_system_id.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->   drivers/hwtracing/coresight/Makefile          |   2 +-
->   .../hwtracing/coresight/coresight-trace-id.c  | 265 ++++++++++++++++++
->   .../hwtracing/coresight/coresight-trace-id.h  | 156 +++++++++++
->   include/linux/coresight-pmu.h                 |  10 +
->   4 files changed, 432 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
->   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
-> 
-> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> index b6c4a48140ec..329a0c704b87 100644
-> --- a/drivers/hwtracing/coresight/Makefile
-> +++ b/drivers/hwtracing/coresight/Makefile
-> @@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
->   coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
->   		coresight-sysfs.o coresight-syscfg.o coresight-config.o \
->   		coresight-cfg-preload.o coresight-cfg-afdo.o \
-> -		coresight-syscfg-configfs.o
-> +		coresight-syscfg-configfs.o coresight-trace-id.o
->   obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
->   coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
->   		      coresight-tmc-etr.o
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-> new file mode 100644
-> index 000000000000..9b85c376cb12
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-> @@ -0,0 +1,265 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> of_mm_gpiochip_add() is unused API, remove it for good.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-...
+A bit late to the party but THANKS for doing this Andy, it's been
+a pain for years to have this cruft around.
 
-> +int coresight_trace_id_read_cpu_id(int cpu)
-> +{
-> +	return _coresight_trace_id_read_cpu_id(cpu);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_read_cpu_id);
-> +
-> +int coresight_trace_id_get_system_id(void)
-> +{
-> +	return coresight_trace_id_map_get_system_id(&id_map_default);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_system_id);
-> +
-> +void coresight_trace_id_put_system_id(int id)
-> +{
-> +	coresight_trace_id_map_put_system_id(&id_map_default, id);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
-> +
-> +void coresight_trace_id_perf_start(void)
-> +{
-> +	atomic_inc(&perf_cs_etm_session_active);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
-> +
-> +void coresight_trace_id_perf_stop(void)
-> +{
-> +	if (!atomic_dec_return(&perf_cs_etm_session_active))
-> +		coresight_trace_id_release_all_pending();
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
-> +
+We even have some traction toward eventual <linux/gpio.h> removal
+now thanks to Dmitry's efforts, this is great.
 
-This blank new line at the end of the file generates a checkpatch
-warning for me. I have fixed it locally and applied it.
-
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.h b/drivers/hwtracing/coresight/coresight-trace-id.h
-
-
+Yours,
+Linus Walleij
