@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1798A66C049
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E2866C03E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjAPNv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S230323AbjAPNvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjAPNup (ORCPT
+        with ESMTP id S231436AbjAPNun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:50:45 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202B321972;
-        Mon, 16 Jan 2023 05:50:44 -0800 (PST)
+        Mon, 16 Jan 2023 08:50:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C2421945;
+        Mon, 16 Jan 2023 05:50:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 86905CE1161;
-        Mon, 16 Jan 2023 13:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F39C433F1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B28DE60FC6;
+        Mon, 16 Jan 2023 13:50:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9767DC43392;
         Mon, 16 Jan 2023 13:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673877040;
-        bh=8NK6cMAg/Gp7SlI9n2MjOR/D97yEutmk49eysprJ2C4=;
+        bh=Sc/MXrEwZaxI4omzYCVHgWpM1c0Ozs8INEgkW+Kkfxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PjndJlSRpc1AnDOK4A7FI2Z6RWqNy6J9qyKZmOdPvNenH5WFdsKvUMZHDUCeh9/kS
-         PA0jeJtbIeypY/8vQqex1EAw5WbNKZVhUmQmEePAm5WC17QIPH/4GBs6i4K3ps/L6P
-         XgiFidY+Yg+6FafT2Dd2v8IxrjaH6zzHRqpBZSoSXLA5fDMeRg4jvk+EPUVze3MbqE
-         OUu4iInoSzrbZYCsOXa/I0y0M4Pmds7Vj+8lwmUDrTpAhEUueX9lRvcOvNwdiEuhy1
-         SHvHTZKc5iDS0sGAqx68AmQXRRj6ZHMJnxoltE5upKUY0IRk0g/Kn1YseplcgiXfvB
-         hyIZp2C4lxgcg==
+        b=GZdwS8bAvdzWN/C6v/U15xmHvbQMQMJusVQTi9CqJfflW/jPFbn3aYdXTST2GS1hv
+         ChWtwzHM9Mo6bKs2CLsEmdTjFdL/zEumhE3mzEhXtRCRsHvoeixjPySaA7MX0P6B55
+         Vhw9Kbo3g3EM6g0/QTjGYHErVQuIgXI6FpFpnntNtkCY56NtR4870LolZ9+RXwI0eW
+         KjvIpJ5o/R9jTF1Dlw9S97JdX8yEZqI9ZaszR6vU9qk3jNFuBgQn5xOBl18KH7oGFb
+         x0ft+UcfE6D4hkXHV3EOcU2UDR0XlFd/EaW6NVQItAnk0l2yIvJmHlMp8mS8jkV/Ya
+         5tidaNTVroP+Q==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pHPt5-0003uu-TT; Mon, 16 Jan 2023 14:50:59 +0100
+        id 1pHPt5-0003ux-Vi; Mon, 16 Jan 2023 14:51:00 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v4 05/19] irqdomain: Fix disassociation race
-Date:   Mon, 16 Jan 2023 14:50:30 +0100
-Message-Id: <20230116135044.14998-6-johan+linaro@kernel.org>
+Subject: [PATCH v4 06/19] irqdomain: Drop revmap mutex
+Date:   Mon, 16 Jan 2023 14:50:31 +0100
+Message-Id: <20230116135044.14998-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230116135044.14998-1-johan+linaro@kernel.org>
 References: <20230116135044.14998-1-johan+linaro@kernel.org>
@@ -60,46 +60,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The global irq_domain_mutex is held when mapping interrupts from
-non-hierarchical domains but currently not when disposing them.
+The global irq_domain_mutex is now held in all paths that update the
+revmap structures so there is no longer any need for the revmap mutex.
 
-This specifically means that updates of the domain mapcount is racy
-(currently only used for statistics in debugfs).
-
-Make sure to hold the global irq_domain_mutex also when disposing
-mappings from non-hierarchical domains.
-
-Fixes: 9dc6be3d4193 ("genirq/irqdomain: Add map counter")
 Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- kernel/irq/irqdomain.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/linux/irqdomain.h |  2 --
+ kernel/irq/irqdomain.c    | 13 ++++++-------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
+diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+index 5b2718e1c6de..7fd3939328c2 100644
+--- a/include/linux/irqdomain.h
++++ b/include/linux/irqdomain.h
+@@ -143,7 +143,6 @@ struct irq_domain_chip_generic;
+  * Revmap data, used internally by the irq domain code:
+  * @revmap_size:	Size of the linear map table @revmap[]
+  * @revmap_tree:	Radix map tree for hwirqs that don't fit in the linear map
+- * @revmap_mutex:	Lock for the revmap
+  * @revmap:		Linear table of irq_data pointers
+  */
+ struct irq_domain {
+@@ -171,7 +170,6 @@ struct irq_domain {
+ 	irq_hw_number_t			hwirq_max;
+ 	unsigned int			revmap_size;
+ 	struct radix_tree_root		revmap_tree;
+-	struct mutex			revmap_mutex;
+ 	struct irq_data __rcu		*revmap[];
+ };
+ 
 diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index b2087f55a1ac..23f5919e58b7 100644
+index 23f5919e58b7..248e6acfafbe 100644
 --- a/kernel/irq/irqdomain.c
 +++ b/kernel/irq/irqdomain.c
-@@ -537,6 +537,9 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+@@ -214,7 +214,6 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+ 
+ 	/* Fill structure */
+ 	INIT_RADIX_TREE(&domain->revmap_tree, GFP_KERNEL);
+-	mutex_init(&domain->revmap_mutex);
+ 	domain->ops = ops;
+ 	domain->host_data = host_data;
+ 	domain->hwirq_max = hwirq_max;
+@@ -501,30 +500,30 @@ static bool irq_domain_is_nomap(struct irq_domain *domain)
+ static void irq_domain_clear_mapping(struct irq_domain *domain,
+ 				     irq_hw_number_t hwirq)
+ {
++	lockdep_assert_held(&irq_domain_mutex);
++
+ 	if (irq_domain_is_nomap(domain))
  		return;
  
- 	hwirq = irq_data->hwirq;
-+
-+	mutex_lock(&irq_domain_mutex);
-+
- 	irq_set_status_flags(irq, IRQ_NOREQUEST);
- 
- 	/* remove chip and handler */
-@@ -556,6 +559,8 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
- 
- 	/* Clear reverse map for this hwirq */
- 	irq_domain_clear_mapping(domain, hwirq);
-+
-+	mutex_unlock(&irq_domain_mutex);
+-	mutex_lock(&domain->revmap_mutex);
+ 	if (hwirq < domain->revmap_size)
+ 		rcu_assign_pointer(domain->revmap[hwirq], NULL);
+ 	else
+ 		radix_tree_delete(&domain->revmap_tree, hwirq);
+-	mutex_unlock(&domain->revmap_mutex);
  }
  
- static int __irq_domain_associate(struct irq_domain *domain, unsigned int virq,
+ static void irq_domain_set_mapping(struct irq_domain *domain,
+ 				   irq_hw_number_t hwirq,
+ 				   struct irq_data *irq_data)
+ {
++	lockdep_assert_held(&irq_domain_mutex);
++
+ 	if (irq_domain_is_nomap(domain))
+ 		return;
+ 
+-	mutex_lock(&domain->revmap_mutex);
+ 	if (hwirq < domain->revmap_size)
+ 		rcu_assign_pointer(domain->revmap[hwirq], irq_data);
+ 	else
+ 		radix_tree_insert(&domain->revmap_tree, hwirq, irq_data);
+-	mutex_unlock(&domain->revmap_mutex);
+ }
+ 
+ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+@@ -1511,11 +1510,12 @@ static void irq_domain_fix_revmap(struct irq_data *d)
+ {
+ 	void __rcu **slot;
+ 
++	lockdep_assert_held(&irq_domain_mutex);
++
+ 	if (irq_domain_is_nomap(d->domain))
+ 		return;
+ 
+ 	/* Fix up the revmap. */
+-	mutex_lock(&d->domain->revmap_mutex);
+ 	if (d->hwirq < d->domain->revmap_size) {
+ 		/* Not using radix tree */
+ 		rcu_assign_pointer(d->domain->revmap[d->hwirq], d);
+@@ -1524,7 +1524,6 @@ static void irq_domain_fix_revmap(struct irq_data *d)
+ 		if (slot)
+ 			radix_tree_replace_slot(&d->domain->revmap_tree, slot, d);
+ 	}
+-	mutex_unlock(&d->domain->revmap_mutex);
+ }
+ 
+ /**
 -- 
 2.38.2
 
