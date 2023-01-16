@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8746E66C3BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA8C66C3C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjAPPYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S229965AbjAPPYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjAPPXn (ORCPT
+        with ESMTP id S229871AbjAPPXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 Jan 2023 10:23:43 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9FC234F6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:21:32 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h16so27793969wrz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:21:32 -0800 (PST)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA91823644
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:21:33 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bk16so27782156wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:21:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nv0qa2Y9kKxU6VGIR/RqoCE+47f00hC3eEX/3It1chk=;
-        b=BKqVukHaNZ2DjWhsK2wghZ2mTsJu+9IwS9P/qGTacZ0hXj+iyool3k9BEfn8x6JXQJ
-         hw3JDOmQN3yWNzSVg3VGPy9Cf5/GGU1zFY0l3Nca3VaEqh1+MzTcGR4ZGwDI7cGGdHD+
-         8TbSsVQEieGnEMxsTK9HhLpZaXZ+S/SWQ+oSzinvM9LN7mM5yYZbBIsIzQqCLMBiYOlS
-         KABMxb76aWIK83/ubWTSgBlSwmAq78EZ9yPnMgv4A+pmjowA8zokO7+q0ESsyUFMri9B
-         KI2bEKXrT9Fif28tva4jio2E2+tU//zFGLIe0M7b2SuEdASgsbDp8+dapdW+vkNO7lZc
-         seVg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ipy7aLx0VwQlNfAPQLDup1F5SBfWJdQz4FY6bwFHuGc=;
+        b=S2uwb2b8BLVVzGbiBGjRSt09lvDYJKv/MTgNZb6TDZSThobAD5VuERDnzC8F9cOSlp
+         0GiBxIXYNJXIDrm8ryJeSxUN4MyVCEvi6vQYdDLsZNvU4h7nrj1GNBOmE8wqQTZmLx8P
+         1HulAz0E1H4ERGEdGc977PynVl3uL4N1uJMMPjT/T4kQIX+okN0dTGyKD/gdy/lsrG4V
+         3cYBA6N+nGdr6Bfa6+28K7WZYYCVXnE9v/K7Dm8I9vccXGCZz61+LwlZwJ9uxRRMvTG6
+         lIKRLVlHTAg7Azg6EYzg6QSv47lK25qI24/Qq8UxELibZzMNFpMIAB5pP2k1ouVJGVDE
+         wsyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nv0qa2Y9kKxU6VGIR/RqoCE+47f00hC3eEX/3It1chk=;
-        b=h1HQta716Y9zSjMYKCYRpH16+ll7CglFk6q0Xl87oDosSdrzhemF/qiQR2/xQ7TnJy
-         ueIDRgdp/+14Q8EHj0agjKd59Alzk57w7H/pxef2KEOqLYhwucatm3wu39dlyni/rKDo
-         ppvZHX6/lqx/nHY6Jks49J/BUuHxHN+sIsI/LQzQeDR9oTU8nHWcgYWW+yY/DFz9offQ
-         m2e+vWU/E4TcsCRwjy6hx5dHhpirRPjLVh29oot1H4a6d7CmURztfmV+0U8V5ev5J6oA
-         +mxkknjpkyVXgRFza19mBf2WHQ9LDj6SlKdVNhjhkX5zVOxPzrVF1h/12feHRIcGrAWb
-         1NPQ==
-X-Gm-Message-State: AFqh2koJolgrwFNn4z82njHsZVQuyUo1JzhupeH7cLGp+k0u1p/60ba4
-        9OzM5yY721PFGIN+Ku4kC6TQNA==
-X-Google-Smtp-Source: AMrXdXvzupPXPZrH8q5lavvJWVE7k7Wke3TppTjy+Xv6euTu3Vht9rwJhUpDg2Gdg2InPn98dgobaA==
-X-Received: by 2002:a05:6000:1b05:b0:2b5:dc24:e08e with SMTP id f5-20020a0560001b0500b002b5dc24e08emr26936729wrz.69.1673882491286;
-        Mon, 16 Jan 2023 07:21:31 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ipy7aLx0VwQlNfAPQLDup1F5SBfWJdQz4FY6bwFHuGc=;
+        b=hf3UyQUCa0JzxKk0EZh3/ThCk3PBxv3oo/lWL3xYDGxLuMz4pk7uvwBFqw09gsTN5i
+         FNNjx5AP4evcUd1jFRQnwIWfrIKrinzawavWbzUYIQAxeiD+GsXNwpVFq9hoqkmjE6l4
+         e7Ac9jj5A8o9OIgGS08+xd+j2TbiAmEcM0tY4pNPaPrxh+VdkmJnRCNkRv1aZo75IWaU
+         hQCbPkiciGyPSrMUs65b38lvNOW9aFjC3oS/TEoJuD/I7dr935fFIc9/KRKSLq/DtvNO
+         H9UIVwcLISl8O95OATdngTBPq39FM9IQNzdLoJwxV5zlG0RzleoVzgFRLmfAGpbWv+E9
+         5btA==
+X-Gm-Message-State: AFqh2ko/Aua9MDHne8tGc3U1CaKuDiavhFKJBvcn1nDT3Vhl6kPuPSpP
+        +03oxKT/pk69CoaRn4qdgrG0Cg==
+X-Google-Smtp-Source: AMrXdXsrBq9Eua99FPGOxxh5Vws09TzxkzR4rxCItnJMKRlM2+1lUIpRsU6LmmoWschXWnjoED2FHA==
+X-Received: by 2002:adf:e987:0:b0:2bb:e891:1829 with SMTP id h7-20020adfe987000000b002bbe8911829mr22933080wrm.4.1673882492423;
+        Mon, 16 Jan 2023 07:21:32 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id u18-20020adff892000000b002bded7da2b8sm6874686wrp.102.2023.01.16.07.21.30
+        by smtp.gmail.com with ESMTPSA id u18-20020adff892000000b002bded7da2b8sm6874686wrp.102.2023.01.16.07.21.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 07:21:30 -0800 (PST)
+        Mon, 16 Jan 2023 07:21:32 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         devicetree@vger.kernel.org
@@ -59,11 +60,14 @@ Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
         swboyd@chromium.org, konrad.dybcio@somainline.org,
         agross@kernel.org, andersson@kernel.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        bryan.odonoghue@linaro.org
-Subject: [PATCH v7 0/4] mdss-dsi-ctrl binding and dts fixes
-Date:   Mon, 16 Jan 2023 15:21:24 +0000
-Message-Id: <20230116152128.909646-1-bryan.odonoghue@linaro.org>
+        bryan.odonoghue@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v7 1/4] dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC
+Date:   Mon, 16 Jan 2023 15:21:25 +0000
+Message-Id: <20230116152128.909646-2-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230116152128.909646-1-bryan.odonoghue@linaro.org>
+References: <20230116152128.909646-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,124 +79,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V7:
-- The bulk of the patches for this series have been merged.
-  There are still four patches to be pushed/updated.
-- Adds clocks for msm8974 - Dmitry
-- Adds compat strings for sm8150, sm8350, sm8450, sm8550 - Dmitry
-- Changes last patch in series to state - Rob
-  compatible:
-    contains:
-      const: qcom,mdss-dsi-ctrl
+Currently we do not differentiate between the various users of the
+qcom,mdss-dsi-ctrl. The driver is flexible enough to operate from one
+compatible string but, the hardware does have some significant differences
+in the number of clocks.
 
-link: https://lore.kernel.org/linux-arm-msm/20221223021025.1646636-1-bryan.odonoghue@linaro.org/
+To facilitate documenting the clocks add the following compatible strings
 
-V6:
-- Squashes a number of patches per Krzysztof's comments on bisectability
-- Adds in Acked-by Rob and Krzysztof 
+- qcom,apq8064-dsi-ctrl
+- qcom,msm8916-dsi-ctrl
+- qcom,msm8953-dsi-ctrl
+- qcom,msm8974-dsi-ctrl
+- qcom,msm8996-dsi-ctrl
+- qcom,msm8998-dsi-ctrl
+- qcom,sc7180-dsi-ctrl
+- qcom,sc7280-dsi-ctrl
+- qcom,sdm660-dsi-ctrl
+- qcom,sdm845-dsi-ctrl
+- qcom,sm8150-dsi-ctrl
+- qcom,sm8250-dsi-ctrl
+- qcom,sm8350-dsi-ctrl
+- qcom,sm8450-dsi-ctrl
+- qcom,sm8550-dsi-ctrl
+- qcom,qcm2290-dsi-ctrl
 
-V5:
-- Adds compat strings to bindings/display/msm/qcom,SoC-mdss.yaml - Dmitry
-- Re-orders simple fixes to the start of the series to allow backports - Dmitry 
-- VDDA and drop of node-names - Krzysztof
-- Deprecates qcom,dsi-ctrl-6g-qcm2290 - Krzysztof, Dmitry
-- Expands set of updated files to include new msm8953 - bod
-- Converts to agreed compat string qcom,SoC-dsi-ctrl hence
-  -              - qcom,mdss-dsi-ctrl-msm8996
-  +              - qcom,msm8996-dsi-ctrl
-- Adds RB where indicated for the compat strings.
-V4:
-- Moves the update of the example from patch #5 to patch #4
+Deprecate qcom,dsi-ctrl-6g-qcm2290 in favour of the desired format while we
+do so.
 
-V3:
-- Moves declaration of mdss-dsi-ctrl into compat string declaration
-  patch - Krzysztof, Dmitry
-- Renames qcm-2290 compat string to agreed compat "qcom,socname-dsi-ctrl"
-  Dmirty, Krzysztof
-- Adds empty line after if clause in yaml control flow section - Dmirty
-- Adds Rb/Ack - Krzysztof, Dmitry, Doug, David
-- vdd*
-  Looking into this some more, I don't believe vdd, vdda, vddio ought to be
-  required properties. Its up to the PCB manufacturer and the panel in-use
-  how that panel is powered. Powering the panel is not something that
-  even necessarily needs to be done from the dsi-ctrl driver.
-  Originally marking vdd* as required in the .txt was an error, its not a
-  SoC level dtsi requirement.
-- clock-names
-  Rather than replicate the clock-name in each if block I listed them with
-  a specific description from a similar reference in usb/qcom,dwc3.yaml.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ .../display/msm/dsi-controller-main.yaml      | 30 ++++++++++++++++---
+ 1 file changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+index 6e2fd6e9fa7f0..35668caa190c4 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+@@ -14,9 +14,31 @@ allOf:
  
-https://lore.kernel.org/linux-arm-msm/eb80681f-2e0b-605f-0444-ec65562f74b8@linaro.org/
-
-V2:
-https://www.spinics.net/lists/linux-arm-msm/msg116326.html
-
-- Moves the DSI PHY changes to a different later series.
-  There are enough dsi-controller-main changes to justify its own
-  standalone series.
-
-- The original phy-name binding change given discussion with Rob and
-  Krzysztof became its own standalone series that has since been merged.
-  https://www.mail-archive.com/dri-devel@lists.freedesktop.org/msg403214.html
-
-- Retains the drop of power-domain from yaml as a required property.
-  I dug into the available dtsi. The apq8064 doesn't appear to have any
-  GDSC which can be attached as a power-domain, which means the
-  power-domain requirement is not universal across the various silicon
-  versions.
-
-- Adds Dmitry's RB to power-domain drop
-
-- For the clock declarations I've
-  * I noticed that the simple change I had worked for msm8939 but
-    subsquently broke other dtsi which drove a bigger change to document
-    the clocks on a per compatible basis.
-  * Added compat strings in yaml.
-  * Moved the allOf down later in the file to acomodate the if/then.
-  * Number of clocks validated on a per compatible basis
-  * The driver code which doesn't care about the number of clocks
-    can still operate on the mdss-dsi-ctrl compat but the dts checks will
-    validate against the compat string and yaml.
-
-- vdd descriptions
-  Took the previous text I missed from the .txt file - Krzysztof, Dmitry
-  Adds vdd, vdda and vddio to the required list. This exposes warnings in
-  existing dtsi but the previous .txt declared these regulators as
-  required. - Krzysztof
+ properties:
+   compatible:
+-    enum:
+-      - qcom,mdss-dsi-ctrl
+-      - qcom,dsi-ctrl-6g-qcm2290
++    oneOf:
++      - items:
++          - enum:
++              - qcom,apq8064-dsi-ctrl
++              - qcom,msm8916-dsi-ctrl
++              - qcom,msm8953-dsi-ctrl
++              - qcom,msm8974-dsi-ctrl
++              - qcom,msm8996-dsi-ctrl
++              - qcom,msm8998-dsi-ctrl
++              - qcom,qcm2290-dsi-ctrl
++              - qcom,sc7180-dsi-ctrl
++              - qcom,sc7280-dsi-ctrl
++              - qcom,sdm660-dsi-ctrl
++              - qcom,sdm845-dsi-ctrl
++              - qcom,sm8150-dsi-ctrl
++              - qcom,sm8250-dsi-ctrl
++              - qcom,sm8350-dsi-ctrl
++              - qcom,sm8450-dsi-ctrl
++              - qcom,sm8550-dsi-ctrl
++          - const: qcom,mdss-dsi-ctrl
++      - items:
++          - enum:
++              - dsi-ctrl-6g-qcm2290
++          - const: qcom,mdss-dsi-ctrl
++        deprecated: true
  
-V1:
-This series fixes up a number of dtbs checks which are being flagged adding
-in the msm8939 dtsi.
-
-
-When converting from .txt to .yaml a number of the parameters for the older
-msm8916 silicon were not transmitted into the yaml.
-
-Adding in the msm8939 which is a near 1:1 copy of the msm8916 in terms of
-dtsi triggers a rake of dtbs checks as a result.
-
-https://www.mail-archive.com/dri-devel@lists.freedesktop.org/msg403211.html
-
-Bryan O'Donoghue (4):
-  dt-bindings: msm: dsi-controller-main: Add compatible strings for
-    every current SoC
-  dt-bindings: msm: dsi-controller-main: Document clocks on a per
-    compatible basis
-  dt-bindings: msm: dsi-controller-main: Add vdd* descriptions back in
-  dt-bindings: display/msm: Add list of mdss-dsi-ctrl compats
-
- .../display/msm/dsi-controller-main.yaml      | 261 ++++++++++++++++--
- .../bindings/display/msm/qcom,mdss.yaml       |   3 +-
- .../display/msm/qcom,msm8998-mdss.yaml        |   8 +-
- .../display/msm/qcom,sc7180-mdss.yaml         |   6 +-
- .../display/msm/qcom,sc7280-mdss.yaml         |   6 +-
- .../display/msm/qcom,sdm845-mdss.yaml         |   8 +-
- .../display/msm/qcom,sm8150-mdss.yaml         |   8 +-
- .../display/msm/qcom,sm8250-mdss.yaml         |   8 +-
- .../display/msm/qcom,sm8350-mdss.yaml         |   6 +-
- .../display/msm/qcom,sm8450-mdss.yaml         |   4 +-
- 10 files changed, 277 insertions(+), 41 deletions(-)
-
+   reg:
+     maxItems: 1
+@@ -149,7 +171,7 @@ examples:
+      #include <dt-bindings/power/qcom-rpmpd.h>
+ 
+      dsi@ae94000 {
+-           compatible = "qcom,mdss-dsi-ctrl";
++           compatible = "qcom,sc7180-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+            reg = <0x0ae94000 0x400>;
+            reg-names = "dsi_ctrl";
+ 
 -- 
 2.38.1
 
