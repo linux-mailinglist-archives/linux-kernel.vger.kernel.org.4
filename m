@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6DD66BDCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEBC66BDCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjAPMZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
+        id S229835AbjAPM1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjAPMZj (ORCPT
+        with ESMTP id S229642AbjAPM1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:25:39 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54751CF7C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:25:37 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so18662412wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:25:37 -0800 (PST)
+        Mon, 16 Jan 2023 07:27:38 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796401CF63
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:27:35 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id q10so7995792wrs.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:27:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=78CL3LWL83HHKF6wLYJClbi8NT0HkDMD/Ek4ymXzJIg=;
-        b=IqYM1jiTUL5AnFVQlIpoojz22xgayX9CtUsl0KVhhouiydPda1UwSROGQeC98oVqmN
-         xp96SXIRxjDYDBm29PvpwJv4YL6ngjmUQw9A1gAgadI4kj5B5iJoSseqm9dR7i5eoN7z
-         jgqyvW6QuUGrBNCx/HfyoAXT6cQpOWjHT8nwXfqbcJugnCFJlBwkL6niR3RG9lYPTw4n
-         J39teE7Gb2MMZFGv23sDVuw5MguHj212cKdnILd7XoeibLcDOb3SoBU2HnlFO1DOvWg0
-         Ixx3cBn7YCdTt9mZ1UN5/HB1Rm4KcX1shkKLO0UywAfzVZ7ZiBTj4gbvzQlpazcSUONK
-         ty/A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fo0HeDZBouoAPlxb6sVNoJ/wyr2YEVED6nbR3911MSQ=;
+        b=QbrK//H35rcGYAPxIs7PaPciTEO3gdE00PomVgKpfLoTY6NgQLlo5H1CTAatYch6ud
+         e1R0xRs4wKjD8kG9PDoM6knYdKlk36162rLQGEJKSazbA5HEIwGR5eBM9byTDH1MkQ9+
+         lZj2FSqeQSI76fTCbiEVEaeAy/X7wKy+HUQ00d1N3785aiWbprK2mT2l3OjIE0VRVpVX
+         tmgfyfbNEOh0vVYzHX8CwMQJD3vVxXZbv/hKj7M5Flt/1WLsH41xDYC9iLCXYetnfgqP
+         Kdrsteqco8QYJ45n9zmJ8rrAM/8wXqrnR3dw4Vs54nxtGivX2hbhgWxMqEEql5Mig6OS
+         rPUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=78CL3LWL83HHKF6wLYJClbi8NT0HkDMD/Ek4ymXzJIg=;
-        b=IwDvmBC8bb4JZRiMmc3EjtPFSh6seI6pkwTGp4j8utEm8hd6LKeCFsIsH9cEG3pUXL
-         ys1gnv8sIEkNZYiIvMg0WC2kQdlbSfOLUcWGp3fsRXIZtGWb3VD3+QlW7Ij2qIQfppVh
-         vU31kOFl4oCKO3mGxdaks7kAho+nSFSJ1eafdF0E94fD5EIkgsPt3c1juaMqbUg97jBu
-         hIwZHpnmsx33lsHEDdrc/5ASvwzkdSPmlUXl+KEj6njaxDAKD260OLcmxk6tpPFen1m/
-         ewwR9F7cf1/RcgM+ZHKLoMgJmD/xWvrHUVNV6zy7Cu6ZEA2QeX5hfpSqjhTbYMK3/TDE
-         /h7g==
-X-Gm-Message-State: AFqh2kqfo76VLhpjbbFzBQnaUTF4IblVQ1bZLUnhp9DdpN0d4cszZT68
-        M8vFkaTp46OK676yBqKOrCB3ek4ib9c=
-X-Google-Smtp-Source: AMrXdXuhQCHMybxA7IaNtXAkTkJClREo5tX/oNRXgoytBfYOC+1mCZy2Sug8ZKxjud/VDk1YQYPKHg==
-X-Received: by 2002:a05:600c:3d0e:b0:3d3:4aa6:4fd0 with SMTP id bh14-20020a05600c3d0e00b003d34aa64fd0mr67703880wmb.6.1673871936407;
-        Mon, 16 Jan 2023 04:25:36 -0800 (PST)
-Received: from localhost (host86-164-169-89.range86-164.btcentralplus.com. [86.164.169.89])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003c70191f267sm41602277wmo.39.2023.01.16.04.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 04:25:35 -0800 (PST)
-Date:   Mon, 16 Jan 2023 12:25:35 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, urezki@gmail.com,
-        stephen.s.brennan@oracle.com, willy@infradead.org,
-        akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 7/7] sh: mm: set VM_IOREMAP flag to the vmalloc area
-Message-ID: <Y8VCPwoNENBUyWEd@lucifer>
-References: <20230113031921.64716-1-bhe@redhat.com>
- <20230113031921.64716-8-bhe@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fo0HeDZBouoAPlxb6sVNoJ/wyr2YEVED6nbR3911MSQ=;
+        b=KR2eef2YVFb0hYFdojV/4pOrgJ/lJluGOyZ4x35wtFJMIOLvrlckmjQcLKQJaCNBNw
+         hCeE6+MBKaFL9e6xWy2mBtPtEUzbCps/HQX7cuxA3hekxwNOjFFui7mK8PXlX3u4mlxM
+         F4p9mB5bpHOBviZ0vBeD05bUesb8wSc2ve/wiBFForKfQ8Hgc9GEpNCtvMLbHcvDHzxb
+         zsUuKc8eopRxnR7c6gVRDFWcCg0t0+oIvnOg7C5KXg/8rEElWxvhNji+rAEb77MQGLYg
+         b8AmbBDRVHw1HkPqKb3NdJObPKfL+qXLodcwbzf2Q8m9FPLglsWiM3ZX/psmYhGH3ie7
+         M+SA==
+X-Gm-Message-State: AFqh2ko5dIAzwKw0+lz5mq4N1ZdsdEppymg0sltMYF+gT3kTT6pYZW81
+        wC+G3278NlwY6B/0VnaE+LslmJv5bssCNz6O2v0fL8j5DzY=
+X-Google-Smtp-Source: AMrXdXtNaC1YHdRVuP4gcZTkJmG2r87dTdN1Dt7AU/GjvXAU+8db71ieHMZe+90cjY+1iXvx2hs+ie3QHZj8gz8vy0w=
+X-Received: by 2002:a05:6000:16cf:b0:29f:7c87:749c with SMTP id
+ h15-20020a05600016cf00b0029f7c87749cmr2127385wrf.195.1673872053835; Mon, 16
+ Jan 2023 04:27:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113031921.64716-8-bhe@redhat.com>
+References: <20230110204225.35503-1-skhan@linuxfoundation.org>
+In-Reply-To: <20230110204225.35503-1-skhan@linuxfoundation.org>
+From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
+Date:   Mon, 16 Jan 2023 14:26:57 +0200
+Message-ID: <CAJ1xhMXtRUnLJQKkPyUemLpYiAP4ebmgExS6cV2Kta6rCd__0w@mail.gmail.com>
+Subject: Re: [PATCH] ver_linux: add missing software to checklist
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,35 +66,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:19:21AM +0800, Baoquan He wrote:
-> Currently, for vmalloc areas with flag VM_IOREMAP set, except of the
-> specific alignment clamping in __get_vm_area_node(), they will be
-> 1) Shown as ioremap in /proc/vmallocinfo;
-> 2) Ignored by /proc/kcore reading via vread()
+On Tue, Jan 10, 2023 at 11:13 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> So for the ioremap in __sq_remap() of sh, we should set VM_IOREMAP
-> in flag to make it handled correctly as above.
+> Update to add missing software checks to bring it in sync with the
+> Documentation/Changes list. Make improvements to the output with
+> separator between different sections.
 >
-> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 > ---
->  arch/sh/kernel/cpu/sh4/sq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  scripts/ver_linux | 29 ++++++++++++++++++++++++++---
+>  1 file changed, 26 insertions(+), 3 deletions(-)
 >
-> diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
-> index a76b94e41e91..27f2e3da5aa2 100644
-> --- a/arch/sh/kernel/cpu/sh4/sq.c
-> +++ b/arch/sh/kernel/cpu/sh4/sq.c
-> @@ -103,7 +103,7 @@ static int __sq_remap(struct sq_mapping *map, pgprot_t prot)
->  #if defined(CONFIG_MMU)
->  	struct vm_struct *vma;
+> diff --git a/scripts/ver_linux b/scripts/ver_linux
+> index 1a8ee4ff0e32..6131f6f1b35b 100755
+> --- a/scripts/ver_linux
+> +++ b/scripts/ver_linux
+> @@ -6,10 +6,14 @@
+>  # differ on your system.
 >
-> -	vma = __get_vm_area_caller(map->size, VM_ALLOC, map->sq_addr,
-> +	vma = __get_vm_area_caller(map->size, VM_IOREMAP, map->sq_addr,
->  			SQ_ADDRMAX, __builtin_return_address(0));
->  	if (!vma)
->  		return -ENOMEM;
+>  BEGIN {
+> -       usage = "If some fields are empty or look unusual you may have an old version.\n"
+> -       usage = usage "Compare to the current minimal requirements in Documentation/Changes.\n"
+> +       usage = "Minimum required software versions to build and run current kernel version.\n"
+> +       usage = usage "If some fields are empty or look unusual you may have an old version.\n"
+> +       usage = usage "Compare with the current minimal requirements in Documentation/Changes.\n"
+>         print usage
+>
+> +       separator = "===================================================\n"
+
+Embedding a new line character at the start of the separator string
+would eliminate the need for the extra printf("\n") statements
+introduced.
+
+> +
+> +       print separator
+>         system("uname -a")
+>         printf("\n")
+
+Consequently, this printf could be removed as well.
+
+>
+> @@ -17,9 +21,15 @@ BEGIN {
+>         libc = "libc[.]so[.][0-9]+$"
+>         libcpp = "(libg|stdc)[+]+[.]so([.][0-9]+)+$"
+>
+> +       print separator
+>         printversion("GNU C", version("gcc -dumpversion"))
+> +       printversion("Clang/LLVM (optional)", version("clang --version"))
+> +       printversion("Rust (optional)", version("rustc --version"))
+> +       printversion("bindgen (optional)", version("bindgen --version"))
+>         printversion("GNU Make", version("make --version"))
+> +       printversion("bash", version("bash --version"))
+>         printversion("Binutils", version("ld -v"))
+> +       printversion("pahole", version("pahole --version"))
+>         printversion("Util-linux", version("mount --version"))
+>         printversion("Mount", version("mount --version"))
+>         printversion("Module-init-tools", version("depmod -V"))
+> @@ -28,6 +38,8 @@ BEGIN {
+>         printversion("Reiserfsprogs", version("reiserfsck -V"))
+>         printversion("Reiser4fsprogs", version("fsck.reiser4 -V"))
+>         printversion("Xfsprogs", version("xfs_db -V"))
+> +       printversion("squashfs-tools", version("mksquashfs -version"))
+> +       printversion("btrfs-progs", version("mkfs.btrfs --version"))
+>         printversion("Pcmciautils", version("pccardctl -V"))
+>         printversion("Pcmcia-cs", version("cardmgr -V"))
+>         printversion("Quota-tools", version("quota -V"))
+> @@ -36,7 +48,16 @@ BEGIN {
+>         printversion("Nfs-utils", version("showmount --version"))
+>         printversion("Bison", version("bison --version"))
+>         printversion("Flex", version("flex --version"))
+> +       printversion("Grub", version("grub-install --version"))
+> +       printversion("mcelog", version("mcelog --version"))
+> +       printversion("iptables", version("iptables --version"))
+> +       printversion("openssl & libcrypto", version("openssl version"))
+> +       printversion("bc", version("bc --version"))
+> +       printversion("Sphinx (for doc builds)", version("sphinx-build --version"))
+> +       printversion("cpio", version("cpio --version"))
+> +       printf("\n")
+>
+> +       print separator
+>         while ("ldconfig -p 2>/dev/null" | getline > 0)
+>                 if ($NF ~ libc || $NF ~ libcpp)
+>                         if (!seen[ver = version("readlink " $NF)]++)
+> @@ -50,12 +71,14 @@ BEGIN {
+>         printversion("Sh-utils", version("expr --v"))
+>         printversion("Udev", version("udevadm --version"))
+>         printversion("Wireless-tools", version("iwconfig --version"))
+> +       printf("\n")
+>
+> +       print separator
+>         while ("sort /proc/modules" | getline > 0) {
+>                 mods = mods sep $1
+>                 sep = " "
+>         }
+> -       printversion("Modules Loaded", mods)
+> +       printversion("Modules Loaded:\n", mods)
+>  }
+>
+>  function version(cmd,    ver) {
 > --
 > 2.34.1
 >
-
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
