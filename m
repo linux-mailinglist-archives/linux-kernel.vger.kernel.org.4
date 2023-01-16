@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F180266B628
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632AA66B62C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjAPDcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 22:32:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S231796AbjAPDds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 22:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjAPDcJ (ORCPT
+        with ESMTP id S231756AbjAPDdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:32:09 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ECF5245;
-        Sun, 15 Jan 2023 19:32:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NwHdK2nHgz4wgv;
-        Mon, 16 Jan 2023 14:32:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673839925;
-        bh=MYzrcPtOc5I2lrsnKNs2i9UU6uSObM46NS6qIaN7NpI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VNU0b+trYcrro8vRg8vZDg/RmFKdBQLNtgpFUt0ZMXoAkHx4ALjJXT/6F1UvLWdXi
-         zsBdrRRd3iUQtJRmwqfBO8IxuyXqwM48tb6/OQX5MhnsmdLFjb6//S/URzUY7OXfh9
-         kQvDDXrcDGQqu4KsaA4clTx/xud0xHGlwLjrL4Mhusco0Ar5RkNqmBV5CLKuUtMRqJ
-         PTjOaqWYaDAgLSMUs9zcUtoqi4JE2kte3XpD4LrnbtkEqQtrw/zv9xjs16s6aMCMSc
-         IsBjHaiuvaAqZSCJeChc8Dbu9kDU+adUROZJ7Xr0OpEvMC3PIvrE5pAdv6hoI0cWWm
-         hyX7yjWGODUNQ==
-Date:   Mon, 16 Jan 2023 14:32:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     JaimeLiao <jaimeliao.tw@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the nand tree
-Message-ID: <20230116143203.3f91f181@canb.auug.org.au>
+        Sun, 15 Jan 2023 22:33:46 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568803C34;
+        Sun, 15 Jan 2023 19:33:45 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pHGF9-000Mjk-F4; Mon, 16 Jan 2023 11:33:08 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 16 Jan 2023 11:33:07 +0800
+Date:   Mon, 16 Jan 2023 11:33:07 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "Jason@zx2c4.com" <Jason@zx2c4.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "David.Laight@aculab.com" <David.Laight@aculab.com>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "peter@n8pjl.ca" <peter@n8pjl.ca>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 03/13] crypto: x86/sha - yield FPU context during long
+ loops
+Message-ID: <Y8TFc84dm3hSVHv5@gondor.apana.org.au>
+References: <20221219220223.3982176-1-elliott@hpe.com>
+ <20221219220223.3982176-4-elliott@hpe.com>
+ <Y7+/Yy7+mLEyqeiK@gondor.apana.org.au>
+ <Y8BVkjwPc6DLm7HT@sol.localdomain>
+ <Y8DDmBg6J31pS0KW@gondor.apana.org.au>
+ <Y8DD8s9nakxW5zzE@gondor.apana.org.au>
+ <MW5PR84MB1842C7F8190348625158DE9CABC29@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xEUa0vyaTTB++MlFIL6fw4Q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MW5PR84MB1842C7F8190348625158DE9CABC29@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xEUa0vyaTTB++MlFIL6fw4Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jan 13, 2023 at 07:35:07PM +0000, Elliott, Robert (Servers) wrote:
+>
+> pkcs_digest() uses shash like this:
+>         /* Allocate the hashing algorithm we're going to need and find out how
+>          * big the hash operational data will be.
+>          */
+>         tfm = crypto_alloc_shash(sinfo->sig->hash_algo, 0, 0);
+>         if (IS_ERR(tfm))
+>                 return (PTR_ERR(tfm) == -ENOENT) ? -ENOPKG : PTR_ERR(tfm);
+> 
+>         desc_size = crypto_shash_descsize(tfm) + sizeof(*desc);
+>         sig->digest_size = crypto_shash_digestsize(tfm);
+> 
+>         ret = -ENOMEM;
+>         sig->digest = kmalloc(sig->digest_size, GFP_KERNEL);
+>         if (!sig->digest)
+>                 goto error_no_desc;
+> 
+>         desc = kzalloc(desc_size, GFP_KERNEL);
+>         if (!desc)
+>                 goto error_no_desc;
+> 
+>         desc->tfm   = tfm;
+> 
+>         /* Digest the message [RFC2315 9.3] */
+>         ret = crypto_shash_digest(desc, pkcs7->data, pkcs7->data_len,
+>                                   sig->digest);
+>         if (ret < 0)
+>                 goto error;
+>         pr_devel("MsgDigest = [%*ph]\n", 8, sig->digest);
 
-Hi all,
+As this path is sleepable, the conversion should be fairly trivial
+with crypto_wait_req.
 
-After merging the nand tree, today's linux-next build (htmldocs) produced
-this warning:
-
-include/linux/mtd/rawnand.h:1325: warning: Function parameter or member 'co=
-nt_read' not described in 'nand_chip'
-
-Introduced by commit
-
-  003fe4b9545b ("mtd: rawnand: Support for sequential cache reads")
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/xEUa0vyaTTB++MlFIL6fw4Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPExTMACgkQAVBC80lX
-0GwMewf+LLuOeht3jPg+vLo+lEmCYcGrZZ6bAdDHMiBCFjIuAuWXc/HX18lQLH7o
-L2cQs8zTJzQf3O+WSxgeOr/nj2ESSiNObJswqzpS4XDmHrY6QDi4WUO+fIRTQHE2
-cq2Ebr1MmsnQuGoKTzh4dg5tUYE6zzIeJ5GwcK2ra6KnGD7GO2fdlVUupVLmWkTJ
-pnNx/wPwgqhIYFZ42+K3p+wJPMXK+P16VYtaXKb9/Y27golChnTmejgn0p6cbJLc
-5jyXCtUtg9enuO3MnSlC+rN/rAUa7+9anL9+6neLwzd0+S7oDtTISWvyeY/YAojF
-/3/ZnzJZHuRcHNxSK3yM4gYqJ39j5w==
-=WV5y
------END PGP SIGNATURE-----
-
---Sig_/xEUa0vyaTTB++MlFIL6fw4Q--
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
