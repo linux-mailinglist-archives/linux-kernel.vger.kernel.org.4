@@ -2,173 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F23C66C92B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF0266C945
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjAPQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S233831AbjAPQra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjAPQqC (ORCPT
+        with ESMTP id S233714AbjAPQq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:46:02 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F004321953;
-        Mon, 16 Jan 2023 08:34:03 -0800 (PST)
-Received: by mail-oi1-f177.google.com with SMTP id r9so13046778oie.13;
-        Mon, 16 Jan 2023 08:34:03 -0800 (PST)
+        Mon, 16 Jan 2023 11:46:59 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7C13B0D1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:34:51 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id vw16so6211454ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKurv2fBxvZBgI8zffGgWfWcbuA/mY2GbURj2GBqtuI=;
+        b=hDKG6BvYivh2vxmy8FbZagCDJ7pdkQqIBjP64nFrRQh2tXrf5j9lICcPG+Wn2DhvDs
+         t7Rq/pK8Hf0N7V7VMT/y6cafH5BMy6f3ELyJiSvoG65kL3Gwer7GHV2csDkcM2GA3BC5
+         aGhw1UdkswTFWrivsMwTB0groXZpxAtVvr41NDXjVSoog0GCclTTWqySKKjmLmdHZm32
+         FuExRep2B67j11jv2eApvVYEovtnufCcXgOrMvb58oiXZLPxUwTX8qySUiIVaybH9D/k
+         b4jvPRzWcv+w3ipU0Vv6GP3m+sGsksg610ijpcvdVajkLB3vsfhpDpLDt3j3yQ5Kdjx5
+         YLhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4huBua94elx+S0dnn6JlkXQ/ae6vTMdKSQQftNSDjjg=;
-        b=N1aMt2OFN7Z1vwIzuCvhMANebQkZxqn+SF2aPY8lRC3x3RxOSfPxZminZrU7SAzEOs
-         4SatWiHPEZs0hk37jEMUdnfoZpBAwANEpHDQvqpoRAAHIs54GrDg5GprogvlGj+/zWGe
-         Hk9q+CSavrCz37eqHP/vCHeWClqa6T2Hw80RItkOEsq7tA6BIabgZH7RRvDPPOhMWgzV
-         9LF+dxJFXFHXKNsf8d9O56ZV5sUWWpJVVrNj8EZzSF6gkkJ7boGO8yMPenO7d+05cgOd
-         E7ikUo64WcGOuvHOvrB2/YO3ypRS20+ja1Uc6rvNV0mMmuq2KTpjddPB3waHQBqgRakc
-         NJJg==
-X-Gm-Message-State: AFqh2kqcpWHEXVKBgh9gOap0y/+PpMYtrnnRIzU9itftBYMdVTgjWut/
-        9OR28LSz+3ySZaRq4MnNZg==
-X-Google-Smtp-Source: AMrXdXvijm6IULxGaKfPRggOh9kVhDpjnGY/kyDVbaab+Gai7JUFuW7J/tR5M+GetLrDA+kg+eZ8ew==
-X-Received: by 2002:aca:180a:0:b0:364:5934:1126 with SMTP id h10-20020aca180a000000b0036459341126mr10460258oih.45.1673886843098;
-        Mon, 16 Jan 2023 08:34:03 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bi38-20020a05680818a600b00353fe4fb4casm13107743oib.48.2023.01.16.08.34.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VKurv2fBxvZBgI8zffGgWfWcbuA/mY2GbURj2GBqtuI=;
+        b=TfyTsg+sBCyrUg0MjSNGPxo8Nyr4fJtVIl0Htc3c2Zib8iUhkgHIHXsrNsIBgr+C9i
+         T5hInhyz/kTFPvFQLx6CR0owVeiRDHh9LH2G2Fncv62DEezUh5JO91g0E8VcXJAphloX
+         6/Fi1rlpGld37491R1lmFJNCygsClnneblgOWKxumCXiAE6kaTayDRDuD+z4lMR77KOe
+         pZllKHob5R4cd0eZFI/D6lBxl/i9/kJk40cVrx9156I3JGZr2YeTq5J40w+1QxEngaxh
+         FipysGLVGDXzslK1T3z8OJfhcIbMXWjWujdIBrq81OpDyLray1O8bnDy78xpxEuX61aA
+         Oziw==
+X-Gm-Message-State: AFqh2kpuXa+PbfdrFDGRqmUu1oZKwq3uprJLq/PL8+hSLvLR7/Ua2fi5
+        hZOe5r3QSC7fg0VgvN6T6mg=
+X-Google-Smtp-Source: AMrXdXtwBz3Uu0Cw7081MlKCKmhbz7gEc4fI3TqKyRF/mOPKqlazXXsAB1bNvFtKi7Yz7UnCzsqkTg==
+X-Received: by 2002:a17:906:1681:b0:86e:c9e2:6313 with SMTP id s1-20020a170906168100b0086ec9e26313mr6806079ejd.32.1673886890330;
+        Mon, 16 Jan 2023 08:34:50 -0800 (PST)
+Received: from fedora.. ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id kx5-20020a170907774500b007c14ae38a80sm11887805ejc.122.2023.01.16.08.34.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:34:02 -0800 (PST)
-Received: (nullmailer pid 602566 invoked by uid 1000);
-        Mon, 16 Jan 2023 16:34:01 -0000
-Date:   Mon, 16 Jan 2023 10:34:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
-Message-ID: <20230116163401.GA2371990-robh@kernel.org>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
+        Mon, 16 Jan 2023 08:34:49 -0800 (PST)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/PAT: use try_cmpxchg in set_page_memtype
+Date:   Mon, 16 Jan 2023 17:34:46 +0100
+Message-Id: <20230116163446.4734-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230115114146.12628-2-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Snps Dwc3 controller.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
->  1 file changed, 47 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 6d78048c4613..3ea051beb2f8 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -81,15 +81,26 @@ properties:
->  
->    phys:
->      minItems: 1
-> -    maxItems: 2
-> +    maxItems: 8
->  
->    phy-names:
->      minItems: 1
-> -    maxItems: 2
-> -    items:
-> -      enum:
-> -        - usb2-phy
-> -        - usb3-phy
-> +    maxItems: 8
-> +    oneOf:
-> +    - items:
-> +        enum:
-> +          - usb2-phy
-> +          - usb3-phy
-> +    - items:
-> +        enum:
-> +          - usb2-phy_port0
-> +          - usb2-phy_port1
-> +          - usb2-phy_port2
-> +          - usb2-phy_port3
-> +          - usb3-phy_port0
-> +          - usb3-phy_port1
-> +          - usb3-phy_port2
-> +          - usb3-phy_port3
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+set_page_memtype.  x86 CMPXCHG instruction returns success in ZF flag,
+so this change saves a compare after cmpxchg (and related move
+instruction in front of cmpxchg).
 
-usbN-portM
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+fails. There is no need to re-read the value in the loop.
 
->  
->    resets:
->      minItems: 1
-> @@ -360,6 +371,22 @@ properties:
->      description:
->        Enable USB remote wakeup.
->  
-> +  num-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This property indicates the number of ports present on the target that
-> +      are to be serviced by the DWC3 controller.
-> +    minimum: 1
-> +    maximum: 4
-> +
-> +  num-ss-ports:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      This property indicates the number of SS capable ports present on the
-> +      target that are to be serviced by the DWC3 controller.
-> +    minimum: 1
-> +    maximum: 4
+Note that the value from *ptr should be read using READ_ONCE to prevent
+the compiler from merging, refetching or reordering the read.
 
-This information is redundant. 'phy-names' tells you how many ports of 
-each.
+No functional change intended.
 
-> +
->  unevaluatedProperties: false
->  
->  required:
-> @@ -388,4 +415,18 @@ examples:
->        snps,dis_u2_susphy_quirk;
->        snps,dis_enblslpm_quirk;
->      };
-> +  - |
-> +    usb@4a000000 {
-> +      compatible = "snps,dwc3";
-> +      reg = <0x4a000000 0xcfff>;
-> +      interrupts = <0 92 4>;
-> +      clocks = <&clk 1>, <&clk 2>, <&clk 3>;
-> +      clock-names = "bus_early", "ref", "suspend";
-> +      num-ports = <2>;
-> +      num-ss-ports = <1>;
-> +      phys = <&usb2_phy0>, <&usb3_phy0>, <&usb2_phy1>;
-> +      phy-names = "usb2-phy_port0", "usb3-phy_port0", "usb2-phy_port1";
-> +      snps,dis_u2_susphy_quirk;
-> +      snps,dis_enblslpm_quirk;
-> +    };
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+---
+ arch/x86/mm/pat/memtype.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Does a different number of phys really need its own example?
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index fb4b1b5e0dea..6d1ba2dda35d 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -159,10 +159,10 @@ static inline void set_page_memtype(struct page *pg,
+ 		break;
+ 	}
+ 
++	old_flags = READ_ONCE(pg->flags);
+ 	do {
+-		old_flags = pg->flags;
+ 		new_flags = (old_flags & _PGMT_CLEAR_MASK) | memtype_flags;
+-	} while (cmpxchg(&pg->flags, old_flags, new_flags) != old_flags);
++	} while (!try_cmpxchg(&pg->flags, &old_flags, new_flags));
+ }
+ #else
+ static inline enum page_cache_mode get_page_memtype(struct page *pg)
+-- 
+2.39.0
 
-Rob
