@@ -2,45 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703C866BFC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E8366BFD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjAPN0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
+        id S230355AbjAPNdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjAPN03 (ORCPT
+        with ESMTP id S230013AbjAPNdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:26:29 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757771CAF7;
-        Mon, 16 Jan 2023 05:26:25 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VZjiPto_1673875578;
-Received: from 30.236.8.126(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VZjiPto_1673875578)
-          by smtp.aliyun-inc.com;
-          Mon, 16 Jan 2023 21:26:19 +0800
-Message-ID: <d7c4686b-24cc-0991-d6db-0dec8fb9942e@linux.alibaba.com>
-Date:   Mon, 16 Jan 2023 21:26:18 +0800
+        Mon, 16 Jan 2023 08:33:15 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0FB65A6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:33:13 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id o17-20020a05600c511100b003db021ef437so774510wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:33:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=vNvOX7djjjBjKEHmE27QSb/utZxm3kNjauubSDkICIY=;
+        b=6bhtEiB/26w40qL9HaO/mVd9X3p8jy6vR7QeqGrPRJ9VB4cbhqVmYX8lVFCN97bDp8
+         +SwI6iuAHzjQLzrGzQdusMA6GrMJ5o4ITzzzqlWBSXyBsu96TRSSoTiYjuDKjfoEIQTl
+         UOJLQioaei3BPtjjyn1U51LZtT64WFjP9YS1Uz6XnRV7A9TBSxPARRUB5iUO58JFaAaa
+         VHJfn12xJ5HIT8jyQD6neJWmA+Sr7sVm3iU4xnZi3JOxzzOBH/F4ZzRVmL8SSVUeuVy0
+         /O1ujgi0twVfWd0t7dgMSPfB2CpWz+cngGXWzdcdt96kJ7AIAb9UlnOVcDmlcxb7bsap
+         GJRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vNvOX7djjjBjKEHmE27QSb/utZxm3kNjauubSDkICIY=;
+        b=kkxQBxrg+UHTm1FCF3X/7YpxcrqkU3I3+DZP/L8nftiDRNS25bNsyKnJk4INilBiEv
+         aNmAhemzioZxS/vM0eWybOccpUH8H/xnbnoyXTEAct2RlG0edqmdtvi7/WjRXtO673n2
+         6YmySoRE1HWJYDxgT6kxQQNRCrcBss+THhFmFqhlzJOwJPzf48R39+8m8saaFXeE+zkT
+         NfKEEhkTSHzVLVEOsDJw3F5OLAvkR2dlk2IghkrRi4ctZma3P8+cZI5FmZzOYiLVJkDT
+         +OZQYvhL9sDtH1o0ge2RYLop9gjsC8NiVwMLfXsqAy2Xmn1JSlwujv15rIRWQ5sYZ9yz
+         iWUg==
+X-Gm-Message-State: AFqh2koAHMcjfN1ZHO/rm7udpNgvxYAxecS33XUUuu7R1Gp+07MdJg7G
+        yos2hZn8CEs+SU/cJbonZF2kbQ==
+X-Google-Smtp-Source: AMrXdXs7Udt0PVl+BdLhxYFkzaWgm2loEFFrkTgEVgK1GDAx8n6smMRhZQAkQmlOxiad+c7F5VlOMw==
+X-Received: by 2002:a05:600c:4d23:b0:3da:270b:ba6b with SMTP id u35-20020a05600c4d2300b003da270bba6bmr9967300wmp.41.1673875992502;
+        Mon, 16 Jan 2023 05:33:12 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id d6-20020a05600c3ac600b003da0dc39872sm16227317wms.6.2023.01.16.05.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 05:33:12 -0800 (PST)
+References: <20230116091637.272923-1-jbrunet@baylibre.com>
+ <20230116091637.272923-3-jbrunet@baylibre.com>
+ <Y8U+1ta6bmt86htm@corigine.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/2] net: mdio: add amlogic gxl mdio mux support
+Date:   Mon, 16 Jan 2023 14:27:57 +0100
+In-reply-to: <Y8U+1ta6bmt86htm@corigine.com>
+Message-ID: <1jk01mhaeg.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Alexander Larsson <alexl@redhat.com>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, gscrivan@redhat.com
-References: <cover.1673623253.git.alexl@redhat.com>
- <3065ecb6-8e6a-307f-69ea-fb72854aeb0f@linux.alibaba.com>
- <d3c63da908ef16c43a6a65a22a8647bf874695c7.camel@redhat.com>
- <0a144ffd-38bb-0ff3-e8b2-bca5e277444c@linux.alibaba.com>
- <9d44494fdf07df000ce1b9bafea7725ea240ca41.camel@redhat.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <9d44494fdf07df000ce1b9bafea7725ea240ca41.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,262 +77,77 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Mon 16 Jan 2023 at 13:11, Simon Horman <simon.horman@corigine.com> wrote:
 
-On 2023/1/16 20:33, Alexander Larsson wrote:
-> On Mon, 2023-01-16 at 18:19 +0800, Gao Xiang wrote:
->> Hi Alexander,
->>
->> On 2023/1/16 17:30, Alexander Larsson wrote:
->>>
->>> I mean, you're not wrong about this being possible. But I don't see
->>> that this is necessarily a new problem. For example, consider the
->>> case
->>> of loopback mounting an ext4 filesystem containing a setuid /bin/su
->>> file. If you have the right permissions, nothing prohibits you from
->>> modifying the loopback mounted file and replacing the content of
->>> the su
->>> file with a copy of bash.
->>>
->>> In both these cases, the security of the system is fully defined by
->>> the
->>> filesystem permissions of the backing file data. I think viewing
->>> composefs as a "new type" of overlayfs gets the wrong idea across.
->>> Its
->>> more similar to a "new type" of loopback mount. In particular, the
->>> backing file metadata is completely unrelated to the metadata
->>> exposed
->>> by the filesystem, which means that you can chose to protect the
->>> backing files (and directories) in ways which protect against
->>> changes
->>> from non-privileged users.
->>>
->>> Note: The above assumes that mounting either a loopback mount or a
->>> composefs image is a privileged operation. Allowing unprivileged
->>> mounts
->>> is a very different thing.
->>
->> Thanks for the reply.  I think if I understand correctly, I could
->> answer some of your questions.  Hopefully help to everyone
->> interested.
->>
->> Let's avoid thinking unprivileged mounts first, although Giuseppe
->> told
->> me earilier that is also a future step of Composefs. But I don't know
->> how it could work reliably if a fs has some on-disk format, we could
->> discuss it later.
->>
->> I think as a loopback mount, such loopback files are quite under
->> control
->> (take ext4 loopback mount as an example, each ext4 has the only one
->> file
->>    to access when setting up loopback devices and such loopback file
->> was
->>    also opened when setting up loopback mount so it cannot be
->> replaced.
->>
->>    If you enables fsverity for such loopback mount before, it cannot
->> be
->>    modified as well) by admins.
->>
->>
->> But IMHO, here composefs shows a new model that some stackable
->> filesystem can point to massive files under a random directory as
->> what
->> ostree does (even files in such directory can be bind-mounted later
->> in
->> principle).  But the original userspace ostree strictly follows
->> underlayfs permission check but Composefs can override
->> uid/gid/permission instead.
-> 
-> Suppose you have:
-> 
-> -rw-r--r-- root root image.ext4
-> -rw-r--r-- root root image.composefs
-> drwxr--r-- root root objects/
-> -rw-r--r-- root root objects/backing.file
-> 
-> Are you saying it is easier for someone to modify backing.file than
-> image.ext4?
-> 
-> I argue it is not, but composefs takes some steps to avoid issues here.
-> At mount time, when the basedir ("objects/" above) argument is parsed,
-> we resolve that path and then create a private vfsmount for it:
-> 
->   resolve_basedir(path) {
->          ...
-> 	mnt = clone_private_mount(&path);
->          ...
->   }
-> 
->   fsi->bases[i] = resolve_basedir(path);
-> 
-> Then we open backing files with this mount as root:
-> 
->   real_file = file_open_root_mnt(fsi->bases[i], real_path,
->   			        file->f_flags, 0);
-> 
-> This will never resolve outside the initially specified basedir, even
-> with symlinks or whatever. It will also not be affected by later mount
-> changes in the original mount namespace, as this is a private mount.
-> 
-> This is the same mechanism that overlayfs uses for its upper dirs.
+> On Mon, Jan 16, 2023 at 10:16:36AM +0100, Jerome Brunet wrote:
+>> Add support for the mdio mux and internal phy glue of the GXL SoC
+>> family
+>> 
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>  drivers/net/mdio/Kconfig              |  11 ++
+>>  drivers/net/mdio/Makefile             |   1 +
+>>  drivers/net/mdio/mdio-mux-meson-gxl.c | 160 ++++++++++++++++++++++++++
+>>  3 files changed, 172 insertions(+)
+>>  create mode 100644 drivers/net/mdio/mdio-mux-meson-gxl.c
+>
+> Hi Jerome,
+>
+> please run this patch through checkpatch.
 
-Ok.  I have no problem of this part.
+Shame ... I really thought I did, but I forgot indeed.
+I am really sorry for this. I'll fix everything.
 
-> 
-> I would argue that anyone who has rights to modify the contents of
-> files in "objects" (supposing they were created with sane permissions)
-> would also have rights to modify "image.ext4".
+>
+> ...
+>
+>> diff --git a/drivers/net/mdio/mdio-mux-meson-gxl.c b/drivers/net/mdio/mdio-mux-meson-gxl.c
+>> new file mode 100644
+>> index 000000000000..205095d845ea
+>> --- /dev/null
+>> +++ b/drivers/net/mdio/mdio-mux-meson-gxl.c
+>
+> ...
+>
+>> +static int gxl_enable_internal_mdio(struct gxl_mdio_mux *priv)
+>> +{
+>
+> nit: I think void would be a more appropriate return type for this
+>      function. Likewise gxl_enable_external_mdio()
+>
+> ...
+>
+>> +static int gxl_mdio_mux_probe(struct platform_device *pdev){
+>
+> nit: '{' should be at the beginning of a new line
+>
+>> +	struct device *dev = &pdev->dev;
+>> +	struct clk *rclk;
+>> +	struct gxl_mdio_mux *priv;
+>
+> nit: reverse xmas tree for local variable declarations.
+>
+>> +	int ret;
+>> +
+>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>
+> nit: may be it is nicer to use dev_err_probe() here for consistency.
 
-But you don't have any permission check for files in such
-"objects/" directory in composefs source code, do you?
+That was on purpose. I only use the `dev_err_probe()` when the probe may
+defer, which I don't expect here.
 
-As I said in my original reply, don't assume random users or
-malicious people just passing in or behaving like your expected
-way.  Sometimes they're not but I think in-kernel fses should
-handle such cases by design.  Obviously, any system written by
-human can cause unexpected bugs, but that is another story.
-I think in general it needs to have such design at least.
+I don't mind changing if you prefer it this way.
 
-> 
->> That is also why we selected fscache at the first time to manage all
->> local cache data for EROFS, since such content-defined directory is
->> quite under control by in-kernel fscache instead of selecting a
->> random directory created and given by some userspace program.
->>
->> If you are interested in looking info the current in-kernel fscache
->> behavior, I think that is much similar as what ostree does now.
->>
->> It just needs new features like
->>     - multiple directories;
->>     - daemonless
->> to match.
->>
-> 
-> Obviously everything can be extended to support everything. But
-> composefs is very small and simple (2128 lines of code), while at the
-> same time being easy to use (just mount it with one syscall) and needs
-> no complex userspace machinery and configuration. But even without the
-> above feature additions fscache + cachefiles is 7982 lines, plus erofs
-> is 9075 lines, and then on top of that you need userspace integration
-> to even use the thing.
+>
+>> +	platform_set_drvdata(pdev, priv);
+>> +
+>> +	priv->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(priv->regs))
+>> +		return PTR_ERR(priv->regs);
+>
+> And here.
+>
+> ...
 
-I've replied this in the comment of LWN.net.  EROFS can handle both
-device-based or file-based images. It can handle FSDAX, compression,
-data deduplication, rolling-hash finer compressed data duplication,
-etc.  Of course, for your use cases, you can just turn them off by
-Kconfig, I think such code is useless to your use cases as well.
-
-And as a team work these years, EROFS always accept useful features
-from other people.  And I've been always working on cleaning up
-EROFS, but as long as it gains more features, the code can expand
-of course.
-
-Also take your project -- flatpak for example, I don't think the
-total line of current version is as same as the original version.
-
-Also you will always maintain Composefs source code below 2.5k Loc?
-
-> 
-> Don't take me wrong, EROFS is great for its usecases, but I don't
-> really think it is the right choice for my usecase.
-> 
->>>>
->>> Secondly, the use of fs-cache doesn't stack, as there can only be
->>> one
->>> cachefs agent. For example, mixing an ostree EROFS boot with a
->>> container backend using EROFS isn't possible (at least without deep
->>> integration between the two userspaces).
->>
->> The reasons above are all current fscache implementation limitation:
->>
->>    - First, if such overlay model really works, EROFS can do it
->> without
->> fscache feature as well to integrate userspace ostree.  But even that
->> I hope this new feature can be landed in overlayfs rather than some
->> other ways since it has native writable layer so we don't need
->> another
->> overlayfs mount at all for writing;
-> 
-> I don't think it is the right approach for overlayfs to integrate
-> something like image support. Merging the two codebases would
-> complicate both while adding costs to users who need only support for
-> one of the features. I think reusing and stacking separate features is
-> a better idea than combining them.
-
-Why? overlayfs could have metadata support as well, if they'd like
-to support advanced features like partial copy-up without fscache
-support.
-
-> 
->>
->>>
->>> Instead what we have done with composefs is to make filesystem
->>> image
->>> generation from the ostree repository 100% reproducible. Then we
->>> can
->>
->> EROFS is all 100% reproduciable as well.
->>
-> 
-> 
-> Really, so if I today, on fedora 36 run:
-> # tar xvf oci-image.tar
-> # mkfs.erofs oci-dir/ oci.erofs
-> 
-> And then in 5 years, if someone on debian 13 runs the same, with the
-> same tar file, then both oci.erofs files will have the same sha256
-> checksum?
-
-Why it doesn't?  Reproducable builds is a MUST for Android use cases
-as well.
-
-Yes, it may break between versions by mistake, but I think
-reproducable builds is a basic functionalaity for all image
-use cases.
-
-> 
-> How do you handle things like different versions or builds of
-> compression libraries creating different results? Do you guarantee to
-> not add any new backwards compat changes by default, or change any
-> default options? Do you guarantee that the files are read from "oci-
-> dir" in the same order each time? It doesn't look like it.
-
-If you'd like to say like that, why mkcomposefs doesn't have the
-same issue that it may be broken by some bug.
-
-> 
->>
->> But really, personally I think the issue above is different from
->> loopback devices and may need to be resolved first. And if possible,
->> I hope it could be an new overlayfs feature for everyone.
-> 
-> Yeah. Independent of composefs, I think EROFS would be better if you
-> could just point it to a chunk directory at mount time rather than
-> having to route everything through a system-wide global cachefs
-> singleton. I understand that cachefs does help with the on-demand
-> download aspect, but when you don't need that it is just in the way.
-
-Just check your reply to Dave's review, it seems that how
-composefs dir on-disk format works is also much similar to
-EROFS as well, see:
-
-https://docs.kernel.org/filesystems/erofs.html -- Directories
-
-a block vs a chunk = dirent + names
-
-cfs_dir_lookup -> erofs_namei + find_target_block_classic;
-cfs_dir_lookup_in_chunk -> find_target_dirent.
-
-Yes, great projects could be much similar to each other
-occasionally, not to mention opensource projects ;)
-
-Anyway, I'm not opposed to Composefs if folks really like a
-new read-only filesystem for this. That is almost all I'd like
-to say about Composefs formally, have fun!
-
-Thanks,
-Gao Xiang
-
-> 
-> 
