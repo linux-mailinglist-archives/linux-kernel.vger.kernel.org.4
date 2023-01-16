@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D790066C31A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE79866C328
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbjAPPAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S232865AbjAPPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbjAPO7Z (ORCPT
+        with ESMTP id S232704AbjAPPAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:59:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BA422DF7;
-        Mon, 16 Jan 2023 06:49:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 16 Jan 2023 10:00:33 -0500
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E8F222DB;
+        Mon, 16 Jan 2023 06:51:03 -0800 (PST)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A6DE60FD7;
-        Mon, 16 Jan 2023 14:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6924DC433EF;
-        Mon, 16 Jan 2023 14:49:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673880585;
-        bh=pdrPQuiDmmHjQzGsq5CHxSZmPxA94iY0FlqhGnDMkMg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pLE1itkAnZJ6raVfPf71HgORB5bnzRcVqhxTUbFmwIXShDqSXBGlKa9NUznOZylpc
-         3sGn3zLCVnrUCxi6rMNn9KTLkbH6JDquzjD+vrKn36Id0FoliZoy/Jlp/KRuFGmZgW
-         G+M2JOER0LImB0dLCo5wNk/hHnTnd9BvJJ7i9y0E=
-Date:   Mon, 16 Jan 2023 15:49:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        io-uring@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "Sergey V." <truesmb@gmail.com>
-Subject: Re: [regression] =?iso-8859-1?Q?Bug=A02169?=
- =?iso-8859-1?Q?32_-_io=5Furing_with_libvir?= =?iso-8859-1?Q?t?= cause kernel
- NULL pointer dereference since 6.1.5
-Message-ID: <Y8VkB6Q2xqeut5N8@kroah.com>
-References: <74347fe1-ac68-2661-500d-b87fab6994f7@leemhuis.info>
- <c5632908-1b0f-af1f-4754-bf1d0027a6dc@kernel.dk>
- <a862915b-66f3-9ad8-77d4-4b9ce7044037@kernel.dk>
+        by box.trvn.ru (Postfix) with ESMTPSA id 15B06405D5;
+        Mon, 16 Jan 2023 19:50:59 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1673880660; bh=vAFVWq5TKeAvsbaHD8fsCVA+DwEy4/SeS3Nqqj8tC6Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Qagj87Ea6+7lkKtnnOvJmfi0aa9cjNT95K/sOKJK71p8h70PAygLxDATU9SnTuU5e
+         NtE1gnDDidSIOhprPpuaG1z5EhF6FFmMmeWqyEKdyQgdWl2shGqSQ6Ry3aDj09bIuL
+         VkNVZhnj20AG1RTHYkXglRjaBz6Y2+06PIOym1VrcjiZKloHKfkwofdUef5ezcFQVD
+         AcKjZO0zWsB4C4NU05rGw2MwGvzRPvSfTjboB4gNmPC2bxYdPjVM+6zOlPUM34/81O
+         MTLbmJDBkhVn819TYJUHiZTy6ZroGuU+ztspQlPo36p5q2i94nr/vJePuu8yOkA0Lo
+         u1m+AyYOw+gGA==
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v2 0/4] Minor cleanup in msm8916 dts files
+Date:   Mon, 16 Jan 2023 19:50:49 +0500
+Message-Id: <20230116145053.1412501-1-nikita@trvn.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a862915b-66f3-9ad8-77d4-4b9ce7044037@kernel.dk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 07:13:40AM -0700, Jens Axboe wrote:
-> On 1/16/23 6:42 AM, Jens Axboe wrote:
-> > On 1/16/23 6:17?AM, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
-> >> Hi, this is your Linux kernel regression tracker.
-> >>
-> >> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> >> kernel developer don't keep an eye on it, I decided to forward it by
-> >> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216932 :
-> > 
-> > Looks like:
-> > 
-> > commit 6d47e0f6a535701134d950db65eb8fe1edf0b575
-> > Author: Jens Axboe <axboe@kernel.dk>
-> > Date:   Wed Jan 4 08:52:06 2023 -0700
-> > 
-> >     block: don't allow splitting of a REQ_NOWAIT bio
-> > 
-> > got picked up by stable, but not the required prep patch:
-> > 
-> > 
-> > commit 613b14884b8595e20b9fac4126bf627313827fbe
-> > Author: Jens Axboe <axboe@kernel.dk>
-> > Date:   Wed Jan 4 08:51:19 2023 -0700
-> > 
-> >     block: handle bio_split_to_limits() NULL return
-> > 
-> > Greg/team, can you pick the latter too? It'll pick cleanly for
-> > 6.1-stable, not sure how far back the other patch has gone yet.
-> 
-> Looked back, and 5.15 has it too, but the cherry-pick won't work
-> on that kernel.
-> 
-> Here's one for 5.15-stable that I verified crashes before this one,
-> and works with it. Haven't done an allmodconfig yet...
+This series performs some minor cleanup on msm8916/apq8016 files to
+bring them in line with the current standard and be closer to the new
+submissions.
 
-All now queued up, thanks!
+The series is separated into commits by each specific change made across
+all files and these commits should not cause any functional difference.
 
-greg k-h
+Changes in v2:
+- Rebase on top of newly applied upstream patches
+
+Nikita Travkin (4):
+  arm64: dts: qcom: msm/apq8x16-*: Move status property last
+  arm64: dts: qcom: msm/apq8x16-*: Reorder the pinctrl properties.
+  arm64: dts: qcom: msm/apq8x16-*: Drop empty lines in pinctrl states
+  arm64: dts: qcom: msm/apq8x16-*: Reorder some regulator properties
+
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts      | 78 +++++++--------
+ .../boot/dts/qcom/msm8916-acer-a1-724.dts     | 15 ++-
+ .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 46 ++++-----
+ .../arm64/boot/dts/qcom/msm8916-asus-z00l.dts | 34 +++----
+ .../arm64/boot/dts/qcom/msm8916-huawei-g7.dts | 52 ++++------
+ .../boot/dts/qcom/msm8916-longcheer-l8150.dts | 42 ++++----
+ .../boot/dts/qcom/msm8916-longcheer-l8910.dts | 30 +++---
+ arch/arm64/boot/dts/qcom/msm8916-pins.dtsi    | 96 +++++--------------
+ .../qcom/msm8916-samsung-a2015-common.dtsi    | 64 +++++--------
+ .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts | 11 +--
+ .../boot/dts/qcom/msm8916-samsung-a5u-eur.dts |  5 +-
+ .../qcom/msm8916-samsung-e2015-common.dtsi    |  5 +-
+ .../dts/qcom/msm8916-samsung-grandmax.dts     |  3 +-
+ .../boot/dts/qcom/msm8916-samsung-j5.dts      | 21 ++--
+ .../dts/qcom/msm8916-samsung-serranove.dts    | 62 +++++-------
+ .../dts/qcom/msm8916-wingtech-wt88047.dts     | 35 +++----
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         | 32 +++----
+ 17 files changed, 245 insertions(+), 386 deletions(-)
+
+-- 
+2.38.1
+
