@@ -2,191 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB78866D922
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC4366DA7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbjAQJCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S236277AbjAQKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236176AbjAQJBZ (ORCPT
+        with ESMTP id S236572AbjAQKBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:01:25 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2081.outbound.protection.outlook.com [40.107.247.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432DA2ED59;
-        Tue, 17 Jan 2023 01:00:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HtSViqJjzdKyUAzcOnbgsQIWHuFuHojy1Q6sCbJ2jjflFuUg+0p1OJ/uQXZItHcFTHv0MJ+EeTP2A0ERvLLHffmPNFDcwIdgXCUrbtXOekboFu+mbcwn5tQPnUl2/TPLe+dRdyHn0dBkyuPI8Al0n+gQ6FQKdk8FurQOn1XVEKUmKYXezzLxIPUOjKA14maJqDSPz7ttUgqTZSvGVGJ1JUIYzwC8ojn1neqbuunIJcpfp3eLYsEni/VUkFC3ewBDZGp3sFO5QbXJ2VrwKc+e06Aehr/T2Ywv8G7kDsgKlNwokwAN/IN8xxikXBRYv5iWiQvAWKGjLlx99hLZYeJ8oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uJmd2lCj+WdnhRTPB8Dv9xjQZn/5spjmP2627kp/1zw=;
- b=D0LPSkXLJkq3wnQB6EjnX/FIgVzs4h90TxgKgzfSkXsgG4QyGZ7WLWF6t/4kgKvAllaeTjPJJOwAkOZ/aFAvNRZvRMq7KJnF+SRpl7ydEBdo5FO7os8YeloY5Dv0I+5JFlXxl5pcTErKJMs8qtEeaji/KfOt+hsAXkHeKw++DycWXfD/fMagV7UBm6LUbZ8EFpJYec+OwwAZFbPIP5AmK5zlIutG8x7SUdirNQwCrjpSG+QYLV6EUean+gbF2NOIYl6d/l4RJHNJ2eHn6IWgIJej+qNcc3fm+y3htT4tycwB2EzIm8y2mMWo1oOGfXiSu8VKHCGx9KgnLP7h8M9udA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uJmd2lCj+WdnhRTPB8Dv9xjQZn/5spjmP2627kp/1zw=;
- b=k4BwBqDURB6vsMwLKqhhG0PKmjreX64ETaVNHRpIzJ3I2hfGFDX5+tapaHORcAo0/W4nwqEyJSruZtgbEqToB49B9ndphRD10TMEXJLPUsXl59kLV9Y6W28TW64pa43Ctw54F0eCXAQRfhNNTTDrr/gowxbv8qV6kFF7M1R0/LQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PAXPR04MB9304.eurprd04.prod.outlook.com (2603:10a6:102:2b6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
- 2023 09:00:00 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 09:00:00 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH v3 net-next 01/12] net: ethtool: netlink: introduce ethnl_update_bool()
-Date:   Tue, 17 Jan 2023 10:59:36 +0200
-Message-Id: <20230117085947.2176464-2-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230117085947.2176464-1-vladimir.oltean@nxp.com>
-References: <20230117085947.2176464-1-vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BE1P281CA0115.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7b::9) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PAXPR04MB9304:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60030366-33b7-4fe1-2650-08daf869369f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 33tA+yRvxOC1Cx3O3moT+ercUt9jgR8jgw3IBaxDAIYj2PDrMXoy5X5qbmDp+44DnLuQtwgCRYmATNTOSyARQtQFNIL4Qvzp2eYW4t0W3SQw275BRG1VdmNPs5N7Q3grJ3Y2DEScOOTvJjur6JF2CdSqJOsYl4SJVO6SCTT7lYhmbmayyScre/lhKgQ5ui6Ea4bYMamx4ZIS9ajTAUcWn6u4LE5r/Ecao6Esw1tKayR4UjBvpeMJ9CKMVF9f6yELV7hvz5B2so5kDEwPHAIRMiGXo1yiZcKU4QGR7Bo/Lz+nZmR/25ay8Gn4Y4HM7W03vahYA5BxvRDc+8SUKfT8oFmznPa1/rES0Bt2buDTYd9cfcp20aFxqh7iU+D3kGwXDpQJYDZoXyz5xqtvtLqyfv0wnVYOH0do/p1eY2E1HeqtyKLwpRlLo3EHxD/R7UnTpwwMAwQZkPOIZQVr/4MLCKpZdYNERXfsxTE7a67yrvjTgWP048fv0hRP3LR/qOOVJONOhwvDGwNh5K+8t5Dup6TuUPb3kIf4WGpNDCnOMTFP1+UZ1q9VciCAWaRK63IEtpXiby2s627G2lXY7A0TvYXKnMfApvgFP/yyGwrlriQw+fP72YjSuG5ucZY8YfHMInjQEOiaYwl+RvhMmjGZjuqCR+u7+BcYmmxo6wzQfa7iH7aCihgBrt8lAmB5NSendgRziN7aOWUXPgo22QBFRPls67XlqFSrKNajgP4WdOU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199015)(6486002)(6512007)(478600001)(186003)(26005)(6666004)(52116002)(6506007)(66556008)(2616005)(66946007)(66476007)(316002)(54906003)(8676002)(6916009)(4326008)(36756003)(83380400001)(41300700001)(8936002)(44832011)(1076003)(2906002)(7416002)(38350700002)(38100700002)(5660300002)(86362001)(309714004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+N+Aj83vqoY8vpEWp/DVTOV7iMEKNtg5WTb/ae10d2aF9FH2qlc8CPMvAddY?=
- =?us-ascii?Q?WoGKsiM2boM2EAuCHul8vidNScOeA0Bkdn9agINR8sLAUURcYxdhfTrXR3c+?=
- =?us-ascii?Q?Rp9dv00jYwNhM4pMBed0M5XKaG2dvyckxfqDM7Cy7WqpIj624p3niZqECHy2?=
- =?us-ascii?Q?trbh2AcJ3+hf0QqP9Zc9T4tXnNFWh+V3U6pMBsGOd/PUf8EvXRPzKin3CHyo?=
- =?us-ascii?Q?VSzHgkmWsImzSYqzQhIamYH62iCGx68S29tBtZhShrmY9m0fAo/kLaaxtJNc?=
- =?us-ascii?Q?Zl0HrcXDhtEMH0xMUaoOMuWWQ79AGdYZGD4+SwFUumeCpCoiOpgfn1FQURJ0?=
- =?us-ascii?Q?bDNITOH9GlPqBJXAH9TbL70XoaDUcoSAegK1JKmIATuZOhpILft6fCMZvOqu?=
- =?us-ascii?Q?lkxEJJ4BT5c5wmW8PD7OBVjDLoxyugr01X3NaEjnt4+TBPFsE8+0QG6I88AN?=
- =?us-ascii?Q?PJR4EyuO0HctmkyMkq+id2cAG6wA0j5TTOvuejmVNIrPZEYS23TPVlK2xzGs?=
- =?us-ascii?Q?QKs5+f55R9uwA/uGqDdJcNOg2eC1mWBKNQySoIKskv5Lr9KfvFn4Qb0qECul?=
- =?us-ascii?Q?pSpLBm77wpZK8ZKPXAh6dnVTb9UqGVuO7VWnlsCrphbxx65SvunzBd9j7I2d?=
- =?us-ascii?Q?IYZgJzlmZyRDSYzVcE5hBeIS1a6TwZziLn2EaZd0Ka0aeQRje3nTzK4Kqnu6?=
- =?us-ascii?Q?MlQwS3j+5vPUk9hObyWCwT8sWLhflnmPmApFN7YtJTI01V3aaVKUknoDMo3D?=
- =?us-ascii?Q?W3rfZ10CfyIeSpm3cWid5+0+oOW33zyDA1tyJxkBrDo/LnlBFjmoOC5R5fs+?=
- =?us-ascii?Q?ToJ38/dq9oSTphurG3//+9Y+AhPrYrAP/ziqH4eakmceUl/NGbAbfwO+dBe0?=
- =?us-ascii?Q?EW1Cs7uViXtO6D1IXWf+g++zpexmpStukaFPCkYSnhtVSYpAEM5bwqyDXb07?=
- =?us-ascii?Q?/caNs/m015NbySstHgdvDXQPEAg0Xm4FZLKU2qrFgVjSLFi5swwEk0LTPBic?=
- =?us-ascii?Q?UrlqcMXwVzcOrw2LpYrzUtBSnU+ySJlu+Co6W6ApagbSR+giP+rQsCS6i0+y?=
- =?us-ascii?Q?0M9fM676dGrFIgKHr+WSZIhObENr66BWUAHxpHwAGfiZYKjIlqd+0pX3TmM7?=
- =?us-ascii?Q?HqR01v0o422HFOOQAlwdZft1HKhaktXIjA4tgvEtJhk8bVEgu3j/LfwnafdO?=
- =?us-ascii?Q?ATLM33VfsJXIirssEi+B14eEITheOOq6vRY9ZjY5Vvmf8rjPt96TvIhJNga9?=
- =?us-ascii?Q?ehe+0knzsmIOXseDQjyF2zeL/ATlo+7AGqVKXoZwBnapt1TdePrhGlO8tTUM?=
- =?us-ascii?Q?mUe7LFaSaMIhd/3ixC7xkqkkqJaAeS2W9NYgX7Ur3q1RM5HHH0s/l3MPmaJy?=
- =?us-ascii?Q?dCojwtiJmj1ZAv73zLu30MnZxfpTl7fQRRY6NyFYjJ1yLK9+hkxdpcKzLldM?=
- =?us-ascii?Q?4EcErBpPpEXLxUD7N9MOwjEHLCOlfH75IVRLrjksbazhtQccO09f6oHHkE5l?=
- =?us-ascii?Q?kjxfGOOvJJAxkYgbYtrVsv7D+EerRITiuzSHydb9AdIOlOEovv6H8KO5dMUE?=
- =?us-ascii?Q?rU08OaJTaSqD7mBwRsX9gHFtjOvZYFobIRlK6OgBhL5o1Y/aJN5ObzjiVvH5?=
- =?us-ascii?Q?aw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60030366-33b7-4fe1-2650-08daf869369f
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 09:00:00.3781
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fMGMvovirdrUyOgbF7X4k9D4XYibNn2xBCAkrvSYnHctil9ZPKEsNFE6Yf0HCXo6popzdv6U9AV/zfBRPPFbEw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9304
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 05:01:50 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05CB2DE4C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:01:45 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230117100143epoutp03e1918ea407559efbe0780e44766c73d2~7EGLpFLNf0668506685epoutp03S
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:01:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230117100143epoutp03e1918ea407559efbe0780e44766c73d2~7EGLpFLNf0668506685epoutp03S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1673949703;
+        bh=wWGnNGV0K80my33qdYO+3w0zAebtUViujp9+aBWfQaw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hbB0dlmIY/8FunfVLNV5dLcOQJrgtV24SjEK/M4rW7V9JftYgVQwj113aSxysYmAM
+         UJ/NbjEpHimcgL65v2BozAaI0yIjyHncI7hK+amI9lEKEg2i4JBxipuyQGZzkp+TlY
+         osKN75CoU3VsFbRRuBsPmJYFaHXVGkbjFESrOg1U=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230117100142epcas5p18a0e24b14047e04fb38c136175a55d2e~7EGLAPhM41092410924epcas5p1p;
+        Tue, 17 Jan 2023 10:01:42 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Nx4DP07W7z4x9Q8; Tue, 17 Jan
+        2023 10:01:41 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        69.27.02301.40276C36; Tue, 17 Jan 2023 19:01:40 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230116103856epcas5p3dea4b4a1e6073257c66b7562f263b5b1~6w9ZRBb_11961519615epcas5p3F;
+        Mon, 16 Jan 2023 10:38:56 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230116103856epsmtrp12850d3beb00a71dafa28ffefe08f4ac9~6w9ZQHjqK2177121771epsmtrp1O;
+        Mon, 16 Jan 2023 10:38:56 +0000 (GMT)
+X-AuditID: b6c32a49-201ff700000108fd-42-63c67204d94c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E6.F8.10542.04925C36; Mon, 16 Jan 2023 19:38:56 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230116103854epsmtip11cd3f6db3ef6b880833cddc265a5d32a~6w9W7RZFY0462804628epsmtip1-;
+        Mon, 16 Jan 2023 10:38:54 +0000 (GMT)
+From:   Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
+        alim.akhtar@samsung.com, rcsekar@samsung.com,
+        aswani.reddy@samsung.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Subject: [PATCH v4 2/5] ASoC: samsung: i2s: add support for FSD I2S
+Date:   Mon, 16 Jan 2023 16:08:20 +0530
+Message-Id: <20230116103823.90757-3-p.rajanbabu@samsung.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230116103823.90757-1-p.rajanbabu@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmui5L0bFkg3MvrSwezNvGZnHl4iEm
+        i0Obt7JbTH34hM1i/pFzrBZ9Lx4yW3y70sFkcXnXHDaLGef3MVkc3RhssWjrF3aLzl39rBaz
+        LuxgtWjde4Td4vCbdlaLDd/XMjoIeGz43MTmsXPWXXaPTas62TzuXNvD5rHv7TI2j74tqxg9
+        1m+5yuLxeZNcAEdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKL
+        T4CuW2YO0AdKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnAKTAr3ixNzi0rx0vbzU
+        EitDAwMjU6DChOyMo1Ousxc8Vq5ofnmWuYHxsGwXIyeHhICJxL/ZzWxdjFwcQgK7GSUmLNnE
+        2sXIAeR8YpQ4pQgR/8wo8WjhFiaYhieXDkI17GKU6Fl5jwnCaWWSWLJxDTtIFZuAqcSqOY2s
+        IAkRgSYmibY3E1lAHGaBjYwSp489BJslLOAsceHid7B9LAKqEv82GYOEeQVsJC5f7oNaJy+x
+        esMBZhCbU8BW4uveG8wgcyQEFnJInJ/3mB2iyEXi2ORNULawxKvjW6BsKYmX/W1Qdr7EtI8g
+        j4LYFRJtHzdALbCXOHBlDgvIDcwCmhLrd+lDhGUlpp5aB1bCLMAn0fv7CVQ5r8SOeTC2qsT6
+        5ZsYIWxpiX3X90LZHhIHZ1+BhsoERolZS8+zTGCUm4WwYgEj4ypGydSC4tz01GLTAsO81HJ4
+        rCXn525iBKdSLc8djHcffNA7xMjEwXiIUYKDWUmE12/X4WQh3pTEyqrUovz4otKc1OJDjKbA
+        8JvILCWanA9M5nkl8YYmlgYmZmZmJpbGZoZK4rypW+cnCwmkJ5akZqemFqQWwfQxcXBKNTAp
+        LT8ltD1Ov1vw/s2Oi3qbfj5X3CtnxxgZ/nDx2tYIh98njl41elG6ujPho8aEyaYS06QOvt74
+        M0dNf2NFxVauhbkHyxXlNhx5WO7NZhR5/sNSZVOOZ8ftK9/7f5FiC+Mw+rHl+4q3QaqBvUtu
+        W9b1bGfYuU5y+To17Vf9bz+ur15WqVm8vr9/ok792n/tP1dfYcla+t4ruj6Vo2mu4wmlJRen
+        zG5nrVCaYFi2S//lQbPlbH9vup19dOPw962WRxraLdas0gtN4wpvWcx/8xLL9rBr9scWPX15
+        MTln2/qob4829Ryq3nMm/+bDyutOqja9ykaf7/jcnL6vd2eiZ/K+tTsXerU+6j81da56/qOt
+        ekosxRmJhlrMRcWJAC29pI8uBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrELMWRmVeSWpSXmKPExsWy7bCSnK6D5tFkg85lqhYP5m1js7hy8RCT
+        xaHNW9ktpj58wmYx/8g5Vou+Fw+ZLb5d6WCyuLxrDpvFjPP7mCyObgy2WLT1C7tF565+VotZ
+        F3awWrTuPcJucfhNO6vFhu9rGR0EPDZ8bmLz2DnrLrvHplWdbB53ru1h89j3dhmbR9+WVYwe
+        67dcZfH4vEkugCOKyyYlNSezLLVI3y6BK+PolOvsBY+VK5pfnmVuYDws28XIySEhYCLx5NJB
+        ti5GLg4hgR2MElvWTWWESEhLTO/fwwZhC0us/PecHaKomUni5OXZ7CAJNgFTiVVzGllBEiIC
+        E4AS746xgCSYBbYySkz9bARiCws4S1y4+B2oiIODRUBV4t8mY5Awr4CNxOXLfUwQC+QlVm84
+        wAxicwrYSnzdewPMFgKqeTLhPOMERr4FjAyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNz
+        NzGCg11LawfjnlUf9A4xMnEwHmKU4GBWEuH123U4WYg3JbGyKrUoP76oNCe1+BCjNAeLkjjv
+        ha6T8UIC6YklqdmpqQWpRTBZJg5OqQam2PJ1545N/N2+vDReJWXjFLPnm50/b9iconl+tuc/
+        sw/GkVMX+GVrfd9j3X3gufyu4vzLv+J+Osx8mvn37cnrp9gnzohd3dB3VNZh2tzG8IezZ7Gb
+        JUetUVwqub+zTejgdHPWsvjUHU+FCplXrE5+cTAy9+lkF+HJNU+d5l35ue7ZrvU1+itvLOcz
+        0xaMnfvr4fMTS/bFXwsTuM+lLtERPiHzjll6w9v+U4tDb80M+f7tuxbHE4/d7kKXrOaEdHkm
+        swd+qWE6XCefqPisPKbH0kizfMtSg6TL/0N73B6ZPJj4O+jFhlyDY8wrnn3yfMlRF7ZpEWvm
+        k4P1AZmaPy62x/18aHlNjj0k8duny5JvzZRYijMSDbWYi4oTAZSwgF/lAgAA
+X-CMS-MailID: 20230116103856epcas5p3dea4b4a1e6073257c66b7562f263b5b1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230116103856epcas5p3dea4b4a1e6073257c66b7562f263b5b1
+References: <20230116103823.90757-1-p.rajanbabu@samsung.com>
+        <CGME20230116103856epcas5p3dea4b4a1e6073257c66b7562f263b5b1@epcas5p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the fact that the kernel-side data structures have been carried
-over from the ioctl-based ethtool, we are now in the situation where we
-have an ethnl_update_bool32() function, but the plain function that
-operates on a boolean value kept in an actual u8 netlink attribute
-doesn't exist.
+Add support for enabling I2S controller on FSD platform.
 
-With new ethtool features that are exposed solely over netlink, the
-kernel data structures will use the "bool" type, so we will need this
-kind of helper. Introduce it now; it's needed for things like
-verify-disabled for the MAC merge configuration.
+FSD I2S controller is based on Exynos7 I2S controller, supporting
+2CH playback/capture in I2S mode and 7.1CH playback/capture in TDM
+mode.
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
 ---
-v2->v3: none
-v1->v2: rewrite commit message
+ sound/soc/samsung/i2s-regs.h |  1 +
+ sound/soc/samsung/i2s.c      | 53 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
- net/ethtool/netlink.h | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/net/ethtool/netlink.h b/net/ethtool/netlink.h
-index f271266f6e28..f675f62fe181 100644
---- a/net/ethtool/netlink.h
-+++ b/net/ethtool/netlink.h
-@@ -111,6 +111,32 @@ static inline void ethnl_update_u8(u8 *dst, const struct nlattr *attr,
- 	*mod = true;
+diff --git a/sound/soc/samsung/i2s-regs.h b/sound/soc/samsung/i2s-regs.h
+index b4b5d6053503..138e95581979 100644
+--- a/sound/soc/samsung/i2s-regs.h
++++ b/sound/soc/samsung/i2s-regs.h
+@@ -132,6 +132,7 @@
+ #define EXYNOS7_MOD_RCLK_192FS	7
+ 
+ #define PSR_PSREN		(1 << 15)
++#define PSR_PSVAL(x)		((((x) - 1) << 8) & 0x3f00)
+ 
+ #define FIC_TX2COUNT(x)		(((x) >>  24) & 0xf)
+ #define FIC_TX1COUNT(x)		(((x) >>  16) & 0xf)
+diff --git a/sound/soc/samsung/i2s.c b/sound/soc/samsung/i2s.c
+index 9505200f3d11..6f96032090de 100644
+--- a/sound/soc/samsung/i2s.c
++++ b/sound/soc/samsung/i2s.c
+@@ -50,6 +50,10 @@ struct samsung_i2s_dai_data {
+ 	u32 quirks;
+ 	unsigned int pcm_rates;
+ 	const struct samsung_i2s_variant_regs *i2s_variant_regs;
++	void (*fixup_early)(struct snd_pcm_substream *substream,
++					struct snd_soc_dai *dai);
++	void (*fixup_late)(struct snd_pcm_substream *substream,
++					struct snd_soc_dai *dai);
+ };
+ 
+ struct i2s_dai {
+@@ -111,6 +115,10 @@ struct samsung_i2s_priv {
+ 	u32 suspend_i2spsr;
+ 
+ 	const struct samsung_i2s_variant_regs *variant_regs;
++	void (*fixup_early)(struct snd_pcm_substream *substream,
++						struct snd_soc_dai *dai);
++	void (*fixup_late)(struct snd_pcm_substream *substream,
++						struct snd_soc_dai *dai);
+ 	u32 quirks;
+ 
+ 	/* The clock provider's data */
+@@ -940,6 +948,10 @@ static int i2s_trigger(struct snd_pcm_substream *substream,
+ 	case SNDRV_PCM_TRIGGER_RESUME:
+ 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+ 		pm_runtime_get_sync(dai->dev);
++
++		if (priv->fixup_early)
++			priv->fixup_early(substream, dai);
++
+ 		spin_lock_irqsave(&priv->lock, flags);
+ 
+ 		if (config_setup(i2s)) {
+@@ -947,6 +959,9 @@ static int i2s_trigger(struct snd_pcm_substream *substream,
+ 			return -EINVAL;
+ 		}
+ 
++		if (priv->fixup_late)
++			priv->fixup_late(substream, dai);
++
+ 		if (capture)
+ 			i2s_rxctrl(i2s, 1);
+ 		else
+@@ -1410,6 +1425,8 @@ static int samsung_i2s_probe(struct platform_device *pdev)
+ 
+ 	if (np) {
+ 		priv->quirks = i2s_dai_data->quirks;
++		priv->fixup_early = i2s_dai_data->fixup_early;
++		priv->fixup_late = i2s_dai_data->fixup_late;
+ 	} else {
+ 		if (!i2s_pdata) {
+ 			dev_err(&pdev->dev, "Missing platform data\n");
+@@ -1563,6 +1580,31 @@ static int samsung_i2s_remove(struct platform_device *pdev)
+ 	return 0;
  }
  
-+/**
-+ * ethnl_update_bool() - update bool from NLA_U8 attribute
-+ * @dst:  value to update
-+ * @attr: netlink attribute with new value or null
-+ * @mod:  pointer to bool for modification tracking
-+ *
-+ * Use the u8 value from NLA_U8 netlink attribute @attr to set bool variable
-+ * pointed to by @dst to false (if zero) or 1 (if not); do nothing if @attr is
-+ * null. Bool pointed to by @mod is set to true if this function changed the
-+ * logical value of *dst, otherwise it is left as is.
-+ */
-+static inline void ethnl_update_bool(bool *dst, const struct nlattr *attr,
-+				     bool *mod)
++static void fsd_i2s_fixup_early(struct snd_pcm_substream *substream,
++		struct snd_soc_dai *dai)
 +{
-+	u8 val;
++	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++	struct i2s_dai *i2s = to_info(asoc_rtd_to_cpu(rtd, 0));
++	struct i2s_dai *other = get_other_dai(i2s);
 +
-+	if (!attr)
-+		return;
-+	val = !!nla_get_u8(attr);
-+	if (*dst == val)
-+		return;
-+
-+	*dst = val;
-+	*mod = true;
++	if (!is_opened(other)) {
++		i2s_set_sysclk(dai, SAMSUNG_I2S_CDCLK, 0, SND_SOC_CLOCK_OUT);
++		i2s_set_sysclk(dai, SAMSUNG_I2S_OPCLK, 0, MOD_OPCLK_PCLK);
++	}
 +}
 +
- /**
-  * ethnl_update_bool32() - update u32 used as bool from NLA_U8 attribute
-  * @dst:  value to update
++static void fsd_i2s_fixup_late(struct snd_pcm_substream *substream,
++		struct snd_soc_dai *dai)
++{
++	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++	struct samsung_i2s_priv *priv = snd_soc_dai_get_drvdata(dai);
++	struct i2s_dai *i2s = to_info(asoc_rtd_to_cpu(rtd, 0));
++	struct i2s_dai *other = get_other_dai(i2s);
++
++	if (!is_opened(other))
++		writel(PSR_PSVAL(2) | PSR_PSREN, priv->addr + I2SPSR);
++}
++
+ static const struct samsung_i2s_variant_regs i2sv3_regs = {
+ 	.bfs_off = 1,
+ 	.rfs_off = 3,
+@@ -1652,6 +1694,14 @@ static const struct samsung_i2s_dai_data i2sv5_dai_type_i2s1 __maybe_unused = {
+ 	.i2s_variant_regs = &i2sv5_i2s1_regs,
+ };
+ 
++static const struct samsung_i2s_dai_data fsd_dai_type __maybe_unused = {
++	.quirks = QUIRK_SEC_DAI | QUIRK_NEED_RSTCLR | QUIRK_SUPPORTS_TDM,
++	.pcm_rates = SNDRV_PCM_RATE_8000_192000,
++	.i2s_variant_regs = &i2sv7_regs,
++	.fixup_early = fsd_i2s_fixup_early,
++	.fixup_late = fsd_i2s_fixup_late,
++};
++
+ static const struct platform_device_id samsung_i2s_driver_ids[] = {
+ 	{
+ 		.name           = "samsung-i2s",
+@@ -1678,6 +1728,9 @@ static const struct of_device_id exynos_i2s_match[] = {
+ 	}, {
+ 		.compatible = "samsung,exynos7-i2s1",
+ 		.data = &i2sv5_dai_type_i2s1,
++	}, {
++		.compatible = "tesla,fsd-i2s",
++		.data = &fsd_dai_type,
+ 	},
+ 	{},
+ };
 -- 
-2.34.1
+2.17.1
 
