@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7233B66C2DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818B566C2DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjAPOzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S232342AbjAPOzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbjAPOyG (ORCPT
+        with ESMTP id S230318AbjAPOyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:54:06 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43CB26581;
-        Mon, 16 Jan 2023 06:43:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673880188; x=1705416188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UhL5WT/iDZbiza1ZHyzkL+c6GHSVurVpiThwXMkPA34=;
-  b=XsBbMviVWhMInJ9O9S8gtXQ3YShtZdaxrAM9/yDkiu8H1YLILW1KdRpN
-   Ckm7mfl36vbQeW49ZAjaWvKSDvVbCxmo6+9o11SPrGH7GUlCY7U04TTeu
-   1Tt4Dsvwhcpl6Xg80W6sSAiF5SgysiJY6FebcE8VnLeweWfN5bb03pKLB
-   t1EOWh447ssKW6WGnLG+R+GOndaQhBC6icPGP+fOc/uXs04Y8Jl1XizNw
-   03x3utwFdiG7/2pA4HVlYMEl5RY4KEOXSAQL6XPULmQkZwPPt3/MJrjb6
-   h6X0AsRcEkQfJFW1Smb79CRJRV5edqvKCCaTF2Q+pbJua2Htj4wCwqVp2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="323174043"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="323174043"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 06:43:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="691269043"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="691269043"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jan 2023 06:43:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pHQhV-00A7tM-0O;
-        Mon, 16 Jan 2023 16:43:05 +0200
-Date:   Mon, 16 Jan 2023 16:43:04 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 2/2] gpio: wcd934x: Use proper headers and drop
- OF_GPIO dependency
-Message-ID: <Y8VieDjXbO9Yj10F@smile.fi.intel.com>
-References: <20230113182619.16800-1-andriy.shevchenko@linux.intel.com>
- <20230113182619.16800-2-andriy.shevchenko@linux.intel.com>
- <CAMRc=MdkgWBb5XTSMEEUQQGCO_3x1a3KK0KbvW4GmAQX1XGbxg@mail.gmail.com>
- <Y8U8bZ9+dOwmDgsb@smile.fi.intel.com>
- <CAMRc=Md65GUZ0XXd_35gzS8SJQAHXG9neE4ZCxZXBr0q2nOc-Q@mail.gmail.com>
+        Mon, 16 Jan 2023 09:54:11 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1163D24483
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:43:19 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id g25so2502175uaw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:43:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JrkHVNRmnhZL9c7e/tiK9zbteggD/bg2MaRxrtXICaA=;
+        b=4hi68ap0w5TIliRa6FiT23ev6Yly6wfrRSYwDoOCoStkCiquhU9FZNpG8MYx+xhxp2
+         B699t8NGWIyLGkZMc19aTewjSSwoO/KDMSqHMfXUBeWUUxq3zJtjE+/AAhaBrW4nJbOF
+         Tp2TTirxp/AQcXahLlJe5a15vd3rmCxkISToBZXO8v8wIv8f3qwMsCIL6ZaXGdM7//po
+         xec5EGqZSJFDy80Prpnytz7R3WV9o4mTvvGyju/ogWcAwmKLZlua9yvTAG0dCWexU9mj
+         jNksVAB7Muc9KNbQDOtmEG1iJUu0W8D4Tbf6PX/i0Bz4pK4oXhhk9ui/tKq/X7IGDEn9
+         7rog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JrkHVNRmnhZL9c7e/tiK9zbteggD/bg2MaRxrtXICaA=;
+        b=rVSp3eZw9vHNy3XI9g/GWfIFjQBrpOmU8e4JSPlBsot0mO4B1jimyNHIxnlYY+xRIl
+         kkfgmdBnzPIEjbPSEnT7/K60cJXODmRWfRqxtaBZYi+Zx+o8THW+1nVSzuXmqawwLnOy
+         AmoCP6ydEEuP4fBRJSgkwsLxB9+zEE311belaOipD+qzc7cYnaOeE5f1H89Czud9+/cS
+         RCo8BPjP0CRWP0VPWuUQDm7hjH+wxZhBdQWC5AKFqJEC3zAWlHwPLrLZfViCGN3VPh2B
+         3Ee+LeGNPQX+xPs2/V8zJaGpJcQ2jwKjyHy9sYKEivdS+KtcLOe5UzaSXkejYxhIUPTM
+         NUhQ==
+X-Gm-Message-State: AFqh2kpix07uFCwivu2Klga/1m8Fg2j6O0BlPXsThU3WDYar+exEe2At
+        kdAJnv/WQ6mOpDRPyG5tQk8e8dsWstLXXto58n934w==
+X-Google-Smtp-Source: AMrXdXtyMquODUcwF8GI68Qc/1WycAYd52xwMGrrUlIOZhID3X1ycKOyqw6fPA9YoJfhslIgO5oXJDlTg8skb6vnyoo=
+X-Received: by 2002:a9f:362c:0:b0:5d2:c6ce:7c41 with SMTP id
+ r41-20020a9f362c000000b005d2c6ce7c41mr4591111uad.112.1673880198144; Mon, 16
+ Jan 2023 06:43:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Md65GUZ0XXd_35gzS8SJQAHXG9neE4ZCxZXBr0q2nOc-Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+ <CAMRc=Mc5YgWqRsmw=n6EV8PW5OZfMZYotiqSy=gSvHH1PbVN4w@mail.gmail.com>
+ <CACMJSesujoLTRFXMRuA2tBAJhainmy6-CmoeuO8OwW9VifaiKw@mail.gmail.com>
+ <10740fc72ae6fb7aeb7d5ea243495bc225ca656f.camel@toradex.com> <CAMRc=Me0ewbyGi+e2mxijsvLUqUZSF5nNCtUfONT2-q=U0VCLw@mail.gmail.com>
+In-Reply-To: <CAMRc=Me0ewbyGi+e2mxijsvLUqUZSF5nNCtUfONT2-q=U0VCLw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 15:43:07 +0100
+Message-ID: <CAMRc=Mc36r-Qoq3HDhhVqF+OOQ9YSfsw1wddnXfHFmjL32Q=1g@mail.gmail.com>
+Subject: Re: spidev regression in 6.2-rc kernel
+To:     Max Krummenacher <max.krummenacher@toradex.com>,
+        "francesco@dolcini.it" <francesco@dolcini.it>
+Cc:     "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 02:56:23PM +0100, Bartosz Golaszewski wrote:
-> On Mon, Jan 16, 2023 at 1:00 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Mon, Jan 16, 2023 at 10:03:47AM +0100, Bartosz Golaszewski wrote:
-> > > On Fri, Jan 13, 2023 at 7:25 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
+On Mon, Jan 16, 2023 at 2:45 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> Thanks Max, that makes sense now, working on a fix.
+>
+> Bart
 
-...
+Max, Francesco,
 
-> > > > +#include <linux/mod_devicetable.h>
-> > > >  #include <linux/module.h>
-> > > > -#include <linux/gpio/driver.h>
-> > > > +#include <linux/platform_device.h>
-> > > >  #include <linux/regmap.h>
-> > > >  #include <linux/slab.h>
-> > > > -#include <linux/of_device.h>
-> > > > +
-> > > > +#include <linux/gpio/driver.h>
-> > >
-> > > Any reason for having it separately here?
-> >
-> > Yes. The idea is to emphasize the relationship between the driver and
-> > the subsystem it's written for.
+I've sent out a fix, please give it a spin and leave your Tested-by if
+you don't mind.
 
-> We almost never do it and I prefer all linux/ headers to be grouped
-> together. I like separate sections for asm/ and local includes but
-> this is overkill IMO.
-
-OK!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Bart
