@@ -2,78 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB71066C282
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40EE66C28C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbjAPOo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S232008AbjAPOpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjAPOoC (ORCPT
+        with ESMTP id S232384AbjAPOo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:44:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9BE5241C1;
-        Mon, 16 Jan 2023 06:22:57 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90DFBC14;
-        Mon, 16 Jan 2023 06:23:39 -0800 (PST)
-Received: from [10.57.89.182] (unknown [10.57.89.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C89393F67D;
-        Mon, 16 Jan 2023 06:22:55 -0800 (PST)
-Message-ID: <da1415e3-3a7f-2c04-e0b5-fb7d49e14855@arm.com>
-Date:   Mon, 16 Jan 2023 14:22:54 +0000
+        Mon, 16 Jan 2023 09:44:28 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1D922DCF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:24:53 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id e130so924237yba.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:24:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hCyXRjcH8YuwMPEc2ZGG+hIyruOgN3sWMVzTY5twqOU=;
+        b=XWpOyCztBtkKx9ZAX92Cij1ET+v3vM5l4VgjTnfVz8etnbVKmQzdzXKiArQff3IlVy
+         jvoZUuLVCzvHSWG43wIh5rLJu/thKefKdcqxmWqYiy4/y/UmeyiaA+aZFHIUnv3wlzeD
+         dIEt6/mDa9m+meh8Kgli87SMgtlT45zia86KPKlID1ylg2f82LVnbZcw+rW9IPsg+y2Q
+         umy8FyEupLgcjA47nK+5cEQGho3FR2tB8m33lVTZ9LVPWc7VVlPaPrF7XwbrDlWP5JaV
+         7gcYpsfMwI0HO+/cNhLw1CjUA1zn3NliRhzyI6Fd9yr8LfEoqaReR+ydamnQimvJFlvi
+         oz+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hCyXRjcH8YuwMPEc2ZGG+hIyruOgN3sWMVzTY5twqOU=;
+        b=f2DhHijh06wRLvo8rpWSFkZFrhwTLNZSHg+JH6mPinQ02AfM1tm0311mnYu2HAjAiF
+         n0wy13TDCbFiEgeNwtQ8RXOWKLPpN+vQog4m2aDMB6UJzu2odcGg5NSV9TmnxQSEJSLE
+         QltAiwMEv5v9yRFjS6cvMPDGqyp+VdnlCM6+mBFQ16gBENIHxVyhX/dp8w2G1hw8eKhP
+         7xRVL2kg7/0JsBv5ef1988kLJeAgMqQCUvv1CgmnIbSlzFv0uuZEfIBd7IAdNdgZZnAj
+         +U/q1y9aTDav7J47P+3DatwGx8bouwWjYObRuWMWeOQhsU/edBStsATPlWu7gOu8whnM
+         3COA==
+X-Gm-Message-State: AFqh2krxIhefHaNaG4GUIO1Twwslx9Ot6JSeARH5aGAd9OEFOPHqdTNS
+        f7QN77Hf7vT0oeaG2YN/gBWdo9cAUq0DlkTdWBVFsw==
+X-Google-Smtp-Source: AMrXdXvOIqa4B5X1SKY7nI4ChSAOS1tejaxJocS8domNreZwCS9JtClGZZpNoDocx9NKT25bHmmO8QYUc/fY4qvGdzg=
+X-Received: by 2002:a5b:a90:0:b0:70b:87d5:4a73 with SMTP id
+ h16-20020a5b0a90000000b0070b87d54a73mr7127242ybq.584.1673879093120; Mon, 16
+ Jan 2023 06:24:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v7 15/15] coresight: etm3x: docs: Alter sysfs
- documentation for trace id updates
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20230116124928.5440-1-mike.leach@linaro.org>
- <20230116124928.5440-16-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230116124928.5440-16-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230113205922.2312951-1-andreas@kemnade.info>
+In-Reply-To: <20230113205922.2312951-1-andreas@kemnade.info>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 16 Jan 2023 15:24:42 +0100
+Message-ID: <CACRpkdauDEys-XyYvb=jt1U6FcKc-qiie-A3W0WQ08rnm42DwQ@mail.gmail.com>
+Subject: Re: [PATCH] gpio: omap: use dynamic allocation of base
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org,
+        brgl@bgdev.pl, linux-omap@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 12:49, Mike Leach wrote:
-> Sysfs access to etm3x trace ID value is now read-only due to recent
-> trace updates and for consistency with etm4x.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->   Documentation/ABI/testing/sysfs-bus-coresight-devices-etm3x | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm3x b/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm3x
-> index 651602a61eac..234c33fbdb55 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm3x
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm3x
-> @@ -236,7 +236,7 @@ What:		/sys/bus/coresight/devices/<memory_map>.[etm|ptm]/traceid
->   Date:		November 2014
->   KernelVersion:	3.19
->   Contact:	Mathieu Poirier <mathieu.poirier@linaro.org>
-> -Description: 	(RW) Holds the trace ID that will appear in the trace stream
-> +Description: 	(RO) Holds the trace ID that will appear in the trace stream
->   		coming from this trace entity.
->   
->   What:		/sys/bus/coresight/devices/<memory_map>.[etm|ptm]/trigger_event
+On Fri, Jan 13, 2023 at 9:59 PM Andreas Kemnade <andreas@kemnade.info> wrote:
 
+> Static allocatin is deprecated and may cause probe mess,
+> if probe order is unusual.
+>
+> like this example
+> [    2.553833] twl4030_gpio twl4030-gpio: gpio (irq 145) chaining IRQs 161..178
+> [    2.561401] gpiochip_find_base: found new base at 160
+> [    2.564392] gpio gpiochip5: (twl4030): added GPIO chardev (254:5)
+> [    2.564544] gpio gpiochip5: registered GPIOs 160 to 177 on twl4030
+> [...]
+> [    2.692169] omap-gpmc 6e000000.gpmc: GPMC revision 5.0
+> [    2.697357] gpmc_mem_init: disabling cs 0 mapped at 0x0-0x1000000
+> [    2.703643] gpiochip_find_base: found new base at 178
+> [    2.704376] gpio gpiochip6: (omap-gpmc): added GPIO chardev (254:6)
+> [    2.704589] gpio gpiochip6: registered GPIOs 178 to 181 on omap-gpmc
+> [...]
+> [    2.840393] gpio gpiochip7: Static allocation of GPIO base is deprecated, use dynamic allocation.
+> [    2.849365] gpio gpiochip7: (gpio-160-191): GPIO integer space overlap, cannot add chip
+> [    2.857513] gpiochip_add_data_with_key: GPIOs 160..191 (gpio-160-191) failed to register, -16
+> [    2.866149] omap_gpio 48310000.gpio: error -EBUSY: Could not register gpio chip
+>
+> So probing was done in an unusual order, causing mess
+> and chips not getting their gpio in the end.
+>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 
-I have squashed this to PATCH 6, where the above sysfs file permission
-is actually changed.
+Dangerous but beautiful change. Let's be brave.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks
-Suzuki
+> maybe CC stable? not sure about good fixes tag.
+
+I wouldn't do that from the outset. If there are no problems
+for a few kernel releases we can think about doing that.
+
+Yours,
+Linus Walleij
