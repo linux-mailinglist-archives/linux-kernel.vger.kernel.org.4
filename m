@@ -2,351 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57EB66BC77
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F05266BC6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjAPLI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S230262AbjAPLIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjAPLIm (ORCPT
+        with ESMTP id S229850AbjAPLI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:08:42 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7805EA5D4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:08:37 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id bj3so25566386pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:08:37 -0800 (PST)
+        Mon, 16 Jan 2023 06:08:29 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F8744A7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:08:27 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso3613165wmb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:08:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MsvXLO2LYgwrnisIBmhtUopgzlBZbEZ9q2CJUnQASFU=;
-        b=jZHjclFFTN0lRqOF+89ClWqRX1oUTkgGLOjH/COUNSuLdHxmbhEaGXwnyUszMIBc2Y
-         9PNg7kYoSl76o6nHKi4SmCGe6OTTF78uMSn3T94qr1toSq+ZTiEUUOUDiItwRikXYU43
-         rtE6s9pWWJbzbBQMAPPiXA6Yq7uzYhz5OmYLI=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oY1CMwQPo9pqZFQ5X1XWiszDlHo8i56moA+2uRb8fME=;
+        b=v/DvQjBqu50BLIO+pJ77FapwhDEE5Lhg9ZhPAcxgnBVjEXReDNOtqyuiv/wE6ZnBvu
+         8+8QLqBj60uSmx6ealELllodGODsWwVnOnfNY8058quhAUDu/im1S3Z5JWdR1Zx3IAC1
+         o9/6Ikqr3BIkJB7HeCzEH6BW782lDcCVYnM6XZe0M5z/RcnvuluEEo665P3J6GWyZheu
+         m/PH6FUsiTvhZx1PXqoFTINIoyU2ghGvOQbii5VSR/JUUKpZEzdW3csa/VT6S4Q0Sh7N
+         U0ENE+ipIgI97GBdktAW+ZLmJysqMB0+hUl+fOLCjJbr5h8FWwFvdTBR8RxLigN1XJxW
+         f10Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MsvXLO2LYgwrnisIBmhtUopgzlBZbEZ9q2CJUnQASFU=;
-        b=fYDMTu8XwnqXSBc1lkEo5YcZOejsPnrnu5OEqDpEby3PIE4lNoYLKCdnkekrKLAUKT
-         PVspdhorEu1OsTjDWN/M1+TpzGCErpbfYXRZEMGN2PwkyUPRTViI/NT3c8jLZa9Wi4V4
-         Vk2nlr3IbMJWVhcdb9ZhPwnQ+W+iyzzbkBY84iHHSe1j/68ljvVpuNI2CaEqPD9cEb8O
-         Z+3BJbIe9PIoqrkwJrYvf+4fCyyOgkYDC+Nvc4NFU8odRGWxdhg2BEnjXRaplq0U8FEM
-         Z3Bx6/YclVYtossIS9LqUd1jvd9rSZNeoQUNzTGEaJOvyyXk7E8PvLG3y+UaxayBAOdK
-         BSaA==
-X-Gm-Message-State: AFqh2kqyLBPTHasn//tJ649Yevq3/rQXbCNzC/JvEgoJfUiarpfLilym
-        JvbTAjGIru8B2bEr3QLmWkoTSg==
-X-Google-Smtp-Source: AMrXdXs7sZF20EwrOSd/udSpFKMG+YWv5OfX+8QSfkMx/v6NRPXCaLivCKVs96K/psgoK7zovgOrZw==
-X-Received: by 2002:a17:90b:2747:b0:21a:1b9b:139e with SMTP id qi7-20020a17090b274700b0021a1b9b139emr93039821pjb.8.1673867316896;
-        Mon, 16 Jan 2023 03:08:36 -0800 (PST)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:a3f3:9ba9:fe36:fbcb])
-        by smtp.gmail.com with ESMTPSA id i8-20020a17090a138800b00226369149cesm17993686pja.21.2023.01.16.03.08.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 03:08:36 -0800 (PST)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Nicolas Boichat <drinkcat@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        dri-devel@lists.freedesktop.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH v2 2/2] drm: bridge: Generic GPIO mux driver
-Date:   Mon, 16 Jan 2023 19:08:20 +0800
-Message-Id: <20230116110820.2615650-3-treapking@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20230116110820.2615650-1-treapking@chromium.org>
-References: <20230116110820.2615650-1-treapking@chromium.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oY1CMwQPo9pqZFQ5X1XWiszDlHo8i56moA+2uRb8fME=;
+        b=IUSz4bQtbkrb6cFPLbFq0zK3FaqEjLo6C+Guu1AeHkbeHIkSSWdM5wSX5EHWXfvKfs
+         5HYZTuoj1g1m+zIxIJtmMLi2QLk+OBfYiNzHO+lBa24/NWaEsBbF4LiWNvJtRm04QRN7
+         MeuDOZHzxb6dCFHFomLbU71dnLiHsMGn0n/v2dOECAEQjGVKQsLRYpz7PR5qi7R1FK+c
+         QgGrGEwIEj7+5olte4k+oP9qTnPKrzz2nysSnoKhmcFVlR07YQIXXl2MXKA5u9d4N9An
+         0enieDdFLlMBAnMRcYhb1gPrDNj8MHLutmM0a7teFr2yYF3pXpjy8Arg9OORz6Ra2qls
+         IT3w==
+X-Gm-Message-State: AFqh2kpmWYY5OoBm1qbEwm/07VdBHPNDx5dtSsKE21CgsO0Qy5c45r72
+        VslzCpIsTR8KCk0gcXrkaBQkPg==
+X-Google-Smtp-Source: AMrXdXt836Nug7KTTOBqrUZsGMleiuqv5Q4zzsuf84wWCwYJA3gixUDb9n32kRKYj11+eosGImg95A==
+X-Received: by 2002:a05:600c:a51:b0:3cf:6f4d:c259 with SMTP id c17-20020a05600c0a5100b003cf6f4dc259mr65053587wmq.39.1673867306323;
+        Mon, 16 Jan 2023 03:08:26 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id i18-20020a1c5412000000b003db01178b62sm1062390wmb.40.2023.01.16.03.08.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 03:08:25 -0800 (PST)
+Message-ID: <1ee1152b-b83b-ed7b-6368-26601ece37e8@linaro.org>
+Date:   Mon, 16 Jan 2023 12:08:24 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 4/6] thermal/drivers/mediatek: Add the Low Voltage
+ Thermal Sensor driver
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, bchihi@baylibre.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230112152855.216072-1-bchihi@baylibre.com>
+ <20230112152855.216072-5-bchihi@baylibre.com>
+ <feab4ff4-b874-aa10-2031-ad6b84cbc004@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <feab4ff4-b874-aa10-2031-ad6b84cbc004@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Boichat <drinkcat@chromium.org>
+On 16/01/2023 11:50, AngeloGioacchino Del Regno wrote:
+> Il 12/01/23 16:28, bchihi@baylibre.com ha scritto:
+>> From: Balsam CHIHI <bchihi@baylibre.com>
+>>
+>> The Low Voltage Thermal Sensor (LVTS) is a multiple sensors, multi
+>> controllers contained in a thermal domain.
+>>
+>> A thermal domains can be the MCU or the AP.
+>>
+>> Each thermal domains contain up to seven controllers, each thermal
+>> controller handle up to four thermal sensors.
+>>
+>> The LVTS has two Finite State Machines (FSM), one to handle the
+>> functionin temperatures range like hot or cold temperature and another
+>> one to handle monitoring trip point. The FSM notifies via interrupts
+>> when a trip point is crossed.
+>>
+>> The interrupt is managed at the thermal controller level, so when an
+>> interrupt occurs, the driver has to find out which sensor triggered
+>> such an interrupt.
+>>
+>> The sampling of the thermal can be filtered or immediate. For the
+>> former, the LVTS measures several points and applies a low pass
+>> filter.
+>>
+>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>> ---
+>>   drivers/thermal/mediatek/Kconfig            |   15 +
+>>   drivers/thermal/mediatek/Makefile           |    1 +
+>>   drivers/thermal/mediatek/lvts_thermal.c     | 1244 +++++++++++++++++++
+>>   include/dt-bindings/thermal/mediatek-lvts.h |   19 +
+>>   4 files changed, 1279 insertions(+)
+>>   create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
+>>   create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
+>>
+> 
+> ..snip..
+> 
+>> +
+>> +static int lvts_set_trips(struct thermal_zone_device *tz, int low, 
+>> int high)
+>> +{
+>> +    struct lvts_sensor *lvts_sensor = tz->devdata;
+>> +    void __iomem *base = lvts_sensor->base;
+>> +    u32 raw_low = lvts_temp_to_raw(low);
+>> +    u32 raw_high = lvts_temp_to_raw(high);
+>> +
+>> +    /*
+>> +     * Hot to normal temperature threshold
+>> +     *
+>> +     * LVTS_H2NTHRE
+>> +     *
+>> +     * Bits:
+>> +     *
+>> +     * 14-0 : Raw temperature for threshold
+>> +     */
+>> +    if (low != -INT_MAX) {
+>> +        dev_dbg(&tz->device, "Setting low limit temperature 
+>> interrupt: %d\n", low);
+>> +        writel(raw_low, LVTS_H2NTHRE(base));
+>> +    }
+>> +
+>> +    /*
+>> +     * Hot temperature threshold
+>> +     *
+>> +     * LVTS_HTHRE
+>> +     *
+>> +     * Bits:
+>> +     *
+>> +     * 14-0 : Raw temperature for threshold
+>> +     */
+>> +    dev_dbg(&tz->device, "Setting high limit temperature interrupt: 
+>> %d\n", high);
+>> +    writel(raw_high, LVTS_HTHRE(base));
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static irqreturn_t lvts_ctrl_irq_handler(struct lvts_ctrl *lvts_ctrl)
+>> +{
+>> +    irqreturn_t iret = IRQ_NONE;
+>> +    u32 value, masks[] = { 0x0009001F, 0X000881F0, 0x00247C00, 
+>> 0x1FC00000 };
+> 
+> Please, no magic numbers around.
+> 
+>> +    int i;
+>> +
+>> +    /*
+>> +     * Interrupt monitoring status
+>> +     *
+>> +     * LVTS_MONINTST
+>> +     *
+>> +     * Bits:
+> 
+> You're describing the register with nice words, but there's another way 
+> to do
+> the same that will be even more effective.
+> 
+> /*
+>   * LVTS MONINT: Interrupt Monitoring register
+>   * Each bit describes the enable status of per-sensor interrupts.
+>   */
+> #define LVTS_MONINT_THRES_COLD    BIT(0)    /* Cold threshold */
+> #define LVTS_MONINT_THRES_HOT    BIT(1)    /* Hot threshold */
+> #define LVTS_MONINT_OFFST_LOW    BIT(2)    /* Low offset */
+> #define LVTS_MONINT_OFFST_HIGH    BIT(3)    /* High offset */
+> #define LVTS_MONINT_OFFST_NTH    BIT(4)    /* Normal To Hot */
+> #define EVERYTHING_ELSE ........................
 
-This driver supports single input, 2 output display mux (e.g.
-HDMI mux), that provide its status via a GPIO.
+I don't see how this is more effective than describing the register 
+layout. If someone wants to hack the driver, it is much better to have 
+the layout than this long list of defines for every bits of every registers.
 
-Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
----
-Laurent in v1 pointed out that the driver doesn't support panels as a
-downstream. IIUC this can be done by using drm_of_find_panel_or_bridge
-callback, but we don't have the hardware for this use case for testing.
 
-Changes in v2:
-- Dropped attach/mode_set/enable/disable callbacks
-- Fixed style issues
-- Removed the special case for the HDMI connector
-- Made the driver only read the GPIO status in IRQ handler
-- Rebased to drm-misc-next
-- Updated the license: "GPL v2" --> "GPL"
 
- drivers/gpu/drm/bridge/Kconfig            |  10 ++
- drivers/gpu/drm/bridge/Makefile           |   1 +
- drivers/gpu/drm/bridge/generic-gpio-mux.c | 201 ++++++++++++++++++++++
- 3 files changed, 212 insertions(+)
- create mode 100644 drivers/gpu/drm/bridge/generic-gpio-mux.c
-
-diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-index 57946d80b02d..28f2221bc900 100644
---- a/drivers/gpu/drm/bridge/Kconfig
-+++ b/drivers/gpu/drm/bridge/Kconfig
-@@ -84,6 +84,16 @@ config DRM_FSL_LDB
- 	help
- 	  Support for i.MX8MP DPI-to-LVDS on-SoC encoder.
- 
-+config DRM_GENERIC_GPIO_MUX
-+	tristate "Generic GPIO-controlled mux"
-+	depends on OF
-+	select DRM_KMS_HELPER
-+	help
-+	  This bridge driver models a GPIO-controlled display mux with one
-+	  input, 2 outputs (e.g. an HDMI mux). The hardware decides which output
-+	  is active, reports it as a GPIO, and the driver redirects calls to the
-+	  appropriate downstream bridge (if any).
-+
- config DRM_ITE_IT6505
-         tristate "ITE IT6505 DisplayPort bridge"
-         depends on OF
-diff --git a/drivers/gpu/drm/bridge/Makefile b/drivers/gpu/drm/bridge/Makefile
-index 1884803c6860..f5cfab100e8a 100644
---- a/drivers/gpu/drm/bridge/Makefile
-+++ b/drivers/gpu/drm/bridge/Makefile
-@@ -5,6 +5,7 @@ obj-$(CONFIG_DRM_CHRONTEL_CH7033) += chrontel-ch7033.o
- obj-$(CONFIG_DRM_CROS_EC_ANX7688) += cros-ec-anx7688.o
- obj-$(CONFIG_DRM_DISPLAY_CONNECTOR) += display-connector.o
- obj-$(CONFIG_DRM_FSL_LDB) += fsl-ldb.o
-+obj-$(CONFIG_DRM_GENERIC_GPIO_MUX) += generic-gpio-mux.o
- obj-$(CONFIG_DRM_ITE_IT6505) += ite-it6505.o
- obj-$(CONFIG_DRM_LONTIUM_LT8912B) += lontium-lt8912b.o
- obj-$(CONFIG_DRM_LONTIUM_LT9211) += lontium-lt9211.o
-diff --git a/drivers/gpu/drm/bridge/generic-gpio-mux.c b/drivers/gpu/drm/bridge/generic-gpio-mux.c
-new file mode 100644
-index 000000000000..9c26abab7778
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/generic-gpio-mux.c
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Generic gpio mux bridge driver
-+ *
-+ * Copyright 2016 Google LLC
-+ */
-+
-+#include <linux/gpio.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_gpio.h>
-+#include <linux/of_graph.h>
-+#include <linux/platform_device.h>
-+
-+#include <drm/drm_bridge.h>
-+#include <drm/drm_crtc_helper.h>
-+#include <drm/drm_probe_helper.h>
-+
-+struct gpio_display_mux {
-+	struct device *dev;
-+
-+	struct gpio_desc *gpiod_detect;
-+	int detect_irq;
-+	int cur_next;
-+
-+	struct drm_bridge bridge;
-+
-+	struct drm_bridge *next[2];
-+};
-+
-+static inline struct gpio_display_mux *bridge_to_gpio_display_mux(
-+		struct drm_bridge *bridge)
-+{
-+	return container_of(bridge, struct gpio_display_mux, bridge);
-+}
-+
-+static irqreturn_t gpio_display_mux_det_threaded_handler(int unused, void *data)
-+{
-+	struct gpio_display_mux *mux = data;
-+	int active = gpiod_get_value(mux->gpiod_detect);
-+
-+	if (active < 0) {
-+		dev_err(mux->dev, "Failed to get detect GPIO\n");
-+		return IRQ_HANDLED;
-+	}
-+
-+	dev_dbg(mux->dev, "Interrupt %d!\n", active);
-+	mux->cur_next = active;
-+
-+	if (mux->bridge.dev)
-+		drm_kms_helper_hotplug_event(mux->bridge.dev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static bool gpio_display_mux_mode_fixup(struct drm_bridge *bridge,
-+				const struct drm_display_mode *mode,
-+				struct drm_display_mode *adjusted_mode)
-+{
-+	struct gpio_display_mux *mux = bridge_to_gpio_display_mux(bridge);
-+	struct drm_bridge *next;
-+
-+	next = mux->next[mux->cur_next];
-+
-+	/* Assume that we have a most one bridge in both downstreams */
-+	if (next && next->funcs->mode_fixup)
-+		return next->funcs->mode_fixup(next, mode, adjusted_mode);
-+
-+	return true;
-+}
-+
-+static const struct drm_bridge_funcs gpio_display_mux_bridge_funcs = {
-+	.mode_fixup = gpio_display_mux_mode_fixup,
-+};
-+
-+static int gpio_display_mux_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct gpio_display_mux *mux;
-+	struct device_node *port, *ep, *remote;
-+	int ret;
-+	u32 reg;
-+
-+	mux = devm_kzalloc(dev, sizeof(*mux), GFP_KERNEL);
-+	if (!mux)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, mux);
-+	mux->dev = &pdev->dev;
-+
-+	mux->bridge.of_node = dev->of_node;
-+
-+	mux->gpiod_detect = devm_gpiod_get(dev, "detect", GPIOD_IN);
-+	if (IS_ERR(mux->gpiod_detect))
-+		return PTR_ERR(mux->gpiod_detect);
-+
-+	mux->detect_irq = gpiod_to_irq(mux->gpiod_detect);
-+	if (mux->detect_irq < 0) {
-+		dev_err(dev, "Failed to get output irq %d\n",
-+			mux->detect_irq);
-+		return -ENODEV;
-+	}
-+
-+	port = of_graph_get_port_by_id(dev->of_node, 1);
-+	if (!port) {
-+		dev_err(dev, "Missing output port node\n");
-+		return -EINVAL;
-+	}
-+
-+	for_each_child_of_node(port, ep) {
-+		if (!ep->name || (of_node_cmp(ep->name, "endpoint") != 0)) {
-+			of_node_put(ep);
-+			continue;
-+		}
-+
-+		if (of_property_read_u32(ep, "reg", &reg) < 0 ||
-+		    reg >= ARRAY_SIZE(mux->next)) {
-+			dev_err(dev,
-+				"Missing/invalid reg property for endpoint %s\n",
-+				ep->full_name);
-+			of_node_put(ep);
-+			of_node_put(port);
-+			return -EINVAL;
-+		}
-+
-+		remote = of_graph_get_remote_port_parent(ep);
-+		if (!remote) {
-+			dev_err(dev,
-+				"Missing connector/bridge node for endpoint %s\n",
-+				ep->full_name);
-+			of_node_put(ep);
-+			of_node_put(port);
-+			return -EINVAL;
-+		}
-+
-+		mux->next[reg] = of_drm_find_bridge(remote);
-+		if (!mux->next[reg]) {
-+			dev_err(dev, "Waiting for external bridge %s\n",
-+				remote->name);
-+			of_node_put(ep);
-+			of_node_put(remote);
-+			of_node_put(port);
-+			return -EPROBE_DEFER;
-+		}
-+
-+		of_node_put(remote);
-+	}
-+	of_node_put(port);
-+
-+	mux->bridge.funcs = &gpio_display_mux_bridge_funcs;
-+	mux->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-+	drm_bridge_add(&mux->bridge);
-+
-+	ret = devm_request_threaded_irq(dev, mux->detect_irq, NULL,
-+					gpio_display_mux_det_threaded_handler,
-+					IRQF_TRIGGER_RISING |
-+					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-+					"gpio-display-mux-det", mux);
-+	if (ret) {
-+		dev_err(dev, "Failed to request MUX_DET threaded irq\n");
-+		goto err_bridge_remove;
-+	}
-+
-+	return 0;
-+
-+err_bridge_remove:
-+	drm_bridge_remove(&mux->bridge);
-+
-+	return ret;
-+}
-+
-+static int gpio_display_mux_remove(struct platform_device *pdev)
-+{
-+	struct gpio_display_mux *mux = platform_get_drvdata(pdev);
-+
-+	disable_irq(mux->detect_irq);
-+	drm_bridge_remove(&mux->bridge);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id gpio_display_mux_match[] = {
-+	{ .compatible = "gpio-display-mux", },
-+	{},
-+};
-+
-+struct platform_driver gpio_display_mux_driver = {
-+	.probe = gpio_display_mux_probe,
-+	.remove = gpio_display_mux_remove,
-+	.driver = {
-+		.name = "gpio-display-mux",
-+		.of_match_table = gpio_display_mux_match,
-+	},
-+};
-+
-+module_platform_driver(gpio_display_mux_driver);
-+
-+MODULE_DESCRIPTION("GPIO-controlled display mux");
-+MODULE_AUTHOR("Nicolas Boichat <drinkcat@chromium.org>");
-+MODULE_LICENSE("GPL");
 -- 
-2.39.0.314.g84b9a713c41-goog
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
