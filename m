@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A3D66C2D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7233B66C2DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjAPOyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
+        id S231218AbjAPOzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbjAPOxv (ORCPT
+        with ESMTP id S232904AbjAPOyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:53:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502382411F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:42:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E46960FE1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142CCC433EF;
-        Mon, 16 Jan 2023 14:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673880171;
-        bh=WsxMDAcMokmx6RzIrfj36P59DWpr6wXA1tT6CKcmJc8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U6r42Alc2l2T5cKwSbqv6na/jzazfkyYVGADvym9G1TYLLX2u91g8F2hKNRvVlRfW
-         3xSTAggV4mQYbnxebubOD41g1E8wIjkOnPOneFHEsD0cnZk74iv5Zf7tvXCuvr/MVv
-         cwilIkUrFT97QwF5EQ7wgcH64ZY/vm93LhbWVoqwbjTiSh+fZ0CITb/BgmLY8HZIiO
-         xpcrrH6qXkGWTUZ1erjW/ynoDxbJQ/wJfOUSpZRbP3L9yfwEmT1j4YsZRt/1S1SmhQ
-         wNvIrua4gsGocsuLF7TUTv8I6aBKJva6tdSREPKR7cAfY+S3ZNgKasj6ebZImWC5ih
-         cI6MLD+26BoLA==
-Date:   Mon, 16 Jan 2023 14:42:47 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-        Lee Jones <lee@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        martin.botka1@gmail.com, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] mfd: axp20x: Add support for AXP313a PMIC
-Message-ID: <Y8ViZ4iKQv0klglW@sirena.org.uk>
-References: <20230116142501.767142-1-andre.przywara@arm.com>
- <20230116142501.767142-3-andre.przywara@arm.com>
+        Mon, 16 Jan 2023 09:54:06 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43CB26581;
+        Mon, 16 Jan 2023 06:43:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673880188; x=1705416188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UhL5WT/iDZbiza1ZHyzkL+c6GHSVurVpiThwXMkPA34=;
+  b=XsBbMviVWhMInJ9O9S8gtXQ3YShtZdaxrAM9/yDkiu8H1YLILW1KdRpN
+   Ckm7mfl36vbQeW49ZAjaWvKSDvVbCxmo6+9o11SPrGH7GUlCY7U04TTeu
+   1Tt4Dsvwhcpl6Xg80W6sSAiF5SgysiJY6FebcE8VnLeweWfN5bb03pKLB
+   t1EOWh447ssKW6WGnLG+R+GOndaQhBC6icPGP+fOc/uXs04Y8Jl1XizNw
+   03x3utwFdiG7/2pA4HVlYMEl5RY4KEOXSAQL6XPULmQkZwPPt3/MJrjb6
+   h6X0AsRcEkQfJFW1Smb79CRJRV5edqvKCCaTF2Q+pbJua2Htj4wCwqVp2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="323174043"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="323174043"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 06:43:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="691269043"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="691269043"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 16 Jan 2023 06:43:06 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pHQhV-00A7tM-0O;
+        Mon, 16 Jan 2023 16:43:05 +0200
+Date:   Mon, 16 Jan 2023 16:43:04 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 2/2] gpio: wcd934x: Use proper headers and drop
+ OF_GPIO dependency
+Message-ID: <Y8VieDjXbO9Yj10F@smile.fi.intel.com>
+References: <20230113182619.16800-1-andriy.shevchenko@linux.intel.com>
+ <20230113182619.16800-2-andriy.shevchenko@linux.intel.com>
+ <CAMRc=MdkgWBb5XTSMEEUQQGCO_3x1a3KK0KbvW4GmAQX1XGbxg@mail.gmail.com>
+ <Y8U8bZ9+dOwmDgsb@smile.fi.intel.com>
+ <CAMRc=Md65GUZ0XXd_35gzS8SJQAHXG9neE4ZCxZXBr0q2nOc-Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QyCk/zA30PD1sX6Q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116142501.767142-3-andre.przywara@arm.com>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=Md65GUZ0XXd_35gzS8SJQAHXG9neE4ZCxZXBr0q2nOc-Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 16, 2023 at 02:56:23PM +0100, Bartosz Golaszewski wrote:
+> On Mon, Jan 16, 2023 at 1:00 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Mon, Jan 16, 2023 at 10:03:47AM +0100, Bartosz Golaszewski wrote:
+> > > On Fri, Jan 13, 2023 at 7:25 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
 
---QyCk/zA30PD1sX6Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Mon, Jan 16, 2023 at 02:25:00PM +0000, Andre Przywara wrote:
+> > > > +#include <linux/mod_devicetable.h>
+> > > >  #include <linux/module.h>
+> > > > -#include <linux/gpio/driver.h>
+> > > > +#include <linux/platform_device.h>
+> > > >  #include <linux/regmap.h>
+> > > >  #include <linux/slab.h>
+> > > > -#include <linux/of_device.h>
+> > > > +
+> > > > +#include <linux/gpio/driver.h>
+> > >
+> > > Any reason for having it separately here?
+> >
+> > Yes. The idea is to emphasize the relationship between the driver and
+> > the subsystem it's written for.
 
->  static const struct of_device_id axp20x_i2c_of_match[] = {
->  	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
-> +	{ .compatible = "x-powers,axp313a", .data = (void *)AXP313A_ID},
->  	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
->  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
->  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+> We almost never do it and I prefer all linux/ headers to be grouped
+> together. I like separate sections for asm/ and local includes but
+> this is overkill IMO.
 
-The sorting isue applies to everything you added here too.
+OK!
 
---QyCk/zA30PD1sX6Q
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPFYmYACgkQJNaLcl1U
-h9CBnwgAgvUptDHGDg2/WLI9gNlsapNSWrPGyjphXxWyhRFudRHFqmyuINwmxpmm
-muYpJRGMe1Xz6vFAeWZbHlWZCCens9wCqryXqbtxwkCspGKinkoJVcx81gKCrvQX
-F9SaPf6gnG4Pes7TPXaF2rgMioW2VlW5/6dzUzZAg+fxFnGcdhaaCMJqn3QEldPZ
-aFbzNZUngVIFPY4ly5Idvr/lpiBzGlTJg2t3S2eLiwO1NNmMweiTWLySQS4VmuCE
-5qCXd+WaZEHtas93nH0nxrFKvRqNLp2d23W9uIrDcdjwGqibG8fbUpaFdzd6Rd/F
-YbcCzI2YVjwjPd25YocuoczgMb902A==
-=s+w2
------END PGP SIGNATURE-----
-
---QyCk/zA30PD1sX6Q--
