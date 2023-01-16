@@ -2,94 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84D566BAA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA31366BAB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjAPJlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S232098AbjAPJn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbjAPJkn (ORCPT
+        with ESMTP id S229930AbjAPJnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:40:43 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83B171E9CD;
-        Mon, 16 Jan 2023 01:39:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59E96AD7;
-        Mon, 16 Jan 2023 01:40:23 -0800 (PST)
-Received: from [10.57.89.182] (unknown [10.57.89.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 576553F67D;
-        Mon, 16 Jan 2023 01:39:38 -0800 (PST)
-Message-ID: <31601f49-967e-4990-5599-0558fc6364b0@arm.com>
-Date:   Mon, 16 Jan 2023 09:39:36 +0000
+        Mon, 16 Jan 2023 04:43:02 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD89A14E8D
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:41:59 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id d13so5395289qkk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:41:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GmFirlKYMgbYub+fXXENCVSgGWnv6tB+3v2Wk5Fh5GU=;
+        b=N4+37EcIVYqq1xo/sV4Tr85Eo7F+dK7xy939SKVSYvOMaGtLjJcJcSOb8un1aUoClO
+         N4aCsA10P/sMZ2CN4cOjBSQman0V8CMeqlXBWb4n/fFdNnAqWA86NUVHgTqzfyYS5D/q
+         Lsci2nCo2uGHS9PO4qsBwM27Y7tdHPFqolcsHGjPeqhQO+mb97opBcyC8dXfVt/OV76i
+         V8NF+ruf/I073eUc3DBKnUPQi+ATkDD6MjBa6CRhf//BxVDe50/RwJtIZd0FHOMRqxM/
+         7ihIxD3VOMwBZd4KH5h5eP/26tWJ1SvBcMT7Jv7fO4efbSpvPZA+vIOchlKmO8gfpy07
+         nwjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GmFirlKYMgbYub+fXXENCVSgGWnv6tB+3v2Wk5Fh5GU=;
+        b=DJHQ1cR0vBCgYirAgTIF+WhdBmZnxnAM8KiaSqYuoIi/tujGM4bcVOZJb6ALDdXMTH
+         sEDP1tKAE6K5jAqj2v0sYrLROF/HasBP+SFMrvwJEgsQk3UPd7n6TTZ1IVfr7+1lXmKn
+         E3jvouJxhZpZaQz9x2s9tyqEGJaKgnnxw92zPSWra+6dHdUuzi6tzopZt8eFqBX8R5Ug
+         CHsknwdyaDP4tAYejefNG6+lVt2qugZ1oIniM8UyiJhULo73dhZp7loqGbYGYqZIiRxX
+         2m14U5GnaMr3QxRfnrob9lb5nE0Mwl3n2O4pMgOFNPgJXIXc6mn86iOi19yeLAVU/wkg
+         nyCg==
+X-Gm-Message-State: AFqh2koaC/eKp+HpLgbksPlIH1RWY0390ncLzFpVTsXhWCsuDvy6QGO1
+        F2fHiuCnwq7vbguB92NzaUgBj2P6upFe31UYlss=
+X-Google-Smtp-Source: AMrXdXu8+cvvDdkpPBSfHF3KsQedToYOvx5VbjZ39VhEf79esPkGEm4MN3VnpQZ6LKGEzU6a40AkZHWXuL7mN3RKSNI=
+X-Received: by 2002:a37:746:0:b0:706:4e95:1ecc with SMTP id
+ 67-20020a370746000000b007064e951eccmr289769qkh.189.1673862119040; Mon, 16 Jan
+ 2023 01:41:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v16 8/8] arm64: dts: qcom: sm8250: Add tpdm mm/prng
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-References: <20230106092119.20449-1-quic_jinlmao@quicinc.com>
- <20230106092119.20449-9-quic_jinlmao@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230106092119.20449-9-quic_jinlmao@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Received: by 2002:a05:6200:5a10:b0:4b6:fb18:3bf5 with HTTP; Mon, 16 Jan 2023
+ 01:41:58 -0800 (PST)
+From:   hony well <honywell860@gmail.com>
+Date:   Mon, 16 Jan 2023 10:41:58 +0100
+Message-ID: <CAN7=mp55+TO3=JNPM3rmWWqOBTvKTYpimTUtxmBfL8kDUOQR=g@mail.gmail.com>
+Subject: I am Hony well from United States I'm a widow.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2023 09:21, Mao Jinlong wrote:
-> Add tpdm mm and tpdm prng for sm8250.
-> 
-> +---------------+                +-------------+
-> |  tpdm@6c08000 |                |tpdm@684C000 |
-> +-------|-------+                +------|------+
->          |                               |
-> +-------|-------+                       |
-> | funnel@6c0b000|                       |
-> +-------|-------+                       |
->          |                               |
-> +-------|-------+                       |
-> |funnel@6c2d000 |                       |
-> +-------|-------+                       |
->          |                               |
->          |    +---------------+          |
->          +----- tpda@6004000  -----------+
->               +-------|-------+
->                       |
->               +-------|-------+
->               |funnel@6005000 |
->               +---------------+
-> 
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
+I'am Hony well from United States I'm 34 years old a widow. I' live
+and work here in United States under
+North Atlantic Treaty Organization- NATO. I have a son who is 7 years
+old he lives and school in UK, he is been taken care by a caretaker
+who look after him.
 
-nit: I have fixed Bjorn's email address. Please fix it in the next
-revision.
+I'm interested in a serious relationship with a loving, caring and
+honest man who I will spend the rest of my life with as I will
+retire from the NATO. in 3 weeks time. I'm interested in a serious
+relationship that will lead to marriage as I will be coming home in 3
+weeks time to start a new life.
 
-I assume this change will go via the arm-soc tree. Hence:
 
-Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+  lovely queen,
+honywell860@gmail.com
 
+=C2=A0+16782316019
