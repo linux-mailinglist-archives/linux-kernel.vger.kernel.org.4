@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E02B66BBDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A9C66BBDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjAPKhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
+        id S229757AbjAPKhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAPKh1 (ORCPT
+        with ESMTP id S230271AbjAPKha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:37:27 -0500
+        Mon, 16 Jan 2023 05:37:30 -0500
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6E74EEB;
-        Mon, 16 Jan 2023 02:37:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20524EEB;
+        Mon, 16 Jan 2023 02:37:28 -0800 (PST)
 Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D331A1BF20C;
-        Mon, 16 Jan 2023 10:37:16 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9002F1BF21D;
+        Mon, 16 Jan 2023 10:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673865443;
+        t=1673865447;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iuogAIwpArvmHJjJhEa0zf0j5PCkZDBGtycwVIelMX8=;
-        b=CEhOE2qh+5jjLZr3yM8AnWuKjQL21XfBx2BU/akJuNd5H5Qld2ukY9uV2vsZYedWeZF2Pk
-        ZkBScwq/jK/2rnV+ioVHfb70cF9a0TBkD5d6UeTy5aiv7iZ7iL7aXsdomFhUXGcgFP4BPh
-        uPRGALpCDZnm6f+8GD9nDQAVSRnMeULNN0K99nnVq4yPZ+qw6w6aoeHgC04jxqhi5DOQg/
-        KrABaPJmOblW7Vaif6Dx3Tbg23fpguN0heuzjx32dVhL3Z5H31c/QD0BHx2njYuvD6KxxW
-        zeU6IGyGL9+WhfeWlplRXaZiiGpy9iKBnuUu0jyXlm9ymsssh86wYYQbbqJnUA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fFLwBp143kB/LSaCSwLfM/ltYrhQ/PI8Cc5ar94b9Ls=;
+        b=AbClFznbfLK1tHwzNMo1ZZTKkPrE2PqxhzA5su3b03jNpwuzLu/LnE7peKBjSobhwUqkG0
+        9leHb8Mf6zMwXHUR9sXmR9w3a5G944U0VQlffclPECthNy2JLnZRb5BYL9XKSpFzzShZ+N
+        x0IXJEorQS0lKX5X80PtA2mdCXq7am2nU72Yna4/y/ect0DBBT7AkeeUu/pwjFDuFhM9VK
+        DOp/YaUz0Te5BPx3laRY6seLPz1sX/2UY44ZbZbFBYsmPIaomWj/TnxTrS8VHV8cNh59Lm
+        ZK7tDhU/p5gp20ED6TR33ff/aOBIx82bC0pntSwv8RSy7hql4umCa1IOb+xF6Q==
 From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
 To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         "David S. Miller" <davem@davemloft.net>,
@@ -61,10 +62,12 @@ Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH net-next 0/6] net: stmmac: add renesas,rzn1-gmac support
-Date:   Mon, 16 Jan 2023 11:39:20 +0100
-Message-Id: <20230116103926.276869-1-clement.leger@bootlin.com>
+Subject: [PATCH net-next 1/6] net: stmmac: add support to use a generic phylink_pcs as PCS
+Date:   Mon, 16 Jan 2023 11:39:21 +0100
+Message-Id: <20230116103926.276869-2-clement.leger@bootlin.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230116103926.276869-1-clement.leger@bootlin.com>
+References: <20230116103926.276869-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -77,34 +80,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rzn1-gmac instance is connected to a PCS (MIIC). In order to use
-this pcs, add support in the sttmac driver to set a generic phylink pcs
-device instead of the xpcs only. Moreover, it adds support to provide
-a phylink pcs device from the stmmac platform data and use it with the
-driver. It also adds the bindings and the new rzn1-gmac driver that
-retrieve this pcs from the device-tree.
+Currently, the PCS is set based on the presence of the xpcs field. In
+order to allow supporting other PCS, add a phylink_pcs pcs field to struct
+mac_device_info which is used in stmmac_mac_select_pcs() to select the
+correct PCS.
 
-Clément Léger (6):
-  net: stmmac: add support to use a generic phylink_pcs as PCS
-  net: stmmac: add support to provide pcs from platform data
-  net: stmmac: start phylink before setting up hardware
-  dt-bindings: net: renesas,rzn1-gmac: Document RZ/N1 GMAC support
-  net: stmmac: add support for RZ/N1 GMAC
-  ARM: dts: r9a06g032: describe GMAC1
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/common.h      | 2 ++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 5 +----
+ drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 1 +
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
- .../bindings/net/renesas,rzn1-gmac.yaml       |  71 +++++++++++
- arch/arm/boot/dts/r9a06g032.dtsi              |  18 +++
- drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 ++
- drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
- drivers/net/ethernet/stmicro/stmmac/common.h  |   2 +
- .../net/ethernet/stmicro/stmmac/dwmac-rzn1.c  | 113 ++++++++++++++++++
- .../net/ethernet/stmicro/stmmac/stmmac_main.c |  15 ++-
- .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   1 +
- include/linux/stmmac.h                        |   1 +
- 9 files changed, 228 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
- create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
+index 6b5d96bced47..79fd67e8ab90 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/common.h
++++ b/drivers/net/ethernet/stmicro/stmmac/common.h
+@@ -15,6 +15,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/stmmac.h>
+ #include <linux/phy.h>
++#include <linux/phylink.h>
+ #include <linux/pcs/pcs-xpcs.h>
+ #include <linux/module.h>
+ #if IS_ENABLED(CONFIG_VLAN_8021Q)
+@@ -518,6 +519,7 @@ struct mac_device_info {
+ 	const struct stmmac_tc_ops *tc;
+ 	const struct stmmac_mmc_ops *mmc;
+ 	struct dw_xpcs *xpcs;
++	struct phylink_pcs *phylink_pcs;
+ 	struct mii_regs mii;	/* MII register Addresses */
+ 	struct mac_link link;
+ 	void __iomem *pcsr;     /* vpointer to device CSRs */
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index c6951c976f5d..19459ef15a35 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -937,10 +937,7 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
+ {
+ 	struct stmmac_priv *priv = netdev_priv(to_net_dev(config->dev));
+ 
+-	if (!priv->hw->xpcs)
+-		return NULL;
+-
+-	return &priv->hw->xpcs->pcs;
++	return priv->hw->phylink_pcs;
+ }
+ 
+ static void stmmac_mac_config(struct phylink_config *config, unsigned int mode,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+index 5f177ea80725..3e875d4664c0 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
+@@ -413,6 +413,7 @@ int stmmac_xpcs_setup(struct mii_bus *bus)
+ 		}
+ 
+ 		priv->hw->xpcs = xpcs;
++		priv->hw->phylink_pcs = &xpcs->pcs;
+ 		break;
+ 	}
+ 
 -- 
 2.39.0
 
