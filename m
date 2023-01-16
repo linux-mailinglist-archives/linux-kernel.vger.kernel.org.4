@@ -2,123 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C3366D2DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B0966D2D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbjAPXPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 18:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
+        id S235392AbjAPXON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:14:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235300AbjAPXOp (ORCPT
+        with ESMTP id S235401AbjAPXNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 18:14:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BDA2FCD9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:10:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673910633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QRj9zo8/4XGZMXr1F9brjuZIjMqL4+pPYiSkNjAxJaI=;
-        b=BNZJFHS95LNIstxQTbNzgAn/AVuyY0qbXxbIPPMELFD6JXQH1ZuCAy3ueuAyr+E64RuGpm
-        B3lez+r1fmYhuKrXuJv6P8GPLXcQLDQKMR//PerQr+HeSr90sQLKDzZHTkBzjI3Z5i5biA
-        Qsda3TktSnPOARFRxLMMfh2jjmOstnk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-R7KYRgH-NsqGjrjFzNEidA-1; Mon, 16 Jan 2023 18:10:27 -0500
-X-MC-Unique: R7KYRgH-NsqGjrjFzNEidA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4611F2A59556;
-        Mon, 16 Jan 2023 23:10:27 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F21AD51FF;
-        Mon, 16 Jan 2023 23:10:25 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v6 20/34] vfs: Make splice use iov_iter_extract_pages()
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, dhowells@redhat.com,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 16 Jan 2023 23:10:25 +0000
-Message-ID: <167391062544.2311931.15195962488932892568.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
-References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Mon, 16 Jan 2023 18:13:32 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90402FCC2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:10:25 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id cm26-20020a056830651a00b00684e5c0108dso3180297otb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:10:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=student.cerritos.edu; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aZ+ODOt4MS4tcK6gq4peoEBqRUoVFWADJV2EWJ+gklg=;
+        b=lcQbHx3YBxGmVPnRdajnHbFVLPMBzjP/BP3hXR5Phgqn6X8f40b2nSYKVAGN7xGxjp
+         LDBfVJ5HO8x5crozzrSR4VE8AL/wDfSiYq/JFOLS9fmbBNTxgK9IadWPptuG3vp7C1c+
+         9p+yFlbuHnA2lQxelaaT48ZAOJyT/7kYoRURg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aZ+ODOt4MS4tcK6gq4peoEBqRUoVFWADJV2EWJ+gklg=;
+        b=m9IqXHPoID4Q09+kDxKsOBtcmQuub0n2G9hFVHGoLVU9xCrBX4cKZGf0dlaPFBMqmE
+         4KHqpLrOrv1LSxUt4c80BUyC+clfEwpYmJeBoc7J2U/asCeLSxn2CENciiRY0k3LNecG
+         Y8wYRhYVnPDRW3wd76mjmMo0ANfxmf3xltU191EXIDoxPXCxU5iwfX3t77WLzHZkriGt
+         oeE+9kbfl4WAetqLsSnSKVaonuBFb4bnapcRdcJ6d/hjE71TgHXE1+S44U/+CXes1LAR
+         DJ7AtZD2bocc5C8sUcQ4Q8l5tnyGh7UJA99peuS7h69YXKMHOm/uvzb7c2NxRjAcRGg2
+         GB8g==
+X-Gm-Message-State: AFqh2kpRLOO7CHlu0uqpfINuDF2rDjH5psNjIuIw25ub0Flon8HclmSr
+        GutCDN5INLiJTUilGTtCQ+qLxNLMz092oGBdHtpNJge/U8cVqmtr
+X-Google-Smtp-Source: AMrXdXv9zDSZmw7fkNM/HX3BuLc05P3IcJflL86clF0YIVuagxEJ4Zv2D9qAlCexs2yQzxU46eocZLuZgaKOXDrXVu0=
+X-Received: by 2002:a05:6830:1be6:b0:66c:68e5:84c5 with SMTP id
+ k6-20020a0568301be600b0066c68e584c5mr42365otb.321.1673910624848; Mon, 16 Jan
+ 2023 15:10:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAPOgqxFva=tOuh1UitCSN38+28q3BNXKq19rEsVNPRzRqKqZ+g@mail.gmail.com>
+ <20230116195357.2jq7q262tongxw52@t-8ch.de>
+In-Reply-To: <20230116195357.2jq7q262tongxw52@t-8ch.de>
+From:   Amy Parker <apark0006@student.cerritos.edu>
+Date:   Mon, 16 Jan 2023 15:10:25 -0800
+Message-ID: <CAPOgqxFtH4Ezb1xVm3kOLBnOnQfpbs4==Kpefhaxz4JhOObqOA@mail.gmail.com>
+Subject: Re: Kernel builds now failing
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make splice's iter_to_pipe() use iov_iter_extract_pages().  Splice requests
-will rejected if the request if the cleanup mode is going to be anything
-other than put_pages() since we're going to be attaching pages from the
-iterator to a pipe and then returning to the caller, leaving the spliced
-pages to their fates at some unknown time in the future.
+On Mon, Jan 16, 2023 at 11:54 AM Thomas Wei=C3=9Fschuh <linux@weissschuh.ne=
+t> wrote:
+> I expect this to be due to a change in make 4.4 that ignores SIGPIPEs [0]=
+.
+> So programs called from make will not receive a SIGPIPE when writing to
+> a closed pipe but instead an EPIPE write error.
+> `find` does not seem to handle this.
 
-Note this will cause some requests to fail that could work before - such as
-splicing from an XARRAY-type iterator - if there's any way to do it as
-extraction doesn't take refs or pins on non-user-backed iterators.
+Thank you so much for the clarification! I've also seen reports of
+other tools not handling it (such as `yes').
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-fsdevel@vger.kernel.org
----
+>
+> This behavior in make is new and I can't find a reasoning for it.
+> It also breaks other softwares builds.
 
- fs/splice.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Are you aware of active discussion regarding this on Savannah, or
+should I go and report the effects there?
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 19c5b5adc548..c3433266ba1b 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -1159,14 +1159,18 @@ static int iter_to_pipe(struct iov_iter *from,
- 	size_t total = 0;
- 	int ret = 0;
- 
-+	/* For the moment, all pages attached to a pipe must have refs, not pins. */
-+	if (WARN_ON(iov_iter_extract_mode(from, FOLL_SOURCE_BUF) != FOLL_GET))
-+		return -EIO;
-+
- 	while (iov_iter_count(from)) {
--		struct page *pages[16];
-+		struct page *pages[16], **ppages = pages;
- 		ssize_t left;
- 		size_t start;
- 		int i, n;
- 
--		left = iov_iter_get_pages(from, pages, ~0UL, 16, &start,
--					  FOLL_SOURCE_BUF);
-+		left = iov_iter_extract_pages(from, &ppages, ~0UL, 16,
-+					      FOLL_SOURCE_BUF, &start);
- 		if (left <= 0) {
- 			ret = left;
- 			break;
+> For now you can disable CONFIG_IKHEADERS and the build should work
+> again.
 
+Alright, thanks. Did that, and re-ran my kernel build (allmodconfig).
+All works now.
 
+> [0] make 4.4 was packaged for ArchLinux on 5th of January, so it would
+> fit the timeline.
+
+Yep, running Make 4.4.
