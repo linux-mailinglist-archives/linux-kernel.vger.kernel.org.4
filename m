@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E2866C03E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3854766C050
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjAPNvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S230513AbjAPNvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjAPNun (ORCPT
+        with ESMTP id S231497AbjAPNus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:50:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C2421945;
-        Mon, 16 Jan 2023 05:50:42 -0800 (PST)
+        Mon, 16 Jan 2023 08:50:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E614921978;
+        Mon, 16 Jan 2023 05:50:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B28DE60FC6;
-        Mon, 16 Jan 2023 13:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9767DC43392;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 23001CE1160;
+        Mon, 16 Jan 2023 13:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B222CC43443;
         Mon, 16 Jan 2023 13:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673877040;
-        bh=Sc/MXrEwZaxI4omzYCVHgWpM1c0Ozs8INEgkW+Kkfxo=;
+        bh=Acjdl6EsE3kWgNQwaT/lwb4EHyPJAJutY4r47DlwrFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GZdwS8bAvdzWN/C6v/U15xmHvbQMQMJusVQTi9CqJfflW/jPFbn3aYdXTST2GS1hv
-         ChWtwzHM9Mo6bKs2CLsEmdTjFdL/zEumhE3mzEhXtRCRsHvoeixjPySaA7MX0P6B55
-         Vhw9Kbo3g3EM6g0/QTjGYHErVQuIgXI6FpFpnntNtkCY56NtR4870LolZ9+RXwI0eW
-         KjvIpJ5o/R9jTF1Dlw9S97JdX8yEZqI9ZaszR6vU9qk3jNFuBgQn5xOBl18KH7oGFb
-         x0ft+UcfE6D4hkXHV3EOcU2UDR0XlFd/EaW6NVQItAnk0l2yIvJmHlMp8mS8jkV/Ya
-         5tidaNTVroP+Q==
+        b=BB0S7c4BKL1c+LF0TaXpdKTSrjvooPYOjJm0vy/8m09ELpwfW7NKgSjsDwyPf/Hw3
+         dB3BEcM91ZjUP9YJnVH5D9RzauAPtNR6RA5CZ7li7aOjYIVvTXFTI8FliJMHwUhhff
+         GjDl3La0NWWatzVsJ5HTevYlnNejKrntWFC6bzCauSEDdtjCRhBcSSooALqfpJXnK0
+         1xpeVOJma5cocRvBG4hSnvDt/UbB+79iLPjDNoeNpdM+Vypa6+Ic7W1nLP0f1nxi4O
+         Zr22yZn1Sdv2NHf5YodowtqMo+CFs5nDCLmbnAIewozKbOuj2Pwq+53QmTGfWAUZeh
+         Z+jWl5XejhwEg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pHPt5-0003ux-Vi; Mon, 16 Jan 2023 14:51:00 +0100
+        id 1pHPt6-0003v0-2e; Mon, 16 Jan 2023 14:51:00 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v4 06/19] irqdomain: Drop revmap mutex
-Date:   Mon, 16 Jan 2023 14:50:31 +0100
-Message-Id: <20230116135044.14998-7-johan+linaro@kernel.org>
+Subject: [PATCH v4 07/19] irqdomain: Look for existing mapping only once
+Date:   Mon, 16 Jan 2023 14:50:32 +0100
+Message-Id: <20230116135044.14998-8-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230116135044.14998-1-johan+linaro@kernel.org>
 References: <20230116135044.14998-1-johan+linaro@kernel.org>
@@ -60,106 +60,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The global irq_domain_mutex is now held in all paths that update the
-revmap structures so there is no longer any need for the revmap mutex.
+Avoid looking for an existing mapping twice when creating a new mapping
+using irq_create_fwspec_mapping() by factoring out the actual allocation
+which is shared with irq_create_mapping_affinity().
 
 Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- include/linux/irqdomain.h |  2 --
- kernel/irq/irqdomain.c    | 13 ++++++-------
- 2 files changed, 6 insertions(+), 9 deletions(-)
+ kernel/irq/irqdomain.c | 60 +++++++++++++++++++++++-------------------
+ 1 file changed, 33 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
-index 5b2718e1c6de..7fd3939328c2 100644
---- a/include/linux/irqdomain.h
-+++ b/include/linux/irqdomain.h
-@@ -143,7 +143,6 @@ struct irq_domain_chip_generic;
-  * Revmap data, used internally by the irq domain code:
-  * @revmap_size:	Size of the linear map table @revmap[]
-  * @revmap_tree:	Radix map tree for hwirqs that don't fit in the linear map
-- * @revmap_mutex:	Lock for the revmap
-  * @revmap:		Linear table of irq_data pointers
-  */
- struct irq_domain {
-@@ -171,7 +170,6 @@ struct irq_domain {
- 	irq_hw_number_t			hwirq_max;
- 	unsigned int			revmap_size;
- 	struct radix_tree_root		revmap_tree;
--	struct mutex			revmap_mutex;
- 	struct irq_data __rcu		*revmap[];
- };
- 
 diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 23f5919e58b7..248e6acfafbe 100644
+index 248e6acfafbe..894bc6ee6348 100644
 --- a/kernel/irq/irqdomain.c
 +++ b/kernel/irq/irqdomain.c
-@@ -214,7 +214,6 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+@@ -675,6 +675,34 @@ unsigned int irq_create_direct_mapping(struct irq_domain *domain)
+ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+ #endif
  
- 	/* Fill structure */
- 	INIT_RADIX_TREE(&domain->revmap_tree, GFP_KERNEL);
--	mutex_init(&domain->revmap_mutex);
- 	domain->ops = ops;
- 	domain->host_data = host_data;
- 	domain->hwirq_max = hwirq_max;
-@@ -501,30 +500,30 @@ static bool irq_domain_is_nomap(struct irq_domain *domain)
- static void irq_domain_clear_mapping(struct irq_domain *domain,
- 				     irq_hw_number_t hwirq)
- {
-+	lockdep_assert_held(&irq_domain_mutex);
++static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
++						  irq_hw_number_t hwirq,
++						  const struct irq_affinity_desc *affinity)
++{
++	struct device_node *of_node = irq_domain_get_of_node(domain);
++	int virq;
 +
- 	if (irq_domain_is_nomap(domain))
- 		return;
- 
--	mutex_lock(&domain->revmap_mutex);
- 	if (hwirq < domain->revmap_size)
- 		rcu_assign_pointer(domain->revmap[hwirq], NULL);
- 	else
- 		radix_tree_delete(&domain->revmap_tree, hwirq);
--	mutex_unlock(&domain->revmap_mutex);
- }
- 
- static void irq_domain_set_mapping(struct irq_domain *domain,
- 				   irq_hw_number_t hwirq,
- 				   struct irq_data *irq_data)
- {
-+	lockdep_assert_held(&irq_domain_mutex);
++	pr_debug("irq_create_mapping(0x%p, 0x%lx)\n", domain, hwirq);
 +
- 	if (irq_domain_is_nomap(domain))
- 		return;
- 
--	mutex_lock(&domain->revmap_mutex);
- 	if (hwirq < domain->revmap_size)
- 		rcu_assign_pointer(domain->revmap[hwirq], irq_data);
- 	else
- 		radix_tree_insert(&domain->revmap_tree, hwirq, irq_data);
--	mutex_unlock(&domain->revmap_mutex);
- }
- 
- static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
-@@ -1511,11 +1510,12 @@ static void irq_domain_fix_revmap(struct irq_data *d)
- {
- 	void __rcu **slot;
- 
-+	lockdep_assert_held(&irq_domain_mutex);
++	/* Allocate a virtual interrupt number */
++	virq = irq_domain_alloc_descs(-1, 1, hwirq, of_node_to_nid(of_node),
++				      affinity);
++	if (virq <= 0) {
++		pr_debug("-> virq allocation failed\n");
++		return 0;
++	}
 +
- 	if (irq_domain_is_nomap(d->domain))
- 		return;
- 
- 	/* Fix up the revmap. */
--	mutex_lock(&d->domain->revmap_mutex);
- 	if (d->hwirq < d->domain->revmap_size) {
- 		/* Not using radix tree */
- 		rcu_assign_pointer(d->domain->revmap[d->hwirq], d);
-@@ -1524,7 +1524,6 @@ static void irq_domain_fix_revmap(struct irq_data *d)
- 		if (slot)
- 			radix_tree_replace_slot(&d->domain->revmap_tree, slot, d);
- 	}
--	mutex_unlock(&d->domain->revmap_mutex);
- }
- 
++	if (irq_domain_associate(domain, virq, hwirq)) {
++		irq_free_desc(virq);
++		return 0;
++	}
++
++	pr_debug("irq %lu on domain %s mapped to virtual irq %u\n",
++		hwirq, of_node_full_name(of_node), virq);
++
++	return virq;
++}
++
  /**
+  * irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
+  * @domain: domain owning this hardware interrupt or NULL for default domain
+@@ -687,14 +715,11 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+  * on the number returned from that call.
+  */
+ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+-				       irq_hw_number_t hwirq,
+-				       const struct irq_affinity_desc *affinity)
++					 irq_hw_number_t hwirq,
++					 const struct irq_affinity_desc *affinity)
+ {
+-	struct device_node *of_node;
+ 	int virq;
+ 
+-	pr_debug("irq_create_mapping(0x%p, 0x%lx)\n", domain, hwirq);
+-
+ 	/* Look for default domain if necessary */
+ 	if (domain == NULL)
+ 		domain = irq_default_domain;
+@@ -702,34 +727,15 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+ 		WARN(1, "%s(, %lx) called with NULL domain\n", __func__, hwirq);
+ 		return 0;
+ 	}
+-	pr_debug("-> using domain @%p\n", domain);
+-
+-	of_node = irq_domain_get_of_node(domain);
+ 
+ 	/* Check if mapping already exists */
+ 	virq = irq_find_mapping(domain, hwirq);
+ 	if (virq) {
+-		pr_debug("-> existing mapping on virq %d\n", virq);
++		pr_debug("existing mapping on virq %d\n", virq);
+ 		return virq;
+ 	}
+ 
+-	/* Allocate a virtual interrupt number */
+-	virq = irq_domain_alloc_descs(-1, 1, hwirq, of_node_to_nid(of_node),
+-				      affinity);
+-	if (virq <= 0) {
+-		pr_debug("-> virq allocation failed\n");
+-		return 0;
+-	}
+-
+-	if (irq_domain_associate(domain, virq, hwirq)) {
+-		irq_free_desc(virq);
+-		return 0;
+-	}
+-
+-	pr_debug("irq %lu on domain %s mapped to virtual irq %u\n",
+-		hwirq, of_node_full_name(of_node), virq);
+-
+-	return virq;
++	return __irq_create_mapping_affinity(domain, hwirq, affinity);
+ }
+ EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
+ 
+@@ -834,7 +840,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+ 			return 0;
+ 	} else {
+ 		/* Create mapping */
+-		virq = irq_create_mapping(domain, hwirq);
++		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
+ 		if (!virq)
+ 			return virq;
+ 	}
 -- 
 2.38.2
 
