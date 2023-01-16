@@ -2,168 +2,426 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF3C66BCD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B2866BCDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjAPL0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S229957AbjAPL1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjAPL0j (ORCPT
+        with ESMTP id S229544AbjAPL0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:26:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6D916327;
-        Mon, 16 Jan 2023 03:26:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E1660F75;
-        Mon, 16 Jan 2023 11:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0AB9C433D2;
-        Mon, 16 Jan 2023 11:26:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673868396;
-        bh=P+T/j57X62oNt6U6/JdEWDqDUe0zXgKY6uRbCJmpj6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dG8b7qxPD7Y1tXny1+jTbCzhBpoyDgRDznhwNTMpnSa6y2O8vQRaIxdn9OaSXnul2
-         8RYofDBUQd1QFA+BY3xaGNBBYrVLyFSY+1FACl0fUXTUzetAN+65OcaRwYFGFmWb7+
-         LEUpqpR/5TJ5kgXkpyC+wczFMx/HHkkCY4Evcb1OlPAcnSWI7djJa0mWuhlWqkhgUV
-         sKQRDCADzWZk67Q/qSXNph16Il3EmM77llmBCmkeeQZXe4wpSSzZMu7UBezpWs2FjN
-         z0Y2rNUcjPEwtnZvjVPRwQ8BQli8obb4WupBZq/1PLvSIT8KfDVdzHxKFUeheq/2xC
-         c2A+3EUhXRYRA==
-Date:   Mon, 16 Jan 2023 13:26:31 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, rogerq@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
-Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
- release action
-Message-ID: <Y8U0Z86y0BnBkRBv@unreal>
-References: <20230116044517.310461-1-s-vadapalli@ti.com>
- <Y8T8+rWrvv6gfNxa@unreal>
- <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
- <Y8UhMVPTo3qVgkyc@unreal>
- <aa578ec2-a8e3-8ad0-7234-971325d1268d@ti.com>
+        Mon, 16 Jan 2023 06:26:54 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0F016AE1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:26:51 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g13so42284851lfv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jiUo/N+/H2Pgfs41Qven/kqGQqI/RDTr+JF+6I51Y0I=;
+        b=T1J2SJHsBxGppAAo5sv0RrnuDSLD8utVMtUC2nXGpGdm4IdfoN9QP2jRwFf0gHOMrj
+         TX6/K5BpojJNvN9CTuOMdjTAs2OI1KiGTop2DYTBDlH+Hd7igd6MHpnAva8qpxVYbJQx
+         gAtphZ/xmEDCX384mmL8jokBAnI8v4Q+KKko+Sk5//wqYMDK2A2FHY8j5w/2IXYxlrjJ
+         qY4UoA37NLv9/4zmXKbXPc0gw2x0KHmwg0uK/hKZ+FRClAoTqxToH71i7F8SS8RG6P9R
+         LjUIt+ho6NOPm9nXYFJjmfBPS5n8WXYK3eI+FaLn+fMj22b6O0I4Cqxyk8ssFIlPY7O/
+         e++g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jiUo/N+/H2Pgfs41Qven/kqGQqI/RDTr+JF+6I51Y0I=;
+        b=Fl1Qna3Xam9ql5tVZmtL0UcrxgWJ/m1CRkritcKEXpsHuHVq1lqRAHziXLAegKkSuS
+         v9WxA0r4jEjximwitAi+OcvYcF6g0egSACV1OHaxp+sREo7jf5wt1boUfP096xYkEFFs
+         yo3ZEE1aGPSa4y47LqrsLT98GQ06Ow6lJfROe1csl9XHMhpi2k21gj3fFJ5zf2LYSG1G
+         Bjs4WJ2ntI0fyqwo8CpP5HtSetQRNpIQNrUUsQRs1AMMSA5CMNV6Sjjw3Lo70O2AVsJi
+         OGny32CGrPnisyFrnkbevyTri/CM2/mYIAFtTJTnDhbEizEXbXABtgtcXJzikHO+nfvp
+         R1FQ==
+X-Gm-Message-State: AFqh2kqKaIK41f5ciyxENkS6ZPZYnWNtKbDoI1RBxR+tFMZSPvLjZp36
+        50vM3YWE7digG53QIY/t47PPqA==
+X-Google-Smtp-Source: AMrXdXt/i6ezRt6Jo2A4YzNxx5Sj3zxB7QCQxsBoBNuETjthUDfx7QIyvEnaVBjMj6B9ENBiDc47AA==
+X-Received: by 2002:a05:6512:694:b0:4cb:436b:a70f with SMTP id t20-20020a056512069400b004cb436ba70fmr15269415lfe.64.1673868410283;
+        Mon, 16 Jan 2023 03:26:50 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056512074500b004b53eb60e3csm349211lfs.256.2023.01.16.03.26.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 03:26:49 -0800 (PST)
+Message-ID: <cec9aebb-d2b1-d7d8-b17a-1a80edb79af6@linaro.org>
+Date:   Mon, 16 Jan 2023 12:26:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa578ec2-a8e3-8ad0-7234-971325d1268d@ti.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 2/6] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230116093845.72621-1-konrad.dybcio@linaro.org>
+ <20230116093845.72621-3-konrad.dybcio@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230116093845.72621-3-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 04:07:16PM +0530, Siddharth Vadapalli wrote:
-> 
-> 
-> On 16/01/23 15:34, Leon Romanovsky wrote:
-> > On Mon, Jan 16, 2023 at 01:13:36PM +0530, Siddharth Vadapalli wrote:
-> >>
-> >>
-> >> On 16/01/23 13:00, Leon Romanovsky wrote:
-> >>> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
-> >>>> The am65_cpts_release() function is registered as a devm_action in the
-> >>>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
-> >>>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
-> >>>> actions associated with the am65-cpsw driver's device.
-> >>>>
-> >>>> In the event of probe failure or probe deferral, the platform_drv_probe()
-> >>>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
-> >>>> CPSW's CPTS hardware, both of which share the same power domain. Since the
-> >>>> am65_cpts_disable() function invoked by the am65_cpts_release() function
-> >>>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
-> >>>> hardware is assumed to be powered on at this point. However, the hardware
-> >>>> is powered off before the devm actions are executed.
-> >>>>
-> >>>> Fix this by getting rid of the devm action for am65_cpts_release() and
-> >>>> invoking it directly on the cleanup and exit paths.
-> >>>>
-> >>>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
-> >>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> >>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> >>>> ---
-> >>>> Changes from v1:
-> >>>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
-> >>>>    error was reported by kernel test robot <lkp@intel.com> at:
-> >>>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
-> >>>> 2. Collect Reviewed-by tag from Roger Quadros.
-> >>>>
-> >>>> v1:
-> >>>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
-> >>>>
-> >>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
-> >>>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
-> >>>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
-> >>>>  3 files changed, 18 insertions(+), 10 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >>>> index 5cac98284184..00f25d8a026b 100644
-> >>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >>>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
-> >>>>  	return 0;
-> >>>>  }
-> >>>>  
-> >>>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
-> >>>> +{
-> >>>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
-> >>>
-> >>> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
-> >>> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
-> >>>
-> >>> How is it possible to have common->cpts == NULL?
-> >>
-> >> Thank you for reviewing the patch. I realize now that checking
-> >> CONFIG_TI_K3_AM65_CPTS is unnecessary.
-> >>
-> >> common->cpts remains NULL in the following cases:
-> >> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
-> > 
-> > In this case am65_cpsw_cpts_cleanup() will NOP as well.
-> > 
-> >> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
-> > 
-> > It is an error and all callers unwind properly.
-> > 
-> >> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
-> >> function with a return value of 0 when cpts is disabled.
-> > 
-> > It is disabled by CONFIG_TI_K3_AM65_CPTS, which in turn will make
-> > am65_cpsw_cpts_cleanup() NOP.
-> > 
-> >> 4. The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
-> >> fails with an error.
-> >>
-> >> Of the above cases, the am65_cpsw_cpts_cleanup() function would have to handle
-> >> cases 1 and 3, since the probe might fail at a later point, following which the
-> >> probe cleanup path will invoke the am65_cpts_cpts_cleanup() function. This
-> >> function then checks for common->cpts not being NULL, so that it can invoke the
-> >> am65_cpts_release() function with this pointer.
-> > 
-> > I still don't see how it is possible.
-> 
-> You are right! I apologize for not analyzing the cases well enough. The only
-> case where common->cpts will remain NULL and the am65_cpsw_cpts_cleanup()
-> function is invoked, is the case where the CONFIG_TI_K3_AM65_CPTS config is
-> disabled. As you had pointed it out, in this case, the am65_cpts_release() is
-> NOP, so passing the NULL pointer common->cpts will have no effect.
-> 
-> With this, I understand that the am65_cpsw_cpts_cleanup() function is
-> unnecessary like you had mentioned, and am65_cpts_release() can be directly
-> invoked for common->cpts. Please let me know if my understanding is correct. If
-> so, I will implement this in the v3 patch.
 
-Yes, you understood me right.
 
-Thanks
-
+On 16.01.2023 10:38, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> Regards,
-> Siddharth.
+> Add the bindings for the CPR3 driver to the documentation.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: Make binding check pass; update AGdR's email]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/soc/qcom/qcom,cpr3.yaml          | 314 ++++++++++++++++++
+>  1 file changed, 314 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> new file mode 100644
+> index 000000000000..eb11af375e54
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> @@ -0,0 +1,314 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
+> +
+> +description: |
+> +  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
+> +  or other device. Each OPP of a device corresponds to a "corner" that has
+> +  a range of valid voltages for a particular frequency. While the device is
+> +  running at a particular frequency, CPR monitors dynamic factors such as
+> +  temperature, etc. and suggests or, in the CPR-Hardened case performs,
+> +  adjustments to the voltage to save power and meet silicon characteristic
+> +  requirements.
+> +
+> +maintainers:
+> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: CPRv3 controller
+> +        items:
+> +          - const: qcom,cpr3
+> +      - description: CPRv4 controller
+> +        items:
+> +          - const: qcom,cpr4
+> +      - description: CPRv4-Hardened controller
+> +        items:
+> +          - enum:
+> +              - qcom,msm8998-cprh
+> +              - qcom,sdm630-cprh
+> +          - const: qcom,cprh
+> +
+> +  reg:
+> +    description: Base address and size of the CPR controller(s)
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: "ref"
+> +
+> +  clocks:
+> +    items:
+> +      - description: CPR reference clock
+> +
+> +  vdd-supply:
+> +    description: Autonomous Phase Control (APC) or other power supply
+> +
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +  acc-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to syscon for writing ACC settings
+> +
+> +  nvmem-cells:
+> +    description: Cells containing the fuse corners and revision data
+> +    minItems: 10
+> +    maxItems: 32
+> +
+> +  nvmem-cell-names:
+> +    minItems: 10
+> +    maxItems: 32
+> +
+> +  operating-points-v2: true
+> +
+> +  power-domains: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - operating-points-v2
+> +  - "#power-domain-cells"
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8998-cprh
+> +    then:
+> +      properties:
+> +        nvmem-cell-names:
+> +          items:
+> +            - const: "cpr_speed_bin"
+> +            - const: "cpr_fuse_revision"
+> +            - const: "cpr0_quotient1"
+> +            - const: "cpr0_quotient2"
+> +            - const: "cpr0_quotient3"
+> +            - const: "cpr0_quotient4"
+> +            - const: "cpr0_quotient_offset2"
+> +            - const: "cpr0_quotient_offset3"
+> +            - const: "cpr0_quotient_offset4"
+> +            - const: "cpr0_init_voltage1"
+> +            - const: "cpr0_init_voltage2"
+> +            - const: "cpr0_init_voltage3"
+> +            - const: "cpr0_init_voltage4"
+> +            - const: "cpr0_ring_osc1"
+> +            - const: "cpr0_ring_osc2"
+> +            - const: "cpr0_ring_osc3"
+> +            - const: "cpr0_ring_osc4"
+> +            - const: "cpr1_quotient1"
+> +            - const: "cpr1_quotient2"
+> +            - const: "cpr1_quotient3"
+> +            - const: "cpr1_quotient4"
+> +            - const: "cpr1_quotient_offset2"
+> +            - const: "cpr1_quotient_offset3"
+> +            - const: "cpr1_quotient_offset4"
+> +            - const: "cpr1_init_voltage1"
+> +            - const: "cpr1_init_voltage2"
+> +            - const: "cpr1_init_voltage3"
+> +            - const: "cpr1_init_voltage4"
+> +            - const: "cpr1_ring_osc1"
+> +            - const: "cpr1_ring_osc2"
+> +            - const: "cpr1_ring_osc3"
+> +            - const: "cpr1_ring_osc4"
+> +    else:
+> +      items:
+> +        - const: "cpr_quotient_offset1"
+> +        - const: "cpr_quotient_offset2"
+> +        - const: "cpr_quotient_offset3"
+> +        - const: "cpr_init_voltage1"
+> +        - const: "cpr_init_voltage2"
+> +        - const: "cpr_init_voltage3"
+> +        - const: "cpr_quotient1"
+> +        - const: "cpr_quotient2"
+> +        - const: "cpr_quotient3"
+> +        - const: "cpr_ring_osc1"
+> +        - const: "cpr_ring_osc2"
+> +        - const: "cpr_ring_osc3"
+> +        - const: "cpr_fuse_revision"
+I suppose this block gotta go, as QCS404 CPR is not
+handled by this binding!
+
+Konrad
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    cpus {
+> +        #address-cells = <2>;
+> +        #size-cells = <0>;
+> +
+> +        cpu@0 {
+> +            compatible = "qcom,kryo280";
+> +            device_type = "cpu";
+> +            reg = <0x0 0x0>;
+> +            operating-points-v2 = <&cpu_gold_opp_table>;
+> +            power-domains = <&apc_cprh 0>;
+> +            power-domain-names = "cprh";
+> +        };
+> +
+> +        cpu@100 {
+> +            compatible = "qcom,kryo280";
+> +            device_type = "cpu";
+> +            reg = <0x0 0x100>;
+> +            operating-points-v2 = <&cpu_silver_opp_table>;
+> +            power-domains = <&apc_cprh 1>;
+> +            power-domain-names = "cprh";
+> +        };
+> +    };
+> +
+> +    cpu0_opp_table: opp-table-cpu0 {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp-1843200000 {
+> +            opp-hz = /bits/ 64 <1843200000>;
+> +            required-opps = <&cprh_opp3>;
+> +        };
+> +
+> +        opp-1094400000 {
+> +            opp-hz = /bits/ 64 <1094400000>;
+> +            required-opps = <&cprh_opp2>;
+> +        };
+> +
+> +        opp-300000000 {
+> +            opp-hz = /bits/ 64 <300000000>;
+> +            required-opps = <&cprh_opp1>;
+> +        };
+> +    };
+> +
+> +    cpu4_opp_table: opp-table-cpu4 {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp-2208000000 {
+> +            opp-hz = /bits/ 64 <2208000000>;
+> +            required-opps = <&cprh_opp3>;
+> +        };
+> +
+> +        opp-1113600000 {
+> +            opp-hz = /bits/ 64 <1113600000>;
+> +            required-opps = <&cprh_opp2>;
+> +        };
+> +
+> +        opp-300000000 {
+> +            opp-hz = /bits/ 64 <300000000>;
+> +            required-opps = <&cprh_opp1>;
+> +        };
+> +    };
+> +
+> +    cprh_opp_table: opp-table-cprh {
+> +        compatible = "operating-points-v2-qcom-level";
+> +
+> +        cprh_opp1: opp-1 {
+> +            opp-level = <1>;
+> +            qcom,opp-fuse-level = <1>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +
+> +        cprh_opp2: opp-2 {
+> +            opp-level = <2>;
+> +            qcom,opp-fuse-level = <2>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +
+> +        cprh_opp3: opp-3 {
+> +            opp-level = <3>;
+> +            qcom,opp-fuse-level = <2 3>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +    };
+> +
+> +    apc_cprh: power-controller@179c8000 {
+> +        compatible = "qcom,msm8998-cprh", "qcom,cprh";
+> +        reg = <0x0179c8000 0x4000>, <0x0179c4000 0x4000>;
+> +        clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
+> +        clock-names = "ref";
+> +
+> +        operating-points-v2 = <&cprh_opp_table>;
+> +        #power-domain-cells = <1>;
+> +
+> +        nvmem-cells = <&cpr_efuse_speedbin>,
+> +                      <&cpr_fuse_revision>,
+> +                      <&cpr_quot0_pwrcl>,
+> +                      <&cpr_quot1_pwrcl>,
+> +                      <&cpr_quot2_pwrcl>,
+> +                      <&cpr_quot3_pwrcl>,
+> +                      <&cpr_quot_offset1_pwrcl>,
+> +                      <&cpr_quot_offset2_pwrcl>,
+> +                      <&cpr_quot_offset3_pwrcl>,
+> +                      <&cpr_init_voltage0_pwrcl>,
+> +                      <&cpr_init_voltage1_pwrcl>,
+> +                      <&cpr_init_voltage2_pwrcl>,
+> +                      <&cpr_init_voltage3_pwrcl>,
+> +                      <&cpr_ro_sel0_pwrcl>,
+> +                      <&cpr_ro_sel1_pwrcl>,
+> +                      <&cpr_ro_sel2_pwrcl>,
+> +                      <&cpr_ro_sel3_pwrcl>,
+> +                      <&cpr_quot0_perfcl>,
+> +                      <&cpr_quot1_perfcl>,
+> +                      <&cpr_quot2_perfcl>,
+> +                      <&cpr_quot3_perfcl>,
+> +                      <&cpr_quot_offset1_perfcl>,
+> +                      <&cpr_quot_offset2_perfcl>,
+> +                      <&cpr_quot_offset3_perfcl>,
+> +                      <&cpr_init_voltage0_perfcl>,
+> +                      <&cpr_init_voltage1_perfcl>,
+> +                      <&cpr_init_voltage2_perfcl>,
+> +                      <&cpr_init_voltage3_perfcl>,
+> +                      <&cpr_ro_sel0_perfcl>,
+> +                      <&cpr_ro_sel1_perfcl>,
+> +                      <&cpr_ro_sel2_perfcl>,
+> +                      <&cpr_ro_sel3_perfcl>;
+> +        nvmem-cell-names = "cpr_speed_bin",
+> +                           "cpr_fuse_revision",
+> +                           "cpr0_quotient1",
+> +                           "cpr0_quotient2",
+> +                           "cpr0_quotient3",
+> +                           "cpr0_quotient4",
+> +                           "cpr0_quotient_offset2",
+> +                           "cpr0_quotient_offset3",
+> +                           "cpr0_quotient_offset4",
+> +                           "cpr0_init_voltage1",
+> +                           "cpr0_init_voltage2",
+> +                           "cpr0_init_voltage3",
+> +                           "cpr0_init_voltage4",
+> +                           "cpr0_ring_osc1",
+> +                           "cpr0_ring_osc2",
+> +                           "cpr0_ring_osc3",
+> +                           "cpr0_ring_osc4",
+> +                           "cpr1_quotient1",
+> +                           "cpr1_quotient2",
+> +                           "cpr1_quotient3",
+> +                           "cpr1_quotient4",
+> +                           "cpr1_quotient_offset2",
+> +                           "cpr1_quotient_offset3",
+> +                           "cpr1_quotient_offset4",
+> +                           "cpr1_init_voltage1",
+> +                           "cpr1_init_voltage2",
+> +                           "cpr1_init_voltage3",
+> +                           "cpr1_init_voltage4",
+> +                           "cpr1_ring_osc1",
+> +                           "cpr1_ring_osc2",
+> +                           "cpr1_ring_osc3",
+> +                           "cpr1_ring_osc4";
+> +    };
+> +...
