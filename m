@@ -2,144 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BBA66CE9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E60766CEA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbjAPSQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S230304AbjAPSTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjAPSPx (ORCPT
+        with ESMTP id S232465AbjAPSSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:15:53 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F881206E;
-        Mon, 16 Jan 2023 10:03:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673892190; x=1705428190;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ea9xxSSSWw3tm4S7t+DdGGvJKuh8rnL7+iKnpW+sRj0=;
-  b=v/+hw4UdBe7KKDet6zgqX/wVwczJMc6SACA+pxy2o0Bnk3t5CedJK+UZ
-   wIO3cGljQGIb9Z60EzpQtjXBqXJkpnJ8BbNdMij8sOoeLCNFUHsG/hIAX
-   OY+RDl98tsjWz7ZoVDqQZbhHdn5VMuiz68Jy56Iuh1yEv14Mj6mb8hkYm
-   0+sRzDiAynbY9hUsaGIpXson3Ne7AVw74SaSZiq6X4abBZ7dzub4Kgdwo
-   uH2XXorNwetOGZZZw/KBYUr0K1P2bNuBdlBT9B9aAZCoOnm2nDCDnvI7J
-   wqLEkfa76GcMPN9SmAL1wp2sj3H5OZ10RVw5tX8R224fxXcjwazng/611
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,221,1669100400"; 
-   d="scan'208";a="192479609"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jan 2023 11:03:09 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 11:03:07 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 11:03:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BXxIqWkPTOWVF8/SKFVttKKqPVH+PjjnRyEdM3gYy/aC3x4f2BLWg7yfL9TmWA+VDRATJ9b9dhwz7zTl37d40RrQnkw5usrTRKkXjp1mWDcopYw5CNsKncw17tuO+3NS2o555NPCtmL2SEq9WMvCFkJVdDKGmEEi2BYsQdIgfHLaE6Gvg+45in/Cy4FbrksMZGqMXpKfBshaObBTeevuqCt6+/ZROyyN0UBefylBYM6+HtKG3GYhRn098sXlPBJ0Vfr854cAN57bg1sNOrJLGKocz4+tdXqxXkYWfq2VBsbpNFkfigopTIKh4NsRQ+9lsx8WMj/tysJdhMYHMLWiAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W2715M04y4mEehPAOYKMm2Ie9Umqmqn1fp6uxzX9Zf0=;
- b=CPd3vMtTK9ZZArFRdwahr/h5o2m2HNji6Ux7FZaEc6ir9r9w/ZtfzvOAB61SJFRvA3ttiPjjGPOB6+rhU7v7pgErrTFUHpsYLunH3QJ1MkbQp64VVn7lNpivQyV93vwn6Rx3Gwu8o4jLG1u4btev3q7AABcyhM+ro9yD2JyzYLnvaMn5SsGM8Xlq+cWnwopu+zcU3LPEqoLzapr80BhSzktq3y3nVCilJoo33x8ujc/TVO5qlwwg16EI9DsGnBGg0qfKVudJ2Ex6Pq/dTJoDIkHbbpo9CXINnAcmUWcQnx1kuosikfQpQLfwgZMaD6T0r6jleuBJ9T8UcvSOG8JxDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W2715M04y4mEehPAOYKMm2Ie9Umqmqn1fp6uxzX9Zf0=;
- b=NjXxcS9DW0oc9DFrWaojf/TH3+pkcAXv14i6gvvfG42PZBKf2vWyGYj0GXmO/IReppwLP73lyFYh73vgjEG47NSVOkQVsrdaz/izURxtytm33EG3RJVX09dz4pkXcCbOnyPA9EEvNtVVflp7Q1kmu9jJIwLoWSzNoj6xXcFjnz0=
-Received: from MWHPR11MB1693.namprd11.prod.outlook.com (2603:10b6:300:2b::21)
- by IA1PR11MB7679.namprd11.prod.outlook.com (2603:10b6:208:3f1::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 18:03:02 +0000
-Received: from MWHPR11MB1693.namprd11.prod.outlook.com
- ([fe80::3558:8159:5c04:f09c]) by MWHPR11MB1693.namprd11.prod.outlook.com
- ([fe80::3558:8159:5c04:f09c%4]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
- 18:03:02 +0000
-From:   <Jerry.Ray@microchip.com>
-To:     <olteanv@gmail.com>
-CC:     <andrew@lunn.ch>, <f.fainelli@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <jbe@pengutronix.de>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net-next v6 2/6] dsa: lan9303: move Turbo Mode bit init
-Thread-Topic: [PATCH net-next v6 2/6] dsa: lan9303: move Turbo Mode bit init
-Thread-Index: AQHZJHABkK7DClBc80KHKpZcwORjQq6eaqUNgAL12sA=
-Date:   Mon, 16 Jan 2023 18:03:02 +0000
-Message-ID: <MWHPR11MB1693247B3AA9D532B1B0E1ADEFC19@MWHPR11MB1693.namprd11.prod.outlook.com>
-References: <20230109211849.32530-1-jerry.ray@microchip.com>
- <20230109211849.32530-1-jerry.ray@microchip.com>
- <20230109211849.32530-3-jerry.ray@microchip.com>
- <20230109211849.32530-3-jerry.ray@microchip.com>
- <20230114204943.jncpislrqjqvinie@skbuf>
-In-Reply-To: <20230114204943.jncpislrqjqvinie@skbuf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1693:EE_|IA1PR11MB7679:EE_
-x-ms-office365-filtering-correlation-id: 8fb20dc5-25de-4bc3-b771-08daf7ebe90e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +DSwtvMCcez2bZ9592RNKlPuyMpcuLGE9u+IhtMVt+qFvM/jtNpZuSCZo46cOQ9y8XJRN2S/3g9QVVkTv29oV088+4Z0yTBZ/9VBvpc9xOVUf8QhP+zEjww4Xhvrp+T1O1tCt3YXWdOgwXeqWhuaXSh8yUFtHcPNDobSEhmZMj9OmO6SeZzgHjWnkYraVth0q7j7tt5qoumCA5/UTY5kjp1uh9CZG0iLuNKk25u4+S3KvgE6oUhWGbmS++3h2pmZBXlEARyq3KvFms1XMVzMAHKsjueAwufJ7p9HG/2Tfca8V9HvN3a55NhFjfrui4gl3WBTCs2kVCukgaOvczYk4VlGQ07dndyu8sYcExLUMIHfnPsZkVF9KxAZ2VUIfpbnhGsb/TWCrNH9pFGYCmgHec26p1idPDlluD3/TC1sgJTz20OmXU9ZultcEdTTIkJyZ00LaW59wvP3MS2UP+YKSv43i1oTTwU/HHvlZ2wrmIVEOnp0G9sxQ7oWaTlw2DvYPsoaIcW5ZB1m4rokAvBUxov/DKhpCrhSjuDOSdpaazKvScJ6/C/gqy52xGWOuqnj4WMMT4cfBh5Pq/Kj1gS07uush2EgTiiCtJ8NePrrGNhIyzWLKeAivkm7gHB9P9vcQ6/4vSg/GXK+7CTDDaLFEH/o768NgV6N/LOPSDvCmWuB2cC4ArVcCyAexJEsCRLVc/Q4YTn9Oo8DFffpSf3mZw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1693.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(136003)(346002)(376002)(39860400002)(451199015)(86362001)(6916009)(38070700005)(76116006)(66946007)(64756008)(66476007)(8936002)(55016003)(66556008)(52536014)(66446008)(8676002)(4326008)(2906002)(7416002)(122000001)(38100700002)(83380400001)(33656002)(5660300002)(478600001)(71200400001)(7696005)(54906003)(316002)(41300700001)(9686003)(26005)(186003)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?42tee2nC5UMFQNPHiVq75xCbSRR2XoPaPOpTtZ7fLej81s9Q14vH+qiPslL2?=
- =?us-ascii?Q?qTqY0AZ0w4O0Hh7OsbSjiijneEs3FxcnjT+kRrP79DOwHI19vHV3T7TZRIDe?=
- =?us-ascii?Q?1AsdjM45NGQiieSv6ZeF5Yp6SQX8bXxo6M8fKDa6jo7YiAFLf7r9LMG+CB9/?=
- =?us-ascii?Q?qA8OynFXrQaq0sZuYyj2j+W1ulxAsAIujzd7tQukiOwrK4z3Hfa+O8/mLOiA?=
- =?us-ascii?Q?Bu0wvxLWQCTNQnFRa5p+YiAg+IjonSw4nw7YukTQrPVcKdyDOneH15E5ZIag?=
- =?us-ascii?Q?DhjOBv+L8YysxbhrrzgM8SaaZ17bR+uqeQoeMSbTlqYuKGxFjXY9kExfu5FH?=
- =?us-ascii?Q?ZWT1BlqohvNiGMjSoPZQUNq5ZwxZ8JT4/9d7afA5T3OikYK6CCfRdCTJOaNn?=
- =?us-ascii?Q?AflIY43sxYP0JEDWF4Oi4NcJkQRIX0qAePzOrJXA0xLP2b8wP7LeQeZNWO39?=
- =?us-ascii?Q?sWqYQl4ZXLvjmJC+rQA3zsmXyJwSGs1L/CBoGdhwTDC2edLdqaJDfUIu9gRy?=
- =?us-ascii?Q?AF3ScdUT4jWM+5Z3h4dqc/aAP8PcsoCmB7F8t2dtdmeRcN0qlAMYj0gCs6Pw?=
- =?us-ascii?Q?+FKKC1oEb2T5PsOxQQOUSXrnEqvqL8XCQThpixr5sTS+716drYE8ZXrXH3JH?=
- =?us-ascii?Q?5jMmKa4Hk3lU6J0fVvRdRn43yUy5c342kdBKqRPqIJbgsJEOy0iN3IOKhkWJ?=
- =?us-ascii?Q?K5Yq6+F0Z6VG3lQtiC9qnWQLn321T3qinxw6YQGnoqmAoofI5RZPsBQR+Uf1?=
- =?us-ascii?Q?hKSAq7uw1aAxZuK2UhY3iZzQgu8Wqi/TSp53STtRtqwDXtO4nNQGJYpuhdPk?=
- =?us-ascii?Q?9A14znCjIzHqHgrptT9u+CneprsmmFa6fprvG3LURINb0ZBnzB7G98jgWPUY?=
- =?us-ascii?Q?dUbFWxxcxUJJ5D2bFUKD2h5XVSSfOleYGKcksccO07Uhow7CQKBzTDL8FG5T?=
- =?us-ascii?Q?6fqDxz3oreCu2bVCZT1C26NjRaDoy8jblGSOOsKZ6SRc+YZ0nUxmnHPros3d?=
- =?us-ascii?Q?ZzFXUrkGBKgJbjnYM7ILj3GoZ6xCU0G89SNlL1jswb7DM5uP3W+hHCshbxNy?=
- =?us-ascii?Q?+cRsNFlkFnaSrqHFz/s9kX7MZKmlMOW3SW6IVblFLxkVLjt7N9H5zQlDySsx?=
- =?us-ascii?Q?gifPghzQS+T9NW6pD5bFz5Ffr8FwQo67UxO6tlrqqT0xhNOJ57tW49xhfuA8?=
- =?us-ascii?Q?RSYLJm+e44Ff60lgGdCKPRrn9fTmLYupfJFJJLRDOPgvrDlgIixbikdJ8AOi?=
- =?us-ascii?Q?HpyJ654IHylFLWQ/kCqS5rOdD55vDpn5PrdfQMNCLl259A0hX/5l3NG2WuFh?=
- =?us-ascii?Q?XK+P2J4Do9/z4FMobCp5hPQhctk6VpQdhcuJka11cRiy100ikgjdSVM6TbUg?=
- =?us-ascii?Q?wV0657ED70pkdgyVXGJ4zaj2ee1N9+dpsfvDrEwUUEN8i+3xmRLOHrGpeg5l?=
- =?us-ascii?Q?skW944amLKnVA1wIeqtFVtq7BQAaQOY3BcTiyT/0wMMN7MNJW4/KmnSNWW1w?=
- =?us-ascii?Q?cUWyHJbpl48GbsORDHvJR+M6UC2ATL1VrOftG01fFr4GY8S857DvvJS6l8kO?=
- =?us-ascii?Q?xFWsb6DkQ3QvySlqkSy1uwsHwJG1e6AUIarvhd0Z?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 16 Jan 2023 13:18:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2AE30E9B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:04:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673892265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RKhcGPZ+PlhALsfFtaUMtGh+G7/ZxXsK6DILN0wHv9Q=;
+        b=VVxgWlbnz837b6BII256CiO0Pw0pjVkDEo2luWAf7e2GPYhjj+JETjkykn7Ee2IiYTAwfK
+        +EaEHTeKIjdWm0vJniSpiSNAZ5uu+RAkRCX9Oh7ork4n6ZncWzX1u0cVSaXbsUQePPnhFg
+        OGkr6o3e4h1l4Paj3OPFhXJvB3dHRLE=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-363-Y3XDwP_OODajIGnUJ72CGw-1; Mon, 16 Jan 2023 13:04:24 -0500
+X-MC-Unique: Y3XDwP_OODajIGnUJ72CGw-1
+Received: by mail-yb1-f199.google.com with SMTP id z9-20020a25ba49000000b007d4416e3667so6904712ybj.23
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:04:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RKhcGPZ+PlhALsfFtaUMtGh+G7/ZxXsK6DILN0wHv9Q=;
+        b=jGTD0gHv1dN0t7jSA5SYQUI2zthMYfjn+x9mkPVsX/xlGjkWZyvw70lXt3zyQVOoRL
+         2BRwatBRatJZWO8IBO6OkpfIflVdk0KBtc1sXcYf/3PAgrAMvK39L8wa6mMtwy+BBaoU
+         zkMcjO8aQwCVc/GvYvKDXC655mu0Q08sQ8LXz4URTPx8IQ5DPB0MQgVSIet/ZQaBZVAQ
+         UtyIvxaY2BJxMs+cFs0nXXwF0HEmler7h/zw2Kw3Q7k7jWL57KKvhXbLUYlYxw4hl7A9
+         2o5/92Px107x6YT5JdgevMqh+fkvlvanz+Junzi8r/g98mVnu+gjN/bddNdi00osJj3q
+         LV1Q==
+X-Gm-Message-State: AFqh2kp5AUCb1VHng3oH5TbLJh/iHFu24T4ytu5ZjHTHIOuxNpCwRo24
+        n6Zn1xoXTsWiKArXZtUhSinMyT1ANTBv3MKJAL6Ubv4lKq33NW3YtoO0v+pMGL+euxCzUiRz9zj
+        1gSUgpTZciXqR/5pvZ7YBynGpZcg41rUQqCAsiNpU
+X-Received: by 2002:a25:ca81:0:b0:7d2:891e:ee59 with SMTP id a123-20020a25ca81000000b007d2891eee59mr79865ybg.152.1673892263388;
+        Mon, 16 Jan 2023 10:04:23 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvpMphjoFXnzj1/HdaHqCfM/NpgixUrScz0fA0smTutViyiy4j8C7DXJ3lZTMa5Srq+y4o1sOfALPGqqgga5/A=
+X-Received: by 2002:a25:ca81:0:b0:7d2:891e:ee59 with SMTP id
+ a123-20020a25ca81000000b007d2891eee59mr79856ybg.152.1673892263141; Mon, 16
+ Jan 2023 10:04:23 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1693.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fb20dc5-25de-4bc3-b771-08daf7ebe90e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 18:03:02.5465
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZiCxJJr2DhVI3riHjFi77Zxt4Tn04+xDC+THr1CLrVjqSavUEl3FPgVbHlCmGfE8XxgYlRjwGMn5YaM1/Pztjg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7679
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230112142218.725622-1-eperezma@redhat.com> <20230112142218.725622-3-eperezma@redhat.com>
+ <DM8PR12MB5400B2FF15EA6DB00AB840EBABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
+In-Reply-To: <DM8PR12MB5400B2FF15EA6DB00AB840EBABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Mon, 16 Jan 2023 19:03:47 +0100
+Message-ID: <CAJaqyWeJOwcAj=mr5R4qHqWSjK1dQ-SxMNVF0HYkPtdoO2BaGQ@mail.gmail.com>
+Subject: Re: [RFC 2/3] vdpa/mlx5: conditionally delete cvq iotlb in destroy_mr
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     "mst@redhat.com" <mst@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Parav Pandit <parav@nvidia.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "sgarzare@redhat.com" <sgarzare@redhat.com>,
+        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -147,74 +83,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> > In preparing to remove the .adjust_link api, I am moving the one-time
-> > initialization of the device's Turbo Mode bit into a different executio=
-n
-> > path. This code clears (disables) the Turbo Mode bit which is never use=
-d
-> > by this driver. Turbo Mode is a non-standard mode that would allow the
-> > 100Mbps RMII interface to run at 200Mbps.
+On Mon, Jan 16, 2023 at 8:03 AM Eli Cohen <elic@nvidia.com> wrote:
+>
+> > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > Sent: Thursday, 12 January 2023 16:22
+> > To: mst@redhat.com; Eli Cohen <elic@nvidia.com>
+> > Cc: linux-kernel@vger.kernel.org; Parav Pandit <parav@nvidia.com>;
+> > lulu@redhat.com; jasowang@redhat.com; virtualization@lists.linux-
+> > foundation.org; sgarzare@redhat.com; si-wei.liu@oracle.com
+> > Subject: [RFC 2/3] vdpa/mlx5: conditionally delete cvq iotlb in destroy=
+_mr
 > >
-> > Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+> > mlx5_vdpa_destroy_mr can be called by setting a map to data ASID after
+> > populating control virtqueue ASID iotlb.  Control vq iotlb must not be
+> > cleared, since it will not be populated again.
+> >
+> > Adding a conditional in the function so the caller specifies if it is
+> > resetting, cleaning, or just changing data memory.
+> >
+> > Fixes: 8fcd20c30704 ("vdpa/mlx5: Support different address spaces for
+> > control and data")
+> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
 > > ---
-> >  drivers/net/dsa/lan9303-core.c | 15 ++++++---------
-> >  1 file changed, 6 insertions(+), 9 deletions(-)
+> >  drivers/vdpa/mlx5/core/mlx5_vdpa.h |  2 +-
+> >  drivers/vdpa/mlx5/core/mr.c        |  5 +++--
+> >  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 12 ++++++------
+> >  3 files changed, 10 insertions(+), 9 deletions(-)
 > >
-> > diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-c=
-ore.c
-> > index 5a21fc96d479..50470fb09cb4 100644
-> > --- a/drivers/net/dsa/lan9303-core.c
-> > +++ b/drivers/net/dsa/lan9303-core.c
-> > @@ -886,6 +886,12 @@ static int lan9303_check_device(struct lan9303 *ch=
-ip)
-> >               return ret;
+> > diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> > b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> > index 058fbe28107e..000b144019ec 100644
+> > --- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> > +++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> > @@ -119,7 +119,7 @@ int mlx5_vdpa_handle_set_map(struct
+> > mlx5_vdpa_dev *mvdev, struct vhost_iotlb *io
+> >                            bool *change_map, unsigned int asid);
+> >  int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotl=
+b
+> > *iotlb,
+> >                       unsigned int asid);
+> > -void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev);
+> > +void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev, bool
+> > delete_cvq_iotlb);
+> >
+> >  #define mlx5_vdpa_warn(__dev, format, ...)
+> > \
+> >       dev_warn((__dev)->mdev->device, "%s:%d:(pid %d) warning: "
+> > format, __func__, __LINE__,     \
+> > diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
+> > index ae34dcac9a3f..878ee94efa78 100644
+> > --- a/drivers/vdpa/mlx5/core/mr.c
+> > +++ b/drivers/vdpa/mlx5/core/mr.c
+> > @@ -491,7 +491,7 @@ static void destroy_user_mr(struct mlx5_vdpa_dev
+> > *mvdev, struct mlx5_vdpa_mr *mr
 > >       }
-> >
-> > +     /* Virtual Phy: Remove Turbo 200Mbit mode */
-> > +     lan9303_read(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, &reg);
-> > +
-> > +     reg &=3D ~LAN9303_VIRT_SPECIAL_TURBO;
-> > +     regmap_write(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, reg);
-> > +
->=20
-> Isn't a function whose name is lan9303_check_device() being abused for
-> this purpose (device initialization)?
->=20
-I will move this into lan9303_setup.
-
-Regards,
-Jerry.
-
-> >       return 0;
 > >  }
 > >
-> > @@ -1050,7 +1056,6 @@ static int lan9303_phy_write(struct dsa_switch *d=
-s, int phy, int regnum,
-> >  static void lan9303_adjust_link(struct dsa_switch *ds, int port,
-> >                               struct phy_device *phydev)
+> > -void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev)
+> > +void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev, bool
+> > delete_cvq_iotlb)
 > >  {
-> > -     struct lan9303 *chip =3D ds->priv;
-> >       int ctl;
+> >       struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
 > >
-> >       if (!phy_is_pseudo_fixed_link(phydev))
-> > @@ -1073,14 +1078,6 @@ static void lan9303_adjust_link(struct dsa_switc=
-h *ds, int port,
-> >               ctl &=3D ~BMCR_FULLDPLX;
+> > @@ -499,7 +499,8 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev
+> > *mvdev)
+> >       if (!mr->initialized)
+> >               goto out;
 > >
-> >       lan9303_phy_write(ds, port, MII_BMCR, ctl);
-> > -
-> > -     if (port =3D=3D chip->phy_addr_base) {
-> > -             /* Virtual Phy: Remove Turbo 200Mbit mode */
-> > -             lan9303_read(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, &ct=
-l);
-> > -
-> > -             ctl &=3D ~LAN9303_VIRT_SPECIAL_TURBO;
-> > -             regmap_write(chip->regmap, LAN9303_VIRT_SPECIAL_CTRL, ctl=
-);
-> > -     }
+> > -     prune_iotlb(mvdev);
+> > +     if (delete_cvq_iotlb)
+> > +             prune_iotlb(mvdev);
+> >       if (mr->user_mr)
+> >               destroy_user_mr(mvdev, mr);
+> >       else
+> > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > index 6632651b1e54..1f1f341f602b 100644
+> > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > @@ -2433,7 +2433,7 @@ static int mlx5_vdpa_change_map(struct
+> > mlx5_vdpa_dev *mvdev,
+> >               goto err_mr;
+> >
+> >       teardown_driver(ndev);
+> > -     mlx5_vdpa_destroy_mr(mvdev);
+> > +     mlx5_vdpa_destroy_mr(mvdev, mvdev-
+> > >group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid);
+>
+> Looks to me we need to handle this in a more generic manner. The asid sho=
+uld be used conditionally for either CVQ or data VQ updates. You are protec=
+ting CVQ but same thing should hold also for data VQs iotlb.
+
+I agree. Maybe the best option is to replace the boolean indicating
+the ASID we want to destroy mr? Then, at cleanup, we can iterate by
+all vq groups / ASID.
+
+> Meaning, if qemu wants to update only CVQ than data VQ translation must n=
+ot be affected.
+
+_mlx5_vdpa_create_mr. is the one that checks it If I recall correctly.
+It is not obvious in this change though.
+
+Thanks!
+
+>
+> >       err =3D mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+> >       if (err)
+> >               goto err_mr;
+> > @@ -2449,7 +2449,7 @@ static int mlx5_vdpa_change_map(struct
+> > mlx5_vdpa_dev *mvdev,
+> >       return 0;
+> >
+> >  err_setup:
+> > -     mlx5_vdpa_destroy_mr(mvdev);
+> > +     mlx5_vdpa_destroy_mr(mvdev, mvdev-
+> > >group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid);
+> >  err_mr:
+> >       return err;
 > >  }
+> > @@ -2578,7 +2578,7 @@ static void mlx5_vdpa_set_status(struct
+> > vdpa_device *vdev, u8 status)
+> >       return;
 > >
-> >  static int lan9303_port_enable(struct dsa_switch *ds, int port,
+> >  err_setup:
+> > -     mlx5_vdpa_destroy_mr(&ndev->mvdev);
+> > +     mlx5_vdpa_destroy_mr(&ndev->mvdev, true);
+> >       ndev->mvdev.status |=3D VIRTIO_CONFIG_S_FAILED;
+> >  err_clear:
+> >       up_write(&ndev->reslock);
+> > @@ -2604,7 +2604,7 @@ static int mlx5_vdpa_reset(struct vdpa_device
+> > *vdev)
+> >       down_write(&ndev->reslock);
+> >       teardown_driver(ndev);
+> >       clear_vqs_ready(ndev);
+> > -     mlx5_vdpa_destroy_mr(&ndev->mvdev);
+> > +     mlx5_vdpa_destroy_mr(&ndev->mvdev, true);
+> >       ndev->mvdev.status =3D 0;
+> >       ndev->cur_num_vqs =3D 0;
+> >       ndev->mvdev.cvq.received_desc =3D 0;
+> > @@ -2691,7 +2691,7 @@ static void mlx5_vdpa_free(struct vdpa_device
+> > *vdev)
+> >       ndev =3D to_mlx5_vdpa_ndev(mvdev);
+> >
+> >       free_resources(ndev);
+> > -     mlx5_vdpa_destroy_mr(mvdev);
+> > +     mlx5_vdpa_destroy_mr(mvdev, true);
+> >       if (!is_zero_ether_addr(ndev->config.mac)) {
+> >               pfmdev =3D pci_get_drvdata(pci_physfn(mvdev->mdev->pdev))=
+;
+> >               mlx5_mpfs_del_mac(pfmdev, ndev->config.mac);
+> > @@ -3214,7 +3214,7 @@ static int mlx5_vdpa_dev_add(struct
+> > vdpa_mgmt_dev *v_mdev, const char *name,
+> >  err_res2:
+> >       free_resources(ndev);
+> >  err_mr:
+> > -     mlx5_vdpa_destroy_mr(mvdev);
+> > +     mlx5_vdpa_destroy_mr(mvdev, true);
+> >  err_res:
+> >       mlx5_vdpa_free_resources(&ndev->mvdev);
+> >  err_mpfs:
 > > --
-> > 2.17.1
+> > 2.31.1
+>
+
