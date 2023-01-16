@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA2066B851
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA63766B850
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjAPHjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 02:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S231985AbjAPHjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbjAPHjB (ORCPT
+        with ESMTP id S231961AbjAPHjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 Jan 2023 02:39:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17976E397
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C211855BA
         for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:39:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF891B80D58
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:38:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0CAC433F0;
-        Mon, 16 Jan 2023 07:38:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E93A60ED1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D8E5C433EF;
+        Mon, 16 Jan 2023 07:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673854737;
-        bh=GRifVG8QQU3bI8YFwJPVwBl3vn/mY1G/0lBs8bIH0oI=;
+        s=k20201202; t=1673854739;
+        bh=PBE0PpRXIlt2qCDFtsjgADfP4kD6JxkZrkUXxW7Tmuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=em9uypzzHGPvaNWOz7teN9KlBmzxP3upD3xcgjrQ7YYhMhdRamJWXJHaM/kQ0spLe
-         MLY9n7CUhvc/zwYxxk2uktB+paiXu/SAyOH0m1OE1eCU0ObNQBjaXbu594R0P1lbby
-         xZ1SLHwcK1gmlf5re16DScRSe8cJLKZLeelsCA9/ao6OcPVBf5hfsWnvf0Kgz/H/4K
-         hWNGBn+HGpsWiV3EroSE1cA7s0rxjaokTnCdpnYagBZ/1WWqSuStoNwH3FwSu6oR6z
-         c+gC2WCXU5eqFQR0Ru8zPEWq1hrDJVsVbZjK+QGZC1VPApdZ31XxYlos24ihjler2s
-         V5/BK0vsMKPOA==
+        b=a0KS4Som77Rg8W9H4kxDYF8K/8s1ZXqdHiwy5QKfjFXMKjjnP3Wfj6Mprg6eePZoK
+         kwSWMB6qR4dw8LL3oK7mBpskdaaabxaC3aRc92oh866vejtqph36qGUvLRmh4ZPqTL
+         ShJVLQh1AstWDoVGeqPaydfXBaHcl2zbcDOXuiH6jc7eI0vaY6RjIqb74dyKHWv3ja
+         QnbDoj4hcEljYRDncvDOVhoMLoS3V4o4mfvUSlKQdcaPtE1p7CZwNTzPLzBpft2qy8
+         Uj4WvlnIBC0OWDtSlrpnKBP0f0ewUYKC8aF2xUKi0JuVKiSxEk6GjQVXNKHUfSWp0T
+         3/W7lPGAJjL7Q==
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -40,9 +40,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
 Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
         Andreas Schwab <schwab@linux-m68k.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] riscv: Add instruction dump to RISC-V splats
-Date:   Mon, 16 Jan 2023 08:38:33 +0100
-Message-Id: <20230116073834.333129-2-bjorn@kernel.org>
+Subject: [PATCH v2 2/2] scripts/decodecode: Add support for RISC-V
+Date:   Mon, 16 Jan 2023 08:38:34 +0100
+Message-Id: <20230116073834.333129-3-bjorn@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230116073834.333129-1-bjorn@kernel.org>
 References: <20230116073834.333129-1-bjorn@kernel.org>
@@ -60,85 +60,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Björn Töpel <bjorn@rivosinc.com>
 
-Add instruction dump (Code:) output to RISC-V splats. Dump 16b
-parcels.
+RISC-V has some GNU disassembly quirks, e.g. it requires '-D' to
+properly disassemble .2byte directives similar to Arm [1]. Further,
+GNU objdump groups RISC-V instruction by 2 or 4 byte chunks, instead
+doing byte-for-byte.
 
-An example:
-  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-  Oops [#1]
-  Modules linked in:
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc3-00302-g840ff44c571d-dirty #27
-  Hardware name: riscv-virtio,qemu (DT)
-  epc : kernel_init+0xc8/0x10e
-   ra : kernel_init+0x70/0x10e
-  epc : ffffffff80bd9a40 ra : ffffffff80bd99e8 sp : ff2000000060bec0
-   gp : ffffffff81730b28 tp : ff6000007ff00000 t0 : 7974697275636573
-   t1 : 0000000000000000 t2 : 3030303270393d6e s0 : ff2000000060bee0
-   s1 : ffffffff81732028 a0 : 0000000000000000 a1 : ff60000080dd1780
-   a2 : 0000000000000002 a3 : ffffffff8176a470 a4 : 0000000000000000
-   a5 : 000000000000000a a6 : 0000000000000081 a7 : ff60000080dd1780
-   s2 : 0000000000000000 s3 : 0000000000000000 s4 : 0000000000000000
-   s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
-   s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
-   s11: 0000000000000000 t3 : ffffffff81186018 t4 : 0000000000000022
-   t5 : 000000000000003d t6 : 0000000000000000
-  status: 0000000200000120 badaddr: 0000000000000000 cause: 000000000000000f
-  [<ffffffff80003528>] ret_from_exception+0x0/0x16
-  Code: 862a d179 608c a517 0069 0513 2be5 d0ef db2e 47a9 (c11c) a517
-  ---[ end trace 0000000000000000 ]---
-  Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-  SMP: stopping secondary CPUs
-  ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+Add the required switches, and translate from short/word to bytes when
+ARCH is "riscv".
+
+An example how to invoke decodecode for RISC-V:
+  $ echo 'Code: bf45 f793 1007 f7d9 50ef 37af d541 b7d9 7097 00c8 (80e7)
+  6140' | AFLAGS="-march=rv64imac_zicbom_zihintpause"  \
+  ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- ./scripts/decodecode
+  Code: bf45 f793 1007 f7d9 50ef 37af d541 b7d9 7097 00c8 (80e7) 6140
+  All code
+  ========
+     0:   bf45                    c.j     0xffffffffffffffb0
+     2:   1007f793                andi    a5,a5,256
+     6:   f7d9                    c.bnez  a5,0xffffffffffffff94
+     8:   37af50ef                jal     ra,0xf5382
+     c:   d541                    c.beqz  a0,0xffffffffffffff94
+     e:   b7d9                    c.j     0xffffffffffffffd4
+    10:   00c87097                auipc   ra,0xc87
+    14:*  614080e7                jalr    ra,1556(ra) # 0xc87624          <-- trapping instruction
+
+  Code starting with the faulting instruction
+  ===========================================
+     0:   614080e7                jalr    ra,1556(ra)
+
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=10263
 
 Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 ---
- arch/riscv/kernel/traps.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ scripts/decodecode | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index 549bde5c970a..b8f0ea8a9568 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -29,6 +29,27 @@ int show_unhandled_signals = 1;
+diff --git a/scripts/decodecode b/scripts/decodecode
+index b28fd2686561..8fe71c292381 100755
+--- a/scripts/decodecode
++++ b/scripts/decodecode
+@@ -93,6 +93,11 @@ disas() {
+ 		${CROSS_COMPILE}strip $t.o
+ 	fi
  
- static DEFINE_SPINLOCK(die_lock);
- 
-+static void dump_kernel_instr(const char *loglvl, struct pt_regs *regs)
-+{
-+	char str[sizeof("0000 ") * 12 + 2 + 1], *p = str;
-+	unsigned long addr = regs->epc;
-+	long bad;
-+	u16 val;
-+	int i;
++	if [ "$ARCH" = "riscv" ]; then
++		OBJDUMPFLAGS="-M no-aliases --section=.text -D"
++		${CROSS_COMPILE}strip $t.o
++	fi
 +
-+	for (i = -10; i < 2; i++) {
-+		bad = get_kernel_nofault(val, &((u16 *)addr)[i]);
-+		if (!bad) {
-+			p += sprintf(p, i == 0 ? "(%04hx) " : "%04hx ", val);
-+		} else {
-+			printk("%sCode: Unable to access instruction at 0x%lx.\n",
-+			       loglvl, (long)&((u16 *)addr)[i]);
-+			return;
-+		}
-+	}
-+	printk("%sCode: %s\n", loglvl, str);
-+}
+ 	if [ $pc_sub -ne 0 ]; then
+ 		if [ $PC ]; then
+ 			adj_vma=$(( $PC - $pc_sub ))
+@@ -126,8 +131,13 @@ get_substr_opcode_bytes_num()
+ 	do
+ 		substr+="$opc"
+ 
++		opcode="$substr"
++		if [ "$ARCH" = "riscv" ]; then
++			opcode=$(echo $opcode | tr ' ' '\n' | tac | tr -d '\n')
++		fi
 +
- void die(struct pt_regs *regs, const char *str)
- {
- 	static int die_counter;
-@@ -43,8 +64,10 @@ void die(struct pt_regs *regs, const char *str)
- 
- 	pr_emerg("%s [#%d]\n", str, ++die_counter);
- 	print_modules();
--	if (regs)
-+	if (regs) {
- 		show_regs(regs);
-+		dump_kernel_instr(KERN_EMERG, regs);
-+	}
- 
- 	cause = regs ? regs->cause : -1;
- 	ret = notify_die(DIE_OOPS, str, regs, 0, cause, SIGSEGV);
+ 		# return if opcode bytes do not match @opline anymore
+-		if ! echo $opline | grep -q "$substr";
++		if ! echo $opline | grep -q "$opcode";
+ 		then
+ 			break
+ 		fi
 -- 
 2.37.2
 
