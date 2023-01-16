@@ -2,165 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D371566BFDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A4A66BFE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbjAPNee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S230455AbjAPNe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjAPNeb (ORCPT
+        with ESMTP id S230484AbjAPNew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:34:31 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2061.outbound.protection.outlook.com [40.107.237.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926391D926;
-        Mon, 16 Jan 2023 05:34:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cih3NVnezjLJ8PgxVhIX1xaAq75xwqYrIkM50MGjVaMwrbjnD1Ufn9Me+/lDZ5x7l/KQmjwEarnUBXfCWbRccyAiBginOJPSJJyXEIK+Y9LChlsM7DRha0rWwMtqsTRt0qSrwSsU78D7CEJZDA5hluf1LAMyESLVlu2FtciUXSrAVUAgeIMefCcidIlcMWGSfy85yEDl5tfLkTMJZZ3ZgI02JRCnwlhBjJTJCm/FcJDxPqMJKzyC/d/kx9wbJTcfWfJuwWKxquwgr3ksHdFYS6UmGL43ZUfIbqyFgdHeNz7YjOuQrR3gTUitLPxWvK58vkYiYa2LIAncFXmfgozY+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JAsrt/TK34CuWcgeLMhGj4m60gxaJxA+PBC4cjQ0MFM=;
- b=ftUIhGLl2bAIWOzQgegAZ90qc5M58cimP6pj9sUOKV7Tr0RhHSH08pXriL34GcCGsy9lSdOjzDl5/e9LKqYp6n1EmgGe/uUjicul0ZoH5xbgcWLxuYELmb4Ur2pBVohwo/2FruyajxDPIJD0XuXi3qEsr3uJAXDmatkRslDJMjtPOPHLjYZ88xvrahjJm2Uk8yG+UFetoJUk3G0lpWEL7VdrmaC8STRR4nyIZSzpI7FjQ9gW16148+/ar3uxoEB7YJqKEKg+aXhaoEh7P2l9q6yPdOYpgC4o31KoX9+zD51pmWIQVyyG9IuRCffz+BVNWxoxiXXAkDhKrLKRK5mWWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JAsrt/TK34CuWcgeLMhGj4m60gxaJxA+PBC4cjQ0MFM=;
- b=MqHomjYYx/edLDf1BfH+LryPrbLVxvbA2PdUc56ubTnTp7HxCQWgYl8lRjBqyXr37HwQPhxwyqOcGfn0LbrbvEw7uMmQjPHlGSch01OkcLbW5fQftaiR0G45mgzXdPVsaq/goxvNmp2m96reEGaSyretp98bvJb6zNS58Zie/AQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by PH7PR12MB7234.namprd12.prod.outlook.com (2603:10b6:510:205::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 13:34:26 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::a0e2:652:d7bd:58f]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::a0e2:652:d7bd:58f%4]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
- 13:34:26 +0000
-Message-ID: <437ccc68-e07f-de9a-4a0d-602b0d8189dd@amd.com>
-Date:   Mon, 16 Jan 2023 19:04:12 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [RFC 3/4] perf tool: Introduce PERF_RECORD_KMOD_SEC_MAP
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        irogers@google.com, kan.liang@linux.intel.com,
-        peterz@infradead.org, mark.rutland@arm.com, mingo@redhat.com,
-        alexander.shishkin@linux.intel.com, james.clark@arm.com,
-        german.gomez@arm.com, leo.yan@linaro.org,
-        alexey.v.bayduraev@linux.intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20230110055859.685-1-ravi.bangoria@amd.com>
- <20230110055859.685-4-ravi.bangoria@amd.com>
- <cbcb6109-0c23-9270-a534-c4fabdddfbbc@intel.com>
-Content-Language: en-US
-In-Reply-To: <cbcb6109-0c23-9270-a534-c4fabdddfbbc@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0210.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::19) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Mon, 16 Jan 2023 08:34:52 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1DE1EFEE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:34:49 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id u1-20020a5d8181000000b006ee29a8c421so17834805ion.19
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:34:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CwcvzN728L5QliwZguaeEyBwZyJYHIOyyKuKBFA/DjE=;
+        b=jR9fJ/3aQvlUv87lwuvrdDJc59GkD+O9md6JU4U20f2+oUzTAJFdqNd/INsr4ebL/U
+         Tx+eNQHP5QHoNKYPw3wkdO6lr0ryFAm3zIZImMN7xsV6enjrBViWVGLNtsxz9rKduXMF
+         LxCL5Exuk6JeTphLMtwokgThD3YjMeepT+ZCKYwHG7bU33PwA5UGjlQS4yNWYDIye1wG
+         PVxDEopWdDW5yalgQGhav7fWB8p+9NsHb0RawSXCBm1UwXMXum3vElrfMGuYP7hFBeeQ
+         +Yag1ONN4GC88AiT5nGrnhG/lBKi3n2i5ZWSc5r1uem/2l/rfSY7VIz7QYy9+c6CbAwm
+         Ufaw==
+X-Gm-Message-State: AFqh2koobFZ1flyQ8TcKXEuIhwvL+NlF+4GWiN1x5YJPW1rNPOGMtkRz
+        qYFBMImY1EOhbRSigCx7/iJcjJqKaQYDBvnu5ZqM311bQpo/
+X-Google-Smtp-Source: AMrXdXuTs9xL4I4fgvm+J5Hch1JYGzpKEl1xoRMmLVa6gUT06lIz+kcnadDf+5Yane9SJ9CKZJWCTqEIIHYYY9/i1nkthnRSENCA
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|PH7PR12MB7234:EE_
-X-MS-Office365-Filtering-Correlation-Id: faf7524b-1c7e-4e2c-8b3d-08daf7c662c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o7wgcmI3Mp9ULnEEIWoH3euahqyZ93IZaLRnS7A7gk3Vf75QxV+SS3ckltUS+yh9G6QToUH74IahVf0lPXVH1RJ30YTX4GCKwK2LfU2y2P21RlPb9YCJ0BocK2NHT+7vWr6R/Ysb0cpZ/nH/R4T6TrHujdm/8XUtAtRy/wEhyrmfqZ1jaPbsPc1JjZdE7fH69tq0fGSpVfLpasIaXJGkm9hBB6PTd1FRpFzacK5+YYrq1WsR05YKSQrybOojOZ0Na6E2NUyN3EIhhzS17NZVyivOOFD4x0yOsk/PHga5itaKhQmgwzyzBzV25M3gdWayO3GbHLaIpYV+gQ+fr0+KGBk+qX8syeYXeHweMBGrAJuz5MVZdr9OaYUA2gIQ78QCa1D2uEsiFLD4v6TZsCBawVHw8dGrvFNyfzsJgQgtaeO/UUxdzv9WSeGQng/YCBQOdrbGWee7g9jPWnOhYaPts5lo/sAmLvGnYdncaWEquOlRbtQjumWIHiVgzMM4uAd0ivYX5W7SNhQJfivrcZ0a7KTKz14Dtg2JafGQFKV6UzxOgZYm/elbNMOoWaJxQRxwyjKWFHWTun7UvktuwhrlYha0Zb273sh8Ar3YPeUjW2stL33UXDU/VEFvSJ0Duvjhwz9fVH2jWh3oCsf2qE3vqggzoSBE769w7r57AvRpv1czX+IuoAdqwqSNCaKypORjMmOUxnEzZiNGWvjQxEy3tS3RdSvBqG8J1jUxgIMREKo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199015)(31686004)(36756003)(86362001)(8676002)(4326008)(6916009)(44832011)(8936002)(66476007)(66946007)(66556008)(31696002)(5660300002)(2906002)(7416002)(38100700002)(83380400001)(478600001)(6486002)(6666004)(316002)(41300700001)(53546011)(2616005)(6512007)(186003)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RGhrRG12UURPRXhYUVg4aTVWcEN6bUJwZU9NVTVWWnk5SkoxSE0xWERUWFJo?=
- =?utf-8?B?RjlsK3pJcGpFYTNxTWRaY2xuR0NUQ2ZsOThadytLaEhrU0cxdG5tMFR5RGM5?=
- =?utf-8?B?NnBsaDMzVkt2VXNONzlHamszMVp2VXMyN2hrRWg0eEJyczNqSmpFL2xuOVJB?=
- =?utf-8?B?RldnTjd3K1hKVk1WbHR0di90RnVXWTFYMGU0WjZsM2FPei9ZTTVRS25odTFq?=
- =?utf-8?B?Qm5IdmlvV0NHWlhpUFB6alZjUWp1c1c2TnhwN3JabWY2UmU0YURlcS9kSjNa?=
- =?utf-8?B?RU1GTnBvSHkwUmpiMWxkcmp6dDFveXU0a2cvbGZ5RFZYRDMwVlF0WjREenZp?=
- =?utf-8?B?U3dTbGVtdktXRFAwLzYwY3BHdXZ4dnZ5Mk5CUngwZ2ttejJNR3NGTUZwdi83?=
- =?utf-8?B?d1RvV3pDM2VyQ25kNmMvdDhEMUNyNnJEcXkxRWNiY2gwVEMvd0ZvSDYwbkZj?=
- =?utf-8?B?MTA0ODlWeVdmVW1uNmdybzlYZ1dIUUk3NllsbkJBSWNDOXRsdlh4NFgzL2pu?=
- =?utf-8?B?QkVBTmZLbkpoSkF2L1YrbkVVbkVXWnZoTDg1bTNMOGlKUzVvUGFMcnNxSldE?=
- =?utf-8?B?UFpYdFpXVzFqZkl1SS9wOHp6NGJhbHZ3UjYwKy9BN0pFUHVsYW5kNm1rcEJJ?=
- =?utf-8?B?R0k3SmxWVmpzR21mdzBHS0NlUkZMQUdyNlBqbmo5TlFZVVJDemFmVlRuaXNk?=
- =?utf-8?B?VVZLVlhNLzQ3alBKNW5TWUx3dStnUXBteTZubjFIeTNQMnFIWjE1Q1liRHpq?=
- =?utf-8?B?VXBEWFZwcCtjUkxIeUl4ZUxTS2dDUitNaitiQ2JtM1JjTWY4M0hsSTJkK1RN?=
- =?utf-8?B?dmdROG1EczB3SlFhSUEyWkdPRnhUSG5ObDB3VEQ5NGlCKzRDQnl3Zmc0dzQv?=
- =?utf-8?B?VG91STErUEk2clJ1K1hQMDNDbHFuOWtEVUM2dHZjMDUreHpQVUJGWEVZTGgv?=
- =?utf-8?B?K3dDNndEMXBkYmdCeEhBbGJma1o4bm5jSXEvb3dOSFd0V1VORURuYkNsYXFi?=
- =?utf-8?B?R1RKaXM2K3UvMTI2c3ZRd3RHSjZiYXUxMnRmbXpsVG04YllpZ3Vxcm4yMzc4?=
- =?utf-8?B?ZHMzL2dFOEdrd3Vrc1hHTzhsazVFRmY0Y1dNYlhJcHMrTWJ6bHlMOHpxTkFT?=
- =?utf-8?B?Q2tsWDVveVRZT3pQbDVoeW9zb21PSGpHQVI2UzRjOWFNK1ZBbFJWSmwxRVAv?=
- =?utf-8?B?SURSRFJwZHdYalFMemRqSlQzTXNrTXJOaHQ2cWJ3MHRsNFpJYXVBemVXamxl?=
- =?utf-8?B?UmxxS0N0cnhlaWpLeWpsbHRpUmFvYTUxTU8yYU1DNjdhOERBeDA0UVJ1MzBk?=
- =?utf-8?B?Y0pBSHlMWmxORW5odk13WndCQTZpY21DN0NCenhyaG00Sm1aQUxzWks4OVhu?=
- =?utf-8?B?MjBZMmpuSzUrR0dESXMwL2pDbm9FWEFMSHFjRzVnTUFxTEthempOYWM5ZFZE?=
- =?utf-8?B?U3c3L1ltcEtZME5DL2J3bzluMExqTk9xZ0Zlc004cmZjR2hqdlJpWDZRem1q?=
- =?utf-8?B?OFE1bU1DaDUxeGkva2llOExOZHZtOGlSNWJaT1l1NVBuRnQ4Ykl6YktsQjRS?=
- =?utf-8?B?L0I1RWgvLzhUQWk3akZiWk5nUDdvbFJYWGpNUGxybDRDWUJ6eFpJTlFuV0Fk?=
- =?utf-8?B?aTYybXNzMG8zZ2U5UFZveEp5UkR4blNia0d3L2wrQ1FZMlVDSTg5SVZHWXlG?=
- =?utf-8?B?MDA5cDhDT3VJSGlobjJGZmxaSGFPYVgyL202RFBMMWR0YmplZCtGSWJZd3dl?=
- =?utf-8?B?aFJjUEE3T0tvSHlKdGZlSS9tODE1c0o4M3UxdWY3QnRoRjdKODdTc2dlQ3F1?=
- =?utf-8?B?OUhmT1NBWmE5OUJnOXNiRjRyZU1kemVzQk1NZ3MvanAwakFmd3pMK1hXZnl0?=
- =?utf-8?B?VmhNZWpUSUdYTUFCQ0tBN3hlRzJSa0lOZmt0WXRRVE9JUGRXb3p1VlpiZ0NC?=
- =?utf-8?B?UTlRM1BOWGR0WWZidFMrNmVkYjdDVHBsazBUdHA2WnhRL1VrWmlPNFFlNUti?=
- =?utf-8?B?ZzUxaEE4enB1K3J4TWFmQjgycmVaZmMzTmpJNDlOSmR1dlByRzRjR2VYNVc5?=
- =?utf-8?B?OHBmNm1XVXI0YjFlRUxXRUV2ZXpTZUoxdE1zSzF4MlNTcmtITG42cFArUXFW?=
- =?utf-8?B?U0F1Y1dtaGREZGkvQVJSb2o5b3BjekpwcVJ3MnQzekRERmVjZ3gxbXVOZzJM?=
- =?utf-8?Q?mrBooOI52HF5htBKpM1FPM8=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: faf7524b-1c7e-4e2c-8b3d-08daf7c662c5
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 13:34:26.3888
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dYTDIbqX/7HUbiPEwa3a23D0McsNRvzkvk0/s6fWSs0orlvS+y+pz1wC/FKySE7t0oy+tjLZzht/w4txT0lXDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7234
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cda9:0:b0:30e:e796:23b7 with SMTP id
+ g9-20020a92cda9000000b0030ee79623b7mr1151386ild.23.1673876088721; Mon, 16 Jan
+ 2023 05:34:48 -0800 (PST)
+Date:   Mon, 16 Jan 2023 05:34:48 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aa9b7405f261a574@google.com>
+Subject: [syzbot] [hfs?] INFO: task hung in hfs_mdb_commit
+From:   syzbot <syzbot+4fec87c399346da35903@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, kch@nvidia.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+Hello,
 
-On 16-Jan-23 11:44 AM, Adrian Hunter wrote:
-> On 10/01/23 07:58, Ravi Bangoria wrote:
->> Introduce, perf tool only, synthetic event type PERF_RECORD_KMOD_SEC_MAP.
->> Also add stub code for it. This event will be used to save/restore kernel
->> module section maps to/from perf.data file. This is needed because kernel
->> module elfs does not contain program header table and thus there is no
->> easy way to find out how kernel would have loaded module sections in the
->> memory.
-> 
-> Currently machine__addnew_module_map() adds a map for a
-> module, and then perf_event__synthesize_modules() creates
-> an MMAP/MMAP2 event for it.  Why can't we do that for the
-> sections?
+syzbot found the following issue on:
 
-Do you mean why not use MMAP/MMAP2 for module sections as well?
-I thought about that but:
-- PERF_RECORD_MMAP has no field which can help segregate normal vs section
-  specific maps.
-- I can probably introduce special MAP_ flag and use PERF_RECORD_MMAP2. But
-  that flag will be non-standard (perf tool only), which is ugly.
-- I also need additional hacks while synthesizing section specific MMAP/
-  MMAP2 (e.g.: store section name and file path in filename[]) and similar
-  hacks while parsing them at perf report time.
+HEAD commit:    e8f60cd7db24 Merge tag 'perf-tools-fixes-for-v6.2-2-2023-0..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13182686480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ebc110f9741920ed
+dashboard link: https://syzkaller.appspot.com/bug?extid=4fec87c399346da35903
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ef7fba480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c68186480000
 
-So I felt introducing PERF_RECORD_KMOD_SEC_MAP is relatively cleaner approach.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bfa9ef2acc71/disk-e8f60cd7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/718a64154ab8/vmlinux-e8f60cd7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/616a25151c23/bzImage-e8f60cd7.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/099f2b1a07ee/mount_0.gz
 
-Thanks,
-Ravi
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4fec87c399346da35903@syzkaller.appspotmail.com
+
+INFO: task kworker/1:3:4767 blocked for more than 143 seconds.
+      Not tainted 6.2.0-rc3-syzkaller-00030-ge8f60cd7db24 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:3     state:D stack:22656 pid:4767  ppid:2      flags:0x00004000
+Workqueue: events_long flush_mdb
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ io_schedule+0x83/0x100 kernel/sched/core.c:8811
+ bit_wait_io+0xe/0xc0 kernel/sched/wait_bit.c:209
+ __wait_on_bit_lock+0xbb/0x1a0 kernel/sched/wait_bit.c:90
+ out_of_line_wait_on_bit_lock+0x1c3/0x240 kernel/sched/wait_bit.c:117
+ lock_buffer include/linux/buffer_head.h:397 [inline]
+ hfs_mdb_commit+0xacd/0xf80 fs/hfs/mdb.c:325
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8d326f50 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8d327750 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/28:
+ #0: ffffffff8d326d80 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+2 locks held by kworker/0:2/898:
+ #0: ffff888012872538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90004e87d00 ((work_completion)(&rew->rew_work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+2 locks held by getty/4745:
+ #0: ffff88802839c098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015802f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
+2 locks held by kworker/1:3/4767:
+ #0: ffff888012871538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc900038efd00 ((work_completion)(&(&sbi->mdb_work)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+2 locks held by syz-executor208/15791:
+ #0: ffff88807c1a0928 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #0: ffff88807c1a0928 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: lock_mount+0x5f/0x2d0 fs/namespace.c:2397
+ #1: ffffffff8d32c3f8 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:292 [inline]
+ #1: ffffffff8d32c3f8 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x384/0x860 kernel/rcu/tree_exp.h:946
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.2.0-rc3-syzkaller-00030-ge8f60cd7db24 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x46f/0x4f0 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1ba/0x420 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xcd5/0xd20 kernel/hung_task.c:377
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 75 Comm: kworker/u4:4 Not tainted 6.2.0-rc3-syzkaller-00030-ge8f60cd7db24 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: events_unbound flush_memcg_stats_dwork
+RIP: 0010:trace_lock_acquire+0x66/0x260 include/trace/events/lock.h:24
+Code: 0d 0f 86 a4 00 00 00 89 ed 48 89 e8 48 c1 e8 06 48 8d 3c c5 a8 67 96 8e be 08 00 00 00 e8 62 79 76 00 48 0f a3 2d 72 5a 2b 0d <73> 3d 65 ff 05 09 8b 98 7e 48 c7 c0 80 d2 82 8e 48 c1 e8 03 80 3c
+RSP: 0018:ffffc90001597778 EFLAGS: 00000057
+RAX: 0000000000000001 RBX: dffffc0000000000 RCX: ffffffff816b0d2e
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff8e9667a8
+RBP: 0000000000000000 R08: dffffc0000000000 R09: fffffbfff1d2ccf6
+R10: fffffbfff1d2ccf6 R11: 1ffffffff1d2ccf5 R12: dffffc0000000000
+R13: 1ffff920002b2efc R14: 0000000000000001 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4bb7e5cc00 CR3: 000000000d08e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0xa4/0x3c0 kernel/locking/lockdep.c:5639
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0xb3/0x100 kernel/locking/spinlock.c:162
+ debug_object_activate+0x96/0x6e0 lib/debugobjects.c:665
+ debug_timer_activate kernel/time/timer.c:782 [inline]
+ __mod_timer+0x837/0xcf0 kernel/time/timer.c:1119
+ queue_delayed_work_on+0x125/0x210 kernel/workqueue.c:1701
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
