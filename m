@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E57366B77A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730BB66B77B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjAPGcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 01:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S232136AbjAPGcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 01:32:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjAPGcH (ORCPT
+        with ESMTP id S231855AbjAPGcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 01:32:07 -0500
+        Mon, 16 Jan 2023 01:32:10 -0500
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115DAF767
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 22:31:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4324EDD
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 22:31:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673850698; x=1705386698;
+  t=1673850701; x=1705386701;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=U4IhIonWVHM0uB5EvKcM6XxvZcENTz+r12d4PtYOG2c=;
-  b=ZVch+r3As2FWyuGdHV5IhCZmtmHXKNnhKhA2eu4oBy6MH91+HAGPZXIi
-   RJB3sLE+41mikK8vsbosGytjeaGmFc7PS+hf7Qy/byEyw5lGWmEclBkbq
-   qeuka8uf8UnYMbguBkcv+v3+5FKAxGVn1EKL7Ce8JmTD4We4nFHwyxp+R
-   LoZjYmmyS/Lbdo+i81jpcyiK60tByH2oZiWSPpqU0Wfn/g/Q928YB0a/B
-   LiMe3NIJMbcpCSsCBInvoLi7ns+lDsgzIRCOaY1hxybVGyAOQRPyjXmcO
-   IOolWhJhsUpbsTt6lmuctNlvDDpC3tKYQqaHVQgoVerY6BWnAa3HnDfD/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="388892232"
+  bh=3J9a3YKiHmKyIA98tevHEicLgJhEATSgMLt7yTqcfnY=;
+  b=UOZiXzIFZmarHiv1iwJrS7zikIqIYdQmT34BJQx3BBhU92M59ZG99/ns
+   MF8YB7fhQmh5xePrEqaBzb6QrZ4JAc4KqDdubkQ6pIjPeniw2K+n7kHij
+   Ezam8xh8Ry0FfYgs40xN97bnTI8NxPVv9MT74x/PGcXBGwwDuSpsQVknv
+   5okv4ehJHuiPmmyi6C2wVqdrK2yTGnqRDKnG6hwQEDQWhEs/SjsRax2+x
+   vnWeHC8Wq/O14f74aWBE81kthdVbxL0FFyQ0nKe+rthU+MtWwQFcGk4rV
+   4xO5Ujujvpf7NYfX4rdbP6PzfSvThv1aTslKtOcvgNeRz/Kl8MqeLTJIn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="388892244"
 X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="scan'208";a="388892232"
+   d="scan'208";a="388892244"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:31:37 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="801286701"
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:31:40 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="801286715"
 X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="scan'208";a="801286701"
+   d="scan'208";a="801286715"
 Received: from tiangeng-mobl.ccr.corp.intel.com (HELO yhuang6-mobl2.ccr.corp.intel.com) ([10.255.28.220])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:31:34 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:31:37 -0800
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>, Zi Yan <ziy@nvidia.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Alistair Popple <apopple@nvidia.com>, Zi Yan <ziy@nvidia.com>,
         Yang Shi <shy828301@gmail.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         Oscar Salvador <osalvador@suse.de>,
         Matthew Wilcox <willy@infradead.org>,
         Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
         haoxin <xhao@linux.alibaba.com>, Minchan Kim <minchan@kernel.org>
-Subject: [PATCH -v3 8/9] migrate_pages: batch flushing TLB
-Date:   Mon, 16 Jan 2023 14:30:56 +0800
-Message-Id: <20230116063057.653862-9-ying.huang@intel.com>
+Subject: [PATCH -v3 9/9] migrate_pages: move THP/hugetlb migration support check to simplify code
+Date:   Mon, 16 Jan 2023 14:30:57 +0800
+Message-Id: <20230116063057.653862-10-ying.huang@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230116063057.653862-1-ying.huang@intel.com>
 References: <20230116063057.653862-1-ying.huang@intel.com>
@@ -66,106 +66,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TLB flushing will cost quite some CPU cycles during the folio
-migration in some situations.  For example, when migrate a folio of a
-process with multiple active threads that run on multiple CPUs.  After
-batching the _unmap and _move in migrate_pages(), the TLB flushing can
-be batched easily with the existing TLB flush batching mechanism.
-This patch implements that.
-
-We use the following test case to test the patch.
-
-On a 2-socket Intel server,
-
-- Run pmbench memory accessing benchmark
-
-- Run `migratepages` to migrate pages of pmbench between node 0 and
-  node 1 back and forth.
-
-With the patch, the TLB flushing IPI reduces 99.1% during the test and
-the number of pages migrated successfully per second increases 291.7%.
-
-NOTE: TLB flushing is batched only for normal folios, not for THP
-folios.  Because the overhead of TLB flushing for THP folios is much
-lower than that for normal folios (about 1/512 on x86 platform).
+This is a code cleanup patch, no functionality change is expected.
+After the change, the line number reduces especially in the long
+migrate_pages_batch().
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Suggested-by: Alistair Popple <apopple@nvidia.com>
 Cc: Zi Yan <ziy@nvidia.com>
 Cc: Yang Shi <shy828301@gmail.com>
 Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
 Cc: Oscar Salvador <osalvador@suse.de>
 Cc: Matthew Wilcox <willy@infradead.org>
 Cc: Bharata B Rao <bharata@amd.com>
-Cc: Alistair Popple <apopple@nvidia.com>
 Cc: haoxin <xhao@linux.alibaba.com>
 Cc: Minchan Kim <minchan@kernel.org>
 ---
- mm/migrate.c |  4 +++-
- mm/rmap.c    | 20 +++++++++++++++++---
- 2 files changed, 20 insertions(+), 4 deletions(-)
+ mm/migrate.c | 83 +++++++++++++++++++++++-----------------------------
+ 1 file changed, 36 insertions(+), 47 deletions(-)
 
 diff --git a/mm/migrate.c b/mm/migrate.c
-index ef9f126e21ed..8ccb61c49188 100644
+index 8ccb61c49188..9d390368cf3f 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1230,7 +1230,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
- 		/* Establish migration ptes */
- 		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
- 			       !folio_test_ksm(src) && !anon_vma, src);
--		try_to_migrate(src, 0);
-+		try_to_migrate(src, TTU_BATCH_FLUSH);
- 		page_was_mapped = 1;
- 	}
+@@ -1099,9 +1099,6 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+ 	bool locked = false;
+ 	bool dst_locked = false;
  
-@@ -1780,6 +1780,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
- 	stats->nr_thp_failed += thp_retry;
- 	stats->nr_failed_pages += nr_retry_pages;
- move:
-+	try_to_unmap_flush();
-+
- 	retry = 1;
- 	for (pass = 0;
- 	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
-diff --git a/mm/rmap.c b/mm/rmap.c
-index b616870a09be..2e125f3e462e 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1976,7 +1976,21 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 		} else {
- 			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
- 			/* Nuke the page table entry. */
--			pteval = ptep_clear_flush(vma, address, pvmw.pte);
-+			if (should_defer_flush(mm, flags)) {
-+				/*
-+				 * We clear the PTE but do not flush so potentially
-+				 * a remote CPU could still be writing to the folio.
-+				 * If the entry was previously clean then the
-+				 * architecture must guarantee that a clear->dirty
-+				 * transition on a cached TLB entry is written through
-+				 * and traps if the PTE is unmapped.
-+				 */
-+				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
-+
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+			} else {
-+				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+-	if (!thp_migration_supported() && folio_test_transhuge(src))
+-		return -ENOSYS;
+-
+ 	if (folio_ref_count(src) == 1) {
+ 		/* Folio was freed from under us. So we are done. */
+ 		folio_clear_active(src);
+@@ -1358,16 +1355,6 @@ static int unmap_and_move_huge_page(new_page_t get_new_page,
+ 	struct anon_vma *anon_vma = NULL;
+ 	struct address_space *mapping = NULL;
+ 
+-	/*
+-	 * Migratability of hugepages depends on architectures and their size.
+-	 * This check is necessary because some callers of hugepage migration
+-	 * like soft offline and memory hotremove don't walk through page
+-	 * tables or check whether the hugepage is pmd-based or not before
+-	 * kicking migration.
+-	 */
+-	if (!hugepage_migration_supported(page_hstate(hpage)))
+-		return -ENOSYS;
+-
+ 	if (folio_ref_count(src) == 1) {
+ 		/* page was freed from under us. So we are done. */
+ 		putback_active_hugepage(hpage);
+@@ -1534,6 +1521,20 @@ static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
+ 
+ 			cond_resched();
+ 
++			/*
++			 * Migratability of hugepages depends on architectures and
++			 * their size.  This check is necessary because some callers
++			 * of hugepage migration like soft offline and memory
++			 * hotremove don't walk through page tables or check whether
++			 * the hugepage is pmd-based or not before kicking migration.
++			 */
++			if (!hugepage_migration_supported(folio_hstate(folio))) {
++				nr_failed++;
++				stats->nr_failed_pages += nr_pages;
++				list_move_tail(&folio->lru, ret_folios);
++				continue;
 +			}
- 		}
++
+ 			rc = unmap_and_move_huge_page(get_new_page,
+ 						      put_new_page, private,
+ 						      &folio->page, pass > 2, mode,
+@@ -1543,16 +1544,9 @@ static int migrate_hugetlbs(struct list_head *from, new_page_t get_new_page,
+ 			 *	Success: hugetlb folio will be put back
+ 			 *	-EAGAIN: stay on the from list
+ 			 *	-ENOMEM: stay on the from list
+-			 *	-ENOSYS: stay on the from list
+ 			 *	Other errno: put on ret_folios list
+ 			 */
+ 			switch(rc) {
+-			case -ENOSYS:
+-				/* Hugetlb migration is unsupported */
+-				nr_failed++;
+-				stats->nr_failed_pages += nr_pages;
+-				list_move_tail(&folio->lru, ret_folios);
+-				break;
+ 			case -ENOMEM:
+ 				/*
+ 				 * When memory is low, don't bother to try to migrate
+@@ -1638,6 +1632,28 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
  
- 		/* Set the dirty flag on the folio now the pte is gone. */
-@@ -2148,10 +2162,10 @@ void try_to_migrate(struct folio *folio, enum ttu_flags flags)
+ 			cond_resched();
  
- 	/*
- 	 * Migration always ignores mlock and only supports TTU_RMAP_LOCKED and
--	 * TTU_SPLIT_HUGE_PMD and TTU_SYNC flags.
-+	 * TTU_SPLIT_HUGE_PMD, TTU_SYNC, and TTU_BATCH_FLUSH flags.
- 	 */
- 	if (WARN_ON_ONCE(flags & ~(TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
--					TTU_SYNC)))
-+					TTU_SYNC | TTU_BATCH_FLUSH)))
- 		return;
- 
- 	if (folio_is_zone_device(folio) &&
++			/*
++			 * Large folio migration might be unsupported or
++			 * the allocation might be failed so we should retry
++			 * on the same folio with the large folio split
++			 * to normal folios.
++			 *
++			 * Split folios are put in split_folios, and
++			 * we will migrate them after the rest of the
++			 * list is processed.
++			 */
++			if (!thp_migration_supported() && is_thp) {
++				nr_large_failed++;
++				stats->nr_thp_failed++;
++				if (!try_split_folio(folio, &split_folios)) {
++					stats->nr_thp_split++;
++					continue;
++				}
++				stats->nr_failed_pages += nr_pages;
++				list_move_tail(&folio->lru, ret_folios);
++				continue;
++			}
++
+ 			rc = migrate_folio_unmap(get_new_page, put_new_page, private,
+ 						 folio, &dst, pass > 2, force_lock,
+ 						 mode, reason, ret_folios);
+@@ -1649,36 +1665,9 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+ 			 *	-EAGAIN: stay on the from list
+ 			 *	-EDEADLOCK: stay on the from list
+ 			 *	-ENOMEM: stay on the from list
+-			 *	-ENOSYS: stay on the from list
+ 			 *	Other errno: put on ret_folios list
+ 			 */
+ 			switch(rc) {
+-			/*
+-			 * Large folio migration might be unsupported or
+-			 * the allocation could've failed so we should retry
+-			 * on the same folio with the large folio split
+-			 * to normal folios.
+-			 *
+-			 * Split folios are put in split_folios, and
+-			 * we will migrate them after the rest of the
+-			 * list is processed.
+-			 */
+-			case -ENOSYS:
+-				/* Large folio migration is unsupported */
+-				if (is_large) {
+-					nr_large_failed++;
+-					stats->nr_thp_failed += is_thp;
+-					if (!try_split_folio(folio, &split_folios)) {
+-						stats->nr_thp_split += is_thp;
+-						break;
+-					}
+-				} else if (!no_split_folio_counting) {
+-					nr_failed++;
+-				}
+-
+-				stats->nr_failed_pages += nr_pages;
+-				list_move_tail(&folio->lru, ret_folios);
+-				break;
+ 			case -ENOMEM:
+ 				/*
+ 				 * When memory is low, don't bother to try to migrate
 -- 
 2.35.1
 
