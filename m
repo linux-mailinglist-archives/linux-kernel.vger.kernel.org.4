@@ -2,255 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F7166C2D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E8266C2D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjAPOy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S231839AbjAPOyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbjAPOxn (ORCPT
+        with ESMTP id S232782AbjAPOxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 Jan 2023 09:53:43 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C74A23D8E
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836BD23D94
         for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:42:00 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id 3so29222309vsq.7
+Received: by mail-wr1-x429.google.com with SMTP id h16so27678733wrz.12
         for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:42:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7FrC+IXUP3VdKKpCfXrmLeBHJWSNceeAqVOsU22NNAM=;
-        b=uAF502q+MGIhlG65ODzohPUWWZ6qvIh4GJQksX7cEPEjayTPExiufQu1eLdquEuVPO
-         zsSwP4YViyf1/L+z0ibNSZK2gxldVp93hhpmSmN+1EFMcdPL/o7qH3qqY74sq+gXMo06
-         Oqo1sMabGJAZ19Eso5Xis8TDYNKHh2q2ApJIJrRAQfMTHm6kBXi/hjikur3fOqUuoOum
-         ZSLbNTf1EFd1lx/Rj3gDb7o9rZ/n3H/317a8qvp5n9rdIsRmnhrPiYEvMrik6CmVkOzv
-         0QLYtpX8OlJxWiROqYGJSLgKjvRHtJPJ6UR/mv14/tGRapGM69uybCE2ODK9B718PvyO
-         j3SA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Ppko8Fem+qtirmYhp62EkgUMyaloOxSAW2RcoWpD8I=;
+        b=8EI8vtH1yUk28VFMj92vw5wTOII6JxqTmxqBGNvfxrRf9qrzwu1wy4qOATNSQxjc9d
+         R1UJ4qU2vEgWUuxmWQiWGyklnOrH5wV2LU+Ccv2embbP0WIETuvDcaXddLvjwyQRHD66
+         dbk5W9yLzTVC7r9xQ6kMStfb4kPSUEcfl+8j28OSk0lopTRCTRddJxa6EYyvsOuwUB3+
+         smD2q6ZAr6K+69W4Rv0jgvS8LM2gawH1uQamqOU0urnmv8/pZOTvCN7qxY7KuL1smhlz
+         bvL86lYGRzOFWlBB/pCJmRn6AiWnFm7YM5i/CBulRWnbqgGVaA+PY4tEOUd3FExj9W7v
+         vsXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7FrC+IXUP3VdKKpCfXrmLeBHJWSNceeAqVOsU22NNAM=;
-        b=me2dHR2/gbiL7z2oYjnS0uHFneqNPAxIJG+V6u3ITlVkQHLZsIef3/geXU0WPpN7vq
-         lYQEJ3H+kfLu9sHf5xwoln4vn4ig1OynHxuY69JtBd5ryIHLH+/g/iLtpPSU39H4y6lK
-         l0I9fp59WWBWJDUqYxJorxPtGGaRR226aSFZZVdlCb5NWNokS6poj3jKe+Af1LHJqgOj
-         XGXakJznwJHpSCUacv8f7TDhVakjxZ42px8k3ppOXKlvSZDMTDQTHYudWAPYLtA3/Ocn
-         Tgaft+DjR+gXQRQtwm7DlU9BCi2aV0aJJ4DrlPpldpG3WwO6UIdkkGRjw/xIPwZUCY8/
-         q7ig==
-X-Gm-Message-State: AFqh2krU8fu8FX0D9Ft2q+4KcOar0/dBrzzYtOMR5Z61jcFnEz5B4PWb
-        AS8piACYjXRwNZFgCk0SbUywYos8Jxkb7+3O0hZ2Ng==
-X-Google-Smtp-Source: AMrXdXvPhsB692sq0dNMTRcEyIjzyvTN+boDvN62za38DT7aiSzNciGbGyt7lFzGx8Dkc66ioJC/N1VU0D9wrXSv+50=
-X-Received: by 2002:a67:f845:0:b0:3d0:ee83:9599 with SMTP id
- b5-20020a67f845000000b003d0ee839599mr2348167vsp.45.1673880119398; Mon, 16 Jan
- 2023 06:41:59 -0800 (PST)
+        bh=0Ppko8Fem+qtirmYhp62EkgUMyaloOxSAW2RcoWpD8I=;
+        b=7HCH7FvOAuRQcxqPA8VIx4ND6A05o/RMHjuo6ugUzIU6ljeqhmw8NHCs0507NOWEsz
+         /qqAvLZfAVpz+Z8n60AQn8zXpSMPRi3qjY3zerB8jbYMO9IumIvqL2ihunQTNoaiwBSe
+         /l3kXHe+HI4fXFPGxgc6CH/vCI/RAl+lBVatwu57Vgbpo7LH/aXSNe0QkxLobbgcjOjk
+         EL9fGi8ksuUHY8hAhGo3WlMq3sHvDLUIsiWTC3q6IeQo6xN435t6bCw5YFsz04MpnHji
+         BkjOJfxQCD11oZS/OiT+BmUNSTJImE+bpGs0ecbKwbLWB09LJfWz5+ZHzsRBNqxjBe2v
+         9S8Q==
+X-Gm-Message-State: AFqh2kqO8jXKfZC4U1uCWEI838mphlx+QSHEzlaE0jPBRms53z2rk3Yf
+        FLnSJ9FJXgxHAP7kr5uik5ryNQ==
+X-Google-Smtp-Source: AMrXdXvswhBZBHL3czGygVmuEp4kCJ4skGF7OFh/1qMOaUgNh5rRMgW34Z1OPN5a1reY/5IDqOTxPA==
+X-Received: by 2002:a5d:528e:0:b0:2bd:e99a:a8a9 with SMTP id c14-20020a5d528e000000b002bde99aa8a9mr7603936wrv.71.1673880119021;
+        Mon, 16 Jan 2023 06:41:59 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:2f9d:c271:2ba9:4f2a])
+        by smtp.gmail.com with ESMTPSA id r10-20020adfda4a000000b0029a06f11022sm26691105wrl.112.2023.01.16.06.41.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 06:41:58 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Mark Brown <broonie@kernel.org>,
+        Francesco Dolcini <francesco@dolcini.it>,
+        Max Krummenacher <max.krummenacher@toradex.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH -next] spi: spidev: fix a recursive locking error
+Date:   Mon, 16 Jan 2023 15:41:49 +0100
+Message-Id: <20230116144149.305560-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20221220120754.2040428-1-aford173@gmail.com> <20221220120754.2040428-2-aford173@gmail.com>
- <CAHCN7xLsm32SufnHb3pozmjKbT6KTETTRR4msdiYBxDn_LKHRw@mail.gmail.com>
-In-Reply-To: <CAHCN7xLsm32SufnHb3pozmjKbT6KTETTRR4msdiYBxDn_LKHRw@mail.gmail.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Mon, 16 Jan 2023 14:41:43 +0000
-Message-ID: <CAPY8ntAv7WC5mVz6F2Jd5iMDbYdP7KN=yFXFE+AtDrUc93qLwQ@mail.gmail.com>
-Subject: Re: [PATCH V4 2/2] media: i2c: imx219: Support four-lane operation
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, aford@beaconembedded.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Sorry, for the delay.
+When calling spidev_message() from the one of the ioctl() callbacks, the
+spi_lock is already taken. When we then end up calling spidev_sync(), we
+get the following splat:
 
-On Fri, 13 Jan 2023 at 18:41, Adam Ford <aford173@gmail.com> wrote:
->
-> On Tue, Dec 20, 2022 at 6:08 AM Adam Ford <aford173@gmail.com> wrote:
-> >
-> > The imx219 camera is capable of either two-lane or four-lane
-> > operation.  When operating in four-lane, both the pixel rate and
-> > link frequency change. Regardless of the mode, however, both
-> > frequencies remain fixed.
-> >
-> > Helper functions are needed to read and set pixel and link frequencies
-> > which also reduces the number of fixed registers in the table of modes.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
+[  214.047619]
+[  214.049198] ============================================
+[  214.054533] WARNING: possible recursive locking detected
+[  214.059858] 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1 Not tainted
+[  214.065969] --------------------------------------------
+[  214.071290] spidev_test/1454 is trying to acquire lock:
+[  214.076530] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x8e0/0xab8
+[  214.084164]
+[  214.084164] but task is already holding lock:
+[  214.090007] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+[  214.097537]
+[  214.097537] other info that might help us debug this:
+[  214.104075]  Possible unsafe locking scenario:
+[  214.104075]
+[  214.110004]        CPU0
+[  214.112461]        ----
+[  214.114916]   lock(&spidev->spi_lock);
+[  214.118687]   lock(&spidev->spi_lock);
+[  214.122457]
+[  214.122457]  *** DEADLOCK ***
+[  214.122457]
+[  214.128386]  May be due to missing lock nesting notation
+[  214.128386]
+[  214.135183] 2 locks held by spidev_test/1454:
+[  214.139553]  #0: c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+[  214.147524]  #1: c4925e14 (&spidev->buf_lock){+.+.}-{3:3}, at: spidev_ioctl+0x70/0xab8
+[  214.155493]
+[  214.155493] stack backtrace:
+[  214.159861] CPU: 0 PID: 1454 Comm: spidev_test Not tainted 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1
+[  214.169012] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+[  214.175555]  unwind_backtrace from show_stack+0x10/0x14
+[  214.180819]  show_stack from dump_stack_lvl+0x60/0x90
+[  214.185900]  dump_stack_lvl from __lock_acquire+0x874/0x2858
+[  214.191584]  __lock_acquire from lock_acquire+0xfc/0x378
+[  214.196918]  lock_acquire from __mutex_lock+0x9c/0x8a8
+[  214.202083]  __mutex_lock from mutex_lock_nested+0x1c/0x24
+[  214.207597]  mutex_lock_nested from spidev_ioctl+0x8e0/0xab8
+[  214.213284]  spidev_ioctl from sys_ioctl+0x4d0/0xe2c
+[  214.218277]  sys_ioctl from ret_fast_syscall+0x0/0x1c
+[  214.223351] Exception stack(0xe75cdfa8 to 0xe75cdff0)
+[  214.228422] dfa0:                   00000000 00001000 00000003 40206b00 bee266e8 bee266e0
+[  214.236617] dfc0: 00000000 00001000 006a71a0 00000036 004c0040 004bfd18 00000000 00000003
+[  214.244809] dfe0: 00000036 bee266c8 b6f16dc5 b6e8e5f6
 
-I can't test on 4 lanes, but 2 lane modes still work, and the code
-looks reasonable for 4 lanes.
+Fix it by introducing an unlocked variant of spidev_sync() and calling it
+from spidev_message() while other users who don't check the spidev->spi's
+existence keep on using the locking flavor.
 
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Reported-by: Francesco Dolcini <francesco@dolcini.it>
+Fixes: 1f4d2dd45b6e ("spi: spidev: fix a race condition when accessing spidev->spi")
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/spi/spidev.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 8ef22ebcde1f..892965ac8fdf 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -89,10 +89,22 @@ MODULE_PARM_DESC(bufsiz, "data bytes in biggest supported SPI message");
+ 
+ /*-------------------------------------------------------------------------*/
+ 
++static ssize_t
++spidev_sync_unlocked(struct spi_device *spi, struct spi_message *message)
++{
++	ssize_t status;
++
++	status = spi_sync(spi, message);
++	if (status == 0)
++		status = message->actual_length;
++
++	return status;
++}
++
+ static ssize_t
+ spidev_sync(struct spidev_data *spidev, struct spi_message *message)
+ {
+-	int status;
++	ssize_t status;
+ 	struct spi_device *spi;
+ 
+ 	mutex_lock(&spidev->spi_lock);
+@@ -101,12 +113,10 @@ spidev_sync(struct spidev_data *spidev, struct spi_message *message)
+ 	if (spi == NULL)
+ 		status = -ESHUTDOWN;
+ 	else
+-		status = spi_sync(spi, message);
+-
+-	if (status == 0)
+-		status = message->actual_length;
++		status = spidev_sync_unlocked(spi, message);
+ 
+ 	mutex_unlock(&spidev->spi_lock);
++
+ 	return status;
+ }
+ 
+@@ -294,7 +304,7 @@ static int spidev_message(struct spidev_data *spidev,
+ 		spi_message_add_tail(k_tmp, &msg);
+ 	}
+ 
+-	status = spidev_sync(spidev, &msg);
++	status = spidev_sync_unlocked(spidev->spi, &msg);
+ 	if (status < 0)
+ 		goto done;
+ 
+-- 
+2.37.2
 
-> Gentle nudge on this.
->
-> > ---
-> > V4:  Restore check for nr_of_link_frequencies and update commit message
-> > V3:  Keep the helper function doing the link and lane parsing to
-> >      keep th probe function small.
-> >
-> > V2:  Replace if-else statements with ternary operator
-> >      Fix 4-lane Link Rate.
-> >      Fix checking the link rate so only the link rate for
-> >      the given number of lanes is permitted.
-> >
-> > diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> > index 7f44d62047b6..b5fa4986470a 100644
-> > --- a/drivers/media/i2c/imx219.c
-> > +++ b/drivers/media/i2c/imx219.c
-> > @@ -42,10 +42,16 @@
-> >  /* External clock frequency is 24.0M */
-> >  #define IMX219_XCLK_FREQ               24000000
-> >
-> > -/* Pixel rate is fixed at 182.4M for all the modes */
-> > +/* Pixel rate is fixed for all the modes */
-> >  #define IMX219_PIXEL_RATE              182400000
-> > +#define IMX219_PIXEL_RATE_4LANE                280800000
-> >
-> >  #define IMX219_DEFAULT_LINK_FREQ       456000000
-> > +#define IMX219_DEFAULT_LINK_FREQ_4LANE 363000000
-> > +
-> > +#define IMX219_REG_CSI_LANE_MODE       0x0114
-> > +#define IMX219_CSI_2_LANE_MODE         0x01
-> > +#define IMX219_CSI_4_LANE_MODE         0x03
-> >
-> >  /* V_TIMING internal */
-> >  #define IMX219_REG_VTS                 0x0160
-> > @@ -299,6 +305,10 @@ static const s64 imx219_link_freq_menu[] = {
-> >         IMX219_DEFAULT_LINK_FREQ,
-> >  };
-> >
-> > +static const s64 imx219_link_freq_4lane_menu[] = {
-> > +       IMX219_DEFAULT_LINK_FREQ_4LANE,
-> > +};
-> > +
-> >  static const char * const imx219_test_pattern_menu[] = {
-> >         "Disabled",
-> >         "Color Bars",
-> > @@ -474,6 +484,9 @@ struct imx219 {
-> >
-> >         /* Streaming on/off */
-> >         bool streaming;
-> > +
-> > +       /* Two or Four lanes */
-> > +       u8 lanes;
-> >  };
-> >
-> >  static inline struct imx219 *to_imx219(struct v4l2_subdev *_sd)
-> > @@ -936,6 +949,13 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
-> >         return -EINVAL;
-> >  }
-> >
-> > +static int imx219_configure_lanes(struct imx219 *imx219)
-> > +{
-> > +       return imx219_write_reg(imx219, IMX219_REG_CSI_LANE_MODE,
-> > +                               IMX219_REG_VALUE_08BIT, (imx219->lanes == 2) ?
-> > +                               IMX219_CSI_2_LANE_MODE : IMX219_CSI_4_LANE_MODE);
-> > +};
-> > +
-> >  static int imx219_start_streaming(struct imx219 *imx219)
-> >  {
-> >         struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
-> > @@ -953,6 +973,13 @@ static int imx219_start_streaming(struct imx219 *imx219)
-> >                 goto err_rpm_put;
-> >         }
-> >
-> > +       /* Configure two or four Lane mode */
-> > +       ret = imx219_configure_lanes(imx219);
-> > +       if (ret) {
-> > +               dev_err(&client->dev, "%s failed to configure lanes\n", __func__);
-> > +               goto err_rpm_put;
-> > +       }
-> > +
-> >         /* Apply default values of current mode */
-> >         reg_list = &imx219->mode->reg_list;
-> >         ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
-> > @@ -1184,6 +1211,11 @@ static const struct v4l2_subdev_internal_ops imx219_internal_ops = {
-> >         .open = imx219_open,
-> >  };
-> >
-> > +static unsigned long imx219_get_pixel_rate(struct imx219 *imx219)
-> > +{
-> > +       return (imx219->lanes == 2) ? IMX219_PIXEL_RATE : IMX219_PIXEL_RATE_4LANE;
-> > +}
-> > +
-> >  /* Initialize control handlers */
-> >  static int imx219_init_controls(struct imx219 *imx219)
-> >  {
-> > @@ -1205,15 +1237,16 @@ static int imx219_init_controls(struct imx219 *imx219)
-> >         /* By default, PIXEL_RATE is read only */
-> >         imx219->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &imx219_ctrl_ops,
-> >                                                V4L2_CID_PIXEL_RATE,
-> > -                                              IMX219_PIXEL_RATE,
-> > -                                              IMX219_PIXEL_RATE, 1,
-> > -                                              IMX219_PIXEL_RATE);
-> > +                                              imx219_get_pixel_rate(imx219),
-> > +                                              imx219_get_pixel_rate(imx219), 1,
-> > +                                              imx219_get_pixel_rate(imx219));
-> >
-> >         imx219->link_freq =
-> >                 v4l2_ctrl_new_int_menu(ctrl_hdlr, &imx219_ctrl_ops,
-> >                                        V4L2_CID_LINK_FREQ,
-> >                                        ARRAY_SIZE(imx219_link_freq_menu) - 1, 0,
-> > -                                      imx219_link_freq_menu);
-> > +                                      (imx219->lanes == 2) ? imx219_link_freq_menu :
-> > +                                      imx219_link_freq_4lane_menu);
-> >         if (imx219->link_freq)
-> >                 imx219->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> >
-> > @@ -1308,7 +1341,7 @@ static void imx219_free_controls(struct imx219 *imx219)
-> >         mutex_destroy(&imx219->mutex);
-> >  }
-> >
-> > -static int imx219_check_hwcfg(struct device *dev)
-> > +static int imx219_check_hwcfg(struct device *dev, struct imx219 *imx219)
-> >  {
-> >         struct fwnode_handle *endpoint;
-> >         struct v4l2_fwnode_endpoint ep_cfg = {
-> > @@ -1328,10 +1361,12 @@ static int imx219_check_hwcfg(struct device *dev)
-> >         }
-> >
-> >         /* Check the number of MIPI CSI2 data lanes */
-> > -       if (ep_cfg.bus.mipi_csi2.num_data_lanes != 2) {
-> > -               dev_err(dev, "only 2 data lanes are currently supported\n");
-> > +       if (ep_cfg.bus.mipi_csi2.num_data_lanes != 2 &&
-> > +           ep_cfg.bus.mipi_csi2.num_data_lanes != 4) {
-> > +               dev_err(dev, "only 2 or 4 data lanes are currently supported\n");
-> >                 goto error_out;
-> >         }
-> > +       imx219->lanes = ep_cfg.bus.mipi_csi2.num_data_lanes;
-> >
-> >         /* Check the link frequency set in device tree */
-> >         if (!ep_cfg.nr_of_link_frequencies) {
-> > @@ -1340,7 +1375,8 @@ static int imx219_check_hwcfg(struct device *dev)
-> >         }
-> >
-> >         if (ep_cfg.nr_of_link_frequencies != 1 ||
-> > -           ep_cfg.link_frequencies[0] != IMX219_DEFAULT_LINK_FREQ) {
-> > +          (ep_cfg.link_frequencies[0] != ((imx219->lanes == 2) ?
-> > +           IMX219_DEFAULT_LINK_FREQ : IMX219_DEFAULT_LINK_FREQ_4LANE))) {
-> >                 dev_err(dev, "Link frequency not supported: %lld\n",
-> >                         ep_cfg.link_frequencies[0]);
-> >                 goto error_out;
-> > @@ -1368,7 +1404,7 @@ static int imx219_probe(struct i2c_client *client)
-> >         v4l2_i2c_subdev_init(&imx219->sd, client, &imx219_subdev_ops);
-> >
-> >         /* Check the hardware configuration in device tree */
-> > -       if (imx219_check_hwcfg(dev))
-> > +       if (imx219_check_hwcfg(dev, imx219))
-> >                 return -EINVAL;
-> >
-> >         /* Get system clock (xclk) */
-> > --
-> > 2.34.1
-> >
