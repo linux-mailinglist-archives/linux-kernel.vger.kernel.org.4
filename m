@@ -2,142 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5324066B623
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B2666B626
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjAPD2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 22:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S231705AbjAPDbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 22:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjAPD2S (ORCPT
+        with ESMTP id S231586AbjAPDbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:28:18 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EB9524B;
-        Sun, 15 Jan 2023 19:28:17 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NwHXr0VFQz4f3k65;
-        Mon, 16 Jan 2023 11:28:12 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgA35CFNxMRjJiiYBg--.11221S3;
-        Mon, 16 Jan 2023 11:28:14 +0800 (CST)
-Subject: Re: [PATCH] block, bfq: switch 'bfqg->ref' to use atomic refcount
- apis
-To:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz,
-        paolo.valente@linaro.org, axboe@kernel.dk, tj@kernel.org,
-        josef@toxicpanda.com
-Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230103084755.1256479-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <a562c6d1-3b20-15db-0487-dd99c09d68b0@huaweicloud.com>
-Date:   Mon, 16 Jan 2023 11:28:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 15 Jan 2023 22:31:06 -0500
+Received: from out29-175.mail.aliyun.com (out29-175.mail.aliyun.com [115.124.29.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D43910D0;
+        Sun, 15 Jan 2023 19:31:00 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436261|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00737706-0.000674387-0.991949;FP=11045481846625830584|1|1|1|0|-1|-1|-1;HT=ay29a033018047211;MF=yulong.zhang@metoak.net;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.QtfOCll_1673839856;
+Received: from localhost.localdomain(mailfrom:yulong.zhang@metoak.net fp:SMTPD_---.QtfOCll_1673839856)
+          by smtp.aliyun-inc.com;
+          Mon, 16 Jan 2023 11:30:57 +0800
+From:   Yulong Zhang <yulong.zhang@metoak.net>
+To:     jic23@kernel.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yulong.zhang@metoak.net
+Subject: [PATCH v2] tools/iio/iio_utils:fix memory leak
+Date:   Mon, 16 Jan 2023 11:30:07 +0800
+Message-Id: <20230116033007.58038-1-yulong.zhang@metoak.net>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230114164114.3212921d@jic23-huawei>
+References: <20230114164114.3212921d@jic23-huawei>
 MIME-Version: 1.0
-In-Reply-To: <20230103084755.1256479-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgA35CFNxMRjJiiYBg--.11221S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw18Kr1ftFW3GF1rWrWkCrg_yoW8urWDpF
-        n0qa45J345Jrn7W3WUJ3WUXry8Jw4fCry8K3y8W3sayry3X3WSg3Z0y3yrJryfZF93ur4U
-        Zr1Ygayqkr1IvFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jens
+1. fopen sysfs without fclose.
+2. asprintf filename without free.
+3. if asprintf return error,do not need to free the buffer.
 
-ÔÚ 2023/01/03 16:47, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> The updating of 'bfqg->ref' should be protected by 'bfqd->lock', however,
-> during code review, we found that bfq_pd_free() update 'bfqg->ref'
-> without holding the lock, which is problematic:
-> 
-> 1) bfq_pd_free() triggered by removing cgroup is called asynchronously;
-> 2) bfqq will grab bfqg reference, and exit bfqq will drop the reference,
-> which can concurrent with 1).
-> 
-> Unfortunately, 'bfqd->lock' can't be held here because 'bfqd' might already
-> be freed in bfq_pd_free(). Fix the problem by using atomic refcount apis.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Yulong Zhang <yulong.zhang@metoak.net>
+---
+Yes, you are right. Thanks you for the advice.
+I found another problem, when asprintf return error, still free the
+buffer.This is not correct,I've removed it.
 
-Can you apply this patch?
+> sysfsfp = fopen(filename, "r");
+> if (!sysfsfp) {
+>       ret = -errno;
+>       fprintf(stderr, "failed to open %s\n",
+>               filename);
+>       free(filename);
+>       goto error_cleanup_array;
+> }
+> free(filename);
+Because in if statement still use filename,so I can't free filename
+before it.And I am not sure it can be removed,so I free filename after if
+statement.
 
-Thanks,
-Kuai
-> ---
-> Changes from RFC:
->   - refcount_dec_and_test(bfqg->ref) -> refcount_dec_and_test(&bfqg->ref)
-> 
->   block/bfq-cgroup.c  | 8 +++-----
->   block/bfq-iosched.h | 2 +-
->   2 files changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-> index 1b2829e99dad..7d9b15f0dbd5 100644
-> --- a/block/bfq-cgroup.c
-> +++ b/block/bfq-cgroup.c
-> @@ -316,14 +316,12 @@ struct bfq_group *bfqq_group(struct bfq_queue *bfqq)
->   
->   static void bfqg_get(struct bfq_group *bfqg)
->   {
-> -	bfqg->ref++;
-> +	refcount_inc(&bfqg->ref);
->   }
->   
->   static void bfqg_put(struct bfq_group *bfqg)
->   {
-> -	bfqg->ref--;
-> -
-> -	if (bfqg->ref == 0)
-> +	if (refcount_dec_and_test(&bfqg->ref))
->   		kfree(bfqg);
->   }
->   
-> @@ -530,7 +528,7 @@ static struct blkg_policy_data *bfq_pd_alloc(gfp_t gfp, struct request_queue *q,
->   	}
->   
->   	/* see comments in bfq_bic_update_cgroup for why refcounting */
-> -	bfqg_get(bfqg);
-> +	refcount_set(&bfqg->ref, 1);
->   	return &bfqg->pd;
->   }
->   
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 41aa151ccc22..466e4865ace6 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -928,7 +928,7 @@ struct bfq_group {
->   	char blkg_path[128];
->   
->   	/* reference counter (see comments in bfq_bic_update_cgroup) */
-> -	int ref;
-> +	refcount_t ref;
->   	/* Is bfq_group still online? */
->   	bool online;
->   
-> 
+ tools/iio/iio_utils.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/tools/iio/iio_utils.c b/tools/iio/iio_utils.c
+index 8d35893b2fa8..abec4331701c 100644
+--- a/tools/iio/iio_utils.c
++++ b/tools/iio/iio_utils.c
+@@ -264,6 +264,7 @@ int iioutils_get_param_float(float *output, const char *param_name,
+ 			if (fscanf(sysfsfp, "%f", output) != 1)
+ 				ret = errno ? -errno : -ENODATA;
+ 
++			fclose(sysfsfp);
+ 			break;
+ 		}
+ error_free_filename:
+@@ -350,6 +351,7 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 				free(filename);
+ 				goto error_close_dir;
+ 			}
++			free(filename);
+ 
+ 			errno = 0;
+ 			if (fscanf(sysfsfp, "%i", &ret) != 1) {
+@@ -357,7 +359,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 				if (fclose(sysfsfp))
+ 					perror("build_channel_array(): Failed to close file");
+ 
+-				free(filename);
+ 				goto error_close_dir;
+ 			}
+ 			if (ret == 1)
+@@ -365,11 +366,9 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 
+ 			if (fclose(sysfsfp)) {
+ 				ret = -errno;
+-				free(filename);
+ 				goto error_close_dir;
+ 			}
+ 
+-			free(filename);
+ 		}
+ 
+ 	*ci_array = malloc(sizeof(**ci_array) * (*counter));
+@@ -395,9 +394,9 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 			}
+ 
+ 			sysfsfp = fopen(filename, "r");
++			free(filename);
+ 			if (!sysfsfp) {
+ 				ret = -errno;
+-				free(filename);
+ 				count--;
+ 				goto error_cleanup_array;
+ 			}
+@@ -405,20 +404,17 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 			errno = 0;
+ 			if (fscanf(sysfsfp, "%i", &current_enabled) != 1) {
+ 				ret = errno ? -errno : -ENODATA;
+-				free(filename);
+ 				count--;
+ 				goto error_cleanup_array;
+ 			}
+ 
+ 			if (fclose(sysfsfp)) {
+ 				ret = -errno;
+-				free(filename);
+ 				count--;
+ 				goto error_cleanup_array;
+ 			}
+ 
+ 			if (!current_enabled) {
+-				free(filename);
+ 				count--;
+ 				continue;
+ 			}
+@@ -429,7 +425,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 						strlen(ent->d_name) -
+ 						strlen("_en"));
+ 			if (!current->name) {
+-				free(filename);
+ 				ret = -ENOMEM;
+ 				count--;
+ 				goto error_cleanup_array;
+@@ -439,7 +434,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 			ret = iioutils_break_up_name(current->name,
+ 						     &current->generic_name);
+ 			if (ret) {
+-				free(filename);
+ 				free(current->name);
+ 				count--;
+ 				goto error_cleanup_array;
+@@ -450,7 +444,6 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 				       scan_el_dir,
+ 				       current->name);
+ 			if (ret < 0) {
+-				free(filename);
+ 				ret = -ENOMEM;
+ 				goto error_cleanup_array;
+ 			}
+@@ -463,6 +456,7 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 				free(filename);
+ 				goto error_cleanup_array;
+ 			}
++			free(filename);
+ 
+ 			errno = 0;
+ 			if (fscanf(sysfsfp, "%u", &current->index) != 1) {
+@@ -470,17 +464,14 @@ int build_channel_array(const char *device_dir, int buffer_idx,
+ 				if (fclose(sysfsfp))
+ 					perror("build_channel_array(): Failed to close file");
+ 
+-				free(filename);
+ 				goto error_cleanup_array;
+ 			}
+ 
+ 			if (fclose(sysfsfp)) {
+ 				ret = -errno;
+-				free(filename);
+ 				goto error_cleanup_array;
+ 			}
+ 
+-			free(filename);
+ 			/* Find the scale */
+ 			ret = iioutils_get_param_float(&current->scale,
+ 						       "scale",
+-- 
+2.25.1
 
