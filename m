@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A0266CEDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5A766CED9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbjAPSbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S231311AbjAPSax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbjAPSb3 (ORCPT
+        with ESMTP id S233644AbjAPSa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:31:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DB1442D6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:16:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673893016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RndVneLxltFQQNDMgD1ceuftx5JF76I+LiBvNh/m1Ic=;
-        b=aXuf5Mj9d7yM+r0nNSFUBF3rbclijBuNJhRGGMXtx8fpcGT3kUp5BRh6WH9yPHbLBjstPK
-        H7nFdz7tdJQmRju6op2tyc1rCzQmcp2IESxJ8TzFtXlwKr4p5ws5fu2VAF7aUEgIK7bYqU
-        xYKlNBK0rLG8xnBNFMCM7OfkvRl09qs=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-312-ySQ_wewIOmq6hi-PYLW1iQ-1; Mon, 16 Jan 2023 13:16:52 -0500
-X-MC-Unique: ySQ_wewIOmq6hi-PYLW1iQ-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-4e62022894dso46797467b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:16:52 -0800 (PST)
+        Mon, 16 Jan 2023 13:30:29 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151A75BB4;
+        Mon, 16 Jan 2023 10:16:23 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id hw16so58106217ejc.10;
+        Mon, 16 Jan 2023 10:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0kOKIRWpF9HuOzAZKrZQZpcRpAWjMLxyYQdRXeMnc+c=;
+        b=Kyr7d9HQhTj9x1xmzYyrZB3d0rVHrJf8i53USWmrcDBJyxlpdTJVwYYSRvzP5nJRZe
+         iTGDb78T6GxkSal2X547pTji9rOvN2E7XbXayq77KtCR5vzVyCmL1nKssju5eYmw9CHo
+         uMjyWYumwhujA63MYpph3klVLmy3xCvCzn3JFntG0S6D2LSc+5hXs2eYoSpkVbQSr1xJ
+         K22Jrho6ZCAkQXpMFZ/JTU0RU6NWgxxQg/AsmK2KsL1hGwdIdR6OSqbt61fwfQHJ6arv
+         PPUFF8EtlXlYzgYVs8CW9R7AIoA4CZiijxY7xBGXARb5DZNaqB/AKV8kFEOeab2j9FWh
+         GHdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RndVneLxltFQQNDMgD1ceuftx5JF76I+LiBvNh/m1Ic=;
-        b=pBA/nRDcyOIvA7i1aGzt9DC4k4soRyBO/R0ti5vMf6Fm4jeFk/FOZSvyDhNo/h14Ni
-         Tz1rxaPiaRfUsN7q0yKgHekDC1w+v2IGGv6NFTiTPqtPia3GYZUrUbeusT9tdd47oDE8
-         hcdIS3M308f7lX5NzGjYI//86Nnhr7CkmrtQpdzEbFlDCd0EbxfAFuvE45FGhEUa0pll
-         +WBAMEhbv3BDcBiFwnRoSDHKmYqa6m2A7otNUw9SUynBUKJTJCywMUommlgF+csk7cKb
-         XHpi8FW/ixexrfL+mqTKoHt41LEeq9HC5f0wiQe2rwYO25Uo302H1i3k7kesMIYH65c7
-         AONg==
-X-Gm-Message-State: AFqh2kograLWPC+lgOLg6KnvCFeXFEpL3YGpHSzgZ9xXTkLj5lMMb0Tt
-        EaWPsNZkrEIiZOf4G4QtJwkEX3LUrLl8MyZv1Ve0eb254Yvak4Pa7Kme4p7k0VqCRlWsqCUKOlm
-        EIduUkl+T8dVpgynZc2EJki4X2xD/5Ao1Y2Ocg8tx
-X-Received: by 2002:a0d:fc86:0:b0:4db:3ac0:78a3 with SMTP id m128-20020a0dfc86000000b004db3ac078a3mr28229ywf.266.1673893012122;
-        Mon, 16 Jan 2023 10:16:52 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuqQMVzxUNJJRcR6yw+ex0cxw5m9eWckdmuAFZaSlKFM0GapCktflp7U+CCg8Xqj1gVn8s3jqkiDsMEU5Ze/14=
-X-Received: by 2002:a0d:fc86:0:b0:4db:3ac0:78a3 with SMTP id
- m128-20020a0dfc86000000b004db3ac078a3mr28222ywf.266.1673893011933; Mon, 16
- Jan 2023 10:16:51 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0kOKIRWpF9HuOzAZKrZQZpcRpAWjMLxyYQdRXeMnc+c=;
+        b=sYTNsYoSDnaJRqngAH7CUZUzZGJ2auCEgyVizikgKsXfM0zfWufNPwGODISW/xpscv
+         MO1oh5imBK44k+EOM5/hwwu2PqTdH5B8BUoaQpORR089YUzxRtllIfs25lF37R0pCq8t
+         LIrcu9M6/S2EOxImt2HXa+C6Dq/ggJt33iwHQrfOGtH+96k1L0ds9+2uQTic1qHXv5e3
+         yJcCNBWBb+3tPRRUa+GvWgCsqS9ma4fxgVDDQRGIOEOyxX+NRVXpcDS6XNUL+DaC+AGd
+         vbxV9hnS8Fcb7uOApP9y8vCs7rKPv3p5mNc6S+oe3kUxLrs0LSAWR2LFo58zgA4ZXE1K
+         Q0gw==
+X-Gm-Message-State: AFqh2kpLShf1kPVBAYjB91t4eBjacRh0BuTlWFh8Lbw3kjMnz4+c3FEY
+        5ADPzohh4NstnDepIWooJAQ=
+X-Google-Smtp-Source: AMrXdXvmQKvVKQCixeZrgIEJeCLdwRT5FQvF0jau7jT0Nl1xt+V24BGYE/CueryjLU8tC3bG7QK0hQ==
+X-Received: by 2002:a17:906:7188:b0:7c1:eb:b2a7 with SMTP id h8-20020a170906718800b007c100ebb2a7mr13030148ejk.13.1673892981577;
+        Mon, 16 Jan 2023 10:16:21 -0800 (PST)
+Received: from skbuf ([188.27.185.68])
+        by smtp.gmail.com with ESMTPSA id r1-20020a17090609c100b007e0e2e35205sm12230589eje.143.2023.01.16.10.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 10:16:21 -0800 (PST)
+Date:   Mon, 16 Jan 2023 20:16:18 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        rafael@kernel.org, andriy.shevchenko@linux.intel.com,
+        sean.wang@mediatek.com, Landen.Chao@mediatek.com,
+        linus.walleij@linaro.org, andrew@lunn.ch, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hkallweit1@gmail.com,
+        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
+Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API
+ to fwnode_
+Message-ID: <20230116181618.2iz54jywj7rqzygu@skbuf>
+References: <20230116173420.1278704-1-mw@semihalf.com>
+ <20230116173420.1278704-3-mw@semihalf.com>
+ <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20230112142218.725622-1-eperezma@redhat.com> <20230112142218.725622-2-eperezma@redhat.com>
- <DM8PR12MB5400550E8664315306F04DFAABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
-In-Reply-To: <DM8PR12MB5400550E8664315306F04DFAABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Mon, 16 Jan 2023 19:16:15 +0100
-Message-ID: <CAJaqyWeUrpc_YnPzkW+PDV+W85Hn_AMTu_CUN9NsSsDtcOHDmw@mail.gmail.com>
-Subject: Re: [RFC 1/3] vdpa/mlx5: reset iotlb at dup_iotlb
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     "mst@redhat.com" <mst@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Parav Pandit <parav@nvidia.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "sgarzare@redhat.com" <sgarzare@redhat.com>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,62 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 7:32 AM Eli Cohen <elic@nvidia.com> wrote:
->
-> > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > Sent: Thursday, 12 January 2023 16:22
-> > To: mst@redhat.com; Eli Cohen <elic@nvidia.com>
-> > Cc: linux-kernel@vger.kernel.org; Parav Pandit <parav@nvidia.com>;
-> > lulu@redhat.com; jasowang@redhat.com; virtualization@lists.linux-
-> > foundation.org; sgarzare@redhat.com; si-wei.liu@oracle.com
-> > Subject: [RFC 1/3] vdpa/mlx5: reset iotlb at dup_iotlb
-> >
-> > Regular memory region changes already reset cvq iotlb at set_map.
-> > However this is not true if CVQ and data VQs are in different ASID.
-> >
-> > Clean the CVQ iotlb every time we hit dup_iotlb.
-> >
-> > Fixes: 8fcd20c30704 ("vdpa/mlx5: Support different address spaces for
-> > control and data")
-> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > ---
-> >  drivers/vdpa/mlx5/core/mr.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
-> > index 0a1e0b0dc37e..ae34dcac9a3f 100644
-> > --- a/drivers/vdpa/mlx5/core/mr.c
-> > +++ b/drivers/vdpa/mlx5/core/mr.c
-> > @@ -456,6 +456,8 @@ static int dup_iotlb(struct mlx5_vdpa_dev *mvdev,
-> > struct vhost_iotlb *src)
-> >       u64 start =3D 0, last =3D ULLONG_MAX;
-> >       int err;
-> >
-> > +     vhost_iotlb_reset(mvdev->cvq.iotlb);
-> > +
->
-> As far as I can see, mlx5_vdpa_destroy_mr() is called independently of th=
-e asid
-> and it will calls prune_iotlb() which resets the cvq iotlb. Am I missing =
-something?
->
+On Mon, Jan 16, 2023 at 05:50:13PM +0000, Russell King (Oracle) wrote:
+> On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
+> > fixed-link PHYs API is used by DSA and a number of drivers
+> > and was depending on of_. Switch to fwnode_ so to make it
+> > hardware description agnostic and allow to be used in ACPI
+> > world as well.
+> 
+> Would it be better to let the fixed-link PHY die, and have everyone use
+> the more flexible fixed link implementation in phylink?
 
-Sorry, my fault. It is not obvious from the patch but this prepares the cod=
-e for
-the next patch in the series.
-
-With the next patch applied, prune_iotlb is not called in all
-contexts. This patch may be dropped in future series.
-
-Thanks!
-
-
-> >       if (!src) {
-> >               err =3D vhost_iotlb_add_range(mvdev->cvq.iotlb, start, la=
-st,
-> > start, VHOST_ACCESS_RW);
-> >               return err;
-> > --
-> > 2.31.1
->
-
+Would it be even better if DSA had some driver-level prerequisites to
+impose for ACPI support - like phylink support rather than adjust_link -
+and we would simply branch off to a dsa_shared_port_link_register_acpi()
+function, leaving the current dsa_shared_port_link_register_of() alone,
+with all its workarounds and hacks? I don't believe that carrying all
+that logic over to a common fwnode based API is the proper way forward.
