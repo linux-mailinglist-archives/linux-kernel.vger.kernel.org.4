@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF67866CFF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DA066CFF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbjAPUP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 15:15:27 -0500
+        id S232332AbjAPUPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 15:15:37 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbjAPUPN (ORCPT
+        with ESMTP id S229934AbjAPUPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 15:15:13 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD470241F6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:15:11 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso3096667wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:15:11 -0800 (PST)
+        Mon, 16 Jan 2023 15:15:14 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382FA244AC
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:15:13 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j34-20020a05600c1c2200b003da1b054057so8670894wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:15:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dypyk6ZgizeLKggHRu4doKP0wIPWphi3ZnBPXRfhuaQ=;
-        b=Zc2tNSbZ9p9u6IeEuUGPuMM8mgTRpCMILK7SwLFU5BJ1Z2J2gHIFcOjzm8woT9ZYEm
-         wmQYlHNLOsN101wndn4tI822PuJgVUohvqEcqAs+NwtGuPlHZqULY7w5xL1ER3D5SRZS
-         oquvk7WMFUZiIpJEF+o/UEYyalmWs9HdN+i8gyujQr94Q+a1GwOoSK5PV64DSp4WuNtp
-         wqRInVLlAsMSNooPSZQe35YEhZFvdDSWMBwlsZlzFA5jjZtol2bf09lOO/15Chr7CrtI
-         sxqjH16sykUBSNVmqDtrRSH9Vpltkp2lePAOTnpABzutw3NwzoMlp2DjtlnWY+lzWaBh
-         nXVQ==
+        bh=FMLRObJikupEwzTrRnh2PGmgjZ9Cqtc3WwiwTSH8KzM=;
+        b=XmCdZzRtTuZuHhp81pkE69P4loy4VR6MnN9p5Ug0b9VeBBJyFAJNXMMCCPXI2Xww4+
+         +WmiN3JAbNz9M0cQ2HbFFj86PlJHgnfX3V6lXt1sgEDdZNmnFPeDjSwKbJNvBY++u8WY
+         tdBzDidtFDPRiHUykbwhSWvFSRYwmt5pon5+6DRZWcD526dyXxLcUW239Ttv5O67N6Fc
+         cLdz5fdlYzw74C1vGu/ANNxqRb1YmE4B2jUnANSP5aRhHLum8XP0XS+AsugX2ORfUlg1
+         KfwnBp6EI/3oYPR0eLQU2Nndym4TVpl856OKzZww7FcENqKPQxmU/O1C2fKPcezVGXGS
+         EACQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dypyk6ZgizeLKggHRu4doKP0wIPWphi3ZnBPXRfhuaQ=;
-        b=gQFH2HiHPupE1IH9TMkCGWEvXcuk63t28z9lQU/KRU6n9wNxlP7G512Il03mI1hZEz
-         MCE+/sQRUuyd7Ixv5cQBC3Vl/RVcO5VSFzHJbxLGgz3nC8Dk5Of3+j8er4KoDKunWXYI
-         l5meGXl2fIGMU0dy7hT9H3NJTwlyXWneAkJYQe92unQ1D1mZPDXvc2lj8QF/r3XAfli4
-         w6pM4hAyp1k3kLRaTMWjGlhIyg79GAbyCj85LRV/3Byr08PmGwkrQXzEtq6G4nhcc11I
-         TirkpHSzjX2ywxLSS/G25KIzJnoA/aNAkIdfNfcpB+qr/LzxCrbsnK8RNPE02rX3IAEK
-         57xQ==
-X-Gm-Message-State: AFqh2kqkEVbscSqj4jXcH/TJ+61OWNu55zQP2cAGRJvhwPsvcbubcuWJ
-        IcPmgGNMxSGZuA0ONer4e2qrPTtTu/kKJx86
-X-Google-Smtp-Source: AMrXdXvzWeOKq69D92Si/8hVLqBC08eyIrm4EbsRB58ohgbnlbS+nQHHBPZVMjFJ9XVIVdbDnopGdQ==
-X-Received: by 2002:a05:600c:a54:b0:3da:fd1d:98d8 with SMTP id c20-20020a05600c0a5400b003dafd1d98d8mr670161wmq.22.1673900110191;
-        Mon, 16 Jan 2023 12:15:10 -0800 (PST)
+        bh=FMLRObJikupEwzTrRnh2PGmgjZ9Cqtc3WwiwTSH8KzM=;
+        b=qzgxGKejgdIuVb7D+AJmAGMZK7AnygeDJZ4HEkxsHV5unqMOBa1NJak1SZguCdZK7G
+         Fd+DGDnN5zPkr9U3Mu64zrfbNjbg+M6L9pSCF5iCZzmmOKacKacgR96PT7okcQo0wul6
+         15JkmTlZLKKjaXaCQ4OOE4hZHQk2TFzunA82y7whQyt4582k1fTuX/3SuZ2dFusZtIXZ
+         FbRq7Lqpiqpgg3Lq5q87Tu9hdpSUFN4pSRtPLsG8fLZZ28m+4F4UvDPdlz06G7CqFaH8
+         g5L4NHFCxPb7ucCTbG97mUpxixurBf3oyBiLQjluswXDmBzsE+QBGSqvyQiAXn9j7h5+
+         grnA==
+X-Gm-Message-State: AFqh2kqjEGHTqVenrPQzT4QzH/Bj5dLARW6kZYJYFIlIdk5uzxxfvvzP
+        kuQSE25PDtejIYYnq6qiFZYcfI3Uj0pVPv1v
+X-Google-Smtp-Source: AMrXdXv6vt0oUJQj3sllPk++1BCsUEFdkO/Gf79SgLX//tfJ5iVqBNK7A6tl8lhtKabc2OX2F1UAyA==
+X-Received: by 2002:a05:600c:b8d:b0:3cf:7c8b:a7c7 with SMTP id fl13-20020a05600c0b8d00b003cf7c8ba7c7mr622696wmb.39.1673900111548;
+        Mon, 16 Jan 2023 12:15:11 -0800 (PST)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm34549829wmb.47.2023.01.16.12.15.09
+        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm34549829wmb.47.2023.01.16.12.15.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 12:15:09 -0800 (PST)
+        Mon, 16 Jan 2023 12:15:11 -0800 (PST)
 From:   Dmitry Safonov <dima@arista.com>
 To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
@@ -65,9 +65,9 @@ Cc:     Dmitry Safonov <dima@arista.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Salam Noureddine <noureddine@arista.com>,
         netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH v3 3/4] crypto/net/ipv6: sr: Switch to using crypto_pool
-Date:   Mon, 16 Jan 2023 20:14:57 +0000
-Message-Id: <20230116201458.104260-4-dima@arista.com>
+Subject: [PATCH v3 4/4] crypto/Documentation: Add crypto_pool kernel API
+Date:   Mon, 16 Jan 2023 20:14:58 +0000
+Message-Id: <20230116201458.104260-5-dima@arista.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230116201458.104260-1-dima@arista.com>
 References: <20230116201458.104260-1-dima@arista.com>
@@ -83,375 +83,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The conversion to use crypto_pool has the following upsides:
-- now SR uses asynchronous API which may potentially free CPU cycles and
-  improve performance for of CPU crypto algorithm providers;
-- hash descriptors now don't have to be allocated on boot, but only at
-  the moment SR starts using HMAC and until the last HMAC secret is
-  deleted;
-- potentially reuse ahash_request(s) for different users
-- allocate only one per-CPU scratch buffer rather than a new one for
-  each user
-- have a common API for net/ users that need ahash on RX/TX fast path
-
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- include/net/seg6_hmac.h |   7 --
- net/ipv6/Kconfig        |   1 +
- net/ipv6/seg6.c         |   3 -
- net/ipv6/seg6_hmac.c    | 207 +++++++++++++++-------------------------
- 4 files changed, 79 insertions(+), 139 deletions(-)
+ Documentation/crypto/crypto_pool.rst | 36 ++++++++++++++++++++++++++++
+ Documentation/crypto/index.rst       |  1 +
+ 2 files changed, 37 insertions(+)
+ create mode 100644 Documentation/crypto/crypto_pool.rst
 
-diff --git a/include/net/seg6_hmac.h b/include/net/seg6_hmac.h
-index 2b5d2ee5613e..d6b7820ecda2 100644
---- a/include/net/seg6_hmac.h
-+++ b/include/net/seg6_hmac.h
-@@ -32,13 +32,6 @@ struct seg6_hmac_info {
- 	u8 alg_id;
- };
- 
--struct seg6_hmac_algo {
--	u8 alg_id;
--	char name[64];
--	struct crypto_shash * __percpu *tfms;
--	struct shash_desc * __percpu *shashs;
--};
--
- extern int seg6_hmac_compute(struct seg6_hmac_info *hinfo,
- 			     struct ipv6_sr_hdr *hdr, struct in6_addr *saddr,
- 			     u8 *output);
-diff --git a/net/ipv6/Kconfig b/net/ipv6/Kconfig
-index 658bfed1df8b..e9aa99180f85 100644
---- a/net/ipv6/Kconfig
-+++ b/net/ipv6/Kconfig
-@@ -305,6 +305,7 @@ config IPV6_SEG6_HMAC
- 	bool "IPv6: Segment Routing HMAC support"
- 	depends on IPV6
- 	select CRYPTO
-+	select CRYPTO_POOL
- 	select CRYPTO_HMAC
- 	select CRYPTO_SHA1
- 	select CRYPTO_SHA256
-diff --git a/net/ipv6/seg6.c b/net/ipv6/seg6.c
-index 29346a6eec9f..3d66bf6d4c66 100644
---- a/net/ipv6/seg6.c
-+++ b/net/ipv6/seg6.c
-@@ -558,9 +558,6 @@ int __init seg6_init(void)
- 
- void seg6_exit(void)
- {
--#ifdef CONFIG_IPV6_SEG6_HMAC
--	seg6_hmac_exit();
--#endif
- #ifdef CONFIG_IPV6_SEG6_LWTUNNEL
- 	seg6_iptunnel_exit();
- #endif
-diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
-index d43c50a7310d..2395d227018c 100644
---- a/net/ipv6/seg6_hmac.c
-+++ b/net/ipv6/seg6_hmac.c
-@@ -35,6 +35,7 @@
- #include <net/xfrm.h>
- 
- #include <crypto/hash.h>
-+#include <crypto/pool.h>
- #include <net/seg6.h>
- #include <net/genetlink.h>
- #include <net/seg6_hmac.h>
-@@ -70,6 +71,12 @@ static const struct rhashtable_params rht_params = {
- 	.obj_cmpfn		= seg6_hmac_cmpfn,
- };
- 
-+struct seg6_hmac_algo {
-+	u8 alg_id;
-+	char name[64];
-+	int crypto_pool_id;
-+};
+diff --git a/Documentation/crypto/crypto_pool.rst b/Documentation/crypto/crypto_pool.rst
+new file mode 100644
+index 000000000000..84abd1f2ee80
+--- /dev/null
++++ b/Documentation/crypto/crypto_pool.rst
+@@ -0,0 +1,36 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- static struct seg6_hmac_algo hmac_algos[] = {
- 	{
- 		.alg_id = SEG6_HMAC_ALGO_SHA1,
-@@ -115,55 +122,17 @@ static struct seg6_hmac_algo *__hmac_get_algo(u8 alg_id)
- 	return NULL;
- }
- 
--static int __do_hmac(struct seg6_hmac_info *hinfo, const char *text, u8 psize,
--		     u8 *output, int outlen)
--{
--	struct seg6_hmac_algo *algo;
--	struct crypto_shash *tfm;
--	struct shash_desc *shash;
--	int ret, dgsize;
--
--	algo = __hmac_get_algo(hinfo->alg_id);
--	if (!algo)
--		return -ENOENT;
--
--	tfm = *this_cpu_ptr(algo->tfms);
--
--	dgsize = crypto_shash_digestsize(tfm);
--	if (dgsize > outlen) {
--		pr_debug("sr-ipv6: __do_hmac: digest size too big (%d / %d)\n",
--			 dgsize, outlen);
--		return -ENOMEM;
--	}
--
--	ret = crypto_shash_setkey(tfm, hinfo->secret, hinfo->slen);
--	if (ret < 0) {
--		pr_debug("sr-ipv6: crypto_shash_setkey failed: err %d\n", ret);
--		goto failed;
--	}
--
--	shash = *this_cpu_ptr(algo->shashs);
--	shash->tfm = tfm;
--
--	ret = crypto_shash_digest(shash, text, psize, output);
--	if (ret < 0) {
--		pr_debug("sr-ipv6: crypto_shash_digest failed: err %d\n", ret);
--		goto failed;
--	}
--
--	return dgsize;
--
--failed:
--	return ret;
--}
--
- int seg6_hmac_compute(struct seg6_hmac_info *hinfo, struct ipv6_sr_hdr *hdr,
- 		      struct in6_addr *saddr, u8 *output)
- {
- 	__be32 hmackeyid = cpu_to_be32(hinfo->hmackeyid);
--	u8 tmp_out[SEG6_HMAC_MAX_DIGESTSIZE];
-+	struct crypto_pool_ahash hp;
-+	struct seg6_hmac_algo *algo;
- 	int plen, i, dgsize, wrsize;
-+	struct crypto_ahash *tfm;
-+	struct scatterlist sg;
- 	char *ring, *off;
-+	int err;
- 
- 	/* a 160-byte buffer for digest output allows to store highest known
- 	 * hash function (RadioGatun) with up to 1216 bits
-@@ -176,6 +145,10 @@ int seg6_hmac_compute(struct seg6_hmac_info *hinfo, struct ipv6_sr_hdr *hdr,
- 	if (plen >= SEG6_HMAC_RING_SIZE)
- 		return -EMSGSIZE;
- 
-+	algo = __hmac_get_algo(hinfo->alg_id);
-+	if (!algo)
-+		return -ENOENT;
++Per-CPU pool of crypto requests
++===============================
 +
- 	/* Let's build the HMAC text on the ring buffer. The text is composed
- 	 * as follows, in order:
- 	 *
-@@ -186,8 +159,36 @@ int seg6_hmac_compute(struct seg6_hmac_info *hinfo, struct ipv6_sr_hdr *hdr,
- 	 * 5. All segments in the segments list (n * 128 bits)
- 	 */
- 
--	local_bh_disable();
-+	err = crypto_pool_start(algo->crypto_pool_id, &hp.base);
-+	if (err)
-+		return err;
++Overview
++--------
++The crypto pool API manages pre-allocated per-CPU pool of crypto requests,
++providing ability to use crypto requests on fast paths, potentially in atomic
++contexts. The allocation and initialization of the requests should be done
++before their usage as it's slow-path and may sleep.
 +
- 	ring = this_cpu_ptr(hmac_ring);
++Order of operations
++-------------------
++You are required to allocate a new pool prior using it and manage its lifetime.
++You can allocate a per-CPU pool of ahash requests by crypto_pool_alloc_ahash().
++It will give you a pool id that you can use further on fast-path for hashing.
++You can increase the reference counter for an allocated pool via
++crypto_pool_get(). Decrease the reference counter by crypto_pool_release().
++When the refcounter hits zero, the pool is scheduled for destruction and you
++can't use the corresponding crypto pool id anymore.
++Note that crypto_pool_get() and crypto_pool_release() must be called
++only for an already existing pool and can be called in atomic contexts.
 +
-+	sg_init_one(&sg, ring, plen);
++crypto_pool_start() disables bh and returns you back ``struct crypto_pool *``,
++which is a generic type for different crypto requests and has ``scratch`` area
++that can be used as a temporary buffer for your operation.
 +
-+	tfm = crypto_ahash_reqtfm(hp.req);
-+	dgsize = crypto_ahash_digestsize(tfm);
-+	if (dgsize > SEG6_HMAC_MAX_DIGESTSIZE) {
-+		pr_debug("digest size too big (%d / %d)\n",
-+			 dgsize, SEG6_HMAC_MAX_DIGESTSIZE);
-+		err = -ENOMEM;
-+		goto err_end_pool;
-+	}
++crypto_pool_end() enables bh back once you've done with your crypto
++operation.
 +
-+	err = crypto_ahash_setkey(tfm, hinfo->secret, hinfo->slen);
-+	if (err) {
-+		pr_debug("crypto_ahash_setkey failed: err %d\n", err);
-+		goto err_end_pool;
-+	}
++.. kernel-doc:: include/crypto/pool.h
++   :identifiers:
 +
-+	err = crypto_ahash_init(hp.req);
-+	if (err)
-+		goto err_end_pool;
-+
-+	ahash_request_set_crypt(hp.req, &sg,
-+				hp.base.scratch, SEG6_HMAC_MAX_DIGESTSIZE);
-+
- 	off = ring;
- 
- 	/* source address */
-@@ -210,21 +211,25 @@ int seg6_hmac_compute(struct seg6_hmac_info *hinfo, struct ipv6_sr_hdr *hdr,
- 		off += 16;
- 	}
- 
--	dgsize = __do_hmac(hinfo, ring, plen, tmp_out,
--			   SEG6_HMAC_MAX_DIGESTSIZE);
--	local_bh_enable();
-+	err = crypto_ahash_update(hp.req);
-+	if (err)
-+		goto err_end_pool;
- 
--	if (dgsize < 0)
--		return dgsize;
-+	err = crypto_ahash_final(hp.req);
-+	if (err)
-+		goto err_end_pool;
- 
- 	wrsize = SEG6_HMAC_FIELD_LEN;
- 	if (wrsize > dgsize)
- 		wrsize = dgsize;
- 
- 	memset(output, 0, SEG6_HMAC_FIELD_LEN);
--	memcpy(output, tmp_out, wrsize);
-+	memcpy(output, hp.base.scratch, wrsize);
-+
-+err_end_pool:
-+	crypto_pool_end();
- 
--	return 0;
-+	return err;
- }
- EXPORT_SYMBOL(seg6_hmac_compute);
- 
-@@ -291,12 +296,24 @@ EXPORT_SYMBOL(seg6_hmac_info_lookup);
- int seg6_hmac_info_add(struct net *net, u32 key, struct seg6_hmac_info *hinfo)
- {
- 	struct seg6_pernet_data *sdata = seg6_pernet(net);
--	int err;
-+	struct seg6_hmac_algo *algo;
-+	int ret;
-+
-+	algo = __hmac_get_algo(hinfo->alg_id);
-+	if (!algo)
-+		return -ENOENT;
-+
-+	ret = crypto_pool_alloc_ahash(algo->name, SEG6_HMAC_MAX_DIGESTSIZE);
-+	if (ret < 0)
-+		return ret;
-+	algo->crypto_pool_id = ret;
- 
--	err = rhashtable_lookup_insert_fast(&sdata->hmac_infos, &hinfo->node,
-+	ret = rhashtable_lookup_insert_fast(&sdata->hmac_infos, &hinfo->node,
- 					    rht_params);
-+	if (ret)
-+		crypto_pool_release(algo->crypto_pool_id);
- 
--	return err;
-+	return ret;
- }
- EXPORT_SYMBOL(seg6_hmac_info_add);
- 
-@@ -304,6 +321,7 @@ int seg6_hmac_info_del(struct net *net, u32 key)
- {
- 	struct seg6_pernet_data *sdata = seg6_pernet(net);
- 	struct seg6_hmac_info *hinfo;
-+	struct seg6_hmac_algo *algo;
- 	int err = -ENOENT;
- 
- 	hinfo = rhashtable_lookup_fast(&sdata->hmac_infos, &key, rht_params);
-@@ -315,6 +333,12 @@ int seg6_hmac_info_del(struct net *net, u32 key)
- 	if (err)
- 		goto out;
- 
-+	algo = __hmac_get_algo(hinfo->alg_id);
-+	if (algo)
-+		crypto_pool_release(algo->crypto_pool_id);
-+	else
-+		WARN_ON_ONCE(1);
-+
- 	seg6_hinfo_release(hinfo);
- 
- out:
-@@ -348,58 +372,6 @@ int seg6_push_hmac(struct net *net, struct in6_addr *saddr,
- }
- EXPORT_SYMBOL(seg6_push_hmac);
- 
--static int seg6_hmac_init_algo(void)
--{
--	struct seg6_hmac_algo *algo;
--	struct crypto_shash *tfm;
--	struct shash_desc *shash;
--	int i, alg_count, cpu;
--
--	alg_count = ARRAY_SIZE(hmac_algos);
--
--	for (i = 0; i < alg_count; i++) {
--		struct crypto_shash **p_tfm;
--		int shsize;
--
--		algo = &hmac_algos[i];
--		algo->tfms = alloc_percpu(struct crypto_shash *);
--		if (!algo->tfms)
--			return -ENOMEM;
--
--		for_each_possible_cpu(cpu) {
--			tfm = crypto_alloc_shash(algo->name, 0, 0);
--			if (IS_ERR(tfm))
--				return PTR_ERR(tfm);
--			p_tfm = per_cpu_ptr(algo->tfms, cpu);
--			*p_tfm = tfm;
--		}
--
--		p_tfm = raw_cpu_ptr(algo->tfms);
--		tfm = *p_tfm;
--
--		shsize = sizeof(*shash) + crypto_shash_descsize(tfm);
--
--		algo->shashs = alloc_percpu(struct shash_desc *);
--		if (!algo->shashs)
--			return -ENOMEM;
--
--		for_each_possible_cpu(cpu) {
--			shash = kzalloc_node(shsize, GFP_KERNEL,
--					     cpu_to_node(cpu));
--			if (!shash)
--				return -ENOMEM;
--			*per_cpu_ptr(algo->shashs, cpu) = shash;
--		}
--	}
--
--	return 0;
--}
--
--int __init seg6_hmac_init(void)
--{
--	return seg6_hmac_init_algo();
--}
--
- int __net_init seg6_hmac_net_init(struct net *net)
- {
- 	struct seg6_pernet_data *sdata = seg6_pernet(net);
-@@ -407,29 +379,6 @@ int __net_init seg6_hmac_net_init(struct net *net)
- 	return rhashtable_init(&sdata->hmac_infos, &rht_params);
- }
- 
--void seg6_hmac_exit(void)
--{
--	struct seg6_hmac_algo *algo = NULL;
--	int i, alg_count, cpu;
--
--	alg_count = ARRAY_SIZE(hmac_algos);
--	for (i = 0; i < alg_count; i++) {
--		algo = &hmac_algos[i];
--		for_each_possible_cpu(cpu) {
--			struct crypto_shash *tfm;
--			struct shash_desc *shash;
--
--			shash = *per_cpu_ptr(algo->shashs, cpu);
--			kfree(shash);
--			tfm = *per_cpu_ptr(algo->tfms, cpu);
--			crypto_free_shash(tfm);
--		}
--		free_percpu(algo->tfms);
--		free_percpu(algo->shashs);
--	}
--}
--EXPORT_SYMBOL(seg6_hmac_exit);
--
- void __net_exit seg6_hmac_net_exit(struct net *net)
- {
- 	struct seg6_pernet_data *sdata = seg6_pernet(net);
++.. kernel-doc:: crypto/crypto_pool.c
++   :identifiers:
+diff --git a/Documentation/crypto/index.rst b/Documentation/crypto/index.rst
+index 21338fa92642..3eaf4e964e5b 100644
+--- a/Documentation/crypto/index.rst
++++ b/Documentation/crypto/index.rst
+@@ -25,6 +25,7 @@ for cryptographic use cases, as well as programming examples.
+    devel-algos
+    userspace-if
+    crypto_engine
++   crypto_pool
+    api
+    api-samples
+    descore-readme
 -- 
 2.39.0
 
