@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F161C66B71C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 07:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB3F66B702
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 06:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjAPGFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 01:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S231781AbjAPF4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 00:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjAPGFm (ORCPT
+        with ESMTP id S231754AbjAPFzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 01:05:42 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACF9A242
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 22:05:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673849141; x=1705385141;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=3DzfFkJlxyL6+WAZYtHcFZtPqjNL1ubLVlcCB3tZvjw=;
-  b=R/cVY+IU6lJklO/4PtJYwQmRV1UO34ybI5J54vSq/Rvim2plgEd0vzVC
-   OAQWpZ3/mAorqvIvzI6OyvNjv8LIr4mVptV+91M13MgR2Da9xKMKD2KaF
-   6+jp/8JtQaIzIaBVTVXC8cDEKssTZCNOpVtxwRINJ786w3ceC/nJ3N9AF
-   ZifuofnJE93uBKtF6DOg5RZogtJC7ZsQjXEIh+zjnmC1Rod1z7fCqG6Yr
-   FQQNmvChVKU7AFPU4B39EexveDRTLYR4AkFaAjYpNU8DpVBDEqFjyrEEd
-   RdsooJywtxzmZtUeMqXWvMRD8R+xLGjWDrFC9Z3psX2Pv2dfVDJ/267ZQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="324451203"
-X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="asc'?scan'208";a="324451203"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 22:05:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="722185818"
-X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="asc'?scan'208";a="722185818"
-Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Jan 2023 22:05:36 -0800
-Date:   Mon, 16 Jan 2023 13:44:46 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Deepak R Varma <drv@mailo.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Subject: Re: [PATCH 2/2] drm/i915/gvt: Avoid full proxy f_ops for vgpu_status
- debug attributes
-Message-ID: <Y8TkTi+/GQwhiMvO@zhen-hp.sh.intel.com>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <cover.1673375066.git.drv@mailo.com>
- <188df08e0feba0cda2c92145f513dd4e57c6e6cf.1673375066.git.drv@mailo.com>
- <Y72zVXYLVHXuyK05@intel.com>
+        Mon, 16 Jan 2023 00:55:54 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA1E903C
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 21:55:53 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4c131bede4bso367263827b3.5
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 21:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+daLfxi8Ns5qDmIM85s09QTJvJFZ/n3H5RvZXOfUl0g=;
+        b=IUkt+lN7A7IoDQPc/iGxftg+aaXqQ2dU4uBpYuT9m99uYJWJlgob/74I6G+RBWZ9Sh
+         lZX1mBVqXGtGTaW2kZzzR3IhC57x5tb/i2NBH9ihXtcREqG8iyAkhkkbuzDKgkkNMDWT
+         na1PXaNGWc/eBa81J4uMhJas1BqQ9lzuV/am1ZVNa3z7IxvR+TbDbz/Fp171PWAzc/mM
+         YYv2ncNdzgp66RL1s1VJG2N7ViFAV1Uqzb/xVyzqUZ5CKHDX+/9b4auklG/gIx7Z3Zej
+         DN6Nw+XTKNWor+Uq51V1dxYoexb1GJXw0BOMgrE1KUIrrz9agvBWisifhhNc15Ldjyxa
+         29gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+daLfxi8Ns5qDmIM85s09QTJvJFZ/n3H5RvZXOfUl0g=;
+        b=AXzshP61rAd66o1Gu6mtyRWNsbmHDpUZo7M5tC9ZEhhLWIXMoNCe1D3V/8lai0aXZZ
+         nkTRePgX/+mbRPpX/8WSDqO3gFWxBlDq66IvH7IMoaVXn3CgJWglaf3leeBRHEPkV5mm
+         4nJPZYR9SqsmzJzxGm0YeRHKmBLQjzqo6s++MF3+8djFVYa0smCkWxcFZZxtITY5iZ6E
+         kTGFiLzD3Ig4niidWsvz6x+h3l87QE1/V0YXpQ6TVJVZFoTTButiS+blLXEygaFvT3LS
+         hWENENfo5GulAitpWSeqc+Ksu+BxtcXeFlx0Hk7LJzSmgxZ+14T0oScugxG3tl/BQrNi
+         1zrQ==
+X-Gm-Message-State: AFqh2koTV5Xwte1q66Lf6/abyDO8ftKwwn9C4kVroEl5lKtzsjpcZZwH
+        X+0XR8HA3jL5a69Ylt1rayQtmpl73IHYnvhr2VHFdA==
+X-Google-Smtp-Source: AMrXdXsywB8wnhpDlO6nEJpmrDCZXmry8C3GEbuCRPVZ1B4e9vvXn4rdj8YMuEXVa6jUakAt+fpSQ+gxuzlzozQZLpk=
+X-Received: by 2002:a81:608a:0:b0:4a4:7135:9214 with SMTP id
+ u132-20020a81608a000000b004a471359214mr97195ywb.378.1673848552367; Sun, 15
+ Jan 2023 21:55:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="MccZDuc/f2Etrv5V"
-Content-Disposition: inline
-In-Reply-To: <Y72zVXYLVHXuyK05@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113162245.117324-1-krzysztof.kozlowski@linaro.org>
+ <20230113162245.117324-2-krzysztof.kozlowski@linaro.org> <e3c367ba-b752-d116-0b84-fd2437e565b8@linaro.org>
+ <5e784285-c391-91f4-c9d1-a53443fc4264@linaro.org>
+In-Reply-To: <5e784285-c391-91f4-c9d1-a53443fc4264@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 16 Jan 2023 07:55:41 +0200
+Message-ID: <CAA8EJpr+0fnhy+aHwmdKQA_xk2Qkse0L5u8JdCJNDZqqdYwhrg@mail.gmail.com>
+Subject: Re: [PATCH 2/6] arm64: dts: qcom: sdm845: move WCD9340 codec to
+ separate file
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---MccZDuc/f2Etrv5V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 2023.01.10 13:49:57 -0500, Rodrigo Vivi wrote:
-> On Wed, Jan 11, 2023 at 12:00:12AM +0530, Deepak R Varma wrote:
-> > Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-> > function adds the overhead of introducing a proxy file operation
-> > functions to wrap the original read/write inside file removal protection
-> > functions. This adds significant overhead in terms of introducing and
-> > managing the proxy factory file operations structure and function
-> > wrapping at runtime.
-> > As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-> > with debugfs_create_file_unsafe() is suggested to be used instead.  The
-> > DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-> > debugfs_file_put() wrappers to protect the original read and write
-> > function calls for the debug attributes. There is no need for any
-> > runtime proxy file operations to be managed by the debugfs core.
-> > Following coccicheck make command helped identify this change:
-> >=20
-> > make coccicheck M=3Ddrivers/gpu/drm/i915/ MODE=3Dpatch COCCI=3D./script=
-s/coccinelle/api/debugfs/debugfs_simple_attr.cocci
-> >=20
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
->=20
-> I believe these 2 gvt cases could be done in one patch.
-> But anyways,
->=20
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
->=20
-> for both patches... and will leave these 2 patches for gvt folks
-> to apply. Unless they ack and I apply in the drm-intel along with the oth=
-er ones.
+On Sun, 15 Jan 2023 at 13:21, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
+> On 14/01/2023 21:33, Konrad Dybcio wrote:
+> >
+> >
+> > On 13.01.2023 17:22, Krzysztof Kozlowski wrote:
+> >> WCD9340 codec node is not a property of the SoC, but board.  Move it to
+> >> separate file and include it in the specific boards.  On all others,
+> >> keep the Slimbus node disabled as it is empty.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> ---
+> > Generally this should be SoC-independent, for example some newer
+> > MSM8998 devices shipped with the 9340 codec that most 845 devices
+> > used, but earlier ones used the WCD9335 found on MSM8996
+>
+> OK, but I don't get if you expect me to change anything?
 
-yeah, they're fine with me, feel free to apply them directly.
+Maybe it might make sense to name new include file just 'wcd9340.dtsi'
+rather than 'sdm845-somthing.dtsi'? Same applies to the wcd9335 codec
+found in msm8996.dtsi, if you are going to extract it too.
 
-Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+Note to Konrad: I don't see slimbus support in the msm8998.dtsi. Are
+there any pending patches?
 
-thanks!
-
-> > ---
-> >  drivers/gpu/drm/i915/gvt/debugfs.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/i915/gvt/debugfs.c b/drivers/gpu/drm/i915/=
-gvt/debugfs.c
-> > index 03f081c3d9a4..baccbf1761b7 100644
-> > --- a/drivers/gpu/drm/i915/gvt/debugfs.c
-> > +++ b/drivers/gpu/drm/i915/gvt/debugfs.c
-> > @@ -165,7 +165,7 @@ static int vgpu_status_get(void *data, u64 *val)
-> >  	return 0;
-> >  }
-> > =20
-> > -DEFINE_SIMPLE_ATTRIBUTE(vgpu_status_fops, vgpu_status_get, NULL, "0x%l=
-lx\n");
-> > +DEFINE_DEBUGFS_ATTRIBUTE(vgpu_status_fops, vgpu_status_get, NULL, "0x%=
-llx\n");
-> > =20
-> >  /**
-> >   * intel_gvt_debugfs_add_vgpu - register debugfs entries for a vGPU
-> > @@ -182,8 +182,8 @@ void intel_gvt_debugfs_add_vgpu(struct intel_vgpu *=
-vgpu)
-> >  			    &vgpu_mmio_diff_fops);
-> >  	debugfs_create_file_unsafe("scan_nonprivbb", 0644, vgpu->debugfs, vgp=
-u,
-> >  				   &vgpu_scan_nonprivbb_fops);
-> > -	debugfs_create_file("status", 0644, vgpu->debugfs, vgpu,
-> > -			    &vgpu_status_fops);
-> > +	debugfs_create_file_unsafe("status", 0644, vgpu->debugfs, vgpu,
-> > +				   &vgpu_status_fops);
-> >  }
-> > =20
-> >  /**
-> > --=20
-> > 2.34.1
-> >=20
-> >=20
-> >=20
-
---MccZDuc/f2Etrv5V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCY8TkSQAKCRCxBBozTXgY
-J3FGAJ4wFe9wnMtxUPhaCOCDkSZhBAzzgQCglj/FAfmvPCFfTpHDMapaW6QFeTY=
-=AIVR
------END PGP SIGNATURE-----
-
---MccZDuc/f2Etrv5V--
+-- 
+With best wishes
+Dmitry
