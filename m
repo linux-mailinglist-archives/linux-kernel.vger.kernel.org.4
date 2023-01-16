@@ -2,250 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3103C66B529
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE2766B52E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjAPBCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 20:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S231528AbjAPBHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 20:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbjAPBCK (ORCPT
+        with ESMTP id S231531AbjAPBHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 20:02:10 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D361554E
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 17:01:52 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id f8-20020a170902ce8800b00190c6518e21so18912376plg.1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 17:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fq9l7at1ooTaJSpkUGZKe7P3obJP6I4kIWy9k7MQBXM=;
-        b=OHrc/Y7AlG8ipL/VF8EJAhW/ttvEH2GKjIzii39L+HIHdQ702xNLigbdi5Et+ALdzm
-         irtFcjWnSXcnIUMx1Hsx7zxmjTkTPjzQEl4DrQ2C7vz+NyTYK8UlcSpb10bkrkHLmg6y
-         X8DjtdzNgQ2rmmS/faKieX528UmyMmu1ko80krLwPJ6x4rKbaTV6v5xMio8yHrFZl9ry
-         r+2BHfX1XSbNwQCXkLHBObCfp8ytS3j+PkJXn1pZcb1I/fkwHuuDxS5Uv7/6l6Gfb3Ee
-         Zjnu4wlQoxhBZFym1XwKwSa9cKKMK/E69YtBkges5K0PU4zA29gjIAEdOvyvwHE1gQwN
-         emeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fq9l7at1ooTaJSpkUGZKe7P3obJP6I4kIWy9k7MQBXM=;
-        b=8SHxBgeFoN79Loqcd8al9kRg3eq038WRDGa9MLWkhANxgZ4+3h/xJiu/0gG4+KWRSl
-         WmpjyUgIGLSSNZdrJhcvAFJpWOrpELHWLo5E078Zckubpx5Ciw/7Q6HRjJga4G524NoK
-         oAnsALcTU3F4vkBNpSRX13ryUTOl0ZRSuWRFvYp90cqMNtClcyzrZUVkE8Ohb5U9id55
-         Njq1RqV71bS8JKg/koLkVBwGzmZgNDvnVra0vetbxGUwd8eqc1eiixOd6ZiEiOzzpK3e
-         m3wX+OdqIUwbpVrJdiaKLxkV+5897vjmejqJyCY8yeqqHDezWvmmfRyiChYUIJEL4xrW
-         KiMw==
-X-Gm-Message-State: AFqh2ko2Vk4p3TR55TlIffpT7okhXOdb/eiiVMz9CsZt1gxfS14gt+Ju
-        adS3Gb5Q3/uKiUbYdeP15FdiO3Q7kFLF
-X-Google-Smtp-Source: AMrXdXvTTWiyW6nD9G8MZKP8e0oyn0VbGW50n5E0CQJjlRQFJCA1q4ja0+qw47ymzPhYIU9++iJTPdDiKoF8
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:79e:5e8e:382c:e7ce])
- (user=irogers job=sendgmr) by 2002:a63:1666:0:b0:478:e22:c90a with SMTP id
- 38-20020a631666000000b004780e22c90amr4920876pgw.185.1673830912233; Sun, 15
- Jan 2023 17:01:52 -0800 (PST)
-Date:   Sun, 15 Jan 2023 17:01:15 -0800
-In-Reply-To: <20230116010115.490713-1-irogers@google.com>
-Message-Id: <20230116010115.490713-4-irogers@google.com>
-Mime-Version: 1.0
-References: <20230116010115.490713-1-irogers@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v2 3/3] perf bpf: Remove pre libbpf 1.0 conditional logic
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sun, 15 Jan 2023 20:07:10 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA318E3AC;
+        Sun, 15 Jan 2023 17:07:05 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NwDPv1psmz4f3jMq;
+        Mon, 16 Jan 2023 09:06:59 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP1 (Coremail) with SMTP id cCh0CgBHsy00o8RjcP3ABg--.29754S2;
+        Mon, 16 Jan 2023 09:07:01 +0800 (CST)
+Subject: Re: [PATCH v3 07/14] blk-mq: make blk_mq_commit_rqs a general
+ function for all commits
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, john.garry@huawei.com, jack@suse.cz
+References: <20230111130159.3741753-1-shikemeng@huaweicloud.com>
+ <20230111130159.3741753-8-shikemeng@huaweicloud.com>
+ <20230111054520.GA17158@lst.de>
+ <c51cbadb-bfd8-5f26-6bc3-5ad975b5db39@huaweicloud.com>
+Message-ID: <e2ba1495-e9a8-8dfc-4eee-d9a2984bc0d2@huaweicloud.com>
+Date:   Mon, 16 Jan 2023 09:07:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
+MIME-Version: 1.0
+In-Reply-To: <c51cbadb-bfd8-5f26-6bc3-5ad975b5db39@huaweicloud.com>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: cCh0CgBHsy00o8RjcP3ABg--.29754S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr4kJw1DtF1kZryftw48Xrb_yoW8XF18pF
+        4UJa98ta1rJrsFywn5Ja1xZFyxJ39aqry3Xr9rt34rWrWYgFyfur43KrnrWFZrCr4kJ3y3
+        u3y3Cr90qa4rurJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests are no longer applicable as libbpf 1.0 can be assumed.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config    |  9 -----
- tools/perf/util/bpf-event.c   | 66 -----------------------------------
- tools/perf/util/bpf-loader.c  | 18 ----------
- tools/perf/util/bpf_counter.c | 18 ----------
- 4 files changed, 111 deletions(-)
+on 1/11/2023 2:30 PM, Kemeng Shi wrote:
+> 
+> Hi Christoph, thank you for taking time to review, alos sorry for the bother
+> of code style problem. I will fix them in next version.
+> on 1/11/2023 1:45 PM, Christoph Hellwig wrote:
+>> On Wed, Jan 11, 2023 at 09:01:52PM +0800, Kemeng Shi wrote:
+>>> 1. rename orignal blk_mq_commit_rqs to blk_mq_plug_commit_rqs as
+>>> trace_block_unplug is only needed when we dispatch request from plug list.
+>>
+>> Why?  I think always having the trace even for the commit case seems
+>> very useful for making the traces useful.
+> I think unplug event more likely means that request going to be sent to driver
+> was plugged and in plug list. And the current code do only trace unplug event
+> when dispatching requests from plug list. If so, would it be better to add
+> a new event to trace commit?
+Hi Christoph, which way do you prefer now? Keep unplug event consistent to
+trace commit of requests from plug list only or trace all commits with
+unplug event. Please let me know and I will consider it in next version.
+Thanks.
+>>> +/* blk_mq_commit_rqs and blk_mq_plug_commit_rqs notify driver using
+>>> + * bd->last that there is no more requests. (See comment in struct
+>>
+>> This is not the normal kernel comment style.
+>>
+>>> +static void blk_mq_commit_rqs(struct blk_mq_hw_ctx *hctx, int queued)
+>>> +{
+>>> +	if (hctx->queue->mq_ops->commit_rqs && queued) {
+>>> +		hctx->queue->mq_ops->commit_rqs(hctx);
+>>> +	}
+>>
+>> No need for the braces.
+>>
+> 
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 5ab7cac48c4a..86ab83d48013 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -566,15 +566,6 @@ ifndef NO_LIBELF
-       # detecting libbpf without LIBBPF_DYNAMIC, so make VF=1 shows libbpf detection status
-       $(call feature_check,libbpf)
- 
--      # Feature test requires libbpf 1.0 so we can assume the following:
--      CFLAGS += -DHAVE_LIBBPF_BTF__LOAD_FROM_KERNEL_BY_ID
--      CFLAGS += -DHAVE_LIBBPF_BPF_PROG_LOAD
--      CFLAGS += -DHAVE_LIBBPF_BPF_OBJECT__NEXT_PROGRAM
--      CFLAGS += -DHAVE_LIBBPF_BPF_OBJECT__NEXT_MAP
--      CFLAGS += -DHAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
--      CFLAGS += -DHAVE_LIBBPF_BTF__RAW_DATA
--      CFLAGS += -DHAVE_LIBBPF_BPF_MAP_CREATE
--
-       ifdef LIBBPF_DYNAMIC
-         ifeq ($(feature-libbpf), 1)
-           EXTLIBS += -lbpf
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index cc7c1f90cf62..025f331b3867 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -22,72 +22,6 @@
- #include "record.h"
- #include "util/synthetic-events.h"
- 
--#ifndef HAVE_LIBBPF_BTF__LOAD_FROM_KERNEL_BY_ID
--struct btf *btf__load_from_kernel_by_id(__u32 id)
--{
--       struct btf *btf;
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--       int err = btf__get_from_id(id, &btf);
--#pragma GCC diagnostic pop
--
--       return err ? ERR_PTR(err) : btf;
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BPF_PROG_LOAD
--LIBBPF_API int bpf_load_program(enum bpf_prog_type type,
--				const struct bpf_insn *insns, size_t insns_cnt,
--				const char *license, __u32 kern_version,
--				char *log_buf, size_t log_buf_sz);
--
--int bpf_prog_load(enum bpf_prog_type prog_type,
--		  const char *prog_name __maybe_unused,
--		  const char *license,
--		  const struct bpf_insn *insns, size_t insn_cnt,
--		  const struct bpf_prog_load_opts *opts)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_load_program(prog_type, insns, insn_cnt, license,
--				opts->kern_version, opts->log_buf, opts->log_size);
--#pragma GCC diagnostic pop
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BPF_OBJECT__NEXT_PROGRAM
--struct bpf_program *
--bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_program__next(prev, obj);
--#pragma GCC diagnostic pop
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BPF_OBJECT__NEXT_MAP
--struct bpf_map *
--bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_map__next(prev, obj);
--#pragma GCC diagnostic pop
--}
--#endif
--
--#ifndef HAVE_LIBBPF_BTF__RAW_DATA
--const void *
--btf__raw_data(const struct btf *btf_ro, __u32 *size)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return btf__get_raw_data(btf_ro, size);
--#pragma GCC diagnostic pop
--}
--#endif
--
- static int snprintf_hex(char *buf, size_t size, unsigned char *data, size_t len)
- {
- 	int ret = 0;
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index 6e9b06cf06ee..44cde27d6389 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -32,24 +32,6 @@
- 
- #include <internal/xyarray.h>
- 
--#ifndef HAVE_LIBBPF_BPF_PROGRAM__SET_INSNS
--int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
--			   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __maybe_unused)
--{
--	pr_err("%s: not support, update libbpf\n", __func__);
--	return -ENOTSUP;
--}
--
--int libbpf_register_prog_handler(const char *sec __maybe_unused,
--                                 enum bpf_prog_type prog_type __maybe_unused,
--                                 enum bpf_attach_type exp_attach_type __maybe_unused,
--                                 const struct libbpf_prog_handler_opts *opts __maybe_unused)
--{
--	pr_err("%s: not support, update libbpf\n", __func__);
--	return -ENOTSUP;
--}
--#endif
--
- /* temporarily disable libbpf deprecation warnings */
- #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
- 
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index eeee899fcf34..aa78a15a6f0a 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -312,24 +312,6 @@ static bool bperf_attr_map_compatible(int attr_map_fd)
- 		(map_info.value_size == sizeof(struct perf_event_attr_map_entry));
- }
- 
--#ifndef HAVE_LIBBPF_BPF_MAP_CREATE
--LIBBPF_API int bpf_create_map(enum bpf_map_type map_type, int key_size,
--                              int value_size, int max_entries, __u32 map_flags);
--int
--bpf_map_create(enum bpf_map_type map_type,
--	       const char *map_name __maybe_unused,
--	       __u32 key_size,
--	       __u32 value_size,
--	       __u32 max_entries,
--	       const struct bpf_map_create_opts *opts __maybe_unused)
--{
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	return bpf_create_map(map_type, key_size, value_size, max_entries, 0);
--#pragma GCC diagnostic pop
--}
--#endif
--
- static int bperf_lock_attr_map(struct target *target)
- {
- 	char path[PATH_MAX];
 -- 
-2.39.0.314.g84b9a713c41-goog
+Best wishes
+Kemeng Shi
 
