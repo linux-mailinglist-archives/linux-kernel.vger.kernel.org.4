@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BFB66BBB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0B366BBC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjAPKaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S230134AbjAPKb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjAPKaT (ORCPT
+        with ESMTP id S229722AbjAPKb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:30:19 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7531A94F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:30:18 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id g10so19639030wmo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:30:18 -0800 (PST)
+        Mon, 16 Jan 2023 05:31:56 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214FC72AD
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:31:55 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id o75so29767238yba.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qTooUq4cMjOEihCYLJFBqFS7hAzRSHaf73G77gKeBmo=;
-        b=MO3oc2rD84K0LdlR/IJAprDxtYLFJ0sNfcuUaS64tDCx0pC1g5CWuVu353jpTPr+II
-         J/4aDi3i78oIZsLXVb855d7PvVYzL29M1yaa5Uielj1i4B4mLdsFFfYI6PKdgMfePD+V
-         36/47gK3jCqbwYRHK40grP4D/ba0t6/iUpuWhob1RvE0znhZYXtbHNnLkQCHqzuxsnjs
-         +GQ/uEwiJRnlrY8+BhgQBk7GgOngbW51EWsdWqAkGozHHqgl4Qoq6upQ8e3Dm3mLX0oS
-         qSop9GgV3WsSfXyIPX8aUkpUa163Goy9LG+lTNqJNpV1VaJEOE700LCiKLyrFyg+Hr/J
-         TPzw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VUQbpg5HItyWZZQATZnM4RSqQnbK+YIpF8+VzAqkd5I=;
+        b=IstoYocSG5xOkpunE8iwoJn5VW1Lf6txDYxlwbE9gLBA4UUbZcr2TsYfEIb7+6bVpa
+         p31BAHAWnZz/ffgjLfOi2kZ4218d3P0P5yNcCSIE21W4PgPo5RAyXQLO2zSXfX9lBEVJ
+         qiwvYlGO/06zz8euC5RyVJ0KBJf845R8Qj4egFcq3aSwfSh/bpuCy/XnYYAXMFid96pZ
+         rXqqE6/KPqIisaVgCxYJLJFK3YOcw+xfWLgCvuR3DDL6oANtpDmhxtBFshAbp/XKksZr
+         ltv8rLiFpujyenRrpCAR1IB0yInd9y73VzdZgyKNDbgqQBnxwvdx3R5nSuVQ/0c+BsZ3
+         AY5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTooUq4cMjOEihCYLJFBqFS7hAzRSHaf73G77gKeBmo=;
-        b=CU4iKpeexc7BTE2P9qoKKyqY8Vg+K2y6Z+N4ml370euGSpuL38iU3IS4QBRkWMnwqN
-         0xqMBsm6Ek4MLggKBVAEgeh7dGZwAmMxgg5sfz01ugcTjxcMUOV1uBlOqUAwC/tSXRwN
-         q9qu7cisjNq4JgXrPutrLnK8gu/zj7o25oheDw30dgnxrWwcHXnyp7FmUCl5MAOoBZtU
-         Zeg6gdWYJdhZ8kz0nVb4YgiJ9cmYXac8CrnEvgbWgwU9z4tzlYvhPa5j1AY+xuvV9Gd9
-         bWGOJZjq5X1w4lF4kSY1vesjLJ3K8Slfl2qxO1v5W+jHJk5sPO6Y3b4Kn8PlxelfoRsU
-         Xq7g==
-X-Gm-Message-State: AFqh2kq8LuiY5dV7vu+X3CyACiYHStLdvsXD6eDBv00gUlEPSiZuFdmM
-        bEIMRJuQN0IIlpggyqOc3D6QyQ==
-X-Google-Smtp-Source: AMrXdXsYyTyvcOBn4REIZA5fHuv68tyqOAxd2gu3QvrZVRzS7158AX8poyUv1J5fgE+WZ6npAJXv/w==
-X-Received: by 2002:a05:600c:b95:b0:3da:fa42:bbf2 with SMTP id fl21-20020a05600c0b9500b003dafa42bbf2mr3401950wmb.28.1673865016776;
-        Mon, 16 Jan 2023 02:30:16 -0800 (PST)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003d1f3e9df3csm40561236wmo.7.2023.01.16.02.30.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 02:30:16 -0800 (PST)
-Message-ID: <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
-Date:   Mon, 16 Jan 2023 10:30:15 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VUQbpg5HItyWZZQATZnM4RSqQnbK+YIpF8+VzAqkd5I=;
+        b=PRX3KLS2E7WxynwUJDSrzSz1AHtdKBhgLq+WmkcExR6CzAjMayZ4pQTrFizBBK4Sza
+         TW7NGK6TZ48b1O97ur6ko8oUCR9OHpwFiTCi3zWT7VId6tYeolAxWpNjZMyTdlZvqHCs
+         PLvFzYhAdAv53nlI+PtmY2S023Exkcy+xTm3pbQjS8Ha0SrqKn3uwiFRhObCoYulcO+W
+         yEUPRzJQVbVoO+IUbfvGd5JJvwlRFFEbjSDp59UvLvcjVchP5zNMKvgLGbFJmYiFZ/B9
+         t6+DtL6uSEVyhmgBsNcCXCW3YDTRo9dERnelQJhkx4ynGoiyfzbtuNE+K5LOwZ3tNUGD
+         O/xA==
+X-Gm-Message-State: AFqh2krxR1UgGZ7NMqWPH80wxaG+6dkGPMVRPkHA2QRCth9AHWS/QykB
+        Mz21tr/ffY0i0y1CecXE2WuCrB7ToEPAyuvrsrM1TP4TG+ZgzQ==
+X-Google-Smtp-Source: AMrXdXtm3G4lKafxGxvq3NBWSBSPmy4LNh0BElo99Uxgk7TClAhifk5n9ULTCijISaHOiEGO3x4inVbPGzqsOcccfgk=
+X-Received: by 2002:a25:6b0b:0:b0:7d2:8687:aea5 with SMTP id
+ g11-20020a256b0b000000b007d28687aea5mr1186817ybc.210.1673865114014; Mon, 16
+ Jan 2023 02:31:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-Content-Language: en-GB
-To:     Peter Foley <pefoley2@pefoley.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105215706.never.027-kees@kernel.org> <CACRpkdYfsY7K8GksccDunCfKHbq_Df8ddrYGRg2gmeu6CVCF5w@mail.gmail.com>
+ <202301121452.14D1A95CA@keescook>
+In-Reply-To: <202301121452.14D1A95CA@keescook>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 16 Jan 2023 11:31:42 +0100
+Message-ID: <CACRpkdb7VcxgZKVYZJAU4mFS1RPwxpDTxvLjFRGFuEiyVgbE2Q@mail.gmail.com>
+Subject: Re: [PATCH] ARM: ixp4xx: Replace 0-length arrays with flexible arrays
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Krzysztof Halasa <khalasa@piap.pl>, Arnd Bergmann <arnd@arndb.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-01-14 18:00 UTC-0500 ~ Peter Foley <pefoley2@pefoley.com>
-> Avoid build errors on distros that force the stack protector on by
-> default.
-> e.g.
->   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
-> skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__stack_chk_fail' is not supported.
-> int iter(struct bpf_iter__task_file *ctx)
->     ^
-> 1 error generated.
-> 
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
-> ---
->  tools/bpf/bpftool/Makefile    | 1 +
->  tools/bpf/runqslower/Makefile | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index f610e184ce02a..36ac0002e386f 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
->  		-I$(or $(OUTPUT),.) \
->  		-I$(srctree)/tools/include/uapi/ \
->  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
-> +		-fno-stack-protector \
->  		-g -O2 -Wall -target bpf -c $< -o $@
->  	$(Q)$(LLVM_STRIP) -g $@
->  
+On Thu, Jan 12, 2023 at 11:54 PM Kees Cook <keescook@chromium.org> wrote:
+> On Sun, Jan 08, 2023 at 12:58:37AM +0100, Linus Walleij wrote:
+> > On Thu, Jan 5, 2023 at 10:57 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > > Zero-length arrays are deprecated[1]. Replace npe_load_firmware's
+> > > union of 0-length arrays with flexible arrays. Detected with GCC 13,
+> > > using -fstrict-flex-arrays=3:
+> > >
+> > > drivers/soc/ixp4xx/ixp4xx-npe.c: In function 'npe_load_firmware':
+> > > drivers/soc/ixp4xx/ixp4xx-npe.c:570:60: warning: array subscript i is outside array bounds of 'u32[0]' {aka 'unsigned int[]'} [-Warray-bounds=]
+> > >   570 |                         image->data[i] = swab32(image->data[i]);
+> > > include/uapi/linux/swab.h:115:54: note: in definition of macro '__swab32'
+> > >   115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+> > >       |                                                      ^
+> > > drivers/soc/ixp4xx/ixp4xx-npe.c:570:42: note: in expansion of macro 'swab32'
+> > >   570 |                         image->data[i] = swab32(image->data[i]);
+> > >       |                                          ^~~~~~
+> > > drivers/soc/ixp4xx/ixp4xx-npe.c:522:29: note: while referencing 'data'
+> > >   522 |                         u32 data[0];
+> > >       |                             ^~~~
+> > >
+> > > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> > >
+> > > Cc: Krzysztof Halasa <khalasa@piap.pl>
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: Arnd Bergmann <arnd@arndb.de>
+> > > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > > Cc: linux-arm-kernel@lists.infradead.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> >
+> > Looks good to me:
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> Thanks!
+>
+> > Do you need me to funnel this to the SoC tree or do you have
+> > some quickpath for fixes like this?
+>
+> I'll take it via my tree if unless you'd rather it go through yours.
+> Most maintainers take these directly, but some don't want to. I'm
+> flexible! :)
 
-For bpftool, a similar patch was already submitted and merged to the
-bpf-next tree last Friday: 878625e1c7a1 ("bpftool: Always disable stack
-protection for BPF objects").
+Just pick it into your tree, the IXP4xx is low activity and I do not
+submit new material every merge window, so this is easiest.
 
-> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-> index 8b3d87b82b7a2..f7313cc966a04 100644
-> --- a/tools/bpf/runqslower/Makefile
-> +++ b/tools/bpf/runqslower/Makefile
-> @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
->  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
->  
->  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
-> -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
-> -		 -c $(filter %.c,$^) -o $@ &&				      \
-> +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
-> +		 -fno-stack-protector 					\
-> +		 -c $(filter %.c,$^) -o $@ &&				\
->  	$(LLVM_STRIP) -g $@
->  
->  $(OUTPUT)/%.o: %.c | $(OUTPUT)
-
-This one looks good, thanks!
-
-I note a few more places in the repository where we compile to BPF using
-clang. Given that there have been patches to add -fno-stack-protector at
-several locations already, have you checked if any of these also need
-the flag, by any chance, so we could fix this once and for all?
-
-$ git grep -l 'target bpf ' | egrep -v '(Documentation|bpftool)'
-kernel/bpf/preload/iterators/Makefile
-samples/bpf/Makefile
-samples/bpf/test_lwt_bpf.sh
-tools/bpf/runqslower/Makefile
-tools/build/feature/Makefile
-tools/perf/Makefile.perf
-tools/perf/util/llvm-utils.c
-tools/testing/selftests/bpf/Makefile
-tools/testing/selftests/net/bpf/Makefile
-tools/testing/selftests/tc-testing/Makefile
+Thanks!
+Linus Walleij
