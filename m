@@ -2,149 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6E466B685
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC10466B676
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjAPEGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 23:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S231670AbjAPD41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 22:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjAPEGO (ORCPT
+        with ESMTP id S231794AbjAPD4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 23:06:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357A683F4
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 20:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673841911;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ohcJPZKvAgOpbS44T4QtlSyb+QSlTiMgmt0MSyKR4Gk=;
-        b=dByWWlzJUlJr4Ilzvfb/vn2zJBtGAdEkS1umPLChqlx/OIekOuVLwkK2ED6xblUFGE13Bq
-        JUaUml7h/yxIRiWdGOJz7q7b7IF0M3aVHmBcSdUX5y7CTAb+APGDXSWN2k38eySkuquzYC
-        tQ86uN2qlorQaaZQOjVLN6jO4Z46otY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-404-oZ03pT2jOM-OSGkw5ehlOg-1; Sun, 15 Jan 2023 23:05:08 -0500
-X-MC-Unique: oZ03pT2jOM-OSGkw5ehlOg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61A6F3828883;
-        Mon, 16 Jan 2023 04:05:07 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-98.bne.redhat.com [10.64.54.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4DDB0492B05;
-        Mon, 16 Jan 2023 04:05:00 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     kvmarm@lists.linux.dev
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
-        corbet@lwn.net, james.morse@arm.com, suzuki.poulose@arm.com,
-        oliver.upton@linux.dev, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
-        shan.gavin@gmail.com
-Subject: [PATCH 4/4] KVM: Improve warning report in mark_page_dirty_in_slot()
-Date:   Mon, 16 Jan 2023 12:04:05 +0800
-Message-Id: <20230116040405.260935-5-gshan@redhat.com>
-In-Reply-To: <20230116040405.260935-1-gshan@redhat.com>
-References: <20230116040405.260935-1-gshan@redhat.com>
+        Sun, 15 Jan 2023 22:56:19 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F85B8684
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 19:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673841378; x=1705377378;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J5gd0BGy5x+M+oYun7etY+8DqXdk9Gy9OGjM/ozXPsc=;
+  b=ln55PM7QMj0mbfpun8okFSx2DOQDg6U1Z4ltKG+Lq/RZQD49dHZcRtFG
+   Ub62sk6E35JrYTi2nhJ58loPpW+Ntkms/Kgsvuz6ntx0oDX5+35QBEmvx
+   A++L6MkQsppW03snVv3U6LanscQwYepbG/+B9f9I85pYjUIpQ/hrQcM7P
+   vzBanSkhBW6T0BFIHx/HAeQCeXAogI1wJ+DKVrHNUuypN8QacXFnQDSqx
+   rPDKyeRu4MtQcxQNnJ8qgYapwDOwUzpds79/mKCmnhoi7zUz7/5HBekXc
+   MKyALFpXe850GXWSAXcckFbjPmloqCK0bKh7cn0Gc/1W7THX/Jj2vhaNE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="312230460"
+X-IronPort-AV: E=Sophos;i="5.97,219,1669104000"; 
+   d="scan'208";a="312230460"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2023 19:56:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="747565220"
+X-IronPort-AV: E=Sophos;i="5.97,219,1669104000"; 
+   d="scan'208";a="747565220"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jan 2023 19:56:17 -0800
+Date:   Sun, 15 Jan 2023 20:05:29 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
+ local sched group
+Message-ID: <20230116040529.GA16654@ranerica-svr.sc.intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
+ <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
+ <20221229040003.GA11497@ranerica-svr.sc.intel.com>
+ <xhsmhsfghcb20.mognet@vschneid.remote.csb>
+ <20230113190226.GA1379@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113190226.GA1379@ranerica-svr.sc.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two warning reports about the dirty ring in the function.
-We have the wrong assumption that the dirty ring is always enabled when
-CONFIG_HAVE_KVM_DIRTY_RING is selected. This leads to warning messages
-about the dirty ring is reported even the dirty ring isn't enabled by
-the user space. Actually, the expected behaviour is to report the
-warning messages only when the dirty ring is enabled, instead of
-being configured.
+On Fri, Jan 13, 2023 at 11:02:26AM -0800, Ricardo Neri wrote:
+> On Wed, Jan 11, 2023 at 04:04:23PM +0000, Valentin Schneider wrote:
+> > On 28/12/22 20:00, Ricardo Neri wrote:
+> > > On Thu, Dec 22, 2022 at 04:55:58PM +0000, Valentin Schneider wrote:
+> > >> Some of this is new to me - I had missed the original series introducing
+> > >> this. However ISTM that this is conflating two concepts: SMT occupancy
+> > >> balancing, and asym packing.
+> > >> 
+> > >> Take the !local_is_smt :: sg_busy_cpus >= 2 :: return true; path. It does
+> > >> not involve asym packing priorities at all. This can end up in an
+> > >> ASYM_PACKING load balance,
+> > >
+> > > Yes, this the desired result: an idle low-priority CPU should help a high-
+> > > priority core with more than one busy SMT sibling. But yes, it does not
+> > > relate to priorities and can be implemented differently.
+> > >
+> > >> which per calculate_imbalance() tries to move
+> > >> *all* tasks to the higher priority CPU - in the case of SMT balancing,
+> > >> we don't want to totally empty the core, just its siblings.
+> > >
+> > > But it will not empty the core, only one of its SMT siblings. A single
+> > > sibling will be selected in find_busiest_queue(). The other siblings will
+> > > be unaffected.
+> > >
+> > 
+> > Right
+> > 
+> > >> 
+> > >> Is there an ITMT/big.LITTLE (or however x86 calls it) case that invalidates
+> > >> the above?
+> > >
+> > > Please see below.
+> > >
+> > >> 
+> > >> Say, what's not sufficient with the below? AFAICT the only thing that isn't
+> > >> covered is the sg_busy_cpus >= 2 thing, but IMO that's SMT balancing, not
+> > >> asym packing - if the current calculate_imbalance() doesn't do it, it
+> > >> should be fixed to do it.
+> > >
+> > > Agreed.
+> > >
+> > >>Looking at the
+> > >> 
+> > >>   local->group_type == group_has_spare
+> > >> 
+> > >> case, it looks like it should DTRT.
+> > >
+> > > I had tried (and failed) to have find_busiest_group() handle the
+> > > !local_is_smt :: sg_busy_cpus >= 2 case. Now I think I made it work.
+> > >
+> > > When the busiest group is not overloaded, find_busiest_group() and
+> > > local->group = group_has_spare during an idle load balance events the
+> > > number of *idle* CPUs. However, this does not work if the local and busiest
+> > > groups have different weights. In SMT2, for instance, if busiest has 2 busy
+> > > CPUs (i.e., 0 idle CPUs) and the destination CPU is idle, the difference in
+> > > the number of idle CPUs is 1. find_busiest_group() will incorrectly goto
+> > > out_balanced.
+> > >
+> > > This issue very visible in Intel hybrid processors because the big cores
+> > > have SMT but the small cores do not. It can, however, be reproduced in non-
+> > > hybrid processors by offlining the SMT siblings of some cores.
+> > >
+> > 
+> > I think I follow. If we're comparing two groups each spanning an SMT2 core,
+> > then
+> > 
+> >   busiest->group_weight > 1 && local->idle_cpus <= (busiest->idle_cpus + 1)
+> > 
+> > is false if local is fully idle and busiest fully busy, but if local
+> > becomes a non-SMT core, then that's true and we goto out_balanced.
+> 
+> Exactly right.
+> 
+> > 
+> > 
+> > With that said, shouldn't SD_PREFER_SIBLING help here? cf.
+> > 
+> > 	if (sds.prefer_sibling && local->group_type == group_has_spare &&
+> > 	    busiest->sum_nr_running > local->sum_nr_running + 1)
+> 
+> It does not help because sds.prefer_sibling is false: an non-SMT core is
+> looking into offloading a fully_busy SMT core at the "MC" domain.
+> sds.prefer_sibling is set in update_sd_lb_stats() if the sched domain's child
+> has the SD_PREFER_SIBLING flag. Since the destination CPU is the non-SMT
+> core, there is no child.
+> 
+> > 
+> > It should be set on any topology level below the NUMA ones, we do remove it
+> > on SD_ASYM_CPUCAPACITY levels because this used to interfere with misfit
+> > balancing (it would override the group_type), things are a bit different
+> > since Vincent's rewrite of load_balance() but I think we still want it off
+> > there.
 
-Fix it by enabling the checks and warning reports when the dirty ring
-has been enabled by the user space.
+Your comment got me thinking. Whose child sched domain wants prefer_sibling?
+It sounds to me that is busiest's. I could not think of any reason of *having*
+to use the flags of the local group.
 
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
- include/linux/kvm_dirty_ring.h |  5 +++++
- virt/kvm/kvm_main.c            | 25 ++++++++++++++-----------
- 2 files changed, 19 insertions(+), 11 deletions(-)
+We can use the flags of the sched group (as per 16d364ba6ef2 ("sched/topology:
+Introduce sched_group::flags"), these are the flags of the child domain).
 
-diff --git a/include/linux/kvm_dirty_ring.h b/include/linux/kvm_dirty_ring.h
-index 4862c98d80d3..3fda0aa42858 100644
---- a/include/linux/kvm_dirty_ring.h
-+++ b/include/linux/kvm_dirty_ring.h
-@@ -42,6 +42,11 @@ static inline bool kvm_use_dirty_bitmap(struct kvm *kvm)
- 	return true;
- }
- 
-+static inline bool kvm_arch_allow_write_without_running_vcpu(struct kvm *kvm)
-+{
-+	return false;
-+}
-+
- static inline int kvm_dirty_ring_alloc(struct kvm_dirty_ring *ring,
- 				       int index, u32 size)
- {
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 90f538433916..a35c32bc84e1 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3316,26 +3316,29 @@ void mark_page_dirty_in_slot(struct kvm *kvm,
- 			     const struct kvm_memory_slot *memslot,
- 		 	     gfn_t gfn)
- {
--	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
-+	struct kvm_vcpu *vcpu;
- 	unsigned long rel_gfn;
- 	u32 slot;
- 
--#ifdef CONFIG_HAVE_KVM_DIRTY_RING
--	if (WARN_ON_ONCE(vcpu && vcpu->kvm != kvm))
--		return;
--
--	WARN_ON_ONCE(!vcpu && !kvm_arch_allow_write_without_running_vcpu(kvm));
--#endif
--
- 	if (!memslot || !kvm_slot_dirty_track_enabled(memslot))
- 		return;
- 
- 	rel_gfn = gfn - memslot->base_gfn;
- 	slot = (memslot->as_id << 16) | memslot->id;
- 
--	if (kvm->dirty_ring_size && vcpu)
--		kvm_dirty_ring_push(vcpu, slot, rel_gfn);
--	else if (memslot->dirty_bitmap)
-+	if (kvm->dirty_ring_size) {
-+		vcpu = kvm_get_running_vcpu();
-+		if (vcpu) {
-+			if (!WARN_ON_ONCE(vcpu->kvm != kvm))
-+				kvm_dirty_ring_push(vcpu, slot, rel_gfn);
-+
-+			return;
-+		}
-+
-+		WARN_ON_ONCE(!kvm_arch_allow_write_without_running_vcpu(kvm));
-+	}
-+
-+	if (memslot->dirty_bitmap)
- 		set_bit_le(rel_gfn, memslot->dirty_bitmap);
- }
- EXPORT_SYMBOL_GPL(mark_page_dirty_in_slot);
--- 
-2.23.0
+The patch below works for me and I don't have to even the number of busy CPUs.
+It should not interfere with misfit balancing either:
 
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a2c70e1087d0..737bb3c8bfae 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9752,8 +9752,12 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+ 		sg = sg->next;
+ 	} while (sg != env->sd->groups);
+ 
+-	/* Tag domain that child domain prefers tasks go to siblings first */
+-	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
++	/*
++	 * Tag domain that child domain prefers tasks go to siblings first.
++	 * A sched group has the flags of the child domain, if any.
++	 */
++	if (sds->busiest)
++		sds->prefer_sibling = sds->busiest->flags & SD_PREFER_SIBLING;
+ 
+ 
+ 	if (env->sd->flags & SD_NUMA)
+
+Thanks and BR,
+Ricardo
