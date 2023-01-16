@@ -2,210 +2,703 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFF266BC54
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22A866BC5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjAPK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S229947AbjAPLBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjAPK7M (ORCPT
+        with ESMTP id S229710AbjAPLAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:59:12 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020CA97;
-        Mon, 16 Jan 2023 02:59:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673866750; x=1705402750;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=esPycDBjyIt5Yvl6K/GPZmTqdwajHZppk+S2ARWYB9o=;
-  b=l1Ts1p1APkcw6Hb7PFNCFlL0YgNG0rE+CGAF7zLvqbyo2f884yofxXr3
-   3Fs3HummLDHhD3AoLnQKbCPWR5SDrSzzil5+XhI/vf8Gd0KPxtaKVfH7A
-   eWRmAke2LCaYvTwzvjTzchuWn2PXSOQKiJhI4Wr6Uup4HMunEAK90lc4i
-   rKOhDP9e+3b5GTx6M1pGnLnKIw1B9Cv5CQlOK1Yeh+dzhhMUfThHxY1Me
-   jEesvnaQ6/w+JgGn8JZAfzw/Mt6EeOdVMclfG+re6ygFCEEX06pwf2XsJ
-   qinBcRyOu8zDVVNfxzk2NfXTgvdboTBTwDFiopA2O5jPvo78kMYudCMVb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="324497872"
-X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="scan'208";a="324497872"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 02:59:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="636502923"
-X-IronPort-AV: E=Sophos;i="5.97,220,1669104000"; 
-   d="scan'208";a="636502923"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga006.jf.intel.com with ESMTP; 16 Jan 2023 02:59:10 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 02:59:10 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 02:59:09 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 02:59:09 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.45) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 16 Jan 2023 02:59:09 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EK2ZF5UnsFrJEBPiZGrSc2Z6biVK25bgnne0PF4xD3TbcVB5xP/+rrEB12A+6fZgpW3GubohrvPO/WcGCvKbipBGOkdhPxrg4Aftbn1JOkCqYhGgs8OdueP53k0WP3Df8ZwuL4IL9U1QdBxbQBvK5LJeRzeYLb2ZtJVKqQ1nyNPm4t96fjniZviHrom7u3izhyJ1OfSkiLOfI/gbh42T7MfbyYOHVwrsu4GltmOwdcHd4QEWG/W5mhZFk7FPd6MceJv+MRjfD1q04krQreGeW3sZmJfKIxySoa3knyumSL9Y4Mw7yayCqy/DYnXl3bXiu3ZhjRxow1lRa3okVAOgIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=esPycDBjyIt5Yvl6K/GPZmTqdwajHZppk+S2ARWYB9o=;
- b=Mlq1Tkmk1UQJl61ma4q51tzHX4RuZIdhcmxAYtvnKgReI6kNRRQdESptBVslL7y5AuWPtbe2omLamZ3r9LMGOb2/rQLhMm34w8atlWheymeyy2WTkxIpRuvnrexqfjAOfSOdZJEq6LO6O5FdAxoj0x1d4FEJxC2i9qg/RhqpDCK1Nr4TjDX1idXAQjclRsZZzV2mTj4bUzoLKpLyWD+vBFisrwnDq88fEq9yqjoWb/oiDSzcp4A+DY/dGXoHu+IAaiZU/8QfjrlwuUtetJzWtwkqOwxz+0FgAsEAMwaoc2yqeNQ78Du7rbxOLAPRqdKy3pxv5s7UUuKWMAtoc0d9MA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by CO1PR11MB5121.namprd11.prod.outlook.com (2603:10b6:303:98::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Mon, 16 Jan
- 2023 10:59:07 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::3f19:b226:ebf1:b04a%6]) with mapi id 15.20.5986.019; Mon, 16 Jan 2023
- 10:59:06 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v11 032/113] KVM: x86/mmu: Add Suppress VE bit to
- shadow_mmio_mask
-Thread-Topic: [PATCH v11 032/113] KVM: x86/mmu: Add Suppress VE bit to
- shadow_mmio_mask
-Thread-Index: AQHZJqV1tHmG0xhOREKv2mzesYQlja6g5cuA
-Date:   Mon, 16 Jan 2023 10:59:06 +0000
-Message-ID: <820e1c1f828ea8e485078f5cd109d03b45981c81.camel@intel.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
-         <8cb87ec35b24d9cf5b47b650597c3005a8adf247.1673539699.git.isaku.yamahata@intel.com>
-In-Reply-To: <8cb87ec35b24d9cf5b47b650597c3005a8adf247.1673539699.git.isaku.yamahata@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|CO1PR11MB5121:EE_
-x-ms-office365-filtering-correlation-id: cd30739c-4398-4ec8-a737-08daf7b0b021
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jLPkM+u9SEtSFeug0yLyK5akS9K0KQxP4UlQNiCbvrhWJg1QN/y3FP8Vlhy/93GkrGxWK7g0L3lUyFU5xLaBTXImGYB9iaqGryfzxDlYNxj0iD0fN/qMwiI6BN9FIeqZr2eazQBLmaeNETFSJVFZv36yybsNB7wgKHhgplKj9e2gc+ZjE0QyvqIu7KGHq7ar6thwXfrMWhk9GNqhDwDvrC6K2Tap8FDHDDQTzBrbLbdRLpN/C7NHdZyVHGnBpMAdEYP9BvwVqfh1bSK9O0JngEAHnSdi/sAVfGyyj9/qp81h2r3Q6GHlDfdfbQ0c9l/WUxfZkW8AjMo6HZ50fjzjXe5jV6YU/ROIgcPyHVQjrEYCTCaIVupoRVHX1zotcLQs0KxYxjj5eGnedY7JZ9HgJkWqeQFuJB0DdPE2+2d6h5eObnndD/eoCVpS/ShnsRGAhUYxr4gf4z9/K2kROihPJsIxyo6y481ngoocgVWPEIFEII8qQSl0wIQcuAofdLy+qDmmVPPsO9bPYRqYO5IY+G93568jH9ephy7s2siBJHGtbSognQxYlvuM4Am4jHjcnvwI9/emrSo19S05kmMQCTAx0lrFnwo4PSr+PsX7dFiMxeq2oMlQRJphi3Zv89YlCNpvtr6XEZjYOXyBlUCazhTsKaR5cCWp6I4LZo86NSpnJUOTJFxHzaVZSVQd+4zt7VcVWPi9XogI4IbWGs6ZJg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(136003)(39860400002)(376002)(451199015)(36756003)(91956017)(86362001)(6512007)(8676002)(186003)(64756008)(4326008)(26005)(66556008)(66946007)(76116006)(41300700001)(2616005)(66476007)(66446008)(316002)(71200400001)(6506007)(110136005)(54906003)(6636002)(478600001)(6486002)(122000001)(38100700002)(2906002)(38070700005)(82960400001)(83380400001)(5660300002)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1J0SFNXaFJ5blE1cFdjT1crRVRiMm5NNXdGMDNRWEZOVTVHRTRHRmEzSGxr?=
- =?utf-8?B?Lzd3SXJ6Z1RLeDhkU2w3Qm85UWFPRWY3MnRZTE1WdDJkRm4xa1B3UFREbkwr?=
- =?utf-8?B?VUhvZGt1R2NiTmZwTVkrVlY2dWlUKzFtdHRmRnRoRUdlcXo5WktMRFNGZW16?=
- =?utf-8?B?TG96SDZ3WHJWa2lYWXlzR21xL28yZGN2eUtpc3Z5L0ZnSGcvQ08vMEV4RWR6?=
- =?utf-8?B?V3BmQ1ZTbXA3WHN2akQ0WHF0TGxQWFlYUDdyRnNuMWM4TDNSR0pncjZmQmIz?=
- =?utf-8?B?THg3TXcwZTJ3aENFTHl3dGoxSVhac1ZIUm9odWsrMFF6RWVMRXoyYkRrS1N4?=
- =?utf-8?B?anZRdWFHMjRySm12N3M0d2N6elRkUW0reVhkL2ozOGpxNnN6QmowQm8wWmtl?=
- =?utf-8?B?YXRZS21rMmdjRnY1dC8xWmhuUlg3SjNPVnh6aklCejdGakYycW9Xa2ZxL3Aw?=
- =?utf-8?B?U1VFWVA3ZmNaMEZVTHdkS1l0TlhhTXhoSjNDaCtsOVNkZ0gzMEczN1EzOVUw?=
- =?utf-8?B?SkhiVEJSdTBRK3BBVWpIZzZSbnUySDMvWGZqYUVLQlNncXJjUzhDZTZ6bk8r?=
- =?utf-8?B?emhhNmU4SSs4SHVrNmlYTENCYWxTc2JrN2U3eGUzcTdDWlBLaHhDNjlmVlRL?=
- =?utf-8?B?VjVGdGU4aEM1RFdEeHpEcWRjSk9PVGtCaVJUNS9yMldkK3FDWEZzbUpwS2hF?=
- =?utf-8?B?T1R0WlorK2U3ZU13WS9paDRzWTJUb0U1dDZubmVaZERkbVZKN09lUDcxK2Zv?=
- =?utf-8?B?eFR3ZVhKNVN0UTBkTXMvY1NVaHM1bGhaN0E0Mnd5VnhqTEdIdGxWUiszMllW?=
- =?utf-8?B?bmlqTnN2ZnhPL2U4aUZqQS9CdTZ6UkVFUTBQc3ZlUXIzRFhtRUM5OUFIVFRM?=
- =?utf-8?B?K2JOSm9GVzBEbDBpRVpkcW9RTnhJVHJPL1RKSDVTZEVWNHU2WXRqWU5yTkw4?=
- =?utf-8?B?bmVPbldaT2Z4RDE4dTVBNUVEM0NqVFArbXBuanFoZGRpaFVTNjE3SXlwQ05r?=
- =?utf-8?B?WHZleVJOSXpPdHNtRmZ1NzJaeXFHVVNDSkF5cE43UG1YRDhyZWp0NHRwc0lo?=
- =?utf-8?B?VThvd3hVMjhmc0VPdlJ3T096SkJrWVlId01jdVZQcFFGcUcxS2xXYXNiWmxs?=
- =?utf-8?B?SjdaRXVaNlJVZ3JXZDZ1SWlQMEdURFF0WUdlZFB0VTc2Q0ZMZ2RlN05lVTBV?=
- =?utf-8?B?cGxGaGltMSswejRqVnVyWXZVMmJyMmFwTmRSc2d5TzJmMXhpcEdJdWc0bUtF?=
- =?utf-8?B?VldPMFhTbXI2TVF1UEZSejBXU2RXS1EyTnJpTjVCdHJnUCtRb2hpQmg2ekJD?=
- =?utf-8?B?bEtRMHhkMnVRaVZHWFFmWVFjdnEyTXFvOGVscUI5cDgwTktDTGxPRjF3c0E4?=
- =?utf-8?B?UU1oTCthOFoyb3dieWFIaDV5am80dHZKOHYyRC9zcHEvcTh1bTVaakx4ZXI3?=
- =?utf-8?B?UythWEFPaFAxN05pQ3ZsUHFBUm1VQm0ydDlmdEVyaWdPNlc1S2xEMHRYUG9H?=
- =?utf-8?B?UFFLZVFlM0JKODM5WHowOGZMWkc3b0pIV2lNbVpnVTJzYm9YOEFwRjFSSmRO?=
- =?utf-8?B?ZWdOcWhZOUZIb2xET3ZaelF4czBOaWprcG5Vb1JReEpOdFVJbWlodlVucVFQ?=
- =?utf-8?B?a0pBOVhucmM4OHZEN0Q1QmhEdDAwUEhPOS9QSndDSmFEcWhlOUlMZGg3S3o4?=
- =?utf-8?B?SGNUTXZDaXZMTzAwclZZNmV4dlF5NnZvaGoyUlJRSUVSZWJ1c2NpRG0yQjJr?=
- =?utf-8?B?OXhQUWNWd0VGQTh2LzNqeUxubzBoeWc1d1ZTZWZrTTcwZDQzNGswVFlFcVcz?=
- =?utf-8?B?Q1dLNUMyenJEeStYd3dQQ2N4OWIvOE9kazk2MmNWWFAxSWhNUlNDNG96ZzNL?=
- =?utf-8?B?VDlUWUlYSkVoUzI4TTgzMUpzU1NCNENuVTdpdjBHcVlaNEdNZi9IS1VPMGZY?=
- =?utf-8?B?ZFlkZzRMbldjTW1XVDdkajdwRVJXY0hZaUkvM1NEc1ZvL0FDdExLMXZnNnU5?=
- =?utf-8?B?YWl1KzE0Z0Y2ZzMxaVRjaGhpaDNxc2FSamcwUXFIQmMwQ3B3TnJFbEErMDhS?=
- =?utf-8?B?eEZYNjFhNHR3d3REZExPdG85TVJJajhYMTZocEVxOU5aQlFkWHJxOEZzNjlS?=
- =?utf-8?B?dHFROUZEZ3RpaWZ3TGFoNlhXdy9vTGlTK0dWTmI2dWNpMGRidzhTZXMvOFE1?=
- =?utf-8?B?MkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7BBDF1DBE17B7D409BCD200E50F59A4F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 16 Jan 2023 06:00:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19811A96F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:00:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673866808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xb4MUUiTpK7w8tFqzemDfEEoqYW+yZ8y6ombY2yLlSM=;
+        b=CYKzFZajVNMBYBpyyoABXrIckjCS6gBlubp1T8Y9dvyA2eCNJIioqoSGPhrMJ0MEbv6EtM
+        XpY9JjQfhKB/yyE3QWZWDH6J/Fme+UixKZWIPMOt9AChuBqZmY/jLSUZjQhvGCEGKNGwGq
+        nSmZVj7gEVtsJJuR5u3NyqL7iOUWIBI=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-36-RABeeZpFORmyXSqy2XiTpg-1; Mon, 16 Jan 2023 06:00:07 -0500
+X-MC-Unique: RABeeZpFORmyXSqy2XiTpg-1
+Received: by mail-lj1-f197.google.com with SMTP id bx14-20020a05651c198e00b0027b58179b0aso7272133ljb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:00:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xb4MUUiTpK7w8tFqzemDfEEoqYW+yZ8y6ombY2yLlSM=;
+        b=m8DSoFlHurQlxByYju4I0bITXcTfdAi6pFL1uSOoI0k6Xbzyunq6K3jc10CcnGtclZ
+         nn70iHfBfJ40KfqtjWxugt00vhVrpU+OKENpuFxNSTbgFvLM/hMd0w8TlycoW8Hvd3DR
+         A8jkUoOeeo3aQ9EbBnlZ4lRX3vgILJK/AROZKgcEb/BoTCFhhgj048EeAeJIz6gdUaeV
+         N6ZTLRCUhjQlcYhowvREhb/Piv7TpNk6eZXH7us0DvgdGonWWFc1jXeTZy1PUlNHIBjS
+         COoB/ZITduTBskDbziUZLvlHjlvP1c3cm93KIOVrjfJWWD7TPpjUueXutBrufXP2Ojyv
+         Hbzw==
+X-Gm-Message-State: AFqh2kqYoS9nSQApHFOvVYIOmzQw9lNFHHXrea8UwqtTfeh/ZsA2zK+o
+        wHo+90kDDzlGNV7nbHFZYsA4pA3gkIgZvBP4rUYcJdHhnCM5mpBaD4nz2bu7LfbKQ4Dj6W5U/lS
+        GGr/crg/JAL7eoRtMsqb9cGmr
+X-Received: by 2002:a05:6512:3053:b0:4d5:7be5:ba22 with SMTP id b19-20020a056512305300b004d57be5ba22mr721653lfb.58.1673866805670;
+        Mon, 16 Jan 2023 03:00:05 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt0diSnwlgoGqWkDapj391PD2WahbcvM1aTCb3z25vKe3m8OLjk14ZaLOgwFLm3e6E1OnEiHQ==
+X-Received: by 2002:a05:6512:3053:b0:4d5:7be5:ba22 with SMTP id b19-20020a056512305300b004d57be5ba22mr721640lfb.58.1673866805208;
+        Mon, 16 Jan 2023 03:00:05 -0800 (PST)
+Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
+        by smtp.gmail.com with ESMTPSA id z20-20020a056512371400b004a2c447598fsm871289lfr.159.2023.01.16.03.00.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 03:00:04 -0800 (PST)
+Message-ID: <fe2e39b16d42ca871428e508935f1aa21608b4ee.camel@redhat.com>
+Subject: Re: [PATCH v2 2/6] composefs: Add on-disk layout
+From:   Alexander Larsson <alexl@redhat.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gscrivan@redhat.com
+Date:   Mon, 16 Jan 2023 12:00:03 +0100
+In-Reply-To: <20230116012904.GJ2703033@dread.disaster.area>
+References: <cover.1673623253.git.alexl@redhat.com>
+         <819f49676080b05c1e87bff785849f0cc375d245.1673623253.git.alexl@redhat.com>
+         <20230116012904.GJ2703033@dread.disaster.area>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd30739c-4398-4ec8-a737-08daf7b0b021
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 10:59:06.7334
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Il7LkfAWkx1jCJmUakzbYNsv70jg9Hd0E35EVBBSAw+XuHNbEb99w1zLhypTpaN6xA2etkepHmY3tD+lKPO+ag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5121
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAxLTEyIGF0IDA4OjMxIC0wODAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20gd3JvdGU6DQo+IEZyb206IElzYWt1IFlhbWFoYXRhIDxpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20+DQo+IA0KPiBUbyBtYWtlIHVzZSBvZiB0aGUgc2FtZSB2YWx1ZSBvZiBzaGFkb3dfbW1pb19t
-YXNrIGZvciBURFggYW5kIFZNWCwgYWRkDQo+IFN1cHByZXNzLVZFIGJpdCB0byBzaGFkb3dfbW1p
-b19tYXNrIHNvIHRoYXQgc2hhZG93X21taW9fbWFzayBjYW4gYmUgY29tbW9uDQo+IGZvciBib3Ro
-IFZNWCBhbmQgVERYLg0KPiANCj4gVERYIHdpbGwgbmVlZCBzaGFkb3dfbW1pb19tYXNrIHRvIGJl
-IFZNWF9TVVBQUkVTU19WRSB8IFJXWCBhbmQNCj4gc2hhZG93X21taW9fdmFsdWUgdG8gYmUgMCBz
-byB0aGF0IEVQVCB2aW9sYXRpb24gaXMgdHJpZ2dlcmVkLiAgRm9yIFZNWCwNCj4gVk1YX1NVUFBS
-RVNTX1ZFIGRvZXNuJ3QgbWF0dGVyIGJlY2F1c2UgdGhlIHNwdGUgdmFsdWUgaXMgcmVxdWlyZWQg
-dG8gY2F1c2UNCj4gRVBUIG1pc2NvbmZpZy4gIHRoZSBhZGRpdGlvbmFsIGJpdCBkb2Vzbid0IGFm
-ZmVjdCBWTVggbG9naWMgdG8gYWRkIHRoZSBiaXQNCj4gdG8gc2hhZG93X21taW9fe3ZhbHVlLCBt
-YXNrfS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IElzYWt1IFlhbWFoYXRhIDxpc2FrdS55YW1haGF0
-YUBpbnRlbC5jb20+DQo+IC0tLQ0KPiAgYXJjaC94ODYva3ZtL21tdS9zcHRlLmMgfCA2ICsrKyst
-LQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4g
-DQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rdm0vbW11L3NwdGUuYyBiL2FyY2gveDg2L2t2bS9t
-bXUvc3B0ZS5jDQo+IGluZGV4IGZjZTZmMDQ3Mzk5Zi4uY2MwYmMwNThmYjI1IDEwMDY0NA0KPiAt
-LS0gYS9hcmNoL3g4Ni9rdm0vbW11L3NwdGUuYw0KPiArKysgYi9hcmNoL3g4Ni9rdm0vbW11L3Nw
-dGUuYw0KPiBAQCAtNDMxLDcgKzQzMSw5IEBAIHZvaWQga3ZtX21tdV9zZXRfZXB0X21hc2tzKGJv
-b2wgaGFzX2FkX2JpdHMsIGJvb2wgaGFzX2V4ZWNfb25seSkNCj4gIAlzaGFkb3dfZGlydHlfbWFz
-awk9IGhhc19hZF9iaXRzID8gVk1YX0VQVF9ESVJUWV9CSVQgOiAwdWxsOw0KPiAgCXNoYWRvd19u
-eF9tYXNrCQk9IDB1bGw7DQo+ICAJc2hhZG93X3hfbWFzawkJPSBWTVhfRVBUX0VYRUNVVEFCTEVf
-TUFTSzsNCj4gLQlzaGFkb3dfcHJlc2VudF9tYXNrCT0gaGFzX2V4ZWNfb25seSA/IDB1bGwgOiBW
-TVhfRVBUX1JFQURBQkxFX01BU0s7DQo+ICsJLyogVk1YX0VQVF9TVVBQUkVTU19WRV9CSVQgaXMg
-bmVlZGVkIGZvciBXIG9yIFggdmlvbGF0aW9uLiAqLw0KPiArCXNoYWRvd19wcmVzZW50X21hc2sJ
-PQ0KPiArCQkoaGFzX2V4ZWNfb25seSA/IDB1bGwgOiBWTVhfRVBUX1JFQURBQkxFX01BU0spIHwg
-Vk1YX0VQVF9TVVBQUkVTU19WRV9CSVQ7DQoNClRoaXMgY2h1bmsgaGFzIG5vdGhpbmcgdG8gZG8g
-d2l0aCB3aGF0IHRoaXMgcGF0Y2ggY2xhaW1zIHRvIGRvLg0KDQo+ICAJLyoNCj4gIAkgKiBFUFQg
-b3ZlcnJpZGVzIHRoZSBob3N0IE1UUlJzLCBhbmQgc28gS1ZNIG11c3QgcHJvZ3JhbSB0aGUgZGVz
-aXJlZA0KPiAgCSAqIG1lbXR5cGUgZGlyZWN0bHkgaW50byB0aGUgU1BURXMuICBOb3RlLCB0aGlz
-IG1hc2sgaXMganVzdCB0aGUgbWFzaw0KPiBAQCAtNDQ4LDcgKzQ1MCw3IEBAIHZvaWQga3ZtX21t
-dV9zZXRfZXB0X21hc2tzKGJvb2wgaGFzX2FkX2JpdHMsIGJvb2wgaGFzX2V4ZWNfb25seSkNCj4g
-IAkgKiBvZiBhbiBFUFQgcGFnaW5nLXN0cnVjdHVyZSBlbnRyeSBpcyAxMTBiICh3cml0ZS9leGVj
-dXRlKS4NCj4gIAkgKi8NCj4gIAlrdm1fbW11X3NldF9tbWlvX3NwdGVfbWFzayhWTVhfRVBUX01J
-U0NPTkZJR19XWF9WQUxVRSwNCj4gLQkJCQkgICBWTVhfRVBUX1JXWF9NQVNLLCAwKTsNCj4gKwkJ
-CQkgICBWTVhfRVBUX1JXWF9NQVNLIHwgVk1YX0VQVF9TVVBQUkVTU19WRV9CSVQsIDApOw0KPiAg
-fQ0KPiAgRVhQT1JUX1NZTUJPTF9HUEwoa3ZtX21tdV9zZXRfZXB0X21hc2tzKTsNCj4gIA0KDQo=
+On Mon, 2023-01-16 at 12:29 +1100, Dave Chinner wrote:
+> On Fri, Jan 13, 2023 at 04:33:55PM +0100, Alexander Larsson wrote:
+> > This commit adds the on-disk layout header file of composefs.
+>=20
+> This isn't really a useful commit message.
+>=20
+> Perhaps it should actually explain what the overall goals of the
+> on-disk format are - space usage, complexity trade-offs, potential
+> issues with validation of variable payload sections, etc.
+>=20
+
+I agree, will flesh it out. But, as for below discussions, one of the
+overall goals is to keep the on-disk file size low.
+
+> > Signed-off-by: Alexander Larsson <alexl@redhat.com>
+> > Co-developed-by: Giuseppe Scrivano <gscrivan@redhat.com>
+> > Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
+> > ---
+> > =C2=A0fs/composefs/cfs.h | 203
+> > +++++++++++++++++++++++++++++++++++++++++++++
+> > =C2=A01 file changed, 203 insertions(+)
+> > =C2=A0create mode 100644 fs/composefs/cfs.h
+> >=20
+> > diff --git a/fs/composefs/cfs.h b/fs/composefs/cfs.h
+> > new file mode 100644
+> > index 000000000000..658df728e366
+> > --- /dev/null
+> > +++ b/fs/composefs/cfs.h
+> > @@ -0,0 +1,203 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * composefs
+> > + *
+> > + * Copyright (C) 2021 Giuseppe Scrivano
+> > + * Copyright (C) 2022 Alexander Larsson
+> > + *
+> > + * This file is released under the GPL.
+> > + */
+> > +
+> > +#ifndef _CFS_H
+> > +#define _CFS_H
+> > +
+> > +#include <asm/byteorder.h>
+> > +#include <crypto/sha2.h>
+> > +#include <linux/fs.h>
+> > +#include <linux/stat.h>
+> > +#include <linux/types.h>
+> > +
+> > +#define CFS_VERSION 1
+>=20
+> This should start with a description of the on-disk format for the
+> version 1 format.
+
+There are some format descriptions in the later document patch. What is
+the general approach here, do we document in the header, or in separate
+doc file? For example, I don't see much of format descriptions in the
+xfs headers. I mean, I should probably add *some* info here for easier
+reading of the stuff below, but I don't feel like headers are a great
+place for docs.
+
+> > +
+> > +#define CFS_MAGIC 0xc078629aU
+> > +
+> > +#define CFS_MAX_DIR_CHUNK_SIZE 4096
+> > +#define CFS_MAX_XATTRS_SIZE 4096
+>=20
+> How do we store 64kB xattrs in this format if the max attr size is
+> 4096 bytes? Or is that the maximum total xattr storage?
+
+This is a current limitation of the composefs file format. I am aware
+that the kernel maximum size is 64k, but I'm not sure what use this
+would have in a read-only filesystem image in practice. I could extend
+this limit with some added complextity, but would it be worth the
+increase in complexity?
+
+> A comment telling us what these limits are would be nice.
+>=20
+
+Sure.
+
+> > +
+> > +static inline int cfs_digest_from_payload(const char *payload,
+> > size_t payload_len,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 u8
+> > digest_out[SHA256_DIGEST_SIZE])
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char *p, *end;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 last_digit =3D 0;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int digit =3D 0;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size_t n_nibbles =3D 0;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* This handles payloads (i.=
+e. path names) that are
+> > "essentially" a
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * digest as the digest (if =
+the DIGEST_FROM_PAYLOAD flag is
+> > set). The
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * "essential" part means th=
+at we ignore hierarchical
+> > structure as well
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * as any extension. So, for=
+ example "ef/deadbeef.file"
+> > would match the
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * (too short) digest "efdea=
+dbeef".
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This allows images to avo=
+id storing both the digest and
+> > the pathname,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * yet work with pre-existin=
+g object store formats of
+> > various kinds.
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0end =3D payload + payload_le=
+n;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (p =3D payload; p !=3D e=
+nd; p++) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/* Skip subdir structure */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (*p =3D=3D '/')
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0contin=
+ue;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/* Break at (and ignore) extension */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (*p =3D=3D '.')
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0break;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (n_nibbles =3D=3D SHA256_DIGEST_SIZE * 2)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
+ -EINVAL; /* Too long */
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0digit =3D hex_to_bin(*p);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (digit =3D=3D -1)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
+ -EINVAL; /* Not hex digit */
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0n_nibbles++;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if ((n_nibbles % 2) =3D=3D 0)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0digest=
+_out[n_nibbles / 2 - 1] =3D (last_digit
+> > << 4) | digit;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0last_digit =3D digit;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (n_nibbles !=3D SHA256_DI=
+GEST_SIZE * 2)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return -EINVAL; /* Too short */
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > +}
+>=20
+> Too big to be a inline function.
+>=20
+
+Yeah, I'm aware of this. I mainly put it in the header as the
+implementation of it is sort of part of the on-disk format. But, I can
+move it to a .c file instead.
+
+
+> > +
+> > +struct cfs_vdata_s {
+>=20
+> Drop the "_s" suffix to indicate the type is a structure - that's
+> waht "struct" tells us.
+
+Sure.
+
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 off;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 len;
+>=20
+> If these are on-disk format structures, why aren't the defined as
+> using the specific endian they are encoded in? i.e. __le64, __le32,
+> etc? Otherwise a file built on a big endian machine won't be
+> readable on a little endian machine (and vice versa).
+
+On disk all fields are little endian. However, when we read them from
+disk we convert them using e.g. le32_to_cpu(), and then we use the same
+structure in memory, with native endian. So, it seems wrong to mark
+them as little endian.
+
+>=20
+> > +} __packed;
+> > +
+> > +struct cfs_header_s {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 version;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 unused1;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 unused2;
+>=20
+> Why are you hyper-optimising these structures for minimal space
+> usage? This is 2023 - we can use a __le32 for the version number,
+> the magic number and then leave....
+>
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 magic;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 data_offset;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 root_inode;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 unused3[2];
+>=20
+> a whole heap of space to round it up to at least a CPU cacheline
+> size using something like "__le64 unused[15]".
+>=20
+> That way we don't need packed structures nor do we care about having
+> weird little holes in the structures to fill....
+
+Sure.
+
+> > +} __packed;
+> > +
+> > +enum cfs_inode_flags {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_NONE =3D 0,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_PAYLOAD =3D =
+1 << 0,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_MODE =3D 1 <=
+< 1,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_NLINK =3D 1 =
+<< 2,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_UIDGID =3D 1=
+ << 3,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_RDEV =3D 1 <=
+< 4,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_TIMES =3D 1 =
+<< 5,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_TIMES_NSEC =
+=3D 1 << 6,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_LOW_SIZE =3D=
+ 1 << 7, /* Low 32bit of st_size
+> > */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_HIGH_SIZE =
+=3D 1 << 8, /* High 32bit of
+> > st_size */
+>=20
+> Why do we need to complicate things by splitting the inode size
+> like this?
+>=20
+
+The goal is to minimize the image size for a typical rootfs or
+container image. Almost zero files in any such images are > 4GB.=C2=A0
+
+Also, we don't just "not decode" the items with the flag not set, they
+are not even stored on disk.
+
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_XATTRS =3D 1=
+ << 9,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_DIGEST =3D 1=
+ << 10, /* fs-verity sha256
+> > digest */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_DIGEST_FROM_=
+PAYLOAD =3D 1 << 11, /* Compute
+> > digest from payload */
+> > +};
+> > +
+> > +#define CFS_INODE_FLAG_CHECK(_flag,
+> > _name)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(((_flag) & (CFS_INODE_FLAGS=
+_##_name)) !=3D 0)
+>=20
+> Check what about a flag? If this is a "check that a feature is set",
+> then open coding it better, but if you must do it like this, then
+> please use static inline functions like:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cfs_inode_has_xattrs(=
+inode->flags)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.....
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+>=20
+
+The check is if the flag is set, so maybe CFS_INODE_FLAG_IS_SET is a
+better name. This is used only when decoding the on-disk version of the
+inode to the in memory one, which is a bunch of:
+
+	if (CFS_INODE_FLAG_CHECK(ino->flags, THE_FIELD))
+		ino->the_field =3D cfs_read_u32(&data);
+	else
+		ino->the_field =3D THE_FIELD_DEFUALT;
+
+I can easily open-code these checks, although I'm not sure it makes a
+great difference either way.
+
+> > +#define CFS_INODE_FLAG_CHECK_SIZE(_flag, _name,
+> > _size)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(CFS_INODE_FLAG_CHECK(_flag,=
+ _name) ? (_size) : 0)
+>=20
+> This doesn't seem particularly useful, because you've still got to
+> test is the return value is valid. i.e.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size =3D CFS_INODE_FLAG_C=
+HECK_SIZE(inode->flags, XATTRS, 32);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (size =3D=3D 32) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0/* got xattrs, decode! */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+>=20
+> vs
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cfs_inode_has_xattrs(=
+inode->flags)) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0/* decode! */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+
+This macro is only uses by the cfs_inode_encoded_size() function that
+computes the size of the on-disk format of an inode, given its flags:
+
+static inline u32 cfs_inode_encoded_size(u32 flags)
+{
+	return sizeof(u32) /* flags */ +
+	       CFS_INODE_FLAG_CHECK_SIZE(flags, PAYLOAD, sizeof(u32))
++
+	       CFS_INODE_FLAG_CHECK_SIZE(flags, MODE, sizeof(u32)) +
+	       CFS_INODE_FLAG_CHECK_SIZE(flags, NLINK, sizeof(u32)) +
+...
+
+It is only useful in the sense that it makes this function easy to
+read/write. I should maybe move the definion of the macro to that
+function.
+
+>=20
+> > +
+> > +#define CFS_INODE_DEFAULT_MODE 0100644
+> > +#define CFS_INODE_DEFAULT_NLINK 1
+> > +#define CFS_INODE_DEFAULT_NLINK_DIR 2
+> > +#define CFS_INODE_DEFAULT_UIDGID 0
+> > +#define CFS_INODE_DEFAULT_RDEV 0
+> > +#define CFS_INODE_DEFAULT_TIMES 0
+>=20
+> Where do these get used? Are they on disk defaults or something
+> else? (comment, please!)
+
+They are the defaults that are used when inode fields on disk are
+missing. I'll add some comments.
+
+> > +struct cfs_inode_s {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 flags;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Optional data: (selected =
+by flags) */
+>=20
+> WHy would you make them optional given that all the fields are still
+> defined in the structure?
+>=20
+> It's much simpler just to decode the entire structure into memory
+> than to have to check each flag value to determine if a field needs
+> to be decoded...
+>=20
+
+I guess I need to clarify these comments a bit, but they are optional
+on-disk, and decoded and extended with the above defaults by
+cfs_get_ino_index() when read into memory. So, they are not optional in
+memory.
+
+
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* This is the size of the t=
+ype specific data that comes
+> > directly after
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the inode in the file. Of=
+ this type:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * directory: cfs_dir_s
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * regular file: the backing=
+ filename
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * symlink: the target link
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Canonically payload_lengt=
+h is 0 for empty
+> > dir/file/symlink.
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 payload_length;
+>=20
+> How do you have an empty symlink?
+
+In terms of the file format, empty would mean a zero length target
+string. But you're right that this isn't allowed. I'll change this
+comment.
+
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_mode; /* File type an=
+d mode.=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_nlink; /* Number of h=
+ard links, only for regular
+> > files.=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_uid; /* User ID of ow=
+ner.=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_gid; /* Group ID of o=
+wner.=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_rdev; /* Device ID (i=
+f special file).=C2=A0 */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 st_size; /* Size of file=
+, only used for regular files
+> > */
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct cfs_vdata_s xattrs; /=
+* ref to variable data */
+>=20
+> This is in the payload that follows the inode?=C2=A0 Is it included in
+> the payload_length above?
+>=20
+> If not, where is this stuff located, how do we validate it points to
+> the correct place in the on-disk format file, the xattrs belong to
+> this specific inode, etc? I think that's kinda important to
+> describe, because xattrs often contain important security
+> information...
+
+No, all inodes are packed into the initial part of the file, each
+containing a flags set, a variable size (from flags) chunk of fixed
+size elements and an variable size payload. The payload is either the
+target symlink for symlinks, or the path of the backing file for
+regular files. Other data, such as xattrs and dirents are stored in a
+separate part of the file and the offsets for those in the inode refer
+to offsets into that area.
+
+>=20
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 digest[SHA256_DIGEST_SIZE=
+]; /* fs-verity digest */
+>=20
+> Why would you have this in the on-disk structure, then also have
+> "digest from payload" that allows the digest to be in the payload
+> section of the inode data?
+
+The payload is normally the path to the backing file, and then you need
+to store the verity digest separately. This is what would be needed
+when using this with ostree for instance, because we have an existing
+backing file repo format we can't change. However, if your backing
+store files are stored by their fs-verity digest already (which is the
+default for mkcomposefs), then we can set this flag and avoid storing
+the digest unnecessary.
+
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct timespec64 st_mtim; /=
+* Time of last modification.=C2=A0
+> > */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct timespec64 st_ctim; /=
+* Time of last status change.=C2=A0
+> > */
+> > +};
+>=20
+> This really feels like an in-memory format inode, not an on-disk
+> format inode, because this:
+>=20
+> > +
+> > +static inline u32 cfs_inode_encoded_size(u32 flags)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return sizeof(u32) /* flags =
+*/ +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, PAYLOAD,
+> > sizeof(u32)) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, MODE, sizeof(u32))
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, NLINK, sizeof(u32))
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, UIDGID, sizeof(u32)
+> > + sizeof(u32)) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, RDEV, sizeof(u32))
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, TIMES, sizeof(u64)
+> > * 2) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, TIMES_NSEC,
+> > sizeof(u32) * 2) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, LOW_SIZE,
+> > sizeof(u32)) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, HIGH_SIZE,
+> > sizeof(u32)) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, XATTRS, sizeof(u64)
+> > + sizeof(u32)) +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, DIGEST,
+> > SHA256_DIGEST_SIZE);
+> > +}
+>=20
+> looks like the on-disk format is an encoded format hyper-optimised
+> for minimal storage space usage?
+
+Yes.
+
+
+> Without comments to explain it, I'm not exactly sure what is stored
+> in the on-disk format inodes, nor the layout of the variable
+> payload section or how payload sections are defined and verified.
+>=20
+> Seems overly complex to me - it's far simpler just to have a fixed
+> inode structure and just decode it directly into the in-memory
+> structure when it is read....
+
+We have a not-fixed-size on disk inode structure (for size reasons)
+which we decode directly into the above in-memory structure when read.
+So I don't think we're that far from what you expect. However, yes,
+this could easily be explained better.
+
+>=20
+> > +struct cfs_dentry_s {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Index of struct cfs_inode=
+_s */
+>=20
+> Not a useful (or correct!) comment :/
+
+Its not really incorrect, but I agree its not neccessary a great
+comment. At this specific offset in the inode section we can decode the
+cfs_inode_s that this inode refers to, and his offset is also the inode
+number of the inode.
+
+> Also, the typical term for this on disk structure in a filesystem is
+> a "dirent", and this is also what readdir() returns to userspace.
+> dentry is typically used internally in the kernel to refer to the
+> VFS cache layer objects, not the filesystem dirents the VFS layers
+> look up to populate it's dentry cache.
+>=20
+
+Yeah, i'll rename it.
+
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 inode_index;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 d_type;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 name_len;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 name_offset;
+>=20
+> What's this name_offset refer to?=20
+
+Dirents are stored in chunks, each chunk < 4k. These chunks are a list
+of these dirents, followed by the strings for the names, the
+name_offset is the offset from the start of the chunk to the name.
+
+> > +} __packed;
+> > +
+> > +struct cfs_dir_chunk_s {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 n_dentries;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 chunk_size;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 chunk_offset;
+>=20
+> What's this chunk offset refer to?
+>=20
+
+This is the offset in the "variable data" section of the image. This
+section follows the packed inode data section. Again, better comments
+needed.
+
+> > +} __packed;
+> > +
+> > +struct cfs_dir_s {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 n_chunks;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct cfs_dir_chunk_s chunk=
+s[];
+> > +} __packed;
+>=20
+> So directory data is packed in discrete chunks? Given that this is a
+> static directory format, and the size of the directory is known at
+> image creation time, why does the storage need to be chunked?
+
+We chunk the data such that each chunk fits inside a single page in the
+image file. I did this to make accessing image data directly from the
+page cache easier. We can just kmap_page_local() each chunk and treat
+it as a non-split continuous dirent array, then move on to the next
+chunk in the next page. If we had dirent data spanning multiple pages
+then we would either need to map the pages consecutively (which seems
+hard/costly) or have complex in-kernel code to handle the case where a
+dirent straddles two pages.
+
+> > +
+> > +#define
+> > cfs_dir_size(_n_chunks)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > =C2=A0=C2=A0=C2=A0 \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(sizeof(struct cfs_dir_s) + =
+(_n_chunks) * sizeof(struct
+> > cfs_dir_chunk_s))
+>=20
+> static inline, at least.
+>=20
+> Also, this appears to be the size of the encoded directory
+> header, not the size of the directory itself. cfs_dir_header_size(),
+> perhaps, to match the cfs_xattr_header_size() function that does the
+> same thing?
+
+Yeah, that makes sense.
+
+--=20
+=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
+-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
+=3D-=3D-=3D
+ Alexander Larsson                                            Red Hat,
+Inc=20
+       alexl@redhat.com            alexander.larsson@gmail.com=20
+He's a suicidal hunchbacked cyborg who knows the secret of the alien=20
+invasion. She's a time-travelling out-of-work snake charmer with a song
+in her heart and a spring in her step. They fight crime!=20
+
