@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D07E66BC07
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ADF66BC0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjAPKn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S229977AbjAPKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjAPKm4 (ORCPT
+        with ESMTP id S230195AbjAPKnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:42:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643D61969B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673865626;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0QFBkEdvWf9cNypMAIWf4qYzs+8ZZg6csxUkawLRiG4=;
-        b=GM1Q+faXbqsZcRWhocJPHRqxVjVhKKSBXB6OVGvUqoltqvq9s47SMa0Qud+CmTOChwB451
-        aMETmbnk9/f3Uu/l/B6W/TlvxHswwydyn0hJU5GUx0aZElt0fcMhgQii9p1vVn5lWmoC2v
-        7OAc4fZdgjr3aSkIaCxlZa6um4QXJl8=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-12-j5_UWf89MgC1c2G-1gcp1w-1; Mon, 16 Jan 2023 05:40:24 -0500
-X-MC-Unique: j5_UWf89MgC1c2G-1gcp1w-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-4dedc46e2d5so83225527b3.21
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:40:24 -0800 (PST)
+        Mon, 16 Jan 2023 05:43:01 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E01D1DBBD
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:41:16 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-4d59d518505so205878807b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:41:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4soP/Smn6p/Qzgy2m1Az79ZJJH6mPvlZu2xOB/yiHY0=;
+        b=HnfFdKima0dYSPTrF1v82kAbukMyFOVonb7ctdBnlYd59TpwCawMSILhAVTRZ/XLnk
+         UaxG4M7ao8T6V+3Pg6Pt3464FZ2JXZaWCEzCqPuM/egVf1tZmR/L9OvRNLl26ctWiKB0
+         1yrtlrYffH8KgdarR8fXWyZjX3mVAaAYJBixnLK+olSMhIl0+8ANNpa3T3Y+oU2DtGs5
+         VOU4qx5srgzkM+UsX+kwwAYDFBKstMX4reVl0lwu+xSlss5pThSRGTThchhXNAHQUMQ8
+         5Q2vHI4ehhiP+gYyEX2egtR0fJ8P+/2lriooo2PMeGthxmtTKUPDTkS/I5LTgAArA0g8
+         R5kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0QFBkEdvWf9cNypMAIWf4qYzs+8ZZg6csxUkawLRiG4=;
-        b=XjOrf6UYvmDQb39XEk5032Qd1cbmfAZ5QUhaUMcpAi/lfMqsNxQF9iifBiq91xI41v
-         j6SQWXLPJYvAuh2Kp5c8pJPhcEvkHtIdsXhkffgkqjp4gSB+WizWwOWIQ/3HXMsbP9nk
-         0x2vgtULeyl1uXH0VlN5lLNuTlE2aS63fEZ5rVDxRvAQUMG+NRv0iAiJg7xeWofeB3wM
-         Eb0aLodxkVKsKjvXS2NVadAdAUk0LcpHH1avosJuRhfnrwPDUwBVxJxaPA5nk1k1OWWp
-         mEq4EZNLwSJQNg11cvI0hcvK0TvfAu7g5xJOAxKWoxQqGa/lHaeg3cuhQsCSOcMJc2BZ
-         lbVg==
-X-Gm-Message-State: AFqh2koCV5q78mDF+enCarHhec0stmEh4mDvrEN4XwvRVbROXABCWuGt
-        Cth9zotSO6OwXfEhDb7WC+AWMhFHJ2PfG7xvKYtSVMMCK3DjRwVJyczdF0t+pUx/g9mMQ+v9San
-        HuVKNtXQOR8+llHde9Q+JWPkjR2f+8W2kxCjROUGn
-X-Received: by 2002:a25:81d0:0:b0:7d2:891e:ee59 with SMTP id n16-20020a2581d0000000b007d2891eee59mr1119879ybm.152.1673865624066;
-        Mon, 16 Jan 2023 02:40:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtTeKQueytBHJsdTA0TtFA28IlDVOY0VUzlujVZOI1l/gLDniG75dLkHCpOQYtorOEuTnKjSSGfH3iJCGtFYY8=
-X-Received: by 2002:a25:81d0:0:b0:7d2:891e:ee59 with SMTP id
- n16-20020a2581d0000000b007d2891eee59mr1119870ybm.152.1673865623865; Mon, 16
- Jan 2023 02:40:23 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4soP/Smn6p/Qzgy2m1Az79ZJJH6mPvlZu2xOB/yiHY0=;
+        b=ak0U7X9j0p6aRoRBJmKJLfla3NgHYdWTZz476bJjkOCqzk08HRVPsfQFROc9F7yHUX
+         0Lcy8FMQhRz61pBTlzGYInnqoj7FphTaIrnUKvlOH+wtud+2k6pkZGpM24N2Jbfn7GuB
+         u6URK7WYULhfx1r4lGUlHkvV7c2bmhxETsZH5r+xbFpLTEyXDZUQMIM5WFUWLXp/aW+K
+         +8c2Byk9iKttJpnSChHF3qoqNqvqjAVYpA0+o4T+JvFjDAD9/mPa2ySbI/zWaV0fc+Ty
+         cd/b3q/Ns1/KICqkHsjfg7Bcf1vP1h5MyTnX4GG6dvIj96ddJit2+er3yacHgJkkAcgm
+         Laow==
+X-Gm-Message-State: AFqh2kqamakb/KzV5wHWIQJPFwGYtFJ15q4cbClP8cbD6OuTTB7hKEHU
+        3wIiEwMvslK1M6+tZu8vK1YGVeMlWfVjjfcLtj2diQ==
+X-Google-Smtp-Source: AMrXdXspgmx249O8TVxAcNuny03DGAUB+V2Yc99sZfMQJoh/65YzhpRklbp6PkiG8js8X67AYdeJP6fFYLwfm58XbuE=
+X-Received: by 2002:a05:690c:b05:b0:467:2f6:4de5 with SMTP id
+ cj5-20020a05690c0b0500b0046702f64de5mr5170933ywb.278.1673865675672; Mon, 16
+ Jan 2023 02:41:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20230112142218.725622-1-eperezma@redhat.com> <20230112142218.725622-4-eperezma@redhat.com>
- <DM8PR12MB54000ADBE1A0717362433C1FABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
-In-Reply-To: <DM8PR12MB54000ADBE1A0717362433C1FABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Mon, 16 Jan 2023 11:39:47 +0100
-Message-ID: <CAJaqyWdrg1nkBSdOmZU=+Nns8UEqoyX7C+wqyk+dOPtv8UW22Q@mail.gmail.com>
-Subject: Re: [RFC 3/3] vdpa/mlx5: take iommu_lock at dup_iotlb
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     "mst@redhat.com" <mst@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Parav Pandit <parav@nvidia.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "sgarzare@redhat.com" <sgarzare@redhat.com>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
+References: <20230116103341.70956-1-kerneljasonxing@gmail.com>
+In-Reply-To: <20230116103341.70956-1-kerneljasonxing@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 16 Jan 2023 11:41:04 +0100
+Message-ID: <CANn89iK+cx+NdBCMG_zH48ZbSpMNnBqm4bNXEEke=ebnLvkvbw@mail.gmail.com>
+Subject: Re: [PATCH v5 net] tcp: avoid the lookup process failing to get sk in
+ ehash table
+To:     Jason Xing <kerneljasonxing@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,96 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 8:13 AM Eli Cohen <elic@nvidia.com> wrote:
+On Mon, Jan 16, 2023 at 11:33 AM Jason Xing <kerneljasonxing@gmail.com> wrote:
 >
-> > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > Sent: Thursday, 12 January 2023 16:22
-> > To: mst@redhat.com; Eli Cohen <elic@nvidia.com>
-> > Cc: linux-kernel@vger.kernel.org; Parav Pandit <parav@nvidia.com>;
-> > lulu@redhat.com; jasowang@redhat.com; virtualization@lists.linux-
-> > foundation.org; sgarzare@redhat.com; si-wei.liu@oracle.com
-> > Subject: [RFC 3/3] vdpa/mlx5: take iommu_lock at dup_iotlb
-> >
-> > Both iommu changes and lookup are protected by mlx5_vdpa_net->reslock a=
-t
-> > this moment, but:
-> > * These iotlb changes / queries are not in the fast data path.
-> > * reslock belongs to netdev, while dup_iotlb seems generic.
-> > * It's located in a different file than the lock it needs to hold
-> >
-> > Justifies the lock acquisition.
-> >
+> From: Jason Xing <kernelxing@tencent.com>
 >
-> Following this reasoning we should take the spinlock wherever we referenc=
-e an iotlb.
+...
 
-vring.c:iotlb_translate takes it.
+> Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+> Suggested-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+> ---
 
-> Question if it make sense that the iotlb could change while it is being r=
-eferenced.
-> Can you identify a specific case for this?
->
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-Not at this moment, because both are protected by
-mlx5_vdpa_net->reslock before access or change iotlb. So this would
-require changes to be exploitable, that's true.
-
-However, to take the lock is the expected usage for vringh, so future
-changes to either mlx or vringh could miss it.
-
-Thanks!
-
-> > Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC
-> > setting")
-> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > ---
-> >  drivers/vdpa/mlx5/core/mr.c | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
-> > index 878ee94efa78..e9c8a7f8ee1d 100644
-> > --- a/drivers/vdpa/mlx5/core/mr.c
-> > +++ b/drivers/vdpa/mlx5/core/mr.c
-> > @@ -454,13 +454,15 @@ static int dup_iotlb(struct mlx5_vdpa_dev *mvdev,
-> > struct vhost_iotlb *src)
-> >  {
-> >       struct vhost_iotlb_map *map;
-> >       u64 start =3D 0, last =3D ULLONG_MAX;
-> > -     int err;
-> > +     int err =3D 0;
-> > +
-> > +     spin_lock(&mvdev->cvq.iommu_lock);
-> >
-> >       vhost_iotlb_reset(mvdev->cvq.iotlb);
-> >
-> >       if (!src) {
-> >               err =3D vhost_iotlb_add_range(mvdev->cvq.iotlb, start, la=
-st,
-> > start, VHOST_ACCESS_RW);
-> > -             return err;
-> > +             goto out;
-> >       }
-> >
-> >       for (map =3D vhost_iotlb_itree_first(src, start, last); map;
-> > @@ -468,9 +470,12 @@ static int dup_iotlb(struct mlx5_vdpa_dev *mvdev,
-> > struct vhost_iotlb *src)
-> >               err =3D vhost_iotlb_add_range(mvdev->cvq.iotlb, map->star=
-t,
-> > map->last,
-> >                                           map->addr, map->perm);
-> >               if (err)
-> > -                     return err;
-> > +                     goto out;
-> >       }
-> > -     return 0;
-> > +
-> > +out:
-> > +     spin_unlock(&mvdev->cvq.iommu_lock);
-> > +     return err;
-> >  }
-> >
-> >  static void prune_iotlb(struct mlx5_vdpa_dev *mvdev)
-> > --
-> > 2.31.1
->
-
+Thanks !
