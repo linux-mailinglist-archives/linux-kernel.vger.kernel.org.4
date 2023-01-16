@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4715866C496
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 034CD66C497
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbjAPP4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S231522AbjAPP43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjAPP4G (ORCPT
+        with ESMTP id S231489AbjAPP4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 10:56:06 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB9E396;
-        Mon, 16 Jan 2023 07:56:04 -0800 (PST)
+        Mon, 16 Jan 2023 10:56:07 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2622782;
+        Mon, 16 Jan 2023 07:56:05 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eoe9yD3zubIMnVGhNTH1MXpRnNlQuswCabwK1HR35TQ0XLJqgDG9M324Kxqu2jNP2KVjejH4tu6lHNYqgGzKmuBPDgaP8XVNOKS+XFXJ9qKlqqrUqykwoOJZqRTXtzZO66E+X4uv3ZKev0Lq6ybwdhedSEznvBuvR5hwmECJLmbLcGlR9i+nLjgpzyHEgk4eRjOnNeiJfTIspAnS7iCFEcYUoqitQvGWuVO2ZWkiCDlT0B/6t7pcYMwElauQAMthdmrFkbR3AU8T9Fu/o6qnzKjGJDJ1SCoEGsYIVdpT5mjzZl6OuJM2TWHELOyiDq3qIZ7N4r9wZzdrIQqcGxVoNw==
+ b=AFBA2+EHQAA7opCX/sdwgLgGRpRVpk0T6qdV6azH/dQmyT18ZPBngG9sghh2EGk6t3TLHIryIn+cHmsDJRYRF9Q8JRwgBaccAA8F/4kxeR9rF6sFN9/hd51pG6lJMq7ZhQSjraQ4UBMINL3WbDeelWd2WVqSgLxLTbveOtK7hAh4BvYfVcTEk26eEFiZltQOeUhZoghiUpv1m1XleDd7tukRGUYoeMLCzREMWZ25BccHYSHY1g5ytd4uwzSdfkyRkIMB5rVJRwxXKOwjb4ZoRnTPy72MycnyFpLgbVaO5Ya3oQjZH/Nqd8kpQqv3mZpgrUOEjO3DAobE2cLANLJzrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z3t1QreyYmTpM8HnHUqYPFD3J63MgZtnckuZuuVaVCw=;
- b=LBkFntueLj50JC9NVHh/Dw1Xuo2C7/3tBn487n2CoiAYdmJpWRf2VtMJmfcy2eTjiJlBVmeFO3LszWsxJgEqUx5mseKibR/DjA8mqvFDRo+f2gr9NiuoWkhM4AKPv3RFg2eohyeBX4uz1msrr5c/iahk31J4PhxiGH7/7R8wfsHK3vW4fNDBYePEvtGQlHQ6FKRXfW1AbJgbxoE2qWwuFU5RhAIc5tfM/NQ3j2infY8Dz4xFSiGJlQA3snGquD5aJlo/hc8Pmr7PURZ2/MH+nxjB9+yrmws7G5zjRfeNEvGhtemq8npT6HZYZPczdkpDv916OyDNIzqqX8eIkMyEPw==
+ bh=LJlGCrFindnrP86Yx31IkXOhdrg5/x8/FrFAYEHjShU=;
+ b=aqxDhuhpjVJnBZ9bkSFcpJ9o0rHTulxuDtyT/+xpRcAS4VVub3d7PFTYhdH6wkq5Xvq1Js4l+6H6FAjrdkURwcf2EHS7+tnw+H6dlHDlLR6i06Vn4OrkOPfF9AqlcPobfzvYqGsJYpVS4C1iSx8Wx7YJdChQ7r93u+NWIHUyhS4JyZZp1DjAZqV5dL7BJVfObyhVjsyNg7gt1OrCyFQfDCMCgRBMn6HVLyJoVCfiaGRogHPyp6fHZbiWejq3Mp1R+G5ClB2c+yqR4DcNhcHuYHESBnfbAwQW9olWBza8hORhALbl3IW38wCY4FQlXgd+HRHm0VzKie+Ek/ekd10DAw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
+ 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
  smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
  header.from=nvidia.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z3t1QreyYmTpM8HnHUqYPFD3J63MgZtnckuZuuVaVCw=;
- b=SU90INM0QruQF8hQ2TPGFRDMP5LSa0H2j3JdoOxps13N4zveEdo22seh0sPXbk1XWFkCnI4Fls+P5qzaE0sUeWldghj/82EdvoTPgBjGQFeBaTFoyYSOpiLLfTQHLdWM8oTTF+wsdHQkCQngjgEpeDGuBxgSl1ku+Jphr7pS9uF0FLoPbkcdts1ZGHmnH5gUMf7u3OoaksS3bSeCLwCUt6V5QRZUj7EPxUJB/dxATFHhOCvCdfEqB+F882q9yhmUF0dOIsAycoVCr8PLu4SYVenX/bzo6VeXAeDcl58GOZVtxvOZBL3yLCljHr9NKF1FI5hvS07RQ3iNzaz6oG7u8A==
-Received: from BN0PR10CA0005.namprd10.prod.outlook.com (2603:10b6:408:143::19)
- by CY5PR12MB6057.namprd12.prod.outlook.com (2603:10b6:930:2e::17) with
+ bh=LJlGCrFindnrP86Yx31IkXOhdrg5/x8/FrFAYEHjShU=;
+ b=sDu5nlnmIhBRkcQFpagFol/2TgsIHeM3l2Uychs3JkoSK7uJkORzAEz2L6LEbdglpcnmR0LW3QEDf9eH+nuedxz1EmYs9u8sMEprIXgCeo+dFnMt/QCDf+XGFg1AwM0nhAFAzAMaTZEuiNID1I9tAKoZ83fVSoZshfUUEjeZq53hDWOSDrP9XM05JbN9HJ0TQh4EmWd+sLWOaceUDxJ1jgHhpHP9f1jdhJ1N/bH41ep8FlDyH9ml9LTPaxMtefY4aY3OxnT8DOwDS4r6tN0jtIGwgR8q2WYraXis1BRhf3iYUVZHdzecbY00PRT1DUpxwhLBkuzJJzZ2KMKDC7RRmA==
+Received: from CY5P221CA0130.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:1f::16)
+ by CH0PR12MB5188.namprd12.prod.outlook.com (2603:10b6:610:bb::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.21; Mon, 16 Jan
- 2023 15:56:03 +0000
-Received: from BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:143:cafe::f6) by BN0PR10CA0005.outlook.office365.com
- (2603:10b6:408:143::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Mon, 16 Jan
+ 2023 15:56:04 +0000
+Received: from CY4PEPF0000C96E.namprd02.prod.outlook.com
+ (2603:10b6:930:1f:cafe::6e) by CY5P221CA0130.outlook.office365.com
+ (2603:10b6:930:1f::16) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
- Transport; Mon, 16 Jan 2023 15:56:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ Transport; Mon, 16 Jan 2023 15:56:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT051.mail.protection.outlook.com (10.13.177.66) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.13 via Frontend Transport; Mon, 16 Jan 2023 15:56:02 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000C96E.mail.protection.outlook.com (10.167.242.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.11 via Frontend Transport; Mon, 16 Jan 2023 15:56:03 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 16 Jan
- 2023 07:55:55 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 07:55:57 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 16 Jan
- 2023 07:55:54 -0800
+ 2023 07:55:56 -0800
 Received: from moonraker.nvidia.com (10.127.8.14) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Mon, 16 Jan 2023 07:55:53 -0800
+ Transport; Mon, 16 Jan 2023 07:55:55 -0800
 From:   Jon Hunter <jonathanh@nvidia.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>,
         Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH V2 1/2] usb: gadget: u_ether: Improve print in gether_setup_name_default()
-Date:   Mon, 16 Jan 2023 15:55:44 +0000
-Message-ID: <20230116155545.101391-1-jonathanh@nvidia.com>
+Subject: [PATCH V2 2/2] usb: gadget: u_ether: Don't warn in gether_setup_name_default()
+Date:   Mon, 16 Jan 2023 15:55:45 +0000
+Message-ID: <20230116155545.101391-2-jonathanh@nvidia.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230116155545.101391-1-jonathanh@nvidia.com>
+References: <20230116155545.101391-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT051:EE_|CY5PR12MB6057:EE_
-X-MS-Office365-Filtering-Correlation-Id: c12126bf-1c71-4112-9784-08daf7da2b8b
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C96E:EE_|CH0PR12MB5188:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b555bc7-1e06-415d-4926-08daf7da2c17
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mk11Z8hLyWnLA7cPRIzERRqWBu0snPV9lca/FMJAMonC4kV3v2ifTdRc6hJuLfLN37CpfauefJUDHoV09uJ1NPjwd+GqaWAeYLZ4J8uKw/9yS2Jk3BF3P2GBGSbVm1iqG4ZS9CuzM6hLN3rzNReNaIZmua5Zj/jvDHexqkOg00Qyb8rMFQRnG9ehCylB9fB6aGO4Fl+2t29flrw2TbJIPlTkbK3U4Jdf3sM98p+HwlyRp6GNg/2m7vV3nh9eLM/DXN4JLgvhOm8XMRH9BhbR8hQtSU1asyCFr7Okquynovvn8HMBX4903sW10joAfKj6x8IFloFSZlC5IsTZ3ywUHL36d93DKVnzkPR0djFfLuGbsFygDaQRL54WC3nypx+6MefETng/Wnbr0xtDCi4WiGV+ovcmtZ2KudBIzzwSddeKX0nevt6kIbwIc0kVikcJlI6jYxlJxAWHK/ekX374b5yvwYbkLTveV6aeod0axr3w7d5TbeWEuSzM+201gvzHtw671J2Oaxt/uoAMFiP5RwMZOgzcaEdQtbwxqxh792Q6RJlWSflYlpc0CwJsvPfKxZsgGdAGBqeeqnChNOSR4ZuctM/nP1N4sJZ2an9nqXcSSOh6otESp6xnJMISArqr+YTuB5ru0al+sCKdedGqReoxNs3xowR/i0KaygClyIFhC+oQCC1A5beikGbvLsxETDpllvZthu5o8tY5WkaI8A==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199015)(46966006)(36840700001)(40470700004)(186003)(5660300002)(336012)(86362001)(426003)(47076005)(2906002)(8936002)(83380400001)(70206006)(70586007)(41300700001)(1076003)(478600001)(6916009)(36756003)(4326008)(8676002)(54906003)(7696005)(6666004)(107886003)(82310400005)(40460700003)(7636003)(356005)(40480700001)(26005)(2616005)(36860700001)(82740400003)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: rhAir7NixAxInfbJZQ9J4UK0GkivEzrzG3Dx8ct4j0D+kuyOfUu9onBmrQ71mTo9Z7lQ12AKjzPeL2l1eYmwhGvluFvBRttcTGXfYLY6RwYjqgIxIS98LVL8fmffJDkeJwnSRfHkwgWhiMWaLNe/u4mCU/AYobvb56mn6VB87JfWEEpKqh3F5PrbKKsprndDaZ/KGr4UWEAUdoYrtBNOFx0iuLAxRka8jThR4Yb7nryQvApnbxndWKmGu4J7KAeMqr5fLI7F3c/ZdVakA3442uuJRRHV9QroP8PW0DS9vUWOV7mD5WQwsR9bVx7KOnoVodlN8L0McR5VyDNHtUnuK7HDOkstQbq1RrZjyNlBJLOmBR7NCwcJD1ibky1wpvn7YoJigxMeC+Pza70/dOf13bJ5LGF/mPqMfDEvNAbUnZpjyzgJE0uI/uiWE9XtR/SSzo4tgEeFNM82p02pkZmnG6GqoityFD132Un/L47vWdBzSsDtVAnKHRLk2lYBHiOamDoIjLNeqB0WTbqugFCa2B140yWsaRLe7brcDdDP8fCFdbJJSgBbD9U+YppTEoGIBdTAmeYgoWD85+a184R1h5ABjwbphC156sgkKGUAYL6pWuXRKV4qLNGzIRdvghfHwzORELKF21qFiari8k7TFZ+fMxUuHoUe4H4qykfbHuRmWr1f8Kc+AevuHcqQj0J1hhoqjsWsx2iAnxcKxY1MIA==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199015)(40470700004)(46966006)(36840700001)(36756003)(36860700001)(2906002)(107886003)(6666004)(70206006)(82310400005)(5660300002)(8676002)(4326008)(8936002)(6916009)(83380400001)(82740400003)(478600001)(356005)(41300700001)(426003)(47076005)(7636003)(40480700001)(70586007)(186003)(336012)(7696005)(26005)(1076003)(40460700003)(2616005)(86362001)(54906003)(316002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 15:56:02.9658
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 15:56:03.9438
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c12126bf-1c71-4112-9784-08daf7da2b8b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b555bc7-1e06-415d-4926-08daf7da2c17
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C96E.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6057
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5188
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -105,39 +107,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print in in gether_setup_name_default() does not provide any useful
-information because a random MAC address will always be generated when
-calling this function. Rather than removing the print, update the print
-to show MAC address that is generated which is similar to other ethernet
-drivers.
-
-Finally, given that the strings 'self' and 'host' are static we do not
-need to pass these strings as an arguments.
+The function gether_setup_name_default() is called by various USB
+ethernet gadget drivers. This function always generates the MAC address
+for the ethernet gadget device and always prints a warning when
+generating the MAC address. Given that these messages are expected, make
+these debug prints instead of warnings.
 
 Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 ---
-V1 -> V2: Added this patch
+V1 -> V2: Changed print to debug instead of info.
 
  drivers/usb/gadget/function/u_ether.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 8f12f3f8f6ee..be8e7b448933 100644
+index be8e7b448933..8feb40e38137 100644
 --- a/drivers/usb/gadget/function/u_ether.c
 +++ b/drivers/usb/gadget/function/u_ether.c
 @@ -845,13 +845,13 @@ struct net_device *gether_setup_name_default(const char *netname)
  	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
  
  	eth_random_addr(dev->dev_mac);
--	pr_warn("using random %s ethernet address\n", "self");
-+	pr_warn("using random self ethernet address %pM\n", dev->dev_mac);
+-	pr_warn("using random self ethernet address %pM\n", dev->dev_mac);
++	pr_debug("using random self ethernet address %pM\n", dev->dev_mac);
  
  	/* by default we always have a random MAC address */
  	net->addr_assign_type = NET_ADDR_RANDOM;
  
  	eth_random_addr(dev->host_mac);
--	pr_warn("using random %s ethernet address\n", "host");
-+	pr_warn("using random host ethernet address %pM\n", dev->host_mac);
+-	pr_warn("using random host ethernet address %pM\n", dev->host_mac);
++	pr_debug("using random host ethernet address %pM\n", dev->host_mac);
  
  	net->netdev_ops = &eth_netdev_ops;
  
