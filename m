@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9B766D046
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2D866D04C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjAPUf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 15:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S232850AbjAPUiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 15:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbjAPUfz (ORCPT
+        with ESMTP id S232579AbjAPUiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 15:35:55 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C7C2A17B;
-        Mon, 16 Jan 2023 12:35:53 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0C3B11F5E0;
-        Mon, 16 Jan 2023 21:35:50 +0100 (CET)
-Date:   Mon, 16 Jan 2023 21:35:49 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Srba <Michael.Srba@seznam.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "phy: qualcomm: usb28nm: Add MDM9607 init
- sequence"
-Message-ID: <20230116203549.5jzd2olxua662n6w@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Srba <Michael.Srba@seznam.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221214223733.648167-1-marijn.suijten@somainline.org>
- <Y8GY51Cfkj7o1MJs@matsya>
+        Mon, 16 Jan 2023 15:38:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BF32A9B6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:37:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673901440;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VzleNOs+fx9ShS3MaQRPGCCH6Yc77fZfbqHMtgEybWk=;
+        b=MjkHr2yBq7OLL5C5koJefNzyCaWoPOYrR9c54glY0es4v24bgnZtRHhH4wlTmZUfU/2SEf
+        KnhmO1/Eo6Tvwpk3NxQfuT9rJ0G+BgNG1/afdUqNxkfPzPHq6VhSdd6ozfo5HDCYLniKYP
+        jPmJPreV1OIHiFK3yv6giasSHT6AN4U=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-433-j8wzFak0MJuDDODmKnZsvQ-1; Mon, 16 Jan 2023 15:37:19 -0500
+X-MC-Unique: j8wzFak0MJuDDODmKnZsvQ-1
+Received: by mail-wm1-f70.google.com with SMTP id n9-20020a05600c3b8900b003d9f14e904eso12980377wms.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:37:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VzleNOs+fx9ShS3MaQRPGCCH6Yc77fZfbqHMtgEybWk=;
+        b=UlXhCOaEIee51Qp7XL5Gwbe89mdx9bk7MSswMH3GewXfjCa0A53LgGxbEMYSUHfwAQ
+         hAZ6i7LyrKOPEBO6jMapyEbgSOYd5PH95HiEhsQsq71DDWotqpsK1D0J10oiz0yYTmBc
+         7a+WA+X1JzFAwodCFHxF4t64BER8ZA2kU2Tz0qPTUwD2gGudvmMEGlswypKKrhxYvxYd
+         0DcxvUF/7pEQ0KsGfJi+n3M7rgLB6oT4I4jvteKvv64SvAmunYBtWJOixrfExbsEaDRa
+         T/sgOkw/iJ8YQPS56HkK5Ka8KcfxxVp8I+gO/AsZdnqPDwGrIL4H73K7YITKsr8ENwTu
+         gyCw==
+X-Gm-Message-State: AFqh2kodyWmTGm5cZWW2xRM7YXZBuDo7gPKE80pqJVnQ5dOcQ5UtEtlM
+        opFavZhzZLb8pG3VS7kZyLKRP5ASCK0htip6FhZbforrMgId1u5ZauAT1xUOODvSt/+9lDFePaY
+        jcPInaf06xqbR7HdLAeeCLk5W
+X-Received: by 2002:a05:600c:1d29:b0:3d9:69fd:7707 with SMTP id l41-20020a05600c1d2900b003d969fd7707mr9409430wms.2.1673901437871;
+        Mon, 16 Jan 2023 12:37:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu5xB78MxySo8g9YovYDjSAM+JAMmvEIr0DeelR1MPq3dEgwbiyULjeLjckf01EINYDXK4+6A==
+X-Received: by 2002:a05:600c:1d29:b0:3d9:69fd:7707 with SMTP id l41-20020a05600c1d2900b003d969fd7707mr9409422wms.2.1673901437650;
+        Mon, 16 Jan 2023 12:37:17 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05600c4e8600b003db03725e86sm1554198wmq.8.2023.01.16.12.37.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 12:37:16 -0800 (PST)
+Message-ID: <452c2588-0e92-7095-f25d-cfe4711e607f@redhat.com>
+Date:   Mon, 16 Jan 2023 21:37:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8GY51Cfkj7o1MJs@matsya>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH] vfio: platform: No need to check res again
+To:     Angus Chen <angus.chen@jaguarmicro.com>,
+        alex.williamson@redhat.com, cohuck@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230107034721.2127-1-angus.chen@jaguarmicro.com>
+Content-Language: en-US
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <20230107034721.2127-1-angus.chen@jaguarmicro.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-13 23:16:15, Vinod Koul wrote:
-> On 14-12-22, 23:37, Marijn Suijten wrote:
-> > This reverts commit 557a28811c7e0286d3816842032db5eb7bb5f156.
-> > 
-> > This commit introduced an init sequence from downstream DT [1] in the
-> > driver.  As mentioned by the comment above the HSPHY_INIT_CFG macro for
-> > this sequence:
-> > 
-> >     /*
-> >      * The macro is used to define an initialization sequence.  Each tuple
-> >      * is meant to program 'value' into phy register at 'offset' with 'delay'
-> >      * in us followed.
-> >      */
-> > 
-> > Instead of corresponding to offsets into the phy register, the sequence
-> > read by the downstream driver [2] is passed into ulpi_write [3] which
-> > crafts the address-value pair into a new value and writes it into the
-> > same register at USB_ULPI_VIEWPORT [4].  In other words, this init
-> > sequence is programmed into the hardware in a totally different way than
-> > downstream and is unlikely to achieve the desired result, if the hsphy
-> > is working at all.
-> > 
-> > An alternative method needs to be found to write these init values at
-> > the desired location.  Fortunately mdm9607 did not land upstream yet [5]
-> > and should have its compatible revised to use the generic one, instead
-> > of a compatible that writes wrong data to the wrong registers.
-> 
-> Applied after adding missing subsystem tag, thanks
+Hi,
+On 1/7/23 04:47, Angus Chen wrote:
+> In function vfio_platform_regions_init(),we did check res implied
+> by using while loop,
+> so no need to check whether res be null or not again.
+>
+> No functional change intended.
+>
+> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
 
-Thanks, it wasn't clear to me whether to suffix the title when already
-included in the Revert: "phy: qualcomm: ..." title :)
+Eric
+> ---
+>  drivers/vfio/platform/vfio_platform_common.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/drivers/vfio/platform/vfio_platform_common.c b/drivers/vfio/platform/vfio_platform_common.c
+> index 1a0a238ffa35..a9ad3f4d2613 100644
+> --- a/drivers/vfio/platform/vfio_platform_common.c
+> +++ b/drivers/vfio/platform/vfio_platform_common.c
+> @@ -150,9 +150,6 @@ static int vfio_platform_regions_init(struct vfio_platform_device *vdev)
+>  		struct resource *res =
+>  			vdev->get_resource(vdev, i);
+>  
+> -		if (!res)
+> -			goto err;
+> -
+>  		vdev->regions[i].addr = res->start;
+>  		vdev->regions[i].size = resource_size(res);
+>  		vdev->regions[i].flags = 0;
 
-- Marijn
