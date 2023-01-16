@@ -2,112 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4114766C24B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A0566C24F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbjAPOfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
+        id S229717AbjAPOhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjAPOfF (ORCPT
+        with ESMTP id S232677AbjAPOhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:35:05 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C62551006
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:15:14 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id d30so37995238lfv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:15:14 -0800 (PST)
+        Mon, 16 Jan 2023 09:37:16 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C972058289;
+        Mon, 16 Jan 2023 06:16:42 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 141so19773625pgc.0;
+        Mon, 16 Jan 2023 06:16:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CwWy52CuSIZ9eeAn8m8F4RjsGnVyeTFSxR7ttkWFgbc=;
-        b=ji55DZWAclT0NfXHWD303ChamS+f7PR4Lw5pAEjqzKWaWS+BsPBM6A7kHRO/Znlj7l
-         lxj8UWk2RLHKaJaRg1knZiKGhZm+cVhjd2tj9K5NA0yHIUTuj4reBFZZ7vukP4zEdYxK
-         1GO6/l7/651rrIleSh4VIL60XTO9gC521dwVBfr00w4bgLIozbGFM7UK/sxb/U0ebumR
-         j/vfbBh+kjZfG5olSzZh21w/cquXFcTbWxaTu51hZrFKYRVzRpleYnngNgGhckGTIlk7
-         m31DBlEbkL2XUmjOeOKwE6ZJO4TlbA0Qv7oCUVQ80oxtdwLWafujhB6kTMxSp1eykzhA
-         DPUQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oLAmxtbvbkDxW+iBsIugh8S7b5E8nXWQC/fzzGTrlWA=;
+        b=D3nWBw6wsGTazWT6xL2kTEetRM6eQ7cpaqSyDIC/zfBGtFONTuOK6eAS0VDGk+/KFB
+         reS/be7U+RTU7Xq1MW/YxdaLyEy0fLm9pubp3F+rUZTJcYSkIphuGblldQgR+3B+wPFd
+         XxQSnPTi5rvI6hM1FOb57Nbwckc5a0w0G2p6MEkx7/9/t3URdUbbt4ErbaN7h/Y7pZSP
+         fxFG/f+hgfoEwJ4hUXeztPilPMzEfNqHyVC+pnP3IsXYCcbv/qVLArA2WRoclicmn2wa
+         XPmQaX4vNtIHkehHH4uz23oIlv5a8pAt3Rii4su0ukfBO63F7XtzlRNx36wIOuc5VJhG
+         M4ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CwWy52CuSIZ9eeAn8m8F4RjsGnVyeTFSxR7ttkWFgbc=;
-        b=Fy1GO7QayS9E5AX6nBDKVH5YhXWoSkoQkvc4d+1mwDLA1K4RfsZsPK2ulTZjn5UY+x
-         YUenPEYV/ngsVNnt7mEgfhoQG38xCIXaJ0pPtu7KMlGJFMr2KBwIxqNp0JEi7+Z3NvjZ
-         wR91FoPRS7M+QHtD5EtPNp0+YMA5A9mqMKsTwgjZXDBp4f62jBTluBfT5aiWoIRfHoXi
-         76uNr83aREWU9Him4plRSSoYFzoWjUDU1tk2zMc6ZvGztV4iEcu4HhRNmNlwmpk9HegG
-         mGmj4lZQmtCnpBeh7ZfC9UGH142+uMjcpOxxFZmYH6IjtIhKWWYrxLokdqWvLkFyR894
-         jAFg==
-X-Gm-Message-State: AFqh2kpBe9CdlFy2uV8HlJfRcZbqSc4ligHVqgqg0an+K4uQ1oyHJT30
-        7ITAM2L61O/bT5ANcBvxJUYflg==
-X-Google-Smtp-Source: AMrXdXtvsGUapjXBIvvMOjjcI8t13mJHnthpf1KoQB0yhdkbdaQS+os+FXdJ3ObnXejoWhEHBkSpHw==
-X-Received: by 2002:a05:6512:340e:b0:4cb:35dd:e58e with SMTP id i14-20020a056512340e00b004cb35dde58emr15727231lfr.49.1673878512524;
-        Mon, 16 Jan 2023 06:15:12 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056512040300b004d1454463basm1442136lfk.94.2023.01.16.06.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 06:15:12 -0800 (PST)
-Message-ID: <ab07ee73-0ad4-769f-cb3b-445f7a2cf089@linaro.org>
-Date:   Mon, 16 Jan 2023 15:15:10 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oLAmxtbvbkDxW+iBsIugh8S7b5E8nXWQC/fzzGTrlWA=;
+        b=AJGuxvBNmL2LYIWhO78/ba7dogiF2/V73u6LXzaPDdadYaNRKRlD25Vk+JMOAWxR0h
+         sZs5OM1AcyLxo1sga1aiCShqyH0Ys7uLU2yBaGRbKbcGVyX61WBPZRR89+wCqUGsaSzG
+         fQ5XRgIk0AjQaNrCSPDYpqIncRYQ/HgCy+jWiVaFHjNFE4LRSnmjocnYw6eOwUmylJpC
+         EXtk66OdPpAfqB06CWxZLFwYsD+TsAWQL2eNOApLTfPUiPy2Q1TNebEqYCNMXVTmrGn4
+         LOXSfdnUl58g4AYqMIZHtFLGaZkfre6fWgthGjXfktFCcqFsxSYCMSTDz6OdYGZJkvgf
+         Oliw==
+X-Gm-Message-State: AFqh2kqhG1zFxBiAVzXH5kTpP4FK+xB0u/Xncp+Yef8bvYdP6c1yrC0b
+        OGwrHbJ+68xtWLlJN6RebPv+LhW0TrTDB8Q9mJE=
+X-Google-Smtp-Source: AMrXdXsUpoS09bzHoL5jMxwjB5R9+SnTJwiJglkoi7GkJe8ks1MVTbTsf3nEy4kcF/dLw1QKQ+UjVaI8RblKfhS/ZuI=
+X-Received: by 2002:a05:6a00:2382:b0:588:f646:fb3e with SMTP id
+ f2-20020a056a00238200b00588f646fb3emr2457194pfc.53.1673878597997; Mon, 16 Jan
+ 2023 06:16:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sdm630: Don't use underscores in
- node names
-Content-Language: en-US
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230116141337.469871-1-konrad.dybcio@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230116141337.469871-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230113211151.2314874-1-andreas@kemnade.info>
+In-Reply-To: <20230113211151.2314874-1-andreas@kemnade.info>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 16 Jan 2023 08:16:26 -0600
+Message-ID: <CAHCN7xJH+c41Yas+xnWA57KNi9arOOJDxJ=joEDEJr2k6jrRrw@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: gta04: fix excess dma channel usage
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 13, 2023 at 3:12 PM Andreas Kemnade <andreas@kemnade.info> wrote:
+>
+> From: "H. Nikolaus Schaller" <hns@goldelico.com>
+>
+> OMAP processors support 32 channels but there is no check or
+> inspect this except booting a device and looking at dmesg reports
+> of not available channels.
+>
+> Recently some more subsystems with DMA (aes1+2) were added filling
+> the list of dma channels beyond the limit of 32 (even if other
+> parameters indicate 96 or 128 channels). This leads to random
+> subsystem failures i(e.g. mcbsp for audio) after boot or boot
+> messages that DMA can not be initialized.
+>
+> Another symptom is that
+>
+> /sys/kernel/debug/dmaengine/summary
+>
+> has 32 entries and does not show all required channels.
+>
+> Fix by disabling unused (on the GTA04 hardware) mcspi1...4.
+> Each SPI channel allocates 4 DMA channels rapidly filling
+> the available ones.
+>
+> Disabling unused SPI modules on the OMAP3 SoC may also save
+> some energy (has not been checked).
 
+Tony,
 
-On 16.01.2023 15:13, Konrad Dybcio wrote:
-> Rename the reserved-memory subnodes such that they don't use
-> undescores.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Would it make sense to make this default in the omap3.dtsi file and
+enable them in the individual boards that need it?
+
+From what I can tell the following use mcspi1:
+
+logicpd-som-lv.dtsi
+logicpd-torpedo-som.dtsi
+omap3-evm-common.dtsi
+omap3-ldp.dts
+omap3-n900.dts
+omap3-pandora-common.dtsi
+omap3-tao3530.dtsi
+
+The following use mcspi2:
+omap3-lilly-a83x.dtsi
+
+mscpi3 is used on:
+omap3-tao3530.dtsi
+
+and mcspi4:
+omap3-n900.dts
+
+In theory that would save a bunch of boards duplicating the disabled
+status if they were to all follow suit.
+
+I was looking into doing something like that for the mmc drivers on
+various OMAP3 boards while disabling it on the omap3.dtsi. It seems
+like some drivers are disabled by default (dss, ssi, mcbsp)  while
+others are enabled by default (i2c, spi, mmc, usb_otg_hs, gpmc,
+usbhshost, and a bunch of timers).  Disabling some of these also might
+help speed up boot times if less devices need to enumerate.  I am
+willing to do some of that work if the idea makes sense.
+
+adam
+>
+> Fixes: c312f066314e ("ARM: dts: omap3: Migrate AES from hwmods to sysc-omap2")
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> [re-enabled aes2, improved commit subject line]
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
-Ignore this revision, I didn't click ctrl-c quickly enough..
-
-Konrad
->  arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-> index 0259e90aad1c..763b1df692f2 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-> @@ -133,12 +133,12 @@ ramoops@ffc00000 {
->  			status = "okay";
->  		};
->  
-> -		debug_region@ffb00000 {
-> +		debug@ffb00000 {
->  			reg = <0x00 0xffb00000 0x00 0x100000>;
->  			no-map;
->  		};
->  
-> -		removed_region@85800000 {
-> +		reserved@85800000 {
->  			reg = <0x00 0x85800000 0x00 0x3700000>;
->  			no-map;
->  		};
+>  arch/arm/boot/dts/omap3-gta04.dtsi | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
+> index 87e0ab1bbe95..e0be0fb23f80 100644
+> --- a/arch/arm/boot/dts/omap3-gta04.dtsi
+> +++ b/arch/arm/boot/dts/omap3-gta04.dtsi
+> @@ -612,6 +612,22 @@ &i2c3 {
+>         clock-frequency = <100000>;
+>  };
+>
+> +&mcspi1 {
+> +       status = "disabled";
+> +};
+> +
+> +&mcspi2 {
+> +       status = "disabled";
+> +};
+> +
+> +&mcspi3 {
+> +       status = "disabled";
+> +};
+> +
+> +&mcspi4 {
+> +       status = "disabled";
+> +};
+> +
+>  &usb_otg_hs {
+>         interface-type = <0>;
+>         usb-phy = <&usb2_phy>;
+> --
+> 2.30.2
+>
