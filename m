@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184DA66C30A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556CE66C30C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjAPO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S232871AbjAPO7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbjAPO6l (ORCPT
+        with ESMTP id S232942AbjAPO6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:58:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35646A67;
-        Mon, 16 Jan 2023 06:49:04 -0800 (PST)
+        Mon, 16 Jan 2023 09:58:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E24012F36;
+        Mon, 16 Jan 2023 06:49:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E30E60FD6;
-        Mon, 16 Jan 2023 14:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D8BC433F0;
-        Mon, 16 Jan 2023 14:48:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEB9160FD7;
+        Mon, 16 Jan 2023 14:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACBFCC433D2;
+        Mon, 16 Jan 2023 14:49:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673880543;
-        bh=y3TvSgmud3kXyKu5FipycE51zj70NUWuclGNv3ekUzI=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=congVETMqSTg+NovrE+Hk6lcnH29x2ibRHjJVl/HNwy9SJ5g+pge5GDmUySEQ9TQm
-         VkCCMvB1z7aoB/O4yrBA1Lj2LK95vmQt/rhr1a3Np4rtHuV9HuqEtfJWh6m7dTq4Hq
-         CT8nbrEymleKK4LtiirjfGPdzDNGymG8J4/Gt1QYkNd3IdaD583TI+4l9uIh6YRikC
-         aLX7xW8ZQV6qmUzhAhT+o4qmovoAjOSi2M/sE0fA+feUyr4VNyVaSGno57Z9GfK/0n
-         80imCdanPW5jNGAtc5bhHrx5Qhg5lYFNCJMm8vrPOmLMxnr/uV7CXnmVtB337enPcX
-         PyPI98NnzYsBA==
+        s=k20201202; t=1673880551;
+        bh=SYGWAHn0hIePrfmTmgN0T/xH1F9Dw0NE2z1mOy81IJQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=utiXRpd/+bO4PGgblAGfbKSGuqIcwnK/RRHdbbkHCIgRrgDHaMN+yUuLz/O7oWQRI
+         eU7HGDOTxjz15DvYmtvk1u9zum+1lVKuCpK8RBFPKvDYewu/K65l1iilGDGOBJc7Dz
+         DBy6hQJyALlSIxqRyf+dNeBipg6pMcfFVhwrH34n0j3wV4SZDo7GMloZj5At7Zz2TN
+         ueJUG4VDL+dYzdpeY0xU9zULJDTTc6MeuPTsOoTxAzTNabcTRKQdP0iF+kXn7pfOQ4
+         E7jJMHcbp9kxrcn+pNxK1mY7dZn42ejRePd75AOmXfp79Oqr9zrdle38F/+/YJ3ivU
+         I0Zxp/krSZCdg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
-References: <20230102114152.297305-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH 1/8] ASoC: codecs: wsa883x: Simplify &pdev->dev in probe
-Message-Id: <167388053865.388539.17611906188714090984.b4-ty@kernel.org>
-Date:   Mon, 16 Jan 2023 14:48:58 +0000
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Walle <michael@walle.cc>
+Cc:     Sander Vanheule <sander@svanheule.net>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>
+In-Reply-To: <20230116111509.4086236-1-michael@walle.cc>
+References: <20230116111509.4086236-1-michael@walle.cc>
+Subject: Re: [PATCH net-next] regmap: Rework regmap_mdio_c45_{read|write} for
+ new C45 API.
+Message-Id: <167388054729.388650.12953940088120724088.b4-ty@kernel.org>
+Date:   Mon, 16 Jan 2023 14:49:07 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -64,26 +62,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 02 Jan 2023 12:41:45 +0100, Krzysztof Kozlowski wrote:
-> The probe already stores pointer to &pdev->dev, so use it to make the
-> code a bit easier to read.
+On Mon, 16 Jan 2023 12:15:09 +0100, Michael Walle wrote:
+> The MDIO subsystem is getting rid of MII_ADDR_C45 and thus also
+> encoding associated encoding of the C45 device address and register
+> address into one value. regmap-mdio also uses this encoding for the
+> C45 bus.
 > 
+> Move to the new C45 helpers for MDIO access and provide regmap-mdio
+> helper macros.
 > 
+> [...]
 
 Applied to
 
-   broonie/sound.git for-next
+   broonie/regmap.git for-next
 
 Thanks!
 
-[1/8] ASoC: codecs: wsa883x: Simplify &pdev->dev in probe
-      commit: d5ce5d3895a33fa8e0dce89c2404facbdef55dcb
-[2/8] ASoC: codecs: wsa881x: Simplify &pdev->dev in probe
-      commit: c617c9e7024d152426acf9f1aaf01070b6852f13
-[3/8] ASoC: codecs: wsa881x: Simplify with dev_err_probe
-      commit: 31a90367443b21f76b972c00aad3430447c999d6
-[4/8] ASoC: codecs: wsa881x: Use proper shutdown GPIO polarity
-      commit: 738455858a2d21b769f673892546cf8300c9fd78
+[1/1] regmap: Rework regmap_mdio_c45_{read|write} for new C45 API.
+      commit: 7b3c4c370c09313e22b555e79167e73d233611d1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
