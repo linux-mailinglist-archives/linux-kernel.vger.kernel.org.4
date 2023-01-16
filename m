@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78CD66C2BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FAB66C2BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjAPOxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:53:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S230424AbjAPOxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjAPOwO (ORCPT
+        with ESMTP id S230218AbjAPOwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:52:14 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1A2BF30
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:38:03 -0800 (PST)
+        Mon, 16 Jan 2023 09:52:13 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895D72BF1B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:38:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=ts2f9zMhByBtAAtY3UBCAh5kpNSswewgiYAUfY8HRdU=; b=aGBhaLZsy7tRmU8DfE6K+TDDO0
-        vuZ+yzEJlLmyIkJpKj5j6TVZcKHJw7LV5zhoweNmIAXEhyqNbDctZ6rxIemADC20CHJlks7N8JIx+
-        K5F4VyyMc1wR1Ib2pi1CQk44Pzj8XTpGUHCP4oZt5ZuUo1cEJm9pBXD/3o3j4D+/yj051n7fxMsXX
-        9AcOJ4ti/xsLZ0KgZKwSKrmlvgRdCt+MP/E3zPoSa5b3jgTI5IW4LJAlgGIKa96qCBr3IpBr3kI5N
-        Tg9J6WHAyn2j5+4GcLAyMQZQrgoS+GXww4z8hdfHou6kXyg3O02NeUUJTaNy52X7cIFx8XWm84+1+
-        NZWTDZ8g==;
+        bh=dtG3CCLzMA0i0qOsNCGAACCWIWjzH+RX76nYJr/7nUg=; b=mNSQfQeUAAjFw9ESss496f+Z7Q
+        u0TgyafjRhE1gQwftI2iBVWQ3NaSLG34VdbAWazXouiYsRdKyzqy1wML0X2573JOCsV/N0PK5k2F2
+        TPov7/LEGoLwGuZcybAwU9tHaa3wffyOD9zxSarAfZ29Q4WErfXs+qrs4jgpQMpEdyO9/ORvp95nX
+        EjaMEymmS+cwIurns0c3wEq3uE17tL2K8Hwq/Ex3y3gpAT4bxe9pp5k86FtmXoW5UtC3/6pfTmVtZ
+        8qPTNYgKrdqtoTo1pP63NdYMrqwT3UhPTSsaXrAPfezN6rdi70FJ8sxMqiPPuMxRvDSFpPFtdzk0Q
+        gXratnhg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pHQc7-005csw-18;
-        Mon, 16 Jan 2023 14:37:32 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHQcT-008oZ6-SE; Mon, 16 Jan 2023 14:37:54 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DE246300652;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E016530073F;
         Mon, 16 Jan 2023 15:37:38 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id B311720EF0A20; Mon, 16 Jan 2023 15:37:38 +0100 (CET)
-Message-ID: <20230116143645.708895882@infradead.org>
+        id B816220B75F29; Mon, 16 Jan 2023 15:37:38 +0100 (CET)
+Message-ID: <20230116143645.768035056@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 16 Jan 2023 15:25:36 +0100
+Date:   Mon, 16 Jan 2023 15:25:37 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, Joan Bruguera <joanbrugueram@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -52,7 +51,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         Andrew Cooper <Andrew.Cooper3@citrix.com>,
         =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v2 3/7] x86/power: De-paravirt restore_processor_state()
+Subject: [PATCH v2 4/7] x86/power: Inline write_cr[04]()
 References: <20230116142533.905102512@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -65,81 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since Xen PV doesn't use restore_processor_state(), and we're going to
-have to avoid CALL/RET until at least GS is restored, de-paravirt the
-easy bits.
+Since we can't do CALL/RET until GS is restored and CR[04] pinning is
+of dubious value in this code path, simply write the stored values.
 
 Fixes: e81dc127ef69 ("x86/callthunks: Add call patching for call depth tracking")
 Reported-by: Joan Bruguera <joanbrugueram@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/power/cpu.c |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ arch/x86/power/cpu.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 --- a/arch/x86/power/cpu.c
 +++ b/arch/x86/power/cpu.c
-@@ -197,25 +197,25 @@ static void notrace __restore_processor_
- 	struct cpuinfo_x86 *c;
- 
- 	if (ctxt->misc_enable_saved)
--		wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
-+		native_wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
- 	/*
- 	 * control registers
- 	 */
- 	/* cr4 was introduced in the Pentium CPU */
- #ifdef CONFIG_X86_32
- 	if (ctxt->cr4)
--		__write_cr4(ctxt->cr4);
-+		native_write_cr4(ctxt->cr4);
+@@ -208,11 +208,11 @@ static void notrace __restore_processor_
  #else
  /* CONFIG X86_64 */
--	wrmsrl(MSR_EFER, ctxt->efer);
--	__write_cr4(ctxt->cr4);
-+	native_wrmsrl(MSR_EFER, ctxt->efer);
-+	native_write_cr4(ctxt->cr4);
+ 	native_wrmsrl(MSR_EFER, ctxt->efer);
+-	native_write_cr4(ctxt->cr4);
++	asm volatile("mov %0,%%cr4": "+r" (ctxt->cr4) : : "memory");
  #endif
--	write_cr3(ctxt->cr3);
--	write_cr2(ctxt->cr2);
--	write_cr0(ctxt->cr0);
-+	native_write_cr3(ctxt->cr3);
-+	native_write_cr2(ctxt->cr2);
-+	native_write_cr0(ctxt->cr0);
+ 	native_write_cr3(ctxt->cr3);
+ 	native_write_cr2(ctxt->cr2);
+-	native_write_cr0(ctxt->cr0);
++	asm volatile("mov %0,%%cr0": "+r" (ctxt->cr0) : : "memory");
  
  	/* Restore the IDT. */
--	load_idt(&ctxt->idt);
-+	native_load_idt(&ctxt->idt);
- 
- 	/*
- 	 * Just in case the asm code got us here with the SS, DS, or ES
-@@ -230,7 +230,7 @@ static void notrace __restore_processor_
- 	 * handlers or in complicated helpers like load_gs_index().
- 	 */
- #ifdef CONFIG_X86_64
--	wrmsrl(MSR_GS_BASE, ctxt->kernelmode_gs_base);
-+	native_wrmsrl(MSR_GS_BASE, ctxt->kernelmode_gs_base);
- #else
- 	loadsegment(fs, __KERNEL_PERCPU);
- #endif
-@@ -246,15 +246,15 @@ static void notrace __restore_processor_
- 	loadsegment(ds, ctxt->es);
- 	loadsegment(es, ctxt->es);
- 	loadsegment(fs, ctxt->fs);
--	load_gs_index(ctxt->gs);
-+	native_load_gs_index(ctxt->gs);
- 
- 	/*
- 	 * Restore FSBASE and GSBASE after restoring the selectors, since
- 	 * restoring the selectors clobbers the bases.  Keep in mind
- 	 * that MSR_KERNEL_GS_BASE is horribly misnamed.
- 	 */
--	wrmsrl(MSR_FS_BASE, ctxt->fs_base);
--	wrmsrl(MSR_KERNEL_GS_BASE, ctxt->usermode_gs_base);
-+	native_wrmsrl(MSR_FS_BASE, ctxt->fs_base);
-+	native_wrmsrl(MSR_KERNEL_GS_BASE, ctxt->usermode_gs_base);
- #else
- 	loadsegment(gs, ctxt->gs);
- #endif
+ 	native_load_idt(&ctxt->idt);
 
 
