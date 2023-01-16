@@ -2,88 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA6A66BA1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E690366BA29
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjAPJR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S232198AbjAPJVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbjAPJRI (ORCPT
+        with ESMTP id S231954AbjAPJV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:17:08 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047C715543;
-        Mon, 16 Jan 2023 01:17:06 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 80D7A240009;
-        Mon, 16 Jan 2023 09:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673860625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tdSLahJGG9ZLaHYSPHl852UcYrbkiUiQZKiDDskVsnM=;
-        b=PCXOzVQPQLdt5HNtqyFfWHiifex63eRKe8Ou4OdgPBavdxwJXQBS4QQHVCUOxnDpad49E7
-        O1xoCc5V6ZuBte8qnjQEQGsi+EtQIFBoFnL/1DV7Pksxguuzj9LRgOjVkSlotNxgF/yiyQ
-        ZFa8ZCURDR3VEg32i9Pf4b+1yGUTEG7H0f5EPjoSq2Ng1PwgYooEw4GRYk60qtf8csVz6n
-        FtscfALaBV1kCBvBhg4Lse3U1XGUiufh0YYCsf+WfWFH6DNzxfXPN+ZcHe/YtjOYjWqsBv
-        mW8fG0Ymzx/aGlkoYz/XtQ8ZoMJLIETEr6jtqzKv0UrsGongj/B+2TCVo4dNMQ==
-Date:   Mon, 16 Jan 2023 10:19:14 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>
-Subject: Re: [PATCH net-next] net: dsa: rzn1-a5psw: Add vlan support
-Message-ID: <20230116101914.2998445b@fixe.home>
-In-Reply-To: <20230113151248.22xexjyxmlyeeg7r@skbuf>
-References: <20230111115607.1146502-1-clement.leger@bootlin.com>
-        <20230113151248.22xexjyxmlyeeg7r@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Mon, 16 Jan 2023 04:21:29 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAA0F44B6;
+        Mon, 16 Jan 2023 01:21:25 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAF4EAD7;
+        Mon, 16 Jan 2023 01:22:07 -0800 (PST)
+Received: from [10.12.3.201] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FCD03F67D;
+        Mon, 16 Jan 2023 01:21:22 -0800 (PST)
+Message-ID: <487f0252-c697-eb62-989d-57ee731691a2@arm.com>
+Date:   Mon, 16 Jan 2023 09:21:20 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] sched/fair: unlink misfit task from cpu overutilized
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>, mingo@kernel.org,
+        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+References: <20221228165415.3436-1-vincent.guittot@linaro.org>
+ <Y8FhfyVyUDZ98hKD@e126311.manchester.arm.com>
+ <CAKfTPtCmDA8WPrhFc8YxFXSOPOKasvvNWA3iOmRYcC2VSyMMrw@mail.gmail.com>
+ <20230114211854.nmvmhtd5yz5wgh2a@airbuntu>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230114211854.nmvmhtd5yz5wgh2a@airbuntu>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, 13 Jan 2023 17:12:48 +0200,
-Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+On 14/01/2023 22:18, Qais Yousef wrote:
+> On 01/13/23 15:28, Vincent Guittot wrote:
+>> Hi Kajetan,
+>>
+>> On Fri, 13 Jan 2023 at 14:50, Kajetan Puchalski
+>> <kajetan.puchalski@arm.com> wrote:
 
-> On Wed, Jan 11, 2023 at 12:56:07PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Add support for vlan operation (add, del, filtering) on the RZN1
-> > driver. The a5psw switch supports up to 32 VLAN IDs with filtering,
-> > tagged/untagged VLANs and PVID for each ports.
-> >=20
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > --- =20
->=20
-> Have you run the bridge_vlan_aware.sh and bridge_vlan_unaware.sh from
-> tools/testing/selftests/drivers/net/dsa/?
+[...]
 
-Nope, I will do that.
+>>> sched/uclamp: Fix a uninitialized variable warnings
+>>> (baseline_ufc) sched/fair: Check if prev_cpu has highest spare cap in feec()
+>>> sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
+>>> sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
+>>> sched/uclamp: Make asym_fits_capacity() use util_fits_cpu()
+>>> sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
+>>> sched/uclamp: Fix fits_capacity() check in feec()
+>>> sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
+>>> sched/uclamp: Fix relationship between uclamp and migration margin
+>>> (previous 'baseline' was here)
+>>>
+>>> I omitted the 3 patches relating directly to capacity_inversion but in
+> 
+> This could lead to confusion. Was there a specific reason for this omission?
+> Did you hit some problem?
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+I thought Vincent's 'split MF from CPU OU' should replace 'CapInv'?
+
+https://lkml.kernel.org/r/20221209164739.GA24368@vingu-book
+
+... I have reverted patches:
+Revert "sched/fair: Detect capacity inversion"
+Revert "sched/fair: Consider capacity inversion in util_fits_cpu()"
+Revert "sched/uclamp: Make cpu_overutilized() use util_fits_cpu()" ...
+
+You also mentioned this in
+https://lkml.kernel.org/r/<20230115001906.v7uq4ddodrbvye7d@airbuntu
+
+[...]
