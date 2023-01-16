@@ -2,205 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC4066BA70
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E5A66BA74
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjAPJdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S232178AbjAPJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjAPJds (ORCPT
+        with ESMTP id S232268AbjAPJeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:33:48 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993C5902B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:33:47 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bp15so41860060lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:33:47 -0800 (PST)
+        Mon, 16 Jan 2023 04:34:11 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A521715F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:34:10 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id k4so28426954vsc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:34:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bW4VezV41t6dJnFFIyNiFP/uduwvoMyXyySpggz2USs=;
-        b=QZ30WhGlpiYd+s+b+44WC3JjJ/TbSKJSHfFsNkhQXLmptWpbn4d7Ql7nhj7i/z8MtV
-         wHchXFyBvoNnPjoi4w+qgP2096CeO3wKKfxI5bfiPywo7w7NdDR2WdcxprROQiFmbyAy
-         XAEBFSx2O9ohCVh/LJzs0KhexKr3L5kikZEZSXA2SkoH46PUF/maMmEoi3wLtZyz3mx4
-         JXZT54CO/n1ehXo3vwekLRpS4UrpZKBeiYEEb8aK3aV3ABEfRN0gHej2mnOyoS4+CcAR
-         UxSwIN9baGAKgxc8doaYDkZOw6NyzOwcZEdsrhSXJ9gNuRfft2uoOYvOURzL9z7UFpVJ
-         LE9Q==
+        bh=XZOuVys9mIzGnHTVfzNN5gjowcf0f3FatVf154JV6kI=;
+        b=CAgnq0I7BlFfkCghCCqc3RKNz/Q7K2CoNwOb30lf57/hbdxKULjkM/TM+wdhkP6w9R
+         1giTcgyCxnZsErQxTyJ1UzD3mKoA0jlupISi36EvixNBTjRDQlrml7FYcrMyLzjZn9UL
+         oYmZLmTCrV3kKVdadxU6/cJaq93U+EDgR3I9OQwGgc+OmnprWH+PiQMDM0Q4ZKIv/XK5
+         WTY8PirgFG9M+Dsj3mnxHtwVD5o3ElndxTNWnIZrJtFvkE+A+GhehBIKX4g1W38SOWTg
+         AhFHCUzpL9QR4g8h1A7XjWmwA5Yk2vH9TVcKwy71QvLvBdWHu0XrwsNWMIh8NhRFG3nV
+         pdzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bW4VezV41t6dJnFFIyNiFP/uduwvoMyXyySpggz2USs=;
-        b=VcCMtp6GlEgm4e4uIjrbRGuqwEnrV9ZiVN5sBxkI5PdAsfT/osl7ahktO2ch+xpFL9
-         /+G3wfS9HODHYuwMLhVaodZn8su5tmMrLgdLjHCUAklmMiWfc8t38kL590o/dCQ8WmJP
-         8lnUcr5XSK1tcFAsboQC9jtIi7bpmqd91kroCnHeehiGJKVa7t22tsfl+abCgyz86qZc
-         VUR1jPeULUOxQsZYENrEIcDGi0nuWueaE9hcBW12akLtBmbg4KjlmqLwdqxALV5PsNii
-         PiLUGGhr9GH76J0hNW1FVk8dJ2JNFx3yNxSTjiHQB+L3/adcKhf7HW88DGvUbnOwEt3q
-         0pJg==
-X-Gm-Message-State: AFqh2konEaf/tqwZdfliF4yzg2nv3VmmqRr6hsfi5bv3reDKhQB/lRSn
-        ngje6EKCp+8/5jodVQBvwmTMZT4lux0tyjaDnLYyZg==
-X-Google-Smtp-Source: AMrXdXsL2JSMNFMtAvHiQixbGj0PC5m9tgFta6WBaf5cY/fx3fY+awz7I8B2zwHPr2nF1F15JK8CvPquXrmPymniv/w=
-X-Received: by 2002:ac2:4e13:0:b0:4c5:32a4:6f88 with SMTP id
- e19-20020ac24e13000000b004c532a46f88mr6239054lfr.6.1673861625672; Mon, 16 Jan
- 2023 01:33:45 -0800 (PST)
+        bh=XZOuVys9mIzGnHTVfzNN5gjowcf0f3FatVf154JV6kI=;
+        b=exSuhiWfdsSeDzBvGfocNOwq1Wg3vTOEbRnSRHliRe5ZMZKZEJ4Gnx2UXlj+vvuCjX
+         gTH52RvZhAdIWoyls+wfKQbUVjmNgg/fq8b3Mo12ogsK5ZV0BtHIzmxzgTmCOFZBYXAJ
+         XDV7ihWin6myj9UvlhJrZmBSFWS6YuR0OI9wBmHyv07SeeL3MyeDqGemc8YixQgl/L8v
+         zfc/3VJ1HVkviiMFwwL8xv+oPDDQJ1C1oEpW0hz3OmmHIvd2DIw3/elwgayz7AfbKw6f
+         5mmbeXtE1O0x1OaUqgq5kXDSCZ50OxkT6hmdSKqZNQ9c6Cq+VdknEuxFuGO75l82AiTp
+         EQdg==
+X-Gm-Message-State: AFqh2ko1HbbD3AT0+owZVTqjrLy/ErUM2/IABU38TSR024M76fHa1a+v
+        0dRujObGJEXG0IFeKlM6ZRn6CKXNrM9AXXKR+oohsg==
+X-Google-Smtp-Source: AMrXdXupP3qQ3MR8Xhcjf19nZo0r5SdZGW1Fyn0PeSZXrUauTJQF3PKLBZ56aau/2xm/B0FrvP5coVOd488pke6eeic=
+X-Received: by 2002:a67:f899:0:b0:3d3:d90c:5ef2 with SMTP id
+ h25-20020a67f899000000b003d3d90c5ef2mr414465vso.17.1673861649780; Mon, 16 Jan
+ 2023 01:34:09 -0800 (PST)
 MIME-Version: 1.0
-References: <00000000000030c20305f2544773@google.com>
-In-Reply-To: <00000000000030c20305f2544773@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 16 Jan 2023 10:33:33 +0100
-Message-ID: <CACT4Y+ZbG3Pykuwt0hQu-PfvPra3snMia=fQcTeF891nnxe-tA@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in ethnl_set_plca_cfg
-To:     syzbot <syzbot+8cf35743af243e5f417e@syzkaller.appspotmail.com>
-Cc:     andrew@lunn.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        piergiorgio.beruto@gmail.com, syzkaller-bugs@googlegroups.com
+References: <20230112134653.59268-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112134653.59268-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 10:33:59 +0100
+Message-ID: <CAMRc=MeFmZWnCKxT7QJv2dmSO-OKLCp60NwP-11MhvKRw1whgQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: rockchip: Do not mention legacy API in the code
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 Jan 2023 at 22:37, syzbot
-<syzbot+8cf35743af243e5f417e@syzkaller.appspotmail.com> wrote:
+On Thu, Jan 12, 2023 at 2:46 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Hello,
+> Replace mentioning of legacy API by the latest one.
 >
-> syzbot found the following issue on:
->
-> HEAD commit:    60d86034b14e Merge tag 'mlx5-updates-2023-01-10' of git://..
-> git tree:       net-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=12582c02480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=de2f853811ba4e08
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8cf35743af243e5f417e
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1773adf2480000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140bc05e480000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/b5b394a217aa/disk-60d86034.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/f129c2da4b3a/vmlinux-60d86034.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/6dbc96a4303d/bzImage-60d86034.xz
->
-> The issue was bisected to:
->
-> commit 8580e16c28f3f1a1bee87de115157161577334b4
-> Author: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-> Date:   Mon Jan 9 16:59:39 2023 +0000
->
->     net/ethtool: add netlink interface for the PLCA RS
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10fde136480000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=12fde136480000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14fde136480000
-
-#syz fix: plca.c: fix obvious mistake in checking retval
-
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8cf35743af243e5f417e@syzkaller.appspotmail.com
-> Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
->
-> general protection fault, probably for non-canonical address 0xdffffc0000000173: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000b98-0x0000000000000b9f]
-> CPU: 1 PID: 5067 Comm: syz-executor355 Not tainted 6.2.0-rc2-syzkaller-00378-g60d86034b14e #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:ethnl_set_plca_cfg+0x1c5/0x810 net/ethtool/plca.c:162
-> Code: 28 7a f9 4c 8b 7c 24 58 e8 d8 17 c6 ff 49 8d 87 98 0b 00 00 48 89 c2 48 89 44 24 08 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 7d 05 00 00 49 83 bf 98 0b 00 00 00 0f 84 b8 04
-> RSP: 0018:ffffc90003cbf470 EFLAGS: 00010202
-> RAX: dffffc0000000000 RBX: ffffc90003cbf5d8 RCX: 0000000000000000
-> RDX: 0000000000000173 RSI: 0000000000000002 RDI: 0000000000000001
-> RBP: 1ffff92000797e95 R08: 0000000000000000 R09: ffffffff8e72e917
-> R10: fffffbfff1ce5d22 R11: 0000000000000000 R12: 00000000ffffffea
-> R13: ffff88801cc43980 R14: ffffc90003cbf618 R15: 0000000000000000
-> FS:  00005555563b5300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020001ac0 CR3: 000000007d808000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
->  genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
->  genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
->  netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2564
->  genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
->  netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
->  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
->  netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xd3/0x120 net/socket.c:734
->  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
->  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
->  __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fb1764e4ae9
-> Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd5160add8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb1764e4ae9
-> RDX: 0000000000000000 RSI: 0000000020001ac0 RDI: 0000000000000003
-> RBP: 00007fb1764a84b0 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb1764a8540
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:ethnl_set_plca_cfg+0x1c5/0x810 net/ethtool/plca.c:162
-> Code: 28 7a f9 4c 8b 7c 24 58 e8 d8 17 c6 ff 49 8d 87 98 0b 00 00 48 89 c2 48 89 44 24 08 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 7d 05 00 00 49 83 bf 98 0b 00 00 00 0f 84 b8 04
-> RSP: 0018:ffffc90003cbf470 EFLAGS: 00010202
-> RAX: dffffc0000000000 RBX: ffffc90003cbf5d8 RCX: 0000000000000000
-> RDX: 0000000000000173 RSI: 0000000000000002 RDI: 0000000000000001
-> RBP: 1ffff92000797e95 R08: 0000000000000000 R09: ffffffff8e72e917
-> R10: fffffbfff1ce5d22 R11: 0000000000000000 R12: 00000000ffffffea
-> R13: ffff88801cc43980 R14: ffffc90003cbf618 R15: 0000000000000000
-> FS:  00005555563b5300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020001ac0 CR3: 000000007d808000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:   28 7a f9                sub    %bh,-0x7(%rdx)
->    3:   4c 8b 7c 24 58          mov    0x58(%rsp),%r15
->    8:   e8 d8 17 c6 ff          callq  0xffc617e5
->    d:   49 8d 87 98 0b 00 00    lea    0xb98(%r15),%rax
->   14:   48 89 c2                mov    %rax,%rdx
->   17:   48 89 44 24 08          mov    %rax,0x8(%rsp)
->   1c:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
->   23:   fc ff df
->   26:   48 c1 ea 03             shr    $0x3,%rdx
-> * 2a:   80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
->   2e:   0f 85 7d 05 00 00       jne    0x5b1
->   34:   49 83 bf 98 0b 00 00    cmpq   $0x0,0xb98(%r15)
->   3b:   00
->   3c:   0f                      .byte 0xf
->   3d:   84                      .byte 0x84
->   3e:   b8                      .byte 0xb8
->   3f:   04                      .byte 0x4
->
->
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>  drivers/gpio/gpio-rockchip.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+> index 200e43a6f4b4..e5de15a2ab9a 100644
+> --- a/drivers/gpio/gpio-rockchip.c
+> +++ b/drivers/gpio/gpio-rockchip.c
+> @@ -299,7 +299,7 @@ static int rockchip_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
+>  }
 >
+>  /*
+> - * gpiolib gpio_to_irq callback function. Creates a mapping between a GPIO pin
+> + * gpiod_to_irq() callback function. Creates a mapping between a GPIO pin
+>   * and a virtual IRQ, if not already present.
+>   */
+>  static int rockchip_gpio_to_irq(struct gpio_chip *gc, unsigned int offset)
 > --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000030c20305f2544773%40google.com.
+> 2.39.0
+>
+
+Applied, thanks!
+
+Bart
