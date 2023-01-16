@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC1D66B92B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4684866B92D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjAPIk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 03:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S232178AbjAPIlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 03:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjAPIky (ORCPT
+        with ESMTP id S232360AbjAPIlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:40:54 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438F1125BA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:40:52 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so30374342pjj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:40:52 -0800 (PST)
+        Mon, 16 Jan 2023 03:41:12 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AB612F3E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:41:09 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id j1so6767082uan.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:41:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bEb72C/frQfArwPtQinDRwWrx1ltU8v74zNyyIO4oyM=;
-        b=70wIzIqS5PHYs/wx55I/kYhXzJvgzLv/QbuMQDjFXqIP7qFP9pafYEhRV35zjE41nm
-         bHLVtho2Y5WKecfl9VToPr0gdKEbNh8Vl/XnxMdSU6/sIB9ZrMRbYYXZScDgsIUjGRM6
-         QZk5810wU5Ja7OmuKH4Rdr3C7pwCj1tycTeDTAXQ3hIIoDcbu8aKUWAbSO0FY8MeKStR
-         D+bXb6OxnFDoFgnC4jK5I/Z4JTdxGzHEx+d060RT6akaIhp3UPY0+IWMfe5IVuCs2LIC
-         Vn/k4S9cwlQ0FVLGTglxqBtKqwYuf3plk6am0kp4Gojn4KryrKQi1pQ6VPFeV34oR1oo
-         o16Q==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rmy9xWKqZX7zRRun3wsSqylOs2ufElH84diKh425GHw=;
+        b=RLZiHyeQz8DQOgSt70ZPLUA4nB8ei/S7Z1eWT6qSdWVBGHqikIPDM8K9hzspnq//Ww
+         W94HBuwbonmlktgdf53GYymc0yUumik6qFju2S8PrdrbmRyD9HfozTku4QPCbQh3AS5W
+         Ks5bWajowar01Ox5/zV+Vov4MCYqTzO1qPqjrW/E4j4vd4sxkUXUDDw3vYDnhBJF4gCM
+         VzcbnOUJgdvX0eF50nziCb1jXeZgOtmS2aVJ7kHL09+9cp8SNGCfbAAGv8rSsOd3gQri
+         abTCkAuhmZ9d8znjsmeLCBYJnwz0ShfpVmsK40v6oZKrElBt4qrACUTMvNcgXVlCXYM8
+         CGZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bEb72C/frQfArwPtQinDRwWrx1ltU8v74zNyyIO4oyM=;
-        b=MiUGjhZdqRyLfsUVt38XOqWaxPs9nYFxE8xFPIZWBjQfCFEDYWNACt8wAqiS6uPSU7
-         VnmwPt7GSN9DneBhdOUy6SLEcIxux9r4WSdDMQ7GtqDwawH3lzYrERskRNKU8h79D+Cc
-         Xo/bAtXTqyWjtVG1yMqnADC/0xhQN6mAO5Ecl6OkneUOVmb6mJOIXkJmVeoHQnv+iU0B
-         LrnSqB4WdXSvaclBM4v9dSBJrA8y49JrnuaawzIRKbtBC2olLFudlaYCHKDWmNa/S8k8
-         JRXJTXmjjvCjN6chT4cI6s7cDRNiv5A2hGUWtWkZ2wds/MyHTZjVPpvMDICfxBQI9dC+
-         f5xA==
-X-Gm-Message-State: AFqh2koXuieX2Hsf7tbrq57yaDv5ybCw9YX7PbRorEgXMD9P4+KNLtdC
-        3CbziDbFEPolThQm9+OGGTRhzXQDenYxdV1b
-X-Google-Smtp-Source: AMrXdXtodyd3wASxNOG8btTnZoEfcCXYqPhDmV8llKqkMaVOBYQDi3nt9CLvWvtiVf6ERc65m79FPA==
-X-Received: by 2002:a17:902:b48f:b0:192:8502:77f9 with SMTP id y15-20020a170902b48f00b00192850277f9mr20251942plr.27.1673858451651;
-        Mon, 16 Jan 2023 00:40:51 -0800 (PST)
-Received: from [10.90.35.114] ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id z10-20020a1709027e8a00b001947222676csm5849391pla.249.2023.01.16.00.40.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 00:40:51 -0800 (PST)
-Message-ID: <49b867c1-2b68-c034-9f60-b26a77ff326a@bytedance.com>
-Date:   Mon, 16 Jan 2023 16:40:47 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rmy9xWKqZX7zRRun3wsSqylOs2ufElH84diKh425GHw=;
+        b=r+3Dfvq2lWV8eMG69M4KjUf6dUh5NmtyIjhO5N/lSe1s7FRrbLWKo6OByIPB4gG8dB
+         8TL+2QYDb3fiGZPAE0FJKp+X/b/ZEN6z7OaiokojDP0xkhZSIPy5BJ/nX7V63/OheEzs
+         uV4w6cVx5nBf1WTSA1Nz0+uRYhSs7Klhebasy6IECeRoKWl4t4IgsgkkeaA++S49IIsr
+         Zi07Xaz6xoB5H2OJjoKq47WPg40Ts71hkzk8hz46VI3cjWhT4bLMf8f38dxMwQYyiqAo
+         hbiBsjn0IS/00knWPHeSNuG8RkaeXGGIRSa8rEcnfLEWzaMrFO1oTWNOhK5ECj3dqbPY
+         E5mw==
+X-Gm-Message-State: AFqh2kq6zcp/K3/iBPpCabfBE0S+RrCWB+c6yuXtBf82yrOXwbpWV8jH
+        7Fq6ap7D70GqyiRzrNocDfEyYY1FodvTveu2pHPnnw==
+X-Google-Smtp-Source: AMrXdXvtGOen7EFVr6iZ7fJdRMfcULlUIs9vwZ8oU7pyQnNvrcgWqcNOHozUsAyk6DqWAe781qN6o5VorO64rhmHAA4=
+X-Received: by 2002:a9f:362c:0:b0:5d2:c6ce:7c41 with SMTP id
+ r41-20020a9f362c000000b005d2c6ce7c41mr4475795uad.112.1673858469027; Mon, 16
+ Jan 2023 00:41:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 2/3] memblock: Make finding index faster when modify
- regions.
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230113082659.65276-1-zhangpeng.00@bytedance.com>
- <20230113082659.65276-3-zhangpeng.00@bytedance.com>
- <Y8QHehG1L+kuyqoR@kernel.org>
- <acbfecf4-e3ee-4df2-6685-6cefca38bde6@bytedance.com>
- <Y8T+qWlUT1KTeFNI@kernel.org>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <Y8T+qWlUT1KTeFNI@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112163855.73032-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112163855.73032-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 09:40:58 +0100
+Message-ID: <CAMRc=MdV2eC8ctHL-eu9u3_Yq+s2H4rkF2vx7W54-2JL-_H52g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: davinci: Remove duplicate assignment of of_gpio_n_cells
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Devarsh Thakkar <devarsht@ti.com>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keerthy <j-keerthy@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 5:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The of_gpio_n_cells default is 2 when ->of_xlate() callback is
+> not defined. No need to assign it explicitly in the driver.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-davinci.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
+> index e1c1b9a527db..26b1f7465e09 100644
+> --- a/drivers/gpio/gpio-davinci.c
+> +++ b/drivers/gpio/gpio-davinci.c
+> @@ -252,7 +252,6 @@ static int davinci_gpio_probe(struct platform_device *pdev)
+>         chips->chip.base = pdata->no_auto_base ? pdata->base : -1;
+>
+>  #ifdef CONFIG_OF_GPIO
+> -       chips->chip.of_gpio_n_cells = 2;
+>         chips->chip.parent = dev;
+>         chips->chip.request = gpiochip_generic_request;
+>         chips->chip.free = gpiochip_generic_free;
+> --
+> 2.39.0
+>
 
+Applied, thanks!
 
-在 2023/1/16 15:37, Mike Rapoport 写道:
-> On Mon, Jan 16, 2023 at 11:17:40AM +0800, Peng Zhang wrote:
->>
->>
->> 在 2023/1/15 22:02, Mike Rapoport 写道:
->>> Hi,
->>>
->>> On Fri, Jan 13, 2023 at 04:26:58PM +0800, Peng Zhang wrote:
->>>> We can use binary search to find the index to modify regions in
->>>> memblock_add_range() and memblock_isolate_range(). Because the
->>>> arrangement of regions is ordered. It may be faster when there are
->>>> many regions. So implemented a binary search and a new macro to walk
->>>> regions.
->>>
->>> Did you see a measurable speedup with this optimization?
->>> I'm not in favor of micro-optimizations that complicate code.
->>>
->> Thank you for your reply. I haven't measured this patch yet, theoretically
->> this small optimization might be difficult to observe.
->> If you think this patch complicates the code, you can ignore this patch.
->>
->> These three patches are independent and they can be applied independently.
->> The logic of the third patch is very simple. It will not complicate the
->> code. It is tested by the default configuration of qemu. The total number of
->> iterations of memblock_merge_regions() in the third patch is reduced from
->> more than one thousand to more than one hundred, this is only in the case of
->> a small number of regions. Can you consider the third patch?
-> 
-> Can you please send the numbers and show how did you obtained them?
-> 
->> Sincerely yours,
->> Peng.
-> 
-I obtained the numbers like this:
-
-void memblock_merge_regions(struct memblock_type *type) {
-	static int iteration_count = 0;
-	static int max_nr_regions = 0;
-
-	max_nr_regions = max(max_nr_regions, (int)type->cnt);
-	...
-	while () {
-		iteration_count++;
-		...
-	}
-	pr_info("iteration_count: %d max_nr_regions %d", iteration_count, 
-max_nr_regions);
-}
-
-Boot the kernel by qemu.
-The folowing numbers is the last output.
-
-master branch:
-iteration_count: 1762 max_nr_regions 41
-
-patched:
-iteration_count: 182 max_nr_regions 41
-
-If max_nr_regions is larger, the difference will be more.
-
-Thanks.
-
-Sincerely yours,
-Peng
+Bart
