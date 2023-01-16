@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD7466B960
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F0466B967
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbjAPIwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 03:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S231954AbjAPIxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 03:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjAPIw0 (ORCPT
+        with ESMTP id S231873AbjAPIxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:52:26 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646044A1;
-        Mon, 16 Jan 2023 00:52:24 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pHLDw-0003Fv-T9; Mon, 16 Jan 2023 09:52:12 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pHLDw-000TdQ-Lf; Mon, 16 Jan 2023 09:52:12 +0100
-Message-ID: <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-Date:   Mon, 16 Jan 2023 09:52:10 +0100
+        Mon, 16 Jan 2023 03:53:44 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5014C29
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:53:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=toxnBJPFRtD3QOxALorC41rSKC05NJueDnvaN0Ilxs0=; b=M5welZx+/iKa0n3a6z5zvrAUxa
+        gFdVaBclwpujg4U+Us2xvVw2eQ/Ug5Rsq0bqi5u+SrBQMLF58Dhhk6G122w/YBU123GQXjPwU2juX
+        PdXz9pThtpJ2NKJwwvUPER4oKG2+/Cp4gu+mOp5Hg1fWKJOo46CcLiIBrbWgWcimBPTj1HdbSqmU+
+        6b0cxblEP29/3240IJwuoKxFmSqTOqMJgOlaNS4k/Esq2J5EE9n21nxc0t+TirF2ueY/j6aoGfIHf
+        QrW3ybCgcFaslQYYAryEn/8ZRCFnMQI8iDZLKlKSvu1f9nrYTLsRiH9tbtBARuuNKHVYG71t8KsVz
+        Q1pr8Ong==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pHLEk-005XLh-2n;
+        Mon, 16 Jan 2023 08:53:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BE8DC30030F;
+        Mon, 16 Jan 2023 09:53:08 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9448C20A006E1; Mon, 16 Jan 2023 09:53:08 +0100 (CET)
+Date:   Mon, 16 Jan 2023 09:53:08 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Joe Mario <jmario@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH] sched/idle: Make idle poll dynamic per-cpu
+Message-ID: <Y8UQdKx+004a28fL@hirez.programming.kicks-ass.net>
+References: <20230112162426.217522-1-bristot@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: remove arch/sh
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
-Content-Language: en-US
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20230116071306.GA15848@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112162426.217522-1-bristot@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Christoph!
-
-On 1/16/23 08:13, Christoph Hellwig wrote:
-> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
->> I'm still maintaining and using this port in Debian.
->>
->> It's a bit disappointing that people keep hammering on it. It works fine for me.
+On Thu, Jan 12, 2023 at 05:24:26PM +0100, Daniel Bristot de Oliveira wrote:
+> idle=poll is frequently used on ultra-low-latency systems. Examples of
+> such systems are high-performance trading and 5G NVRAM. The performance
+> gain is given by avoiding the idle driver machinery and by keeping the
+> CPU is always in an active state - avoiding (odd) hardware heuristics that
+> are out of the control of the OS.
 > 
-> What platforms do you (or your users) use it on?
+> Currently, idle=poll is an all-or-nothing static option defined at
+> boot time. The motivation for creating this option dynamic and per-cpu
+> are two:
+> 
+>   1) Reduce the power usage/heat by allowing only selected CPUs to
+>      do idle polling;
+>   2) Allow multi-tenant systems (e.g., Kubernetes) to enable idle
+>      polling only when ultra-low-latency applications are present
+>      on specific CPUs.
+> 
+> Joe Mario did some experiments with this option enabled, and the results
+> were significant. For example, by using dynamic idle polling on
+> selected CPUs, cyclictest performance is optimal (like when using
+> idle=poll), but cpu power consumption drops from 381 to 233 watts.
+> 
+> Also, limiting idle=poll to the set of CPUs that benefits from
+> it allows other CPUs to benefit from frequency boosts. Joe also
+> shows that the results can be in the order of 80nsec round trip
+> improvement when system-wide idle=poll was not used.
+> 
+> The user can enable idle polling with this command:
+>   # echo 1 > /sys/devices/system/cpu/cpu{CPU_ID}/idle_poll
+> 
+> And disable it via:
+>   # echo 0 > /sys/devices/system/cpu/cpu{CPU_ID}/idle_poll
+> 
+> By default, all CPUs have idle polling disabled (the current behavior).
+> A static key avoids the CPU mask check overhead when no idle polling
+> is enabled.
 
-We have had a discussion between multiple people invested in the SuperH port and
-I have decided to volunteer as a co-maintainer of the port to support Rich Felker
-when he isn't available.
+Urgh, can we please make this a cpuidle governor thing or so? So that we
+don't need to invent new interfaces and such.
 
-Adrian
-
--- 
-  .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
