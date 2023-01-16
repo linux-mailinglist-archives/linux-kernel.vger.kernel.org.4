@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD15B66C35B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B00866C35F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjAPPLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S229762AbjAPPMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbjAPPL2 (ORCPT
+        with ESMTP id S232239AbjAPPLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 10:11:28 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B305234C7;
-        Mon, 16 Jan 2023 06:59:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WFKnv3IXFGo/+R8aB760h27cGKXKKD/moSarcuDR1DI=; b=KiXQaWYjAzj22qeVwf+8jraFnd
-        piSsFBsu9jpccuQs1OylYmOhIxYpYJMXk9UyP8itAzdxLXZH6mTTAzAzsQlF0ezNt4NoQdpe1IkY8
-        u4k28bU9DzDlGgLhdaq2SePXFBylBp0fFPF2Gd8K/VFGgpVHIi/HDGC4TJ1MNqtbFIB3V4jZwt3Zq
-        a2jILgICyiMK0Ye8t3cBHRBaVU6/N/P71gpgPg43tBGnmXFdXv0semHNJb9z0WCUs/2JuoRMYNrSF
-        31fMcmwwLBZ8kcU/TEM9VyQ4w00g1Hv4AnsJ0drPuoayyhfQokV48ZP1CRv+eMOvMhEtJfolfdvIH
-        3bklwOgA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36130)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pHQxM-0005D4-H5; Mon, 16 Jan 2023 14:59:28 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pHQxG-00066F-Sc; Mon, 16 Jan 2023 14:59:22 +0000
-Date:   Mon, 16 Jan 2023 14:59:22 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Message-ID: <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
-References: <trinity-ac9a840b-cb06-4710-827a-4c4423686074-1666551838763@3c-app-gmx-bs01>
- <trinity-169e3c3f-3a64-485c-9a43-b7cc595531a9-1666552897046@3c-app-gmx-bs01>
- <Y1Wfc+M/zVdw9Di3@shell.armlinux.org.uk>
- <Y1Zah4+hyFk50JC6@shell.armlinux.org.uk>
- <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
- <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
- <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
- <87o7qy39v5.fsf@miraculix.mork.no>
- <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
- <87h6wq35dn.fsf@miraculix.mork.no>
+        Mon, 16 Jan 2023 10:11:46 -0500
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC04301BF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:59:58 -0800 (PST)
+Date:   Mon, 16 Jan 2023 14:59:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
+        s=protonmail; t=1673881196; x=1674140396;
+        bh=zzF9mAQN1tOBRS7sao22BNfZIlVCplVmqFFZ1O+i9rQ=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=PeWRTFyZ5oaod8KIEvldYz8XEm18qXWxt/IZefcD5a+Y/YTjdCq1zkY+4KeEEz8PC
+         vX4ti3EzR1zcuC6fkj3Pge1gIAHhHzbW9+DH7jl+TzK13q7hwiS+MQEyWvYWiz5poq
+         urQ3kcCoT1rzfhzh5f2dKN1J1qTerMlJZkqf2wOWPp0O7o2sXQbY+0VqzZn2seNdrd
+         2G/UfDWw9OY991VbA+GX35XY4icIf5elnTaVpDHqgeQs2/csr9UVq6KYWRZuczlU5/
+         +Ta0vNF0xeDFPKMwR7/cYBzEZne8HkH4g6f15DQrJq3FTilfyGvcFqPMMwQc8IJyVo
+         2cikKCqAFtEuw==
+To:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+From:   Peter Lafreniere <peter@n8pjl.ca>
+Cc:     "ardb@kernel.org" <ardb@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peter Lafreniere <peter@n8pjl.ca>
+Subject: [PATCH] crypto: x86 - exit fpu context earlier in ECB/CBC macros
+Message-ID: <IBooTlGWpNE7pOelt0gm21bxW7wBILNYJ1HaoPbbfdEEMwz0Pp92vpd_OUlhNFNAitFThTi27P6q6NvcYMKm-y7tjwiF9YbImWjhgC3UDMk=@n8pjl.ca>
+Feedback-ID: 53133685:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87h6wq35dn.fsf@miraculix.mork.no>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:45:24PM +0100, Bjørn Mork wrote:
-> "Russell King (Oracle)" <linux@armlinux.org.uk> writes:
-> > On Mon, Jan 16, 2023 at 02:08:30PM +0100, Bjørn Mork wrote:
-> >> Frank Wunderlich <frank-w@public-files.de> writes:
-> >> 
-> >> > apart from this little problem it works much better than it actually is so imho more
-> >> > people should test it on different platforms.
-> >> 
-> >> Hello!  I've been banging my head against an MT7986 board with two
-> >> Maxlinear GPY211C phys for a while. One of those phys is connected to
-> >> port 5 of the MT7531 switch.  This is working perfectly.
-> >> 
-> >> The other GPY211C is connected to the second MT7986 mac.  This one is
-> >> giving me a headache...
-> >> 
-> >> I can only get the port to work at 2500Mb/s.  Changing the speed to
-> >> anything lower looks fine in ethtool etc, but traffic is blocked.
-> >
-> > My guess would be that the GPY PHY is using in-band SGMII negotiation
-> > (it sets VSPEC1_SGMII_ANEN_ANRS when entering SGMII mode and clears
-> > it in 2500base-X), but as the link is not using in-band mode on the
-> > PCS side, the PHY never sees its in-band negotiation complete, so the
-> > link between PCS and PHY never comes up.
-> >
-> > Both sides need to agree on that detail.
-> 
-> Any hints on how I would go about doing that?  I am a little lost here,
-> changing arbitrary bits I don't understand the meaning of.
+Currently the ecb/cbc macros hold fpu context unnecessarily when using=20
+scalar cipher routines (e.g. when handling odd sizes of blocks per walk).
 
-Hi,
+Change the macros to drop fpu context as soon as the fpu is out of use.
 
-To prove the point, in mtk_pcs_config():
+No performance impact found (on Intel Haswell).
 
-        if (interface == PHY_INTERFACE_MODE_SGMII) {
-                sgm_mode = SGMII_IF_MODE_SGMII;
-                if (phylink_autoneg_inband(mode)) {
+Signed-off-by: Peter Lafreniere <peter@n8pjl.ca>
+---
+ arch/x86/crypto/ecb_cbc_helpers.h | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-Force the second if() to always be true, and see whether that allows
-traffic to pass.
+diff --git a/arch/x86/crypto/ecb_cbc_helpers.h b/arch/x86/crypto/ecb_cbc_he=
+lpers.h
+index eaa15c7b29d6..b83085e18ab0 100644
+--- a/arch/x86/crypto/ecb_cbc_helpers.h
++++ b/arch/x86/crypto/ecb_cbc_helpers.h
+@@ -14,12 +14,13 @@
+ #define ECB_WALK_START(req, bsize, fpu_blocks) do {=09=09=09\
+ =09void *ctx =3D crypto_skcipher_ctx(crypto_skcipher_reqtfm(req));=09\
++=09const int __fpu_blocks =3D (fpu_blocks);=09=09=09=09\
+ =09const int __bsize =3D (bsize);=09=09=09=09=09\
+ =09struct skcipher_walk walk;=09=09=09=09=09\
+ =09int err =3D skcipher_walk_virt(&walk, (req), false);=09=09\
+ =09while (walk.nbytes > 0) {=09=09=09=09=09\
+ =09=09unsigned int nbytes =3D walk.nbytes;=09=09=09\
+-=09=09bool do_fpu =3D (fpu_blocks) !=3D -1 &&=09=09=09\
+-=09=09=09      nbytes >=3D (fpu_blocks) * __bsize;=09=09\
++=09=09bool do_fpu =3D __fpu_blocks !=3D -1 &&=09=09=09\
++=09=09=09      nbytes >=3D __fpu_blocks * __bsize;=09=09\
+ =09=09const u8 *src =3D walk.src.virt.addr;=09=09=09\
+ =09=09u8 *dst =3D walk.dst.virt.addr;=09=09=09=09\
+ =09=09u8 __maybe_unused buf[(bsize)];=09=09=09=09\
+@@ -35,7 +36,12 @@
+ } while (0)
+=20
+ #define ECB_BLOCK(blocks, func) do {=09=09=09=09=09\
+-=09while (nbytes >=3D (blocks) * __bsize) {=09=09=09=09\
++=09const int __blocks =3D (blocks);=09=09=09=09=09\
++=09if (do_fpu && __blocks < __fpu_blocks) {=09=09=09\
++=09=09kernel_fpu_end();=09=09=09=09=09\
++=09=09do_fpu =3D false;=09=09=09=09=09=09\
++=09}=09=09=09=09=09=09=09=09\
++=09while (nbytes >=3D __blocks * __bsize) {=09=09=09=09\
+ =09=09(func)(ctx, dst, src);=09=09=09=09=09\
+ =09=09ECB_WALK_ADVANCE(blocks);=09=09=09=09\
+ =09}=09=09=09=09=09=09=09=09\
+@@ -53,7 +59,12 @@
+ } while (0)
+=20
+ #define CBC_DEC_BLOCK(blocks, func) do {=09=09=09=09\
+-=09while (nbytes >=3D (blocks) * __bsize) {=09=09=09=09\
++=09const int __blocks =3D (blocks);=09=09=09=09=09\
++=09if (do_fpu && __blocks <  __fpu_blocks) {=09=09=09\
++=09=09kernel_fpu_end();=09=09=09=09=09\
++=09=09do_fpu =3D false;=09=09=09=09=09=09\
++=09}=09=09=09=09=09=09=09=09\
++=09while (nbytes >=3D __blocks * __bsize) {=09=09=09=09\
+ =09=09const u8 *__iv =3D src + ((blocks) - 1) * __bsize;=09\
+ =09=09if (dst =3D=3D src)=09=09=09=09=09=09\
+ =09=09=09__iv =3D memcpy(buf, __iv, __bsize);=09=09\
+--=20
+2.39.0
 
-Thanks.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
