@@ -2,157 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEBC66CF68
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B087C66CF6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjAPTOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S229725AbjAPTP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbjAPTOl (ORCPT
+        with ESMTP id S232346AbjAPTP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:14:41 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA581CAD9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:14:39 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id t5so24024599wrq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:14:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3I9TKz0QCRwStrORKwRYbo4zYDMGw/8qyv/2PPzcTIw=;
-        b=JhpTDkNcmd/K/PpIamox+UvMbgveXuheag7i9hm8ma5NnX7ZfIOvhDb1HEwnrhqXgV
-         DMPZY4t81B1oRlC1xwXXjkqUDt3e/oxumkm8f58ziGzt6ueDgTdxVpSbxmWLa5Y/LqIP
-         b3h5/Wepronyk03vMqkjLgLzU2Nh6Zcq+b8Ard3BfdYwkBmsxc9039CJba7v7FTcQ6ef
-         3swlGUN78iSzOIxCdqSboYpAB4+ZEFVbKXJU/A2J4I1H+gpE/GmWLAd7i2MSNVcGX1Jj
-         Dp+HqtxFWRKw2OFt6pSgbCTWBBfOfZmdFLGKnK7jqQS3hYgr3ggvMSbka3FiLg4x9//h
-         b8zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3I9TKz0QCRwStrORKwRYbo4zYDMGw/8qyv/2PPzcTIw=;
-        b=SjVQWGMSMofmWazFThfklGUgbFuroZ68WsYbD54wsBy4p/gCy5nWCUcS7d2EXeG6cH
-         xkqauoSGBv+BvTgoCRPtLwwDUDcwWl+cH+v45Uzu9ZMhHecS9T8Z9yQ+VcYhq/6aJZcC
-         fOalkOhGi1TpmcZh9ZM1weGSt8qH3oGXDqkKLnwXJWD3/+KUZdQNSt8ZF74uh3Idcff6
-         c7fEHZ4H5CS3qDc3EbhzpXkle67jEUkHqDfawh7FmVa4hKSvtu5mW2CA/rEW/phT9aqi
-         ohoM2dz0jlazamBaYzw+JlMOyw8QsxlieOqIl0mG+BWuFt90y1D87NqpbmpR1EbDZxvu
-         8E/w==
-X-Gm-Message-State: AFqh2koomlf49cdGiJW40EX5uZCHI7/xP5bSavGHExgff0oXZ7eq7Gsn
-        HGhRgqVUl4cawFgPnT289iViFKq3jwCQnbND
-X-Google-Smtp-Source: AMrXdXtWSSV63Ld25GuO0BsX3I2Wu43PREgvm5mdCHutcYHBaybO5RRT8NbVv9KhGzTM4D2Fl8Waig==
-X-Received: by 2002:a05:6000:1d87:b0:2a1:602d:ff3 with SMTP id bk7-20020a0560001d8700b002a1602d0ff3mr1103593wrb.3.1673896478372;
-        Mon, 16 Jan 2023 11:14:38 -0800 (PST)
-Received: from localhost ([2a00:79e0:9d:4:e2d9:b90f:9307:af59])
-        by smtp.gmail.com with ESMTPSA id u13-20020a05600c19cd00b003c6f1732f65sm42619579wmq.38.2023.01.16.11.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 11:14:37 -0800 (PST)
-From:   Jann Horn <jannh@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: [PATCH] fs: Use CHECK_DATA_CORRUPTION() when kernel bugs are detected
-Date:   Mon, 16 Jan 2023 20:14:25 +0100
-Message-Id: <20230116191425.458864-1-jannh@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Mon, 16 Jan 2023 14:15:26 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C625D16ADA;
+        Mon, 16 Jan 2023 11:15:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hkNFVtbzzp0XpZsfx3emQeVOO5FVZGr7hZw/Jma4LVA=; b=UupanAH6GT+TSgnVN/G70/Kw+B
+        jPITqiNGkh1JrRh4mlCwzBvLRsti1vU9cmXyJwxNBF6EbMEIaedOKbOf5aXZyJDsqzmkpMfvc18bl
+        8hRllSvXxKlcUQMjMA0GqDTdHEauQuSd7+Q0vPKWYL/ZAaMVaTUKwmZj5F6tMVh5UQVW5Si47khOP
+        D8HQcYo1QZAI0HVfnrpxtKXyWSt48mw3gp6ZHPKDTzQvP2OwOTqL8aFQ//OfBy5osBf0GYWPClAXX
+        Mtxn6D6nH3BEvK5dwzHfSQICxaXXLSBafF1KyzaFFy3Pf9AGmpBag8BDGPNkJrPhHv5ISf8I/8uIO
+        unUC1hPg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36150)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pHUwp-0005k4-0o; Mon, 16 Jan 2023 19:15:10 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pHUwl-0006Gj-Bh; Mon, 16 Jan 2023 19:15:07 +0000
+Date:   Mon, 16 Jan 2023 19:15:07 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y8WiO+8mkD6TPIAQ@shell.armlinux.org.uk>
+References: <87bkmy33ph.fsf@miraculix.mork.no>
+ <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
+ <875yd630cu.fsf@miraculix.mork.no>
+ <871qnu2ztz.fsf@miraculix.mork.no>
+ <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk>
+ <87pmbe1hu0.fsf@miraculix.mork.no>
+ <87lem21hkq.fsf@miraculix.mork.no>
+ <Y8WT6GwMqwi8rBe7@shell.armlinux.org.uk>
+ <87a62i1ge4.fsf@miraculix.mork.no>
+ <875yd61fg3.fsf@miraculix.mork.no>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <875yd61fg3.fsf@miraculix.mork.no>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, filp_close() and generic_shutdown_super() use printk() to log
-messages when bugs are detected. This is problematic because infrastructure
-like syzkaller has no idea that this message indicates a bug.
-In addition, some people explicitly want their kernels to BUG() when kernel
-data corruption has been detected (CONFIG_BUG_ON_DATA_CORRUPTION).
-And finally, when generic_shutdown_super() detects remaining inodes on a
-system without CONFIG_BUG_ON_DATA_CORRUPTION, it would be nice if later
-accesses to a busy inode would at least crash somewhat cleanly rather than
-walking through freed memory.
+On Mon, Jan 16, 2023 at 07:50:52PM +0100, Bjørn Mork wrote:
+> Made things fail with 2.5G, as expected I guess. But this actually works
+> with 1G!
+> 
+> Except for an unexpected packet drop.  But at least there are packets
+> coming through at 1G now.  This is the remote end of the link:
+> 
+> ns-enp3s0# ethtool -s enp3s0 autoneg off speed 1000 duplex full
+> ns-enp3s0# ping  192.168.0.1
+> PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.
+> 64 bytes from 192.168.0.1: icmp_seq=1 ttl=64 time=0.544 ms
+> 64 bytes from 192.168.0.1: icmp_seq=3 ttl=64 time=0.283 ms
+> 64 bytes from 192.168.0.1: icmp_seq=4 ttl=64 time=0.261 ms
+> 64 bytes from 192.168.0.1: icmp_seq=5 ttl=64 time=0.295 ms
+> 64 bytes from 192.168.0.1: icmp_seq=6 ttl=64 time=0.273 ms
+> 64 bytes from 192.168.0.1: icmp_seq=7 ttl=64 time=0.290 ms
+> 64 bytes from 192.168.0.1: icmp_seq=8 ttl=64 time=0.266 ms
+> 64 bytes from 192.168.0.1: icmp_seq=9 ttl=64 time=0.269 ms
+> 64 bytes from 192.168.0.1: icmp_seq=10 ttl=64 time=0.270 ms
+> 64 bytes from 192.168.0.1: icmp_seq=11 ttl=64 time=0.261 ms
+> 64 bytes from 192.168.0.1: icmp_seq=12 ttl=64 time=0.261 ms
+> 64 bytes from 192.168.0.1: icmp_seq=13 ttl=64 time=0.266 ms
+> ^C
+> --- 192.168.0.1 ping statistics ---
+> 13 packets transmitted, 12 received, 7.69231% packet loss, time 12282ms
+> rtt min/avg/max/mdev = 0.261/0.294/0.544/0.075 ms
+> ns-enp3s0# ethtool enp3s0
+> Settings for enp3s0:
+>         Supported ports: [ TP ]
+>         Supported link modes:   100baseT/Full
+>                                 1000baseT/Full
+>                                 10000baseT/Full
+>                                 2500baseT/Full
+>                                 5000baseT/Full
+>         Supported pause frame use: Symmetric Receive-only
+>         Supports auto-negotiation: Yes
+>         Supported FEC modes: Not reported
+>         Advertised link modes:  1000baseT/Full
+>         Advertised pause frame use: Symmetric
+>         Advertised auto-negotiation: No
+>         Advertised FEC modes: Not reported
+>         Speed: 1000Mb/s
+>         Duplex: Full
+>         Auto-negotiation: off
+>         Port: Twisted Pair
+>         PHYAD: 0
+>         Transceiver: internal
+>         MDI-X: Unknown
+>         Supports Wake-on: pg
+>         Wake-on: g
+>         Current message level: 0x00000005 (5)
+>                                drv link
+>         Link detected: yes
+> .
+> 
+> The MT7986 end looks like this:
+> 
+> root@OpenWrt:/# [   55.659413] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
+> [   55.664380] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
+> [   58.779924] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
+> [   58.784884] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
+> [   58.789841] mtk_sgmii_select_pcs: id=1
+> [   58.793581] mtk_pcs_config: interface=4
+> [   58.797399] offset:0 0x81140
+> [   58.797401] offset:4 0x4d544950
+> [   58.800273] offset:8 0x1a0
+> [   58.803397] offset:0x20 0x31120118
 
-To address all three, use CHECK_DATA_CORRUPTION() when kernel bugs are
-detected.
+This looks like it's configured for 1000base-X at this point.
 
-Signed-off-by: Jann Horn <jannh@google.com>
----
- fs/open.c              |  5 +++--
- fs/super.c             | 21 +++++++++++++++++----
- include/linux/poison.h |  3 +++
- 3 files changed, 23 insertions(+), 6 deletions(-)
+> [   58.806089] forcing AN
+> [   58.811826] mtk_pcs_config: rgc3=0x0, advertise=0x1 (changed), link_timer=1600000,  sgm_mode=0x103, bmcr=0x1200, use_an=1
+> [   58.822759] mtk_pcs_restart_an
+> [   58.825800] mtk_pcs_get_state: bm=0x81140, adv=0xda014001
+> [   58.831184] mtk_pcs_get_state: bm=0x2c1140, adv=0xda014001
+> [   58.836649] mtk_pcs_link_up: interface=4
+> [   58.840559] offset:0 0xac1140
+> [   58.840561] offset:4 0x4d544950
+> [   58.843512] offset:8 0xda014001
+> [   58.846636] offset:0x20 0x3112011b
 
-diff --git a/fs/open.c b/fs/open.c
-index 82c1a28b3308..ceb88ac0ca3b 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1411,8 +1411,9 @@ int filp_close(struct file *filp, fl_owner_t id)
- {
- 	int retval = 0;
- 
--	if (!file_count(filp)) {
--		printk(KERN_ERR "VFS: Close: file count is 0\n");
-+	if (CHECK_DATA_CORRUPTION(file_count(filp) == 0,
-+			"VFS: Close: file count is 0 (f_op=%ps)",
-+			filp->f_op)) {
- 		return 0;
- 	}
- 
-diff --git a/fs/super.c b/fs/super.c
-index 12c08cb20405..cf737ec2bd05 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -491,10 +491,23 @@ void generic_shutdown_super(struct super_block *sb)
- 		if (sop->put_super)
- 			sop->put_super(sb);
- 
--		if (!list_empty(&sb->s_inodes)) {
--			printk("VFS: Busy inodes after unmount of %s. "
--			   "Self-destruct in 5 seconds.  Have a nice day...\n",
--			   sb->s_id);
-+		if (CHECK_DATA_CORRUPTION(!list_empty(&sb->s_inodes),
-+				"VFS: Busy inodes after unmount of %s (%s)",
-+				sb->s_id, sb->s_type->name)) {
-+			/*
-+			 * Adding a proper bailout path here would be hard, but
-+			 * we can at least make it more likely that a later
-+			 * iput_final() or such crashes cleanly.
-+			 */
-+			struct inode *inode;
-+
-+			spin_lock(&sb->s_inode_list_lock);
-+			list_for_each_entry(inode, &sb->s_inodes, i_sb_list) {
-+				inode->i_op = VFS_PTR_POISON;
-+				inode->i_sb = VFS_PTR_POISON;
-+				inode->i_mapping = VFS_PTR_POISON;
-+			}
-+			spin_unlock(&sb->s_inode_list_lock);
- 		}
- 	}
- 	spin_lock(&sb_lock);
-diff --git a/include/linux/poison.h b/include/linux/poison.h
-index 2d3249eb0e62..0e8a1f2ceb2f 100644
---- a/include/linux/poison.h
-+++ b/include/linux/poison.h
-@@ -84,4 +84,7 @@
- /********** kernel/bpf/ **********/
- #define BPF_PTR_POISON ((void *)(0xeB9FUL + POISON_POINTER_DELTA))
- 
-+/********** VFS **********/
-+#define VFS_PTR_POISON ((void *)(0xF5 + POISON_POINTER_DELTA))
-+
- #endif
+and here we've reconfigured it for SGMII mode - and we can see the
+Mediatek PCS has set the ACK bit (bit 14) in its advertisement
+register as one would expect.
 
-base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+> Now, if we only could figure out what the difference is between this and
+> what we configure when the mode is changed from 2500base-x to sgmii.
+
+Maybe there is something missing which we need to do on the Mediatek
+side to properly switch between 2500base-X and SGMII.
+
+It has a feel of a problem changing the underlying link speed between
+3.125 and 1.25Gbps, which is done by the ANA_RGC3 register.
+
+Hmm, maybe the PCS needs to be powered down to change the speed, in
+other words, SGMII_PHYA_PWD needs to be set before the write to the
+ANA_RGC3 register?
+
 -- 
-2.39.0.314.g84b9a713c41-goog
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
