@@ -2,78 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22A866BC5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5621766BC5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjAPLBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S230456AbjAPLCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjAPLAz (ORCPT
+        with ESMTP id S229973AbjAPLCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:00:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19811A96F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:00:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673866808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xb4MUUiTpK7w8tFqzemDfEEoqYW+yZ8y6ombY2yLlSM=;
-        b=CYKzFZajVNMBYBpyyoABXrIckjCS6gBlubp1T8Y9dvyA2eCNJIioqoSGPhrMJ0MEbv6EtM
-        XpY9JjQfhKB/yyE3QWZWDH6J/Fme+UixKZWIPMOt9AChuBqZmY/jLSUZjQhvGCEGKNGwGq
-        nSmZVj7gEVtsJJuR5u3NyqL7iOUWIBI=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-36-RABeeZpFORmyXSqy2XiTpg-1; Mon, 16 Jan 2023 06:00:07 -0500
-X-MC-Unique: RABeeZpFORmyXSqy2XiTpg-1
-Received: by mail-lj1-f197.google.com with SMTP id bx14-20020a05651c198e00b0027b58179b0aso7272133ljb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:00:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xb4MUUiTpK7w8tFqzemDfEEoqYW+yZ8y6ombY2yLlSM=;
-        b=m8DSoFlHurQlxByYju4I0bITXcTfdAi6pFL1uSOoI0k6Xbzyunq6K3jc10CcnGtclZ
-         nn70iHfBfJ40KfqtjWxugt00vhVrpU+OKENpuFxNSTbgFvLM/hMd0w8TlycoW8Hvd3DR
-         A8jkUoOeeo3aQ9EbBnlZ4lRX3vgILJK/AROZKgcEb/BoTCFhhgj048EeAeJIz6gdUaeV
-         N6ZTLRCUhjQlcYhowvREhb/Piv7TpNk6eZXH7us0DvgdGonWWFc1jXeTZy1PUlNHIBjS
-         COoB/ZITduTBskDbziUZLvlHjlvP1c3cm93KIOVrjfJWWD7TPpjUueXutBrufXP2Ojyv
-         Hbzw==
-X-Gm-Message-State: AFqh2kqYoS9nSQApHFOvVYIOmzQw9lNFHHXrea8UwqtTfeh/ZsA2zK+o
-        wHo+90kDDzlGNV7nbHFZYsA4pA3gkIgZvBP4rUYcJdHhnCM5mpBaD4nz2bu7LfbKQ4Dj6W5U/lS
-        GGr/crg/JAL7eoRtMsqb9cGmr
-X-Received: by 2002:a05:6512:3053:b0:4d5:7be5:ba22 with SMTP id b19-20020a056512305300b004d57be5ba22mr721653lfb.58.1673866805670;
-        Mon, 16 Jan 2023 03:00:05 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt0diSnwlgoGqWkDapj391PD2WahbcvM1aTCb3z25vKe3m8OLjk14ZaLOgwFLm3e6E1OnEiHQ==
-X-Received: by 2002:a05:6512:3053:b0:4d5:7be5:ba22 with SMTP id b19-20020a056512305300b004d57be5ba22mr721640lfb.58.1673866805208;
-        Mon, 16 Jan 2023 03:00:05 -0800 (PST)
-Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
-        by smtp.gmail.com with ESMTPSA id z20-20020a056512371400b004a2c447598fsm871289lfr.159.2023.01.16.03.00.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 03:00:04 -0800 (PST)
-Message-ID: <fe2e39b16d42ca871428e508935f1aa21608b4ee.camel@redhat.com>
-Subject: Re: [PATCH v2 2/6] composefs: Add on-disk layout
-From:   Alexander Larsson <alexl@redhat.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gscrivan@redhat.com
-Date:   Mon, 16 Jan 2023 12:00:03 +0100
-In-Reply-To: <20230116012904.GJ2703033@dread.disaster.area>
-References: <cover.1673623253.git.alexl@redhat.com>
-         <819f49676080b05c1e87bff785849f0cc375d245.1673623253.git.alexl@redhat.com>
-         <20230116012904.GJ2703033@dread.disaster.area>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 16 Jan 2023 06:02:21 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C191C311;
+        Mon, 16 Jan 2023 03:01:27 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30GAZknB022818;
+        Mon, 16 Jan 2023 11:01:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=3QMDyJ88SGzHaVcUolDf3jWoJy0kBaDQI8PuPw7c7Ys=;
+ b=mv98FpUH8DkesMqSHYfibDItyDdIkhmPimeSnInHeGh8dbb+mxsXMt55J4PxV61MwZoR
+ bCVbCnOHfxtWag96aNNWH9DiF2A/oeWi5IfoOL215t/oo+6HypnrvkW5C4vF5IIPHxGi
+ C8+IR58FuXQUpaeXnuuPtW6+AGslsPqBQXIW0JorYLrMqpMBjp6o7nQU9HHU5DU9H4Ix
+ LrYx3MUWkhkQGqS6qO7tjK7HkJsJragPBNfeJsIqy3IB/fAY//y80qgNaTbvnpUH0+nw
+ +gLfw4WK/EIjF0p2RK7w2D9PLX1jMPykJJ7iXEmPC1AfkT4WpOudDyHjr4OvJetD9PmD rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n4g07wfs1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Jan 2023 11:01:19 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30GAxR7c005861;
+        Mon, 16 Jan 2023 11:01:19 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n4g07wfrk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Jan 2023 11:01:18 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30G9SsWi013744;
+        Mon, 16 Jan 2023 11:01:18 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3n3m16prr8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Jan 2023 11:01:18 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30GB1GUZ35521182
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 11:01:16 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 788E3580A7;
+        Mon, 16 Jan 2023 11:01:16 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1546E580AB;
+        Mon, 16 Jan 2023 11:01:14 +0000 (GMT)
+Received: from [9.211.83.196] (unknown [9.211.83.196])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 16 Jan 2023 11:01:13 +0000 (GMT)
+Message-ID: <bc4e55b9-ac35-3c71-104e-862fec958403@linux.ibm.com>
+Date:   Mon, 16 Jan 2023 12:01:13 +0100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH net-next v2 0/5] net/smc:Introduce SMC-D based
+ loopback acceleration
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     Alexandra Winter <wintera@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1671506505-104676-1-git-send-email-guwen@linux.alibaba.com>
+ <42f2972f1dfe45a2741482f36fbbda5b5a56d8f1.camel@linux.ibm.com>
+ <4a9b0ff0-8f03-1bfd-d09c-6deb3a9bb39e@linux.alibaba.com>
+ <4c7b0f4d-d57d-0aab-4ddd-6a4f15661e8d@linux.ibm.com>
+ <b25f56de-7913-2a56-950f-dfe0defd6936@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <b25f56de-7913-2a56-950f-dfe0defd6936@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VIj83aTJZkmHpr21woKmrIbdRU7M-NuE
+X-Proofpoint-GUID: j2eVEU2tEvDM7I_S2d0LTsNkTkyz2_ph
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-16_08,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1011 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301160078
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,NUMERIC_HTTP_ADDR,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,624 +102,546 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-16 at 12:29 +1100, Dave Chinner wrote:
-> On Fri, Jan 13, 2023 at 04:33:55PM +0100, Alexander Larsson wrote:
-> > This commit adds the on-disk layout header file of composefs.
->=20
-> This isn't really a useful commit message.
->=20
-> Perhaps it should actually explain what the overall goals of the
-> on-disk format are - space usage, complexity trade-offs, potential
-> issues with validation of variable payload sections, etc.
->=20
-
-I agree, will flesh it out. But, as for below discussions, one of the
-overall goals is to keep the on-disk file size low.
-
-> > Signed-off-by: Alexander Larsson <alexl@redhat.com>
-> > Co-developed-by: Giuseppe Scrivano <gscrivan@redhat.com>
-> > Signed-off-by: Giuseppe Scrivano <gscrivan@redhat.com>
-> > ---
-> > =C2=A0fs/composefs/cfs.h | 203
-> > +++++++++++++++++++++++++++++++++++++++++++++
-> > =C2=A01 file changed, 203 insertions(+)
-> > =C2=A0create mode 100644 fs/composefs/cfs.h
-> >=20
-> > diff --git a/fs/composefs/cfs.h b/fs/composefs/cfs.h
-> > new file mode 100644
-> > index 000000000000..658df728e366
-> > --- /dev/null
-> > +++ b/fs/composefs/cfs.h
-> > @@ -0,0 +1,203 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * composefs
-> > + *
-> > + * Copyright (C) 2021 Giuseppe Scrivano
-> > + * Copyright (C) 2022 Alexander Larsson
-> > + *
-> > + * This file is released under the GPL.
-> > + */
-> > +
-> > +#ifndef _CFS_H
-> > +#define _CFS_H
-> > +
-> > +#include <asm/byteorder.h>
-> > +#include <crypto/sha2.h>
-> > +#include <linux/fs.h>
-> > +#include <linux/stat.h>
-> > +#include <linux/types.h>
-> > +
-> > +#define CFS_VERSION 1
->=20
-> This should start with a description of the on-disk format for the
-> version 1 format.
-
-There are some format descriptions in the later document patch. What is
-the general approach here, do we document in the header, or in separate
-doc file? For example, I don't see much of format descriptions in the
-xfs headers. I mean, I should probably add *some* info here for easier
-reading of the stuff below, but I don't feel like headers are a great
-place for docs.
-
-> > +
-> > +#define CFS_MAGIC 0xc078629aU
-> > +
-> > +#define CFS_MAX_DIR_CHUNK_SIZE 4096
-> > +#define CFS_MAX_XATTRS_SIZE 4096
->=20
-> How do we store 64kB xattrs in this format if the max attr size is
-> 4096 bytes? Or is that the maximum total xattr storage?
-
-This is a current limitation of the composefs file format. I am aware
-that the kernel maximum size is 64k, but I'm not sure what use this
-would have in a read-only filesystem image in practice. I could extend
-this limit with some added complextity, but would it be worth the
-increase in complexity?
-
-> A comment telling us what these limits are would be nice.
->=20
-
-Sure.
-
-> > +
-> > +static inline int cfs_digest_from_payload(const char *payload,
-> > size_t payload_len,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 u8
-> > digest_out[SHA256_DIGEST_SIZE])
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char *p, *end;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 last_digit =3D 0;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int digit =3D 0;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size_t n_nibbles =3D 0;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* This handles payloads (i.=
-e. path names) that are
-> > "essentially" a
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * digest as the digest (if =
-the DIGEST_FROM_PAYLOAD flag is
-> > set). The
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * "essential" part means th=
-at we ignore hierarchical
-> > structure as well
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * as any extension. So, for=
- example "ef/deadbeef.file"
-> > would match the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * (too short) digest "efdea=
-dbeef".
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This allows images to avo=
-id storing both the digest and
-> > the pathname,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * yet work with pre-existin=
-g object store formats of
-> > various kinds.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0end =3D payload + payload_le=
-n;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (p =3D payload; p !=3D e=
-nd; p++) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0/* Skip subdir structure */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (*p =3D=3D '/')
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0contin=
-ue;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0/* Break at (and ignore) extension */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (*p =3D=3D '.')
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0break;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (n_nibbles =3D=3D SHA256_DIGEST_SIZE * 2)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
- -EINVAL; /* Too long */
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0digit =3D hex_to_bin(*p);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (digit =3D=3D -1)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return=
- -EINVAL; /* Not hex digit */
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0n_nibbles++;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if ((n_nibbles % 2) =3D=3D 0)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0digest=
-_out[n_nibbles / 2 - 1] =3D (last_digit
-> > << 4) | digit;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0last_digit =3D digit;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (n_nibbles !=3D SHA256_DI=
-GEST_SIZE * 2)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return -EINVAL; /* Too short */
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > +}
->=20
-> Too big to be a inline function.
->=20
-
-Yeah, I'm aware of this. I mainly put it in the header as the
-implementation of it is sort of part of the on-disk format. But, I can
-move it to a .c file instead.
 
 
-> > +
-> > +struct cfs_vdata_s {
->=20
-> Drop the "_s" suffix to indicate the type is a structure - that's
-> waht "struct" tells us.
+On 12.01.23 13:12, Wen Gu wrote:
+> 
+> 
+> On 2023/1/5 00:09, Alexandra Winter wrote:
+>>
+>>
+>> On 21.12.22 14:14, Wen Gu wrote:
+>>>
+>>>
+>>> On 2022/12/20 22:02, Niklas Schnelle wrote:
+>>>
+>>>> On Tue, 2022-12-20 at 11:21 +0800, Wen Gu wrote:
+>>>>> Hi, all
+>>>>>
+>>>>> # Background
+>>>>>
+>>>>> As previously mentioned in [1], we (Alibaba Cloud) are trying to 
+>>>>> use SMC
+>>>>> to accelerate TCP applications in cloud environment, improving 
+>>>>> inter-host
+>>>>> or inter-VM communication.
+>>>>>
+>>>>> In addition of these, we also found the value of SMC-D in scenario 
+>>>>> of local
+>>>>> inter-process communication, such as accelerate communication 
+>>>>> between containers
+>>>>> within the same host. So this RFC tries to provide a SMC-D loopback 
+>>>>> solution
+>>>>> in such scenario, to bring a significant improvement in latency and 
+>>>>> throughput
+>>>>> compared to TCP loopback.
+>>>>>
+>>>>> # Design
+>>>>>
+>>>>> This patch set provides a kind of SMC-D loopback solution.
+>>>>>
+>>>>> Patch #1/5 and #2/5 provide an SMC-D based dummy device, preparing 
+>>>>> for the
+>>>>> inter-process communication acceleration. Except for loopback 
+>>>>> acceleration,
+>>>>> the dummy device can also meet the requirements mentioned in [2], 
+>>>>> which is
+>>>>> providing a way to test SMC-D logic for broad community without ISM 
+>>>>> device.
+>>>>>
+>>>>>    +------------------------------------------+
+>>>>>    |  +-----------+           +-----------+   |
+>>>>>    |  | process A |           | process B |   |
+>>>>>    |  +-----------+           +-----------+   |
+>>>>>    |       ^                        ^         |
+>>>>>    |       |    +---------------+   |         |
+>>>>>    |       |    |   SMC stack   |   |         |
+>>>>>    |       +--->| +-----------+ |<--|         |
+>>>>>    |            | |   dummy   | |             |
+>>>>>    |            | |   device  | |             |
+>>>>>    |            +-+-----------+-+             |
+>>>>>    |                   VM                     |
+>>>>>    +------------------------------------------+
+>>>>>
+>>>>> Patch #3/5, #4/5, #5/5 provides a way to avoid data copy from 
+>>>>> sndbuf to RMB
+>>>>> and improve SMC-D loopback performance. Through extending smcd_ops 
+>>>>> with two
+>>>>> new semantic: attach_dmb and detach_dmb, sender's sndbuf shares the 
+>>>>> same
+>>>>> physical memory region with receiver's RMB. The data copied from 
+>>>>> userspace
+>>>>> to sender's sndbuf directly reaches the receiver's RMB without 
+>>>>> unnecessary
+>>>>> memory copy in the same kernel.
+>>>>>
+>>>>>    +----------+                     +----------+
+>>>>>    | socket A |                     | socket B |
+>>>>>    +----------+                     +----------+
+>>>>>          |                               ^
+>>>>>          |         +---------+           |
+>>>>>     regard as      |         | ----------|
+>>>>>     local sndbuf   |  B's    |     regard as
+>>>>>          |         |  RMB    |     local RMB
+>>>>>          |-------> |         |
+>>>>>                    +---------+
+>>>>
+>>>> Hi Wen Gu,
+>>>>
+>>>> I maintain the s390 specific PCI support in Linux and would like to
+>>>> provide a bit of background on this. You're surely wondering why we
+>>>> even have a copy in there for our ISM virtual PCI device. To understand
+>>>> why this copy operation exists and why we need to keep it working, one
+>>>> needs a bit of s390 aka mainframe background.
+>>>>
+>>>> On s390 all (currently supported) native machines have a mandatory
+>>>> machine level hypervisor. All OSs whether z/OS or Linux run either on
+>>>> this machine level hypervisor as so called Logical Partitions (LPARs)
+>>>> or as second/third/… level guests on e.g. a KVM or z/VM hypervisor that
+>>>> in turn runs in an LPAR. Now, in terms of memory this machine level
+>>>> hypervisor sometimes called PR/SM unlike KVM, z/VM, or VMWare is a
+>>>> partitioning hypervisor without paging. This is one of the main reasons
+>>>> for the very-near-native performance of the machine hypervisor as the
+>>>> memory of its guests acts just like native RAM on other systems. It is
+>>>> never paged out and always accessible to IOMMU translated DMA from
+>>>> devices without the need for pinning pages and besides a trivial
+>>>> offset/limit adjustment an LPAR's MMU does the same amount of work as
+>>>> an MMU on a bare metal x86_64/ARM64 box.
+>>>>
+>>>> It also means however that when SMC-D is used to communicate between
+>>>> LPARs via an ISM device there is  no way of mapping the DMBs to the
+>>>> same physical memory as there exists no MMU-like layer spanning
+>>>> partitions that could do such a mapping. Meanwhile for machine level
+>>>> firmware including the ISM virtual PCI device it is still possible to
+>>>> _copy_ memory between different memory partitions. So yeah while I do
+>>>> see the appeal of skipping the memcpy() for loopback or even between
+>>>> guests of a paging hypervisor such as KVM, which can map the DMBs on
+>>>> the same physical memory, we must keep in mind this original use case
+>>>> requiring a copy operation.
+>>>>
+>>>> Thanks,
+>>>> Niklas
+>>>>
+>>>
+>>> Hi Niklas,
+>>>
+>>> Thank you so much for the complete and detailed explanation! This 
+>>> provides
+>>> me a brand new perspective of s390 device that we hadn't dabbled in 
+>>> before.
+>>> Now I understand why shared memory is unavailable between different 
+>>> LPARs.
+>>>
+>>> Our original intention of proposing loopback device and the incoming 
+>>> device
+>>> (virtio-ism) for inter-VM is to use SMC-D to accelerate communication 
+>>> in the
+>>> case with no existing s390 ISM devices. In our conception, s390 ISM 
+>>> device,
+>>> loopback device and virtio-ism device are parallel and are abstracted 
+>>> by smcd_ops.
+>>>
+>>>   +------------------------+
+>>>   |          SMC-D         |
+>>>   +------------------------+
+>>>   -------- smcd_ops ---------
+>>>   +------+ +------+ +------+
+>>>   | s390 | | loop | |virtio|
+>>>   | ISM  | | back | | -ism |
+>>>   | dev  | | dev  | | dev  |
+>>>   +------+ +------+ +------+
+>>>
+>>> We also believe that keeping the existing design and behavior of s390 
+>>> ISM
+>>> device is unshaken. What we want to get support for is some smcd_ops 
+>>> extension
+>>> for devices with optional beneficial capability, such as nocopy here 
+>>> (Let's call
+>>> it this for now), which is really helpful for us in inter-process and 
+>>> inter-VM
+>>> scenario.
+>>>
+>>> And coincided with IBM's intention to add APIs between SMC-D and 
+>>> devices to
+>>> support various devices for SMC-D, as mentioned in [2], we send out 
+>>> this RFC and
+>>> the incoming virio-ism RFC, to provide some examples.
+>>>
+>>>>>
+>>>>> # Benchmark Test
+>>>>>
+>>>>>    * Test environments:
+>>>>>         - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
+>>>>>         - SMC sndbuf/RMB size 1MB.
+>>>>>
+>>>>>    * Test object:
+>>>>>         - TCP: run on TCP loopback.
+>>>>>         - domain: run on UNIX domain.
+>>>>>         - SMC lo: run on SMC loopback device with patch #1/5 ~ #2/5.
+>>>>>         - SMC lo-nocpy: run on SMC loopback device with patch #1/5 
+>>>>> ~ #5/5.
+>>>>>
+>>>>> 1. ipc-benchmark (see [3])
+>>>>>
+>>>>>    - ./<foo> -c 1000000 -s 100
+>>>>>
+>>>>>                          TCP              domain              
+>>>>> SMC-lo             SMC-lo-nocpy
+>>>>> Message
+>>>>> rate (msg/s)         75140      129548(+72.41)    
+>>>>> 152266(+102.64%)         151914(+102.17%)
+>>>>
+>>>> Interesting that it does beat UNIX domain sockets. Also, see my below
+>>>> comment for nginx/wrk as this seems very similar.
+>>>>
+>>>>>
+>>>>> 2. sockperf
+>>>>>
+>>>>>    - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
+>>>>>    - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp 
+>>>>> --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 -t 30
+>>>>>
+>>>>>                          TCP                  SMC-lo             
+>>>>> SMC-lo-nocpy
+>>>>> Bandwidth(MBps)   4943.359        4936.096(-0.15%)        
+>>>>> 8239.624(+66.68%)
+>>>>> Latency(us)          6.372          3.359(-47.28%)            
+>>>>> 3.25(-49.00%)
+>>>>>
+>>>>> 3. iperf3
+>>>>>
+>>>>>    - serv: <smc_run> taskset -c <cpu> iperf3 -s
+>>>>>    - clnt: <smc_run> taskset -c <cpu> iperf3 -c 127.0.0.1 -t 15
+>>>>>
+>>>>>                          TCP                  SMC-lo             
+>>>>> SMC-lo-nocpy
+>>>>> Bitrate(Gb/s)         40.5            41.4(+2.22%)            
+>>>>> 76.4(+88.64%)
+>>>>>
+>>>>> 4. nginx/wrk
+>>>>>
+>>>>>    - serv: <smc_run> nginx
+>>>>>    - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
+>>>>>
+>>>>>                          TCP                  SMC-lo             
+>>>>> SMC-lo-nocpy
+>>>>> Requests/s       154643.22      220894.03(+42.84%)        
+>>>>> 226754.3(+46.63%)
+>>>>
+>>>>
+>>>> This result is very interesting indeed. So with the much more realistic
+>>>> nginx/wrk workload it seems to copy hurts much less than the
+>>>> iperf3/sockperf would suggest while SMC-D itself seems to help more.
+>>>> I'd hope that this translates to actual applications as well. Maybe
+>>>> this makes SMC-D based loopback interesting even while keeping the
+>>>> copy, at least until we can come up with a sane way to work a no-copy
+>>>> variant into SMC-D?
+>>>>
+>>>
+>>> I agree, nginx/wrk workload is much more realistic for many 
+>>> applications.
+>>>
+>>> But we also encounter many other cases similar to sockperf on the 
+>>> cloud, which
+>>> requires high throughput, such as AI training and big data.
+>>>
+>>> So avoidance of copying between DMBs can help these cases a lot :)
+>>>
+>>>>>
+>>>>>
+>>>>> # Discussion
+>>>>>
+>>>>> 1. API between SMC-D and ISM device
+>>>>>
+>>>>> As Jan mentioned in [2], IBM are working on placing an API between 
+>>>>> SMC-D
+>>>>> and the ISM device for easier use of different "devices" for SMC-D.
+>>>>>
+>>>>> So, considering that the introduction of attach_dmb or detach_dmb can
+>>>>> effectively avoid data copying from sndbuf to RMB and brings obvious
+>>>>> throughput advantages in inter-VM or inter-process scenarios, can the
+>>>>> attach/detach semantics be taken into consideration when designing the
+>>>>> API to make it a standard ISM device behavior?
+>>>            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>
+>>>> Due to the reasons explained above this behavior can't be emulated by
+>>>> ISM devices at least not when crossing partitions. Not sure if we can
+>>>> still incorporate it in the API and allow for both copying and
+>>>> remapping SMC-D like devices, it definitely needs careful consideration
+>>>> and I think also a better understanding of the benefit for real world
+>>>> workloads.
+>>>>
+>>>
+>>> Here I am not rigorous.
+>>>
+>>> Nocopy shouldn't be a standard ISM device behavior indeed. Actually 
+>>> we hope it be a
+>>> standard optional _SMC-D_ device behavior and defined by smcd_ops.
+>>>
+>>> For devices don't support these options, like ISM device on s390 
+>>> architecture,
+>>> .attach_dmb/.detach_dmb and other reasonable extensions (which will 
+>>> be proposed to
+>>> discuss in incoming virtio-ism RFC) can be set to NULL or return 
+>>> invalid. And for
+>>> devices do support, they may be used for improving performance in 
+>>> some cases.
+>>>
+>>> In addition, can I know more latest news about the API design? :) , 
+>>> like its scale, will
+>>> it be a almost refactor of existing interface or incremental 
+>>> patching? and its object,
+>>> will it be tailored for exact ISM behavior or to reserve some options 
+>>> for other devices,
+>>> like nocopy here? From my understanding of [2], it might be the latter?
+>>>
+>>>>>
+>>>>> Maybe our RFC of SMC-D based inter-process acceleration (this one) and
+>>>>> inter-VM acceleration (will coming soon, which is the update of [1])
+>>>>> can provide some examples for new API design. And we are very glad to
+>>>>> discuss this on the mail list.
+>>>>>
+>>>>> 2. Way to select different ISM-like devices
+>>>>>
+>>>>> With the proposal of SMC-D loopback 'device' (this RFC) and incoming
+>>>>> device used for inter-VM acceleration as update of [1], SMC-D has more
+>>>>> options to choose from. So we need to consider that how to indicate
+>>>>> supported devices, how to determine which one to use, and their 
+>>>>> priority...
+>>>>
+>>>> Agree on this part, though it is for the SMC maintainers to decide, I
+>>>> think we would definitely want to be able to use any upcoming inter-VM
+>>>> devices on s390 possibly also in conjunction with ISM devices for
+>>>> communication across partitions.
+>>>>
+>>>
+>>> Yes, this part needs to be discussed with SMC maintainers. And thank 
+>>> you, we are very glad
+>>> if our devices can be applied on s390 through the efforts.
+>>>
+>>>
+>>> Best Regards,
+>>> Wen Gu
+>>>
+>>>>>
+>>>>> IMHO, this may require an update of CLC message and negotiation 
+>>>>> mechanism.
+>>>>> Again, we are very glad to discuss this with you on the mailing list.
+>>
+>> As described in
+>> SMC protocol (including SMC-D): 
+>> https://www.ibm.com/support/pages/system/files/inline-files/IBM%20Shared%20Memory%20Communications%20Version%202_2.pdf
+>> the CLC messages provide a list of up to 8 ISM devices to chose from.
+>> So I would hope that we can use the existing protocol.
+>>
+>> The challenge will be to define GID (Global Interface ID) and CHID (a 
+>> fabric ID) in
+>> a meaningful way for the new devices.
+>> There is always smcd_ops->query_remote_gid()  as a safety net. But the 
+>> idea is that
+>> a CHID mismatch is a fast way to tell that these 2 interfaces do match.
+>>
+>>
+> 
 
-Sure.
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 off;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 len;
->=20
-> If these are on-disk format structures, why aren't the defined as
-> using the specific endian they are encoded in? i.e. __le64, __le32,
-> etc? Otherwise a file built on a big endian machine won't be
-> readable on a little endian machine (and vice versa).
-
-On disk all fields are little endian. However, when we read them from
-disk we convert them using e.g. le32_to_cpu(), and then we use the same
-structure in memory, with native endian. So, it seems wrong to mark
-them as little endian.
-
->=20
-> > +} __packed;
-> > +
-> > +struct cfs_header_s {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 version;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 unused1;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 unused2;
->=20
-> Why are you hyper-optimising these structures for minimal space
-> usage? This is 2023 - we can use a __le32 for the version number,
-> the magic number and then leave....
->
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 magic;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 data_offset;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 root_inode;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 unused3[2];
->=20
-> a whole heap of space to round it up to at least a CPU cacheline
-> size using something like "__le64 unused[15]".
->=20
-> That way we don't need packed structures nor do we care about having
-> weird little holes in the structures to fill....
-
-Sure.
-
-> > +} __packed;
-> > +
-> > +enum cfs_inode_flags {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_NONE =3D 0,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_PAYLOAD =3D =
-1 << 0,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_MODE =3D 1 <=
-< 1,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_NLINK =3D 1 =
-<< 2,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_UIDGID =3D 1=
- << 3,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_RDEV =3D 1 <=
-< 4,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_TIMES =3D 1 =
-<< 5,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_TIMES_NSEC =
-=3D 1 << 6,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_LOW_SIZE =3D=
- 1 << 7, /* Low 32bit of st_size
-> > */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_HIGH_SIZE =
-=3D 1 << 8, /* High 32bit of
-> > st_size */
->=20
-> Why do we need to complicate things by splitting the inode size
-> like this?
->=20
-
-The goal is to minimize the image size for a typical rootfs or
-container image. Almost zero files in any such images are > 4GB.=C2=A0
-
-Also, we don't just "not decode" the items with the flag not set, they
-are not even stored on disk.
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_XATTRS =3D 1=
- << 9,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_DIGEST =3D 1=
- << 10, /* fs-verity sha256
-> > digest */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0CFS_INODE_FLAGS_DIGEST_FROM_=
-PAYLOAD =3D 1 << 11, /* Compute
-> > digest from payload */
-> > +};
-> > +
-> > +#define CFS_INODE_FLAG_CHECK(_flag,
-> > _name)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 \
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(((_flag) & (CFS_INODE_FLAGS=
-_##_name)) !=3D 0)
->=20
-> Check what about a flag? If this is a "check that a feature is set",
-> then open coding it better, but if you must do it like this, then
-> please use static inline functions like:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cfs_inode_has_xattrs(=
-inode->flags)) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0.....
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
->=20
-
-The check is if the flag is set, so maybe CFS_INODE_FLAG_IS_SET is a
-better name. This is used only when decoding the on-disk version of the
-inode to the in memory one, which is a bunch of:
-
-	if (CFS_INODE_FLAG_CHECK(ino->flags, THE_FIELD))
-		ino->the_field =3D cfs_read_u32(&data);
-	else
-		ino->the_field =3D THE_FIELD_DEFUALT;
-
-I can easily open-code these checks, although I'm not sure it makes a
-great difference either way.
-
-> > +#define CFS_INODE_FLAG_CHECK_SIZE(_flag, _name,
-> > _size)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 \
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(CFS_INODE_FLAG_CHECK(_flag,=
- _name) ? (_size) : 0)
->=20
-> This doesn't seem particularly useful, because you've still got to
-> test is the return value is valid. i.e.
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size =3D CFS_INODE_FLAG_C=
-HECK_SIZE(inode->flags, XATTRS, 32);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (size =3D=3D 32) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0/* got xattrs, decode! */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
->=20
-> vs
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cfs_inode_has_xattrs(=
-inode->flags)) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0/* decode! */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-
-This macro is only uses by the cfs_inode_encoded_size() function that
-computes the size of the on-disk format of an inode, given its flags:
-
-static inline u32 cfs_inode_encoded_size(u32 flags)
-{
-	return sizeof(u32) /* flags */ +
-	       CFS_INODE_FLAG_CHECK_SIZE(flags, PAYLOAD, sizeof(u32))
-+
-	       CFS_INODE_FLAG_CHECK_SIZE(flags, MODE, sizeof(u32)) +
-	       CFS_INODE_FLAG_CHECK_SIZE(flags, NLINK, sizeof(u32)) +
-...
-
-It is only useful in the sense that it makes this function easy to
-read/write. I should maybe move the definion of the macro to that
-function.
-
->=20
-> > +
-> > +#define CFS_INODE_DEFAULT_MODE 0100644
-> > +#define CFS_INODE_DEFAULT_NLINK 1
-> > +#define CFS_INODE_DEFAULT_NLINK_DIR 2
-> > +#define CFS_INODE_DEFAULT_UIDGID 0
-> > +#define CFS_INODE_DEFAULT_RDEV 0
-> > +#define CFS_INODE_DEFAULT_TIMES 0
->=20
-> Where do these get used? Are they on disk defaults or something
-> else? (comment, please!)
-
-They are the defaults that are used when inode fields on disk are
-missing. I'll add some comments.
-
-> > +struct cfs_inode_s {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 flags;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Optional data: (selected =
-by flags) */
->=20
-> WHy would you make them optional given that all the fields are still
-> defined in the structure?
->=20
-> It's much simpler just to decode the entire structure into memory
-> than to have to check each flag value to determine if a field needs
-> to be decoded...
->=20
-
-I guess I need to clarify these comments a bit, but they are optional
-on-disk, and decoded and extended with the above defaults by
-cfs_get_ino_index() when read into memory. So, they are not optional in
-memory.
+FYI, we just sent the rest part of the API to the net-next 
+https://lore.kernel.org/netdev/20230116092712.10176-1-jaka@linux.ibm.com/T/#t,
+which should answer some questions in your patch series.
 
 
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* This is the size of the t=
-ype specific data that comes
-> > directly after
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the inode in the file. Of=
- this type:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * directory: cfs_dir_s
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * regular file: the backing=
- filename
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * symlink: the target link
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Canonically payload_lengt=
-h is 0 for empty
-> > dir/file/symlink.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 payload_length;
->=20
-> How do you have an empty symlink?
-
-In terms of the file format, empty would mean a zero length target
-string. But you're right that this isn't allowed. I'll change this
-comment.
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_mode; /* File type an=
-d mode.=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_nlink; /* Number of h=
-ard links, only for regular
-> > files.=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_uid; /* User ID of ow=
-ner.=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_gid; /* Group ID of o=
-wner.=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_rdev; /* Device ID (i=
-f special file).=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 st_size; /* Size of file=
-, only used for regular files
-> > */
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct cfs_vdata_s xattrs; /=
-* ref to variable data */
->=20
-> This is in the payload that follows the inode?=C2=A0 Is it included in
-> the payload_length above?
->=20
-> If not, where is this stuff located, how do we validate it points to
-> the correct place in the on-disk format file, the xattrs belong to
-> this specific inode, etc? I think that's kinda important to
-> describe, because xattrs often contain important security
-> information...
-
-No, all inodes are packed into the initial part of the file, each
-containing a flags set, a variable size (from flags) chunk of fixed
-size elements and an variable size payload. The payload is either the
-target symlink for symlinks, or the path of the backing file for
-regular files. Other data, such as xattrs and dirents are stored in a
-separate part of the file and the offsets for those in the inode refer
-to offsets into that area.
-
->=20
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 digest[SHA256_DIGEST_SIZE=
-]; /* fs-verity digest */
->=20
-> Why would you have this in the on-disk structure, then also have
-> "digest from payload" that allows the digest to be in the payload
-> section of the inode data?
-
-The payload is normally the path to the backing file, and then you need
-to store the verity digest separately. This is what would be needed
-when using this with ostree for instance, because we have an existing
-backing file repo format we can't change. However, if your backing
-store files are stored by their fs-verity digest already (which is the
-default for mkcomposefs), then we can set this flag and avoid storing
-the digest unnecessary.
-
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct timespec64 st_mtim; /=
-* Time of last modification.=C2=A0
-> > */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct timespec64 st_ctim; /=
-* Time of last status change.=C2=A0
-> > */
-> > +};
->=20
-> This really feels like an in-memory format inode, not an on-disk
-> format inode, because this:
->=20
-> > +
-> > +static inline u32 cfs_inode_encoded_size(u32 flags)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return sizeof(u32) /* flags =
-*/ +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, PAYLOAD,
-> > sizeof(u32)) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, MODE, sizeof(u32))
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, NLINK, sizeof(u32))
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, UIDGID, sizeof(u32)
-> > + sizeof(u32)) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, RDEV, sizeof(u32))
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, TIMES, sizeof(u64)
-> > * 2) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, TIMES_NSEC,
-> > sizeof(u32) * 2) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, LOW_SIZE,
-> > sizeof(u32)) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, HIGH_SIZE,
-> > sizeof(u32)) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, XATTRS, sizeof(u64)
-> > + sizeof(u32)) +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CFS_INODE_FLAG_CHECK_SIZE(flags, DIGEST,
-> > SHA256_DIGEST_SIZE);
-> > +}
->=20
-> looks like the on-disk format is an encoded format hyper-optimised
-> for minimal storage space usage?
-
-Yes.
-
-
-> Without comments to explain it, I'm not exactly sure what is stored
-> in the on-disk format inodes, nor the layout of the variable
-> payload section or how payload sections are defined and verified.
->=20
-> Seems overly complex to me - it's far simpler just to have a fixed
-> inode structure and just decode it directly into the in-memory
-> structure when it is read....
-
-We have a not-fixed-size on disk inode structure (for size reasons)
-which we decode directly into the above in-memory structure when read.
-So I don't think we're that far from what you expect. However, yes,
-this could easily be explained better.
-
->=20
-> > +struct cfs_dentry_s {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Index of struct cfs_inode=
-_s */
->=20
-> Not a useful (or correct!) comment :/
-
-Its not really incorrect, but I agree its not neccessary a great
-comment. At this specific offset in the inode section we can decode the
-cfs_inode_s that this inode refers to, and his offset is also the inode
-number of the inode.
-
-> Also, the typical term for this on disk structure in a filesystem is
-> a "dirent", and this is also what readdir() returns to userspace.
-> dentry is typically used internally in the kernel to refer to the
-> VFS cache layer objects, not the filesystem dirents the VFS layers
-> look up to populate it's dentry cache.
->=20
-
-Yeah, i'll rename it.
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 inode_index;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 d_type;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 name_len;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 name_offset;
->=20
-> What's this name_offset refer to?=20
-
-Dirents are stored in chunks, each chunk < 4k. These chunks are a list
-of these dirents, followed by the strings for the names, the
-name_offset is the offset from the start of the chunk to the name.
-
-> > +} __packed;
-> > +
-> > +struct cfs_dir_chunk_s {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 n_dentries;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u16 chunk_size;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 chunk_offset;
->=20
-> What's this chunk offset refer to?
->=20
-
-This is the offset in the "variable data" section of the image. This
-section follows the packed inode data section. Again, better comments
-needed.
-
-> > +} __packed;
-> > +
-> > +struct cfs_dir_s {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 n_chunks;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct cfs_dir_chunk_s chunk=
-s[];
-> > +} __packed;
->=20
-> So directory data is packed in discrete chunks? Given that this is a
-> static directory format, and the size of the directory is known at
-> image creation time, why does the storage need to be chunked?
-
-We chunk the data such that each chunk fits inside a single page in the
-image file. I did this to make accessing image data directly from the
-page cache easier. We can just kmap_page_local() each chunk and treat
-it as a non-split continuous dirent array, then move on to the next
-chunk in the next page. If we had dirent data spanning multiple pages
-then we would either need to map the pages consecutively (which seems
-hard/costly) or have complex in-kernel code to handle the case where a
-dirent straddles two pages.
-
-> > +
-> > +#define
-> > cfs_dir_size(_n_chunks)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > =C2=A0=C2=A0=C2=A0 \
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0(sizeof(struct cfs_dir_s) + =
-(_n_chunks) * sizeof(struct
-> > cfs_dir_chunk_s))
->=20
-> static inline, at least.
->=20
-> Also, this appears to be the size of the encoded directory
-> header, not the size of the directory itself. cfs_dir_header_size(),
-> perhaps, to match the cfs_xattr_header_size() function that does the
-> same thing?
-
-Yeah, that makes sense.
-
---=20
-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
--=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
-=3D-=3D-=3D
- Alexander Larsson                                            Red Hat,
-Inc=20
-       alexl@redhat.com            alexander.larsson@gmail.com=20
-He's a suicidal hunchbacked cyborg who knows the secret of the alien=20
-invasion. She's a time-travelling out-of-work snake charmer with a song
-in her heart and a spring in her step. They fight crime!=20
-
+> Hi Winter and all,
+> 
+> Thanks for your reply and suggestions! And sorry for my late reply 
+> because it took me
+> some time to understand SMC-Dv2 protocol and implementation.
+> 
+> I agree with your opinion. The existing SMC-Dv2 protocol whose CLC 
+> messages include
+> ism_dev[] list can solve the devices negotiation problem. And I am very 
+> willing to use
+> the existing protocol, because we all know that the protocol update is a 
+> long and complex
+> process.
+> 
+> If I understand correctly, SMC-D loopback(dummy) device can coordinate 
+> with existing
+> SMC-Dv2 protocol as follows. If there is any mistake, please point out.
+> 
+> 
+> # Initialization
+> 
+> - Initialize the loopback device with unique GID [Q-1].
+> 
+> - Register the loopback device as SMC-Dv2-capable device with a 
+> system_eid whose 24th
+>     or 28th byte is non-zero [Q-2], so that this system's 
+> smc_ism_v2_capable will be set
+>     to TRUE and SMC-Dv2 is available.
+> 
+The decision point is the VLAN_ID, if it is x1FFF, the device will 
+support V2. i.e. If you can have subnet with VLAN_ID x1FFF, then the 
+SEID is necessary, so that the series or types is non-zero. (*1)
+> 
+> # Proposal
+> 
+> - Find the loopback device from the smcd_dev_list in 
+> smc_find_ism_v2_device_clnt();
+> 
+> - Record the SEID, GID and CHID[Q-3] of loopback device in the v2 
+> extension part of CLC
+>     proposal message.
+> 
+> 
+> # Accept
+> 
+> - Check the GID/CHID list and SEID in CLC proposal message, and find 
+> local matched ISM
+>     device from smcd_dev_list in smc_find_ism_v2_device_serv(). If both 
+> sides of the
+>     communication are in the same VM and share the same loopback device, 
+> the SEID, GID and
+>     CHID will match and loopback device will be chosen [Q-4].
+> 
+> - Record the loopback device's GID/CHID and matched SEID into CLC accept 
+> message.
+> 
+> 
+> # Confirm
+> 
+> - Confirm the server-selected device (loopback device) accordingto CLC 
+> accept messages.
+> 
+> - Record the loopback device's GID/CHID and server-selected SEID in CLC 
+> confirm message.
+> 
+> 
+> Follow the above process, I supplement a patch based on this RFC in the 
+> email attachment.
+> With the attachment patch, SMC-D loopback will switch to use SMC-Dv2 
+> protocol.
+> 
+> 
+> 
+> And in the above process, there are something I want to consult and 
+> discuss, which is marked
+> with '[Q-*]' in the above description.
+> 
+> # [Q-1]:
+> 
+> The GID of loopback device is randomly generated in this RFC patch set, 
+> but I will find a way
+> to unique the GID in formal patches. Any suggestions are welcome.
+> 
+I think the randowmly generated GID is fine in your case, which is 
+equivalent to the IP address.
+> 
+> # [Q-2]:
+> 
+> In Linux implementation, the system_eid of the first registered smcd 
+> device will determinate
+> system's smc_ism_v2_capable (see smcd_register_dev()).
+> 
+> And I wonder that
+> 
+> 1) How to define the system_eid? It can be inferred from the code that 
+> the 24th and 28th byte
+>      are special for SMC-Dv2. So in attachment patch, I define the 
+> loopback device SEID as
+> 
+>      static struct smc_lo_systemeid LO_SYSTEM_EID = {
+>              .seid_string = "SMC-SYSZ-LOSEID000000000",
+>              .serial_number = "1000",
+>              .type = "1000",
+>      };
+> 
+>      Is there anything else I need to pay attention to?
+> 
+If you just want to use V2, such defination looks good.
+e.g. you can use some unique information from "lshw"
+> 
+> 2) Seems only the first added smcd device determinate the system 
+> smc_ism_v2_capable? If two
+>      different smcd devices respectively with v1-indicated and 
+> v2-indicated system_eid, will
+>      the order in which they are registered affects the result of 
+> smc_ism_v2_capable ?
+> 
+see (*1)
+> 
+> # [Q-3]:
+> 
+> In attachment patch, I define a special CHID (0xFFFF) for loopback 
+> device, as a kind of
+> 'unassociated ISM CHID' that not associated with any IP (OSA or 
+> HiperSockets) interfaces.
+> 
+> What's your opinion about this?
+> 
+It looks good to me
+> 
+> # [Q-4]:
+> 
+> In current Linux implementation, server will select the first 
+> successfully initialized device
+> from the candidates as the final selected one in 
+> smc_find_ism_v2_device_serv().
+> 
+> for (i = 0; i < matches; i++) {
+>      ini->smcd_version = SMC_V2;
+>      ini->is_smcd = true;
+>      ini->ism_selected = i;
+>      rc = smc_listen_ism_init(new_smc, ini);
+>      if (rc) {
+>          smc_find_ism_store_rc(rc, ini);
+>          /* try next active ISM device */
+>          continue;
+>      }
+>      return; /* matching and usable V2 ISM device found */
+> }
+> 
+> IMHO, maybe candidate devices should have different priorities? For 
+> example, the loopback device
+> may be preferred to use if loopback is available.
+> 
+IMO, I'd prefer such a order: ISM -> loopback -> RoCE
+Because ISM for SMC-D is our standard user case, not loopback.
+> 
+> Best Regards,
+> Wen Gu
+> 
+>>>>>
+>>>>> [1] 
+>>>>> https://lore.kernel.org/netdev/20220720170048.20806-1-tonylu@linux.alibaba.com/
+>>>>> [2] 
+>>>>> https://lore.kernel.org/netdev/35d14144-28f7-6129-d6d3-ba16dae7a646@linux.ibm.com/
+>>>>> [3] https://github.com/goldsborough/ipc-bench
+>>>>>
+>>>>> v1->v2
+>>>>>    1. Fix some build WARNINGs complained by kernel test rebot
+>>>>>       Reported-by: kernel test robot <lkp@intel.com>
+>>>>>    2. Add iperf3 test data.
+>>>>>
+>>>>> Wen Gu (5):
+>>>>>     net/smc: introduce SMC-D loopback device
+>>>>>     net/smc: choose loopback device in SMC-D communication
+>>>>>     net/smc: add dmb attach and detach interface
+>>>>>     net/smc: avoid data copy from sndbuf to peer RMB in SMC-D loopback
+>>>>>     net/smc: logic of cursors update in SMC-D loopback connections
+>>>>>
+>>>>>    include/net/smc.h      |   3 +
+>>>>>    net/smc/Makefile       |   2 +-
+>>>>>    net/smc/af_smc.c       |  88 +++++++++++-
+>>>>>    net/smc/smc_cdc.c      |  59 ++++++--
+>>>>>    net/smc/smc_cdc.h      |   1 +
+>>>>>    net/smc/smc_clc.c      |   4 +-
+>>>>>    net/smc/smc_core.c     |  62 +++++++++
+>>>>>    net/smc/smc_core.h     |   2 +
+>>>>>    net/smc/smc_ism.c      |  39 +++++-
+>>>>>    net/smc/smc_ism.h      |   2 +
+>>>>>    net/smc/smc_loopback.c | 358 
+>>>>> +++++++++++++++++++++++++++++++++++++++++++++++++
+>>>>>    net/smc/smc_loopback.h |  63 +++++++++
+>>>>>    12 files changed, 662 insertions(+), 21 deletions(-)
+>>>>>    create mode 100644 net/smc/smc_loopback.c
+>>>>>    create mode 100644 net/smc/smc_loopback.h
+>>>>>
