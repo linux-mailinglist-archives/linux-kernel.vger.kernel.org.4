@@ -2,190 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4A266BE50
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3DC66BE94
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjAPMzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S229553AbjAPNDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjAPMy5 (ORCPT
+        with ESMTP id S229566AbjAPNCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:54:57 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035D01E5FA;
-        Mon, 16 Jan 2023 04:52:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NwX3w3pygz4f3xbv;
-        Mon, 16 Jan 2023 20:52:28 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgBH7uuMSMVjYH02Bw--.361S6;
-        Mon, 16 Jan 2023 20:52:30 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     jack@suse.cz, axboe@kernel.dk
-Cc:     kbusch@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shikemeng@huaweicloud.com
-Subject: [PATCH v3 4/5] sbitmap: add sbitmap_find_bit to remove repeat code in __sbitmap_get/__sbitmap_get_shallow
-Date:   Tue, 17 Jan 2023 04:50:58 +0800
-Message-Id: <20230116205059.3821738-5-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230116205059.3821738-1-shikemeng@huaweicloud.com>
-References: <20230116205059.3821738-1-shikemeng@huaweicloud.com>
+        Mon, 16 Jan 2023 08:02:38 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9131EFEE;
+        Mon, 16 Jan 2023 04:59:59 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id bk15so10412208ejb.9;
+        Mon, 16 Jan 2023 04:59:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IAZguNTJVi/a6qoNeng/AApLOsYaM+FNkT6jN5FeRBo=;
+        b=fcpft07FKnXkA5Fdv/XkfosHhmd2dr3mQUQXXiiyNlTXFZa6ui4wATziWFKR5vfMUw
+         z/yU7/3iI6h3icE9LDf3LFg/j3RA3qWjF8HkLmjvyATJQvDl+tRBzbX5W+WaHRHVsuuN
+         YFPLiXzPJy8RcIS9gwAO3g3xE3m9HMZP/XY7s4krb9ylVkCed/cQlCVShPABSUvUMoX0
+         ZLyfehF3K1+0JxvaAflqmqqc7NPE2rvkCnu8phW74qL0JiX2NQQA3AmcXSfawCRAmhHE
+         hvVVX1nRtZKy/HT/UsCW4AbBpxSkwww35EgYq5HodIohOP2fdJoUp+mgkBT7zp0qY52P
+         yuHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IAZguNTJVi/a6qoNeng/AApLOsYaM+FNkT6jN5FeRBo=;
+        b=djK814+R3w78/jiJ5h2t5D4ymqIt1B5BGOC2AIq7xc6gDuF5CfmPWqMhvYzU4AZPdP
+         2gjU3nvaPGu3hXQPI0vP1hETgze2HED4jmVf6X0HiufpW6rKwmVI4pgMfrbeW4kk2ynC
+         K4PWfFXkjKy0DMFUfCESMIAERWu3/Xe3/lo4HfXyXgwvA93K2ITSZy+8lGA6aQoIl7H/
+         3w3jxRxuw1hW/XJIKj9zmyg4oB8asUVRRbcWN7O4YVWlJCEcA15n/yAVmOht2RADORza
+         aHcN65RMXtCmIwzS7G1VOfGZUArm5cqyPM9AURsi28115zeX9ACH+VgrC53qA0ghsQVx
+         qE1g==
+X-Gm-Message-State: AFqh2kroWzXziC2vq7/x9eRwOj7R7MMa2RNMEKw5UnoH7bJwcGRIdvdc
+        V7z0i//bnmWgJ5ziV8P0aOFW44i+Je1zYQ==
+X-Google-Smtp-Source: AMrXdXt+KIsbGtUUAJ5IN1palYinCuWmotGeAPr4XqskjrlDpAxK8fm5qeFPnzEf8newqhjWwz99zg==
+X-Received: by 2002:a17:907:b68c:b0:870:4986:2ce with SMTP id vm12-20020a170907b68c00b00870498602cemr4795680ejc.58.1673873998114;
+        Mon, 16 Jan 2023 04:59:58 -0800 (PST)
+Received: from [192.168.1.113] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id lj1-20020a170906f9c100b0078d22b0bcf2sm11734515ejb.168.2023.01.16.04.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 04:59:57 -0800 (PST)
+Message-ID: <194f38f2dc7d521375e5a660baaf1be31536be9a.camel@gmail.com>
+Subject: Re: [PATCH] tools: bpf: Disable stack protector
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Quentin Monnet <quentin@isovalent.com>,
+        Peter Foley <pefoley2@pefoley.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Date:   Mon, 16 Jan 2023 14:59:56 +0200
+In-Reply-To: <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
+References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
+         <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH7uuMSMVjYH02Bw--.361S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4UCF1xGF1DWF1UCw17KFg_yoW5KrWDpF
-        4Fqa4fK3s5tryUur4DtFyrAF9xGw43J3ZxJayfXr1ruF1UGFn3Krs5KFySqa43CFWDZFWD
-        Xa15Xr18WF1UZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0
-        rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6x
-        IIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xv
-        wVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFc
-        xC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_
-        Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2
-        IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F
-        4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRKfOw
-        UUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are three differences between __sbitmap_get and
-__sbitmap_get_shallow when searching free bit:
-1. __sbitmap_get_shallow limit number of bit to search per word.
-__sbitmap_get has no such limit.
-2. __sbitmap_get_shallow always searches with wrap set. __sbitmap_get set
-wrap according to round_robin.
-3. __sbitmap_get_shallow always searches from first bit in first word.
-__sbitmap_get searches from first bit when round_robin is not set
-otherwise searches from SB_NR_TO_BIT(sb, alloc_hint).
+On Mon, 2023-01-16 at 10:30 +0000, Quentin Monnet wrote:
+> 2023-01-14 18:00 UTC-0500 ~ Peter Foley <pefoley2@pefoley.com>
+> > Avoid build errors on distros that force the stack protector on by
+> > default.
+> > e.g.
+> >   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
+> > skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__sta=
+ck_chk_fail' is not supported.
+> > int iter(struct bpf_iter__task_file *ctx)
+> >     ^
+> > 1 error generated.
+> >=20
+> > Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+> > ---
+> >  tools/bpf/bpftool/Makefile    | 1 +
+> >  tools/bpf/runqslower/Makefile | 5 +++--
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index f610e184ce02a..36ac0002e386f 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux=
+.h $(LIBBPF_BOOTSTRAP)
+> >  		-I$(or $(OUTPUT),.) \
+> >  		-I$(srctree)/tools/include/uapi/ \
+> >  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
+> > +		-fno-stack-protector \
+> >  		-g -O2 -Wall -target bpf -c $< -o $@
+> >  	$(Q)$(LLVM_STRIP) -g $@
+> > =20
+>=20
+> For bpftool, a similar patch was already submitted and merged to the
+> bpf-next tree last Friday: 878625e1c7a1 ("bpftool: Always disable stack
+> protection for BPF objects").
+>=20
+> > diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makef=
+ile
+> > index 8b3d87b82b7a2..f7313cc966a04 100644
+> > --- a/tools/bpf/runqslower/Makefile
+> > +++ b/tools/bpf/runqslower/Makefile
+> > @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+> >  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+> > =20
+> >  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+> > -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
+> > -		 -c $(filter %.c,$^) -o $@ &&				      \
+> > +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
+> > +		 -fno-stack-protector 					\
+> > +		 -c $(filter %.c,$^) -o $@ &&				\
+> >  	$(LLVM_STRIP) -g $@
+> > =20
+> >  $(OUTPUT)/%.o: %.c | $(OUTPUT)
+>=20
+> This one looks good, thanks!
+>=20
+> I note a few more places in the repository where we compile to BPF using
+> clang. Given that there have been patches to add -fno-stack-protector at
+> several locations already, have you checked if any of these also need
+> the flag, by any chance, so we could fix this once and for all?
+>=20
+> $ git grep -l 'target bpf ' | egrep -v '(Documentation|bpftool)'
+> kernel/bpf/preload/iterators/Makefile
+> samples/bpf/Makefile
+> samples/bpf/test_lwt_bpf.sh
+> tools/bpf/runqslower/Makefile
+> tools/build/feature/Makefile
+> tools/perf/Makefile.perf
+> tools/perf/util/llvm-utils.c
+> tools/testing/selftests/bpf/Makefile
+> tools/testing/selftests/net/bpf/Makefile
+> tools/testing/selftests/tc-testing/Makefile
 
-Add helper function sbitmap_find_bit function to do common search while
-accept "limit depth per word", "wrap flag" and "first bit to
-search" from caller to support the need of both __sbitmap_get and
-__sbitmap_get_shallow.
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- lib/sbitmap.c | 70 ++++++++++++++++++++++++---------------------------
- 1 file changed, 33 insertions(+), 37 deletions(-)
-
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 27cfcc35956e..2514e7a3f6ca 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -186,27 +186,22 @@ static int sbitmap_find_bit_in_word(struct sbitmap_word *map,
- 	return nr;
- }
- 
--static int __sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
-+static int sbitmap_find_bit(struct sbitmap *sb,
-+			    unsigned int depth,
-+			    unsigned int index,
-+			    unsigned int alloc_hint,
-+			    bool wrap)
- {
--	unsigned int i, index;
-+	unsigned int i;
- 	int nr = -1;
- 
--	index = SB_NR_TO_INDEX(sb, alloc_hint);
--
--	/*
--	 * Unless we're doing round robin tag allocation, just use the
--	 * alloc_hint to find the right word index. No point in looping
--	 * twice in find_next_zero_bit() for that case.
--	 */
--	if (sb->round_robin)
--		alloc_hint = SB_NR_TO_BIT(sb, alloc_hint);
--	else
--		alloc_hint = 0;
--
- 	for (i = 0; i < sb->map_nr; i++) {
- 		nr = sbitmap_find_bit_in_word(&sb->map[index],
--					      __map_depth(sb, index),
--					      alloc_hint, !sb->round_robin);
-+					      min_t(unsigned int,
-+						    __map_depth(sb, index),
-+						    depth),
-+					      alloc_hint, wrap);
-+
- 		if (nr != -1) {
- 			nr += index << sb->shift;
- 			break;
-@@ -221,6 +216,26 @@ static int __sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
- 	return nr;
- }
- 
-+static int __sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
-+{
-+	unsigned int index;
-+
-+	index = SB_NR_TO_INDEX(sb, alloc_hint);
-+
-+	/*
-+	 * Unless we're doing round robin tag allocation, just use the
-+	 * alloc_hint to find the right word index. No point in looping
-+	 * twice in find_next_zero_bit() for that case.
-+	 */
-+	if (sb->round_robin)
-+		alloc_hint = SB_NR_TO_BIT(sb, alloc_hint);
-+	else
-+		alloc_hint = 0;
-+
-+	return sbitmap_find_bit(sb, UINT_MAX, index, alloc_hint,
-+				!sb->round_robin);
-+}
-+
- int sbitmap_get(struct sbitmap *sb)
- {
- 	int nr;
-@@ -242,31 +257,12 @@ static int __sbitmap_get_shallow(struct sbitmap *sb,
- 				 unsigned int alloc_hint,
- 				 unsigned long shallow_depth)
- {
--	unsigned int i, index;
--	int nr = -1;
-+	unsigned int index;
- 
- 	index = SB_NR_TO_INDEX(sb, alloc_hint);
- 	alloc_hint = SB_NR_TO_BIT(sb, alloc_hint);
- 
--	for (i = 0; i < sb->map_nr; i++) {
--		nr = sbitmap_find_bit_in_word(&sb->map[index],
--					      min_t(unsigned int,
--						    __map_depth(sb, index),
--						    shallow_depth),
--					      alloc_hint, true);
--
--		if (nr != -1) {
--			nr += index << sb->shift;
--			break;
--		}
--
--		/* Jump to next index. */
--		alloc_hint = 0;
--		if (++index >= sb->map_nr)
--			index = 0;
--	}
--
--	return nr;
-+	return sbitmap_find_bit(sb, shallow_depth, index, alloc_hint, true);
- }
- 
- int sbitmap_get_shallow(struct sbitmap *sb, unsigned long shallow_depth)
--- 
-2.30.0
+A bit tangential, but since BPF LLVM backend does not support the
+stack protector (should it?) there is also an option to adjust LLVM
+to avoid this instrumentation, WDYT?
 
