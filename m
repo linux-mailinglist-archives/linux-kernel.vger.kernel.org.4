@@ -2,78 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1FD66B8D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFC666B8DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbjAPILh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 03:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S232170AbjAPIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 03:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbjAPILe (ORCPT
+        with ESMTP id S232011AbjAPIMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:11:34 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EFD6592
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:11:33 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id cf18so59779091ejb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:11:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D4ymnYKhsS5iGv9bsc4wQY9ntYFsPX+jp5KzAaLzQD4=;
-        b=xWuVPpbqSPdKQoVpn+evZUOz92Ak0AkA2LERHD4T1TTO28wKqxKz+bFsrqX98liYZF
-         fjdr/eMRiJVOss4qNo+G76S+TTDHjGBMM9DAuvnm/GGJXfjrJ2xlUz4kP4qXGxN53s1E
-         xFiK8JauJxOfzcqUK9wQa7qzhLMDUhDg3XV+CdjZdxKNUmvOxI+jzq2UWgRk29a7NuPj
-         GdTdXacEmxT4M5N/oSjUAtwyz8dEkrKFRW5gRpVnQLX9ijd6jRxMDH9pfuedkr2TGG9M
-         yP+FmlEeTcD+UhTP+xPqLIVtLJegrmApSkNpggApjFjAVpWpcQckA+yT6lT5BlqVB4SF
-         ta2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D4ymnYKhsS5iGv9bsc4wQY9ntYFsPX+jp5KzAaLzQD4=;
-        b=uocqcxx4YAYUMkEzltJqDD9BG0YfU1ncVRDIuMcCSczDKxcHnhGhxr/uMH5/DLE05P
-         xXkwqilvwkPJ8p9v1/fwxXdpcpve7Mv+kt1GNZrlIv38lnwYam9aWW8Ie3JuMJ6ezCZ6
-         EZoYW2L9ZhrRbo0eZdflXRnOBnr6UnWm7PTZ8/jqagOd0bp2Ch8Eiz8FtPUzlK4gKyoH
-         WFJFn+NQctLptOgAb+2Mcuu7NZ9NCp+MzDXorhFoLL5GlcN+rL0kpntoxKuq0s/A2oMN
-         w+kM/+pcQKypXrSrpusGiS1EOWwTAUb1uzBqstQdLe+W8jdUj1g36Lka9zTPTeQkhXz5
-         /GGQ==
-X-Gm-Message-State: AFqh2kp3VNQkhg4QyEDaetOUBt5YZu5dj8CxBehL+FkrQoK7fI2KDqaO
-        Tw5Dj9upiTfUMQU05wD6NpusjA==
-X-Google-Smtp-Source: AMrXdXsBdP72AkcKF65oxwlJ7ZJRCVcEpKDcRDmYVyokU253P4At6lvgwyuEbeN/2E/ruNFGCMa3rQ==
-X-Received: by 2002:a17:906:b00d:b0:7c1:8ba6:6eb3 with SMTP id v13-20020a170906b00d00b007c18ba66eb3mr81757639ejy.35.1673856692269;
-        Mon, 16 Jan 2023 00:11:32 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v18-20020aa7cd52000000b0047eeaae9558sm3158160edw.60.2023.01.16.00.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 00:11:31 -0800 (PST)
-Message-ID: <63f3d41a-1aa3-396a-b515-bc805f4a19b4@linaro.org>
-Date:   Mon, 16 Jan 2023 09:11:30 +0100
+        Mon, 16 Jan 2023 03:12:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2946F65B1;
+        Mon, 16 Jan 2023 00:12:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE6CC60EDF;
+        Mon, 16 Jan 2023 08:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4385AC433D2;
+        Mon, 16 Jan 2023 08:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673856756;
+        bh=WcIVGhhIJd57HmWTdUrkvlJouTMGu4zpz/MuC9iSurc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rq5MTjXE75d9M00WJrDfQodfZimmgH7p9fFUN3wc9mzEAMyZw0AbRzjsWznYVkFfT
+         fz4Ig8UB9FBwIZiP8OMxvR0MRslDaH7D4UyAD8pw4/oPVSXwLGwBsO56qk50KoohpH
+         8XA5Dg61doYwB+7USg68ECLTE3cypOp7mImpV8o3ovLr8fuTAJG7/8ZNVOiwviUlZi
+         XrTAYPXnFQkAXTuCKdG1zyXCvIvkwoPRAiPdtgxqZm8F9YBBIxgufJZ9d0n5q6b1G5
+         oi8xmHtm04no1RKd+G0aFC/1mnjH+llB+f8Io6f3jMSvZYFucQKVKWJX3Ar1OwZrYu
+         jh8EtWNdUX3AA==
+Date:   Mon, 16 Jan 2023 10:12:31 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM
+ suspend fails
+Message-ID: <Y8UG77zvJeic7Cyc@kernel.org>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com>
+ <20230106030156.3258307-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RESEND v3 02/13] arm64: dts: mediatek: mt8195: add MDP3 nodes
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230116032147.23607-1-moudy.ho@mediatek.com>
- <20230116032147.23607-3-moudy.ho@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230116032147.23607-3-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106030156.3258307-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,75 +65,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 04:21, Moudy Ho wrote:
-> Add device nodes for Media Data Path 3 (MDP3) modules.
+On Fri, Jan 06, 2023 at 04:01:56AM +0100, Jason A. Donenfeld wrote:
+> TPM 1 is sometimes broken across system suspends, due to races or
+> locking issues or something else that haven't been diagnosed or fixed
+> yet, most likely having to do with concurrent reads from the TPM's
+> hardware random number generator driver. These issues prevent the system
+> from actually suspending, with errors like:
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+>   tpm tpm0: A TPM error (28) occurred continue selftest
+>   ...
+>   tpm tpm0: A TPM error (28) occurred attempting get random
+>   ...
+>   tpm tpm0: Error (28) sending savestate before suspend
+>   tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
+>   tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
+>   tpm_tis 00:08: PM: failed to suspend: error 28
+>   PM: Some devices failed to suspend, or early wake event detected
+> 
+> This issue was partially fixed by 23393c646142 ("char: tpm: Protect
+> tpm_pm_suspend with locks"), in a last minute 6.1 commit that Linus took
+> directly because the TPM maintainers weren't available. However, it
+> seems like this just addresses the most common cases of the bug, rather
+> than addressing it entirely. So there are more things to fix still,
+> apparently.
+> 
+> In lieu of actually fixing the underlying bug, just allow system suspend
+> to continue, so that laptops still go to sleep fine. Later, this can be
+> reverted when the real bug is fixed.
+> 
+> Link: https://lore.kernel.org/lkml/7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz/
+> Cc: stable@vger.kernel.org # 6.1+
+> Reported-by: Vlastimil Babka <vbabka@suse.cz>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 420 +++++++++++++++++++++++
->  1 file changed, 420 insertions(+)
+> This is basically untested and I haven't worked out if there are any
+> awful implications of letting the system sleep when TPM suspend fails.
+> Maybe some PCRs get cleared and that will make everything explode on
+> resume? Maybe it doesn't matter? Somebody well versed in TPMology should
+> probably [n]ack this approach.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 206dd534c3f6..d2d1ba71222d 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -1706,6 +1706,133 @@
->  			#clock-cells = <1>;
->  		};
+>  drivers/char/tpm/tpm-interface.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index d69905233aff..6df9067ef7f9 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
+>  	}
 >  
-> +		mdp3-rdma0@14001000 {
+>  suspended:
+> -	return rc;
+> +	if (rc)
+> +		pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
+> +		       chip->dev_num, rc);
+> +	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+>  
+> -- 
+> 2.39.0
+> 
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+Let me read all the threads through starting from the original report. I've
+had emails piling up because of getting sick before holiday, and holiday
+season after that.
 
-0 is definitely not generic
+This looks sane
 
-Isn't this dma-controller? or if not then just rdma?
+Apologies for the lack of response.
 
-> +			compatible = "mediatek,mt8195-mdp3-rdma";
-> +			reg = <0 0x14001000 0 0x1000>;
-> +			mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0x1000 0x1000>;
-> +			mediatek,gce-events = <CMDQ_EVENT_VPP0_MDP_RDMA_SOF>,
-> +					      <CMDQ_EVENT_VPP0_MDP_RDMA_FRAME_DONE>;
-> +			power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>,
-> +					<&spm MT8195_POWER_DOMAIN_VPPSYS1>;
-> +			iommus = <&iommu_vpp M4U_PORT_L4_MDP_RDMA>,
-> +				 <&iommu_vpp M4U_PORT_L4_MDP_WROT>;
-> +			clocks = <&vppsys0 CLK_VPP0_MDP_RDMA>,
-> +				 <&topckgen CLK_TOP_CFG_VPP0>,
-> +				 <&topckgen CLK_TOP_CFG_26M_VPP0>,
-> +				 <&vppsys0 CLK_VPP0_WARP0_ASYNC_TX>,
-> +				 <&vppsys0 CLK_VPP0_WARP0_RELAY>,
-> +				 <&vppsys0 CLK_VPP0_WARP0_MDP_DL_ASYNC>,
-> +				 <&vppsys0 CLK_VPP0_WARP1_ASYNC_TX>,
-> +				 <&vppsys0 CLK_VPP0_WARP1_RELAY>,
-> +				 <&vppsys0 CLK_VPP0_WARP1_MDP_DL_ASYNC>,
-> +				 <&vppsys0 CLK_VPP0_VPP02VPP1_RELAY>,
-> +				 <&vppsys1 CLK_VPP1_DL_ASYNC>,
-> +				 <&vppsys1 CLK_VPP1_VPP0_DL_ASYNC>,
-> +				 <&vppsys1 CLK_VPP1_VPP0_DL_RELAY>,
-> +				 <&vppsys0 CLK_VPP0_VPP12VPP0_ASYNC>,
-> +				 <&vppsys1 CLK_VPP1_VPP0_DL1_RELAY>,
-> +				 <&vppsys1 CLK_VPP1_SVPP2_VDO0_DL_RELAY>,
-> +				 <&vppsys1 CLK_VPP1_SVPP3_VDO1_DL_RELAY>,
-> +				 <&vppsys1 CLK_VPP1_SVPP2_VDO1_DL_RELAY>,
-> +				 <&vppsys1 CLK_VPP1_SVPP3_VDO0_DL_RELAY>;
-> +			mboxes = <&gce1 12 CMDQ_THR_PRIO_1>,
-> +				 <&gce1 13 CMDQ_THR_PRIO_1>,
-> +				 <&gce1 14 CMDQ_THR_PRIO_1>,
-> +				 <&gce1 21 CMDQ_THR_PRIO_1>,
-> +				 <&gce1 22 CMDQ_THR_PRIO_1>;
-> +		};
-> +
-> +		mdp3-fg0@14002000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-"0" suffix is definitely nothing generic. Drop such suffixes everywhere.
-Drop also "mdp3" prefix everywhere.
-
-
-Best regards,
-Krzysztof
-
+BR, Jarkko
