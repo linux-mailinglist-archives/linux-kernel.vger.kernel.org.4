@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E6F66BB8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBAB66BB8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjAPKSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:18:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
+        id S229588AbjAPKTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjAPKSr (ORCPT
+        with ESMTP id S229869AbjAPKTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:18:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4411A95B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:17:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673864277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NoqwI+WfW2YX1zBiZhXX6tIkshOZecUe6DtUqu/J1c4=;
-        b=SangRvmns9bdyGzS0VniOdfKY2wq9FoJ4fvhx48leFa/tX+ayav2m5v6/jh0NQVciaJuwg
-        2kwYkkfdxI2S1+qthWTRVc1SnUz9/j/r9p+sSvo9scFPwScfCC6Tvn5fvu6LxvtRJzWHo5
-        Z7O70frSdIqqKIah/mxTL4Y7eJR6SrA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-437-FUYF5cAGMA6c7ywpaanXiA-1; Mon, 16 Jan 2023 05:17:56 -0500
-X-MC-Unique: FUYF5cAGMA6c7ywpaanXiA-1
-Received: by mail-wm1-f71.google.com with SMTP id z22-20020a05600c0a1600b003db00dc4b69so440905wmp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:17:56 -0800 (PST)
+        Mon, 16 Jan 2023 05:19:14 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679D25592
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:19:13 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id y19so6484927edc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:19:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qpFaSguiiG5sSHfQpXcgWAbjptbT0uDYsnZiuy0reew=;
+        b=Fkm4AffZNk48McGdW+1Y8+1FGAHhY1hGahKH/oAorEqzl7rgGtEe2ea0jeZBUxnDow
+         hF53GMkNMxVz8g5R3IywO3S/ZgYqxOalrADzSEh+3pK3mKWX6ma1Z8jihu1dlEry3JYB
+         YU7HXiHYmgQL9DhHJDpZXi5fqz3Lj6tJr7CFqnW+YbK0j552jjhbwFSjV9P/Sav87zeN
+         r6N7upl+wYglr6gCQ/GS9/lfucTz4FLi+BhCdcj0LYpQAS+pGLOfFvZn8z82Q4kmOu+8
+         WKMLiC2xytUGg+2yQROFHv/Cd4jyxpC3U+QRV2bMT3sNQPFrqSte0HpwXezWPkegpAUs
+         kAzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NoqwI+WfW2YX1zBiZhXX6tIkshOZecUe6DtUqu/J1c4=;
-        b=H3c81GyCRfGoNj92ZMRS6+UNpiROVzHIEeMWuH+ZvR8j3yromty4I7IkLo4a0pL3ju
-         wcSfJyChSHkYbvKDp1VldtrAyNqczetWeOQzABiHumZeM4B05sYbLc6E6KFf4w0UoeOr
-         FaZPccU6/odYPxhn6KW3OiciC4VKE7Fgb582WBFBYhMdM19L371vNLrRM6FizPluruy4
-         A8i2OH+JTCG3N2zVjq333IqvViOPakaqi0wF35xXj2oZvbjgl6nZMNx+gyNphPT3l6iL
-         yVSTq9+OpCTQMJF78dXun+aVooDU5Yj5N6BTOaZXXhOtbknXWDtmwnZCSiLbiwGOaTOG
-         m0hQ==
-X-Gm-Message-State: AFqh2kr/fDDkNn9K6nJgWrH7lotJjXH4E2ayYlEMGoJ4cda7rcWS0a4P
-        JIfnvEb2MYi+up8F6JMQYYWrJ/o2ZeK78HgPHsGcL0etHr1/7Xh7RtAGcywmflhZD0KpUbVVMTE
-        Nh0iZHr0wLtr+yjXFHDRb8zHl
-X-Received: by 2002:adf:f6cf:0:b0:2bc:858a:3def with SMTP id y15-20020adff6cf000000b002bc858a3defmr7286488wrp.5.1673864275294;
-        Mon, 16 Jan 2023 02:17:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsw1f4fxhjEtEz+P+Gk5cOHrWmBaeN+EJ/aeu07b++MxfTtTmC697Oy/NM954Nv8W9cHtD2tQ==
-X-Received: by 2002:adf:f6cf:0:b0:2bc:858a:3def with SMTP id y15-20020adff6cf000000b002bc858a3defmr7286475wrp.5.1673864275005;
-        Mon, 16 Jan 2023 02:17:55 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:1000:21d5:831d:e107:fbd6? (p200300cbc704100021d5831de107fbd6.dip0.t-ipconnect.de. [2003:cb:c704:1000:21d5:831d:e107:fbd6])
-        by smtp.gmail.com with ESMTPSA id bp28-20020a5d5a9c000000b00273cd321a1bsm25937199wrb.107.2023.01.16.02.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 02:17:54 -0800 (PST)
-Message-ID: <06423461-c543-56fe-cc63-cabda6871104@redhat.com>
-Date:   Mon, 16 Jan 2023 11:17:52 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qpFaSguiiG5sSHfQpXcgWAbjptbT0uDYsnZiuy0reew=;
+        b=x9LxHu1p0RskPOmYmvFtbDbGXxFBlNxFOqde1J0LfBq4ZarlzPNx7dDNMn0jlbtzua
+         zfutUxxESz+Xt9BLZCf3KXHlQaTcuo3ZAZXhIPqcl4ipWvDsopKDLT+NfppwjYK6s4Le
+         ATQjDz4HFfb1DOIumdPP7NsFqTcUoAKBq85icsp8TiTLXWBlBkme9rRpdB9IYw/hUrzQ
+         7fsa4tv/6o0H26LiT3F1RB0zmYI1EhI1nDcqxTBlTea3nJx9b0EtZKtjWnQbnR+tw9/p
+         23SSqiOQhfRTaXs95YtgoScaeHlkcjkaq7YvQnswpE2n62JX+JyO/t00YTtgxVlx4FwF
+         BhEA==
+X-Gm-Message-State: AFqh2kqyUObxxZ2RF57m8mlsFTdUkeUlHIb0kU3PgwfCE1/x1WxejSUb
+        1cxm84r1UQyiaArZnoMLkuJPTTZ2OOFlOF3DkPVgPg==
+X-Google-Smtp-Source: AMrXdXs8lFkjin3Xc38VxLUZ1H0RxVFbJcO8t+nYz/ev+BVDBbRsh9NWNIrb/degGGcyXJc5Q1LYxjrVid8GoTL+Seo=
+X-Received: by 2002:a05:6402:f29:b0:499:b3b2:cfbf with SMTP id
+ i41-20020a0564020f2900b00499b3b2cfbfmr263340eda.145.1673864352024; Mon, 16
+ Jan 2023 02:19:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
- walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>,
-        James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-22-jthoughton@google.com> <Y78+/wleTEC3gyqu@x1n>
- <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
- <Y8AnROAtMngKntnq@x1n>
- <CADrL8HWFfqCqbpmvv8BSpvvzJ9aEeBEN30bMLuWGancsfMXv2w@mail.gmail.com>
- <Y8BtJzBLTpw5IR+H@x1n>
- <CADrL8HUi-j4ais45Xq8Jpb6a7DsWiXrKNeJfsqBRMi1Lier8xA@mail.gmail.com>
- <Y8B8mW2zSWDDwp7G@x1n>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y8B8mW2zSWDDwp7G@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <60a52348-7d50-1056-a596-e154f87c99d2@amd.com> <Yyt5LSxSz+6QeWF1@zn.tnic>
+ <YywvmueFj/ibyZdf@smile.fi.intel.com> <YywwEvkZK1R9mJfE@smile.fi.intel.com>
+ <c0c8bdce-26a0-ad3f-749b-7585d947608b@redhat.com> <YyxrdpUyc+kp48kX@zn.tnic>
+ <33d5cc27-474b-fdec-a6b0-84ac16f7d386@redhat.com> <CAOtMz3M=BTZUTRMHWGULwMDWmGdOzHKo=UcZeg3sP8_ndVYk2g@mail.gmail.com>
+ <YzG657ZFeEvLd6hm@zn.tnic> <CAOtMz3MWnmdMbw_CKxBKVt=TJpLNJuZUzpxvnDi+QnigaLozLA@mail.gmail.com>
+ <Y7v2j92Ol6dL3FLE@zn.tnic>
+In-Reply-To: <Y7v2j92Ol6dL3FLE@zn.tnic>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Mon, 16 Jan 2023 11:19:00 +0100
+Message-ID: <CAOtMz3PG4nku-O7dh+1U_DA05HAmQboTqwUQkCkrXQLV9bFjPw@mail.gmail.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, wsa@kernel.org,
+        rrangel@chromium.org, upstream@semihalf.com,
+        Muralidhara M K <muralimk@amd.com>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.01.23 22:33, Peter Xu wrote:
-> On Thu, Jan 12, 2023 at 04:17:52PM -0500, James Houghton wrote:
->> I'll look into it, but doing it this way will use _mapcount, so we
->> won't be able to use the vmemmap optimization. I think even if we do
->> use Hugh's approach, refcount is still being kept on the head page, so
->> there's still an overflow risk there (but maybe I am
->> misunderstanding).
-> 
-> Could you remind me what's the issue if using refcount on the small pages
-> rather than the head (assuming vmemmap still can be disabled)?
+Hi Borislav,
 
-The THP-way of doing things is refcounting on the head page. All folios 
-use a single refcount on the head.
+> Make init_amd_nbs() arch_initcall_sync() so that it executes after PCI init.
 
-There has to be a pretty good reason to do it differently.
+I described earlier in this thread why such option is not working -
+let me quote myself:
 
--- 
-Thanks,
+It's not enough for running init_amd_nbs() to have only
+pci_arch_init() done. We need the pci bus to be created and registered
+with all devices found on the bus. We are traversing through them and
+trying to find northbridge VID/DID. Due to the above, we need to run
+init_amd_nbs() only after acpi_scan_init() that is invoked from
+acpi_init() which is registered as subsys_initcall. That's why the
+trick with switching init_amd_nbs() to arch_initcall_sync will not
+work.
 
-David / dhildenb
+We have a kind of chicken-and-egg problem here. Or is there something I missed?
 
+I wonder if there is upstreamable option to control order of the
+drivers' init by forcing link order?
+
+Best Regards,
+Jan
