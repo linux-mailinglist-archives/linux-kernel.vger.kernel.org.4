@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B85F66CECD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B594866CED1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbjAPS1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        id S234635AbjAPS22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbjAPS0l (ORCPT
+        with ESMTP id S233087AbjAPS16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:26:41 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958EC3A58B;
-        Mon, 16 Jan 2023 10:13:21 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 177A81EC054E;
-        Mon, 16 Jan 2023 19:13:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673892800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i/kh1ilFTWPtG8UywoZ6jYpIHXmqf2pU9jgg6W4/tcs=;
-        b=BRT1B4yyAW2z+g8WbQ/stM+fatfcjgjLyNkdp+OUWrixORtyBSH0Kh6dDVwJm6rM+DnuXk
-        mXc5FpQRMgx5fR09DlWEwDIqF6jYvwkasW8eQ0P0kvsYtUkOoGPp6YnAyL56laqkWWepY8
-        QrALCXN4/E/JMamNCWpaqbRcjCGGeoA=
-Date:   Mon, 16 Jan 2023 19:13:15 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kim Phillips <kim.phillips@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/7] x86/cpu, kvm: Move the LFENCE_RDTSC / LFENCE
- always serializing feature
-Message-ID: <Y8WTnx/ukvdAEeoe@zn.tnic>
-References: <20230110224643.452273-1-kim.phillips@amd.com>
- <20230110224643.452273-5-kim.phillips@amd.com>
+        Mon, 16 Jan 2023 13:27:58 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34621E1D5;
+        Mon, 16 Jan 2023 10:14:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oZ/eIqVO5uQMasPeB15wvp3K//r6DTxoyyALad2UpFA=; b=aPBcR9TgPdrX8Re8IVHqBUFNUK
+        XyNlwN0rPdVq/8bvRhdN3fuubtm/R2AaMXi6XE+rObMlbJUo3P/1o/UXtfhl86pFo/ZY4xChj2bSp
+        zFnBEX90KCjYcXtuh4RsZL9JtcfiGpMdl+v2sAGyd98aYIVwJKZBW7/uinb/h7ti07Ps76lzsh9aD
+        494/TqDNMEQFctOU+FJgwXJ+lo1qdYzvsDmwo0Z+5SvmrPX1HJMz/Yd21t5M5TUKFOKzmATYp9j7f
+        PB3wtuAUJdKSMKzDnaL4imf664WUh99ukXpuvglfwAb+447oafXyGAJsLwHIwBZYzQ0iW0mnbmupz
+        dulPqpNg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36144)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pHTzf-0005dC-ND; Mon, 16 Jan 2023 18:14:03 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pHTzc-0006Du-NE; Mon, 16 Jan 2023 18:14:00 +0000
+Date:   Mon, 16 Jan 2023 18:14:00 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y8WT6GwMqwi8rBe7@shell.armlinux.org.uk>
+References: <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
+ <87h6wq35dn.fsf@miraculix.mork.no>
+ <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
+ <87bkmy33ph.fsf@miraculix.mork.no>
+ <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
+ <875yd630cu.fsf@miraculix.mork.no>
+ <871qnu2ztz.fsf@miraculix.mork.no>
+ <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk>
+ <87pmbe1hu0.fsf@miraculix.mork.no>
+ <87lem21hkq.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230110224643.452273-5-kim.phillips@amd.com>
+In-Reply-To: <87lem21hkq.fsf@miraculix.mork.no>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,57 +79,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 04:46:39PM -0600, Kim Phillips wrote:
-> The LFENCE_RDTSC / LFENCE always serializing feature was a scattered bit
-> and open-coded for KVM in __do_cpuid_func().  Add it to its newly added
-> CPUID leaf 0x80000021 EAX proper, and propagate it in kvm_set_cpu_caps()
-> instead.
+On Mon, Jan 16, 2023 at 07:04:53PM +0100, Bjørn Mork wrote:
+> Bjørn Mork <bjorn@mork.no> writes:
 > 
-> Also drop the bit description comments now it's more self-describing.
+> > [   52.473325] offset:20 0x10000
 > 
-> Whilst there, switch to using the more efficient cpu_feature_enabled()
-> instead of static_cpu_has().
-> 
-> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-> ---
->  arch/x86/include/asm/cpufeatures.h | 3 ++-
->  arch/x86/kvm/cpuid.c               | 9 ++++-----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 0cd7b4afd528..79da8e492c0f 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -97,7 +97,7 @@
->  #define X86_FEATURE_SYSENTER32		( 3*32+15) /* "" sysenter in IA32 userspace */
->  #define X86_FEATURE_REP_GOOD		( 3*32+16) /* REP microcode works well */
->  #define X86_FEATURE_AMD_LBR_V2		( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
-> -#define X86_FEATURE_LFENCE_RDTSC	( 3*32+18) /* "" LFENCE synchronizes RDTSC */
-> +/* FREE, was #define X86_FEATURE_LFENCE_RDTSC		( 3*32+18) "" LFENCE synchronizes RDTSC */
->  #define X86_FEATURE_ACC_POWER		( 3*32+19) /* AMD Accumulated Power Mechanism */
->  #define X86_FEATURE_NOPL		( 3*32+20) /* The NOPL (0F 1F) instructions */
->  #define X86_FEATURE_ALWAYS		( 3*32+21) /* "" Always-present feature */
-> @@ -428,6 +428,7 @@
->  
->  /* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
->  #define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" AMD No Nested Data Breakpoints */
-> +#define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
+> Should have warned about my inability to write the simplest code without
+> adding more bugs than characters.  20 != 0x20
 
-Hmm, a synthetic bit which gets replaced with a vendor oneÂ and then the other
-vendors set it too. I don't see why that cannot work but we probably should be
-careful here.
+Ah, that kind of explains the lack of change in the values at offset 20!
 
-dhansen, am I missing an angle?
+> [   44.139420] mtk_soc_eth 15100000.ethernet wan: Link is Down
+> [   47.259922] mtk_sgmii_select_pcs: id=1
+> [   47.263683] mtk_pcs_config: interface=4
+> [   47.267503] offset:0 0x140
+> [   47.267505] offset:4 0x4d544950
+> [   47.270210] offset:8 0x20
+> [   47.273335] offset:0x20 0x31120018
+> [   47.275939] forcing AN
+> [   47.281676] mtk_pcs_config: rgc3=0x0, advertise=0x1 (changed), link_timer=1600000,  sgm_mode=0x103, bmcr=0x1200, use_an=1
+> [   47.292610] mtk_pcs_link_up: interface=4
+> [   47.296516] offset:0 0x81140
+> [   47.296518] offset:4 0x4d544950
+> [   47.299387] offset:8 0x1
+> [   47.302512] offset:0x20 0x3112011b
+> [   47.305043] mtk_soc_eth 15100000.ethernet wan: Link is Up - 1Gbps/Full - flow control rx/tx
+> [   56.619420] mtk_soc_eth 15100000.ethernet wan: Link is Down
+> [   60.779865] mtk_sgmii_select_pcs: id=1
+> [   60.783623] mtk_pcs_config: interface=22
+> [   60.787531] offset:0 0x81140
+> [   60.787533] offset:4 0x4d544950
+> [   60.790409] offset:8 0x1
+> [   60.793535] offset:0x20 0x3112011b
+> [   60.796057] mtk_pcs_config: rgc3=0x4, advertise=0x20 (changed), link_timer=10000000,  sgm_mode=0x0, bmcr=0x0, use_an=0
+> [   60.810117] mtk_pcs_link_up: interface=22
+> [   60.814110] offset:0 0x40140
+> [   60.814112] offset:4 0x4d544950
+> [   60.816976] offset:8 0x20
+> [   60.820105] offset:0x20 0x31120018
+> [   60.822723] mtk_soc_eth 15100000.ethernet wan: Link is Up - 2.5Gbps/Full - flow control rx/tx
 
-Also, X86_FEATURE_LFENCE_RDTSC gets set in init_amd() along with setting
-DE_CFG[1]. I think you should check the new flag here first and avoid the
-setting if that flag is set. Just for good measure - not that it changes
-anything but still, it is cheap to do.
+That all looks fine. However, I'm running out of ideas. What we
+seem to have is:
 
-Thx.
+PHY:
+VSPEC1_SGMII_CTRL = 0x34da
+VSPEC1_SGMII_STAT = 0x000e
+
+The PHY is programmed to exchange SGMII with the host PCS, and it
+says that it hasn't completed that exchange (bit 5 of STAT).
+
+The Mediatek PCS says:
+BMCR = 0x1140		AN enabled
+BMSR = 0x0008		AN capable
+ADVERTISE = 0x0001	SGMII response (bit 14 is clear, hardware is
+			supposed to manage that bit)
+LPA = 0x0000		SGMII received control word (nothing)
+SGMII_MODE = 0x011b	SGMII mode, duplex AN, 1000M, Full duplex,
+			Remote fault disable
+
+which all looks like it should work - but it isn't.
+
+One last thing I can think of trying at the moment would be writing
+the VSPEC1_SGMII_CTRL with 0x36da, setting bit 9 which allegedly
+restarts the SGMII exchange. There's some comments in the PHY driver
+that this may be needed - maybe it's necessary once the MAC's PCS
+has been switched to SGMII mode.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
