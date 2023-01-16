@@ -2,148 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DA066CFF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D154566D008
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbjAPUPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 15:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S233185AbjAPUSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 15:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjAPUPO (ORCPT
+        with ESMTP id S232346AbjAPUSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 15:15:14 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382FA244AC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:15:13 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j34-20020a05600c1c2200b003da1b054057so8670894wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:15:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FMLRObJikupEwzTrRnh2PGmgjZ9Cqtc3WwiwTSH8KzM=;
-        b=XmCdZzRtTuZuHhp81pkE69P4loy4VR6MnN9p5Ug0b9VeBBJyFAJNXMMCCPXI2Xww4+
-         +WmiN3JAbNz9M0cQ2HbFFj86PlJHgnfX3V6lXt1sgEDdZNmnFPeDjSwKbJNvBY++u8WY
-         tdBzDidtFDPRiHUykbwhSWvFSRYwmt5pon5+6DRZWcD526dyXxLcUW239Ttv5O67N6Fc
-         cLdz5fdlYzw74C1vGu/ANNxqRb1YmE4B2jUnANSP5aRhHLum8XP0XS+AsugX2ORfUlg1
-         KfwnBp6EI/3oYPR0eLQU2Nndym4TVpl856OKzZww7FcENqKPQxmU/O1C2fKPcezVGXGS
-         EACQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FMLRObJikupEwzTrRnh2PGmgjZ9Cqtc3WwiwTSH8KzM=;
-        b=qzgxGKejgdIuVb7D+AJmAGMZK7AnygeDJZ4HEkxsHV5unqMOBa1NJak1SZguCdZK7G
-         Fd+DGDnN5zPkr9U3Mu64zrfbNjbg+M6L9pSCF5iCZzmmOKacKacgR96PT7okcQo0wul6
-         15JkmTlZLKKjaXaCQ4OOE4hZHQk2TFzunA82y7whQyt4582k1fTuX/3SuZ2dFusZtIXZ
-         FbRq7Lqpiqpgg3Lq5q87Tu9hdpSUFN4pSRtPLsG8fLZZ28m+4F4UvDPdlz06G7CqFaH8
-         g5L4NHFCxPb7ucCTbG97mUpxixurBf3oyBiLQjluswXDmBzsE+QBGSqvyQiAXn9j7h5+
-         grnA==
-X-Gm-Message-State: AFqh2kqjEGHTqVenrPQzT4QzH/Bj5dLARW6kZYJYFIlIdk5uzxxfvvzP
-        kuQSE25PDtejIYYnq6qiFZYcfI3Uj0pVPv1v
-X-Google-Smtp-Source: AMrXdXv6vt0oUJQj3sllPk++1BCsUEFdkO/Gf79SgLX//tfJ5iVqBNK7A6tl8lhtKabc2OX2F1UAyA==
-X-Received: by 2002:a05:600c:b8d:b0:3cf:7c8b:a7c7 with SMTP id fl13-20020a05600c0b8d00b003cf7c8ba7c7mr622696wmb.39.1673900111548;
-        Mon, 16 Jan 2023 12:15:11 -0800 (PST)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id bh13-20020a05600c3d0d00b003d358beab9dsm34549829wmb.47.2023.01.16.12.15.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 12:15:11 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: [PATCH v3 4/4] crypto/Documentation: Add crypto_pool kernel API
-Date:   Mon, 16 Jan 2023 20:14:58 +0000
-Message-Id: <20230116201458.104260-5-dima@arista.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230116201458.104260-1-dima@arista.com>
-References: <20230116201458.104260-1-dima@arista.com>
+        Mon, 16 Jan 2023 15:18:24 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FE71CACF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 12:18:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OF0xfiZ2S/SF8gIlq2iqzM6YU/PabQiNCsv2X1aoxmg=; b=a9SMmT1N58/cMM5OJE6bzmwSJ1
+        qTqmakFhtKy2odC0NIZdBGTJbOlqIcqHtcso6Xeohwt3BNHr1TWeJQeAtvBW1mS2k9aG0T3QSGDwn
+        xd3w2CggnL5GeFkumWhSy2LGtaSDV9bPsqA7s2L4OeOEqvvRYBBg6IjqGnLkBOARaxFqPBKYR4AOT
+        Y0vV8+deT+bjWgxdyz44DS8ONIQQGl9nQV8wR+SyuWIFyeNxJXz3bkKB5NCWhEZBROGtq6nY9gV5I
+        qftHreuefo27TtpXqpxryS2+7ZKv0wL0s4pShSl+hBZxRVwqG38U1V2Bd5I1nUIbTnuI1mrewFg0/
+        XXIcngOw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pHVvj-002EHl-2O;
+        Mon, 16 Jan 2023 20:18:07 +0000
+Date:   Mon, 16 Jan 2023 20:18:07 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     Peng Zhang <zhangpeng362@huawei.com>, kari.argillander@gmail.com,
+        akpm@linux-foundation.org, ntfs3@lists.linux.dev,
+        linux-kernel@vger.kernel.org, sunnanyong@huawei.com,
+        wangkefeng.wang@huawei.com, Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH -next] fs/ntfs3: Fix potential NULL/IS_ERR bug in
+ ntfs_lookup()
+Message-ID: <Y8Ww/48pwi8RbTIv@ZenIV>
+References: <20230112013248.2464556-1-zhangpeng362@huawei.com>
+ <808288ae-bf1a-ccc6-ab37-d1b2022b44b5@paragon-software.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <808288ae-bf1a-ccc6-ab37-d1b2022b44b5@paragon-software.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- Documentation/crypto/crypto_pool.rst | 36 ++++++++++++++++++++++++++++
- Documentation/crypto/index.rst       |  1 +
- 2 files changed, 37 insertions(+)
- create mode 100644 Documentation/crypto/crypto_pool.rst
+On Fri, Jan 13, 2023 at 02:05:56PM +0400, Konstantin Komarov wrote:
 
-diff --git a/Documentation/crypto/crypto_pool.rst b/Documentation/crypto/crypto_pool.rst
-new file mode 100644
-index 000000000000..84abd1f2ee80
---- /dev/null
-+++ b/Documentation/crypto/crypto_pool.rst
-@@ -0,0 +1,36 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Per-CPU pool of crypto requests
-+===============================
-+
-+Overview
-+--------
-+The crypto pool API manages pre-allocated per-CPU pool of crypto requests,
-+providing ability to use crypto requests on fast paths, potentially in atomic
-+contexts. The allocation and initialization of the requests should be done
-+before their usage as it's slow-path and may sleep.
-+
-+Order of operations
-+-------------------
-+You are required to allocate a new pool prior using it and manage its lifetime.
-+You can allocate a per-CPU pool of ahash requests by crypto_pool_alloc_ahash().
-+It will give you a pool id that you can use further on fast-path for hashing.
-+You can increase the reference counter for an allocated pool via
-+crypto_pool_get(). Decrease the reference counter by crypto_pool_release().
-+When the refcounter hits zero, the pool is scheduled for destruction and you
-+can't use the corresponding crypto pool id anymore.
-+Note that crypto_pool_get() and crypto_pool_release() must be called
-+only for an already existing pool and can be called in atomic contexts.
-+
-+crypto_pool_start() disables bh and returns you back ``struct crypto_pool *``,
-+which is a generic type for different crypto requests and has ``scratch`` area
-+that can be used as a temporary buffer for your operation.
-+
-+crypto_pool_end() enables bh back once you've done with your crypto
-+operation.
-+
-+.. kernel-doc:: include/crypto/pool.h
-+   :identifiers:
-+
-+.. kernel-doc:: crypto/crypto_pool.c
-+   :identifiers:
-diff --git a/Documentation/crypto/index.rst b/Documentation/crypto/index.rst
-index 21338fa92642..3eaf4e964e5b 100644
---- a/Documentation/crypto/index.rst
-+++ b/Documentation/crypto/index.rst
-@@ -25,6 +25,7 @@ for cryptographic use cases, as well as programming examples.
-    devel-algos
-    userspace-if
-    crypto_engine
-+   crypto_pool
-    api
-    api-samples
-    descore-readme
--- 
-2.39.0
+> Hello.
+> 
+> We have added a patch with this check just before the New Year. (here https://lore.kernel.org/lkml/ee705b24-865b-26ff-157d-4cb2a303a962@paragon-software.com/)
 
+See upthread for the reasons why that's wrong.  Incidentally,
+mixing logical change with a pile of whitespace changes is
+bad idea - it's very easy for reviewers to miss...
+
+Other observation from the cursory look through your namei.c:
+ntfs_create_inode() has no reason to return inode; the reference
+it creates goes into dentry.  Make it return int, the callers will
+be happier.  While we are at it, use d_instantiate_new() instead
+of d_instantiate() + unlock_new_inode() there.
+
+Incidentally, control flow in there is harder to follow that it
+needs to be:
+	* everything that reaches out{3,4,5,6,7} is guaranteed
+to have err != 0;
+	* fallthrough into out2 is guaranteed to have err != 0;
+direct branch to it - err == 0.
+	* direct branch to out1 is guaranteed to have err != 0.
+
+I would suggest something along the lines of the following (completely
+untested) delta; the callers are clearly better off that way and
+failure paths are separated from the success one - they didn't share
+anywhere near enough to have it worth bothering.
+
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 51f9542de7b0..3ae4ad329b51 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -1197,11 +1197,11 @@ ntfs_create_reparse_buffer(struct ntfs_sb_info *sbi, const char *symname,
+  * 
+  * NOTE: if fnd != NULL (ntfs_atomic_open) then @dir is locked
+  */
+-struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
+-				struct inode *dir, struct dentry *dentry,
+-				const struct cpu_str *uni, umode_t mode,
+-				dev_t dev, const char *symname, u32 size,
+-				struct ntfs_fnd *fnd)
++int ntfs_create_inode(struct user_namespace *mnt_userns,
++			struct inode *dir, struct dentry *dentry,
++			const struct cpu_str *uni, umode_t mode,
++			dev_t dev, const char *symname, u32 size,
++			struct ntfs_fnd *fnd)
+ {
+ 	int err;
+ 	struct super_block *sb = dir->i_sb;
+@@ -1642,18 +1642,19 @@ struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
+ 			goto out7;
+ 	}
+ 
+-	/*
+-	 * Call 'd_instantiate' after inode->i_op is set
+-	 * but before finish_open.
+-	 */
+-	d_instantiate(dentry, inode);
+-
+ 	ntfs_save_wsl_perm(inode);
+ 	mark_inode_dirty(dir);
+ 	mark_inode_dirty(inode);
+ 
+ 	/* Normal exit. */
+-	goto out2;
++	__putname(new_de);
++	kfree(rp);
++	/*
++	 * Call 'd_instantiate_new' after inode->i_op is set
++	 * but before finish_open.
++	 */
++	d_instantiate_new(dentry, inode);
++	return 0;
+ 
+ out7:
+ 
+@@ -1678,21 +1679,13 @@ struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
+ 	discard_new_inode(inode);
+ out3:
+ 	ntfs_mark_rec_free(sbi, ino, false);
+-
+ out2:
+ 	__putname(new_de);
+ 	kfree(rp);
+-
+ out1:
+-	if (err) {
+-		if (!fnd)
+-			ni_unlock(dir_ni);
+-		return ERR_PTR(err);
+-	}
+-
+-	unlock_new_inode(inode);
+-
+-	return inode;
++	if (!fnd)
++		ni_unlock(dir_ni);
++	return err;
+ }
+ 
+ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 53ddea219e37..f98d0252a785 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -107,12 +107,8 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ static int ntfs_create(struct user_namespace *mnt_userns, struct inode *dir,
+ 		       struct dentry *dentry, umode_t mode, bool excl)
+ {
+-	struct inode *inode;
+-
+-	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFREG | mode,
++	return ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFREG | mode,
+ 				  0, NULL, 0, NULL);
+-
+-	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
+ }
+ 
+ /*
+@@ -123,12 +119,8 @@ static int ntfs_create(struct user_namespace *mnt_userns, struct inode *dir,
+ static int ntfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+ 		      struct dentry *dentry, umode_t mode, dev_t rdev)
+ {
+-	struct inode *inode;
+-
+-	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, mode, rdev,
++	return ntfs_create_inode(mnt_userns, dir, dentry, NULL, mode, rdev,
+ 				  NULL, 0, NULL);
+-
+-	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
+ }
+ 
+ /*
+@@ -196,13 +188,8 @@ static int ntfs_unlink(struct inode *dir, struct dentry *dentry)
+ static int ntfs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
+ 			struct dentry *dentry, const char *symname)
+ {
+-	u32 size = strlen(symname);
+-	struct inode *inode;
+-
+-	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFLNK | 0777,
+-				  0, symname, size, NULL);
+-
+-	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
++	return ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFLNK | 0777,
++				  0, symname, strlen(symname), NULL);
+ }
+ 
+ /*
+@@ -211,12 +198,8 @@ static int ntfs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
+ static int ntfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+ 		      struct dentry *dentry, umode_t mode)
+ {
+-	struct inode *inode;
+-
+-	inode = ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFDIR | mode,
++	return ntfs_create_inode(mnt_userns, dir, dentry, NULL, S_IFDIR | mode,
+ 				  0, NULL, 0, NULL);
+-
+-	return IS_ERR(inode) ? PTR_ERR(inode) : 0;
+ }
+ 
+ /*
+@@ -358,7 +341,6 @@ static int ntfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 			    struct file *file, u32 flags, umode_t mode)
+ {
+ 	int err;
+-	struct inode *inode;
+ 	struct ntfs_fnd *fnd = NULL;
+ 	struct ntfs_inode *ni = ntfs_i(dir);
+ 	struct dentry *d = NULL;
+@@ -431,10 +413,10 @@ static int ntfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 	 * Looks like ntfs_atomic_open must accept 'struct user_namespace *mnt_userns' as argument.
+ 	 */
+ 
+-	inode = ntfs_create_inode(&init_user_ns, dir, dentry, uni, mode, 0,
++	err = ntfs_create_inode(&init_user_ns, dir, dentry, uni, mode, 0,
+ 				  NULL, 0, fnd);
+-	err = IS_ERR(inode) ? PTR_ERR(inode)
+-			    : finish_open(file, dentry, ntfs_file_open);
++	if (!err)
++		err = finish_open(file, dentry, ntfs_file_open);
+ 	dput(d);
+ 
+ out2:
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index 2050eb3f6a5a..cea0b8a3a38a 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -707,7 +707,7 @@ int ntfs_sync_inode(struct inode *inode);
+ int ntfs_flush_inodes(struct super_block *sb, struct inode *i1,
+ 		      struct inode *i2);
+ int inode_write_data(struct inode *inode, const void *data, size_t bytes);
+-struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
++int ntfs_create_inode(struct user_namespace *mnt_userns,
+ 				struct inode *dir, struct dentry *dentry,
+ 				const struct cpu_str *uni, umode_t mode,
+ 				dev_t dev, const char *symname, u32 size,
