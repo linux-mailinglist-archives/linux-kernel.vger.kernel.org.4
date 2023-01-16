@@ -2,46 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05E166CAE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F071966CB04
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbjAPRI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S230391AbjAPRJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233970AbjAPRHn (ORCPT
+        with ESMTP id S232958AbjAPRJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:07:43 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29823442FC;
-        Mon, 16 Jan 2023 08:48:14 -0800 (PST)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4440B20DFE7B;
-        Mon, 16 Jan 2023 08:48:13 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4440B20DFE7B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1673887693;
-        bh=8WJ4zN5MuJ/C11+0ipegAO1si9SMvqeWNRylUa8fNzc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=SjlDDfFhL9lfRd/aAv5hJ1HJ4R9srUQcXj9teGHm7+UGQLoLW1dy6/XPfY07mR9Ra
-         DEKKMNkKJvFKNbdBLAoKIa5nt3aDtEyKsM+wZm50Hz7rHu/8FO3BKNEzpDP566/I9I
-         QZPbBRsm8wDewAHHWkZxzmZQpq2ZxomBKn5QF3G4=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: [PATCH 4/4] dt-bindings: hv: Add dt-bindings for VMBus
-Date:   Mon, 16 Jan 2023 08:48:08 -0800
-Message-Id: <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Mon, 16 Jan 2023 12:09:12 -0500
+Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403F323C68;
+        Mon, 16 Jan 2023 08:49:37 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
+        (authenticated bits=0)
+        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GGmpaU2102783
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 16:48:52 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GGmjDj2045637
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 17:48:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1673887726; bh=UD4ZhaHjRcn1J2dnBAvslht8N8U56Uf/Euv/eC9LvAo=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=PTdLyuia0bJNc5u9zqdnDShXdiE3GeI5ngqK4fbBuVluwBjD87vjwLYx+IzeNJZv/
+         taALeumzB0roYExAe6bLKOftCFkFWWhbdUomsV6d83GY5tsvqNetimULAxzYSvGevl
+         dGFFWwI74DAMZsAEcTMM6rq4JHme9kXjXVMurB0A=
+Received: (nullmailer pid 377843 invoked by uid 1000);
+        Mon, 16 Jan 2023 16:48:45 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Organization: m
+References: <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
+        <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
+        <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
+        <87o7qy39v5.fsf@miraculix.mork.no>
+        <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
+        <87h6wq35dn.fsf@miraculix.mork.no>
+        <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
+        <87bkmy33ph.fsf@miraculix.mork.no>
+        <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
+        <875yd630cu.fsf@miraculix.mork.no>
+        <Y8V+pvWlV6pSuDX/@shell.armlinux.org.uk>
+Date:   Mon, 16 Jan 2023 17:48:45 +0100
+In-Reply-To: <Y8V+pvWlV6pSuDX/@shell.armlinux.org.uk> (Russell King's message
+        of "Mon, 16 Jan 2023 16:43:18 +0000")
+Message-ID: <87v8l61l3m.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,54 +81,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt-bindings for Hyper-V VMBus
+"Russell King (Oracle)" <linux@armlinux.org.uk> writes:
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
- .../devicetree/bindings/hv/msft,vmbus.yaml         | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hv/msft,vmbus.yaml
+> I found the document for the PHY at:
+>
+> https://assets.maxlinear.com/web/documents/617792_gpy212b1vc_gpy212c0vc_d=
+s_rev1.3.pdf
+>
+> It seems as I suspected, the PHY has not completed SGMII AN. Please
+> can you read register 8 when operating at 1G speeds as well
+> (VSPEC1_SGMII_CTRL)? Thanks.
 
-diff --git a/Documentation/devicetree/bindings/hv/msft,vmbus.yaml b/Documentation/devicetree/bindings/hv/msft,vmbus.yaml
-new file mode 100644
-index 0000000..66cb426
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hv/msft,vmbus.yaml
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/hv/msft,vmbus.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microsoft Hyper-V VMBus device tree bindings
-+
-+maintainers:
-+  - Saurabh Sengar <ssengar@linux.microsoft.com>
-+
-+description:
-+  VMBus is a software bus that implement the protocols for communication
-+  between the root or host OS and guest OSs (virtual machines).
-+
-+properties:
-+  compatible:
-+    const: msft,vmbus
-+
-+  ranges :
-+    const: <0x00 0x00 0x0f 0xf0000000 0x10000000>
-+
-+required:
-+  - compatible
-+  - ranges
-+
-+examples:
-+  - |
-+        vmbus {
-+		#address-cells = <0x02>;
-+		#size-cells = <0x01>;
-+		compatible = "msft,vmbus";
-+		ranges = <0x00 0x00 0x0f 0xf0000000 0x10000000>;
-+	};
--- 
-1.8.3.1
+Both phys at 1G:
 
+root@OpenWrt:/# mdio mdio-bus 5:30 raw 8
+0x34da
+
+root@OpenWrt:/# mdio mdio-bus 6:30 raw 8
+0x34da
+
+
+Bj=C3=B8rn
