@@ -2,129 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A04266B59E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6942D66B5A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjAPC14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 21:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S230358AbjAPC2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 21:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjAPC1w (ORCPT
+        with ESMTP id S231720AbjAPC15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 21:27:52 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778E1272C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 18:27:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VL2f8OQVK/h6VBJkwLudhbK0PrYGjV1r5qMdMtxmzMdxEeMhTixtjS9TNaDJddxr7S/P2ter8vz/kxbK+05EiEGZc1dQcL4b125Dv7ZG9YDLODDC2DpRTH3WywGbmP2u8nMo/iPGJdEgNrPjMzCSdTISWr5uKDEl981ElIZO+7Azox34efDWgvb0Qbj8KZC+tlfHD8zOY44dVGS4f6ioWJ+34CFIEWCshsZFQ3ZJki+N4ZIs4bqSKrMirL5KrWF6ogcLuI+6/z/IOEfLOoWIjeJDcMgsgW6tCpPhTV/OWBVHRfqIh3jFdBZZ2hMz/MDCBduxxZ4x+gve0JwnmojbtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=52ztWwq17GRgIzvvV+YMsbbksgaHDM2xoJqljW6Xj6U=;
- b=f9EtOkEaBXR41aFD3gQIDAl6TNV/Xal99IaVsiwg5YtkVei125mFchiJBjuiQ9FbfLnVh1ot13RxMJfSz78WJbJ1BSPUAYhNlt/FXOFLrl2i8uloxcRdsdhXX31tc3WIG3/7oZrh1QQl549GIDs3nmTP0epEZkwNQJGR18kB0tnBQAzUnoT+Fdrgd6yyx4iiGyQJteX42z7G5ONlN5ai8s3DkqSdQS/f8b7MgkEfE8V4b2V1ze4fpZbbYRKOVmtnyhIOGvtmKyB3C4PktK8jLzLqDUXe2cjo2+SdNYW8C2O5dUFDU50i+j0lFfIAD4FMsVCS0UjLc3LGWFw4gl1+CQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=52ztWwq17GRgIzvvV+YMsbbksgaHDM2xoJqljW6Xj6U=;
- b=5tEEsvHEo6laA0Hiy5LAbVXEbIl5LJeenDlTB346PyitNzlu/ZzxjWSTMgWHE1XA9qDpk2mG/HU/axgXl1VXqkU/GNZ+EaO+UxJ84YIcqqsZaLTqTCqEUItu6QK/QzPrO/2XDlb5F439BtBL4veYGyCJlGu1eoU69IwOwYZwB1E=
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com (2603:10b6:5:45::18) by
- PH7PR12MB6466.namprd12.prod.outlook.com (2603:10b6:510:1f6::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Mon, 16 Jan
- 2023 02:27:36 +0000
-Received: from DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::5dc8:98e2:7b6e:a9db]) by DM6PR12MB2619.namprd12.prod.outlook.com
- ([fe80::5dc8:98e2:7b6e:a9db%5]) with mapi id 15.20.5986.018; Mon, 16 Jan 2023
- 02:27:36 +0000
-From:   "Quan, Evan" <Evan.Quan@amd.com>
-To:     Deepak R Varma <drv@mailo.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: RE: [PATCH 0/3] drm/amd/pm/powerplay: use bitwise or for bitmasks
- addition
-Thread-Topic: [PATCH 0/3] drm/amd/pm/powerplay: use bitwise or for bitmasks
- addition
-Thread-Index: AQHZKLE7fuzkAUEui02+QI2mNbwaFa6gUm5Q
-Date:   Mon, 16 Jan 2023 02:27:36 +0000
-Message-ID: <DM6PR12MB2619EF8DBE956A8F79A579DCE4C19@DM6PR12MB2619.namprd12.prod.outlook.com>
-References: <cover.1673766696.git.drv@mailo.com>
-In-Reply-To: <cover.1673766696.git.drv@mailo.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-01-16T02:27:28Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=7dfd49c4-0619-48d0-b9ab-5b014d2b1022;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB2619:EE_|PH7PR12MB6466:EE_
-x-ms-office365-filtering-correlation-id: ba73e46e-5b10-4618-c1b7-08daf7693b4d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RaIt0e2d6H49KWCGv8Cw/cbMw+ad4vqouJ7177FDP1PN2e0g96UrDcjjKRiXUKRB4kboj2FXkqD4jUTT0YIRz3Zs+vPXc7msN/u+/sP7i8TclZi5DXMy8wj0CXuoleOt4YfpBt77+fUKw+Kptk8Ksa00fQCd6Lk8vBcZ0ba06AZcgzZdLvQQwPNexkDX+Auv0p1GUbF+xcAWouspmeET6FuMNYQ8tFLS3ToeaccrXjiijBvrbH/0RB6CT5k3QWMAmzvVFHjqKajNJowM8NvM3AGMR6jBDSKWXjiYK6SgTQaGy+ley+kBCGIkp5nQSifYK1F3ESbSMX6zaiUmPLvjVkpUWNlTeOmNvODOTqQ7gCtgUrEaE8aQOFGaMucYASk9rIztlUTlp8OmPTDhmX4BRhGNbnSZtjUzy+UD5Rcun6t1ZiyIM+i5K0iWkZjlIVfNqUF0fmmXhEvFfAg2kISinBIBeClhyXwC4PLbWPk1V7FNEP0EPkJ3NLdT8JfVi89UDepA4rnMu8eZk3BdFZZmgcxgZyxycwDcaoiml3UcSLkZtocQEyryq2X9xPm7fYQuYlwOsDDjO5iaixw8OCK9uDVAaKBxfRNogyUhpYu0BZFXGNmOS9giIrXE4+ivoR1gDQq6OGfuyyc7LuGOfKtT4NyNuZS9Ttrs8c0MpwEdNxSTe/VSrJ34FnWxFMnEqKZz2t68oDO/ivB9ol73bkRqm95MNEKDeUSII9YjkAcJPEI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2619.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(346002)(376002)(39860400002)(451199015)(9686003)(186003)(55016003)(71200400001)(7696005)(53546011)(26005)(2906002)(66446008)(478600001)(6506007)(76116006)(8676002)(110136005)(54906003)(4326008)(316002)(83380400001)(41300700001)(52536014)(66476007)(8936002)(86362001)(66556008)(5660300002)(921005)(64756008)(66946007)(122000001)(33656002)(38070700005)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v0fFXDTb2L9RCODrwC+uRO4LRv8oCsrzlomcyYBLtykuh+OxMJ1hP2OYTT20?=
- =?us-ascii?Q?IUOHdyNkCuxGs15ABPBcz9/msIFxQeMLRIIGm7Xm3TqVRexd7in/EKOLrExW?=
- =?us-ascii?Q?aJJzC1yCXQAgMu66KL1d+7GN3hLwsRTaWuFjzp694hVNSfU2YZQEL6N17lAp?=
- =?us-ascii?Q?fR88eJJKCVcao865WsMRHS2MUCowi5W8uqP4vSkg0iApwns4E1cD79MR/CEB?=
- =?us-ascii?Q?aAwBUhu8pblvNbbEpH5P1FA+7xTdqV3aO12FIZIgSJhn7tyVwsbd1VC1Uk3T?=
- =?us-ascii?Q?aJcAxJoTg30DjHe8Moq0Qcpqbg7UyUhRDH5VTm5PZTCgGCNQiL0G58f0mssn?=
- =?us-ascii?Q?JsEKsgj71Ot0OU41yU1NdsFqCaayM0iWLA72U8p8cNrU+tHJsUtVM3y/R85F?=
- =?us-ascii?Q?D4GgWpB4NRZV4dkpLxM/2dUtAn2UYFii9CpE1kohokyxE4Vjtv1DIs5RbSNo?=
- =?us-ascii?Q?aQny0JkKzh/bNSVkAPB5u7JUey/Y/4hOnIaSnz2V5oFKyz3CZIybRBcgsYiZ?=
- =?us-ascii?Q?PPDMP9+usUfXhOy0VQNcAOceRdcvsGffFcszy8uYaXZbIXjwuOZUIjJ/XV0v?=
- =?us-ascii?Q?5nTHn2j9jwKg4EJ3pBNYJqLG+Xm5KMW1Bm16ubMzy4ETiZ0CnMK3nEAeSsx6?=
- =?us-ascii?Q?eAhk0bzbRVOiz+9hfHDOm3XRr/TKuP22xj+AG+X89U/vHHDEQY4rWbUl4pcu?=
- =?us-ascii?Q?nHZUo853gm/NaQ12ZwMJ1/AAcKXAiyAodU0/sNBrQ3i2hjPShKVGY767HzcO?=
- =?us-ascii?Q?D4yy2x3KYXQGe0NytgdfyJ+mYb4Da4xUF9ZH9tOB/BDRZrPVXv+DsS1jlS4/?=
- =?us-ascii?Q?wocNgbLFlj31UeqInNJ3hGLSlLitHB/ZoTr4+iuMzNBeGwu6/6GQ/b3SnBej?=
- =?us-ascii?Q?ltAgAtue08Ded19MD7nrN5jbeYlq1h+mHHfQ6FG4vCHqBZCY9faeK597qNxN?=
- =?us-ascii?Q?KM8Xt/8JSCkC6dXE+PlVyByFXDWy1/kS985DM6AamSLD9I2IW+RYL/RGWKj9?=
- =?us-ascii?Q?rc0lWeUUUsow2gIPzXn/FFchBe8bBgAcB3kKY2FPgI3o5xdTCwq/VgOn2XeG?=
- =?us-ascii?Q?0PAqbcwJy2ny1uO9x17SZqT0DzygPcKrfwX1KOa0J6Rf7Z0cn5jPEu2JfsgY?=
- =?us-ascii?Q?k5pvE7uDIVYBQ9jey8BaxEtYOwI1A4IhMjLsOKuFS6TP00RlC8QuCV3QFxI1?=
- =?us-ascii?Q?3U7id8hr59swk/JXcTN5+ob716TXieqXI1620zBU/QM3j04dpxvAAwhBjWQ3?=
- =?us-ascii?Q?lkh0smiK2cgek8sduyrTrBJogSxEp84Yh+AHvPkHSpSnDDVwiRVHaylhHVLT?=
- =?us-ascii?Q?fIh3ovKnC6ATr8D9AlG1oEUJDx+W/KHc7hI3YszXqh1jZ37tuud41oFc3a8z?=
- =?us-ascii?Q?n563Fu0BOi/EP76a+KXdUkWMl9/W5IlL6pwcYF7n3WTCyVKJ0q+89Mu3n9xa?=
- =?us-ascii?Q?tCc/xovfZvnBUlCHZMuLwdr2sI/kPcTLYBnnph//E05wBFr0ZmKoilUhWcJt?=
- =?us-ascii?Q?dstTfGfnEPXRxxytdBmobReoWOwxqKBNsgzV8yj9RZkKRNc7goC9fA4BjSkZ?=
- =?us-ascii?Q?3AKC/d7anHjZSU4D8hg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 15 Jan 2023 21:27:57 -0500
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F09E728D;
+        Sun, 15 Jan 2023 18:27:57 -0800 (PST)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-4d59d518505so194063247b3.1;
+        Sun, 15 Jan 2023 18:27:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rf3oYMshP1FK8r55wtFcYr8p7u075CmKOwZBIt1AJME=;
+        b=ZbE+TFA+ei/ozO8vXf2wNwOOEbolWBI8xxLCZOqLChDIEyBkNgG6zT7qvQcPyGNaz1
+         tOMj+HW8Eg2bMExypX1UgwbvhsDtTTM4orD4k4frATLgEcq4ZzbCZBB/LJ/hL9VAlOvP
+         tq+O9QzDrg3rKqlNzjsOa0ZS4pkFEQ609xUGVZOVzhAMi+iP7E0WX/YL2U/IMNAmYQDL
+         47eMp73Amj+mTcLROge3gV0hQtE6HZ56Jms4zStCwmT5+0eRvlmYpohUid+a1b6nHTB/
+         c+5DOLNgaP3i/IvS5B2cr6FyzGtu3EE0+CMIaNfZ/RumgKVbnfGPMbh1gCPyJdSxAspb
+         5+nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rf3oYMshP1FK8r55wtFcYr8p7u075CmKOwZBIt1AJME=;
+        b=7KlxDZxYlJNuU5Q7cMs/zKGhN+1ZNXeGI6dIfPfiWxBUm/MZSfmMo97VVxw78wX4ih
+         AzXA5leZLG/qrmflAaRENOLh7zvP0oa2A7MqcjuFCc0Pi3G+d7Ywk356EboqgakNt4Jz
+         xAahOsWWyLYAY6CRQ5MPofPWsm1t/LM6rlDWCaJFryDktP1Da1RFd46tS39QiXTFSJCq
+         zhM2jC3/15pPL/1e+LmH3vD/YeeJhCTU9607/wMfBfiqDih1tCnufXYer307mA0tMjE6
+         mdjHK+LN2iWiun3Q6Udl6fBTaXKmydPBORodYRQxGO1b6V1R1uJ2aD1XuMFGSAuNXR0R
+         xyVg==
+X-Gm-Message-State: AFqh2kqPSntAQ9CqrgA7Oz9F21WhFoP9c3BLFVTAfJvnSnJs90B7qP4e
+        17+fShMZBT7SuFzgWEk6FMENHTu9w16UoDYnshY=
+X-Google-Smtp-Source: AMrXdXv3OEd1aT/KA9stR9zP/tT2p/re0Lpanqx7mbXkKxFVlAgShiM0BwqULHDALZcDJ7PVxFGcIpSOwkTQWpo8ub0=
+X-Received: by 2002:a81:4c83:0:b0:3be:16c3:6829 with SMTP id
+ z125-20020a814c83000000b003be16c36829mr4581695ywa.298.1673836068557; Sun, 15
+ Jan 2023 18:27:48 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2619.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba73e46e-5b10-4618-c1b7-08daf7693b4d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 02:27:36.4612
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Qf8uN4NVo1FJ0a/5f86KTq4+iaEX8DDSsw026+wti8JzfXyJAOqEPcKrHdetDCvr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6466
+References: <20230113093427.1666466-1-imagedong@tencent.com>
+ <bdca73eb-07e3-2187-c46f-a3f14a9e50a4@oracle.com> <CAEf4BzZ5FNw-j3F8cUpy4knRiM1sqQOOPZnM43Kj8peN9kKQLg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ5FNw-j3F8cUpy4knRiM1sqQOOPZnM43Kj8peN9kKQLg@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Mon, 16 Jan 2023 10:27:37 +0800
+Message-ID: <CADxym3YqgvYt71+WhMM4jzp+9uqkNdq3nB9kvBxT=CVM7hwRsA@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: replace '.' with '_' in legacy kprobe event name
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,44 +72,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hello,
 
-Series is reviewed-by: Evan Quan <evan.quan@amd.com>
+On Sat, Jan 14, 2023 at 6:07 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Jan 13, 2023 at 6:13 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > On 13/01/2023 09:34, menglong8.dong@gmail.com wrote:
+> > > From: Menglong Dong <imagedong@tencent.com>
+> > >
+> > > '.' is not allowed in the event name of kprobe. Therefore, we will get a
+> > > EINVAL if the kernel function name has a '.' in legacy kprobe attach
+> > > case, such as 'icmp_reply.constprop.0'.
+> > >
+> > > In order to adapt this case, we need to replace the '.' with other char
+> > > in gen_kprobe_legacy_event_name(). And I use '_' for this propose.
+> > >
+> > > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > > ---
+> > >  tools/lib/bpf/libbpf.c | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > >
+> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > index fdfb1ca34ced..5d6f6675c2f2 100644
+> > > --- a/tools/lib/bpf/libbpf.c
+> > > +++ b/tools/lib/bpf/libbpf.c
+> > > @@ -9994,9 +9994,16 @@ static void gen_kprobe_legacy_event_name(char *buf, size_t buf_sz,
+> > >                                        const char *kfunc_name, size_t offset)
+> > >  {
+> > >       static int index = 0;
+> > > +     int i = 0;
+> > >
+> > >       snprintf(buf, buf_sz, "libbpf_%u_%s_0x%zx_%d", getpid(), kfunc_name, offset,
+> > >                __sync_fetch_and_add(&index, 1));
+> > > +
+> > > +     while (buf[i] != '\0') {
+> > > +             if (buf[i] == '.')
+> > > +                     buf[i] = '_';
+> > > +             i++;
+> > > +     }
+> > >  }
+> >
+> > probably more naturally expressed as a for() loop as is done in
+> > gen_uprobe_legacy_event_name(), but not a big deal.
+> >
+> > Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+>
+> Applied, but tuned to be exactly the same loop as in
+> gen_uprobe_legacy_event_name. Thanks.
+>
 
-> -----Original Message-----
-> From: Deepak R Varma <drv@mailo.com>
-> Sent: Sunday, January 15, 2023 3:16 PM
-> To: Quan, Evan <Evan.Quan@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; amd-
-> gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
-> kernel@vger.kernel.org
-> Cc: Saurabh Singh Sengar <ssengar@microsoft.com>; Praveen Kumar
-> <kumarpraveen@linux.microsoft.com>
-> Subject: [PATCH 0/3] drm/amd/pm/powerplay: use bitwise or for bitmasks
-> addition
->=20
-> The patch series proposes usage of bitwise or "|" operator for addition o=
-f
-> bitmasks instead of using numerial additions. The former is quicker and
-> cleaner.
->=20
-> The proposed change is compile tested.
->=20
-> Deepak R Varma (3):
->   drm/amd/pm/powerplay/smumgr: use bitwise or for addition
->   drm/amd/pm/powerplay/hwmgr: use bitwise or for bitmasks addition
->   drm/amd/pm/powerplay/smumgr/ci: use bitwise or for bitmasks addition
->=20
->  drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu7_hwmgr.c      | 8 ++++---
-> -
->  drivers/gpu/drm/amd/pm/powerplay/smumgr/ci_smumgr.c      | 2 +-
->  drivers/gpu/drm/amd/pm/powerplay/smumgr/iceland_smumgr.c | 2 +-
->  drivers/gpu/drm/amd/pm/powerplay/smumgr/tonga_smumgr.c   | 2 +-
->  4 files changed, 7 insertions(+), 7 deletions(-)
->=20
-> --
-> 2.34.1
->=20
->=20
+Thanks for your modification, it looks much better now!
+
+> >
+> > One issue with the legacy kprobe code is that we don't get test coverage
+> > with it on new kernels - I wonder if it would be worth adding a force_legacy
+> > option to bpf_kprobe_opts? A separate issue to this change of course, but
+> > if we had that we could add some legacy kprobe tests that would run
+> > for new kernels as well.
+>
+> Yep, good idea. If we ever have some bug in the latest greatest kprobe
+> implementation, users will have an option to work around that with
+> this.
+>
+> The only thing is that we already have 3 modes: legacy, perf-based
+> through ioctl, and bpf_link-based, so I think it should be something
+> like
+>
+> enum kprobe_mode {
+>     KPROBE_MODE_DEFAULT = 0, /* latest supported by kernel */
+>     KPROBE_MODE_LEGACY,
+>     KPROBE_MODE_PERF,
+>     KPROBE_MODE_LINK,
+> };
+>
+> LEGACY/PERF/LINK naming should be thought through, just a quick example.
+>
+> And then just have `enum kprobe_mode mode;` in kprobe_opts, which
+> would default to 0 (KPROBE_MODE_DEFAULT).
+>
+> Would that work?
+>
+
+Sounds great, which means I don't have to switch to an older
+kernel to test this function for my app.
+
+BTW, should I do this job, (which is my pleasure), or Alan?
+
+
+Thanks!
+Menglong Dong
+
+> >
+> > Alan
+> > >
+> > >  static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
+> > >
