@@ -2,117 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A43A66BA58
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1D666BA61
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjAPJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S231872AbjAPJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbjAPJ2z (ORCPT
+        with ESMTP id S232116AbjAPJbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:28:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB0A16AC4;
-        Mon, 16 Jan 2023 01:28:53 -0800 (PST)
-Date:   Mon, 16 Jan 2023 09:28:51 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673861332;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Mon, 16 Jan 2023 04:31:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C3716AC9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673861432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G5OPga9s9el+CHbJ947Z6+l1jBqfCaiyuLxg70TImQI=;
-        b=mXgF/mdvSH/Q6YlDNvzjgbl5+BUz48NBSFltjq16o4dE9A5N909n/tT6vuxMCodrmPhiyA
-        PFLopFJ6OY/j1jBDiXYJZG0zUxXgOZq0rsdnkk+ftZ+8JSZkbqFZZ4sOkdK6UprtxmbYgZ
-        +F9S9e/fj9/fbTE4KR7ksAX0tOFotCrvYXjkCsr3x7kLD2+GMVJhDTpS6CdrW6J74xdaHo
-        KH768kK+PDYHBwGFjtSCQDK1+6IkaowxJNavZy0JJ2jQLUJCCutTZRuDFypq6cRa6MRLAq
-        remUama9eA3fuheTERoMI3qe1bcJdsuwCWUjJU+m5fZIv3C5Cpp7qrkl4OvrTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673861332;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5OPga9s9el+CHbJ947Z6+l1jBqfCaiyuLxg70TImQI=;
-        b=VQufeeKpZGn1kYgRPd4AKwfCq0hIRDSc47/Oz8WNSfT25i+HGUAF2uC/Fg26A9SBHNpLPv
-        o/ph6TS07ugK64CA==
-From:   "tip-bot2 for Yair Podemsky" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] x86/aperfmperf: Erase stale arch_freq_scale
- values when disabling frequency invariance readings
-Cc:     Yair Podemsky <ypodemsk@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230110160206.75912-1-ypodemsk@redhat.com>
-References: <20230110160206.75912-1-ypodemsk@redhat.com>
+        bh=0zbe5Wv4qmr2PUPl8qLqbaGH6Ky1QQLhULVocB+QQ68=;
+        b=PjvTIos5buE2iDlpdQEUjZGPCypsYk7NPjFaltS3fpc/JkOtBjg2hdyvVMBKz+XCNRsbuT
+        3Z7vgFWaZECype5hqhmbdQ2zSRbKK6UtTbsZCQiUtwIK0C0mXsVIP+AxqNGImca2BnavJS
+        +7TwDm3qVV5jqsV7aO9OqsNTDjn434c=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-475-6BUryBMUNWGsR8RCUQlnJw-1; Mon, 16 Jan 2023 04:30:30 -0500
+X-MC-Unique: 6BUryBMUNWGsR8RCUQlnJw-1
+Received: by mail-lf1-f71.google.com with SMTP id d2-20020a0565123d0200b004d1b23f2047so2365676lfv.20
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:30:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0zbe5Wv4qmr2PUPl8qLqbaGH6Ky1QQLhULVocB+QQ68=;
+        b=Xavkfb24fBIPEgklD74UaCH2M1rxxmTX0VGJ2veQkU2AbdqssivzAP/5KlK0UK8YdL
+         eDrx+6clb2FOgCrN/ilERx6iPnKX74AX86jB8xT+6NbNB1Vs24Ko8B3PQvCJVTLiZdNE
+         W9HfYzaN3R8Y2j366ktRvMdiAvwaIhicGXE1tSSsLXcSCeochiD++62341m7MjjSJdkG
+         dm4kvQ8J3ZyAFh2ZTa1VekHEA1dwxsEU7c6d6GmfFH+5tNrIVUNONYDo5CLSVwbWCGsB
+         wWqcldjyN2KvsPVP4T5tCj44iqXmQHlC8cA9pJ52MBJVJIX1GeyJ4j97p7zlHyPr0jw6
+         4kKw==
+X-Gm-Message-State: AFqh2kolwsKpXoZt8xYM015TTQl2WA58fUaa6GxPTz1HF0qnuxu1xSti
+        WdZqPahPDCkYeNac9kiBWDH/o5um329XOriZpjv7flITxumi/lln84McQA7w5mDY2BXYhWGsewC
+        fWwTx4PHyHlB9YCZdkdfJGKB6
+X-Received: by 2002:a05:6512:108f:b0:4cc:7b49:a2f6 with SMTP id j15-20020a056512108f00b004cc7b49a2f6mr11073841lfg.19.1673861428758;
+        Mon, 16 Jan 2023 01:30:28 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvtCfu1+sVpejm0bMRKGIemtrDusfhD4vLSyb5d/7mafJ9f0dW33NYYaJ+rOz0lqEvdi8jIkA==
+X-Received: by 2002:a05:6512:108f:b0:4cc:7b49:a2f6 with SMTP id j15-20020a056512108f00b004cc7b49a2f6mr11073835lfg.19.1673861428416;
+        Mon, 16 Jan 2023 01:30:28 -0800 (PST)
+Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
+        by smtp.gmail.com with ESMTPSA id t11-20020a056512208b00b004cc83be556dsm3854624lfr.247.2023.01.16.01.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 01:30:27 -0800 (PST)
+Message-ID: <d3c63da908ef16c43a6a65a22a8647bf874695c7.camel@redhat.com>
+Subject: Re: [PATCH v2 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+From:   Alexander Larsson <alexl@redhat.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gscrivan@redhat.com
+Date:   Mon, 16 Jan 2023 10:30:27 +0100
+In-Reply-To: <3065ecb6-8e6a-307f-69ea-fb72854aeb0f@linux.alibaba.com>
+References: <cover.1673623253.git.alexl@redhat.com>
+         <3065ecb6-8e6a-307f-69ea-fb72854aeb0f@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Message-ID: <167386133169.4906.2168836143666979819.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+On Mon, 2023-01-16 at 12:44 +0800, Gao Xiang wrote:
+> Hi Alexander and folks,
+>=20
+> I'd like to say sorry about comments in LWN.net article.=C2=A0 If it help=
+s
+> to the community,=C2=A0 my own concern about this new overlay model was
+> (which is different from overlayfs since overlayfs doesn't have
+> =C2=A0 different permission of original files) somewhat a security issue
+> (as
+> I told Giuseppe Scrivano before when he initially found me on slack):
+>=20
+> As composefs on-disk shown:
+>=20
+> struct cfs_inode_s {
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_mode; /* File type=
+ and mode.=C2=A0 */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_nlink; /* Number o=
+f hard links, only for regular
+> files.=C2=A0 */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_uid; /* User ID of=
+ owner.=C2=A0 */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_gid; /* Group ID o=
+f owner.=C2=A0 */
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+> };
+>=20
+> It seems Composefs can override uid / gid and mode bits of the
+> original file
+>=20
+> =C2=A0=C2=A0=C2=A0 considering a rootfs image:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 /bin
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=
+=E2=94=80 su
+>=20
+> /bin/su has SUID bit set in the Composefs inode metadata, but I
+> didn't
+> find some clues if ostree "objects/abc" could be actually replaced
+> with data of /bin/sh if composefs fsverity feature is disabled (it
+> doesn't seem composefs enforcely enables fsverity according to
+> documentation).
+>=20
+> I think that could cause _privilege escalation attack_ of these SUID
+> files is replaced with some root shell.=C2=A0 Administrators cannot keep
+> all the time of these SUID files because such files can also be
+> replaced at runtime.
+>=20
+> Composefs may assume that ostree is always for such content-addressed
+> directory.=C2=A0 But if considering it could laterly be an upstream fs, I
+> think we cannot always tell people "no, don't use this way, it
+> doesn't
+> work" if people use Composefs under an untrusted repo (maybe even
+> without ostree).
+>=20
+> That was my own concern at that time when Giuseppe Scrivano told me
+> to enhance EROFS as this way, and I requested him to discuss this in
+> the fsdevel mailing list in order to resolve this, but it doesn't
+> happen.
+>=20
+> Otherwise, EROFS could face such issue as well, that is why I think
+> it needs to be discussed first.
 
-Commit-ID:     5f5cc9ed992cbab6361f198966f0edba5fc52688
-Gitweb:        https://git.kernel.org/tip/5f5cc9ed992cbab6361f198966f0edba5fc52688
-Author:        Yair Podemsky <ypodemsk@redhat.com>
-AuthorDate:    Tue, 10 Jan 2023 18:02:06 +02:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Mon, 16 Jan 2023 10:19:15 +01:00
+I mean, you're not wrong about this being possible. But I don't see
+that this is necessarily a new problem. For example, consider the case
+of loopback mounting an ext4 filesystem containing a setuid /bin/su
+file. If you have the right permissions, nothing prohibits you from
+modifying the loopback mounted file and replacing the content of the su
+file with a copy of bash.
 
-x86/aperfmperf: Erase stale arch_freq_scale values when disabling frequency invariance readings
+In both these cases, the security of the system is fully defined by the
+filesystem permissions of the backing file data. I think viewing
+composefs as a "new type" of overlayfs gets the wrong idea across. Its
+more similar to a "new type" of loopback mount. In particular, the
+backing file metadata is completely unrelated to the metadata exposed
+by the filesystem, which means that you can chose to protect the
+backing files (and directories) in ways which protect against changes
+from non-privileged users.
 
-Once disable_freq_invariance_work is called the scale_freq_tick function
-will not compute or update the arch_freq_scale values.
-However the scheduler will still read these values and use them.
-The result is that the scheduler might perform unfair decisions based on stale
-values.
+Note: The above assumes that mounting either a loopback mount or a
+composefs image is a privileged operation. Allowing unprivileged mounts
+is a very different thing.
 
-This patch adds the step of setting the arch_freq_scale values for all
-cpus to the default (max) value SCHED_CAPACITY_SCALE, Once all cpus
-have the same arch_freq_scale value the scaling is meaningless.
+> > To be fully verified we need another step: we use fs-verity on the
+> > image itself. Then we pass the expected digest on the mount command
+> > line (which will be verified at mount time):
+> >=20
+> > # fsverity enable rootfs.img
+> > # fsverity digest rootfs.img
+> > sha256:da42003782992856240a3e25264b19601016114775debd80c01620260af8
+> > 6a76 rootfs.img
+> > # mount -t composefs rootfs.img -o
+> > basedir=3Dobjects,digest=3Dda42003782992856240a3e25264b19601016114775de
+> > bd80c01620260af86a76 /mnt
+> >=20
+>=20
+>=20
+> It seems that Composefs uses fsverity_get_digest() to do fsverity
+> check.=C2=A0 If Composefs uses symlink-like payload to redirect a file to
+> another underlayfs file, such underlayfs file can exist in any other
+> fses.
+>=20
+> I can see Composefs could work with ext4, btrfs, f2fs, and later XFS
+> but I'm not sure how it could work with overlayfs, FUSE, or other
+> network fses.=C2=A0 That could limit the use cases as well.
 
-Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230110160206.75912-1-ypodemsk@redhat.com
----
- arch/x86/kernel/cpu/aperfmperf.c |  9 +++++++++
- 1 file changed, 9 insertions(+)
+Yes, if you chose to store backing files on a non-fs-verity enabled
+filesystem you cannot use the fs-verity feature. But this is just a
+decision users of composefs have to take if they wish to use this
+particular feature. I think re-using fs-verity like this is a better
+approach than re-implementing verity.
 
-diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-index 1f60a2b..fdbb5f0 100644
---- a/arch/x86/kernel/cpu/aperfmperf.c
-+++ b/arch/x86/kernel/cpu/aperfmperf.c
-@@ -330,7 +330,16 @@ static void __init bp_init_freq_invariance(void)
- 
- static void disable_freq_invariance_workfn(struct work_struct *work)
- {
-+	int cpu;
-+
- 	static_branch_disable(&arch_scale_freq_key);
-+
-+	/*
-+	 * Set arch_freq_scale to a default value on all cpus
-+	 * This negates the effect of scaling
-+	 */
-+	for_each_possible_cpu(cpu)
-+		per_cpu(arch_freq_scale, cpu) = SCHED_CAPACITY_SCALE;
- }
- 
- static DECLARE_WORK(disable_freq_invariance_work,
+> Except for the above, I think EROFS could implement this in about
+> 300~500 new lines of code as Giuseppe found me, or squashfs or
+> overlayfs.
+>=20
+> I'm very happy to implement such model if it can be proved as safe
+> (I'd also like to say here by no means I dislike ostree) and I'm
+> also glad if folks feel like to introduce a new file system for
+> this as long as this overlay model is proved as safe.
+
+My personal target usecase is that of the ostree trusted root
+filesystem, and it has a lot of specific requirements that lead to
+choices in the design of composefs. I took a look at EROFS a while ago,
+and I think that even with some verify-like feature it would not fit
+this usecase.=20
+
+EROFS does indeed do some of the file-sharing aspects of composefs with
+its use of fs-cache (although the current n_chunk limit would need to
+be raised). However, I think there are two problems with this.=C2=A0
+
+First of all is the complexity of having to involve a userspace for the
+cache. For trusted boot to work we have to have all the cachefs
+userspace machinery on the (signed) initrd, and then have to properly
+transition this across the pivot-root into the full os boot. I'm sure
+it is technically *possible*, but it is very complex and a pain to set
+up and maintain.
+
+Secondly, the use of fs-cache doesn't stack, as there can only be one
+cachefs agent. For example, mixing an ostree EROFS boot with a
+container backend using EROFS isn't possible (at least without deep
+integration between the two userspaces).
+
+Also, f we ignore the file sharing aspects there is the question of how
+to actually integrate a new digest-based image format with the pre-
+existing ostree formats and distribution mechanisms. If we just replace
+everything with distributing a signed image file then we can easily use
+existing technology (say dm-verity + squashfs + loopback). However,
+this would be essentially A/B booting and we would lose all the
+advantages of ostree.=C2=A0
+
+Instead what we have done with composefs is to make filesystem image
+generation from the ostree repository 100% reproducible. Then we can
+keep the entire pre-existing ostree distribution mechanism and on-disk
+repo format, adding just a single piece of metadata to the ostree
+commit, containing the composefs toplevel digest. Then the client can
+easily and efficiently re-generate the composefs image locally, and
+boot into it specifying the trusted not-locally-generated digest. A
+filesystem that doesn't have this reproduceability feature isn't going
+to be possible to integrate with ostree without enormous changes to
+ostree, and a filesystem more complex that composefs will have a hard
+time giving such guarantees.
+
+
+--=20
+=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
+-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
+=3D-=3D-=3D
+ Alexander Larsson                                            Red Hat,
+Inc=20
+       alexl@redhat.com            alexander.larsson@gmail.com=20
+He's an unconventional gay card sharp moving from town to town, helping
+folk in trouble. She's a virginal goth bounty hunter descended from a=20
+line of powerful witches. They fight crime!=20
+
