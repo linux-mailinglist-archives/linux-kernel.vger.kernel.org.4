@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3E366BD63
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA4466BD62
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjAPL7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S230198AbjAPL7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjAPL7A (ORCPT
+        with ESMTP id S230325AbjAPL7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 Jan 2023 06:59:00 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEDB1968A
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753A19684
         for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:58:58 -0800 (PST)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NwVr95MWNznVSt;
-        Mon, 16 Jan 2023 19:57:13 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NwVr24brBzRrlv;
+        Mon, 16 Jan 2023 19:57:06 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,10 +27,12 @@ To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <mawupeng1@huawei.com>, <kuleshovmail@gmail.com>,
         <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v2 0/4] Add overflow checks for several syscalls
-Date:   Mon, 16 Jan 2023 19:58:09 +0800
-Message-ID: <20230116115813.2956935-1-mawupeng1@huawei.com>
+Subject: [PATCH v2 1/4] mm/mlock: return EINVAL if len overflows for mlock/munlock
+Date:   Mon, 16 Jan 2023 19:58:10 +0800
+Message-ID: <20230116115813.2956935-2-mawupeng1@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230116115813.2956935-1-mawupeng1@huawei.com>
+References: <20230116115813.2956935-1-mawupeng1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -59,25 +61,50 @@ The same problem happens in munlock.
 Add new check and return -EINVAL to fix this overflowing scenarios since
 they are absolutely wrong.
 
-Similar logic is used to fix problems with multiple syscalls.
+Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+---
+ mm/mlock.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Changelog since v1[1]:
-- only check overflow rather than access_ok to keep backward-compatibility
-
-[1]: https://lore.kernel.org/lkml/20221228141701.c64add46c4b09aa17f605baf@linux-foundation.org/T/
-
-Ma Wupeng (4):
-  mm/mlock: return EINVAL if len overflows for mlock/munlock
-  mm/mempolicy: return EINVAL for if len overflows for
-    set_mempolicy_home_node
-  mm/mempolicy: return EINVAL if len overflows for mbind
-  mm/msync: return ENOMEM if len overflows for msync
-
- mm/mempolicy.c | 6 ++++--
- mm/mlock.c     | 8 ++++++++
- mm/msync.c     | 3 ++-
- 3 files changed, 14 insertions(+), 3 deletions(-)
-
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 7032f6dd0ce1..5a4e767feb28 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -569,6 +569,7 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+ 	unsigned long locked;
+ 	unsigned long lock_limit;
+ 	int error = -ENOMEM;
++	size_t old_len = len;
+ 
+ 	start = untagged_addr(start);
+ 
+@@ -578,6 +579,9 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
+ 	len = PAGE_ALIGN(len + (offset_in_page(start)));
+ 	start &= PAGE_MASK;
+ 
++	if (old_len != 0 && len == 0)
++		return -EINVAL;
++
+ 	lock_limit = rlimit(RLIMIT_MEMLOCK);
+ 	lock_limit >>= PAGE_SHIFT;
+ 	locked = len >> PAGE_SHIFT;
+@@ -632,12 +636,16 @@ SYSCALL_DEFINE3(mlock2, unsigned long, start, size_t, len, int, flags)
+ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+ {
+ 	int ret;
++	size_t old_len = len;
+ 
+ 	start = untagged_addr(start);
+ 
+ 	len = PAGE_ALIGN(len + (offset_in_page(start)));
+ 	start &= PAGE_MASK;
+ 
++	if (old_len != 0 && len == 0)
++		return -EINVAL;
++
+ 	if (mmap_write_lock_killable(current->mm))
+ 		return -EINTR;
+ 	ret = apply_vma_lock_flags(start, len, 0);
 -- 
 2.25.1
 
