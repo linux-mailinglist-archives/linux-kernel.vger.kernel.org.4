@@ -2,351 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AE566BDD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB9766BDD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjAPM3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S230070AbjAPM3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjAPM3g (ORCPT
+        with ESMTP id S229699AbjAPM3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:29:36 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027741E1D8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:29:35 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id 20so2870770plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UgkiqTyzwjniAuy/4fFbJUSojpXdp/wFJb1dpVCiEGk=;
-        b=sCNVxPxIb7uyzLHdTpxl7N+kYeKmd4vJRxoISdWWCpMJT0PCBPTHNYFwzuj+e0s/Qj
-         lk3fPv+WqrEtccAuvc2OKQd3QY1cIGvl8jBKHR8MhjNImtpguFPSmkAuwpVyiqeB3ZTQ
-         CIf5IdR5Ck4QOjDsBXPtCLllzO6OWNJs62D07+2ddtIOTbEBzlDqyDRSgBeWYWLHysyj
-         27UPFhCl+7vE1emT2gLiOVaOu5jR0s7OR1JDh3X6mWpg7VcxN4rSTV3fuyA7uWhAAgVz
-         rtl8aPOzdmBlfYcu8GGfo4uf6vBRivSvtISLBa4/FfBc2LnHbG1AfnXiBWNexSDNgUTa
-         i0Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UgkiqTyzwjniAuy/4fFbJUSojpXdp/wFJb1dpVCiEGk=;
-        b=NMpr6w6mQk84fOYztWp+YZ7kKsZBYWVn3AmrbDkJoB3jx+yeXY/DYt1f9Hss+IEiM7
-         1J9zz5AVpOJtu9q6Ak7blsvSR3POogKjRR67eRGM7brJVd6jnCP3KQagNDgksHQzXrsd
-         39bm6Ukmpwr2ZKyOSjUDx2f5c87ShiRa9cdqtS1+2ajB8uGLLBy9W3uL9IcX0+91gmAl
-         Gf472xoxVHnS67SRpYV/6iokDiI13ufTIyAOWCUR3DGFMQWnPhX7SJORbaQW667MFprv
-         zanRBkyn5fNvo2BuyGzvCJd+emWjVpxhruQT/GCcPkrH9T5qbHCkKHk0ZjjNeS+73Hl/
-         axVg==
-X-Gm-Message-State: AFqh2ko4DseRuyWLPCdZGIxb24D/ntmDaJ4pPuUIEV6b0GWgnftEsoDD
-        k7PBeQ0pnLk2isYbNJs3zcVC3K+5X6Th0zNTrmDnJg==
-X-Google-Smtp-Source: AMrXdXtA2Bg5ja5lpxx0bEnT1Eb8pttIwvCZma9VPnbGiWcJFWy4BTZ58JbxT9mWoyoZOCyW+ZhlZAeLkfBWz/SQHCE=
-X-Received: by 2002:a17:902:d14c:b0:194:957b:e81a with SMTP id
- t12-20020a170902d14c00b00194957be81amr257209plt.114.1673872174441; Mon, 16
- Jan 2023 04:29:34 -0800 (PST)
+        Mon, 16 Jan 2023 07:29:31 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CA91CF73
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:29:27 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:ca8:1fb3:6247:f214])
+        by laurent.telenet-ops.be with bizsmtp
+        id 9QVR290013ai2CG01QVRgJ; Mon, 16 Jan 2023 13:29:25 +0100
+Received: from rox.of.borg ([192.168.97.57] helo=rox)
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pHOc4-005TQP-Ab
+        for linux-kernel@vger.kernel.org;
+        Mon, 16 Jan 2023 13:29:24 +0100
+Received: from geert by rox with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pHOc8-000UNA-RA
+        for linux-kernel@vger.kernel.org;
+        Mon, 16 Jan 2023 13:29:24 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.2-rc4
+Date:   Mon, 16 Jan 2023 13:29:24 +0100
+Message-Id: <20230116122924.116745-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHk-=wgcOEWvT-WjmRf-zCCXyFJaVVFH=26BPQ+N1OFTTnN=RA@mail.gmail.com>
+References: <CAHk-=wgcOEWvT-WjmRf-zCCXyFJaVVFH=26BPQ+N1OFTTnN=RA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221219234638.3661-1-mike.leach@linaro.org> <20221219234638.3661-7-mike.leach@linaro.org>
- <Y6KDqe26J8RyoJIV@debian.me>
-In-Reply-To: <Y6KDqe26J8RyoJIV@debian.me>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Mon, 16 Jan 2023 12:29:23 +0000
-Message-ID: <CAJ9a7VivKKZi8DvNFurb6V0ds1qjvtD+BV7Don+kGSnwrNFY5g@mail.gmail.com>
-Subject: Re: [PATCH v5 6/6] Documentation: coresight: docs for config load via configfs
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com, acme@kernel.org, james.clark@arm.com,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
+Below is the list of build error/warning regressions/improvements in
+v6.2-rc4[1] compared to v6.1[2].
 
-On Wed, 21 Dec 2022 at 03:55, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On Mon, Dec 19, 2022 at 11:46:38PM +0000, Mike Leach wrote:
-> > diff --git a/Documentation/trace/coresight/coresight-config.rst b/Documentation/trace/coresight/coresight-config.rst
-> > index 6d5ffa6f7347..109053eb1b93 100644
-> > --- a/Documentation/trace/coresight/coresight-config.rst
-> > +++ b/Documentation/trace/coresight/coresight-config.rst
-> > @@ -141,11 +141,11 @@ Mount configfs as normal and the 'cs-syscfg' subsystem will appear::
-> >      $ ls /config
-> >      cs-syscfg  stp-policy
-> >
-> > -This has two sub-directories::
-> > +This has two sub-directories, with the load and unload attribute files::
-> >
-> >      $ cd cs-syscfg/
-> >      $ ls
-> > -    configurations  features
-> > +    configurations features load  unload
-> >
-> >  The system has the configuration 'autofdo' built in. It may be examined as
-> >  follows::
-> > @@ -278,9 +278,16 @@ Creating and Loading Custom Configurations
-> >  ==========================================
-> >
-> >  Custom configurations and / or features can be dynamically loaded into the
-> > -system by using a loadable module.
-> > +system by using a loadable module, or by loading a binary configuration
-> > +file in configfs.
-> >
-> > -An example of a custom configuration is found in ./samples/coresight.
-> > +Loaded configurations can use previously loaded features. The system will
-> > +ensure that it is not possible to unload a feature that is currently in
-> > +use, by enforcing the unload order as the strict reverse of the load order.
-> > +
-> > +
-> > +Using a Loadable Module
-> > +-----------------------
-> >
-> >  This creates a new configuration that uses the existing built in
-> >  strobing feature, but provides a different set of presets.
-> > @@ -289,6 +296,187 @@ When the module is loaded, then the configuration appears in the configfs
-> >  file system and is selectable in the same way as the built in configuration
-> >  described above.
-> >
-> > -Configurations can use previously loaded features. The system will ensure
-> > -that it is not possible to unload a feature that is currently in use, by
-> > -enforcing the unload order as the strict reverse of the load order.
-> > +The file 'coresight-cfg-sample.c' contains the configuration and module
-> > +initialisation code needed to create the loadable module.
-> > +
-> > +This will be built alongside the kernel modules if select in KConfig.
->
-> What config options (CONFIG_) are required for above to work?
->
-> > +
-> > +An example of a custom configuration module is found in './samples/coresight'.
-> > +
-> > +Using a Binary Configuration File
-> > +---------------------------------
-> > +
-> > +The './tools/coresight' directory contains example programs to generate and
-> > +read and print binary configuration files.
-> > +
-> > +Building the tools creates the 'coresight-cfg-file-gen' program that will
-> > +generate a configuration binary 'example1.cscfg' that can be loaded into the
-> > +system using configfs. The configuration declared in the source file
-> > +'coresight-cfg-example1.c' is named 'autofdo3' - the name that will be used
-> > +once loaded.
-> > +
-> > +The source files 'coresight-cfg-bufw.h' and 'coresight-cfg-bufw.c' provide a
-> > +standard function to convert a configuration declared in 'C' into the correct
-> > +binary buffer format. These files can be re-used to create new custom
-> > +configurations. Alternatively, addition examples can be added to the
->
-> s/addition/additional/
->
-> > +'coresight-cfg-file-gen' program::
-> > +
-> > +    $ ./coresight-cfg-file-gen
-> > +    Coresight Configuration file Generator
-> > +
-> > +    Generating example1 example
-> > +    Generating example2 example
-> > +
-> > +The program 'coresight-cfg-file-read' can read back and print a configuration
-> > +binary. This is built using the file reader from the driver code
-> > +(coresight-config-file.c), which is copied over into './tools/coresight' at
-> > +build time.::
-> > +
-> > +    ./coresight-cfg-file-read example1.cscfg
-> > +    CoreSight Configuration file reader
-> > +    ============================================
-> > +
-> > +    Configuration 1
-> > +    Name:- autofdo3
-> > +    Description:-
-> > +    Setup ETMs with strobing for autofdo
-> > +    Supplied presets allow experimentation with mark-space ratio for various loads
-> > +
-> > +    Uses 1 features:-
-> > +    Feature-1: strobing
-> > +
-> > +    Provides 4 sets of preset values, 2 presets per set
-> > +    set[0]: 0x7d0, 0x64,
-> > +    set[1]: 0x7d0, 0x3e8,
-> > +    set[2]: 0x7d0, 0x1388,
-> > +    set[3]: 0x7d0, 0x2710,
-> > +
-> > +    ============================================
-> > +    File contains no features
-> > +
-> > +There are additional attributes in the cs-syscfg directory - load and
-> > +unload that can be used to load and unload configuration binary files. To
-> > +load, 'cat' the binary config into the load attribute::
-> > +
-> > +    $ ls /config/cs-syscfg
-> > +    configurations features  load  unload
-> > +    $ cat example1.cscfg > /config/cs-syscfg/load
-> > +    $ ls /config/cs-syscfg/configurations/
-> > +    autofdo  autofdo3
-> > +
-> > +To unload, use the same file in the unload attribute::
-> > +
-> > +    $ cat example1.cscfg > /config/cs-syscfg/unload
-> > +    ls /config/cs-syscfg/configurations/
-> > +    autofdo
-> > +
-> > +
-> > +
-> > +Binary Configuration File Format
-> > +--------------------------------
-> > +
-> > +The file format is defined in the source file **coresight-config-file.h**
->
-> Use single-quote for identifier names for consistency here.
->
-> > +
-> > +The source reader and generator examples produce a binary of this format.
-> > +
-> > +This arrangement is reproduced below:-
-> > +
-> > +Overall File structure
-> > +~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +::
-> > +
-> > +   [cscfg_file_header]   // Mandatory
-> > +   [CONFIG_ELEM]*        // Optional - multiple, defined by cscfg_file_header.nr_configs
-> > +   [FEATURE_ELEM]*       // Optional - multiple, defined by cscfg_file_header.nr_features
-> > +
-> > +File is invalid if both [CONFIG_ELEM] and [FEATURE_ELEM] are omitted.
-> > +
-> > +A file that contains only [FEATURE_ELEM] may be loaded, and the features used
-> > +by subsequently loaded files with [CONFIG_ELEM] elements.
-> > +
-> > +Element Name Strings
-> > +~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +Configuration name strings are required to consist of alphanumeric characters and '_' only. Other special characters are not permitted.
-> > +
-> > +::
-> > +   my_config_2          // is a valid name.
-> > +   this-bad-config#5    // this will not work
->
-> Instead of using code-block for name examples, what about "... For
-> example, foo_bar is a valid name where as foo-bar# is not."?
->
-> > +
-> > +This is in order to comply with the requirements of the perf command line.
-> > +
-> > +It is recommended that Feature and Parameter names use the same convention to allow for future enhancements to the command line syntax.
-> > +
-> > +CONFIG_ELEM element
-> > +~~~~~~~~~~~~~~~~~~~
-> > +
-> > +::
-> > +
-> > +   [cscfg_file_elem_header]                // header length value to end of feature strings.
-> > +   [cscfg_file_elem_str]                   // name of the configuration.
-> > +                                           // (see element string name requirements)
-> > +   [cscfg_file_elem_str]                   // description of configuration.
-> > +   [u16 value](nr_presets)                 // number of defined sets presets values.
-> > +   [u32 value](nr_total_params)            // total parameters defined by all used features.
-> > +   [u16 value](nr_feat_refs)               // number of features referenced by the configuration
-> > +   [u64 values] * (nr_presets * nr_total_params)     // the preset values.
-> > +   [cscfg_file_elem_str] * (nr_feat_refs)  // names of features used in the configurations.
-> > +
-> > +FEATURE_ELEM element
-> > +~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +::
-> > +
-> > +   [cscfg_file_elem_header]                // header length is total bytes to end of param structures.
-> > +   [cscfg_file_elem_str]                   // feature name.
-> > +   [cscfg_file_elem_str]                   // feature description.
-> > +   [u32 value](match_flags)                // flags to associate the feature with a device.
-> > +   [u16 value](nr_regs)                    // number of registers.
-> > +   [u16 value](nr_params)                  // number of parameters.
-> > +   [cscfg_regval_desc struct] * (nr_regs)  // register definitions
-> > +   [PARAM_ELEM] * (nr_params)              // parameters definitions
-> > +
-> > +PARAM_ELEM element
-> > +~~~~~~~~~~~~~~~~~~
-> > +
-> > +::
-> > +
-> > +   [cscfg_file_elem_str]         // parameter name.
-> > +   [u64 value](param_value)      // initial value.
-> > +
-> > +Additional definitions.
-> > +~~~~~~~~~~~~~~~~~~~~~~~
->
-> Trim trailing period for section names
->
-> > +
-> > +The following structures are defined in **coresight-config-file.h**
-> > +
-> > + * **struct cscfg_file_header** : This structure contains an initial magic number, the total
-> > +   length of the file, and the number of configurations and features in the file.
-> > + * **struct cscfg_file_elem_header**: This defines the total length and type of a CONFIG_ELEM
-> > +   or a FEATURE_ELEM.
-> > + * **struct cscfg_file_elem_str**: This defines a string and its length.
->
-> Again, for consistency, wrap identifier names in single-quotes.
->
-> > +
-> > +The magic number in cscfg_file_header is defined as two bitfields::
-> > +
-> > +   [31:8] Fixed magic number to identify file type.
-> > +   [7:0]  Current file format version.
-> > +
-> > +The following defines determine the maximum overall file size and maximum individual
-> > +string size::
-> > +
-> > +   CSCFG_FILE_MAXSIZE       // maximum overall file size.
-> > +   CSCFG_FILE_STR_MAXSIZE   // maximum individual string size.
->
-> For parameter lists in elements, use bullet lists instead.
->
-> > +
-> > +Load Dependencies.
-> > +~~~~~~~~~~~~~~~~~~
->
-> Trim trailing period for section names.
-> > +
-> > +Files may be unloaded only in the strict reverse order of loading. This is enforced by the
-> > +configuration system.
-> > +
-> > +This is to ensure that any load dependencies are maintained.
-> > +
-> > +A configuration file that contains a CONFIG_ELEM that references named features "feat_A" and "feat_B" will load only if either:-
-> > +a) "feat_A" and/or "feat_B" has been loaded previously, or are present as built-in / module loaded features.
-> > +b) "feat_A" and/or "feat_B" are declared as FEAT_ELEM in the same file as the CONFIG_ELEM.
->
-> Separate the preceding paragraph and the list with a blank line in order
-> for the list to be rendered as list.
->
+Summarized:
+  - build errors: +7/-14
+  - build warnings: +30/-9
 
-The next version will contain all the adjustments that you suggested,
-though rather than using single quotes, I have changed all the
-occurrences to consistently the double back tick to make the filenames
-etc fixed width font.
+JFYI, when comparing v6.2-rc4[1] to v6.2-rc3-8-g1fe4fd6f5cad346e[3], the summaries are:
+  - build errors: +1/-5
+  - build warnings: +21/-3
 
-Thanks for the review
+Happy fixing! ;-)
 
-Mike
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/5dc4c995db9eb45f6373a956eb1f69460e69e6d4/ (all 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1fe4fd6f5cad346e598593af36caeadc4f5d4fa9/ (all 152 configs)
 
 
-> Thanks.
->
-> --
-> An old man doll... just what I always wanted! - Clara
+*** ERRORS ***
+
+7 error regressions:
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
+  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' reading 128 bytes from a region of size 0 [-Werror=stringop-overread]:  => 57:33
+  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
+
+14 error improvements:
+  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
+  - /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]: 259:14, 263:14, 258:14, 261:46, 262:14 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
+  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
+  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
+  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
+  - {standard input}: Error: pcrel too far: 2274, 2221, 2232, 2293, 2217, 2206, 2216, 2249, 2231, 2209, 2262, 2204, 2215, 2259, 2247, 2248, 2261, 2229 => 
+  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
 
 
+*** WARNINGS ***
+
+30 warning regressions:
+  + /kisskb/src/arch/s390/kernel/setup.c: warning: 'memcpy' reading 128 bytes from a region of size 0 [-Wstringop-overread]:  => 526:9
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/bus/mhi/host/mhi_pci_generic.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/extcon/extcon-fsa9480.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/cec/core/cec.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/usb/hdpvr/hdpvr.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/pwm/pwm-sifive.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/hptiop.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/sd_mod.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
+
+9 warning improvements:
+  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]: 68:25 => 
+  - /kisskb/src/arch/s390/kernel/setup.c: warning: 'memcpy' offset [0, 127] is out of the bounds [0, 0] [-Warray-bounds]: 524:9 => 
+  - /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]: 989:108, 989:122 => 989:108
+  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
 
 --
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
