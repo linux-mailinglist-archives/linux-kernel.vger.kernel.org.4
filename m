@@ -2,199 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6246766BE76
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F1B66BE74
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjAPM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
+        id S231419AbjAPM5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjAPM46 (ORCPT
+        with ESMTP id S231284AbjAPM4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:56:58 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B781F91B;
-        Mon, 16 Jan 2023 04:55:45 -0800 (PST)
-Received: from mwalle01.sab.local (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D9DE016F2;
-        Mon, 16 Jan 2023 13:55:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1673873739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N/4W4B+W4pbypXR0XLXo8vwK/KzTHK+Yr6B7LFX8zfE=;
-        b=xmPF+pbQnuFJOIntAfRbp9TykBDBlvpixmjoiiWQ1ZmDbGhat5vqpLYOEh8b0FThavc0Hp
-        XQmq5Zs+X+BSLhhO7tisGY1ZyxhoyWi+gz2tHrj28iKFKYNmFm8bCBasoF0aAV/ZyYZ79a
-        4IYKgYHHAzbPN54vhPfSQbf7VQ0DeWm7Y/mPClv6SFdDFyQEDb2NnvAjpNzYFqn4ICwqgb
-        A2EVliCxWfRccD+6tIO+yyyhMucYX+KVvjH8ElwfZH/YgPNnuNB8FIe+CwO0xP3EgD7VfK
-        cUMALh+rWueQwiQjMXst9NEXnuW4FLyXKQpKRxSqLV+CB0Rrz7B3kkzBIN7buw==
-From:   Michael Walle <michael@walle.cc>
-Date:   Mon, 16 Jan 2023 13:55:18 +0100
-Subject: [PATCH net-next 6/6] net: phy: Remove probe_capabilities
+        Mon, 16 Jan 2023 07:56:53 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FE120050;
+        Mon, 16 Jan 2023 04:55:42 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id x5so861930qti.3;
+        Mon, 16 Jan 2023 04:55:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CM4Jkzp/QAXkO7bnxWsfgCHfESoHq0ivf9TvlonLhmA=;
+        b=Mn12KVK09MbH3Hu1oFUpb91/fQq2Ug1Z9ttFJE3HTfHJGykZ7mG6ap34OOqGCy2lIO
+         oVVAT0MRRi/epgeph8vkPzVfrN80ql2r64zYNTJbwqb/Dp7EXWMt5vofn82JZ11+Om0+
+         xml1FBPmPR13B0I4ZG7n0BZVKu0Bwessyu6ZcyHHBACcmy5BjRfvlE5v3PGCRefzNmXF
+         iO0OhvAyuXHt/gmqthfBz7on7BbqLmpb6Uhi/QS7n1e8F6QFo/Jm4QHJNGBc+15UOJ0b
+         ukEaqxGA11VkinQIKOPTSopziQfKUhQ1q3Pko80j8xcyg+psu0YbRCXjTD3gWZnCt0ST
+         RJgQ==
+X-Gm-Message-State: AFqh2kplFSIxWBsblK5BCLSdT/t0TQd6OmQfHXeuQWqvJZ6G8yp8LsrT
+        RosIB5m7UUWTFKl6M5GwnYXYDLyJP2VpoA==
+X-Google-Smtp-Source: AMrXdXvSek5CM7kko3egK3cIPxxImuMu6Faaui9MMc86ouX0ZA93gouZby3xtrm8yUqdhdm2/f2juw==
+X-Received: by 2002:a05:622a:1c0e:b0:3b6:2c74:1453 with SMTP id bq14-20020a05622a1c0e00b003b62c741453mr8833816qtb.61.1673873741673;
+        Mon, 16 Jan 2023 04:55:41 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id jr49-20020a05622a803100b003ad373d04b6sm11638024qtb.59.2023.01.16.04.55.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 04:55:41 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id a9so13476351ybb.3;
+        Mon, 16 Jan 2023 04:55:40 -0800 (PST)
+X-Received: by 2002:a25:46c6:0:b0:7b8:a0b8:f7ec with SMTP id
+ t189-20020a2546c6000000b007b8a0b8f7ecmr4777221yba.36.1673873740621; Mon, 16
+ Jan 2023 04:55:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230116-net-next-remove-probe-capabilities-v1-6-5aa29738a023@walle.cc>
-References: <20230116-net-next-remove-probe-capabilities-v1-0-5aa29738a023@walle.cc>
-In-Reply-To: <20230116-net-next-remove-probe-capabilities-v1-0-5aa29738a023@walle.cc>
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bryan Whitehead <bryan.whitehead@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-aspeed@lists.ozlabs.org, Andrew Lunn <andrew@lunn.ch>,
-        Michael Walle <michael@walle.cc>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106125816.10600-1-fabrizio.castro.jz@renesas.com> <20230106125816.10600-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230106125816.10600-2-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 16 Jan 2023 13:55:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVZ+wrCmRxjoV-k3zhs1tHHdLr1toBbT2ft+-pVrzMYEQ@mail.gmail.com>
+Message-ID: <CAMuHMdVZ+wrCmRxjoV-k3zhs1tHHdLr1toBbT2ft+-pVrzMYEQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: soc: renesas: Add RZ/V2M PWC
+To:     fabrizio.castro.jz@renesas.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+On Fri, Jan 6, 2023 at 1:58 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The Renesas RZ/V2M External Power Sequence Controller (PWC) IP
+> is capable of:
+> * external power supply on/off sequence generation
+> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
+> * key input signals processing
+> * general-purpose output pins
+>
+> Add the corresponding dt-bindings.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>
+> v1->v2: I have dropped syscon, simple-mfd, regmap, offset, and the child nodes.
+> v2->v3: No change.
+> v3->v4: Moved file under Documentation/devicetree/bindings/soc/renesas,
+>         and changed $id accordingly.
+> v4->v5: Fixed subject line and changelog. Rob, I have kept your Reviewed-by tag
+>         assuming you are still happy, please do jump in if you think  that's not
+>         appropriate anymore.
 
-Deciding if to probe of PHYs using C45 is now determine by if the bus
-provides the C45 read method. This makes probe_capabilities redundant
-so remove it.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.3.
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/net/ethernet/adi/adin1110.c               | 1 -
- drivers/net/ethernet/freescale/xgmac_mdio.c       | 1 -
- drivers/net/ethernet/mediatek/mtk_eth_soc.c       | 1 -
- drivers/net/ethernet/microchip/lan743x_main.c     | 2 --
- drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 3 ---
- drivers/net/mdio/mdio-aspeed.c                    | 1 -
- include/linux/phy.h                               | 8 --------
- 7 files changed, 17 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/net/ethernet/adi/adin1110.c b/drivers/net/ethernet/adi/adin1110.c
-index 0805f249fff2..25f55756681d 100644
---- a/drivers/net/ethernet/adi/adin1110.c
-+++ b/drivers/net/ethernet/adi/adin1110.c
-@@ -523,7 +523,6 @@ static int adin1110_register_mdiobus(struct adin1110_priv *priv,
- 	mii_bus->priv = priv;
- 	mii_bus->parent = dev;
- 	mii_bus->phy_mask = ~((u32)GENMASK(2, 0));
--	mii_bus->probe_capabilities = MDIOBUS_C22;
- 	snprintf(mii_bus->id, MII_BUS_ID_SIZE, "%s", dev_name(dev));
- 
- 	ret = devm_mdiobus_register(dev, mii_bus);
-diff --git a/drivers/net/ethernet/freescale/xgmac_mdio.c b/drivers/net/ethernet/freescale/xgmac_mdio.c
-index 8b5a4cd8ff08..a13b4ba4d6e1 100644
---- a/drivers/net/ethernet/freescale/xgmac_mdio.c
-+++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
-@@ -397,7 +397,6 @@ static int xgmac_mdio_probe(struct platform_device *pdev)
- 	bus->read_c45 = xgmac_mdio_read_c45;
- 	bus->write_c45 = xgmac_mdio_write_c45;
- 	bus->parent = &pdev->dev;
--	bus->probe_capabilities = MDIOBUS_C22_C45;
- 	snprintf(bus->id, MII_BUS_ID_SIZE, "%pa", &res->start);
- 
- 	priv = bus->priv;
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index dc50e0b227a6..d67ec28b2ba3 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -808,7 +808,6 @@ static int mtk_mdio_init(struct mtk_eth *eth)
- 	eth->mii_bus->write = mtk_mdio_write_c22;
- 	eth->mii_bus->read_c45 = mtk_mdio_read_c45;
- 	eth->mii_bus->write_c45 = mtk_mdio_write_c45;
--	eth->mii_bus->probe_capabilities = MDIOBUS_C22_C45;
- 	eth->mii_bus->priv = eth;
- 	eth->mii_bus->parent = eth->dev;
- 
-diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
-index e205edf477de..86b81df374da 100644
---- a/drivers/net/ethernet/microchip/lan743x_main.c
-+++ b/drivers/net/ethernet/microchip/lan743x_main.c
-@@ -3279,7 +3279,6 @@ static int lan743x_mdiobus_init(struct lan743x_adapter *adapter)
- 			lan743x_csr_write(adapter, SGMII_CTL, sgmii_ctl);
- 			netif_dbg(adapter, drv, adapter->netdev,
- 				  "SGMII operation\n");
--			adapter->mdiobus->probe_capabilities = MDIOBUS_C22_C45;
- 			adapter->mdiobus->read = lan743x_mdiobus_read_c22;
- 			adapter->mdiobus->write = lan743x_mdiobus_write_c22;
- 			adapter->mdiobus->read_c45 = lan743x_mdiobus_read_c45;
-@@ -3295,7 +3294,6 @@ static int lan743x_mdiobus_init(struct lan743x_adapter *adapter)
- 			netif_dbg(adapter, drv, adapter->netdev,
- 				  "RGMII operation\n");
- 			// Only C22 support when RGMII I/F
--			adapter->mdiobus->probe_capabilities = MDIOBUS_C22;
- 			adapter->mdiobus->read = lan743x_mdiobus_read_c22;
- 			adapter->mdiobus->write = lan743x_mdiobus_write_c22;
- 			adapter->mdiobus->name = "lan743x-mdiobus";
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index d2cb22f49ce5..21aaa2730ac8 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -553,9 +553,6 @@ int stmmac_mdio_register(struct net_device *ndev)
- 
- 	new_bus->name = "stmmac";
- 
--	if (priv->plat->has_gmac4)
--		new_bus->probe_capabilities = MDIOBUS_C22_C45;
--
- 	if (priv->plat->has_xgmac) {
- 		new_bus->read = &stmmac_xgmac2_mdio_read_c22;
- 		new_bus->write = &stmmac_xgmac2_mdio_write_c22;
-diff --git a/drivers/net/mdio/mdio-aspeed.c b/drivers/net/mdio/mdio-aspeed.c
-index 2f4bbda5e56c..c727103c8b05 100644
---- a/drivers/net/mdio/mdio-aspeed.c
-+++ b/drivers/net/mdio/mdio-aspeed.c
-@@ -164,7 +164,6 @@ static int aspeed_mdio_probe(struct platform_device *pdev)
- 	bus->write = aspeed_mdio_write_c22;
- 	bus->read_c45 = aspeed_mdio_read_c45;
- 	bus->write_c45 = aspeed_mdio_write_c45;
--	bus->probe_capabilities = MDIOBUS_C22_C45;
- 
- 	rc = of_mdiobus_register(bus, pdev->dev.of_node);
- 	if (rc) {
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index fceaac0fb319..fbeba4fee8d4 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -419,14 +419,6 @@ struct mii_bus {
- 	/** @reset_gpiod: Reset GPIO descriptor pointer */
- 	struct gpio_desc *reset_gpiod;
- 
--	/** @probe_capabilities: bus capabilities, used for probing */
--	enum {
--		MDIOBUS_NO_CAP = 0,
--		MDIOBUS_C22,
--		MDIOBUS_C45,
--		MDIOBUS_C22_C45,
--	} probe_capabilities;
--
- 	/** @shared_lock: protect access to the shared element */
- 	struct mutex shared_lock;
- 
+                        Geert
 
--- 
-2.30.2
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
