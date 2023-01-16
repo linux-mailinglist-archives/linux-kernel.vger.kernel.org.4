@@ -2,133 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5788766CF57
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8187566CF5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjAPTKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S230474AbjAPTKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjAPTKQ (ORCPT
+        with ESMTP id S232156AbjAPTKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:10:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2134A2798D
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673896167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wr8XmZu9EBjO0WPK0qtcecPC5MDD0nBa8oSRFLTxPhE=;
-        b=JQWu72Jh7htehXwpSmgFHeKqhVX0FOescV9wmj0dM+o18M5b+i5aN9ZgexgWdYxKuqYCgz
-        gfT0dfRFbolIq8oiH6W93OXuBxUhtNqlf5i2V95fd6yo21tkiSz9UZ/SJlhcaimcn3uxtV
-        /QS7HQ78eiTarwcoOBTIzuQ3pO2bD4U=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-658-xeGHPpgqO2W4Gwmu3zG50w-1; Mon, 16 Jan 2023 14:08:17 -0500
-X-MC-Unique: xeGHPpgqO2W4Gwmu3zG50w-1
-Received: by mail-wm1-f70.google.com with SMTP id bi18-20020a05600c3d9200b003d991844dbcso18869019wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:08:01 -0800 (PST)
+        Mon, 16 Jan 2023 14:10:45 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92090298DA
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:10:44 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id tz11so5841166ejc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Co2g9IMkk73uKQEckznsjPdf9rOk98qtlKq/GS31a/w=;
+        b=U714rqVZg173SnKUPuCRnKX3tvwBwaSG8VtImxN4rrf/BDh9nnYe6KzyleixazhPxP
+         A7OTCSaQrm1KfFD2C0ElinXw7VfsQzQkulca9N2XZsBa+yhZ8B7ZhE4C2i6mQvJiOyu/
+         Poam/01xBxy83M/lKNRrgnt0vs03iTu6v2co+WHq8hcqT3ngZ2/wLglaDPoSwNYf5mw0
+         FC4XfqtP0nF6sL8Tuo37qD/UUegdNfYUbRBb4QuCqqkTGujoOSGW4+LfiuezDrRLLKoW
+         ECWTHLo9wwg04wFeOD/bW4tYkWbv30totLZK3C5M+upSXf3Z9ZifyKqCh1XQJwecH4p9
+         BBzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wr8XmZu9EBjO0WPK0qtcecPC5MDD0nBa8oSRFLTxPhE=;
-        b=T1k7eBlfSSurVg0TxcA44VtfZfO0fb3Y9rmHfuSW71pYx8NYpUwdRPZ1HfWImA5XY3
-         CpUsZWHI2ctaSSx+q4R/QF3gKsyeUAuEJBYj9eqfZ02vLmX8OD9GyFiqOfRovMmJbUVi
-         KSDwcSrCTiGqA8aqeNGjcsKngC8oGiJPEPq/YZNtFtegtrt9PSG9njr9w1ZWyK7NQpQ3
-         AI0bSnpGEf+VfH+z7EADBKgwpzouNoUUZHIli3axowlcMtnARcF6L7xmOxdcXXVaIUmO
-         tbbthge+WenH8NcCRB5mrmFasZ4NG8fhIV2oFXlDBy3/D2JcRUeDvb1lVQjy9pKDBe/n
-         Wx9A==
-X-Gm-Message-State: AFqh2ko4kIb260v5xYMD0Umwq2DIpmzGeqdYxmSyHM064HYi6HJ+fezB
-        LbnOBkZXhDqPRgrk9c+RLKd9B7PJ+t/oVori2J9SjDKOkfW4OWl1FQfPwI7qpxuVcC8aBRXkJ/l
-        /prJqPGfbHbDXZGxEboI5FXp8
-X-Received: by 2002:a7b:c849:0:b0:3da:f651:7828 with SMTP id c9-20020a7bc849000000b003daf6517828mr577914wml.2.1673896076799;
-        Mon, 16 Jan 2023 11:07:56 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvkoKy9I7yPBD2CNVxNnI4pXi5wuPin4AEuobT/WUTYYNfhQPzvWrzNXiZexaf5oOnuZMOYcA==
-X-Received: by 2002:a7b:c849:0:b0:3da:f651:7828 with SMTP id c9-20020a7bc849000000b003daf6517828mr577892wml.2.1673896076501;
-        Mon, 16 Jan 2023 11:07:56 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id ay13-20020a05600c1e0d00b003d34faca949sm34611196wmb.39.2023.01.16.11.07.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 11:07:55 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for
- SMT local sched group
-In-Reply-To: <20230116040529.GA16654@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
- <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
- <20221229040003.GA11497@ranerica-svr.sc.intel.com>
- <xhsmhsfghcb20.mognet@vschneid.remote.csb>
- <20230113190226.GA1379@ranerica-svr.sc.intel.com>
- <20230116040529.GA16654@ranerica-svr.sc.intel.com>
-Date:   Mon, 16 Jan 2023 19:07:54 +0000
-Message-ID: <xhsmhtu0qi9h1.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Co2g9IMkk73uKQEckznsjPdf9rOk98qtlKq/GS31a/w=;
+        b=pizE6yGe4rpITZrAvefOiSj3yL6cY/jOEtDMDwvgC5quLXDVWbPR3xp7ZVfz/0GvNq
+         i7mBH9rnH5nHrxcUeYKSJjG7MV6UpcYPg6fIjZh1nmTrYGPrJxwjLHPkCRL5xjSZZTi1
+         xtzJAGE/Zjnclzh3484YPt7jJWmPzIh6fheSlNZJxRNR0+4pzmFYrYX/KW6Fu7OA8zcB
+         OXZJnPZC205aZ6x6zjK9z/wiF75YqurH8w4yVunFyVw83T5gxAp8n6dyiXJMoS5mp5S8
+         KOkZNag8VmI+eIy3WJRInnqAISL/OJ0bNMchtnRsAGizdKYzc8Vmcf6ThJRL2sjeriPB
+         hvmw==
+X-Gm-Message-State: AFqh2kpkKDGDIHDj4szuhJOIhOe3VUNhv39Wuxpay1et9aIFfrtc38kc
+        LPLsUddMg74BAHDZM6qR7sQO8A==
+X-Google-Smtp-Source: AMrXdXu7KxNRBkkMmI1eVW/Eoo9jAdHt6qJ1e/DZ7tGTObc7DPCWM2gvqdSko6LhWVAwn+JazerySg==
+X-Received: by 2002:a17:906:b855:b0:864:8c78:e7ff with SMTP id ga21-20020a170906b85500b008648c78e7ffmr12488537ejb.23.1673896243157;
+        Mon, 16 Jan 2023 11:10:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b0079e11b8e891sm12050219ejh.125.2023.01.16.11.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 11:10:42 -0800 (PST)
+Message-ID: <18cab846-f62a-93f2-8d47-17b37b638278@linaro.org>
+Date:   Mon, 16 Jan 2023 20:10:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
+ '#size-cells' related dt-binding error
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
+ <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+ <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
+ <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
+ <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/01/23 20:05, Ricardo Neri wrote:
->> >
->> > It should be set on any topology level below the NUMA ones, we do remove it
->> > on SD_ASYM_CPUCAPACITY levels because this used to interfere with misfit
->> > balancing (it would override the group_type), things are a bit different
->> > since Vincent's rewrite of load_balance() but I think we still want it off
->> > there.
->
-> Your comment got me thinking. Whose child sched domain wants prefer_sibling?
-> It sounds to me that is busiest's. I could not think of any reason of *having*
-> to use the flags of the local group.
->
+On 16/01/2023 16:43, Bhupesh Sharma wrote:
+> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
+>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
+>>>>> Fix the following '#address-cells' & '#size-cells' related
+>>>>> dt-binding error:
+>>>>>
+>>>>>    $ make dtbs_check
+>>>>>
+>>>>>    From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>>         arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+>>>>>               #address-cells:0:0: 2 was expected
+>>>>>       From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>>>>
+>>>> Don't we want rather to unify the soc address range?
+>>>
+>>> Well, the assumption in the original dt-bindings was that every reg
+>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
+>>> #size-cells to <2>). However, that is not the case for all of the
+>>> SoCs.
+>>
+>> Hm, which device of that SoC cannot be used with address/size cells 2?
+> 
+> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
+> be used with address/size cells 2 (See:
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
 
-Hm, given that on systems without SD_ASYM_CPUCAPACITY, SD_PREFER_SIBLING is
-set all the way from SMT up to the last !NUMA domain, should we just get
-rid of the child/parent weirdness of SD_PREFER_SIBLING and stick with the
-flags we are given at the level we're balancing at?
+That's not relevant and not answering to my question. Address/size cells
+affect children, so not geniqup. address-cells 2 means you have
+everywhere 64 bit addresses, so which devices cannot work with such DTS?
+If you claim that geniqup and its children has some troubles - please
+point what troubles. The DTS and existing address/size cells have
+nothing to do with it.
 
-i.e.
-
-        sds->prefer_sibling = env->sd & SD_PREFER_SIBLING;
-
-Unless I'm reading this wrong, this also eliminates the effect of
-SD_PREFER_SIBLING on the first NUMA level - DIE level has SD_PREFER_SIBLING
-set, but we don't necessarily want to evenly spread things out when accross
-NUMA nodes.
-
-
-> We can use the flags of the sched group (as per 16d364ba6ef2 ("sched/topology:
-> Introduce sched_group::flags"), these are the flags of the child domain).
->
-> The patch below works for me and I don't have to even the number of busy CPUs.
-> It should not interfere with misfit balancing either:
->
-
-We remove that flag on systems where misfit balancing happens anyway, so
-that's safe vs. SD_PREFER_SIBLING.
+Best regards,
+Krzysztof
 
