@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDD966CF39
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635E966CF3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbjAPS4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S232824AbjAPS6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjAPS4e (ORCPT
+        with ESMTP id S231161AbjAPS6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:56:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329F318B35;
-        Mon, 16 Jan 2023 10:56:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C34B161117;
-        Mon, 16 Jan 2023 18:56:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0F2C433EF;
-        Mon, 16 Jan 2023 18:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673895392;
-        bh=DuMYZOnr0bMZvp7GSH2TEtxIL4JXiMj6qVLcpIaZmVw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nNscdUa5yyar00y4JkXqh/nP1LwzCLEY3fydqzu6fthUBWQOwSIevYrYNrDeChQR3
-         D8F6MGD1axAjkWcOE9CUsxvsxv+drEgsIAI3kRi9eBVUNaybBz/SaSx+WO2PiUSYeu
-         ZAmA+HZE8m3lkKINt/rCVtquL3O/WI0gvQiI3NvuCbePGAdKsIsI3lyE0QSx5Fm2Mu
-         k6slx5iTdh2aeBbVdphF/sXLKgCDo1sBOiEjbXDVZQw18FqNKLJY7QpNCY90I21QBT
-         Y7FkrZ+SSN9B2j7NTeILgbOMm2VrGEaNX/MLj5EKYpM9tN/HfVUz6eIO76gITp2f6k
-         fdIdMW5fVn/uA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CB7385C0687; Mon, 16 Jan 2023 10:56:31 -0800 (PST)
-Date:   Mon, 16 Jan 2023 10:56:31 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, kvm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        David Woodhouse <dwmw2@infradead.org>, seanjc@google.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH 2/3] rcu: Equip sleepable RCU with lockdep dependency
- graph checks
-Message-ID: <20230116185631.GY2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230113065955.815667-1-boqun.feng@gmail.com>
- <20230113065955.815667-3-boqun.feng@gmail.com>
- <20230113112949.GX4028633@paulmck-ThinkPad-P17-Gen-1>
- <Y8GdYgSBtyKwf/qj@boqun-archlinux>
- <20230113191120.GB4028633@paulmck-ThinkPad-P17-Gen-1>
- <456f6c15-3043-6da2-349d-c0c3880c1a55@redhat.com>
- <Y8WPWJ6TKg5ikZYr@Boquns-Mac-mini.local>
+        Mon, 16 Jan 2023 13:58:20 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ACE234D5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:16 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id d13so20065974qvj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7C63mgoRdAtz/YJMR7biI6szW2IE2U19fGXKnn72cZo=;
+        b=L2HXL4cnvlLjL83N5xUbSr+EK6yWGpxzHl3ZGFmGE+GNP3/4yoW1NKAdekC061eGZ0
+         cmx3idM8ioMI7UDqqEECrdX2rzEyuiea/jdKvOD4eniJdHb98Hhzhh5mOQCzw1/Ob3v4
+         9dBP3LyzcytS6pFdyXdBtl1ocFAljciJinO8c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7C63mgoRdAtz/YJMR7biI6szW2IE2U19fGXKnn72cZo=;
+        b=4PlgVQbTN7OorxO4uX9nh3uSrjHAl9j7owJjS0C0hEg/plsSi0McpdKlYYSpQt9P+i
+         4K5QeiuvIvYf1KxkCOUJDWGoQ/Z0xPDyN+7TWMcaHzX/9sS0hSYvE64Y4wi0wvWJSt4c
+         s6L+2u0Bf3Xe56ZtbisK3Yqic6Ui+iDTsvO8hb9yezvFvyxL0q/F5bORz7JlU6yD2TNK
+         H+e6/CqqCaaeAAOVe2M2TuHrr2Xef3u5Spz7+VihJ7pHF9wfKUW31tF7OzbpNnF4EvV5
+         gT6f5si2bJSRHnaKWoD7fDTiNHTPr6I9/gZ76F9MpttV1WEAuoU6gdIqtle33wEFNQar
+         xkCA==
+X-Gm-Message-State: AFqh2kqC2McOocx0VLCVbsAArTEtPIagF42StBvJfbtUCzjgwEY0y8AK
+        rT3ySDdDXIQTU3sIjlx8kW5lAThOwGergnDX
+X-Google-Smtp-Source: AMrXdXve02hvHhtVuY9XMelwvLZ6d8Vb+YQbDRp9qXXm0J4ExDSjjf9i/2mD93Uht7WloztC+VVdYA==
+X-Received: by 2002:a0c:fa08:0:b0:532:1caa:3402 with SMTP id q8-20020a0cfa08000000b005321caa3402mr839693qvn.12.1673895495714;
+        Mon, 16 Jan 2023 10:58:15 -0800 (PST)
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05620a454f00b006ce76811a07sm18989439qkp.75.2023.01.16.10.58.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 10:58:15 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id g9so10709584qtu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 10:58:15 -0800 (PST)
+X-Received: by 2002:ac8:7252:0:b0:3b2:d164:a89b with SMTP id
+ l18-20020ac87252000000b003b2d164a89bmr876qtp.452.1673895495062; Mon, 16 Jan
+ 2023 10:58:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8WPWJ6TKg5ikZYr@Boquns-Mac-mini.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wgcOEWvT-WjmRf-zCCXyFJaVVFH=26BPQ+N1OFTTnN=RA@mail.gmail.com>
+ <20230116185212.GA2127972@roeck-us.net>
+In-Reply-To: <20230116185212.GA2127972@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 16 Jan 2023 10:57:58 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whgHNt2dmrwmCfNqherZegVcAo1Nin6EpydnW+fm=D79g@mail.gmail.com>
+Message-ID: <CAHk-=whgHNt2dmrwmCfNqherZegVcAo1Nin6EpydnW+fm=D79g@mail.gmail.com>
+Subject: Re: Linux 6.2-rc4
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 09:54:32AM -0800, Boqun Feng wrote:
-> On Mon, Jan 16, 2023 at 06:36:43PM +0100, Paolo Bonzini wrote:
-> > On 1/13/23 20:11, Paul E. McKenney wrote:
-> > > On Fri, Jan 13, 2023 at 10:05:22AM -0800, Boqun Feng wrote:
-> > > > On Fri, Jan 13, 2023 at 03:29:49AM -0800, Paul E. McKenney wrote:
-> > > > I prefer that the first two patches go through your tree, because it
-> > > > reduces the synchronization among locking, rcu and KVM trees to the
-> > > > synchronization betwen rcu and KVM trees.
-> > > 
-> > > Very well, I have queued and pushed these with the usual wordsmithing,
-> > > thank you!
-> > 
-> > I'm worried about this case:
-> > 
-> > 	CPU 0				CPU 1
-> > 	--------------------		------------------
-> > 	lock A				srcu lock B
-> > 	srcu lock B			lock A
-> > 	srcu unlock B			unlock A
-> > 	unlock A			srcu unlock B
-> > 
-> > While a bit unclean, there is nothing that downright forbids this; as long
-> > as synchronize_srcu does not happen inside lock A, no deadlock can occur.
-> > 
-> 
-> First, even with my change, lockdep won't report this as a deadlock
-> because srcu_read_lock() is annotated as a recursive (unfair) read lock
-> (the "read" parameter for lock_acquire() is 2) and in this case lockdep
-> knows that it won't cause deadlock.
-> 
-> For SRCU, the annotation mapping that is 1) srcu_read_lock() is marked
-> as recursive read lock and 2) synchronize_srcu() is marked as write lock
-> sync, recursive read locks themselves cannot cause deadlocks and lockdep
-> is aware of it.
-> 
-> Will add a selftest for this later.
-> 
-> > However, if srcu is replaced with an rwlock then lockdep should and does
-> > report a deadlock.  Boqun, do you get a false positive or do your patches
-> 
-> To be more precise, to have a deadlock, the read lock on CPU 0 has to be
-> a *fair* read lock (i.e. non-recursive reader, the "read" parameter for
-> lock_acquire is 1)
-> 
-> > correctly suppress this?
-> 
-> I'm pretty sure that lockdep handles this ;-)
+On Mon, Jan 16, 2023 at 10:52 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Build results:
+>         total: 155 pass: 155 fail: 0
+> Qemu test results:
+>         total: 502 pass: 502 fail: 0
+>
+> ... and no runtime warnings.
 
-And lockdep agrees, refusing to complain about the following:
+Lovely. Fingers crossed that we can keep it this way for the reset of
+the rc series.
 
-	idx = srcu_read_lock(&srcu1);
-	mutex_lock(&mut1);
-	mutex_unlock(&mut1);
-	srcu_read_unlock(&srcu1, idx);
+I suspect I'll make this a "rc8" release regardless - not because we
+have any particular problem areas, but simply because of the
+effectively lost week or two over the holidays.
 
-	mutex_lock(&mut1);
-	idx = srcu_read_lock(&srcu1);
-	srcu_read_unlock(&srcu1, idx);
-	mutex_unlock(&mut1);
-
-							Thanx, Paul
+               Linus
