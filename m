@@ -2,112 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D2C66CE67
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B3C66CE69
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbjAPSKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S230401AbjAPSK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbjAPSJu (ORCPT
+        with ESMTP id S233989AbjAPSKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:09:50 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702813F2B9;
-        Mon, 16 Jan 2023 09:54:42 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id x7so15121496qtv.13;
-        Mon, 16 Jan 2023 09:54:42 -0800 (PST)
+        Mon, 16 Jan 2023 13:10:17 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CD13BD9F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:54:58 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bk15so12344217ejb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:54:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kIDoERHtKfd57GD1gNwdQBw7qJacIkRCHvUuRpuup6M=;
-        b=PhlBzZHV2Srh6ST8+N4VoHPUB72ojrpmDLpjwaiXkX+DEXoZBISwh2qgbqlQRhxlzG
-         uj/lWXJvuQxb7H7ZrDeeHOuT1sLphpJlYlNBuYb6Jn4r30DrppmKNdP7VbjCLvCUOvRG
-         WnhEnEmWDK+ml86o8EobTNY3KdT4icmLV1QMxAltEUF4bnp/t/FeiPnua9LEfK/z3AzS
-         H6p0JLTLzlmOQg8z4XFd7VDcqougnt2zL5bohmpM7NnFWZ4zQueY//z4EM44kn6sDYKI
-         GHHaXcBGuHJ+CIMIuCGAWxCY5F+gDgigrU36Jbn1iZYiNVjUlHFOXLU/CyYsfwA5qslv
-         RUwg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1jdt3zqp8+vihNO8d83ajsiCC9GXXQBkXGpmuLk4Zs4=;
+        b=BnfVX22PJyTU2rnUz4ScLrN5Xta5JGIECsQySefTlhElXrgfPgQhCGw6rQCAmXyTPA
+         f8tYMnEgM1mUQGLejD/7si8pxGnGTczlNGjQhQT+aMLN3alhdMPAYtQEEH+GebZaebe7
+         W80xnODpbRvmTD0EJHojm3dXOqsbMVzkGRmOwjw4CiI1xBfJOqMBifr+eVKUqQ/UMKzg
+         I228f0UHNB8+XzvF63AP1bm7pPkDK0WMChKPAMsz4y7aCVMN10JM+pslFu7SSacMtymI
+         H3wHWTLc3OZVh15Ac/thDDtD12uHW0wQ/ZFR8Xavx3xq6D2Mx3pPtNTh1NlOKKaKyRMD
+         yYMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kIDoERHtKfd57GD1gNwdQBw7qJacIkRCHvUuRpuup6M=;
-        b=Olj6syn3sq5MErM2+2LAE/heWhHs/dg8jeTb0yDZvsZhwidn4k0xbnDs/5w9vRHq3R
-         WV7RVpJtD7mttY7+0GVfAktZq/BfJjfagS7874FROfOgEs25pfELdf88ZBqx83uzfDRK
-         H2l9aFUjHYEjXeboILFfAZNaZsQTcYGD+YX7Ha1QXnU4Wg1ZVzU3CgvKj9LfrBGz6CAo
-         JOo18GrbxDDQJrAttyhuZQJKKZhI8Agbvg7wxBTJbwwuOIdvRA6G1nzbEgGnFD8EZ65Z
-         eKNdUbXpMf15hfjHmQebU4VyxB6l1DrdIjXDCJfgxccKa/rfJXiktE359cmi0q/GC4bj
-         j48g==
-X-Gm-Message-State: AFqh2kq/JeaYD8SoNlOvZqgVfJ5oxTaTGyK2UXrBf1HwuXN5MUZd4iwB
-        NwWHf/oYTrBgEGJNrYnH/bA=
-X-Google-Smtp-Source: AMrXdXuUzJcLaAlzmpvUna85zh01jrDJVlmaL6EVzSj7aBYgDIsGc05M0zPB6W0tPzHRoby1NpCOng==
-X-Received: by 2002:ac8:7253:0:b0:3a5:d1a:8f1d with SMTP id l19-20020ac87253000000b003a50d1a8f1dmr122876679qtp.27.1673891676883;
-        Mon, 16 Jan 2023 09:54:36 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id f9-20020ac80689000000b00343057845f7sm14775040qth.20.2023.01.16.09.54.35
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1jdt3zqp8+vihNO8d83ajsiCC9GXXQBkXGpmuLk4Zs4=;
+        b=pY7nwAZU2c/XTnMy0rYi86C7i776wLIvEMtbPQCY/PoUX7vlXCa6eJcUWmuNHasZKh
+         qS2Nm8K9J0hBpMacqXkkjO5HS7p1p/jKKVU/5/u7YKlr1L1x14GSP711GKrVNzvsyPtw
+         +aZlQYSpTv55XVnyBCVirkrtFoZ72W/EISb1nVhxhvJvZO6+Oks6U548qhUcxMRVHlYs
+         tGG6zKdWcAwYHt/FNr8d2/mU1HGhLbbNF/L3R0rQM8gkLhYoICU0GbU7jPyf/n+xQD16
+         4BmcSsW1rKK3y4MLdwgn6R98CMv/QHAla5IQylCH1H8qBGVLpC6hRIk3YV99KDwaa7Nj
+         ioyg==
+X-Gm-Message-State: AFqh2kqdWXzrOa6+TXZ3OltJhwk0CLQZ3Ut20PD+2rHW/WSVdrAjo5Ks
+        iS+2s2An3IwEc+A2NMZfnzrR8iH5rh0=
+X-Google-Smtp-Source: AMrXdXs6k2eZUQ2G3TgxS7FwNXHILZ/IkSJDqimGBmu65SYdVuiLs+NUp0U1G5Mp+TbOj/wm6GgOfg==
+X-Received: by 2002:a05:6512:3410:b0:4a4:68b8:f4db with SMTP id i16-20020a056512341000b004a468b8f4dbmr24974979lfr.33.1673891677491;
+        Mon, 16 Jan 2023 09:54:37 -0800 (PST)
+Received: from pc636 (host-90-235-24-7.mobileonline.telia.com. [90.235.24.7])
+        by smtp.gmail.com with ESMTPSA id k14-20020a05651239ce00b004d4ead86cb2sm1034761lfu.20.2023.01.16.09.54.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 09:54:36 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id AE14E27C0054;
-        Mon, 16 Jan 2023 12:54:35 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 16 Jan 2023 12:54:35 -0500
-X-ME-Sender: <xms:Wo_FY9x2QVNigvH8Ke5WPGrzvBE1hwxQsST1xByMI2DIMHCmd9VcxA>
-    <xme:Wo_FY9Rfb-akwKAbGpTUV_RkxS2RXsQ9g9XvoDWc1iQCKmPto22c9WAu0P_Juj-T-
-    2G9TqC8Y3lV_ojQqA>
-X-ME-Received: <xmr:Wo_FY3WdVFQIQG18FbyfDr-DZtVZNnW-cO7RBY-3sZ1scO9SrvIaLQimdCUSUZMGggXH0KJLmplmNw4ULuVM9KP9Zvu2fuPtNCc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgedguddtiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:Wo_FY_iUPdAVQUcLG57kLIFYYXVIp4TZPGOrpvkLVTpSb7ufJDdkFg>
-    <xmx:Wo_FY_AB857gbqQknkcRFoAVhXv23gzuS_l3xWCO0GcEnVm83q4bBQ>
-    <xmx:Wo_FY4IPXGsR2JqcahNhp8OlTLGwWHS_rM_2hCCZ9tt9XERt0tSrbg>
-    <xmx:W4_FY73bCBiYTeqcqT2kjwNnZa5vyn5hRKTE8jbg_Y1egv4QVEsUQA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 Jan 2023 12:54:34 -0500 (EST)
-Date:   Mon, 16 Jan 2023 09:54:32 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, kvm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        David Woodhouse <dwmw2@infradead.org>, seanjc@google.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH 2/3] rcu: Equip sleepable RCU with lockdep dependency
- graph checks
-Message-ID: <Y8WPWJ6TKg5ikZYr@Boquns-Mac-mini.local>
-References: <20230113065955.815667-1-boqun.feng@gmail.com>
- <20230113065955.815667-3-boqun.feng@gmail.com>
- <20230113112949.GX4028633@paulmck-ThinkPad-P17-Gen-1>
- <Y8GdYgSBtyKwf/qj@boqun-archlinux>
- <20230113191120.GB4028633@paulmck-ThinkPad-P17-Gen-1>
- <456f6c15-3043-6da2-349d-c0c3880c1a55@redhat.com>
+        Mon, 16 Jan 2023 09:54:37 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Mon, 16 Jan 2023 18:54:34 +0100
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, stephen.s.brennan@oracle.com,
+        willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v2 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
+Message-ID: <Y8WPWngsci0QPY0Y@pc636>
+References: <20221217015435.73889-1-bhe@redhat.com>
+ <20221217015435.73889-3-bhe@redhat.com>
+ <Y6HpGayyQZH7U7Fd@pc636>
+ <Y6UrPGMVYUMttKD3@MiWiFi-R3L-srv>
+ <Y8DWG+OHV6E4cR8p@fedora>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <456f6c15-3043-6da2-349d-c0c3880c1a55@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8DWG+OHV6E4cR8p@fedora>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,56 +79,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 06:36:43PM +0100, Paolo Bonzini wrote:
-> On 1/13/23 20:11, Paul E. McKenney wrote:
-> > On Fri, Jan 13, 2023 at 10:05:22AM -0800, Boqun Feng wrote:
-> > > On Fri, Jan 13, 2023 at 03:29:49AM -0800, Paul E. McKenney wrote:
-> > > I prefer that the first two patches go through your tree, because it
-> > > reduces the synchronization among locking, rcu and KVM trees to the
-> > > synchronization betwen rcu and KVM trees.
+On Fri, Jan 13, 2023 at 11:55:07AM +0800, Baoquan He wrote:
+> Hi Uladzislau Rezki，
+> 
+> On 12/23/22 at 12:14pm, Baoquan He wrote:
+> > On 12/20/22 at 05:55pm, Uladzislau Rezki wrote:
+> ......
+>  > >  	spin_lock(&vmap_area_lock);
+> > > >  	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
+> > > > @@ -1887,6 +1889,10 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+> > > >  
+> > > >  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
+> > > >  
+> > > > +#define VMAP_RAM		0x1
+> > > > +#define VMAP_BLOCK		0x2
+> > > > +#define VMAP_FLAGS_MASK		0x3
+> > > > 
+> > > Maybe to rename a VMAP_BLOCK to something like VMAP_BLOCK_RESERVED or
+> > > VMAP_PER_CPU_BLOCK?
 > > 
-> > Very well, I have queued and pushed these with the usual wordsmithing,
-> > thank you!
+> > Both VMAP_BLOCK or VMAP_PER_CPU_BLOCK look good to me, please see my
+> > explanation at below.
+> > 
+> > > 
+> > > >  struct vmap_block_queue {
+> > > >  	spinlock_t lock;
+> > > >  	struct list_head free;
+> > > > @@ -1962,7 +1968,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+> > > >  
+> > > >  	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
+> > > >  					VMALLOC_START, VMALLOC_END,
+> > > > -					node, gfp_mask);
+> > > > +					node, gfp_mask,
+> > > > +					VMAP_RAM|VMAP_BLOCK);
+> > > >
+> > > A new_vmap_block() is for a per-cpu path. As far as i see the VMAP_BLOCK
+> > > flag is used to mark a VA that corresponds to a reserved per-cpu free area.
+> > > 
+> > > Whereas a VMAP_RAM is for VA that was obtained over per-cpu path but
+> > > over alloc_vmap_area() thus a VA should be read out over "busy" tree
+> > > directly.
 > 
-> I'm worried about this case:
+> Rethinking about the vmap->flags and the bit0->VMAP_RAM,
+> bit1->VMAP_BLOCK correspondence, it looks better to use bit0->VMAP_RAM
+> to indicate the vm_map_ram area, no matter how it's handled inside
+> vm_map_ram() interface; and use bit1->VMAP_BLOCK to mark out the special
+> vm_map_ram area which is further subdivided and managed by struct
+> vmap_block. With these, you can see that we can identify vm_map_ram area
+> and treat it as one type of vmalloc area, e.g in vread(), s_show().
 > 
-> 	CPU 0				CPU 1
-> 	--------------------		------------------
-> 	lock A				srcu lock B
-> 	srcu lock B			lock A
-> 	srcu unlock B			unlock A
-> 	unlock A			srcu unlock B
+> Means when we are talking about vm_map_ram areas, we use
+> (vmap->flags & VMAP_RAM) to recognize them; when we need to
+> differentiate and handle vm_map_ram areas respectively, we use
+> (vmap->flags & VMAP_BLOCK) to pick out the area which is further managed
+> by vmap_block. Please help check if this is OK to you.
 > 
-> While a bit unclean, there is nothing that downright forbids this; as long
-> as synchronize_srcu does not happen inside lock A, no deadlock can occur.
+> > > 
+> > > Why do you need to set here both VMAP_RAM and VMAP_BLOCK?
+> > 
+> > My understanding is that the vm_map_ram area has two types, one is
+> > the vb percpu area via vb_alloc(), the other is allocated via
+> > alloc_vmap_area(). While both of them is got from vm_map_ram()
+> > interface, this is the main point that distinguishes the vm_map_ram area
+> > than the normal vmalloc area, and this makes vm_map_ram area not owning
+> > va->vm pointer. So here, I use flag VMAP_RAM to mark the vm_map_ram
+> > area, including the two types; meanwhile, I add VMAP_BLOCK to mark out
+> > the vb percpu area. 
+> > 
+> > I understand people could have different view about them, e.g as you
+> > said, use VMAP_RAM to mark the type of vm_map_ram area allocated through
+> > alloc_vmap_area(), while use VMAP_PER_CPU_BLOCK to mark vb percpu area
+> > from vb_alloc. In this way, we may need to rename VMAP_RAM to reflect
+> > the area allocated from alloc_vmap_area() only. Both is fine to me.
+> > 
+> > > 
+> > > >  	if (IS_ERR(va)) {
+> > > >  		kfree(vb);
+> > > >  		return ERR_CAST(va);
+> > > > @@ -2229,8 +2236,12 @@ void vm_unmap_ram(const void *mem, unsigned int count)
+> > > >  		return;
+> > > >  	}
+> > > >  
+> > > > -	va = find_vmap_area(addr);
+> > > > +	spin_lock(&vmap_area_lock);
+> > > > +	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+> > > >  	BUG_ON(!va);
+> > > > +	if (va)
+> > > > +		va->flags &= ~VMAP_RAM;
+> > > > +	spin_unlock(&vmap_area_lock);
+> > > >  	debug_check_no_locks_freed((void *)va->va_start,
+> > > >
+> > > Agree with Lorenzo. BUG_ON() should be out of spinlock(). Furthermore
+> > > i think it makes sense to go with WARN_ON_ONCE() and do not kill a system.
+> > > Instead emit a warning and bailout.
+> > > 
+> > > What do you think? Maybe separate patch for it?
+> > 
+> > Agree, your patch looks great to me. Thanks.
+> > 
+> > > 
+> > > >  				    (va->va_end - va->va_start));
+> > > >  	free_unmap_vmap_area(va);
+> > > > @@ -2265,7 +2276,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
+> > > >  	} else {
+> > > >  		struct vmap_area *va;
+> > > >  		va = alloc_vmap_area(size, PAGE_SIZE,
+> > > > -				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
+> > > > +				VMALLOC_START, VMALLOC_END,
+> > > > +				node, GFP_KERNEL, VMAP_RAM);
+> > > >  		if (IS_ERR(va))
+> > > >  			return NULL;
+> > > >  
+> > > > @@ -2505,7 +2517,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
+> > > >  	if (!(flags & VM_NO_GUARD))
+> > > >  		size += PAGE_SIZE;
+> > > >  
+> > > > -	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
+> > > > +	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
+> > > >  	if (IS_ERR(va)) {
+> > > >  		kfree(area);
+> > > >  		return NULL;
+> > > >
+> > > I know we have already discussed the new parameter. But what if we just
+> > > use atomic_set operation to mark VA as either vmap-ram or vmap-block?
 > 
-
-First, even with my change, lockdep won't report this as a deadlock
-because srcu_read_lock() is annotated as a recursive (unfair) read lock
-(the "read" parameter for lock_acquire() is 2) and in this case lockdep
-knows that it won't cause deadlock.
-
-For SRCU, the annotation mapping that is 1) srcu_read_lock() is marked
-as recursive read lock and 2) synchronize_srcu() is marked as write lock
-sync, recursive read locks themselves cannot cause deadlocks and lockdep
-is aware of it.
-
-Will add a selftest for this later.
-
-> However, if srcu is replaced with an rwlock then lockdep should and does
-> report a deadlock.  Boqun, do you get a false positive or do your patches
-
-To be more precise, to have a deadlock, the read lock on CPU 0 has to be
-a *fair* read lock (i.e. non-recursive reader, the "read" parameter for
-lock_acquire is 1)
-
-> correctly suppress this?
+> As I replied at above, I take the vm_map_ram as one kind of vmalloc
+> area, and mark out the percpu vmap block handling of vm_map_ram area.
+> Seems the passing in the flags through function parameter is better. Not
+> sure if I got your suggestion correctly, and my code change is
+> appropriate. I have sent v3 according to your and Lorenzo's comments and
+> suggestion, and my rethinking after reading your words. I make some
+> adjustment to try to remove misundersanding or confusion when reading
+> patch and code. Please help check if it's OK.
 > 
+OK, if we decided to go with a parameter it is OK, it is not a big deal
+and complexity. If needed it can be adjusted later on if there is a
+need.
 
-I'm pretty sure that lockdep handles this ;-)
+Thanks!
 
-Regards,
-Boqun
-
-> Paolo
-> 
+--
+Uladzislau Rezki
