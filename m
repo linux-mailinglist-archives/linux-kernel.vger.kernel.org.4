@@ -2,81 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CCF66BBCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57C066BBD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjAPKeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S230317AbjAPKfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjAPKeF (ORCPT
+        with ESMTP id S230355AbjAPKfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:34:05 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD791ABC1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:34:03 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-4d4303c9de6so224043887b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m/tYLsguvhNX76zD17hbPH2qZrPUhffkR6haBjKQqeM=;
-        b=lOAzNQu8eznDMDQrcDCeg8Fr+f4UMLS1VKaRsPuieAhkt0buE9051t1htqoIaxTiPe
-         J2ypkmPum8BdNAzSBXwbQiS/RJgBXZ9uNJNoY9p7/4ECG5i2eJFzWSvxsI7w4VLi95qA
-         65cm9Sgww5hrMlBJO/mkMjzNxRTk/Cl+Kalzz/jTRBSAkeoZSnD85r5K9fe5Y427m9Wy
-         GvpTxzOk4uy1F9NJo5kgPKyKkrs7kCcWQyuGdxvFOlD7611X+u7Zcgpm/7NGRA8MkNaf
-         ZCvdaxDS1JE4r7/uoMTLFgylYdR+JRh1ELrm209maie8TVQlHpLfuGkkkOdZyBAT06X1
-         NhKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m/tYLsguvhNX76zD17hbPH2qZrPUhffkR6haBjKQqeM=;
-        b=TjscNOFhz80HC7uAQDECdQBY4LpmnIy1pxN5DGc9TMXmjpmduDlkUH/pnXwOQGO8lP
-         3eMujUIrolHplKA2WjiqyKxDTU2xn/DSqLOPkMp6Hr9L4jZMDLoNLj/z0XBHeeWMVK1+
-         f7eXqPfGVIv/E2ceWCtPo7Ku40ZoU8Uru84ptadpAj11RG9T37CdVoBpW/1bgJ40sXtS
-         1jChxJfdIUf25pKrXYPQApzfIVoOpvaPA2Knt0WaCO0Q4slOCUAWsO5/YaNJMjPoWaMU
-         0JwMFO5AWWtbuoZUCkkzZYP44SYYCNLBfG4lv1vbAQdeb6CludEQI6/6D7j3rsgUzXvt
-         qt5w==
-X-Gm-Message-State: AFqh2koz1IFQP8PNckar0sYSIJ7iqEU/juqhAspxELpXPhNdZ+TWjzAa
-        0cjYK0+zQY2ToErjnPHNXXuqrCuVO69lqQFLSZL27vDWPc5soA==
-X-Google-Smtp-Source: AMrXdXtW6TKCnRsDE0wvhiF6XGnwo0I29h/efOhVdU9ndWaVGtkwJJu/nRXufdrfHsXPEx193xkQYwrYct1AIhwg7Gw=
-X-Received: by 2002:a81:a084:0:b0:4dd:ff06:1358 with SMTP id
- x126-20020a81a084000000b004ddff061358mr1574748ywg.488.1673865243057; Mon, 16
- Jan 2023 02:34:03 -0800 (PST)
+        Mon, 16 Jan 2023 05:35:07 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2571ABD9;
+        Mon, 16 Jan 2023 02:35:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IwrpYZNXVgDzRnQ/g45MzSz/G3KSC3zVu9IxhxiH5tM=; b=bXceAawuJ0ihE/zTFcq6Zoe/AJ
+        TYg+Fvaw8ns62ThMpgIc0JGruZ0GLgNRY3u3WuhAGo7LfwXD4a8JgiFvv/GHk1FX3WBLfsf48OHyI
+        CcJF09sIyQuxtQEUupXi81A3S4D8nOzTpkT4NfXXCRrfTUyDXddsY/Wl0rNery5Kb9s9tGKM6Zxtf
+        ajVS50m9vkBHzvzlDlusvgrt/FKeRNmXdXwC+u/XbvQCsSScsgv2MAT1u9oMEURMSMoDvG9q7xuGL
+        0Pn5Ir32ABsdi5Bjvyo7Mo8WPdk3Gk7OVOCdgZDOZLrmWDexYl54y/Kqdxfb8gVztz15Ng8HYePn3
+        vguaTssA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36120)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pHMpM-0004aa-Pd; Mon, 16 Jan 2023 10:34:56 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pHMpK-0005vo-10; Mon, 16 Jan 2023 10:34:54 +0000
+Date:   Mon, 16 Jan 2023 10:34:54 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Pierluigi Passaro <pierluigi.passaro@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        Eran Matityahu <eran.m@variscite.com>,
+        Nate Drude <Nate.D@variscite.com>,
+        Francesco Ferraro <francesco.f@variscite.com>
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Message-ID: <Y8UoTtn8cIc6uzqJ@shell.armlinux.org.uk>
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <202301161653.hbqd7e0q-lkp@intel.com>
+ <AM6PR08MB4376E687ED26A7DB0DD5C331FFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 16 Jan 2023 11:33:51 +0100
-Message-ID: <CACRpkdZLAOfJ4YHWhK2qfcfC7unex0fHRHdxsCRWhgHmkhacAw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] power: supply: collie_battery: Convert to GPIO
- descriptors (part 2)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM6PR08MB4376E687ED26A7DB0DD5C331FFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 3:02 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Mon, Jan 16, 2023 at 10:32:38AM +0000, Pierluigi Passaro wrote:
+> The config file used to build this kernel disables CONFIG_GPIOLIB.
+> Is this intentional ?
 
-> Finish the job started by the commit ba940ed83218 ("power: supply:
-> collie_battery: Convert to GPIO descriptors"), i.e. convert the use
-> of gpio_to_irq() to gpiod_to_irq(). No functional changes intended.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+All configurations should build - and the build bot tries random
+configurations. Your job is to fix the errors / warnings that it
+finds as a result of your patch and submit fixes where appropriate.
+Don't expect the build bot to provide any guidance or answer questions.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
