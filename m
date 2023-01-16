@@ -2,272 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82A466C830
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A4166C82B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbjAPQgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S233556AbjAPQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjAPQgW (ORCPT
+        with ESMTP id S233273AbjAPQgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:36:22 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6296A31E39
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:25:04 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230116162459euoutp02dbbe1a445a4c8578a3db02957aec1140~61riVw1T71108011080euoutp02C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 16:24:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230116162459euoutp02dbbe1a445a4c8578a3db02957aec1140~61riVw1T71108011080euoutp02C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1673886299;
-        bh=rIeNW4HYLmJYLi39+ryxT727xkchYje+Z8ssq4AC+3Y=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=toaGEGvpCZmvgJH7VKzEy0YxwYLXDA1FnWt4g89kK0arSk9ht6EPEZWKe+wRMt+v1
-         ZuDTjgF77dYuK+ghz9AT0n1KsLyVzK7C1rztQ7Krqx/sYCBxi8ijpJDUUZmOKrOmVD
-         gw0Z0eztC8Ap2tbDf7VF8RsLArUhIhBEXlKoa35E=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230116162459eucas1p1de38d093e8dc85e48f795fb75742de3b~61rh4Vie51596915969eucas1p1P;
-        Mon, 16 Jan 2023 16:24:59 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id A6.38.61936.B5A75C36; Mon, 16
-        Jan 2023 16:24:59 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230116162458eucas1p2cd56987b67ace5aaead81665a3377fa1~61rhThD183050730507eucas1p2E;
-        Mon, 16 Jan 2023 16:24:58 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230116162458eusmtrp1b9344dbfae703eb2e7f69933c7ad5552~61rhRIpIE2350823508eusmtrp1T;
-        Mon, 16 Jan 2023 16:24:58 +0000 (GMT)
-X-AuditID: cbfec7f4-a2dff7000002f1f0-74-63c57a5b9804
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id C1.B1.23420.A5A75C36; Mon, 16
-        Jan 2023 16:24:58 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230116162457eusmtip19f8a293be5ebd606327ef17fd220b136~61rgBuxd71495514955eusmtip1D;
-        Mon, 16 Jan 2023 16:24:57 +0000 (GMT)
-Message-ID: <b756e833-71c5-e43a-b222-ab9bdcc4f494@samsung.com>
-Date:   Mon, 16 Jan 2023 17:24:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v5 0/5] iommu: Retire detach_dev callback
+        Mon, 16 Jan 2023 11:36:21 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2092.outbound.protection.outlook.com [40.107.113.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A708C2B282;
+        Mon, 16 Jan 2023 08:25:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X91Qx0Bn59a9Hv9+oYKHk/lv+hh62W73+qY8a6Ne0n1dYRUn6KovoEe2LfpDV0EqrdmDPBKQrEhJru39s/AIYayJ2UB3mEU5Yww7GDrHPKV9/MktmD5iS0nwa6RUPYrknQiTRb0soevs4FZ7kaaAygbZ55SvkmwUbttBm6xSKkczTnBoh2bFutR85u60z1lVUiUItxOVPZZhdHWwJMNEKfJk8HVS7kW0pK1zs+HbXNWkRYAPucSs2UitDbSKtmj2HpvQbP5B+vt4ykF9e8m+3kEl55TAnPzKPJM7YN6Hv00f/wDxHIrQPDusDHAW/cyqU1kQEocvyanICQWPt/r8Iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6x9dsNAFDOjjkDR09uLbSh4Dmm9R5EDz7G0JLYp/ECs=;
+ b=FwmVxvltiS0MZRHncmVIxR6mcPkOlB1E0hBBgHSC1Emw7s4nFh/gu3yQesbJNYAaIS1d/o1cZC8WhjF2xxENSQOx3HTwJ7KfSV++01oJMZUmljqs/Ur/5onJNVK5dJhYcSMXrcY5UVTz9sPcA5a3OuKWBAuGVfoGhFKnGxC5lj7WHxTDMUOKU4HKo90as88h8Aq94LA9umzIieNyjLDQWIuJ3NDYtyTJIPFb2knrUaEbR4vmwsEELe7JokU0JG8DJVF4RkWqkaLC1gWJEw6jdChd2HerLM7PO7SkU0pG8qq7ZnLmr+CeesiK7FneRJQ6i+jrrZuQQoiV7V5LXC8Apw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6x9dsNAFDOjjkDR09uLbSh4Dmm9R5EDz7G0JLYp/ECs=;
+ b=EsoZitlH0Mp+1lUdeuqk95gDKtNLfTjvpOhKk4MOY5Xj3WGRWmiYA9SWPxo2+SiKcTdB/ys5obRfEY7TsvCBPiUHuenSrYMwGggAECW3JccwqQSaK3gQOvOXrGVj0iPwqdR0WMMs8sUPFb9PrDiKgF6ovlA/QAOOXCAR9UOKhDg=
+Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com (2603:1096:400:169::11)
+ by TYAPR01MB6171.jpnprd01.prod.outlook.com (2603:1096:402:33::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
+ 2023 16:24:57 +0000
+Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com
+ ([fe80::9459:ffa9:a884:8a8e]) by TYWPR01MB8775.jpnprd01.prod.outlook.com
+ ([fe80::9459:ffa9:a884:8a8e%3]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
+ 16:24:57 +0000
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: RE: [PATCH 2/2] watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
+Thread-Topic: [PATCH 2/2] watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
+Thread-Index: AQHY+nqpy1QulZVqxE28XPYMi1eo7K6hkpCAgAAAPXCAAAWlAIAAAFow
+Date:   Mon, 16 Jan 2023 16:24:57 +0000
+Message-ID: <TYWPR01MB87757FCB3CDA549DB4DC4743C2C19@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com>
+ <20221117114907.138583-3-fabrizio.castro.jz@renesas.com>
+ <CAMuHMdUzkAjF=v__r2vJrYugBuDt13LnToCW66n-5r-jcVV+8A@mail.gmail.com>
+ <TYWPR01MB877570EB023D2ECEB7896F84C2C19@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+ <CAMuHMdXxri6GgGxJy9WC-ktM_zoXDkzRz-6yBqQcikVe3DPShg@mail.gmail.com>
+In-Reply-To: <CAMuHMdXxri6GgGxJy9WC-ktM_zoXDkzRz-6yBqQcikVe3DPShg@mail.gmail.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Rob Clark <robdclark@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230110025408.667767-1-baolu.lu@linux.intel.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02ScUxbVRTGve+9vr7WFR8F5ToUYxUTMXSiklzd3NRo9hCdLjFuOg3ryrPF
-        0bK0gI4YrYgbqzq6ocJaYAWEzlJZobRIR+Ook4pkgMOga9kY0DkowcHEDCijUt6m/HNzzne+
-        3z3n3FwKF7eR66kcdT6rUctyJaSQcHUv9KXuKvpJ/mikdh3qGw8TyFW6CUU83QA5jjhJ1Guo
-        w1BkbIqHFucQ0jUN8NBvy50AHTLZ+ahh2slHnqmVY9BdteIdMvNRccnjyF5vwlHFjAmgK7Xz
-        OOqaCfLQkXkzQEuBCIYW3DUE6i4rJtGCtx9DJcPpaOSog0CWS27+M4lMsKsGYz49d4NkbDU2
-        wNjHmnhMh/ECn3GcSGHqOycxptV6iGSGhzpJpmP0ScZQdxowNT3bmQnHMcDUN3aQTEnPDwTz
-        xSd/ka/GvSnclM3m5hSymg2bdwuV/ou1/H066fsBw1meDpgleiCgIP0EbLxkIvVASInpEwAW
-        V1gBl8wB2GW18bjkbwCbR6+Rt5BQ9QE+V7AA6OofuOmaBfD0uGHFRVEiejPs/Tg+ChB0MrS7
-        m1ZhER0Le44FiajlTjobti4VRuU4+mno6Tm8asHpBOgPHseiV8bTLRhstDetJjgd4ME2a4iI
-        ukg6Deqn9auEgN4Cf/lykeDo+2D7dBUeBSDtEULP1egO0bGfh77vvgJcHAdDvjY+F98De8s/
-        JzjgIIDm8AjGJQYAdVf8N4mNcLhvcXU1nH4YnnRv4ORnobduDERlSMfAP6ZjuSFi4FFXBc7J
-        Ilh6QMy5H4JGX/N/bbsGzuEGIDGueRfjmgcwrlnH+H9fMyCsIIEt0KoUrPYxNfueVCtTaQvU
-        Cqk8T9UKVj5277Jv7ntgCc1KvQCjgBdACpfEi7a5f5SLRdmy/UWsJi9LU5DLar0gkSIkCaJK
-        53G5mFbI8tm9LLuP1dyqYpRgvQ5r0etGJ1iQEbpjSKF8Knfevff19v7R268ujeixxetQPel4
-        qeytR66pPpJsdJ5ftqT40177NtaVnvRu5oQor4JMI6/f+85YLKwvTTrpqNoveHH2tqxIZsNd
-        6wbdM4EzFns5KHrZbk5MyQn4NAUuXjoKB/XfJG6ZUkwL9mQvtusbqKXdPVlYwB/+Wc9m5JQ3
-        3vBk/H5BJhEURna23r2cZD1VKR7MjEuV27bn5NssLTt2hcJvSC8/YOsm749Pl+xRasYrU5Pf
-        7jTVfR1WjmAPnidc0q2ntj23Q3VWnOyaq29+wa2NKfv18pmd1dUXD/o/cH7I/mn6DE9QTWYc
-        nvL+M/+KhNAqZWkpuEYr+xfTiSWyRwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKKsWRmVeSWpSXmKPExsVy+t/xu7pRVUeTDd4cV7Q49/g3i8W2DhuL
-        /3uPMVpsnriVzeL0hEVMFv8fvWa1+PXFwqJh9QVWiyv/9jBadM7ewG6x9O1Wdou9r4HE5V1z
-        gGqvLWC3aGoxttiweDazxfQPsxktni/8wWxx8MMTVouJPxYwWvy5/Z/J4ueueSwWx/qb2Cx+
-        HjrPZNFyx9Ti/qTNLBbLH+xid5D2eHJwHpNH66W/bB5r5q1h9NjwaDWrx85Zd9k9Nq/Q8li8
-        5yWTx6ZVnWwed67tYfPY+dDSY8KiA4we804GerzYPJPRY/GynWweLSf3s3j0Nr9jCxCO0rMp
-        yi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0Mu4dW8he0GD
-        XsXtCWdZGxgXKHUxcnJICJhIvJrbxt7FyMUhJLCUUeL6n+3sEAkZiZPTGlghbGGJP9e62CCK
-        3jNKnOq/wNjFyMHBK2AncbpRBKSGRUBVYsOu1WwgNq+AoMTJmU9YQGxRgRSJ5ucnweYIC9hK
-        7D3ZB1bDLCAucevJfCYQW0RgI5NE37oUkPnMAndZJQ7+OwdWJCQwiVFix9cqEJtNwFCi620X
-        WJxTwF7i1JRfLBCDzCS6tnYxQtjyEtvfzmGewCg0C8kds5Dsm4WkZRaSlgWMLKsYRVJLi3PT
-        c4sN9YoTc4tL89L1kvNzNzEC09O2Yz8372Cc9+qj3iFGJg7GQ4wSHMxKIrx+uw4nC/GmJFZW
-        pRblxxeV5qQWH2I0BQbGRGYp0eR8YILMK4k3NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1O
-        TS1ILYLpY+LglGpgslST9WLW2ss25eAxhvyN9hHfGgQL3jSJXtP93Dtl/9airVVhJwJ7Nn/Q
-        nhGhmt63U0pA8AE3h5Hr+YzbboFudxUt9tnY+WptVtlU4eX4cYnRxT0H6+ZU+f5jjNyp88HA
-        t7ln0/bdDxXYko9n9nFeV/BfyH1vQkdMYd6zp9pb3kfc+pLR+cpt0gwJzYcJgdXXFiq/Nf+Z
-        F6DXvu2KknjklZUmDPyn3eec4Kp81sFV9E5P93nIE2e1/u36jdpf9mq6e9ycKXXPU+fza/M6
-        +TnX5xt1z5LfxCeu8tlORd/irI7f8Y3Ms9WnlgiteLj33KXqp7ZScX4Pr3TcWvzX4+Z3oxlz
-        xJ7lX772nT1JU9dFiaU4I9FQi7moOBEAPfWcKtgDAAA=
-X-CMS-MailID: 20230116162458eucas1p2cd56987b67ace5aaead81665a3377fa1
-X-Msg-Generator: CA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8775:EE_|TYAPR01MB6171:EE_
+x-ms-office365-filtering-correlation-id: bc9e7508-44f0-4d39-631d-08daf7de3578
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Pq8UENokF+MN77Ii2HC6kBxyZarIHx5sKvqVY+6pwY6zE0NEyGxmD4THr1fvYgZX4lp3BCGvNiSgyEGjn8bA6tZXYCYHqLuLRav7ngMbLK3O2JQXCZbEFV0y9VoeZIV5Gugcpw2/ulvaIV5cn47bnqO5tEc7bTW8Zug0vxyI7cC2cTxKzFBJcBBorcZeK0miwzjYlZVqDc3VmROMApJkLuXKcwEQesaOxK7P7V3fmwsGEVgQmH53OzVlVAqw70BpeHV2BRCQ2JdPZ7nLROm8pn72KxwGOXdym5+tuxPOlAPfNfDKTVuY3jqEyElmwIToHCxHN0Ki8EnreS+EGiVSucPf0y2HiQMawRzUuc64bU4fKxl/kXq8/WYap26bV9fCyRDi+/xcI7AWROrvuVgmBurxwGSBW/tQiVy74ptYdq1Dn87dLxpaMfLUPfw544Do4eu9XC25F7qo+FoqdzWOr6bfPlRCsmXCgHHYPvLMXPXpl7EPDmrZdkH1Im6alvqpYdTRqFpGNSz4nvJqw9wiykRsl6852Vqe9sOv0H+HDASannxVJGMaBmjkseVii+hY7ixLaACrGtsdFHajEfcVD1bFBzZ5trm8KAbYLZO0nrYhgsxyV0V+yj7HweBTwlbTRwTTKK/DkhC23sCxcDoP3dTUzUFXV3hjLK1qLZAKWTGLG83ckOZSWsY6pgo9SPsp9Kb8mYJQtS1G1pR53I78Pw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(366004)(136003)(451199015)(316002)(71200400001)(33656002)(6916009)(66446008)(41300700001)(66476007)(66556008)(76116006)(64756008)(66946007)(4326008)(8676002)(86362001)(83380400001)(54906003)(38100700002)(38070700005)(122000001)(55016003)(478600001)(7696005)(9686003)(6506007)(53546011)(26005)(186003)(2906002)(66899015)(52536014)(8936002)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RFBJQjB6QkpvczhmeE5PWGNDWkNneFNFTE1SV0ZtNGpDUkJISmY3ZXk3VFZQ?=
+ =?utf-8?B?eUVYTzNGNzlwUWlWM25MVktCcnRqcUQvNEpQeVZyeEV0ZmFuZ2VXeDZVVHJT?=
+ =?utf-8?B?a2J2L0tPUi8wcDJxYXgxa3Q4YUFaTWMydlpia0FraWlrb2ZNcFNJUEhWU0x3?=
+ =?utf-8?B?RlV0Sk0xTHAxQzZkUEtPMUZOaFlyZWtwZm5yT2NNeWE2eTBkWEwvN2l0Z1V3?=
+ =?utf-8?B?MTNQUjJuOWE4RndBeTY4c3VHZ0RCMmRUOG4xck4wTnYxY0xCaVpxMEFvZlpj?=
+ =?utf-8?B?SEV6eGZOMVE0OGluMEVzRlNhc3h6ZnNlTm9lbUdoazNwbm00SGRsN3ZJNE9h?=
+ =?utf-8?B?MGRMS0o4b054UlJaNEVuYllaL1hJSXRQRnNLYTlPQ1lEKzZmWXpETVo1bTN4?=
+ =?utf-8?B?SWk1N1JXVmc2d1A5MEIrWnU3VCtMS2hxcFNiM1hCcHRwNTlkVnBCczBubHZX?=
+ =?utf-8?B?ekU2OGY4elFzbXNPSFgyUnVodlg2YVNCZUJjYkl6Z1V1ZUY2RklHUzh6czVJ?=
+ =?utf-8?B?TjB6cWYzTUY5eUFSZDFNWmNzTWEzN1QxRW1IcFhsUWdoMHpOMGRvSUNGei83?=
+ =?utf-8?B?b1ZYMkRsSWxTaCtITmVTeVQ5YkVmZUk4VTdkTlVxWkh4Z01raFZ4Q2YvTEh5?=
+ =?utf-8?B?cmZDN3Y5am5xaG9mQzlKQWJ6UHgxM1dFT0I0NFRycGVWWnFsRU8vQktEQ3VM?=
+ =?utf-8?B?RXp2aXlOcklIb29FZ1FZTGVuYWFVVVFuRDRRVGh0T2k5Ymo4K3QzTG9IeUsz?=
+ =?utf-8?B?VUM1ZXVBNVV3RUVxWFpYYWFMY2kwb2RFT2hFb2M2c0wzNWtMUkx2WTAxTzRs?=
+ =?utf-8?B?cEdjTEd6N3NwcmROUGViZWpOZDd0Q3V6dXYvR1BhdDduUXgzTVNmSGVIbldV?=
+ =?utf-8?B?OVptSkRDaFdKTmIwV0pKL1JYUlhRMU5vRExvUHJIcFdYallCaUkwRDlNT2dI?=
+ =?utf-8?B?VE1FY3IxblhZdGhOOXdZdmhpNGswUldodG44WEIzKzk0bEowVWVxVHhkY3Zx?=
+ =?utf-8?B?cXkvaXM3bHU3MFdtMXN0U3JGeUxBVGtWMFk3L21IYkFiUWhPbUZhbFJicUxU?=
+ =?utf-8?B?RzBNazYraEJzOFJabDFuMytOTXVFdHk4NFJqckUrUHF2YWFuSXRQTGpxdU0y?=
+ =?utf-8?B?L041bnJnam5WMGtwMHM0RXVjMzdnU0JGSG0yeDdEcEIwTDk1NVB0UnZ0dGc1?=
+ =?utf-8?B?THZmRS9MSElKektJVkFHYUY2SGRnUDNxaFVNNW9Hb3p3RlNyN3ZyM1VFUFVz?=
+ =?utf-8?B?UGRzVUVPb1hyYjFBVmZsd3hJOFQvb0VZRGh1ZHNOZklDSjBEVHhMc3hUUzhU?=
+ =?utf-8?B?SWR4VEhqTXE1d2pUU28ra25PQ0grVitSeldTOUY3YUV1M05KWDV4TXBhWEtG?=
+ =?utf-8?B?MGRtbTh0cDgyQmdDZlZRajFTYjdtMXB1K2Vzb3dUeG1ZcGIyenVTaElRQVBi?=
+ =?utf-8?B?NkV2OWJVYjc2TWpkZXZGSndkNXFEQ0lPZTJ4UGJ1L0NhdFJ0UW1mM21pNW9B?=
+ =?utf-8?B?LzVNdmY0a0N6M1E0RTd4bTNIOXRTQUZOc0RycEtRbC9QS2NPZmE2dlRXZUM5?=
+ =?utf-8?B?VWFlbUR3RjZJSHdzcWJpajFDUFhEeU1zMnVSeHpRUFZnandXVWRaMFU1SkRy?=
+ =?utf-8?B?Z2tOWnlkZ0tvYXg2aUNaL1hxU2lMa0I1dCs3R0F6VWI3Q1pyeEIxQjN1TjdN?=
+ =?utf-8?B?NXI3R2dKdFhOYWtJRnlyS05BekdtL1craVVuaHR0czB4aTFhdVFCWU5ieUhB?=
+ =?utf-8?B?VlUvYXRhNGw4K3dIdFVsbStQdFVEVStzblRHbUpjYXFkWEExbmZUQTNTOERZ?=
+ =?utf-8?B?NzIyS1RmWVZ1Q2hqTVM3ZjFWRDI1bFBZdlN2NkFUZWJmVTNFbC9BMGsrRVBl?=
+ =?utf-8?B?WjY0OXh3dUt6Z0c0MExiZllSajF0RTQ3bnJGN3haTXRZWWlBZ0RacDRJbXhs?=
+ =?utf-8?B?TmpzSWxBdjVYUXd2U24vbjlsdGZjOEF5R0MzT2RnQSsxOTlZMUk4U3AvSXFE?=
+ =?utf-8?B?ajliemVOVVovZTNUajlnSlhHWVFvWkZTLzIrcVBkZWZrRHFXZWNrUGFpOTVY?=
+ =?utf-8?B?M1dDaysyZ3ZJcmVWekRrbCs5T1ZQYnJ2cmlHUnp6eSt2cVMzSitsQkR2Sk5E?=
+ =?utf-8?B?SDZMTHRaaldrM0FCZEp6Q2VwdStCUXFFZjZQRGVoaGE2MzN1ZW5EYlFoMUt2?=
+ =?utf-8?B?Qnc9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230110030211eucas1p10834ec4cc8c227e2cd7051dc85026dbb
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230110030211eucas1p10834ec4cc8c227e2cd7051dc85026dbb
-References: <CGME20230110030211eucas1p10834ec4cc8c227e2cd7051dc85026dbb@eucas1p1.samsung.com>
-        <20230110025408.667767-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8775.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc9e7508-44f0-4d39-631d-08daf7de3578
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 16:24:57.7760
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZNVty+m62ZqQcBkhliVWp1C52Qa8AnXZxUROKOiMnWdSNSnXKFH9bxW/zA85JJPdJc6Uc8MMROM43mjJHab6EO5v/RXOU+c/jOyzNxfA4mI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB6171
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
-
-
-On 10.01.2023 03:54, Lu Baolu wrote:
-> Hi folks,
->
-> The iommu core calls the driver's detach_dev domain op callback only when
-> a device is finished assigning to user space and
-> iommu_group_release_dma_owner() is called to return the device to the
-> kernel, where iommu core wants to set the default domain to the device but
-> the driver didn't provide one. The code looks like:
->
->          /*
->           * New drivers should support default domains and so the detach_dev() op
->           * will never be called. Otherwise the NULL domain represents some
->           * platform specific behavior.
->           */
->          if (!new_domain) {
->                  if (WARN_ON(!group->domain->ops->detach_dev))
->                          return -EINVAL;
->                  __iommu_group_for_each_dev(group, group->domain,
->                                             iommu_group_do_detach_device);
->                  group->domain = NULL;
->                  return 0;
->          }
->
-> In other words, if the iommu driver provides default domains, the
-> .detach_dev callback will never be called; Otherwise, the .detach_dev
-> callback is actually called to return control back to the platform DMA
-> ops, other than detaching the domain from device.
->
-> This series cleanups this by:
->
-> - If the IOMMU driver provides default domains, remove .detach_dev
->    callback.
-> - Adds a new set_platform_dma iommu op. Any IOMMU driver that doesn't
->    provide default domain should implement set_platform_dma callback
->    instead.
-> - Retire .detach_dev callback.
->
-> This series originates from various discussion in the community. Thanks
-> to Jason, Robin and all others for their ideas.
-
-I wonder how to handle the ARM 32bit case, which doesn't use the default 
-domain solution. Today, once this patchset has been merged to 
-linux-next, I've noticed that it broke booting of ARM 32bit Exynos based 
-boards.
-
-The final solution would be to switch ARM 32bit to generic DMA-IOMMU 
-glue, but I'm not sure it this will happen soon. I will try to check if 
-any kind of quick workaround can be applied to get it working again.
-
-
-> The whole series is available on github:
-> https://protect2.fireeye.com/v1/url?k=ef2183b6-b0bababa-ef2008f9-000babff3563-336828b3433153d2&q=1&e=4ae5dae4-383f-4a82-9449-3f08f0422cb1&u=https%3A%2F%2Fgithub.com%2FLuBaolu%2Fintel-iommu%2Fcommits%2Fiommu-retire-detach_dev-v5
->
-> Change log:
-> v5:
->   - Merge some patches to make the series cute. No functionality changes.
->   - Check the op directly and WARN_ON the lack of any necessary
->     callbacks. Get rid of the ret and EINVAL.
->
-> v4:
->   - https://lore.kernel.org/linux-iommu/20230104125725.271850-1-baolu.lu@linux.intel.com/
->   - Drop the patch which renamed .attach_dev to .set_dev. As Robin said,
->     "... I also wouldn't say that "attach" loses its meaning in a context
->     where an equivalent "detach" operation is only ever implicit in
->     reattaching to something else...". If we have a better name in the
->     future, we can do it in other series.
->   - Adjust the patch of "iommu: Add set_platform_dma_ops iommu ops"
->     according to Jason's following suggestion " ... This is a bit ugly,
->     it would be better to make the previous patch call set_platform_dma
->     if it is set instead of detach_dev and then these patches should just
->     rename the driver's fsl_pamu_detach_device to
->     fsl_pamu_set_platform_dma ..."
->   - Add a new patch to remove deferred attach check from
->     __iommu_detach_domain() path. Make it a separate patch as the
->     prerequisite to remove __iommu_detach_device() helper.
->   - Rename set_platform_dma to set_platform_dma_ops to make it more
->     meaningful.
->
-> v3:
->   - https://lore.kernel.org/linux-iommu/20221128064648.1934720-1-baolu.lu@linux.intel.com/
->   - Setting blocking domain is not conceptually equal to detach_dev.
->     Dropped all blocking domain related staffs in the previous version.
->
-> v2:
->   - https://lore.kernel.org/linux-iommu/20220826123014.52709-1-baolu.lu@linux.intel.com/
->   - Replace .detach_dev callback with static block domain ops;
->   - Rename .attach_dev to .set_dev.
->
-> v1:
->   - https://lore.kernel.org/linux-iommu/20220516015759.2952771-1-baolu.lu@linux.intel.com/
->
-> Jason Gunthorpe (1):
->    iommu: Remove deferred attach check from __iommu_detach_device()
->
-> Lu Baolu (4):
->    iommu: Remove detach_dev callbacks
->    iommu: Add set_platform_dma_ops iommu ops
->    iommu: Add set_platform_dma_ops callbacks
->    iommu: Remove detach_dev callback
->
->   include/linux/iommu.h                   |  8 ++-
->   include/trace/events/iommu.h            |  7 --
->   drivers/iommu/amd/iommu.c               | 26 -------
->   drivers/iommu/apple-dart.c              | 24 -------
->   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 23 ------
->   drivers/iommu/exynos-iommu.c            |  1 -
->   drivers/iommu/fsl_pamu_domain.c         |  6 +-
->   drivers/iommu/iommu-traces.c            |  1 -
->   drivers/iommu/iommu.c                   | 94 ++++++++++++-------------
->   drivers/iommu/ipmmu-vmsa.c              | 16 -----
->   drivers/iommu/msm_iommu.c               |  6 +-
->   drivers/iommu/mtk_iommu.c               |  9 ---
->   drivers/iommu/mtk_iommu_v1.c            |  4 +-
->   drivers/iommu/omap-iommu.c              |  6 +-
->   drivers/iommu/rockchip-iommu.c          |  1 -
->   drivers/iommu/s390-iommu.c              |  7 +-
->   drivers/iommu/sprd-iommu.c              | 16 -----
->   drivers/iommu/sun50i-iommu.c            |  1 -
->   drivers/iommu/tegra-gart.c              |  6 +-
->   drivers/iommu/tegra-smmu.c              |  5 +-
->   20 files changed, 69 insertions(+), 198 deletions(-)
->
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgeW91ciByZXBseSENCg0KPiANCj4gSGkgRmFicml6aW8s
+DQo+IA0KPiBPbiBNb24sIEphbiAxNiwgMjAyMyBhdCA1OjE4IFBNIEZhYnJpemlvIENhc3Rybw0K
+PiA8ZmFicml6aW8uY2FzdHJvLmp6QHJlbmVzYXMuY29tPiB3cm90ZToNCj4gPiA+IE9uIFRodSwg
+Tm92IDE3LCAyMDIyIGF0IDEyOjQ5IFBNIEZhYnJpemlvIENhc3Rybw0KPiA+ID4gPGZhYnJpemlv
+LmNhc3Ryby5qekByZW5lc2FzLmNvbT4gd3JvdGU6DQo+ID4gPiA+IEFzIHBlciBzZWN0aW9uIDQ4
+LjQgb2YgdGhlIEhXIFVzZXIgTWFudWFsLCBJUHMgaW4gdGhlIFJaL1YyTQ0KPiA+ID4gPiBTb0Mg
+bmVlZCBlaXRoZXIgYSBUWVBFLUEgcmVzZXQgc2VxdWVuY2Ugb3IgYSBUWVBFLUIgcmVzZXQNCj4g
+PiA+ID4gc2VxdWVuY2UuIE1vcmUgc3BlY2lmaWNhbGx5LCB0aGUgd2F0Y2hkb2cgSVAgbmVlZHMg
+YSBUWVBFLUINCj4gPiA+ID4gcmVzZXQgc2VxdWVuY2UuDQo+ID4gPiA+DQo+ID4gPiA+IElmIHRo
+ZSBwcm9wZXIgcmVzZXQgc2VxdWVuY2UgaXNuJ3QgaW1wbGVtZW50ZWQsIHRoZW4gcmVzZXR0aW5n
+DQo+ID4gPiA+IElQcyBtYXkgbGVhZCB0byB1bmRlc2lyZWQgYmVoYXZpb3VyLiBJbiB0aGUgcmVz
+dGFydCBjYWxsYmFjayBvZg0KPiA+ID4gPiB0aGUgd2F0Y2hkb2cgZHJpdmVyIHRoZSByZXNldCBo
+YXMgYmFzaWNhbGx5IG5vIGVmZmVjdCBvbiB0aGUNCj4gPiA+ID4gZGVzaXJlZCBmdW5jaW9uYWxp
+dHksIGFzIHRoZSByZWdpc3RlciB3cml0ZXMgZm9sbG93aW5nIHRoZSByZXNldA0KPiA+ID4gPiBo
+YXBwZW4gYmVmb3JlIHRoZSBJUCBtYW5hZ2VzIHRvIGNvbWUgb3V0IG9mIHJlc2V0Lg0KPiA+ID4g
+Pg0KPiA+ID4gPiBJbXBsZW1lbnQgdGhlIFRZUEUtQiByZXNldCBzZXF1ZW5jZSBpbiB0aGUgd2F0
+Y2hkb2cgZHJpdmVyIHRvDQo+ID4gPiA+IGFkZHJlc3MgdGhlIGlzc3VlcyB3aXRoIHRoZSByZXN0
+YXJ0IGNhbGxiYWNrIG9uIFJaL1YyTS4NCj4gPiA+ID4NCj4gPiA+ID4gRml4ZXM6IGVjMTIyZmQ5
+NGVlYiAoIndhdGNoZG9nOiByemcybF93ZHQ6IEFkZCByenYybSBzdXBwb3J0IikNCj4gPiA+ID4g
+U2lnbmVkLW9mZi1ieTogRmFicml6aW8gQ2FzdHJvIDxmYWJyaXppby5jYXN0cm8uanpAcmVuZXNh
+cy5jb20+DQo+ID4gPg0KPiA+ID4gUmV2aWV3ZWQtYnk6IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2Vl
+cnQrcmVuZXNhc0BnbGlkZXIuYmU+DQo+ID4gPg0KPiA+ID4gUGVyaGFwcyB0aGlzIGxvZ2ljIGNh
+biBiZSBpbmNvcnBvcmF0ZWQgaW50byB0aGUgUlovVjJNIHJlc2V0DQo+IGNvbnRyb2xsZXINCj4g
+PiA+IGRyaXZlciBsYXRlciwgc28gcmVzZXQgY29uc3VtZXJzIGRvbid0IGhhdmUgdG8gY2FyZSBh
+Ym91dCBUWVBFLUENCj4gYW5kDQo+ID4gPiBUWVBFLUIgcmVzZXQsIGJ1dCBjYW4ganVzdCBjYWxs
+IHJlc2V0X2NvbnRyb2xfcmVzZXQoKT8NCj4gPiA+IEkgdW5kZXJzdGFuZCB0aGF0J3Mgbm90IGdv
+bm5hIGJlIGVhc3ksIGFzIGl0IG5lZWRzIHRvIGtub3cgYWJvdXQNCj4gdGhlDQo+ID4gPiByZWxh
+dGlvbiBiZXR3ZWVuIHJlc2V0cyBhbmQgY2xvY2tzLCBhbmQgaG93IHRvIGhhbmRsZSBib3RoIGNh
+c2VzDQo+IChjbG9jaw0KPiA+ID4gKG5vdCkgc3dpdGNoZWQgb2ZmKSBmb3IgVFlQRS1CIHJlc2V0
+cy4NCj4gPg0KPiA+IFllYWgsIHdlIGhhdmUgYmVlbiB0aGlua2luZyBhYm91dCBkZWFsaW5nIHdp
+dGggdGhpcyBpbiB0aGUgcmVzZXQNCj4gY29udHJvbGxlcg0KPiA+IGRyaXZlciwgYnV0IGFzIHlv
+dSBwb2ludGVkIG91dCBpdCdzIG5vdCBnb2luZyB0byBiZSBzaW1wbGUsIGFuZA0KPiB0aGVyZWZv
+cmUNCj4gPiBpdCdsbCB0YWtlIHNvbWUgdGltZS4gVGhpcyBjaGFuZ2Ugd2lsbCBndWFyYW50ZWUg
+dGhlIGNvcnJlY3QNCj4gYmVoYXZpb3VyIG9mDQo+ID4gdGhlIHdhdGNoZG9nIGZvciBub3csIHdl
+J2xsIHRhY2tsZSB0aGUgbGFyZ2VyIGlzc3VlIGxhdGVyIG9uLCBpZg0KPiB0aGF0J3Mgb2theQ0K
+PiA+IHdpdGggeW91Lg0KPiANCj4gRmluZSBmb3IgbWUuDQoNCkF3ZXNvbWUsIHRoYW5rcyBmb3Ig
+dGhhdC4NCg0KQ2hlZXJzLA0KRmFiDQoNCj4gDQo+IEdye29ldGplLGVldGluZ31zLA0KPiANCj4g
+ICAgICAgICAgICAgICAgICAgICAgICAgR2VlcnQNCj4gDQo+IC0tDQo+IEdlZXJ0IFV5dHRlcmhv
+ZXZlbiAtLSBUaGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0NCj4gZ2VlcnRAbGlu
+dXgtbTY4ay5vcmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZlcnNhdGlvbnMgd2l0aCB0ZWNobmlj
+YWwgcGVvcGxlLCBJIGNhbGwgbXlzZWxmIGENCj4gaGFja2VyLiBCdXQNCj4gd2hlbiBJJ20gdGFs
+a2luZyB0byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFtbWVyIiBvciBzb21ldGhpbmcN
+Cj4gbGlrZSB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC0tIExpbnVz
+IFRvcnZhbGRzDQo=
