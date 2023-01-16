@@ -2,149 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3D766CFCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAB866CFD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbjAPTuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S232077AbjAPTwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbjAPTt6 (ORCPT
+        with ESMTP id S232201AbjAPTv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:49:58 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A892C67D
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:49:56 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id k12so9233671plk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:49:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8wZvvACyBelhwyC9g77by0DEIkBqZpn0ZmXIgfmKr4s=;
-        b=0oC65SyRHbWDjj7xp6Z5i5H7PKj9V2uYPsPQ3OqlQp+3vN9gFAdP/sq3xkLwsvLRVS
-         McB8d3MpJc4v96EUA9wf/iM2TqR0GJ15g374T+k2oOetyyQWWe5sV0KcuuaI0T3DQ1mO
-         aPo1gjrVrlEsQNgjfwYbOonw+vgLoONw5oTLv4ZFnSeIM3jDuEFozpyQ+5pp9VxbxTEU
-         dIzgulr11qkfeUnYqXz7AVpJZ1KN2zDbCism7+gww5+ygd5mNP3cDh4X7duKjhUMeg4A
-         9+k+ruW9Y/N4jDkPQkNzvGey+mDbzzVDdaQJV7geBcMly8kcUZWwPTWhv8f4ZnhHKrtJ
-         2IIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8wZvvACyBelhwyC9g77by0DEIkBqZpn0ZmXIgfmKr4s=;
-        b=VTrse50w7uyUnx1L2ynzcaG39pPNhhDY9t0AilGHdI19yW8ipRFBXSxxIksGPFwzd/
-         cTGKsVhqajUfQaz1DWT66cRfB7PgM5EMZH983C5LbblQluZ3WSVV+qJ4Fq0WpOEPNy25
-         T2W9NqjdWwENtOqa299+hduXCDa4xQGF5WkFnv9xwjmUaa16l3bG0YlAAoINW3czMTKr
-         xbiT5xPNTzZbYMjCItw7t4IrPN5rrZ7UxHDUqxCPVwhvkUf8bJogSbh/ZogEUBqi+TTc
-         bEDNKMbsxx4fOFTNDIjrwdOpGmCX5APQ5Vd8QJ5ui7Jt80Vtzio3K8x6ofHjXw8xT8Zk
-         BTog==
-X-Gm-Message-State: AFqh2kqj1MolCFicfQEeFDZTZT9D/wvmxTkObbJNUhUss2QeKz4PzjYL
-        78JmwkpZVCxxBve5F3lLwGafNw==
-X-Google-Smtp-Source: AMrXdXtpS9tGPFZxJo7zJbNIiuX5+Bt+X5f0IpuEJBuXVCAC2ooHDIHjJz3wEm9Fj9oNuS3cd0YJAA==
-X-Received: by 2002:a05:6a20:1710:b0:b8:499d:7c99 with SMTP id bn16-20020a056a20171000b000b8499d7c99mr180334pzb.0.1673898596098;
-        Mon, 16 Jan 2023 11:49:56 -0800 (PST)
-Received: from smtpclient.apple ([2601:646:c200:522:b469:4533:dab3:1cd4])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b0019248880f75sm19686244pls.77.2023.01.16.11.49.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 11:49:54 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [RFC PATCH 0/4] random: a simple vDSO mechanism for reseeding userspace CSPRNGs
-Date:   Mon, 16 Jan 2023 11:49:42 -0800
-Message-Id: <15F7D57C-8CC6-4CAE-8B7E-6F480B5F4133@amacapital.net>
-References: <585ddb35-adc5-f5cf-4db3-27571f394108@zytor.com>
-Cc:     Yann Droneaud <ydroneaud@opteya.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Florian Weimer <fweimer@redhat.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-In-Reply-To: <585ddb35-adc5-f5cf-4db3-27571f394108@zytor.com>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-X-Mailer: iPhone Mail (20C65)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 16 Jan 2023 14:51:59 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BBC2B2BF;
+        Mon, 16 Jan 2023 11:51:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sVpM1mtW3MN+VZv9WJeM6OcVWT6pY0gr9be30QEiFF4=; b=v6Wbig+JaiPH4eX5Rzg2eO5G0o
+        44wcgWigoUXogzv4WZhH7Ix7GQc5ZLLX32DsewWcDQCViwLNcGH2MjnBedpjnb2VyX1pn/6QK7gr8
+        2akQdyrK8LwUJDOHBYj/FcyCIp40ED/9LuDsCsMjIrW6g9Y+9oVdO2aI7wY2Xz2ajqM8lYM/xHERJ
+        0ES8d3O93yZPCGfimX+tJ+Z6XGnXc/AQytUQRYIvsID8rLIzhqsyx1/B5CPzeW6B7O5G/jAqZ9V6y
+        Zuu/9FP9+Rsm+gWVm2KzJNmUFpho9iyAFPeL8UJkwpCDi6YQPqFBTCpR4BYAb6oIujh5W3m4GFx+/
+        4GinB/lQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHVWP-0091Si-Ga; Mon, 16 Jan 2023 19:51:57 +0000
+Date:   Mon, 16 Jan 2023 19:51:57 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     yang.yang29@zte.com.cn
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
+        bagasdotme@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        iamjoonsoo.kim@lge.com, ran.xiaokai@zte.com.cn
+Subject: Re: [PATCH linux-next v3] swap_state: update shadow_nodes for
+ anonymous page
+Message-ID: <Y8Wq3apsJh7keUVA@casper.infradead.org>
+References: <202301131736452546903@zte.com.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202301131736452546903@zte.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 13, 2023 at 05:36:45PM +0800, yang.yang29@zte.com.cn wrote:
+> From: Yang Yang <yang.yang29@zte.com.cn>
+> 
+> Shadow_nodes is for shadow nodes reclaiming of workingset handling,
+> it is updated when page cache add or delete since long time ago
+> workingset only supported page cache. But when workingset supports
+> anonymous page detection, we missied updating shadow nodes for
+> it. This caused that shadow nodes of anonymous page will never be
+> reclaimd by scan_shadow_nodes() even they use much memory and
+> system memory is tense.
+> 
+> So update shadow_nodes of anonymous page when swap cache is
+> add or delete by calling  xas_set_update(..workingset_update_node).
 
+What testing did you do of this?  I have this crash in today's testing:
 
-> On Jan 13, 2023, at 7:16 PM, H. Peter Anvin <hpa@zytor.com> wrote:
->=20
-> =EF=BB=BFOn 1/12/23 11:55, Yann Droneaud wrote:
->> Hi
->> 12 janvier 2023 =C3=A0 18:07 "Jason A. Donenfeld" <Jason@zx2c4.com> a =C3=
-=A9crit:
->> =20
->>> Sorry Yann, but I'm not interested in this approach, and I don't think
->>> reviewing the details of it are a good allocation of time. I don't
->>> want to lock the kernel into having specific reseeding semantics that
->>> are a contract with userspace, which is what this approach does.
->> This patch adds a mean for the kernel to tell userspace: between the
->> last time you call us with getrandom(timestamp,, GRND_TIMESTAMP),
->> something happened that trigger an update to the opaque cookie given
->> to getrandom(timestamp, GRND_TIMESTAMP). When such update happen,
->> userspace is advised to discard buffered random data and retry.
->> The meaning of the timestamp cookie is up to the kernel, and can be
->> changed anytime. Userspace is not expected to read the content of this
->> blob. Userspace only acts on the length returned by getrandom(,, GRND_TIM=
-ESTAMP):
->>  -1 : not supported
->>   0 : cookie not updated, no need to discard buffered data
->>  >0 : cookie updated, userspace should discard buffered data
->> For the cookie, I've used a single u64, but two u64 could be a better sta=
-rt,
->> providing room for implementing improved behavior in future kernel versio=
-ns.
->>> Please just let me iterate on my original patchset for a little bit,
->>> without adding more junk to the already overly large conversation.
->> I like the simplicity of my so called "junk". It's streamlined, doesn't
->> require a new syscall, doesn't require a new copy of ChaCha20 code.
->> I'm sorry it doesn't fit your expectations.
->=20
-> Why would anything more than a 64-bit counter be ever necessary? It only n=
-eeds to be incremented.
+04304 BUG: kernel NULL pointer dereference, address: 0000000000000080
+04304 #PF: supervisor read access in kernel mode
+04304 #PF: error_code(0x0000) - not-present page
+04304 PGD 0 P4D 0
+04304 Oops: 0000 [#1] PREEMPT SMP NOPTI
+04304 CPU: 4 PID: 3219629 Comm: sh Kdump: loaded Not tainted 6.2.0-rc4-next-20230116-00016-gd289d3de8ce5-dirty #69
+04304 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+04304 RIP: 0010:_raw_spin_trylock+0x12/0x50
+04304 Code: e0 41 5c 5d c3 89 c6 48 89 df e8 89 06 00 00 4c 89 e0 5b 41 5c 5d c3 90 55 48 89 e5 53 48 89 fb bf 01 00 00 00 e8 be 5b 71 ff <8b> 03 85 c0 75 16 ba 01 00 00 00 f0 0f b1 13 b8 01 00 00 00 75 06
+04304 RSP: 0018:ffff888059afbbb8 EFLAGS: 00010093
+04304 RAX: 0000000000000003 RBX: 0000000000000080 RCX: 0000000000000000
+04304 RDX: 0000000000000000 RSI: ffff8880033e24c8 RDI: 0000000000000001
+04304 RBP: ffff888059afbbc0 R08: 0000000000000000 R09: ffff888059afbd68
+04304 R10: ffff88807d9db868 R11: 0000000000000000 R12: ffff8880033e24c0
+04304 R13: ffff88800a1d8008 R14: ffff8880033e24c8 R15: ffff8880033e24c0
+04304 FS:  00007feeeabc6740(0000) GS:ffff88807d900000(0000) knlGS:0000000000000000
+04304 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+04304 CR2: 0000000000000080 CR3: 0000000059830003 CR4: 0000000000770ea0
+04304 PKRU: 55555554
+04304 Call Trace:
+04304  <TASK>
+04304  shadow_lru_isolate+0x3a/0x120
+04304  __list_lru_walk_one+0xa3/0x190
+04304  ? memcg_list_lru_alloc+0x330/0x330
+04304  ? memcg_list_lru_alloc+0x330/0x330
+04304  list_lru_walk_one_irq+0x59/0x80
+04304  scan_shadow_nodes+0x27/0x30
+04304  do_shrink_slab+0x13b/0x2e0
+04304  shrink_slab+0x92/0x250
+04304  drop_slab+0x41/0x90
+04304  drop_caches_sysctl_handler+0x70/0x80
+04304  proc_sys_call_handler+0x162/0x210
+04304  proc_sys_write+0xe/0x10
+04304  vfs_write+0x1c7/0x3a0
+04304  ksys_write+0x57/0xd0
+04304  __x64_sys_write+0x14/0x20
+04304  do_syscall_64+0x34/0x80
+04304  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+04304 RIP: 0033:0x7feeeacc1190
 
-This is completely broken with CRIU or, for that matter, with VM forking.
+Decoding it, shadow_lru_isolate+0x3a/0x120 maps back to this line:
 
->=20
-> Let user space manage keeping track of the cookie matching its own buffers=
-. You do NOT want this to be stateful, because that's just begging for multi=
-ple libraries to step on each other.
->=20
-> Export the cookie from the vdso and voli=C3=A0, a very cheap check around a=
-ny user space randomness buffer will work:
->=20
->    static clone_cookie_t last_cookie;
->    clone_cookie_t this_cookie;
->=20
->    this_cookie =3D get_clone_cookie();
->    do {
->        while (this_cookie !=3D last_cookie) {
->            last_cookie =3D this_cookie;
->            reinit_randomness();
->            this_cookie =3D get_clone_cookie();
->        }
->=20
->        extract_randomness_from_buffer();
->        this_cookie =3D get_clone_cookie();
->    } while (this_cookie !=3D last_cookie);
->=20
->    last_cookie =3D this_cookie;
->=20
->    -hpa
+        if (!spin_trylock(&mapping->host->i_lock)) {
+
+i_lock is at offset 128 of struct inode, so that matches the dump.
+I believe that swapper_spaces never have ->host set, so I don't
+believe you've tested this patch since 51b8c1fe250d went in
+back in 2021.
