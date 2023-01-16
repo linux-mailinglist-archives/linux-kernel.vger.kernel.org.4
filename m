@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5114666BD15
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3AE66BD16
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjAPLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S229499AbjAPLnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjAPLml (ORCPT
+        with ESMTP id S229913AbjAPLnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:42:41 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E8C5BAB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:42:36 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id a37so3827676ljq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:42:36 -0800 (PST)
+        Mon, 16 Jan 2023 06:43:33 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B514ED8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:43:32 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id a11so2214792lfg.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:43:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oxnwJbvyhUCNV9WuLxXMAau6Uwpc5k8QcgUPDDDfKkQ=;
-        b=f4eI3N22d07e5n69IFfasFunuH/CWivspmvvc51QwBByyUBzFXTeWDguVjZbiqk57A
-         lGHP/behR5zcu4QKuyoiqaGo6upZbo2gx/SU3cF+TfsqwGlOAzRuy1AhWKeHW54xKu2s
-         ZtAcIQ5oeB7+YXlG1OLQAicFGBBQtqV+kWTmdLH8GQoPCNjup344g2MsCIG1wAlHpxLM
-         As+oXDDVL0f2cCGkCSB/ONHSG1YsCc5BW6k5jeu5BYdNMJgvFq3GuZJ8P8YMSsQYm0BT
-         kqMprTHLKQtSkl1OgBmfF92nlpGDfV1VFFGseibtyGNcDKz3GTWocU9YJm/2YXo7pSMC
-         CAfg==
+        bh=DDY2ydxs0Md/L6JTm4RZDTBwRYkpSjvKBRY/2I51biw=;
+        b=MuEmOHgkGzLLTvws9Ihl7oSSt7/unm2LvNMye1oPgRHA9WTV+nmYv1zRxhFy2Inj9m
+         CraJ3ViaAD8MHQcap+2CPtIYkB0TcMKg/UIy74J461txx86a+mF91H0aClhukZzqUImc
+         WtFGgFR55RW0WH/7OXqSdHM9ybt/gaRx9Rq25uN1WPPXKDplLZW5vSkZOYJsvMKjvWUQ
+         Ni1bB8KCAYdV+fvULM6diqWCnwIbDVIjR7OfPNUUJWvOStl3GeUXQT1QKsqiNRuBpgay
+         bVXtSU9nL0B1UQCLJ0YKDUKS/KjqFl3MQ0wU1286f1nITThwv1xhBnkUYp8PHRIMWj5Y
+         wX/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oxnwJbvyhUCNV9WuLxXMAau6Uwpc5k8QcgUPDDDfKkQ=;
-        b=qQ+tXsHy4Ncho1vW2C1JnVdqRYp36sYqi4TnmS4+SLkY6vgkPMaY4R/A2WPgFQqkd7
-         oWg5iWGAQKe9Qky1/fOAknRxJ9Qd9lJuombwdXsjvpHrGWm+ysRW7CU4BcX0Z6y+gZzH
-         P2Z3RETt/0C0MNaGyQ+/YRgJJPq6d/dE/YPnGM7w3/WqiBLuIjRgKxNPJLJJ9NW1KbK9
-         wfnlnPoQWDi1a0hkkwCcOuhnb93yPQbYkoI081sT2RX6xhTm3KhYW16PboujifeBEIki
-         yVsCDnlTwIopD1yZbqDQeLPu43MPPtGQZiE5gP/KY5X19SfWVdVU5V53z7QGJp6zSsi2
-         KK1w==
-X-Gm-Message-State: AFqh2krA0m51Vbq+sJNlwNkIhMwxcpBHAwH1O4xMm1yDzywLrFOQsBdp
-        tmCvK97ETMLSlIB/XX3ftqo6JDxRsic=
-X-Google-Smtp-Source: AMrXdXvZ1H5gBTQzSuvDUPeO44ykOO9UyyNWl4Dwsr2/4VapOqFd8mfrgoJl/w4kcnM74SAgh1/2zg==
-X-Received: by 2002:a2e:6e0b:0:b0:27f:bcdf:526d with SMTP id j11-20020a2e6e0b000000b0027fbcdf526dmr20578316ljc.31.1673869355054;
-        Mon, 16 Jan 2023 03:42:35 -0800 (PST)
+        bh=DDY2ydxs0Md/L6JTm4RZDTBwRYkpSjvKBRY/2I51biw=;
+        b=KJNEtq5mSbfFBcH3yGxFaZHpthYuMQhF5HM5nPISvd4HDrbkSrj6iUBkoFkEjpuMEY
+         ilaqsa1bLO0xQOz/slHlca2CGkd8t0uxhjZus0rFdXNWCTGOVcVDw/Vp0xi1Kd+XDKCD
+         ApF+8DhDSujgw7m6hWXh4i5birDsvr12OuynCGGXQW0JaNHqycltQHEwMd5crh1bi/bc
+         m+mdqngTLBo6fxrHWdaZFRaiza2kqFKshxXYVY1lCfFhXi3Nj5+CHHoScdrYXV/QOdQM
+         B+8fbROUdMgwBTMUB2Wy/jbveIUK4XDhjzyw7aWS4DjagWTSCFJ4grwaIYs1oJ+OfmFK
+         7EOQ==
+X-Gm-Message-State: AFqh2kpKGlfSKRQyRjgDNZVcXvp1dPgRkQi5Thdl0Pihj3spjdELD8nD
+        Kc84bSkoSudpQwgbCdehAzI=
+X-Google-Smtp-Source: AMrXdXuMz0sQSCLXjhBIYQOM3hUdQls1ndH+6zB95ktI9QD+ueAd+usUmv6UfkcJc2/bAcy6BdyfoQ==
+X-Received: by 2002:ac2:5933:0:b0:4ce:e773:db6c with SMTP id v19-20020ac25933000000b004cee773db6cmr4184383lfi.57.1673869411313;
+        Mon, 16 Jan 2023 03:43:31 -0800 (PST)
 Received: from pc636 (host-90-235-24-7.mobileonline.telia.com. [90.235.24.7])
-        by smtp.gmail.com with ESMTPSA id m10-20020a2e870a000000b0027f43f6e9fdsm3578980lji.33.2023.01.16.03.42.33
+        by smtp.gmail.com with ESMTPSA id j5-20020a05651231c500b004b5480edf67sm4998955lfe.36.2023.01.16.03.43.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 03:42:34 -0800 (PST)
+        Mon, 16 Jan 2023 03:43:30 -0800 (PST)
 From:   Uladzislau Rezki <urezki@gmail.com>
 X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 16 Jan 2023 12:42:32 +0100
+Date:   Mon, 16 Jan 2023 12:43:28 +0100
 To:     Baoquan He <bhe@redhat.com>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, urezki@gmail.com,
         lstoakes@gmail.com, stephen.s.brennan@oracle.com,
         willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
-Message-ID: <Y8U4KInvsmxA9iv3@pc636>
+Subject: Re: [PATCH v3 4/7] mm/vmalloc: explicitly identify vm_map_ram area
+ when shown in /proc/vmcoreinfo
+Message-ID: <Y8U4YKjVxh1ugnwv@pc636>
 References: <20230113031921.64716-1-bhe@redhat.com>
- <20230113031921.64716-3-bhe@redhat.com>
+ <20230113031921.64716-5-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113031921.64716-3-bhe@redhat.com>
+In-Reply-To: <20230113031921.64716-5-bhe@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,112 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:19:16AM +0800, Baoquan He wrote:
-> Through vmalloc API, a virtual kernel area is reserved for physical
-> address mapping. And vmap_area is used to track them, while vm_struct
-> is allocated to associate with the vmap_area to store more information
-> and passed out.
+On Fri, Jan 13, 2023 at 11:19:18AM +0800, Baoquan He wrote:
+> Now, by marking VMAP_RAM in vmap_area->flags for vm_map_ram, we can
+> clearly differentiate it with other vmalloc areas. So identify
+> vm_map_area area by checking VMAP_RAM of vmap_area->flags when shown
+> in /proc/vmcoreinfo.
 > 
-> However, area reserved via vm_map_ram() is an exception. It doesn't have
-> vm_struct to associate with vmap_area. And we can't recognize the
-> vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
-> freeing path will set va->vm = NULL before unmapping, please see
-> function remove_vm_area().
-> 
-> Meanwhile, there are two kinds of handling for vm_map_ram area. One is
-> the whole vmap_area being reserved and mapped at one time through
-> vm_map_area() interface; the other is the whole vmap_area with
-> VMAP_BLOCK_SIZE size being reserved, while mapped into split regions
-> with smaller size via vb_alloc().
-> 
-> To mark the area reserved through vm_map_ram(), add flags field into
-> struct vmap_area. Bit 0 indicates this is vm_map_ram area created
-> through vm_map_ram() interface, while bit 1 marks out the type of
-> vm_map_ram area which makes use of vmap_block to manage split regions
-> via vb_alloc/free().
-> 
-> This is a preparatoin for later use.
+> Meanwhile, the code comment above vm_map_ram area checking in s_show()
+> is not needed any more, remove it here.
 > 
 > Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
->  include/linux/vmalloc.h |  1 +
->  mm/vmalloc.c            | 16 ++++++++++++----
->  2 files changed, 13 insertions(+), 4 deletions(-)
+>  mm/vmalloc.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
-> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> index 096d48aa3437..69250efa03d1 100644
-> --- a/include/linux/vmalloc.h
-> +++ b/include/linux/vmalloc.h
-> @@ -76,6 +76,7 @@ struct vmap_area {
->  		unsigned long subtree_max_size; /* in "free" tree */
->  		struct vm_struct *vm;           /* in "busy" tree */
->  	};
-> +	unsigned long flags; /* mark type of vm_map_ram area */
->  };
->  
->  /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
 > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index d6ff058ef4d0..ab4825050b5c 100644
+> index 13875bc41e27..4a10b3b692fa 100644
 > --- a/mm/vmalloc.c
 > +++ b/mm/vmalloc.c
-> @@ -1589,7 +1589,8 @@ preload_this_cpu_lock(spinlock_t *lock, gfp_t gfp_mask, int node)
->  static struct vmap_area *alloc_vmap_area(unsigned long size,
->  				unsigned long align,
->  				unsigned long vstart, unsigned long vend,
-> -				int node, gfp_t gfp_mask)
-> +				int node, gfp_t gfp_mask,
-> +				unsigned long va_flags)
->  {
->  	struct vmap_area *va;
->  	unsigned long freed;
-> @@ -1635,6 +1636,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
->  	va->va_start = addr;
->  	va->va_end = addr + size;
->  	va->vm = NULL;
-> +	va->flags = va_flags;
+> @@ -4225,11 +4225,7 @@ static int s_show(struct seq_file *m, void *p)
 >  
->  	spin_lock(&vmap_area_lock);
->  	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
-> @@ -1913,6 +1915,10 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
+>  	va = list_entry(p, struct vmap_area, list);
 >  
->  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
->  
-> +#define VMAP_RAM		0x1 /* indicates vm_map_ram area*/
-> +#define VMAP_BLOCK		0x2 /* mark out the vmap_block sub-type*/
-> +#define VMAP_FLAGS_MASK		0x3
-> +
->  struct vmap_block_queue {
->  	spinlock_t lock;
->  	struct list_head free;
-> @@ -1988,7 +1994,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  
->  	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
->  					VMALLOC_START, VMALLOC_END,
-> -					node, gfp_mask);
-> +					node, gfp_mask,
-> +					VMAP_RAM|VMAP_BLOCK);
->  	if (IS_ERR(va)) {
->  		kfree(vb);
->  		return ERR_CAST(va);
-> @@ -2297,7 +2304,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
->  	} else {
->  		struct vmap_area *va;
->  		va = alloc_vmap_area(size, PAGE_SIZE,
-> -				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
-> +				VMALLOC_START, VMALLOC_END,
-> +				node, GFP_KERNEL, VMAP_RAM);
->  		if (IS_ERR(va))
->  			return NULL;
->  
-> @@ -2537,7 +2545,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
->  	if (!(flags & VM_NO_GUARD))
->  		size += PAGE_SIZE;
->  
-> -	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
-> +	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
->  	if (IS_ERR(va)) {
->  		kfree(area);
->  		return NULL;
+> -	/*
+> -	 * s_show can encounter race with remove_vm_area, !vm on behalf
+> -	 * of vmap area is being tear down or vm_map_ram allocation.
+> -	 */
+> -	if (!va->vm) {
+> +	if (!va->vm && (va->flags & VMAP_RAM)) {
+>  		seq_printf(m, "0x%pK-0x%pK %7ld vm_map_ram\n",
+>  			(void *)va->va_start, (void *)va->va_end,
+>  			va->va_end - va->va_start);
 > -- 
 > 2.34.1
 > 
