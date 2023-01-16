@@ -2,62 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6460A66C2F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48A266C332
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjAPO4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S232898AbjAPPCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjAPO4Q (ORCPT
+        with ESMTP id S232838AbjAPPAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:56:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AE822DCA;
-        Mon, 16 Jan 2023 06:45:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93542B80E72;
-        Mon, 16 Jan 2023 14:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A64C433F0;
-        Mon, 16 Jan 2023 14:45:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673880327;
-        bh=QENT3/o77DrxIX5y2/X2KutjovyA1smRJxICKJ/Qxjo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xxkUSfq/fOLhO+LuNw/iICNfRJjUr2F5WOR+phmgQigPZtUwnF2qQs8Oht+l63D8M
-         5PHfXcSDY7av1D4UuQ6ixv0EzU3ttkdAze8eM0rNDBj5an9j3d3157rlm6v0fgMa0g
-         hyMXSZ5s+K9NuVSCiqo5Qx5yGhMHEs5uUWFZ8z6M=
-Date:   Mon, 16 Jan 2023 15:45:24 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     mkv22@cantab.net
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Subject: Re: Mainline stable kernel kbd backlight stops working from 6.1.6 in
- t2 Macs
-Message-ID: <Y8VjBJVei/I+Q67G@kroah.com>
-References: <CAC+-fDs=YHjsWvNAUVT=D=+JU9FQ-dJ_L4esqJveQiiGLcW2Lw@mail.gmail.com>
+        Mon, 16 Jan 2023 10:00:41 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CC62332B;
+        Mon, 16 Jan 2023 06:51:19 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2B31F37642;
+        Mon, 16 Jan 2023 14:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673880678; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=1yNIiC+DlOYTUjgeCCgqwn2x0yECAXqm0gh7u//B+3g=;
+        b=BtSTYuumDX11ifUEjXqrhSIMxTTgNL28469+794F8tPYZFQ1lyYJvjGKgoqcroaoiGFnzE
+        koEKXLDF4dyHeNIkykjN25yVZYXQZiWRI9DrEVtjSc6VuRVU6ngG+ZTMzeS1C9n2a6aqSh
+        +0NOhHxwyLmhDQf/6LaM1eTxQ9Vw9Tc=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 2064A2C186;
+        Mon, 16 Jan 2023 14:51:18 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id C8EC9DA7E1; Mon, 16 Jan 2023 15:45:41 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.2-rc5
+Date:   Mon, 16 Jan 2023 15:45:40 +0100
+Message-Id: <cover.1673876631.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAC+-fDs=YHjsWvNAUVT=D=+JU9FQ-dJ_L4esqJveQiiGLcW2Lw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 06:12:12AM +0530, mkv22@cantab.net wrote:
-> Apologies that I am unable to attach more detailed information from dmesg
-> or logs as the update was in a production laptop and had to be rolled back
-> to 6.1.5 immediately and lost the dmesg output.
+Hi,
 
-Any chance to run 'git bisect' to find the offending change?
+another batch of fixes, dealing with fallouts from 6.1 reported by users.
 
-thanks,
+One or two extra -rcs would be appreciated, this pull request is for rc5
+which is my usual target for big changes code freeze but there are still
+such branches in the queue.
 
-greg k-h
+Please pull, thanks.
+
+- tree-log fixes
+  - fix directory logging due to race with concurrent index key deletion
+  - fix missing error handling when logging directory items
+  - handle case of conflicting inodes being added to the log
+  - remove transaction aborts for not so serious errors
+
+- fix qgroup accounting warning when rescan can be started at time with
+  temporarily disable accounting
+
+- print more specific errors to system log when device scan ioctl fails
+
+- disable space overcommit for ZNS devices, causing heavy performance
+  drop
+
+----------------------------------------------------------------
+The following changes since commit 2ba48b20049b5a76f34a85f853c9496d1b10533a:
+
+  btrfs: fix compat_ro checks against remount (2023-01-03 16:22:13 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc4-tag
+
+for you to fetch changes up to 09e44868f1e03c7825ca4283256abedc95e249a3:
+
+  btrfs: do not abort transaction on failure to update log root (2023-01-12 15:43:31 +0100)
+
+----------------------------------------------------------------
+Filipe Manana (5):
+      btrfs: fix missing error handling when logging directory items
+      btrfs: add missing setup of log for full commit at add_conflicting_inode()
+      btrfs: do not abort transaction on failure to write log tree when syncing log
+      btrfs: do not abort transaction on failure to update log root
+
+Naohiro Aota (1):
+      btrfs: zoned: enable metadata over-commit for non-ZNS setup
+
+Qu Wenruo (2):
+      btrfs: add extra error messages to cover non-ENOMEM errors from device_add_list()
+      btrfs: qgroup: do not warn on record without old_roots populated
+
+ fs/btrfs/disk-io.c    |  9 ++++++++-
+ fs/btrfs/fs.h         |  6 ++++++
+ fs/btrfs/qgroup.c     | 14 ++++++++++++--
+ fs/btrfs/space-info.c |  3 ++-
+ fs/btrfs/tree-log.c   | 47 +++++++++++++++++++++++++++++++----------------
+ fs/btrfs/volumes.c    | 11 ++++++++++-
+ fs/btrfs/zoned.c      |  2 ++
+ 7 files changed, 71 insertions(+), 21 deletions(-)
