@@ -2,228 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E922A66B8C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8247A66B889
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjAPIEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 03:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S232098AbjAPH7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbjAPIDL (ORCPT
+        with ESMTP id S232073AbjAPH7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:03:11 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1871205A;
-        Mon, 16 Jan 2023 00:02:47 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30G5pfq2022611;
-        Mon, 16 Jan 2023 08:02:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qNtZkA13WTIemqsNq8nY2phpY5cLQU1E9IBQKgMGmpI=;
- b=mYD61q+FA552864UcyoI3qkpNPRVve+FBLACHAZ2ZYUrcjopXjCXISZjr9wt7ju1TO78
- NnsUGIIBt/18pz2fOu/soBzwURyCPaKgC4DEcTPXhK2IRCONIdLM2Rk7rAJbMlj6xh4n
- pNuwjNoD/+DDh21lbc67OLZpaoUuBp6ygZSqlsQ+AloZkaenLkoYNDurP4V+Ip/+dcrZ
- x1P1LjRLfsse0dOSJumZmZMk2ix0RLBia/cL3jyKGKHOkJSFf4dyv0CQAL6bWArBuMVA
- Hbf7oZ4BxIsyXrAI04/BnxzAWYM0iGk6Htc1xSB3VKyXQgeOxlnQCWFlqpxoD6m0+bmw 0Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n4g07sb5j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:02:42 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30G82gVY030160;
-        Mon, 16 Jan 2023 08:02:42 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n4g07sb4v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:02:42 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30G1KLG4023792;
-        Mon, 16 Jan 2023 08:02:40 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n3m16j3ey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:02:40 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30G82bK147907308
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 08:02:38 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFB8420040;
-        Mon, 16 Jan 2023 08:02:37 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1081B2004E;
-        Mon, 16 Jan 2023 08:02:36 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.in.ibm.com (unknown [9.109.253.169])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 16 Jan 2023 08:02:35 +0000 (GMT)
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: [PATCH v3 8/8] ext4: Remove the logic to trim inode PAs
-Date:   Mon, 16 Jan 2023 13:32:16 +0530
-Message-Id: <20230116080216.249195-9-ojaswin@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230116080216.249195-1-ojaswin@linux.ibm.com>
-References: <20230116080216.249195-1-ojaswin@linux.ibm.com>
-MIME-Version: 1.0
+        Mon, 16 Jan 2023 02:59:46 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2087.outbound.protection.outlook.com [40.107.220.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C7010430
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:59:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sq6Hwhc6qONVEhVvNDLSF3S3bKQWPevo7esdvPJlWEBVEHgRX5zshz8Hly2DWNqd0T/Ivsprsr5A+L9OWMVKN74ifY9vWrmR9umPzbE3ijvZC14bKTCLo3lWfDeT9ffDCMnPc3XUh0ywCHUHNlYn3W3M9L2dZxM1xQawp/WV5EQa0td+VRgovUIpmjGlO66L0D+y1rsOzd0pbUZBvJRG6s9fU/FCwKDSirYYAM1IC0Z1mzrOH6VxFFx2iZctw0C+AkshjnZtn0fw6g0zp3vihbMAFFrdKeau2tGYFRA897Hk28me94ruSAZ4+oQQN7ZSXgw7b2mkieGancvK7sVEHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5bjlptJFs6ZXp8gMQNEH6RVEKd1sh4AU2H+U7Ijd+7w=;
+ b=VYxDh+ER10IprCILIuJxC/EBi8kWdGeJa8+hTwU5TOzCXNbrCthIHd8NGaniWRxxNxz8JO7++bFqzVxn+hWylSYoi8bhm1US7HAVvp71igFr+u5Rv0YpiOzmQV7r4KqHka7tCcOZ8ycR9SBWi1bl3ef1+xwDyTQpVIvz1cSA9XXq9XNQBDzzKwZZGwBUotYZydCO5LSWjkbpZRpU4E1Dpev7mDit2FINOI2gUNgP8LDqTUBN8AkeHdf/zc+umOPiieQ5Uxa5EIRl2X+kar4kC0j0STTJkISl3roMmPs337ZZnv+utCVIbkX24AZnkI/JTl9V4PLS6pRqUoL5iqC3Sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5bjlptJFs6ZXp8gMQNEH6RVEKd1sh4AU2H+U7Ijd+7w=;
+ b=IEHwufGtokSd64zDQFR7sNrib+m64NfeOcoRF5/loFdTTrwsHKxa11OSSU/99lJQY0DdP2TtnxOVuEFxVClu5ds2Ib0E2dd/sf1fzsg2r6CYgHmfFKB577O6bYZkjtPDREYbGdw3YBKwcpMl+rraGJaebQIRfK+gQoKZNav3lsc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
+ by SN7PR12MB8147.namprd12.prod.outlook.com (2603:10b6:806:32e::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
+ 2023 07:59:42 +0000
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::fc88:7080:445e:6866%7]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
+ 07:59:42 +0000
+Message-ID: <27eabbf2-eff2-0964-b72b-f9db251c3b57@amd.com>
+Date:   Mon, 16 Jan 2023 13:32:54 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
+ config
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        broonie@kernel.org, vkoul@kernel.org, alsa-devel@alsa-project.org
+Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
+        arungopal.kondaveeti@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
+ <9f2229fb-499b-f802-993b-56a7ad2ce361@linux.intel.com>
+ <257b6f1e-f403-573f-3978-13ffb14342ad@amd.com>
+ <2b4c12ce-2586-0277-ede0-560f8317e4e4@linux.intel.com>
+From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+In-Reply-To: <2b4c12ce-2586-0277-ede0-560f8317e4e4@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qRRsXOqHRJSFjpEaGxjU5HyV0JmrwClD
-X-Proofpoint-GUID: 6unrsTKb8a7_mC1lJiVFQruQJ9oWufvA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-16_06,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301160058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN2PR01CA0177.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::32) To DM6PR12MB4123.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|SN7PR12MB8147:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6562e2e-33ef-43c6-9eea-08daf797a024
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KcWLwNc710RKexaVfm617fSK+v8HCkDYdX58lnlMcT+bB++DLQ92U8tX92vhFoqlZh4cwlfX7Bq6GOx+fN80Zl0AdhxFKj33wrCZka7uqNQ3maaNuHm2BfELd7/ruZXU162d+azCJzO6Iq9KiadXS2kNdMJh5qkBqZreOPk8nkOSL9l7MHLQcLqh5HIVaKK68h4GLadUNwf4D7JBtsMvzE+5OHue/KifxXagIOkArvWf8M4WVI0uYE7lCafoOB5MBQc+QyJAg9VuDftVcJHB4h5USW/TzpAtrKVpagnvaDQDtFB8A5GCdMuJj170pv3dFm4vEXgwvPQV8NfNgRGJQIW3to/hN5Vwav99Qs8at3N+xS9fViezjAdmLc7QwIi6YcutUp9cNySM6dpp7NTSQaQYB0ghLfAfr3mWDxIMqRM8XApywtHdbYveeuQcybF7wSAXx4BUMtOmzTB9eAnq4giEZPid/VMA2JF1qB7EZhFbtzNEriL3V2NmH8I/UWHaitG/0K40G0Y1hCcBxMDZyKJPi+LfiqJKq+qyOkM3MH/FKag2GGgXT8v8fghV9u5Tnnd5HxMch8DpLvSQn78totdiYdi1skO4IMyLsHPhqGP3zytJjXVHbj9hAYf3qX6kDtfXr7ryWBAXeR47lbhJVoQ4SVkfM47ATKw3ZQDstOMG3ms+RudYQsvS0meunnmhkYRrhgrK64ptx3qsYd0hV8D4kunsFnQZ/M0I14ECUmo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(376002)(346002)(366004)(451199015)(54906003)(2616005)(186003)(66476007)(8676002)(4326008)(26005)(6512007)(66556008)(31686004)(66946007)(478600001)(8936002)(41300700001)(83380400001)(5660300002)(7416002)(2906002)(6666004)(53546011)(316002)(6506007)(38100700002)(31696002)(6486002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VG8zY1VXbUZ3NE5uTkdpNW9EeTZMbkV6dTZaQ1NOU0hmUUlRUTZraGsyb3lL?=
+ =?utf-8?B?TExEWTROcmgwanNsMG4zenJYWjRPY01DeERsR0xYcGhKTmlqT2xXbkNKaHlI?=
+ =?utf-8?B?NHY5Ri9YZ2w3Slh3eDVPalowckZwZ0FpdENkbE1Wd1p0SWY2UXpWSmE2M2VB?=
+ =?utf-8?B?TXJFYUpDeGpJSjRjTUhSMzlyaCt4bW1Oa2Jha3IrdnJxUWdxRDZTc2dnOERD?=
+ =?utf-8?B?RHhjc2dTR1JKSkFCOThIUFMzTkttbE1ta3hFb3VmbGFSR3FDRGhLTkluMXhh?=
+ =?utf-8?B?SU9ZUExHY3Y0WUFDdVBOVHl6OHkxN28rMTBqM3JVRFB5U0JPWUFKY250UWVQ?=
+ =?utf-8?B?bTFGU1REOUl0QlhDWlkydm8rZXFCc1hSdHZBUDV0N0hhTXpmbHY1UlpyYjZE?=
+ =?utf-8?B?ZkVseFVYeWRJbmF4L2dtQm5DYThKdko0emdHanJWckZFZEJCckpVUTgzMlc3?=
+ =?utf-8?B?T2lMQ1d1eXh1ZW1hblEvNkNVd0cwOVVwN2JqbHh4RU5JLzJDZC9sVmNaY0FH?=
+ =?utf-8?B?VmNFREQ1ejBoQXgycmhEcXowN3BoMklZSTZQaDNPcXFrTEFkRTE4d3RMSzk5?=
+ =?utf-8?B?SWNOV1BzZFZlVDF2WHluTE1BRmhWTk9uZW1ZeGpvNlVaRlJVVVl6MEhFRVN6?=
+ =?utf-8?B?NWlCVnkvS3JvdW5QMHQrcVJvYURFU2hObHhFQTFGMXZsbGRQT2VOb0FyZWhF?=
+ =?utf-8?B?VXQzamxUUVRxZnRkK0ZoRktuclF0a3MzbkdxbUxMYUZjN0Voc0xrVW8wUWRx?=
+ =?utf-8?B?WUJUaUFrZ3hzZDdsSE1ZMzgwN04rVW1OUDFyRGlzem05elE3M0JMbWpLZHN2?=
+ =?utf-8?B?ZjhzeTlCM3g0NXFBcXJEVi9ibkRmQThmNUdQRTZZUXRyODFJVjBPdWYvTlQ2?=
+ =?utf-8?B?c2RYeUFrdDZZU3dxUElSbzY2N2pJcVhLbXF1cnRSL1N6aTFNa0orb3kzb0Vp?=
+ =?utf-8?B?MEt3NnpLMjVQZXFJc0ZKNlg2SGZlN2dyWlVtc2E2Q29Fa2pEZFFxQkZ0anMv?=
+ =?utf-8?B?V2ZQcjEwS1BYOWhJeVFtZTcxMEhJaDZxcnFoRjhIeXF1dlo4RHdRRDlKaCsx?=
+ =?utf-8?B?bTMzTmpuQWs2SWJBV3Q1TnpoMzRtT1VneFhndHIrWjRkWkNOSlBhbnFySkJ6?=
+ =?utf-8?B?Z1YyM2ZnRlI1Lyt3UlAwcDJYbkc2d2hWNjFUdm5WU1ZKU3dleXQ0ZlN6Mmxp?=
+ =?utf-8?B?Zi9TbGQzajRnYzZIOGMyK3VOekxzeG5MQ2o2cHk4eHFZRkUxOC85ZVVIVE04?=
+ =?utf-8?B?Q3RKbllQTUhibGxSZUhSTUQ2SUlCZWc1K3h3cXBvRjJDdTU1alVRZHhoYW41?=
+ =?utf-8?B?TjUrQjhQb3ZEbUNGTXAzYjAwcUdDTXE3WGcwK2h3Q2FxM1hibTJQOTNEQXBy?=
+ =?utf-8?B?WDgxeHVQWllNK0NKNnUyS2RGa3hGVEdrUUNMbWFQSFN2RXFIMWViRmNDeFhM?=
+ =?utf-8?B?VFZuakVwcDR4WTRHSnRKWGJHVWlRS1Q4TmtHVlk1ZmxnZmNjVjhxVVhsMEFT?=
+ =?utf-8?B?TkxtVlpGWE1yOXBNSTc2dFUyRTdab3VRbHp5R2NWMnZKM3Bud05pRGRZZmgv?=
+ =?utf-8?B?WGpTSEc1OFhoVVFmSWZyalpkRTVrYTFSUnUxenpDSU85T2toZkIwREE4MUdE?=
+ =?utf-8?B?SmRDYmZSam5oOThOTWNWRU5Jb2E3aWFoUHRUUEZRNVErRklQazhEeFVkRHpJ?=
+ =?utf-8?B?aEF0cW1PRFdXL1VQUnRLYlFoNG4ramNyYjEzc2IzODNNRnFVNzQrb1RLbita?=
+ =?utf-8?B?TmFTdS9SN0VCWDZ0WUZVOVFsaVd3TFVZS2EvTEhpRHBEb2pVN1dONVVXVHVz?=
+ =?utf-8?B?cEZ0d3grUDB6L01CT1hxR1Z5bnFobzVPV09QUExML2w2QTVHaVJ0L3VjSjRG?=
+ =?utf-8?B?QTVxcEF2OEUyalVJZmFpT1RTenJuY3hyZzFMd09VQzYyVXVFaWVCUmtWRlAz?=
+ =?utf-8?B?TVB2ckRKai9td0hNbzBFNnNZblNFOCtUNHAyVi9lcnB0OVVyb0dkVzJMMGlJ?=
+ =?utf-8?B?RmxHYTRpRTdtdmpjSXh2ekJlVDdsc2Z3ckIvdTVrZ1QzbkVSR2o2Q0VSYnNu?=
+ =?utf-8?B?Y1lXRFR3ajJybEhSclZiVkpoTlZwWmdhQnpkREdqaGZjeVJ5STlkR3R1a3BM?=
+ =?utf-8?Q?OuPePMYWS/AVkO//CmKqKZfoU?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6562e2e-33ef-43c6-9eea-08daf797a024
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 07:59:42.7109
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: n+NBzKfAHN4052pgQgOpVs/doVYQdWFgTSmzQY/3nGCyCaB8+ElHr3MPl6/7S0ITb379xraVW9wycdmyoyEFvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8147
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Earlier, inode PAs were stored in a linked list. This caused a need to
-periodically trim the list down inorder to avoid growing it to a very
-large size, as this would severly affect performance during list
-iteration.
+On 13/01/23 22:41, Pierre-Louis Bossart wrote:
+>>>> +		if (is_dmic_dev && is_sdw_dev) {
+>>>> +			switch (acp_data->sdw_master_count) {
+>>>> +			case 1:
+>>>> +				acp_data->pdev_mask = ACP63_SDW_PDM_DEV_MASK;
+>>>> +				acp_data->pdev_count = ACP63_SDW0_PDM_MODE_DEVS;
+>>>> +				break;
+>>>> +			case 2:
+>>>> +				acp_data->pdev_mask = ACP63_SDW_PDM_DEV_MASK;
+>>>> +				acp_data->pdev_count = ACP63_SDW0_SDW1_PDM_MODE_DEVS;
+>>>> +				break;
+>>> so the cover letter is indeed wrong and confuses two controllers for two
+>>> managers.
+>> ACP IP has two independent manager instances driven by separate controller
+>> each which are connected in different power domains.
+>>
+>> we should create two separate ACPI companion devices for separate
+>> manager instance.  Currently we have limitations with BIOS.
+>> we are going with single ACPI companion device.
+>> We will update the changes later.
+> Humm, this is tricky. The BIOS interface isn't something that can be
+> changed at will on the kernel side, you'd have to maintain two solutions
+> with a means to detect which one to use.
+>
+> Or is this is a temporary issue on development devices, then that part
+> should probably not be upstreamed.
+It's a temporary issue on development devices.
+We had discussion with Windows dev team and BIOS team.
+They have agreed to modify ACPI companion device logic.
+We will update the two companion devices logic for two manager
+instances in V2 version.
 
-Recent patches changed this list to an rbtree, and since the tree scales
-up much better, we no longer need to have the trim functionality, hence
-remove it.
-
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- Documentation/admin-guide/ext4.rst |  3 ---
- fs/ext4/ext4.h                     |  1 -
- fs/ext4/mballoc.c                  | 20 --------------------
- fs/ext4/mballoc.h                  |  5 -----
- fs/ext4/sysfs.c                    |  2 --
- 5 files changed, 31 deletions(-)
-
-diff --git a/Documentation/admin-guide/ext4.rst b/Documentation/admin-guide/ext4.rst
-index 4c559e08d11e..5740d85439ff 100644
---- a/Documentation/admin-guide/ext4.rst
-+++ b/Documentation/admin-guide/ext4.rst
-@@ -489,9 +489,6 @@ Files in /sys/fs/ext4/<devname>:
-         multiple of this tuning parameter if the stripe size is not set in the
-         ext4 superblock
- 
--  mb_max_inode_prealloc
--        The maximum length of per-inode ext4_prealloc_space list.
--
-   mb_max_to_scan
-         The maximum number of extents the multiblock allocator will search to
-         find the best extent.
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index fad5f087e4c6..d2869ad7d885 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -1612,7 +1612,6 @@ struct ext4_sb_info {
- 	unsigned int s_mb_stats;
- 	unsigned int s_mb_order2_reqs;
- 	unsigned int s_mb_group_prealloc;
--	unsigned int s_mb_max_inode_prealloc;
- 	unsigned int s_max_dir_size_kb;
- 	/* where last allocation was done - for stream allocation */
- 	unsigned long s_mb_last_group;
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 85598079b7ce..273a98bcaa0d 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -3419,7 +3419,6 @@ int ext4_mb_init(struct super_block *sb)
- 	sbi->s_mb_stats = MB_DEFAULT_STATS;
- 	sbi->s_mb_stream_request = MB_DEFAULT_STREAM_THRESHOLD;
- 	sbi->s_mb_order2_reqs = MB_DEFAULT_ORDER2_REQS;
--	sbi->s_mb_max_inode_prealloc = MB_DEFAULT_MAX_INODE_PREALLOC;
- 	/*
- 	 * The default group preallocation is 512, which for 4k block
- 	 * sizes translates to 2 megabytes.  However for bigalloc file
-@@ -5583,29 +5582,11 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
- 	return ;
- }
- 
--/*
-- * if per-inode prealloc list is too long, trim some PA
-- */
--static void ext4_mb_trim_inode_pa(struct inode *inode)
--{
--	struct ext4_inode_info *ei = EXT4_I(inode);
--	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
--	int count, delta;
--
--	count = atomic_read(&ei->i_prealloc_active);
--	delta = (sbi->s_mb_max_inode_prealloc >> 2) + 1;
--	if (count > sbi->s_mb_max_inode_prealloc + delta) {
--		count -= sbi->s_mb_max_inode_prealloc;
--		ext4_discard_preallocations(inode, count);
--	}
--}
--
- /*
-  * release all resource we used in allocation
-  */
- static int ext4_mb_release_context(struct ext4_allocation_context *ac)
- {
--	struct inode *inode = ac->ac_inode;
- 	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
- 	struct ext4_prealloc_space *pa = ac->ac_pa;
- 	if (pa) {
-@@ -5641,7 +5622,6 @@ static int ext4_mb_release_context(struct ext4_allocation_context *ac)
- 	if (ac->ac_flags & EXT4_MB_HINT_GROUP_ALLOC)
- 		mutex_unlock(&ac->ac_lg->lg_mutex);
- 	ext4_mb_collect_stats(ac);
--	ext4_mb_trim_inode_pa(inode);
- 	return 0;
- }
- 
-diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
-index f8e8ee493867..6d85ee8674a6 100644
---- a/fs/ext4/mballoc.h
-+++ b/fs/ext4/mballoc.h
-@@ -73,11 +73,6 @@
-  */
- #define MB_DEFAULT_GROUP_PREALLOC	512
- 
--/*
-- * maximum length of inode prealloc list
-- */
--#define MB_DEFAULT_MAX_INODE_PREALLOC	512
--
- /*
-  * Number of groups to search linearly before performing group scanning
-  * optimization.
-diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-index d233c24ea342..f0d42cf44c71 100644
---- a/fs/ext4/sysfs.c
-+++ b/fs/ext4/sysfs.c
-@@ -214,7 +214,6 @@ EXT4_RW_ATTR_SBI_UI(mb_min_to_scan, s_mb_min_to_scan);
- EXT4_RW_ATTR_SBI_UI(mb_order2_req, s_mb_order2_reqs);
- EXT4_RW_ATTR_SBI_UI(mb_stream_req, s_mb_stream_request);
- EXT4_RW_ATTR_SBI_UI(mb_group_prealloc, s_mb_group_prealloc);
--EXT4_RW_ATTR_SBI_UI(mb_max_inode_prealloc, s_mb_max_inode_prealloc);
- EXT4_RW_ATTR_SBI_UI(mb_max_linear_groups, s_mb_max_linear_groups);
- EXT4_RW_ATTR_SBI_UI(extent_max_zeroout_kb, s_extent_max_zeroout_kb);
- EXT4_ATTR(trigger_fs_error, 0200, trigger_test_error);
-@@ -264,7 +263,6 @@ static struct attribute *ext4_attrs[] = {
- 	ATTR_LIST(mb_order2_req),
- 	ATTR_LIST(mb_stream_req),
- 	ATTR_LIST(mb_group_prealloc),
--	ATTR_LIST(mb_max_inode_prealloc),
- 	ATTR_LIST(mb_max_linear_groups),
- 	ATTR_LIST(max_writeback_mb_bump),
- 	ATTR_LIST(extent_max_zeroout_kb),
--- 
-2.31.1
 
