@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CA066BADB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212C266BADC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjAPJsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
+        id S229561AbjAPJtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:49:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjAPJsI (ORCPT
+        with ESMTP id S230007AbjAPJsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:48:08 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E5614EAD;
-        Mon, 16 Jan 2023 01:48:03 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Mon, 16 Jan 2023 04:48:32 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4585714EA9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HB509Ij8BgRiGYsjt7/oG8BMyaiBytgGWhNBYz1sI3M=; b=gUKdb+N60yZcN6esZvgZc4c1wS
+        hS/1n8zmoi5E2SO5yP308fph8rnw2z+oytIie0Kd1xzBmz4C8a1YRkh6dtOXAwbpdP4Qfqd3mWyRo
+        eAHkdQqzinxiwP24IQI0KH1RIAtOhbGH/69MFqwCT/DkdHgO5Qy2o9ah0RaB4MmQrGCyg19x+CrmZ
+        5Us6spLsT5eDBODMjXLrEzktWC8yC78BlCvgMhuTflYqVIYn27piX3dJ5lY5s5RWgvpAJEFGHd0+y
+        SMZYbaeIED6LC4+v/xRr7qgHXi454do9dDAERbeEfY8dYe4Bz/mbZ5ha4yF/kerU/8zhxStS+x3Ui
+        cpjt94jA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHM6O-008cai-Tr; Mon, 16 Jan 2023 09:48:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 24CD666029A5;
-        Mon, 16 Jan 2023 09:48:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673862482;
-        bh=fUqB0lUcAzGq7ytua/E0NgN49HOvnPLdYVWV1Lgom0E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hHLh5t7oiT8cfNsuwghVgvJdiag2so50g7VwEDTPFAKRH6k9g4ZrkI5bCFohSMzvW
-         MDPZf3A9cDblYZjYXf0hmiMzRpDZpBvOsJefu6kiWdlEbORI6qygQMXnn1Fptd4QDe
-         w11yRjxRr4TNI+WlOd+RMlbaDaogjHxBiG5o7vWYH2MbDvygFNq142codtRJhOkqsd
-         a+8nzkRPsNmxRK53HiJuDLEibmUKVYK5U6MzyufyuhX1auyOHX5VOiHjR0aSdOwdOa
-         bed8mQlJpuorFvNhEFRT35hyzqx/2i8uGned2l5Sr4j4zOEeHuW3Dxhkoy1MTWwWXQ
-         0rOR9+jQ/SIJw==
-Message-ID: <532b130e-7f1b-57e5-5b1d-fceccb241f27@collabora.com>
-Date:   Mon, 16 Jan 2023 10:47:58 +0100
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC4143005C9;
+        Mon, 16 Jan 2023 10:48:13 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A123C20D30481; Mon, 16 Jan 2023 10:48:13 +0100 (CET)
+Date:   Mon, 16 Jan 2023 10:48:13 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrei Vagin <avagin@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Oskolkov <posk@google.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Will Drewry <wad@chromium.org>
+Subject: Re: [PATCH 1/5] seccomp: don't use semaphore and wait_queue together
+Message-ID: <Y8UdXRt7rhm61ATD@hirez.programming.kicks-ass.net>
+References: <20230110213010.2683185-1-avagin@google.com>
+ <20230110213010.2683185-2-avagin@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 01/10] dt-bindings: media: mediatek,vcodec: Remove
- dma-ranges property
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, mingyuan.ma@mediatek.com,
-        yf.wang@mediatek.com, libo.kang@mediatek.com,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
-        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-References: <20230113060133.9394-1-yong.wu@mediatek.com>
- <20230113060133.9394-2-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230113060133.9394-2-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110213010.2683185-2-avagin@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/01/23 07:01, Yong Wu ha scritto:
-> MediaTek iommu has already controlled the masters' iova ranges by the
-> master's larb/port id. then the dma-ranges property is unnecessary for
-> the master's node. the master is vcodec here.
-> 
-> Cc: Tiffany Lin <tiffany.lin@mediatek.com>
-> Cc: Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+On Tue, Jan 10, 2023 at 01:30:06PM -0800, Andrei Vagin wrote:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> +	atomic_add(1, &match->notif->requests);
 
+atomic_inc() ?
 
