@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882E766CCCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A339366CD00
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234847AbjAPR3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S234897AbjAPRcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234776AbjAPR2x (ORCPT
+        with ESMTP id S234794AbjAPRbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:28:53 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB304EC5;
-        Mon, 16 Jan 2023 09:06:24 -0800 (PST)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pHSw9-000Puw-P7; Mon, 16 Jan 2023 18:06:21 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pHSw9-0002xa-Ch; Mon, 16 Jan 2023 18:06:21 +0100
-Subject: Re: [PATCH v3] scripts: Exclude Rust CUs with pahole
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Neal Gompa <neal@gompa.dev>, Eric Curtin <ecurtin@redhat.com>,
-        bpf@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>
-References: <20230111152050.559334-1-yakoyoku@gmail.com>
- <aaf97a61-73c9-ff90-422d-9f3a79b0acd6@iogearbox.net>
- <CANiq72m+8D8OGtkyEjmyqCynp48DCKEw4-zLZ4pm6-OmFe4p1w@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <bec74b32-e35f-9489-4748-cbb241b31be7@iogearbox.net>
-Date:   Mon, 16 Jan 2023 18:06:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 16 Jan 2023 12:31:45 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFABB442E2;
+        Mon, 16 Jan 2023 09:08:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CN5uEZxXBCYPT2Yo5HjKTJcUlbPD7LwQL3H+jpdCImQ=; b=ZNOkrhum/ZspnKIDYRAcxe9lFU
+        lwa97xUJWJPckA3V3LNIUsCjXwS7Mvk/qj8za04D4cdH3EfFBTzM7AO8bbsuYZuNYBzm074hSJTFw
+        iCORVq0Wp/vAt3vcEu1x+FxWHZeVg8Wj5UKcl811NtM14OZ71UnTb2Qmypn0IamCV0kOexPaokDGX
+        h6wPcmO7TiqjguHuIo02cuRp7lY4X3u8lLut71JlXY1e4iwKT4kPmdkNoOnvzHOaU7SJUAr0LlBqv
+        20HdDuk6EivWErPwWPV1PSbsjlzjxxv3UqG32nH7/vwXiLGcCHE40YmNhBp3SGpWuFeCAz58cGN/8
+        haTITfYw==;
+Received: from p200300ccff0748001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff07:4800:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pHSxy-0003Jz-99; Mon, 16 Jan 2023 18:08:14 +0100
+Date:   Mon, 16 Jan 2023 18:08:13 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org,
+        brgl@bgdev.pl, linux-omap@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpio: omap: use dynamic allocation of base
+Message-ID: <20230116180813.08cb1fb0@aktux>
+In-Reply-To: <CACRpkdauDEys-XyYvb=jt1U6FcKc-qiie-A3W0WQ08rnm42DwQ@mail.gmail.com>
+References: <20230113205922.2312951-1-andreas@kemnade.info>
+        <CACRpkdauDEys-XyYvb=jt1U6FcKc-qiie-A3W0WQ08rnm42DwQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <CANiq72m+8D8OGtkyEjmyqCynp48DCKEw4-zLZ4pm6-OmFe4p1w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26783/Mon Jan 16 09:28:30 2023)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 5:52 PM, Miguel Ojeda wrote:
-> On Mon, Jan 16, 2023 at 5:37 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>
->> I presume Miguel will pick this up via rust tree? (Either way, would be nice to
->> also get an Ack from Arnaldo.)
+Hi,
+
+On Mon, 16 Jan 2023 15:24:42 +0100
+Linus Walleij <linus.walleij@linaro.org> wrote:
+
+> > maybe CC stable? not sure about good fixes tag.  
 > 
-> I am happy to, but I think it would be great if BPF takes it whenever
-> you think it is a good time. And indeed, let's give time to Arnaldo to
-> take a look.
+> I wouldn't do that from the outset. If there are no problems
+> for a few kernel releases we can think about doing that.
 
-Ok, if you could ack it for the rust bits, we can route it via bpf-next.
+I have the impression that numbering somehow changed here.
+In earlier kernel, omap_gpmc started at >400 and gpio-twl4030 also
+(both base = -1 now), so no conflicts with the static allocation of
+the soc-gpios.  I have not investigated/bisected yet. But perhaps
+additionally, a patch ensuring that dynamic allocation starts at
+a higher number to not interfer with static numbering with be interesting.
 
-Thanks,
-Daniel
+That could then be more easily backportable.
+
+Regards,
+Andreas 
