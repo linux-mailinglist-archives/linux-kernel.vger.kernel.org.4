@@ -2,114 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222F066C51C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A542D66C52D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjAPQBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S232091AbjAPQCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbjAPQBc (ORCPT
+        with ESMTP id S232072AbjAPQBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:01:32 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFFB234C4;
-        Mon, 16 Jan 2023 08:01:29 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id x7so14822528qtv.13;
-        Mon, 16 Jan 2023 08:01:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yeeni+aVpCcW6b8lUXBeTt2zeTUBWlICjmBcGzWOK3E=;
-        b=m0ShH6lP6szwI+O3m/SvSiDeqxdXgkA0CO0aQkMkKDgx//5EquIaEmjLcKVBTVU31H
-         L8QF/YIBNXp3+9/OqTnY35yO4CujU4A9l363hXP/G8jn/tERZQQrsp3RNKi+epHepslo
-         +g3o55sraX53FIvEbUE3OP2RcNFfcWY+8iG2uKi45Zyt7pbZIfRPT4Br+jMbHxhm8/Ng
-         85i3d03JhWPjvUvbpMqe6/4SaJC0jBnY7PLTecBG4mEqx8NRJVjxY4epzCNBpKhkC2oe
-         M8BCKwY3MelIWf2EdiPyf/jQ6j/wZ3QQ9s16GUGNcOSVqEJ6va7wcPJV/1xnOEBi/FuW
-         bdPA==
-X-Gm-Message-State: AFqh2kreNZ4DPJkehrvkPcDKAnGua4wY7ps0rFbiC5P08jAybYzGpknG
-        DD/P00xywcqD5UfjNQFvt2SzlJeXmBrZeA==
-X-Google-Smtp-Source: AMrXdXsgtPSo7WSVyH6gmIVfxsPOR9BQ+whspvw2CUZO1cq26DTdpyi1S4c1Qyvin/yhCyXBnkEQqg==
-X-Received: by 2002:ac8:6609:0:b0:3b6:2fd2:84b5 with SMTP id c9-20020ac86609000000b003b62fd284b5mr7218005qtp.57.1673884888047;
-        Mon, 16 Jan 2023 08:01:28 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id bb30-20020a05622a1b1e00b003aba8e9efdasm14687295qtb.4.2023.01.16.08.01.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 08:01:27 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id a9so14068378ybb.3;
-        Mon, 16 Jan 2023 08:01:27 -0800 (PST)
-X-Received: by 2002:a25:9012:0:b0:7b8:a0b8:f7ec with SMTP id
- s18-20020a259012000000b007b8a0b8f7ecmr35185ybl.36.1673884886896; Mon, 16 Jan
- 2023 08:01:26 -0800 (PST)
+        Mon, 16 Jan 2023 11:01:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164272386D;
+        Mon, 16 Jan 2023 08:01:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5B9DB81061;
+        Mon, 16 Jan 2023 16:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF783C433F0;
+        Mon, 16 Jan 2023 16:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673884906;
+        bh=y0ykQ5LxFyBMrgAOQxypx7vnPabzGGYUIb99kre3vn0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RZrpQpaLuDnKOcBDICQF/OAAYXnQ43KVfMZ7t1c7g4/ozCliZf8WnDSxoesPwBMeQ
+         b1u/BOlnUqWiov9JRjEAgH74CZ3QPMYBJqZFwG4N7w90eCOYqCXL0R2c2c/5LbtEgZ
+         5t9JAzBkogX9B5qnVSnLzYSBiTYUV+G7L0EI5UhTNkYVgHNGr4GIA0uNajhpbo/hZI
+         bKEiE01cZjbG10SXTHWSs6Cd+0EV7+tx8i1y+P+6gaWgpSytcYtHko3ZcrLQ7sTGbn
+         xxv8+o/7BZEQc76RkwitlAp1o5GFWoshQ3sPysrqSszHiWg0Onpl6sYLBdsnsDj87U
+         OZxEEHwPOvo+Q==
+Message-ID: <b33c25c5-c93f-6860-b0a5-58279022a91c@kernel.org>
+Date:   Mon, 16 Jan 2023 18:01:40 +0200
 MIME-Version: 1.0
-References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com> <20221117114907.138583-3-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221117114907.138583-3-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 16 Jan 2023 17:01:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUzkAjF=v__r2vJrYugBuDt13LnToCW66n-5r-jcVV+8A@mail.gmail.com>
-Message-ID: <CAMuHMdUzkAjF=v__r2vJrYugBuDt13LnToCW66n-5r-jcVV+8A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
+ release action
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux@armlinux.org.uk, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vigneshr@ti.com, srk@ti.com
+References: <20230116044517.310461-1-s-vadapalli@ti.com>
+ <Y8T8+rWrvv6gfNxa@unreal> <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabrizio,
+Hi Siddharth,
 
-On Thu, Nov 17, 2022 at 12:49 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> As per section 48.4 of the HW User Manual, IPs in the RZ/V2M
-> SoC need either a TYPE-A reset sequence or a TYPE-B reset
-> sequence. More specifically, the watchdog IP needs a TYPE-B
-> reset sequence.
->
-> If the proper reset sequence isn't implemented, then resetting
-> IPs may lead to undesired behaviour. In the restart callback of
-> the watchdog driver the reset has basically no effect on the
-> desired funcionality, as the register writes following the reset
-> happen before the IP manages to come out of reset.
->
-> Implement the TYPE-B reset sequence in the watchdog driver to
-> address the issues with the restart callback on RZ/V2M.
->
-> Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+On 16/01/2023 09:43, Siddharth Vadapalli wrote:
+> 
+> 
+> On 16/01/23 13:00, Leon Romanovsky wrote:
+>> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
+>>> The am65_cpts_release() function is registered as a devm_action in the
+>>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
+>>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
+>>> actions associated with the am65-cpsw driver's device.
+>>>
+>>> In the event of probe failure or probe deferral, the platform_drv_probe()
+>>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
+>>> CPSW's CPTS hardware, both of which share the same power domain. Since the
+>>> am65_cpts_disable() function invoked by the am65_cpts_release() function
+>>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
+>>> hardware is assumed to be powered on at this point. However, the hardware
+>>> is powered off before the devm actions are executed.
+>>>
+>>> Fix this by getting rid of the devm action for am65_cpts_release() and
+>>> invoking it directly on the cleanup and exit paths.
+>>>
+>>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
+>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>>> ---
+>>> Changes from v1:
+>>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
+>>>    error was reported by kernel test robot <lkp@intel.com> at:
+>>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
+>>> 2. Collect Reviewed-by tag from Roger Quadros.
+>>>
+>>> v1:
+>>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
+>>>
+>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
+>>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
+>>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
+>>>  3 files changed, 18 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>> index 5cac98284184..00f25d8a026b 100644
+>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+>>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
+>>>  	return 0;
+>>>  }
+>>>  
+>>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
+>>> +{
+>>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
+>>
+>> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
+>> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
+>>
+>> How is it possible to have common->cpts == NULL?
+> 
+> Thank you for reviewing the patch. I realize now that checking
+> CONFIG_TI_K3_AM65_CPTS is unnecessary.
+> 
+> common->cpts remains NULL in the following cases:
+> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
+> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
+> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
+> function with a return value of 0 when cpts is disabled.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+In this case common->cpts is not NULL and is set to error pointer.
+Probe will continue normally.
+Is it OK to call any of the cpts APIs with invalid handle?
+Also am65_cpts_release() will be called with invalid handle.
 
-Perhaps this logic can be incorporated into the RZ/V2M reset controller
-driver later, so reset consumers don't have to care about TYPE-A and
-TYPE-B reset, but can just call reset_control_reset()?
-I understand that's not gonna be easy, as it needs to know about the
-relation between resets and clocks, and how to handle both cases (clock
-(not) switched off) for TYPE-B resets.
+> 4. The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
+> fails with an error.
 
-Gr{oetje,eeting}s,
+In this case common->cpts is not NULL and will invoke am65_cpts_release() with
+invalid handle.
 
-                        Geert
+> 
+> Of the above cases, the am65_cpsw_cpts_cleanup() function would have to handle
+> cases 1 and 3, since the probe might fail at a later point, following which the
+> probe cleanup path will invoke the am65_cpts_cpts_cleanup() function. This
+> function then checks for common->cpts not being NULL, so that it can invoke the
+> am65_cpts_release() function with this pointer.
+> 
+>>
+>> And why do you need special am65_cpsw_cpts_cleanup() which does nothing
+>> except call to am65_cpts_release()? It will be more intuitive change
+>> the latter to be exported function.
+> 
+> The am65_cpts_release() function expects the cpts pointer to be valid. Thus, I
+> had added the am65_cpsw_cpts_cleanup() function to conditionally invoke the
+> am65_cpts_release() function whenever the cpts pointer is valid. Based on your
+> suggestion, I believe that you want me to check for the cpts pointer being valid
+> within the am65_cpts_release() function instead, so that the
+> am65_cpsw_cpts_cleanup() function doesn't have to be added. Please let me know
+> if this is what you meant.
+> 
+> Regards,
+> Siddharth.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+cheers,
+-roger
