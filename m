@@ -2,132 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0F666B5F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FA766B617
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjAPDTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 22:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S231876AbjAPDWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 22:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjAPDT2 (ORCPT
+        with ESMTP id S231818AbjAPDWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:19:28 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81D6876A3
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 19:19:26 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxV+k9wsRj5csBAA--.353S3;
-        Mon, 16 Jan 2023 11:19:25 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axvr45wsRjYgUaAA--.53479S3;
-        Mon, 16 Jan 2023 11:19:22 +0800 (CST)
-Subject: Re: [PATCH v11 3/6] LoongArch: Add kretprobe support
-To:     kernel test robot <lkp@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-References: <1673688444-24251-4-git-send-email-yangtiezhu@loongson.cn>
- <202301151852.m2cigv2D-lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <bfac74ca-5e8e-7a02-71d4-9b69b804aa7c@loongson.cn>
-Date:   Mon, 16 Jan 2023 11:19:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 15 Jan 2023 22:22:04 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3816A7AA8;
+        Sun, 15 Jan 2023 19:21:59 -0800 (PST)
+X-UUID: e9febf54954c11ed945fc101203acc17-20230116
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Gg8bWb1FimtqSa/S00NIuzeLTb9/WRlCLgNfTbeYtTQ=;
+        b=GegkSOE3BVrFVCR/+ZcmVyEIegrTkGp1d5pv/4ZVDVe2lByQokq6nX8ayna6DauoxSv3KyRQtjY3cIXyCYj3bO5VjQkI0mvEGh8LOwvbT9XRCwVa34Pz836xkd3eVQnKm2cDAsM4jw39t+pu2HBViTmk/KYZZhPQUiGsKfxCtP0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:11ef97df-90e9-4b33-8953-f021eb2027b9,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:543e81c,CLOUDID:e0f7ba54-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0,NGT
+X-UUID: e9febf54954c11ed945fc101203acc17-20230116
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1624900539; Mon, 16 Jan 2023 11:21:49 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 16 Jan 2023 11:21:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 16 Jan 2023 11:21:48 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [RESEND v3 00/13] add support MDP3 on MT8195 platform
+Date:   Mon, 16 Jan 2023 11:21:34 +0800
+Message-ID: <20230116032147.23607-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <202301151852.m2cigv2D-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Axvr45wsRjYgUaAA--.53479S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJw4fXr15WrW8Zr4xZF48tFb_yoW5ArWxpa
-        yDZr1akr4rWr95XFZ7GayUX3W8Krn5A3srZryUK34Y9ay5Zryftrn293y5AFZrKwn8KFyF
-        vr4Fqas5KF43Aa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes since v2:
+- Depend on :
+  [1] MMSYS/MUTEX: https://patchwork.kernel.org/project/linux-mediatek/list/?series=711592
+  [2] MDP3: https://patchwork.kernel.org/project/linux-mediatek/list/?series=711618
+- Suggested by Rob to revise MDP3 bindings to pass dtbs check
+- Add parallel paths feature.
+- Add blended components settings.
 
+Changes since v1:
+- Depend on :
+  [1] MDP3 : https://patchwork.kernel.org/project/linux-mediatek/list/?series=698872
+  [2] MMSYS/MUTEX: https://patchwork.kernel.org/project/linux-mediatek/list/?series=684959
+- Fix compilation failure due to use of undeclared identifier in file "mtk-mdp3-cmdq.c"
 
-On 01/15/2023 07:17 PM, kernel test robot wrote:
-> Hi Tiezhu,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.2-rc3 next-20230113]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Tiezhu-Yang/LoongArch-Simulate-branch-and-PC-instructions/20230114-173012
-> patch link:    https://lore.kernel.org/r/1673688444-24251-4-git-send-email-yangtiezhu%40loongson.cn
-> patch subject: [PATCH v11 3/6] LoongArch: Add kretprobe support
-> config: loongarch-allmodconfig
-> compiler: loongarch64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/da766ea35a574bece74a5068aad708b5773b2981
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Tiezhu-Yang/LoongArch-Simulate-branch-and-PC-instructions/20230114-173012
->         git checkout da766ea35a574bece74a5068aad708b5773b2981
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash arch/loongarch/kernel/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> Note: functions only called from assembly code should be annotated with the asmlinkage attribute
-> All warnings (new ones prefixed by >>):
->
->>> arch/loongarch/kernel/kprobes.c:376:14: warning: no previous prototype for 'trampoline_probe_handler' [-Wmissing-prototypes]
->      376 | void __used *trampoline_probe_handler(struct pt_regs *regs)
->          |              ^~~~~~~~~~~~~~~~~~~~~~~~
->
->
-> vim +/trampoline_probe_handler +376 arch/loongarch/kernel/kprobes.c
->
->    374	
->    375	/* Called from __kretprobe_trampoline */
->  > 376	void __used *trampoline_probe_handler(struct pt_regs *regs)
->    377	{
->    378		return (void *)kretprobe_trampoline_handler(regs, NULL);
->    379	}
->    380	NOKPROBE_SYMBOL(trampoline_probe_handler);
->    381	
->
+Hello,
 
-Thanks for the report, I can reproduce it when make W=1
-and also can silence it when declare the prototype
+This patch is used to add support for MDP3 on the MT8195 platform that
+contains more picture quality components, and can arrange more pipelines
+through two sets of MMSYS and MUTEX respectively.
 
-void *trampoline_probe_handler(struct pt_regs *regs);
+Moudy Ho (13):
+  dt-binding: mediatek: add bindings for MediaTek mt8195 MDP3 components
+  arm64: dts: mediatek: mt8195: add MDP3 nodes
+  media: platform: mtk-mdp3: add support second sets of MMSYS
+  media: platform: mtk-mdp3: add support second sets of MUTEX
+  media: platform: mtk-mdp3: introduce more MDP3 components
+  media: platform: mtk-mdp3: add checks for dummy components
+  media: platform: mtk-mdp3: avoid multiple driver registrations
+  media: platform: mtk-mdp3: extend GCE event waiting in RDMA and WROT
+  media: platform: mtk-mdp3: add the blend of component in MUTEX MOD
+  media: platform: mtk-mdp3: add mt8195 platform configuration
+  media: platform: mtk-mdp3: add mt8195 shared memory configurations
+  media: platform: mtk-mdp3: add mt8195 MDP3 component settings
+  media: platform: mtk-mdp3: add support for parallel pipe to improve
+    FPS
 
-in arch/loongarch/include/asm/kprobes.h
+ .../bindings/media/mediatek,mdp3-aal.yaml     |  63 ++
+ .../bindings/media/mediatek,mdp3-color.yaml   |  63 ++
+ .../bindings/media/mediatek,mdp3-fg.yaml      |  63 ++
+ .../bindings/media/mediatek,mdp3-hdr.yaml     |  62 ++
+ .../bindings/media/mediatek,mdp3-merge.yaml   |  63 ++
+ .../bindings/media/mediatek,mdp3-ovl.yaml     |  63 ++
+ .../bindings/media/mediatek,mdp3-pad.yaml     |  63 ++
+ .../bindings/media/mediatek,mdp3-rdma.yaml    |  30 +-
+ .../bindings/media/mediatek,mdp3-rsz.yaml     |  11 +-
+ .../bindings/media/mediatek,mdp3-split.yaml   |  75 ++
+ .../bindings/media/mediatek,mdp3-stitch.yaml  |  63 ++
+ .../bindings/media/mediatek,mdp3-tcc.yaml     |  62 ++
+ .../bindings/media/mediatek,mdp3-tdshp.yaml   |  63 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 420 +++++++++
+ .../platform/mediatek/mdp3/mdp_reg_aal.h      |  25 +
+ .../platform/mediatek/mdp3/mdp_reg_color.h    |  31 +
+ .../media/platform/mediatek/mdp3/mdp_reg_fg.h |  23 +
+ .../platform/mediatek/mdp3/mdp_reg_hdr.h      |  31 +
+ .../platform/mediatek/mdp3/mdp_reg_merge.h    |  25 +
+ .../platform/mediatek/mdp3/mdp_reg_ovl.h      |  25 +
+ .../platform/mediatek/mdp3/mdp_reg_pad.h      |  21 +
+ .../platform/mediatek/mdp3/mdp_reg_rdma.h     |  24 +
+ .../platform/mediatek/mdp3/mdp_reg_rsz.h      |   2 +
+ .../platform/mediatek/mdp3/mdp_reg_tdshp.h    |  34 +
+ .../platform/mediatek/mdp3/mdp_reg_wrot.h     |   8 +
+ .../mediatek/mdp3/mt8183/mdp3-plat-mt8183.h   |  38 +-
+ .../mediatek/mdp3/mt8195/mdp3-comp-mt8195.h   | 283 ++++++
+ .../mediatek/mdp3/mt8195/mdp3-plat-mt8195.h   | 669 ++++++++++++++
+ .../platform/mediatek/mdp3/mtk-img-ipi.h      |   4 +
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 453 +++++++---
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |   1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 834 +++++++++++++++++-
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  92 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    | 115 ++-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  33 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  15 +
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.c    |  18 +
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |   1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     |   3 +-
+ 39 files changed, 3791 insertions(+), 181 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-aal.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-color.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-merge.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-ovl.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-pad.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-split.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_aal.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_color.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_fg.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_hdr.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_merge.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ovl.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_pad.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_tdshp.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mt8195/mdp3-comp-mt8195.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mt8195/mdp3-plat-mt8195.h
 
-Let me wait for some time, if no more comments, I will
-update this patch and then send v12.
-
-Thanks,
-Tiezhu
+-- 
+2.18.0
 
