@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A633166B54E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABD066B554
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjAPBrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 20:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S231617AbjAPBxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 20:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjAPBrH (ORCPT
+        with ESMTP id S231621AbjAPBxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 20:47:07 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36193A95
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 17:47:06 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso32482964pjt.0
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 17:47:06 -0800 (PST)
+        Sun, 15 Jan 2023 20:53:13 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C574493;
+        Sun, 15 Jan 2023 17:53:11 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id s25so28618886lji.2;
+        Sun, 15 Jan 2023 17:53:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wSr3gBths7LfzOhP3PbG7HoBbxP6OSt6Z7HOZ0qcxXo=;
-        b=TwWHWle4nENJdybCYfEUNwLATVa6lRfDW7SUhskQ95K/FfJqRCxcpHsjnb8fHepDs8
-         1H8Ip6lJBhjX6JltLk6pklRUbaTjjszDDOqQXSO8TsrzN9DwUdegliA4X32DNzI7hShX
-         rV+rwfcCTSFburVZXA7WhwVyh9JnbiP5oIdOZje8pxNdPuhFs6O+ANhtM5Rkfx5ypmNg
-         DxrjchoXVuZ4jd8uTRWPyYVfRriANi/YcZVLPg6ENVyHHOAHkJSshuvqEcaSIT/XKJW7
-         ETfIeCoBSybkec9vWxEDmku/0mfWX5D1RR9k169/oUB3lPxAWE+SPJ4DUWU0ChJHvmCw
-         WPBw==
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zN3vKPOooFIqs+n+/r4j1b6xyKulBfxLx9wgI9OLmYI=;
+        b=YmRtgFIeIhBrbBTdNYg8vHpbF1XgNHsBx/hianTKlZwDEHm2fWPwF/cPNoRd319Nct
+         nDDvN/SWf1wf1GHV3TYZlOVQyIpl6TzEGivGXJAoyu5tKsz0vMxoaY1KT5f+NzXpcdlY
+         /Wx9wqF/wBM2SjgQx//z0LJFXwMo5XJ9kWX/zKz5cty9Fm0P8J89OSklJxF3+y0VW2cJ
+         wRGTMxZjWryT8sEZUBho9YUURqIAG2DNOl7atPzHda6WUBcCtrEWZHK3ka1lmfVLL6dY
+         eZIgLXvfDmoyRdZtGwDv96vkuLiYVEYm0N2as5vM3Z7Hi3wXKAlEbi9AHLsI+juMVgYr
+         TWCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wSr3gBths7LfzOhP3PbG7HoBbxP6OSt6Z7HOZ0qcxXo=;
-        b=qP0RvvbLg6pLNtMyB6ogdnr1j6N7cHvRPX/s7leU020zBMZMTc3GeUgDGkMJene4cQ
-         AhUsqpxz6qU/ebVpH3lHAee0wfL5D/XS0okCkaZzRjrVEz4L04OiyESXrqK8IHjtEF0P
-         +0cUuxUrIQh4nMx7rUkfZdUF4P5deSShUlJsIyCnjMFxQQkZW2FWscawGlhxlqZjsFiD
-         XCoUeGY3EfIIBSuYvUueeWkoJ8Jb+defw8PgOaRZnqYmi/LD8nXhRMo2BlfeLFb+HFDp
-         K/l/exMFDcHoVNtFfe0ZPtB2FGrt6qs+IDes2UQjmzysUKe6Mxjp4r4pa5Pe5ixROYBh
-         O3lg==
-X-Gm-Message-State: AFqh2kqN2DnzWxcDU75IlnzmfmzVz+7S4Gi1hkO92sT2Kbq8oXt+jbR3
-        w9mLPDejQOAPIE4jd5LWVTk=
-X-Google-Smtp-Source: AMrXdXve+Ct7yuT9wUiewycnlfGeBeR6Y20nXR/DrHTnfkVDxHZul7Xv77WqoccFtvZBdleBCVHn1g==
-X-Received: by 2002:a17:902:eb11:b0:194:46e0:1b61 with SMTP id l17-20020a170902eb1100b0019446e01b61mr20978703plb.63.1673833626434;
-        Sun, 15 Jan 2023 17:47:06 -0800 (PST)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170902650d00b00187197c499asm17985883plk.164.2023.01.15.17.47.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 15 Jan 2023 17:47:06 -0800 (PST)
-Date:   Mon, 16 Jan 2023 09:52:20 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <xiang@kernel.org>, zhangwen@coolpad.com
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] erofs: simplify iloc()
-Message-ID: <20230116095220.0000093d.zbestahu@gmail.com>
-In-Reply-To: <20230114150823.432069-1-xiang@kernel.org>
-References: <20230114125746.399253-2-xiang@kernel.org>
-        <20230114150823.432069-1-xiang@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zN3vKPOooFIqs+n+/r4j1b6xyKulBfxLx9wgI9OLmYI=;
+        b=LRE81RmhipsAqvMgQFu38eC9fVlDTGDUZkDZ8SRCCQCf/vhoIWkalv086yUM1bkSU4
+         /+MTgsAOyjjyJ8mi4PKuHdh9voQ9oP/WeEA4n2QfbW/tpUAN9DNFoJeXku9koZ1Vo9zQ
+         AS+qs35pc86wO9pAN9oxgkN+VeZVHcRzYZe+MAngymlbQK4yKzykP2O4BmrcipnkhNe7
+         f5xuze9hjpKDlAjYEKiLHLtE9+YjMn9HIcFS9u3P6ryWmNzlE9/GWP+0/3PLExsJ/+jO
+         kB+1ux5w+kw/+Wep3rqhJxneFE9t4ctlqPE+cGB4p1CiUXUEEDqYW9PVEI/XoBqEIps6
+         VzYg==
+X-Gm-Message-State: AFqh2kq5FgW3PwOI31W+0ZsDRCZ4TSBCQbgNrR7/RqDtSpXoBML8Acgz
+        Ftd6rR17Em1JQViKNzYb1G0b5Q1r1ZYN4nDXANI=
+X-Google-Smtp-Source: AMrXdXv6KEGRyuXodwkBAbGpchhrASJ1S80h8xhQ6fI4bLEMbOHycJ0Mb/xIOv0qNvD00OzHQOHI5D4rjCvYh2xxqho=
+X-Received: by 2002:a2e:9188:0:b0:289:81a4:3a7b with SMTP id
+ f8-20020a2e9188000000b0028981a43a7bmr967681ljg.487.1673833990003; Sun, 15 Jan
+ 2023 17:53:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20230107012324.30698-1-zhanghongchen@loongson.cn>
+ <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn> <CA+icZUU3-t0+NhdMQ39OeuwR13eMVOKVhLwS31WTHQ1ksaWgNg@mail.gmail.com>
+In-Reply-To: <CA+icZUU3-t0+NhdMQ39OeuwR13eMVOKVhLwS31WTHQ1ksaWgNg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 16 Jan 2023 02:52:32 +0100
+Message-ID: <CA+icZUXWAu_+KT9wYfdn7uSp1=ikO5ZdhM2VFokRi_JfhL455Q@mail.gmail.com>
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,15 +78,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 14 Jan 2023 23:08:23 +0800
-Gao Xiang <xiang@kernel.org> wrote:
+On Fri, Jan 13, 2023 at 10:32 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, Jan 13, 2023 at 4:19 AM Hongchen Zhang
+> <zhanghongchen@loongson.cn> wrote:
+> >
+> > Hi All,
+> > any question about this patch, can it be merged?
+> >
+> > Thanks
+> > On 2023/1/7 am 9:23, Hongchen Zhang wrote:
+> > > Use spinlock in pipe_read/write cost too much time,IMO
+> > > pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> > > On the other hand, we can use __pipe_{lock,unlock} to protect
+> > > the pipe->{head,tail} in pipe_resize_ring and
+> > > post_one_notification.
+> > >
+> > > Reminded by Matthew, I tested this patch using UnixBench's pipe
+> > > test case on a x86_64 machine,and get the following data:
+> > > 1) before this patch
+> > > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> > > Pipe Throughput                   12440.0     493023.3    396.3
+> > >                                                          ========
+> > > System Benchmarks Index Score (Partial Only)              396.3
+> > >
+> > > 2) after this patch
+> > > System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> > > Pipe Throughput                   12440.0     507551.4    408.0
+> > >                                                          ========
+> > > System Benchmarks Index Score (Partial Only)              408.0
+> > >
+> > > so we get ~3% speedup.
+> > >
+> > > Reminded by Andrew, I tested this patch with the test code in
+> > > Linus's 0ddad21d3e99 add get following result:
+>
+> Happy new 2023 Hongchen Zhang,
+>
+> Thanks for the update and sorry for the late response.
+>
+> Should be "...s/add/and get following result:"
+>
+> I cannot say much about the patch itself or tested it in my build-environment.
+>
+> Best regards,
+> -Sedat-
+>
 
-> From: Gao Xiang <hsiangkao@linux.alibaba.com>
-> 
-> Actually we could pass in inodes directly to clean up all callers.
-> Also rename iloc() as erofs_iloc().
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+I have applied v3 on top of Linux v6.2-rc4.
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+Used pipebench for a quick testing.
 
+# fdisk -l /dev/sdb
+Disk /dev/sdb: 14,91 GiB, 16013942784 bytes, 31277232 sectors
+Disk model: SanDisk iSSD P4
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x74f02dea
+
+Device     Boot Start      End  Sectors  Size Id Type
+/dev/sdb1        2048 31277231 31275184 14,9G 83 Linux
+
+# cat /dev/sdb | pipebench > /dev/null
+Summary:
+Piped   14.91 GB in 00h01m34.20s:  162.12 MB/second
+
+Not tested/benchmarked with the kernel w/o your patch.
+
+-Sedat-
