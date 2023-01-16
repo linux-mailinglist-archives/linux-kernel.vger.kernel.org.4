@@ -2,111 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBA766CE7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C050266CE8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbjAPSND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S231603AbjAPSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbjAPSMb (ORCPT
+        with ESMTP id S229834AbjAPSOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 13:12:31 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6949C2310B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:58:48 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15ebfdf69adso12158410fac.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 09:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgfXRILltDL8S4th3YYjCyiGREYlV3Wzl8EokshqMNY=;
-        b=FHCujPFf3hVg/9eX5RypYIWhrfc+BxPlhn0Ye/kcvv6zEBXYT9qt8hLZnv18d2mz8o
-         EjEs6I1t45nZRfcAdAW/5wHuo9CCG4XtYfjm6EVDOnv7ySS7xNBlGvj4nDRefeCrVWxC
-         5gCI9/1E/+REHC+SBXVMzrj2PYK1nnoOAT4S526A3rIFsdWqw/zsBuG4Ba7UOVoi9IP9
-         +QRB9ATxf5RVJPastXYGgVZZrfpnMt0sI16NFx6sxDlvYydCHpWyrxY4d6VFGu9a54TU
-         PjmO5PhzDw3sJujpM9Vvom4PCkqp2mncX7o7LOpyH/twytvYH7HoHoZOhrDkU9XkdYRM
-         F0og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vgfXRILltDL8S4th3YYjCyiGREYlV3Wzl8EokshqMNY=;
-        b=IC0okrkTu1DpGvMazspOem0cejytFFNA6sac/OberWGzXzNqhtdAkoWGeeWbjKkQym
-         QnuMWffpiEqY/LoQWKqBAUNx4IiTutem/1BIcK9jiOBgmG4mWAR3YouQ+5LsoNM+B2sS
-         fLWIDy2hAOB6VMBBXuiwCT/DCQq5JVPP8T9hNrnX5Az/6K7bHdL+db0euJDIEjqzZ/Kv
-         o4NxsVGdRC+8kJaI740XXy5q1qr4cz5Jy2o3i7usTEoULZ4VlLEQzgTtbDrlInF8m3UY
-         nrrWM96Wl7U9Kh/ozv/rR3gQtTnXvOSTt08JfPQiFiz+8Ifb/B6VFfGlTJfinCZiOpsS
-         LbDQ==
-X-Gm-Message-State: AFqh2kok4bcQjeLaI9FPM1pyr4QZ14H8Y12X8Dd4p+y6XQdXNziz3VX1
-        FMnPrUKNTAV6YDpn6oVCyEKoNDx8vRHgi65CnYYq475j
-X-Google-Smtp-Source: AMrXdXvxUWNEueQOsZDzqdCgqeJ4gzqa9d6KCdyrfPanU1F9Nty4mte0rlSM9c7THwdnA/vkAXlHCW5oZYmAohu9szg=
-X-Received: by 2002:a05:6870:7a18:b0:15f:5509:9a0d with SMTP id
- hf24-20020a0568707a1800b0015f55099a0dmr53155oab.46.1673891927813; Mon, 16 Jan
- 2023 09:58:47 -0800 (PST)
+        Mon, 16 Jan 2023 13:14:07 -0500
+Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC26223DA5;
+        Mon, 16 Jan 2023 10:00:10 -0800 (PST)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
+        (authenticated bits=0)
+        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GHxPUE2106206
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 17:59:26 GMT
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GHxJrP2083208
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 16 Jan 2023 18:59:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1673891960; bh=HDuvAz64SqsKbU9gYiKU5aaWYNXaEHcp2xofRwaGKA4=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=g3nhyG6Z9qnhfhTznf2bRAH/7kBCvKFOv8lPvw/AT4jnKqIzDU1AW1XPLuiTjt4jv
+         vkbDjFSpCUeFSafYiM5CNsN9ZXw1gTAbFrz3EVZeFt7md8AGyfKVrBc+bykMPGdnI3
+         RvLyCKn/9C59pTMdMSJv4SwPWLfA1pN8xQk/kigI=
+Received: (nullmailer pid 386524 invoked by uid 1000);
+        Mon, 16 Jan 2023 17:59:19 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Organization: m
+References: <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
+        <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
+        <87o7qy39v5.fsf@miraculix.mork.no>
+        <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
+        <87h6wq35dn.fsf@miraculix.mork.no>
+        <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
+        <87bkmy33ph.fsf@miraculix.mork.no>
+        <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
+        <875yd630cu.fsf@miraculix.mork.no> <871qnu2ztz.fsf@miraculix.mork.no>
+        <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk>
+Date:   Mon, 16 Jan 2023 18:59:19 +0100
+In-Reply-To: <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk> (Russell King's message
+        of "Mon, 16 Jan 2023 17:47:48 +0000")
+Message-ID: <87pmbe1hu0.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <Y8PIId1k1TmIAo18@ubun2204.myguest.virtualbox.org>
-In-Reply-To: <Y8PIId1k1TmIAo18@ubun2204.myguest.virtualbox.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 16 Jan 2023 12:58:36 -0500
-Message-ID: <CADnq5_OpLW77PqMi=-OYg=wam5FgFvB3CbFZHbPpotPo9G6Uiw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: avoid variable reinitialization
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.7 at canardo
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is already fixed.
+"Russell King (Oracle)" <linux@armlinux.org.uk> writes:
 
-Thanks,
+> On Mon, Jan 16, 2023 at 05:45:12PM +0100, Bj=C3=B8rn Mork wrote:
+>> Bj=C3=B8rn Mork <bjorn@mork.no> writes:
+>>=20
+>> >> You have bmcr=3D0x1000, but the code sets two bits - SGMII_AN_RESTART=
+ and
+>> >> SGMII_AN_ENABLE which are bits 9 and 12, so bmcr should be 0x1200, not
+>> >> 0x1000. Any ideas why?
+>> >
+>> > No, not really
+>>=20
+>> Doh! Looked over it again, and this was my fault of course.  Had an
+>>=20
+>>   "bmcr =3D SGMII_AN_ENABLE;"
+>>=20=20=20
+>> line overwriting the original value from a previous attempt without
+>> changing the if condition.. Thanks for spotting that.
+>>=20
+>> But this still doesn't work any better:
+>>=20
+>> [   43.019395] mtk_soc_eth 15100000.ethernet wan: Link is Down
+>> [   45.099898] mtk_sgmii_select_pcs: id=3D1
+>> [   45.103653] mtk_pcs_config: interface=3D4
+>> [   45.107473] offset:0 0x140
+>> [   45.107476] offset:4 0x4d544950
+>> [   45.110181] offset:8 0x20
+>> [   45.113305] forcing AN
+>> [   45.118256] mtk_pcs_config: rgc3=3D0x0, advertise=3D0x1 (changed), li=
+nk_timer=3D1600000,  sgm_mode=3D0x103, bmcr=3D0x1200, use_an=3D1
+>> [   45.129191] mtk_pcs_link_up: interface=3D4
+>> [   45.133100] offset:0 0x81140
+>> [   45.133102] offset:4 0x4d544950
+>> [   45.135967] offset:8 0x1
+>> [   45.139104] mtk_soc_eth 15100000.ethernet wan: Link is Up - 1Gbps/Ful=
+l - flow control rx/tx
+>
+> In your _dump_pcs_ctrl() function, please can you dump the
+> SGMSYS_SGMII_MODE register as well (offset 0x20), in case this gives
+> more clue as to what's going on.
 
-Alex
 
-On Sun, Jan 15, 2023 at 4:32 AM Deepak R Varma <drv@mailo.com> wrote:
->
-> The member variable set_odm_combine is already initialized and hence the
-> reinitialization instruction can be removed. Issue identified using the
-> dubleinit.cocci Coccinelle semantic patch script.
->
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c
-> index 41edbd64ea21..777d8efee977 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_optc.c
-> @@ -254,7 +254,6 @@ static struct timing_generator_funcs dcn314_tg_funcs = {
->                 .get_hw_timing = optc1_get_hw_timing,
->                 .init_odm = optc3_init_odm,
->                 .set_odm_bypass = optc314_set_odm_bypass,
-> -               .set_odm_combine = optc314_set_odm_combine,
->                 .set_h_timing_div_manual_mode = optc314_set_h_timing_div_manual_mode,
->  };
->
-> --
-> 2.34.1
->
->
->
+[   49.339410] mtk_soc_eth 15100000.ethernet wan: Link is Down
+[   52.459913] mtk_sgmii_select_pcs: id=3D1
+[   52.463673] mtk_pcs_config: interface=3D4
+[   52.467494] offset:0 0x140
+[   52.467496] offset:4 0x4d544950
+[   52.470199] offset:8 0x20
+[   52.473325] offset:20 0x10000
+[   52.475929] forcing AN
+[   52.481232] mtk_pcs_config: rgc3=3D0x0, advertise=3D0x1 (changed), link_=
+timer=3D1600000,  sgm_mode=3D0x103, bmcr=3D0x1200, use_an=3D1
+[   52.492166] mtk_pcs_link_up: interface=3D4
+[   52.496072] offset:0 0x81140
+[   52.496074] offset:4 0x4d544950
+[   52.498938] offset:8 0x1
+[   52.502067] offset:20 0x10000
+[   52.504599] mtk_soc_eth 15100000.ethernet wan: Link is Up - 1Gbps/Full -=
+ flow control rx/tx
+[   65.979410] mtk_soc_eth 15100000.ethernet wan: Link is Down
+[   70.139856] mtk_sgmii_select_pcs: id=3D1
+[   70.143616] mtk_pcs_config: interface=3D22
+[   70.147523] offset:0 0x81140
+[   70.147525] offset:4 0x4d544950
+[   70.150402] offset:8 0x1
+[   70.153526] offset:20 0x10000
+[   70.156049] mtk_pcs_config: rgc3=3D0x4, advertise=3D0x20 (changed), link=
+_timer=3D10000000,  sgm_mode=3D0x0, bmcr=3D0x0, use_an=3D0
+[   70.169672] mtk_pcs_link_up: interface=3D22
+[   70.173664] offset:0 0x40140
+[   70.173666] offset:4 0x4d544950
+[   70.176530] offset:8 0x20
+[   70.179659] offset:20 0x10000
+[   70.182279] mtk_soc_eth 15100000.ethernet wan: Link is Up - 2.5Gbps/Full=
+ - flow control rx/tx
+
+
+Bj=C3=B8rn
