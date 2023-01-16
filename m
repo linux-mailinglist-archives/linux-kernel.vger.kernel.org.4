@@ -2,157 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C467466C8BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D97766C8C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbjAPQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:42:15 -0500
+        id S233730AbjAPQmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:42:50 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjAPQlp (ORCPT
+        with ESMTP id S233401AbjAPQmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:41:45 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55332ED4A
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:29:57 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j17so43475013lfr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:29:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G8K1RmWXIkiPGKo5rdIMlyUws+ytI7cIHwrzZJ2azso=;
-        b=Qwo73i7k4TFVW4W9ODHn2D31owplGN+ohI4BcXolF/ZQkD6do3Wcxz1nYOC9CNXonX
-         jS1RVfnJcQQVABWLq0jNH4zheVyf4h+GMcbONNoUdnri7EXnXonvt/hUQXFZFO1J4VIE
-         /jj/OeKV1qAbQdKi2V/45Q69RwkZ8rR1pOiTPZ1lgP/79MZ4kFTQhJqM76J+i1+8w8nD
-         ayeX1QToZyVrwU1GjlFcCXzJZKQ2R6Xhc/a61usDxr0B9tyokNrdPmr3dzt94h2Cm+WG
-         Sme/OPxLhDfUbhZysJgMsukjfrMJJnmj+xESqgD7xAN7XGm9ZDJkXBjaapDzuKZltmpU
-         79hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8K1RmWXIkiPGKo5rdIMlyUws+ytI7cIHwrzZJ2azso=;
-        b=qbsY5R+Aodf2vzMgzmNCGT2w4D9940fzThQMVaXAh0xZriSB6keFjASa8kmDH/65Zk
-         pp/1s7UgUI4IAVyr2NvHVts/B7m6Rb9buQZnTLPKml+fVw6ZfqS7B9hhVvRT+Gvhe4BJ
-         BA37XIWs8cgNizQpT/knXcEp8/X9lGFUvWoVFe3y7CJ9ntJ2X6uRH7mzYJUjWuMm88GI
-         iF/DptL3s2nq1b0e6MjYix73OFvQHCNlnwN0jGdKarmMk/KoEBxUZ+ESVjceUln9umWh
-         P8v8lZIEgEI3VnP+LRiy/Tp0k0kEZd+OJHyJi3s1ddjnhJ050ThsjujgR7c9Q80HMbR4
-         HhwA==
-X-Gm-Message-State: AFqh2kpbsDojaotc9K+aNwetiA5kBrb7SQPdQ3B2m4qhYW7hv3lfm8pa
-        a7xclfVjFLxtBnJntERzZXS+pA==
-X-Google-Smtp-Source: AMrXdXsPIZj1jWkctfyszi9JmAGWKyuU0BIXMPnSpGeeviVYMWHd72EtUdKxhks7JtVTHMQhAtHFmg==
-X-Received: by 2002:a19:e611:0:b0:4a4:68b9:608a with SMTP id d17-20020a19e611000000b004a468b9608amr24195186lfh.21.1673886596181;
-        Mon, 16 Jan 2023 08:29:56 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id x12-20020ac25dcc000000b0049fbf5facf4sm5087974lfq.75.2023.01.16.08.29.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 08:29:55 -0800 (PST)
-Message-ID: <09fe3e93-328b-13a3-540b-4ca47224b176@linaro.org>
-Date:   Mon, 16 Jan 2023 17:29:54 +0100
+        Mon, 16 Jan 2023 11:42:13 -0500
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB4B3E603
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:30:12 -0800 (PST)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-b985-910f-39e1-703f.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:b985:910f:39e1:703f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id E0D0413E0C9;
+        Mon, 16 Jan 2023 17:30:08 +0100 (CET)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1673886609; bh=EWAvrD4RojL0LVOAIJLliUiQp4sAh2O0X95WyClxam4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=alOM8Qzex40r+j9quWCOGy7tiIciq8Q7+8fiyc9/pZhoxFF5X9wUKW3NqU+Iaq7p6
+         KTq6Qtohzbxc0PzE/MYr3dh7tf5HLtLEgZT1nUAC/zHWMSubGnajgAAgxK8TRiObis
+         G79qPHNI/lz08EJ9YJBczwh6sM5qfg7MxLxKlOCD/2tjLUjtoibZQaBH8v2SHAKYhd
+         fUDUzxjcAN/l7nU9lijkPyZY+eZ/YYDyWchZBnZ4BF/VldaIFy+tGTwKkYixVn4zjn
+         svympXbsTq8lyZUVakVP6liCaCU9Bo1OblIWUdR/3JR4PQ30FnveEN58ml2GozYFIL
+         xKShC5ULUX+fw==
+Date:   Mon, 16 Jan 2023 17:30:05 +0100
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Sourabh Jain <sourabhjain@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v15 1/7] crash: move crash_prepare_elf64_headers()
+Message-ID: <20230116173005.21bd7b67@meshulam.tesarici.cz>
+In-Reply-To: <b3f3a4e5-35e7-2cb4-f754-f425da094f28@oracle.com>
+References: <20221209153656.3284-1-eric.devolder@oracle.com>
+        <20221209153656.3284-2-eric.devolder@oracle.com>
+        <09567e13-c5ed-d1b9-027c-9340fce6a0a8@linux.ibm.com>
+        <b3f3a4e5-35e7-2cb4-f754-f425da094f28@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
- '#size-cells' related dt-binding error
-Content-Language: en-US
-To:     bhupesh.sharma@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
- <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
- <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
- <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
- <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
- <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
- <6f08d466-9589-ebff-c38d-bf9015a0f6ad@linaro.org>
- <64e4b3b0-fc71-1876-9de8-e51d503d6183@linaro.org>
- <3e18a79b-fdd8-63f8-c27a-7515bbb6cb9b@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <3e18a79b-fdd8-63f8-c27a-7515bbb6cb9b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Eric,
 
+On Thu, 12 Jan 2023 11:23:18 -0600
+Eric DeVolder <eric.devolder@oracle.com> wrote:
 
-On 16.01.2023 17:18, bhupesh.sharma@linaro.org wrote:
+>[...]
+> After looking into this for a bit, to allow hotplug without kexec_file would require quite a bit of 
+> code movement. Why? Because hotplug is basically built on top of (part of) the infrastructure that 
+> was needed for kexec_file.
 > 
-> On 1/16/23 9:35 PM, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->>
->> On 16.01.2023 17:02, Bhupesh Sharma wrote:
->> >
->> > On 1/16/23 9:24 PM, Konrad Dybcio wrote:
->> >>
->> >>
->> >> On 16.01.2023 16:43, Bhupesh Sharma wrote:
->> >>> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
->> >>> <krzysztof.kozlowski@linaro.org> wrote:
->> >>>>
->> >>>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
->> >>>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
->> >>>>> <krzysztof.kozlowski@linaro.org> wrote:
->> >>>>>>
->> >>>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
->> >>>>>>> Fix the following '#address-cells' & '#size-cells' related
->> >>>>>>> dt-binding error:
->> >>>>>>>
->> >>>>>>>      $ make dtbs_check
->> >>>>>>>
->> >>>>>>>      From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->> >>>>>>>           arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
->> >>>>>>>                 #address-cells:0:0: 2 was expected
->> >>>>>>>         From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->> >>>>>>
->> >>>>>> Don't we want rather to unify the soc address range?
->> >>>>>
->> >>>>> Well, the assumption in the original dt-bindings was that every reg
->> >>>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
->> >>>>> #size-cells to <2>). However, that is not the case for all of the
->> >>>>> SoCs.
->> >>>>
->> >>>> Hm, which device of that SoC cannot be used with address/size cells 2?
->> >>>
->> >>> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
->> >>> be used with address/size cells 2 (See:
->> >>> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
->> >> SM6115 (and pretty much every other arm64 msm platform newer than 8916)
->> >> should be using addr/size-cells = 2 along with (dma-)ranges of 36 bit, as
->> >> that's what their smmus use and otherwise some addresses may get cut off
->> >> in translation, or so the story went with 845 N years ago.. We can either
->> >> pursue this patch or I can submit the 2-cell-ification if you don't plan on
->> >> adding more nodes shortly
->> >
->> >
->> > Have you tested this combination on SM6115 like SoCs with various IPs? I have tried a few experiments in the past and not all IPs work well with 36-bit DMA ranges (atleast not on the boards I have).
->> Can you list any specific examples? I've been using it for
->> quite some time now and I see nothing wrong..
+> I'd be inclined to suggest that KEXEC_FILE be a required dependency for CRASH_HOTPLUG, ie:
 > 
-> I remember seeing some issues with SDHC controller booting (uSD card use case) with sm6115, but I cannot find the appropriate dmesg right now.
-FWIW it works completely fine for me, in fact I'm booting from
-uSD most of the time.
+>   config CRASH_HOTPLUG
+>          bool "Update the crash elfcorehdr on system configuration changes"
+>          default n
+> -       depends on CRASH_DUMP && (HOTPLUG_CPU || MEMORY_HOTPLUG)
+> +       depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
+> 
+> 
+> If that isn't feasible, then it would appear quite a bit of surgery is needed to properly separate 
+> out the items hotplug needs from kexec_file.
+> 
+> Thoughts?
 
-Konrad
-> 
->> >
->> > So, I think it might lead to more breakage (unless we are sure of a well-tested fix). A simpler patch to fix the dt-bindings looks more useful IMO.
->> I'm not saying no, you just have to convince Krzysztof :D
-> 
-> :)
-> 
-> Thanks,
-> Bhupesh
+I would have thought that CPU hotplug can be handled in the kernel only
+if the crash image was loaded by the kernel with kexec_file_load(2).
+When the image is loaded with kexec_load(2), then all data structures
+are prepared by the user-space utility kexec(8), and the kernel
+generally has no idea how to handle them.
+
+In short, I believe that by definition there must be this dependency of
+CRASH_HOTPLUG on KEXEC_FILE.
+
+Petr T
