@@ -2,345 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC47F66C5CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D5066C459
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbjAPQK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S231142AbjAPPwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbjAPQJ5 (ORCPT
+        with ESMTP id S231424AbjAPPwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:09:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8BE2886E;
-        Mon, 16 Jan 2023 08:06:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 115AFB8107E;
-        Mon, 16 Jan 2023 16:06:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34683C433F0;
-        Mon, 16 Jan 2023 16:06:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673885186;
-        bh=1FMbckGDZKUOmh9B8Qgm6MqJxUC6w9f36GjxU20yXd4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cdkCS5TQHG2Efk8FuJLrZNaPIUuTDzp07+wIKFSy87SoXKaOI6oUac6RkyrHHy0CD
-         C09p+WshTyKoRhthUMjqEuTJVtEC+bTbh3ZDqPLEfRFUU8XmJ3Z2oSVrjz4+9SX4k1
-         kY3Rhqe/Kq7ZVzbvbIyZL1/eoHfx7twPj76YgHc0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.10 00/64] 5.10.164-rc1 review
-Date:   Mon, 16 Jan 2023 16:51:07 +0100
-Message-Id: <20230116154743.577276578@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
+        Mon, 16 Jan 2023 10:52:07 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B131CF78;
+        Mon, 16 Jan 2023 07:52:02 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pHRmB-0004On-Na; Mon, 16 Jan 2023 16:51:59 +0100
+Message-ID: <954a693d-09aa-1033-384a-53debf2a2d1c@leemhuis.info>
+Date:   Mon, 16 Jan 2023 16:51:58 +0100
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.164-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.10.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.10.164-rc1
-X-KernelTest-Deadline: 2023-01-18T15:47+00:00
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: spidev regression in 6.2-rc kernel
+Content-Language: en-US, de-DE
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Mark Brown <broonie@kernel.org>, bartosz.golaszewski@linaro.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        max.krummenacher@toradex.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1673884323;7ce5b7c7;
+X-HE-SMSGID: 1pHRmB-0004On-Na
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.10.164 release.
-There are 64 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.164-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.10.164-rc1
-
-Ferry Toth <ftoth@exalondelft.nl>
-    Revert "usb: ulpi: defer ulpi_register on ulpi_read_id timeout"
-
-Jens Axboe <axboe@kernel.dk>
-    io_uring/io-wq: only free worker if it was allocated for creation
-
-Jens Axboe <axboe@kernel.dk>
-    io_uring/io-wq: free worker if task_work creation is canceled
-
-Rob Clark <robdclark@chromium.org>
-    drm/virtio: Fix GEM handle creation UAF
-
-Johan Hovold <johan+linaro@kernel.org>
-    efi: fix NULL-deref in init error path
-
-Mark Rutland <mark.rutland@arm.com>
-    arm64: cmpxchg_double*: hazard against entire exchange variable
-
-Mark Rutland <mark.rutland@arm.com>
-    arm64: atomics: remove LL/SC trampolines
-
-Mark Rutland <mark.rutland@arm.com>
-    arm64: atomics: format whitespace consistently
-
-Peter Newman <peternewman@google.com>
-    x86/resctrl: Fix task CLOSID/RMID update race
-
-Reinette Chatre <reinette.chatre@intel.com>
-    x86/resctrl: Use task_curr() instead of task_struct->on_cpu to prevent unnecessary IPI
-
-Paolo Bonzini <pbonzini@redhat.com>
-    KVM: x86: Do not return host topology information from KVM_GET_SUPPORTED_CPUID
-
-Paolo Bonzini <pbonzini@redhat.com>
-    Documentation: KVM: add API issues section
-
-Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-    iommu/mediatek-v1: Fix an error handling path in mtk_iommu_v1_probe()
-
-Yong Wu <yong.wu@mediatek.com>
-    iommu/mediatek-v1: Add error handle for mtk_iommu_probe
-
-Aaron Thompson <dev@aaront.org>
-    mm: Always release pages to the buddy allocator in memblock_free_late().
-
-Gavin Li <gavinl@nvidia.com>
-    net/mlx5e: Don't support encap rules with gbp option
-
-Rahul Rameshbabu <rrameshbabu@nvidia.com>
-    net/mlx5: Fix ptp max frequency adjustment range
-
-Ido Schimmel <idosch@nvidia.com>
-    net/sched: act_mpls: Fix warning during failed attribute validation
-
-Minsuk Kang <linuxlovemin@yonsei.ac.kr>
-    nfc: pn533: Wait for out_urb's completion in pn533_usb_send_frame()
-
-Roger Pau Monne <roger.pau@citrix.com>
-    hvc/xen: lock console list traversal
-
-Angela Czubak <aczubak@marvell.com>
-    octeontx2-af: Fix LMAC config in cgx_lmac_rx_tx_enable
-
-Subbaraya Sundeep <sbhatta@marvell.com>
-    octeontx2-af: Map NIX block from CGX connection
-
-Subbaraya Sundeep <sbhatta@marvell.com>
-    octeontx2-af: Update get/set resource count functions
-
-Tung Nguyen <tung.q.nguyen@dektech.com.au>
-    tipc: fix unexpected link reset due to discovery messages
-
-Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-    ASoC: wm8904: fix wrong outputs volume after power reactivation
-
-Ricardo Ribalda <ribalda@chromium.org>
-    regulator: da9211: Use irq handler when ready
-
-Eliav Farber <farbere@amazon.com>
-    EDAC/device: Fix period calculation in edac_device_reset_delay_period()
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/boot: Avoid using Intel mnemonics in AT&T syntax asm
-
-Kajol Jain <kjain@linux.ibm.com>
-    powerpc/imc-pmu: Fix use of mutex in IRQs disabled section
-
-Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-    netfilter: ipset: Fix overflow before widen in the bitmap_ip_create() function.
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    xfrm: fix rcu lock in xfrm_notify_userpolicy()
-
-Ye Bin <yebin10@huawei.com>
-    ext4: fix uninititialized value in 'ext4_evict_inode'
-
-Ferry Toth <ftoth@exalondelft.nl>
-    usb: ulpi: defer ulpi_register on ulpi_read_id timeout
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Prevent infinite loop in transaction errors recovery for streams
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: move and rename xhci_cleanup_halted_endpoint()
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: store TD status in the td struct instead of passing it along
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: move xhci_td_cleanup so it can be called by more functions
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Add xhci_reset_halted_ep() helper function
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: adjust parameters passed to cleanup_halted_endpoint()
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: get isochronous ring directly from endpoint structure
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Avoid parsing transfer events several times
-
-Li Jun <jun.li@nxp.com>
-    clk: imx: imx8mp: add shared clk gate for usb suspend clk
-
-Li Jun <jun.li@nxp.com>
-    dt-bindings: clocks: imx8mp: Add ID for usb suspend clock
-
-Lucas Stach <l.stach@pengutronix.de>
-    clk: imx8mp: add clkout1/2 support
-
-Marek Vasut <marex@denx.de>
-    clk: imx8mp: Add DISP2 pixel clock
-
-Kim Phillips <kim.phillips@amd.com>
-    iommu/amd: Fix ill-formed ivrs_ioapic, ivrs_hpet and ivrs_acpihid options
-
-Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-    iommu/amd: Add PCI segment support for ivrs_[ioapic/hpet/acpihid] commands
-
-Qiang Yu <quic_qianyu@quicinc.com>
-    bus: mhi: host: Fix race between channel preparation and M0 event
-
-Herbert Xu <herbert@gondor.apana.org.au>
-    ipv6: raw: Deduct extension header length in rawv6_push_pending_frames
-
-Yang Yingliang <yangyingliang@huawei.com>
-    ixgbe: fix pci device refcount leak
-
-Hans de Goede <hdegoede@redhat.com>
-    platform/x86: sony-laptop: Don't turn off 0x153 keyboard backlight during probe
-
-Kuogee Hsieh <quic_khsieh@quicinc.com>
-    drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if irq is not for aux transfer
-
-Konrad Dybcio <konrad.dybcio@linaro.org>
-    drm/msm/adreno: Make adreno quirks not overwrite each other
-
-Volker Lendecke <vl@samba.org>
-    cifs: Fix uninitialized memory read for smb311 posix symlink create
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/percpu: add READ_ONCE() to arch_this_cpu_to_op_simple()
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/cpum_sf: add READ_ONCE() semantics to compare and swap loops
-
-Brian Norris <computersforpeace@gmail.com>
-    ASoC: qcom: lpass-cpu: Fix fallback SD line index handling
-
-Alexander Egorenkov <egorenar@linux.ibm.com>
-    s390/kexec: fix ipl report address for kdump
-
-Adrian Hunter <adrian.hunter@intel.com>
-    perf auxtrace: Fix address filter duplicate symbol selection
-
-Jonathan Corbet <corbet@lwn.net>
-    docs: Fix the docs build with Sphinx 6.0
-
-Ard Biesheuvel <ardb@kernel.org>
-    efi: tpm: Avoid READ_ONCE() for accessing the event log
-
-Marc Zyngier <maz@kernel.org>
-    KVM: arm64: Fix S1PTW handling on RO memslots
-
-Luka Guzenko <l.guzenko@web.de>
-    ALSA: hda/realtek: Enable mute/micmute LEDs on HP Spectre x360 13-aw0xxx
-
-Pablo Neira Ayuso <pablo@netfilter.org>
-    netfilter: nft_payload: incorrect arithmetics when fetching VLAN header bits
-
-
--------------
-
-Diffstat:
-
- Documentation/admin-guide/kernel-parameters.txt    |  51 +++-
- Documentation/sphinx/load_config.py                |   6 +-
- Documentation/virt/kvm/api.rst                     |  60 +++++
- Makefile                                           |   4 +-
- arch/arm64/include/asm/atomic_ll_sc.h              | 114 ++++----
- arch/arm64/include/asm/atomic_lse.h                |  16 +-
- arch/arm64/include/asm/kvm_emulate.h               |  22 +-
- arch/powerpc/include/asm/imc-pmu.h                 |   2 +-
- arch/powerpc/perf/imc-pmu.c                        | 136 +++++-----
- arch/s390/include/asm/cpu_mf.h                     |  31 ++-
- arch/s390/include/asm/percpu.h                     |   2 +-
- arch/s390/kernel/machine_kexec_file.c              |   5 +-
- arch/s390/kernel/perf_cpum_sf.c                    | 101 ++++---
- arch/x86/boot/bioscall.S                           |   4 +-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c             |  26 +-
- arch/x86/kvm/cpuid.c                               |  32 +--
- drivers/bus/mhi/core/pm.c                          |   3 +-
- drivers/clk/imx/clk-imx8mp.c                       |  23 +-
- drivers/edac/edac_device.c                         |  17 +-
- drivers/edac/edac_module.h                         |   2 +-
- drivers/firmware/efi/efi.c                         |   9 +-
- drivers/gpu/drm/msm/adreno/adreno_gpu.h            |  10 +-
- drivers/gpu/drm/msm/dp/dp_aux.c                    |   4 +
- drivers/gpu/drm/virtio/virtgpu_ioctl.c             |  10 +-
- drivers/iommu/amd/init.c                           |  89 ++++--
- drivers/iommu/mtk_iommu_v1.c                       |  26 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c       |  14 +-
- drivers/net/ethernet/marvell/octeontx2/af/cgx.c    |  17 +-
- drivers/net/ethernet/marvell/octeontx2/af/cgx.h    |   6 +-
- drivers/net/ethernet/marvell/octeontx2/af/rvu.c    | 134 ++++++++--
- drivers/net/ethernet/marvell/octeontx2/af/rvu.h    |   4 +
- .../net/ethernet/marvell/octeontx2/af/rvu_cgx.c    |  15 ++
- .../net/ethernet/marvell/octeontx2/af/rvu_nix.c    |  21 +-
- .../ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c  |   2 +
- .../net/ethernet/mellanox/mlx5/core/lib/clock.c    |   2 +-
- drivers/nfc/pn533/usb.c                            |  44 ++-
- drivers/platform/x86/sony-laptop.c                 |  21 +-
- drivers/regulator/da9211-regulator.c               |  11 +-
- drivers/tty/hvc/hvc_xen.c                          |  46 ++--
- drivers/usb/host/xhci-mem.c                        |   4 +
- drivers/usb/host/xhci-ring.c                       | 297 +++++++++++----------
- drivers/usb/host/xhci.h                            |   6 +-
- fs/cifs/link.c                                     |   1 +
- fs/ext4/super.c                                    |   1 +
- include/dt-bindings/clock/imx8mp-clock.h           |  10 +-
- include/linux/tpm_eventlog.h                       |   4 +-
- io_uring/io-wq.c                                   |   6 +
- mm/memblock.c                                      |   8 +-
- net/ipv6/raw.c                                     |   4 +
- net/netfilter/ipset/ip_set_bitmap_ip.c             |   4 +-
- net/netfilter/nft_payload.c                        |   2 +-
- net/sched/act_mpls.c                               |   8 +-
- net/tipc/node.c                                    |  12 +-
- net/xfrm/xfrm_user.c                               |   7 +-
- sound/pci/hda/patch_realtek.c                      |  23 ++
- sound/soc/codecs/wm8904.c                          |   7 +
- sound/soc/qcom/lpass-cpu.c                         |   5 +-
- tools/perf/util/auxtrace.c                         |   2 +-
- 58 files changed, 1015 insertions(+), 538 deletions(-)
-
-
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+On 16.01.23 13:06, Francesco Dolcini wrote:
+> Hello,
+> we spotted a regression on spidev on latest 6.2-rc kernel.
+> 
+> [  214.047619]
+> [  214.049198] ============================================
+> [  214.054533] WARNING: possible recursive locking detected
+> [  214.059858] 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1 Not tainted
+> [  214.065969] --------------------------------------------
+> [  214.071290] spidev_test/1454 is trying to acquire lock:
+> [  214.076530] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x8e0/0xab8
+> [  214.084164]
+> [  214.084164] but task is already holding lock:
+> [  214.090007] c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+> [  214.097537]
+> [  214.097537] other info that might help us debug this:
+> [  214.104075]  Possible unsafe locking scenario:
+> [  214.104075]
+> [  214.110004]        CPU0
+> [  214.112461]        ----
+> [  214.114916]   lock(&spidev->spi_lock);
+> [  214.118687]   lock(&spidev->spi_lock);
+> [  214.122457]
+> [  214.122457]  *** DEADLOCK ***
+> [  214.122457]
+> [  214.128386]  May be due to missing lock nesting notation
+> [  214.128386]
+> [  214.135183] 2 locks held by spidev_test/1454:
+> [  214.139553]  #0: c4925dbc (&spidev->spi_lock){+.+.}-{3:3}, at: spidev_ioctl+0x44/0xab8
+> [  214.147524]  #1: c4925e14 (&spidev->buf_lock){+.+.}-{3:3}, at: spidev_ioctl+0x70/0xab8
+> [  214.155493]
+> [  214.155493] stack backtrace:
+> [  214.159861] CPU: 0 PID: 1454 Comm: spidev_test Not tainted 6.2.0-rc3-0.0.0-devel+git.97ec4d559d93 #1
+> [  214.169012] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+> [  214.175555]  unwind_backtrace from show_stack+0x10/0x14
+> [  214.180819]  show_stack from dump_stack_lvl+0x60/0x90
+> [  214.185900]  dump_stack_lvl from __lock_acquire+0x874/0x2858
+> [  214.191584]  __lock_acquire from lock_acquire+0xfc/0x378
+> [  214.196918]  lock_acquire from __mutex_lock+0x9c/0x8a8
+> [  214.202083]  __mutex_lock from mutex_lock_nested+0x1c/0x24
+> [  214.207597]  mutex_lock_nested from spidev_ioctl+0x8e0/0xab8
+> [  214.213284]  spidev_ioctl from sys_ioctl+0x4d0/0xe2c
+> [  214.218277]  sys_ioctl from ret_fast_syscall+0x0/0x1c
+> [  214.223351] Exception stack(0xe75cdfa8 to 0xe75cdff0)
+> [  214.228422] dfa0:                   00000000 00001000 00000003 40206b00 bee266e8 bee266e0
+> [  214.236617] dfc0: 00000000 00001000 006a71a0 00000036 004c0040 004bfd18 00000000 00000003
+> [  214.244809] dfe0: 00000036 bee266c8 b6f16dc5 b6e8e5f6
+> 
+> 
+> This is not running the latest rc4, but on sha 97ec4d559d93 (this is
+> just what our CI had available when this test was run). I was not able
+> to bisect it, but it seems something that you could have introduced.
+> 
+> The log is from an apalis-imx6, but I have the same on other ARM SOC.
+
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 1f4d2dd45b6e
+#regzbot title spi: spidev: recursive locking error
+#regzbot monitor:
+https://lore.kernel.org/all/20230116144149.305560-1-brgl@bgdev.pl/
+#regzbot fix: spi: spidev: fix a recursive locking error
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
