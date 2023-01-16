@@ -2,85 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98B066BEE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C2B66BF49
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjAPNMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S230189AbjAPNOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjAPNMZ (ORCPT
+        with ESMTP id S231639AbjAPNNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:12:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136A021A02;
-        Mon, 16 Jan 2023 05:09:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 239D2B80D20;
-        Mon, 16 Jan 2023 13:08:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B20C433EF;
-        Mon, 16 Jan 2023 13:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673874519;
-        bh=JyzanIewff9FFjjBb97feVFjkpLjSxsRwNK9A+uPc5g=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=WjQ4z7ZF8C4ajxaFizSNFat9XQctWZy0N3dTjY5fukfqdcqklZT2X4smXDEJh5R5V
-         f2cbMRyFa4GJDy0omur5u/TxKvc3CIaNgT5WxPYbZcUn1lyafB70xRe2YbhlYGqIej
-         3Jl/ZgxPZ24+OzkJNV8dHr9zSfUkgs4BKaWPpQ6RqoUZP6aqxzpbebIxewgpA72EKI
-         zk1SILn93bCJbCCk4k0/8K8Ppr5wUlkW4CmQO+2EqXFqHj7s6Mm0D2YjiN5xFs+YTs
-         jailnWrAR7ehZwrRV8TBeuZK7ydWyaM5mY7XCKXPEZ376vA+VJMIifeFkqsY/rW29o
-         uwucAF4KcSDfw==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 16 Jan 2023 08:13:36 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B542D1E5E0;
+        Mon, 16 Jan 2023 05:10:34 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7BB62E0005;
+        Mon, 16 Jan 2023 13:09:38 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Subject: [PATCH] HID: logitech-hidpp: Hard-code HID++ 1.0 fast scroll support
+Date:   Mon, 16 Jan 2023 14:09:37 +0100
+Message-Id: <20230116130937.391441-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re:
- =?utf-8?q?=5BPATCH_net-next=5D_brcm80211=3A_use_strscpy=28=29_to_in?=
-        =?utf-8?q?stead_of_strncpy=28=29?=
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <202212231037210142246@zte.com.cn>
-References: <202212231037210142246@zte.com.cn>
-To:     <yang.yang29@zte.com.cn>
-Cc:     <aspriel@gmail.com>, <franky.lin@broadcom.com>,
-        <hante.meuleman@broadcom.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>,
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        <sha-cyfmac-dev-list@infineon.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167387451256.32134.6493247488948126794.kvalo@kernel.org>
-Date:   Mon, 16 Jan 2023 13:08:36 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<yang.yang29@zte.com.cn> wrote:
+HID++ 1.0 devices only export whether Fast Scrolling is enabled, not
+whether they are capable of it. Reinstate the original quirks for the 3
+supported mice so fast scrolling works again on those devices.
 
-> From: Xu Panda <xu.panda@zte.com.cn>
-> 
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL-terminated strings.
-> 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+Fixes: 908d325 ("HID: logitech-hidpp: Detect hi-res scrolling support")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216903
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/hid/hid-logitech-hidpp.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-Mismatch email in From and Signed-off-by lines:
-
-From: <yang.yang29@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
-
-Patch set to Changes Requested.
-
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index abf2c95e4d0b..fa026e9107c5 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -77,6 +77,7 @@ MODULE_PARM_DESC(disable_tap_to_click,
+ #define HIDPP_QUIRK_HIDPP_WHEELS		BIT(26)
+ #define HIDPP_QUIRK_HIDPP_EXTRA_MOUSE_BTNS	BIT(27)
+ #define HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS	BIT(28)
++#define HIDPP_QUIRK_HI_RES_SCROLL_1P0		BIT(29)
+ 
+ /* These are just aliases for now */
+ #define HIDPP_QUIRK_KBD_SCROLL_WHEEL HIDPP_QUIRK_HIDPP_WHEELS
+@@ -3472,14 +3473,8 @@ static int hidpp_initialize_hires_scroll(struct hidpp_device *hidpp)
+ 			hid_dbg(hidpp->hid_dev, "Detected HID++ 2.0 hi-res scrolling\n");
+ 		}
+ 	} else {
+-		struct hidpp_report response;
+-
+-		ret = hidpp_send_rap_command_sync(hidpp,
+-						  REPORT_ID_HIDPP_SHORT,
+-						  HIDPP_GET_REGISTER,
+-						  HIDPP_ENABLE_FAST_SCROLL,
+-						  NULL, 0, &response);
+-		if (!ret) {
++		/* We cannot detect fast scrolling support on HID++ 1.0 devices */
++		if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL_1P0) {
+ 			hidpp->capabilities |= HIDPP_CAPABILITY_HIDPP10_FAST_SCROLL;
+ 			hid_dbg(hidpp->hid_dev, "Detected HID++ 1.0 fast scroll\n");
+ 		}
+@@ -4296,9 +4291,15 @@ static const struct hid_device_id hidpp_devices[] = {
+ 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH,
+ 		USB_DEVICE_ID_LOGITECH_T651),
+ 	  .driver_data = HIDPP_QUIRK_CLASS_WTP },
++	{ /* Mouse Logitech Anywhere MX */
++	  LDJ_DEVICE(0x1017), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
+ 	{ /* Mouse logitech M560 */
+ 	  LDJ_DEVICE(0x402d),
+ 	  .driver_data = HIDPP_QUIRK_DELAYED_INIT | HIDPP_QUIRK_CLASS_M560 },
++	{ /* Mouse Logitech M705 (firmware RQM17) */
++	  LDJ_DEVICE(0x101b), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
++	{ /* Mouse Logitech Performance MX */
++	  LDJ_DEVICE(0x101a), .driver_data = HIDPP_QUIRK_HI_RES_SCROLL_1P0 },
+ 	{ /* Keyboard logitech K400 */
+ 	  LDJ_DEVICE(0x4024),
+ 	  .driver_data = HIDPP_QUIRK_CLASS_K400 },
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/202212231037210142246@zte.com.cn/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.39.0
 
