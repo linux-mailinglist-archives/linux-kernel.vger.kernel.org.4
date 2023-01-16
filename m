@@ -2,76 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBADA66CE3C
+	by mail.lfdr.de (Postfix) with ESMTP id 7063066CE3B
 	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbjAPSDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 13:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S233148AbjAPSD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbjAPSCq (ORCPT
+        with ESMTP id S232168AbjAPSCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 Jan 2023 13:02:46 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A769A14490;
-        Mon, 16 Jan 2023 09:48:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YlUo0VHGiHMqOq7GALN7Pw8+2+ppyERsUnHndjGHafs=; b=OkJyz9r3mgDSaw8Y2k1jx3/8VU
-        c8RMeUzS9M04RYoq1Lk4ZHGQl0R+MP1845w3OzyAeAqYxy3M3RF1YhDYLyZRu/UCelyBeXKAkyK8T
-        oM98rrAddjYBDUzkHi5/CNg0FXFcinO2Wrxgv77CMPZcCUB7Pqkpfd7fuolnMrgwOxR9K9r2zQOvh
-        CVMtSThx2FDWKBeWPOm6UByPU66XVEO2OaBNDTgTCQp2WOHq6l+TACWelbDj7ZwRqZqa4qVIaKhRh
-        qDKn7WUiILBPzXUMhAQ0QrII1eKTpWJzbXi9U2fgp+hqkSyeybbA2pf5T5Gl82oZMx8T/bbro38Br
-        PCACa7/g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36136)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pHTaM-0005YZ-3b; Mon, 16 Jan 2023 17:47:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pHTaG-0006CW-EU; Mon, 16 Jan 2023 17:47:48 +0000
-Date:   Mon, 16 Jan 2023 17:47:48 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Message-ID: <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk>
-References: <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
- <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
- <87o7qy39v5.fsf@miraculix.mork.no>
- <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
- <87h6wq35dn.fsf@miraculix.mork.no>
- <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
- <87bkmy33ph.fsf@miraculix.mork.no>
- <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
- <875yd630cu.fsf@miraculix.mork.no>
- <871qnu2ztz.fsf@miraculix.mork.no>
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E284279B4;
+        Mon, 16 Jan 2023 09:48:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673891296; x=1705427296;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=TNgX0mCKMCl8fMMol+o+7jJ7FmDZK6TmzIACPGFpF3U=;
+  b=KDR7LYGf4oSJFO5wBYvtH5i1U9WcypcD43JTqC5R9YGc59wOuWv8BhN4
+   nxcAyQpvuxQtjqr8vLQalrCScPvoPLpu4MYDNbY6W0zZI5RNIwgQMlljR
+   KqsrOLC1vLoDZfrSe1fQmYUglyK3nU6r57rcBlEpqAcEYs0JOHvmBbjvM
+   upNE/aAEq99TKdfD9YVnEEl/pw4N10EdjCQ6wEgqndksSMZpHheAVdX1h
+   6UeGRA2rH0hryso3Q2Rt5u8k+sTC3iJbf0CLRB8tuoLVD5qb6gYQaq5mw
+   zwEFhA/1JdnI+tvGM9p50k9iNGpRROcA8KoIG9mfLGnfTQ7eQZ2uGNeoG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="312366869"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="312366869"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 09:48:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="659114269"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="659114269"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 16 Jan 2023 09:48:12 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pHTac-00ACas-0G;
+        Mon, 16 Jan 2023 19:48:10 +0200
+Date:   Mon, 16 Jan 2023 19:48:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        "M K, Muralidhara" <Muralidhara.MK@amd.com>,
+        "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
+        "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Subject: Re: [PATCH -next 1/2] i2c: designware: Switch from using MMIO access
+ to SMN access
+Message-ID: <Y8WN2ZTnnVDgVlZB@smile.fi.intel.com>
+References: <c0c8bdce-26a0-ad3f-749b-7585d947608b@redhat.com>
+ <YyxrdpUyc+kp48kX@zn.tnic>
+ <33d5cc27-474b-fdec-a6b0-84ac16f7d386@redhat.com>
+ <CAOtMz3M=BTZUTRMHWGULwMDWmGdOzHKo=UcZeg3sP8_ndVYk2g@mail.gmail.com>
+ <YzG657ZFeEvLd6hm@zn.tnic>
+ <CAOtMz3MWnmdMbw_CKxBKVt=TJpLNJuZUzpxvnDi+QnigaLozLA@mail.gmail.com>
+ <Y7v2j92Ol6dL3FLE@zn.tnic>
+ <CAOtMz3PG4nku-O7dh+1U_DA05HAmQboTqwUQkCkrXQLV9bFjPw@mail.gmail.com>
+ <Y8VFVmhqP8dpqZcQ@smile.fi.intel.com>
+ <MN0PR12MB6101E79DA61CB0154C4819B2E2C19@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <871qnu2ztz.fsf@miraculix.mork.no>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <MN0PR12MB6101E79DA61CB0154C4819B2E2C19@MN0PR12MB6101.namprd12.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,44 +87,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 05:45:12PM +0100, Bj�rn Mork wrote:
-> Bj�rn Mork <bjorn@mork.no> writes:
-> 
-> >> You have bmcr=0x1000, but the code sets two bits - SGMII_AN_RESTART and
-> >> SGMII_AN_ENABLE which are bits 9 and 12, so bmcr should be 0x1200, not
-> >> 0x1000. Any ideas why?
-> >
-> > No, not really
-> 
-> Doh! Looked over it again, and this was my fault of course.  Had an
-> 
->   "bmcr = SGMII_AN_ENABLE;"
->   
-> line overwriting the original value from a previous attempt without
-> changing the if condition.. Thanks for spotting that.
-> 
-> But this still doesn't work any better:
-> 
-> [   43.019395] mtk_soc_eth 15100000.ethernet wan: Link is Down
-> [   45.099898] mtk_sgmii_select_pcs: id=1
-> [   45.103653] mtk_pcs_config: interface=4
-> [   45.107473] offset:0 0x140
-> [   45.107476] offset:4 0x4d544950
-> [   45.110181] offset:8 0x20
-> [   45.113305] forcing AN
-> [   45.118256] mtk_pcs_config: rgc3=0x0, advertise=0x1 (changed), link_timer=1600000,  sgm_mode=0x103, bmcr=0x1200, use_an=1
-> [   45.129191] mtk_pcs_link_up: interface=4
-> [   45.133100] offset:0 0x81140
-> [   45.133102] offset:4 0x4d544950
-> [   45.135967] offset:8 0x1
-> [   45.139104] mtk_soc_eth 15100000.ethernet wan: Link is Up - 1Gbps/Full - flow control rx/tx
+On Mon, Jan 16, 2023 at 04:22:09PM +0000, Limonciello, Mario wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Monday, January 16, 2023 06:39
+> > To: Jan Dąbroś <jsd@semihalf.com>
+> > On Mon, Jan 16, 2023 at 11:19:00AM +0100, Jan Dąbroś wrote:
 
-In your _dump_pcs_ctrl() function, please can you dump the
-SGMSYS_SGMII_MODE register as well (offset 0x20), in case this gives
-more clue as to what's going on.
+> > > > Make init_amd_nbs() arch_initcall_sync() so that it executes after PCI
+> > init.
+> > >
+> > > I described earlier in this thread why such option is not working -
+> > > let me quote myself:
+> > >
+> > > It's not enough for running init_amd_nbs() to have only
+> > > pci_arch_init() done. We need the pci bus to be created and registered
+> > > with all devices found on the bus. We are traversing through them and
+> > > trying to find northbridge VID/DID. Due to the above, we need to run
+> > > init_amd_nbs() only after acpi_scan_init() that is invoked from
+> > > acpi_init() which is registered as subsys_initcall. That's why the
+> > > trick with switching init_amd_nbs() to arch_initcall_sync will not
+> > > work.
+> > >
+> > > We have a kind of chicken-and-egg problem here. Or is there something I
+> > missed?
+> > >
+> > > I wonder if there is upstreamable option to control order of the
+> > > drivers' init by forcing link order?
+> > 
+> > But what exactly do you need from North Bridge? Is it only its existence or
+> > do you need to have fully instantiated PCI device (if so, why?)?
+> 
+> There is a need to be able to write and read PCI config space.
 
-Thanks.
+So, it's available even on early stages, are there some specifics why it can't
+be done using the respective APIs?
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
