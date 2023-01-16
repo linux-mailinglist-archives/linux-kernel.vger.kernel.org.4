@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1707466D2F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA59F66D2F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235402AbjAPXRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 18:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S235266AbjAPXRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235353AbjAPXQR (ORCPT
+        with ESMTP id S235420AbjAPXQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 18:16:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DBE26856
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:11:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673910661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lvoePorPb+s/SNMB7xx6LbwM0BqIOrroTztDrtCxjAY=;
-        b=dGysmAeAlEazIvTAYFtg6YYowokAYjlGzrfd/eWfpSGsBTwVO0zbW1nkrVaLzLaxODEf+o
-        PRmsfMQ517Kcb0XfMhmHyBzoX/yS+I4XC2t2J+Lfok12weNf3CbbP1xBiKXecX8VEWRr/T
-        IOMyZedHudPDpm3nX7eW+9XWzy6EdgI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-193-lT3YyhGPO9uz0g4OFhAvXg-1; Mon, 16 Jan 2023 18:10:57 -0500
-X-MC-Unique: lT3YyhGPO9uz0g4OFhAvXg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F272E85CCE0;
-        Mon, 16 Jan 2023 23:10:56 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AF9E40C6EC4;
-        Mon, 16 Jan 2023 23:10:55 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v6 24/34] cifs: Add a function to build an RDMA SGE list from
- an iterator
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, dhowells@redhat.com,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 16 Jan 2023 23:10:54 +0000
-Message-ID: <167391065455.2311931.6594946160942957670.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
-References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Mon, 16 Jan 2023 18:16:13 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1DF2C669
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:11:16 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id p188so31980185yba.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eY/KJZ4lbmc+2XWsZ1z/ZDsZuzYLlrOu48ChSc6SgWY=;
+        b=ZixO1TRwnXk+Zt8AF0h/qfqGg+VFnuqWHiC/HyBxquWFYjlRl0YLLeTOV5ebh4DJ/q
+         3NA4XIFmHBMtm/+65vSu6ODMVBvpV/4Z4Q2N0PSP8VOhYVM2f9ttOWIa9XLK8RuzgQ6d
+         zVxv6Y8B2O35YV0ERZgJZtS5jd/n8ERgHrLmUQ7KIW3idzhC0N6Dj25drlUsemu5Bc5B
+         zUp79W76z07v0rq5EpdGvLb2As2Cx4TQ7puDyBiu38lkrOO/ch3iv8VQAbENPsRHXrQM
+         s7ks6/ymncWZJ3W6sGbVgjATyUXYNlRtKW7K1T5NgM9jJg9D4ibCIUoC4OljjI/jlfRh
+         TQ1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eY/KJZ4lbmc+2XWsZ1z/ZDsZuzYLlrOu48ChSc6SgWY=;
+        b=7osloMam00WXRlFCwKEjuyVqo0felxBuMvV5kokUeFvGnZhWLnzA6eLnIzjOLhtjTF
+         UF31rf2gKNvsACyOEw2Evq9lJQ0mv2FcP5lRr86a9YuNoRV7Cenm4NtSdgNRttEnoR5L
+         SSS5y3j9ph7lP8w+qPFNj9BtPFq6qRcd0Hux5Qbaw9MYpLnTdhb9pAt+aQGIR0J8cY1e
+         a3USJWKm8rMaCSyVEr/tSO9BqadtTSrG5MyMiMDpzeQPtz51CQNLPHoPEropBvzs4nAw
+         ZY9OzoZ9DMizb6AAdPQV9Cpp7i0IEcz5Xgoa+NzwgBPWmQWnHCbRqXqPF5U3FjwaFewh
+         hclA==
+X-Gm-Message-State: AFqh2kog2GX95p1rNxBfsW+/NuKtfLcmxkrIV1pkuwIiJVzxVp7LsTU6
+        z6juR6bx3EIPnP+pIv09lOdPwoPmlX7/2qBEHtwv5Q==
+X-Google-Smtp-Source: AMrXdXvxjMFnv3sXKfnTKH4PTNF/OT1rqzcwKMDy96OvxnpCIj9/MWgAZnN/R9Th80cE+rQd8BICuY6ElJpUSZTS8r0=
+X-Received: by 2002:a5b:cc8:0:b0:7ba:78b1:9fcc with SMTP id
+ e8-20020a5b0cc8000000b007ba78b19fccmr160434ybr.593.1673910671886; Mon, 16 Jan
+ 2023 15:11:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230109205336.3665937-42-surenb@google.com> <20230116140649.2012-1-hdanton@sina.com>
+ <CAJuCfpHoHcZxQZgt4Ki1kiBu9O+sANZQambOa+1gSQu2brPoyA@mail.gmail.com>
+In-Reply-To: <CAJuCfpHoHcZxQZgt4Ki1kiBu9O+sANZQambOa+1gSQu2brPoyA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 16 Jan 2023 15:11:00 -0800
+Message-ID: <CAJuCfpEx4tLNaVy_VpUKbrTkHJ7uPg5pPostNHD++6hD1dfzrQ@mail.gmail.com>
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        peterz@infradead.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,268 +70,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to add elements onto an RDMA SGE list representing page
-fragments extracted from a BVEC-, KVEC- or XARRAY-type iterator and DMA
-mapped until the maximum number of elements is reached.
+On Mon, Jan 16, 2023 at 3:08 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Mon, Jan 16, 2023 at 6:07 AM Hillf Danton <hdanton@sina.com> wrote:
+> >
+> > On Mon, 9 Jan 2023 12:53:36 -0800 Suren Baghdasaryan <surenb@google.com>
+> > > --- a/include/linux/mm.h
+> > > +++ b/include/linux/mm.h
+> > > @@ -627,12 +627,16 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+> > >        * mm->mm_lock_seq can't be concurrently modified.
+> > >        */
+> > >       mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
+> > > -     if (vma->vm_lock_seq == mm_lock_seq)
+> > > +     if (vma->vm_lock->lock_seq == mm_lock_seq)
+> > >               return;
+> >
+> >         lock acquire for write to info lockdep.
+>
+> Thanks for the review Hillf!
+>
+> Good idea. Will add in the next version.
+>
+> > >
+> > > -     down_write(&vma->vm_lock->lock);
+> > > -     vma->vm_lock_seq = mm_lock_seq;
+> > > -     up_write(&vma->vm_lock->lock);
+> > > +     if (atomic_cmpxchg(&vma->vm_lock->count, 0, -1))
+> > > +             wait_event(vma->vm_mm->vma_writer_wait,
+> > > +                        atomic_cmpxchg(&vma->vm_lock->count, 0, -1) == 0);
+> > > +     vma->vm_lock->lock_seq = mm_lock_seq;
+> > > +     /* Write barrier to ensure lock_seq change is visible before count */
+> > > +     smp_wmb();
+> > > +     atomic_set(&vma->vm_lock->count, 0);
+> > >  }
+> > >
+> > >  /*
+> > > @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+> > >  static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> > >  {
+> > >       /* Check before locking. A race might cause false locked result. */
+> > > -     if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > > +     if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > >               return false;
+> >
+> > Add mb to pair with the above wmb like
+>
+> The wmb above is to ensure the ordering between updates of lock_seq
+> and vm_lock->count (lock_seq is updated first and vm_lock->count only
+> after that). The first access to vm_lock->count in this function is
+> atomic_inc_unless_negative() and it's an atomic RMW operation with a
+> return value. According to documentation such functions are fully
+> ordered, therefore I think we already have an implicit full memory
+> barrier between reads of lock_seq and vm_lock->count here. Am I wrong?
+>
+> >
+> >         if (READ_ONCE(vma->vm_lock->lock_seq) == READ_ONCE(vma->vm_mm->mm_lock_seq)) {
+> >                 smp_acquire__after_ctrl_dep();
+> >                 return false;
+> >         }
+> > >
+> > > -     if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+> > > +     if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
+> > >               return false;
+> > >
+> > > +     /* If atomic_t overflows, restore and fail to lock. */
+> > > +     if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
+> > > +             if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > +                     wake_up(&vma->vm_mm->vma_writer_wait);
+> > > +             return false;
+> > > +     }
+> > > +
+> > >       /*
+> > >        * Overflow might produce false locked result.
+> > >        * False unlocked result is impossible because we modify and check
+> > >        * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+> > >        * modification invalidates all existing locks.
+> > >        */
+> > > -     if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > > -             up_read(&vma->vm_lock->lock);
+> > > +     if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > > +             if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > +                     wake_up(&vma->vm_mm->vma_writer_wait);
+> > >               return false;
+> > >       }
+> >
+> > Simpler way to detect write lock owner and count overflow like
+> >
+> >         int count = atomic_read(&vma->vm_lock->count);
+> >         for (;;) {
+> >                 int new = count + 1;
+> >
+> >                 if (count < 0 || new < 0)
+> >                         return false;
+> >
+> >                 new = atomic_cmpxchg(&vma->vm_lock->count, count, new);
+> >                 if (new == count)
+> >                         break;
+> >                 count = new;
+> >                 cpu_relax();
+> >         }
+> >
+> >         (wake up waiting readers after taking the lock;
+> >         but the write lock owner before this read trylock should be
+> >         responsible for waking waiters up.)
+> >
+> >         lock acquire for read.
+>
+> This schema might cause readers to wait, which is not an exact
+> replacement for down_read_trylock(). The requirement to wake up
+> waiting readers also complicates things and since we can always fall
+> back to mmap_lock, that complication is unnecessary IMHO. I could use
+> part of your suggestion like this:
+>
+>                  int new = count + 1;
+>
+>                  if (count < 0 || new < 0)
+>                          return false;
+>
+>                  new = atomic_cmpxchg(&vma->vm_lock->count, count, new);
+>                  if (new == count)
+>                          return false;
 
-Nothing is done to make sure the pages remain present - that must be done
-by the caller.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: Tom Talpey <tom@talpey.com>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-cifs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-rdma@vger.kernel.org
-
-Link: https://lore.kernel.org/r/166697256704.61150.17388516338310645808.stgit@warthog.procyon.org.uk/ # rfc
-Link: https://lore.kernel.org/r/166732028840.3186319.8512284239779728860.stgit@warthog.procyon.org.uk/ # rfc
----
-
- fs/cifs/smbdirect.c |  224 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 224 insertions(+)
-
-diff --git a/fs/cifs/smbdirect.c b/fs/cifs/smbdirect.c
-index 3e693ffd0662..78a76752fafd 100644
---- a/fs/cifs/smbdirect.c
-+++ b/fs/cifs/smbdirect.c
-@@ -44,6 +44,17 @@ static int smbd_post_send_page(struct smbd_connection *info,
- static void destroy_mr_list(struct smbd_connection *info);
- static int allocate_mr_list(struct smbd_connection *info);
- 
-+struct smb_extract_to_rdma {
-+	struct ib_sge		*sge;
-+	unsigned int		nr_sge;
-+	unsigned int		max_sge;
-+	struct ib_device	*device;
-+	u32			local_dma_lkey;
-+	enum dma_data_direction	direction;
-+};
-+static ssize_t smb_extract_iter_to_rdma(struct iov_iter *iter, size_t len,
-+					struct smb_extract_to_rdma *rdma);
-+
- /* SMBD version number */
- #define SMBD_V1	0x0100
- 
-@@ -2480,3 +2491,216 @@ int smbd_deregister_mr(struct smbd_mr *smbdirect_mr)
- 
- 	return rc;
- }
-+
-+static bool smb_set_sge(struct smb_extract_to_rdma *rdma,
-+			struct page *lowest_page, size_t off, size_t len)
-+{
-+	struct ib_sge *sge = &rdma->sge[rdma->nr_sge];
-+	u64 addr;
-+
-+	addr = ib_dma_map_page(rdma->device, lowest_page,
-+			       off, len, rdma->direction);
-+	if (ib_dma_mapping_error(rdma->device, addr))
-+		return false;
-+
-+	sge->addr   = addr;
-+	sge->length = len;
-+	sge->lkey   = rdma->local_dma_lkey;
-+	rdma->nr_sge++;
-+	return true;
-+}
-+
-+/*
-+ * Extract page fragments from a BVEC-class iterator and add them to an RDMA
-+ * element list.  The pages are not pinned.
-+ */
-+static ssize_t smb_extract_bvec_to_rdma(struct iov_iter *iter,
-+					struct smb_extract_to_rdma *rdma,
-+					ssize_t maxsize)
-+{
-+	const struct bio_vec *bv = iter->bvec;
-+	unsigned long start = iter->iov_offset;
-+	unsigned int i, sge_max = rdma->max_sge;
-+	ssize_t ret = 0;
-+
-+	for (i = 0; i < iter->nr_segs; i++) {
-+		size_t off, len;
-+
-+		len = bv[i].bv_len;
-+		if (start >= len) {
-+			start -= len;
-+			continue;
-+		}
-+
-+		len = min_t(size_t, maxsize, len - start);
-+		off = bv[i].bv_offset + start;
-+
-+		if (!smb_set_sge(rdma, bv[i].bv_page, off, len))
-+			return -EIO;
-+		sge_max--;
-+
-+		ret += len;
-+		maxsize -= len;
-+		if (maxsize <= 0 || sge_max == 0)
-+			break;
-+		start = 0;
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * Extract fragments from a KVEC-class iterator and add them to an RDMA list.
-+ * This can deal with vmalloc'd buffers as well as kmalloc'd or static buffers.
-+ * The pages are not pinned.
-+ */
-+static ssize_t smb_extract_kvec_to_rdma(struct iov_iter *iter,
-+					struct smb_extract_to_rdma *rdma,
-+					ssize_t maxsize)
-+{
-+	const struct kvec *kv = iter->kvec;
-+	unsigned long start = iter->iov_offset;
-+	unsigned int i, sge_max = rdma->max_sge;
-+	ssize_t ret = 0;
-+
-+	for (i = 0; i < iter->nr_segs; i++) {
-+		struct page *page;
-+		unsigned long kaddr;
-+		size_t off, len, seg;
-+
-+		len = kv[i].iov_len;
-+		if (start >= len) {
-+			start -= len;
-+			continue;
-+		}
-+
-+		kaddr = (unsigned long)kv[i].iov_base + start;
-+		off = kaddr & ~PAGE_MASK;
-+		len = min_t(size_t, maxsize, len - start);
-+		kaddr &= PAGE_MASK;
-+
-+		maxsize -= len;
-+		ret += len;
-+		do {
-+			seg = min_t(size_t, len, PAGE_SIZE - off);
-+
-+			if (is_vmalloc_or_module_addr((void *)kaddr))
-+				page = vmalloc_to_page((void *)kaddr);
-+			else
-+				page = virt_to_page(kaddr);
-+
-+			if (!smb_set_sge(rdma, page, off, len))
-+				return -EIO;
-+			sge_max--;
-+
-+			len -= seg;
-+			kaddr += PAGE_SIZE;
-+			off = 0;
-+		} while (len > 0 && sge_max > 0);
-+
-+		if (maxsize <= 0 || sge_max == 0)
-+			break;
-+		start = 0;
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * Extract folio fragments from an XARRAY-class iterator and add them to an
-+ * RDMA list.  The folios are not pinned.
-+ */
-+static ssize_t smb_extract_xarray_to_rdma(struct iov_iter *iter,
-+					  struct smb_extract_to_rdma *rdma,
-+					  ssize_t maxsize)
-+{
-+	struct xarray *xa = iter->xarray;
-+	struct folio *folio;
-+	unsigned int sge_max = rdma->max_sge;
-+	loff_t start = iter->xarray_start + iter->iov_offset;
-+	pgoff_t index = start / PAGE_SIZE;
-+	ssize_t ret = 0;
-+	size_t off, len;
-+	XA_STATE(xas, xa, index);
-+
-+	rcu_read_lock();
-+
-+	xas_for_each(&xas, folio, ULONG_MAX) {
-+		if (xas_retry(&xas, folio))
-+			continue;
-+		if (WARN_ON(xa_is_value(folio)))
-+			break;
-+		if (WARN_ON(folio_test_hugetlb(folio)))
-+			break;
-+
-+		off = offset_in_folio(folio, start);
-+		len = min_t(size_t, maxsize, folio_size(folio) - off);
-+
-+		if (!smb_set_sge(rdma, folio_page(folio, 0), off, len)) {
-+			rcu_read_lock();
-+			return -EIO;
-+		}
-+		sge_max--;
-+
-+		maxsize -= len;
-+		ret += len;
-+		if (maxsize <= 0 || sge_max == 0)
-+			break;
-+	}
-+
-+	rcu_read_unlock();
-+	return ret;
-+}
-+
-+/*
-+ * Extract page fragments from up to the given amount of the source iterator
-+ * and build up an RDMA list that refers to all of those bits.  The RDMA list
-+ * is appended to, up to the maximum number of elements set in the parameter
-+ * block.
-+ *
-+ * The extracted page fragments are not pinned or ref'd in any way; if an
-+ * IOVEC/UBUF-type iterator is to be used, it should be converted to a
-+ * BVEC-type iterator and the pages pinned, ref'd or otherwise held in some
-+ * way.
-+ */
-+static ssize_t smb_extract_iter_to_rdma(struct iov_iter *iter, size_t len,
-+					struct smb_extract_to_rdma *rdma)
-+{
-+	ssize_t ret;
-+	int before = rdma->nr_sge;
-+
-+	if (iov_iter_is_discard(iter) ||
-+	    iov_iter_is_pipe(iter) ||
-+	    user_backed_iter(iter)) {
-+		WARN_ON_ONCE(1);
-+		return -EIO;
-+	}
-+
-+	switch (iov_iter_type(iter)) {
-+	case ITER_BVEC:
-+		ret = smb_extract_bvec_to_rdma(iter, rdma, len);
-+		break;
-+	case ITER_KVEC:
-+		ret = smb_extract_kvec_to_rdma(iter, rdma, len);
-+		break;
-+	case ITER_XARRAY:
-+		ret = smb_extract_xarray_to_rdma(iter, rdma, len);
-+		break;
-+	default:
-+		BUG();
-+	}
-+
-+	if (ret > 0) {
-+		iov_iter_advance(iter, ret);
-+	} else if (ret < 0) {
-+		while (rdma->nr_sge > before) {
-+			struct ib_sge *sge = &rdma->sge[rdma->nr_sge--];
-+
-+			ib_dma_unmap_single(rdma->device, sge->addr, sge->length,
-+					    rdma->direction);
-+			sge->addr = 0;
-+		}
-+	}
-+
-+	return ret;
-+}
+Made a mistake above. It should have been:
+                  if (new != count)
+                          return false;
 
 
+>
+> Compared to doing atomic_inc_unless_negative() first, like I did
+> originally, this schema opens a bit wider window for the writer to get
+> in the middle and cause the reader to fail locking but I don't think
+> it would result in any visible regression.
+>
+> >
+> > >       return true;
+> > > @@ -664,7 +676,8 @@ static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> > >
+> > >  static inline void vma_read_unlock(struct vm_area_struct *vma)
+> > >  {
+> >         lock release for read.
+>
+> Ack.
+>
+> >
+> > > -     up_read(&vma->vm_lock->lock);
+> > > +     if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > +             wake_up(&vma->vm_mm->vma_writer_wait);
+> > >  }
+> >
