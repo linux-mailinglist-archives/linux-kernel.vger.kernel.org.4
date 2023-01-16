@@ -2,166 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A542D66C52D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1325E66C53D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjAPQCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S232102AbjAPQDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbjAPQBz (ORCPT
+        with ESMTP id S232119AbjAPQDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:01:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164272386D;
-        Mon, 16 Jan 2023 08:01:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 16 Jan 2023 11:03:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B656323C6C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673884918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8pukx+I4QrScYN3Z5nRX9xtPFWya2FweofKXHmiiGPg=;
+        b=dlgaO5bCC7tof8NYmTMkn8vGa3+4LIuq7ZtsqHH+kWjseBi257rqqzQ4JYULBptnAKii1E
+        rriehkGj6sDjWCNFJfqJulz7Tr0pzax7msxcTTfs/sIY1j0575B1eOIPxui0obmfs/wJqt
+        bZKbMEw//Z8QTdWirI80zhMQnvzrhxU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-ifNPrZcoO5aLBvu_n-6qtw-1; Mon, 16 Jan 2023 11:01:54 -0500
+X-MC-Unique: ifNPrZcoO5aLBvu_n-6qtw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5B9DB81061;
-        Mon, 16 Jan 2023 16:01:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF783C433F0;
-        Mon, 16 Jan 2023 16:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673884906;
-        bh=y0ykQ5LxFyBMrgAOQxypx7vnPabzGGYUIb99kre3vn0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RZrpQpaLuDnKOcBDICQF/OAAYXnQ43KVfMZ7t1c7g4/ozCliZf8WnDSxoesPwBMeQ
-         b1u/BOlnUqWiov9JRjEAgH74CZ3QPMYBJqZFwG4N7w90eCOYqCXL0R2c2c/5LbtEgZ
-         5t9JAzBkogX9B5qnVSnLzYSBiTYUV+G7L0EI5UhTNkYVgHNGr4GIA0uNajhpbo/hZI
-         bKEiE01cZjbG10SXTHWSs6Cd+0EV7+tx8i1y+P+6gaWgpSytcYtHko3ZcrLQ7sTGbn
-         xxv8+o/7BZEQc76RkwitlAp1o5GFWoshQ3sPysrqSszHiWg0Onpl6sYLBdsnsDj87U
-         OZxEEHwPOvo+Q==
-Message-ID: <b33c25c5-c93f-6860-b0a5-58279022a91c@kernel.org>
-Date:   Mon, 16 Jan 2023 18:01:40 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4ECF91C00426;
+        Mon, 16 Jan 2023 16:01:52 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9562140C2008;
+        Mon, 16 Jan 2023 16:01:50 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@infradead.org>
+cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+cc:     dhowells@redhat.com
+Subject: Is there a reason why REQ_OP_READ has to be 0?
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
- release action
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vigneshr@ti.com, srk@ti.com
-References: <20230116044517.310461-1-s-vadapalli@ti.com>
- <Y8T8+rWrvv6gfNxa@unreal> <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2117828.1673884910.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 16 Jan 2023 16:01:50 +0000
+Message-ID: <2117829.1673884910@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddharth,
+Hi Jens, Christoph,
 
-On 16/01/2023 09:43, Siddharth Vadapalli wrote:
-> 
-> 
-> On 16/01/23 13:00, Leon Romanovsky wrote:
->> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
->>> The am65_cpts_release() function is registered as a devm_action in the
->>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
->>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
->>> actions associated with the am65-cpsw driver's device.
->>>
->>> In the event of probe failure or probe deferral, the platform_drv_probe()
->>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
->>> CPSW's CPTS hardware, both of which share the same power domain. Since the
->>> am65_cpts_disable() function invoked by the am65_cpts_release() function
->>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
->>> hardware is assumed to be powered on at this point. However, the hardware
->>> is powered off before the devm actions are executed.
->>>
->>> Fix this by getting rid of the devm action for am65_cpts_release() and
->>> invoking it directly on the cleanup and exit paths.
->>>
->>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
->>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->>> ---
->>> Changes from v1:
->>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
->>>    error was reported by kernel test robot <lkp@intel.com> at:
->>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
->>> 2. Collect Reviewed-by tag from Roger Quadros.
->>>
->>> v1:
->>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
->>>
->>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
->>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
->>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
->>>  3 files changed, 18 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>> index 5cac98284184..00f25d8a026b 100644
->>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
->>>  	return 0;
->>>  }
->>>  
->>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
->>> +{
->>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
->>
->> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
->> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
->>
->> How is it possible to have common->cpts == NULL?
-> 
-> Thank you for reviewing the patch. I realize now that checking
-> CONFIG_TI_K3_AM65_CPTS is unnecessary.
-> 
-> common->cpts remains NULL in the following cases:
-> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
-> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
-> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
-> function with a return value of 0 when cpts is disabled.
+Do you know if there's a reason why REQ_OP_READ has to be 0?  I'm seeing a
+circumstance where a direct I/O write on a blockdev is BUG'ing in my modif=
+ied
+iov_iter code because the iterator says it's a source iterator (correct), =
+but
+the bio->bi_opf =3D=3D REQ_OP_READ (which should be wrong).
 
-In this case common->cpts is not NULL and is set to error pointer.
-Probe will continue normally.
-Is it OK to call any of the cpts APIs with invalid handle?
-Also am65_cpts_release() will be called with invalid handle.
+I thought I'd move REQ_OP_READ to, say, 4 so that I could try and see if i=
+t's
+just undefined but the kernel BUGs and then panics during boot.
 
-> 4. The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
-> fails with an error.
+David
 
-In this case common->cpts is not NULL and will invoke am65_cpts_release() with
-invalid handle.
+------------[ cut here ]------------
+kernel BUG at mm/filemap.c:1615!
+------------[ cut here ]------------
+invalid opcode: 0000 [#1] PREEMPT SMP PTI
+kernel BUG at mm/filemap.c:1615!
+CPU: 1 PID: 2196 Comm: systemd-udevd Not tainted 6.2.0-rc2-build3+ #12783
+Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
+RIP: 0010:folio_end_writeback+0x30/0x70
+Code: 48 8b 07 48 89 fb 0f ba e0 12 73 0a f0 80 67 02 fb e8 d0 de 00 00 48=
+ 89 df e8 fe df ff ff 48 89 df e8 f9 ac 00 00 84 c0 75 02 <0f> 0b 48 8b 03=
+ 84 c0 79 0d be 0f 00 00 00 48 89 df e8 44 f3 ff ff
+RSP: 0000:ffff8881091a3db8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffffea0004271d40 RCX: 0000000000001000
+RDX: 0000000000000101 RSI: 0000000000000246 RDI: ffff888107694000
+RBP: ffff888100b6f600 R08: 000000204d567e99 R09: 0000000000000200
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000001 R14: 0000000000001000 R15: ffff888107402080
+FS:  00007f65ecde8940(0000) GS:ffff88840fa80000(0000) knlGS:00000000000000=
+00
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb269292ba1 CR3: 0000000107140004 CR4: 00000000001706e0
+Call Trace:
+ <TASK>
+ mpage_end_io+0x91/0x9b
+ blk_update_request+0x200/0x2be
+ scsi_end_request+0x27/0xf3
+ scsi_io_completion+0x151/0x21e
+ blk_complete_reqs+0x41/0x4c
+ __do_softirq+0x123/0x27d
+ __irq_exit_rcu+0x5a/0xcd
+ common_interrupt+0x36/0xbc
+ asm_common_interrupt+0x22/0x40
+RIP: 0033:0x7f65edc7ab60
+Code: 00 41 29 c5 4a 8d 14 ed 00 00 00 00 49 8d 34 0c 49 8d 7c 0c f8 e8 d0=
+ 5e ff ff 83 6d 20 01 eb 9f 66 2e 0f 1f 84 00 00 00 00 00 <f3> 0f 1e fa 53=
+ 48 89 fb 48 83 c7 08 e8 7f 60 ff ff 85 c0 75 0b 48
+RSP: 002b:00007ffe0b70bd88 EFLAGS: 00000202
+RAX: 0000000000000000 RBX: 000055ddc430c5dc RCX: 000055ddc4301f98
+RDX: 00000000000000ff RSI: 000000000000000c RDI: 000055ddc4301f98
+RBP: 00007ffe0b7102d0 R08: 45d54cec8b358fc3 R09: 00544145535f4449
+R10: 000000000000000c R11: f17eedd8cae0d043 R12: 000055ddc4302920
+R13: 000055ddc432091a R14: 000055ddc4308460 R15: 000055ddc42d90dc
+ </TASK>
+Modules linked in:
+invalid opcode: 0000 [#2] PREEMPT SMP PTI
 
-> 
-> Of the above cases, the am65_cpsw_cpts_cleanup() function would have to handle
-> cases 1 and 3, since the probe might fail at a later point, following which the
-> probe cleanup path will invoke the am65_cpts_cpts_cleanup() function. This
-> function then checks for common->cpts not being NULL, so that it can invoke the
-> am65_cpts_release() function with this pointer.
-> 
->>
->> And why do you need special am65_cpsw_cpts_cleanup() which does nothing
->> except call to am65_cpts_release()? It will be more intuitive change
->> the latter to be exported function.
-> 
-> The am65_cpts_release() function expects the cpts pointer to be valid. Thus, I
-> had added the am65_cpsw_cpts_cleanup() function to conditionally invoke the
-> am65_cpts_release() function whenever the cpts pointer is valid. Based on your
-> suggestion, I believe that you want me to check for the cpts pointer being valid
-> within the am65_cpts_release() function instead, so that the
-> am65_cpsw_cpts_cleanup() function doesn't have to be added. Please let me know
-> if this is what you meant.
-> 
-> Regards,
-> Siddharth.
-
-cheers,
--roger
