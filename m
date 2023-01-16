@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B1466B834
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B948866B846
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbjAPHbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 02:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S231868AbjAPHfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjAPHbo (ORCPT
+        with ESMTP id S231679AbjAPHfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 02:31:44 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8AAE3A1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:31:39 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id y11-20020a056e02178b00b0030c048d64a7so20462160ilu.1
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 23:31:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5LFjPBPQX5VTHahUWFGvW547MY3Vx8HfP9h5GwFmub8=;
-        b=V933kmroj7tMZnNg/Vm62Bo5BVgQ6oq4BX9TkKr2I/maRzYYgXWWWeyifEuBK4Iz8p
-         PDcNyAjxrzFoaPWQygZ9paUUehxpb0mszRJ3IWWiILss4gbUplfYLy7qLb7Qt0sORWGP
-         TNbymFXWBRzeBiGcKZWPvokqrGus+yZ8VbKtaZ/NIfG4/xbZzftQDLZCpq82uOKK65Vf
-         M07ZNAYiz9MSS5yYDGu1YqD6nRbp5jTGLptA+C7mWwf9AowFBVT8rvx80g4awoaS7TCC
-         xPXduaUW154xo0Z3vFrP28/rSNTwKEXPrJsBiUVbfhQpOBFc5paxjLPGqbADEUrulhrr
-         iJ0A==
-X-Gm-Message-State: AFqh2koEYpu3cstNCmWVLy3QHWuPr2E4CXRzdQbkjkQ7X1aR6sxfb4+9
-        XfZG0vXECo6lnWt51TrxFpVizCJyVMAIxMHQ/tW6QXrGa68i
-X-Google-Smtp-Source: AMrXdXu4XZN0wDcSySC8AMwWQl/jizq1t7VTmrIwnoMQySbRGBJlPVF/OqfItPwmXFohrpIxKOWhIyukT3bPjsCoaClxE7eHEXAf
+        Mon, 16 Jan 2023 02:35:52 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE061CDFD;
+        Sun, 15 Jan 2023 23:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1673854551; x=1705390551;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YszkHojPOFwKeLehYtOFvn3DFCgr8dW4CyaPruyHuVg=;
+  b=jfc9N4Hvdi3gSQbC8i2nz1+0j0C5coSvQQ6TOoe0PQJrYFQKkSd+EVAr
+   p69HK5NMRGgnglYfPIpcmmLLZNItDPKWf5pky2bN3taxTS+KyBuMU+hn2
+   9MPL8NkSnxN0aIK5loSJjsOZMDrIRpXNdaKu5WaYcTFjt2dp+DZrq79Gn
+   RG0sJ55i5c4rEAJKu8OxUGlGMu46w8eVGAuYhHbw7gvNiykG4hbgM8ldd
+   PSob1H3NrSs6+JNIRqsIdxtt9jtkDnXSM0jMPOl9eoQKIT5VGFYY2Wz+w
+   AYd9f82lj0PRFC13RXlM94HcR5XaOQZc9hwTSBiVK63U0jx5NQBGSPiFH
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,220,1669071600"; 
+   d="scan'208";a="28437135"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 16 Jan 2023 08:35:48 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 16 Jan 2023 08:35:48 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 16 Jan 2023 08:35:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1673854548; x=1705390548;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YszkHojPOFwKeLehYtOFvn3DFCgr8dW4CyaPruyHuVg=;
+  b=V05ZCuVQ0P+P7pIZXxuZzDIVOpW8NGDLQQ6vBAv2F5yTNr3TdUYXn90P
+   anCVKU+wNqO3Dli0ABt4NlaL924jq1ewMEatIVaKuOEoQ4z2e9c6YyUJo
+   s/8YY1VrS6hDX95szewhNKtnKmFxuie9Zo7UItYA1N1SGfQX5pcgnw6V5
+   sANpjK47YtdMGk0Qf7jh8n25F2Y3vn8oAoVCFQzdo+0qHzaoktC7oWJK4
+   uXyKZJUNC5Ro2UgPz5GQNL0Y+KCq1MG+DIrIL9LWnPF6hgiYW9HA5/4P4
+   WkZUobrUt0qAKhdQtwNNPm3g9ygyFxqWo47NdNmuMq0gmgShIcgC7alH4
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,220,1669071600"; 
+   d="scan'208";a="28437134"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Jan 2023 08:35:48 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2B9DF280056;
+        Mon, 16 Jan 2023 08:35:48 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Pierluigi Passaro <pierluigi.passaro@gmail.com>
+Cc:     Pierluigi Passaro <pierluigi.p@variscite.com>, wei.fang@nxp.com,
+        shenwei.wang@nxp.com, xiaoning.wang@nxp.com, linux-imx@nxp.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, eran.m@variscite.com,
+        nate.d@variscite.com, francesco.f@variscite.com
+Subject: Re: [PATCH v2] net: fec: manage corner deferred probe condition
+Date:   Mon, 16 Jan 2023 08:35:46 +0100
+Message-ID: <5899558.lOV4Wx5bFT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CAJ=UCjXvcpV9gAfXv8An-pp=CK8J=sGE_adAoKeNFG1C-sMgJA@mail.gmail.com>
+References: <20230115213804.26650-1-pierluigi.p@variscite.com> <Y8R2kQMwgdgE6Qlp@lunn.ch> <CAJ=UCjXvcpV9gAfXv8An-pp=CK8J=sGE_adAoKeNFG1C-sMgJA@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c5a3:0:b0:30e:ec1e:2dac with SMTP id
- r3-20020a92c5a3000000b0030eec1e2dacmr573106ilt.75.1673854298771; Sun, 15 Jan
- 2023 23:31:38 -0800 (PST)
-Date:   Sun, 15 Jan 2023 23:31:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e259c105f25c92da@google.com>
-Subject: [syzbot] WARNING: refcount bug in mm_update_next_owner
-From:   syzbot <syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
-        ebiederm@xmission.com, jannh@google.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+Am Sonntag, 15. Januar 2023, 23:23:51 CET schrieb Pierluigi Passaro:
+> On Sun, Jan 15, 2023 at 10:56 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > On Sun, Jan 15, 2023 at 10:38:04PM +0100, Pierluigi Passaro wrote:
+> > > For dual fec interfaces, external phys can only be configured by fec0.
+> > > When the function of_mdiobus_register return -EPROBE_DEFER, the driver
+> > > is lately called to manage fec1, which wrongly register its mii_bus as
+> > > fec0_mii_bus.
+> > > When fec0 retry the probe, the previous assignement prevent the MDIO bus
+> > > registration.
+> > > Use a static boolean to trace the orginal MDIO bus deferred probe and
+> > > prevent further registrations until the fec0 registration completed
+> > > succesfully.
+> > 
+> > The real problem here seems to be that fep->dev_id is not
+> > deterministic. I think a better fix would be to make the mdio bus name
+> > deterministic. Use pdev->id instead of fep->dev_id + 1. That is what
+> > most mdiobus drivers use.
+> 
+> Actually, the sequence is deterministic, fec0 and then fec1,
+> but sometimes the GPIO of fec0 is not yet available.
 
-HEAD commit:    0a093b2893c7 Add linux-next specific files for 20230112
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16a8e102480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d4c86ac0fed92e3fc78
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Not in every case though. On i.MX6UL has the following memory map for FEC:
+* FEC2: 0x020b4000
+* FEC1: 0x02188000
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Which essentially means that fec2 will be probed first.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8111a570d6cb/disk-0a093b28.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ecc135b7fc9a/vmlinux-0a093b28.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ca8d73b446ea/bzImage-0a093b28.xz
+> The EPROBE_DEFER does not prevent the second instance from being probed.
+> This is the origin of the problem.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1d4c86ac0fed92e3fc78@syzkaller.appspotmail.com
+Is this the actual cause? There is also a problem in the case above if the 
+MDIO controlling interface (fec2) is not probed first, e.g. using fec1 for 
+MDIO access. But then again there is i.MX6ULG1 which only has fec1 
+interface...
 
-------------[ cut here ]------------
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 0 PID: 5316 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-Modules linked in:
-CPU: 0 PID: 5316 Comm: syz-executor.4 Not tainted 6.2.0-rc3-next-20230112-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-Code: 0a 31 ff 89 de e8 d4 13 78 fd 84 db 0f 85 2e ff ff ff e8 57 17 78 fd 48 c7 c7 60 87 a6 8a c6 05 e0 ce 54 0a 01 e8 98 a7 b2 05 <0f> 0b e9 0f ff ff ff e8 38 17 78 fd 0f b6 1d ca ce 54 0a 31 ff 89
-RSP: 0018:ffffc90005967d80 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880829f3a80 RSI: ffffffff8166972c RDI: fffff52000b2cfa2
-RBP: ffff888082ae3aa8 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffff88807e520900
-R13: ffff888082ae3fa8 R14: 0000000000000000 R15: ffff888082ae3aa8
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b32f23000 CR3: 000000007716c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __refcount_add include/linux/refcount.h:199 [inline]
- __refcount_inc include/linux/refcount.h:250 [inline]
- refcount_inc include/linux/refcount.h:267 [inline]
- get_task_struct include/linux/sched/task.h:110 [inline]
- mm_update_next_owner+0x585/0x7b0 kernel/exit.c:504
- exit_mm kernel/exit.c:562 [inline]
- do_exit+0x9a4/0x2a90 kernel/exit.c:854
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1021
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f51f5a8c0c9
-Code: Unable to access opcode bytes at 0x7f51f5a8c09f.
-RSP: 002b:00007ffe3c730ad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 000000000000001e RCX: 00007f51f5a8c0c9
-RDX: 00007f51f5a3df7b RSI: ffffffffffffffb8 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 000000002ed3101e R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000001 R15: 00007ffe3c730bc0
- </TASK>
+Best regards,
+Alexander
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
