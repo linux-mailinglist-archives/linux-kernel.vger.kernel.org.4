@@ -2,99 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E5A66BA74
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732BE66BA75
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjAPJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S232204AbjAPJeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbjAPJeL (ORCPT
+        with ESMTP id S232144AbjAPJeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:34:11 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A521715F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:34:10 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id k4so28426954vsc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZOuVys9mIzGnHTVfzNN5gjowcf0f3FatVf154JV6kI=;
-        b=CAgnq0I7BlFfkCghCCqc3RKNz/Q7K2CoNwOb30lf57/hbdxKULjkM/TM+wdhkP6w9R
-         1giTcgyCxnZsErQxTyJ1UzD3mKoA0jlupISi36EvixNBTjRDQlrml7FYcrMyLzjZn9UL
-         oYmZLmTCrV3kKVdadxU6/cJaq93U+EDgR3I9OQwGgc+OmnprWH+PiQMDM0Q4ZKIv/XK5
-         WTY8PirgFG9M+Dsj3mnxHtwVD5o3ElndxTNWnIZrJtFvkE+A+GhehBIKX4g1W38SOWTg
-         AhFHCUzpL9QR4g8h1A7XjWmwA5Yk2vH9TVcKwy71QvLvBdWHu0XrwsNWMIh8NhRFG3nV
-         pdzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XZOuVys9mIzGnHTVfzNN5gjowcf0f3FatVf154JV6kI=;
-        b=exSuhiWfdsSeDzBvGfocNOwq1Wg3vTOEbRnSRHliRe5ZMZKZEJ4Gnx2UXlj+vvuCjX
-         gTH52RvZhAdIWoyls+wfKQbUVjmNgg/fq8b3Mo12ogsK5ZV0BtHIzmxzgTmCOFZBYXAJ
-         XDV7ihWin6myj9UvlhJrZmBSFWS6YuR0OI9wBmHyv07SeeL3MyeDqGemc8YixQgl/L8v
-         zfc/3VJ1HVkviiMFwwL8xv+oPDDQJ1C1oEpW0hz3OmmHIvd2DIw3/elwgayz7AfbKw6f
-         5mmbeXtE1O0x1OaUqgq5kXDSCZ50OxkT6hmdSKqZNQ9c6Cq+VdknEuxFuGO75l82AiTp
-         EQdg==
-X-Gm-Message-State: AFqh2ko1HbbD3AT0+owZVTqjrLy/ErUM2/IABU38TSR024M76fHa1a+v
-        0dRujObGJEXG0IFeKlM6ZRn6CKXNrM9AXXKR+oohsg==
-X-Google-Smtp-Source: AMrXdXupP3qQ3MR8Xhcjf19nZo0r5SdZGW1Fyn0PeSZXrUauTJQF3PKLBZ56aau/2xm/B0FrvP5coVOd488pke6eeic=
-X-Received: by 2002:a67:f899:0:b0:3d3:d90c:5ef2 with SMTP id
- h25-20020a67f899000000b003d3d90c5ef2mr414465vso.17.1673861649780; Mon, 16 Jan
- 2023 01:34:09 -0800 (PST)
+        Mon, 16 Jan 2023 04:34:12 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD1117147;
+        Mon, 16 Jan 2023 01:34:11 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 041256602BBC;
+        Mon, 16 Jan 2023 09:34:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673861649;
+        bh=l4d/nOWEMwXLposanFY9XKP6QnAoGbIqo4G/neYks9o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LgGE1XHpi12/cbaHd5nS1YmPfwt0H+LxxnXyHY+5nqqHsehK2yXFaPdVk6nGpimSG
+         mIPiCaYJ1Pe1ChCC8RFscpBoly3H9be/v3SGuoy/1CrTWeQOZi5TgcuYpyyRje2FuY
+         VW+KvDQ/ymHou8l/HqxR8mlvsYEnzv4fzcF/4dia1o5KZc6Eg40MJ7Mk4kuKQSbhKr
+         SnkJ7IBTD8gBvQ+95Km5vI7c0QjmRBQkfQtbpP9AsDDFbtQHEkwTgyyjyB5avUPiNp
+         ZvHdzzu5gquJiT1UzeJkgGjVHNJdeKNEfJqqz4XP2kYuS9aDwzBwDo/EA1VoZTgNLz
+         IH7T9Qyp18pVQ==
+Message-ID: <0a129474-a3c4-eaf8-26be-1d1acf5c3513@collabora.com>
+Date:   Mon, 16 Jan 2023 10:34:06 +0100
 MIME-Version: 1.0
-References: <20230112134653.59268-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230112134653.59268-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 16 Jan 2023 10:33:59 +0100
-Message-ID: <CAMRc=MeFmZWnCKxT7QJv2dmSO-OKLCp60NwP-11MhvKRw1whgQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: rockchip: Do not mention legacy API in the code
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RESEND,v5 11/13] ASoC: mediatek: common: add soundcard driver
+ common code
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230116034131.23943-1-trevor.wu@mediatek.com>
+ <20230116034131.23943-12-trevor.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230116034131.23943-12-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 2:46 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Replace mentioning of legacy API by the latest one.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpio-rockchip.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
-> index 200e43a6f4b4..e5de15a2ab9a 100644
-> --- a/drivers/gpio/gpio-rockchip.c
-> +++ b/drivers/gpio/gpio-rockchip.c
-> @@ -299,7 +299,7 @@ static int rockchip_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
->  }
->
->  /*
-> - * gpiolib gpio_to_irq callback function. Creates a mapping between a GPIO pin
-> + * gpiod_to_irq() callback function. Creates a mapping between a GPIO pin
->   * and a virtual IRQ, if not already present.
->   */
->  static int rockchip_gpio_to_irq(struct gpio_chip *gc, unsigned int offset)
-> --
-> 2.39.0
->
+Il 16/01/23 04:41, Trevor Wu ha scritto:
+> Add common code to support of_node of codec parsing, so codec phandle
+> can be assigned by sound-dai in dts.
+> 
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 
-Applied, thanks!
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Bart
+
