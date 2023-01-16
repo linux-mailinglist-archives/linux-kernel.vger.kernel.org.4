@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A30166B55C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659C766B566
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 02:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjAPBxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 20:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S231807AbjAPByJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 20:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjAPBx3 (ORCPT
+        with ESMTP id S231722AbjAPBxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 20:53:29 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3314EFD;
-        Sun, 15 Jan 2023 17:53:27 -0800 (PST)
+        Sun, 15 Jan 2023 20:53:30 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC1B44BF;
+        Sun, 15 Jan 2023 17:53:28 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NwFRQ3SDkz4f3nVG;
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NwFRQ4bjJz4f4374;
         Mon, 16 Jan 2023 09:53:22 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgD3rbERrsRj9iw3Bw--.37368S7;
-        Mon, 16 Jan 2023 09:53:24 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgD3rbERrsRj9iw3Bw--.37368S8;
+        Mon, 16 Jan 2023 09:53:25 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     jack@suse.com, damien.lemoal@opensource.wdc.com,
         paolo.valente@linaro.org, axboe@kernel.dk
 Cc:     hch@lst.de, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/8] block, bfq: remove unnecessary dereference to get async_bfqq
-Date:   Mon, 16 Jan 2023 17:51:50 +0800
-Message-Id: <20230116095153.3810101-6-shikemeng@huaweicloud.com>
+Subject: [PATCH v4 6/8] block, bfq: remove redundant check in bfq_put_cooperator
+Date:   Mon, 16 Jan 2023 17:51:51 +0800
+Message-Id: <20230116095153.3810101-7-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230116095153.3810101-1-shikemeng@huaweicloud.com>
 References: <20230116095153.3810101-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3rbERrsRj9iw3Bw--.37368S7
-X-Coremail-Antispam: 1UD129KBjvdXoWruFW7tryDWw13Xw4rAFWxtFb_yoWfJrX_C3
-        W8K3Z3uF1kGFy3Cr4rAry3tws0kryFqa1rCF90qry5WFnrAan8CasFqrZ0va98Zay7GFya
-        gr9rur13AF1q9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: gCh0CgD3rbERrsRj9iw3Bw--.37368S8
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrWxAFWUXr1xWw48Gw1Utrb_yoW3GFc_t3
+        9YkFWrJrW8G345Ar1ftF95Jw1jyayxJF1DJF4Fqw4DXF1UWFn5Aa9FgFWayF45Gay7Ca4a
+        ya40q3WDtr1DWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
         Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl82
         xGYIkIc2x26280x7IE14v26r126s0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC
@@ -61,27 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The async_bfqq is assigned with bfqq->bic->bfqq[0], use it directly.
+We have already avoided a circular list in bfq_setup_merge (see comments
+in bfq_setup_merge() for details), so bfq_queue will not appear in it's
+new_bfqq list. Just remove this check.
 
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 Reviewed-by: Jan Kara <jack@suse.cz>
 ---
- block/bfq-iosched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/bfq-iosched.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 6f38a0130034..4a17b22327f1 100644
+index 4a17b22327f1..dbee5c61830c 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -4989,7 +4989,7 @@ static struct bfq_queue *bfq_select_queue(struct bfq_data *bfqd)
- 		    icq_to_bic(async_bfqq->next_rq->elv.icq) == bfqq->bic &&
- 		    bfq_serv_to_charge(async_bfqq->next_rq, async_bfqq) <=
- 		    bfq_bfqq_budget_left(async_bfqq))
--			bfqq = bfqq->bic->bfqq[0][act_idx];
-+			bfqq = async_bfqq;
- 		else if (bfqq->waker_bfqq &&
- 			   bfq_bfqq_busy(bfqq->waker_bfqq) &&
- 			   bfqq->waker_bfqq->next_rq &&
+@@ -5429,8 +5429,6 @@ void bfq_put_cooperator(struct bfq_queue *bfqq)
+ 	 */
+ 	__bfqq = bfqq->new_bfqq;
+ 	while (__bfqq) {
+-		if (__bfqq == bfqq)
+-			break;
+ 		next = __bfqq->new_bfqq;
+ 		bfq_put_queue(__bfqq);
+ 		__bfqq = next;
 -- 
 2.30.0
 
