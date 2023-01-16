@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D97766C8C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D18766C8D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbjAPQmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        id S233419AbjAPQnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjAPQmN (ORCPT
+        with ESMTP id S233728AbjAPQm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:42:13 -0500
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB4B3E603
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:30:12 -0800 (PST)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-b985-910f-39e1-703f.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:b985:910f:39e1:703f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id E0D0413E0C9;
-        Mon, 16 Jan 2023 17:30:08 +0100 (CET)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1673886609; bh=EWAvrD4RojL0LVOAIJLliUiQp4sAh2O0X95WyClxam4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=alOM8Qzex40r+j9quWCOGy7tiIciq8Q7+8fiyc9/pZhoxFF5X9wUKW3NqU+Iaq7p6
-         KTq6Qtohzbxc0PzE/MYr3dh7tf5HLtLEgZT1nUAC/zHWMSubGnajgAAgxK8TRiObis
-         G79qPHNI/lz08EJ9YJBczwh6sM5qfg7MxLxKlOCD/2tjLUjtoibZQaBH8v2SHAKYhd
-         fUDUzxjcAN/l7nU9lijkPyZY+eZ/YYDyWchZBnZ4BF/VldaIFy+tGTwKkYixVn4zjn
-         svympXbsTq8lyZUVakVP6liCaCU9Bo1OblIWUdR/3JR4PQ30FnveEN58ml2GozYFIL
-         xKShC5ULUX+fw==
-Date:   Mon, 16 Jan 2023 17:30:05 +0100
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     Sourabh Jain <sourabhjain@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v15 1/7] crash: move crash_prepare_elf64_headers()
-Message-ID: <20230116173005.21bd7b67@meshulam.tesarici.cz>
-In-Reply-To: <b3f3a4e5-35e7-2cb4-f754-f425da094f28@oracle.com>
-References: <20221209153656.3284-1-eric.devolder@oracle.com>
-        <20221209153656.3284-2-eric.devolder@oracle.com>
-        <09567e13-c5ed-d1b9-027c-9340fce6a0a8@linux.ibm.com>
-        <b3f3a4e5-35e7-2cb4-f754-f425da094f28@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-suse-linux-gnu)
+        Mon, 16 Jan 2023 11:42:29 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972CF38B5A;
+        Mon, 16 Jan 2023 08:30:39 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30GGUP8q057885;
+        Mon, 16 Jan 2023 10:30:25 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673886625;
+        bh=O2Ejt62mxUfx3tdgkGy7b2vFDYAAKe8GIb3qDpu9Tkg=;
+        h=Date:To:CC:References:From:Subject:In-Reply-To;
+        b=O5p1zKS05dBbPWH2OwB072suoBV4NmioQWqawQVR3rXXSC3o4sSX6FpvNkeU1bSNc
+         bJmiOPgyq/YeF50tQoEnvQ9XIRCUU32s+cZ7Z19Fb34Pi8/qKugBFvG4rxwiyPYPWs
+         ipS3THuMt6DhlwX3zXzDIm0nq5mncsMf4iPGLIok=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30GGUPk7053486
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 16 Jan 2023 10:30:25 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 16
+ Jan 2023 10:30:25 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 16 Jan 2023 10:30:25 -0600
+Received: from [10.250.234.92] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30GGUJFM063429;
+        Mon, 16 Jan 2023 10:30:20 -0600
+Message-ID: <4d7ac24a-0a35-323c-045c-cc5b3d3c715a@ti.com>
+Date:   Mon, 16 Jan 2023 22:00:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nm@ti.com>,
+        <kristo@kernel.org>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
+References: <20230111114429.1297557-1-s-vadapalli@ti.com>
+ <20230111114429.1297557-6-s-vadapalli@ti.com>
+ <6ae650c9-d68d-d2fc-8319-b7784cd2a749@kernel.org>
+ <a889a47f-5f44-1ae6-1ab7-3b7e7011b4f7@ti.com>
+ <2007adb5-0980-eee3-8d2f-e30183cf408e@kernel.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH net-next 5/5] arm64: dts: ti: k3-am625-sk: Add cpsw3g cpts
+ PPS support
+In-Reply-To: <2007adb5-0980-eee3-8d2f-e30183cf408e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
 
-On Thu, 12 Jan 2023 11:23:18 -0600
-Eric DeVolder <eric.devolder@oracle.com> wrote:
 
->[...]
-> After looking into this for a bit, to allow hotplug without kexec_file would require quite a bit of 
-> code movement. Why? Because hotplug is basically built on top of (part of) the infrastructure that 
-> was needed for kexec_file.
-> 
-> I'd be inclined to suggest that KEXEC_FILE be a required dependency for CRASH_HOTPLUG, ie:
-> 
->   config CRASH_HOTPLUG
->          bool "Update the crash elfcorehdr on system configuration changes"
->          default n
-> -       depends on CRASH_DUMP && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> +       depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> 
-> 
-> If that isn't feasible, then it would appear quite a bit of surgery is needed to properly separate 
-> out the items hotplug needs from kexec_file.
-> 
-> Thoughts?
+On 16/01/23 9:35 pm, Roger Quadros wrote:
+>>>> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>> index 4f179b146cab..962a922cc94b 100644
+>>>> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>> @@ -366,6 +366,10 @@ &cpsw3g {
+>>>>  	pinctrl-names = "default";
+>>>>  	pinctrl-0 = <&main_rgmii1_pins_default
+>>>>  		     &main_rgmii2_pins_default>;
+>>>> +
+>>>> +	cpts@3d000 {
+>>>> +		ti,pps = <2 1>;
+>>>> +	};
+>>>>  };
+>>>>  
+>>>>  &cpsw_port1 {
+>>>> @@ -464,3 +468,19 @@ partition@3fc0000 {
+>>>>  		};
+>>>>  	};
+>>>>  };
+>>>> +
+>>>> +#define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x10000 | val)
+>>> Should this go in ./include/dt-bindings/pinctrl/k3.h ?
+>>> That way every board DT file doesn't have to define it.
+>>>
+>>> The name should be made more platform specific.
+>>> e.g. K3_TS_OFFSET if it is the same for all K3 platforms.
+>>> If not then please add Platform name instead of K3.
+>> The offsets are board specific. If it is acceptable, I will add board specific
+>> macro for the TS_OFFSET definition in the ./include/dt-bindings/pinctrl/k3.h
+>> file. Please let me know.
+> If it is board specific then it should remain in the board file.
 
-I would have thought that CPU hotplug can be handled in the kernel only
-if the crash image was loaded by the kernel with kexec_file_load(2).
-When the image is loaded with kexec_load(2), then all data structures
-are prepared by the user-space utility kexec(8), and the kernel
-generally has no idea how to handle them.
 
-In short, I believe that by definition there must be this dependency of
-CRASH_HOTPLUG on KEXEC_FILE.
+The values you pass to macro maybe board specific. But the macro
+definition itself same for a given SoC right? Also, is its same across
+K3 family ?
 
-Petr T
+Please use SoC specific prefix like AM62X_TS_OFFSET() or K3_TS_OFFSET()
+accordingly.
+
+Regards
+Vignesh
