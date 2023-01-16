@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE79866C328
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400D966C32D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbjAPPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S232700AbjAPPB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbjAPPAd (ORCPT
+        with ESMTP id S232733AbjAPPAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 10:00:33 -0500
+        Mon, 16 Jan 2023 10:00:36 -0500
 Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E8F222DB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A10222E0;
         Mon, 16 Jan 2023 06:51:03 -0800 (PST)
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 15B06405D5;
-        Mon, 16 Jan 2023 19:50:59 +0500 (+05)
+        by box.trvn.ru (Postfix) with ESMTPSA id AB90B418F4;
+        Mon, 16 Jan 2023 19:51:00 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1673880660; bh=vAFVWq5TKeAvsbaHD8fsCVA+DwEy4/SeS3Nqqj8tC6Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Qagj87Ea6+7lkKtnnOvJmfi0aa9cjNT95K/sOKJK71p8h70PAygLxDATU9SnTuU5e
-         NtE1gnDDidSIOhprPpuaG1z5EhF6FFmMmeWqyEKdyQgdWl2shGqSQ6Ry3aDj09bIuL
-         VkNVZhnj20AG1RTHYkXglRjaBz6Y2+06PIOym1VrcjiZKloHKfkwofdUef5ezcFQVD
-         AcKjZO0zWsB4C4NU05rGw2MwGvzRPvSfTjboB4gNmPC2bxYdPjVM+6zOlPUM34/81O
-         MTLbmJDBkhVn819TYJUHiZTy6ZroGuU+ztspQlPo36p5q2i94nr/vJePuu8yOkA0Lo
-         u1m+AyYOw+gGA==
+        t=1673880661; bh=Z21o6vZENwNgsIHqVAbVcoLM3j2YLhcpgZDrzH8B2aM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=5Lmj0ov4WicEnY2X8+QmdL6BjP2dueJxzdEdwqug0ukMt1kY8Zal1BJhQqT9bc0iJ
+         CnGs+IjsAkctZNBJ953lguhQaWJKAWBZ8Xh5XyI+t1Ss/I34/bIZ4nR7j2l3/ATxJy
+         zq8yMlUJxf4D55Cw/OMLyeaWLVvFKP9be7VtDgGnolmSvhoBgW5pPtiSBajW1DBbhY
+         0wk45mflwk8DjsxSvb0h1J43XkREIDgTUrSpZXMglIYD/I6QZWwydckzzMGWs17+IN
+         bHjqlQZm02Lg0ctKRpU47ImAxzxguIFB/21w7/Me4YQVty0tWmI8hwc3GO90TaBdtT
+         fPuoBToGtll1w==
 From:   Nikita Travkin <nikita@trvn.ru>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>
@@ -39,9 +39,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH v2 0/4] Minor cleanup in msm8916 dts files
-Date:   Mon, 16 Jan 2023 19:50:49 +0500
-Message-Id: <20230116145053.1412501-1-nikita@trvn.ru>
+Subject: [PATCH v2 1/4] arm64: dts: qcom: msm/apq8x16-*: Move status property last
+Date:   Mon, 16 Jan 2023 19:50:50 +0500
+Message-Id: <20230116145053.1412501-2-nikita@trvn.ru>
+In-Reply-To: <20230116145053.1412501-1-nikita@trvn.ru>
+References: <20230116145053.1412501-1-nikita@trvn.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,41 +55,604 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series performs some minor cleanup on msm8916/apq8016 files to
-bring them in line with the current standard and be closer to the new
-submissions.
+It's agreed that the status property should always be the last.
+Move it in all msm8916 dts.
 
-The series is separated into commits by each specific change made across
-all files and these commits should not cause any functional difference.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+---
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts      | 44 ++++++++++---------
+ .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 12 ++---
+ .../arm64/boot/dts/qcom/msm8916-asus-z00l.dts |  9 ++--
+ .../arm64/boot/dts/qcom/msm8916-huawei-g7.dts | 16 +++----
+ .../boot/dts/qcom/msm8916-longcheer-l8150.dts | 12 ++---
+ .../boot/dts/qcom/msm8916-longcheer-l8910.dts | 12 ++---
+ .../qcom/msm8916-samsung-a2015-common.dtsi    | 12 ++---
+ .../boot/dts/qcom/msm8916-samsung-j5.dts      | 12 ++---
+ .../dts/qcom/msm8916-samsung-serranove.dts    | 12 ++---
+ .../dts/qcom/msm8916-wingtech-wt88047.dts     | 12 ++---
+ 10 files changed, 78 insertions(+), 75 deletions(-)
 
-Changes in v2:
-- Rebase on top of newly applied upstream patches
-
-Nikita Travkin (4):
-  arm64: dts: qcom: msm/apq8x16-*: Move status property last
-  arm64: dts: qcom: msm/apq8x16-*: Reorder the pinctrl properties.
-  arm64: dts: qcom: msm/apq8x16-*: Drop empty lines in pinctrl states
-  arm64: dts: qcom: msm/apq8x16-*: Reorder some regulator properties
-
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts      | 78 +++++++--------
- .../boot/dts/qcom/msm8916-acer-a1-724.dts     | 15 ++-
- .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 46 ++++-----
- .../arm64/boot/dts/qcom/msm8916-asus-z00l.dts | 34 +++----
- .../arm64/boot/dts/qcom/msm8916-huawei-g7.dts | 52 ++++------
- .../boot/dts/qcom/msm8916-longcheer-l8150.dts | 42 ++++----
- .../boot/dts/qcom/msm8916-longcheer-l8910.dts | 30 +++---
- arch/arm64/boot/dts/qcom/msm8916-pins.dtsi    | 96 +++++--------------
- .../qcom/msm8916-samsung-a2015-common.dtsi    | 64 +++++--------
- .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts | 11 +--
- .../boot/dts/qcom/msm8916-samsung-a5u-eur.dts |  5 +-
- .../qcom/msm8916-samsung-e2015-common.dtsi    |  5 +-
- .../dts/qcom/msm8916-samsung-grandmax.dts     |  3 +-
- .../boot/dts/qcom/msm8916-samsung-j5.dts      | 21 ++--
- .../dts/qcom/msm8916-samsung-serranove.dts    | 62 +++++-------
- .../dts/qcom/msm8916-wingtech-wt88047.dts     | 35 +++----
- arch/arm64/boot/dts/qcom/msm8916.dtsi         | 32 +++----
- 17 files changed, 245 insertions(+), 386 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+index c52d79a55d80..110d22f6968b 100644
+--- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
++++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+@@ -171,18 +171,16 @@ led@6 {
+ 
+ &blsp_i2c2 {
+ 	/* On Low speed expansion */
+-	status = "okay";
+ 	label = "LS-I2C0";
++	status = "okay";
+ };
+ 
+ &blsp_i2c4 {
+ 	/* On High speed expansion */
+-	status = "okay";
+ 	label = "HS-I2C2";
++	status = "okay";
+ 
+ 	adv_bridge: bridge@39 {
+-		status = "okay";
+-
+ 		compatible = "adi,adv7533";
+ 		reg = <0x39>;
+ 
+@@ -204,6 +202,8 @@ adv_bridge: bridge@39 {
+ 		pinctrl-1 = <&adv7533_int_suspend &adv7533_switch_suspend>;
+ 		#sound-dai-cells = <1>;
+ 
++		status = "okay";
++
+ 		ports {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -227,34 +227,35 @@ adv7533_out: endpoint {
+ 
+ &blsp_i2c6 {
+ 	/* On Low speed expansion */
+-	status = "okay";
+ 	label = "LS-I2C1";
++	status = "okay";
+ };
+ 
+ &blsp_spi3 {
+ 	/* On High speed expansion */
+-	status = "okay";
+ 	label = "HS-SPI1";
++	status = "okay";
+ };
+ 
+ &blsp_spi5 {
+ 	/* On Low speed expansion */
+-	status = "okay";
+ 	label = "LS-SPI0";
++	status = "okay";
+ };
+ 
+ &blsp1_uart1 {
+-	status = "okay";
+ 	label = "LS-UART0";
++	status = "okay";
+ };
+ 
+ &blsp1_uart2 {
+-	status = "okay";
+ 	label = "LS-UART1";
++	status = "okay";
+ };
+ 
+ &camss {
+ 	status = "okay";
++
+ 	ports {
+ 		port@0 {
+ 			reg = <0>;
+@@ -315,43 +316,41 @@ &mdss {
+ };
+ 
+ &mpss {
+-	status = "okay";
+-
+ 	firmware-name = "qcom/apq8016/mba.mbn", "qcom/apq8016/modem.mbn";
++
++	status = "okay";
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pronto {
+-	status = "okay";
+-
+ 	firmware-name = "qcom/apq8016/wcnss.mbn";
+-};
+ 
+-&sdhc_1 {
+ 	status = "okay";
++};
+ 
++&sdhc_1 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+ 
+ 	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
+-};
+ 
+-&sound {
+ 	status = "okay";
++};
+ 
++&sound {
+ 	pinctrl-0 = <&cdc_pdm_lines_act &ext_sec_tlmm_lines_act &ext_mclk_tlmm_lines_act>;
+ 	pinctrl-1 = <&cdc_pdm_lines_sus &ext_sec_tlmm_lines_sus &ext_mclk_tlmm_lines_sus>;
+ 	pinctrl-names = "default", "sleep";
+@@ -360,6 +359,8 @@ &sound {
+ 		"AMIC2", "MIC BIAS Internal2",
+ 		"AMIC3", "MIC BIAS External1";
+ 
++	status = "okay";
++
+ 	quaternary-dai-link {
+ 		link-name = "ADV7533";
+ 		cpu {
+@@ -392,12 +393,13 @@ codec {
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&usb_id>, <&usb_id>;
+ 
+ 	pinctrl-names = "default", "device";
+ 	pinctrl-0 = <&usb_sw_sel_pm &usb_hub_reset_pm>;
+ 	pinctrl-1 = <&usb_sw_sel_pm_device &usb_hub_reset_pm_device>;
++
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
+index 701a5585d77e..20301eaa3b95 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
+@@ -152,8 +152,8 @@ led@1 {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pm8916_vib {
+@@ -165,26 +165,26 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+ 
+ 	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&usb_id>, <&usb_id>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts b/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
+index 3618704a5330..a0f868854d53 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
+@@ -133,26 +133,27 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
++
++	status = "okay";
+ };
+ 
+ &sdhc_2 {
+-	status = "okay";
+ 	vmmc-supply = <&reg_sd_vmmc>;
+ 
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+ 	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&usb_id>, <&usb_id>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
+index 8c07eca900d3..2d266fd417f8 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
+@@ -219,8 +219,8 @@ &lpass {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pm8916_vib {
+@@ -232,16 +232,14 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdhc2_cd_default>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdhc2_cd_default>;
+@@ -260,11 +258,11 @@ &sdhc_2 {
+ 	 * SD card slot and forgot to re-route to gpio38.
+ 	 */
+ 	cd-gpios = <&msmgpio 56 GPIO_ACTIVE_LOW>;
+-};
+ 
+-&sound {
+ 	status = "okay";
++};
+ 
++&sound {
+ 	model = "msm8916";
+ 	audio-routing =
+ 		"AMIC1", "MIC BIAS External1",
+@@ -275,6 +273,8 @@ &sound {
+ 	pinctrl-0 = <&cdc_pdm_lines_act>;
+ 	pinctrl-1 = <&cdc_pdm_lines_sus>;
+ 
++	status = "okay";
++
+ 	primary-dai-link {
+ 		link-name = "WCD";
+ 		cpu {
+@@ -297,8 +297,8 @@ codec {
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&usb_id>, <&usb_id>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
+index d1e8cf2f50c0..f63f0fb797b4 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
+@@ -219,8 +219,8 @@ &blsp1_uart2 {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pm8916_usbin {
+@@ -236,27 +236,27 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+ 
+ 	non-removable;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	dr_mode = "peripheral";
+ 	extcon = <&pm8916_usbin>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
+index 3899e11b9843..4d627d06f87b 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
+@@ -91,8 +91,8 @@ &blsp1_uart2 {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pm8916_vib {
+@@ -104,26 +104,26 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+ 
+ 	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&usb_id>, <&usb_id>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
+index d600916a0e55..13c586079e50 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
+@@ -248,8 +248,8 @@ &mdss {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pronto {
+@@ -257,26 +257,26 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+ 
+ 	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&muic>, <&muic>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
+index 7ac49a021563..8eb68bb6607c 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
+@@ -53,8 +53,8 @@ &blsp1_uart2 {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ /* FIXME: Replace with SM5703 MUIC when driver is available */
+@@ -67,27 +67,27 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
+ 
+ 	cd-gpios = <&msmgpio 38 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	dr_mode = "peripheral";
+ 	extcon = <&pm8916_usbin>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+index d4984b3af802..34bee5211413 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+@@ -264,8 +264,8 @@ &blsp1_uart2 {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pm8916_vib {
+@@ -281,16 +281,14 @@ iris {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+@@ -309,11 +307,13 @@ &sdhc_2 {
+ 	 * (without tuning), so maybe only tuning is broken?
+ 	 */
+ 	no-1-8-v;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&muic>, <&muic>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+index a87be1d95b14..24a5c3486beb 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+@@ -145,8 +145,8 @@ &blsp1_uart2 {
+ };
+ 
+ &pm8916_resin {
+-	status = "okay";
+ 	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pm8916_vib {
+@@ -158,26 +158,26 @@ &pronto {
+ };
+ 
+ &sdhc_1 {
+-	status = "okay";
+-
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+ 	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-};
+ 
+-&sdhc_2 {
+ 	status = "okay";
++};
+ 
++&sdhc_2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+ 	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+ 
+ 	non-removable;
++
++	status = "okay";
+ };
+ 
+ &usb {
+-	status = "okay";
+ 	extcon = <&usb_id>, <&usb_id>;
++	status = "okay";
+ };
+ 
+ &usb_hs_phy {
 -- 
 2.38.1
 
