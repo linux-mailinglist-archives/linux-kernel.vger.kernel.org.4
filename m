@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F071966CB04
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD0866CB53
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjAPRJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        id S234238AbjAPRNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 12:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbjAPRJM (ORCPT
+        with ESMTP id S234367AbjAPRMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:09:12 -0500
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403F323C68;
-        Mon, 16 Jan 2023 08:49:37 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GGmpaU2102783
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 16:48:52 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GGmjDj2045637
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 17:48:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1673887726; bh=UD4ZhaHjRcn1J2dnBAvslht8N8U56Uf/Euv/eC9LvAo=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=PTdLyuia0bJNc5u9zqdnDShXdiE3GeI5ngqK4fbBuVluwBjD87vjwLYx+IzeNJZv/
-         taALeumzB0roYExAe6bLKOftCFkFWWhbdUomsV6d83GY5tsvqNetimULAxzYSvGevl
-         dGFFWwI74DAMZsAEcTMM6rq4JHme9kXjXVMurB0A=
-Received: (nullmailer pid 377843 invoked by uid 1000);
-        Mon, 16 Jan 2023 16:48:45 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Organization: m
-References: <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
-        <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
-        <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
-        <87o7qy39v5.fsf@miraculix.mork.no>
-        <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
-        <87h6wq35dn.fsf@miraculix.mork.no>
-        <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
-        <87bkmy33ph.fsf@miraculix.mork.no>
-        <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
-        <875yd630cu.fsf@miraculix.mork.no>
-        <Y8V+pvWlV6pSuDX/@shell.armlinux.org.uk>
-Date:   Mon, 16 Jan 2023 17:48:45 +0100
-In-Reply-To: <Y8V+pvWlV6pSuDX/@shell.armlinux.org.uk> (Russell King's message
-        of "Mon, 16 Jan 2023 16:43:18 +0000")
-Message-ID: <87v8l61l3m.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 16 Jan 2023 12:12:23 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EFD4B18C;
+        Mon, 16 Jan 2023 08:52:37 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id v19so25037505ybv.1;
+        Mon, 16 Jan 2023 08:52:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFQLhHdyrqER0kuXd0vq345qeGKM+r6w6javqYC8UmQ=;
+        b=d2rUgQbwHKmf/RQEz+VVQ7UlN/uijYES7Ka4btbq9t4Q2qnz4jO3SkV+o8s9gCrT73
+         GLjk8mOwi5Shsc8L/T8ESuss/uDRwrISTxKuPtO1CPG43dNSVsTIgQPKeTeqWSN4Q6wq
+         Brf2TSdEgLf5h45T/NSzQlKxadJD+MOuL5btjb5jbPZqO41sK2rdiNPzDBMqnZHGm7mT
+         TGp2Ru2Etm3efi2RgNLPc4RVFPWI7/zDVXeOFvUvfyB58RiEq2UNxxxXS0CAN3mTrZVx
+         nsN9iG13YTLM9I3gM/peAUqVoJ5rfG2Hzm7sw9MwhRrrB5gNMZr2eZZKsrmITL3JufLN
+         jwAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iFQLhHdyrqER0kuXd0vq345qeGKM+r6w6javqYC8UmQ=;
+        b=VWkwtSlbO3SWmdvxJL9r99pGlVdCN8Ad7/tW3jX09HImB6kQt3q1L4qJ8xJz1dJ68o
+         f2JO0u6Y+4zRkPnftZpOZzjnc4uEfvvgZlqSa2/U6M8l+14OAsy1uyTPR4EZskXl8yWy
+         769ypnXz2NCnVevdR0v34N3Ooi+qmipTLRLkRgGk/ZIRVHPmcBXvUMld+ji5xoev1nA/
+         MSD+ybUMi0rYDl85HpGuM/uFEFHXEvmcCnShk0lsX/n9xtxS1OeQnrnA4W8cRTL9hifc
+         o3IGJXpvjy+RUOS8+pAd5olaJQPZjpu7zqoYI7entN1J2NNvOAWEp8xjUjXdlu3DhVQ9
+         c5uw==
+X-Gm-Message-State: AFqh2kqf+f0yiv13rEh6+XbC700ifmY6lSABS+I/gQcim54UlWprwjtQ
+        v2SW4ZVa9KDQMVVc3bz3DpZaYqdn/RYey/ZV8oct4RohGVjcPOCx
+X-Google-Smtp-Source: AMrXdXs/yfZTGypDLxLmHNaoAX4jgSfGiwQGCB5/9lYDiWzzkMgSVbdwwlGLCJBT6Oq5AJ8/fegAya9BzRAll0CO+X8=
+X-Received: by 2002:a25:cf87:0:b0:7cb:dfbe:3996 with SMTP id
+ f129-20020a25cf87000000b007cbdfbe3996mr40668ybg.489.1673887956871; Mon, 16
+ Jan 2023 08:52:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
+References: <20230111152050.559334-1-yakoyoku@gmail.com> <aaf97a61-73c9-ff90-422d-9f3a79b0acd6@iogearbox.net>
+In-Reply-To: <aaf97a61-73c9-ff90-422d-9f3a79b0acd6@iogearbox.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 16 Jan 2023 17:52:25 +0100
+Message-ID: <CANiq72m+8D8OGtkyEjmyqCynp48DCKEw4-zLZ4pm6-OmFe4p1w@mail.gmail.com>
+Subject: Re: [PATCH v3] scripts: Exclude Rust CUs with pahole
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Neal Gompa <neal@gompa.dev>, Eric Curtin <ecurtin@redhat.com>,
+        bpf@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Russell King (Oracle)" <linux@armlinux.org.uk> writes:
-
-> I found the document for the PHY at:
+On Mon, Jan 16, 2023 at 5:37 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> https://assets.maxlinear.com/web/documents/617792_gpy212b1vc_gpy212c0vc_d=
-s_rev1.3.pdf
->
-> It seems as I suspected, the PHY has not completed SGMII AN. Please
-> can you read register 8 when operating at 1G speeds as well
-> (VSPEC1_SGMII_CTRL)? Thanks.
+> I presume Miguel will pick this up via rust tree? (Either way, would be nice to
+> also get an Ack from Arnaldo.)
 
-Both phys at 1G:
+I am happy to, but I think it would be great if BPF takes it whenever
+you think it is a good time. And indeed, let's give time to Arnaldo to
+take a look.
 
-root@OpenWrt:/# mdio mdio-bus 5:30 raw 8
-0x34da
-
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 8
-0x34da
-
-
-Bj=C3=B8rn
+Cheers,
+Miguel
