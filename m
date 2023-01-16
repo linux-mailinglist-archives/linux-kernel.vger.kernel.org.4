@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E00766D337
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC2C66D33A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235528AbjAPXfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 18:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S235566AbjAPXf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235520AbjAPXew (ORCPT
+        with ESMTP id S232024AbjAPXe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 18:34:52 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E14EF3;
-        Mon, 16 Jan 2023 15:32:12 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id a9so15320807ybb.3;
-        Mon, 16 Jan 2023 15:32:12 -0800 (PST)
+        Mon, 16 Jan 2023 18:34:56 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61892B2B0;
+        Mon, 16 Jan 2023 15:33:35 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-4d4303c9de6so249514867b3.2;
+        Mon, 16 Jan 2023 15:33:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2eGx37EmHA0N0W9tODp3iY+Jtr51iEGe4dAXEDxPGHg=;
-        b=XRlIs7dhg5iCvVEvX8TYR7BIQKWSK4S519EMsig4S5hCPso4dy7drqtAvz6p3eSBk9
-         TL9nFCr1BHLTa/c154LoKHJxh3bg+zI74O6EVrr1xoP5MHfNiypcPqxsnhkkbpIrQQuu
-         GuWKMCHBBY+Op8eDdAMcV3jZ9tpnlV19zXWNLzGzC2eag5zGIn5UzTLIzWQjAHb/tdvM
-         7wxakp2+ndRz65RdQfgyxVWNNJmSobFZOgUKAOcopDU5EfuHSHDddPDacsMHVDQ+zjtT
-         uRXhjiCzOw6fHAgZVPkK1SYmMuYnLCvGN2G2NxAQLlTxyju4nGP5M6+7QwQeF08oh2SS
-         2Grg==
+        bh=ivDU9Ro37F3LuZ7hP1KJdu6lEpnACciyXmME6mUAv2o=;
+        b=UnUAoO9C4bejerdcar2SMro8ESQo9VE1qYnQdXDVVtEtHy/ZKAGbLDmDY1nZBn3MdQ
+         0j6SINS/LdQ2vDXIigrTebkYjHeNAK8x43+a5hrF4yOPozgPiJdpkqLEK4W9H1XRw6+T
+         +1oupZMO8d3wdWZ4JIcT65POYrz9aaid/dJzcef5Yi5VD+vjWo8Dnfr79ReqkLv47TtE
+         hskPMFp7Cf45vH0BMNuCh8rY3CKuA8rqDvOsw7SwBwZbskw87wepJ6kpsjFYvSI22OM3
+         9gdTnKDf1/aAqc/hTh5YiUvosRUj7t+MmwcRTY2m1c8WB42Mn95U4PrX90IyYPsANBmi
+         vJww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2eGx37EmHA0N0W9tODp3iY+Jtr51iEGe4dAXEDxPGHg=;
-        b=lzxOOobC0PcGkH3//gyBHvUWgbVEoN1yogqG1l1lgA8tu+9dfCwZ2kikry20T+BBMt
-         RAlJ7HjnGd4vUGuTNmJ7B6c26UTQNIxAMgg2FOtataFQysNxBfoVxz//CORrp0NxzGnt
-         kvxTb+Oig8xjH4EgzDWvWfp+r5IEVtWeHrPEAmK2htrbkYPrmb8aINeF703QQyolE0t8
-         khEhPL2Mzt/Mdjdo0fDlV9dbPtrHGxPvxgSLkAS4Tv7ihQCzPn2cMeio8oGFlWIZ/ogq
-         NBhq35zE8qpHXnIn8NP8Qis5nrbpeAdWXp8AFBqyT6TZbbRyUK1lnSOCz/vXS/H9gvfr
-         VR1Q==
-X-Gm-Message-State: AFqh2koKhuVuFtPKpp1BwzHWApwwe+bZwrs24ySNUU3hvYmhyKVb6XY3
-        v5x8dGDjsBYlzuJiRyFlhpp69ZewAW4PB4uriZOTsc0PSFkIU6qi
-X-Google-Smtp-Source: AMrXdXuE1UAGgnxyZDwm/YOVUXX3/p67x7O3O4eboTy7D5CVHVN0IgALnQIj866+lQInoK43ZnNG9XsjVJ+vYXBy6yU=
-X-Received: by 2002:a25:ca51:0:b0:7bf:b130:9e24 with SMTP id
- a78-20020a25ca51000000b007bfb1309e24mr195541ybg.328.1673911931888; Mon, 16
- Jan 2023 15:32:11 -0800 (PST)
+        bh=ivDU9Ro37F3LuZ7hP1KJdu6lEpnACciyXmME6mUAv2o=;
+        b=MKXfgJHJ1rKGR1x9hyB9UjcBNjR/+SFX+/FdxRODwYqZrmem7a1LqpcgjKZfblFcjG
+         GKyGn4GyTjEUm/+a6m77Se/JA6RMPJ1TlIyYliAkQL13HVMYCFDJzG1CAFVH/3AYjxlY
+         XGjXkheh69gGO7sIlgL7HNg+VZQLG74iVX9whRLhrYMbWovmZ0g7Jvs4h/LhUXThAQxn
+         rrNWmCxvoaXDs8wjf4DZNNflqgpMY8mJXTeqgAymmX4UyiJPZjV3jZAop/AZJHcKydPh
+         5bwN2k6ywPN3qVcq32vX9UXimRS2hrRRDjYSbvgkm3tl37VtX4Qdk4VCDEVu2Z57e+lb
+         ouMw==
+X-Gm-Message-State: AFqh2kqOBLclkQ7/fUcW9g+ILlFC5bfYYfjVonUw20VXwX3DRHZ9uIGb
+        OLal/zAZXhPdYI/owR1K9l7PFDAB+Q8YjOYf134=
+X-Google-Smtp-Source: AMrXdXuCcIido/P/3jSaJx/R83F6+hTx4BurA5zvLjkHEPpRb4KZSkemt8vYeCGVW7zRCAMwBDJ2XvxzjTrPkw/TTw0=
+X-Received: by 2002:a81:5402:0:b0:3d8:8c0e:6d48 with SMTP id
+ i2-20020a815402000000b003d88c0e6d48mr82639ywb.462.1673912015171; Mon, 16 Jan
+ 2023 15:33:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20221206010519.39075-1-ojeda@kernel.org>
-In-Reply-To: <20221206010519.39075-1-ojeda@kernel.org>
+References: <20221205214454.2542888-1-gary@garyguo.net>
+In-Reply-To: <20221205214454.2542888-1-gary@garyguo.net>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 17 Jan 2023 00:32:00 +0100
-Message-ID: <CANiq72kTrfYzmgdLjOecsVTQzHdy_ZDaCO2KgbODtHpL0pS7Qw@mail.gmail.com>
-Subject: Re: [PATCH v1] rust: alloc: remove the `borrow` module (`ToOwned`, `Cow`)
-To:     ojeda@kernel.org
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+Date:   Tue, 17 Jan 2023 00:33:24 +0100
+Message-ID: <CANiq72kjaNpc_e6b0fetviJAcWBAitnD+mNmJV5Xr15rFubY9w@mail.gmail.com>
+Subject: Re: [PATCH v3] rust: compiler_builtins: make stubs non-global
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
         =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Josh Triplett <josh@joshtriplett.org>
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,27 +71,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 2:05 AM <ojeda@kernel.org> wrote:
+On Mon, Dec 5, 2022 at 10:45 PM Gary Guo <gary@garyguo.net> wrote:
 >
-> From: Miguel Ojeda <ojeda@kernel.org>
+> Currently we define a number of stubs for compiler-builtin intrinsics
+> that compiled libcore generates. The defined stubs are weak so they will
+> not conflict with genuine implementation of these intrinsics, but their
+> effect is global and will cause non-libcore code that accidently
+> generate these intrinsics calls compile and bug on runtime.
 >
-> The `Cow` type [1] requires that its generic parameter type implements
-> the `ToOwned` trait [2], which provides a method to create owned data
-> from borrowed data, usually by cloning.
+> Instead of defining a stub that can affect all code, this patch uses
+> objcopy's `--redefine-sym` flag to redirect these calls (from libcore
+> only) to a prefixed version (e.g. redirect `__multi3` to `__rust_multi3`),
+> so we can define panciking stubs that are only visible to libcore.
 >
-> However, it is infallible, and thus in most cases it is not useful for
-> the kernel. [3]
+> This patch was previously discussed on GitHub [1].
 >
-> Therefore, introduce `cfg(no_borrow)` to remove the `borrow` module
-> (which contains `ToOwned` and `Cow`) from `alloc`.
->
-> Link: https://doc.rust-lang.org/alloc/borrow/enum.Cow.html [1]
-> Link: https://doc.rust-lang.org/alloc/borrow/trait.ToOwned.html [2]
-> Link: https://lore.kernel.org/rust-for-linux/20221204103153.117675b1@GaryWorkstation/ [3]
-> Cc: Gary Guo <gary@garyguo.net>
-> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Link: https://github.com/Rust-for-Linux/linux/pull/779 [1]
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
 Applied to rust-next, thanks all!
 
