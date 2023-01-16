@@ -2,167 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CC766D0C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152AD66D0CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbjAPVPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S234167AbjAPVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbjAPVP1 (ORCPT
+        with ESMTP id S234057AbjAPVPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:15:27 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484622203C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:15:26 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id o15so20855003wmr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:15:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WhKvfliPWjeYRlf9KlWOibV02oeF9LVlkFGqKN45jSg=;
-        b=LdqHevJ7SNQAOSKe68U1ISBc2e4FYx0CQ9DIsjjEh9Efuas3xHB5UrYyHjvrcCDMaZ
-         Til4k+AjL4okkXjcpbqusd1pOlr4xCuVaZUu3dVFirrE0F44Krmg/rJCY9HKS5+sIEHC
-         pvj23xGbp6PFj+Ajl5xX355zfAjdI+BjR1aKvA/7LLZNHZZNwCxKHc6GG3+IRtC0hcIw
-         th36nqZmZLdphBpEg6kmQqpwMl4yYxcgIYIgdlck+v6qKfzjH1TrKW0xVubsyvL/K4re
-         cGzLAGxeFRDQAcVg4J5XiWx/Kr5E6AnZ0VJ6BP9pzvmXRB2PC4p/qO/ga3fJY5VGle4t
-         yjLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WhKvfliPWjeYRlf9KlWOibV02oeF9LVlkFGqKN45jSg=;
-        b=3DlcxJ5Fj05QVKxpAN5EdENCFlyBeGWNneNU2y4CZtBXgwu+DsLjCW7Z/ziyfnl7hp
-         nw+YgM1t5cg49xqPL+gV80szyubG8Q0OAvFi6ZbYKQqTJpiCbX/ld3uhLwU9OPHWUu2r
-         QrUBG73XKzhE3znuIajPFMWaanI7Yxy90lmJsNbnXSOBoltkRxlLVjdHBZG8iBZ5UayI
-         AK8kWAwIqSP9O9w9+rchSP65JygYI0DL2ikVR8gT0Qg0y26lx7/gIVwZ55KOU4iAjDsB
-         SJLwrfWV5xIalaxJJabV3r9x0TrQ40MBYXmEMxHh2MzjXnHVzy1PIpi/9C2buQAvvq7R
-         faiA==
-X-Gm-Message-State: AFqh2kpNJnxg9YUS/q7WxcyRv6Fl/WenUu/bWAcw3JHz5QCyGORmYBTB
-        wuSya+iGq8OJW9YQZ2Uy7B1FI/bVEKreOcQOVO1C3A==
-X-Google-Smtp-Source: AMrXdXsBdvvX9ajJKzWjK4fc0capcTkKIGnMHD2Gc+3LzuF7IBBVMW5SlcWvK/Sk8GfFV+H/2dPEqjOAlOHwRk7xhio=
-X-Received: by 2002:a05:600c:2247:b0:3da:27dd:9585 with SMTP id
- a7-20020a05600c224700b003da27dd9585mr35443wmm.182.1673903724574; Mon, 16 Jan
- 2023 13:15:24 -0800 (PST)
+        Mon, 16 Jan 2023 16:15:30 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FAD1207D;
+        Mon, 16 Jan 2023 13:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673903729; x=1705439729;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BjXiOG/yTpsib22dvo4gTY26G0IKOftojtMmiRyxqfw=;
+  b=QzveZxbBRabohwotYfdVivEyuWz9+KAj/mVfLytIJIrm/Dwr5a/PkeQO
+   zkGmAy18G7qXReeN2BbOb6dBSALQKB9QjIcQS9NLLX7+MDuZpPTFWWxW3
+   6iGhMmEheFbw3f1kI30edqXCIuJfyZxiV9x7O68zWsJ705LMb5edVjvso
+   klRFBE6R0C4p7+I9sMQA5xHRxQemCG4jJgTCvFe2mzMW3U2de7DTggpFB
+   dWkWviMbA8rRFB+xSfgm05FkexPMDrS5x6aCDHWrgj47taoy/NAFmCnrj
+   HJjAaTyojyAYJFjJiMTwfx7ZDfXTtp4kPvkulAzpaIzy3S0DLyBaDFB+4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="325828854"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="325828854"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 13:15:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="727592088"
+X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
+   d="scan'208";a="727592088"
+Received: from paichuan-mobl1.amr.corp.intel.com (HELO [10.209.71.173]) ([10.209.71.173])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 13:15:28 -0800
+Message-ID: <cc344449-5f0b-51c7-bae8-6deb9be83702@intel.com>
+Date:   Mon, 16 Jan 2023 13:15:29 -0800
 MIME-Version: 1.0
-References: <20230112004024.1934601-1-irogers@google.com> <Y8Uzet0cNtDo8kHe@krava>
- <CAP-5=fXjjnivhuVSRj7yjaea+6E-YfVKP+Tz2BsTNSqUBDvm4g@mail.gmail.com> <Y8WVVLEIkXgYvePd@krava>
-In-Reply-To: <Y8WVVLEIkXgYvePd@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 16 Jan 2023 13:15:11 -0800
-Message-ID: <CAP-5=fUKZwbnGA6H96w5U_-L6s7XMHvXkcQXQCrYpup_Qs4aSA@mail.gmail.com>
-Subject: Re: [PATCH v1] tools/resolve_btfids: Install subcmd headers
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 3/7] x86/cpu, kvm: Move the LFENCE_RDTSC / LFENCE
+ always serializing feature
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230110224643.452273-1-kim.phillips@amd.com>
+ <20230110224643.452273-5-kim.phillips@amd.com> <Y8WTnx/ukvdAEeoe@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y8WTnx/ukvdAEeoe@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:20 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Mon, Jan 16, 2023 at 09:20:39AM -0800, Ian Rogers wrote:
-> > On Mon, Jan 16, 2023 at 3:22 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Wed, Jan 11, 2023 at 04:40:24PM -0800, Ian Rogers wrote:
-> > > > Previously tools/lib/subcmd was added to the include path, switch to
-> > > > installing the headers and then including from that directory. This
-> > > > avoids dependencies on headers internal to tools/lib/subcmd. Add the
-> > > > missing subcmd directory to the affected #include.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
-> > > >  tools/bpf/resolve_btfids/main.c   |  2 +-
-> > > >  2 files changed, 15 insertions(+), 6 deletions(-)
-> > >
-> > > this depends on changes that went to Arnaldo's tree right?
-> > > I can't apply this on bpf-next/master
-> >
-> > Hmm.. sorry for that. I did the work on the master branch of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >
-> > > >
-> > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > index 19a3112e271a..de7d29cf43d6 100644
-> > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > @@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
-> > > >  BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
-> > > >  LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
-> > > >  SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
-> > > > +SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
-> > > >
-> > > >  LIBBPF_DESTDIR := $(LIBBPF_OUT)
-> > > >  LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
-> > > >
-> > > > +SUBCMD_DESTDIR := $(SUBCMD_OUT)
-> > > > +SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
-> > > > +
-> > > >  BINARY     := $(OUTPUT)/resolve_btfids
-> > > >  BINARY_IN  := $(BINARY)-in.o
-> > > >
-> > > >  all: $(BINARY)
-> > > >
-> > > > +prepare: $(SUBCMDOBJ)
-> > >
-> > > do we need special target for that? we already have BPFOBJ dependency
-> > > placed in the BINARY_IN as prereq
-> >
-> > BPFOBJ is $(OUTPUT)/libbpf/libbpf.a which is needed at link time. The
-> > prepare step is one we have elsewhere and it creates things like the
-> > header files necessary to compile the C code, so we need it earlier is
-> > the answer.
-> >
-> > > why not place both as BINARY_IN prereq, or is there some other reason
-> > > for new 'prepare' target?
-> >
-> > I was trying to follow the convention elsewhere in the tree of having
-> > a prepare target that does things like get the necessary header files
-> > ready. Having prepare is useful because if an additional dependency is
-> > added, then it just needs to be added to prepare. It could be tedious
-> > to list all the dependencies for every C file, although Makefile.build
->
-> ok, could we maybe add the BPFOBJ in prepare target as well?
+On 1/16/23 10:13, Borislav Petkov wrote:
+>>  /* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
+>>  #define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" AMD No Nested Data Breakpoints */
+>> +#define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
+> Hmm, a synthetic bit which gets replaced with a vendor one and then the other
+> vendors set it too. I don't see why that cannot work but we probably should be
+> careful here.
+> 
+> dhansen, am I missing an angle?
 
-Agreed, added to v2.
+I don't think so.
 
-> > handles most of that. It isn't clear to me why $(BPFOBJ) is a
-> > dependency of $(BINARY_IN) as it is already a dependency of $(BINARY).
->
-> I think that if you specify OUTPUT then we need the libbpf headers
-> to be created before we go to compile resolve_btfids objects
->
-> thanks,
-> jirka
-
-Yep. I also noticed that this code is doing the "CC=$(HOSTCC)" thing.
-The problem with that is Makefile.include (line 2) will set things
-like CFLAGS based on CC and then you change it. I sent out some
-objtool build cleanup for this:
-https://lore.kernel.org/lkml/20230105090155.357604-4-irogers@google.com/
-I'll add a patch for this in v2.
-
-Thanks,
-Ian
+I'd be surprised if we don't have a _few_ other cases like this around,
+but nothing is coming to mind.  Either way, it doesn't seem problematic.
