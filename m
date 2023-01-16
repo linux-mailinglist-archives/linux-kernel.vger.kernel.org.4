@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC27F66C072
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB46A66C077
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjAPN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S229919AbjAPN7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjAPN5n (ORCPT
+        with ESMTP id S231548AbjAPN5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:57:43 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF86422785
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:55:22 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id v23so25492516plo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:55:22 -0800 (PST)
+        Mon, 16 Jan 2023 08:57:49 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C972195A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:56:35 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id q125so17332544vsb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:56:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=147jSvlJn5xlSD2sUs0kYKU5A8XzMbwpiBCjTNuI7UQ=;
-        b=RJAFWHjuvZK/dAbe6GnD6KJxIkse2okjfKOmy0E0QmeeTYuRgtpe5HYs9Z6UnS9Mf2
-         cbBM6Riu6PuvpQO+ovTAbQRyUGDSiXB03qZtzQHu+cdvbtYanb1ERT7LFng2Z7nl8tz8
-         ZTGUU0wpHVIw8/vNoZ5gKPDvnM0yFkIrUbifnhV5ynDfzBVXiuRAy+Q8ISWHN6WVYXzK
-         pKG3Q+zeA0Sbg1A/qPe+DL8OsEyLbjhDyoxpFTsVHtvnafoGcIqxxXZMaO0Wd9i6BDRy
-         HjmgJoAGOapftq5GBQI03vrGwPq6618OLSUIbkh2J732odRmWORQsH/CRgys8R339uBa
-         C+0A==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZjN8CVhZObDPaSBf0c7cy+cZ0hKPnAPq8A620naKKZg=;
+        b=YRQCE3tux2Ndi3YV94WG1FxQoNK0Bs6geZFQ1Dv2FmvBblbWV7S6ppu4hc5Os0O+PX
+         LGHujExzAkan5j/1pekcU+gIsgw+KSfMcthEC2l3mGwu675qtW+wXievSlBboGe8+2xJ
+         uTPPySlsKSHQfEcXXhwIyiqOZHQvPLkTSPpzP/nFhf6prDTZpfbA/e51SJeLLy83Rul6
+         x03yR/IB2KEJP8XCdsMB5spVfI0JhJbnzParxsOre4Ezs34MRwvn769VX1fWxEg/JMIB
+         jps6V8uFmBv0HJ4SnCwI5xu41C1tfcNCbpYxFB4U+yEpFRRe0OK3Bcq7wa6fHCaf1ceW
+         JTHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=147jSvlJn5xlSD2sUs0kYKU5A8XzMbwpiBCjTNuI7UQ=;
-        b=xle5LGswR88O2NlMjcNWMrnXesthukgPlTBDvRidFEcpq53+WqX4Cj5IhyvcGXtuGt
-         OWm1G3di/cWYt+kp7Z6UP0YjXZoagSUGc49GUEkJ/OQY0F2K/bp2YjMs3ZEIgLsx3C66
-         IVmD1Kb+HFoEpOJkR9syz9zQqVn/f8rayBKUi7FDRnObE+9FuaJqZrwVmLY3M7dx2VF8
-         q21MFWmempjuJ0k9P6lNflPrHVndViwe4iSzl6zgtcFRjO9HHkeC9Hr5Hn3E7vUllftl
-         nv1F57BnHih2l9bheZ86mkPxdlo070ywSYzPFTiy/h94B0VS3mmiSZ0Pc+hyZL/KksoT
-         2fkg==
-X-Gm-Message-State: AFqh2kpvzlfPoytF2xmNN//WQ/jEMmxmA/nYxJ58bF93dqp3xELwkqq/
-        m4wvb+ipU/5wYorx6ygpCx+FMg==
-X-Google-Smtp-Source: AMrXdXv13YFxiAXJNMAadUbS9Q6PE3PbLzHNMejVH0EJDX2xGGWu77aDgVBYSYbhLk0HyJCFwtCzlw==
-X-Received: by 2002:a05:6a20:3a9e:b0:9d:efc1:116c with SMTP id d30-20020a056a203a9e00b0009defc1116cmr21242624pzh.6.1673877322173;
-        Mon, 16 Jan 2023 05:55:22 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id c10-20020a63d14a000000b004468cb97c01sm15901902pgj.56.2023.01.16.05.55.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 05:55:21 -0800 (PST)
-Message-ID: <e01e469f-488a-8f2d-008f-8427289d2ff3@kernel.dk>
-Date:   Mon, 16 Jan 2023 06:55:20 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZjN8CVhZObDPaSBf0c7cy+cZ0hKPnAPq8A620naKKZg=;
+        b=43SPv5gtWd3aIi04ofbqQqrL6/wq/Hn3BLqvDZV/Jpr5ViH1gkk7bvcPTA4T/i/BQ0
+         GrdvZ/2YKN4wyxJZGTeDmAP4itd8exdHskBeHwn9QVWluX2hnGPhfDJshKaLQ6NkJWnF
+         4FZwEcG8Kz7SQXs9FRIjXhe7CGzQGlTJhP+RGkLWihfrhGva81grT0HnBvXl2qPKn2eI
+         GEGe8vM/z/7kAqfNB7cOOZ7+d7oj8TwnlVSW/AK+StmAv8igSOHxbL7Fn1ksC4211bqG
+         JuF7I8Ao+J//UHgSLd7BYoSarmz5ebQ1/NaN1Uf8PeDYgW/1TkIpZc2Olsh66rF+tpiy
+         Wfqg==
+X-Gm-Message-State: AFqh2krNeR3arJDSDD1io6TFYvFo/jptlO9XT/RhqB8p+JtiR+Xak85c
+        jigsD8pdgGk7aClm2drK0GFYAQM/6Qmy8XbgsSNv3g==
+X-Google-Smtp-Source: AMrXdXs+HUmvx8auM1W65HBnw1/zlTGaQifSZJOf0nZxy2gBciN4SKDeQA5+P8NlR17+c14Ks/VxI5V2vxfAu4e392w=
+X-Received: by 2002:a67:f899:0:b0:3d3:d90c:5ef2 with SMTP id
+ h25-20020a67f899000000b003d3d90c5ef2mr537386vso.17.1673877394705; Mon, 16 Jan
+ 2023 05:56:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] io_uring: Split io_issue_def struct
-Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>,
-        Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     asml.silence@gmail.com, dylany@meta.com, io-uring@vger.kernel.org,
-        leit@fb.com, linux-kernel@vger.kernel.org
-References: <20230112144411.2624698-1-leitao@debian.org>
- <20230112144411.2624698-2-leitao@debian.org> <87v8lbcwz9.fsf@suse.de>
- <Y8UseW5sTqu72M2U@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y8UseW5sTqu72M2U@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230113182619.16800-1-andriy.shevchenko@linux.intel.com>
+ <20230113182619.16800-2-andriy.shevchenko@linux.intel.com>
+ <CAMRc=MdkgWBb5XTSMEEUQQGCO_3x1a3KK0KbvW4GmAQX1XGbxg@mail.gmail.com> <Y8U8bZ9+dOwmDgsb@smile.fi.intel.com>
+In-Reply-To: <Y8U8bZ9+dOwmDgsb@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 14:56:23 +0100
+Message-ID: <CAMRc=Md65GUZ0XXd_35gzS8SJQAHXG9neE4ZCxZXBr0q2nOc-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] gpio: wcd934x: Use proper headers and drop OF_GPIO dependency
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 3:52 AM, Breno Leitao wrote:
-> On Thu, Jan 12, 2023 at 05:35:22PM -0300, Gabriel Krisman Bertazi wrote:
->> Breno Leitao <leitao@debian.org> writes:
->>
->>> This patch removes some "cold" fields from `struct io_issue_def`.
->>>
->>> The plan is to keep only highly used fields into `struct io_issue_def`, so,
->>> it may be hot in the cache. The hot fields are basically all the bitfields
->>> and the callback functions for .issue and .prep.
->>>
->>> The other less frequently used fields are now located in a secondary and
->>> cold struct, called `io_cold_def`.
->>>
->>> This is the size for the structs:
->>>
->>> Before: io_issue_def = 56 bytes
->>> After: io_issue_def = 24 bytes; io_cold_def = 40 bytes
->>
->> Does this change have an observable impact in run time? Did it show
->> a significant decrease of dcache misses?
-> 
-> I haven't tested it. I expect it might be hard to came up with such test.
-> 
-> A possible test might be running io_uring heavy tests, while adding
-> enough memory pressure. Doing this in two different instant (A/B test),
-> might be a unpredicable and the error deviation might hide the benefit.
+On Mon, Jan 16, 2023 at 1:00 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Jan 16, 2023 at 10:03:47AM +0100, Bartosz Golaszewski wrote:
+> > On Fri, Jan 13, 2023 at 7:25 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+>
+> ...
+>
+> > > +#include <linux/mod_devicetable.h>
+> > >  #include <linux/module.h>
+> > > -#include <linux/gpio/driver.h>
+> > > +#include <linux/platform_device.h>
+> > >  #include <linux/regmap.h>
+> > >  #include <linux/slab.h>
+> > > -#include <linux/of_device.h>
+> > > +
+> > > +#include <linux/gpio/driver.h>
+> >
+> > Any reason for having it separately here?
+>
+> Yes. The idea is to emphasize the relationship between the driver and
+> the subsystem it's written for.
+>
+> P.S. Thanks for applying the rest of my contribution.
+>
 
-I think what you'd want is two (or more) io_uring ops being really
-busy and measuring dcache pressure while running that test. I don't
-think this is very feasible to accurately measure, and I also don't
-think that is an issue. The split into hot/cold parts of the op
-definitions is obviously a good idea. For ideal setups, we'll never
-be using the cold part at all, and having a smaller op definition
-for the fast path is always going to be helpful.
+We almost never do it and I prefer all linux/ headers to be grouped
+together. I like separate sections for asm/ and local includes but
+this is overkill IMO.
 
--- 
-Jens Axboe
-
-
+Bart
