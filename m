@@ -2,182 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B58A66BB21
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD37C66BB2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjAPKBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S229876AbjAPKFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjAPKBq (ORCPT
+        with ESMTP id S229834AbjAPKEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:01:46 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE3EC170
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:01:44 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id w14so22680551edi.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:01:44 -0800 (PST)
+        Mon, 16 Jan 2023 05:04:36 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C68193F2;
+        Mon, 16 Jan 2023 02:04:29 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id z5so25868841wrt.6;
+        Mon, 16 Jan 2023 02:04:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lgldI+82xaPUxW9jFm83l+ZVCizNwJg+yeI6zrnzsq4=;
-        b=BCpiKjVBNdeZIXfLzwWGp6kixGj7UhUJC6Jg3ImNGeisAS1niXVyRhbI37ToWhVVov
-         Gau4+9ctE1TDM13aqvWzu+yVTrjdC7tpaxBvH6lbm1K8ZLSAoYqj1tnfDNhaIggJy8Ix
-         U/m66LrjGiz/kInp/qy2Q4BcTg2Hx+cyJ/wha7WUftpsKznaWllLTHXTxs4JOuEAtz2K
-         Rk1Gp73r2z4eTAFbP20g0pkZLqvAsF50G1T9htpwAMzxU64m8827iOUAbuqItmOd2E4A
-         HnjayK4LMsTaDCKG/ax7O7cRtjDYaN817bWhHtQmCMNH239aO/y0pjmUOszBeipZH+p1
-         C2mA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XbIO2N193nCzeMIACK0SFaSPQ5nzZU2nDgITnTHRxbs=;
+        b=dJxMfLb2RB28pwZidieiXoi0wehiMuiOL+2IskQXY3CwWbNYpwokm2jYhlL+kJRMHC
+         8yZc2XvMvrUNFMxJ4caAGN/mx6hqU78vIvjWrPcEbft6/FlafkYoVcyW27N665yi65JX
+         NzTiv9c4j7dxdF7dD8j5y2fuYKNhv87s1r9eZug/53kZyBcQBOuyKicRqkv4Kz2R6PCm
+         UIiEfEPonuyJqQEG4SV7MegYgPi4UBmySkISbEzUoJW8bEFOTysvCi8y0E/2MVfZLCUB
+         v7HRamfMvHd+4vZ3qT2/6G6LS8WgmBtVw5f0/gnALeJi/HvMw9ZiVkUuP29rSilM5RF8
+         NZOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lgldI+82xaPUxW9jFm83l+ZVCizNwJg+yeI6zrnzsq4=;
-        b=BizmR35S+3rmyuCwT9UpWbfOLjgsA3O73x1DjRrwEZ3caYdogxiPTOkE/EKKhgqQNZ
-         m67sXJwjbnglH7Kxk5Nfvzi9HH+YweW2W4N88zjgZ21SchkJkYhQxISGYz50ORHrHlzR
-         H2E+nB8TwfXlUXPzJMFV+NdOqi07GoU8pygaE1PNzcJCXKqgQYKm1gsu8euACPHl5Niv
-         j5gknO+wd+frWoFn6JNv9vyHCCs4PLpCcNcgV2W+IVnoQM2TxCdf9XaQll7UFWnQHTnm
-         jEEaWZXWZFyEzkaGAyPqhE2PRva5nq0UzXS4tPAZapW5it8PWO5MXZ5HVHLQYmGTdVmP
-         fNWQ==
-X-Gm-Message-State: AFqh2kp9Pq/0QeoIG+5OddW+erQSVEoZQ4UZvBYNLbzSPOQMIxLva+nz
-        B6P3kIxw5V0MgwOnSLHag0j8+g==
-X-Google-Smtp-Source: AMrXdXvnFV6jO2U3anaxOMJIRIEJtNv8DD9RTL58GFnKUvxRRdcA3m/m4J+pPGsSPdTOMxg7f/nfCA==
-X-Received: by 2002:a05:6402:520b:b0:48b:58be:472c with SMTP id s11-20020a056402520b00b0048b58be472cmr78238671edd.18.1673863303450;
-        Mon, 16 Jan 2023 02:01:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q24-20020a056402249800b0046ac460da13sm11336099eda.53.2023.01.16.02.01.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 02:01:43 -0800 (PST)
-Message-ID: <dbf5fc36-11c6-ae54-a19c-5fc9924aa18d@linaro.org>
-Date:   Mon, 16 Jan 2023 11:01:40 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XbIO2N193nCzeMIACK0SFaSPQ5nzZU2nDgITnTHRxbs=;
+        b=xVct2IXKf89ENUso4UXco3emNdzdd5F+ReQx+SEkfg77DNlEqEzLt6dpaADwketkxy
+         Xkjdnts8c+B9Oz5SNzaOHuQHDs+dGHUSdsJizQ7hafa/3m1cwXH9FG1Uh2N0ec7/FYYV
+         JPW5+J1+sfQiGzFOJvr+Kc4JJLBgFtVXDoj7sOfUY4DijT4KoxbhHMhnS5m+y5xFpYCz
+         SZY5T9wAcROj5BxZRPc1T3LLZvYPzBAqXoztBVuMQrCaj+iGrK2BTy53s1QGv0cUazU1
+         oCdN4PWDc7Gm/9qFXHgvELimkGd4yfW6OrWq+a90/60CkA4SLbx6RByS208DsrzldyW0
+         67eA==
+X-Gm-Message-State: AFqh2kpwjdInXAtA+pek6gUcAvppbP69XfHtC1yPRGqew/KBaaJfwt8R
+        801Ocyb97HYJN7rbTu47+O4=
+X-Google-Smtp-Source: AMrXdXuO/QQxJ4KmNkv0K3j6obl3Gx0l62TtiA7hL2J3w+HhEH7U1sE7KprVVzcaS9WniUcCeKw9mw==
+X-Received: by 2002:adf:b608:0:b0:2bd:d76f:23eb with SMTP id f8-20020adfb608000000b002bdd76f23ebmr6745487wre.29.1673863467887;
+        Mon, 16 Jan 2023 02:04:27 -0800 (PST)
+Received: from localhost.localdomain (mm-88-61-120-178.brest.dynamic.pppoe.byfly.by. [178.120.61.88])
+        by smtp.gmail.com with ESMTPSA id bq14-20020a5d5a0e000000b002bdf2739cabsm5856220wrb.1.2023.01.16.02.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 02:04:27 -0800 (PST)
+From:   Oleg Verych <olecom@gmail.com>
+To:     wens@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mark.rutland@arm.com, mchehab@kernel.org, mripard@kernel.org,
+        robh+dt@kernel.org, sakari.ailus@linux.intel.com, wens@csie.org,
+        Oleg Verych <olecom@gmail.com>
+Subject: Re: [PATCH 04/14] media: sun4i-csi: Fix [HV]sync polarity handling
+Date:   Mon, 16 Jan 2023 13:03:59 +0300
+Message-Id: <20230116100359.4479-1-olecom@gmail.com>
+X-Mailer: git-send-email 2.35.1.windows.2
+In-Reply-To: <20191215165924.28314-5-wens@kernel.org>
+References: <20191215165924.28314-5-wens@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RESEND v3 01/13] dt-binding: mediatek: add bindings for MediaTek
- mt8195 MDP3 components
-To:     =?UTF-8?B?TW91ZHkgSG8gKOS9leWul+WOnyk=?= <Moudy.Ho@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20230116032147.23607-1-moudy.ho@mediatek.com>
- <20230116032147.23607-2-moudy.ho@mediatek.com>
- <f24a54f1-2720-3345-9596-bb8d388ba16f@linaro.org>
- <a5ef36df5bf8c483d327247199f5494be13b1efa.camel@mediatek.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a5ef36df5bf8c483d327247199f5494be13b1efa.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 10:39, Moudy Ho (何宗原) wrote:
-> Hi Krzysztof,
-> 
-> Thank you for taking the time to help review, I would like to ask a
-> modification as follows.
-> 
-> On Mon, 2023-01-16 at 09:10 +0100, Krzysztof Kozlowski wrote:
->>>
-> 
-> (snip)
-> 
->> On 16/01/2023 04:21, Moudy Ho wrote:
->>> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> aal.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> aal.yaml
->>> new file mode 100644
->>> index 000000000000..d2e1b5245778
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> aal.yaml
->>
->> Filename should match compatible, unless you already expect this
->> binding
->> will cover other devices. If so, why not adding them now?
->>
-> 
-> May I rename this file to "mediatek,mt8195-mdp3.yaml"
-> 
->>>
-> 
-> (snip)
-> 
->>> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> color.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> color.yaml
->>> new file mode 100644
->>> index 000000000000..1d8aa5dc76b9
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-
->>> color.yaml
->>> @@ -0,0 +1,63 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: 
->>> https://urldefense.com/v3/__http://devicetree.org/schemas/media/mediatek,mdp3-color.yaml*__;Iw!!CTRNKA9wMg0ARbw!lcferrFFP-mshDHNL-rwJLgNKDrXF9fXoljpqL30k5YKTNvCwuC3webzR32VnQQoPeFvSvAewNkeupcT4mjdEwNEKP4V$ 
->>>  
->>> +$schema: 
->>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!lcferrFFP-mshDHNL-rwJLgNKDrXF9fXoljpqL30k5YKTNvCwuC3webzR32VnQQoPeFvSvAewNkeupcT4mjdEz618JHq$ 
->>>  
->>> +
->>> +title: MediaTek Media Data Path 3 COLOR
->>> +
->>> +maintainers:
->>> +  - Matthias Brugger <matthias.bgg@gmail.com>
->>> +  - Moudy Ho <moudy.ho@mediatek.com>
->>> +
->>> +description:
->>> +  One of Media Data Path 3 (MDP3) components used to adjust hue,
->>> luma and
->>> +  saturation to get better picture quality.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - mediatek,mt8195-mdp3-color
->>
->> This is exactly the same as previous file. Why do you split the
->> binding?
->> It really looks unnecessary.
->>
->> Probably all other files should be also squashed.
->>
-> 
-> and convert all other bindings into individual compatible enums to
-> squash all files?
-> 
->   compatible:
->     enum:
->       - mediatek,mt8195-mdp3-color
->       - mediatek,mt8195-mdp3-aal
+Hi, Chen-Yu Tsai
 
-Yes, all devices which have exactly the same properties in one binding
-file. Their compatibles listed in enum.
+> -	hsync_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
+> -	vsync_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
+> +	/*
+> +	 * This hardware uses [HV]REF instead of [HV]SYNC. Based on the
+> +	 * provided timing diagrams in the manual, positive polarity
+> +	 * equals active high [HV]REF.
+> +	 *
+> +	 * When the back porch is 0, [HV]REF is more or less equivalent
+> +	 * to [HV]SYNC inverted.
+> +	 */
+> +	href_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
+> +	vref_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
 
-You can keep the separate bindings which differ from each other.
+After this change has been made there is a need of explicit explanation
+of what "Active high" / "Active low" in dts really mean.
 
-Best regards,
-Krzysztof
+Currently physical high/low voltage levels are like that:
+(I'm not sure about vsync-active)
 
+* hsync-active = <0>; /* HSYNC active 'low' => wire active is 'high' */
+  CSI register setting: href_pol: 1,
+
+That is confusing:
+
+[PATCH v6 5/5] DO NOT MERGE: ARM: dts: bananapi: Add Camera support
+https://lore.kernel.org/linux-arm-kernel/cf0e40b0bca9219d2bb023a5b7f23bad8baba1e5.1562847292.git-series.maxime.ripard@bootlin.com/#r
+
+> +	port {
+> +		csi_from_ov5640: endpoint {
+> +                        remote-endpoint = <&ov5640_to_csi>;
+> +                        bus-width = <8>;
+> +                        hsync-active = <1>; /* Active high */
+
+original CSI driver
+
+> +                        vsync-active = <0>; /* Active low */
+> +                        data-active = <1>;  /* Active high */
+> +                        pclk-sample = <1>;  /* Rising */
+> +                };
+> +	};
+
+[PATCH 13/14] [DO NOT MERGE] ARM: dts: sun7i: cubieboard2: Enable OV7670 camera on CSI1
+https://lore.kernel.org/linux-arm-kernel/20191215165924.28314-14-wens@kernel.org/
+
+> +	port {
+> +		/* Parallel bus endpoint */
+> +		csi_from_ov7670: endpoint {
+> +			remote-endpoint = <&ov7670_to_csi>;
+> +			bus-width = <8>;
+> +			/* driver is broken */
+> +			hsync-active = <0>; /* Active high */
+
+this change patchset
+
+> +			vsync-active = <1>; /* Active high */
+> +			data-active = <1>;  /* Active high */
+> +			pclk-sample = <1>;  /* Rising */
+> +		};
+
+> +			ov7670_to_csi: endpoint {
+> +				remote-endpoint = <&csi_from_ov7670>;
+> +				bus-width = <8>;
+> +				hsync-active = <1>; /* Active high */
+
+this patcheset
+
+> +				vsync-active = <1>; /* Active high */
+> +				data-active = <1>;  /* Active high */
+> +				pclk-sample = <1>;  /* Rising */
+> +			};
+> +		};
