@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E638A66D0E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7585666D0E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbjAPVWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S234253AbjAPVW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbjAPVWq (ORCPT
+        with ESMTP id S234293AbjAPVWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:22:46 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F3F22031;
-        Mon, 16 Jan 2023 13:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673904165; x=1705440165;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SuTGGIHQH37aq7t2M/pxLpldt78SXV6xIw0m542+wJ4=;
-  b=LWL1IavCrg/tKPTqhBmrg87OYmZbiCzDiJ14+/rYHLnv6WfFl9aDsuMZ
-   /3w8ebr8gj7GfCQGIFxPS1B7exgCh+GHLZKql4a2Ql1PR0oz5Hpbt7Ta7
-   YtPlsgVv+x+rCtAYYlp3M7L4xreswN3MhmgHOlr+7Lo1fzZQgJY+8regQ
-   WAAyyOd1vyuDWsjouwe2Din6cLwSPywxUGEjkC9SHrEMPc4AANP6RxJkx
-   /sEvFjYs0agjkUwJg7PGqX9u3KPwL8AVobXglUo9xxbBce7n+mh3r/2sw
-   BBrha1bCRemhwcUWka1fymQkMCLnh9a38CjvLK5L3Lycua9RwFtYCi5vI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="304244491"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="304244491"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 13:22:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="904433033"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="904433033"
-Received: from paichuan-mobl1.amr.corp.intel.com (HELO [10.209.71.173]) ([10.209.71.173])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 13:22:44 -0800
-Message-ID: <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
-Date:   Mon, 16 Jan 2023 13:22:45 -0800
+        Mon, 16 Jan 2023 16:22:53 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFBE23645;
+        Mon, 16 Jan 2023 13:22:52 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D995F1EC0441;
+        Mon, 16 Jan 2023 22:22:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673904170;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SvTq3QUKO/fSH18fq9ZAd93e/ucCBpnJFHBpsteItuU=;
+        b=PUd8SkGifBQ8ZKXzqdEtcmE5Uf9eNwLtrb8cAkH8OzQEERiCXcf43p8STIqE+0ExQkgAyI
+        GHkul9tFi6j0VazAKkiOk3IbvSYp2nJDZ5qa95AdXfZYtW9hiJyRh+u6EQb6FMxja827Ha
+        wGHJMOX4LukUqlfAcd+Buw2KsbBnKnI=
+Date:   Mon, 16 Jan 2023 22:22:50 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kim Phillips <kim.phillips@amd.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/7] x86/cpu, kvm: Move the LFENCE_RDTSC / LFENCE
+ always serializing feature
+Message-ID: <Y8XAKvXSHuKF/uma@zn.tnic>
+References: <20230110224643.452273-1-kim.phillips@amd.com>
+ <20230110224643.452273-5-kim.phillips@amd.com>
+ <Y8WTnx/ukvdAEeoe@zn.tnic>
+ <cc344449-5f0b-51c7-bae8-6deb9be83702@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
-Content-Language: en-US
-To:     Gerd Hoffmann <kraxel@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
-        Ard Biescheuvel <ardb@kernel.org>,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230113212926.2904735-1-dionnaglaze@google.com>
- <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
- <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cc344449-5f0b-51c7-bae8-6deb9be83702@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 02:56, Gerd Hoffmann wrote:
->> And we add this protocol to address very temporary problem: once
->> unaccepted memory support get upstream it is just a dead weight.
-> Maybe, maybe not.  unaccepted memory support has a Kconfig switch after
-> all.  If we figure in 3-5 years that all distros have enabled it anyway
-> we can drop it again.  For the transition period it will surely be
-> useful.
+On Mon, Jan 16, 2023 at 01:15:29PM -0800, Dave Hansen wrote:
+> I don't think so.
+> 
+> I'd be surprised if we don't have a _few_ other cases like this around,
+> but nothing is coming to mind.  Either way, it doesn't seem problematic.
 
-I agree with Kirill here.
+Yeah, probably. The cases I remember are the other way around - we map
+vendor-specific flags to synthetic ones...
 
-Having unaccepted memory *AND* this firmware-driven feature really is
-just implementing the same thing twice.
+Anyway, thanks for checking!
 
-I'd much rather have the Kconfig option forced on for all guests that
-*might* need unaccepted memory support than carry redundant implementations.
+-- 
+Regards/Gruss,
+    Boris.
 
-Also, _if_ we allow folks to turn the Kconfig off and get access to all
-their memory, they might get used to that.  Removing this firmware
-interface from the kernel in a few years could be viewed as a
-regression.  Then, we'll be stuck with this forever.
-
-In any case, the firmware side of things didn't seem like _that_ much
-code.  So, I'm not protesting *that* strongly.  But, I also don't
-believe for a second that this is going to be removed in 3-5 years.
+https://people.kernel.org/tglx/notes-about-netiquette
