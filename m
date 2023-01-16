@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEDF66D0F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8733866D105
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbjAPVfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S234711AbjAPVjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbjAPVfk (ORCPT
+        with ESMTP id S234627AbjAPVji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:35:40 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7EEAF;
-        Mon, 16 Jan 2023 13:35:39 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 03D5B1C09F6; Mon, 16 Jan 2023 22:35:38 +0100 (CET)
-Date:   Mon, 16 Jan 2023 22:35:37 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 000/521] 4.19.270-rc1 review
-Message-ID: <Y8XDKdUQ2JMgCB3x@duo.ucw.cz>
-References: <20230116154847.246743274@linuxfoundation.org>
+        Mon, 16 Jan 2023 16:39:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485F82BEF4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:39:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A076112F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 21:39:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49641C433F1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 21:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673905175;
+        bh=weET09a+ApawIsIatnvFTDnBOF/EDNC+WndN/Pj7sP8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PI9/0VJhIuleRzqDyGxToT3hXqpP6NAczZ6JAe2nd9+m/ZG0RKcvwojVQDhuLxTzw
+         88pwKlBU8AApOlfR5S7NIt/zsRdD71Zq4JyZTw9QOUgZMCldlB74ZhO0x96VAm2J0P
+         rBcBUyf3Ki8qVCy+YG+GjX0+H/yvqsGGd1ffaTEUVbaexoM0QdO5rIqSUWRJzc/Avw
+         jOhEh3L5G0mjKuBEsZpBidX8dwCRWRn4167xYTsAp8J7QzxeQ4pGkt7DTkbnPLXKWB
+         HOXj8EW+DrekEd4HZ+idtCAUdiMztgcBOz+jc5ZiivqZScme2CZ7WGkbVpcsvdkR6B
+         oWSS6bDCw5SmA==
+Received: by mail-ed1-f51.google.com with SMTP id x10so39566313edd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:39:35 -0800 (PST)
+X-Gm-Message-State: AFqh2kqn//l5+iggOY38WagpoOEFXmnODIeMkZftIlzNOtOe6zBjHkNX
+        q7mmGXsYCL2ct4phRFXJ3FhZCj44ay1JQHaSK00IgA==
+X-Google-Smtp-Source: AMrXdXsOFsLavQ9hyoAJhVqVxyprMYzeot7dXdv5Eh5PbuRKJO/EJOZYtAE1n+GMR/a/Ag0t9c05HK1eGxgP1uhaOWo=
+X-Received: by 2002:a05:6402:194b:b0:49d:ba1:dc82 with SMTP id
+ f11-20020a056402194b00b0049d0ba1dc82mr53839edz.312.1673905163253; Mon, 16 Jan
+ 2023 13:39:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="0vJclO4rIwnOYAZ+"
-Content-Disposition: inline
-In-Reply-To: <20230116154847.246743274@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+References: <SJ0PR04MB7248C599DE6F006F94997CF180C39@SJ0PR04MB7248.namprd04.prod.outlook.com>
+ <CAADnVQK4ucv=LugqZ3He9ubwdxDu6ohaBKr2E=TX0UT65+7WpQ@mail.gmail.com>
+In-Reply-To: <CAADnVQK4ucv=LugqZ3He9ubwdxDu6ohaBKr2E=TX0UT65+7WpQ@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 16 Jan 2023 22:39:12 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ75aNbH4w_GzYjrNPKis1x24KOu_33DniY_ig5s3ycobg@mail.gmail.com>
+Message-ID: <CACYkzJ75aNbH4w_GzYjrNPKis1x24KOu_33DniY_ig5s3ycobg@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Add CONFIG_BPF_HELPER_STRICT
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Roland <kernel.pwn@outlook.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>, bsegall@google.com,
+        Mel Gorman <mgorman@suse.de>, bristot <bristot@redhat.com>,
+        vschneid@redhat.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jan 15, 2023 at 10:32 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Jan 13, 2023 at 11:53 PM Roland <kernel.pwn@outlook.com> wrote:
+> >
+> > In container environment, ebpf helpers could be used maliciously to
+> >    leak information, DOS, even escape from containers.
+> >    CONFIG_BPF_HELPER_STRICT is as a mitigation of it.
+> >    Related Link: https://rolandorange.zone/report.html
+>
+> The link is arguing that a process with CAP_SYS_ADMIN permissions
+> can read memory of user processes, leak kernel addresses, etc.
+> And this is somehow an issue with bpf helpers?
+> and your suggested "temporary mitigation" is to CONFIG_BPF=n ?
+> While this patch is a "proper fix" ?
+> Sorry, but please stay with your "temporary mitigation" forever.
 
---0vJclO4rIwnOYAZ+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> This is the start of the stable review cycle for the 4.19.270 release.
-> There are 521 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.19.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
-
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---0vJclO4rIwnOYAZ+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY8XDKQAKCRAw5/Bqldv6
-8o7+AKC+7b0Tr5vR8oQDn6aOTvm3FbC+HACcCSMFb6IUfn9vogJQSy9HzYyZ2vU=
-=ZT6+
------END PGP SIGNATURE-----
-
---0vJclO4rIwnOYAZ+--
+100% agreeing with Alexei here, if you are running your containers
+with CAP_SYS_ADMIN there are a lot of other things you need to worry
+about than just BPF helpers. You need to revisit your threat model and
+consider not using CAP_SYS_ADMIN and more fine grained policies using
+Mandatory Access Control.
