@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EBA66C94E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3EC66C952
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbjAPQry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S233449AbjAPQsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233799AbjAPQrV (ORCPT
+        with ESMTP id S233845AbjAPQrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:47:21 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACD940BEF;
-        Mon, 16 Jan 2023 08:35:09 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CC830671D6;
-        Mon, 16 Jan 2023 16:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673886907; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 16 Jan 2023 11:47:31 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C6F40BF1;
+        Mon, 16 Jan 2023 08:35:18 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673886917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=x7t0YOJRqJkyR/v4+Wf24lPdcrODSmxqSGim8YzYnhs=;
-        b=Io1NDW4DvizFFd/BfM+ziDxHHjtF5sOBp4nwfT08niOp80XKhwhwF/jZKscKxuc6k06VEx
-        d0hQgX1MwimvRavIgcAbe6zgrgsCOiJ3Gm5gZ1adL09GDww4Pqd2NMkjqHGKUCOnmCt2Tn
-        pMu7OCH1bCzfJx7+hPkUTJ5vVf+sYyk=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3CF3F2C1AC;
-        Mon, 16 Jan 2023 16:35:05 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 17:35:02 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     coverity-bot <keescook@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: console_prepend_dropped(): Memory - corruptions
-Message-ID: <Y8V8tqMJeB7t+rcJ@alley>
-References: <202301131544.D9E804CCD@keescook>
- <Y8KAhaiZQOWTcfyF@google.com>
+        bh=y5aBMbxFAFIdStpWd8PjTw92BwcyzNQZ6KDghf5lWME=;
+        b=WcOzXIZhvSGHI4kvKmeXfaaJdxjdle5MVf1vpbxI/AmUPipq+r7qwkITTv//VM9mg2PMc7
+        LJyptKIS3yd4uD1y6XgEyOBdnZINhLk4pwbRiAJcb7tXuvov9dJEQxirB+Wi2tCA8f1eIa
+        h2cO72zuZ79rBMwZaKUf4/SNsPtLgaWlTBOzrBSUW7ykALM+MBfG/QKRYEG1fzOv6vMTSa
+        yJY53J3efC7hTx+lqxx5IvHLGh81f78i2M2JK9nKssO6CgT8pgnSPs0ravGlqLQ+uozKD7
+        9S28aL/s/ATwBDcokK0dTbo+ezQyz5JBswbnBs3R4ZIqdf2rLtC9muKIMPPjcA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673886917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y5aBMbxFAFIdStpWd8PjTw92BwcyzNQZ6KDghf5lWME=;
+        b=9t2m2hJfCfUhEd3ewF1n6zPM2zYK0sf7ZNxJnZ3SeXx+vQAZEnM9dxnpLeYBFOWDXJwYSF
+        lbgkBHygutn1QsAw==
+To:     David Woodhouse <dwmw2@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel <xen-devel@lists.xen.org>
+Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: Re: [patch V3 16/22] genirq/msi: Provide new domain id based
+ interfaces for freeing interrupts
+In-Reply-To: <1901d84f8f999ac6b2f067360f098828cb8c17cf.camel@infradead.org>
+References: <20221124225331.464480443@linutronix.de>
+ <20221124230314.337844751@linutronix.de>
+ <1901d84f8f999ac6b2f067360f098828cb8c17cf.camel@infradead.org>
+Date:   Mon, 16 Jan 2023 17:35:16 +0100
+Message-ID: <875yd6o2t7.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8KAhaiZQOWTcfyF@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,49 +75,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2023-01-14 19:14:29, Sergey Senozhatsky wrote:
-> On (23/01/13 15:46), coverity-bot wrote:
-> > *** CID 1530570:  Memory - corruptions  (OVERRUN)
-> > kernel/printk/printk.c:2738 in console_prepend_dropped()
-> > 2732     		/* Truncate the message, but keep it terminated. */
-> > 2733     		pmsg->outbuf_len = outbuf_sz - (len + 1);
-> > 2734     		outbuf[pmsg->outbuf_len] = 0;
-> > 2735     	}
-> > 2736
-> > 2737     	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
-> > vvv     CID 1530570:  Memory - corruptions  (OVERRUN)
-> > vvv     Overrunning buffer pointed to by "scratchbuf" of 1024 bytes by passing it to a function which accesses it at byte offset 1998 using argument "len" (which evaluates to 1999). [Note: The source code implementation of the function has been overridden by a builtin model.]
-> > 2738     	memcpy(outbuf, scratchbuf, len);
-> > 2739     	pmsg->outbuf_len += len;
-> > 2740     }
-> > 2741     #else
-> > 2742     #define console_prepend_dropped(pmsg, dropped)
-> > 2743     #endif /* CONFIG_PRINTK */
-> [..]
-> > Human notes from Kees:
-> > 
-> > I'm not sure how it got 1998, but I do see that snprintf() should
-> > probably be scnprintf(), otherwise "len" might be a lie (i.e. it'll hold
-> > what it WANTED to write, rather than what it actually wrote).
-> 
-> Cannot imagine how "** %lu printk messages dropped **\n" can expand into
-> 1998 bytes. Does coverity have a "verbose" mode?
+David!
 
-I guess that coverity tries to pass some random string that is longer
-than the provided buffer.
+On Mon, Jan 16 2023 at 09:56, David Woodhouse wrote:
+> On Fri, 2022-11-25 at 00:24 +0100, Thomas Gleixner wrote:
+>> +
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ops->domain_free_irqs)
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ops->domain_free_irqs(domain, dev);
+>
+> Do you want a call to msi_free_dev_descs(dev) here? In the case where
+> the core code calls ops->domain_alloc_irqs() it *has* allocated the
+> descriptors first... but it's expecting the irqdomain to free them?
 
-The code might be safe with the current size of the buffer and
-the string. But it is true that the following is wrong:
+No. Let me stare at it.
 
-	len = snprintf(scratchbuf, scratchbuf_sz,
-		       "** %lu printk messages dropped **\n", dropped);
+> However, it's not quite as simple as adding msi_free_dev_descs()...
 
+Correct.
 
-As Kees pointed out in the human comment, we should use scnprintf()
-that will return the really written length of the string that fits
-into the buffer.
+> diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+> index 955267bbc2be..812e1ec1a633 100644
+> --- a/kernel/irq/msi.c
+> +++ b/kernel/irq/msi.c
+> @@ -1533,9 +1533,10 @@ static void msi_domain_free_locked(struct device *=
+dev, struct msi_ctrl *ctrl)
+>  	info =3D domain->host_data;
+>  	ops =3D info->ops;
+>=20=20
+> -	if (ops->domain_free_irqs)
+> +	if (ops->domain_free_irqs) {
+>  		ops->domain_free_irqs(domain, dev);
+> -	else
+> +		msi_free_msi_descs(dev);
 
-I am going to send a patch.
+This is just wrong. I need to taxi my grandson. Will have a look
+afterwards.
 
-Best Regards,
-Petr
+Thanks,
+
+        tglx
