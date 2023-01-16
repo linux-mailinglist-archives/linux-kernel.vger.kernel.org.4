@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8DD66D04E
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E2C66D050
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 21:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjAPUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 15:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S232809AbjAPUjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 15:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjAPUjM (ORCPT
+        with ESMTP id S231390AbjAPUjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 15:39:12 -0500
+        Mon, 16 Jan 2023 15:39:16 -0500
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B08A2A9B6;
-        Mon, 16 Jan 2023 12:39:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3D42A997;
+        Mon, 16 Jan 2023 12:39:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673901550;
-        bh=LcUa09Y7snyF9Tz76Q52RwDF+8IvPy9A4+2h3Egsjn8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=e3lYJcnnJy9W1oPMBk30oU2TQ8PkvkvBxOO3xZM3OCDvp363T2Zu/B1LLT7H33cX1
-         UyE6KdUc9/eHkVpyQwDYVSBt/vzfOWYxfZW/ZOHUG83hZMUzjzDx2VVj1cogZTlsYa
-         sMLYBuhDvF+FQdPwtJJzql2K1KNWIEA5SKjXpLWfcgcHFSjpnyofb60gHCor16pIKL
-         rFbrPTsQWQu91TMu0Gzfj+eIDU7AelDzk/QE1RjjvQzLA6UFnZYu60ObkJyJOQ2sBj
-         +inJxSJaypiajkt6baH6/zfDIprqkwzySVgd/8P0rl2c/TzwAfBaU0RFCgiad9maQe
-         ZEibhKU5op/zg==
+        s=smtpout1; t=1673901555;
+        bh=PqBFqTTAgHMc20hNw6gIlD2yW1hdhrjFLL4zFiV9dtU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TsawzhFc7E4C3Id3I1e4vNeTj9hGQFA/giGhK+cx+4Zqbsyxeh4m6Zov8Wmbp7F0k
+         iYavcRPJzkLQjNvGWk2RJ36B0pkvCSttjXySxz33rFSQT6l0DxRbunsGIIGcOFmrKR
+         ut2ftrc5MB+T4MssqLivmrlDVrjuioHJvrHL/uD3vZWKgSV7+QRs+H25++nNfLrEx9
+         XkcSWiI/Dvt6oCJTGIuVriVPZnNkQs9ISl7d3U+/61j06YjZooxHDdLFZvQ/ccIS4W
+         bWZKrl2vUR007EIxD2JNPFRyIIagDKDlqRjTujdWzuGMsorimlv5BxI+3/IJWXWOKx
+         SrXg+c+XQO4/g==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NwkQQ1MMvzgjs;
-        Mon, 16 Jan 2023 15:39:10 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NwkQV5wPWzgjt;
+        Mon, 16 Jan 2023 15:39:14 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
@@ -39,12 +39,13 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
         Alexander Mikhalitsyn <alexander@mihalicyn.com>,
         Chris Kennelly <ckennelly@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [RFC PATCH tip 1/2] rseq selftests: Fix: use KHDR_INCLUDES for kernel headers
-Date:   Mon, 16 Jan 2023 15:39:03 -0500
-Message-Id: <20230116203904.214010-1-mathieu.desnoyers@efficios.com>
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH tip 2/2] sched/membarrier selftests: Fix: use KHDR_INCLUDES for kernel headers
+Date:   Mon, 16 Jan 2023 15:39:04 -0500
+Message-Id: <20230116203904.214010-2-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230116203904.214010-1-mathieu.desnoyers@efficios.com>
+References: <20230116203904.214010-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,25 +62,22 @@ building against kernel headers from the build environment in scenarios
 where kernel headers are installed into a specific output directory
 (O=...).
 
-Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tools/testing/selftests/rseq/Makefile | 2 +-
+ tools/testing/selftests/membarrier/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 82a52810a649..b357ba24af06 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -4,7 +4,7 @@ ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
- CLANG_FLAGS += -no-integrated-as
- endif
+diff --git a/tools/testing/selftests/membarrier/Makefile b/tools/testing/selftests/membarrier/Makefile
+index 34d1c81a2324..fc840e06ff56 100644
+--- a/tools/testing/selftests/membarrier/Makefile
++++ b/tools/testing/selftests/membarrier/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-CFLAGS += -g -I../../../../usr/include/
++CFLAGS += -g $(KHDR_INCLUDES)
+ LDLIBS += -lpthread
  
--CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L$(OUTPUT) -Wl,-rpath=./ \
-+CFLAGS += -O2 -Wall -g -I./ $(KHDR_INCLUDES) -L$(OUTPUT) -Wl,-rpath=./ \
- 	  $(CLANG_FLAGS)
- LDLIBS += -lpthread -ldl
- 
+ TEST_GEN_PROGS := membarrier_test_single_thread \
 -- 
 2.25.1
 
