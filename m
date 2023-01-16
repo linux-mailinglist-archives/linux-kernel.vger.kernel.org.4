@@ -2,105 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB3F66B702
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 06:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E9366B703
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 06:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbjAPF4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 00:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S231827AbjAPF4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 00:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjAPFzy (ORCPT
+        with ESMTP id S231717AbjAPFzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 00:55:54 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA1E903C
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 21:55:53 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4c131bede4bso367263827b3.5
-        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 21:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+daLfxi8Ns5qDmIM85s09QTJvJFZ/n3H5RvZXOfUl0g=;
-        b=IUkt+lN7A7IoDQPc/iGxftg+aaXqQ2dU4uBpYuT9m99uYJWJlgob/74I6G+RBWZ9Sh
-         lZX1mBVqXGtGTaW2kZzzR3IhC57x5tb/i2NBH9ihXtcREqG8iyAkhkkbuzDKgkkNMDWT
-         na1PXaNGWc/eBa81J4uMhJas1BqQ9lzuV/am1ZVNa3z7IxvR+TbDbz/Fp171PWAzc/mM
-         YYv2ncNdzgp66RL1s1VJG2N7ViFAV1Uqzb/xVyzqUZ5CKHDX+/9b4auklG/gIx7Z3Zej
-         DN6Nw+XTKNWor+Uq51V1dxYoexb1GJXw0BOMgrE1KUIrrz9agvBWisifhhNc15Ldjyxa
-         29gQ==
+        Mon, 16 Jan 2023 00:55:55 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA2E8A60
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 21:55:50 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id t3-20020a6bc303000000b006f7844c6298so17507820iof.23
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 21:55:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+daLfxi8Ns5qDmIM85s09QTJvJFZ/n3H5RvZXOfUl0g=;
-        b=AXzshP61rAd66o1Gu6mtyRWNsbmHDpUZo7M5tC9ZEhhLWIXMoNCe1D3V/8lai0aXZZ
-         nkTRePgX/+mbRPpX/8WSDqO3gFWxBlDq66IvH7IMoaVXn3CgJWglaf3leeBRHEPkV5mm
-         4nJPZYR9SqsmzJzxGm0YeRHKmBLQjzqo6s++MF3+8djFVYa0smCkWxcFZZxtITY5iZ6E
-         kTGFiLzD3Ig4niidWsvz6x+h3l87QE1/V0YXpQ6TVJVZFoTTButiS+blLXEygaFvT3LS
-         hWENENfo5GulAitpWSeqc+Ksu+BxtcXeFlx0Hk7LJzSmgxZ+14T0oScugxG3tl/BQrNi
-         1zrQ==
-X-Gm-Message-State: AFqh2koTV5Xwte1q66Lf6/abyDO8ftKwwn9C4kVroEl5lKtzsjpcZZwH
-        X+0XR8HA3jL5a69Ylt1rayQtmpl73IHYnvhr2VHFdA==
-X-Google-Smtp-Source: AMrXdXsywB8wnhpDlO6nEJpmrDCZXmry8C3GEbuCRPVZ1B4e9vvXn4rdj8YMuEXVa6jUakAt+fpSQ+gxuzlzozQZLpk=
-X-Received: by 2002:a81:608a:0:b0:4a4:7135:9214 with SMTP id
- u132-20020a81608a000000b004a471359214mr97195ywb.378.1673848552367; Sun, 15
- Jan 2023 21:55:52 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Neb0M9m1wuS/EiJZKNK8tyTuZyiCOJ+/j+azaSqhRls=;
+        b=SzifcgbUR1cdMFxOQSvbEIhjNz9d+5KU1IbFPMQKnMsfqkK5RWBHKaAX4Nkf9eyyS3
+         8defBfFbAsDrZMrWlcxFhbR/RuatKpWhcpvaQjuZ17M+Y8AGblAsI6rh2C8BpB6TgofK
+         n0DRhcHrxQese3CFeMUohmuGd8cn2umPmRIIMDTZVYsShqVkiGdQVKcrEomb0zw93b3j
+         6PIDKZ3RSWrffRTi/P7zHSkTpQ626JfOPA8ckmEela94AtHufMcnUHcB5RE++CJGejGR
+         yY+yKug0OAelpIoNmae4q+ZOHJFB8co3nmDM7nznINrG9L5hv8josgTm5Kjqz8GoGmnD
+         aAlQ==
+X-Gm-Message-State: AFqh2kotnI7uOyfDJSydwVwnGhkX/Nh4B9LjDdvGEikewP0ufHBvuZwz
+        adHGRMXiPW4Dj9ey6D3TyJZkZpIEMdqNyESY5v1X5CDns9i7
+X-Google-Smtp-Source: AMrXdXuY6j0pIfj/op015EDT3XMTEE1KPDhSOnmOINBlGwf8rd77Zae3Fd9SY0PUzKGdBWgDB/Lqv8CnhQ6l1esLbjvFWhn1GYkH
 MIME-Version: 1.0
-References: <20230113162245.117324-1-krzysztof.kozlowski@linaro.org>
- <20230113162245.117324-2-krzysztof.kozlowski@linaro.org> <e3c367ba-b752-d116-0b84-fd2437e565b8@linaro.org>
- <5e784285-c391-91f4-c9d1-a53443fc4264@linaro.org>
-In-Reply-To: <5e784285-c391-91f4-c9d1-a53443fc4264@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 16 Jan 2023 07:55:41 +0200
-Message-ID: <CAA8EJpr+0fnhy+aHwmdKQA_xk2Qkse0L5u8JdCJNDZqqdYwhrg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] arm64: dts: qcom: sdm845: move WCD9340 codec to
- separate file
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:1a0b:0:b0:30d:8f68:cd9 with SMTP id
+ a11-20020a921a0b000000b0030d8f680cd9mr4810898ila.274.1673848550134; Sun, 15
+ Jan 2023 21:55:50 -0800 (PST)
+Date:   Sun, 15 Jan 2023 21:55:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d19f805f25b3c71@google.com>
+Subject: [syzbot] [f2fs?] kernel BUG in __destroy_extent_tree
+From:   syzbot <syzbot+15d87e3695975269de2c@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 15 Jan 2023 at 13:21, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 14/01/2023 21:33, Konrad Dybcio wrote:
-> >
-> >
-> > On 13.01.2023 17:22, Krzysztof Kozlowski wrote:
-> >> WCD9340 codec node is not a property of the SoC, but board.  Move it to
-> >> separate file and include it in the specific boards.  On all others,
-> >> keep the Slimbus node disabled as it is empty.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> > Generally this should be SoC-independent, for example some newer
-> > MSM8998 devices shipped with the 9340 codec that most 845 devices
-> > used, but earlier ones used the WCD9335 found on MSM8996
->
-> OK, but I don't get if you expect me to change anything?
+Hello,
 
-Maybe it might make sense to name new include file just 'wcd9340.dtsi'
-rather than 'sdm845-somthing.dtsi'? Same applies to the wcd9335 codec
-found in msm8996.dtsi, if you are going to extract it too.
+syzbot found the following issue on:
 
-Note to Konrad: I don't see slimbus support in the msm8998.dtsi. Are
-there any pending patches?
+HEAD commit:    5a41237ad1d4 gcc: disable -Warray-bounds for gcc-11 too
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ffa85a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2b6ecad960fc703e
+dashboard link: https://syzkaller.appspot.com/bug?extid=15d87e3695975269de2c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
--- 
-With best wishes
-Dmitry
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+15d87e3695975269de2c@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/f2fs/extent_cache.c:1191!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 3 PID: 7706 Comm: syz-executor.3 Not tainted 6.2.0-rc3-syzkaller-00009-g5a41237ad1d4 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:__destroy_extent_tree+0x64a/0x7f0 fs/f2fs/extent_cache.c:1191
+Code: 04 00 00 00 49 8d 9c 07 e8 0c 00 00 48 89 df e8 fc 00 22 fe f0 ff 03 48 8b 3c 24 e8 20 1c 5b 06 e9 93 fc ff ff e8 a6 fa d3 fd <0f> 0b e8 9f fa d3 fd e8 6a 1f 59 06 31 ff 89 c3 89 c6 e8 3f f7 d3
+RSP: 0018:ffffc90027ee79c0 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000000 RCX: ffffc90007712000
+RDX: 0000000000040000 RSI: ffffffff83ad57ba RDI: 0000000000000005
+RBP: ffff8880754b0000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff888044fd2000 R14: 0000000000000001 R15: ffff8880700e4000
+FS:  0000000000000000(0000) GS:ffff88802c900000(0063) knlGS:00000000f7fa4b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00007f2dd53c836b CR3: 000000006d4f3000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ f2fs_destroy_extent_tree+0x17/0x30 fs/f2fs/extent_cache.c:1204
+ f2fs_evict_inode+0x38b/0x1df0 fs/f2fs/inode.c:789
+ evict+0x2ed/0x6b0 fs/inode.c:664
+ iput_final fs/inode.c:1747 [inline]
+ iput.part.0+0x59b/0x880 fs/inode.c:1773
+ iput+0x5c/0x80 fs/inode.c:1763
+ f2fs_abort_atomic_write+0xea/0x4f0 fs/f2fs/segment.c:196
+ f2fs_release_file+0xc8/0xf0 fs/f2fs/file.c:1869
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ get_signal+0x1c7/0x2450 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7fa9549
+Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f7fa45cc EFLAGS: 00000296 ORIG_RAX: 00000000000000bb
+RAX: 00000000002dc7fb RBX: 0000000000000004 RCX: 0000000000000005
+RDX: 0000000000000000 RSI: 0000000001000fc4 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000296 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__destroy_extent_tree+0x64a/0x7f0 fs/f2fs/extent_cache.c:1191
+Code: 04 00 00 00 49 8d 9c 07 e8 0c 00 00 48 89 df e8 fc 00 22 fe f0 ff 03 48 8b 3c 24 e8 20 1c 5b 06 e9 93 fc ff ff e8 a6 fa d3 fd <0f> 0b e8 9f fa d3 fd e8 6a 1f 59 06 31 ff 89 c3 89 c6 e8 3f f7 d3
+RSP: 0018:ffffc90027ee79c0 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 0000000000000000 RCX: ffffc90007712000
+RDX: 0000000000040000 RSI: ffffffff83ad57ba RDI: 0000000000000005
+RBP: ffff8880754b0000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff888044fd2000 R14: 0000000000000001 R15: ffff8880700e4000
+FS:  0000000000000000(0000) GS:ffff88802c900000(0063) knlGS:00000000f7fa4b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00007f2dd53c836b CR3: 000000006d4f3000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
+   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
+   a:	10 06                	adc    %al,(%rsi)
+   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+  10:	10 07                	adc    %al,(%rdi)
+  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+  16:	10 08                	adc    %cl,(%rax)
+  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1c:	00 00                	add    %al,(%rax)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 51 52             	add    %dl,0x52(%rcx)
+  23:	55                   	push   %rbp
+  24:	89 e5                	mov    %esp,%ebp
+  26:	0f 34                	sysenter
+  28:	cd 80                	int    $0x80
+* 2a:	5d                   	pop    %rbp <-- trapping instruction
+  2b:	5a                   	pop    %rdx
+  2c:	59                   	pop    %rcx
+  2d:	c3                   	retq
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
