@@ -2,156 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DE366B693
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3706166B6B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 05:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjAPEVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 23:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
+        id S231906AbjAPEoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 23:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjAPEVr (ORCPT
+        with ESMTP id S231869AbjAPEnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 23:21:47 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79C76EA8;
-        Sun, 15 Jan 2023 20:21:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gamME+x7gebsJfkm7gW8jA6COx7Xd9i0Qw8d9AcbeSlNMPCRe6OkQfOGDsmP6YSBFHtgXPMdFcHirWQl9J5uUpARSwYkrntaSSxwloToPIRMCXvZjac7GxI6n4e0IeOoijbjK9vGhMsF8n6SNsH8JzMiPUbv1QqEosHt/PVhXlUO7yzgjjCFtDHCoYPpYOz7gbS22XMfdZ54vYO45fiZvMU+dnVsVXM1/i+feNvl+Z+IDHfGwNK5Bqrjx9Okzuu88WGv4tN9HV6xWkPtTaLu+8NZrC/sAPo6DZqGZp7AfH42ITQeSd88kIE8GWDBkZxwtZvvzH0wbyLRbJjdSwTEjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FuH3PcsgZH+CZmjuGKewGk3kJHTL1KDq7PfOI0Ox8mU=;
- b=TazqxA6lQZ6dBlLiuQmfQcxEcTLqqYCM4cR/p7XH1C3dfQV5OQQOClwZhg57DtlUjEeZKOZtutjIeuislLmL9r+v0gnmM3VLuZi9LkYi95b9GAUCHr5Pi9JXJzaLpMhanHGghTp4Eyos9gwwJT08oLgf5Wj3X8vefJg94O1hHXIjsAihECDIfNpNka/Qr8HYH8C/u2zR9pWU/3MvIbx+1cK4HNyU2Ni51kFiuH2lZVlpU3Fc6wwWKy/O9PBg3BBtDTRjKBgRJHljgUQt49/11SJ0/gvDEJHUtWTY3G2DkXMogAAL5Wk+Dht5wt9V7ExVKwrR4UW8Gechf0NOBT2NEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FuH3PcsgZH+CZmjuGKewGk3kJHTL1KDq7PfOI0Ox8mU=;
- b=WSWpKGwWRpOGsr/xh35XTFatuYQTVUTtopM/uHDdVbFvna0uNXtI0WvC97Ae0jQUJh/ZOl/OQQvy/6lTBrYIR1deoFwfZKtYpdnMSVvSiaIaRtylTvAwtql1trDu/LZTbfC2gNnthr6q0sGAXyxY17VLIb1I3FyNFS57XiVbNTk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by CH0PR12MB5386.namprd12.prod.outlook.com (2603:10b6:610:d5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 04:21:43 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::a0e2:652:d7bd:58f]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::a0e2:652:d7bd:58f%4]) with mapi id 15.20.5986.018; Mon, 16 Jan 2023
- 04:21:43 +0000
-Message-ID: <98570bf8-dd78-3d9c-61da-9ac6b3502fd5@amd.com>
-Date:   Mon, 16 Jan 2023 09:51:27 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC 0/4] perf tool: Fix non-".text" symbol resolution for kernel
- modules
-Content-Language: en-US
-To:     acme@kernel.org
-Cc:     jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        kan.liang@linux.intel.com, peterz@infradead.org,
-        mark.rutland@arm.com, mingo@redhat.com,
-        alexander.shishkin@linux.intel.com, james.clark@arm.com,
-        german.gomez@arm.com, leo.yan@linaro.org, adrian.hunter@intel.com,
-        alexey.v.bayduraev@linux.intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20230110055859.685-1-ravi.bangoria@amd.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <20230110055859.685-1-ravi.bangoria@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::19) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Sun, 15 Jan 2023 23:43:50 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082D88A49
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 20:43:49 -0800 (PST)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230116044347epoutp02b26d961539b2f4a25c722b1feffec708~6sHTd_X841359513595epoutp02E
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:43:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230116044347epoutp02b26d961539b2f4a25c722b1feffec708~6sHTd_X841359513595epoutp02E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1673844227;
+        bh=KirXBT6ZP0szW+a5Gpp7gID69ByyoBTylvK8HFRXtAU=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=ZU6WdfaVOHBPdobtMyO4/xKWvrlBPAXJnscFHtL16E8E3Xgu67q6hz+gfL3gFUm22
+         olwuUV1aAqEGm4S8inaLB1oulZVqOnY44H0PCn+M3EZEl5IBWhWEIJDgO/5si/Cn/l
+         vzYfrDlPfpQy5Pnogunke81egPotCRBE87MtDhJ4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230116044346epcas5p113e74e8b8e44041a9e97d9879729f5ed~6sHSzgFDX3000830008epcas5p1L;
+        Mon, 16 Jan 2023 04:43:46 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4NwKD114V5z4x9Pw; Mon, 16 Jan
+        2023 04:43:45 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1F.C9.62806.006D4C36; Mon, 16 Jan 2023 13:43:44 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230116042307epcas5p10477cb96bb2daa850a0477a585188a7d~6r1Q4Yt7N1722717227epcas5p1R;
+        Mon, 16 Jan 2023 04:23:07 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230116042307epsmtrp25281f56f6ee4186642c16e5501cf6b29~6r1Q3bKce0891508915epsmtrp2c;
+        Mon, 16 Jan 2023 04:23:07 +0000 (GMT)
+X-AuditID: b6c32a4a-ea5fa7000000f556-4f-63c4d600186c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B8.84.02211.B21D4C36; Mon, 16 Jan 2023 13:23:07 +0900 (KST)
+Received: from FDSFTE070 (unknown [107.116.189.86]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230116042305epsmtip1853ec2a881894ca048434d72d1f65415~6r1OsbbYh1277212772epsmtip1T;
+        Mon, 16 Jan 2023 04:23:05 +0000 (GMT)
+From:   "Padmanabhan Rajanbabu" <p.rajanbabu@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s.nawrocki@samsung.com>,
+        <perex@perex.cz>, <tiwai@suse.com>, <pankaj.dubey@samsung.com>,
+        <alim.akhtar@samsung.com>, <rcsekar@samsung.com>,
+        <aswani.reddy@samsung.com>
+Cc:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <a4982e06-a6a4-a8c9-3b24-24f798c61f73@linaro.org>
+Subject: RE: [PATCH v3 4/5] arm64: dts: fsd: Add codec node for Tesla FSD
+Date:   Mon, 16 Jan 2023 09:53:04 +0530
+Message-ID: <03a301d92962$3c1a2320$b44e6960$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|CH0PR12MB5386:EE_
-X-MS-Office365-Filtering-Correlation-Id: 154ac5e2-ae4c-4b68-f11b-08daf7792c00
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 04SjXobykxJORNLurpVGLyAcBK6AesC+rvC7+zq5q3SKUeICxrypfkdd9nS9iLN7sTPRFtT4RiJt9GPD8+hf8HcbOMQkWcxcXFxDNqfgzaQvAtRb1MqLIuS0FPASOejfbyEfxiR09C5yqO9w74x95phzu9FWjO51glx8/UGlZB4HfkeoKZtkY94WnhRKJDy4TDFw7pD//T7r9oz/L2beBuzT+qNzCPQJhyZYQws89ark1sBZj6wlZu7H1k1QSBYVchcNSwyUZE3IwuG9XsOjNpdx3EEZn7IySP2xs+lsrk/qIpSPGYScAxi4nPgAomOP08LVMAaxuv62SHNl/sgrQ7d/IkCtDt8xxah0iyB69TdcJto8J4DFeOPKJVwO/BJlxmpWSQKLZJfO14aMyWS7yHTHeAmODNhtTXn1gW3mh1kePELY9DtPVo57fd9orjSpW5KEa2TGItcLSTRtI+w5sjigMF4TT7hQUQhUjPPR8dkpaG9iLLgs8E1mwCga8GQ001e6wK1Ud5AVOhEKCCKgSDivpyXWfU5cxGqRi4CdI3esLny2ncwlJbBLpJjzQAX74Zogujjw+rLM9xa9mqOs+MDk5Rsm8Yjx8LjXpMMT/V6b0qigzFjVCM6f0Wy5Q9sB0UkLvG9W5JoJyJRYmjMs/swuELR4h7ntgRfYsQiXLmJU4unXWMA38y8dEVH9SLkxJuGbB1O7YnEz9hvLwQ2g7eGHY++hiQ5mPzOPqloGdSI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(366004)(136003)(376002)(396003)(451199015)(86362001)(8676002)(38100700002)(31696002)(4744005)(5660300002)(7416002)(2906002)(8936002)(44832011)(6916009)(66946007)(66476007)(4326008)(66556008)(41300700001)(6512007)(6506007)(186003)(26005)(2616005)(53546011)(6666004)(316002)(478600001)(6486002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlJjbVN2VU0xWk5raU5IMUlSZE9wYnV4MERaYmovUEJlQVhWZ294cWFuZjBv?=
- =?utf-8?B?RTg3QjlPbHZyVHcvbExqZUtjWCtNKzR6QmxVVVZROE83SWJMY3RjQ0dlbjNz?=
- =?utf-8?B?Y1ZFUWpUcDgyOHZISFJsM2NSamFHM3JaSmcrOTBNb3RZRmJERlBIek9TY2ZE?=
- =?utf-8?B?Y0FFQSs4WG1aSVZBM2grOTBsYlRKQmZGKzE1dHFvSkh0R0JIYWgwK3paamlL?=
- =?utf-8?B?ZExJMm9EL2RHVWc5cHY4aDhuUG51MmNhV25pUUwyRWFLVTRPc2FadnE5ajhy?=
- =?utf-8?B?VlpsV3hQV3VsbXVPWmcvbk41T2pmdkZmS2ZYeE4xSFRERmxaejdlM1JjbzRl?=
- =?utf-8?B?a2Rqbk4wMTV4TXdqOWJGYU4yVE1KWTVkZzkrdDlIVnY1WnVPaUFBa1FDeVdr?=
- =?utf-8?B?Nnh3emNHWS92U1VZVnVMekFORzhwaVpJdFNQYXYzVnhNdWhUYnpoc1FxRERF?=
- =?utf-8?B?a1A0OU9jMWUxam9uYXlCYVI5dlQvS1Z5NHhNdUg0NUhVd0x2UTZNcVFodFRY?=
- =?utf-8?B?RTFWQUorbEg4VmNxc2VuVlRVM0tKZTdmUlJZN2RXWGdDNWdRZXVCTVE4TWxn?=
- =?utf-8?B?S29qdjA5RW5oMHg4aUR4RjBWdWNGNXlXdEdaYW5wMTFOYUlTK2hQeFBwaCtF?=
- =?utf-8?B?NWhoUmxQRTJLWHpFTHlhdW8xVHdlMVZsZHVlU2EreW1uVFRSd0RTRURaS20x?=
- =?utf-8?B?aG52dVVhdWFsUStmR0FaVzFXU1BORDhnWDF5dUhrTjY3UTBORERjNG9BTlBO?=
- =?utf-8?B?SzQ0U1psK1JNcXpMMXY3UFZlajF4djFycjB4V0ViQ2YzanVTelRvbENrQTE4?=
- =?utf-8?B?cGp6UFZVbzNYK1hWeXppUEt5dXlOd2prOE1mcTQzdHZpalJicGtRZU9YeDBT?=
- =?utf-8?B?RXRRTm4yZDdMUDBpTnF4a0cwcTJic05JSnZ0dm9mZFFndEhXOGVVL0piellm?=
- =?utf-8?B?bm1wZmQzUlBTeGtvWjNhdGorUlBRbDFyQzdlR0JsTnlENTRrbktUTTRFUlRC?=
- =?utf-8?B?K0o2N3g0cmE5bFdvSWM0YUp0UHBZWGM2SlJSbjhzbWN6VUI3aHhpSEJyV1FN?=
- =?utf-8?B?ZDBuZXZxMWhuUW5CazJvcGxPQ1VVK3B3VHpSR2N2VHlSNTNkL3d4dWhleTN0?=
- =?utf-8?B?V0h2d1kwSjY4dWpueHlaZlY0OU5kV2dYMWRsUUZESXE1SzJJaVg4VWx4SThM?=
- =?utf-8?B?Y3VmUTdlQ1dPMmlFMDZLeFBJWXVtb2t1aSs5amFHV2Z5b1VkVHNYemhSOTJ1?=
- =?utf-8?B?SjlSR0kwNFlkVXkySDV4MDIyZDlqTStBb1RsSTlOY1NRbW5XQk9Ham1GTGVw?=
- =?utf-8?B?bGkxYlZuMHZDK0VNcjk4SWVOUllxZWovV0dIQkdkSXRYQ2ZLbGpOVmdobHBj?=
- =?utf-8?B?THZ1TnlnOEFXTURmQmY1SStvbGg3cHZibExGOWc2czRnMmsyak55ZUZ5NGJS?=
- =?utf-8?B?TTJoNGI0NUJISDJ1NVc2MXhMOUk5aG5uYXBYaDRSMUh1WjNTZDFHcm1WVmpH?=
- =?utf-8?B?alJRRVdUU1FRUm9kTytvV0JkKzg2UW9BeGlyTldlOU9PZVNyQlFyV0Vaekxr?=
- =?utf-8?B?ZmFpeUpTakwyZE1selZHWGc4a0J6SGpJQVFZekd3TjA1U2p5QU1BZkhtMFgw?=
- =?utf-8?B?c2p1bENDV053TloyTG1DdXFvdFBiT29YeCs0QmhDeWlTdWlpL0dTdGtZbFRD?=
- =?utf-8?B?M0diOHh1Qkx3MUllZ2RMZjdVRDYra2VVbHdscDlZTkJVRElXZytOK1ZpMFZK?=
- =?utf-8?B?cy9iRUhRa0J5MXgyWFRSTjhUWktmSXZOTThDd0t4WC9mWng4QklvTzUrNXYy?=
- =?utf-8?B?dGJrb3JZQzFKeGxVTno4RWwvdW1WWXNnbzJHbHZGcWN1ZWZSU1Rkd0VONWEr?=
- =?utf-8?B?OW5NS3daT2R4TDlJdnlaT2s2TDFWajVwRThmWkRZeGlqVXdCTTJSSjBFakI1?=
- =?utf-8?B?ekZwR3YveThTdGd5Zll0MjZPV0liT0VPM3VZbTFqc0I3QlI2bzIyOEtCM2lF?=
- =?utf-8?B?SkVzZU9kMmU0dWJyay96bG5nOXlsWTI5NXZsWGFNTWFXb2xDUnZmRDcvdTJV?=
- =?utf-8?B?RzdjNFNac3ZLbW5FUlR4Z2s4eUVzSlM2M0pzeDBkUnZ6aENoRzBjWEZmbDNG?=
- =?utf-8?Q?afYy+s/dlkPY23NpVfXXX9zRl?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 154ac5e2-ae4c-4b68-f11b-08daf7792c00
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 04:21:43.1927
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5PXVoK+2E7ZpuToL1hRe5c34owInQD7qwA4u1FfKxTlht7YMPVsQxBKLmEcJlG01Ui0/vStdORPwxO2DfJjqDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5386
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-in
+Thread-Index: AQHLbZyfFuOXMbrDWpBwvoqdO4xuvAHRtuXQAlPUijoCxLwDyq6ElpYg
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTZxjG+c5pTw9uHWeFxU/MsJ5EnUSQalsPCIw5pFV0YZmJGWPBYzlp
+        kdJ2vUwwmWMQrhuIf8BmZSosQFa5NB2XDixBqDHKAjo7WLgNkhK6KSsXo0FItpZTNv77vc/7
+        vHm/55zvw1HBOBaOZ2uMjF5Dq0lsG6drcH9kVNCoUxHzh4tHzdzowijX4wGEGvipk0fVzLox
+        6qZzmEtVeWZRyvHUp71wlSHUk546jPpupA+hGjqf86jynitcyvzIzqWKHU4eNfislEtZX7aC
+        JEJuXSnE5D+bp3hym6Uck0+O3sHkfQtNmLyqwwLk7R2/ceQrtog0PD0nXsXQWYxeyGgU2qxs
+        jTKBTP0o8/1MiTRGFCWKpY6QQg2dyySQyafSolKy1b4IpPBzWm3ySWm0wUAeTIzXa01GRqjS
+        GowJJKPLUuvEumgDnWswaZTRGsYYJ4qJOSTxGc/lqNbrnRxdfUje/f4hbgHofb0CBOOQEMO5
+        O16kAmzDBUQvgM+sVRhbLAPYOF0Z6LwAsLhoHNscedhVyGMbDgC9lnHAFh4AR10u1O/CiCOw
+        wdG40QgjXAhcvV3K8RcoUQKg43Er8LuCiUR4taeY4+dQ4gRc/tbD8zOH2AObS3/Z0PlELHTO
+        VPNYfhM+uObe0FFiF+xeqEPZMwnh6lwTl9W3w3ur32zoYUQKLOtrQf2LIfEchwXlc4EQydDT
+        7+CwHAr/ut/BYzkcrvztCHi0sHapKMB5sGTJirD8Lux31flmcd+y/bC95yArvw1rHrYh7Bne
+        gJVr7oCdD+03NnkPbG+2AZZ3wr4xB6gGpHlLNPOWaOYtccz/b7sFOBawg9EZcpWMQaI7pGEu
+        /vfPFdpcG9i45JEn7WB2ZjF6ACA4GAAQR8kw/gc9gwoBP4vOv8TotZl6k5oxDACJ73tfRcPf
+        Umh9r0RjzBSJY2PEUqlUHHtYKiK385nOmwoBoaSNTA7D6Bj95hyCB4cXIGcSPGV2N0UkLZxd
+        DMVeXmqY78jLmDYdG156JFihLL/G19n0Qb2vpoycpBNnv+q2vVZYs1zbbe4eLtc2adX5x1ur
+        LgaNpMrG5hpODdln1q4fpX+UnDnWSSWm1wvmLE36y+M7T57zOvb+M/1ny7qMzEeYTyJqFp1D
+        lXET65Oe/GrZRMSFDJOQ36ZsjB9rtr9qOR1fOvFZ25pb8qDka6XenXLYLR+Z8tYeCL1+bde+
+        HUVDXy4M3pUWflg6+d4t28hx5qkl9ah0/oDMrvb+XpFCnP8+GV4ovp2xW5aU/kSkHe0NaZHs
+        /YKav3c5BFV9WjQ99g6+Hr12xTuy+HHXD9a75+NIjkFFiyJRvYH+F1aAOIttBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsWy7bCSnK72xSPJBpf3qlk8mLeNzeLKxUNM
+        Foc2b2W3mPrwCZvF/CPnWC36Xjxkttj7Gij27UoHk8XlXXPYLGac38dksWjrF3aLzl39rBaz
+        LuxgtWjde4Td4vCbdlaLDd/XMjoIeGz43MTmsXPWXXaPTas62TzuXNvD5rHv7TI2j74tqxg9
+        1m+5yuLxeZNcAEcUl01Kak5mWWqRvl0CV8afhUdYChbyVxw/cJq1gXE3TxcjJ4eEgInEqW1N
+        7F2MXBxCArsZJQ5OeMAMkZCWmN6/hw3CFpZY+e85O4gtJPCMUeLqbCMQm03AXGLR3qWMIM0i
+        Ao+YJObOf8QG4jALdDFKHP+7khli7HtGiQMHtzGCtHAK2ElM3NXKAmILC3hKfJr+Amwsi4Cq
+        xPL2M2BxXgFLiSMPJrBD2IISJ2c+AYszC2hL9D5sZYSw5SW2v50DdaqCxM+ny1gh4uISR3/2
+        gMVFBNwkOvatYZ7AKDwLyahZSEbNQjJqFpL2BYwsqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS
+        9ZLzczcxgmNZS3MH4/ZVH/QOMTJxMB5ilOBgVhLh9dt1OFmINyWxsiq1KD++qDQntfgQozQH
+        i5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGpoPSbdcElH+wbrbYO4XhtGGU7rkNh55cNN0U
+        utY4Ztb9FD5Z2TQ7u/C+gNXM32aphW4uDlDTuhARdq3cWCZ9xyJ5N8O3rf+m6G3dtvfcrk+a
+        YmeP2dR0ZxyR9T7ptl03e//KlI0fmjo3lqy8c0inrS3toVb10YDLlcvMhZfdcljJ8+ewgCHD
+        OSeHO6+WXn654cu6+zufVDW+2i9Yxjit1uCflVy3u9ZS2Wkylfv+9+R/ejsv1Xjv302bL668
+        f5rhxB6da1/rjK2ljilyB71a7bbhqvasPQ8eWGdIz/TRET6rL//x71fuitp4I/FXc65uO2O9
+        yVNrk61d+5kv29X+vfj+/fe5277FQiLexek+rzOVWIozEg21mIuKEwGWu0u6VAMAAA==
+X-CMS-MailID: 20230116042307epcas5p10477cb96bb2daa850a0477a585188a7d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230113121830epcas5p4cc336a48f4597ba84ab1352774242f75
+References: <20230113121749.4657-1-p.rajanbabu@samsung.com>
+        <CGME20230113121830epcas5p4cc336a48f4597ba84ab1352774242f75@epcas5p4.samsung.com>
+        <20230113121749.4657-5-p.rajanbabu@samsung.com>
+        <a4982e06-a6a4-a8c9-3b24-24f798c61f73@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
 
-On 10-Jan-23 11:28 AM, Ravi Bangoria wrote:
-> Kernel module elf contains executable code in non-".text" sections as
-> well, for ex: ".noinstr.text". Plus, kernel module's memory layout
-> differs from it's binary layout because .ko elf does not contain
-> program header table.
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+> Sent: 15 January 2023 08:37 PM
+> To: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>;
+> lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
+> krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
+> perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
+> alim.akhtar@samsung.com; rcsekar@samsung.com;
+> aswani.reddy@samsung.com
+> Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org
+> Subject: Re: [PATCH v3 4/5] arm64: dts: fsd: Add codec node for Tesla FSD
 > 
-> Perf tries to solve it by creating special maps for allocated (SHF_ALLOC)
-> elf sections, but perf uses elf addresses for map address range and thus
-> these special maps remains unused because no real ip falls into their
-> address range.
+> On 13/01/2023 13:17, Padmanabhan Rajanbabu wrote:
+> > Add device tree node support for codec on Tesla FSD platform.
+> >
+> > Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> > ---
+> >  arch/arm64/boot/dts/tesla/fsd-evb.dts | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > index cf5f2ce4d2a7..2f211a1ad50d 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > @@ -10,6 +10,7 @@
+> >
+> >  /dts-v1/;
+> >  #include "fsd.dtsi"
+> > +#include <dt-bindings/gpio/gpio.h>
+> >
+> >  / {
+> >  	model = "Tesla Full Self-Driving (FSD) Evaluation board"; @@ -34,6
+> > +35,17 @@
+> >  	clock-frequency = <24000000>;
+> >  };
+> >
+> > +&hsi2c_5 {
+> > +	status = "okay";
+> > +
+> > +	tlv320aic3x: codec@18 {
+> > +		compatible = "ti,tlv320aic3104";
+> > +		reg = <0x18>;
+> > +		#sound-dai-cells = <0>;
+> > +		reset-gpios = <&gpg1 6 GPIO_ACTIVE_LOW>;
+> > +	};
+> > +};
+> > +
 > 
-> Solve this by preparing section specific special maps using addresses
-> provided by sysfs /sys/module/.../sections/. Also save these details in
-> PERF_RECORD_KMOD_SEC_MAP format in perf.data which can be consumed at
-> perf-report time.
+> Why there is i2s here? What was the base of this patch?
 
-Do you guys feel this is worth to fix and I shall continue? Or --kcore /
---kallsyms workarounds are sufficient?
+Sorry, I could not get what you were asking for. Would be really
+helpful if you can elaborate on this query.
 
-Thanks,
-Ravi
+> 
+> 
+> Best regards,
+> Krzysztof
+
+
