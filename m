@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F0466B967
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB50166B96B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 09:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjAPIxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 03:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S231869AbjAPIyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 03:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbjAPIxo (ORCPT
+        with ESMTP id S232041AbjAPIyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:53:44 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5014C29
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=toxnBJPFRtD3QOxALorC41rSKC05NJueDnvaN0Ilxs0=; b=M5welZx+/iKa0n3a6z5zvrAUxa
-        gFdVaBclwpujg4U+Us2xvVw2eQ/Ug5Rsq0bqi5u+SrBQMLF58Dhhk6G122w/YBU123GQXjPwU2juX
-        PdXz9pThtpJ2NKJwwvUPER4oKG2+/Cp4gu+mOp5Hg1fWKJOo46CcLiIBrbWgWcimBPTj1HdbSqmU+
-        6b0cxblEP29/3240IJwuoKxFmSqTOqMJgOlaNS4k/Esq2J5EE9n21nxc0t+TirF2ueY/j6aoGfIHf
-        QrW3ybCgcFaslQYYAryEn/8ZRCFnMQI8iDZLKlKSvu1f9nrYTLsRiH9tbtBARuuNKHVYG71t8KsVz
-        Q1pr8Ong==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pHLEk-005XLh-2n;
-        Mon, 16 Jan 2023 08:53:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BE8DC30030F;
-        Mon, 16 Jan 2023 09:53:08 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9448C20A006E1; Mon, 16 Jan 2023 09:53:08 +0100 (CET)
-Date:   Mon, 16 Jan 2023 09:53:08 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Joe Mario <jmario@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH] sched/idle: Make idle poll dynamic per-cpu
-Message-ID: <Y8UQdKx+004a28fL@hirez.programming.kicks-ass.net>
-References: <20230112162426.217522-1-bristot@kernel.org>
+        Mon, 16 Jan 2023 03:54:33 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE59A5F2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:54:32 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id 12so2046847vkj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 00:54:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8AoNhE9nlR/QGp4z87SryZWRWBB4ufblvx66JVKBkQg=;
+        b=WpORYWNejzln9pw3GjGAWoD9UJKVYIO1dL95+WnV0IArOLSWW1Lv9QroS957BJwWCB
+         9ZPvLC2pUXLT31xp2iNJYfQ/jVYoW/6jubp5g6DwSEVrtnL0N05K4zrBOYAba/lf+npp
+         xAeK08JWiaF1b8EkZhNW/LIVpDwcyJxhQkt1TU5vH9NziFk18KnppaUeo3AkXkDMQXP1
+         I607/1jMgT0I+7zPravRCsOJ6KOlJ7GFEBvUznp5GRYPArS38zXLHmZR56e/T185eXoQ
+         GzVQ8q+kGkxqKw4u9g8hDVb4fPVKttiXIRYVlZn6UwM5pj1+jsQbzvwwkxcHLw62w6dF
+         aVXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8AoNhE9nlR/QGp4z87SryZWRWBB4ufblvx66JVKBkQg=;
+        b=jaaVt/W+kJmulk/5zL3atl5EN9ZfydKUlkMNRb0xqBTX1yn1o60P8v//YUDlJe6mRd
+         MGeJrNByit/ou+8xeeorsvt8x0r58I6RCVWSG7eQna8+PXqAB+9JOx3WaTWfgQNnV6Pf
+         E5MCvmdTF+cAuQoCDw2JgjULc30yFwQ5ql0yQ8xF5jEOfltrpYogK1ZpNv8MDAHp+lNr
+         aLWhTplTdEB1JJB0nhL0c/799twQ36ufTnMEJs5wuSzUAEUn17B/ZA/r0+UBRbsv1W2z
+         ws7g/mMIRxzpMQKDKg7xOIw18dsuRPwOHif/h6r7az4w3J5/KZ5FBJulqTgRAiem3cFc
+         6RRw==
+X-Gm-Message-State: AFqh2ko1e9tzPaSHYUj7qMEsIiE69yBOSfe8eVeWnuKvsoWEVe+iOPjx
+        1J/69uqfCs20mSDxnurdlXiS/vzTvV3OWbmxXEUlqQ==
+X-Google-Smtp-Source: AMrXdXsg/hyJNGENEoEO7DJDfE66mlBgOB9nb1h59SVSiEt1dmlwhZcn6g6wCHM06JL/qKuDITRh/U2Z1Ai7/KFnh7c=
+X-Received: by 2002:a1f:4cc4:0:b0:3dd:f5ea:63a2 with SMTP id
+ z187-20020a1f4cc4000000b003ddf5ea63a2mr1001270vka.10.1673859271898; Mon, 16
+ Jan 2023 00:54:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112162426.217522-1-bristot@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112163951.73180-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230112163951.73180-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 16 Jan 2023 09:54:21 +0100
+Message-ID: <CAMRc=Mc+zSfM=eiWScuhDr9kasmhyCMHDxavoMbPd6TmGAuWdw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: xilinx: Remove duplicate assignment of of_gpio_n_cells
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 05:24:26PM +0100, Daniel Bristot de Oliveira wrote:
-> idle=poll is frequently used on ultra-low-latency systems. Examples of
-> such systems are high-performance trading and 5G NVRAM. The performance
-> gain is given by avoiding the idle driver machinery and by keeping the
-> CPU is always in an active state - avoiding (odd) hardware heuristics that
-> are out of the control of the OS.
-> 
-> Currently, idle=poll is an all-or-nothing static option defined at
-> boot time. The motivation for creating this option dynamic and per-cpu
-> are two:
-> 
->   1) Reduce the power usage/heat by allowing only selected CPUs to
->      do idle polling;
->   2) Allow multi-tenant systems (e.g., Kubernetes) to enable idle
->      polling only when ultra-low-latency applications are present
->      on specific CPUs.
-> 
-> Joe Mario did some experiments with this option enabled, and the results
-> were significant. For example, by using dynamic idle polling on
-> selected CPUs, cyclictest performance is optimal (like when using
-> idle=poll), but cpu power consumption drops from 381 to 233 watts.
-> 
-> Also, limiting idle=poll to the set of CPUs that benefits from
-> it allows other CPUs to benefit from frequency boosts. Joe also
-> shows that the results can be in the order of 80nsec round trip
-> improvement when system-wide idle=poll was not used.
-> 
-> The user can enable idle polling with this command:
->   # echo 1 > /sys/devices/system/cpu/cpu{CPU_ID}/idle_poll
-> 
-> And disable it via:
->   # echo 0 > /sys/devices/system/cpu/cpu{CPU_ID}/idle_poll
-> 
-> By default, all CPUs have idle polling disabled (the current behavior).
-> A static key avoids the CPU mask check overhead when no idle polling
-> is enabled.
+On Thu, Jan 12, 2023 at 5:39 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The of_gpio_n_cells default is 2 when ->of_xlate() callback is
+> not defined. No need to assign it explicitly in the driver.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-xilinx.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+> index 619a00ad71d4..bbcde91135b9 100644
+> --- a/drivers/gpio/gpio-xilinx.c
+> +++ b/drivers/gpio/gpio-xilinx.c
+> @@ -558,7 +558,6 @@ static int xgpio_probe(struct platform_device *pdev)
+>         int status = 0;
+>         struct device_node *np = pdev->dev.of_node;
+>         u32 is_dual = 0;
+> -       u32 cells = 2;
+>         u32 width[2];
+>         u32 state[2];
+>         u32 dir[2];
+> @@ -591,15 +590,6 @@ static int xgpio_probe(struct platform_device *pdev)
+>
+>         bitmap_from_arr32(chip->dir, dir, 64);
+>
+> -       /* Update cells with gpio-cells value */
+> -       if (of_property_read_u32(np, "#gpio-cells", &cells))
+> -               dev_dbg(&pdev->dev, "Missing gpio-cells property\n");
+> -
+> -       if (cells != 2) {
+> -               dev_err(&pdev->dev, "#gpio-cells mismatch\n");
+> -               return -EINVAL;
+> -       }
+> -
+>         /*
+>          * Check device node and parent device node for device width
+>          * and assume default width of 32
+> @@ -630,7 +620,6 @@ static int xgpio_probe(struct platform_device *pdev)
+>         chip->gc.parent = &pdev->dev;
+>         chip->gc.direction_input = xgpio_dir_in;
+>         chip->gc.direction_output = xgpio_dir_out;
+> -       chip->gc.of_gpio_n_cells = cells;
+>         chip->gc.get = xgpio_get;
+>         chip->gc.set = xgpio_set;
+>         chip->gc.request = xgpio_request;
+> --
+> 2.39.0
+>
 
-Urgh, can we please make this a cpuidle governor thing or so? So that we
-don't need to invent new interfaces and such.
+Applied, thanks!
 
-
+Bart
