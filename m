@@ -2,114 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F1B66BE74
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B0D66BE7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjAPM5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 07:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S231313AbjAPNA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjAPM4x (ORCPT
+        with ESMTP id S231209AbjAPNAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:56:53 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FE120050;
-        Mon, 16 Jan 2023 04:55:42 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id x5so861930qti.3;
-        Mon, 16 Jan 2023 04:55:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CM4Jkzp/QAXkO7bnxWsfgCHfESoHq0ivf9TvlonLhmA=;
-        b=Mn12KVK09MbH3Hu1oFUpb91/fQq2Ug1Z9ttFJE3HTfHJGykZ7mG6ap34OOqGCy2lIO
-         oVVAT0MRRi/epgeph8vkPzVfrN80ql2r64zYNTJbwqb/Dp7EXWMt5vofn82JZ11+Om0+
-         xml1FBPmPR13B0I4ZG7n0BZVKu0Bwessyu6ZcyHHBACcmy5BjRfvlE5v3PGCRefzNmXF
-         iO0OhvAyuXHt/gmqthfBz7on7BbqLmpb6Uhi/QS7n1e8F6QFo/Jm4QHJNGBc+15UOJ0b
-         ukEaqxGA11VkinQIKOPTSopziQfKUhQ1q3Pko80j8xcyg+psu0YbRCXjTD3gWZnCt0ST
-         RJgQ==
-X-Gm-Message-State: AFqh2kplFSIxWBsblK5BCLSdT/t0TQd6OmQfHXeuQWqvJZ6G8yp8LsrT
-        RosIB5m7UUWTFKl6M5GwnYXYDLyJP2VpoA==
-X-Google-Smtp-Source: AMrXdXvSek5CM7kko3egK3cIPxxImuMu6Faaui9MMc86ouX0ZA93gouZby3xtrm8yUqdhdm2/f2juw==
-X-Received: by 2002:a05:622a:1c0e:b0:3b6:2c74:1453 with SMTP id bq14-20020a05622a1c0e00b003b62c741453mr8833816qtb.61.1673873741673;
-        Mon, 16 Jan 2023 04:55:41 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id jr49-20020a05622a803100b003ad373d04b6sm11638024qtb.59.2023.01.16.04.55.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 04:55:41 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id a9so13476351ybb.3;
-        Mon, 16 Jan 2023 04:55:40 -0800 (PST)
-X-Received: by 2002:a25:46c6:0:b0:7b8:a0b8:f7ec with SMTP id
- t189-20020a2546c6000000b007b8a0b8f7ecmr4777221yba.36.1673873740621; Mon, 16
- Jan 2023 04:55:40 -0800 (PST)
+        Mon, 16 Jan 2023 08:00:04 -0500
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF63F23C7A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
+        :Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=H5f0dObctcGnzYNS5KGN/jNVSS1kTkd181waoSAxSvw=; b=cgD4zmVP2OoYP4MI8wq+2clHDR
+        /xVnmWPbgeK2ENXb7L0ewyg/2KAn04BUUKB1Kie+aggKj7G+hx0C/3B9RVdNxP2sqYWs5Q4Tg87YL
+        qtuI0u7w3lDAkOd41A58hHptWK9l0238ICFoAiiblR2uSpxoAUggt87KA2W1HRFdDjb3Thd/zcWoy
+        lQ0PjYMNUYOW1OdB0AG1s9yp1j78jI01B8AiIHr713TBc9jezlh403X5S+G30r/kxI2iq1h8vH27c
+        7z1cWQAJZgI9L8+mNj2cbnFMeknE+pDzGYUS4QFsNM4Mp/GjA0DYiAK0GmqodKq6tEnez+hAXmAQ4
+        tKzt2pzQ==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <anuradha@debian.org>)
+        id 1pHP3W-008y6z-Gw; Mon, 16 Jan 2023 12:57:43 +0000
+From:   Anuradha Weeraman <anuradha@debian.org>
+To:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Cc:     anuradha@debian.org
+Subject: [PATCH] kernel/printk/printk.c: Fix W=1 kernel-doc warning
+Date:   Mon, 16 Jan 2023 18:26:34 +0530
+Message-Id: <20230116125635.374567-1-anuradha@debian.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230106125816.10600-1-fabrizio.castro.jz@renesas.com> <20230106125816.10600-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230106125816.10600-2-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 16 Jan 2023 13:55:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVZ+wrCmRxjoV-k3zhs1tHHdLr1toBbT2ft+-pVrzMYEQ@mail.gmail.com>
-Message-ID: <CAMuHMdVZ+wrCmRxjoV-k3zhs1tHHdLr1toBbT2ft+-pVrzMYEQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: soc: renesas: Add RZ/V2M PWC
-To:     fabrizio.castro.jz@renesas.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=864; i=anuradha@debian.org; h=from:subject; bh=eT+JGkevGZaq8nqTmUmG8ZRflCJK93WPK/lWTjr5uew=; b=owEBbQKS/ZANAwAKAWNttaHZGGD9AcsmYgBjxUl9we/wsCMfDQYEDxhTCNKMn2GDX39a3+Td7RUd 9C8XKd6JAjMEAAEKAB0WIQT1a48U4BTN710Ef8FjbbWh2Rhg/QUCY8VJfQAKCRBjbbWh2Rhg/dA+D/ wOl1vch2Hejk50p0T5laT5I9P8Ji7DhERD3Sb8Q5lRqdN3RqlLFe76u75iwA1KJe23R4gQcaQNGVJg Uj+Gy2wFWKBbq3tgz46CJu+4VM+kMwxwhvwUcnSm9jRG1T0xm1IorAz0lRANzgUeOK/VIMenMSj26n zQgHFXTjjXPFH8G9Xb/CzBIDNlcJqSxIMI3luh5v0l88cuQm74dzsg7ZXRdAYOAWQ6b9M3RwNFwzjd fWG8Xw2kqbgx4d4zUhjMimUL1p+onLcffP3Un9RwM5s5Eg+EKZOA9GNOqBjRiJ7RNL2uWLStrDVVm0 czdis0aSRUthCyedgDjg568G2QfJzZPnxB09Qe8XchdiG7f9b3gtH9qAA5fN99hkBXkJPKiMeqUfNp g7Sw+Un5jtJkSTZ0A/IDvLCPvcDXer0/7ELmNoX0uHDE4tGnlflMAMSQG9QdfrxbcU4Det6HSJWGEy GTyNVQYqLWTGpyMvBslwiSGEE6q431XGPMyLMYk+47ZWcRfWS+JFOyIZ2YlApiCQeB3xEr4vmeWaiF cuK55385DbGNwJAM/GRd25DLe7RzJ+4mMtSfhwzHr1YT4TleJY+/P2mXWHkPffIwlcHpuprxf0c+YU hp4w3ZYsfxkTav1NMcCHnpy0Btpc2nLaDqlx1QaTyfAvo1ulrj6iv2K9FvKw==
+X-Developer-Key: i=anuradha@debian.org; a=openpgp; fpr=F56B8F14E014CDEF5D047FC1636DB5A1D91860FD
+Content-Transfer-Encoding: 8bit
+X-Debian-User: anuradha
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 1:58 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The Renesas RZ/V2M External Power Sequence Controller (PWC) IP
-> is capable of:
-> * external power supply on/off sequence generation
-> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
-> * key input signals processing
-> * general-purpose output pins
->
-> Add the corresponding dt-bindings.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->
-> v1->v2: I have dropped syscon, simple-mfd, regmap, offset, and the child nodes.
-> v2->v3: No change.
-> v3->v4: Moved file under Documentation/devicetree/bindings/soc/renesas,
->         and changed $id accordingly.
-> v4->v5: Fixed subject line and changelog. Rob, I have kept your Reviewed-by tag
->         assuming you are still happy, please do jump in if you think  that's not
->         appropriate anymore.
+Fix W=1 kernel-doc warning:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
+kernel/printk/printk.c:
+ - Include function parameter in console_lock_spinning_disable_and_check()
 
-Gr{oetje,eeting}s,
+Signed-off-by: Anuradha Weeraman <anuradha@debian.org>
+---
+ kernel/printk/printk.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-                        Geert
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 7decf1e9c486..557eba131210 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -1891,6 +1891,7 @@ static void console_lock_spinning_enable(void)
+ /**
+  * console_lock_spinning_disable_and_check - mark end of code where another
+  *	thread was able to busy wait and check if there is a waiter
++ * @cookie: cookie returned from console_srcu_read_lock()
+  *
+  * This is called at the end of the section where spinning is allowed.
+  * It has two functions. First, it is a signal that it is no longer
+-- 
+2.39.0
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
