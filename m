@@ -2,181 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B087C66CF6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D231666CF70
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjAPTP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S232813AbjAPTTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbjAPTP0 (ORCPT
+        with ESMTP id S232346AbjAPTTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:15:26 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C625D16ADA;
-        Mon, 16 Jan 2023 11:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hkNFVtbzzp0XpZsfx3emQeVOO5FVZGr7hZw/Jma4LVA=; b=UupanAH6GT+TSgnVN/G70/Kw+B
-        jPITqiNGkh1JrRh4mlCwzBvLRsti1vU9cmXyJwxNBF6EbMEIaedOKbOf5aXZyJDsqzmkpMfvc18bl
-        8hRllSvXxKlcUQMjMA0GqDTdHEauQuSd7+Q0vPKWYL/ZAaMVaTUKwmZj5F6tMVh5UQVW5Si47khOP
-        D8HQcYo1QZAI0HVfnrpxtKXyWSt48mw3gp6ZHPKDTzQvP2OwOTqL8aFQ//OfBy5osBf0GYWPClAXX
-        Mtxn6D6nH3BEvK5dwzHfSQICxaXXLSBafF1KyzaFFy3Pf9AGmpBag8BDGPNkJrPhHv5ISf8I/8uIO
-        unUC1hPg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36150)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pHUwp-0005k4-0o; Mon, 16 Jan 2023 19:15:10 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pHUwl-0006Gj-Bh; Mon, 16 Jan 2023 19:15:07 +0000
-Date:   Mon, 16 Jan 2023 19:15:07 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Mon, 16 Jan 2023 14:19:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AEB21A36;
+        Mon, 16 Jan 2023 11:19:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 704F86111E;
+        Mon, 16 Jan 2023 19:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D62C433D2;
+        Mon, 16 Jan 2023 19:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673896748;
+        bh=XPbeY1Tw3NOIW18sn3VUjs5hnmitr2mUboL06yyV1OU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ht26c5+BaGyCrnSatfGGdKlEeaSu6vFP4V4n9oRMBtY9yVXlRSe/2DdYDLyNPXbEP
+         TaZAHDIhfnoHV4gNfbdO6avAqMxerbEq+Kd3rTvXXICod5S6F0czWPGbt71oRbGTE+
+         EBMrn0o2zzrvL2mD9J1cRd8/2XtJArHP6xV4QRFMCQk4lo6x78PJzpsp1l3y2MBBB4
+         4EDSvcALVvzn0mkixQjkJfr6BgbrHZnsRyj1Ngv/OnqFArGwqbklYrnIqipgMUZlOe
+         PDwmQsbmfiN07tMtCLKfgXNSjzN0vbHZlxoLuCBwDslQhLNymZEQ33hQ7qzkrrfszd
+         vfFWghN6ratvQ==
+Date:   Mon, 16 Jan 2023 19:19:04 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Message-ID: <Y8WiO+8mkD6TPIAQ@shell.armlinux.org.uk>
-References: <87bkmy33ph.fsf@miraculix.mork.no>
- <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
- <875yd630cu.fsf@miraculix.mork.no>
- <871qnu2ztz.fsf@miraculix.mork.no>
- <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk>
- <87pmbe1hu0.fsf@miraculix.mork.no>
- <87lem21hkq.fsf@miraculix.mork.no>
- <Y8WT6GwMqwi8rBe7@shell.armlinux.org.uk>
- <87a62i1ge4.fsf@miraculix.mork.no>
- <875yd61fg3.fsf@miraculix.mork.no>
+Subject: Re: [PATCH v3 0/3] JH7110 PMU Support
+Message-ID: <Y8WjKArEZH5zd5jb@spud>
+References: <20230116074259.22874-1-walker.chen@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9GoKrs0wz7LbOpIW"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <875yd61fg3.fsf@miraculix.mork.no>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230116074259.22874-1-walker.chen@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 07:50:52PM +0100, Bjørn Mork wrote:
-> Made things fail with 2.5G, as expected I guess. But this actually works
-> with 1G!
-> 
-> Except for an unexpected packet drop.  But at least there are packets
-> coming through at 1G now.  This is the remote end of the link:
-> 
-> ns-enp3s0# ethtool -s enp3s0 autoneg off speed 1000 duplex full
-> ns-enp3s0# ping  192.168.0.1
-> PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.
-> 64 bytes from 192.168.0.1: icmp_seq=1 ttl=64 time=0.544 ms
-> 64 bytes from 192.168.0.1: icmp_seq=3 ttl=64 time=0.283 ms
-> 64 bytes from 192.168.0.1: icmp_seq=4 ttl=64 time=0.261 ms
-> 64 bytes from 192.168.0.1: icmp_seq=5 ttl=64 time=0.295 ms
-> 64 bytes from 192.168.0.1: icmp_seq=6 ttl=64 time=0.273 ms
-> 64 bytes from 192.168.0.1: icmp_seq=7 ttl=64 time=0.290 ms
-> 64 bytes from 192.168.0.1: icmp_seq=8 ttl=64 time=0.266 ms
-> 64 bytes from 192.168.0.1: icmp_seq=9 ttl=64 time=0.269 ms
-> 64 bytes from 192.168.0.1: icmp_seq=10 ttl=64 time=0.270 ms
-> 64 bytes from 192.168.0.1: icmp_seq=11 ttl=64 time=0.261 ms
-> 64 bytes from 192.168.0.1: icmp_seq=12 ttl=64 time=0.261 ms
-> 64 bytes from 192.168.0.1: icmp_seq=13 ttl=64 time=0.266 ms
-> ^C
-> --- 192.168.0.1 ping statistics ---
-> 13 packets transmitted, 12 received, 7.69231% packet loss, time 12282ms
-> rtt min/avg/max/mdev = 0.261/0.294/0.544/0.075 ms
-> ns-enp3s0# ethtool enp3s0
-> Settings for enp3s0:
->         Supported ports: [ TP ]
->         Supported link modes:   100baseT/Full
->                                 1000baseT/Full
->                                 10000baseT/Full
->                                 2500baseT/Full
->                                 5000baseT/Full
->         Supported pause frame use: Symmetric Receive-only
->         Supports auto-negotiation: Yes
->         Supported FEC modes: Not reported
->         Advertised link modes:  1000baseT/Full
->         Advertised pause frame use: Symmetric
->         Advertised auto-negotiation: No
->         Advertised FEC modes: Not reported
->         Speed: 1000Mb/s
->         Duplex: Full
->         Auto-negotiation: off
->         Port: Twisted Pair
->         PHYAD: 0
->         Transceiver: internal
->         MDI-X: Unknown
->         Supports Wake-on: pg
->         Wake-on: g
->         Current message level: 0x00000005 (5)
->                                drv link
->         Link detected: yes
-> .
-> 
-> The MT7986 end looks like this:
-> 
-> root@OpenWrt:/# [   55.659413] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
-> [   55.664380] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
-> [   58.779924] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
-> [   58.784884] mtk_pcs_get_state: bm=0x81140, adv=0x1a0
-> [   58.789841] mtk_sgmii_select_pcs: id=1
-> [   58.793581] mtk_pcs_config: interface=4
-> [   58.797399] offset:0 0x81140
-> [   58.797401] offset:4 0x4d544950
-> [   58.800273] offset:8 0x1a0
-> [   58.803397] offset:0x20 0x31120118
 
-This looks like it's configured for 1000base-X at this point.
+--9GoKrs0wz7LbOpIW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> [   58.806089] forcing AN
-> [   58.811826] mtk_pcs_config: rgc3=0x0, advertise=0x1 (changed), link_timer=1600000,  sgm_mode=0x103, bmcr=0x1200, use_an=1
-> [   58.822759] mtk_pcs_restart_an
-> [   58.825800] mtk_pcs_get_state: bm=0x81140, adv=0xda014001
-> [   58.831184] mtk_pcs_get_state: bm=0x2c1140, adv=0xda014001
-> [   58.836649] mtk_pcs_link_up: interface=4
-> [   58.840559] offset:0 0xac1140
-> [   58.840561] offset:4 0x4d544950
-> [   58.843512] offset:8 0xda014001
-> [   58.846636] offset:0x20 0x3112011b
+Hey Walker,
 
-and here we've reconfigured it for SGMII mode - and we can see the
-Mediatek PCS has set the ACK bit (bit 14) in its advertisement
-register as one would expect.
+On Mon, Jan 16, 2023 at 03:42:56PM +0800, Walker Chen wrote:
+> Hello,
+>=20
+> This patchset adds PMU (Power Management Unit) controller driver for the
+> StarFive JH7110 SoC. In order to meet low power requirements, PMU is
+> designed for including multiple PM domains that can be used for power
+> gating of selected IP blocks for power saving by reduced leakage
+> current. The first patch adds device tree binding for PM domain provider
+> and consumer. The second patch adds pmu driver and support JH7110 SoC.
+> The last patch adds device node about pmu to JH7110 dts.=20
+>=20
+> The series has been tested on the VisionFive 2 boards which equip with
+> JH7110 SoC and works normally.
 
-> Now, if we only could figure out what the difference is between this and
-> what we configure when the mode is changed from 2500base-x to sgmii.
+For the series:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Maybe there is something missing which we need to do on the Mediatek
-side to properly switch between 2500base-X and SGMII.
+I'm hoping that someone with knowledge of the power APIs will take a
+look now that the driver looks to be in a pretty good state (to my naive
+eyes at least).
 
-It has a feel of a problem changing the underlying link speed between
-3.125 and 1.25Gbps, which is done by the ANA_RGC3 register.
+> Changes in v3:
+> - Rebased on tag v6.1.
 
-Hmm, maybe the PCS needs to be powered down to change the speed, in
-other words, SGMII_PHYA_PWD needs to be set before the write to the
-ANA_RGC3 register?
+FYI, please pick something more recent than that.
+Ideally, the last -rc1, which in this case is v6.2-rc1.
+It's helpful to do this, as when I went to apply your patch, there were
+some conflicts that needed to be sorted out. Because of your prerequisite
+patches, the usual `b4` commands would not usable. E.g.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+b4 am -3 20230116074259.22874-1-walker.chen@starfivetech.com
+Analyzing 4 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v3 1/3] dt-bindings: power: Add starfive,jh7110-pmu
+  [PATCH v3 2/3] soc: starfive: Add StarFive JH71XX pmu driver
+  [PATCH v3 3/3] riscv: dts: starfive: add pmu controller node
+---
+Total patches: 3
+Preparing fake-am for v3: JH7110 PMU Support
+  ERROR: Could not find matching blob for MAINTAINERS (85e8f83161d7)
+         If you know on which tree this patchset is based,
+         add it as a remote and perform "git remote update"
+         in order to fetch the missing objects.
+
+Fortunately, this is just a driver addition so despite `b4` not
+helping it was easy to resolve but for other patches in the future,
+this may not be the case.
+
+Assuming the dt maintainers are happy with the binding, ping me in 2
+weeks if no-one else has commented and I'll apply patches 1 & 2.
+
+Thanks,
+Conor.
+
+> base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+> prerequisite-patch-id: 54ce870d6ea747466474b5d4105cfbc05e1b01ab
+> prerequisite-patch-id: e8dd8258a4c4062eee2cf07c4607d52baea71f3a
+> prerequisite-patch-id: 057fa35870d8d7d22a57c13362588ffb9e9df316
+> prerequisite-patch-id: 102368a6ff799c4cb639aed513deff09c1839161
+> prerequisite-patch-id: 7c1a50a37919fedbbd336ca5dec295ac63c2a89d
+> prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+> prerequisite-patch-id: 87cb528acd9a7f1ffe7475d7261553f6a4de5753
+> prerequisite-patch-id: 417736eb958e1158c60a5ed74bc2350394321a80
+> prerequisite-patch-id: a137312ca162b5712e28719f77d0da78e9fdd778
+> prerequisite-patch-id: f7c548b4619f491ce27f319242c4e3685c76173b
+> prerequisite-patch-id: 4d90febab2fb7928f50a73104e7454312b9ce6c8
+> prerequisite-patch-id: 645a807d50e0e56593ffdc6c3b50ea54a230827a
+> prerequisite-patch-id: 165f8cd740ae60585d22c95b99a0689084d468e3
+> prerequisite-patch-id: 480d910deccadc2947b3318c3c13dfa0882c8e0d
+> prerequisite-patch-id: 1d1cb90ec12dfc9312e448759c7cab89f2bc6394
+> prerequisite-patch-id: 5f539ac7c96023b36489c6da7c70c31eaf64a25b
+> prerequisite-patch-id: 6bb9a780c62af3bcc2368dfd20303c7b1bc91e23
+> prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+> prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+> prerequisite-patch-id: e3b986b9c60b2b93b7812ec174c9e1b4cfb14c97
+> prerequisite-patch-id: 2e03eeb766aefd5d38f132d091618e9fa19a37b6
+> prerequisite-patch-id: e0ba7af0f8d3d41844da9fbcba14b548cbc18f55
+> prerequisite-patch-id: c1f8603e58c64828d0f36deac9b93c24289d8e05
+
+
+--9GoKrs0wz7LbOpIW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8WjKAAKCRB4tDGHoIJi
+0oszAQDM9ExcHzz5zwVTaRHH/CUh3N4IkT9RnBltBfBDkeqmmwD/eoWkYLcS1whs
+CsKsgJlSS9Nu15N2/XX5xgyh1Scb+AA=
+=zJa1
+-----END PGP SIGNATURE-----
+
+--9GoKrs0wz7LbOpIW--
