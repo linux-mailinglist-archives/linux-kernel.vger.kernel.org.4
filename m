@@ -2,129 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B948866B846
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6F566B84B
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 08:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjAPHfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 02:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S231966AbjAPHgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 02:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbjAPHfw (ORCPT
+        with ESMTP id S231713AbjAPHgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 02:35:52 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE061CDFD;
-        Sun, 15 Jan 2023 23:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1673854551; x=1705390551;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YszkHojPOFwKeLehYtOFvn3DFCgr8dW4CyaPruyHuVg=;
-  b=jfc9N4Hvdi3gSQbC8i2nz1+0j0C5coSvQQ6TOoe0PQJrYFQKkSd+EVAr
-   p69HK5NMRGgnglYfPIpcmmLLZNItDPKWf5pky2bN3taxTS+KyBuMU+hn2
-   9MPL8NkSnxN0aIK5loSJjsOZMDrIRpXNdaKu5WaYcTFjt2dp+DZrq79Gn
-   RG0sJ55i5c4rEAJKu8OxUGlGMu46w8eVGAuYhHbw7gvNiykG4hbgM8ldd
-   PSob1H3NrSs6+JNIRqsIdxtt9jtkDnXSM0jMPOl9eoQKIT5VGFYY2Wz+w
-   AYd9f82lj0PRFC13RXlM94HcR5XaOQZc9hwTSBiVK63U0jx5NQBGSPiFH
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,220,1669071600"; 
-   d="scan'208";a="28437135"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Jan 2023 08:35:48 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 16 Jan 2023 08:35:48 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 16 Jan 2023 08:35:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1673854548; x=1705390548;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YszkHojPOFwKeLehYtOFvn3DFCgr8dW4CyaPruyHuVg=;
-  b=V05ZCuVQ0P+P7pIZXxuZzDIVOpW8NGDLQQ6vBAv2F5yTNr3TdUYXn90P
-   anCVKU+wNqO3Dli0ABt4NlaL924jq1ewMEatIVaKuOEoQ4z2e9c6YyUJo
-   s/8YY1VrS6hDX95szewhNKtnKmFxuie9Zo7UItYA1N1SGfQX5pcgnw6V5
-   sANpjK47YtdMGk0Qf7jh8n25F2Y3vn8oAoVCFQzdo+0qHzaoktC7oWJK4
-   uXyKZJUNC5Ro2UgPz5GQNL0Y+KCq1MG+DIrIL9LWnPF6hgiYW9HA5/4P4
-   WkZUobrUt0qAKhdQtwNNPm3g9ygyFxqWo47NdNmuMq0gmgShIcgC7alH4
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,220,1669071600"; 
-   d="scan'208";a="28437134"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Jan 2023 08:35:48 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Mon, 16 Jan 2023 02:36:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F377DEC4A;
+        Sun, 15 Jan 2023 23:36:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 2B9DF280056;
-        Mon, 16 Jan 2023 08:35:48 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Pierluigi Passaro <pierluigi.passaro@gmail.com>
-Cc:     Pierluigi Passaro <pierluigi.p@variscite.com>, wei.fang@nxp.com,
-        shenwei.wang@nxp.com, xiaoning.wang@nxp.com, linux-imx@nxp.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, eran.m@variscite.com,
-        nate.d@variscite.com, francesco.f@variscite.com
-Subject: Re: [PATCH v2] net: fec: manage corner deferred probe condition
-Date:   Mon, 16 Jan 2023 08:35:46 +0100
-Message-ID: <5899558.lOV4Wx5bFT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CAJ=UCjXvcpV9gAfXv8An-pp=CK8J=sGE_adAoKeNFG1C-sMgJA@mail.gmail.com>
-References: <20230115213804.26650-1-pierluigi.p@variscite.com> <Y8R2kQMwgdgE6Qlp@lunn.ch> <CAJ=UCjXvcpV9gAfXv8An-pp=CK8J=sGE_adAoKeNFG1C-sMgJA@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6DB7B80D1B;
+        Mon, 16 Jan 2023 07:36:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23729C433EF;
+        Mon, 16 Jan 2023 07:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673854560;
+        bh=+LEK/p0aR7GFm7WL+gdmi6ckOz4YMx0HfCxEZNMp2HY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EmoRfDJ2VOZZ5iryiW4pbGvvco/rsGaT6VClYX1g3n3qYy8k9V0m/ANLT8MiP9vfD
+         iSVn0KzJOvt9MVht7qQ1ZpWX9kE4QCvguEddb3zOsuz3fqFVSZgbiqBuROesIsXMRx
+         r+i1oOD8Htql1OscpXSR/5ZGhg+w4falqN3luYWiTtOS3mg33STW6mK+hnodk7vyre
+         aJGO1m/7/L27aMZ2PEsPv9yEp8GAqIzZ0USn5VSXbEbBZ/szQIk1N/XK7tUM6iaw9a
+         yp1AbzHpkbZccjiSGaF9WDlTNZsUWhD0rNtjuNp07NN2s1GKd6a2/4YSYBLZ9GFRhU
+         0PDryhbY8A0Kg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pHK2T-00026s-B4; Mon, 16 Jan 2023 08:36:18 +0100
+Date:   Mon, 16 Jan 2023 08:36:17 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] PCI: qcom: Add support for modular builds
+Message-ID: <Y8T+cZ1jvnkGPz1l@hovoldconsulting.com>
+References: <20221017114705.8277-1-johan+linaro@kernel.org>
+ <Y8F98UTZNgQpX6UG@lpieralisi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8F98UTZNgQpX6UG@lpieralisi>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Sonntag, 15. Januar 2023, 23:23:51 CET schrieb Pierluigi Passaro:
-> On Sun, Jan 15, 2023 at 10:56 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> > On Sun, Jan 15, 2023 at 10:38:04PM +0100, Pierluigi Passaro wrote:
-> > > For dual fec interfaces, external phys can only be configured by fec0.
-> > > When the function of_mdiobus_register return -EPROBE_DEFER, the driver
-> > > is lately called to manage fec1, which wrongly register its mii_bus as
-> > > fec0_mii_bus.
-> > > When fec0 retry the probe, the previous assignement prevent the MDIO bus
-> > > registration.
-> > > Use a static boolean to trace the orginal MDIO bus deferred probe and
-> > > prevent further registrations until the fec0 registration completed
-> > > succesfully.
+On Fri, Jan 13, 2023 at 04:51:13PM +0100, Lorenzo Pieralisi wrote:
+> On Mon, Oct 17, 2022 at 01:47:03PM +0200, Johan Hovold wrote:
+> > Allow the Qualcomm PCIe controller driver to be built as a module, which
+> > is useful for multi-platform kernels as well as during development.
 > > 
-> > The real problem here seems to be that fep->dev_id is not
-> > deterministic. I think a better fix would be to make the mdio bus name
-> > deterministic. Use pdev->id instead of fep->dev_id + 1. That is what
-> > most mdiobus drivers use.
+> > There's no rush with this, but I figured I'd send an updated version
+> > that has been rebased on 6.1-rc1 (where post_deinit() has been removed).
+> > 
+> > I also broke out the qcom_pcie_host_deinit() handler in a separate patch
+> > as the host_deinit() callback has now been added to dwc core and can be
+> > used to fixes some late-probe error handling.
 > 
-> Actually, the sequence is deterministic, fec0 and then fec1,
-> but sometimes the GPIO of fec0 is not yet available.
+> Waiting for the dust to settle on patch 2, does it make sense to
+> merge patch 1 on its own ?
 
-Not in every case though. On i.MX6UL has the following memory map for FEC:
-* FEC2: 0x020b4000
-* FEC1: 0x02188000
+Sure, please do.
 
-Which essentially means that fec2 will be probed first.
+I haven't found the time and motivation to reiterate the arguments for
+why I think blocking patch 2 is misguided, but I'm still confident that
+anyone reviewing the arguments will reach the same conclusion (e.g. if
+you want to dig through the archives). I'll get to it eventually.
 
-> The EPROBE_DEFER does not prevent the second instance from being probed.
-> This is the origin of the problem.
+Johan
 
-Is this the actual cause? There is also a problem in the case above if the 
-MDIO controlling interface (fec2) is not probed first, e.g. using fec1 for 
-MDIO access. But then again there is i.MX6ULG1 which only has fec1 
-interface...
-
-Best regards,
-Alexander
-
-
-
+> > Changes in v3
+> >  - rebase on 6.1-rc1 where post_deinit() has been removed
+> >  - split out host-init error handling
+> >  - add Stan's ack
+> > 
+> > Changes in v2
+> >  - rebase on next-20220720 (adjust context)
+> >  - add Rob and Mani's reviewed-by tags
+> > 
+> > 
+> > Johan Hovold (2):
+> >   PCI: qcom: Fix host-init error handling
+> >   PCI: qcom: Add support for modular builds
+> > 
+> >  drivers/pci/controller/dwc/Kconfig     |  2 +-
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 39 +++++++++++++++++++++++---
+> >  2 files changed, 36 insertions(+), 5 deletions(-)
+> > 
+> > -- 
+> > 2.37.3
+> > 
