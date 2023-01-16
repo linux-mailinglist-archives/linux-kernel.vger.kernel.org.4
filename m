@@ -2,136 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6976F66BA7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFF166BA85
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjAPJfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S231903AbjAPJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbjAPJfO (ORCPT
+        with ESMTP id S232268AbjAPJgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:35:14 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5123B17163
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:35:08 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id f26so6574600uab.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fzVoMIU5yZxhhhcv7+w++/y6p+MZy0p2+9qccUZAxPY=;
-        b=X7x/+hhX2INfPG3RI8TXxg06zm5tGqT+L7mV2NqEXu0rwd7D0Z6btahIrvTMbicZXR
-         qV2a8r7LA8uQTSA9GY6N271tOvKmeKqhySEUqBlsPgRsAloD4OmaXABhtilm+V/oW5Zj
-         /R5vex+0hBV/Orc9StnGzEiGvMyB3wtNtu/b9ZxEQTA4nspPS7K4XbaNSCOcTfmti3Fs
-         3jJk6PZR07Mx9ipljffyPtCgydrpCg9UMqmaUJLFJJI2MQNrzk8T9bXioDhW1xTmU2Tl
-         NPZ4cPbc1wS77TAo5rAc4rpEVAjUKHOMBSFQkYRjvzikbem+hfWlgyG3igSO8DIH4MgB
-         pJ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fzVoMIU5yZxhhhcv7+w++/y6p+MZy0p2+9qccUZAxPY=;
-        b=zO+rHngczOItBhcNLj2fkaFJh9XNuHOh/UtgtxDuvfD+hfZ3ckE1eFHISidPPPufqn
-         iv8WnNMfFnBMn4RqPRvsCSxJ0xYChsHLmNuzLLe5AitUh4+tsG+pQMAfV3x7GIUPcnDP
-         4OdKGly8r1cKytMtT28/hv3bgjCGUKXANELHHWTUM53Giga/SHoW9T0ZqnSX0Kl9nT3s
-         rWrMccs57xm1r4Jx/DQPXCcqf1W970iT9vUib+eIGoisWjaa6VCpAOx8rWeNrrOjbWrp
-         Wk+tVV4rrxNFydHhaC8/HD2hJhel3vF/gp71KAaC2/+XCI9EmTiWrAQmHsb/m7aUb/l7
-         VGiw==
-X-Gm-Message-State: AFqh2ko7PQRyp8Lz94vU4nlp0ft38jiHxTjvrbZMuGnjUvEXtTOUz911
-        deIq/EV7LDSNRSZ8QljcDvg9a2K/+FTozW/JSxgoqw==
-X-Google-Smtp-Source: AMrXdXsTS+cNw2OieuYDCGotVaiHhxT/MmnC+Vb/6h05YYPTcorxZBOp4/HqjNXtPcL36Z6s0rss/4ego31psNPNA+k=
-X-Received: by 2002:ab0:5a49:0:b0:424:e8b8:7bcb with SMTP id
- m9-20020ab05a49000000b00424e8b87bcbmr10143161uad.123.1673861707545; Mon, 16
- Jan 2023 01:35:07 -0800 (PST)
+        Mon, 16 Jan 2023 04:36:15 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EF216AF7;
+        Mon, 16 Jan 2023 01:36:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1673861767; bh=wnOHpBayjdNSjw+eUV3MCoIeItj+WtT29KKObbgNH18=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=NSfx8Dl/wEgIyRrR0lcjIoZ2+gQioo4GdYXZkaOt2SZ3INu5zv6Y/9o8PVdWYeZqR
+         QNGn2DEv3OmXbsz/w3tvJWMHONjbZHsP3G8pjogqQPAqlgq+LZCqqIyhJAN9vQxYi/
+         TTf1oXWyOJJg5Jtw4O/rysQc1v+GF13XVONMtp3Nua6R3avP0Qg5toxTZAmfmdXaX3
+         waz1MU7k/3oAEm4Y4i8lS0UfTcafirk3DTeS2iuo2/WnWwb79WkUFzb/ZBwtOosEZj
+         xMtgyLwB0YXxPfnekHlZ3Z9Kf8dhuyG2VjP2OCin+PHLchWkLTvLasF8ABFw4kX0g2
+         QEt3dzz2Bvlbw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.151.61] ([109.43.179.224]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N8XPn-1odhjS1vbV-014QUC; Mon, 16
+ Jan 2023 10:36:07 +0100
+Message-ID: <7c2d45e5-8f16-83b2-93ce-87b456c53b52@gmx.de>
+Date:   Mon, 16 Jan 2023 10:36:05 +0100
 MIME-Version: 1.0
-References: <20230113171051.19309-1-andriy.shevchenko@linux.intel.com> <20230113171051.19309-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230113171051.19309-2-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 16 Jan 2023 10:34:56 +0100
-Message-ID: <CAMRc=MdzeWN85paaoVPDHTo4==d-6ZBQZetRHw5o+TNMfa3bBw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Revert "gpiolib: of: Introduce hook for missing gpio-ranges"
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: linux-next: manual merge of the fbdev tree with the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <20230116115440.3f1909cd@canb.auug.org.au>
+Content-Language: en-US
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230116115440.3f1909cd@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xA0svzfJeflX86rbfoatcczhHIIJk14fm6BDqRMBweC4tHBj+xI
+ rguCwLMLkg/Dti7PO2lt61M72WAmQkS1veipCs2sT2tXF50/j71RCda0GLxqM4RqNmq4rwt
+ onxH1WflPzvJkQm/GcvynAN21l0DPhdIo3ssqh+IzHHFPXoNyx3w3I2MjIJT/qeguil2NEz
+ hb1ToK3uFt5czFm5P26rw==
+UI-OutboundReport: notjunk:1;M01:P0:k89X/3EyuLs=;g1bkkxWspCpYG57AuM4VeRimN4z
+ ezB7wSI6jDg08BcB6gbCb7IFTL/5VQXLsoEc52FXl1CUtYylgCgQG6h0/fsgDaU+Mk7x6hvAM
+ h+hoKyfY5r9xDqV0vHXyrH5hvZppQ0e1W/1R11DNZivpMIutj+C1SRh/8Ck22cDutidkA4f4v
+ BU4QZIFVtgwBQ6OfEyernNiIJk1DZ3tbRpnHy7b9n9lZXB+L9CICCX9NWCOGraTxe5rl1Mnzu
+ LThv7ToYMMG1Pdft3L1FbsidYy12beDqw6tsZ/OYz1q+IZY2A9rhBIT8EJlCsgno1hKto/ICy
+ 63TAZfGVlcRbQ3dcZfKJfeU0vxY6dMXc5M8tMRGMCjB5sjtz/lkfJUSColVdLB8mG+mTouieH
+ 6NQpK2/OEmPJRYDJHihgtreIs/U6YUyyjyw3PahEJbAFhqAGWl8BZqF5EhqTMUn/7aac/7yMB
+ zgykOQegOPMj8zmB4Bkmz0hqMxjUkRN+IsVIR3Ug4HafcJILz0QAPcd5zJwn7SGAwMYTUgMBz
+ RG2W7pcLSak1Qx0NeoY9n4vmxc304QoQYzfn2PIK4QNRSa98lwzdIpJ3OOt8NUGtSqy5PBMIj
+ +PHeMimDGxhjtTeBkxWOX/9/TXbhuWJmn8SrxOP9IkdMDgTv05Ie02knvAvsCDjedtOwts6/C
+ LToJ99CyQqrBquHVmCrtoARUSopVrvNjgGuTbCzNIuXpLZFLDniRmSOXzaMpmBv0T3A46Ybkm
+ tHJBzjo9kuZW5HvAh88dct0WI22xmvo8yBp2Uf/yWuB9TbJ7Q3/yhwO87Ry3sjc+sNB9IPdcj
+ ICnUeNi9avC718Vb2cFp/1DCSiEn2eYLi/ACaBvJoRZneYM8/zUKKDGzzuTAt2k3wAwifQbtQ
+ WWDCuQ3S7Rnm/4y6lpQzevW1lrjM5O3iHtGstwg6vQwQvW1q9MBMpWSd3r6gbthn0+uQClPaf
+ bZBnczip6/lgZQog2ZUJZdFL7mA=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 6:14 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On 1/16/23 01:54, Stephen Rothwell wrote:
+> Hi all,
 >
-> This reverts commit 3550bba25d5587a701e6edf20e20984d2ee72c78.
+> Today's linux-next merge of the fbdev tree got a conflict in:
 >
-> No users for this one, revert it for good.
-> The ->add_pin_ranges() can be used instead.
+>    include/linux/fb.h
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: made it as a pure revert
->  drivers/gpio/gpiolib-of.c   |  5 -----
->  include/linux/gpio/driver.h | 12 ------------
->  2 files changed, 17 deletions(-)
+> between commit:
 >
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 72d8a3da31e3..266352b1a966 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -980,11 +980,6 @@ static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
->         if (!np)
->                 return 0;
+>    5b6373de4351 ("drm/fbdev: Remove aperture handling and FBINFO_MISC_FI=
+RMWARE")
 >
-> -       if (!of_property_read_bool(np, "gpio-ranges") &&
-> -           chip->of_gpio_ranges_fallback) {
-> -               return chip->of_gpio_ranges_fallback(chip, np);
-> -       }
-> -
->         group_names = of_find_property(np, group_names_propname, NULL);
+> from the drm-misc tree and commit:
 >
->         for (;; index++) {
-> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-> index ddc7a14a274f..5ab50ba3c309 100644
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -521,18 +521,6 @@ struct gpio_chip {
->          */
->         int (*of_xlate)(struct gpio_chip *gc,
->                         const struct of_phandle_args *gpiospec, u32 *flags);
-> -
-> -       /**
-> -        * @of_gpio_ranges_fallback:
-> -        *
-> -        * Optional hook for the case that no gpio-ranges property is defined
-> -        * within the device tree node "np" (usually DT before introduction
-> -        * of gpio-ranges). So this callback is helpful to provide the
-> -        * necessary backward compatibility for the pin ranges.
-> -        */
-> -       int (*of_gpio_ranges_fallback)(struct gpio_chip *gc,
-> -                                      struct device_node *np);
-> -
->  #endif /* CONFIG_OF_GPIO */
->  };
+>    72ac3535c2c5 ("fbdev: fb.h: Replace 0-length array with flexible arra=
+y")
 >
-> --
-> 2.39.0
->
+> from the fbdev tree.
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+I've dropped the offending patch from the fbdev git tree, so it should
+be resolved now.
+
+Thanks!
+Helge
+
