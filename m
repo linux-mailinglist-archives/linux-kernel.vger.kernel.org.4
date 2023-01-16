@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873C766D1E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37E766D1E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjAPWqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 17:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S229918AbjAPWtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 17:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbjAPWqj (ORCPT
+        with ESMTP id S232546AbjAPWs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 17:46:39 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E4A24494;
-        Mon, 16 Jan 2023 14:46:36 -0800 (PST)
+        Mon, 16 Jan 2023 17:48:58 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D522658E;
+        Mon, 16 Jan 2023 14:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673909335; x=1705445335;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=0Z+9qHgOQYi0Thm8p6TZX9uXDjvo6HB+Mo+JPgbxwhQ=;
+  b=R8w6LKI6w/KkwJWqZ7xSdd4PJsokiQcTVG/wMpv8JcT9YXcbM4OrV0k1
+   jym1IT45NDtvaGdCiKgjSeUEYCDSADiYNDTmBtVI4R3G7nfIX02gC0emo
+   hgx4o5WWRhCqJm8AHeXGX+i+uYbNVHfA3EmDbHLdzbkPpg7J1r2mEDbew
+   rYJVv67vFj6ZugD9gly+o8//pYFBnTaANCezAO6bagsrgKG4kKDOscdgz
+   6u1S7MKtN0KNX8UvxvioFVevwZEf59r83V6v5eG1kPEAHz9gsci3T6L+m
+   FPdY4uau5pLdPbaRIk2NzmXqk9Iu5MumP8b9BbBUIImrYbd6uANasZ0Rq
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,222,1669100400"; 
+   d="scan'208";a="196043896"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jan 2023 15:48:53 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 16 Jan 2023 15:48:51 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 15:48:51 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QCMI6IQYBU5f/+bpIWFtoWQlTL0bj/vE6UOMybrdLAAUUUMlS+sjsE3lQTz0TaCCbb3C30gvK7E8EXw1cTvEeg0e51m60ps7rkqsg4ckdL8MQd2url4WAM1fX9uHGpXortqBrdN6Zto1aU1xEYJicWHycU+BZmXVP5//2fMJyAEEVWTlCW4xZ/wgrAQ8w28db7APVbKR3d41CUrPau7otavkRAQ6U5yEV/c0Zu18XvHyScaAhAenkzQFaZjC0FmExvJgszWY9B+ITRuJXmClBx0imaCj9CWlR1WeIf9jXWNJxTEEjWG9YiJVsDMO38RTgVSwoOPSOVZ9zx8NVN/Ahg==
+ b=ET4BAMCMjPzYsL4r+EI2bJ8SOpxGF3+YwZMKKW/LHF0w8TioAIHNyMoaYbIxEJwJawRp/B6gkuvJMqJznfolMXjtnhQiZG+ZUP6zN0efAj6Cq2tkvCniuXhBZYCUDRn3pJn6BB6xx1ATY3mDVPz2otGR81D/m4f2KDsqNWae4yrUUL2e6w+ODHc3Fmq6DsDynQC0wYZD5BIXcFvcL2SNgBtcO+M5NvIu6lj1f0RxBmRWBzpyX3gwts9stdiWWwkWOwLhUmo7wwqXR1J0v360infkDFmGE/SdRPRSpLXqTFT10ubG+djvQMxMuMmWSqeqaSIK3yMQHnacIi1AFF4RSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FlhEnk5AsbSQkhg23r57HJC2tYTaZMAtg3hLutUdTIc=;
- b=d45+iQGhCYPSGnrWyEwVQrZn7tRTNZ1xMoRo9Cj8gOecfDBaT7//E6WBryJN3vQHP8A/KZIbWWjTO97MJqooWVOZGysU/hAAbrChjoaES/DBDbnNwn5zOTjQQb6rZQIUjqGjHZOw/87iKQhLQbRBxL++4Q6UjsGFagcaod4WupV17/CPBR1U64vwTIufRBJwQDZnI9gU3Ki7Uo5ZD2y4H/SJNsdIDFLmNTwBkfg5HUXkoIs/ImMD/Mbuh1zzgcF2D2FsKwpddWILp6qQjEqxgGwIi9kd7SbVI4Ot9arssTW040vWWUdK7ZrpMdILdl9xeSG7Kb6SOt/x6aDsG+IhNw==
+ bh=xQZmg0YQTucJ/v6+1dp7wX4miwji8UWVGzWGznT17Ig=;
+ b=mKxooy2kbznd+Y88a63dHneN8HREHeUyAvWOf3PS9RfE5s1eDwstrqsNgmjcNlba+M1qBjhZaTzCQiUHcSb6J8StSjf325heKRLy1sNQ92Ze9ELiws4AMAebGmvyHkaVNX+aGM5RDiCAIjbQri5pHK6uvjQBKJnIvFc9AxW3CSgBB/8iM46eLgBT3bwCVNtSdDxsVDie62VYmw+Eua/5E6NadJ3exjjXdMTuNtsZN2UJ2YTiMCWnwTGkhTHtzKaDu/fu68hFDgqBdf0fpRoSoBUp5xhs8i2TONnPzz+HDq28K/KrIJENdBGZKrHhVLaw04nVr1buAopLyiHhwnXivw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FlhEnk5AsbSQkhg23r57HJC2tYTaZMAtg3hLutUdTIc=;
- b=a6njIGUslAwQq2RFrN2JdtFzhfSPdh8qDX3U4l2l2OfAU1SrtK/mto8ms1fxsPvzKFKq9lAqGhHcaedVJ8WVM9VX5h7CEbmmtlcHaVzjcJTRGj8X7PXpRymKZb5etlZchD9XtmK49UMVlgPNmthx95zBq71FTGSFI/fI3/y0Rjo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by CY5PR12MB6550.namprd12.prod.outlook.com (2603:10b6:930:42::6) with
+ bh=xQZmg0YQTucJ/v6+1dp7wX4miwji8UWVGzWGznT17Ig=;
+ b=rXLnXFVEOt/HcxDLKS0l2X0/fz/fEYg9cHiSlshjxFUAdlTApQmYjGh3BSM7V7OHYm1CFgAWKB+VsKzlBzOIzrrJsDdfDSzIC2kv2bKMrrhbRuIjvV7bQG7nXFT8jsVsc9L8+5W+i2j1LuamsfABj972mWaq0ckwi/ocRwEMH/E=
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com (2603:10b6:300:2b::21)
+ by MW3PR11MB4700.namprd11.prod.outlook.com (2603:10b6:303:2d::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 22:46:35 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::8200:4042:8db4:63d7%3]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
- 22:46:35 +0000
-Message-ID: <1818a72f-31ef-07b0-d1b4-6a8904636db2@amd.com>
-Date:   Mon, 16 Jan 2023 16:46:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+ 2023 22:48:48 +0000
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::3558:8159:5c04:f09c]) by MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::3558:8159:5c04:f09c%4]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
+ 22:48:48 +0000
+From:   <Jerry.Ray@microchip.com>
+To:     <linux@armlinux.org.uk>
+CC:     <andrew@lunn.ch>, <f.fainelli@gmail.com>, <olteanv@gmail.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <jbe@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net-next v6 6/6] dsa: lan9303: Migrate to PHYLINK
+Thread-Topic: [PATCH net-next v6 6/6] dsa: lan9303: Migrate to PHYLINK
+Thread-Index: AQHZJHAUgbmW0ofBykmmlKO+Ubpgs66arr+AgAamOBCAAAu0gIAATvQw
+Date:   Mon, 16 Jan 2023 22:48:47 +0000
+Message-ID: <MWHPR11MB16938EF0B3FBFB87022A327AEFC19@MWHPR11MB1693.namprd11.prod.outlook.com>
+References: <20230109211849.32530-1-jerry.ray@microchip.com>
+ <20230109211849.32530-7-jerry.ray@microchip.com>
+ <Y7/zlzcyTsF+z0cN@shell.armlinux.org.uk>
+ <MWHPR11MB169301FF4ED0E0BB2305780AEFC19@MWHPR11MB1693.namprd11.prod.outlook.com>
+ <Y8WRVWaalcfW+vLB@shell.armlinux.org.uk>
+In-Reply-To: <Y8WRVWaalcfW+vLB@shell.armlinux.org.uk>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
-        Ard Biescheuvel <ardb@kernel.org>,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230113212926.2904735-1-dionnaglaze@google.com>
- <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
- <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
- <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR11CA0013.namprd11.prod.outlook.com
- (2603:10b6:610:54::23) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1693:EE_|MW3PR11MB4700:EE_
+x-ms-office365-filtering-correlation-id: b3c476b1-78bc-4322-d0ea-08daf813d47e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TDrPqmPsR2s69kQ33Z5Xz+MTuEAR+zIsRJ9h//HaOtymUYhtBw3GZrZd2hakFDF2y4+FOsuJoqN3GROkF/WYSeoRTXySX6pf8lMa7kVQg4LInuZoosgSafyKXF0sUSgLneSK2tVE55P5yOMMBTZdY0JBVepFqIV0OYPRA9smZOMpYqDxqm4Rh++Jo61rq6CRPz04oSPCPKFHXAglmVYsxTLel6+fpVBzOyXapll4d6FWXJ+CKCEBRi0vclDUqIn474Dt5650Yk9sBVpPnu1sy+UsT7+QqxfokTlkNSz1THhtuZYXF3zIwykBXkoIBUubhyNP/04ku1QeVGntvenzzfIgpTKaZKGWRc6awBD92CCI1neAFrU20eIa3Dh/Q2hQsY/op0A7qprpeTO1Vk8eUIhzPJ2BCTu43PeHMpgP7JoeKhISKAETnM5Vohx/Vbi/TMVujXMjKM+WZVWuZJohL1pGOdo7ODMnDO0NgFEyDMZleg8V2H4hOL/4UL4roSCJTAQcC3CtcH35exDbmEyQTAVYpGXkx6Yb9n1J0aneB0VQEanxH/SCbXI7IAEVtbixp7++5vQhCzEgDwol2lr2GJbwOmf5PBYC8RU5BHZQJXkcfIrevr97L4G+Y2C/BA2fvS8UdIOH4UCl851IuQZ/O01ONm57I+3wBmUbtw34glbowzZYsrftKJxreWNDdFPRj0wuNvjLotQ2RR1OL8ilSg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1693.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39860400002)(376002)(346002)(366004)(451199015)(71200400001)(7696005)(186003)(6916009)(4326008)(66476007)(8676002)(66556008)(9686003)(66446008)(76116006)(64756008)(26005)(66946007)(478600001)(6506007)(41300700001)(52536014)(8936002)(5660300002)(2906002)(7416002)(83380400001)(316002)(122000001)(54906003)(38070700005)(33656002)(38100700002)(86362001)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pnaWRzt0gCjdRXf3eodZwgq8b20Qi+D2zlHdFBm20CMDXr6ThgS5wuDWNvg+?=
+ =?us-ascii?Q?bafqpZi+IFS6d6atV2fx0Sj7r4ioTl9vnpmo99VZJay6OoNaDzBOLZ+TtQcZ?=
+ =?us-ascii?Q?2XZbDhRLNJCVzljgIQVAbx09Ff7A5edHH77s/jweNyF/ECv82VIXDeLcID+j?=
+ =?us-ascii?Q?TQsvghIw90FcW8v14M9wqi2uwUWu+ZmtkOFEqK8kzwj8wnuyauBBZ+J7Ns1y?=
+ =?us-ascii?Q?Y7eeQe6eyW23Wi/81r0HeamzY/qNXuLie2IRk/3c4fh/uH0mqVwwwAKwdT05?=
+ =?us-ascii?Q?R/7hPu5kpaZd4tlPo3OBfilfqR483/SszzhHMRKsXnSvuvA/xSULCHppjzP/?=
+ =?us-ascii?Q?NdwYe/tt2jlBWo1fGfUkyzAdvSZrcRVGpfg/k6ONT2rB2NKnskx7eM3+vV8B?=
+ =?us-ascii?Q?2cvVfjLQt+IJ+/vvC6qhf8ZuDdwJfUBR2mKYtBSLhlkdZCWZuUcoaVHHks2a?=
+ =?us-ascii?Q?/0rc8JMzTwDFO5WsfIlV/e57NA6zow9EHW5tnU7G6NExdWJ+E+4Aiq+qw+KB?=
+ =?us-ascii?Q?Kx39kSrThsx5pRcAFKu1hQucrK7CUY15OhTi4zE4bT9wxIacfDcewycDizfA?=
+ =?us-ascii?Q?bJZY2Wi9CgcPpfx/nz6m8CtH1vrxu68HU7hUzVWUtRWisDuy0Wdj+jmlK7fD?=
+ =?us-ascii?Q?mwBkvh9J2otuJ+3CBlgJkNo0tKltRRXiuKME8brz2E1x4pAocs29HUSXhKfm?=
+ =?us-ascii?Q?Iy6b6gyBzG9Y1yfUyMY6kaNACGqA0iQVbiBIwOQGPqgANUvlXs5rs78xeX4M?=
+ =?us-ascii?Q?3BvIWcb5JDWdhwvcXv9DQj3bl4w2Rm82yEO0YLg3fIez42H3dH2hjXqZsk79?=
+ =?us-ascii?Q?Z2EAa4Ftc3Aru6WDXnfUUW/4kU9aY/GapiRXu+NTopVyy2gmk+OIWuYFqSCP?=
+ =?us-ascii?Q?lliJ0/6MMxC8o0gtx9Wh1FZq90TLDjEmkWbLteR2iGF66S/3Bts9gouUMyNE?=
+ =?us-ascii?Q?CI6b6zOKz38DGRn4DbP9iX/YRSEWcV4r9EHjKf3qDU1z8xXFx7blpo7s0BB2?=
+ =?us-ascii?Q?RjRiXPXr+L+Jrq4agXe7u4FcXu/IOCFn8gp0X0guGesdUXYB5KBdGhRS1NQG?=
+ =?us-ascii?Q?qEhJ/F/d1nj5RIcJ3wlYWbfAkQHqj5qCv3+Ph8J0VIlCegAkPwSRwkQaqW5X?=
+ =?us-ascii?Q?76VPvX9jvZDRWWyyRXWgHwdfrb5CWTgH0qSU9irlicCe1JccMicDjrNGLjG2?=
+ =?us-ascii?Q?TefyYyiSCWu6mJQGkjbAJ5nrKusBqyoJqqO4/bfTdWOSeShF0jVP/M4b0J0J?=
+ =?us-ascii?Q?ioy7ex5BfKbG4UbaMYDR1CKxWk9ucV8yjnYU8SJNvXHC+SY+imkFG0ME2glj?=
+ =?us-ascii?Q?jo6MwxUh+Tw+sH4eXfucnycIyGGvNRw5Lasey/lKfwiNQ6ByaDS9tUA2xRnD?=
+ =?us-ascii?Q?GvcuRnakhzFAXwJxD2pYkitjIDOvbwGYgvYYUxkDbb7QEJfkDh957WOJ2t12?=
+ =?us-ascii?Q?1CxUpWTkt8+Z+szWWbpDwfxliWXZ63oCNMm/8OTT1EX43/FF6lOFtLrd2cf8?=
+ =?us-ascii?Q?PuD1FcGbDp5IH0Akph5IfP1ZVZbl7Ct5Kb6aifixjvnlVoZ6A6wTEAVUkusG?=
+ =?us-ascii?Q?abBhdKmUytkFmDdo/i8IY0trbOPuwmyX1YUOf7YN?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CY5PR12MB6550:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3aa8ad91-1992-4f60-2798-08daf8138528
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: seuwxg0jUHV5tCkObWg8MZMEKzQNSccNfQMd5KuDcwDVgDtyZcj0AwscH6wum8cuXFbCWiaOkGQ+am9brL6bo/XSve1Tc72TKlm3sCa5wCi4AosDHR1zRpKiD60dVVx8e3xwIQ1EMp3j9/qrjLZoaNYl5cCENj+TF5wQww74pI0GTy3Oab90SD0PMBdnPjy/nANwHhWTCqN6X63sBAT/4ISHdru7DelbsGwDOAMrSUygY8rOnI5MGfnOSXrEito43ByRmajWjMzDFnlrStdjJr7AJW2Eu2hsKEEjFdRVrd7MW+xEchapxwcCP3JFjkt7buLHoXvDBipK5IrMjuvDGATfLatMZOa/P7EBUqJ/tSQ5bEOnnv4q5fBRXljrBWsA1PVuUmrsq0kUYkfDPjbOGYDrxegJRtIWEZhQTi58v3zeG8n13F7sDxkLvafXwGiH9AQHNlNvGFIpo4J2DkArK6ktUQl+7aEd83Ln3eCCsEqkFqgCRDzvU2syY+vUcLqdccBduUCE8q3R6vI25dJMvXST9T5PkY152nxIZLw2yXSW7FB1Jze3DOtVB8wr9XPbjbWdxycV8+aluYovUzm6fq0WG/YTrrVySnC2hr3pcbA5O9/Q8U6x1vSsUqb6Ndi2FOgSS+Fo8B8DVk1jWl2/tmDy1iPWpfH7aG0ymPMlv/UEW6nvfwmx8A1Tz97lDGcAOXJ7tJ6dmS+hc5P0BTYJCne8+6lNf350vfEDxRD4YRM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39860400002)(376002)(346002)(396003)(451199015)(31686004)(2616005)(316002)(83380400001)(41300700001)(6506007)(8936002)(6666004)(8676002)(4326008)(66556008)(66476007)(7416002)(5660300002)(53546011)(2906002)(66946007)(38100700002)(6486002)(186003)(54906003)(110136005)(31696002)(36756003)(26005)(478600001)(6512007)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWU5d2pia3RybTFhSGZUQnV4MXd6aElpalBIQ0ZvZ3B6RzI5amQrTHcvL0xX?=
- =?utf-8?B?OGY0YUZBeER1ak9DNGQ0a0hSSFZWS3RUR0hGY0VRczRQZmpiaDR2OE92TVQ2?=
- =?utf-8?B?K3FJbU5CWDhmS3kyMkQ2eVBWT2hiZkxQcUtzSUI5bWYxTytwUHk2YlgyRjk5?=
- =?utf-8?B?YnN3WUVNRmtTWWErRFhDY1ZGNkZwQ0QyUFVWUnZ3Y2tLZDZMZ25lOFA2SUNQ?=
- =?utf-8?B?Tkx5aVRHdjJKWmZHWHNNaU00S1dRWlFrY2QwS2I0bUpKQ3ZhSzA4MTJpL0Fm?=
- =?utf-8?B?SzgwVWZwNHJnN0UrZVRkLzlPMld5U1lYNmt3d0NMUWpQSmpMdlBaNU5lcVAr?=
- =?utf-8?B?ajhuUFhTMFA1V3N6cW5OclNhQW0rUWNIK09qczFzb1ljSVN3SEtkRmRqWjFC?=
- =?utf-8?B?NGx5QjN1ckYzMW1oU3BqZmk2bmdMQ2ZlMGhEQVREWVdzaFVnRU8zcHl1VHNy?=
- =?utf-8?B?d3ZnWHYwS0Q2b3pJcWJtTm4vOVhKRnpBSGVKK0pJWEU4WWczVzF6MlNJL3F1?=
- =?utf-8?B?bm1WeEhxTkpKVGY1VHpvQ1FiSnlsdWhjZGV3ekxuTE8xR2ZKMkJLdEU1cGZP?=
- =?utf-8?B?eWxBZ3BFN01VTS9BeEluMk9qajBscDYzZG1RdjhzdmtTTk5NUHVsWjM1OW1v?=
- =?utf-8?B?VkJELytET0pQbE1SbmFwRVpYakdDQVJ4SXkrRlB0WG1Ha2R6ZjI4WHlwZ1hu?=
- =?utf-8?B?UzhnOUtIN1daOUhJRXpRQmZscG1taGFXUFFQVHhmQXJ5Ny9ZQVh1N1BINnRw?=
- =?utf-8?B?eGZPRlBnZy9IcWtJSWdrVGVkemdJaXpaVXdUVDVaNWxTa1Z0UTRVTHJ5dzhy?=
- =?utf-8?B?SG1jQjVZdEFmdi8rbENlSkJnWmZKOHRPazIwY2R3U0FlbmFvQVNOU3Z1aHY1?=
- =?utf-8?B?OGIrOS9ZZEpnYzhLV0xhem5abWpoWCthbFBna1dzd0lFamhtTGFyQk5EdTRO?=
- =?utf-8?B?QjJrL3E5eURGNTRxSUU4L2E0bWx6Njc1dnNHa09maWJnWXFGNlZDR3R0Q21F?=
- =?utf-8?B?Y3R2aW5kdXVMYnNOell2cWEzYlZrVEtoV3g3ZTBrR2FxRTlUaXlnVWhndnNE?=
- =?utf-8?B?WDZlU01iZWxJcFcxRndOdXlOcnNSN0hxamIwWFNwUWo0NjhRc21QSVJ6aUlr?=
- =?utf-8?B?cW9iZExSMm1XSXIvK3oyUU9JYjFKaktuK0N3K2ZxR0ltY0FSOWFIUnFVaytH?=
- =?utf-8?B?S1Q2Si85dGZoYUxlUmFLN0NCU3hNSzFIZjNTV0d3Vlovazdra0RCNzhSMVJQ?=
- =?utf-8?B?eEFjTHNRTnFaY2NsYmtqTXFCSTVTb3IyNzdxdWkyaEhzdW1lcWtoUjlwMWJO?=
- =?utf-8?B?RlpzZ0dpRE12SjRWcllLN095UVhtYkN0VFI4WVlvdHlqcXY3V0gzR21MdVV1?=
- =?utf-8?B?cDV3QkdVcGk5My9SOEdIL1ZRSWJ3WlI5L0tvREY3dFBMSk9SaHFJd2Y3cFEz?=
- =?utf-8?B?a0dUQUJSQjBqVkFpNWhLU2dYRkVpUWJwMUdDNElFSkNDcFNMVjlmR3BsTkJP?=
- =?utf-8?B?WkliMXRkWk9xbU95dnBoNElGUWNTVm5taSsyMHdZakxaKzkraG50VDJ5THlv?=
- =?utf-8?B?VmlLdzRveG1teVJLQ3BubzJpcUJZckMrQUl2M2d5Sml6cWRLRmY0Nk1ZRkN2?=
- =?utf-8?B?dnlHMGRGS0ljN1A5cGE0bXJBSHBHK0QxT1FWWFY2QkFDMkZwQkpBQ3JmOWpm?=
- =?utf-8?B?N2lBRUpudnpPcW5ua2pxZCtlZmZOR0JiTUxGUXFob1RzTExzSTJjK2x4V2wy?=
- =?utf-8?B?ck96YlZoM2xoV1Q1Y1dzV2c2MFZmREhnNStNVG93OEdhbWZ4RWNpZUx6L1E0?=
- =?utf-8?B?UDdKSEo1ZTlVbExYa1BHWEZ4cmR1RytqNnU2V1pkSms1NnVINWlIL3NVUnBZ?=
- =?utf-8?B?amVaOEF2QjVTU1poSDkvTHRSU1hHVWNMSlJFS3dRdVFzcTBHRWxSTVYwZk0v?=
- =?utf-8?B?VWM5dWtzR1lvR21tY2NvVWlTd3o0amhCaXRHTjBaU1U1RFJ6a3ljaktrbmJQ?=
- =?utf-8?B?V05vOUh6U1ZlSlBaRGtBYTM0TnpybWhlS3F2UEUvamE4bGdkWkoxRDlZSXJM?=
- =?utf-8?B?U2FQVkUyQ3hmOEdQS1FpSUE1dUt3SUZTMkw5alBRelQ0MDhwSWZoYk5rZ1Ro?=
- =?utf-8?Q?0NdAkwHA6SafDdqkXThcFZ6gm?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3aa8ad91-1992-4f60-2798-08daf8138528
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 22:46:35.0427
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1693.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3c476b1-78bc-4322-d0ea-08daf813d47e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 22:48:47.8869
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rM/61Gl6btBt5V8H5sJuPNJPD27RlE+IWtEP6Kcv7e+t+nRClxLZkQCwBTNldvLlSmHLMy0I3AZq1JE+kHkZ9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6550
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4S2zDta0W0f6EshqXOwwlGqterE7Q42AMfuC0abHwxBqPGxE1Va3QbM3SElha43yZ3SqPbG4V+NVJfKiDATIKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4700
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -135,43 +147,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 15:22, Dave Hansen wrote:
-> On 1/16/23 02:56, Gerd Hoffmann wrote:
->>> And we add this protocol to address very temporary problem: once
->>> unaccepted memory support get upstream it is just a dead weight.
->> Maybe, maybe not.  unaccepted memory support has a Kconfig switch after
->> all.  If we figure in 3-5 years that all distros have enabled it anyway
->> we can drop it again.  For the transition period it will surely be
->> useful.
-> 
-> I agree with Kirill here.
-> 
-> Having unaccepted memory *AND* this firmware-driven feature really is
-> just implementing the same thing twice.
+> > > > +static void lan9303_phylink_get_caps(struct dsa_switch *ds, int po=
+rt,
+> > > > +                                  struct phylink_config *config)
+> > > > +{
+> > > > +     struct lan9303 *chip =3D ds->priv;
+> > > > +
+> > > > +     dev_dbg(chip->dev, "%s(%d) entered.", __func__, port);
+> > > > +
+> > > > +     config->mac_capabilities =3D MAC_10 | MAC_100 | MAC_ASYM_PAUS=
+E |
+> > > > +                                MAC_SYM_PAUSE;
+> > >
+> > > You indicate that pause modes are supported, but...
+> > >
+> > > > +static void lan9303_phylink_mac_link_up(struct dsa_switch *ds, int=
+ port,
+> > > > +                                     unsigned int mode,
+> > > > +                                     phy_interface_t interface,
+> > > > +                                     struct phy_device *phydev, in=
+t speed,
+> > > > +                                     int duplex, bool tx_pause,
+> > > > +                                     bool rx_pause)
+> > > > +{
+> > > > +     u32 ctl;
+> > > > +
+> > > > +     /* On this device, we are only interested in doing something =
+here if
+> > > > +      * this is the xMII port. All other ports are 10/100 phys usi=
+ng MDIO
+> > > > +      * to control there link settings.
+> > > > +      */
+> > > > +     if (port !=3D 0)
+> > > > +             return;
+> > > > +
+> > > > +     ctl =3D lan9303_phy_read(ds, port, MII_BMCR);
+> > > > +
+> > > > +     ctl &=3D ~BMCR_ANENABLE;
+> > > > +
+> > > > +     if (speed =3D=3D SPEED_100)
+> > > > +             ctl |=3D BMCR_SPEED100;
+> > > > +     else if (speed =3D=3D SPEED_10)
+> > > > +             ctl &=3D ~BMCR_SPEED100;
+> > > > +     else
+> > > > +             dev_err(ds->dev, "unsupported speed: %d\n", speed);
+> > > > +
+> > > > +     if (duplex =3D=3D DUPLEX_FULL)
+> > > > +             ctl |=3D BMCR_FULLDPLX;
+> > > > +     else
+> > > > +             ctl &=3D ~BMCR_FULLDPLX;
+> > > > +
+> > > > +     lan9303_phy_write(ds, port, MII_BMCR, ctl);
+> > >
+> > > There is no code here to program the resolved pause modes. Is it hand=
+led
+> > > internally within the switch? (Please add a comment to this effect
+> > > either in get_caps or here.)
+> > >
+> > > Thanks.
+> > >
+> >
+> > As I look into this, the part does have control flags for advertising
+> > Symmetric and Asymmetric pause toward the link partner. The default is =
+set
+> > by a configuration strap on power-up. I am having trouble mapping the r=
+x and
+> > tx pause parameters into symmetric and asymmetric controls. Where can I=
+ find
+> > the proper definitions and mappings?
+> >
+> >   ctl &=3D ~( ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_AYM);
+> >   if(tx_pause)
+> >     ctl |=3D ADVERTISE_PAUSE_CAP;
+> >   if(rx_pause)
+> >     ctl |=3D ADVERTISE_PAUSE_AYM;
+>=20
+> lan9303_phylink_mac_link_up() has nothing to do with what might be
+> advertised to the link partner - this is called when the link has been
+> negotiated and established, and it's purpose is to program the results
+> of the resolution into the MAC.
+>=20
+> That means programming the MAC to operate at the negotiated speed and
+> duplex, and also permitting the MAC to generate pause frames when its
+> receive side becomes full (tx_pause) and whether to act on pause frames
+> received over the network (rx_pause).
+>=20
+> If there's nowhere to program the MAC to accept and/or generate pause
+> frames, how are they controlled? Does the MAC always accept and/or
+> generate them? Or does the MAC always ignore them and never generates
+> them?
+>=20
+> If the latter, then that suggests pause frames are not supported, and
+> thus MAC_SYM_PAUSE and MAC_ASYM_PAUSE should not be set in the get_caps
+> method.
+>=20
+> This leads me on to another question - in the above quoted code, what
+> device's BMCR is being accessed in lan9303_phylink_mac_link_up() ? Is
+> it a PCS? If it is, please use the phylink_pcs support, as the
+> pcs_config() method gives you what is necessary to program the PCS
+> advertisement.
+>=20
+> Thanks.
+>=20
+> --
 
-I'm not sure I follow you. This feature merely tells the firmware whether 
-or not the OS supports unaccepted memory, which then tells the firmware 
-whether it needs to accept the memory or whether the kernel can.
+On this device, the XMII connection is the rev-xmii port connected to the C=
+PU.
+This is the DSA port. This device 'emulates' a phy (virtual phy) allowing t=
+he
+CPU to use standard phy registers to set things up.
 
-We have had SNP guest support since 5.19 without support for unaccepted 
-memory. Imagine now using a newer OVMF that can support unaccepted memory. 
-How does the firmware know whether it must accept all the memory or 
-whether it can advertise unaccepted memory. By having the kernel call this 
-boot service protocol once support for unaccepted memory is in place, the 
-firmware now knows that it need not accept all the memory.
+Let me back up for a moment.
+The device supports half-duplex BackPressure as well as full-duplex Flow
+Control.
+The device has bootstrapping options that will configure the Settings for
+BP and FC. On port 0, these strapping options also affect the Virtual Phys
+Auto-Negotiation Link Partner Base Page Ability Register.
+If auto-negotiation is enabled, the flow control is enabled/disabled based
+on the Sym/Asym settings of the Advertised and Link Partner's capabilities
+registers.
+If Manual Flow Control is enabled, then flow control is programmed into the
+Manual_FC_0 register directly and the auto-neg registers are ignored. The
+device can be strapped to use (default to) the Manual FC register.
 
-Thanks,
-Tom
+So this is why I'm trying to reflect the flow control settings as provided =
+in
+the mac_link_up hook api into the emulated phy's aneg settings.
 
-> 
-> I'd much rather have the Kconfig option forced on for all guests that
-> *might* need unaccepted memory support than carry redundant implementations.
-> 
-> Also, _if_ we allow folks to turn the Kconfig off and get access to all
-> their memory, they might get used to that.  Removing this firmware
-> interface from the kernel in a few years could be viewed as a
-> regression.  Then, we'll be stuck with this forever.
-> 
-> In any case, the firmware side of things didn't seem like _that_ much
-> code.  So, I'm not protesting *that* strongly.  But, I also don't
-> believe for a second that this is going to be removed in 3-5 years.
+Question:  In the get capabilities API, should I report the device's
+flow control capabilities independent of how the device is bootstrapped or
+should I reflect the bootstrapped settings? I consider the bootstrap settin=
+g
+to affect the register default rather than limit what the device is physica=
+lly
+capable of supporting.
+
+Thanks for helping me get this right.
+Regards,
+Jerry.
