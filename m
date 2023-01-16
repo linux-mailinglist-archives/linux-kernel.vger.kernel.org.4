@@ -2,121 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E69066CFAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7752466CFBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbjAPTno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S232957AbjAPTsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbjAPTn3 (ORCPT
+        with ESMTP id S233406AbjAPTsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:43:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C622C664;
-        Mon, 16 Jan 2023 11:43:27 -0800 (PST)
-Date:   Mon, 16 Jan 2023 19:43:26 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673898206;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oTL33mkl+z34Nws6m744aZKk/w6dXKgVBTtPQtshBio=;
-        b=xC2n5EF1n57WjfSrVASE2pXoUs+DkUBijFE/H3fIYGXyj+FssS3b03D1Vf5/9+3fXITBFk
-        bAyeR7mirK215jBfH5hPzuSecB2qZSafJ0DFFJ596UJsJ28VP4uBJepUP30B4uPUKTQTsW
-        6sEkpvzeSGObZZCgsaV2h/SIEHA5tcUywohSjmKCAT5jNoto41b6GESe45tyRf2SmdmEVi
-        csSNGvxvbXob8eD3IBRWQzBJPDsoBuEcaywSw9B/hwL8aaGZ/MML40xWt50zP9g8oFTt5t
-        CePgoI2iFh9BNFsFxI1TCaxYWlb3Ar+hsEIZgvJNpWOpY4Ys9/9nj2zdmSqQ9w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673898206;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oTL33mkl+z34Nws6m744aZKk/w6dXKgVBTtPQtshBio=;
-        b=noz/LJ3P8HK8iK9bsRVBRG70uiU/iBJEjqQMgtp3NnM7CtJsIoN4GNZcxTlt8czcEMr1Qj
-        8K9KyfS5OikYDYBQ==
-From:   "tip-bot2 for David Woodhouse" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/pci/xen: Set MSI_FLAG_PCI_MSIX support in Xen
- MSI domain
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <4bffa69a949bfdc92c4a18e5a1c3cbb3b94a0d32.camel@infradead.org>
-References: <4bffa69a949bfdc92c4a18e5a1c3cbb3b94a0d32.camel@infradead.org>
+        Mon, 16 Jan 2023 14:48:18 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F6B22A0F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:48:15 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id o15so20730980wmr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:48:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=onvhX1TOdt60boJ/7IAHFv/aMGHge6Nfr/YhIhx4rzQ=;
+        b=TdvrquOPOT5LXSSXAt/M7SaQWSgxwpkMFCuOGNBBXMfFgE5oUEp3LpPmSu/sjkMVV9
+         dom5C304X31GgzFzDY8I6f/7j/bridJG4CmiY0wgmDDaH1aizuRnajCFlUHHFTCcpSgw
+         t7SV5Q4UzEtuaIJgH6+2m/NcvEggjHT1keCxCHtEzhJt8hJgl7EHpvNvxKmkSF8nhFah
+         f9hwIRqXxy9o1vLALnYNXfccgBpcB8NUZw39lpVDSRRBBsWxLwA7zjk7xB68mdz2jyEp
+         NUX0xhYUTJaz28jlHBQy6B0pLHjmjoZ5K2ks53NZV/Blq1dGzwA92AfIV6qIPYSVSuYg
+         o7aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=onvhX1TOdt60boJ/7IAHFv/aMGHge6Nfr/YhIhx4rzQ=;
+        b=hU5Fj5p5uSI5mUkAISI/vYF1NfYEXr6rWEVy3xFDF+YaQUrK9GngoU12X9MOHEADGG
+         RFIPL97yuTnBc0XwsIxa6hLRNdqJXkIxl0903rSg73XlQQTIbk8cjdFUFsVcEHjB2jnE
+         Yy2m8qLGZOLydUr3f3dgNUyaxzqE7tyGt0oI1NZO40b2wkBKyChfIcQ7xok46Lgb3xDA
+         wDJnfcI1sUYEfEzUE9pmqZ+udcwkue10zGDmudFxY+8CpLBprWp2Qg4YmLT7Am+hO8xK
+         sg9qaBx1KO3z+wfdnqZlNCtdNq8X2aX//ZUdSzk/XcLzG6D0y8x6pOX5zZjDNsvpbX0F
+         CZAg==
+X-Gm-Message-State: AFqh2koSnZfHDgbQFTS2m2ByHR9BJYeBS+XcUzrE2OdNE83yLfN4050a
+        wQAuEDAmG8fyFQu0Jop0JpQ=
+X-Google-Smtp-Source: AMrXdXs848a3qdyv+SLxTCa7nmdliC7Rl6LooPQPd9DElyiKg8euw8Ei0tsWe0p7OWf3VwtebAHtGg==
+X-Received: by 2002:a05:600c:3c92:b0:3d3:4007:9c88 with SMTP id bg18-20020a05600c3c9200b003d340079c88mr608217wmb.18.1673898494380;
+        Mon, 16 Jan 2023 11:48:14 -0800 (PST)
+Received: from localhost (host86-164-169-89.range86-164.btcentralplus.com. [86.164.169.89])
+        by smtp.gmail.com with ESMTPSA id j20-20020a05600c1c1400b003daf89e01d3sm5910223wms.11.2023.01.16.11.48.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 11:48:13 -0800 (PST)
+Date:   Mon, 16 Jan 2023 19:48:12 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Baoquan He <bhe@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, urezki@gmail.com,
+        stephen.s.brennan@oracle.com, akpm@linux-foundation.org,
+        hch@infradead.org
+Subject: Re: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out
+ vm_map_ram areas
+Message-ID: <Y8Wp/BtGWj9zk4tP@lucifer>
+References: <20230113031921.64716-1-bhe@redhat.com>
+ <20230113031921.64716-4-bhe@redhat.com>
+ <Y8WfDSRkc/OHP3oD@casper.infradead.org>
 MIME-Version: 1.0
-Message-ID: <167389820601.4906.4662164438390754868.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8WfDSRkc/OHP3oD@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Mon, Jan 16, 2023 at 07:01:33PM +0000, Matthew Wilcox wrote:
+> On Fri, Jan 13, 2023 at 11:19:17AM +0800, Baoquan He wrote:
+> > +	spin_lock(&vb->lock);
+> > +	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+> > +		spin_unlock(&vb->lock);
+> > +		memset(buf, 0, count);
+> > +		return;
+> > +	}
+> > +	for_each_set_bitrange(rs, re, vb->used_map, VMAP_BBMAP_BITS) {
+> > +		if (!count)
+> > +			break;
+> > +		start = vmap_block_vaddr(vb->va->va_start, rs);
+> > +		while (addr < start) {
+> > +			if (count == 0)
+> > +				break;
+> > +			*buf = '\0';
+> > +			buf++;
+> > +			addr++;
+> > +			count--;
+> > +		}
+> > +		/*it could start reading from the middle of used region*/
+> > +		offset = offset_in_page(addr);
+> > +		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
+> > +		if (n > count)
+> > +			n = count;
+> > +		aligned_vread(buf, start+offset, n);
+>
+> The whole vread() interface is rather suboptimal.  The only user is proc,
+> which is trying to copy to userspace.  But the vread() interface copies
+> to a kernel address, so kcore has to copy to a bounce buffer.  That makes
+> this spinlock work, but the price is that we can't copy to a user address
+> in the future.  Ideally, read_kcore() would be kcore_read_iter() and
+> we'd pass an iov_iter into vread().  vread() would then need to use a
+> mutex rather than a spinlock.
+>
+> I don't think this needs to be done now, but if someone's looking for
+> a project ...
 
-Commit-ID:     0a3a58de319552525507a3497da86df039a5e4e0
-Gitweb:        https://git.kernel.org/tip/0a3a58de319552525507a3497da86df039a=
-5e4e0
-Author:        David Woodhouse <dwmw2@infradead.org>
-AuthorDate:    Sun, 15 Jan 2023 22:14:19=20
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 16 Jan 2023 20:40:44 +01:00
-
-x86/pci/xen: Set MSI_FLAG_PCI_MSIX support in Xen MSI domain
-
-The Xen MSI =E2=86=92 PIRQ magic does support MSI-X, so advertise it.
-
-(In fact it's better off with MSI-X than MSI, because it's actually
-broken by design for 32-bit MSI, since it puts the high bits of the
-PIRQ# into the high 32 bits of the MSI message address, instead of the
-Extended Destination ID field which is in bits 4-11.
-
-Strictly speaking, this really fixes a much older commit 2e4386eba0c0
-("x86/xen: Wrap XEN MSI management into irqdomain") which failed to set
-the flag. But that never really mattered until __pci_enable_msix_range()
-started to check and bail out early. So in 6.2-rc we see failures e.g.
-to bring up networking on an Amazon EC2 m4.16xlarge instance:
-
-[   41.498694] ena 0000:00:03.0 (unnamed net_device) (uninitialized): Failed =
-to enable MSI-X. irq_cnt -524
-[   41.498705] ena 0000:00:03.0: Can not reserve msix vectors
-[   41.498712] ena 0000:00:03.0: Failed to enable and set the admin interrupts
-
-Side note: This is the first bug found, and first patch tested, by running
-Xen guests under QEMU/KVM instead of running under actual Xen.
-
-Fixes: 99f3d2797657 ("PCI/MSI: Reject MSI-X early")
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/4bffa69a949bfdc92c4a18e5a1c3cbb3b94a0d32.came=
-l@infradead.org
-
----
- arch/x86/pci/xen.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/pci/xen.c b/arch/x86/pci/xen.c
-index b94f727..7905504 100644
---- a/arch/x86/pci/xen.c
-+++ b/arch/x86/pci/xen.c
-@@ -433,6 +433,7 @@ static struct msi_domain_ops xen_pci_msi_domain_ops =3D {
- };
-=20
- static struct msi_domain_info xen_pci_msi_domain_info =3D {
-+	.flags			=3D MSI_FLAG_PCI_MSIX,
- 	.ops			=3D &xen_pci_msi_domain_ops,
- };
-=20
+Interesting! I may take a look at this if I get the time :)
