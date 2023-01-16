@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAD266C2D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB87F66C2D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjAPOyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S231259AbjAPOyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjAPOx3 (ORCPT
+        with ESMTP id S232518AbjAPOx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 Jan 2023 09:53:29 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EFD526D;
-        Mon, 16 Jan 2023 06:40:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673880059; x=1705416059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=omRXLkSPYL+E0aSp9XjS5PIFHSuzZ008Zyz8ceghZRk=;
-  b=OuEZms/wdG6xQSOMP1aurv/Ewf7kojiUcZm2EneOKk0DbBAWSxu5HobD
-   odOwTJvhrMtr1i3hbiEbTCAMSQHN/Uejoda5K1pX0nDkys6RdJctUpSUf
-   xjbvaiRjSb6WV7ey3UIQASEM9qWsdnu0Kf7MoINDRjQ2xAr5det6dmcHn
-   rPk9vqqB5Ue6v/pTE0gH34l8D6lH127vj5E6MIrYgmCj9D99ttPjBjhHp
-   7YGM1yKVa2iNF6iimPOgN1oAtzoOuFKpl6yuwLAb2yOoqn727PrP3pM1T
-   HcOAAEa3vMyrj9/KOyskkGNKDbXK8zGl/4/RxCjc8S85SkQGfQ72VjUSE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="325739489"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="325739489"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 06:40:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="636553720"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="636553720"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 16 Jan 2023 06:40:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pHQfM-00A7nm-0Q;
-        Mon, 16 Jan 2023 16:40:52 +0200
-Date:   Mon, 16 Jan 2023 16:40:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Baruch Siach <baruch@tkos.co.il>
-Subject: Re: [PATCH v2 1/2] pinctrl: digicolor: Remove duplicate assignment
- of of_gpio_n_cells
-Message-ID: <Y8Vh807+yUgIX6X0@smile.fi.intel.com>
-References: <20230113143640.24302-1-andriy.shevchenko@linux.intel.com>
- <CACRpkda66+a0A2Ho4ndTnzZKeQG_rR2wWNLE0xTD1QoGwd3bUQ@mail.gmail.com>
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9787C5B96;
+        Mon, 16 Jan 2023 06:41:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 611F0B80FCD;
+        Mon, 16 Jan 2023 14:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECFDC433D2;
+        Mon, 16 Jan 2023 14:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673880076;
+        bh=DBpFvUPk6aIKzxRtTgvzA2wsR/gccADGxoulyVLE4+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ir3us1sa/T4GamrJrao7UGS7x1tYciTsv9XWDvOoWpZv8wnh8S5fGsZx59Pm6mRgN
+         ExS+nAmO62zPdnEcz0wWEI9pRLyz2koLMpITe6hvCRDOqLz0oE6skQOGhH4kFHYhoy
+         DmIU/MFv7RRVqARixVOuh8SOdaOZBsEW4h1iknv8bOGwROf9mO3U15YMMRuT4LFJXq
+         R2rvZ2Mx5IyJJPnEHcEgUj7SbCAkSCcqxdHqeX3uyhftiBsWeukAalsKRPXkP0SiMy
+         VKh5qbkhOtuioxGBDcgcqJopwspTANN4VADUabuTyQQ/tQg5h7tiYigDzio/mIZ9sN
+         2rI+LuX2wh8xg==
+Date:   Mon, 16 Jan 2023 14:41:11 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+        Lee Jones <lee@kernel.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        martin.botka1@gmail.com, Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP313a variant
+Message-ID: <Y8ViBxFk+YRBmCch@sirena.org.uk>
+References: <20230116142501.767142-1-andre.przywara@arm.com>
+ <20230116142501.767142-2-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R4/rqsV5InU2Lm75"
 Content-Disposition: inline
-In-Reply-To: <CACRpkda66+a0A2Ho4ndTnzZKeQG_rR2wWNLE0xTD1QoGwd3bUQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        SUSPICIOUS_RECIPS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230116142501.767142-2-andre.przywara@arm.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 03:14:38PM +0100, Linus Walleij wrote:
-> On Fri, Jan 13, 2023 at 3:36 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > The of_gpio_n_cells default is 2 when ->of_xlate() callback is
-> > not defined. No need to assign it explicitly in the driver.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Acked-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> > v2: added tag (Baruch), avoid confusion with previously sent patch
-> 
-> Took out v1 and applied the v2 version instead!
-> 
-> (Hoping there is no v3 version I have missed too...)
 
-Nope, thanks!
+--R4/rqsV5InU2Lm75
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Mon, Jan 16, 2023 at 02:24:59PM +0000, Andre Przywara wrote:
 
+>        - enum:
+>            - x-powers,axp152
+> +          - x-powers,axp313a
+>            - x-powers,axp202
+>            - x-powers,axp209
+>            - x-powers,axp221
 
+Probably better to keep these lists sorted.
+
+--R4/rqsV5InU2Lm75
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPFYgcACgkQJNaLcl1U
+h9DEJQf/W4YVdfe7oceJbRfGjUZeyoD1zDIZRw0/5GhFhmLThRiwd54aAEKHncvZ
+mU86HzAE8meVc/bRnCRSOnJ0oKxF3RIvcUiLzGCGC7xa8pv4VRU7XR5TaX20ch2t
+Wk5+0/84PAtTBezwYkl6dhQtG+SBoj+/05pM5hlYshfR6k3hQoyjjSP+iTP948lM
+upu6oKOexUZZcgP6nb/dVpns/n42j74gky8cPc+KAt2XdgMH6vDGp7wHtlffhmfd
+YwZL/svKsSzHckcXURY6pQaZtpovMgEUa1q+kZGuHctsirGeC9dMp6hkOsHljpwY
+zKhX7+iaRLrW5kYsNBRMsMwFz97SiQ==
+=DlAX
+-----END PGP SIGNATURE-----
+
+--R4/rqsV5InU2Lm75--
