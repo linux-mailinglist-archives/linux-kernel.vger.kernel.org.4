@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E6166C047
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D3366C01E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjAPNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:51:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S231517AbjAPNuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbjAPNuo (ORCPT
+        with ESMTP id S231478AbjAPNun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:50:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AA22197B;
-        Mon, 16 Jan 2023 05:50:43 -0800 (PST)
+        Mon, 16 Jan 2023 08:50:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864272006B;
+        Mon, 16 Jan 2023 05:50:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE726B80F1A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25D1360F95;
         Mon, 16 Jan 2023 13:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80150C433EF;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8F2C433D2;
         Mon, 16 Jan 2023 13:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673877040;
-        bh=heMSyTjPVavJ2Aad43hH/VAIkwpBj4Ge9/GVRzLpwHg=;
+        bh=WOLEYv/LC2uRo2oOqpCuxx1j2Jg09eJ+FL+Ym0vCxkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZ284EJZSZP2qsSjGnp5CKWQdPPkhVemAo44H1WSr+Yvra3KkzKEtNsKeqhRGpEa0
-         QkAZ2Xd9foHia2QJ8jv33WVY8EnvFYUniKtytP4BeqHlXcjcDs1DNTXLNHZUkSednx
-         jkfsz8/1w9GUyQHGBwjZ6v3bIsqGmeWHHhivSjPrt3jzHAaqW0x5zBFU/lqy25fVyZ
-         Z139nsEmuiK/ALPdUMVly8F0A/ruO0sZlsiJaPr67DsELzlAjGSZQYoMM6opNjGiyf
-         sSyg4daW0Bhy+kQE2mM3vtGgM4xk8N0Jvh29ilFqRoOuLE6Yt+OxzanmFc1+PCXtZA
-         8fEcOGZOv8ukg==
+        b=S7gB9oP1nlNtzHy6VDK5Mbnw+MZRfv/CQ8NrAx76e1s+PSpferOR5tbrxFiNltPDM
+         q/SPDI4AS+XNO2gPWB3FhMzrH8Qu+BYh1uFsbEJgepXZSN+bZJlj2yenpb/jMPjwYu
+         6N8WmfT35dhIpIjYZ4KL8rRz9IcYi5B48B/6tIKHfji6F7lJgEKWKDn602u09PaPwf
+         usbjHvcXLR4HR2KAPJs5YFSc4CMLZo6HPRiPb5wyhRSRJRmYiMPyMMaXWGdrN2KJ1I
+         ZRUdzuf11uKMNvgetNjirHXPM4Qv6ZgYhEZ8Fzi1zCbadCy/xsieBkDWhoc6OARX+P
+         23K36jP0fbovA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pHPt5-0003uk-IO; Mon, 16 Jan 2023 14:50:59 +0100
+        id 1pHPt5-0003um-Ku; Mon, 16 Jan 2023 14:50:59 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v4 01/19] irqdomain: Drop bogus fwspec-mapping error handling
-Date:   Mon, 16 Jan 2023 14:50:26 +0100
-Message-Id: <20230116135044.14998-2-johan+linaro@kernel.org>
+Subject: [PATCH v4 02/19] irqdomain: Drop dead domain-name assignment
+Date:   Mon, 16 Jan 2023 14:50:27 +0100
+Message-Id: <20230116135044.14998-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.38.2
 In-Reply-To: <20230116135044.14998-1-johan+linaro@kernel.org>
 References: <20230116135044.14998-1-johan+linaro@kernel.org>
@@ -60,37 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case a newly allocated IRQ ever ends up not having any associated
-struct irq_data it would not even be possible to dispose the mapping.
+Since commit d59f6617eef0 ("genirq: Allow fwnode to carry name
+information only") an IRQ domain is always given a name during
+allocation (e.g. used for the debugfs entry).
 
-Replace the bogus disposal with a WARN_ON().
+Drop the leftover name assignment when allocating the first IRQ.
 
 Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- kernel/irq/irqdomain.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ kernel/irq/irqdomain.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
 diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 8fe1da9614ee..bf67de1733ee 100644
+index bf67de1733ee..fe9ec53fe7aa 100644
 --- a/kernel/irq/irqdomain.c
 +++ b/kernel/irq/irqdomain.c
-@@ -833,13 +833,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+@@ -593,10 +593,6 @@ int irq_domain_associate(struct irq_domain *domain, unsigned int virq,
+ 			mutex_unlock(&irq_domain_mutex);
+ 			return ret;
+ 		}
+-
+-		/* If not already assigned, give the domain the chip's name */
+-		if (!domain->name && irq_data->chip)
+-			domain->name = irq_data->chip->name;
  	}
  
- 	irq_data = irq_get_irq_data(virq);
--	if (!irq_data) {
--		if (irq_domain_is_hierarchy(domain))
--			irq_domain_free_irqs(virq, 1);
--		else
--			irq_dispose_mapping(virq);
-+	if (WARN_ON(!irq_data))
- 		return 0;
--	}
+ 	domain->mapcount++;
+@@ -1118,10 +1114,6 @@ static void irq_domain_insert_irq(int virq)
  
- 	/* Store trigger type */
- 	irqd_set_trigger_type(irq_data, type);
+ 		domain->mapcount++;
+ 		irq_domain_set_mapping(domain, data->hwirq, data);
+-
+-		/* If not already assigned, give the domain the chip's name */
+-		if (!domain->name && data->chip)
+-			domain->name = data->chip->name;
+ 	}
+ 
+ 	irq_clear_status_flags(virq, IRQ_NOREQUEST);
 -- 
 2.38.2
 
