@@ -2,103 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED63166D1CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB94066D1CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjAPWbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 17:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S230087AbjAPWgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 17:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbjAPWbS (ORCPT
+        with ESMTP id S231272AbjAPWf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 17:31:18 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E06222E5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:31:17 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id e202so8497807ybh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:31:17 -0800 (PST)
+        Mon, 16 Jan 2023 17:35:56 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F4A222E5;
+        Mon, 16 Jan 2023 14:35:54 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id x5so2208239qti.3;
+        Mon, 16 Jan 2023 14:35:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nl4uCsevYvl21DFFHHfHpz/TY+Y4NdyKB4ccoVr7FxM=;
-        b=chY1LYkc3H+7hwj/BzINosPDLnW4BQC51NGqOsPgzOmsrQGibOT529CWVKDRNgZt5I
-         KJ0MuF5E3JcVVQ2T7wsSl+cZPlwEC0rLS71jtCLN4GB8zD/2Ch+fJCIvtL39dxavyxIA
-         vV3b92qomL4uJ01lIhnK++fLvunoAnIwDLNjG5u3aZQ6blpD9EUx5CkvorGV5xhJmej+
-         OETGuRCgLXW5njpfaCItvXGrAB9kxp8rVll+SHUg5ZQVeNcnd2QaK8QysWQj1V1kuqO5
-         ImeLHdGsxi6a+d83eMCZul4HJ7gpirnbI4QqxLwAwkQJCsSpwM3b98wZdY2LgB1BgkU3
-         gq7Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WpALo6yYkl3lNut55yl7mbAkmluyUA+Fh6lVM7D5hFw=;
+        b=Vg80NC8KuDcPxzAZ95A6ngBnA0gb9XTUeqXc4pS8+itbQRMetIIAe4ra4aC9LkPknq
+         Nyr+jRD/hEEPHsEWqadCbhHJcO3TnDUjK7+f9qhjw7qQ4PbGev0/cw9Ft5Moa+y6ymKm
+         RpkmQWXakg3OCgTotu8oX0X1BBPH8MRIqqC9/4BLfAeB+zl3AAuQZi9G1B2rHHbDUxOV
+         dJR53A2Sg/TexO+VRBqI/hM6fy5yAs/DI3XAQzQtKDCEvrNQTmMmOjYz6HooQ+pAR4SS
+         ekMwzqqNSLGDybsfKUgJsX/Dr+YyMnzfI/NtKSOcLiuKpVymnXVYKDQWBIfmFPxt1zGL
+         jxnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nl4uCsevYvl21DFFHHfHpz/TY+Y4NdyKB4ccoVr7FxM=;
-        b=QDO7Wz6/Sekvf6qDpYJstWLefvGL1juQXe9lXmTag1vpiVXaCZLXroFCC7cSLxk2ds
-         pDzdczYoVhgdHTiQT7X1d7qUljpO+tCCL5Oo5obEtEkrkgoE32QPGwjOoaTbEs7b0Req
-         DYn3QdaQdKwiQNELnjx6SYZTR27QUMJvwtd5/8li3cnbwghuvW5v9eRoyj3fMr9JFjsZ
-         JEPJmUoNSIzZ27KCzCrhg/XrFKznNiLwu5q7Et61mTyNeMaNN9MfvnxsufsqUlMsRFON
-         OtQSF97HHY+7sswtWkiZtM26uEzzWXtyATFjUKS3i4DDiRMO8cpJR9qgt0SAN+H5NcoM
-         2kPA==
-X-Gm-Message-State: AFqh2kpOV6D3q3UqNeGzOEhaoSQ6xP3wfIsU4FuTqoZdkXGKlUzlxBFC
-        4riD6IkMBpIVhA7TtMFWPhrzZZkgY/vakCZxN/0=
-X-Google-Smtp-Source: AMrXdXvlLUCfc+dIq+S5LzlJkLbG4mALH7IbRNhj0nlEsjsJBFMxs8d/8MZNFKA4yVyRrZU9kxbh9sXILnOYWi68GBs=
-X-Received: by 2002:a25:3309:0:b0:748:8c22:b8ff with SMTP id
- z9-20020a253309000000b007488c22b8ffmr134104ybz.468.1673908276421; Mon, 16 Jan
- 2023 14:31:16 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WpALo6yYkl3lNut55yl7mbAkmluyUA+Fh6lVM7D5hFw=;
+        b=nGoQrTUaveU2AmqEo/op+yV/ZV5KgfvrjKtkDSh4yUq9gwajkb24PqdtwEiEDHU5GX
+         4F5wxiGfcxBaxDxWVyI7VSBs9qJuaUIGS/o/ij7Pv1A+ovD2jFwQoVQs6LcbNB6Wwl1E
+         N7MShrU3KditAM83oO7UGHQSiYFE4rP7MAFBhgEIhKreMG+UlajexkrRSn+mQGz7lAg9
+         rx0UArVDeestQreuYxaXZiutr9Fwq2PTVcwXuNTotUDz50sWeABf9ZohBZFRxI2Ng04K
+         3sLT7PxMHh0rXdp65M6YNLvDobW+iQQzS944CXO3WzMqpJnO8fk6PCnNO/6KUCl8m5Ki
+         UVZg==
+X-Gm-Message-State: AFqh2krJZ1RBUm04mZTJ36Izv8KF0uM3bFIXm/DEe0UsIJGIa+7ImYTY
+        LhtYvcF5y7NlU8e261kkx+M=
+X-Google-Smtp-Source: AMrXdXsPBhuxoF1FOtd+AgnhUfVPQSMHBWTiZ6T+QeKBs+shfw9LTRlRfa4lxMrKAxS9DNw7GOoYSA==
+X-Received: by 2002:ac8:4f58:0:b0:3b3:9d40:b407 with SMTP id i24-20020ac84f58000000b003b39d40b407mr19071825qtw.62.1673908553390;
+        Mon, 16 Jan 2023 14:35:53 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id q22-20020a05620a2a5600b0070638ad5986sm5460630qkp.85.2023.01.16.14.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 14:35:52 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1930E27C0054;
+        Mon, 16 Jan 2023 17:35:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 16 Jan 2023 17:35:52 -0500
+X-ME-Sender: <xms:RdHFY6h_u8hGqyGFqI6hV82fdC_a5V6oG3naXWz87t5TmTyX9Z858w>
+    <xme:RdHFY7BmXJOOAuYSXMdOeakj3Wi5ZR7_Y5iiHHneImWVI4qHImGSFpM517yFkpOli
+    jqtiTgI4OTPKMXYBw>
+X-ME-Received: <xmr:RdHFYyExOgTGpfdArLIHlVxsq8A35t1OE_gWkIuTSzooJ4azzWOpRZHwl0I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddthecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
+    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
+    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
+    drnhgrmhgv
+X-ME-Proxy: <xmx:RdHFYzT9OUJHHBD-HdVszTOmJBzxoBAsrLDmclCFcvjKUXkX-jDhbw>
+    <xmx:RdHFY3xLYQy_3o6KCfrp7Qyp5slluDmCREnvzjfjWfJrGeufEHG6jA>
+    <xmx:RdHFYx4odU6f8HRrrQ7342uWfTt9sJ6neNWQISm56ES47dqzBcVuOg>
+    <xmx:RtHFY3n2P3Z-klDKTRyQLGZ72BERLw167Irk0mAhGPU7hS1Pt1vwDA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Jan 2023 17:35:49 -0500 (EST)
+Date:   Mon, 16 Jan 2023 14:35:33 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH 4/3] locking/lockdep: Improve the deadlock scenario print
+ for sync and read lock
+Message-ID: <Y8XRNdrW3t1jvpMF@boqun-archlinux>
+References: <20230113065955.815667-1-boqun.feng@gmail.com>
+ <20230113235722.1226525-1-boqun.feng@gmail.com>
+ <221e35b8-88f5-5fc5-6961-6a8ce060a97b@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6918:959a:b0:104:e594:6d5e with HTTP; Mon, 16 Jan 2023
- 14:31:15 -0800 (PST)
-Reply-To: stbzan@gmail.com
-From:   Sheikh Tahnoon Al Nahyan <ahmedkmohammed10@gmail.com>
-Date:   Mon, 16 Jan 2023 23:31:15 +0100
-Message-ID: <CA+KTRHRDZh5FS8X3HxF=KuvQ72EeDEP7R2BBb76c-hH6JsaONQ@mail.gmail.com>
-Subject: Hello sir
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6896]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ahmedkmohammed10[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ahmedkmohammed10[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <221e35b8-88f5-5fc5-6961-6a8ce060a97b@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
+On Mon, Jan 16, 2023 at 05:21:09PM -0500, Waiman Long wrote:
+> On 1/13/23 18:57, Boqun Feng wrote:
+> > Lock scenario print is always a weak spot of lockdep splats. Improvement
+> > can be made if we rework the dependency search and the error printing.
+> > 
+> > However without touching the graph search, we can improve a little for
+> > the circular deadlock case, since we have the to-be-added lock
+> > dependency, and know whether these two locks are read/write/sync.
+> > 
+> > In order to know whether a held_lock is sync or not, a bit was
+> > "stolen" from ->references, which reduce our limit for the same lock
+> > class nesting from 2^12 to 2^11, and it should still be good enough.
+> > 
+> > Besides, since we now have bit in held_lock for sync, we don't need the
+> > "hardirqoffs being 1" trick, and also we can avoid the __lock_release()
+> > if we jump out of __lock_acquire() before the held_lock stored.
+> > 
+> > With these changes, a deadlock case evolved with read lock and sync gets
+> > a better print-out from:
+> > 
+> > 	[...]  Possible unsafe locking scenario:
+> > 	[...]
+> > 	[...]        CPU0                    CPU1
+> > 	[...]        ----                    ----
+> > 	[...]   lock(srcuA);
+> > 	[...]                                lock(srcuB);
+> > 	[...]                                lock(srcuA);
+> > 	[...]   lock(srcuB);
+> > 
+> > to
+> > 
+> > 	[...]  Possible unsafe locking scenario:
+> > 	[...]
+> > 	[...]        CPU0                    CPU1
+> > 	[...]        ----                    ----
+> > 	[...]   rlock(srcuA);
+> > 	[...]                                lock(srcuB);
+> > 	[...]                                lock(srcuA);
+> > 	[...]   sync(srcuB);
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> >   include/linux/lockdep.h  |  3 ++-
+> >   kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
+> >   2 files changed, 34 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> > index ba09df6a0872..febd7ecc225c 100644
+> > --- a/include/linux/lockdep.h
+> > +++ b/include/linux/lockdep.h
+> > @@ -134,7 +134,8 @@ struct held_lock {
+> >   	unsigned int read:2;        /* see lock_acquire() comment */
+> >   	unsigned int check:1;       /* see lock_acquire() comment */
+> >   	unsigned int hardirqs_off:1;
+> > -	unsigned int references:12;					/* 32 bits */
+> > +	unsigned int sync:1;
+> > +	unsigned int references:11;					/* 32 bits */
+> >   	unsigned int pin_count;
+> >   };
+> > diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> > index cffa026a765f..4031d87f6829 100644
+> > --- a/kernel/locking/lockdep.c
+> > +++ b/kernel/locking/lockdep.c
+> > @@ -1880,6 +1880,8 @@ print_circular_lock_scenario(struct held_lock *src,
+> >   	struct lock_class *source = hlock_class(src);
+> >   	struct lock_class *target = hlock_class(tgt);
+> >   	struct lock_class *parent = prt->class;
+> > +	int src_read = src->read;
+> > +	int tgt_read = tgt->read;
+> >   	/*
+> >   	 * A direct locking problem where unsafe_class lock is taken
+> > @@ -1907,7 +1909,10 @@ print_circular_lock_scenario(struct held_lock *src,
+> >   	printk(" Possible unsafe locking scenario:\n\n");
+> >   	printk("       CPU0                    CPU1\n");
+> >   	printk("       ----                    ----\n");
+> > -	printk("  lock(");
+> > +	if (tgt_read != 0)
+> > +		printk("  rlock(");
+> > +	else
+> > +		printk("  lock(");
+> >   	__print_lock_name(target);
+> >   	printk(KERN_CONT ");\n");
+> >   	printk("                               lock(");
+> > @@ -1916,7 +1921,12 @@ print_circular_lock_scenario(struct held_lock *src,
+> >   	printk("                               lock(");
+> >   	__print_lock_name(target);
+> >   	printk(KERN_CONT ");\n");
+> > -	printk("  lock(");
+> > +	if (src_read != 0)
+> > +		printk("  rlock(");
+> > +	else if (src->sync)
+> > +		printk("  sync(");
+> > +	else
+> > +		printk("  lock(");
+> >   	__print_lock_name(source);
+> >   	printk(KERN_CONT ");\n");
+> >   	printk("\n *** DEADLOCK ***\n\n");
+> 
+> src can be sync() but not the target. Is there a reason why that is the
+> case?
+> 
 
-Hope you are well?
+The functions annotated by sync() don't create real critical sections,
+so no lock dependency can be created from a sync(), for example:
 
-Would you be interested in a possible business partnership?
+	synchronize_srcu(A);
+	mutex_lock(B);
 
-Please let me know.
+no dependency from A to B. In the scenario case, if we see a dependency
+target -> source, the target cannot be a lock_sync(). I will add better
+documentation later.
+
+> 
+> > @@ -4530,7 +4540,13 @@ mark_usage(struct task_struct *curr, struct held_lock *hlock, int check)
+> >   					return 0;
+> >   		}
+> >   	}
+> > -	if (!hlock->hardirqs_off) {
+> > +
+> > +	/*
+> > +	 * For lock_sync(), don't mark the ENABLED usage, since lock_sync()
+> > +	 * creates no critical section and no extra dependency can be introduced
+> > +	 * by interrupts
+> > +	 */
+> > +	if (!hlock->hardirqs_off && !hlock->sync) {
+> >   		if (hlock->read) {
+> >   			if (!mark_lock(curr, hlock,
+> >   					LOCK_ENABLED_HARDIRQ_READ))
+> > @@ -4909,7 +4925,7 @@ static int __lock_is_held(const struct lockdep_map *lock, int read);
+> >   static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+> >   			  int trylock, int read, int check, int hardirqs_off,
+> >   			  struct lockdep_map *nest_lock, unsigned long ip,
+> > -			  int references, int pin_count)
+> > +			  int references, int pin_count, int sync)
+> >   {
+> >   	struct task_struct *curr = current;
+> >   	struct lock_class *class = NULL;
+> > @@ -4960,7 +4976,8 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+> >   	class_idx = class - lock_classes;
+> > -	if (depth) { /* we're holding locks */
+> > +	if (depth && !sync) {
+> > +		/* we're holding locks and the new held lock is not a sync */
+> >   		hlock = curr->held_locks + depth - 1;
+> >   		if (hlock->class_idx == class_idx && nest_lock) {
+> >   			if (!references)
+> > @@ -4994,6 +5011,7 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+> >   	hlock->trylock = trylock;
+> >   	hlock->read = read;
+> >   	hlock->check = check;
+> > +	hlock->sync = !!sync;
+> >   	hlock->hardirqs_off = !!hardirqs_off;
+> >   	hlock->references = references;
+> >   #ifdef CONFIG_LOCK_STAT
+> > @@ -5055,6 +5073,10 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+> >   	if (!validate_chain(curr, hlock, chain_head, chain_key))
+> >   		return 0;
+> > +	/* For lock_sync(), we are done here since no actual critical section */
+> > +	if (hlock->sync)
+> > +		return 1;
+> > +
+> >   	curr->curr_chain_key = chain_key;
+> >   	curr->lockdep_depth++;
+> >   	check_chain_key(curr);
+> 
+> Even with sync, there is still a corresponding lock_acquire() and
+> lock_release(), you can't exit here without increasing lockdep_depth. That
+> can cause underflow.
+> 
+
+I actually remove the __lock_release() in lock_sync() in this patch, so
+I think it's OK. But I must admit the whole submission is to give David
+something to see whether the output is an improvement, so I probably
+should separate the output changes and the lock_sync() internall into
+two patches (and the later can also be folded into the introduction
+patch).
 
 Regards,
+Boqun
 
-Sheikh.
+> Cheers,
+> Longman
+> 
