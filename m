@@ -2,144 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F75B66C8D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0C966C921
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbjAPQnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S233865AbjAPQqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbjAPQmS (ORCPT
+        with ESMTP id S233581AbjAPQpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:42:18 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E806738B62;
-        Mon, 16 Jan 2023 08:30:29 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id ss4so62047143ejb.11;
-        Mon, 16 Jan 2023 08:30:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KVo92w+mMU35HgccNk8F5uG9725xv7bq4W+283/I+5A=;
-        b=F1V4NeV1D7nGM8Ao68MkS8QO+9OEKX18y9BLG9eBcTm68JqtuVTes13gtGycIoLRAw
-         srN9x+oQ+5buVkRa2BwZdBVn3kyWx/Md4mJiCqwYdWg7qpuutIKeUlKkwRtm9zk0iQJy
-         +5VIGwNlh1+Yqesp2qqIWTy/rFP2ZnWflhy7kxO1BQE5yjv50Jo9YjkQCCUgBrsJWhho
-         mHjXgiXIWPXB8OGy0UhqN7YE3R2LO0sQh7NEsFnakRuvHcJZPmpvVGDmUBIinGg07pyf
-         HYlSl6MJBi5ctVB4BQUOjdKWHAkIUWQa1z+LWtDPFSz2w3Tc+PmkmgQHYFEDLtR7sAbY
-         tZIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KVo92w+mMU35HgccNk8F5uG9725xv7bq4W+283/I+5A=;
-        b=hnwJy7qSKCqduy3csjO0yJZ0GgCCCGGgjKmRIO/TjxPhgZ9Ru74z8BLx+gSaHk7VmU
-         wONqFu7781Yx9SD9rbP+EhWJ6NjWk1clujRDEwUIg4C2TbqZ/KCCbrhcd26scxivSVHA
-         CEXaKyH8FCgGK7YEB/GRSUGoC0XUSOEtJY7fI2JqKfjCUGLBAQfqk8eOMOtl9tbGKNw+
-         odlf9qjvXYR+Nx573h/Onw+tP1cMMJ+5bPqX0sQyoOWZtV3DWcwu2Snng/qtn1OKYPIG
-         UvIbQKBLZcNsXQVXWHT5DNKATSDdYYT5P3uPjIZv5Ser2z6UEXOMpTXdIyIX50rMUPd8
-         3aHQ==
-X-Gm-Message-State: AFqh2kopwUnbP/bic8JNCOmd6B0rJClrh6h1m2yYlCmHC8uO0pd2ff9k
-        bhAKpaC/B7Ec3Y5KkYA9Lsg=
-X-Google-Smtp-Source: AMrXdXvuq2AkcmdJDlN5B8LWYcHY5dyWpQtmhK1kg5hNM+AsoxOfhH9r3YeEkJiVk7A1UbLdpoJDBA==
-X-Received: by 2002:a17:906:39ca:b0:871:e336:cd2a with SMTP id i10-20020a17090639ca00b00871e336cd2amr1478292eje.47.1673886628390;
-        Mon, 16 Jan 2023 08:30:28 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b0084c6581c16fsm12005496ejc.64.2023.01.16.08.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:30:27 -0800 (PST)
-Date:   Mon, 16 Jan 2023 17:30:24 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        treding@nvidia.com, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v1 09/10] memory: tegra: get number of enabled mc channels
-Message-ID: <Y8V7oIzVPffETqtO@orome>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-10-sumitg@nvidia.com>
- <db223161-a424-c4cf-09a8-ff2241fda71a@linaro.org>
- <86f94266-d88e-af82-0352-876bc369f6a2@nvidia.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="g8Q09nNnddE8uScx"
+        Mon, 16 Jan 2023 11:45:55 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2056.outbound.protection.outlook.com [40.107.93.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512571CAD3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:33:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JMtXLrJIdvNgERhDjQajBU2k6AcAI1FNa+E5JVadYVOiW09NpZgeF1WFJ58b86GdDJwG1gnwCfvNvPc5h+FSWFCEx/lnwofA+J6hny/ISXPkU4MIh3r+ZHDDqfrjNPfcWnHjUeHsoC0IZFBisn2EmpuqzmsckefqD91nP5wWuiDUkpoosTQsATvBSIejHc6PYaYlpXDO25XesSv+ol87Yb6rcg+aIaRE8KWLiE1QpAkqv8mRvvnGnvdhETYH150SG8oUjIwO051qj2hYvAtpK6al/hq59lmTSg3oqheSA+zVikGh4SwU6f5O8L+Ui8M+SyMNfvr1KOgLvQYMCgqneQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zrPj7KElq32ykFQKhcA5b+LFDpEfcg0w9/9gvZ9fA/k=;
+ b=D5DTu5QCN0dgH988/1O7IB1fWdDE7Pgo55oVglAzRA6A/kLM6mEZz8uHjwnu2EHo6YRVZyVrJqFpivF3/k1dSQ+vHA8vghyCRFxbu9KLshJO9XG2aLqxLWXfH5D27Jv9uVBa0ucv0jrB2z+bh4U4NYnNsn9bXLAFQIqr5m5AgOHe8d2578LDWSP6OJZa15OKUG48TT3429wuqVLxykSZzh6butZNkWTqXADOMXD6uNN9JwGZWIuoJm9szCjPG/clSDeKOIEjJmaZ2g8TJlYY4OnIFfZOnB3AeuihAOW8fgtwakpqNwGhDfslSrBv8/bBHWdxxelhOi6GxpXmk4koAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zrPj7KElq32ykFQKhcA5b+LFDpEfcg0w9/9gvZ9fA/k=;
+ b=MZvQQkZ5ahXDZgK3wPt80Tm4YJux6lAvFBgriowRhbxVcpNHnFWdsEHeP9NbVk9gkaxU3MJzrOq4N6sJK2znUOf0XDVkPylqUd9dXk62xsBOW1sFD8vcF5ibVhYu3TcGTdhqj5R4v/OKDQa0ketmcg8+keXjKBGwxaAoXk6d3vQ8+iWFapD2/2Q9IwZECX7006IMDMyrbCmHlPE+9Cd7PpYRYsq3ZI2HCFrcq8rEPrnmwaGZaFAwgxCiF/NHeImOeP9PBHDyZ5wMCSrYY+nLcmrb+zg3ZBOegR7MS5T9OtptDENTCf23fb6d3KuYlFCso4bLhBA+rSYY5v0TvEHF9g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BY5PR12MB5510.namprd12.prod.outlook.com (2603:10b6:a03:1d2::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
+ 2023 16:33:46 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
+ 16:33:46 +0000
+Date:   Mon, 16 Jan 2023 12:33:44 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] iommu: Retire detach_dev callback
+Message-ID: <Y8V8aOaFb2BWx47j@nvidia.com>
+References: <CGME20230110030211eucas1p10834ec4cc8c227e2cd7051dc85026dbb@eucas1p1.samsung.com>
+ <20230110025408.667767-1-baolu.lu@linux.intel.com>
+ <b756e833-71c5-e43a-b222-ab9bdcc4f494@samsung.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <86f94266-d88e-af82-0352-876bc369f6a2@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b756e833-71c5-e43a-b222-ab9bdcc4f494@samsung.com>
+X-ClientProxiedBy: MN2PR19CA0019.namprd19.prod.outlook.com
+ (2603:10b6:208:178::32) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB5510:EE_
+X-MS-Office365-Filtering-Correlation-Id: f503e590-bd78-46fb-4e42-08daf7df702e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a1g1cnLl5PWgZlzJNVnmw1Cx1E0QnM2xEPhVGQTts1ZvR672oQ5IcvLXXM2Uipm+nEPjgwhQAKR/ZOJ1+Oj/3/AFH73fNq//Czw6IG6PWTCQneGVipDwn/IZEY1ts10suOd97+jUIPipZXKpsg1pad3IBtqMMQvxvHjiRMom1XKtJQMnArKdk7XMX8L7W7ywfumgHCQ2bn55EYvUy/eTGhnHB/DBtLIY0KW2kNgxRZ6gmMjt3AoiQ37mkHHCtGCz3Iw8o1n8RSdj9RFuvFstS1HEc484SpD8U9NDVF6LsoDwksrxUT6l+3yZy58dU9N8SCI+uMJx7lUdqvfVdWS0PKMCFH5x25Lui8YgqzFdCcioaVAvgP2EeuypuivZJk7iYFlw4rQKwdA3r5kx4Nxz2nnFeazGDir+Fog7U69jSUkG442ZvTxj77g5E/oCaxzGkiXD5g/JAkEXdAMD1aEouQ0g9U80da7310RDwE9HNYYbPfz7cyDYc+gjzN92x/6xuv4U7Y40YIcK6leLj4ED5LjvEAY+3Nt7YBgayV7B+epJufFn89+k0cP6lQm7RaKjb5DER/39rEtoIQpyym2WzNf7fu+jHfenLffqnimUzwg8wuMncfi2SGbLjIChcOJKaz90WcfPEPCam/lEMYZAvg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(376002)(136003)(396003)(84040400005)(451199015)(83380400001)(86362001)(8676002)(38100700002)(5660300002)(7416002)(2906002)(8936002)(6916009)(66476007)(66946007)(66556008)(4326008)(41300700001)(6512007)(186003)(6506007)(26005)(2616005)(54906003)(316002)(6486002)(478600001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IC5k/Nm5tFOlE5nMg2mQcrNXM2S+9PwXPo4ztsIB8XNCLMLNfXXGJqWTSugr?=
+ =?us-ascii?Q?MsSRhz6OEPWxcVpXgRst8VDgmngh3kwJPS+epeTOZ4VkwKL3XAD8VRvlm509?=
+ =?us-ascii?Q?uT617pazZbB/IJYLU1ISQMy+HvnnHZGIjC7OVnz6/XgA4okgHCDdEHQSahR6?=
+ =?us-ascii?Q?lZCfa09Qa86eVcPesEfL/gh7HRWoSK4z+QuieYUCeaf+V5GMNzcoaNia+hri?=
+ =?us-ascii?Q?1qjohYmfJ/c1y98DAy0XYo+re8uqRplr3hjroQobCO4EJADHSFLq5JoJ8xso?=
+ =?us-ascii?Q?KfOtXqnLkJ5S7uyHNCs2+GVd3X6KYsrFinjobHxXZmSXhDxHHqWBY8w+Dptz?=
+ =?us-ascii?Q?aWW30UqZSA83clSNw4EAHIahnHLnh1UZv1LxM3mZFVk3Ra9WaVloZMwLR3zM?=
+ =?us-ascii?Q?X8yQT98vdG50pEBXryHEUOSwNKxUOVZvI55qQt0rci88F6tA9EFPIK6zyyOl?=
+ =?us-ascii?Q?3MTqiMR+v8qNV4Srmp+cLy46frSzk8npP61pHdhPI+Xugv8JVIpS5cG6H54Z?=
+ =?us-ascii?Q?ma6k6ofYRuWbxMvm/8MVPE2+xf6NsCDPAKtXU1ZndSAfVyuf067cFiQvuzc6?=
+ =?us-ascii?Q?hxZPfgfyZIzEhKhJi11UxpwopZ3Smyf5A1dFLAP8CFGVYoez4b5baA72pZY0?=
+ =?us-ascii?Q?4/G0eH14smUVBSLQe58cVTRTfEdY5nKRgl/bYFzqBqZjG5OShgC4zEYK9HF4?=
+ =?us-ascii?Q?ory4UZq0kfWGhKAQOjXY9/hLJcAwiMbrdCb2M8KCi5JKgntAYUXGNAkSRU2d?=
+ =?us-ascii?Q?mqSnc7VdwrSxhh5I3L1xNG8EY7cSikOL9VaeVYMEZI6DhpF4ePkgnJJwCl3C?=
+ =?us-ascii?Q?EWo2/iZ4Lt//jSYWPU4ujsYOaztJLYsBjj3A+vY13Od4ja7ZZGiDdFc/YQm7?=
+ =?us-ascii?Q?7xZrBpKe363APgDogNsnVkbUzQ4fpaXGO7bttGBWT572tbaOI1ZKGDjQOKwy?=
+ =?us-ascii?Q?a3ETNR1Iq/FA0lKDahXMaYbKr9WB7iX/sMTGs6R+J/epZ1LtK1xFijERgdo7?=
+ =?us-ascii?Q?P8Gf5t8VFHmICN5a0vWQuzxYuTyugJMihG5wUsxB8Q6iL/P9nX96hm9zHl6C?=
+ =?us-ascii?Q?pCDiAFdNUQC7dRxrow9QfXKjNZj/pfWrsTQcd15RIPRSzKqqctw6bFM3glbx?=
+ =?us-ascii?Q?Ge+mnLl0maPo4R7kLy/jxuuF6d0aUpYeRqwhmDvDnpXAT7d253RPJYIqfVJY?=
+ =?us-ascii?Q?SqTd7HPsqcO6oXn6Tk7MM89Z2EdOCsA1IXRwmQqZ7BoXbLdwAu7MEjYcDNRj?=
+ =?us-ascii?Q?EbgkJ+LRjwFSYj37HILEM8u9Rox9aog7Lo4ug40PyXv6f4axaBNur+rNGPlY?=
+ =?us-ascii?Q?I220pRnk2pPNfG7BsYCsp70JP2NGeabuFOkngQgkORtSlqEPnXsNKBZvDZoB?=
+ =?us-ascii?Q?4pwTE6JpdbOTFnCDYD/FrxvqdvcvDGwPQS5Rulu+9toQJnK/LgHv6Jh6J6No?=
+ =?us-ascii?Q?5Cx9a91s8xlocvxkVqwdbEqYQ4ZI18dG3OsnXstTdxY75y7p+fNdTGJCrRzc?=
+ =?us-ascii?Q?QNopznhe0Bv/PiLiS+rTQHmzGopfM2h2wGFB++bdsltrG9uADNtSwoUif90y?=
+ =?us-ascii?Q?rXfUnPiT56Bjuexgtp0P33A/CHxM6dgsbltMdIAR?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f503e590-bd78-46fb-4e42-08daf7df702e
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 16:33:45.9759
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AkipyX3cRk6xeeV6eJCRrCu8xMh2UuJfR4jvS9l+Rjlh3WIa8QzRh7iQErVwcog3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5510
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 16, 2023 at 05:24:56PM +0100, Marek Szyprowski wrote:
 
---g8Q09nNnddE8uScx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > The iommu core calls the driver's detach_dev domain op callback only when
+> > a device is finished assigning to user space and
+> > iommu_group_release_dma_owner() is called to return the device to the
+> > kernel, where iommu core wants to set the default domain to the device but
+> > the driver didn't provide one. The code looks like:
+> >
+> >          /*
+> >           * New drivers should support default domains and so the detach_dev() op
+> >           * will never be called. Otherwise the NULL domain represents some
+> >           * platform specific behavior.
+> >           */
+> >          if (!new_domain) {
+> >                  if (WARN_ON(!group->domain->ops->detach_dev))
+> >                          return -EINVAL;
+> >                  __iommu_group_for_each_dev(group, group->domain,
+> >                                             iommu_group_do_detach_device);
+> >                  group->domain = NULL;
+> >                  return 0;
+> >          }
+> >
+> > In other words, if the iommu driver provides default domains, the
+> > .detach_dev callback will never be called; Otherwise, the .detach_dev
+> > callback is actually called to return control back to the platform DMA
+> > ops, other than detaching the domain from device.
+> >
+> > This series cleanups this by:
+> >
+> > - If the IOMMU driver provides default domains, remove .detach_dev
+> >    callback.
+> > - Adds a new set_platform_dma iommu op. Any IOMMU driver that doesn't
+> >    provide default domain should implement set_platform_dma callback
+> >    instead.
+> > - Retire .detach_dev callback.
+> >
+> > This series originates from various discussion in the community. Thanks
+> > to Jason, Robin and all others for their ideas.
+> 
+> I wonder how to handle the ARM 32bit case, which doesn't use the default 
+> domain solution. Today, once this patchset has been merged to 
+> linux-next, I've noticed that it broke booting of ARM 32bit Exynos based 
+> boards.
 
-On Fri, Jan 13, 2023 at 08:34:18PM +0530, Sumit Gupta wrote:
->=20
->=20
-> On 22/12/22 17:07, Krzysztof Kozlowski wrote:
-> > External email: Use caution opening links or attachments
-> >=20
-> >=20
-> > On 20/12/2022 17:02, Sumit Gupta wrote:
-> > > Get number of MC channels which are actually enabled
-> > > in current boot configuration.
-> >=20
-> > Why? You don't do anything with it. Commit msg should give the reason of
-> > changes.
-> >=20
-> >=20
-> > Best regards,
-> > Krzysztof
-> >=20
->=20
-> CPU OPP tables have per channel bandwidth info. The "mc->num_channels" is
-> used in [1] (Patch v1 10/10) to make the per MC channel bandwidth request=
-ed
-> by the CPU cluster as a multiple of number of the enabled mc channels.
->=20
-> Will update the commit description with this info.
->=20
-> [1] https://lore.kernel.org/lkml/20221220160240.27494-1-sumitg@nvidia.com=
-/T/#m3ac150a86977e89b97c5d19c60384f29d7a01d21
+It is supposed to work, can you help debug what went wrong?
 
-Both patch 9 and 10 are reasonably small, so it would be okay to merge
-the two patches and avoid any need for an extra explanation.
-
-Thierry
-
---g8Q09nNnddE8uScx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPFe6AACgkQ3SOs138+
-s6E/2BAAiVcPFgJQq47pbkFQvbySJLa/pcKt6BI8lTuPJwZsRJ13RxfCp2Y+KkE0
-xSYrAmtvD+IDy2s67qTGm6UZjT9KqGmV9zMaZ6ooTylKYtOW4N/Ln4///T9jwRGM
-oTG6NN2DEPVKkV96gTtLzYAAM0cNx7lx7pNEHV7uXDUr2ieKHUhEkEeliDK73xBN
-6so7/FzLBCf/O7mitcLOud1qC1pHSXwULHMxDFZyU3VinsqIJBBc4Ua5IB0dkc8U
-Cy8E04CrxU7H49ylIl4cpO/bq0PuazW6PlIemqoheJyWKyr0foyRpjvJI6nsy1CT
-9Mb+ocRAB+Cu2IILTFl4IaW09982TBJOyIYJ5qRi0DvMhFAb64dUWT/rdMPvQ4q9
-P6RLArDLfcksDnYnhFwhFESdEPOa+YccCYwfFyeYcN2/XzE9AMGW9iNYKPw4fnpM
-fDmU33Q/0ze7q4BDcEDfLFwiRmoHpXZv2QYIi/U2fhN6cuux9QEMWEX4Lksxvqst
-uH/9FFgHHlViYPkb/iW1qZjuOsG4Z5A6xNVCMxbKYt89W7800FlI0tWZGQ/LYT2R
-JdorAB6uZnW0MkXm5N70rnCJn75+2xJmrRLnnIfmAivLrRE6uo8WwXOTVYgTZVAN
-8WONvNE9WgSPFSw2nJ8Rr+UE/pektA2R8QfNrVgyF5w9txkkCDA=
-=jOs7
------END PGP SIGNATURE-----
-
---g8Q09nNnddE8uScx--
+Jason
