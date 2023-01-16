@@ -2,112 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6334B66C20F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E639666C217
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjAPOSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S232553AbjAPOVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjAPORc (ORCPT
+        with ESMTP id S232654AbjAPOVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:17:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7391630E8D;
-        Mon, 16 Jan 2023 06:05:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF22360FB1;
-        Mon, 16 Jan 2023 14:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45213C433D2;
-        Mon, 16 Jan 2023 14:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673877954;
-        bh=63SC94Ier2TFvKzC6i0Z1YJOo/PKtnMOWVRuPbn9sTA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EH42kW6qIa1uqfLJlXw2eiHpJyYoTCAQB1uBVDCRYLl2y4XPiukIFGSjveP2D957a
-         9oqNbfjoDDH+Atl2PtsFpnxACPNCR6CNJXTHI2QmLti0WU7kVWmQ/YbpLWwlzQXg4M
-         7R03hCyFptXwkYY+i4wYOaygSZHnwZJ9vbYXWpOpVo4VIrpT612Ph1q3TnJi2DcdEl
-         obxXspajCsv9JYiPBrcTXDfE0h6Zw66cCbqbL0CecVM2bSZs4VkjPTxD9PGb4Npz+T
-         OVNXGZ+UfXmo2w+/K++5phcS5VkO8OH7rEl7dt1Br3DEWiJa2sypWUA47w2IVWF5fn
-         9yb+4V8ncgPVA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liu Shixin <liushixin2@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH AUTOSEL 4.14] binfmt_misc: fix shift-out-of-bounds in check_special_flags
-Date:   Mon, 16 Jan 2023 09:05:51 -0500
-Message-Id: <20230116140551.116487-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 16 Jan 2023 09:21:16 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CD24485;
+        Mon, 16 Jan 2023 06:07:11 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30G9eUvf000401;
+        Mon, 16 Jan 2023 15:06:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=ZUFiwmuXUVXgB50AexCJ2aYXXaHlJR5y5ppvtTRfE5M=;
+ b=Ynb3g2gvkWCA3S6BQnWw+9IsEdYk6PRDDSoS5+Ixdvlq4gNMlHpP6Vi91He0GXFybI0c
+ PKgmKzxS/BJlagpQyZVjPRqAe/6+93YzeYUMmNluKe2K7w1PpT/+mUKvV2pEMR62c+Lt
+ xr0Rj1il4tHdOpSIDJy1U9kVdOZcRoXyNorvmZ+O6CRzzgBwia9i870GAUl1Rn00JSon
+ 40PDQRyxmp7JebhBwlbfMlYArt8i237IBpOvSYKtMB9Sje6BjPylSmZjFbqXV8mfgcEm
+ MubhEpSbkiZvUakCwF6cwjf8/SShJ0UinfSkUy3kIbaWBE3RuzX+TWeVSSC8xh909/da gg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n3mm6a9vm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Jan 2023 15:06:40 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E994010002A;
+        Mon, 16 Jan 2023 15:06:38 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D66472194F2;
+        Mon, 16 Jan 2023 15:06:38 +0100 (CET)
+Received: from [10.201.21.177] (10.201.21.177) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 16 Jan
+ 2023 15:06:38 +0100
+Message-ID: <b90e4b78-d84d-3a63-1aef-e7214d4b29d9@foss.st.com>
+Date:   Mon, 16 Jan 2023 15:06:06 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 3/7] dt-bindings: bus: add STM32MP15 ETZPC firewall
+ bus bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-4-gatien.chevallier@foss.st.com>
+ <879325d2-4b2d-bc1d-310c-ece4c449ad8f@kernel.org>
+ <8357d887-c8ab-39bc-4ef0-62e9225fb2a6@foss.st.com>
+ <118e7f0c-bf5d-4bda-ee70-92eb2b71649c@kernel.org>
+ <8f022dc8-d728-ba91-35ed-8a4006855f0d@foss.st.com>
+ <dfe328fc-349b-3357-a8ac-6fc363f403fc@kernel.org>
+ <19157c67-fa83-e598-d7ee-c313f3d4b198@foss.st.com>
+ <f169d05a-7a07-aedf-bad2-30cb4a88fc16@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <f169d05a-7a07-aedf-bad2-30cb4a88fc16@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.177]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-16_11,2023-01-13_02,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Shixin <liushixin2@huawei.com>
+Hello Krzysztof,
 
-[ Upstream commit 6a46bf558803dd2b959ca7435a5c143efe837217 ]
+On 1/11/23 13:32, Krzysztof Kozlowski wrote:
+> On 09/01/2023 12:54, Gatien CHEVALLIER wrote:
+>>>>> Then why do you define them in bindings? Use raw numbers. Do you see
+>>>>> anywhere in arm/arm64 bindings for GIC_SPI interrupt numbers?
+>>>>>
+>>>>
+>>>> What would you think of simply removing the comments that state that IDs
+>>>> are reserved, mimicking the way it is for qcom bindings? Fundamentally,
+>>>> they are indeed only IDs and could be raw numbers.
+>>>
+>>> If these are IDs then there are no reserved numbers and they are
+>>> continuous from 0 to X. Without gaps.
+>>>
+>>>> IMO, this makes reading the device tree harder. Because you'd have to
+>>>> look what the raw number corresponds to.
+>>>
+>>> Sure, but that's not the reason to put numbers to the bindings... You
+>>> mix defines with bindings.
+>>>
+>>>> To take an example, it has already been done for SCMI clocks and I find
+>>>> it eases comprehension.
+>>>
+>>> You need to be a bit more specific...
+>>
+>> Please see include/dt-bindings/clock/stm32mp1-clks.h, where there are
+>> various clock IDs defined, some of them not contiguous.
+> 
+> These are pretty often added to accommodate space for exposing these
+> clocks in the future. IOW, these might be IDs just not all are shared
+> via header. There are such platforms and it is OK.
+> 
+>>
+>> Errata: for SCMI clocks they are indeed contiguous but not clock IDs.
+>>
+>>>
+>>> Anyway, IDs should be placed in bindings. Some mapping of
+>>> internal/hardware ports, registers, offsets, values - usually not.
+>>>
+>>> I don't know where exactly your case fits, but when some IDs are
+>>> reserved it is a clear sign that these are not IDs (again - IDs start
+>>> from 0 and go incrementally by one, without gaps).
+>>>
+>>
+>> I do agree with your statement that IDs should not be reserved.
+>>
+>> I think I've missed something to better highlight my point of view: It
+>> would be perfectly fine using numbers that are not described in this
+>> bindings file. It would just not correspond to an ID of a peripheral
+>> described in the SoC reference manual, thus making no sense to use them.
+>> Stating that they are reserved was incorrect, it's just that peripherals
+>> get a firewall ID, depending on the platform.
+> 
+> Why peripheral ID should be put into the bindings? Why bindings is a
+> place for it? Interrupt numbers, GPIO indices/numbers, register offsets,
+> IOMMU ports - none of these are suitable for bindings.
+> 
+>>
+>> I think it should be okay not describing IDs that are not relevant, what
+>> do you think? I found that in include/dt-bindings/arm/qcom,ids.h, IDs
+>> are not continuous. Not mentioning an ID could be used for deprecation.
+> 
+> These are not IDs of clocks. These are unique identifiers assigned by
+> vendor and used by different pieces: firmware/bootloaders, DTS and Linux
+> driver. We have no control of them but they exist. They also do not
+> represent any hardware number.
+> 
+> You bring some examples as an argument, but these examples are not
+> always related to your case. To be clear - we talk here about bindings,
+> so they bind different interfaces of software components (e.g. Linux
+> kernel with DTS). Now, what is the different interface here in your
+> case? If you say your peripheral hardware ID, then answer is no - this
+> is not software interface.
 
-UBSAN reported a shift-out-of-bounds warning:
+I see what you want to avoid,
 
- left shift of 1 by 31 places cannot be represented in type 'int'
- Call Trace:
-  <TASK>
-  __dump_stack lib/dump_stack.c:88 [inline]
-  dump_stack_lvl+0x8d/0xcf lib/dump_stack.c:106
-  ubsan_epilogue+0xa/0x44 lib/ubsan.c:151
-  __ubsan_handle_shift_out_of_bounds+0x1e7/0x208 lib/ubsan.c:322
-  check_special_flags fs/binfmt_misc.c:241 [inline]
-  create_entry fs/binfmt_misc.c:456 [inline]
-  bm_register_write+0x9d3/0xa20 fs/binfmt_misc.c:654
-  vfs_write+0x11e/0x580 fs/read_write.c:582
-  ksys_write+0xcf/0x120 fs/read_write.c:637
-  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-  do_syscall_64+0x34/0x80 arch/x86/entry/common.c:80
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
- RIP: 0033:0x4194e1
+These bindings are indeed presented as pure helpers here. They are not 
+used by the firewall bus driver on Linux except for the value that they 
+represent, thus your comment.
+However, they will be shared between different boot chain components. I 
+do not have an upstreamed example to give but please see that we might 
+use them in OP-TEE:
 
-Since the type of Node's flags is unsigned long, we should define these
-macros with same type too.
+[1] 
+https://github.com/STMicroelectronics/optee_os/blob/3.16.0-stm32mp/core/include/dt-bindings/soc/stm32mp13-etzpc.h
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20221102025123.1117184-1-liushixin2@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/binfmt_misc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+They could be used and used differently depending on the software 
+component (e.g: lock of secure configuration for a particular 
+peripheral, ...). This change is here for consistency between those.
 
-diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
-index 566296ce7ea8..c19bf5c2fbec 100644
---- a/fs/binfmt_misc.c
-+++ b/fs/binfmt_misc.c
-@@ -42,10 +42,10 @@ static LIST_HEAD(entries);
- static int enabled = 1;
- 
- enum {Enabled, Magic};
--#define MISC_FMT_PRESERVE_ARGV0 (1 << 31)
--#define MISC_FMT_OPEN_BINARY (1 << 30)
--#define MISC_FMT_CREDENTIALS (1 << 29)
--#define MISC_FMT_OPEN_FILE (1 << 28)
-+#define MISC_FMT_PRESERVE_ARGV0 (1UL << 31)
-+#define MISC_FMT_OPEN_BINARY (1UL << 30)
-+#define MISC_FMT_CREDENTIALS (1UL << 29)
-+#define MISC_FMT_OPEN_FILE (1UL << 28)
- 
- typedef struct {
- 	struct list_head list;
--- 
-2.35.1
+> 
+> Best regards,
+> Krzysztof
+> 
 
+Best regards,
+Gatien
