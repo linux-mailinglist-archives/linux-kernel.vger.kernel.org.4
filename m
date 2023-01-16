@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EB866D126
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0AC66D124
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 22:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234912AbjAPV5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 16:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S234520AbjAPV5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 16:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbjAPV5b (ORCPT
+        with ESMTP id S233847AbjAPV5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 16:57:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45965241FB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673906202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eh4V/toS718E68IlYB64s6hGtbmtJ10ieSzmAkeBliY=;
-        b=bwE+l87Ig12ROPnmXrtKYbXeF56ha+BovqgS9TDs766qeOfwiX0HznEQCwYBwwpSxaWeXT
-        FurNy6J1GOFeE33vX0ABfeMdex+bGicnE+PR4ZeL9v9RC2YnmT21Y9Dlszf9ygO9uefTuq
-        86f1Mzqldcz2679wz2dt7F7hi0G0tfs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-U40D2aN6NBmROTEJPDDCCg-1; Mon, 16 Jan 2023 16:56:39 -0500
-X-MC-Unique: U40D2aN6NBmROTEJPDDCCg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D27A29A9CA2;
-        Mon, 16 Jan 2023 21:56:38 +0000 (UTC)
-Received: from [10.22.18.0] (unknown [10.22.18.0])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 215C3C15BA0;
-        Mon, 16 Jan 2023 21:56:37 +0000 (UTC)
-Message-ID: <0f67aad4-45fb-c679-a11a-6046a1a74628@redhat.com>
-Date:   Mon, 16 Jan 2023 16:56:36 -0500
+        Mon, 16 Jan 2023 16:57:20 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773B124492
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 13:57:18 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 609505C01C5;
+        Mon, 16 Jan 2023 16:57:15 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 16 Jan 2023 16:57:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1673906235; x=1673992635; bh=pB7OzMUP2R+eFx2+0Tb9eBFUfZ26JGznjxb
+        wj0Je6iY=; b=K35m0ZDUtc1iU8uC+gueRpCQA3uBExWFyRcS984nW4EEtJuYe/6
+        7a+z4MtSoMnOMsLUD6z4+N4WLBWOT8ieE+c3ryAecmH+i78EoyLpnVvMPTsNGaeE
+        YRMWApj8F225J9Jj/NENmc8GVvMfipCZrx6SlZmCy1q9Z8Vm33Bwi+Z7BRWCHTaz
+        PeCWD+f/1zgBXHg04sjloOF+NOGksZ3t+ZcMiqAsdnQUny0PSNlkjNPEhwxhExSK
+        IIjybp8eINNOkwpyTsikp92TvT+Vv/QtbdVpUd3BQDUvCGfNH9G6isV600+5H2Jg
+        fZDZ6S4Su32dYeQ6lT3T7IUDo4qRcmxnNSQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673906235; x=
+        1673992635; bh=pB7OzMUP2R+eFx2+0Tb9eBFUfZ26JGznjxbwj0Je6iY=; b=C
+        y5pw0QGd6gFDnxTcWPFFr2oseOmzv+OErsNmA0ftXgnlEEakrpFN7EQl8aPzO5kS
+        pmmaYCsateilTsaUIDJq49YtPHa6g8jgt/3ZkT2PzDRCS3Vc7LI+g/2ha9oxHhCr
+        6rWdXfhmikza83x9v7PVrBUghGKokur0AlP2byOIpBk7Wi1bH1A8XGYAlKDmb+vr
+        CMrMKsCCGN4NNWmjkUoYGCLMWFWypZR1VOya+t4mCu8LG3CBYIAqoBMDQNGZN1ik
+        Uv8rHyK8mWYCub1x/wkAxzFDsd+LGkpK5FCGdSHxoYGZpo4DjLpzdWTdTD+PEpS/
+        IQ9n3wjNplEFR2mvNCVVg==
+X-ME-Sender: <xms:O8jFY46iJbgYI921Z-tJLlZJqCEQZy5J6-d6IermOT1DGqGIyP8cDQ>
+    <xme:O8jFY57m737goO0CwdwQ_sv6rJUXJ8KGyC1GaIwl63E6a6vHn7uibCalniMNH0VjU
+    wYfmLcHdysWR-oh4I4>
+X-ME-Received: <xmr:O8jFY3d9Xyo5fjWa-9a5keT9DNOTWj7YQdpiXsVoZbRtfSJAR7VSP4xExLHEmlPZnzMKW6LlTKS9s8w2a5wkPWzKvmc2IA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgedgudehiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfggtggusehgtderredttdejnecuhfhrohhmpefmlhgruhhs
+    ucflvghnshgvnhcuoehithhssehirhhrvghlvghvrghnthdrughkqeenucggtffrrghtth
+    gvrhhnpedtjefgteejuedvkeefjefgieekueetvdduheffkeehjeevleehhedvgfeiudeh
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehith
+    hssehirhhrvghlvghvrghnthdrughk
+X-ME-Proxy: <xmx:O8jFY9LB-PWWMz1Ccm6Uu8yTZHr01hS22F8bGPNdL1IKX73e5B_wTw>
+    <xmx:O8jFY8L26D5rtqfEaIzUyy0ivp-RTzvuqQVehm7hTi02xMwiLDtG4Q>
+    <xmx:O8jFY-z4oU76ojKZANQEs3VsDy63lCw4C2IYcV9xAlvRxz5w9vaAag>
+    <xmx:O8jFY2gqn4GXS1Ic4IAefZX8WnPfroZNrwGJggc0HYcvwlFtN4i6Hw>
+Feedback-ID: idc91472f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Jan 2023 16:57:13 -0500 (EST)
+Date:   Mon, 16 Jan 2023 22:57:11 +0100
+From:   Klaus Jensen <its@irrelevant.dk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: regression on aarch64? panic on boot
+Message-ID: <Y8XINx8fpGPKudW6@cormorant.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/3] locking/lockdep: Introduce lock_sync()
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Luczaj <mhal@rbox.co>
-References: <20230113065955.815667-1-boqun.feng@gmail.com>
- <20230113065955.815667-2-boqun.feng@gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230113065955.815667-2-boqun.feng@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Wv4oHFnziRYt8pYX"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,109 +83,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/23 01:59, Boqun Feng wrote:
-> Currently, in order to annonate functions like synchronize_srcu() for
-> lockdep, a trick as follow can be used:
->
-> 	lock_acquire();
-> 	lock_release();
->
-> , which indicates synchronize_srcu() acts like an empty critical section
-> that waits for other (read-side) critical sections to finish. This
-> surely can catch some deadlock, but as discussion brought up by Paul
-> Mckenney [1], this could introduce false positives because of
-> irq-safe/unsafe detection. Extra tricks might help this:
->
-> 	local_irq_disable(..);
-> 	lock_acquire();
-> 	lock_release();
-> 	local_irq_enable(...);
->
-> But it's better that lockdep could provide an annonation for
-> synchronize_srcu() like functions, so that people won't need to repeat
-> the ugly tricks above. Therefore introduce lock_sync(). It's simply an
-> lock+unlock pair with no irq safe/unsafe deadlock check, since the
-> to-be-annontated functions don't create real critical sections therefore
-> there is no way that irq can create extra dependencies.
->
-> [1]: https://lore.kernel.org/lkml/20180412021233.ewncg5jjuzjw3x62@tardis/
->
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->   include/linux/lockdep.h  |  5 +++++
->   kernel/locking/lockdep.c | 34 ++++++++++++++++++++++++++++++++++
->   2 files changed, 39 insertions(+)
->
-> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-> index 1f1099dac3f0..ba09df6a0872 100644
-> --- a/include/linux/lockdep.h
-> +++ b/include/linux/lockdep.h
-> @@ -268,6 +268,10 @@ extern void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
->   
->   extern void lock_release(struct lockdep_map *lock, unsigned long ip);
->   
-> +extern void lock_sync(struct lockdep_map *lock, unsigned int subclass,
-> +		      int read, int check, struct lockdep_map *nest_lock,
-> +		      unsigned long ip);
-> +
->   /* lock_is_held_type() returns */
->   #define LOCK_STATE_UNKNOWN	-1
->   #define LOCK_STATE_NOT_HELD	0
-> @@ -555,6 +559,7 @@ do {									\
->   #define lock_map_acquire_read(l)		lock_acquire_shared_recursive(l, 0, 0, NULL, _THIS_IP_)
->   #define lock_map_acquire_tryread(l)		lock_acquire_shared_recursive(l, 0, 1, NULL, _THIS_IP_)
->   #define lock_map_release(l)			lock_release(l, _THIS_IP_)
-> +#define lock_map_sync(l)			lock_sync(l, 0, 0, 1, NULL, _THIS_IP_)
->   
->   #ifdef CONFIG_PROVE_LOCKING
->   # define might_lock(lock)						\
-> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index e3375bc40dad..cffa026a765f 100644
-> --- a/kernel/locking/lockdep.c
-> +++ b/kernel/locking/lockdep.c
-> @@ -5692,6 +5692,40 @@ void lock_release(struct lockdep_map *lock, unsigned long ip)
->   }
->   EXPORT_SYMBOL_GPL(lock_release);
->   
-> +/*
-> + * lock_sync() - A special annotation for synchronize_{s,}rcu()-like API.
-> + *
-> + * No actual critical section is created by the APIs annotated with this: these
-> + * APIs are used to wait for one or multiple critical sections (on other CPUs
-> + * or threads), and it means that calling these APIs inside these critical
-> + * sections is potential deadlock.
-> + *
-> + * This annotation acts as an acqurie+release anontation pair with hardirqoff
-> + * being 1. Since there's no critical section, no interrupt can create extra
-> + * dependencies "inside" the annotation, hardirqoff == 1 allows us to avoid
-> + * false positives.
-> + */
-> +void lock_sync(struct lockdep_map *lock, unsigned subclass, int read,
-> +	       int check, struct lockdep_map *nest_lock, unsigned long ip)
-> +{
-> +	unsigned long flags;
-> +
-> +	if (unlikely(!lockdep_enabled()))
-> +		return;
-> +
-> +	raw_local_irq_save(flags);
-> +	check_flags(flags);
-> +
-> +	lockdep_recursion_inc();
-> +	__lock_acquire(lock, subclass, 0, read, check, 1, nest_lock, ip, 0, 0);
-> +
-> +	if (__lock_release(lock, ip))
-> +		check_chain_key(current);
-> +	lockdep_recursion_finish();
-> +	raw_local_irq_restore(flags);
-> +}
-> +EXPORT_SYMBOL_GPL(lock_sync);
-> +
->   noinstr int lock_is_held_type(const struct lockdep_map *lock, int read)
->   {
->   	unsigned long flags;
 
-This patch looks good to me.
+--Wv4oHFnziRYt8pYX
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Acked-by: Waiman Long <longman@redhat.com>
+Hi,
 
+I'm getting panics when booting from a QEMU hw/nvme device on an aarch64
+guest in roughly 20% of boots on v6.2-rc4. Example panic below.
+
+I've bisected it to commit eac3ef262941 ("nvme-pci: split the initial
+probe from the rest path").
+
+I'm not seeing this on any other emulated platforms that I'm currently
+testing (x86_64, riscv32/64, mips32/64 and sparc64).
+
+
+nvme nvme0: 1/0/0 default/read/poll queues
+NET: Registered PF_VSOCK protocol family
+registered taskstats version 1
+nvme nvme0: Ignoring bogus Namespace Identifiers
+/dev/root: Can't open blockdev
+VFS: Cannot open root device "nvme0n1" or unknown-block(0,0): error -6
+Please append a correct "root=" boot option; here are the available partitions:
+103:00000      61440 nvme0n1
+ (driver?)
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc4 #22
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace.part.0+0xdc/0xf0
+ show_stack+0x18/0x30
+ dump_stack_lvl+0x7c/0xa0
+ dump_stack+0x18/0x34
+ panic+0x17c/0x328
+ mount_block_root+0x184/0x234
+ mount_root+0x178/0x198
+ prepare_namespace+0x124/0x164
+ kernel_init_freeable+0x2a0/0x2c8
+ kernel_init+0x2c/0x130
+ ret_from_fork+0x10/0x20
+Kernel Offset: disabled
+CPU features: 0x00000,01800100,0000420b
+Memory Limit: none
+---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
+
+--Wv4oHFnziRYt8pYX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEUigzqnXi3OaiR2bATeGvMW1PDekFAmPFyDcACgkQTeGvMW1P
+DekuvwgAnzpWdriYkhJke67vy04eHNX22UnTthB8dHmz1+lqaGyqak1ih8SFrzr6
+t/v9UNJA/JJ/k6smupIOd0UA2DtbeoCEEOgnjXGoUBerRbzbJNyquc/2HtRKzprt
+lAHHUQ5Le/d93yK9jskzkyLmZQAYUClK1JKcADg+5Kz/+K/OnrxarYJ8qMOI0pLb
+I0TUBKTCEWVGOsprzfNFCJ2ug3Yjf/64wjYSohAZm9+5U+Svyl4rWTF3iHeC6eaX
+whyES8dOA7bHGGr/2gWpqU0WPbPVEdrQc4yKfShDJ2PBqfn4vEGEalFjYHqqzIEE
+LZsqcIfH2N5fkqRVfU5Hf+pwAQxiPg==
+=ifcL
+-----END PGP SIGNATURE-----
+
+--Wv4oHFnziRYt8pYX--
