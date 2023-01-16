@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD7D66BF89
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5987666BF90
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjAPNSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S229836AbjAPNS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbjAPNRn (ORCPT
+        with ESMTP id S230417AbjAPNSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:17:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B1F1EFE3;
-        Mon, 16 Jan 2023 05:16:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE7CAB80D31;
-        Mon, 16 Jan 2023 13:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB12C433EF;
-        Mon, 16 Jan 2023 13:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673874968;
-        bh=5Y3OayCpNahHzw9Xu2OoIo50BHoizMUaQvkXJFa58jc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Ji7hoiqffDLLiyyHf0MQuVT4t+x2VkeKFh2OvBxm6GGBp1tBuMO3b6X9fpD2WOY1H
-         VUKulXpprZWegUh/ActP4x8MtUal3gP5W1zJUfFNUI/TTyX2fBWz+7rNmtkZeeo+Ks
-         YmNXMQ6OIABQdK2Vyy+9wy8UPNh0uDH/r8AFXuXAAWGdcEQH/bcLju5LIj5/OHMrZm
-         lg6x6aUaQlpHyUYZ6Ckwy8cQkuWOBZ54LuZwImESBmSfVeklfwL2lmFcfkRbu722V/
-         0QxZX8HURk0cFoKUG9MF/Bg/SHdRKSaydaKSGiKJfE1Vhj8lCoVx9lWfLbidzXmypJ
-         IeoDqHksqQWkA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sergey Nazarov <Sergey.Nazarov@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230113185942.2516-1-Sergey.Semin@baikalelectronics.ru>
-References: <20230113185942.2516-1-Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v2] spi: dw: Fix wrong FIFO level setting for long xfers
-Message-Id: <167387496509.317866.16090598149927325020.b4-ty@kernel.org>
-Date:   Mon, 16 Jan 2023 13:16:05 +0000
+        Mon, 16 Jan 2023 08:18:25 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F193C24;
+        Mon, 16 Jan 2023 05:17:20 -0800 (PST)
+Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NwXZb4M7nznVlD;
+        Mon, 16 Jan 2023 21:15:35 +0800 (CST)
+Received: from [10.67.101.184] (10.67.101.184) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 16 Jan 2023 21:17:17 +0800
+Subject: Re: [PATCH] crypto: hisilicon - remove redundant config PCI
+ dependency for some CRYPTO_DEV_HISI configs
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        <linux-crypto@vger.kernel.org>
+References: <20230111120203.822-1-lukas.bulwahn@gmail.com>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Weili Qian <qianweili@huawei.com>
+Message-ID: <e1a19c92-9162-1696-5974-99aecd86989b@huawei.com>
+Date:   Mon, 16 Jan 2023 21:17:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20230111120203.822-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-69c4d
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.101.184]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023 21:59:42 +0300, Serge Semin wrote:
-> Due to using the u16 type in the min_t() macros the SPI transfer length
-> will be cast to word before participating in the conditional statement
-> implied by the macro. Thus if the transfer length is greater than 64KB the
-> Tx/Rx FIFO threshold level value will be determined by the leftover of the
-> truncated after the type-case length. In the worst case it will cause the
-> dramatical performance drop due to the "Tx FIFO Empty" or "Rx FIFO Full"
-> interrupts triggered on each xfer word sent/received to/from the bus.
+
+
+On 2023/1/11 20:02, Lukas Bulwahn wrote:
+> While reviewing dependencies in some Kconfig files, I noticed the redundant
+> dependency "depends on PCI && PCI_MSI". The config PCI_MSI has always,
+> since its introduction, been dependent on the config PCI. So, it is
+> sufficient to just depend on PCI_MSI, and know that the dependency on PCI
+> is implicitly implied.
 > 
-> [...]
+> Reduce the dependencies of configs CRYPTO_DEV_HISI_SEC2,
+> CRYPTO_DEV_HISI_QM, CRYPTO_DEV_HISI_ZIP and CRYPTO_DEV_HISI_HPRE.
+> 
+> No functional change and effective change of Kconfig dependendencies.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  drivers/crypto/hisilicon/Kconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+Acked-by: Weili Qian <qianweili@huawei.com>
 
-Applied to
-
-   broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: dw: Fix wrong FIFO level setting for long xfers
-      commit: 9ef7b7b43eb708c114bb3ce6c0acadd74065bf4e
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> diff --git a/drivers/crypto/hisilicon/Kconfig b/drivers/crypto/hisilicon/Kconfig
+> index 743ce4fc3158..4137a8bf131f 100644
+> --- a/drivers/crypto/hisilicon/Kconfig
+> +++ b/drivers/crypto/hisilicon/Kconfig
+> @@ -27,7 +27,7 @@ config CRYPTO_DEV_HISI_SEC2
+>  	select CRYPTO_SHA256
+>  	select CRYPTO_SHA512
+>  	select CRYPTO_SM4_GENERIC
+> -	depends on PCI && PCI_MSI
+> +	depends on PCI_MSI
+>  	depends on UACCE || UACCE=n
+>  	depends on ARM64 || (COMPILE_TEST && 64BIT)
+>  	depends on ACPI
+> @@ -42,7 +42,7 @@ config CRYPTO_DEV_HISI_SEC2
+>  config CRYPTO_DEV_HISI_QM
+>  	tristate
+>  	depends on ARM64 || COMPILE_TEST
+> -	depends on PCI && PCI_MSI
+> +	depends on PCI_MSI
+>  	depends on UACCE || UACCE=n
+>  	depends on ACPI
+>  	help
+> @@ -51,7 +51,7 @@ config CRYPTO_DEV_HISI_QM
+>  
+>  config CRYPTO_DEV_HISI_ZIP
+>  	tristate "Support for HiSilicon ZIP accelerator"
+> -	depends on PCI && PCI_MSI
+> +	depends on PCI_MSI
+>  	depends on ARM64 || (COMPILE_TEST && 64BIT)
+>  	depends on !CPU_BIG_ENDIAN || COMPILE_TEST
+>  	depends on UACCE || UACCE=n
+> @@ -62,7 +62,7 @@ config CRYPTO_DEV_HISI_ZIP
+>  
+>  config CRYPTO_DEV_HISI_HPRE
+>  	tristate "Support for HISI HPRE accelerator"
+> -	depends on PCI && PCI_MSI
+> +	depends on PCI_MSI
+>  	depends on UACCE || UACCE=n
+>  	depends on ARM64 || (COMPILE_TEST && 64BIT)
+>  	depends on ACPI
+> 
