@@ -2,186 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9876D66B648
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B5966B665
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 04:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbjAPDmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 22:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S231916AbjAPDqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 22:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjAPDls (ORCPT
+        with ESMTP id S231506AbjAPDqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 22:41:48 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34C7EF6;
-        Sun, 15 Jan 2023 19:41:45 -0800 (PST)
-X-UUID: aeeb3674954f11eda06fc9ecc4dadd91-20230116
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=yTwi/wm1VEa7sxfk9gx+359zu2PiIe1XEuGy8+FqnVo=;
-        b=bBa36DHErvlQEPp4/ao2o/7xCL3IOzHQIX/tGSIHd3QujETcWXJ8k8Tl5Pb15PSlupUznd+/cZu9fCjIAzKafwhmzMFRqJWzDgqpYq4ihanx8DfKY7h/wbNad13a+arMoN3TWCox76jM3jn0SfoGPYMuLA65m9KyzcQw7QPtSH8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:6ae80c0b-1368-408b-9756-250492f8d05e,IP:0,U
-        RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:25
-X-CID-META: VersionHash:543e81c,CLOUDID:dcf1bb54-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: aeeb3674954f11eda06fc9ecc4dadd91-20230116
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 97385257; Mon, 16 Jan 2023 11:41:38 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 16 Jan 2023 11:41:38 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 16 Jan 2023 11:41:37 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <p.zabel@pengutronix.de>
-CC:     <trevor.wu@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [RESEND,v5 13/13] ASoC: dt-bindings: mediatek,mt8188-mt6359: add mt8188-mt6359 document
-Date:   Mon, 16 Jan 2023 11:41:31 +0800
-Message-ID: <20230116034131.23943-14-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230116034131.23943-1-trevor.wu@mediatek.com>
-References: <20230116034131.23943-1-trevor.wu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 15 Jan 2023 22:46:12 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96453CC0C
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 19:44:46 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id p18-20020a25bd52000000b007c8919c86efso12131079ybm.13
+        for <linux-kernel@vger.kernel.org>; Sun, 15 Jan 2023 19:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FRXb5Tx9eB0QD8MPQ3bDTUMYKB42PbWbukVcWDbrGBE=;
+        b=DbXiQgb16cXc0c+1Ms81Hey0/LYqSzODb9phkheLoa2O8f3Ig92mTiQHSCrotArslU
+         FEhihvxAu74eZD4ZQe4lTANr5P5IpZ55hmjNXVmwzm9h7sRX2FMGYLVTwiaWm1ZkUjKH
+         pFtLaSOiV+aW76Yi83BTtq0/BrDt/QaUwk97NMS5Sq4Cb3L2/vr4KLaNpNLQ8XBHU+a6
+         hahZrekdCCHtViDqFgpx0LlxuyMZ/IYBQSlN37323erCpSDPaVessn4Ls1Em2E92Sw44
+         oXeBPF4ZzWX50UHybSL9f4sTMOwB3Nl2zVKANoYCGcvJkLRVQx3peuXbl7WTm23Qno3H
+         V55g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FRXb5Tx9eB0QD8MPQ3bDTUMYKB42PbWbukVcWDbrGBE=;
+        b=3GpK8izaNc/c/arWqSFCzL3fLWwh4uodd2RbvSPrOw+g9BSKK7HeSVULv33ED0pO4a
+         iGGNLvU6332IdhBMg7kmruRzkankgfY+rD7TXoDgt+myxPM6u7IX+aoLcsfBkzp09JU4
+         Zg3tqKkwQg3G3p4JjyNMvvCnpZUl8XG6qZYi0xFng6miO7A/Q9bgpXEkEoko1U9HgcjV
+         IodA0E7PES5xxjrZuKlHwbT4BPTpcQ+YmRg/XshA/hd++5pBcUNhW2EBWJwKVMzdDF5c
+         FkABIJ4WzrZNIYKxPhlnm4piT4HvCJedzmpR3NATNaxVi+ynKC5qlDSac/paZ0Y05hXs
+         pakg==
+X-Gm-Message-State: AFqh2koAq/820Z04mgEp8TTrDlg0Ejg+PH8TVaiVqSVI0Szq4Ve5Dmq3
+        VHwVao+cCP2xbUUGb7g4YcraZTGKAvw=
+X-Google-Smtp-Source: AMrXdXvLWad4bD9NfwO8dLR/2EI357BTUrAnmpF0KOigylM+0w18WGKH/mk2AkTunNN50QaDroPabDG7MY8=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:9283:334a:bf40:242b])
+ (user=yuzhao job=sendgmr) by 2002:a25:f903:0:b0:7b9:daf2:4117 with SMTP id
+ q3-20020a25f903000000b007b9daf24117mr4108825ybe.408.1673840647568; Sun, 15
+ Jan 2023 19:44:07 -0800 (PST)
+Date:   Sun, 15 Jan 2023 20:44:05 -0700
+Message-Id: <20230116034405.2960276-1-yuzhao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Subject: [PATCH mm-unstable v1] mm: multi-gen LRU: fix crash during cgroup migration
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-mm@google.com, Yu Zhao <yuzhao@google.com>,
+        msizanoen <msizanoen@qtmlabs.xyz>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document for mt8188 board with mt6359.
+lru_gen_migrate_mm() assumes lru_gen_add_mm() runs prior to itself.
+This isn't true for the following scenario:
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    CPU 1                         CPU 2
+
+  clone()
+    cgroup_can_fork()
+                                cgroup_procs_write()
+    cgroup_post_fork()
+                                  task_lock()
+                                  lru_gen_migrate_mm()
+                                  task_unlock()
+    task_lock()
+    lru_gen_add_mm()
+    task_unlock()
+
+And when the above happens, kernel crashes because of linked list
+corruption (mm_struct->lru_gen.list).
+
+Link: https://lore.kernel.org/r/20230115134651.30028-1-msizanoen@qtmlabs.xyz/
+Reported-by: msizanoen <msizanoen@qtmlabs.xyz>
+Tested-by: msizanoen <msizanoen@qtmlabs.xyz>
+Fixes: bd74fdaea146 ("mm: multi-gen LRU: support page table walks")
+Cc: stable@vger.kernel.org # v6.1+
+Signed-off-by: Yu Zhao <yuzhao@google.com>
 ---
- .../sound/mediatek,mt8188-mt6359.yaml         | 97 +++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
+ mm/vmscan.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-new file mode 100644
-index 000000000000..6640272b3f4f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-@@ -0,0 +1,97 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mediatek,mt8188-mt6359.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index cdf96aec39dc..394ff4962cbc 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -3335,13 +3335,16 @@ void lru_gen_migrate_mm(struct mm_struct *mm)
+ 	if (mem_cgroup_disabled())
+ 		return;
+ 
++	/* migration can happen before addition */
++	if (!mm->lru_gen.memcg)
++		return;
 +
-+title: MediaTek MT8188 ASoC sound card
-+
-+maintainers:
-+  - Trevor Wu <trevor.wu@mediatek.com>
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt8188-mt6359-evb
-+
-+  model:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: User specified audio sound card name
-+
-+  audio-routing:
-+    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-+    description:
-+      A list of the connections between audio components. Each entry is a
-+      sink/source pair of strings. Valid names could be the input or output
-+      widgets of audio components, power supplies, MicBias of codec and the
-+      software switch.
-+
-+  mediatek,platform:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of MT8188 ASoC platform.
-+
-+patternProperties:
-+  "^dai-link-[0-9]+$":
-+    type: object
-+    description:
-+      Container for dai-link level properties and CODEC sub-nodes.
-+
-+    properties:
-+      link-name:
-+        description:
-+          This property corresponds to the name of the BE dai-link to which
-+          we are going to update parameters in this node.
-+        items:
-+          enum:
-+            - ADDA_BE
-+            - DPTX_BE
-+            - ETDM1_IN_BE
-+            - ETDM2_IN_BE
-+            - ETDM1_OUT_BE
-+            - ETDM2_OUT_BE
-+            - ETDM3_OUT_BE
-+            - PCM1_BE
-+
-+      codec:
-+        description: Holds subnode which indicates codec dai.
-+        type: object
-+        additionalProperties: false
-+        properties:
-+          sound-dai:
-+            minItems: 1
-+            maxItems: 2
-+        required:
-+          - sound-dai
-+
-+    additionalProperties: false
-+
-+    required:
-+      - link-name
-+      - codec
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - mediatek,platform
-+
-+examples:
-+  - |
-+    sound {
-+        compatible = "mediatek,mt8188-mt6359-evb";
-+        mediatek,platform = <&afe>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&aud_pins_default>;
-+        audio-routing =
-+            "Headphone", "Headphone L",
-+            "Headphone", "Headphone R",
-+            "AIN1", "Headset Mic";
-+        dai-link-0 {
-+            link-name = "ETDM3_OUT_BE";
-+
-+            codec {
-+                sound-dai = <&hdmi0>;
-+            };
-+        };
-+    };
-+
-+...
+ 	rcu_read_lock();
+ 	memcg = mem_cgroup_from_task(task);
+ 	rcu_read_unlock();
+ 	if (memcg == mm->lru_gen.memcg)
+ 		return;
+ 
+-	VM_WARN_ON_ONCE(!mm->lru_gen.memcg);
+ 	VM_WARN_ON_ONCE(list_empty(&mm->lru_gen.list));
+ 
+ 	lru_gen_del_mm(mm);
 -- 
-2.18.0
+2.39.0.314.g84b9a713c41-goog
 
