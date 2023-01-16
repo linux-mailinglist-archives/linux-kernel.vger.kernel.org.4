@@ -2,105 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3405366B584
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB93966B586
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjAPCPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 21:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S231611AbjAPCQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 21:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjAPCPP (ORCPT
+        with ESMTP id S231661AbjAPCQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 21:15:15 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7DB527A;
-        Sun, 15 Jan 2023 18:15:13 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NwFwW61xZz4f3v5b;
-        Mon, 16 Jan 2023 10:15:07 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP1 (Coremail) with SMTP id cCh0CgBXxS8ss8RjAsTDBg--.33134S2;
-        Mon, 16 Jan 2023 10:15:10 +0800 (CST)
-Subject: Re: [PATCH RESEND v2 5/5] sbitmap: correct wake_batch recalculation
- to avoid potential IO hung
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>, Jan Kara <jack@suse.cz>,
-        Ming Lei <ming.lei@redhat.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kbusch@kernel.org,
-        Laibin Qiu <qiulaibin@huawei.com>
-References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
- <20221222143353.598042-6-shikemeng@huaweicloud.com>
- <20221222134146.khucy5afnxwl75px@quack3>
- <d00297d7-a77a-770a-1cd7-1632f8ae77e0@huaweicloud.com>
- <3662b1aa-546b-e4e0-3705-0bc5626067f6@huaweicloud.com>
- <f8df9153-eeff-f3ca-c4c2-2be0cf876298@huaweicloud.com>
-Message-ID: <16d02f7b-8e0e-097c-63bc-ef83eb9cb05b@huaweicloud.com>
-Date:   Mon, 16 Jan 2023 10:15:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Sun, 15 Jan 2023 21:16:42 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B5A146A3;
+        Sun, 15 Jan 2023 18:16:39 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.185])
+        by gateway (Coremail) with SMTP id _____8Dxh+mGs8RjEsoBAA--.339S3;
+        Mon, 16 Jan 2023 10:16:38 +0800 (CST)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+SEs8Rj2f4ZAA--.13846S3;
+        Mon, 16 Jan 2023 10:16:37 +0800 (CST)
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     sedat.dilek@gmail.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230107012324.30698-1-zhanghongchen@loongson.cn>
+ <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn>
+ <CA+icZUU3-t0+NhdMQ39OeuwR13eMVOKVhLwS31WTHQ1ksaWgNg@mail.gmail.com>
+ <CA+icZUXWAu_+KT9wYfdn7uSp1=ikO5ZdhM2VFokRi_JfhL455Q@mail.gmail.com>
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <c896b0f8-e172-625c-59f2-a78c745c92f6@loongson.cn>
+Date:   Mon, 16 Jan 2023 10:16:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <f8df9153-eeff-f3ca-c4c2-2be0cf876298@huaweicloud.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBXxS8ss8RjAsTDBg--.33134S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF13ZFWfGF48ur18JF4Utwb_yoW3twb_Xr
-        4v93Z7C39xGa1xKw1kKr4YqFZIga4DWFy8ArZ5Xr1Fq395t3yfAr4DtrZ5XayDtw4rJFnI
-        qry3uasrXw4UujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_
-        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
+In-Reply-To: <CA+icZUXWAu_+KT9wYfdn7uSp1=ikO5ZdhM2VFokRi_JfhL455Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Cxf+SEs8Rj2f4ZAA--.13846S3
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Ww13CFyfXr1DJw18AFW7CFg_yoW8Kw4rpF
+        93CFn7tr4DJw1UJry29Fn0qFWYv343WryqgrWUKFyUJ3ZYgwnrtF47JryUW3s8uF4FkF4r
+        Aw4Ut3sFgF45AaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU89iSPUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi sedat,
 
 
-on 1/3/2023 10:12 AM, Kemeng Shi wrote:
-> Friendly ping...
-> 
-> on 12/26/2022 4:57 PM, Yu Kuai wrote:
->> ÔÚ 2022/12/26 15:50, Yu Kuai Ð´µÀ:
+On 2023/1/16 am9:52, Sedat Dilek wrote:
+> On Fri, Jan 13, 2023 at 10:32 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >>
->>>> why using
->>>> wake batch of 4 is safe for cards with say 32 tags in case active_users is
->>>> currently 32. Because I don't see why that is correct either.
+>> On Fri, Jan 13, 2023 at 4:19 AM Hongchen Zhang
+>> <zhanghongchen@loongson.cn> wrote:
+>>>
+>>> Hi All,
+>>> any question about this patch, can it be merged?
+>>>
+>>> Thanks
+>>> On 2023/1/7 am 9:23, Hongchen Zhang wrote:
+>>>> Use spinlock in pipe_read/write cost too much time,IMO
+>>>> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+>>>> On the other hand, we can use __pipe_{lock,unlock} to protect
+>>>> the pipe->{head,tail} in pipe_resize_ring and
+>>>> post_one_notification.
 >>>>
+>>>> Reminded by Matthew, I tested this patch using UnixBench's pipe
+>>>> test case on a x86_64 machine,and get the following data:
+>>>> 1) before this patch
+>>>> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+>>>> Pipe Throughput                   12440.0     493023.3    396.3
+>>>>                                                           ========
+>>>> System Benchmarks Index Score (Partial Only)              396.3
+>>>>
+>>>> 2) after this patch
+>>>> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+>>>> Pipe Throughput                   12440.0     507551.4    408.0
+>>>>                                                           ========
+>>>> System Benchmarks Index Score (Partial Only)              408.0
+>>>>
+>>>> so we get ~3% speedup.
+>>>>
+>>>> Reminded by Andrew, I tested this patch with the test code in
+>>>> Linus's 0ddad21d3e99 add get following result:
 >>
->> I see, you guys are worried that during the period that some hctx
->> complete all it's not idle yet. It's right waiter might wait for
->> other hctx to become idle to be awaken in this case. However, I'm
->> not sure which way is better.
+>> Happy new 2023 Hongchen Zhang,
 >>
->> Ming, do you have any idea?
+>> Thanks for the update and sorry for the late response.
 >>
->> Thanks,
->> Kuai
+>> Should be "...s/add/and get following result:"
+>>
+>> I cannot say much about the patch itself or tested it in my build-environment.
+>>
+>> Best regards,
+>> -Sedat-
 >>
 > 
-Hi Jan. The magic batch 4 seems just for performance initially while
-lacks of full consideration. And there is no better solution provided
-in futher. Do you have any suggestion that I can do to make more
-progress.
+> I have applied v3 on top of Linux v6.2-rc4.
+> 
+> Used pipebench for a quick testing.
+> 
+> # fdisk -l /dev/sdb
+> Disk /dev/sdb: 14,91 GiB, 16013942784 bytes, 31277232 sectors
+> Disk model: SanDisk iSSD P4
+> Units: sectors of 1 * 512 = 512 bytes
+> Sector size (logical/physical): 512 bytes / 512 bytes
+> I/O size (minimum/optimal): 512 bytes / 512 bytes
+> Disklabel type: dos
+> Disk identifier: 0x74f02dea
+> 
+> Device     Boot Start      End  Sectors  Size Id Type
+> /dev/sdb1        2048 31277231 31275184 14,9G 83 Linux
+> 
+> # cat /dev/sdb | pipebench > /dev/null
+> Summary:
+> Piped   14.91 GB in 00h01m34.20s:  162.12 MB/second
+> 
+> Not tested/benchmarked with the kernel w/o your patch.
+> 
+> -Sedat-
+> 
+OK, If there is any problem, let's continue to discuss it
+and hope it can be merged into the main line.
 
--- 
-Best wishes
-Kemeng Shi
+Best Regards,
+Hongchen Zhang
 
