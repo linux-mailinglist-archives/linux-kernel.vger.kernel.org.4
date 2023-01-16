@@ -2,152 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8CD66B5A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51CA66B5AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 03:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjAPCeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 15 Jan 2023 21:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S231802AbjAPCnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 15 Jan 2023 21:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjAPCd6 (ORCPT
+        with ESMTP id S231806AbjAPCnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 15 Jan 2023 21:33:58 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A19D365A6;
-        Sun, 15 Jan 2023 18:33:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
-        Content-Type; bh=fZ+bh+8LWfKsEVfDfKoGhZz+4N9mDp8dKkfRQqixCiw=;
-        b=jp1MxQXie1wWD74u1J0Y26Dvos0lsbr8hp3afMXdoTJgvuPuq5QrPVn83z+aFo
-        QD+nxmZgKCKJd1oT+WVFCk0cA+w4ckUnzjoyVtwUoMOByvbPbl2lIUU6ZUscq0mU
-        GPAgJm25LxVvQxeVNM+VxcU6S/JhIffiUTmMGMtcIDOQk=
-Received: from ubuntu.localdomain (unknown [220.180.239.55])
-        by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wCH5qKBt8RjuRMbAg--.41437S2;
-        Mon, 16 Jan 2023 10:33:38 +0800 (CST)
-From:   =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
-        <duke_xinanwen@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jerry.meng@quectel.com, duke.xin@quectel.com,
-        =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
-        <duke_xinanwen@163.com>
-Subject: [PATCH v3] USB: serial: option: add Quectel EM05CN modem
-Date:   Sun, 15 Jan 2023 18:33:28 -0800
-Message-Id: <20230116023328.20228-1-duke_xinanwen@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 15 Jan 2023 21:43:18 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912927298;
+        Sun, 15 Jan 2023 18:43:16 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id cf42so40887166lfb.1;
+        Sun, 15 Jan 2023 18:43:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cItREHD7dVSseoE084li5wt4URU48z08MkE8TxU0Osk=;
+        b=PI8bMPcmyWx7vIVkmXy+TlkqTf4D/WEIlv9AiKmf9Zt2mgEL1QU/acE3CgEjDO/FfZ
+         qj8cJX890M9+NS0AjiSDhVxrzFDfj3G3HmnVIn/2AvZArMpkW0Twq6yVCWZw8XEAl3lA
+         31YPk+mwrqo5J9WJ3r2/fLQ5kZbyL26TdzFigd53D/xHfEYiQB5macnEmy6EK+eqf8Kn
+         F82+VOJa8oukQTHSrz3s3O81rYdGvNL4Pfam4/nwBKCp0/Kh/s5b+bfFlEpYMljlAeyo
+         TkRpo6y/GvVS0WRphibxgLOpPM6Vt6fSDexwUn2RG+C6IOVUrnuP6lbXlNHYbK+7XYtx
+         zFEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cItREHD7dVSseoE084li5wt4URU48z08MkE8TxU0Osk=;
+        b=8OnZhGr9xbQf+4cJYyD2i3orENzHjyWE7J2V6z0SMYPIVSOc4lTakBgDqstNU0iLyk
+         zxIHs1MGapQ9RVTZCFgbQJ9hHiAeLsfa5iVakBWrStlZcvMSqH8XVHLZT270cg7Y46lH
+         T2pVevFpAqz37hA2fUnvQ1xj96VJiRyltvRa7MbUtkx/eY6CO58TQK/X3CwiqsVA/yEM
+         tJLWIkiyhVGm/CfoBGQHcaGZE11nQ/LPJ72ym+66xSISrTgf86DgBXn3ffAiEzL6XlHu
+         E3FuxMdE2WumVAGxYTw1xRzv2SxUjFN0hZc7blrkVLlnwEPhZ7gQT8vhbsJzF5CHafxF
+         q6gQ==
+X-Gm-Message-State: AFqh2kq1AL+vvttD6CKgHZZZCUqGrJsNT219UP9H3Xm9uZAKQeGIND5d
+        2gWQ5PALVmXpN2v2IFaBNjs40JGKg5EOAsoNKSA=
+X-Google-Smtp-Source: AMrXdXsvqPHqa2uKarhLXQbf4gS/CzmsSOIa2tHdFEImXsDMQ3w3b9vgfzqn7NNAYsVbcN2hzQBNXtRdMqotUIQSqb4=
+X-Received: by 2002:a05:6512:3e12:b0:4ca:6c11:d3e5 with SMTP id
+ i18-20020a0565123e1200b004ca6c11d3e5mr4166570lfv.224.1673836994503; Sun, 15
+ Jan 2023 18:43:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCH5qKBt8RjuRMbAg--.41437S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxury5Gw47CrW8WF45KFyUJrb_yoWrZw48pa
-        18AaySvFyrXF12g3ZIkr1xuFWrKan7Wr17C3ZrZr4fXFZ3Ars7tr1UArZ2vrnF9r4FyF40
-        q398C3yxGFykJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRC4EJUUUUU=
-X-Originating-IP: [220.180.239.55]
-X-CM-SenderInfo: 5gxnvsp0lqt0xzhqqiywtou0bp/1tbiyAT4e1p7JJrSjgAAsM
+References: <20230107012324.30698-1-zhanghongchen@loongson.cn>
+ <9fcb3f80-cb55-9a72-0e74-03ace2408d21@loongson.cn> <CA+icZUU3-t0+NhdMQ39OeuwR13eMVOKVhLwS31WTHQ1ksaWgNg@mail.gmail.com>
+ <CA+icZUXWAu_+KT9wYfdn7uSp1=ikO5ZdhM2VFokRi_JfhL455Q@mail.gmail.com> <c896b0f8-e172-625c-59f2-a78c745c92f6@loongson.cn>
+In-Reply-To: <c896b0f8-e172-625c-59f2-a78c745c92f6@loongson.cn>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 16 Jan 2023 03:42:37 +0100
+Message-ID: <CA+icZUUQFOmm8s=AOBGPcr5OFWmo71ROdcunHQecrTyV1jMvXw@mail.gmail.com>
+Subject: Re: [PATCH v3] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EM05CN modem has 2 USB configurations that are configurable via the AT
-command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
-the following interfaces, respectively:
+On Mon, Jan 16, 2023 at 3:16 AM Hongchen Zhang
+<zhanghongchen@loongson.cn> wrote:
+>
+> Hi sedat,
+>
+>
+> On 2023/1/16 am9:52, Sedat Dilek wrote:
+> > On Fri, Jan 13, 2023 at 10:32 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >>
+> >> On Fri, Jan 13, 2023 at 4:19 AM Hongchen Zhang
+> >> <zhanghongchen@loongson.cn> wrote:
+> >>>
+> >>> Hi All,
+> >>> any question about this patch, can it be merged?
+> >>>
+> >>> Thanks
+> >>> On 2023/1/7 am 9:23, Hongchen Zhang wrote:
+> >>>> Use spinlock in pipe_read/write cost too much time,IMO
+> >>>> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> >>>> On the other hand, we can use __pipe_{lock,unlock} to protect
+> >>>> the pipe->{head,tail} in pipe_resize_ring and
+> >>>> post_one_notification.
+> >>>>
+> >>>> Reminded by Matthew, I tested this patch using UnixBench's pipe
+> >>>> test case on a x86_64 machine,and get the following data:
+> >>>> 1) before this patch
+> >>>> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> >>>> Pipe Throughput                   12440.0     493023.3    396.3
+> >>>>                                                           ========
+> >>>> System Benchmarks Index Score (Partial Only)              396.3
+> >>>>
+> >>>> 2) after this patch
+> >>>> System Benchmarks Partial Index  BASELINE       RESULT    INDEX
+> >>>> Pipe Throughput                   12440.0     507551.4    408.0
+> >>>>                                                           ========
+> >>>> System Benchmarks Index Score (Partial Only)              408.0
+> >>>>
+> >>>> so we get ~3% speedup.
+> >>>>
+> >>>> Reminded by Andrew, I tested this patch with the test code in
+> >>>> Linus's 0ddad21d3e99 add get following result:
+> >>
+> >> Happy new 2023 Hongchen Zhang,
+> >>
+> >> Thanks for the update and sorry for the late response.
+> >>
+> >> Should be "...s/add/and get following result:"
+> >>
+> >> I cannot say much about the patch itself or tested it in my build-environment.
+> >>
+> >> Best regards,
+> >> -Sedat-
+> >>
+> >
+> > I have applied v3 on top of Linux v6.2-rc4.
+> >
+> > Used pipebench for a quick testing.
+> >
+> > # fdisk -l /dev/sdb
+> > Disk /dev/sdb: 14,91 GiB, 16013942784 bytes, 31277232 sectors
+> > Disk model: SanDisk iSSD P4
+> > Units: sectors of 1 * 512 = 512 bytes
+> > Sector size (logical/physical): 512 bytes / 512 bytes
+> > I/O size (minimum/optimal): 512 bytes / 512 bytes
+> > Disklabel type: dos
+> > Disk identifier: 0x74f02dea
+> >
+> > Device     Boot Start      End  Sectors  Size Id Type
+> > /dev/sdb1        2048 31277231 31275184 14,9G 83 Linux
+> >
+> > # cat /dev/sdb | pipebench > /dev/null
+> > Summary:
+> > Piped   14.91 GB in 00h01m34.20s:  162.12 MB/second
+> >
+> > Not tested/benchmarked with the kernel w/o your patch.
+> >
+> > -Sedat-
+> >
+> OK, If there is any problem, let's continue to discuss it
+> and hope it can be merged into the main line.
+>
 
-"MBIM"  : AT + MBIM + DIAG + NMEA  + MODEM
-"RMNET" : AT + DIAG + NMEA + Modem + QMI
+Can you give me a hand on the perf stat line?
 
-The detailed description of the USB configuration for each mode as follows:
+I tried with:
 
-MBIM Mode
---------------
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0312 Rev= 3.18
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM05-CN
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 2 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 2 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+$ /usr/bin/perf stat --repeat=1 ./0ddad21d3e99
 
-RMNET Mode
---------------
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0312 Rev= 3.18
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM05-CN
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+But that gives in both cases no context-switches and cpu-migrations values.
 
-Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
----
- drivers/usb/serial/option.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index dee79c7d82d5..a022b3c281e6 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM05G			0x030a
- #define QUECTEL_PRODUCT_EM060K			0x030b
- #define QUECTEL_PRODUCT_EM05G_SG		0x0311
-+#define QUECTEL_PRODUCT_EM05CN			0x0312
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
- #define QUECTEL_PRODUCT_RM520N			0x0801
-@@ -1163,6 +1164,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(6) | ZLP },
- 	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
- 	  .driver_info = RSVD(6) | ZLP },
-+	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05CN, 0xff),
-+	  .driver_info = RSVD(6) | ZLP },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
--- 
-2.25.1
-
+-Sedat-
