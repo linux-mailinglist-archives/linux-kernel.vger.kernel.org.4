@@ -2,207 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D7866BDE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A896E66BDD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjAPMdV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 16 Jan 2023 07:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S229681AbjAPM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAPMdT (ORCPT
+        with ESMTP id S229545AbjAPM30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 07:33:19 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9401C338;
-        Mon, 16 Jan 2023 04:33:18 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id cm26-20020a056830651a00b00684e5c0108dso2292330otb.9;
-        Mon, 16 Jan 2023 04:33:18 -0800 (PST)
+        Mon, 16 Jan 2023 07:29:26 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968C81CF73
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:29:25 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id i65so17359300pfc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 04:29:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tu5OJOBIgMLHuUpsp6UpRFubmqLqzfGdVmO7CU8EkKs=;
+        b=I4tjtw/UCFox/srRbt1s5pAj87hrugXKw43CBMeH86AXlSaAAwipyCqo2EdfOZLTnh
+         n9ijnEfgcThnWNV7FYPAOgzV5oHG+5F+e4kY6x/llVkrrr53Ehym4fkIrfPbKvqLR6Ds
+         1NY+lxiUt9ma9a4/JGkI/hsgSN9hEjqQAnNPjkYlLLrl+m6gjBMxa9WjLxC0Uj1o/ePo
+         yr/XLGNv77kMWeNfiWCg3Dr8El1QQiQrboFfpJxXasmr2YKjYI/5QtzN9e2cjfsR3k98
+         W3fFOChDz+/s7wqaL0cb+cyJFM9jKT/qmMAfdRF9Um0TZEbj0bIknjS4AxX+Ai507ixT
+         b9UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F61H973BIjXBatem9Exy4ACFKfXqK3XYvjoCLybvptw=;
-        b=urS35smwwuNshpl0oM6fGqd1FUOAUSSCG6iA9TwpE6BUtpsYi/YpbzTmZMgjHpcAfd
-         HGsvbGF7Dw15wCdOnlpyNU5lisCA/0nS+X/2EGhE344d65eB4eHn/IdE3tb8fzP8RyPy
-         PHBfqHASoxMerIsu4s+QfAOaqj1fDbox2n6NyyqbfLeZXhamLIIyIc6vt1ndqgHpp/6y
-         JzVV1hcdonSrOP+L8ngIu4VnyMqjAjzg94I2CjiVQ0wFJ5CxK3n1fv24j5ZBbSrVKCip
-         Fqt+NrnE2omBjKmea25KMRJR7T+8/3phO+8q5lDX7reWI9gwuHWN3iyaxYRkvbRHnzys
-         LcWw==
-X-Gm-Message-State: AFqh2kr5AsMBreOS8pc3dhjc4i2heHPTqTYsOOHydPBshOteu7kCN5KY
-        atc9jQ+8mAnXSNENqYgvRM4bV0Fk6l1Xig==
-X-Google-Smtp-Source: AMrXdXtzSsNph0ejn7p8tIAE0wWLdos/hFo+vZ3ENfRhvFwTvGYdif1ebIp2V3Kjt1CZrmTBvLG4aA==
-X-Received: by 2002:a05:6830:2084:b0:685:134:b73d with SMTP id y4-20020a056830208400b006850134b73dmr2168892otq.23.1673872397164;
-        Mon, 16 Jan 2023 04:33:17 -0800 (PST)
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
-        by smtp.gmail.com with ESMTPSA id cb2-20020a056830618200b0068460566f4bsm14613187otb.30.2023.01.16.04.33.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 04:33:17 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id d6-20020a056830138600b0068585c52f86so1403698otq.4;
-        Mon, 16 Jan 2023 04:33:16 -0800 (PST)
-X-Received: by 2002:a25:5189:0:b0:7bf:d201:60cb with SMTP id
- f131-20020a255189000000b007bfd20160cbmr1936519ybb.365.1673872073848; Mon, 16
- Jan 2023 04:27:53 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tu5OJOBIgMLHuUpsp6UpRFubmqLqzfGdVmO7CU8EkKs=;
+        b=sj52+xhZ4H3oq0uhQt/VJ20yeeGOi6DJudZH9Wx0+oCSEKvDRM4T7rzv6UOaLd37Cd
+         LJrrtoBRR1vw5qH34ZkjK/a1Bmgq8TwLZbv02jUkPTvtvTVRF1EuJn3NXHj1IaZOOCYj
+         ysxu0oGVBqz8AIutlM/RD4UDgXE2AM+Zb1lDsRKwzd3WPE64I4nVnz+c7JHCYTHbSpzZ
+         uHRlXmDKv5cj+l1178W5WhVa7QIWgOS/gvf8lYfuHMWvs9PPT7SpjEsixqrY0uXTwJbn
+         cBAk/X52RWsP+cTWL7rsBClzk3pH9d7kkP4bsKpxMmV9yhdnJ3cFJKdyKjEEEibE9zQQ
+         WVcA==
+X-Gm-Message-State: AFqh2kpiILCB+D6725gADwsuu3DpHEaqtnEN0IZoMfrvJGD/RVehBmTe
+        zhPucRD+eCr5JPHMV3yUaJCrLRUAxcKH2qTE4fuV4Q==
+X-Google-Smtp-Source: AMrXdXsJB+z7pfvhzwjU2HZpxaf8SN+y75dBho1GmgangP2wLMdwcOsOceVbkZ5kiDwx8zY0OtozBqQkkO5bnXVMD4w=
+X-Received: by 2002:aa7:88c5:0:b0:58d:aeb6:2d66 with SMTP id
+ k5-20020aa788c5000000b0058daeb62d66mr200816pff.66.1673872165004; Mon, 16 Jan
+ 2023 04:29:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20230116103926.276869-1-clement.leger@bootlin.com> <20230116103926.276869-5-clement.leger@bootlin.com>
-In-Reply-To: <20230116103926.276869-5-clement.leger@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 16 Jan 2023 13:27:42 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVsa4t61AOnEHzuda7czE1fk-16-R8fXsp-MB3hZMJTEQ@mail.gmail.com>
-Message-ID: <CAMuHMdVsa4t61AOnEHzuda7czE1fk-16-R8fXsp-MB3hZMJTEQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 4/6] dt-bindings: net: renesas,rzn1-gmac:
- Document RZ/N1 GMAC support
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
+References: <20221219234638.3661-1-mike.leach@linaro.org> <20221219234638.3661-5-mike.leach@linaro.org>
+ <Y6sm74wfjenzA0v9@infradead.org>
+In-Reply-To: <Y6sm74wfjenzA0v9@infradead.org>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Mon, 16 Jan 2023 12:29:13 +0000
+Message-ID: <CAJ9a7VgMFXTh19eQa5_yX2Ss8Eur8zRxBSyZJbr68ybJSW_hYg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/6] coresight: configfs: Modify config files to allow
+ userspace use
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, acme@kernel.org, james.clark@arm.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
+I'll rework this in the next set.
 
-Thanks for your patch!
+Thanks for the review
 
-On Mon, Jan 16, 2023 at 11:37 AM Clément Léger
-<clement.leger@bootlin.com> wrote:
-> Add "renesas,rzn1-gmac" binding documention which is compatible which
+Mike
 
-documentation
 
-> "snps,dwmac" compatible driver but uses a custom PCS to communicate
-> with the phy.
+On Tue, 27 Dec 2022 at 17:10, Christoph Hellwig <hch@infradead.org> wrote:
 >
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/renesas,rzn1-gmac.yaml       | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
+> On Mon, Dec 19, 2022 at 11:46:36PM +0000, Mike Leach wrote:
+> > Update coresight-config.h and the coresight-config-file.c & .h
+> > to allow use in userspace programs.
+> >
+> > Use __KERNEL__ defines to filter out driver only structures and
+> > elements so that user space programs can use the descriptor structures.
+> >
+> > Abstract memory allocation in coresight-config-file.c to allow read
+> > file functions to be run in userspace and kernel drivers.
 >
-> diff --git a/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml b/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
-> new file mode 100644
-> index 000000000000..effb9a312832
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/renesas,rzn1-gmac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas GMAC1 Device Tree Bindings
-> +
-> +maintainers:
-> +  - Clément Léger <clement.leger@bootlin.com>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - renesas,r9a06g032-gmac
-> +          - renesas,rzn1-gmac
-> +  required:
-> +    - compatible
-> +
-> +allOf:
-> +  - $ref: "snps,dwmac.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    additionalItems: true
-> +    maxItems: 3
-> +    items:
-> +      - enum:
-> +          - renesas,r9a06g032-gmac
-> +          - renesas,rzn1-gmac
-> +    contains:
-> +      enum:
-> +        - snps,dwmac
+> That's now how kernel code is written.
 
-Why not just
 
-    items:
-      - enum:
-          - renesas,r9a06g032-gmac
-          - renesas,rzn1-gmac
-          - snps,dwmac
-
-?
-
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    ethernet@44000000 {
-> +      compatible = "renesas,rzn1-gmac";
-
-Documentation/devicetree/bindings/net/renesas,rzn1-gmac.example.dtb:
-ethernet@44000000: compatible: ['renesas,rzn1-gmac'] does not contain
-items matching the given schema
-
-> +      reg = <0x44000000 0x2000>;
-> +      interrupt-parent = <&gic>;
-> +      interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
-> +             <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
-> +             <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-> +      interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
-> +      clock-names = "stmmaceth";
-> +      clocks = <&sysctrl R9A06G032_HCLK_GMAC0>;
-> +      snps,multicast-filter-bins = <256>;
-> +      snps,perfect-filter-entries = <128>;
-> +      tx-fifo-depth = <2048>;
-> +      rx-fifo-depth = <4096>;
-> +      pcs-handle = <&mii_conv1>;
-> +      phy-mode = "mii";
-> +    };
-> +
-> +...
-
-Gr{oetje,eeting}s,
-
-                        Geert
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
