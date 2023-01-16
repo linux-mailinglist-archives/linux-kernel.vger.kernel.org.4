@@ -2,115 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404366BE8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C6E66BE51
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 13:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjAPNCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S231240AbjAPMzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 07:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjAPNCF (ORCPT
+        with ESMTP id S231302AbjAPMy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:02:05 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F65E22033;
-        Mon, 16 Jan 2023 04:58:57 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id x5so867167qti.3;
-        Mon, 16 Jan 2023 04:58:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6xw2bF+7MxIfm5k6ouCEy1zSWGDR9wStyiUaq/I6FAg=;
-        b=6jVPH3qTMLiK3zdte4Y7fccKSc9SHBU0LcJaVQ4ATHrekR7S1tMOTonAZ56+hjkYM4
-         PRlazpuBkt2MG+RyfjQxG/kLo2QUcCFbqcnr48C0yLZIysNyQSXFl5UKJoiL+yGrSSWl
-         1VjAveH+D77mJujlmFwg63XghdMP4rqMdd9Dn7s9RagsZgQ6atRfUqBmvJCA5UHuMLty
-         3BCAg/10G/4hfj6xoxhFdI6UitKiz3h1pum7BTXHFfX6h0KO4hhfyvuafl0vx+oO0zjC
-         hF2KyM6NJhVTn38zr4Ion1auLKWQ26/hItxZgU0IuOpAdN2kCzJOZYUXPvKsRp91L6BH
-         8wwQ==
-X-Gm-Message-State: AFqh2krXfekc52/keQ6YQdiqBBRL54q+pLVfkavXKOXEN+eHyfC1PBGC
-        5euPbb7bRoz1yMSa9i2Os14HhgFTzOfc8w==
-X-Google-Smtp-Source: AMrXdXtKew0OUzQM1RryPXK5CioiugKddudAr9h2r0IPRduqhU4kyOzcnVriLpeh/bv6CK1aFX19pQ==
-X-Received: by 2002:a05:622a:4885:b0:3b6:378c:5cd5 with SMTP id fc5-20020a05622a488500b003b6378c5cd5mr1658254qtb.62.1673873913854;
-        Mon, 16 Jan 2023 04:58:33 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05620a294f00b0070383f1b6f1sm18348749qkp.31.2023.01.16.04.58.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 04:58:33 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id d62so14003135ybh.8;
-        Mon, 16 Jan 2023 04:58:33 -0800 (PST)
-X-Received: by 2002:a5b:541:0:b0:7d5:620e:b60f with SMTP id
- r1-20020a5b0541000000b007d5620eb60fmr849755ybp.89.1673873913099; Mon, 16 Jan
- 2023 04:58:33 -0800 (PST)
+        Mon, 16 Jan 2023 07:54:57 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5285D1EFE7;
+        Mon, 16 Jan 2023 04:52:34 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NwX3v0y71z4f419B;
+        Mon, 16 Jan 2023 20:52:27 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgBH7uuMSMVjYH02Bw--.361S2;
+        Mon, 16 Jan 2023 20:52:29 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     jack@suse.cz, axboe@kernel.dk
+Cc:     kbusch@kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shikemeng@huaweicloud.com
+Subject: [PATCH v3 0/5] A few bugfix and cleanup patches for sbitmap
+Date:   Tue, 17 Jan 2023 04:50:54 +0800
+Message-Id: <20230116205059.3821738-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20230106125816.10600-1-fabrizio.castro.jz@renesas.com> <20230106125816.10600-3-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20230106125816.10600-3-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 16 Jan 2023 13:58:21 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXAFqMRRyfRsV8-ASzdLS5Fa7dS8UrSc73We+=WuOeDZQ@mail.gmail.com>
-Message-ID: <CAMuHMdXAFqMRRyfRsV8-ASzdLS5Fa7dS8UrSc73We+=WuOeDZQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] soc: renesas: Add PWC support for RZ/V2M
-To:     fabrizio.castro.jz@renesas.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBH7uuMSMVjYH02Bw--.361S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw15Zr18uw43Jw1DCF1UGFg_yoW8Jw4fpr
+        1fKF1fGwn3KFy7Xr17A343JFySyw4kKrnxJw1IkF1ruF1UAF9IkrWkKFWfA34UJFy3tFW7
+        JF1rXr18Kr1UZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0p
+        RVc_3UUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 1:58 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The Renesas RZ/V2M External Power Sequence Controller (PWC)
-> IP is capable of:
-> * external power supply on/off sequence generation
-> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
-> * key input signals processing
-> * general-purpose output pins
->
-> Add the corresponding device driver.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
->
-> v1: In the first version, I had 1 driver for GPIO handling, and 1 driver
->     for poweroff handling, both based on syscon to share the mapped
->     memory region.
-> v2: One more driver added to act as MFD core driver. Dropped syscon, and
->     dropped the OF compatible string for the GPIO and poweroff drivers.
-> v3: This new patch merges all the PWC code in 1 new driver.
->     It also takes into account the comments received from Bartosz and Geert.
->     Since this is a new driver, I have dropped all the Reviewed-by tags
->     received on the separated drivers.
-> v4: No change.
-> v5: No change.
+Hi, this series contain a bugfix patch to correct wake_batch
+recalculation to avoid potential IO hung and a few cleanup patches to
+remove unnecessary check and repeat code in sbitmap. Thanks.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.3.
+---
+v3:
+ -Thank Jan for review. Collect Reviewed-by from Jan for all patches.
+ -some cleanups according to recommends from Jan:
+   1)Add Fixes tag in patch 2/5 "sbitmap: remove redundant check in
+__sbitmap_queue_get_batch"
+   2)Avoid lines over 80 characters in patch 3/5 "sbitmap: rewrite
+sbitmap_find_bit_in_index to reduce repeat code"
+   3)Remove pointless line in patch 4/5 "sbitmap: add sbitmap_find_bit
+to remove repeat code in __sbitmap_get/__sbitmap_get_shallow"
 
-Gr{oetje,eeting}s,
+---
+v2:
+ -add patch "sbitmap: correct wake_batch recalculation to avoid potential
+IO hung"
+---
 
-                        Geert
+Kemeng Shi (5):
+  sbitmap: remove unnecessary calculation of alloc_hint in
+    __sbitmap_get_shallow
+  sbitmap: remove redundant check in __sbitmap_queue_get_batch
+  sbitmap: rewrite sbitmap_find_bit_in_index to reduce repeat code
+  sbitmap: add sbitmap_find_bit to remove repeat code in
+    __sbitmap_get/__sbitmap_get_shallow
+  sbitmap: correct wake_batch recalculation to avoid potential IO hung
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ lib/sbitmap.c | 102 ++++++++++++++++++++++----------------------------
+ 1 file changed, 45 insertions(+), 57 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.30.0
+
