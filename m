@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DCF66D13B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E83666D147
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbjAPWCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 17:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S231703AbjAPWE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 17:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233225AbjAPWB4 (ORCPT
+        with ESMTP id S234256AbjAPWEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 17:01:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BE625E03
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 14:01:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673906468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKW7zCBLEA66mVcb3Cu7SCLLHnEA4pbfURAi0ynqeO8=;
-        b=eICz3Q0k+9JeniZ0aFLPWJYVZUbtlOrtLCVHdaOz+/W+N0MLn/zgJwXEeXIdqDAGplwLv1
-        ebt/dJ4VT0apowHCPiaywOq2nAY29VTviu7HT35zgW9fZVq8l8zm/NfUeS8wEz65wQd7dy
-        3p0dGGHOslWiVh9ARVdoPe7ZVZ1+e48=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-VktBD6VkPFe1XvOqPSP0-A-1; Mon, 16 Jan 2023 17:01:04 -0500
-X-MC-Unique: VktBD6VkPFe1XvOqPSP0-A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 28AAE85CCEF;
-        Mon, 16 Jan 2023 22:01:03 +0000 (UTC)
-Received: from [10.22.18.0] (unknown [10.22.18.0])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A8192166B26;
-        Mon, 16 Jan 2023 22:01:02 +0000 (UTC)
-Message-ID: <ac5c75d4-5d21-68a5-a428-3ef449595836@redhat.com>
-Date:   Mon, 16 Jan 2023 17:01:02 -0500
+        Mon, 16 Jan 2023 17:04:25 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E9625E03;
+        Mon, 16 Jan 2023 14:04:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=uazCoJXtzlq2kShlcT9rXD6tOctqES9trOINp4voJPQ=; b=HbsVr2uw3QcN5Haiwf2oauolr4
+        Q1wpFz/1qvpARLsRMeTnrxxLPykIcbZ9qPZEfg3GdTES4pGeXkHiQulW8KdoyjNHopQX/zxIPm3CA
+        jL/pFa/9SFYlHwHsV0jYy94nWtzULKX3+n/jvE9iKcTiehNTI/vG6oVUPJmzCOOgbXP4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pHXaP-002GdJ-Uh; Mon, 16 Jan 2023 23:04:13 +0100
+Date:   Mon, 16 Jan 2023 23:04:13 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        rafael@kernel.org, andriy.shevchenko@linux.intel.com,
+        sean.wang@mediatek.com, Landen.Chao@mediatek.com,
+        linus.walleij@linaro.org, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hkallweit1@gmail.com,
+        jaz@semihalf.com, tn@semihalf.com, Samer.El-Haj-Mahmoud@arm.com
+Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API
+ to fwnode_
+Message-ID: <Y8XJ3WoP+YKCjTlF@lunn.ch>
+References: <20230116173420.1278704-1-mw@semihalf.com>
+ <20230116173420.1278704-3-mw@semihalf.com>
+ <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk>
+ <20230116181618.2iz54jywj7rqzygu@skbuf>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/3] rcu: Equip sleepable RCU with lockdep dependency
- graph checks
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Luczaj <mhal@rbox.co>
-References: <20230113065955.815667-1-boqun.feng@gmail.com>
- <20230113065955.815667-3-boqun.feng@gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230113065955.815667-3-boqun.feng@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116181618.2iz54jywj7rqzygu@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,62 +58,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/23 01:59, Boqun Feng wrote:
-> Although all flavors of RCU are annotated correctly with lockdep as
-> recursive read locks, their 'check' parameter of lock_acquire() is
-> unset. It means that RCU read locks are not added into the lockdep
-> dependency graph therefore deadlock detection based on dependency graph
-> won't catch deadlock caused by RCU. This is fine for "non-sleepable" RCU
-> flavors since wait-context detection and other context based detection
-> can catch these deadlocks. However for sleepable RCU, this is limited.
->
-> Actually we can detect the deadlocks caused by SRCU by 1) making
-> srcu_read_lock() a 'check'ed recursive read lock and 2) making
-> synchronize_srcu() a empty write lock critical section. Even better,
-> with the newly introduced lock_sync(), we can avoid false positives
-> about irq-unsafe/safe. So do it.
->
-> Note that NMI safe SRCU read side critical sections are currently not
-> annonated, since step-by-step approach can help us deal with
-> false-positives. These may be annotated in the future.
->
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->   include/linux/srcu.h  | 23 +++++++++++++++++++++--
->   kernel/rcu/srcutiny.c |  2 ++
->   kernel/rcu/srcutree.c |  2 ++
->   3 files changed, 25 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-> index 9b9d0bbf1d3c..a1595f8c5155 100644
-> --- a/include/linux/srcu.h
-> +++ b/include/linux/srcu.h
-> @@ -102,6 +102,21 @@ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
->   	return lock_is_held(&ssp->dep_map);
->   }
->   
-> +static inline void srcu_lock_acquire(struct lockdep_map *map)
-> +{
-> +	lock_map_acquire_read(map);
-> +}
-> +
-> +static inline void srcu_lock_release(struct lockdep_map *map)
-> +{
-> +	lock_map_release(map);
-> +}
-> +
-> +static inline void srcu_lock_sync(struct lockdep_map *map)
-> +{
-> +	lock_map_sync(map);
-> +}
-> +
->   #else /* #ifdef CONFIG_DEBUG_LOCK_ALLOC */
+On Mon, Jan 16, 2023 at 08:16:18PM +0200, Vladimir Oltean wrote:
+> On Mon, Jan 16, 2023 at 05:50:13PM +0000, Russell King (Oracle) wrote:
+> > On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
+> > > fixed-link PHYs API is used by DSA and a number of drivers
+> > > and was depending on of_. Switch to fwnode_ so to make it
+> > > hardware description agnostic and allow to be used in ACPI
+> > > world as well.
+> > 
+> > Would it be better to let the fixed-link PHY die, and have everyone use
+> > the more flexible fixed link implementation in phylink?
+> 
+> Would it be even better if DSA had some driver-level prerequisites to
+> impose for ACPI support - like phylink support rather than adjust_link -
+> and we would simply branch off to a dsa_shared_port_link_register_acpi()
+> function, leaving the current dsa_shared_port_link_register_of() alone,
+> with all its workarounds and hacks? I don't believe that carrying all
+> that logic over to a common fwnode based API is the proper way forward.
 
-It would be nice if a comment is added to document the difference 
-between the 2 sets of rcu_lock_* and srcu_lock_* functions. It is 
-described in patch description, but it is not easy to figure that out 
-just by looking at the source files.
+I agree with you there, here is little attempt to make a clean ACPI
+binding. Most of the attempts to add ACPI support seem to try to take
+the short cut for just search/replace of_ with fwnode_. And we then
+have to push back and say no, and generally it then goes quiet.
 
-Cheers,
-Longman
+Marcin, please approach this from the other end. Please document in
+Documentation/firmware-guide/acpi/dsd what a clean binding should look
+like, and then try to implement it.
 
+      Andrew
