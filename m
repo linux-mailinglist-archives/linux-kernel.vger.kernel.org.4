@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFF866BC4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FA566BC52
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjAPK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S230484AbjAPK6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjAPK5h (ORCPT
+        with ESMTP id S230507AbjAPK5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:57:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9AB59EB
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673866614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dMSn7PTMEvVVrQFt74Q3u3R9ASe6C2Dbwlt9UzpnyIA=;
-        b=E4iGXnR9nhkj1uoUO0Koi77Rlmn5o5/uJZy8HOnAPGwO9Jtm1Dcgb7dl5RIkbIxCTMcxI0
-        KAh0JBIjmx+gGqo8Xrd46YkA+29mx0A8h+uEgI1LjpQRqnZ4121D2vSZbYjj7OWFgfajBE
-        dwykXVj9KngpXGnCk/1MHNzK4NyfLJM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131-Xw_dsNCgOiuaYGOnxBKnEQ-1; Mon, 16 Jan 2023 05:56:51 -0500
-X-MC-Unique: Xw_dsNCgOiuaYGOnxBKnEQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 600553814944;
-        Mon, 16 Jan 2023 10:56:50 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.124])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BEAE651FF;
-        Mon, 16 Jan 2023 10:56:49 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 6ABEB18017F5; Mon, 16 Jan 2023 11:56:48 +0100 (CET)
-Date:   Mon, 16 Jan 2023 11:56:48 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
-        Ard Biescheuvel <ardb@kernel.org>,
-        "Min M. Xu" <min.m.xu@intel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
-Message-ID: <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
-References: <20230113212926.2904735-1-dionnaglaze@google.com>
- <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
+        Mon, 16 Jan 2023 05:57:46 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092243596
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:57:46 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id z194so1597796iof.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kEVCWhwaEt+bn9i52bVqpmK9bg670xeHDRX6VYKdr8A=;
+        b=Y+10qfnyfB0ZBOAHKkltK4/g34JlA1BuLVY55+bEEWPbI0tbLcpiZZqr3fpqQd6IIt
+         28dmVukyPeYBPyET/DvCp9kTTFt6FscynPq8LxNuh+vO/FSB6BdBXX97nTG2XhWblMNq
+         STMsgmD7uiWf5KjfOtThKLR2vCwxBmcI+dOR19UqQ7NfpgT1k5S7QT7Ep4gON2C5Mtlz
+         m4itAmesgdjjqddJ5Jf14VLY0OorpjsN6YEBRmdK7ZjqYDw9iuO5tFZICr8Ux5X+5bEw
+         yjmM1z+YaXTdSXsJuFPc2nnMQZ4jq3Bzf2apVSdp2MvetuUPkBf2E4cLfx4cWOU/Echp
+         6FyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kEVCWhwaEt+bn9i52bVqpmK9bg670xeHDRX6VYKdr8A=;
+        b=YlPupxo2Ha3vz6vBSIQ8OOgV+aAlWFbze6UpgY+zCiMm7PFTmepRVgCVFTvWcGmbOO
+         5sPQDF86YgofDgerhaECmwQSQXq6C9kcQIjzv9mMPlgSQ6Bi50s7aIBobigJhxp5KpaC
+         lTReoMnWNvGnAm/3uO7A85Zc1JC2hn5HEd5C4iQJ7TXnYILRYDhFh513X9vIlJpCvxsk
+         hufbw3mzVAOynBfs1ZKX/poI1peqvBFVsnMnckHPOc9a2uWDm4ezM59L29Ygb043Ndb5
+         57smgBjw7KZktsvpp9oPnZbtZA8JXT4AmVypwtNrQKw/vWvH4pKcwoXOlZ7ju9fOj9iP
+         OipQ==
+X-Gm-Message-State: AFqh2kqY9L5liNnhFWl6ZgLeonZDpuEyaG+e2k7Y+fpdfdLC9uW77wLH
+        8qMhUkP+NAcFgD/yYmML4tXmrpdo3NFUPILot+c=
+X-Google-Smtp-Source: AMrXdXt2aMohjyK8GKfgJII0fUdxGT4SW5NcL+TvbM+R93dTXmjFbGzCMnIZv0a282x6b7INV7phBS2Qcjgw/SVMfs8=
+X-Received: by 2002:a05:6602:18a:b0:6ed:13b9:2e1e with SMTP id
+ m10-20020a056602018a00b006ed13b92e1emr8489378ioo.172.1673866665290; Mon, 16
+ Jan 2023 02:57:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:12cc:b0:395:c7de:f14c with HTTP; Mon, 16 Jan 2023
+ 02:57:44 -0800 (PST)
+Reply-To: abrahammorrison443@gmail.com
+From:   Abraham Morrison <awochambers004@gmail.com>
+Date:   Mon, 16 Jan 2023 02:57:44 -0800
+Message-ID: <CAH2diS72gv+nPm5EH+BaC0XyxRqcf_Zgn9QXOy-Jmm8_rqibgg@mail.gmail.com>
+Subject: Good day!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [abrahammorrison443[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [awochambers004[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [awochambers004[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 01:20:24AM +0300, Kirill A. Shutemov wrote:
-> On Fri, Jan 13, 2023 at 09:29:26PM +0000, Dionna Glaze wrote:
-> > This patch depends on Kirill A. Shutemov's series
-> > 
-> > [PATCHv8 00/14] mm, x86/cc: Implement support for unaccepted memory
-> > 
-> > The UEFI v2.9 specification includes a new memory type to be used in
-> > environments where the OS must accept memory that is provided from its
-> > host. Before the introduction of this memory type, all memory was
-> > accepted eagerly in the firmware. In order for the firmware to safely
-> > stop accepting memory on the OS's behalf, the OS must affirmatively
-> > indicate support to the firmware.
-> 
-> I think it is a bad idea.
-> 
-> This approach breaks use case with a bootloader between BIOS and OS.
-> As the bootloader does ExitBootServices() it has to make the call on
-> behalf of OS when it has no idea if the OS supports unaccepted.
+Hallo! Haben Sie meine vorherige Nachricht erhalten? Haben Sie die
+Bankomatkarte erhalten, die ich f=C3=BCr Sie aufbewahrt habe?
 
-Nothing breaks, it'll error on the safe side.  If the protocol callback
-is not called the firmware will simply accept all memory.  The guest OS
-will only see unaccepted memory if it explicitly asked for it (assuming
-the firmware wants know to support both cases, of course the firmware
-could also enforce the one or the other and just not offer the
-protocol).
+Ich rate Ihnen, sich an meine Sekret=C3=A4rin zu wenden, um eine
+Geldautomatenkarte in H=C3=B6he von 500.000,00 USD zu erhalten, die ich f=
+=C3=BCr
+Sie aufbewahrt habe.
 
-> Note that kexec is such use-case: original kernel has to make a
-> decision on whether it is okay to leave some memory unaccepted for the
-> new kernel.
+Kontaktieren Sie sie mit den folgenden Informationen.
+Name: Linda Kofi
+E-Mail: koffilinda785@gmail.com
 
-Not sure what you are trying to tell.  The kexec case doesn't go
-through the efi stub anyway.
+Bitten Sie sie, Ihnen die Gesamtsumme von ($500.000,00) ATM CARD zu
+schicken, die ich f=C3=BCr Sie aufbewahrt habe.
 
-> And we add this protocol to address very temporary problem: once
-> unaccepted memory support get upstream it is just a dead weight.
-
-Maybe, maybe not.  unaccepted memory support has a Kconfig switch after
-all.  If we figure in 3-5 years that all distros have enabled it anyway
-we can drop it again.  For the transition period it will surely be
-useful.
-
-take care,
-  Gerd
-
+Herr Abraham Morrison
