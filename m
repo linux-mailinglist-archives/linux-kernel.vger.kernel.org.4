@@ -2,107 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6003D66BB1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B58A66BB21
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjAPKBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S229717AbjAPKBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjAPKAt (ORCPT
+        with ESMTP id S229531AbjAPKBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:00:49 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17537A5D4;
-        Mon, 16 Jan 2023 02:00:48 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id qb7so19259374qvb.5;
-        Mon, 16 Jan 2023 02:00:48 -0800 (PST)
+        Mon, 16 Jan 2023 05:01:46 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE3EC170
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:01:44 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w14so22680551edi.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:01:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lgldI+82xaPUxW9jFm83l+ZVCizNwJg+yeI6zrnzsq4=;
+        b=BCpiKjVBNdeZIXfLzwWGp6kixGj7UhUJC6Jg3ImNGeisAS1niXVyRhbI37ToWhVVov
+         Gau4+9ctE1TDM13aqvWzu+yVTrjdC7tpaxBvH6lbm1K8ZLSAoYqj1tnfDNhaIggJy8Ix
+         U/m66LrjGiz/kInp/qy2Q4BcTg2Hx+cyJ/wha7WUftpsKznaWllLTHXTxs4JOuEAtz2K
+         Rk1Gp73r2z4eTAFbP20g0pkZLqvAsF50G1T9htpwAMzxU64m8827iOUAbuqItmOd2E4A
+         HnjayK4LMsTaDCKG/ax7O7cRtjDYaN817bWhHtQmCMNH239aO/y0pjmUOszBeipZH+p1
+         C2mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZcfbiaOtd0rIUu3J0LzMQ7r+7EcuQP5IsDRStK58JTY=;
-        b=Iw+E2l7iP+BBT8wRY6KgUlaJY+XOp81ebji0YGTQl0mfalLqk8KwdJH/d4pLncKqtJ
-         y7I1g+kIcwfV5SRNRr99uL6HX4rfWdDoHawXeeUShcqBPugheTY+yc+BpLVKvszGo3j7
-         FBaecPSOf17aKObAFZ8+trpHDKjtMBWIGSQYFeAm0J7aFndDMbsTPd20s1EsKvs52dLQ
-         FZuMmDD/eWn9xeXJeKO6l97CWw5XGO6MN8JAENZZb39tEsWKkIMAIhFmkTVd/UP+3C+v
-         LU1gHqwWZmZyTVa9ajp81qJFoYuKkURzSnoXXGP6mKuJzlYde1wRQQZZwsbnALZP6TVE
-         gZwQ==
-X-Gm-Message-State: AFqh2kqbRoHXRslXHqm+0ZvAGJVODn7P3DztMINdEfkYbY5h0sFOYr5X
-        vLxwZY9qiX70ef99uheXcIMU7QiqujjkYA==
-X-Google-Smtp-Source: AMrXdXuiuftiU4iE277WG3SmWjPXImBlsWEUzPQF8WNXLe8Y4WX4/6CWP8AJZgR2D+F1RJx2UMKg6A==
-X-Received: by 2002:a0c:fb44:0:b0:532:21bf:bb41 with SMTP id b4-20020a0cfb44000000b0053221bfbb41mr46054145qvq.18.1673863246977;
-        Mon, 16 Jan 2023 02:00:46 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id k19-20020a05620a415300b006fbaf9c1b70sm2819430qko.133.2023.01.16.02.00.46
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lgldI+82xaPUxW9jFm83l+ZVCizNwJg+yeI6zrnzsq4=;
+        b=BizmR35S+3rmyuCwT9UpWbfOLjgsA3O73x1DjRrwEZ3caYdogxiPTOkE/EKKhgqQNZ
+         m67sXJwjbnglH7Kxk5Nfvzi9HH+YweW2W4N88zjgZ21SchkJkYhQxISGYz50ORHrHlzR
+         H2E+nB8TwfXlUXPzJMFV+NdOqi07GoU8pygaE1PNzcJCXKqgQYKm1gsu8euACPHl5Niv
+         j5gknO+wd+frWoFn6JNv9vyHCCs4PLpCcNcgV2W+IVnoQM2TxCdf9XaQll7UFWnQHTnm
+         jEEaWZXWZFyEzkaGAyPqhE2PRva5nq0UzXS4tPAZapW5it8PWO5MXZ5HVHLQYmGTdVmP
+         fNWQ==
+X-Gm-Message-State: AFqh2kp9Pq/0QeoIG+5OddW+erQSVEoZQ4UZvBYNLbzSPOQMIxLva+nz
+        B6P3kIxw5V0MgwOnSLHag0j8+g==
+X-Google-Smtp-Source: AMrXdXvnFV6jO2U3anaxOMJIRIEJtNv8DD9RTL58GFnKUvxRRdcA3m/m4J+pPGsSPdTOMxg7f/nfCA==
+X-Received: by 2002:a05:6402:520b:b0:48b:58be:472c with SMTP id s11-20020a056402520b00b0048b58be472cmr78238671edd.18.1673863303450;
+        Mon, 16 Jan 2023 02:01:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q24-20020a056402249800b0046ac460da13sm11336099eda.53.2023.01.16.02.01.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 02:00:46 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id d62so13502101ybh.8;
-        Mon, 16 Jan 2023 02:00:45 -0800 (PST)
-X-Received: by 2002:a25:46c6:0:b0:7b8:a0b8:f7ec with SMTP id
- t189-20020a2546c6000000b007b8a0b8f7ecmr4703291yba.36.1673863245804; Mon, 16
- Jan 2023 02:00:45 -0800 (PST)
+        Mon, 16 Jan 2023 02:01:43 -0800 (PST)
+Message-ID: <dbf5fc36-11c6-ae54-a19c-5fc9924aa18d@linaro.org>
+Date:   Mon, 16 Jan 2023 11:01:40 +0100
 MIME-Version: 1.0
-References: <Y7P9IcR7/jgYWMcq@osiris> <20230105095426.2163354-1-andrzej.hajda@intel.com>
-In-Reply-To: <20230105095426.2163354-1-andrzej.hajda@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 16 Jan 2023 11:00:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUhPjya8zWMxEN8U8pjf4M2u_+HOfxQ2NP1XOcX9EpAKg@mail.gmail.com>
-Message-ID: <CAMuHMdUhPjya8zWMxEN8U8pjf4M2u_+HOfxQ2NP1XOcX9EpAKg@mail.gmail.com>
-Subject: Re: [PATCH v4] arch: rename all internal names __xchg to __arch_xchg
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RESEND v3 01/13] dt-binding: mediatek: add bindings for MediaTek
+ mt8195 MDP3 components
+To:     =?UTF-8?B?TW91ZHkgSG8gKOS9leWul+WOnyk=?= <Moudy.Ho@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20230116032147.23607-1-moudy.ho@mediatek.com>
+ <20230116032147.23607-2-moudy.ho@mediatek.com>
+ <f24a54f1-2720-3345-9596-bb8d388ba16f@linaro.org>
+ <a5ef36df5bf8c483d327247199f5494be13b1efa.camel@mediatek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a5ef36df5bf8c483d327247199f5494be13b1efa.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 10:54 AM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
-> __xchg will be used for non-atomic xchg macro.
->
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: squashed all arch patches into one
-> v3: fixed alpha/xchg_local, thx to lkp@intel.com
-> v4: adjusted indentation (Heiko)
+On 16/01/2023 10:39, Moudy Ho (何宗原) wrote:
+> Hi Krzysztof,
+> 
+> Thank you for taking the time to help review, I would like to ask a
+> modification as follows.
+> 
+> On Mon, 2023-01-16 at 09:10 +0100, Krzysztof Kozlowski wrote:
+>>>
+> 
+> (snip)
+> 
+>> On 16/01/2023 04:21, Moudy Ho wrote:
+>>> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-
+>>> aal.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-
+>>> aal.yaml
+>>> new file mode 100644
+>>> index 000000000000..d2e1b5245778
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-
+>>> aal.yaml
+>>
+>> Filename should match compatible, unless you already expect this
+>> binding
+>> will cover other devices. If so, why not adding them now?
+>>
+> 
+> May I rename this file to "mediatek,mt8195-mdp3.yaml"
+> 
+>>>
+> 
+> (snip)
+> 
+>>> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-
+>>> color.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-
+>>> color.yaml
+>>> new file mode 100644
+>>> index 000000000000..1d8aa5dc76b9
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-
+>>> color.yaml
+>>> @@ -0,0 +1,63 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: 
+>>> https://urldefense.com/v3/__http://devicetree.org/schemas/media/mediatek,mdp3-color.yaml*__;Iw!!CTRNKA9wMg0ARbw!lcferrFFP-mshDHNL-rwJLgNKDrXF9fXoljpqL30k5YKTNvCwuC3webzR32VnQQoPeFvSvAewNkeupcT4mjdEwNEKP4V$ 
+>>>  
+>>> +$schema: 
+>>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!lcferrFFP-mshDHNL-rwJLgNKDrXF9fXoljpqL30k5YKTNvCwuC3webzR32VnQQoPeFvSvAewNkeupcT4mjdEz618JHq$ 
+>>>  
+>>> +
+>>> +title: MediaTek Media Data Path 3 COLOR
+>>> +
+>>> +maintainers:
+>>> +  - Matthias Brugger <matthias.bgg@gmail.com>
+>>> +  - Moudy Ho <moudy.ho@mediatek.com>
+>>> +
+>>> +description:
+>>> +  One of Media Data Path 3 (MDP3) components used to adjust hue,
+>>> luma and
+>>> +  saturation to get better picture quality.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - mediatek,mt8195-mdp3-color
+>>
+>> This is exactly the same as previous file. Why do you split the
+>> binding?
+>> It really looks unnecessary.
+>>
+>> Probably all other files should be also squashed.
+>>
+> 
+> and convert all other bindings into individual compatible enums to
+> squash all files?
+> 
+>   compatible:
+>     enum:
+>       - mediatek,mt8195-mdp3-color
+>       - mediatek,mt8195-mdp3-aal
 
->  arch/m68k/include/asm/cmpxchg.h      |  6 +++---
+Yes, all devices which have exactly the same properties in one binding
+file. Their compatibles listed in enum.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> [m68k]
+You can keep the separate bindings which differ from each other.
 
-Gr{oetje,eeting}s,
+Best regards,
+Krzysztof
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
