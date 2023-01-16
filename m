@@ -2,88 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBD666CF46
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152EC66CF51
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbjAPTBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S232443AbjAPTGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjAPTB1 (ORCPT
+        with ESMTP id S233675AbjAPTGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:01:27 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B233A9A
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:01:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OTvEP0dk4mOnC2iv0N91tfWHpSStEQbuT03o4jsB+3k=; b=SJcYe70efrX8NSS8Oee1AV7oXk
-        9+KXywD1yVF9dgdzQNDkDQZsc2W3A3X7sBqpZ5JPqn63Ow7j8GgTrImpeRecy4QUIFl6ljfcUQqEa
-        t87JAqa/QYU7shrT2vJTbdrGkqcaBcQBYp9KvWq3t74wTeYM7Xwr6zIqcWyMMKvjCu9W3BqE6/3rA
-        YMnpnqqcYNrOafNGhECpltEHsNkGlaPwFsC3KqYJg/50+O/WC/MQZN3GKSApQ/Dg/WZ4JPe/vJCGM
-        dSmUKDFurx2BcqKKe3Ri7baVFaWaUo6sjj7wlvWvISzoX+SDGE28lj9TDcd5qWnPh2Bf7A7M7jbmU
-        hl85AbnQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHUjd-008zPN-Oh; Mon, 16 Jan 2023 19:01:33 +0000
-Date:   Mon, 16 Jan 2023 19:01:33 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, urezki@gmail.com,
-        lstoakes@gmail.com, stephen.s.brennan@oracle.com,
-        akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out
- vm_map_ram areas
-Message-ID: <Y8WfDSRkc/OHP3oD@casper.infradead.org>
-References: <20230113031921.64716-1-bhe@redhat.com>
- <20230113031921.64716-4-bhe@redhat.com>
+        Mon, 16 Jan 2023 14:06:34 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B567274BF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:06:33 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x36so7307224ede.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:06:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CV8tAfRPf2IHKFO84VR70240CzDv/yHe+xWXBC9YNck=;
+        b=QeJDGv2fUxNWwwetKotPZ+TRh8gJ+RlvO1uxBkjuQb8ZkAeeYnLOALxczfeh1MtpTl
+         n08bJKkqBv3F3+bKDR1PjNg3wIcxrtb9Of+pgl2avg185N8CXce/m3zUpQ1kxVFneVRt
+         WAFZtgGeaZ3ttMQ7H64Xw4sUpfJK0Ek5uQAHH3nI/uqEb3eEZDESzY+Vg39eotfynjGw
+         TdpgVKRsCJmU7aSh0HDmWjvt2mebSkp46uH0fi1eWSHZpzW6Pmf2m7/M9yW0g327aTd4
+         k4zALpCg0fGdSo8V/YssbcYg8VO/9wiqI5N+Mdk0d3VPT1kCRYyu2NQ1Iugow5LmK3dC
+         3lnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CV8tAfRPf2IHKFO84VR70240CzDv/yHe+xWXBC9YNck=;
+        b=MlKKO6GSoNxyZFWfsKxfN/d+Qa23wL3mH26xE4xUyBt48gYQpczu+57mtcFfVhjAEd
+         RbnTgSf0990A6AyH677utaKt64J2ToviAaFt6tquicN+S7Fj9hFuWGDyYUsUrmv0++8s
+         DbRD/8CpNb/ydcbWGCHCsWeIo5lzHhQmupQmywgusjlhECSUs+AFjEPFsO48JW7+nBSi
+         WfWVTXtsiSOGgyoo+bWPPMaFgICZgNhipvOnq3MtnHYMd81ILGsfYPtoUZh8na4GuNI9
+         +KHY2r63Ow6UFwyXt1ZGHRJyKzVpqglW1mKNh8QKpeUoy9DJSC6sHnizznipbKrh/tWB
+         RSGg==
+X-Gm-Message-State: AFqh2kr4sloLFtl/EodYQZiam2tKJGLskySLKF8TyBX40nSVtFtkVHYy
+        tAEt6CYyFYJjmC2YBB32jXAOnA==
+X-Google-Smtp-Source: AMrXdXsjBZjMnuV7YVxZpvP0hj3P56j70NAIFlFg7nArqAvUb/4acMKxsEX19XftKcyXLdXMVou5Jw==
+X-Received: by 2002:aa7:dbc4:0:b0:47c:445b:b4f with SMTP id v4-20020aa7dbc4000000b0047c445b0b4fmr296641edt.32.1673895992067;
+        Mon, 16 Jan 2023 11:06:32 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id d20-20020a170906305400b007c0d64c1886sm12096487ejd.33.2023.01.16.11.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 11:06:31 -0800 (PST)
+Message-ID: <1a70a28b-b406-4d84-ced9-4d66bad94652@linaro.org>
+Date:   Mon, 16 Jan 2023 20:06:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113031921.64716-4-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 2/3] dt-bindings: remoteproc: ti: Add new compatible
+ for AM62 SoC family
+Content-Language: en-US
+To:     Devarsh Thakkar <devarsht@ti.com>, andersson@kernel.org,
+        devicetree@vger.kernel.org, mathieu.poirier@linaro.org,
+        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com
+Cc:     hnagalla@ti.com, praneeth@ti.com, nm@ti.com, vigneshr@ti.com,
+        a-bhatia1@ti.com, j-luthra@ti.com
+References: <20230116151906.549384-1-devarsht@ti.com>
+ <20230116151906.549384-3-devarsht@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230116151906.549384-3-devarsht@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:19:17AM +0800, Baoquan He wrote:
-> +	spin_lock(&vb->lock);
-> +	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
-> +		spin_unlock(&vb->lock);
-> +		memset(buf, 0, count);
-> +		return;
-> +	}
-> +	for_each_set_bitrange(rs, re, vb->used_map, VMAP_BBMAP_BITS) {
-> +		if (!count)
-> +			break;
-> +		start = vmap_block_vaddr(vb->va->va_start, rs);
-> +		while (addr < start) {
-> +			if (count == 0)
-> +				break;
-> +			*buf = '\0';
-> +			buf++;
-> +			addr++;
-> +			count--;
-> +		}
-> +		/*it could start reading from the middle of used region*/
-> +		offset = offset_in_page(addr);
-> +		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
-> +		if (n > count)
-> +			n = count;
-> +		aligned_vread(buf, start+offset, n);
+On 16/01/2023 16:19, Devarsh Thakkar wrote:
+> AM62 family of devices don't have a R5F cluster, instead
+> they have single core DM R5F.
+> Add new compatible string ti,am62-r5fss to support this scenario.
+> 
 
-The whole vread() interface is rather suboptimal.  The only user is proc,
-which is trying to copy to userspace.  But the vread() interface copies
-to a kernel address, so kcore has to copy to a bounce buffer.  That makes
-this spinlock work, but the price is that we can't copy to a user address
-in the future.  Ideally, read_kcore() would be kcore_read_iter() and
-we'd pass an iov_iter into vread().  vread() would then need to use a
-mutex rather than a spinlock.
+This is a friendly reminder during the review process.
 
-I don't think this needs to be done now, but if someone's looking for
-a project ...
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+
+Best regards,
+Krzysztof
+
