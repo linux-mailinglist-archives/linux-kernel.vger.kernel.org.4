@@ -2,82 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDA366C06D
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC27F66C072
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjAPN6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S231637AbjAPN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjAPN5i (ORCPT
+        with ESMTP id S229982AbjAPN5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:57:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1C823C58;
-        Mon, 16 Jan 2023 05:54:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EFBF60FC7;
-        Mon, 16 Jan 2023 13:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F17CCC433D2;
-        Mon, 16 Jan 2023 13:54:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673877293;
-        bh=OcdO1JWUCmNg+w34wlOYXhk+GGbIuoUVxALObErkpDg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JjEYHwEw8AAI8jKH8xHf87HKCVHBnLkFFdj5S3PdSbtrnzYa/tAPptPzdZ7CUKXlY
-         y1DZg6Z8W5S25KWROoL6abELtO5nBpcE1MODTjXtUG+SutlyrsJoJaw5+T9GRK1ajk
-         iQDNIf1ZoQUt4ChkdB4qZ3hqnoMBEj6B0vH+T9obdNUV+rpL+6qW+dsd8fdDnDeqzS
-         s6XqqG4mVuWO8tV0PFIodtp3t/SCdXupA3r/NvEAqjt9cT25BQDQUsnk5Fmp1b6naA
-         gjrMpnb1PbgMJL7mJt49NRyJSs9v0bOx0cuS9mIcYudcqPwcENUr7Tel3MjBCUAOQe
-         ho4/OsDNyqk1Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pHPx3-00043R-3M; Mon, 16 Jan 2023 14:55:05 +0100
-Date:   Mon, 16 Jan 2023 14:55:05 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     johan+linaro@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        maz@kernel.org, platform-driver-x86@vger.kernel.org,
-        tglx@linutronix.de, x86@kernel.org, yj.chiang@mediatek.com,
-        phil.chang@mediatek.com
-Subject: Re: [PATCH v3 0/19] irqdomain: fix mapping race and clean up locking
-Message-ID: <Y8VXOQy09lJ+obLE@hovoldconsulting.com>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221220033042.27724-1-mark-pk.tsai@mediatek.com>
+        Mon, 16 Jan 2023 08:57:43 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF86422785
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:55:22 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id v23so25492516plo.1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=147jSvlJn5xlSD2sUs0kYKU5A8XzMbwpiBCjTNuI7UQ=;
+        b=RJAFWHjuvZK/dAbe6GnD6KJxIkse2okjfKOmy0E0QmeeTYuRgtpe5HYs9Z6UnS9Mf2
+         cbBM6Riu6PuvpQO+ovTAbQRyUGDSiXB03qZtzQHu+cdvbtYanb1ERT7LFng2Z7nl8tz8
+         ZTGUU0wpHVIw8/vNoZ5gKPDvnM0yFkIrUbifnhV5ynDfzBVXiuRAy+Q8ISWHN6WVYXzK
+         pKG3Q+zeA0Sbg1A/qPe+DL8OsEyLbjhDyoxpFTsVHtvnafoGcIqxxXZMaO0Wd9i6BDRy
+         HjmgJoAGOapftq5GBQI03vrGwPq6618OLSUIbkh2J732odRmWORQsH/CRgys8R339uBa
+         C+0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=147jSvlJn5xlSD2sUs0kYKU5A8XzMbwpiBCjTNuI7UQ=;
+        b=xle5LGswR88O2NlMjcNWMrnXesthukgPlTBDvRidFEcpq53+WqX4Cj5IhyvcGXtuGt
+         OWm1G3di/cWYt+kp7Z6UP0YjXZoagSUGc49GUEkJ/OQY0F2K/bp2YjMs3ZEIgLsx3C66
+         IVmD1Kb+HFoEpOJkR9syz9zQqVn/f8rayBKUi7FDRnObE+9FuaJqZrwVmLY3M7dx2VF8
+         q21MFWmempjuJ0k9P6lNflPrHVndViwe4iSzl6zgtcFRjO9HHkeC9Hr5Hn3E7vUllftl
+         nv1F57BnHih2l9bheZ86mkPxdlo070ywSYzPFTiy/h94B0VS3mmiSZ0Pc+hyZL/KksoT
+         2fkg==
+X-Gm-Message-State: AFqh2kpvzlfPoytF2xmNN//WQ/jEMmxmA/nYxJ58bF93dqp3xELwkqq/
+        m4wvb+ipU/5wYorx6ygpCx+FMg==
+X-Google-Smtp-Source: AMrXdXv13YFxiAXJNMAadUbS9Q6PE3PbLzHNMejVH0EJDX2xGGWu77aDgVBYSYbhLk0HyJCFwtCzlw==
+X-Received: by 2002:a05:6a20:3a9e:b0:9d:efc1:116c with SMTP id d30-20020a056a203a9e00b0009defc1116cmr21242624pzh.6.1673877322173;
+        Mon, 16 Jan 2023 05:55:22 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c10-20020a63d14a000000b004468cb97c01sm15901902pgj.56.2023.01.16.05.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 05:55:21 -0800 (PST)
+Message-ID: <e01e469f-488a-8f2d-008f-8427289d2ff3@kernel.dk>
+Date:   Mon, 16 Jan 2023 06:55:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220033042.27724-1-mark-pk.tsai@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] io_uring: Split io_issue_def struct
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>,
+        Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     asml.silence@gmail.com, dylany@meta.com, io-uring@vger.kernel.org,
+        leit@fb.com, linux-kernel@vger.kernel.org
+References: <20230112144411.2624698-1-leitao@debian.org>
+ <20230112144411.2624698-2-leitao@debian.org> <87v8lbcwz9.fsf@suse.de>
+ <Y8UseW5sTqu72M2U@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y8UseW5sTqu72M2U@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 11:30:42AM +0800, Mark-PK Tsai wrote:
-> > Parallel probing (e.g. due to asynchronous probing) of devices that
-> > share interrupts can currently result in two mappings for the same
-> > hardware interrupt to be created.
-> > 
-> > This series fixes this mapping race and clean up the irqdomain locking
-> > so that in the end the global irq_domain_mutex is only used for managing
-> > the likewise global irq_domain_list, while domain operations (e.g.
-> > IRQ allocations) use per-domain (hierarchy) locking.
-
-> Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+On 1/16/23 3:52 AM, Breno Leitao wrote:
+> On Thu, Jan 12, 2023 at 05:35:22PM -0300, Gabriel Krisman Bertazi wrote:
+>> Breno Leitao <leitao@debian.org> writes:
+>>
+>>> This patch removes some "cold" fields from `struct io_issue_def`.
+>>>
+>>> The plan is to keep only highly used fields into `struct io_issue_def`, so,
+>>> it may be hot in the cache. The hot fields are basically all the bitfields
+>>> and the callback functions for .issue and .prep.
+>>>
+>>> The other less frequently used fields are now located in a secondary and
+>>> cold struct, called `io_cold_def`.
+>>>
+>>> This is the size for the structs:
+>>>
+>>> Before: io_issue_def = 56 bytes
+>>> After: io_issue_def = 24 bytes; io_cold_def = 40 bytes
+>>
+>> Does this change have an observable impact in run time? Did it show
+>> a significant decrease of dcache misses?
 > 
-> We have the same issue and this patch series fix that.
-> Thanks!
+> I haven't tested it. I expect it might be hard to came up with such test.
 > 
-> Link: https://lore.kernel.org/lkml/20221219130620.21092-1-mark-pk.tsai@mediatek.com/
+> A possible test might be running io_uring heavy tests, while adding
+> enough memory pressure. Doing this in two different instant (A/B test),
+> might be a unpredicable and the error deviation might hide the benefit.
 
-Thanks for confirming. I just sent a v4 with a couple of clarifying
-comments added to the final patch.
+I think what you'd want is two (or more) io_uring ops being really
+busy and measuring dcache pressure while running that test. I don't
+think this is very feasible to accurately measure, and I also don't
+think that is an issue. The split into hot/cold parts of the op
+definitions is obviously a good idea. For ideal setups, we'll never
+be using the cold part at all, and having a smaller op definition
+for the fast path is always going to be helpful.
 
-Johan
+-- 
+Jens Axboe
+
+
