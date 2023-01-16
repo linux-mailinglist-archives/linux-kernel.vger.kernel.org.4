@@ -2,259 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1D666BA61
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CCC66BA5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbjAPJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S231713AbjAPJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjAPJbX (ORCPT
+        with ESMTP id S232229AbjAPJao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:31:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C3716AC9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673861432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0zbe5Wv4qmr2PUPl8qLqbaGH6Ky1QQLhULVocB+QQ68=;
-        b=PjvTIos5buE2iDlpdQEUjZGPCypsYk7NPjFaltS3fpc/JkOtBjg2hdyvVMBKz+XCNRsbuT
-        3Z7vgFWaZECype5hqhmbdQ2zSRbKK6UtTbsZCQiUtwIK0C0mXsVIP+AxqNGImca2BnavJS
-        +7TwDm3qVV5jqsV7aO9OqsNTDjn434c=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-475-6BUryBMUNWGsR8RCUQlnJw-1; Mon, 16 Jan 2023 04:30:30 -0500
-X-MC-Unique: 6BUryBMUNWGsR8RCUQlnJw-1
-Received: by mail-lf1-f71.google.com with SMTP id d2-20020a0565123d0200b004d1b23f2047so2365676lfv.20
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:30:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0zbe5Wv4qmr2PUPl8qLqbaGH6Ky1QQLhULVocB+QQ68=;
-        b=Xavkfb24fBIPEgklD74UaCH2M1rxxmTX0VGJ2veQkU2AbdqssivzAP/5KlK0UK8YdL
-         eDrx+6clb2FOgCrN/ilERx6iPnKX74AX86jB8xT+6NbNB1Vs24Ko8B3PQvCJVTLiZdNE
-         W9HfYzaN3R8Y2j366ktRvMdiAvwaIhicGXE1tSSsLXcSCeochiD++62341m7MjjSJdkG
-         dm4kvQ8J3ZyAFh2ZTa1VekHEA1dwxsEU7c6d6GmfFH+5tNrIVUNONYDo5CLSVwbWCGsB
-         wWqcldjyN2KvsPVP4T5tCj44iqXmQHlC8cA9pJ52MBJVJIX1GeyJ4j97p7zlHyPr0jw6
-         4kKw==
-X-Gm-Message-State: AFqh2kolwsKpXoZt8xYM015TTQl2WA58fUaa6GxPTz1HF0qnuxu1xSti
-        WdZqPahPDCkYeNac9kiBWDH/o5um329XOriZpjv7flITxumi/lln84McQA7w5mDY2BXYhWGsewC
-        fWwTx4PHyHlB9YCZdkdfJGKB6
-X-Received: by 2002:a05:6512:108f:b0:4cc:7b49:a2f6 with SMTP id j15-20020a056512108f00b004cc7b49a2f6mr11073841lfg.19.1673861428758;
-        Mon, 16 Jan 2023 01:30:28 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvtCfu1+sVpejm0bMRKGIemtrDusfhD4vLSyb5d/7mafJ9f0dW33NYYaJ+rOz0lqEvdi8jIkA==
-X-Received: by 2002:a05:6512:108f:b0:4cc:7b49:a2f6 with SMTP id j15-20020a056512108f00b004cc7b49a2f6mr11073835lfg.19.1673861428416;
-        Mon, 16 Jan 2023 01:30:28 -0800 (PST)
-Received: from greebo.mooo.com (c-e6a5e255.022-110-73746f36.bbcust.telenor.se. [85.226.165.230])
-        by smtp.gmail.com with ESMTPSA id t11-20020a056512208b00b004cc83be556dsm3854624lfr.247.2023.01.16.01.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 01:30:27 -0800 (PST)
-Message-ID: <d3c63da908ef16c43a6a65a22a8647bf874695c7.camel@redhat.com>
-Subject: Re: [PATCH v2 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-From:   Alexander Larsson <alexl@redhat.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, gscrivan@redhat.com
-Date:   Mon, 16 Jan 2023 10:30:27 +0100
-In-Reply-To: <3065ecb6-8e6a-307f-69ea-fb72854aeb0f@linux.alibaba.com>
-References: <cover.1673623253.git.alexl@redhat.com>
-         <3065ecb6-8e6a-307f-69ea-fb72854aeb0f@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 16 Jan 2023 04:30:44 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F89616AD5;
+        Mon, 16 Jan 2023 01:30:42 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D163D802;
+        Mon, 16 Jan 2023 10:30:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673861440;
+        bh=9YWn45J/ZNgJKTD6UEkGgR2mEmqJ7NYekCQW2ePfKgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N+zSHiOP3BPeIWVxgMUMZkbWSMpAwC7eyS7KRf00o33vAIM8HgnNlYZlsGe4NvEx+
+         ggan64ipd8TDap0zM7nKhc17S/7JZhs8uDIM+s21vxICnSvXcvLCGEqibqZ7MKdHAQ
+         GpwQEr5QqXpkio0Z6yTPKSTEHMw4GfSB6ctnf2Pk=
+Date:   Mon, 16 Jan 2023 11:30:40 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Aradhya Bhatia <a-bhatia1@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Rahul T R <r-ravikumar@ti.com>
+Subject: Re: [RFC PATCH 0/4] dt-bindings: Introduce dual-link panels &
+ panel-vendors
+Message-ID: <Y8UZQHvVT2VQcQ33@pendragon.ideasonboard.com>
+References: <20230103064615.5311-1-a-bhatia1@ti.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230103064615.5311-1-a-bhatia1@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-16 at 12:44 +0800, Gao Xiang wrote:
-> Hi Alexander and folks,
->=20
-> I'd like to say sorry about comments in LWN.net article.=C2=A0 If it help=
-s
-> to the community,=C2=A0 my own concern about this new overlay model was
-> (which is different from overlayfs since overlayfs doesn't have
-> =C2=A0 different permission of original files) somewhat a security issue
-> (as
-> I told Giuseppe Scrivano before when he initially found me on slack):
->=20
-> As composefs on-disk shown:
->=20
-> struct cfs_inode_s {
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_mode; /* File type=
- and mode.=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_nlink; /* Number o=
-f hard links, only for regular
-> files.=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_uid; /* User ID of=
- owner.=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 st_gid; /* Group ID o=
-f owner.=C2=A0 */
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
-> };
->=20
-> It seems Composefs can override uid / gid and mode bits of the
-> original file
->=20
-> =C2=A0=C2=A0=C2=A0 considering a rootfs image:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 /bin
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=
-=E2=94=80 su
->=20
-> /bin/su has SUID bit set in the Composefs inode metadata, but I
-> didn't
-> find some clues if ostree "objects/abc" could be actually replaced
-> with data of /bin/sh if composefs fsverity feature is disabled (it
-> doesn't seem composefs enforcely enables fsverity according to
-> documentation).
->=20
-> I think that could cause _privilege escalation attack_ of these SUID
-> files is replaced with some root shell.=C2=A0 Administrators cannot keep
-> all the time of these SUID files because such files can also be
-> replaced at runtime.
->=20
-> Composefs may assume that ostree is always for such content-addressed
-> directory.=C2=A0 But if considering it could laterly be an upstream fs, I
-> think we cannot always tell people "no, don't use this way, it
-> doesn't
-> work" if people use Composefs under an untrusted repo (maybe even
-> without ostree).
->=20
-> That was my own concern at that time when Giuseppe Scrivano told me
-> to enhance EROFS as this way, and I requested him to discuss this in
-> the fsdevel mailing list in order to resolve this, but it doesn't
-> happen.
->=20
-> Otherwise, EROFS could face such issue as well, that is why I think
-> it needs to be discussed first.
+Hi Aradhya,
 
-I mean, you're not wrong about this being possible. But I don't see
-that this is necessarily a new problem. For example, consider the case
-of loopback mounting an ext4 filesystem containing a setuid /bin/su
-file. If you have the right permissions, nothing prohibits you from
-modifying the loopback mounted file and replacing the content of the su
-file with a copy of bash.
+On Tue, Jan 03, 2023 at 12:16:11PM +0530, Aradhya Bhatia wrote:
+> Hi all,
+> 
+> Microtips Technology Solutions USA, and Lincoln Technology Solutions are
+> 2 display panel vendors, and the first 2 patches add their vendor
+> prefixes.
+> 
+> The fourth patch, simply introduces the new compatible for the generic
+> dual-link panels in the panel-lvds driver. This new compatible is based
+> from a new DT binding added in the third patch explained below.
+> 
+> The third patch introduces a dt-binding for generic dual-link LVDS
+> panels. These panels do not have any documented constraints, except for
+> their timing characteristics. Further, these panels have 2 pixel-sinks.
+> In a dual-link connection between an LVDS encoder and the panel, one
+> sink accepts the odd set of LVDS pixels and the other, the even set.
+> 
+> A lot of this has been based from the Advantech,idk-2121wr dual-link
+> panel[1] and Maxime's patches for generic LVDS panels[2] (which are
+> single-link by default.) and the discussions that happened before they
+> were finally merged.
+> 
+> Below are some notes and points that I want to bring forward.
+> 
+>   - The advantech,idk-2121wr panel binding uses 2 boolean properties
+>     dual-link-odd/even-pixels, to signify which port sink is being used
+>     for which set of LVDS pixels. I too have added similar support and
+>     introduced constraints around those properties, so as to not break
+>     the ABI... but I believe there is a better way to achieve this.
+> 
+>     A "pixel-type" enum property could be introduced in their stead,
+>     which can accept one of the 2 options <dual-lvds-odd-pixels> or
+>     <dual-lvds-even-pixels>.
+> 
+>     This method, in my opinion, is more accurate and cleaner to
+>     implement in the bindings as well.
+> 
+>     If this does sound a better I can push out a new revision where the
+>     driver supports both these methods (to not break the ABI) and the
+>     advantech,2121wr panel can remain as an exception.
 
-In both these cases, the security of the system is fully defined by the
-filesystem permissions of the backing file data. I think viewing
-composefs as a "new type" of overlayfs gets the wrong idea across. Its
-more similar to a "new type" of loopback mount. In particular, the
-backing file metadata is completely unrelated to the metadata exposed
-by the filesystem, which means that you can chose to protect the
-backing files (and directories) in ways which protect against changes
-from non-privileged users.
+It's usually best not to change an existing system if there are no good
+reasons, so I'd ask why you think a pixel-type property would be better
+(including when taking into account the fact that we would have to
+maintain the advantech,2121wtr driver separately) if you want to go that
+way. Otherwise, if we were developing this from scratch, I would have no
+real preference.
 
-Note: The above assumes that mounting either a loopback mount or a
-composefs image is a privileged operation. Allowing unprivileged mounts
-is a very different thing.
+>   - As an alternative to the previous point, if that method is not
+>     preferred for some reason, the advantech,2121wtr panel binding
+>     could then be merged in the panel-dual-lvds binding as part of
+>     future work.
+> 
+> 
+>   - Another tweak, I am looking forward to do as part of future work and
+>     would like all your comments is to introduce driver-based
+>     implementation of the panel timing parameters, like it is with
+>     "panel-simple". The driver can then support both the panel-timing
+>     sources (DT node or hard-coded driver structure) and the binding
+>     can remove this from the "required" section.
 
-> > To be fully verified we need another step: we use fs-verity on the
-> > image itself. Then we pass the expected digest on the mount command
-> > line (which will be verified at mount time):
-> >=20
-> > # fsverity enable rootfs.img
-> > # fsverity digest rootfs.img
-> > sha256:da42003782992856240a3e25264b19601016114775debd80c01620260af8
-> > 6a76 rootfs.img
-> > # mount -t composefs rootfs.img -o
-> > basedir=3Dobjects,digest=3Dda42003782992856240a3e25264b19601016114775de
-> > bd80c01620260af86a76 /mnt
-> >=20
->=20
->=20
-> It seems that Composefs uses fsverity_get_digest() to do fsverity
-> check.=C2=A0 If Composefs uses symlink-like payload to redirect a file to
-> another underlayfs file, such underlayfs file can exist in any other
-> fses.
->=20
-> I can see Composefs could work with ext4, btrfs, f2fs, and later XFS
-> but I'm not sure how it could work with overlayfs, FUSE, or other
-> network fses.=C2=A0 That could limit the use cases as well.
+There's been a very long discussion in the past (multiple discussions
+actually) regarding whether timings should be set in DT or in drivers.
+There were multiple arguments supporting both sides, without (it seems)
+a clear winner. If you want driver-side timings for dual-link panels,
+I'd like to understand why you think that's better. If the reasons are
+the same as the ones expressed when we discussed simple panels, you
+should also look at whether or not any of the fears expressed on either
+side have materialized.
 
-Yes, if you chose to store backing files on a non-fs-verity enabled
-filesystem you cannot use the fs-verity feature. But this is just a
-decision users of composefs have to take if they wish to use this
-particular feature. I think re-using fs-verity like this is a better
-approach than re-implementing verity.
+> Thank you!
+> 
+> [1]: https://patchwork.freedesktop.org/patch/357122/
+> [2]: https://patchwork.freedesktop.org/patch/471228/
+> 
+> Aradhya Bhatia (4):
+>   dt-bindings: vendor-prefixes: Add microtips
+>   dt-bindings: vendor-prefixes: Add lincolntech
+>   dt-bindings: panel: Introduce dual-link LVDS panel
+>   drm: panel-lvds: Introduce dual-link panels
+> 
+>  .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+>  MAINTAINERS                                   |   1 +
+>  drivers/gpu/drm/panel/panel-lvds.c            |   1 +
+>  4 files changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
 
-> Except for the above, I think EROFS could implement this in about
-> 300~500 new lines of code as Giuseppe found me, or squashfs or
-> overlayfs.
->=20
-> I'm very happy to implement such model if it can be proved as safe
-> (I'd also like to say here by no means I dislike ostree) and I'm
-> also glad if folks feel like to introduce a new file system for
-> this as long as this overlay model is proved as safe.
+-- 
+Regards,
 
-My personal target usecase is that of the ostree trusted root
-filesystem, and it has a lot of specific requirements that lead to
-choices in the design of composefs. I took a look at EROFS a while ago,
-and I think that even with some verify-like feature it would not fit
-this usecase.=20
-
-EROFS does indeed do some of the file-sharing aspects of composefs with
-its use of fs-cache (although the current n_chunk limit would need to
-be raised). However, I think there are two problems with this.=C2=A0
-
-First of all is the complexity of having to involve a userspace for the
-cache. For trusted boot to work we have to have all the cachefs
-userspace machinery on the (signed) initrd, and then have to properly
-transition this across the pivot-root into the full os boot. I'm sure
-it is technically *possible*, but it is very complex and a pain to set
-up and maintain.
-
-Secondly, the use of fs-cache doesn't stack, as there can only be one
-cachefs agent. For example, mixing an ostree EROFS boot with a
-container backend using EROFS isn't possible (at least without deep
-integration between the two userspaces).
-
-Also, f we ignore the file sharing aspects there is the question of how
-to actually integrate a new digest-based image format with the pre-
-existing ostree formats and distribution mechanisms. If we just replace
-everything with distributing a signed image file then we can easily use
-existing technology (say dm-verity + squashfs + loopback). However,
-this would be essentially A/B booting and we would lose all the
-advantages of ostree.=C2=A0
-
-Instead what we have done with composefs is to make filesystem image
-generation from the ostree repository 100% reproducible. Then we can
-keep the entire pre-existing ostree distribution mechanism and on-disk
-repo format, adding just a single piece of metadata to the ostree
-commit, containing the composefs toplevel digest. Then the client can
-easily and efficiently re-generate the composefs image locally, and
-boot into it specifying the trusted not-locally-generated digest. A
-filesystem that doesn't have this reproduceability feature isn't going
-to be possible to integrate with ostree without enormous changes to
-ostree, and a filesystem more complex that composefs will have a hard
-time giving such guarantees.
-
-
---=20
-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D=
--=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
-=3D-=3D-=3D
- Alexander Larsson                                            Red Hat,
-Inc=20
-       alexl@redhat.com            alexander.larsson@gmail.com=20
-He's an unconventional gay card sharp moving from town to town, helping
-folk in trouble. She's a virginal goth bounty hunter descended from a=20
-line of powerful witches. They fight crime!=20
-
+Laurent Pinchart
