@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CBF66CE2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 18:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFA066CE30
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 19:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233718AbjAPR7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 12:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S231821AbjAPSBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 13:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbjAPR6t (ORCPT
+        with ESMTP id S233858AbjAPSAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 12:58:49 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2083.outbound.protection.outlook.com [40.107.21.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36E355B8;
-        Mon, 16 Jan 2023 09:42:42 -0800 (PST)
+        Mon, 16 Jan 2023 13:00:38 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBA930EB8;
+        Mon, 16 Jan 2023 09:43:33 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=enKk6v9O5s1IWh3HTYMmYtF2RfdBTp0fKs5HWKeXcb2W5bYLTwLsDkTxsKdyGdeonDsZwEQpLPHA0yEeEBd0l4liUe9k2fIlrGqJeDHFZ2Vo/rsC4faHCyqXv7W8ba1K3PqTDNSb6mWEIORB74nDXbpmMOtsZ35WuPwL2DmKQgCZB9duTDZEbkppB9zEGF/6Shp7nuOY/iZfAXvffY92H4sCdmgmXZdVCAul8tU4k7dtxCNmU56YfZIK8HJ5OZzCSLfZqlfkpCnp2xDnTAtnNh+79PBXOc7Ofr/aKdILaPWv+DdvgU7b0cJWI9YWCbOseRlY6JRAWFwuCN1T6zGoPw==
+ b=SPyEMnMBdPvQPHib3Slrkh3OoP61y6bZLB90K6q9CG5YgsdTopx1oUoRXQawQa3B+/Iv4KgdrQKh15lRiUXw5c/Wi8Mj8zJUFi64unSfeIl95K8cK58FORc1gGBO1mTi9IdBzAh0LD5vXsfr7PuzSml3KzJgPe2Xl3xJGB+EAoVHO2T2L5O+HC0q0FZdX0GJGm4/wbLzBV8xHbZ06rFD1kS+rgcsWHsPLjYE/2819ey0Zrpuecm+Qpvgn8Ap6bcah4JFfwxdq663Q8KsfsaBWAdJpIYtL1i7HHvDSr1qCGPfg1/OVpIRAmiAqQqRlEawKKB1nrL/nUswMqgrl9oEIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a9NfvHtt94HvuchxsBBYwc9bxTgfNsb+ydFWhknQTTY=;
- b=X8BVUu1A1wQjYqj4RiIfAfDgHxVC786CALyZbH3tEGsSiGJzOSyzC1XswMKKeiSsh3TvFh2rR52sQC4gISn905ojWvQor+1TqbvMVi2SYsN1cQLgoW6+wURFjSvt1XFXteT3Gw7pt95uQJpQaZl3wwZDKwH8i6YDFUzABzE+rKGsGMsovIvobYzHP5nuGvwVPkaq4Q1h2Yiv6A48K4XUJ+A5IdZV1KHps+x/iwJgMmWrwZ+1+/Yt1cp1LDRhNQqdZQLTSxxC6Bsjrdk8oUkM4hpVsZ5UD44mtBCZBPlrlFmerwEKbmc+st+YcntjJF5fh8lRLvXPptPc/xJ+1j/aww==
+ bh=YC5bs14iov5hgZ6/CQmOu7FlKVST0SQcSfzF9rTVjJY=;
+ b=iK0lB+2NCbyh1QhZOdtpbNtMIpHdMCHj9jmfTLQIC7hzGqqvsNUnrA6zPbVKn1veZ53r5Iq9hEAM7nqalWk9WD4Kpb2EhUvMKTaVFWEzlTepXhHPYm4AHXzn93oalb24NXaOoqEXnjvSN9IS8BVN2qJg8MssTNiHsuc2dhEOun121WYzTEz7DMNO83I6uS9LmdY/m5vG4AV9ccEWeb+nuSfch0Sk+dGGRxu6ovhhXODufRfFHTzHLVIAa4FgtBGhz5c5xymYP7udeweS3GdR7a7hwNBxoNNRZT6HmnxWN8FP0Il2rnGGvoka/928GWbqFFAOA9Zu98bfiM5iteYxOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a9NfvHtt94HvuchxsBBYwc9bxTgfNsb+ydFWhknQTTY=;
- b=b05lAYVCc5pJQ6Qqu2mEBmo8vZXcDtPMFBVOwgfM+cZ/XRtlJxaI5ZwTPs0WuTqIhgx9wuoJCGnCBOZ2SbK9pczBlYgFnHsV2wRezvO1wgb1WEv7RjCL0YJMMZ0XftGWqj/4LIJILxIzop/u+0N5LUH2Z2OuTaHJLkONCw/O7qE=
+ bh=YC5bs14iov5hgZ6/CQmOu7FlKVST0SQcSfzF9rTVjJY=;
+ b=dR+NWKv0MrHtC7JQurUDsdWX0fBTE/6kNmZzqsZFMzrRNpdXosqsbmjnFnVS7pDdRsg2UccxBWb8Kdo1N4MD8Ul+nFmqzK2OYi0dKWzZet1x3Cw4f/h24pE+wVdqgcsZGYnUIpp4KH9fZW7/eTEfRfGwofkHoAR5BgGmzIRzmUU=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PR3PR04MB7353.eurprd04.prod.outlook.com (2603:10a6:102:82::20) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
+ by DM6PR12MB4531.namprd12.prod.outlook.com (2603:10b6:5:2a4::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Mon, 16 Jan
- 2023 17:42:39 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
- 17:42:39 +0000
-Date:   Mon, 16 Jan 2023 19:42:34 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH v2 net-next 04/12] net: ethtool: netlink: retrieve stats
- from multiple sources (eMAC, pMAC)
-Message-ID: <20230116174234.yzq6cnczs6fxww6q@skbuf>
-References: <20230111161706.1465242-1-vladimir.oltean@nxp.com>
- <20230111161706.1465242-5-vladimir.oltean@nxp.com>
- <20230113204336.401a2062@kernel.org>
- <20230114232214.tj6bsfhmhfg3zjxw@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230114232214.tj6bsfhmhfg3zjxw@skbuf>
-X-ClientProxiedBy: AM4PR0202CA0023.eurprd02.prod.outlook.com
- (2603:10a6:200:89::33) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.22; Mon, 16 Jan
+ 2023 17:43:30 +0000
+Received: from BY5PR12MB3683.namprd12.prod.outlook.com
+ ([fe80::3ddf:d47:b37a:5a7a]) by BY5PR12MB3683.namprd12.prod.outlook.com
+ ([fe80::3ddf:d47:b37a:5a7a%3]) with mapi id 15.20.5986.023; Mon, 16 Jan 2023
+ 17:43:30 +0000
+Message-ID: <980d9c9c-3dbf-3ebd-28a1-5b3b4b58e93e@amd.com>
+Date:   Mon, 16 Jan 2023 09:43:28 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
+ Gecko/20100101 Thunderbird/109.0
+Subject: Re: [PATCH] dt-bindings: sram: Tightly Coupled Memory (TCM) bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tanmay Shah <tanmay.shah@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+References: <20230113073045.4008853-1-tanmay.shah@amd.com>
+ <6f43e320-b533-e5fb-3886-1b6ccc7f9548@linaro.org>
+ <b79f7e0a-8048-d0e1-ad0b-d15d72288fde@amd.com>
+ <9f4994de-e468-43ea-f8db-d4a37ebc30e0@linaro.org>
+Content-Language: en-US
+From:   Tanmay Shah <tanmays@amd.com>
+In-Reply-To: <9f4994de-e468-43ea-f8db-d4a37ebc30e0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0070.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::15) To BY5PR12MB3683.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a5::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PR3PR04MB7353:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3c80069-75b3-4723-30fb-08daf7e90fb4
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|DM6PR12MB4531:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab0c9890-ece7-4cdd-461b-08daf7e92e3d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Mh1DUq2k/ay+cWN4uL1uRrYOASL6FXwGiPMkS4USZ2+7CSJI/ML/usoLZ/UiNm03Ou6DQWfUki9stqBY7M+ZZ94Ak99o9/AYCMGN2EEyxaLDq0K8G+wmK46TTN+VqeYXLG8hX42eeluo1++55vUAT1mWezSB3kb+uEFdtUN/TCfc8f0lqSTM/7bIxun6FS4xgGoXoJXU+8lrNHaNqBqeBYT22Sg1W559sGiGVtEqzGbhf/j4nZhpJRZg/YYQNYLEyB8jdLJZCfbKIuDEzD/cEOSay1nMs1L45ULijZY0DjE/T3EMrP4fLzfH12dZXRbGHksA+tHZV1yt9z1bv3XTZERa7AsdNA9ZuGON3RWdrxu7oRcl2xqrpJOKJrIqKtyy4+H6gUnQue8UYquZuy4EhsbRRTlRViWNx1pj6OO/dqnh1FeNxNpb6RpKlZbOxEC5NHKarMgaPgmJSKSoCbcKFP0f1iWvmfvqu+OC678BY3DJWs/O7r4CVDLODul/H/ilrQ6v/PsIJWKu1oSB3SBKvQuIqEii2fSrbnEQrjSe+2FCCTAhO026npeNpzU2UsdDZ7Oz1wQ7mtELgA9UT4PJoEGVuJaB6HyvQldFk4lqMLtSm1iJpOUzvLzRdvnEvG86M6ZhagZeQowpDdEKjvpgdg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199015)(38100700002)(33716001)(86362001)(6486002)(66556008)(9686003)(66946007)(4326008)(6916009)(66476007)(8676002)(186003)(6512007)(26005)(478600001)(54906003)(1076003)(316002)(8936002)(41300700001)(6506007)(83380400001)(44832011)(2906002)(7416002)(5660300002)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NzCiqpxWMgmjVmk2xdbMHgnlARPllQuHbuh8kwRxnLewyQyQZUHjSWzV3Lua3+G6h4q9zT8GUKAv83uAN/tUgIrPOdtKprJ/ez0vq/8GY3cNtOQwpuv5TSOAJjVdYr3QAUBCvDegsq6JolaUuaXVYoFOeqHTIOOsotc6SVncjQ+Ln3aBgossnakdu/AupeALb1+rBPD9XcFz2AvHfp9w7QQCeVb6g/mFbDoi/aMn32y/xIN07z3MYJ3QoxngedTb14tt4WtsASUFIX+iMkX/mGbkX0/vzmZ3+dFQYFxEyvPxVIroZuNjA0yC9l4Jyd1pCq4XvjGx4Ri3BaptMh/vuGJwtdYF2Penml31C5T0nNLfJU9NGXb3HPed/3G5DXnC7EpwKwR5snpKhuHE/waCoJou63UjxL1zxAI+kMpsJ5vtmPfkkbgyVotzYVvI10F3CxXaD34PQtK9iqsGG+7dOmqSoRj6FJ2sHRM6jOe5IoE9812o7jR8GZE7CJ5/+t66eW2pa7vzYlL6Q7msm6oli1kYC3zMrHDoGH8Y8Kuomx5tqKqKWTCyCxDiurk1V5/3V7rOyh9RW/na7BqUPDDjVwg2+uqBMAWLXsi0ngNNHB4iT2zOVWMztjPj2JxIOB429ZEjIVGIhjLJ6MqTBNNUgkKYKWY3oFTacWB5kdnNn8DDD2JcWKJF6hEDdKB63Iv7yBclL4JTBHj6ol+oMXQ5c/yJKp0DqEUlnoRUZD9zd0A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(39860400002)(346002)(376002)(451199015)(478600001)(36756003)(4326008)(8676002)(66476007)(66556008)(66946007)(41300700001)(110136005)(316002)(6486002)(38100700002)(6512007)(53546011)(2616005)(6506007)(31696002)(5660300002)(186003)(31686004)(83380400001)(2906002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YvqULhosC9BZZq7unvjYMfUy3iU1Vai7657q7M1Wa68E/F8rJfrHe38QxF7y?=
- =?us-ascii?Q?P54U1nCpXLql8Ix+ofAumory9V3HAXIXV+95co4Ht9OhbZV7SE/ybQB1Y6s3?=
- =?us-ascii?Q?euveEtg+v8l35v03r7OYBEchHxNffBa/4R+R4+Y2OVdGZxwBsiY5yane8k3B?=
- =?us-ascii?Q?v/a1ftq//WGaxaqzAkuNIUGPLcEEL7NGXYaZspn+Hcc1iKm7QPRwcpw3j5Zd?=
- =?us-ascii?Q?qJ/QAAYH3gYJw6M6iHNcIz1weyo7SLRL4nswIc7IZMHwb4oWeIXN8eB5qfbh?=
- =?us-ascii?Q?86LU08M07x0tGTCndb9OQmOF87ah+m0Z5NEwhH+hkOxVwI07xPhBCc6ke6iz?=
- =?us-ascii?Q?qgRuuu+c3MDmv8qli731FDtBF1twLiTrfvo5awS8vX7lz7r4VO6eiiHo4aM8?=
- =?us-ascii?Q?zaklZFrS2SSY1DsQFfnHF993aQ+v2uFXWBGQNQZKKNU4PhX+ihR4kbZnjCTU?=
- =?us-ascii?Q?XbYNO/MIvXp7iffxCLwT6S3DvPHJqSkUf4vDtwk/q23RRzsJ6jZzkVG0zHYO?=
- =?us-ascii?Q?gT0HdYAHtnmwArW5Soh/1V7vO36sKasJJghld3pCo3WPvy1xHnDwwOtuvMo8?=
- =?us-ascii?Q?YpRMUSlFJgA13lcbwH1uzYe+mgqvhYIyLwUg0mbZ5e3W1p7ydzOm8pdJCFkc?=
- =?us-ascii?Q?eyHbMqjy+flpSXJO09rx9MnVbjNxT/yJPAdfMsolBBJznGvrMbIZQZykrdTu?=
- =?us-ascii?Q?QCpIii+AGsZj29HANiIFZV4eB/j11HBx8PKAfBMlrC5694a4bRSoYjEeTVXj?=
- =?us-ascii?Q?oGgP1SCjDij4avg6Bg8z4tPr36xLrtJal5ZlXpl6LNhlpfmveV0duZvbexmw?=
- =?us-ascii?Q?w3zCEhE/gYlFO0Tw86fYpDkjenIu1/yEz8VWheqh7hvxbOe2MAaJJifm3CNp?=
- =?us-ascii?Q?jvGUZ1gpZq6M1dBpo49I+QgjPjiUntjSJ81Pz4LCwEZpg7dkvxdOcVOpG6qM?=
- =?us-ascii?Q?7x9OBspRusO4mOJpKyd6ouWelQSRi0r2FP+ayXIQCMdXnZwLoRj9ThQhlTyk?=
- =?us-ascii?Q?OYVrU6XjJTp2NLH8RwWV9RrTL/FPvF+W7rkC8jPIPvjgdMFp7a+ppnGBdx0h?=
- =?us-ascii?Q?jM51uowKhqTlJnZrs6NbjNVVTuUG4i7MdjXWCFjd1AUafleBb3UCyTYGvLOT?=
- =?us-ascii?Q?74HwC63EjRwLPO0rTgj+9/wg4ATokqb6dApEq+z7EZTc8MN5LRyWXlOLAhWr?=
- =?us-ascii?Q?OX9nLBMq+n8N4iuKIVETaKurny4r0W/yvgHspYJI5840lUwJGyBbE3K0LN5x?=
- =?us-ascii?Q?s42mOGXwLu4apEqM2uj9tjr8jUy3qB4Anonx/iXApVb5uZr9FGsmquTZZOg/?=
- =?us-ascii?Q?D69754t+2+XpqDVzFoj05KX52B/Ha70k8haU728yY4upWkBXGtfaFneyoydF?=
- =?us-ascii?Q?d41cLLR0x5ArTxhJqIolmEAArRR5f1N6ZkxoxKwcxPsjVpE5Q83ESevDw+0G?=
- =?us-ascii?Q?3PCcfcT5rKclT9BxhaIOKE6/x2BT7JxqgWzGz0s7HI/+H/B1ywvI2g7gHBzs?=
- =?us-ascii?Q?/UH38Q7+cuBOMNYdk+cV9AlV9r8lizf45M2ofjvryJjhwNLDpeuw2ZaVVDUl?=
- =?us-ascii?Q?0aD9Ud5WI9K2CNyshz/WwD1xhpfGpbJoEnzr6TiMDU7WhYr9hogqocMg0w5R?=
- =?us-ascii?Q?QA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3c80069-75b3-4723-30fb-08daf7e90fb4
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkNweUhvMytzODMvNmcrV2tkK2RpTCsxQkNEVnFmT25jL2Rib0xHcVRQUjU1?=
+ =?utf-8?B?QWVDcEE1dlJLQkY1S2pCUUljNXQydk84SG5CaTRMclpTTFhaOFBXN3ZtRU44?=
+ =?utf-8?B?UTNNd3I1L0RsbkRHRDRFZ1RybzIzVmdtZVMzRTNKK0lIcTJ5NWxCQ0d0V0FC?=
+ =?utf-8?B?SHZkL0Y2T1FFRTEvL3Ayc05tc2E1OFA4RVRSVVdOS0RlaU1wNU5qemg5V2Uz?=
+ =?utf-8?B?QTZiNk1TMklEUlR0MjRvVWpmeDhERTF1cFBIUjdKbVloM1ZQcXBKakdFYjBu?=
+ =?utf-8?B?d3V5bmFabTc5RDdZSldmZEtVSEtoVms2ak9EM3NmZnpvcGgwdkUvbjA5dFF6?=
+ =?utf-8?B?T0kvcmJXWjhlc0pVd0t5dG5nS01uNExFUzZtREQrRnEyL3ozTlpMRmZQQTFK?=
+ =?utf-8?B?cWVNVi81cTJmRkJ4ZGE4Tzk2ZU1pc1M5ZUpEQXZSUXJsemN1VkZoajdINVFr?=
+ =?utf-8?B?aUk3TS9UWWYzQ2xKYUszY0FhbWNYM01tSjJqUkY3NE9YVjVLaWtVTC93OWNO?=
+ =?utf-8?B?RXIvbDRObmxaTXBtT0FOU0pnNUJES0E2YkwvUStxc1djcmpSb2FISVh2TDFt?=
+ =?utf-8?B?R1ZvaTVzQVNlcS9tZ3hNazVReTRMUTltM0hPVDFPOHlDdUJha1hJSWJuSW94?=
+ =?utf-8?B?dGx6Y3dCL0M2dVpzdS9NbU1zaHFBMHV2elZOMGo0R09ZK0V4dXFGRVFNSTdl?=
+ =?utf-8?B?ZGQrTHdnQUcvMHFyK0N6VzV5M2oyVXNsa0VOK3lxeUs3SWd2UnB1b0Frd3JB?=
+ =?utf-8?B?Mis2QTIrWU1ac2RiUE1VS2tJdW04cW92SS9SWGxGazVtK1hPb0JaWlFVVWhj?=
+ =?utf-8?B?WEdMTGJyUXhqaDVRbE8rVEJ6QXpOQ1Boc0ZQVFVvbmRhTWgwMVRlV1lLNWNJ?=
+ =?utf-8?B?ek5yOXl1VFpDRkxjYnVtWGhVNFhzVVpZZWJtdk0vOHExWjZITUZjWWhkdTlq?=
+ =?utf-8?B?blE4Z3VSQmQ1NjhyQ3ltVzgxR0I3QWlySUsvNW1GRDUzNkhvRk1wbi9Va3RZ?=
+ =?utf-8?B?YnZHL1U1NVp2UmdVN1IwYnVlQTBXaytITlcrVVR4bmYzdEQ5clRzb3lLeTBh?=
+ =?utf-8?B?cmhZS2VtK1hXSU5GSDkvNTFDd3VDWGZCTVlLMUtTak5Za1FuUzhoRDROSTBP?=
+ =?utf-8?B?dE10WnFlSmxMOStFUzRFbnpwKzlSSGkzNkxMakZ6a1BocUJJcllhVGpDdllL?=
+ =?utf-8?B?K2doNURKWXM0bDUwZGhRUXYxSnhqcVNPSVNaREVQc2pML2I2Mlg0UzdhajRK?=
+ =?utf-8?B?dlNucjVMTWo4c2YzQnFhMVJZREkxUEpNeWduWjdnN25tUjhWcFU3a2ljWlhx?=
+ =?utf-8?B?THQyUDJFdlEvS2xVVmY3VElPVnhwWkN0SjRGQ25rZVl6MmNyYmN2aE15dkZO?=
+ =?utf-8?B?OURJcmdyaHoxVnRFbzNya0xWMFptQVFDc2Z4QlduZWxMbWo3WkVuTzJGU2hh?=
+ =?utf-8?B?N1Rac25KSzBCckVKeXJzeDF1eTIvZFpVRXhSbXh1bC9Xait3UFdrbGxwS2Vy?=
+ =?utf-8?B?dnhDUG8rbWdaNWl3MGJPN295YTFVZ1lIS1A4WnUrV29vS2Q5cFZBeDhjcVZ4?=
+ =?utf-8?B?RlRQYWtpUG53dGhYR0hETFByQ1F0dmN0YmFQUWswY0hIbVRrOW15amI0V012?=
+ =?utf-8?B?eFdHRmsrVkx1UlhUdVZKVTdINUxwd0ZtZEFNZ1pCd0FubUtkQjQ1N2h4aHY1?=
+ =?utf-8?B?eGFFeU5nVHF5MWRsSE9RdnJpTHlJaWZ5dFMrWko4Znc4T3JST2JQa0tRZTF0?=
+ =?utf-8?B?eDBOR0J2VTArRnpkWEJkYTg1dTN2VlJvbG9sa0JTUHl2dkcweEc5MEJ6SnNF?=
+ =?utf-8?B?Ty9NNWoxRUY1bXlua0ptQytHWHdVSWpTUjVFUTBMT0lldkhhdjl1MjVoUVBa?=
+ =?utf-8?B?SXpzTGRnK2NHVXBCNnhhU3FIV1gzWHZ3Q3F4RVlHL1pJZStCaTlFb1FMWVRB?=
+ =?utf-8?B?L3RVU0pjSUpJRXNlLzh6ZjUyR09ZYTNiekZrQkVkdUh4dkhiMU5SYWpsTklB?=
+ =?utf-8?B?U09MbG56Z3FaZUJXdUdacGwwYVlmZlV3UWNGNmpheDQ2K1ZBVTRvQVdKNEly?=
+ =?utf-8?B?OHVEcjFoR1BSMjAyaURhLzMraTdzYW9FQzVrTzF3UnE5NHJ5cWYwNmpWQS95?=
+ =?utf-8?B?Y0tNRXl6TmhtcG1UQXVndEt4MGplU2F6UCtWcjFSWjZobTlKTkJraExubDEz?=
+ =?utf-8?Q?RFvooKMV4zrjkW2PiKKEJBtXk3AlmI0enx7R3Oc9N+05?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab0c9890-ece7-4cdd-461b-08daf7e92e3d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 17:42:39.1129
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 17:43:30.3117
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LwwpHqRMNuECm3e8DtEOnZeTipwdw81icbYQnW9q5PCwpbdAwTtoqh/o/Io+0oC+6OWZFBUBFEu41V1iX4+ZLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7353
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-MS-Exchange-CrossTenant-UserPrincipalName: CgzMfMFRoYI4V22Vo3NoXo3HuR9tAuXLYn6VOINKYo2Een8WT76mzNomBSmE2dj3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4531
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -133,88 +130,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 01:22:14AM +0200, Vladimir Oltean wrote:
-> On Fri, Jan 13, 2023 at 08:43:36PM -0800, Jakub Kicinski wrote:
-> > On Wed, 11 Jan 2023 18:16:58 +0200 Vladimir Oltean wrote:
-> > > +/**
-> > > + * enum ethtool_stats_src - source of ethtool statistics
-> > > + * @ETHTOOL_STATS_SRC_AGGREGATE:
-> > > + *	if device supports a MAC merge layer, this retrieves the aggregate
-> > > + *	statistics of the eMAC and pMAC. Otherwise, it retrieves just the
-> > > + *	statistics of the single (express) MAC.
-> > > + * @ETHTOOL_STATS_SRC_EMAC:
-> > > + *	if device supports a MM layer, this retrieves the eMAC statistics.
-> > > + *	Otherwise, it retrieves the statistics of the single (express) MAC.
-> > > + * @ETHTOOL_STATS_SRC_PMAC:
-> > > + *	if device supports a MM layer, this retrieves the pMAC statistics.
-> > > + */
-> > > +enum ethtool_stats_src {
-> > > +	ETHTOOL_STATS_SRC_AGGREGATE,
-> > > +	ETHTOOL_STATS_SRC_EMAC,
-> > > +	ETHTOOL_STATS_SRC_PMAC,
-> > > +};
-> > 
-> > Should we somehow call it "MAC stats"?
-> > 
-> > Right now its named like a generic attribute, but it's not part of 
-> > the header nest (ETHTOOL_A_HEADER_*).
-> > 
-> > I'm not sure myself which way is better, but feels like either it
-> > should be generic, in the header nest, and parsed by the common code;
-> > or named more specifically and stay in the per-cmd attrs.
-> 
-> Considering that I currently have separate netlink attributes for
-> ETHTOOL_MSG_STATS_GET (ETHTOOL_A_STATS_SRC) and for
-> ETHTOOL_MSG_PAUSE_GET (ETHTOOL_A_PAUSE_STATS_SRC), I'm going to add just
-> a single attribute right under ETHTOOL_A_HEADER_FLAGS for v3 and go from
-> there. Is it ok if I keep naming it ETHTOOL_A_STATS_SRC, or would you
-> prefer something else?
 
-I'm already lost while trying to implement this change request.
+On 1/15/23 6:38 AM, Krzysztof Kozlowski wrote:
+> On 13/01/2023 19:08, Tanmay Shah wrote:
+>> On 1/12/23 11:52 PM, Krzysztof Kozlowski wrote:
+>>> On 13/01/2023 08:30, Tanmay Shah wrote:
+>>>> This patch introduces bindings for TCM memory address space on AMD-xilinx
+>>>> platforms. As of now TCM addresses are hardcoded in xilinx remoteproc
+>>>> driver. This bindings will help in defining TCM in device-tree and
+>>>> make it's access platform agnostic and data-driven from the driver.
+>>>>
+>>> Subject: drop second/last, redundant "bindings". The "dt-bindings"
+>>> prefix is already stating that these are bindings.
+>> Ack.
+>>
+>>
+>>> Where is driver or DTS? Are you now adding a dead binding without users?
+>>
+>> TCM is used by drivers/remoteproc/xlnx_r5_remoteproc.c driver. Howerver,
+>> we have hardcode addresses in TCM as bindings are not available yet.
+> I don't see usage of these compatibles there. You also did not supply
+> DTS here. Please provide users of bindings within the same patchset.
 
-ETHTOOL_A_STATS_HEADER uses NLA_POLICY_NESTED(ethnl_header_policy),
-while ETHTOOL_A_PAUSE_HEADER uses NLA_POLICY_NESTED(ethnl_header_policy_stats).
 
-The two header nest policies look like this:
+ACK. I will supply dts as well.
 
-const struct nla_policy ethnl_header_policy[] = {
-	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
-	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
-					    .len = ALTIFNAMSIZ - 1 },
-	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
-							  ETHTOOL_FLAGS_BASIC),
-};
+However, Is it ok if I convert this patch to RFC patch, and once 
+bindings are fixed I will send actual patch with driver support.
 
-const struct nla_policy ethnl_header_policy_stats[] = {
-	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
-	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
-					    .len = ALTIFNAMSIZ - 1 },
-	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
-							  ETHTOOL_FLAGS_STATS),
-};
+If bindings design is not correct then I might have to change 
+corresponding driver design lot.
 
-The request seems to be for ETHTOOL_A_PAUSE_HEADER to use a policy like this:
 
- const struct nla_policy ethnl_header_policy_mac_stats[] = {
- 	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
- 	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
- 					    .len = ALTIFNAMSIZ - 1 },
- 	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
- 							  ETHTOOL_FLAGS_STATS),
-+	[ETHTOOL_A_HEADER_MAC_STATS_SRC] = NLA_POLICY_MASK(NLA_U32,
-+							   ETHTOOL_MAC_STATS_SRC_PMAC),
- };
-
-and for ETHTOOL_A_STATS_HEADER to use a policy like this:
-
-const struct nla_policy ethnl_header_policy_mac_stats_src_basic[] = {
-	[ETHTOOL_A_HEADER_DEV_INDEX]	= { .type = NLA_U32 },
-	[ETHTOOL_A_HEADER_DEV_NAME]	= { .type = NLA_NUL_STRING,
-					    .len = ALTIFNAMSIZ - 1 },
-	[ETHTOOL_A_HEADER_FLAGS]	= NLA_POLICY_MASK(NLA_U32,
-							  ETHTOOL_FLAGS_BASIC),
-+	[ETHTOOL_A_HEADER_MAC_STATS_SRC] = NLA_POLICY_MASK(NLA_U32,
-+							   ETHTOOL_MAC_STATS_SRC_PMAC),
-};
-
-Did I get this right?
+>
+>
+> Best regards,
+> Krzysztof
+>
