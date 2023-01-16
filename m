@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ECB66C8A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C467466C8BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 17:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbjAPQlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 11:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S233686AbjAPQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 11:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjAPQkx (ORCPT
+        with ESMTP id S233641AbjAPQlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:40:53 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A76C36B2E;
-        Mon, 16 Jan 2023 08:29:07 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id kt14so10414641ejc.3;
-        Mon, 16 Jan 2023 08:29:07 -0800 (PST)
+        Mon, 16 Jan 2023 11:41:45 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55332ED4A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:29:57 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j17so43475013lfr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 08:29:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5s7i4e/9M2UcJLxes9insspm/+PoKa2o1GchG8eSBbc=;
-        b=Jhd1ZnirmUUEaqs4PzBrNVNrHZrjJCRRvfLXAsFPQFqmYRYykhG//aWcQjTKnEvJg/
-         IhAncth9L+aQ81KqrJeQq0AGpvl/0NMIfiyEUPZqkxsluCf+AFMXOKdAMWP/tKLpYqnV
-         xA+usSt8BKe3NtBuju6wwvrYPwV+MSanG9GbB7ap/rQwDXPR8hwdPgYPbq7m/ZnVy+jm
-         zf5FaKjGGG0Bh8CZ91xbdWy5mG6ukzoJEJmqjft4kLyFWEfcAywncnIlxatu7cm/WFu1
-         UAaSfTXEOEnBqDZt3VJmZYXcn3nfhqf8A31CCpHIhSlqwBUUwf3B951KZcgSawFs8h5h
-         8AOQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G8K1RmWXIkiPGKo5rdIMlyUws+ytI7cIHwrzZJ2azso=;
+        b=Qwo73i7k4TFVW4W9ODHn2D31owplGN+ohI4BcXolF/ZQkD6do3Wcxz1nYOC9CNXonX
+         jS1RVfnJcQQVABWLq0jNH4zheVyf4h+GMcbONNoUdnri7EXnXonvt/hUQXFZFO1J4VIE
+         /jj/OeKV1qAbQdKi2V/45Q69RwkZ8rR1pOiTPZ1lgP/79MZ4kFTQhJqM76J+i1+8w8nD
+         ayeX1QToZyVrwU1GjlFcCXzJZKQ2R6Xhc/a61usDxr0B9tyokNrdPmr3dzt94h2Cm+WG
+         Sme/OPxLhDfUbhZysJgMsukjfrMJJnmj+xESqgD7xAN7XGm9ZDJkXBjaapDzuKZltmpU
+         79hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5s7i4e/9M2UcJLxes9insspm/+PoKa2o1GchG8eSBbc=;
-        b=JgP6ALS0hM+G68LxQidu49+EcpOlyBIDnm05fUi1k0Zp+qDvLjPv8WC6VoY9ecj6k+
-         9vvN1CGXBnmziIpvQhdD0xC+fHp3IarzzGB/ZYDfpO6ebBeUZtuNCiM3gzPHYUkIeNgq
-         Xgsk3SxMKZLKlLAYwn2XsWAGEDns2TFBgORTuXwUbUqm5hnmW/J81rY/Kv0K0tMuoRzI
-         be6biPYtCzyZXLk4XOqZE7yHlQB4x1UL01gvNpRHl0oGM+3LUWg/PMy9SJEe/+KkqO/8
-         QWGtAz9jIfhRIGmfz6EF2pALQx5CVmywwqd4OeP4ynTupCCwYtoo10vS99aF72b4qAdQ
-         oXFw==
-X-Gm-Message-State: AFqh2kqzdd+YILCXTbrbyswvlwUxDCBGecwZ0WxsyVO70fjNIJRwF4J6
-        SZyVvC0Oqz5PAa0H9ofFxS8=
-X-Google-Smtp-Source: AMrXdXuwjYY4SeuRhYiBmpNcCIWXCkDyZdQ881c1TRZlr/sdeKegiB+f2b8el7lPUC6lY45jc9547w==
-X-Received: by 2002:a17:907:76f2:b0:869:236c:ac43 with SMTP id kg18-20020a17090776f200b00869236cac43mr14778321ejc.32.1673886545881;
-        Mon, 16 Jan 2023 08:29:05 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id tc9-20020a1709078d0900b0086edf177209sm2343403ejc.78.2023.01.16.08.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:29:05 -0800 (PST)
-Date:   Mon, 16 Jan 2023 17:29:02 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-Subject: Re: [Patch v1 06/10] arm64: tegra: Add cpu OPP tables and
- interconnects property
-Message-ID: <Y8V7TkAiEWizF70l@orome>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-7-sumitg@nvidia.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G8K1RmWXIkiPGKo5rdIMlyUws+ytI7cIHwrzZJ2azso=;
+        b=qbsY5R+Aodf2vzMgzmNCGT2w4D9940fzThQMVaXAh0xZriSB6keFjASa8kmDH/65Zk
+         pp/1s7UgUI4IAVyr2NvHVts/B7m6Rb9buQZnTLPKml+fVw6ZfqS7B9hhVvRT+Gvhe4BJ
+         BA37XIWs8cgNizQpT/knXcEp8/X9lGFUvWoVFe3y7CJ9ntJ2X6uRH7mzYJUjWuMm88GI
+         iF/DptL3s2nq1b0e6MjYix73OFvQHCNlnwN0jGdKarmMk/KoEBxUZ+ESVjceUln9umWh
+         P8v8lZIEgEI3VnP+LRiy/Tp0k0kEZd+OJHyJi3s1ddjnhJ050ThsjujgR7c9Q80HMbR4
+         HhwA==
+X-Gm-Message-State: AFqh2kpbsDojaotc9K+aNwetiA5kBrb7SQPdQ3B2m4qhYW7hv3lfm8pa
+        a7xclfVjFLxtBnJntERzZXS+pA==
+X-Google-Smtp-Source: AMrXdXsPIZj1jWkctfyszi9JmAGWKyuU0BIXMPnSpGeeviVYMWHd72EtUdKxhks7JtVTHMQhAtHFmg==
+X-Received: by 2002:a19:e611:0:b0:4a4:68b9:608a with SMTP id d17-20020a19e611000000b004a468b9608amr24195186lfh.21.1673886596181;
+        Mon, 16 Jan 2023 08:29:56 -0800 (PST)
+Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
+        by smtp.gmail.com with ESMTPSA id x12-20020ac25dcc000000b0049fbf5facf4sm5087974lfq.75.2023.01.16.08.29.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 08:29:55 -0800 (PST)
+Message-ID: <09fe3e93-328b-13a3-540b-4ca47224b176@linaro.org>
+Date:   Mon, 16 Jan 2023 17:29:54 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZMip0bUSH42JeHsT"
-Content-Disposition: inline
-In-Reply-To: <20221220160240.27494-7-sumitg@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
+ '#size-cells' related dt-binding error
+Content-Language: en-US
+To:     bhupesh.sharma@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
+ <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
+ <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
+ <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
+ <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
+ <23b4551c-db79-d859-c037-6ed3c8a11883@linaro.org>
+ <6f08d466-9589-ebff-c38d-bf9015a0f6ad@linaro.org>
+ <64e4b3b0-fc71-1876-9de8-e51d503d6183@linaro.org>
+ <3e18a79b-fdd8-63f8-c27a-7515bbb6cb9b@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <3e18a79b-fdd8-63f8-c27a-7515bbb6cb9b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,71 +88,71 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ZMip0bUSH42JeHsT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 20, 2022 at 09:32:36PM +0530, Sumit Gupta wrote:
-> Add OPP table and interconnects property required to scale DDR
-> frequency for better performance. The OPP table has CPU frequency
-> to per MC channel bandwidth mapping in each operating point entry.
-> One table is added for each cluster even though the table data is
-> same because the bandwidth request is per cluster. OPP framework
-> is creating a single icc path if the table is marked 'opp-shared'
-> and shared among all clusters. For us the OPP table is same but
-> the MC client ID argument to interconnects property is different
-> for each cluster which makes different icc path for all.
->=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 276 +++++++++++++++++++++++
->  1 file changed, 276 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/d=
-ts/nvidia/tegra234.dtsi
-> index eaf05ee9acd1..ed7d0f7da431 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> @@ -2840,6 +2840,9 @@
-> =20
->  			enable-method =3D "psci";
-> =20
-> +			operating-points-v2 =3D <&cl0_opp_tbl>;
-> +			interconnects =3D <&mc TEGRA_ICC_MC_CPU_CLUSTER0 &emc>;
+On 16.01.2023 17:18, bhupesh.sharma@linaro.org wrote:
+> 
+> On 1/16/23 9:35 PM, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>> On 16.01.2023 17:02, Bhupesh Sharma wrote:
+>> >
+>> > On 1/16/23 9:24 PM, Konrad Dybcio wrote:
+>> >>
+>> >>
+>> >> On 16.01.2023 16:43, Bhupesh Sharma wrote:
+>> >>> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
+>> >>> <krzysztof.kozlowski@linaro.org> wrote:
+>> >>>>
+>> >>>> On 15/01/2023 22:33, Bhupesh Sharma wrote:
+>> >>>>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
+>> >>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>> >>>>>>
+>> >>>>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
+>> >>>>>>> Fix the following '#address-cells' & '#size-cells' related
+>> >>>>>>> dt-binding error:
+>> >>>>>>>
+>> >>>>>>>      $ make dtbs_check
+>> >>>>>>>
+>> >>>>>>>      From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>> >>>>>>>           arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
+>> >>>>>>>                 #address-cells:0:0: 2 was expected
+>> >>>>>>>         From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+>> >>>>>>
+>> >>>>>> Don't we want rather to unify the soc address range?
+>> >>>>>
+>> >>>>> Well, the assumption in the original dt-bindings was that every reg
+>> >>>>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
+>> >>>>> #size-cells to <2>). However, that is not the case for all of the
+>> >>>>> SoCs.
+>> >>>>
+>> >>>> Hm, which device of that SoC cannot be used with address/size cells 2?
+>> >>>
+>> >>> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
+>> >>> be used with address/size cells 2 (See:
+>> >>> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
+>> >> SM6115 (and pretty much every other arm64 msm platform newer than 8916)
+>> >> should be using addr/size-cells = 2 along with (dma-)ranges of 36 bit, as
+>> >> that's what their smmus use and otherwise some addresses may get cut off
+>> >> in translation, or so the story went with 845 N years ago.. We can either
+>> >> pursue this patch or I can submit the 2-cell-ification if you don't plan on
+>> >> adding more nodes shortly
+>> >
+>> >
+>> > Have you tested this combination on SM6115 like SoCs with various IPs? I have tried a few experiments in the past and not all IPs work well with 36-bit DMA ranges (atleast not on the boards I have).
+>> Can you list any specific examples? I've been using it for
+>> quite some time now and I see nothing wrong..
+> 
+> I remember seeing some issues with SDHC controller booting (uSD card use case) with sm6115, but I cannot find the appropriate dmesg right now.
+FWIW it works completely fine for me, in fact I'm booting from
+uSD most of the time.
 
-I dislike how this muddies the water between hardware and software
-description. We don't have a hardware client ID for the CPU clusters, so
-there's no good way to describe this in a hardware-centric way. We used
-to have MPCORE read and write clients for this, but as far as I know
-they used to be for the entire CCPLEX rather than per-cluster. It'd be
-interesting to know what the BPMP does underneath, perhaps that could
-give some indication as to what would be a better hardware value to use
-for this.
-
-Failing that, I wonder if a combination of icc_node_create() and
-icc_get() can be used for this type of "virtual node" special case.
-
-Thierry
-
---ZMip0bUSH42JeHsT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPFe0wACgkQ3SOs138+
-s6F2yBAAjowmxzjVq6aVzA6zhSk3nbCgl0QL/OEp6PY0OzH2xVKJUuu4zOttfnbe
-Yp1JqpDpVvueEBIRSRWV2bwEwtJ6W5vYrcW2TkNfM5biG3c1uYRCVcADJPwSO4gL
-Obyy7iew33hS30m/9uynImJVGAh/WuVIZJ/2JTkFGzjP7K7nvhASuyABnVE4+CvJ
-uIgl1XUxTdgD/hS6BmVlKv5S6M9bU7UkWTCWqX2xS/t51K+iv7nBc9NeeVrJZdwF
-sChYSmFEmKMPyZF15al5UK//xakf3l9M1Q3p7QEo/VK6Ee5D8nAvGRzMYWD2uSvv
-rfhT9hZNaLYaHUQkdGJP7hcIspsR3CucHasz6UqDgsWSJkL9b4QlDYLFK9StTEyV
-LrrYjQHe6jTYSGegIBqwzANd3Kp/Enbzdz0Rb9d7fXelYuEkPdxc4xMjw22qe7Er
-9DuaDmkeh1218GaEWeepVrQvDKDiaK2KrhQGd8uu2iXGXe9xOG2TtT0lvQENZpLX
-WkEpDjrh+ZJrSrd8A06oRFmRzHP/Y8W4QUH7dUFujcfip+JQjMlq+K1+EMyRwapR
-yrWPyYqk/2NxS+vlfAwyX+K+DkB/xlvPNRRsdof93MKdbGUgFQ9pbGtzCddzyAOK
-sPo4xnV+1yI+JBT9/OafTN0UMaSLCArvPLubL+7mfrjqaBrPQ54=
-=eSEA
------END PGP SIGNATURE-----
-
---ZMip0bUSH42JeHsT--
+Konrad
+> 
+>> >
+>> > So, I think it might lead to more breakage (unless we are sure of a well-tested fix). A simpler patch to fix the dt-bindings looks more useful IMO.
+>> I'm not saying no, you just have to convince Krzysztof :D
+> 
+> :)
+> 
+> Thanks,
+> Bhupesh
