@@ -2,106 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152EC66CF51
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089C566CF53
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjAPTGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
+        id S232056AbjAPTHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbjAPTGe (ORCPT
+        with ESMTP id S233841AbjAPTGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:06:34 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B567274BF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:06:33 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x36so7307224ede.13
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:06:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CV8tAfRPf2IHKFO84VR70240CzDv/yHe+xWXBC9YNck=;
-        b=QeJDGv2fUxNWwwetKotPZ+TRh8gJ+RlvO1uxBkjuQb8ZkAeeYnLOALxczfeh1MtpTl
-         n08bJKkqBv3F3+bKDR1PjNg3wIcxrtb9Of+pgl2avg185N8CXce/m3zUpQ1kxVFneVRt
-         WAFZtgGeaZ3ttMQ7H64Xw4sUpfJK0Ek5uQAHH3nI/uqEb3eEZDESzY+Vg39eotfynjGw
-         TdpgVKRsCJmU7aSh0HDmWjvt2mebSkp46uH0fi1eWSHZpzW6Pmf2m7/M9yW0g327aTd4
-         k4zALpCg0fGdSo8V/YssbcYg8VO/9wiqI5N+Mdk0d3VPT1kCRYyu2NQ1Iugow5LmK3dC
-         3lnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CV8tAfRPf2IHKFO84VR70240CzDv/yHe+xWXBC9YNck=;
-        b=MlKKO6GSoNxyZFWfsKxfN/d+Qa23wL3mH26xE4xUyBt48gYQpczu+57mtcFfVhjAEd
-         RbnTgSf0990A6AyH677utaKt64J2ToviAaFt6tquicN+S7Fj9hFuWGDyYUsUrmv0++8s
-         DbRD/8CpNb/ydcbWGCHCsWeIo5lzHhQmupQmywgusjlhECSUs+AFjEPFsO48JW7+nBSi
-         WfWVTXtsiSOGgyoo+bWPPMaFgICZgNhipvOnq3MtnHYMd81ILGsfYPtoUZh8na4GuNI9
-         +KHY2r63Ow6UFwyXt1ZGHRJyKzVpqglW1mKNh8QKpeUoy9DJSC6sHnizznipbKrh/tWB
-         RSGg==
-X-Gm-Message-State: AFqh2kr4sloLFtl/EodYQZiam2tKJGLskySLKF8TyBX40nSVtFtkVHYy
-        tAEt6CYyFYJjmC2YBB32jXAOnA==
-X-Google-Smtp-Source: AMrXdXsjBZjMnuV7YVxZpvP0hj3P56j70NAIFlFg7nArqAvUb/4acMKxsEX19XftKcyXLdXMVou5Jw==
-X-Received: by 2002:aa7:dbc4:0:b0:47c:445b:b4f with SMTP id v4-20020aa7dbc4000000b0047c445b0b4fmr296641edt.32.1673895992067;
-        Mon, 16 Jan 2023 11:06:32 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d20-20020a170906305400b007c0d64c1886sm12096487ejd.33.2023.01.16.11.06.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 11:06:31 -0800 (PST)
-Message-ID: <1a70a28b-b406-4d84-ced9-4d66bad94652@linaro.org>
-Date:   Mon, 16 Jan 2023 20:06:29 +0100
+        Mon, 16 Jan 2023 14:06:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA26298E7
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:06:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4124D61123
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94814C433EF;
+        Mon, 16 Jan 2023 19:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673896012;
+        bh=/4lqJw+MW10yFNzZpZTh/NCIHg4tnhSxEPNCyHASEK8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=f54ph7NeGFqhQND/+hT4HRcVd3or9IHwutjUQhUO0IXX9lAzfHKmYG12D6ieRiExO
+         Mr1bVAJhVE4eL6E2v7Tc2CATTK+b5Gp/s+d/zNUebefCxPAHB7DyhwWeedIQ7tJIT8
+         ZuxyR0AtadV9oeva2ZuTE2q24XWzSmxdqo6V7DJWXO02Ueri6ZLK9wh519ZIeVkRms
+         dv4spAHPEyREZ4zjMxBc/BHJt7bEriHhTuYMaB1qL2Gnz6wIY2pEFaN4GrGvVnhY1F
+         4iUICx7lFTJJSSzvVtBgloddu7WYAnNVgZa5mrwiQlSphcG1yMO2pSuGkBpddNAW86
+         PPGpuXq1pdhOA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 37EF95C0687; Mon, 16 Jan 2023 11:06:52 -0800 (PST)
+Date:   Mon, 16 Jan 2023 11:06:52 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "parri.andrea" <parri.andrea@gmail.com>, will <will@kernel.org>,
+        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
+        dhowells <dhowells@redhat.com>,
+        "j.alglave" <j.alglave@ucl.ac.uk>,
+        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
+        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
+        urezki <urezki@gmail.com>,
+        quic_neeraju <quic_neeraju@quicinc.com>,
+        frederic <frederic@kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
+ test)
+Message-ID: <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <136d019d8c8049f6b737627df830e66f@huawei.com>
+ <20230114175343.GF2948950@paulmck-ThinkPad-P17-Gen-1>
+ <20230114181537.GA493203@paulmck-ThinkPad-P17-Gen-1>
+ <Y8MOOrrHntA9TyUk@rowland.harvard.edu>
+ <20230115051510.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8Qog8qf7wIx2Kve@rowland.harvard.edu>
+ <20230115181052.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8RmEtBnwqOzNhsK@rowland.harvard.edu>
+ <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 2/3] dt-bindings: remoteproc: ti: Add new compatible
- for AM62 SoC family
-Content-Language: en-US
-To:     Devarsh Thakkar <devarsht@ti.com>, andersson@kernel.org,
-        devicetree@vger.kernel.org, mathieu.poirier@linaro.org,
-        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com
-Cc:     hnagalla@ti.com, praneeth@ti.com, nm@ti.com, vigneshr@ti.com,
-        a-bhatia1@ti.com, j-luthra@ti.com
-References: <20230116151906.549384-1-devarsht@ti.com>
- <20230116151906.549384-3-devarsht@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230116151906.549384-3-devarsht@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 16:19, Devarsh Thakkar wrote:
-> AM62 family of devices don't have a R5F cluster, instead
-> they have single core DM R5F.
-> Add new compatible string ti,am62-r5fss to support this scenario.
+On Mon, Jan 16, 2023 at 01:11:41PM -0500, Alan Stern wrote:
+> On Sun, Jan 15, 2023 at 08:23:29PM -0800, Paul E. McKenney wrote:
+> > On Sun, Jan 15, 2023 at 03:46:10PM -0500, Alan Stern wrote:
+> > > On Sun, Jan 15, 2023 at 10:10:52AM -0800, Paul E. McKenney wrote:
+> > > > On Sun, Jan 15, 2023 at 11:23:31AM -0500, Alan Stern wrote:
+> > > > > On Sat, Jan 14, 2023 at 09:15:10PM -0800, Paul E. McKenney wrote:
+> > > > > > What am I missing here?
+> > > > > 
+> > > > > I don't think you're missing anything.  This is a matter for Boqun or 
+> > > > > Luc; it must have something to do with the way herd treats the 
+> > > > > srcu_read_lock() and srcu_read_unlock() primitives.
+> > > > 
+> > > > It looks like we need something that tracks (data | rf)* between
+> > > > the return value of srcu_read_lock() and the second parameter of
+> > > > srcu_read_unlock().  The reason for rf rather than rfi is the upcoming
+> > > > srcu_down_read() and srcu_up_read().
+> > > 
+> > > Or just make herd treat srcu_read_lock(s) as an annotated equivalent of 
+> > > READ_ONCE(&s) and srcu_read_unlock(s, v) as an annotated equivalent of 
+> > > WRITE_ONCE(s, v).  But with some special accomodation to avoid 
+> > > interaction with the new carry-dep relation.
+> > 
+> > This is a modification to herd7 you are suggesting?  Otherwise, I am
+> > suffering a failure of imagination on how to properly sort it from the
+> > other READ_ONCE() and WRITE_ONCE() instances.
 > 
+> srcu_read_lock and srcu_read_unlock events would be distinguished from 
+> other marked loads and stores by belonging to the Srcu-lock and 
+> Srcu-unlock sets.  But I don't know whether this result can be 
+> accomplished just by modifying the .def file -- it might require changes 
+> to herd7.  (In fact, as far as I know there is no documentation at all 
+> for the double-underscore operations used in linux-kernel.def.  Hint 
+> hint!)
+> 
+> As mentioned earlier, we should ask Luc or Boqun.
 
-This is a friendly reminder during the review process.
+Good point, will do.
 
-It looks like you received a tag and forgot to add it.
+> > > > Or is there some better intermediate position that could be taken?
+> > > 
+> > > Do you mean go back to the current linux-kernel.bell?  The code you 
+> > > wrote above is different, since it prohibits nesting.
+> > 
+> > Not to the current linux-kernel.bell, but, as you say, making the change
+> > to obtain a better approximation by prohibiting nesting.
+> 
+> Why do you want to prohibit nesting?  Why would that be a better 
+> approximation?
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
+Because the current LKMM gives wrong answers for nested critical
+sections.  For example, for the litmus test shown below, mainline
+LKMM will incorrectly report "Never".  The two SRCU read-side critical
+sections are independent, so the fact that P1()'s synchronize_srcu() is
+guaranteed to wait for the first on to complete says nothing about the
+second having completed.  Therefore, in Linux-kernel SRCU, the "exists"
+clause could be satisfied.
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+In contrast, the proposed change flags this as having nesting.
 
-If a tag was not added on purpose, please state why and what changed.
+							Thaxn, Paul
 
+------------------------------------------------------------------------
 
-Best regards,
-Krzysztof
+C C-srcu-nest-5
 
+(*
+ * Result: Sometimes
+ *
+ * This demonstrates non-nesting of SRCU read-side critical sections.
+ * Unlike RCU, SRCU critical sections do not nest.
+ *)
+
+{}
+
+P0(int *x, int *y, struct srcu_struct *s1)
+{
+	int r1;
+	int r2;
+	int r3;
+	int r4;
+
+	r3 = srcu_read_lock(s1);
+	r2 = READ_ONCE(*y);
+	r4 = srcu_read_lock(s1);
+	srcu_read_unlock(s1, r3);
+	r1 = READ_ONCE(*x);
+	srcu_read_unlock(s1, r4);
+}
+
+P1(int *x, int *y, struct srcu_struct *s1)
+{
+	WRITE_ONCE(*y, 1);
+	synchronize_srcu(s1);
+	WRITE_ONCE(*x, 1);
+}
+
+locations [0:r1]
+exists (0:r1=1 /\ 0:r2=0)
