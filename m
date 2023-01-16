@@ -2,193 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BA466BCC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526D466BCCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjAPLWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S229573AbjAPLXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjAPLWk (ORCPT
+        with ESMTP id S229867AbjAPLXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:22:40 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59A1C33A;
-        Mon, 16 Jan 2023 03:22:38 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ud5so67347757ejc.4;
-        Mon, 16 Jan 2023 03:22:38 -0800 (PST)
+        Mon, 16 Jan 2023 06:23:37 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C591DB96
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:23:36 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id s3so18188494pfd.12
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:23:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mDYnpMLjl8fAmkTS+znYTtl7s92kfNE7ldCeYDukpPI=;
-        b=PYNclnm8mkcmdm6hcI4zRGZ0FAOXtgDONWNFY5tyXVKm8NQHo1U/F/AkML2C3WjSDM
-         v/yJvfKc+8AtDZnXRqaPAGtyjCWqV3hGwvoQTAJ+VdTMJrLK8ILv+0K3xqZ/1Bz423dT
-         zT9bxvvy7qEBLDyLVXyouOqFJMLQvhGEUNTAnlT2RF9/YotoGry1onbr8FTtzKvMoQQX
-         88RCXkgf3HK8hOw1Qq9UgmjYYzn3oWJzbGkRcGGU3KAYUrgjTdcscnK+k4wG5t9lrCEj
-         13RxvZgwGY7nkAGv+j8PIW7FVHgANUPtssBNkKpaqbOpMJmwcHd3iMx1RvCNnqEL52AJ
-         LUkQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tLgP40hKSxsObwN4+snUnnezeQ4wAc0rF/UZlYixKYE=;
+        b=ttR4DUNjgwNCiDJGYcKWSjpWkCG8CmI/DGS0PpQhmbyoU1xr6nu3ViH55fG99+iXUJ
+         OcvZcAlQ5ZFjsnVoWtthaJnJtTh00fdWSK+PyViI1ruQY2iLLZ/7KZE/0Kwt+F8HdshF
+         266Kfy8lzrajKzZ8zSZyZAyx22KTaGOopjgbvzE+w4Xm+NYaBqGWolqsYjGsxKXZtk19
+         9AQAUknUn4deuyNXbq2iwtIFHYddWyFRyhuTeDqqNlhN9R4Jv06nLPfe1tC4v66aQmVA
+         McitY5RoyfhO6hecFfbq0GOwNrksApJVLnln1cntrTMG6AUaUnzCsgzHNuTmZB3aDpmz
+         at+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mDYnpMLjl8fAmkTS+znYTtl7s92kfNE7ldCeYDukpPI=;
-        b=mSjEdxQH//GBs+7vKGzObCHq0aDg42aJn3b4/XtOcT66u8TjvB0u4Pfco/cMVlApfu
-         nnbaXdN2EvlWInQjyXa5JYziK0YrSz0lOeWdSX0mxfJlSAPL9kR4hcZMSBSUSf759++z
-         VJ7Jt5YO/PW19ctp+1frHCudivLx9IgqqkztY9pjxWq9Zf+fVJdAaPwA3urYf/ZgHQLu
-         xMP0jzLwoCtSuF61vxDjvmWPbWfPs2exGfcWXPNQfwdmzkbA1COPysA+BIiYppKmbEz3
-         TNrFgwZDlJx5klTD7fey81MqiWWaB/hBsQja+iSiQmOIQ/sEMBzq6qXjijEgE2sXFYZA
-         MeAw==
-X-Gm-Message-State: AFqh2kpr3xY6wb1lNThtPI/XQU5IWEmXWSpd6szARjedD/YCom/jPZUh
-        oSDxE7DQ9tdbWpbVBWF1x7I=
-X-Google-Smtp-Source: AMrXdXu8qyN3uRoTUmLxxU+xStvu1H/yAY2P84lAeHVTBia8PCGBApU/X+rhRQ51y+D7J8ZCaa81aA==
-X-Received: by 2002:a17:906:158c:b0:7c4:f752:e959 with SMTP id k12-20020a170906158c00b007c4f752e959mr72454757ejd.33.1673868157182;
-        Mon, 16 Jan 2023 03:22:37 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id ss5-20020a170907038500b00856ad9108e7sm7536518ejb.70.2023.01.16.03.22.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 03:22:36 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 16 Jan 2023 12:22:34 +0100
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] tools/resolve_btfids: Install subcmd headers
-Message-ID: <Y8Uzet0cNtDo8kHe@krava>
-References: <20230112004024.1934601-1-irogers@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tLgP40hKSxsObwN4+snUnnezeQ4wAc0rF/UZlYixKYE=;
+        b=CiEOf0L5z/QEuDZUHH+WpyM+j+uuwQsrx4X4V9egjalSg40v9YdE2bBtxiIDNe2nj1
+         sjWmo8m9as8qoxchlJkn/qw/nL+QrLGdUOjVmN0Nw5NHJtKNhsP5BdK07u1afVCs3GXM
+         FUnWZXysW7wWgKnZzh7w0NYdpc6P3De2W5CGCrVGuJohIGwFC6WGf92DUiJaY6xdvZ88
+         dVWBmTmR/HGxyGc/tx9UT6pUL/TyNeIj163h4+IQ/6gpMcYM957nZ3bP2fSr0AmQ1HRX
+         Ef1MfSunCzzMN3/k+4mMhDTzZ4DXF0+gQz3gobVV093MBlM5OlZADJXfDjjUaV4JSSiO
+         mtQg==
+X-Gm-Message-State: AFqh2kqJYmsq5DwrcsRTDO/H/4fd4Wk/RTOSdkcMF/w3YAnlIbwIBRVz
+        H43tiVW9tRYuNUwz4qyOlK97tH8ZnHfBKCfqL2LZ/g==
+X-Google-Smtp-Source: AMrXdXt6Ro5iYwvNcd7pUuuLeNcgwA98EKZwPUwhsrTWIrjVP3kyuxP7+nE2mHuJMsng3nW3MuNikEW5jtLg3Zo5f5w=
+X-Received: by 2002:aa7:8102:0:b0:58d:a683:bb28 with SMTP id
+ b2-20020aa78102000000b0058da683bb28mr222018pfi.36.1673868215665; Mon, 16 Jan
+ 2023 03:23:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230112004024.1934601-1-irogers@google.com>
+References: <20230113134056.257691-1-vincent.guittot@linaro.org> <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+In-Reply-To: <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 16 Jan 2023 12:23:24 +0100
+Message-ID: <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@kernel.org, peterz@infradead.org, qyousef@layalina.io,
+        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
+        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 04:40:24PM -0800, Ian Rogers wrote:
-> Previously tools/lib/subcmd was added to the include path, switch to
-> installing the headers and then including from that directory. This
-> avoids dependencies on headers internal to tools/lib/subcmd. Add the
-> missing subcmd directory to the affected #include.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/bpf/resolve_btfids/Makefile | 19 ++++++++++++++-----
->  tools/bpf/resolve_btfids/main.c   |  2 +-
->  2 files changed, 15 insertions(+), 6 deletions(-)
+On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>
+> On 13/01/2023 14:40, Vincent Guittot wrote:
+> > By taking into account uclamp_min, the 1:1 relation between task misfit
+> > and cpu overutilized is no more true as a task with a small util_avg of
+>
+> of ?
+>
+> > may not fit a high capacity cpu because of uclamp_min constraint.
+> >
+> > Add a new state in util_fits_cpu() to reflect the case that task would fit
+> > a CPU except for the uclamp_min hint which is a performance requirement.
+> >
+> > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> > can use this new value to take additional action to select the best CPU
+> > that doesn't match uclamp_min hint.
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+> >
+> > Change since v2:
+> > - fix a condition in feec()
+> > - add comments
+> >
+> >  kernel/sched/fair.c | 108 ++++++++++++++++++++++++++++++++++----------
+> >  1 file changed, 83 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index e9d906a9bba9..29adb9e27b3d 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4525,8 +4525,7 @@ static inline int util_fits_cpu(unsigned long util,
+> >        *     2. The system is being saturated when we're operating near
+> >        *        max capacity, it doesn't make sense to block overutilized.
+> >        */
+> > -     uclamp_max_fits = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> > -     uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
+> > +     uclamp_max_fits = (uclamp_max <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE);
+>
+> Isn't `uclamp_max <= capacity_orig` always true for `capacity_orig ==
+> SCHED_CAPACITY_SCALE`?
+>
+> uclamp_max = [0..SCHED_CAPACITY_SCALE] , capacity_orig =
+> SCHED_CAPACITY_SCALE
+>
+> >       fits = fits || uclamp_max_fits;
+>
+> Like Qais I don't understand this change. I read the previous discussion
+> from https://lkml.kernel.org/r/20221208140526.vvmjxlz6akgqyoma@airbuntu
+> ("Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+> capacity inversion").
+>
+> I assume Qais wanted to force `uclamp_max_fits = 0` for a big CPU
+> (`capacity_orig = 1024`) and a `uclamp_max = 1024` to not lift `fits`
+> from 0 to 1.
+>
+> >       /*
+> > @@ -4561,8 +4560,8 @@ static inline int util_fits_cpu(unsigned long util,
+> >        * handle the case uclamp_min > uclamp_max.
+> >        */
+> >       uclamp_min = min(uclamp_min, uclamp_max);
+> > -     if (util < uclamp_min && capacity_orig != SCHED_CAPACITY_SCALE)
+> > -             fits = fits && (uclamp_min <= capacity_orig_thermal);
+> > +     if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
+> > +             return -1;
+> >       return fits;
+> >  }
+> > @@ -4572,7 +4571,11 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
+> >       unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
+> >       unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
+> >       unsigned long util = task_util_est(p);
+> > -     return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
+> > +     /*
+> > +      * Return true only if the cpu fully fits the task requirements, which
+> > +      * include the utilization but also the performance.
+>
+> Not sure if people get what `performance requirements` mean here? I know
+> we want to use `performance` rather `bandwidth hint` to describe what
+> uclamp is. So shouldn't we use `utilization but also uclamp`?
+>
+> > +      */
+> > +     return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
+> >  }
+> >
+> >  static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
+> > @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
+> >       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> >       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> >
+> > +     /* Return true only if the utlization doesn't fit its capacity */
+>
+> s/utlization/utilization
+> s/its/CPU ?
+>
+> >       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+> >  }
+>
+> cpu_overutilized() is the only place where we now only test for
+> !util_fits_cpu(). The new comment says we only care about utilization
+> not fitting CPU capacity.
+>
+> Does this mean the rq uclamp values are not important here and we could
+> go back to use fits_capacity()?
+>
+> Not sure since util_fits_cpu() is still coded differently:
 
-this depends on changes that went to Arnaldo's tree right?
-I can't apply this on bpf-next/master
+uclamp_min is not important but uclamp_max still cap the utilization
 
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 19a3112e271a..de7d29cf43d6 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -35,21 +35,29 @@ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
->  BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
->  LIBBPF_OUT := $(abspath $(dir $(BPFOBJ)))/
->  SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
-> +SUBCMD_OUT := $(abspath $(dir $(SUBCMDOBJ)))/
->  
->  LIBBPF_DESTDIR := $(LIBBPF_OUT)
->  LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
->  
-> +SUBCMD_DESTDIR := $(SUBCMD_OUT)
-> +SUBCMD_INCLUDE := $(SUBCMD_DESTDIR)include
-> +
->  BINARY     := $(OUTPUT)/resolve_btfids
->  BINARY_IN  := $(BINARY)-in.o
->  
->  all: $(BINARY)
->  
-> +prepare: $(SUBCMDOBJ)
+>
+>   fits = fits_capacity(util, capacity)
+>
+>   fits = fits || uclamp_max_fits  <-- uclamp_max_fits can turn fits from
+>                                       0 into 1, so util doesn't fit but
+>                                       we don't return 1?
+>
+> That said, I don't understand the current 'uclamp_max_fits = (uclamp_max
+> <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE)' in
+> util_fits_cpu(), like already mentioned.
+>
+> > @@ -6925,6 +6929,7 @@ static int
+> >  select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> >  {
+> >       unsigned long task_util, util_min, util_max, best_cap = 0;
+> > +     int fits, best_fits = 0;
+> >       int cpu, best_cpu = -1;
+> >       struct cpumask *cpus;
+> >
+> > @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> >
+> >               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+> >                       continue;
+> > -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
+> > +
+> > +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> > +
+> > +             /* This CPU fits with all capacity and performance requirements */
+>
+> In task_fits_cpu() `utilization and performance (better uclamp)
+> requirements` term was used. I assume it's the same thing here?
+>
+> > +             if (fits > 0)
+> >                       return cpu;
+> > +             /*
+> > +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+> > +              * for the CPU with highest performance capacity.
+>                                             ^^^^^^^^^^^^^^^^^^^^
+>
+> Do we use a new CPU capacity value `performance capacity (1)` here?
+>
+> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+>
+> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+> to return -1. Shouldn't (1) and (2) be the same?
 
-do we need special target for that? we already have BPFOBJ dependency
-placed in the BINARY_IN as prereq
+I'm all in favor of both being capacity_orig_of(cpu) -
+thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
 
-why not place both as BINARY_IN prereq, or is there some other reason
-for new 'prepare' target?
-
-jirka
-
-> +
->  $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->  	$(call msg,MKDIR,,$@)
->  	$(Q)mkdir -p $(@)
->  
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> -	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
-> +	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> +		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> +		    $(abspath $@) install_headers
->  
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> @@ -60,14 +68,14 @@ CFLAGS += -g \
->            -I$(srctree)/tools/include \
->            -I$(srctree)/tools/include/uapi \
->            -I$(LIBBPF_INCLUDE) \
-> -          -I$(SUBCMD_SRC)
-> +          -I$(SUBCMD_INCLUDE)
->  
->  LIBS = -lelf -lz
->  
->  export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->  
-> -$(BINARY_IN): $(BPFOBJ) fixdep FORCE | $(OUTPUT)
-> +$(BINARY_IN): $(BPFOBJ) fixdep FORCE prepare | $(OUTPUT)
->  	$(Q)$(MAKE) $(build)=resolve_btfids
->  
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> @@ -79,7 +87,8 @@ clean_objects := $(wildcard $(OUTPUT)/*.o                \
->                              $(OUTPUT)/.*.o.d             \
->                              $(LIBBPF_OUT)                \
->                              $(LIBBPF_DESTDIR)            \
-> -                            $(OUTPUT)/libsubcmd          \
-> +                            $(SUBCMD_OUT)                \
-> +                            $(SUBCMD_DESTDIR)            \
->                              $(OUTPUT)/resolve_btfids)
->  
->  ifneq ($(clean_objects),)
-> @@ -96,4 +105,4 @@ tags:
->  
->  FORCE:
->  
-> -.PHONY: all FORCE clean tags
-> +.PHONY: all FORCE clean tags prepare
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index 80cd7843c677..77058174082d 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -75,7 +75,7 @@
->  #include <linux/err.h>
->  #include <bpf/btf.h>
->  #include <bpf/libbpf.h>
-> -#include <parse-options.h>
-> +#include <subcmd/parse-options.h>
->  
->  #define BTF_IDS_SECTION	".BTF_ids"
->  #define BTF_ID		"__BTF_ID__"
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+>
+> > +              */
+> > +             else if (fits < 0)
+> > +                     cpu_cap = capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu));
+> >
+> > -             if (cpu_cap > best_cap) {
+> > +             /*
+> > +              * First, select cpu which fits better (-1 being better than 0).
+> > +              * Then, select the one with largest capacity at same level.
+> > +              */
+> > +             if ((fits < best_fits) ||
+> > +                 ((fits == best_fits) && (cpu_cap > best_cap))) {
+> >                       best_cap = cpu_cap;
+> >                       best_cpu = cpu;
+> > +                     best_fits = fits;
+> >               }
+> >       }
+> >
+>
+> [...]
+>
+> > @@ -7446,26 +7480,50 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> >                       if (prev_delta < base_energy)
+> >                               goto unlock;
+> >                       prev_delta -= base_energy;
+> > +                     prev_thermal_cap = cpu_thermal_cap;
+> >                       best_delta = min(best_delta, prev_delta);
+> >               }
+> >
+> >               /* Evaluate the energy impact of using max_spare_cap_cpu. */
+> >               if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
+> > +                     /* Current best energy cpu fits better */
+> > +                     if (max_fits < best_fits)
+> > +                             continue;
+> > +
+> > +                     /*
+> > +                      * Both don't fit performance (i.e. uclamp_min) but
+> > +                      * best energy cpu has better performance.
+>
+> IMHO, `performance` stands for `cpu_thermal_cap` which is
+> `cpu_capacity_orig - thermal pressure`.
+>
+> I assume `performance` is equal to `performance capacity` used in
+> select_idle_capacity which uses thermal_load_avg() and not thermal
+> pressure. Why this difference?
+>
+> [...]
