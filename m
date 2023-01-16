@@ -2,143 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED8766BB89
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E52066BB87
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjAPKSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S230040AbjAPKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjAPKRZ (ORCPT
+        with ESMTP id S229504AbjAPKRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:17:25 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A40E3A0;
-        Mon, 16 Jan 2023 02:17:02 -0800 (PST)
+        Mon, 16 Jan 2023 05:17:23 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04F61A951;
+        Mon, 16 Jan 2023 02:17:00 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 037C45C00B5;
-        Mon, 16 Jan 2023 05:17:02 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 16 Jan 2023 05:17:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673864221; x=
-        1673950621; bh=iejAn/JA2IrvyMX9kgO+F6LQ9d4XrEBaYkb9PfZupCU=; b=X
-        v4kOJhW3fCQ06lB5cyOKmnI0pwoCJwp0NET8xASsDqh+z5WZ5TTFHGcxj2i8135d
-        wGYHjAwiTs5/092AgaqvXTHC560dE6A+71h/2XUzgwmRBh7rDXeG7EeT8p0AqYjX
-        C1wcBzqylqnTLBhf/KbrJ2NFcVVCLs9ziejZTugY3tiy51bBMvOhJrx40xhkuCrE
-        qm0nCZxab5zE9lKi2CjllW7ps3sit2deeKUAKd/KBYW6pWG1av5YGTrjW6mEFgIA
-        IEEj3AVnjDrjvQaEPFBAOnnu0VGT12GXGv3Znh/+oH+XMIg/aSAAot4i8P+CmLb7
-        tUY8vXyiO5dFp3IAeCLqQ==
+        by mailout.west.internal (Postfix) with ESMTP id E6215320010B;
+        Mon, 16 Jan 2023 05:16:55 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 16 Jan 2023 05:16:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1673864215; x=1673950615; bh=ohPYesaxXk
+        sV3W2txrimDtAtBAhmW/4R6Nx2mCz0Zps=; b=Eaw8Xd2GS61lnPC+MNep66n+dC
+        PCUEhiMxdPbFe1k/kw5XTMvIPinamdKeTutSmSfmd7YA1ukylFaGz4nNxf1J5YEu
+        IjhQvqFv7MvCbxLOKdNhdS/+r+/t9Qz+TeEaBx/YHpnK9PmiZDXYTPZ1y1D077Ze
+        ZwpbCMohYzcyOEzwbOQzHOD/H7AO5uKdQjn1L0Ow4vWcCzrnuHS50N9cPj8H52O8
+        rbfoddzAOLKxrY4VOHazuz4cIGmLYwLli3jczhATfEQWqF9PKYLsCBhVUUwSGOby
+        soypM3N0+un9uIwXY4iJlqES2K4xH7WR89IzLB0T998cHYoqXLWMhCzdFu7w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673864221; x=
-        1673950621; bh=iejAn/JA2IrvyMX9kgO+F6LQ9d4XrEBaYkb9PfZupCU=; b=p
-        u5NB9L5T21juEG5S38HhlEz0/cRdp5S22ZR3xTNlBTuXnA08FjH5h6Udev3MPcB0
-        rzIpctp3LxJgXZctmKmVTuHUA0in+HmnuhqNyHXnxC11ehL64efj3aMTA6pgj0Fk
-        hJK8V8cIdlgCfiqbAC8nZSNE7S09ZqxvSNjjx4djoOD9vGeKT+uyXIuC+rHZgPFT
-        MsIjmr9YKuSjcongAgHUwLe8MF5cOKidhy3LjiwUP3FLfJaNPbecREUjsPa3gOL1
-        /rem4nGE94O5Qig3jNBWS9SX2LrfhoBtIKWmVtWAlOfRUNPr2jEalmkTdl/1gQK2
-        wXpjZAUFPZ39QNhX/Gvew==
-X-ME-Sender: <xms:HSTFY7LTLSPascLpB_uAV1xwRvONmaWTKfJG4SDcopQ5SMa1kS9oHQ>
-    <xme:HSTFY_Iqw_L-Z6aLVcQLq1Qq3d-CY3VV7wY7MTWWe75gAuRK_RbHtG6ApYjQX71Su
-    XMF0guM-YySU-HVhtk>
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673864215; x=1673950615; bh=ohPYesaxXksV3W2txrimDtAtBAhm
+        W/4R6Nx2mCz0Zps=; b=QyYpzpoC4JaiDhO9oOtlWLeMQJbky/neCi0IjmmzKyIw
+        pNRw0vNqn35ekGLaYLMqTmPBKODOdBvLGGdrVWZG0KkRor67veTQcvjNqY35s+ll
+        jhMAnfXJw+zMCJVMTM8LitiIqM3/diIkO0ZufNcx/pxWNkivpvKMcYMK2gxjWsDJ
+        eLoYi1aydXHMXgW2GC3f/SfRKTHjWWm91r6HeKqm/RdNeXLRNAvUeQvyWlegq4oh
+        Wi7mbgOhI0yC27c2wPQLdORbTS8wlUQxEQjGa0XT+TCPTo4gXRerGh294X4WTmP6
+        WZ19W+iBIaHKZDX8vvc3s3ba1sKTRUJSC9wHN1bwdQ==
+X-ME-Sender: <xms:FiTFYyg-udWjlu1DBrZdNQ4AJw8-kA9XMwrZlTV99IoyGPAyg7H65Q>
+    <xme:FiTFYzCDjbI2Pe2YDW53smZCYPI-sbdRytq09rzeZVkig4Vcql8yEJ-AWtJI43Mtr
+    sfKlDjpOH7nrwUgCgI>
+X-ME-Received: <xmr:FiTFY6FTvrGJ17x2hBuRVPnAP6_Wq1euJ9cdgwLq4-1c6tDC0hpVZrhz5ropdj6H3fAEBWFYDB7zUH05hyz0OhJymdZILIzJ6vuPC1MgNLWgqw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgedgudefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:HSTFYzsNJyDJaCb5-WEg7MPnAqnYV3JrmShdu-6XIbyh92W13dssdQ>
-    <xmx:HSTFY0YQy2eE72fnr_MkduADhuYyogOIVfamFDrmuo9xwIJSe5_nhQ>
-    <xmx:HSTFYyaW4JIFBq8AP3cbHqZvtgUzWYsfDXUr33SXOfvjuTEoBMadxQ>
-    <xmx:HSTFYxkCfnadbAsPCED_Y3sXy6Q20yxf7-QdSzjZT4AWgXfbYmIm6w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5711AB60086; Mon, 16 Jan 2023 05:17:01 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
-Mime-Version: 1.0
-Message-Id: <7278f631-1b79-46d9-b765-ac3ba8789028@app.fastmail.com>
-In-Reply-To: <20230116162739.529247b5@canb.auug.org.au>
-References: <20230116162739.529247b5@canb.auug.org.au>
-Date:   Mon, 16 Jan 2023 11:16:41 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Olof Johansson" <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehgtd
+    erredttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegt
+    vghrnhhordhtvggthheqnecuggftrfgrthhtvghrnheptdelkeejiedufedvhfeiffetle
+    fhiedvleeigfeiuefghfdvleeiffejieegteejnecuffhomhgrihhnpehkvghrnhgvlhdr
+    ohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:FiTFY7Ste6i31k9z-m6htj1R-0C5H2A6lt1cKAXXNTThiSHzdYehfg>
+    <xmx:FiTFY_xx7FBDWEh_sC-JbmhDsXGYEQBgJAjzXSQrYkbcBUUMd2CLZw>
+    <xmx:FiTFY56MSwC_zNMqb6gStkqwmquKYd7Yd-eqLWx2HoSBkOwyNrOAaw>
+    <xmx:FyTFY0zeH9ByF2HD5GBfu7_0NEOFU0Zs12Gi4rBdNJNsAx7ejXAg1Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Jan 2023 05:16:54 -0500 (EST)
+Date:   Mon, 16 Jan 2023 11:16:51 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Oleg Verych <olecom@gmail.com>
+Cc:     wens@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, mark.rutland@arm.com,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        sakari.ailus@linux.intel.com, wens@csie.org
+Subject: Re: [PATCH 04/14] media: sun4i-csi: Fix [HV]sync polarity handling
+Message-ID: <20230116101651.jjzz2rcdehs5wvsi@houat>
+References: <20191215165924.28314-5-wens@kernel.org>
+ <20230116100359.4479-1-olecom@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d42kwkvwzbbj3usb"
+Content-Disposition: inline
+In-Reply-To: <20230116100359.4479-1-olecom@gmail.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023, at 06:27, Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the arm-soc tree, today's linux-next build (various)
-> failed like this:
->
-> arch/arm/mach-sa1100/h3600.c:125:3: error: =E2=80=98struct irda_platfo=
-rm_data=E2=80=99=20
-> has no member named =E2=80=98shutdown=E2=80=99
-> arch/arm/mach-sa1100/h3600.c:124:3: error: =E2=80=98struct irda_platfo=
-rm_data=E2=80=99=20
-> has no member named =E2=80=98startup=E2=80=99
-> arch/arm/mach-sa1100/h3600.c:123:3: error: =E2=80=98struct irda_platfo=
-rm_data=E2=80=99=20
-> has no member named =E2=80=98set_speed=E2=80=99
-> arch/arm/mach-sa1100/h3600.c:122:3: error: =E2=80=98struct irda_platfo=
-rm_data=E2=80=99=20
-> has no member named =E2=80=98set_power=E2=80=99
-> arch/arm/mach-sa1100/h3600.c:121:34: error: storage size of=20
-> =E2=80=98h3600_irda_data=E2=80=99 isn=E2=80=99t known
-> arch/arm/mach-sa1100/h3600.c:121:15: error: variable =E2=80=98h3600_ir=
-da_data=E2=80=99=20
-> has initializer but incomplete type
-> arch/arm/mach-sa1100/collie.c:148:3: error: =E2=80=98struct irda_platf=
-orm_data=E2=80=99=20
-> has no member named =E2=80=98set_power=E2=80=99
-> arch/arm/mach-sa1100/collie.c:147:3: error: =E2=80=98struct irda_platf=
-orm_data=E2=80=99=20
-> has no member named =E2=80=98shutdown=E2=80=99
-> arch/arm/mach-sa1100/collie.c:146:3: error: =E2=80=98struct irda_platf=
-orm_data=E2=80=99=20
-> has no member named =E2=80=98startup=E2=80=99
-> arch/arm/mach-sa1100/collie.c:145:34: error: storage size of=20
-> =E2=80=98collie_ir_data=E2=80=99 isn=E2=80=99t known
-> arch/arm/mach-sa1100/collie.c:145:15: error: variable =E2=80=98collie_=
-ir_data=E2=80=99=20
-> has initializer but incomplete type
->
-> Caused by commit
->
->   56d3391e6c85 ("ARM: sa1100: remove irda references")
->
-> These came from the kernelci builds.
 
-Fixed now, thanks for the report!
+--d42kwkvwzbbj3usb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I had completed a few thousand randconfig builds on this without
-seeing the issue, but could reproduce it easily with the
-defconfigs.  I had some settings in my randconfig builder to
-tip it towards the more common armv6/v7 builds, will adjust it
-to do the opposite now for testing that better, and hopefully
-remember to undo it all later.
+Hi,
 
-      Arnd
+On Mon, Jan 16, 2023 at 01:03:59PM +0300, Oleg Verych wrote:
+> > -	hsync_pol =3D !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
+> > -	vsync_pol =3D !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
+> > +	/*
+> > +	 * This hardware uses [HV]REF instead of [HV]SYNC. Based on the
+> > +	 * provided timing diagrams in the manual, positive polarity
+> > +	 * equals active high [HV]REF.
+> > +	 *
+> > +	 * When the back porch is 0, [HV]REF is more or less equivalent
+> > +	 * to [HV]SYNC inverted.
+> > +	 */
+> > +	href_pol =3D !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
+> > +	vref_pol =3D !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
+>=20
+> After this change has been made there is a need of explicit explanation
+> of what "Active high" / "Active low" in dts really mean.
+
+Why?
+
+Active high means that the signal is considered active when it is held
+high. Active low means that the signal is considered active when it is
+low.
+
+> Currently physical high/low voltage levels are like that:
+> (I'm not sure about vsync-active)
+>=20
+> * hsync-active =3D <0>; /* HSYNC active 'low' =3D> wire active is 'high' =
+*/
+
+Yes
+
+>   CSI register setting: href_pol: 1,
+
+Not really, no. It's what this patch commit log is saying: HREF is
+!HSYNC, so in order to get a hsync pulse active high, you need to set
+href_pol to 0.
+
+> That is confusing:
+>=20
+> [PATCH v6 5/5] DO NOT MERGE: ARM: dts: bananapi: Add Camera support
+> https://lore.kernel.org/linux-arm-kernel/cf0e40b0bca9219d2bb023a5b7f23bad=
+8baba1e5.1562847292.git-series.maxime.ripard@bootlin.com/#r
+>=20
+> > +	port {
+> > +		csi_from_ov5640: endpoint {
+> > +                        remote-endpoint =3D <&ov5640_to_csi>;
+> > +                        bus-width =3D <8>;
+> > +                        hsync-active =3D <1>; /* Active high */
+>=20
+> original CSI driver
+>=20
+> > +                        vsync-active =3D <0>; /* Active low */
+> > +                        data-active =3D <1>;  /* Active high */
+> > +                        pclk-sample =3D <1>;  /* Rising */
+> > +                };
+> > +	};
+>=20
+> [PATCH 13/14] [DO NOT MERGE] ARM: dts: sun7i: cubieboard2: Enable OV7670 =
+camera on CSI1
+> https://lore.kernel.org/linux-arm-kernel/20191215165924.28314-14-wens@ker=
+nel.org/
+>=20
+> > +	port {
+> > +		/* Parallel bus endpoint */
+> > +		csi_from_ov7670: endpoint {
+> > +			remote-endpoint =3D <&ov7670_to_csi>;
+> > +			bus-width =3D <8>;
+> > +			/* driver is broken */
+> > +			hsync-active =3D <0>; /* Active high */
+>=20
+> this change patchset
+>=20
+> > +			vsync-active =3D <1>; /* Active high */
+> > +			data-active =3D <1>;  /* Active high */
+> > +			pclk-sample =3D <1>;  /* Rising */
+> > +		};
+>=20
+> > +			ov7670_to_csi: endpoint {
+> > +				remote-endpoint =3D <&csi_from_ov7670>;
+> > +				bus-width =3D <8>;
+> > +				hsync-active =3D <1>; /* Active high */
+>=20
+> this patcheset
+>=20
+> > +				vsync-active =3D <1>; /* Active high */
+> > +				data-active =3D <1>;  /* Active high */
+> > +				pclk-sample =3D <1>;  /* Rising */
+> > +			};
+> > +		};
+
+I'm sorry, it's not clear to me what is confusing in those excerpts?
+
+Maxime
+
+--d42kwkvwzbbj3usb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY8UkEwAKCRDj7w1vZxhR
+xTMkAP4+TgmiQeIUnqkQdGHMurxhX6R1RMA0WARr69iNcT7I+AD/ZaGQUas8YGRi
+CYDPVdJ5hhgKlTctilLgpPIaA55YmwE=
+=QilM
+-----END PGP SIGNATURE-----
+
+--d42kwkvwzbbj3usb--
