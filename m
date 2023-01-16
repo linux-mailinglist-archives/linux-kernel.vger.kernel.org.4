@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FF566C0E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D09E66C12A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjAPOFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S232000AbjAPOIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:08:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjAPOE0 (ORCPT
+        with ESMTP id S232027AbjAPOHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:04:26 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B532522787;
-        Mon, 16 Jan 2023 06:03:06 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30GE2qDv027761;
-        Mon, 16 Jan 2023 08:02:52 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673877772;
-        bh=RvMrcOnoZ7zgQpoByxWk6Ame8Dz6zp6IIoFQ6RO6aKQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=S1tN0bU7HnADi66c4at+4QyhtV4MXAEI56IaKbTHwbpgq029ARSJkNOgJoSFCTjav
-         nTfgfGAJI95/+SAj8JaIL1N0+UK4xkwSEpvkSPl4ttMyuJAJFa4eBb28VK/5VCBRKj
-         KgkU8fD4dy7BTXLesIWQ2zD/oeOBOINIBJSeVOyo=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30GE2qtm000586
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 16 Jan 2023 08:02:52 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 16
- Jan 2023 08:02:52 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 16 Jan 2023 08:02:51 -0600
-Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30GE2m1C001156;
-        Mon, 16 Jan 2023 08:02:49 -0600
-Message-ID: <6740eba8-5473-28ad-94f2-5e433c02c2b1@ti.com>
-Date:   Mon, 16 Jan 2023 19:32:48 +0530
+        Mon, 16 Jan 2023 09:07:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4FE241D4;
+        Mon, 16 Jan 2023 06:03:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17BBE60FCA;
+        Mon, 16 Jan 2023 14:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2B2C433F0;
+        Mon, 16 Jan 2023 14:03:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VawOqSVQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1673877811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c/usgNs9pfu7FbT7iKyXt726LjP2SjSeWRrj88OxrK8=;
+        b=VawOqSVQURtyfqU3uNej2kfSXR57CyMBmawE0EuKEiBo/bhl29iOcpkswenRdLS3P4nWV+
+        OsubsVJ0gAbx3obnJfFFDFjS7TalV968ODb/D3HG4dUE7zle3+USa1zlfhc8aoGT4WIfT3
+        HRTf7Jkm85MUuiO2N6KHjX2493gxXE0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 94b23cb7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 16 Jan 2023 14:03:30 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id d62so14209605ybh.8;
+        Mon, 16 Jan 2023 06:03:30 -0800 (PST)
+X-Gm-Message-State: AFqh2kr2X2tdrM5zFGUQ0lTVO5oKFtKGUWZqXiAz8bzVj5hcyTwvc7BD
+        8bFICRvlbs5pKcHJDqsJbmDyErbeF29HjUBENts=
+X-Google-Smtp-Source: AMrXdXs6GZpmdrfgweNbQS8/0Y8RCAaey/orcLg0xTcwW9Lkwr5FCig6Y6BbUhGpPa1tiDm7gXovA9Lmm+NFJz34R64=
+X-Received: by 2002:a25:5189:0:b0:7bf:d201:60cb with SMTP id
+ f131-20020a255189000000b007bfd20160cbmr1958247ybb.365.1673877808634; Mon, 16
+ Jan 2023 06:03:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V5 2/3] arm64: dts: ti: Add initial support for AM68 SK
- System on Module
-To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sinthu Raja <sinthu.raja@ti.com>
-References: <20230116071446.28867-1-sinthu.raja@ti.com>
- <20230116071446.28867-3-sinthu.raja@ti.com>
-Content-Language: en-US
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <20230116071446.28867-3-sinthu.raja@ti.com>
+References: <Y7dPV5BK6jk1KvX+@zx2c4.com> <20230106030156.3258307-1-Jason@zx2c4.com>
+ <Y8UG77zvJeic7Cyc@kernel.org>
+In-Reply-To: <Y8UG77zvJeic7Cyc@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 16 Jan 2023 15:03:17 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+Message-ID: <CAHmME9oj5V9eWNtVPZ0HF6Kx0but-4KW-+yQnt_gyGj8w5QPbg@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: Allow system suspend to continue when TPM suspend fails
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Johannes Altmanninger <aclopte@gmail.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,110 +76,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sinthu,
+Hi Jarkko,
 
-On 16/01/23 12:44, Sinthu Raja wrote:
-> From: Sinthu Raja <sinthu.raja@ti.com>
-> 
-> AM68 Starter Kit (SK) is a low cost, small form factor board designed
-> for TI’s AM68 SoC. TI’s AM68 SoC comprises of dual core A72, high
-> performance vision accelerators, hardware accelerators, latest C71x
-> DSP, high bandwidth real-time IPs for capture and display. The SoC is
-> power optimized to provide best in class performance for industrial
-> applications.
-> 
->     AM68 SK supports the following interfaces:
->       * 16 GB LPDDR4 RAM
->       * x1 Gigabit Ethernet interface
->       * x1 USB 3.1 Type-C port
->       * x2 USB 3.1 Type-A ports
->       * x1 PCIe M.2 M Key
->       * 512 Mbit OSPI flash
->       * x2 CSI2 Camera interface (RPi and TI Camera connector)
->       * 40-pin Raspberry Pi GPIO header
-> 
-> SK's System on Module (SoM) contains the SoC and DDR.
-> Therefore, add DT node for the SOC and DDR on the SoM.
-> 
-> Schematics: https://www.ti.com/lit/zip/SPRR463
-> TRM: http://www.ti.com/lit/pdf/spruj28
-> 
-> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> ---
-> 
-> Changes in V5:
-> =============
-> Address review comments:
-> - Remove the unessential comment.
-> - Remove alignment property from secure-ddr node, as no memory is allocated out
->   of this region.
-> 
-> No changes in V4.
-> 
-> Changes in V3:
-> =============
-> Addressed review comments
-> - Removed the unused nodes that are disabled by default.
-> OSPI support will be added once the OSPI node is enabled for J721s2/AM68 in main DTSI.
-> 
-> Changes in V2:
-> =============
-> Address review comments
-> - drop the empty lines.
-> 
-> V1: https://lore.kernel.org/linux-arm-kernel/20221018123849.23695-3-sinthu.raja@ti.com/
-> V2: https://lore.kernel.org/lkml/20221107123852.8063-3-sinthu.raja@ti.com/
-> V3: https://lore.kernel.org/lkml/20230110110052.14851-3-sinthu.raja@ti.com/
-> V4: https://lore.kernel.org/lkml/20230105151740.29436-3-sinthu.raja@ti.com/
-> 
->  arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-> new file mode 100644
-> index 000000000000..e92431250729
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "k3-j721s2.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
-> +
-> +/ {
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		/* 16 GB RAM */
-> +		reg = <0x00 0x80000000 0x00 0x80000000>,
-> +		      <0x08 0x80000000 0x03 0x80000000>;
-> +	};
-> +
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		secure_ddr: optee@9e800000 {
-> +			reg = <0x00 0x9e800000 0x00 0x01800000>;
-> +			no-map;
-> +		};
-> +	};
+On Mon, Jan 16, 2023 at 9:12 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> > index d69905233aff..6df9067ef7f9 100644
+> > --- a/drivers/char/tpm/tpm-interface.c
+> > +++ b/drivers/char/tpm/tpm-interface.c
+> > @@ -412,7 +412,10 @@ int tpm_pm_suspend(struct device *dev)
+> >       }
+> >
+> >  suspended:
+> > -     return rc;
+> > +     if (rc)
+> > +             pr_err("Unable to suspend tpm-%d (error %d), but continuing system suspend\n",
+> > +                    chip->dev_num, rc);
+> > +     return 0;
+> >  }
+> >  EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> >
+> > --
+> > 2.39.0
+> >
+>
+> Let me read all the threads through starting from the original report. I've
+> had emails piling up because of getting sick before holiday, and holiday
+> season after that.
+>
+> This looks sane
 
-Thank you for making the updates,
+No, not really. I mean, it was sane under the circumstances of, "I'm
+not going to spend time fixing this for real if the maintainers aren't
+around," and it fixed the suspend issue. But it doesn't actually fix
+any real tpm issue. The real issue, AFAICT, is there's some sort of
+race between the tpm rng read command and either suspend or wakeup or
+selftest. One of these is missing some locking. And then commands step
+on each other and the tpm gets upset. This is probably something that
+should be fixed. I assume the "Fixes: ..." tag will actually go quite
+far back, with recent things only unearthing a somewhat old bug. But
+just a hunch.
 
-Tested-by: Vaishnav Achath <vaishnav.a@ti.com>
-
-Bootlogs during my testing :
-https://gist.github.com/vaishnavachath/64b58be41028c646b06568a73faed2fd
-
-> +};
-
--- 
-Regards,
-Vaishnav
+Jason
