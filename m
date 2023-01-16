@@ -2,86 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF0B66BB3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66DB66BB3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjAPKH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:07:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S230053AbjAPKIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:08:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjAPKH1 (ORCPT
+        with ESMTP id S229972AbjAPKHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:07:27 -0500
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049601BAC7
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:07:09 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id bk15so9359984ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:07:08 -0800 (PST)
+        Mon, 16 Jan 2023 05:07:46 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4D1193C1;
+        Mon, 16 Jan 2023 02:07:27 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id x5so603908qti.3;
+        Mon, 16 Jan 2023 02:07:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZTCz+isani3C/5J+9yJj7obK7LQvYU7O69T/Y+9F+F8=;
-        b=wdH/2nWMIOS0GwywLIT+2RHNtg5X933hpQFSNtAOgEudTESnr55wpLFmkujYRGBNME
-         lSqo86Kdg3hsvhYgE3fjGYcw7qEj6gOZBzXkXYOcuss+1XnZLrmBSCYIrPGJ1+7N12qp
-         H0lazrQfSd4O+r7Vur9BE2Js6l3rnJDEI6Tp2Snzd3tLNgo2RJl/d6HGGsU0AslA1QVH
-         3ZmRu5EE+NuJri30RwmYpUaWhdrQuUakaa4H7rZxiJHod1hU+8is94WOOCHm+25XnjgQ
-         s+bGGu/geUUQOXQNf4lmVEWWldA+SUiA4g6A1Wa6OTX/g2J74AsE5GX+PDaXi4ZI+mXl
-         i3ig==
-X-Gm-Message-State: AFqh2krLvGIf2bUxPwNEvDpjB8YrQYY5Izwe30yKAtz1QakcUtkO+7UL
-        DzfKxkNJtkJLfI3RvDtk4FRcFXUut/E=
-X-Google-Smtp-Source: AMrXdXsoGN1R8oF/zMup0p81IbrEwnhugbv+jd1MwxDTPJ4pXgmiBMp0RTVnBqgFsTVGo8lCZygipg==
-X-Received: by 2002:a17:906:5786:b0:78d:f455:3105 with SMTP id k6-20020a170906578600b0078df4553105mr72739023ejq.45.1673863627486;
-        Mon, 16 Jan 2023 02:07:07 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id du1-20020a17090772c100b0084bfd56fb3bsm11517899ejc.162.2023.01.16.02.07.06
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=26Y1vYmwwq8aWhcVlX6A7aJb6PyVhNqZiaD+Qkg9TZw=;
+        b=utP/O9EtDJ3CiawojFExCbSJ6f6u0a/KR375ANkYwCVL0VjZK9tJfTW6H6ufndVzxR
+         2urxR2MIIMkKjGdrkuz1802UlIyrlQkP8hIY3ZqdWoXLWKTqbtUesxWtUErr75gekyBn
+         U3nuqda5JFS24/EdZ8j4fOPyJsD3ee3M/cQwh29AFGu887ZnLqJJqOSlmpmkJ0KDNVcP
+         W7E+gVvqsrVUJU9kOBZ3cuJrRobsEclPW/AuK1gkYIKR55zgJeG1XmZnWlqQ+4jt8aK1
+         GSeZmdkSqgJKPhXuAVk/NkosBsZaJfyRfYPcKEbsBVnL1U1SHVrF5blIxWH7Tt+8u8FT
+         6+7g==
+X-Gm-Message-State: AFqh2kod5mefmyFlQ/a8vQ2xY5tkoaSxwycNltNYJAp3wwdRuQrNPZww
+        rHKtJu4AVtyX9K9jtetY9OvliM/WfpFsGA==
+X-Google-Smtp-Source: AMrXdXv1rbUEcZM7j1hR3C7o0Sy20KVmvgBwASRf+byMgi7DySoLy0sx5oJXxmwo5yMhIcLqEAFr+A==
+X-Received: by 2002:a05:622a:5096:b0:3b6:2f43:8937 with SMTP id fp22-20020a05622a509600b003b62f438937mr5466534qtb.3.1673863646451;
+        Mon, 16 Jan 2023 02:07:26 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id bl19-20020a05620a1a9300b006fa9d101775sm16772547qkb.33.2023.01.16.02.07.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 02:07:07 -0800 (PST)
-Message-ID: <f7be9afd-c581-c5bf-3967-717977c1979c@kernel.org>
-Date:   Mon, 16 Jan 2023 11:07:06 +0100
+        Mon, 16 Jan 2023 02:07:26 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-4d4303c9de6so223243147b3.2;
+        Mon, 16 Jan 2023 02:07:26 -0800 (PST)
+X-Received: by 2002:a81:91cc:0:b0:48d:1334:6e38 with SMTP id
+ i195-20020a8191cc000000b0048d13346e38mr1765629ywg.316.1673863645871; Mon, 16
+ Jan 2023 02:07:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] BRANCH_MARKER: work
-Content-Language: en-US
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, airlied@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230116100611.12712-1-jirislaby@kernel.org>
- <20230116100611.12712-2-jirislaby@kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230116100611.12712-2-jirislaby@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+References: <20221211061358.28035-1-palmer@rivosinc.com> <20221211061358.28035-6-palmer@rivosinc.com>
+In-Reply-To: <20221211061358.28035-6-palmer@rivosinc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 16 Jan 2023 11:07:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXpFBcxPZLcyqP_Zi7sxF1OgKtW1wExUO3xYks-RViVhA@mail.gmail.com>
+Message-ID: <CAMuHMdXpFBcxPZLcyqP_Zi7sxF1OgKtW1wExUO3xYks-RViVhA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/24] m68k: Remove COMMAND_LINE_SIZE from uapi
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please, ignore this :).
+CC linux-m68k
 
-On 16. 01. 23, 11:06, Jiri Slaby (SUSE) wrote:
-> From: Jiri Slaby <jslaby@suse.cz>
-> 
+On Sun, Dec 11, 2022 at 7:19 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>
+> As far as I can tell this is not used by userspace and thus should not
+> be part of the user-visible API.
+>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 > ---
->   branch/work | 1 +
->   1 file changed, 1 insertion(+)
->   create mode 100644 branch/work
-> 
-> diff --git a/branch/work b/branch/work
-> new file mode 100644
-> index 000000000000..587be6b4c3f9
-> --- /dev/null
-> +++ b/branch/work
-> @@ -0,0 +1 @@
-> +x
-
--- 
-js
-suse labs
-
+> This leaves an empty <uapi/asm/setup.h>, which will soon be cleaned up.
+> ---
+>  arch/m68k/include/asm/setup.h      | 3 +--
+>  arch/m68k/include/uapi/asm/setup.h | 2 --
+>  2 files changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/arch/m68k/include/asm/setup.h b/arch/m68k/include/asm/setup.h
+> index 2c99477aaf89..9a256cc3931d 100644
+> --- a/arch/m68k/include/asm/setup.h
+> +++ b/arch/m68k/include/asm/setup.h
+> @@ -23,9 +23,8 @@
+>  #define _M68K_SETUP_H
+>
+>  #include <uapi/asm/bootinfo.h>
+> -#include <uapi/asm/setup.h>
+> -
+>
+> +#define COMMAND_LINE_SIZE 256
+>  #define CL_SIZE COMMAND_LINE_SIZE
+>
+>  #ifndef __ASSEMBLY__
+> diff --git a/arch/m68k/include/uapi/asm/setup.h b/arch/m68k/include/uapi/asm/setup.h
+> index 25fe26d5597c..005593acc7d8 100644
+> --- a/arch/m68k/include/uapi/asm/setup.h
+> +++ b/arch/m68k/include/uapi/asm/setup.h
+> @@ -12,6 +12,4 @@
+>  #ifndef _UAPI_M68K_SETUP_H
+>  #define _UAPI_M68K_SETUP_H
+>
+> -#define COMMAND_LINE_SIZE 256
+> -
+>  #endif /* _UAPI_M68K_SETUP_H */
+> --
+> 2.38.1
+>
