@@ -2,172 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B48366C2B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCBC66C2C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjAPOvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S230346AbjAPOxb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 16 Jan 2023 09:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjAPOvX (ORCPT
+        with ESMTP id S229543AbjAPOw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:51:23 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7017CF6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:36:03 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s5so40936832edc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rCZPqWPiwmy+Qg3w9Zw0kU442c7Jihjgka7OZcZFvZ4=;
-        b=vK/m3ZhBu0rXmwlaHWgHg/SJV3wZwAcbhd6qMxLW6BfEHoQz0LWh1fbCr8C+lK5HmS
-         bhRZ1X9ylmKvKawQ3N6yph8My2pmJvfm0eafkOElbuheYZVdMhjGMwR8YExcCfbR/kL8
-         7eeGDkBW4uSNo0sICPIofDBbdeMdir6P4y2J0LpZl3rAU4eXG4k6SY8gQa6LsLjo1Hyd
-         UJgJqfqxKJJnyqeIXL8PxL4bMoBZkHOqmADuqiClaUMVQQH1XIk5czTyl31+GkSEqVyO
-         b/3x0jhIpJSBAntgZfJ52P3wbP7zLAnGw9xJE+2x3+hDg8AAW3SluiWijSVism0Kxc2q
-         uc/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rCZPqWPiwmy+Qg3w9Zw0kU442c7Jihjgka7OZcZFvZ4=;
-        b=KKTqKk7/S13FwD8G5Sc7J/6oQjNRWUIm4Q26X2EOh0nxG0bmq8alfMoBwubDJ0HERq
-         +Z4Aya+pQrsFWWQOE4do2s4gdB0eeVpm6U4QLPlfknesWQbyJ4A6TvYKxGaSEnoI3NkG
-         guazBnR0OFBhshpSlfCosB4ZMj2RNIXBaLy58qiN6fhBU0CQcSZfO5kKg1zIWs2I6qYi
-         WpIwALtBtU4y7tr0x8KslqOZyqUOTE5FG0U9I/8CFoVApwAmDl/XTA0/klxHBUYF+Rdi
-         GGksVnMAVyzDsPah1x1tXFycncZHNBkgSb+HNMgvvswqBlq+NxT544pWW2q4q7kc0jrh
-         pdFQ==
-X-Gm-Message-State: AFqh2kpphE1kQMZ6WZ44+tx5AEttamhwmoEuWc65azeHLy3RqUm6cwuG
-        a7PzQyOqgFoqmuSp2M7veTZDzg==
-X-Google-Smtp-Source: AMrXdXtV7SF+3RSBX9E7TN51Zz8RFwX6gb7hQ8yrCuB589NuTrrLEfdLDjrguaEyTdVgTYDRIpbTRw==
-X-Received: by 2002:a05:6402:2a02:b0:470:44eb:9e58 with SMTP id ey2-20020a0564022a0200b0047044eb9e58mr82109589edb.30.1673879762167;
-        Mon, 16 Jan 2023 06:36:02 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id d3-20020aa7d5c3000000b004835bd8dfe5sm11665624eds.35.2023.01.16.06.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 06:36:01 -0800 (PST)
-Date:   Mon, 16 Jan 2023 16:35:59 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, angelo@amarulasolutions.com,
-        michael@amarulasolutions.com, tommaso.merciai@amarulasolutions.com,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        linux-amarula@amarulasolutions.com, anthony@amarulasolutions.com,
-        jagan@amarulasolutions.com, Abel Vesa <abelvesa@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Jun <jun.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
-        Marek Vasut <marex@denx.de>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: Re: [RFC PATCH v2 11/11] arm64: dts: imx8mn: add clocks description
-Message-ID: <Y8VgzyNxGpqSvJ2b@linaro.org>
-References: <20230101175740.1010258-1-dario.binacchi@amarulasolutions.com>
- <20230101175740.1010258-12-dario.binacchi@amarulasolutions.com>
+        Mon, 16 Jan 2023 09:52:28 -0500
+Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754172BF32;
+        Mon, 16 Jan 2023 06:38:56 -0800 (PST)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 49B563A1757;
+        Mon, 16 Jan 2023 15:38:55 +0100 (CET)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 323C63A16BB;
+        Mon, 16 Jan 2023 15:38:55 +0100 (CET)
+X-TM-AS-ERS: 10.181.10.102-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
+        by mail5.swissbit.com (Postfix) with ESMTPS;
+        Mon, 16 Jan 2023 15:38:55 +0100 (CET)
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
+Subject: [PATCH] mmc: block: workaround long ioctl busy timeout
+Thread-Topic: [PATCH] mmc: block: workaround long ioctl busy timeout
+Thread-Index: Adkpq3tb+gXfT/KXQXawlvtJeLUDVw==
+Date:   Mon, 16 Jan 2023 14:38:53 +0000
+Message-ID: <68590206e8b044a2a71457cbbeda0794@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230101175740.1010258-12-dario.binacchi@amarulasolutions.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27390.000
+X-TMASE-Result: 10--8.216100-10.000000
+X-TMASE-MatchedRID: h20DFeLkM893uQV78MmZxh1kSRHxj+Z5FlIP4ZuPPcgvfU/riSJXkdko
+        t/+2LaVUIvrftAIhWmLy9zcRSkKatfIBX+jDfXGr9k0tWBWiOf9vk3JiXDj4ddgJ+YNQuvvyWRC
+        IX/LXQb6N93YyrucDM39T5imd/2HNDXVj0zMhpTY+EW3T0xru/EsY9G/RZ3FCmyiLZetSf8kTGR
+        upINaDDx9GgLAHOBFiIAcCikR3vq/205AQ33Ah3CSWTvfMopWv4Ut13rPkKW5t8v8Cp/gu40/Ft
+        YU9NC8y
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: a700dd83-0a62-415b-abe4-eb352c300a78-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-01 18:57:40, Dario Binacchi wrote:
-> The patch creates a unique node for each clock in the imx8mn clock
-> control module (CCM).
-> 
-> To ensure backwards compatibility it was not possible to separate the
-> changes to the device tree from those applied to the clocks setup code.
-> In doing so, all clocks are initialized from the device tree and the
-> legacy setup code with hardwired parameters is removed.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> 
-> ---
-> 
-> (no changes since v1)
-> 
->  .../boot/dts/freescale/imx8mn-clocks.dtsi     | 1885 +++++++++++++++++
->  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |   54 +-
->  drivers/clk/imx/clk-imx8mn.c                  |  714 ++-----
->  3 files changed, 2086 insertions(+), 567 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi
-> new file mode 100644
-> index 000000000000..21e02ea996d0
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn-clocks.dtsi
-> @@ -0,0 +1,1885 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Device Tree Source for imx8mn clock data
-> + *
-> + * Copyright (c) 2022 Amarula Solutions
-> + *
-> + * Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> + */
-> +
-> +/ {
-> +	osc_32k: clock-osc-32k {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <32768>;
-> +		clock-output-names = "osc_32k";
-> +	};
-> +
+The ioctl interface allowed to set cmd_timeout_ms when polling for
+busy on R1B commands. This was often limited by the max hw timeout
+so work around it like for the sanitize command.
 
-[...]
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+ drivers/mmc/core/block.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-> +
-> +	clk_audio_pll2_bypass: clock-audio-pll2-bypass@14 {
-> +		compatible = "fsl,imx8mn-mux-clock";
-> +		#clock-cells = <0>;
-> +		clocks = <&clk_audio_pll2>, <&clk_audio_pll2_ref_sel>;
-> +		fsl,anatop = <&anatop 0x14>;
-> +		fsl,bit-shift = <16>;
-> +		fsl,set-rate-parent;
-
-NACK. I'm sorry, but this creates a huge effort on maintaining the
-bindings. Plus the vendor specific properties will keep increasing.
-
-I don't think Rob and Krzysztof will be OK with this either.
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 20da7ed43e6d..ba3bc9014179 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -472,6 +472,8 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	struct scatterlist sg;
+ 	int err;
+ 	unsigned int target_part;
++	unsigned int busy_timeout = MMC_BLK_TIMEOUT_MS;
++	int poll_prog = false;
+ 
+ 	if (!card || !md || !idata)
+ 		return -EINVAL;
+@@ -493,6 +495,12 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	cmd.opcode = idata->ic.opcode;
+ 	cmd.arg = idata->ic.arg;
+ 	cmd.flags = idata->ic.flags;
++	/* R1B flag might be removed here to work around hw, so save it */
++	poll_prog = (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B);
++	busy_timeout = idata->ic.cmd_timeout_ms ? :
++		MMC_BLK_TIMEOUT_MS;
++	if (poll_prog)
++		mmc_prepare_busy_cmd(card->host, &cmd, busy_timeout);
+ 
+ 	if (idata->buf_bytes) {
+ 		data.sg = &sg;
+@@ -596,7 +604,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	if (idata->ic.postsleep_min_us)
+ 		usleep_range(idata->ic.postsleep_min_us, idata->ic.postsleep_max_us);
+ 
+-	if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
++	if (poll_prog) {
+ 		/*
+ 		 * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
+ 		 * allow to override the default timeout value if a custom timeout is specified.
+-- 
+2.37.3
 
 
-> +		clock-output-names = "audio_pll2_bypass";
-> +	};
-> +
-> +	clk_audio_pll2_out: clock-audio-pll2-out@14 {
-> +		compatible = "fsl,imx8mn-gate-clock";
-> +		#clock-cells = <0>;
-> +		clocks = <&clk_audio_pll2_bypass>;
-> +		fsl,anatop = <&anatop 0x14>;
-> +		fsl,bit-shift = <13>;
-> +		clock-output-names = "audio_pll2_out";
-> +	};
-> +
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
-[...]
-
-> -- 
-> 2.32.0
-> 
