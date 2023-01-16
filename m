@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A549266C414
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7759366C407
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 16:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjAPPhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 10:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S229608AbjAPPfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 10:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjAPPhL (ORCPT
+        with ESMTP id S230411AbjAPPem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 10:37:11 -0500
-X-Greylist: delayed 180 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Jan 2023 07:35:41 PST
-Received: from mo6-p01-ob.smtp.rzone.de (mo6-p01-ob.smtp.rzone.de [IPv6:2a01:238:400:200::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498551F92B
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 07:35:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1673882970; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=nZsUYF7ikucQF7DLMPbDxMOc8KZ6VR6W5bqBqEbZHFkQs+T4cbHZxFsTdMA6WtYqf/
-    NdYK7qAc84VFSOKEbPUiHbxMy7ASuQQWule9V1yKBPiT5zziR8CEZ/SK+rgMk022x4g3
-    CU9X2i3tQ9WTczlIH0LQ/QGeltAnaSwg7066eR8SURA+rLzI4XzMeeE3nS2oYnJFAcL/
-    VwwALj5URohYRKx0MMeVGh+3UYl7vb53uOFWX5Uq6QAlpYSne2uMvOyW7WEWEyMD9idB
-    gczSx1eTO2Ot9CwYgz8UPuPDpAmFO7/e+ti1ilWuX7mFJ6jAkrZUHtQwNAyfNe0NG//D
-    rIRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1673882970;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=AbbuHm7TvsAFiVwinj9rMZM8rW8kB0ZA+o+CqVXSWxM=;
-    b=SZMZKlPURtMGL6bF2SoTarIVEatMgvPrYieXLW6siZRvHXPROToNOnSNDW/b6rUAEh
-    zJu+Mbki39WDVfnpg/pwol+i7e5gaBhfaEF7jnWHVbujocQYsoe4/mDf0a8UM7L3tBHY
-    wlmfPEtZ+BEGpSOkax/GAv3S0yfVrXYuWSyr4vtsaIWPW7Z3DrXx9yiKelFUfeLEgEyu
-    EmyOrFdL0YlzIKkrlE5f8Vs2cn6U9C5e+9UCUgntXsejK5UIAA8aDAoHfRGhn2NzoIw+
-    zMoDfoY4gStUfeuMVjCdjKGztr8zQbm0h6bVGuPzcXt8M4RTWHHznGGsqt/S8fTn19ru
-    85mQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1673882970;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=AbbuHm7TvsAFiVwinj9rMZM8rW8kB0ZA+o+CqVXSWxM=;
-    b=tuMfb8OK84jk6v/Vc+Obyemg4XLn1FK/6P2w9+auAZ/uQJlmuwyU+CzGfPSbeYgNZx
-    44OV46vPa1ppgsNz1PzNgqteqqszDzf4T6EJUMGT3tbo1hEX1oGU1ZUOaHFtKN6e2uPg
-    Ixv+bHs+2kBo6rUb3CB4SXCENnh8t5jaAm3xgAm2cdKsCxkJfmWosIhdklUcXsNp7fgx
-    rLK0yaYBlCKm1yv4KRDF4NK+hcp0LTcRg40jf3vlHswkJAcnUiaIilYQrniGAXdoJ9LE
-    f5G4e7lR5zcbDKTMrgclPFBe2Y+Ra0+l9C2DSLUrXwBan3BS4WCzwtNCYWSA/whECWEw
-    bw1Q==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGfpGU="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 48.6.2 DYNA|AUTH)
-    with ESMTPSA id Q5ca1cz0GFTUL7n
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 16 Jan 2023 16:29:30 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH] ARM: dts: gta04: fix excess dma channel usage
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <Y8VkjQ2yZQssx/wJ@atomide.com>
-Date:   Mon, 16 Jan 2023 16:29:29 +0100
-Cc:     Adam Ford <aford173@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        Mon, 16 Jan 2023 10:34:42 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930054EE8;
+        Mon, 16 Jan 2023 07:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uu7nSecGWseQ3bOuTyemkP6Mkcu9D4Vr+8fK+fSf+bU=; b=SdDjm8sXL/UOT1grM+JtNQ/Ux6
+        En1SAU0mVmdeycI1VuSFQC7EbaHARW+S3qRy2OMHH7YmsFQYeyY66oB8kYxSWwEHg7hCw26UV3es3
+        6gB4ZQaIuFstj+VoxPf1hodh+V8K3DC2Zr2hkBMnnEVqBgXamgxEsCRcZMtJRl3hwTyOK6vFZMoV7
+        s45ICygDMZk1NxE5295RXxy0/M9FPHw5VeqLegB1u9eB7Ae1s97d2gBZO+ReEezxC/nl4E+tNDQeo
+        DbiniybZGTOE0LwdKCAAjmQzgPDQyvsY1+uP9+LZRfs3VkrbK0D8tCSA6EWBOeYvvPb86003AaCI+
+        akm0Urww==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36132)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pHRT1-0005H6-2n; Mon, 16 Jan 2023 15:32:10 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pHRSw-00067Q-Ao; Mon, 16 Jan 2023 15:32:06 +0000
+Date:   Mon, 16 Jan 2023 15:32:06 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <4EFDE2C4-0BBB-4804-AA46-C40EB0D97AC4@goldelico.com>
-References: <20230113211151.2314874-1-andreas@kemnade.info>
- <CAHCN7xJH+c41Yas+xnWA57KNi9arOOJDxJ=joEDEJr2k6jrRrw@mail.gmail.com>
- <Y8VkjQ2yZQssx/wJ@atomide.com>
-To:     Tony Lindgren <tony@atomide.com>
-X-Mailer: Apple Mail (2.3445.104.21)
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
+References: <Y1Wfc+M/zVdw9Di3@shell.armlinux.org.uk>
+ <Y1Zah4+hyFk50JC6@shell.armlinux.org.uk>
+ <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
+ <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
+ <trinity-defa4f3d-804e-401e-bea1-b36246cbc11b-1666685003285@3c-app-gmx-bap29>
+ <87o7qy39v5.fsf@miraculix.mork.no>
+ <Y8VVa0zHk0nCwS1w@shell.armlinux.org.uk>
+ <87h6wq35dn.fsf@miraculix.mork.no>
+ <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
+ <87bkmy33ph.fsf@miraculix.mork.no>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87bkmy33ph.fsf@miraculix.mork.no>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,34 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jan 16, 2023 at 04:21:30PM +0100, Bjørn Mork wrote:
+> [   54.539438] mtk_soc_eth 15100000.ethernet wan: Link is Down
+> [   56.619937] mtk_sgmii_select_pcs: id=1
+> [   56.623690] mtk_pcs_config: interface=4
+> [   56.627511] offset:0 0x140
+> [   56.627513] offset:4 0x4d544950
+> [   56.630215] offset:8 0x20
+> [   56.633340] forcing AN
+> [   56.638292] mtk_pcs_config: rgc3=0x0, advertise=0x1 (changed), link_timer=1600000,  sgm_mode=0x103, bmcr=0x1000, use_an=1
+> [   56.649226] mtk_pcs_link_up: interface=4
+> [   56.653135] offset:0 0x81140
+> [   56.653137] offset:4 0x4d544950
+> [   56.656001] offset:8 0x1
+> [   56.659137] mtk_soc_eth 15100000.ethernet wan: Link is Up - 1Gbps/Full - flow control rx/tx
 
-> Am 16.01.2023 um 15:51 schrieb Tony Lindgren <tony@atomide.com>:
-> 
-> Hi,
-> 
-> * Adam Ford <aford173@gmail.com> [230116 14:16]:
->> Would it make sense to make this default in the omap3.dtsi file and
->> enable them in the individual boards that need it?
-> 
-> In general disabling the unused devices by default for omaps will break
-> the power management. The disabled devices are completely ignored by the
-> kernel, and the devices are left to whatever the bootloader state might
-> be.
+Thanks - there seems to be something weird with the bmcr value printed
+above in the mtk_pcs_config line.
 
-Yes, indeed.
+You have bmcr=0x1000, but the code sets two bits - SGMII_AN_RESTART and
+SGMII_AN_ENABLE which are bits 9 and 12, so bmcr should be 0x1200, not
+0x1000. Any ideas why?
 
-> For SoCs using firmware to manage devices it's a bit different story
-> however. The firmware can still idle disabled devices based on a
-> late_initcall for example, even if the kernel knows nothing about the
-> disabled devices.
+Can you also hint at what the bits in the PHY register you quote mean
+please?
 
-But how can we then handle all devices being "okay" by default and
-eating up more dma channels than are available?
+Thanks.
 
-We can't put all under power management AND dma by default.
-
-Or can dma channel usage be postponed until the device is really used?
-
-BR,
-Nikolaus
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
