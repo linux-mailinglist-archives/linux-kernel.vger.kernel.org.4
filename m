@@ -2,165 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4573166CF45
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBD666CF46
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbjAPTAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S233846AbjAPTBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbjAPTAs (ORCPT
+        with ESMTP id S230465AbjAPTB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:00:48 -0500
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4835A234D5;
-        Mon, 16 Jan 2023 11:00:47 -0800 (PST)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GIxuOn2109213
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 18:59:57 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9a:3202:549f:9f7a:c9d8:875b])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 30GIxoPL2177984
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 19:59:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1673895591; bh=a4SXkIxmSrOYxxcCMtrOU0vev2/ZChtTN7KgK4Iptkk=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=kQkPNgTCxYO8ZngrQVLf1ev5VkkeS7NUDz467UYSHqRWRl33bLvhs5qsTRMrCWf8c
-         6BYJthnUdI7buFBRRe/TUfe/2722DX6fmLLcctQ6KCh+QzQDgJJgX/SqlVB7UoUvb1
-         O0vsA831gPz393sL+SYfAC2vQRFmH+wZqbhHF3W8=
-Received: (nullmailer pid 387067 invoked by uid 1000);
-        Mon, 16 Jan 2023 18:59:50 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Organization: m
-References: <Y8VmSrjHTlllaDy2@shell.armlinux.org.uk>
-        <87bkmy33ph.fsf@miraculix.mork.no>
-        <Y8Vt9vfEa4w8HXHQ@shell.armlinux.org.uk>
-        <875yd630cu.fsf@miraculix.mork.no> <871qnu2ztz.fsf@miraculix.mork.no>
-        <Y8WNxAQ6C6NyUUn1@shell.armlinux.org.uk>
-        <87pmbe1hu0.fsf@miraculix.mork.no> <87lem21hkq.fsf@miraculix.mork.no>
-        <Y8WT6GwMqwi8rBe7@shell.armlinux.org.uk>
-        <87a62i1ge4.fsf@miraculix.mork.no>
-        <Y8WdTVU141f2L1R5@shell.armlinux.org.uk>
-Date:   Mon, 16 Jan 2023 19:59:50 +0100
-In-Reply-To: <Y8WdTVU141f2L1R5@shell.armlinux.org.uk> (Russell King's message
-        of "Mon, 16 Jan 2023 18:54:05 +0000")
-Message-ID: <87zgaiz4nt.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 16 Jan 2023 14:01:27 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B233A9A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OTvEP0dk4mOnC2iv0N91tfWHpSStEQbuT03o4jsB+3k=; b=SJcYe70efrX8NSS8Oee1AV7oXk
+        9+KXywD1yVF9dgdzQNDkDQZsc2W3A3X7sBqpZ5JPqn63Ow7j8GgTrImpeRecy4QUIFl6ljfcUQqEa
+        t87JAqa/QYU7shrT2vJTbdrGkqcaBcQBYp9KvWq3t74wTeYM7Xwr6zIqcWyMMKvjCu9W3BqE6/3rA
+        YMnpnqqcYNrOafNGhECpltEHsNkGlaPwFsC3KqYJg/50+O/WC/MQZN3GKSApQ/Dg/WZ4JPe/vJCGM
+        dSmUKDFurx2BcqKKe3Ri7baVFaWaUo6sjj7wlvWvISzoX+SDGE28lj9TDcd5qWnPh2Bf7A7M7jbmU
+        hl85AbnQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHUjd-008zPN-Oh; Mon, 16 Jan 2023 19:01:33 +0000
+Date:   Mon, 16 Jan 2023 19:01:33 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, urezki@gmail.com,
+        lstoakes@gmail.com, stephen.s.brennan@oracle.com,
+        akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v3 3/7] mm/vmalloc.c: allow vread() to read out
+ vm_map_ram areas
+Message-ID: <Y8WfDSRkc/OHP3oD@casper.infradead.org>
+References: <20230113031921.64716-1-bhe@redhat.com>
+ <20230113031921.64716-4-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.7 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113031921.64716-4-bhe@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Russell King (Oracle)" <linux@armlinux.org.uk> writes:
+On Fri, Jan 13, 2023 at 11:19:17AM +0800, Baoquan He wrote:
+> +	spin_lock(&vb->lock);
+> +	if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+> +		spin_unlock(&vb->lock);
+> +		memset(buf, 0, count);
+> +		return;
+> +	}
+> +	for_each_set_bitrange(rs, re, vb->used_map, VMAP_BBMAP_BITS) {
+> +		if (!count)
+> +			break;
+> +		start = vmap_block_vaddr(vb->va->va_start, rs);
+> +		while (addr < start) {
+> +			if (count == 0)
+> +				break;
+> +			*buf = '\0';
+> +			buf++;
+> +			addr++;
+> +			count--;
+> +		}
+> +		/*it could start reading from the middle of used region*/
+> +		offset = offset_in_page(addr);
+> +		n = ((re - rs + 1) << PAGE_SHIFT) - offset;
+> +		if (n > count)
+> +			n = count;
+> +		aligned_vread(buf, start+offset, n);
 
-> On Mon, Jan 16, 2023 at 07:30:27PM +0100, Bj=C3=B8rn Mork wrote:
->> "Russell King (Oracle)" <linux@armlinux.org.uk> writes:
->>=20
->> > That all looks fine. However, I'm running out of ideas.
->>=20
->> Thanks a lot for the effort in any case.  It's comforting that even the
->> top experts can't figure out this one :-)
->>=20
->>=20
->> > What we seem to have is:
->> >
->> > PHY:
->> > VSPEC1_SGMII_CTRL =3D 0x34da
->> > VSPEC1_SGMII_STAT =3D 0x000e
->> >
->> > The PHY is programmed to exchange SGMII with the host PCS, and it
->> > says that it hasn't completed that exchange (bit 5 of STAT).
->> >
->> > The Mediatek PCS says:
->> > BMCR =3D 0x1140		AN enabled
->> > BMSR =3D 0x0008		AN capable
->> > ADVERTISE =3D 0x0001	SGMII response (bit 14 is clear, hardware is
->> > 			supposed to manage that bit)
->> > LPA =3D 0x0000		SGMII received control word (nothing)
->> > SGMII_MODE =3D 0x011b	SGMII mode, duplex AN, 1000M, Full duplex,
->> > 			Remote fault disable
->> >
->> > which all looks like it should work - but it isn't.
->> >
->> > One last thing I can think of trying at the moment would be writing
->> > the VSPEC1_SGMII_CTRL with 0x36da, setting bit 9 which allegedly
->> > restarts the SGMII exchange. There's some comments in the PHY driver
->> > that this may be needed - maybe it's necessary once the MAC's PCS
->> > has been switched to SGMII mode.
->>=20
->>=20
->> Tried that now.  Didn't change anything.  And still no packets.
->>=20
->> root@OpenWrt:/# mdio mdio-bus 6:30 raw 8
->> 0x34da
->> root@OpenWrt:/# mdio mdio-bus 6:30 raw 9
->> 0x000e
->> root@OpenWrt:/# mdio mdio-bus 6:30 raw 8 0x36da
->> root@OpenWrt:/# mdio mdio-bus 6:30 raw 8
->> 0x34da
->> root@OpenWrt:/# mdio mdio-bus 6:30 raw 9
->> 0x000e
->
-> If bit 9 is indeed the restart-an bit, it will be self-clearing, so
-> I wouldn't expect a read back of it to change to 0x36da.
->
-> I guess next thing to try is clearing and setting the AN enable bit,
-> bit 12, so please try this:
->
-> mdio mdio-bus 6:30 raw 8 0x24da
-> mdio mdio-bus 6:30 raw 8 0x36da
-> mdio mdio-bus 6:30 raw 9
->
-> If that doesn't work, then let's try something a bit harder:
->
-> mdio mdio-bus 6:30 raw 8 0xb4da
-> mdio mdio-bus 6:30 raw 9
->
-> Please let me know the results from those.
+The whole vread() interface is rather suboptimal.  The only user is proc,
+which is trying to copy to userspace.  But the vread() interface copies
+to a kernel address, so kcore has to copy to a bounce buffer.  That makes
+this spinlock work, but the price is that we can't copy to a user address
+in the future.  Ideally, read_kcore() would be kcore_read_iter() and
+we'd pass an iov_iter into vread().  vread() would then need to use a
+mutex rather than a spinlock.
 
-OK, back to the original dts with phy-mode =3D "2500base-x", with peer set
-to 1G.  Still no success:
-
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 8
-0x34da
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 9
-0x000e
-root@OpenWrt:/#  mdio mdio-bus 6:30 raw 8 0x24da
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 8 0x36da
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 9
-0x000e
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 8 0xb4da
-root@OpenWrt:/# mdio mdio-bus 6:30 raw 9
-0x000e
-
-
-
-Bj=C3=B8rn
+I don't think this needs to be done now, but if someone's looking for
+a project ...
