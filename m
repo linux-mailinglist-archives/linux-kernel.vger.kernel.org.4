@@ -2,141 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC9366BEDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2125C66BEE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 14:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjAPNKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 08:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S231472AbjAPNMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 08:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjAPNJo (ORCPT
+        with ESMTP id S231176AbjAPNLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 08:09:44 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F319F2202F;
-        Mon, 16 Jan 2023 05:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673874448; x=1705410448;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PQR4PYqa4mE+bf4TUURtJBMGa6yXyz651NIX9P1G6Qs=;
-  b=C5ZoJsr5KRd3uX1iFR1SyH7LS/BuvtBloLH0m9sQa3MqJ+LvK12Hs7Vc
-   c1pdNX0h2AesB8knxS1ENDNqrMH+wl1JmHwWL/vfr+k/Tla8RijTbWBfy
-   BwFTgx6jIW8XbC+tvzZJElj7u8TvXW3st/p4Y3cM9smkRk22yc0vscUP7
-   zxz+TDpx9nuUzf5n7qrMjLeFtLIvZwVUxd5vJjPcZGo1RahNo3rjUNyOc
-   JFIRi6s1DUj3TZMPjh9w0jzmjWCgJSE5x1topxJQOXCFkZAMCcL7Ewbe5
-   cMlaVPmlZpAinY74L72CTn189rEYE2yZFW3dT4iBGeRGgloE/zmSq8mbz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="323157590"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="323157590"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 05:07:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10591"; a="832831586"
-X-IronPort-AV: E=Sophos;i="5.97,221,1669104000"; 
-   d="scan'208";a="832831586"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 05:07:14 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 3400E20165;
-        Mon, 16 Jan 2023 15:07:11 +0200 (EET)
-Date:   Mon, 16 Jan 2023 13:07:11 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
-        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, chrome-platform@lists.linux.dev,
-        Xin Ji <xji@analogixsemi.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
-        linux-acpi@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v10 1/9] device property: Add remote endpoint to devcon
- matcher
-Message-ID: <Y8VL/+My+s/PkG9L@paasikivi.fi.intel.com>
-References: <20230112042104.4107253-1-treapking@chromium.org>
- <20230112042104.4107253-2-treapking@chromium.org>
- <Y8AL8nTcNcl6zX7H@paasikivi.fi.intel.com>
- <CACeCKaeN7KBi30M1fRWhTPgMbxF6=B+KuAS7Ny7+i9qCx+=49Q@mail.gmail.com>
+        Mon, 16 Jan 2023 08:11:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3A523C7C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:08:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673874465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dmLLkPbzYH2imUf6tsl8FiMjCHfk0QK4ayKq6vV3fIw=;
+        b=VtcnVPdxgBXfOnfFFWpe7+LMcv3qDeLYe0SCcVZzzZD/nNS1znErNoNigbpfkhBNazIq6D
+        mfLdDg7esB2SSt8wI1KNW4SyqR/H13wmhaxwvD0m0HPAMu3cn4AMCYp52ukLUOrEpOmJCx
+        sAEZ7H9Yh9cVy0QE2WvWhqMeHWaUIO8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-611-p3E8r39tNjeiXIoIDWJOjA-1; Mon, 16 Jan 2023 08:07:44 -0500
+X-MC-Unique: p3E8r39tNjeiXIoIDWJOjA-1
+Received: by mail-wr1-f72.google.com with SMTP id j30-20020adfb31e000000b002be008be32cso629272wrd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 05:07:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dmLLkPbzYH2imUf6tsl8FiMjCHfk0QK4ayKq6vV3fIw=;
+        b=AIRgGG0OzDSw9oz8ZTdDTMPf+CaQtP0bRckDImbvbPZ8XIuR2Hkd+59MxXUScIuMtB
+         1ylscRqAG3+GzKP/b7zFzzenPRoq3pieoTrIWKZLJJ5lyqo83aUyegm6ah68S/1guM5z
+         0xkrBZSw8taFgH37ZkmW0/xu1tFDMxCPI+BCrLPC7v0npwviRGpKMxMLWtqnfvznv525
+         fRGQsBmu3zqygYC8d1neKVAZEHGmBmER4qoRGu8eB1yNIBYvinhycvrkL9U68yGzQjAF
+         WmKQl7frGLGPtOj1EnSMDTau/uoh8MuzaQa4qrCdH9FCcPUNjRG0wRuDqjTtp1NSh7nW
+         cBUA==
+X-Gm-Message-State: AFqh2kotU3KmhcwUGcNJllkhJ7AFWIyqmwc7wEexehyMkYLB9+tAxiJm
+        7aguVfMlqpu1EnwTUpMuLyiq1oWJS5TqgmK/qSNJmZphBCDt0EFFouN3mYsuFaSK4tMS3jh5MJD
+        Jer5aZT8pwyXbsnIbjESXD/kR
+X-Received: by 2002:a05:600c:1e10:b0:3da:1d51:ef9d with SMTP id ay16-20020a05600c1e1000b003da1d51ef9dmr12365183wmb.15.1673874463485;
+        Mon, 16 Jan 2023 05:07:43 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXugD1xws40AUhPq2LWDIcl1B4P7+pPhBrX2BWrHBy3cM2vSvbJ2rmzKLoAy9dm9rGqGbjQaJw==
+X-Received: by 2002:a05:600c:1e10:b0:3da:1d51:ef9d with SMTP id ay16-20020a05600c1e1000b003da1d51ef9dmr12365161wmb.15.1673874463142;
+        Mon, 16 Jan 2023 05:07:43 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1000:21d5:831d:e107:fbd6? (p200300cbc704100021d5831de107fbd6.dip0.t-ipconnect.de. [2003:cb:c704:1000:21d5:831d:e107:fbd6])
+        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b003cf71b1f66csm38419097wms.0.2023.01.16.05.07.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 05:07:42 -0800 (PST)
+Message-ID: <5a7fdfa7-5b25-0ed4-2479-661d387b397b@redhat.com>
+Date:   Mon, 16 Jan 2023 14:07:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKaeN7KBi30M1fRWhTPgMbxF6=B+KuAS7Ny7+i9qCx+=49Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Jann Horn <jannh@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>
+References: <20230111133351.807024-1-jannh@google.com>
+ <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
+ <CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com>
+ <20230115190654.mehtlyz2rxtg34sl@box.shutemov.name>
+ <CAG48ez2zeQ4+g1=B4eyrrvZRYMr1S1xKBh2_eAhCjVjhj7Lpfg@mail.gmail.com>
+ <20230116123403.fiyv22esqgh7bzp3@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230116123403.fiyv22esqgh7bzp3@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prashant,
+On 16.01.23 13:34, Kirill A. Shutemov wrote:
+> On Mon, Jan 16, 2023 at 01:06:59PM +0100, Jann Horn wrote:
+>> On Sun, Jan 15, 2023 at 8:07 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
+>>> On Fri, Jan 13, 2023 at 08:28:59PM +0100, Jann Horn wrote:
+>>>> No, that lockdep assert has to be there. Page table traversal is
+>>>> allowed under any one of the mmap lock, the anon_vma lock (if the VMA
+>>>> is associated with an anon_vma), and the mapping lock (if the VMA is
+>>>> associated with a mapping); and so to be able to remove page tables,
+>>>> we must hold all three of them.
+>>>
+>>> Okay, that's fair. I agree with the patch now. Maybe adjust the commit
+>>> message a bit?
+>>
+>> Just to make sure we're on the same page: Are you suggesting that I
+>> add this text?
+>> "Page table traversal is allowed under any one of the mmap lock, the
+>> anon_vma lock (if the VMA is associated with an anon_vma), and the
+>> mapping lock (if the VMA is associated with a mapping); and so to be
+>> able to remove page tables, we must hold all three of them."
+>> Or something else?
+> 
+> Looks good to me.
+> 
+>>> Anyway:
+>>>
+>>> Acked-by: Kirill A. Shutemov <kirill.shutemov@intel.linux.com>
+>>
+>> Thanks!
+>>
+>>> BTW, I've noticied that you recently added tlb_remove_table_sync_one().
+>>> I'm not sure why it is needed. Why IPI in pmdp_collapse_flush() in not
+>>> good enough to serialize against GUP fast?
+>>
+>> If that sent an IPI, it would be good enough; but
+>> pmdp_collapse_flush() is not guaranteed to send an IPI.
+>> It does a TLB flush, but on some architectures (including arm64 and
+>> also virtualized x86), a remote TLB flush can be done without an IPI.
+>> For example, arm64 has some fancy hardware support for remote TLB
+>> invalidation without IPIs ("broadcast TLB invalidation"), and
+>> virtualized x86 has (depending on the hypervisor) things like TLB
+>> shootdown hypercalls (under Hyper-V, see hyperv_flush_tlb_multi) or
+>> TLB shootdown signalling for preempted CPUs through shared memory
+>> (under KVM, see kvm_flush_tlb_multi).
+> 
+> I think such architectures must provide proper pmdp_collapse_flush()
+> with the required serialization. Power and S390 already do that.
+> 
 
-On Thu, Jan 12, 2023 at 02:31:45PM -0800, Prashant Malani wrote:
-> HI Sakari,
-> 
-> On Thu, Jan 12, 2023 at 5:32 AM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Pin-yen,
-> >
-> > On Thu, Jan 12, 2023 at 12:20:56PM +0800, Pin-yen Lin wrote:
-> > > From: Prashant Malani <pmalani@chromium.org>
-> > > +             /*
-> > > +              * Some drivers may register devices for endpoints. Check
-> > > +              * the remote-endpoints for matches in addition to the remote
-> > > +              * port parent.
-> > > +              */
-> > > +             node = fwnode_graph_get_remote_endpoint(ep);
-> > > +             if (fwnode_device_is_available(node)) {
-> > > +                     ret = match(node, con_id, data);
-> > > +                     if (ret) {
-> > > +                             if (matches)
-> > > +                                     matches[count] = ret;
-> > > +                             count++;
-> > > +                     }
-> > > +             }
-> >
-> > Aren't you missing fwnode_handle-put(node) here??
-> 
-> It shouldn't be necessary. We aren't break-ing/continue-ing here,
-> and fwnode_handle_put(node) is called latter in the loop [1][2]
+The plan is to eventually move away from (ab)using IPI to synchronize with
+GUP-fast. Moving further into that direction a is wrong.
 
-It is, but node is overwritten just below this chunk --- before
-fwnode_handle_put() is called on it.
+The flush was added as a quick fix for all architectures by Jann, until
+we can do better.
 
-> 
-> BR,
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/property.c#n1256
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/property.c#n1261
+Even for ppc64, see:
+
+commit bedf03416913d88c796288f9dca109a53608c745
+Author: Yang Shi <shy828301@gmail.com>
+Date:   Wed Sep 7 11:01:44 2022 -0700
+
+     powerpc/64s/radix: don't need to broadcast IPI for radix pmd collapse flush
+     
+     The IPI broadcast is used to serialize against fast-GUP, but fast-GUP will
+     move to use RCU instead of disabling local interrupts in fast-GUP.  Using
+     an IPI is the old-styled way of serializing against fast-GUP although it
+     still works as expected now.
+     
+     And fast-GUP now fixed the potential race with THP collapse by checking
+     whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
+     flush is not necessary anymore.  But it is still needed for hash TLB.
+
 
 -- 
-Regards,
+Thanks,
 
-Sakari Ailus
+David / dhildenb
+
