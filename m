@@ -2,123 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A041366C248
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FD366C246
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 15:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjAPOet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 09:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S232766AbjAPOem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 09:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjAPOeX (ORCPT
+        with ESMTP id S232633AbjAPOeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 09:34:23 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E9F25E32
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:14:59 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id q2so30134438ljp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:14:59 -0800 (PST)
+        Mon, 16 Jan 2023 09:34:20 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4815B25E29
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:14:58 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id v6so40824877edd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 06:14:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Ficsldgz1V74n51gnUvukrDpVMvxEkIQD2f4d4LFj4=;
-        b=P1FspR5njyIiraQNtqdfe9hJKpnalbbp9WRYjEmC3hECF8zuaeICcPakMEw9Vrug6l
-         i8FEbDe7Ew4S1mbifUu/FZMhif0s13LiAOi+Tl5QFDFSivISP3WCRkr7cgJdE2n47weK
-         R68kqe75bPbXJu+dMpeCZOh4vhtk3uxO/UF9ev7z9fOkJ52uNEMCsHHZj5z3X8nkNBMS
-         WRLRwLdwf0AJ0ZzEnknYKzCOKP6Q9khNb0wDTnHlAekr1iMRWoJTKn2mqCMjj5AvsQ4m
-         S9z9TU08fal1aHZbGTSINOeTwB3j8V4/cvWrGA53V9okmKe043LLXAGfJKOu56n3iWzE
-         Eo8Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PxWXmWcLQ+ZIknAtpo/VTrs5PfqFx9sefku166Jyecw=;
+        b=lG2jWb+J5HLvrWszvvybXPjb7IPaErSAiwIUBVWb5qlcA3I8+l6J0mmbat/04JWP0E
+         UrRKrpCVDgDq2VCdHtDOnzuRSLtthlJ6JtAyZNA+LqpF/gUMH1BV9WqMwFdVVGgOhxCv
+         wgMNLiti//slLJWlUiF1wZmOvosdEde6WHcR5zoXYppXGMj9sMcchC6Y8KPcsUCYLTbx
+         iKPwej56sTot2iQVIEeFaCskeJV2VJACzJGr/qpnhjMJ9+9ZTSsjk09NdoV1et3xIvDx
+         nCTVfBlkGt9cMWCifaek42Mi8aSdMb+q2HQu9CXB3dcL6+mXz9DIURyP3xCdfOYrXncG
+         tQFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Ficsldgz1V74n51gnUvukrDpVMvxEkIQD2f4d4LFj4=;
-        b=ILh8zDyujBngk0bux+PFyOGHnh1f6QjMIFv9tBH534tCj1ocBhBxT1Mp3d/nJsZJQL
-         VWf4GSDs8yHpjZVf1RaWLvy4Mnkwxnm6+VqrD7IrMre4lt5cnvEQkpsICqGYZj8E5YJS
-         e5MD7+YYp3d52M3zI96EaMexzsi19U/E4lSM+Dv9gfqPxJL4u1hgrW2dChJGj0yZ6e7W
-         w5MCFLIO1qtUkwNsjlql8oXMPXaDr2avG/ta3RRIwUjTZw1pUV8Kn2wMb4achfzwgvuk
-         5jAHAO/M3aGkj0HzyRR7Zv0zSSuLjhlDPEEFM4YWdsPIWqGPXOgTghR3Dwlm2En5nFsa
-         szhQ==
-X-Gm-Message-State: AFqh2kqZdM07KVLTim2B3UZc6Z4viW0TSp2Tz4iX1Oo664YtANYXfDER
-        x5PfwUH5xvYuoGqeQ/igIMgVbQ==
-X-Google-Smtp-Source: AMrXdXtZ8rR829D0MqKWhPH2C4/psGp6mr5iBMWLIQ05tq9vUWCGJttMa5xAtOo54W3ut6i6bT7h7g==
-X-Received: by 2002:a05:651c:198e:b0:284:3b7f:9b7 with SMTP id bx14-20020a05651c198e00b002843b7f09b7mr11497297ljb.48.1673878497742;
-        Mon, 16 Jan 2023 06:14:57 -0800 (PST)
-Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id s27-20020a05651c201b00b0028b85d0e705sm483717ljo.136.2023.01.16.06.14.56
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PxWXmWcLQ+ZIknAtpo/VTrs5PfqFx9sefku166Jyecw=;
+        b=qsNaKPFVGjt1wGtXWjCxS4eM66cvn7pnWe9zCHBVbFjHN7DS7w8VtHRTT8Bjn6Zdov
+         rB37nkGY/NlMM4WaBauRLpEfTSTDV+VSopeHSlXwiM8yAYsCMyjEjsgHvdFY+KlfX6oZ
+         KyaBUB3v12xepqmACpvFID+Bj+nIsYYjenEXsuRHblu1hkjdYQmvBv7D2JP4lYAaWgyg
+         gQwD8jCj4mWxVekPvOyufgcgIH4k24m3zG5qkQTLnpv5aQXvBf3cDptO8qbmT3a/n5T8
+         RGmWb0Qp1mRCCWiFcSJNo0nAZjZY7OXoFqnrADvL3jUrdzbiUvAwfKOvlHLkgYoC7tPO
+         wo7w==
+X-Gm-Message-State: AFqh2koqL0FA/e2m7O8Ab9Ipk4QWXKf+As5MCHfZE7S/laJ/ALUK1zFW
+        5Qeyv40/ObcUGyJ1zKot1DMoUA==
+X-Google-Smtp-Source: AMrXdXtKQkmYiR8b4sgoBLLQVNlMUBW4jlnwYSbaHNAIN+T0Fhw2pI/kQSEyKvuC2H5sGY6b5pBcRA==
+X-Received: by 2002:a50:cc4c:0:b0:463:e2cd:a8b5 with SMTP id n12-20020a50cc4c000000b00463e2cda8b5mr81548431edi.11.1673878496707;
+        Mon, 16 Jan 2023 06:14:56 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id o7-20020aa7d3c7000000b0045bd14e241csm11586818edr.76.2023.01.16.06.14.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 06:14:57 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
+        Mon, 16 Jan 2023 06:14:56 -0800 (PST)
+Date:   Mon, 16 Jan 2023 16:14:54 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     mani@kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sdm630-nile: Reserve simplefb memory
-Date:   Mon, 16 Jan 2023 15:14:51 +0100
-Message-Id: <20230116141451.470158-2-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230116141451.470158-1-konrad.dybcio@linaro.org>
-References: <20230116141451.470158-1-konrad.dybcio@linaro.org>
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 6/6] phy: qcom-qmp-ufs: Add SM8550 support
+Message-ID: <Y8Vb3jBR2AtAJlWQ@linaro.org>
+References: <20230112130542.1399921-1-abel.vesa@linaro.org>
+ <20230112130542.1399921-7-abel.vesa@linaro.org>
+ <Y8GkZKwvOc5nPSjI@matsya>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8GkZKwvOc5nPSjI@matsya>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reserve the bit of memory that simplefb uses to ensure it can always
-probe.
+On 23-01-14 00:05:16, Vinod Koul wrote:
+> On 12-01-23, 15:05, Abel Vesa wrote:
+> > Add SM8550 specific register layout and table configs.
+> 
+> Not related, but was this tested with the UFS Gear 4 support from Mani?
+> It would be great to have that added (here or separately)
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-No changes
+I mentioned both Mani's and Dmitry's patchsets in the cover letter.
+This patchset is based on both those patchsets.
 
- arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dts | 5 +++++
- arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi        | 5 +++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dts b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dts
-index 71b448978e88..9425b2d9536e 100644
---- a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dts
-@@ -21,6 +21,11 @@ framebuffer@9d400000 {
- 	};
- };
- 
-+/* Reserve a bigger chunk of RAM for the higher-res display */
-+&cont_splash_mem {
-+	reg = <0 0x9d400000 0 (2520 * 1080 * 4)>;
-+};
-+
- /* Ganges devices feature a Novatek touchscreen instead. */
- /delete-node/ &touchscreen;
- /delete-node/ &vreg_l18a_1v8;
-diff --git a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-index 763b1df692f2..e52580acd5c8 100644
---- a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-@@ -142,6 +142,11 @@ reserved@85800000 {
- 			reg = <0x00 0x85800000 0x00 0x3700000>;
- 			no-map;
- 		};
-+
-+		cont_splash_mem: splash@9d400000 {
-+			reg = <0 0x9d400000 0 (1920 * 1080 * 4)>;
-+			no-map;
-+		};
- 	};
- 
- 	/*
--- 
-2.39.0
-
+> 
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 100 ++++++++++++++++++++++++
+> >  1 file changed, 100 insertions(+)
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+> > index 5936a3a05002..a9b666f32f59 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+> > @@ -95,6 +95,13 @@ static const unsigned int sm8150_ufsphy_regs_layout[QPHY_LAYOUT_SIZE] = {
+> >  	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V4_PCS_UFS_POWER_DOWN_CONTROL,
+> >  };
+> >  
+> > +static const unsigned int sm8550_ufsphy_regs_layout[QPHY_LAYOUT_SIZE] = {
+> > +	[QPHY_START_CTRL]		= QPHY_V6_PCS_UFS_PHY_START,
+> > +	[QPHY_PCS_READY_STATUS]		= QPHY_V6_PCS_UFS_READY_STATUS,
+> > +	[QPHY_SW_RESET]			= QPHY_V6_PCS_UFS_SW_RESET,
+> > +	[QPHY_PCS_POWER_DOWN_CONTROL]	= QPHY_V6_PCS_UFS_POWER_DOWN_CONTROL,
+> > +};
+> > +
+> >  static const struct qmp_phy_init_tbl msm8996_ufsphy_serdes[] = {
+> >  	QMP_PHY_INIT_CFG(QSERDES_COM_CMN_CONFIG, 0x0e),
+> >  	QMP_PHY_INIT_CFG(QSERDES_COM_SYSCLK_EN_SEL, 0xd7),
+> > @@ -599,6 +606,61 @@ static const struct qmp_phy_init_tbl sm8350_ufsphy_g4_pcs[] = {
+> >  	QMP_PHY_INIT_CFG(QPHY_V5_PCS_UFS_BIST_FIXED_PAT_CTRL, 0x0a),
+> >  };
+> >  
+> > +static const struct qmp_phy_init_tbl sm8550_ufsphy_serdes[] = {
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_SYSCLK_EN_SEL, 0xd9),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CMN_CONFIG_1, 0x16),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_HSCLK_SEL_1, 0x11),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_HSCLK_HS_SWITCH_SEL_1, 0x00),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP_EN, 0x01),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_MAP, 0x04),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_IVCO, 0x0f),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_VCO_TUNE_INITVAL2, 0x00),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x41),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x7f),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x06),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_DEC_START_MODE0, 0x4c),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_CP_CTRL_MODE0, 0x0a),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_RCTRL_MODE0, 0x18),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_PLL_CCTRL_MODE0, 0x14),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP1_MODE0, 0x99),
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_COM_LOCK_CMP2_MODE0, 0x07),
+> > +};
+> > +
+> > +static const struct qmp_phy_init_tbl sm8550_ufsphy_tx[] = {
+> > +	QMP_PHY_INIT_CFG(QSERDES_V6_TX_LANE_MODE_1, 0x05),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_TX_RES_CODE_LANE_OFFSET_TX, 0x07),
+> > +};
+> > +
+> > +static const struct qmp_phy_init_tbl sm8550_ufsphy_rx[] = {
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE2, 0x0c),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_UCDR_FO_GAIN_RATE4, 0x0f),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_VGA_CAL_MAN_VAL, 0x0e),
+> > +
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B0, 0xc2),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B1, 0xc2),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B3, 0x1a),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE_0_1_B6, 0x60),
+> > +
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE2_B3, 0x9e),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE2_B6, 0x60),
+> > +
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B3, 0x9e),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B4, 0x0e),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B5, 0x36),
+> > +	QMP_PHY_INIT_CFG(QSERDES_UFS_V6_RX_MODE_RATE3_B8, 0x02),
+> > +};
+> > +
+> > +static const struct qmp_phy_init_tbl sm8550_ufsphy_pcs[] = {
+> > +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_RX_SIGDET_CTRL2, 0x69),
+> > +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_LARGE_AMP_DRV_LVL, 0x0f),
+> > +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
+> > +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_PLL_CNTL, 0x2b),
+> > +	QMP_PHY_INIT_CFG(QPHY_V6_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
+> > +};
+> > +
+> >  struct qmp_ufs_offsets {
+> >  	u16 serdes;
+> >  	u16 pcs;
+> > @@ -703,6 +765,10 @@ static const char * const sm8450_ufs_phy_clk_l[] = {
+> >  	"qref", "ref", "ref_aux",
+> >  };
+> >  
+> > +static const char * const sm8550_ufs_phy_clk_l[] = {
+> > +	"qref", "ref",
+> > +};
+> > +
+> >  static const char * const sdm845_ufs_phy_clk_l[] = {
+> >  	"ref", "ref_aux",
+> >  };
+> > @@ -721,6 +787,15 @@ static const struct qmp_ufs_offsets qmp_ufs_offsets_v5 = {
+> >  	.rx2		= 0xa00,
+> >  };
+> >  
+> > +static const struct qmp_ufs_offsets qmp_ufs_offsets_v6 = {
+> > +	.serdes		= 0,
+> > +	.pcs		= 0x400,
+> > +	.tx		= 0x1000,
+> > +	.rx		= 0x1200,
+> > +	.tx2		= 0x1800,
+> > +	.rx2		= 0x1a00,
+> > +};
+> > +
+> >  static const struct qmp_phy_cfg msm8996_ufsphy_cfg = {
+> >  	.lanes			= 1,
+> >  
+> > @@ -958,6 +1033,28 @@ static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
+> >  	.regs			= sm8150_ufsphy_regs_layout,
+> >  };
+> >  
+> > +static const struct qmp_phy_cfg sm8550_ufsphy_cfg = {
+> > +	.lanes			= 2,
+> > +
+> > +	.offsets		= &qmp_ufs_offsets_v6,
+> > +
+> > +	.tbls = {
+> > +		.serdes		= sm8550_ufsphy_serdes,
+> > +		.serdes_num	= ARRAY_SIZE(sm8550_ufsphy_serdes),
+> > +		.tx		= sm8550_ufsphy_tx,
+> > +		.tx_num		= ARRAY_SIZE(sm8550_ufsphy_tx),
+> > +		.rx		= sm8550_ufsphy_rx,
+> > +		.rx_num		= ARRAY_SIZE(sm8550_ufsphy_rx),
+> > +		.pcs		= sm8550_ufsphy_pcs,
+> > +		.pcs_num	= ARRAY_SIZE(sm8550_ufsphy_pcs),
+> > +	},
+> > +	.clk_list		= sm8550_ufs_phy_clk_l,
+> > +	.num_clks		= ARRAY_SIZE(sm8550_ufs_phy_clk_l),
+> > +	.vreg_list		= qmp_phy_vreg_l,
+> > +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+> > +	.regs			= sm8550_ufsphy_regs_layout,
+> > +};
+> > +
+> >  static void qmp_ufs_configure_lane(void __iomem *base,
+> >  					const struct qmp_phy_init_tbl tbl[],
+> >  					int num,
+> > @@ -1467,6 +1564,9 @@ static const struct of_device_id qmp_ufs_of_match_table[] = {
+> >  	}, {
+> >  		.compatible = "qcom,sm8450-qmp-ufs-phy",
+> >  		.data = &sm8450_ufsphy_cfg,
+> > +	}, {
+> > +		.compatible = "qcom,sm8550-qmp-ufs-phy",
+> > +		.data = &sm8550_ufsphy_cfg,
+> >  	},
+> >  	{ },
+> >  };
+> > -- 
+> > 2.34.1
+> 
+> -- 
+> ~Vinod
