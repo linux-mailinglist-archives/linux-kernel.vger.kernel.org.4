@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA59F66D2F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878C766D2F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbjAPXRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 18:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        id S235437AbjAPXRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235420AbjAPXQN (ORCPT
+        with ESMTP id S235255AbjAPXQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 18:16:13 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1DF2C669
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:11:16 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id p188so31980185yba.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:11:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eY/KJZ4lbmc+2XWsZ1z/ZDsZuzYLlrOu48ChSc6SgWY=;
-        b=ZixO1TRwnXk+Zt8AF0h/qfqGg+VFnuqWHiC/HyBxquWFYjlRl0YLLeTOV5ebh4DJ/q
-         3NA4XIFmHBMtm/+65vSu6ODMVBvpV/4Z4Q2N0PSP8VOhYVM2f9ttOWIa9XLK8RuzgQ6d
-         zVxv6Y8B2O35YV0ERZgJZtS5jd/n8ERgHrLmUQ7KIW3idzhC0N6Dj25drlUsemu5Bc5B
-         zUp79W76z07v0rq5EpdGvLb2As2Cx4TQ7puDyBiu38lkrOO/ch3iv8VQAbENPsRHXrQM
-         s7ks6/ymncWZJ3W6sGbVgjATyUXYNlRtKW7K1T5NgM9jJg9D4ibCIUoC4OljjI/jlfRh
-         TQ1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eY/KJZ4lbmc+2XWsZ1z/ZDsZuzYLlrOu48ChSc6SgWY=;
-        b=7osloMam00WXRlFCwKEjuyVqo0felxBuMvV5kokUeFvGnZhWLnzA6eLnIzjOLhtjTF
-         UF31rf2gKNvsACyOEw2Evq9lJQ0mv2FcP5lRr86a9YuNoRV7Cenm4NtSdgNRttEnoR5L
-         SSS5y3j9ph7lP8w+qPFNj9BtPFq6qRcd0Hux5Qbaw9MYpLnTdhb9pAt+aQGIR0J8cY1e
-         a3USJWKm8rMaCSyVEr/tSO9BqadtTSrG5MyMiMDpzeQPtz51CQNLPHoPEropBvzs4nAw
-         ZY9OzoZ9DMizb6AAdPQV9Cpp7i0IEcz5Xgoa+NzwgBPWmQWnHCbRqXqPF5U3FjwaFewh
-         hclA==
-X-Gm-Message-State: AFqh2kog2GX95p1rNxBfsW+/NuKtfLcmxkrIV1pkuwIiJVzxVp7LsTU6
-        z6juR6bx3EIPnP+pIv09lOdPwoPmlX7/2qBEHtwv5Q==
-X-Google-Smtp-Source: AMrXdXvxjMFnv3sXKfnTKH4PTNF/OT1rqzcwKMDy96OvxnpCIj9/MWgAZnN/R9Th80cE+rQd8BICuY6ElJpUSZTS8r0=
-X-Received: by 2002:a5b:cc8:0:b0:7ba:78b1:9fcc with SMTP id
- e8-20020a5b0cc8000000b007ba78b19fccmr160434ybr.593.1673910671886; Mon, 16 Jan
- 2023 15:11:11 -0800 (PST)
+        Mon, 16 Jan 2023 18:16:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2E0279AE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 15:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673910670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mkjFMRxDIKJKWLRwMUOLvuSiSTpWYy2LHznevDgStcI=;
+        b=fHYJ3Xp4zUIWj3bCd1E9KpVylnFBxRI0uxCNI/azcugbxu6zOQXFqapUZy5B4itbtKyjnY
+        nciR7aRfXwQNhrRWmT/3+S8VEUgpkZWpJg05NoFlZWcmBZTLodnPXCQX7gMoPyMqhwmSG7
+        KxU4JOePSpv06X/mTpggy23aSI2BGmM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-203-enKb_4ZtORmXcmB3l_IJKw-1; Mon, 16 Jan 2023 18:11:05 -0500
+X-MC-Unique: enKb_4ZtORmXcmB3l_IJKw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 710612A59560;
+        Mon, 16 Jan 2023 23:11:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A58A94010D46;
+        Mon, 16 Jan 2023 23:11:02 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v6 25/34] cifs: Add a function to Hash the contents of an
+ iterator
+From:   David Howells <dhowells@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 16 Jan 2023 23:11:02 +0000
+Message-ID: <167391066212.2311931.16097548940184155209.stgit@warthog.procyon.org.uk>
+In-Reply-To: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-References: <20230109205336.3665937-42-surenb@google.com> <20230116140649.2012-1-hdanton@sina.com>
- <CAJuCfpHoHcZxQZgt4Ki1kiBu9O+sANZQambOa+1gSQu2brPoyA@mail.gmail.com>
-In-Reply-To: <CAJuCfpHoHcZxQZgt4Ki1kiBu9O+sANZQambOa+1gSQu2brPoyA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 16 Jan 2023 15:11:00 -0800
-Message-ID: <CAJuCfpEx4tLNaVy_VpUKbrTkHJ7uPg5pPostNHD++6hD1dfzrQ@mail.gmail.com>
-Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        peterz@infradead.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,151 +77,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 3:08 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Mon, Jan 16, 2023 at 6:07 AM Hillf Danton <hdanton@sina.com> wrote:
-> >
-> > On Mon, 9 Jan 2023 12:53:36 -0800 Suren Baghdasaryan <surenb@google.com>
-> > > --- a/include/linux/mm.h
-> > > +++ b/include/linux/mm.h
-> > > @@ -627,12 +627,16 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
-> > >        * mm->mm_lock_seq can't be concurrently modified.
-> > >        */
-> > >       mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
-> > > -     if (vma->vm_lock_seq == mm_lock_seq)
-> > > +     if (vma->vm_lock->lock_seq == mm_lock_seq)
-> > >               return;
-> >
-> >         lock acquire for write to info lockdep.
->
-> Thanks for the review Hillf!
->
-> Good idea. Will add in the next version.
->
-> > >
-> > > -     down_write(&vma->vm_lock->lock);
-> > > -     vma->vm_lock_seq = mm_lock_seq;
-> > > -     up_write(&vma->vm_lock->lock);
-> > > +     if (atomic_cmpxchg(&vma->vm_lock->count, 0, -1))
-> > > +             wait_event(vma->vm_mm->vma_writer_wait,
-> > > +                        atomic_cmpxchg(&vma->vm_lock->count, 0, -1) == 0);
-> > > +     vma->vm_lock->lock_seq = mm_lock_seq;
-> > > +     /* Write barrier to ensure lock_seq change is visible before count */
-> > > +     smp_wmb();
-> > > +     atomic_set(&vma->vm_lock->count, 0);
-> > >  }
-> > >
-> > >  /*
-> > > @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
-> > >  static inline bool vma_read_trylock(struct vm_area_struct *vma)
-> > >  {
-> > >       /* Check before locking. A race might cause false locked result. */
-> > > -     if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
-> > > +     if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
-> > >               return false;
-> >
-> > Add mb to pair with the above wmb like
->
-> The wmb above is to ensure the ordering between updates of lock_seq
-> and vm_lock->count (lock_seq is updated first and vm_lock->count only
-> after that). The first access to vm_lock->count in this function is
-> atomic_inc_unless_negative() and it's an atomic RMW operation with a
-> return value. According to documentation such functions are fully
-> ordered, therefore I think we already have an implicit full memory
-> barrier between reads of lock_seq and vm_lock->count here. Am I wrong?
->
-> >
-> >         if (READ_ONCE(vma->vm_lock->lock_seq) == READ_ONCE(vma->vm_mm->mm_lock_seq)) {
-> >                 smp_acquire__after_ctrl_dep();
-> >                 return false;
-> >         }
-> > >
-> > > -     if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
-> > > +     if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
-> > >               return false;
-> > >
-> > > +     /* If atomic_t overflows, restore and fail to lock. */
-> > > +     if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
-> > > +             if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > +                     wake_up(&vma->vm_mm->vma_writer_wait);
-> > > +             return false;
-> > > +     }
-> > > +
-> > >       /*
-> > >        * Overflow might produce false locked result.
-> > >        * False unlocked result is impossible because we modify and check
-> > >        * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
-> > >        * modification invalidates all existing locks.
-> > >        */
-> > > -     if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
-> > > -             up_read(&vma->vm_lock->lock);
-> > > +     if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
-> > > +             if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > +                     wake_up(&vma->vm_mm->vma_writer_wait);
-> > >               return false;
-> > >       }
-> >
-> > Simpler way to detect write lock owner and count overflow like
-> >
-> >         int count = atomic_read(&vma->vm_lock->count);
-> >         for (;;) {
-> >                 int new = count + 1;
-> >
-> >                 if (count < 0 || new < 0)
-> >                         return false;
-> >
-> >                 new = atomic_cmpxchg(&vma->vm_lock->count, count, new);
-> >                 if (new == count)
-> >                         break;
-> >                 count = new;
-> >                 cpu_relax();
-> >         }
-> >
-> >         (wake up waiting readers after taking the lock;
-> >         but the write lock owner before this read trylock should be
-> >         responsible for waking waiters up.)
-> >
-> >         lock acquire for read.
->
-> This schema might cause readers to wait, which is not an exact
-> replacement for down_read_trylock(). The requirement to wake up
-> waiting readers also complicates things and since we can always fall
-> back to mmap_lock, that complication is unnecessary IMHO. I could use
-> part of your suggestion like this:
->
->                  int new = count + 1;
->
->                  if (count < 0 || new < 0)
->                          return false;
->
->                  new = atomic_cmpxchg(&vma->vm_lock->count, count, new);
->                  if (new == count)
->                          return false;
+Add a function to push the contents of a BVEC-, KVEC- or XARRAY-type
+iterator into a symmetric hash algorithm.
 
-Made a mistake above. It should have been:
-                  if (new != count)
-                          return false;
+UBUF- and IOBUF-type iterators are not supported on the assumption that
+either we're doing buffered I/O, in which case we won't see them, or we're
+doing direct I/O, in which case the iterator will have been extracted into
+a BVEC-type iterator higher up.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <sfrench@samba.org>
+cc: Shyam Prasad N <nspmangalore@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-cifs@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+cc: linux-crypto@vger.kernel.org
+
+Link: https://lore.kernel.org/r/166697257423.61150.12070648579830206483.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732029577.3186319.17162612653237909961.stgit@warthog.procyon.org.uk/ # rfc
+---
+
+ fs/cifs/cifsencrypt.c |  144 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 144 insertions(+)
+
+diff --git a/fs/cifs/cifsencrypt.c b/fs/cifs/cifsencrypt.c
+index 5db73c0f792a..e13f26371540 100644
+--- a/fs/cifs/cifsencrypt.c
++++ b/fs/cifs/cifsencrypt.c
+@@ -24,6 +24,150 @@
+ #include "../smbfs_common/arc4.h"
+ #include <crypto/aead.h>
+ 
++/*
++ * Hash data from a BVEC-type iterator.
++ */
++static int cifs_shash_bvec(const struct iov_iter *iter, ssize_t maxsize,
++			   struct shash_desc *shash)
++{
++	const struct bio_vec *bv = iter->bvec;
++	unsigned long start = iter->iov_offset;
++	unsigned int i;
++	void *p;
++	int ret;
++
++	for (i = 0; i < iter->nr_segs; i++) {
++		size_t off, len;
++
++		len = bv[i].bv_len;
++		if (start >= len) {
++			start -= len;
++			continue;
++		}
++
++		len = min_t(size_t, maxsize, len - start);
++		off = bv[i].bv_offset + start;
++
++		p = kmap_local_page(bv[i].bv_page);
++		ret = crypto_shash_update(shash, p + off, len);
++		kunmap_local(p);
++		if (ret < 0)
++			return ret;
++
++		maxsize -= len;
++		if (maxsize <= 0)
++			break;
++		start = 0;
++	}
++
++	return 0;
++}
++
++/*
++ * Hash data from a KVEC-type iterator.
++ */
++static int cifs_shash_kvec(const struct iov_iter *iter, ssize_t maxsize,
++			   struct shash_desc *shash)
++{
++	const struct kvec *kv = iter->kvec;
++	unsigned long start = iter->iov_offset;
++	unsigned int i;
++	int ret;
++
++	for (i = 0; i < iter->nr_segs; i++) {
++		size_t len;
++
++		len = kv[i].iov_len;
++		if (start >= len) {
++			start -= len;
++			continue;
++		}
++
++		len = min_t(size_t, maxsize, len - start);
++		ret = crypto_shash_update(shash, kv[i].iov_base + start, len);
++		if (ret < 0)
++			return ret;
++		maxsize -= len;
++
++		if (maxsize <= 0)
++			break;
++		start = 0;
++	}
++
++	return 0;
++}
++
++/*
++ * Hash data from an XARRAY-type iterator.
++ */
++static ssize_t cifs_shash_xarray(const struct iov_iter *iter, ssize_t maxsize,
++				 struct shash_desc *shash)
++{
++	struct folio *folios[16], *folio;
++	unsigned int nr, i, j, npages;
++	loff_t start = iter->xarray_start + iter->iov_offset;
++	pgoff_t last, index = start / PAGE_SIZE;
++	ssize_t ret = 0;
++	size_t len, offset, foffset;
++	void *p;
++
++	if (maxsize == 0)
++		return 0;
++
++	last = (start + maxsize - 1) / PAGE_SIZE;
++	do {
++		nr = xa_extract(iter->xarray, (void **)folios, index, last,
++				ARRAY_SIZE(folios), XA_PRESENT);
++		if (nr == 0)
++			return -EIO;
++
++		for (i = 0; i < nr; i++) {
++			folio = folios[i];
++			npages = folio_nr_pages(folio);
++			foffset = start - folio_pos(folio);
++			offset = foffset % PAGE_SIZE;
++			for (j = foffset / PAGE_SIZE; j < npages; j++) {
++				len = min_t(size_t, maxsize, PAGE_SIZE - offset);
++				p = kmap_local_page(folio_page(folio, j));
++				ret = crypto_shash_update(shash, p, len);
++				kunmap_local(p);
++				if (ret < 0)
++					return ret;
++				maxsize -= len;
++				if (maxsize <= 0)
++					return 0;
++				start += len;
++				offset = 0;
++				index++;
++			}
++		}
++	} while (nr == ARRAY_SIZE(folios));
++	return 0;
++}
++
++/*
++ * Pass the data from an iterator into a hash.
++ */
++static int cifs_shash_iter(const struct iov_iter *iter, size_t maxsize,
++			   struct shash_desc *shash)
++{
++	if (maxsize == 0)
++		return 0;
++
++	switch (iov_iter_type(iter)) {
++	case ITER_BVEC:
++		return cifs_shash_bvec(iter, maxsize, shash);
++	case ITER_KVEC:
++		return cifs_shash_kvec(iter, maxsize, shash);
++	case ITER_XARRAY:
++		return cifs_shash_xarray(iter, maxsize, shash);
++	default:
++		pr_err("cifs_shash_iter(%u) unsupported\n", iov_iter_type(iter));
++		WARN_ON_ONCE(1);
++		return -EIO;
++	}
++}
++
+ int __cifs_calc_signature(struct smb_rqst *rqst,
+ 			struct TCP_Server_Info *server, char *signature,
+ 			struct shash_desc *shash)
 
 
->
-> Compared to doing atomic_inc_unless_negative() first, like I did
-> originally, this schema opens a bit wider window for the writer to get
-> in the middle and cause the reader to fail locking but I don't think
-> it would result in any visible regression.
->
-> >
-> > >       return true;
-> > > @@ -664,7 +676,8 @@ static inline bool vma_read_trylock(struct vm_area_struct *vma)
-> > >
-> > >  static inline void vma_read_unlock(struct vm_area_struct *vma)
-> > >  {
-> >         lock release for read.
->
-> Ack.
->
-> >
-> > > -     up_read(&vma->vm_lock->lock);
-> > > +     if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > +             wake_up(&vma->vm_mm->vma_writer_wait);
-> > >  }
-> >
