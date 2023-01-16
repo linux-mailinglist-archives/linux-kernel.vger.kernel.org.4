@@ -2,124 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8187566CF5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF63F66CF5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 20:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjAPTKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 14:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S232194AbjAPTLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 14:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjAPTKp (ORCPT
+        with ESMTP id S232509AbjAPTLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 14:10:45 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92090298DA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:10:44 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id tz11so5841166ejc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 11:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Co2g9IMkk73uKQEckznsjPdf9rOk98qtlKq/GS31a/w=;
-        b=U714rqVZg173SnKUPuCRnKX3tvwBwaSG8VtImxN4rrf/BDh9nnYe6KzyleixazhPxP
-         A7OTCSaQrm1KfFD2C0ElinXw7VfsQzQkulca9N2XZsBa+yhZ8B7ZhE4C2i6mQvJiOyu/
-         Poam/01xBxy83M/lKNRrgnt0vs03iTu6v2co+WHq8hcqT3ngZ2/wLglaDPoSwNYf5mw0
-         FC4XfqtP0nF6sL8Tuo37qD/UUegdNfYUbRBb4QuCqqkTGujoOSGW4+LfiuezDrRLLKoW
-         ECWTHLo9wwg04wFeOD/bW4tYkWbv30totLZK3C5M+upSXf3Z9ZifyKqCh1XQJwecH4p9
-         BBzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Co2g9IMkk73uKQEckznsjPdf9rOk98qtlKq/GS31a/w=;
-        b=pizE6yGe4rpITZrAvefOiSj3yL6cY/jOEtDMDwvgC5quLXDVWbPR3xp7ZVfz/0GvNq
-         i7mBH9rnH5nHrxcUeYKSJjG7MV6UpcYPg6fIjZh1nmTrYGPrJxwjLHPkCRL5xjSZZTi1
-         xtzJAGE/Zjnclzh3484YPt7jJWmPzIh6fheSlNZJxRNR0+4pzmFYrYX/KW6Fu7OA8zcB
-         OXZJnPZC205aZ6x6zjK9z/wiF75YqurH8w4yVunFyVw83T5gxAp8n6dyiXJMoS5mp5S8
-         KOkZNag8VmI+eIy3WJRInnqAISL/OJ0bNMchtnRsAGizdKYzc8Vmcf6ThJRL2sjeriPB
-         hvmw==
-X-Gm-Message-State: AFqh2kpkKDGDIHDj4szuhJOIhOe3VUNhv39Wuxpay1et9aIFfrtc38kc
-        LPLsUddMg74BAHDZM6qR7sQO8A==
-X-Google-Smtp-Source: AMrXdXu7KxNRBkkMmI1eVW/Eoo9jAdHt6qJ1e/DZ7tGTObc7DPCWM2gvqdSko6LhWVAwn+JazerySg==
-X-Received: by 2002:a17:906:b855:b0:864:8c78:e7ff with SMTP id ga21-20020a170906b85500b008648c78e7ffmr12488537ejb.23.1673896243157;
-        Mon, 16 Jan 2023 11:10:43 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b0079e11b8e891sm12050219ejh.125.2023.01.16.11.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 11:10:42 -0800 (PST)
-Message-ID: <18cab846-f62a-93f2-8d47-17b37b638278@linaro.org>
-Date:   Mon, 16 Jan 2023 20:10:40 +0100
+        Mon, 16 Jan 2023 14:11:12 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D517A1A9;
+        Mon, 16 Jan 2023 11:11:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JgYq4+I5k6FzhVwdhXuqKrpb+qzQm2/C5GG1Tk9K1HhA9ymcErdtkNBTUnYBgQbsoZd97LVeG9kooGzt6IZtto7ESa2ICgf5Dw2UtQ6MhY4quno6dkhPWDAOgc+qDRShWB40XjAes9c13bRJgK4m5fJIO7mHHeJ/KdmBOpkw59iSOtHWuivGiQupepfSl58pvaW6ui7yQDPpxxqHbANE7zt95CKRvY7qNcpM5EigftbdE2ydhlgZer30CPZndww/v+YjAuo+XErHMI9kwgn+m5i6wdbYIXimN+cu8C5OI3CeCYWz/UiZ11MX45ZarJ8NILhSd/b7lLT9+xUCDl1HCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kyrlARqUeI8ncR4CpfrGR2Bg9W1gjYgU6HItN2WQVFQ=;
+ b=OKTPkXqb6yfB7rBFsxCuCHOhx7vessMnB92MGB+YAmpKXc6KM3b0tVP5CEv5na7ytboO1rxRAJsmB96umlqiWyXELzAXpj4hqMYbOtIRQmIfuk5e11fhI6VKdmd87a+T6YOwVMjRnXcaNpKXVbZ/HiGN/hIxXVANiZp11gab0hMyABaW4BUrxVceKAw/Wr3Mbyx/1iD1gO004Q5YiuITurSHx6v9twYSo5RNe0jjsA2yvIW/Lo8nkIBJ62Gwd+iOCm2rqQGoN0UzAiPW3mokIYiahDT4Fdw1tbgQejPelGAoBs5MDidPz/88HusYSDGOHWduN7u4oxdCJwgLsdnDCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kyrlARqUeI8ncR4CpfrGR2Bg9W1gjYgU6HItN2WQVFQ=;
+ b=PtxB6E5RuodWotQfa5k1/KUzKFEZwRlVO6J7e+L7hOeDZ607dhysNp7UzZm12g0fywLS70ONY1HlEHs1JJFJDZDU31xV7oIzr8rZp5kV8j2RdzC/FOZijQRXbX8C4+jJrScahiDLwTIULdPMMhJ5EANXKrdpkhxlLkqJ6z2by14=
+Received: from MW4P221CA0005.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::10)
+ by CH3PR12MB7595.namprd12.prod.outlook.com (2603:10b6:610:14c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Mon, 16 Jan
+ 2023 19:11:09 +0000
+Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b:cafe::84) by MW4P221CA0005.outlook.office365.com
+ (2603:10b6:303:8b::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
+ Transport; Mon, 16 Jan 2023 19:11:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6002.13 via Frontend Transport; Mon, 16 Jan 2023 19:11:09 +0000
+Received: from onyx-7400host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 16 Jan
+ 2023 13:11:08 -0600
+From:   Avadhut Naik <avadnaik@amd.com>
+To:     <linux-edac@vger.kernel.org>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>, <yazen.ghannam@amd.com>, <avadnaik@amd.com>
+Subject: [PATCH v1 0/3] Update SMCA Error Decoding for AMD EPYC Processors
+Date:   Mon, 16 Jan 2023 19:10:59 +0000
+Message-ID: <20230116191102.4226-1-avadnaik@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] dt-bindings: qcom: geni-se: Fix '#address-cells' &
- '#size-cells' related dt-binding error
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230113201038.267449-1-bhupesh.sharma@linaro.org>
- <aef753a5-e8b1-5b7b-1b9e-e92a84de15bd@linaro.org>
- <CAH=2Ntx5rLWu4jzXV8DwKj+yweHPRqb4+Rv8uZpDn_brWDxyJg@mail.gmail.com>
- <b9aa6d30-5fe8-57a9-e478-c99bca70d185@linaro.org>
- <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAH=2Nty2gUL3DufowzHavhUNdeht2dcX4EU7ooM+xzax2vP7uQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT027:EE_|CH3PR12MB7595:EE_
+X-MS-Office365-Filtering-Correlation-Id: f438f4cf-d9d5-4d85-5b17-08daf7f56cfb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5lo+xqUTnY1RRqnhOiIYrs/NKnnaRJmTPq7NtiNz9lyCcaBKJz3HcseCyVi4OSEkMAHduuol485ZLnwwi/Kn06ewLfFOx/j2j/Oo7NkSWaiTwoUu6H21p3faR9GkMMdyAQ00s6SaTkUIjaf5ZS/VRDwEAh/nOJ69NtZV4Z0AhkIuURIhpAfscJ5LLqAMp/sEuQl2FHc5qCCDIT1sC9fjJFtN1lS0eKqpGwMRXoJQZCj+Afj5FvDObwUFmdHoBc0umJWFnxLc04S+yVbWdEJ9+kJBBq+Lu7/Wvkv9rrERvyKyW0lonAgt7o66yFTDehdsTWqkhmCAN85/Gc/g/7q11R5GZSx1EPxEYOthmaNz6M1MIZqmGmwpFgluBX+Hm/srSvVGuR9lB9ARB4k5Sr/E6xCqB7bfKrH3vXTGKU7hXAIVmlt99PrqUeSLrVYygVCU0oo/6k0aXje014wtzYrlE1a7kgYvt3exdUXjnqtKliOjz508R+i90T2msxEzZ3ledRATRLmOhMGSgvFxxiJfmuN8Q8WiXlVDjVnPYGmYzrg/p3mSBZv1u8mc/Wlv6q/5eTftOXKcBL8zCqxN6RlXTtBt+954n3Qrv8FZDA7cbpdHaBQ44kF6PEUVtzC7Du4JfEzMwotka7kTvDMux2OZKsvfIPF3OE0F2GWgcRlm7ACiZ7++UZvZ0Zhp/uZK6YG5EQno7gfFwDfJe2/xH4ovBgDb0uGMdkTzW+i5JgbOY10=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(36756003)(356005)(5660300002)(82310400005)(40460700003)(8936002)(2906002)(40480700001)(15650500001)(36860700001)(47076005)(83380400001)(426003)(82740400003)(54906003)(110136005)(81166007)(41300700001)(478600001)(8676002)(6666004)(2616005)(7696005)(336012)(4326008)(316002)(70586007)(1076003)(70206006)(16526019)(186003)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 19:11:09.2244
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f438f4cf-d9d5-4d85-5b17-08daf7f56cfb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7595
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2023 16:43, Bhupesh Sharma wrote:
-> On Mon, 16 Jan 2023 at 13:23, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 15/01/2023 22:33, Bhupesh Sharma wrote:
->>> On Sun, 15 Jan 2023 at 20:57, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 13/01/2023 21:10, Bhupesh Sharma wrote:
->>>>> Fix the following '#address-cells' & '#size-cells' related
->>>>> dt-binding error:
->>>>>
->>>>>    $ make dtbs_check
->>>>>
->>>>>    From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>>>         arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dtb: geniqup@4ac0000:
->>>>>               #address-cells:0:0: 2 was expected
->>>>>       From schema: Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>>
->>>> Don't we want rather to unify the soc address range?
->>>
->>> Well, the assumption in the original dt-bindings was that every reg
->>> variable is 4 * u32 wide (as most new qcom SoCs set #address- and
->>> #size-cells to <2>). However, that is not the case for all of the
->>> SoCs.
->>
->> Hm, which device of that SoC cannot be used with address/size cells 2?
-> 
-> As noted in the git log already the geniqup on sm6115 / sm4250 cannot
-> be used with address/size cells 2 (See:
-> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sm6115.dtsi#L795)
+Modern AMD EPYC processors support Scalable MCA (SMCA) Error decoding.
+Currently however, on Family 19h and 1Ah based, AMD EPYC processors, not
+all SMCA errors are being decoded. This patchset attempts to address the
+very issue by updating error description structures and handling errata
+of some SMCA bank types.
 
-That's not relevant and not answering to my question. Address/size cells
-affect children, so not geniqup. address-cells 2 means you have
-everywhere 64 bit addresses, so which devices cannot work with such DTS?
-If you claim that geniqup and its children has some troubles - please
-point what troubles. The DTS and existing address/size cells have
-nothing to do with it.
+The first patch adds new error descriptions for various SMCA bank types
+while also rewording existing and removing unused error descriptions.
 
-Best regards,
-Krzysztof
+The second patch handles the mismatch, encountered on some AMD CPUs, between
+the HWID read from the MCA_IPID register and the HWID expected by the kernel
+for XGMI Controller SMCA bank type during SMCA initialization.
+
+The third patch tackles the erratum no. 1384, encountered on Genoa and a
+few other CPUs due to bit reassignments in Control register of the Coherent
+Slave (CS) SMCA bank type.
+
+Avadhut Naik (2):
+  x86/MCE/AMD: Add HWID Fixup for PCS_XGMI SMCA
+  x86/MCE/AMD: Handle reassigned bit definitions for CS SMCA
+
+Yazen Ghannam (1):
+  EDAC/mce_amd: Update SMCA bank error descriptions
+
+ arch/x86/include/asm/mce.h    |  1 +
+ arch/x86/kernel/cpu/mce/amd.c | 50 +++++++++++++++++++++-
+ drivers/edac/mce_amd.c        | 79 +++++++++++++++++++++++++----------
+ 3 files changed, 107 insertions(+), 23 deletions(-)
+
+-- 
+2.34.1
 
