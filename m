@@ -2,69 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433EF66D21F
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 23:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C8066D26D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 00:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbjAPW7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 17:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S232825AbjAPXCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 18:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbjAPW7t (ORCPT
+        with ESMTP id S233570AbjAPXCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 17:59:49 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518D4279AC;
-        Mon, 16 Jan 2023 14:59:48 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso32397677pjf.1;
-        Mon, 16 Jan 2023 14:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fHMLhnMFgS56M2Qg/SbxbmEiyvJ1FRxRUZKrLw8fNgw=;
-        b=UNmof0K3BdbjZq7/M/94A0y544wFgsY2to7uHlqQBa1hnnfitxHL4bJOa2LXxp/JPC
-         32oW+yMiIBzjS5E8aPLrsCqjAgPmkRYSuuaUTtMs6l5jYMGC15nqGFRBUAWQrOr93OCo
-         DXDXOwXppQGXP73rIbEnArTKwUsyOYi4j04hJTne8j2Yf6yrbFGzNvS9f99XMbopOM1h
-         zXaPxAUnHLOS4YpOJJPRNcwxvd6J1O8UgKQnQmqTOUmmMgDQzKedswWGLuDGYkv4y+Zx
-         jMwMNRZULxM7gchIiAO9qpZUGxgOruZLPMssgtW7gpBemItFQATITgiQ41VpWfqKIglF
-         gH8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fHMLhnMFgS56M2Qg/SbxbmEiyvJ1FRxRUZKrLw8fNgw=;
-        b=zY21vqxTdIi80/OnboNpv5xvqaOuX0FBmoPM9xRDEJw8mTlL57vTH8ZqMxoi4fi+6x
-         fFIPJOF2OW1I/ZC96ZTgCq9jqwkbjMQmqVfAPZMbbnX43ri/kskCbhD5FYzO+iMSnuYe
-         x01puNkorchGMVItd46+VJMSOVPFHzvqBeFmnUFFSyRuYJgX2LZpxMscceJvRUALCKxg
-         G/hNvxjucvIRvpeUHXfe0YUDqDp/d1Jfh4hMGWrY0bh3GB1qc7ZJcrBM7QZ/0lQ7XfMo
-         dGJxoLfgJmHwdrx19MEa7n0Gtdci6P72CNUO5ILPsKf8aDUFIfSnHeQfPG2/3RYl3EmV
-         SU/w==
-X-Gm-Message-State: AFqh2kr4yRnV/+2qT0sPPjPfL7d8T1LCUOeM8xpAnyCyUMLyLRD13gyf
-        BvDnPpfv57Ba+R4wgGeG66k=
-X-Google-Smtp-Source: AMrXdXu2fhDEHjZLm6UcQLueHuAtLgXtUrjVOPRxF2ocrk5bMPD8mmu1yZV345Cv6R3za1n2Z1C9Aw==
-X-Received: by 2002:a17:903:2289:b0:194:9290:fa6f with SMTP id b9-20020a170903228900b001949290fa6fmr1870030plh.25.1673909987516;
-        Mon, 16 Jan 2023 14:59:47 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:746e:9668:c7aa:72b4])
-        by smtp.gmail.com with ESMTPSA id l1-20020a170903244100b0019498477f31sm319758pls.123.2023.01.16.14.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 14:59:46 -0800 (PST)
-Date:   Mon, 16 Jan 2023 14:59:43 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     linux-kernel@vger.kernel.org, Xaver Hugl <xaver.hugl@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] Input: i8042: Disable wake from keyboard by default on
- several AMD systems
-Message-ID: <Y8XW32BChi6A5/am@google.com>
-References: <20230116184830.30573-1-mario.limonciello@amd.com>
+        Mon, 16 Jan 2023 18:02:13 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAF9233D4;
+        Mon, 16 Jan 2023 15:02:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RwMnxGHz445YrBT9xhxfggfCqJ0OnxqoRpevvUGbQ2cwVSOkK5RgAoAoyr+8AXj1wfEEfSay/mgGwt9JEnGsi9zDIsNOwNp2gAxjtM982EBePq4k5Eh/6eKVaubhQcedmSJpmg1tWrUu+5W6Y18qiNJmPDAZIm8dhp2JkJddFFLmcX10Q1TZV1Nmnv8Yg2Nf8KlDfJ8tnHAOL/xz/K96v69dMECJc1KQCF6KqfzJ6tNUZM/AsSMWMfcAjLnWpAmRnbYBX+vDwf/EGHwzscN8x3/Ycmwpn15DCj//gASvEajfAgfLS3oUAALUuFvOMzVU/M1tRpXxl6PRu6fZ/8oDKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BYtiquKxTlA/AZn4YbIID/gATHanB7cwpVurloRQqfo=;
+ b=SYI2ePlkah2GRlAwU7K6leGZQKVBadURAO19GUUlLAZYGTg+m7GqXu6Jf1kLxGdHpLLveYKqsYbA2tKIY4b+Eij58HwdlpzjQ0xb6rjSe0Bzzs+tCcWjETc39foH+HWxOKLZ4atiY20yC5Uv44b1ssT+BkwPA1DlQtumCXRiaHBRs0ILQCD5iaTUoufzSgaZ1rHGyu3HMIbcrP+F1B9C1bKqSWUe96gbLoRFFe0huJhb7AUFs/Th+ilkMN47HNDXMN+e0TwSw8PtW0T86FV8DgLwzvQnsEI+YIEe8+v62tE4JxzfqIVW16nsypbEc3o+pzXLX4/3/BccY4j/8Zefxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BYtiquKxTlA/AZn4YbIID/gATHanB7cwpVurloRQqfo=;
+ b=wJlhZU5WyDo7bMrZ4iONejJSDMLrGMGxQHy72IGB8iwvNBzBe6CYXIXJsoHcmWf9x5nHuO3F5NVVbxHrEFfzpvIyO2/qLAoT3DFDBFzDXuGL39ipqLisqSesli6sdTBBu6EE6SkjVpNO1KWyFFVfIxXAI50Z/BML5B8ALKmaGlI=
+Received: from DS7PR05CA0070.namprd05.prod.outlook.com (2603:10b6:8:57::28) by
+ DM4PR12MB5072.namprd12.prod.outlook.com (2603:10b6:5:38b::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5986.23; Mon, 16 Jan 2023 23:02:08 +0000
+Received: from DS1PEPF0000B078.namprd05.prod.outlook.com
+ (2603:10b6:8:57:cafe::2a) by DS7PR05CA0070.outlook.office365.com
+ (2603:10b6:8:57::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6023.12 via Frontend
+ Transport; Mon, 16 Jan 2023 23:02:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000B078.mail.protection.outlook.com (10.167.17.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6002.11 via Frontend Transport; Mon, 16 Jan 2023 23:02:08 +0000
+Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 16 Jan
+ 2023 17:02:06 -0600
+From:   Kim Phillips <kim.phillips@amd.com>
+To:     <x86@kernel.org>
+CC:     Kim Phillips <kim.phillips@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Alexey Kardashevskiy" <aik@amd.com>, <kvm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/7] x86/cpu, kvm: Support AMD Automatic IBRS
+Date:   Mon, 16 Jan 2023 17:01:52 -0600
+Message-ID: <20230116230159.1511393-1-kim.phillips@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116184830.30573-1-mario.limonciello@amd.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000B078:EE_|DM4PR12MB5072:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93b4baa0-ab42-485e-c91f-08daf815b1ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GRy/v5y3t5lhTTOjLtc+GjR3TDotqWMYGJt/3kFzkmncoBwuh9/1J0nCnu1gPRtPV+04GhBLhBsn9tJh2apXaBgAa69ylAH8DpjKmkjD5XkhLTlYWn2Tz2IwDHJss6banYSBf9QHRjV6Iqcb/ZPjaURSGcTngoWwI9kIUkHy9y+Y07CBfvkSAmHpodQGC4TtqEPZARF9NoAJv2MyGkn8NoxaVCPlse8rxlZ4QxI8dfu8zE778yomAppDQcSOsI6EvpLZ3QSOlHPri3fL9bpPyzSc/+2yG8k5OR9MEGH5OwGNcljR752DT6QLot4CTiAS8CZlyRK+FRqFsSLENHIBj1gg2y5XFh/myQgcrVgPHGFPjjiwJKivixHEYC7MQLGaiIhw12mB7O5OOgmCWvOuCmO8UpBOiJexs6p0oUpXYV8eZshEKLxCagXnsSd+JSL+NtmUIz9jDc9Vpt05ZuESBRu7Cnq0OYeblQc8RlRRwjOY0dUw9wuQJ7gunT2LMQ4UUHNLsJUMXuefexq9xLBoeOKoT116pL/bX6CTWjgM1tAXPYCD3jxuukhUJhMAS6wJKqxYrjULebDcOl5qaK6778gF9PKZuUkxBYN5ie5erbW9pTMgkcaDQA7s/FlG0g7HkmlaH3E3FgPgEA+QaswK01uu0xcLUk3mejJxPASM4wEIa8oJn3zD3X112WZaGNP0F98xNSz42j0n61f1EQL3XKG2L2WUIb+uHDmJZ6ybcyXXY3NHfOZyHH8qyNQfYsQ/i+76DhqmUDyyG2mo8dM6MrNY9NQnDNvN3eczTDRmjTrwlkPmnNzoyX+jiugYuec1
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199015)(36840700001)(46966006)(40470700004)(36756003)(82310400005)(70586007)(70206006)(47076005)(426003)(41300700001)(2616005)(16526019)(26005)(186003)(8676002)(6916009)(4326008)(86362001)(83380400001)(336012)(5660300002)(36860700001)(82740400003)(8936002)(6666004)(54906003)(478600001)(7696005)(316002)(40480700001)(1076003)(356005)(7416002)(2906002)(81166007)(966005)(44832011)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2023 23:02:08.4458
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93b4baa0-ab42-485e-c91f-08daf815b1ac
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B078.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5072
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,124 +113,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+The AMD Zen4 core supports a new feature called Automatic IBRS
+(Indirect Branch Restricted Speculation).
 
-On Mon, Jan 16, 2023 at 12:48:30PM -0600, Mario Limonciello wrote:
-> By default when the system is configured for suspend to idle by default
-> the keyboard is set up as a wake source.  This matches the behavior that
-> Windows uses for Modern Standby as well.
-> 
-> It has been reported that a variety of AMD based designs there are
-> spurious wakeups are happening where two IRQ sources are active.
-> 
-> ```
-> PM: Triggering wakeup from IRQ 9
-> PM: Triggering wakeup from IRQ 1
-> ```
-> 
-> In these designs IRQ 9 is the ACPI SCI and IRQ 1 is the PS/2 keyboard.
-> An example way to trigger this is to suspend the system and then unplug
-> the AC adapter.  The SOC will be in a hardware sleep state and plugging
-> in the AC adapter returns control to the kernel's s2idle loop.
-> 
-> Normally if just IRQ 9 was active the s2idle loop would advance any EC
-> transactions and no other IRQ being active would cause the s2idle loop
-> to put the SOC back into hardware sleep state.
-> 
-> When this bug occurred IRQ 1 is also active even if no keyboard activity
-> occurred. This causes the s2idle loop to break and the system to wake.
-> 
-> This is a platform firmware bug triggering IRQ1 without keyboard activity.
-> This occurs in Windows as well, but Windows will enter "SW DRIPS" and
-> then with no activity enters back into "HW DRIPS" (hardware sleep state).
-> 
-> This issue affects Renoir, Lucienne, Cezanne, and Barcelo based platforms
-> that use LPC EC. It does not happen on newer systems such as Mendocino or
-> Rembrandt.
-> 
-> It's been fixed in newer platform firmware, but determining whether the
-> system vendor uses an LPC EC and has deployed the fix is not possible.
-> 
-> To avoid triggering the bug check the CPU model and adjust the policy for
-> s2idle wakeup from keyboard on these systems to be disabled by default.
+Enable Automatic IBRS by default if the CPU feature is present.
+It typically provides greater performance over the incumbent
+generic retpolines mitigation.
 
-I think there are Chrome devices using these chipsets that use coreboot
-firmware and do not exhibit the problematic behavior, so in addition to
-CPU model check we need to check the firmware origin as well.
+Patch 1 adds support for the whole leaf that contains the
+AutoIBRS feature bit.
 
-> 
-> Users who know that their firmware is fixed and want to use wakeup from
-> keyboard can manually enable wakeup from sysfs by modifying
-> `/sys/bus/serio/devices/serio0/power/wakeup`.
-> 
-> Reported-by: Xaver Hugl <xaver.hugl@gmail.com>
-> Tested-by: Xaver Hugl <xaver.hugl@gmail.com>
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2115#note_1724008
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/input/serio/i8042.c | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/input/serio/i8042.c b/drivers/input/serio/i8042.c
-> index 6dac7c1853a54..c9eeca18c0816 100644
-> --- a/drivers/input/serio/i8042.c
-> +++ b/drivers/input/serio/i8042.c
-> @@ -23,6 +23,7 @@
->  #include <linux/suspend.h>
->  #include <linux/property.h>
->  
-> +#include <asm/cpu_device_id.h>
+Patches 2-5 mainly move the existing features over from
+scattered / open-coded in KVM into the new shared leaf,
+where they match hardware.
 
-Is it available on all architectures? Historically we were trying to
-hide platform details in drivers/input/serio/i8042-acpipnpio.h
+Patch 6 Adds support for AutoIBRS by turning its EFER
+enablement bit on at startup if the feature is available.
 
->  #include <asm/io.h>
->  
->  MODULE_AUTHOR("Vojtech Pavlik <vojtech@suse.cz>");
-> @@ -433,6 +434,26 @@ static void i8042_port_close(struct serio *serio)
->  	i8042_interrupt(0, NULL);
->  }
->  
-> +static bool i8042_should_wakeup_by_default(struct serio *serio)
-> +{
-> +#ifdef CONFIG_X86
-> +	const struct x86_cpu_id irq1_bug_cpu_ids[] = {
-> +		X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 96, NULL),	/* Renoir */
-> +		X86_MATCH_VENDOR_FAM_MODEL(AMD, 23, 104, NULL),	/* Lucienne */
-> +		X86_MATCH_VENDOR_FAM_MODEL(AMD, 25, 80, NULL),	/* Cezanne/Barcelo */
-> +		{}
-> +	};
-> +
-> +	if (x86_match_cpu(irq1_bug_cpu_ids)) {
-> +		pr_info_once("Disabling wakeup from keyboard to avoid firmware bug\n");
-> +		return false;
-> +	}
-> +#endif
-> +	if (!pm_suspend_default_s2idle())
-> +		return false;
-> +	return serio == i8042_ports[I8042_KBD_PORT_NO].serio;
-> +}
-> +
->  /*
->   * i8042_start() is called by serio core when port is about to finish
->   * registering. It will mark port as existing so i8042_interrupt can
-> @@ -451,10 +472,8 @@ static int i8042_start(struct serio *serio)
->  	 * behavior on many platforms using suspend-to-RAM (ACPI S3)
->  	 * by default.
->  	 */
-> -	if (pm_suspend_default_s2idle() &&
-> -	    serio == i8042_ports[I8042_KBD_PORT_NO].serio) {
-> +	if (i8042_should_wakeup_by_default(serio))
->  		device_set_wakeup_enable(&serio->dev, true);
-> -	}
->  
->  	spin_lock_irq(&i8042_lock);
->  	port->exists = true;
-> -- 
-> 2.34.1
-> 
+Patch 7 Adds support for propagating AutoIBRS to the guest.
 
-Thanks.
+v7: - Add Dave Hansen's Acked-by to unchanged patch 6/7
+    - Change patch 3/7 to not bother to set MSR DE_CFG[1]
+      if X86_FEATURE_LFENCE_RDTSC is already set [Boris]
+    - v6 went out with two 1/1's, try to not do that again
+
+v6: https://lore.kernel.org/lkml/20230110224643.452273-1-kim.phillips@amd.com/
+    Address v5 comment from Boris:
+    - Move CPUID leaf 0x8000021 EAX feature bits from scattered
+      to the new whole leaf since the majority of the features
+      will be used in the kernel and thus a separate leaf is
+       appropriate.
+
+v5: https://lore.kernel.org/lkml/20221205233235.622491-1-kim.phillips@amd.com/
+    Address v4 comments from Dave Hansen, Pawan Gupta, and Boris:
+    - Don't add new user-visible 'autoibrs' command line
+      options that we have to document: reuse 'eibrs'
+    - Update Documentation/admin-guide/hw-vuln/spectre.rst
+    - Add NO_EIBRS_PBRSB to Hygon as well
+    - Re-word commit texts to not use words like 'us'
+
+v4: https://lore.kernel.org/lkml/20221201015003.295769-8-kim.phillips@amd.com/
+    Moved some kvm bits that had crept into patch 6/7 back into 7/7,
+    and addressed v3 comments:
+    - Don't put ", kvm" in titles of patches that don't touch kvm.  [SeanC]
+    - () after function names, i.e. kvm_set_cpu_caps().  [SeanC]
+    - follow the established kvm_cpu_cap_init_scattered() style [SeanC]
+    - Add using cpu_feature_enabled() instead of static_cpu_has() to
+      commit text [SeanC]
+    - Pawan Gupta mentioned that the ordering of enabling the Intel
+      feature bit past Intel EIBRS bug detection could be avoided
+      by setting NO_EIBRS_PBRSB to cpu_vuln_whitelist, so did that
+      which allowed regrouping all EIBRS related code to one place
+      in cpu_set_bug_bits().
+
+v3: https://lore.kernel.org/lkml/20221129235816.188737-1-kim.phillips@amd.com/
+    - Remove Co-developed-bys.  They require signed-off-bys,
+      so co-developers need to add them themselves.
+    - update check_null_seg_clears_base() [Boris]
+    - Made the feature bit additions separate patches
+      because v2 patch was clearly doing too many things at once.
+
+v2: https://lore.kernel.org/lkml/20221124000449.79014-1-kim.phillips@amd.com/
+    https://lkml.org/lkml/2022/11/23/1690
+    - Use synthetic/scattered bits instead of introducing new leaf [Boris]
+    - Combine the rest of the leaf's bits being used [Paolo]
+      Note: Bits not used by the host can be moved to kvm/cpuid.c if
+      maintainers do not want them in cpufeatures.h.
+    - Hoist bitsetting code to kvm_set_cpu_caps(), and use
+      cpuid_entry_override() in __do_cpuid_func() [Paolo]
+    - Reuse SPECTRE_V2_EIBRS spectre_v2_mitigation enum [Boris, PeterZ, D.Hansen]
+      - Change from Boris' diff:
+        Moved setting X86_FEATURE_IBRS_ENHANCED to after BUG_EIBRS_PBRSB
+        so PBRSB mitigations wouldn't be enabled.
+    - Allow for users to specify "autoibrs,lfence/retpoline" instead
+      of actively preventing the extra protections.  AutoIBRS doesn't
+      require the extra protection, but we allow it anyway.
+
+v1: https://lore.kernel.org/lkml/20221104213651.141057-1-kim.phillips@amd.com/
+
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Joao Martins <joao.m.martins@oracle.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Alexey Kardashevskiy <aik@amd.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Kim Phillips (7):
+  x86/cpu, kvm: Add support for cpuid leaf 80000021/EAX (FeatureExt2Eax)
+  x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature
+  x86/cpu, kvm: Move the LFENCE_RDTSC / LFENCE always serializing
+    feature
+  x86/cpu, kvm: Add the Null Selector Clears Base feature
+  x86/cpu, kvm: Add the SMM_CTL MSR not present feature
+  x86/cpu: Support AMD Automatic IBRS
+  x86/cpu, kvm: Propagate the AMD Automatic IBRS feature to the guest
+
+ Documentation/admin-guide/hw-vuln/spectre.rst |  6 ++--
+ .../admin-guide/kernel-parameters.txt         |  6 ++--
+ arch/x86/include/asm/cpufeature.h             |  7 +++--
+ arch/x86/include/asm/cpufeatures.h            | 11 +++++--
+ arch/x86/include/asm/disabled-features.h      |  3 +-
+ arch/x86/include/asm/msr-index.h              |  2 ++
+ arch/x86/include/asm/required-features.h      |  3 +-
+ arch/x86/kernel/cpu/amd.c                     |  2 +-
+ arch/x86/kernel/cpu/bugs.c                    | 20 ++++++++-----
+ arch/x86/kernel/cpu/common.c                  | 22 +++++++++-----
+ arch/x86/kvm/cpuid.c                          | 30 +++++++------------
+ arch/x86/kvm/reverse_cpuid.h                  |  1 +
+ arch/x86/kvm/svm/svm.c                        |  3 ++
+ arch/x86/kvm/x86.c                            |  3 ++
+ 14 files changed, 71 insertions(+), 48 deletions(-)
 
 -- 
-Dmitry
+2.34.1
+
