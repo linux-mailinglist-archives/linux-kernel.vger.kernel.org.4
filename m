@@ -2,202 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E52066BB87
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E6F66BB8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 11:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjAPKRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 05:17:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S229735AbjAPKSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 05:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjAPKRX (ORCPT
+        with ESMTP id S230304AbjAPKSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:17:23 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04F61A951;
-        Mon, 16 Jan 2023 02:17:00 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E6215320010B;
-        Mon, 16 Jan 2023 05:16:55 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 16 Jan 2023 05:16:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1673864215; x=1673950615; bh=ohPYesaxXk
-        sV3W2txrimDtAtBAhmW/4R6Nx2mCz0Zps=; b=Eaw8Xd2GS61lnPC+MNep66n+dC
-        PCUEhiMxdPbFe1k/kw5XTMvIPinamdKeTutSmSfmd7YA1ukylFaGz4nNxf1J5YEu
-        IjhQvqFv7MvCbxLOKdNhdS/+r+/t9Qz+TeEaBx/YHpnK9PmiZDXYTPZ1y1D077Ze
-        ZwpbCMohYzcyOEzwbOQzHOD/H7AO5uKdQjn1L0Ow4vWcCzrnuHS50N9cPj8H52O8
-        rbfoddzAOLKxrY4VOHazuz4cIGmLYwLli3jczhATfEQWqF9PKYLsCBhVUUwSGOby
-        soypM3N0+un9uIwXY4iJlqES2K4xH7WR89IzLB0T998cHYoqXLWMhCzdFu7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673864215; x=1673950615; bh=ohPYesaxXksV3W2txrimDtAtBAhm
-        W/4R6Nx2mCz0Zps=; b=QyYpzpoC4JaiDhO9oOtlWLeMQJbky/neCi0IjmmzKyIw
-        pNRw0vNqn35ekGLaYLMqTmPBKODOdBvLGGdrVWZG0KkRor67veTQcvjNqY35s+ll
-        jhMAnfXJw+zMCJVMTM8LitiIqM3/diIkO0ZufNcx/pxWNkivpvKMcYMK2gxjWsDJ
-        eLoYi1aydXHMXgW2GC3f/SfRKTHjWWm91r6HeKqm/RdNeXLRNAvUeQvyWlegq4oh
-        Wi7mbgOhI0yC27c2wPQLdORbTS8wlUQxEQjGa0XT+TCPTo4gXRerGh294X4WTmP6
-        WZ19W+iBIaHKZDX8vvc3s3ba1sKTRUJSC9wHN1bwdQ==
-X-ME-Sender: <xms:FiTFYyg-udWjlu1DBrZdNQ4AJw8-kA9XMwrZlTV99IoyGPAyg7H65Q>
-    <xme:FiTFYzCDjbI2Pe2YDW53smZCYPI-sbdRytq09rzeZVkig4Vcql8yEJ-AWtJI43Mtr
-    sfKlDjpOH7nrwUgCgI>
-X-ME-Received: <xmr:FiTFY6FTvrGJ17x2hBuRVPnAP6_Wq1euJ9cdgwLq4-1c6tDC0hpVZrhz5ropdj6H3fAEBWFYDB7zUH05hyz0OhJymdZILIzJ6vuPC1MgNLWgqw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgedgudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehgtd
-    erredttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegt
-    vghrnhhordhtvggthheqnecuggftrfgrthhtvghrnheptdelkeejiedufedvhfeiffetle
-    fhiedvleeigfeiuefghfdvleeiffejieegteejnecuffhomhgrihhnpehkvghrnhgvlhdr
-    ohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:FiTFY7Ste6i31k9z-m6htj1R-0C5H2A6lt1cKAXXNTThiSHzdYehfg>
-    <xmx:FiTFY_xx7FBDWEh_sC-JbmhDsXGYEQBgJAjzXSQrYkbcBUUMd2CLZw>
-    <xmx:FiTFY56MSwC_zNMqb6gStkqwmquKYd7Yd-eqLWx2HoSBkOwyNrOAaw>
-    <xmx:FyTFY0zeH9ByF2HD5GBfu7_0NEOFU0Zs12Gi4rBdNJNsAx7ejXAg1Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 Jan 2023 05:16:54 -0500 (EST)
-Date:   Mon, 16 Jan 2023 11:16:51 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Oleg Verych <olecom@gmail.com>
-Cc:     wens@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, mark.rutland@arm.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        sakari.ailus@linux.intel.com, wens@csie.org
-Subject: Re: [PATCH 04/14] media: sun4i-csi: Fix [HV]sync polarity handling
-Message-ID: <20230116101651.jjzz2rcdehs5wvsi@houat>
-References: <20191215165924.28314-5-wens@kernel.org>
- <20230116100359.4479-1-olecom@gmail.com>
+        Mon, 16 Jan 2023 05:18:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4411A95B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:17:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673864277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NoqwI+WfW2YX1zBiZhXX6tIkshOZecUe6DtUqu/J1c4=;
+        b=SangRvmns9bdyGzS0VniOdfKY2wq9FoJ4fvhx48leFa/tX+ayav2m5v6/jh0NQVciaJuwg
+        2kwYkkfdxI2S1+qthWTRVc1SnUz9/j/r9p+sSvo9scFPwScfCC6Tvn5fvu6LxvtRJzWHo5
+        Z7O70frSdIqqKIah/mxTL4Y7eJR6SrA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-437-FUYF5cAGMA6c7ywpaanXiA-1; Mon, 16 Jan 2023 05:17:56 -0500
+X-MC-Unique: FUYF5cAGMA6c7ywpaanXiA-1
+Received: by mail-wm1-f71.google.com with SMTP id z22-20020a05600c0a1600b003db00dc4b69so440905wmp.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 02:17:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NoqwI+WfW2YX1zBiZhXX6tIkshOZecUe6DtUqu/J1c4=;
+        b=H3c81GyCRfGoNj92ZMRS6+UNpiROVzHIEeMWuH+ZvR8j3yromty4I7IkLo4a0pL3ju
+         wcSfJyChSHkYbvKDp1VldtrAyNqczetWeOQzABiHumZeM4B05sYbLc6E6KFf4w0UoeOr
+         FaZPccU6/odYPxhn6KW3OiciC4VKE7Fgb582WBFBYhMdM19L371vNLrRM6FizPluruy4
+         A8i2OH+JTCG3N2zVjq333IqvViOPakaqi0wF35xXj2oZvbjgl6nZMNx+gyNphPT3l6iL
+         yVSTq9+OpCTQMJF78dXun+aVooDU5Yj5N6BTOaZXXhOtbknXWDtmwnZCSiLbiwGOaTOG
+         m0hQ==
+X-Gm-Message-State: AFqh2kr/fDDkNn9K6nJgWrH7lotJjXH4E2ayYlEMGoJ4cda7rcWS0a4P
+        JIfnvEb2MYi+up8F6JMQYYWrJ/o2ZeK78HgPHsGcL0etHr1/7Xh7RtAGcywmflhZD0KpUbVVMTE
+        Nh0iZHr0wLtr+yjXFHDRb8zHl
+X-Received: by 2002:adf:f6cf:0:b0:2bc:858a:3def with SMTP id y15-20020adff6cf000000b002bc858a3defmr7286488wrp.5.1673864275294;
+        Mon, 16 Jan 2023 02:17:55 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsw1f4fxhjEtEz+P+Gk5cOHrWmBaeN+EJ/aeu07b++MxfTtTmC697Oy/NM954Nv8W9cHtD2tQ==
+X-Received: by 2002:adf:f6cf:0:b0:2bc:858a:3def with SMTP id y15-20020adff6cf000000b002bc858a3defmr7286475wrp.5.1673864275005;
+        Mon, 16 Jan 2023 02:17:55 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:1000:21d5:831d:e107:fbd6? (p200300cbc704100021d5831de107fbd6.dip0.t-ipconnect.de. [2003:cb:c704:1000:21d5:831d:e107:fbd6])
+        by smtp.gmail.com with ESMTPSA id bp28-20020a5d5a9c000000b00273cd321a1bsm25937199wrb.107.2023.01.16.02.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 02:17:54 -0800 (PST)
+Message-ID: <06423461-c543-56fe-cc63-cabda6871104@redhat.com>
+Date:   Mon, 16 Jan 2023 11:17:52 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d42kwkvwzbbj3usb"
-Content-Disposition: inline
-In-Reply-To: <20230116100359.4479-1-olecom@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for
+ walk_hugetlb_range
+To:     Peter Xu <peterx@redhat.com>,
+        James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230105101844.1893104-1-jthoughton@google.com>
+ <20230105101844.1893104-22-jthoughton@google.com> <Y78+/wleTEC3gyqu@x1n>
+ <CADrL8HU-prbfx2xxXCi0RPznp5DB68-NjqqmdM+4aUeUUURhiA@mail.gmail.com>
+ <Y8AnROAtMngKntnq@x1n>
+ <CADrL8HWFfqCqbpmvv8BSpvvzJ9aEeBEN30bMLuWGancsfMXv2w@mail.gmail.com>
+ <Y8BtJzBLTpw5IR+H@x1n>
+ <CADrL8HUi-j4ais45Xq8Jpb6a7DsWiXrKNeJfsqBRMi1Lier8xA@mail.gmail.com>
+ <Y8B8mW2zSWDDwp7G@x1n>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y8B8mW2zSWDDwp7G@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12.01.23 22:33, Peter Xu wrote:
+> On Thu, Jan 12, 2023 at 04:17:52PM -0500, James Houghton wrote:
+>> I'll look into it, but doing it this way will use _mapcount, so we
+>> won't be able to use the vmemmap optimization. I think even if we do
+>> use Hugh's approach, refcount is still being kept on the head page, so
+>> there's still an overflow risk there (but maybe I am
+>> misunderstanding).
+> 
+> Could you remind me what's the issue if using refcount on the small pages
+> rather than the head (assuming vmemmap still can be disabled)?
 
---d42kwkvwzbbj3usb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The THP-way of doing things is refcounting on the head page. All folios 
+use a single refcount on the head.
 
-Hi,
+There has to be a pretty good reason to do it differently.
 
-On Mon, Jan 16, 2023 at 01:03:59PM +0300, Oleg Verych wrote:
-> > -	hsync_pol =3D !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
-> > -	vsync_pol =3D !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
-> > +	/*
-> > +	 * This hardware uses [HV]REF instead of [HV]SYNC. Based on the
-> > +	 * provided timing diagrams in the manual, positive polarity
-> > +	 * equals active high [HV]REF.
-> > +	 *
-> > +	 * When the back porch is 0, [HV]REF is more or less equivalent
-> > +	 * to [HV]SYNC inverted.
-> > +	 */
-> > +	href_pol =3D !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
-> > +	vref_pol =3D !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
->=20
-> After this change has been made there is a need of explicit explanation
-> of what "Active high" / "Active low" in dts really mean.
+-- 
+Thanks,
 
-Why?
+David / dhildenb
 
-Active high means that the signal is considered active when it is held
-high. Active low means that the signal is considered active when it is
-low.
-
-> Currently physical high/low voltage levels are like that:
-> (I'm not sure about vsync-active)
->=20
-> * hsync-active =3D <0>; /* HSYNC active 'low' =3D> wire active is 'high' =
-*/
-
-Yes
-
->   CSI register setting: href_pol: 1,
-
-Not really, no. It's what this patch commit log is saying: HREF is
-!HSYNC, so in order to get a hsync pulse active high, you need to set
-href_pol to 0.
-
-> That is confusing:
->=20
-> [PATCH v6 5/5] DO NOT MERGE: ARM: dts: bananapi: Add Camera support
-> https://lore.kernel.org/linux-arm-kernel/cf0e40b0bca9219d2bb023a5b7f23bad=
-8baba1e5.1562847292.git-series.maxime.ripard@bootlin.com/#r
->=20
-> > +	port {
-> > +		csi_from_ov5640: endpoint {
-> > +                        remote-endpoint =3D <&ov5640_to_csi>;
-> > +                        bus-width =3D <8>;
-> > +                        hsync-active =3D <1>; /* Active high */
->=20
-> original CSI driver
->=20
-> > +                        vsync-active =3D <0>; /* Active low */
-> > +                        data-active =3D <1>;  /* Active high */
-> > +                        pclk-sample =3D <1>;  /* Rising */
-> > +                };
-> > +	};
->=20
-> [PATCH 13/14] [DO NOT MERGE] ARM: dts: sun7i: cubieboard2: Enable OV7670 =
-camera on CSI1
-> https://lore.kernel.org/linux-arm-kernel/20191215165924.28314-14-wens@ker=
-nel.org/
->=20
-> > +	port {
-> > +		/* Parallel bus endpoint */
-> > +		csi_from_ov7670: endpoint {
-> > +			remote-endpoint =3D <&ov7670_to_csi>;
-> > +			bus-width =3D <8>;
-> > +			/* driver is broken */
-> > +			hsync-active =3D <0>; /* Active high */
->=20
-> this change patchset
->=20
-> > +			vsync-active =3D <1>; /* Active high */
-> > +			data-active =3D <1>;  /* Active high */
-> > +			pclk-sample =3D <1>;  /* Rising */
-> > +		};
->=20
-> > +			ov7670_to_csi: endpoint {
-> > +				remote-endpoint =3D <&csi_from_ov7670>;
-> > +				bus-width =3D <8>;
-> > +				hsync-active =3D <1>; /* Active high */
->=20
-> this patcheset
->=20
-> > +				vsync-active =3D <1>; /* Active high */
-> > +				data-active =3D <1>;  /* Active high */
-> > +				pclk-sample =3D <1>;  /* Rising */
-> > +			};
-> > +		};
-
-I'm sorry, it's not clear to me what is confusing in those excerpts?
-
-Maxime
-
---d42kwkvwzbbj3usb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY8UkEwAKCRDj7w1vZxhR
-xTMkAP4+TgmiQeIUnqkQdGHMurxhX6R1RMA0WARr69iNcT7I+AD/ZaGQUas8YGRi
-CYDPVdJ5hhgKlTctilLgpPIaA55YmwE=
-=QilM
------END PGP SIGNATURE-----
-
---d42kwkvwzbbj3usb--
