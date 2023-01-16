@@ -2,104 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D0466BC8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E539E66BC94
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 12:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjAPLND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 06:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S229670AbjAPLPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 06:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjAPLMj (ORCPT
+        with ESMTP id S229624AbjAPLO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 06:12:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA1014487;
-        Mon, 16 Jan 2023 03:12:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E35E160F68;
-        Mon, 16 Jan 2023 11:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B524C433D2;
-        Mon, 16 Jan 2023 11:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673867555;
-        bh=+wQ25LIyeqNsuwnNuac8hPsPq35J2Ha8X2Pw4vC4ugk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M7dA4lvI6DveU5osHG3ehgQ5EcRwZhupa8q2AbikDbB8v5NouXE861wUbAJORWcFR
-         C92L0v9G6PwpUNM6rckYlGByT9OvCgBhDHQtjrPk6IrvpzEK6oohxQURgj3ctk0qG3
-         wB1+VuEDlF8+3evOfGVQl5nkfEiErkJRG+bqRGqVcHi0fFQ6TGhWxpGCOl0t15W6ng
-         oVoyhsSRoPg/LXZ0ArbvVNeRPbZbXTCHrJ7uPnPbIUXWw9BTtDqCgAfqZ95yVsPlB1
-         HEAiPwanxi/+0df7i8+4GDpqw0NQ3pos9Srw1hEsIyAqXe2/wNZf9jJFyovAOyUQaX
-         g/4fZ4o4tkW1g==
-Date:   Mon, 16 Jan 2023 11:12:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-Subject: Re: [PATCH 1/6] soc: qcom: smd-rpm: Add IPQ9574 compatible
-Message-ID: <Y8UxHZx6Mkt3sHXq@sirena.org.uk>
-References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
- <20230113150310.29709-2-quic_devipriy@quicinc.com>
- <37755ba1-e8d0-cd9e-73a4-6501746022d8@linaro.org>
+        Mon, 16 Jan 2023 06:14:57 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB13110CE
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:14:56 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id c6so30020888pls.4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 03:14:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H/j+1WOB2+poIU0zjjNXAinFoRjK1wRjx3d+XHMefVA=;
+        b=IKaS1mlsXdKP2qLzqb0Dyj556UOX3zeMPhPIirCQcTt3qQS2nyTrw1H+PTDeBL8zuV
+         HM5hqzwdA1j2S+Owv380uXh4elme5UhoOwMxL5rwB6SEfOxqFisy3kf5PXKswLa2DQwZ
+         ZbSg85c+dciT9fX+W0S917eX6PiPq8JsRiD7hiEgNGE0uDyd/QyqjwINAVDHmul8StHU
+         g7sLEfykA1+gfNGZH3mWj1DPNJa/IpRkv5amvYAt97kyPizVZeEvRvSNKrRlkvJJAMDV
+         n1yK9QwW5Xy/Z8sceRkhjoRr36n6xdiEOnqDkWDzss1yFAf2tXJokS2p8uBJx8DvUK4b
+         8mUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H/j+1WOB2+poIU0zjjNXAinFoRjK1wRjx3d+XHMefVA=;
+        b=qbDxcQpc3a6nqIk3q+Xpf3KpDldUwVkULjrAA7RJCe/O8GQKwVl37jU+M+rjePBy+U
+         lNbJyCrVo7co6BpGvLY1Cd3zAKYC6/PE+ERZYffIyA86yZFNIvuY4RFQcrsEXA3WaICB
+         SN10XM7eddqct03MYkHtsjMN2FPpz7YupENNePfed0adxGT9MyVHqRDj7n4egyyXm5E9
+         aAi/sVb5AiSpsYPB80Xn8dxl38a1GxRp4YYMEFtiNQgqlboItCYwiHXP3ekS+zpZDVZl
+         iBOhUpj3HDQOgFq4/cHT/kMlUDDC9EIDv4rO6PN9kMYgr7VlnRWfKmkVVvibKAfh7oVz
+         f2ZA==
+X-Gm-Message-State: AFqh2kpXObOoQQj7Eyz5SpSspZPVnZhO7aRtZ0lOMp8s4JrEHfvqI/lS
+        2RTH211MsUAzJK4ayP2HN8k=
+X-Google-Smtp-Source: AMrXdXuQRd6wOjQtljWK07qYLraoNulCoayDZNQpKT3xAcTulISKZqIOzMvtWPVA3/M2jPRTkeVMbA==
+X-Received: by 2002:a05:6a20:5489:b0:b0:b870:54e1 with SMTP id i9-20020a056a20548900b000b0b87054e1mr140691094pzk.12.1673867695716;
+        Mon, 16 Jan 2023 03:14:55 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id 3-20020a621503000000b00581c741f95csm16176892pfv.46.2023.01.16.03.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 03:14:54 -0800 (PST)
+Date:   Mon, 16 Jan 2023 11:14:38 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+Message-ID: <Y8UxnqPCTLbbD+2F@localhost>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-42-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wIRK8edTiW17OVlw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <37755ba1-e8d0-cd9e-73a4-6501746022d8@linaro.org>
-X-Cookie: Serving suggestion.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230109205336.3665937-42-surenb@google.com>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 09, 2023 at 12:53:36PM -0800, Suren Baghdasaryan wrote:
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index d40bf8a5e19e..294dd44b2198 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -627,12 +627,16 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+>  	 * mm->mm_lock_seq can't be concurrently modified.
+>  	 */
+>  	mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
+> -	if (vma->vm_lock_seq == mm_lock_seq)
+> +	if (vma->vm_lock->lock_seq == mm_lock_seq)
+>  		return;
+>  
+> -	down_write(&vma->vm_lock->lock);
+> -	vma->vm_lock_seq = mm_lock_seq;
+> -	up_write(&vma->vm_lock->lock);
+> +	if (atomic_cmpxchg(&vma->vm_lock->count, 0, -1))
+> +		wait_event(vma->vm_mm->vma_writer_wait,
+> +			   atomic_cmpxchg(&vma->vm_lock->count, 0, -1) == 0);
+> +	vma->vm_lock->lock_seq = mm_lock_seq;
+> +	/* Write barrier to ensure lock_seq change is visible before count */
+> +	smp_wmb();
+> +	atomic_set(&vma->vm_lock->count, 0);
+>  }
+>  
+>  /*
+> @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+>  static inline bool vma_read_trylock(struct vm_area_struct *vma)
+>  {
+>  	/* Check before locking. A race might cause false locked result. */
+> -	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> +	if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+>  		return false;
+>  
+> -	if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+> +	if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
+>  		return false;
+>  
+> +	/* If atomic_t overflows, restore and fail to lock. */
+> +	if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
+> +		if (atomic_dec_and_test(&vma->vm_lock->count))
+> +			wake_up(&vma->vm_mm->vma_writer_wait);
+> +		return false;
+> +	}
+> +
+>  	/*
+>  	 * Overflow might produce false locked result.
+>  	 * False unlocked result is impossible because we modify and check
+>  	 * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+>  	 * modification invalidates all existing locks.
+>  	 */
+> -	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> -		up_read(&vma->vm_lock->lock);
+> +	if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> +		if (atomic_dec_and_test(&vma->vm_lock->count))
+> +			wake_up(&vma->vm_mm->vma_writer_wait);
+>  		return false;
+>  	}
 
---wIRK8edTiW17OVlw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+With this change readers can cause writers to starve.
+What about checking waitqueue_active() before or after increasing
+vma->vm_lock->count?
 
-On Fri, Jan 13, 2023 at 05:42:36PM +0100, Krzysztof Kozlowski wrote:
-> On 13/01/2023 16:03, devi priya wrote:
-> > Adding compatible string to support RPM communication over SMD for
-> > IPQ9574 SoC
-> >=20
-> > Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->=20
-> What exactly was developed here but the other author?
-
-It's fairly clear looking at this in the context of the series
-that the same tags have been applied to every patch in the
-series.  Probably a patch like this was actually written by just
-one person but there's a decent chance that it's just been
-forgotten who it was and fundamentally it just doesn't matter
-that much.
-
---wIRK8edTiW17OVlw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPFMRgACgkQJNaLcl1U
-h9Da5gf/XnXzjuy+LtiIlDhMn/Kn8h19yQMA765qgQdrO+h8Ig/PUCRTyf9X8ksa
-2kRwpMRn4wf767IWRei5rYrvsDuwTC3CObWa2H9cJ+m0mvPpH5us91mSnnaBlcKN
-Pll+1q4K1o+bAxG/fwAQbkrHfMUzeVO2ctaLpDmBZ9WATahktJl34OvsUZxZ7UIb
-VnyK8ZmIFFVSTrliaKzdlng39VwUK/gqWZm2s4NGLGh2EtHHWqlZdu2nL0o2gtP8
-hw5fJQiIhTRIlnnyWwfUB5hSXfkW5Js+8sYBZWA3y2W6MweDf5/6uhOYmlu6cH4E
-3YakshqMbXpUFGY4gRDDqkQCeHOOpw==
-=3sH0
------END PGP SIGNATURE-----
-
---wIRK8edTiW17OVlw--
+--
+Thanks,
+Hyeonggon
