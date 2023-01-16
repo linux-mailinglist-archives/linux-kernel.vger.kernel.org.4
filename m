@@ -2,77 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF4066BAF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5773A66BAED
+	for <lists+linux-kernel@lfdr.de>; Mon, 16 Jan 2023 10:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjAPJxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 04:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S229834AbjAPJwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 04:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjAPJwa (ORCPT
+        with ESMTP id S229656AbjAPJwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 04:52:30 -0500
-Received: from gentwo.de (gentwo.de [161.97.139.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE0118B2D
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 01:52:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
-        t=1673862700; bh=GGWZqurGVXYXKjiSWb48WruguAOsrq5zDLR1T8LYJYQ=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Dv/YkebidJycejB8ZSKlLlgZmGWe7U0ihJbL01oIY8LfRzd2tv0dOC0HeB7LW69mk
-         aJ57mUEGBsrA+1f5RBFOfzYDk84PtIkPCGrGfn3nRMTCgCoSjxXI98n4qBLgJZLF+W
-         yS2Q/n8mRXsnjdQyg/SArqy7/zwlmiTaFlmdZ1LiWWmgMhCvaFxbCXOJZ9Qbig4MIW
-         RDxlRONX7K02+GASBsxBV/PFdl6/gTNONUe9XXVoIDpGfnnTt3nE7uxQBXCr9Dfrdn
-         98g9uk5URmbgOK2EKBS+rDFlRbS9k2eiIaYXLKdCefFaPdva4rK3BOJK43zD/AytSz
-         C4r95u1zb2qbg==
-Received: by gentwo.de (Postfix, from userid 1001)
-        id 447CFB00195; Mon, 16 Jan 2023 10:51:40 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.de (Postfix) with ESMTP id 43326B0011F;
-        Mon, 16 Jan 2023 10:51:40 +0100 (CET)
-Date:   Mon, 16 Jan 2023 10:51:40 +0100 (CET)
-From:   Christoph Lameter <cl@gentwo.de>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-cc:     Frederic Weisbecker <frederic@kernel.org>, atomlin@atomlin.com,
-        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v13 2/6] mm/vmstat: Use vmstat_dirty to track CPU-specific
- vmstat discrepancies
-In-Reply-To: <Y77s4x5yC4O1OxTQ@tpad>
-Message-ID: <24ca2aad-54b2-2c3a-70b5-49a33c9a33@gentwo.de>
-References: <20230105125218.031928326@redhat.com> <20230105125248.813825852@redhat.com> <b89a9828-d4e-9874-d482-dbb6cbe46@gentwo.de> <Y71XpnJGumySL9ej@lothringen> <7c2af941-42a9-a59b-6a20-b331a4934a3@gentwo.de> <Y73F4tbfxT6Kb9kZ@tpad>
- <60183179-3a28-6bf9-a6ab-8a8976f283d@gentwo.de> <Y77s4x5yC4O1OxTQ@tpad>
+        Mon, 16 Jan 2023 04:52:09 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF94818B0F;
+        Mon, 16 Jan 2023 01:51:56 -0800 (PST)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 78AB884F3E;
+        Mon, 16 Jan 2023 10:51:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1673862715;
+        bh=AriQnM0aPmdyQ63JyxY6+PYRD6b7/e5rfRLzvkdM2R4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bJxAQW0ZM1gD7LrZPN42GA+aAVqUVuI2OaeCOqjJDwJ1Crf/M6vuC6KsPD1s/oGwL
+         4HjSp/ckHchnTZUiOBWLh1N6UbktVYV5FU3w82QputJaJSeez96/3B/4GEQyzz7Njn
+         NjqZEfmnm8Z7GhacQFyvRZDZ8eP7BbXpDkt9sFBSEcIH/Qllq9FSwpqZJ7P6tY/16H
+         9QXCpUfgsbqtSq7ilLEfSWpKAmqKQA1sP2EtMK1VJon2qKHn7tS+qWXUxlBpotMF6X
+         dbC0RXlUtmVI80vwHv9nYCMaMhjLRY4rwRD2LkFVgKWTUKxoR9ZgTlYYf3hSP5AanD
+         ukFI67Z6b0/cA==
+Date:   Mon, 16 Jan 2023 10:51:48 +0100
+From:   Lukasz Majewski <lukma@denx.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dsa: marvell: Provide per device information
+ about max frame size
+Message-ID: <20230116105148.230ef4ae@wsk>
+In-Reply-To: <Y8Fno+svcnNY4h/8@shell.armlinux.org.uk>
+References: <20230106101651.1137755-1-lukma@denx.de>
+        <Y8Fno+svcnNY4h/8@shell.armlinux.org.uk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yxWGpSSJACP3k2nu2/8Ph_X";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 Jan 2023, Marcelo Tosatti wrote:
+--Sig_/yxWGpSSJACP3k2nu2/8Ph_X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> OK, can replace this_cpu operations with this_cpu_ptr + standard C operators
-> (and in fact can do that for interrupt disabled functions as well, that
-> is CONFIG_HAVE_CMPXCHG_LOCAL not defined).
->
-> Is that it?
+Hi Russell,
 
-No that was hyperthetical.
+> On Fri, Jan 06, 2023 at 11:16:49AM +0100, Lukasz Majewski wrote:
+> > Different Marvell DSA switches support different size of max frame
+> > bytes to be sent. This value corresponds to the memory allocated
+> > in switch to store single frame.
+> >=20
+> > For example mv88e6185 supports max 1632 bytes, which is now
+> > in-driver standard value. On the other hand - mv88e6250 supports
+> > 2048 bytes. To be more interresting - devices supporting jumbo
+> > frames - use yet another value (10240 bytes)
+> >=20
+> > As this value is internal and may be different for each switch IC,
+> > new entry in struct mv88e6xxx_info has been added to store it.
+> >=20
+> > This commit doesn't change the code functionality - it just provides
+> > the max frame size value explicitly - up till now it has been
+> > assigned depending on the callback provided by the IC driver
+> > (e.g. .set_max_frame_size, .port_set_jumbo_size). =20
+>=20
+> I don't think this patch is correct.
+>=20
+> One of the things that mv88e6xxx_setup_port() does when initialising
+> each port is:
+>=20
+>         if (chip->info->ops->port_set_jumbo_size) {
+>                 err =3D chip->info->ops->port_set_jumbo_size(chip,
+> port, 10218); if (err)
+>                         return err;
+>         }
+>=20
+> There is one implementation of this, which is
+> mv88e6165_port_set_jumbo_size() and that has the effect of setting
+> port register 8 to the largest size. So any chip that supports the
+> port_set_jumbo_size() method will be programmed on initialisation to
+> support this larger size.
+>=20
+> However, you seem to be listing e.g. the 88e6190 (if I'm interpreting
+> the horrid mv88e6xxx_table changes correctly)
 
-I do not know how to get out of this dilemma. We surely want to keep fast
-vmstat operations working.
+Those changes were requested by the community. Previous versions of
+this patch were just changing things to allow correct operation of the
+switch ICs on which I do work (i.e. 88e6020 and 88e6071).
 
-The fundamental issue that causes the vmstat discrepancies is likely that
-the fast this_cpu ops can increment the counter on any random cpu and that
-this is the reason you get vmstat discrepancies.
+And yes, for 88e6190 the max_frame_size =3D 10240, but (by mistake) the
+same value was not updated for 88e6190X.
 
-Give up the assumption that an increment of a this_cpu counter on a
-specific cpu means that something occurred on that specific cpu. Maybe
-that will get you on a path to resolve the issues you are seeing.
+The question is - how shall I proceed?=20
+
+After the discussion about this code - it looks like approach from v3
+[1] seems to be the most non-intrusive for other ICs.
+
+> as having a maximum
+> frame size of 1522, but it implements this method, supports 10240, and
+> thus is programmed to support frames of that size rather than 1522.
+>=20
+
+Links:
+
+[1] - https://lore.kernel.org/netdev/Y7M+mWMU+DJPYubp@lunn.ch/T/
 
 
+Best regards,
 
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/yxWGpSSJACP3k2nu2/8Ph_X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmPFHjQACgkQAR8vZIA0
+zr1KBQgAqlq+nldC7Wy1tHVtLEpJID5+bW/abhyGBhyW9F9NAbU9AqstcJMEhuEr
+IPllCMvauw96YEveGfklueBgoilKvdzhAHlef1UEDSXdX5lZviWyLhiRkZYl3Qx5
+OBEvpMQULe1UvZ8mhjgO/IQ09FYGpNGx5ac/IqHawIN363pyRiry7y52DUN7rbjA
+ubLs8TIa8/DtWJA03cMO4VfMNowMEI5vAKyNli9ojKFKSTddG7H0lvdG2TNn/ycZ
+tNZSDHZi0s3DfZB+wbUWfgUqmdHPIygsqAGHHPKp04i7P5IVNnRbVUGFuOLoWpfe
+RB7DQRIa40DfPKZ6v9f/UA+Kaw7oLw==
+=Yiso
+-----END PGP SIGNATURE-----
+
+--Sig_/yxWGpSSJACP3k2nu2/8Ph_X--
