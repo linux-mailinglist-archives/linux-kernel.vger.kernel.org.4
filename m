@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E9E66DFFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8E166E002
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbjAQOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S231417AbjAQOJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbjAQOJV (ORCPT
+        with ESMTP id S231395AbjAQOJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:09:21 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498D43BDB2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:09:16 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id x10so42352667edd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:09:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8lRKNEyZBQ0MEz5uWRwQDY0cEHSnPNZLloQPoR0gCIA=;
-        b=Ocn4aUWP4m1u7SHcpx51JCkpswLgA9s1SPQ+8kNx8RMzL5jQL8ym9RHgpIqoauuWr3
-         CumVoCg6SU99qDrSXSCy0+6uGv1Xmq4C+xvNC+NuHoGKjHMmGjC1gB65fRZXelVlJ/DU
-         OEvy3SokQBpnk/vNiwM4r6j9hMLLBwCjSYUjmnuCEWaCgeGmgR1PROeq5neCTNBwJcsQ
-         bfxIYrAM8xZVQi9ffgEEDGLzx96VXF4L0qULKwE0TZQm43c4wBXeMwn3Q6ObUbFh2AhG
-         Z8Zp6A5Am/98qXzJM3Amna0xRaIk1oPXPcN/XnqkLR8dXoPnt5WyQPx9/0vI8xyXe8Tm
-         20IA==
+        Tue, 17 Jan 2023 09:09:40 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1620D3A5A6;
+        Tue, 17 Jan 2023 06:09:36 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id vw16so12482457ejc.12;
+        Tue, 17 Jan 2023 06:09:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8lRKNEyZBQ0MEz5uWRwQDY0cEHSnPNZLloQPoR0gCIA=;
-        b=M9rPDi/a6y/5Z3F6j4haiWAlZYrLoCFIH9rRerfo1etdRAqG2hm5C31ljnZkJ3smu6
-         1SZqC7pM95TVGWWtnOhw65bvY+DojPpv74Q65WoIPQsEJh+tbxeqgBymEFySB9jjyGwf
-         +ZCkcZ0U34NuTCYEuzfQERalD84Yamy0ZpZ5fQRyxj0SDMSEWELzn2M6M2scpZgN8ork
-         B2dTQGdzDcSLivZEYGkIAi54/xeFDEq1DMfbmqyUuL/QKRf2P4wJPGvneTeLJzV6eHVb
-         3MDUBQbaKHRU2dIOAoZjib09cWs8q5OvEBD2CAt93cz2fbHHPHrUNVQXd37uxr4dpzEO
-         2PCQ==
-X-Gm-Message-State: AFqh2kqgviyitm2HtxJJuBPncSi19fXGpORhm2bbD8vMwb7U0j7JUEe7
-        hb33Gr+eQJS62kI8pMBYZ0s+Kw==
-X-Google-Smtp-Source: AMrXdXvxKfX7GGtuIFRDSzek0Q3sa3LydURkvRpFoLSK2KCXpzVuXwChigb90MTDqNsP6enNLybzKg==
-X-Received: by 2002:aa7:d310:0:b0:499:e564:a1c with SMTP id p16-20020aa7d310000000b00499e5640a1cmr2544846edq.11.1673964554809;
-        Tue, 17 Jan 2023 06:09:14 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id el14-20020a056402360e00b00458b41d9460sm12376641edb.92.2023.01.17.06.09.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 06:09:14 -0800 (PST)
-Message-ID: <33eda50c-c70f-1bb6-0917-22b6fdb4a2ca@linaro.org>
-Date:   Tue, 17 Jan 2023 16:09:12 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SxrCGjSKfBkjK5viyn3/63bLv/HFmaC1YTqocY1zE1E=;
+        b=PsXakM8q0f3n89Ua6Zpw1AS8ZFLjv7nlKW5iNCEeaQ6+AnoozAJknXwd3QTS/1uIne
+         CkGwGHzOg1pw46HF0Djvn1VvZymJdhrW0rOisTonUw5IupDQMVcLQ1MMpCioAgYhZlYV
+         p4XFRFnkP29aD7eJVlZCjshjEF4feJdZ9CZRRJk/WSJUDO6/WnuYWIKPXjWegpflUKV6
+         IsdzSlAw7aI312w7DOzhBdTS2Tto7f8VEWCDpsYZI7nnIxHjVytoVyhV9odsqft7l8UC
+         G3t7IhQUxv/7jJy2HtNHTfC2/nAE9YXquQHeUQrT6jsEmMcCR9C5DjdPrACuC3fAbAYE
+         OVLQ==
+X-Gm-Message-State: AFqh2kplE+D9PdjxIIdPO0XHWrFj3cgJMQziGV0HhMJALuCRZpG+20xD
+        UAKODakWkgVucteEZUR3g0yXOEoM8sNEoXlv1II=
+X-Google-Smtp-Source: AMrXdXu3u90Y/GKUFfDt7Oeht0ZXER9iAI4urcFhf748H5avCW3qieQtQPSGgH0KHpzyPJom0xOGNHHT1Jp4RjFOURk=
+X-Received: by 2002:a17:906:eb1b:b0:86e:abe4:5acf with SMTP id
+ mb27-20020a170906eb1b00b0086eabe45acfmr297536ejb.615.1673964575446; Tue, 17
+ Jan 2023 06:09:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 1/6] dt-bindings: phy: Add QMP UFS PHY comptible for
- SM8550
-Content-Language: en-GB
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230117125555.163087-1-abel.vesa@linaro.org>
- <20230117125555.163087-2-abel.vesa@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230117125555.163087-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113140610.7132-1-jgross@suse.com> <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
+ <e5cc2f96-82bc-a0dc-21fa-2f605bc867d1@suse.com>
+In-Reply-To: <e5cc2f96-82bc-a0dc-21fa-2f605bc867d1@suse.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Jan 2023 15:09:24 +0100
+Message-ID: <CAJZ5v0ggSbR7+RiXuJo4aq+PYWS-eb9R2iSr0DFfVhcaJ1bfUQ@mail.gmail.com>
+Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
+To:     Juergen Gross <jgross@suse.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 14:55, Abel Vesa wrote:
-> Document the QMP UFS PHY compatible for SM8550.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   .../devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml       | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> index 760791de0869..44745a5c64cd 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
-> @@ -17,6 +17,7 @@ properties:
->     compatible:
->       enum:
->         - qcom,sc8280xp-qmp-ufs-phy
-> +      - qcom,sm8550-qmp-ufs-phy
->         - qcom,sm6125-qmp-ufs-phy
+On Mon, Jan 16, 2023 at 7:45 AM Juergen Gross <jgross@suse.com> wrote:
+>
+> On 13.01.23 20:40, Rafael J. Wysocki wrote:
+> > On Fri, Jan 13, 2023 at 3:06 PM Juergen Gross <jgross@suse.com> wrote:
+> >>
+> >> Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
+> >> Xen PV guest") missed one code path accessing real_mode_header, leading
+> >> to dereferencing NULL when suspending the system under Xen:
+> >>
+> >>      [  348.284004] PM: suspend entry (deep)
+> >>      [  348.289532] Filesystems sync: 0.005 seconds
+> >>      [  348.291545] Freezing user space processes ... (elapsed 0.000 seconds) done.
+> >>      [  348.292457] OOM killer disabled.
+> >>      [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.104 seconds) done.
+> >>      [  348.396612] printk: Suspending console(s) (use no_console_suspend to debug)
+> >>      [  348.749228] PM: suspend devices took 0.352 seconds
+> >>      [  348.769713] ACPI: EC: interrupt blocked
+> >>      [  348.816077] BUG: kernel NULL pointer dereference, address: 000000000000001c
+> >>      [  348.816080] #PF: supervisor read access in kernel mode
+> >>      [  348.816081] #PF: error_code(0x0000) - not-present page
+> >>      [  348.816083] PGD 0 P4D 0
+> >>      [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >>      [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1.3-1.fc32.qubes.x86_64 #1
+> >>      [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.01 07/03/2022
+> >>      [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
+> >>
+> >> Fix that by adding an indirection for acpi_get_wakeup_address() which
+> >> Xen PV dom0 can use to return a dummy non-zero wakeup address (this
+> >> address won't ever be used, as the real suspend handling is done by the
+> >> hypervisor).
+> >
+> > How exactly does this help?
+>
+> I believed the first sentence of the commit message would make this
+> clear enough.
 
-Please keep the list sorted
+That was clear, but the fix part wasn't really.
 
->   
->     reg:
+> I can expand the commit message to go more into detail if you think
+> this is really needed.
 
--- 
-With best wishes
-Dmitry
+IMO calling acpi_set_waking_vector() with a known-invalid wakeup
+vector address in dom0 is plain confusing.
 
+I'm not sure what to do about it yet, but IMV something needs to be done.
