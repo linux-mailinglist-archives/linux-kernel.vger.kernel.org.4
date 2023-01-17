@@ -2,140 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802CD66E8A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E3466E8AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjAQVmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S229755AbjAQVmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjAQViT (ORCPT
+        with ESMTP id S230017AbjAQVjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:38:19 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA1D2CFE4;
-        Tue, 17 Jan 2023 12:01:25 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 108925C00E9;
-        Tue, 17 Jan 2023 15:01:24 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 17 Jan 2023 15:01:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673985684; x=1674072084; bh=tMyHBVcYNG
-        0ERO4S5Q8/K/ngC+15RRvO4SZa46EllSw=; b=e/I7Bu6JmmSGgy3u4WX+iD+QMX
-        i2eQ5+cEbaTu38BxSpYEjKFtGNT7PSo4U7WFgF4ABTLwLQ7Xh+N5CCqUebDEkUiX
-        aYahBdbKsHZu43my0QuBJ5Uclm6GNOp/2XmtY1lCkijJdiOeZGWidyeT0pI0OEeb
-        wJf2cmmrFYDhXztF2bQ5jLjW+FIdZ8Fc2YDIC3R8THV7H10UAW1WCJTpGR5lz/s5
-        97JI1LDDjqyYs684EKx673zOjv5kmJbEq81LOYrawAaz6XIpZdS7CVuHnuPp5Atb
-        s8p547yb1vivVMq6SaW6n7fZChEjkoYVlGkFBa4GjtxVPE+VGxQ/EGYEvnoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673985684; x=1674072084; bh=tMyHBVcYNG0ERO4S5Q8/K/ngC+15
-        RRvO4SZa46EllSw=; b=r0/igWbp96bDczPUdGiDuVQOZk8DlgxsYWPQXTZq9fJ4
-        cbF2zV+baxa3Ca9K/3BAxQEYq/FOgnP/kKebLY6L5cyR6v5a2VWUJjMwWPBW/wg9
-        ohKcrpd4OdmuVIrhfXUQyRzghFXJ4Ra45NcS3FAOlfSxxsSnbTYuS86CpEMzPU8V
-        ypWiQgVmg/llOUBdFWRQfDCnqp7mpBYaEV0xYBNJcA+G27Ba2vreV1jP3AKu0Lp3
-        SmkaMFnDLx3BggpIa8EdbDx/QmqXf6yLAOGZdB3YD34+5tkODhp2VII4p5hE4fLJ
-        1NVEz9GnMx1Hz4KMtAwZz8F/ur/YZdhmbpLH+eGQqA==
-X-ME-Sender: <xms:k_7GY8LW8h2_wNKJSUM2TFzFq56zfzh_EiHL4v4e57MQuLmniUnaUA>
-    <xme:k_7GY8LYJWyfAJs1_c_mWNnr4ZJDz46ELzc_HWIcTPzheWUirzILxNR5Iw5sslUUw
-    tQGWFi3q7cdnAMrfko>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtiedgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:k_7GY8vuExMOsyJ81lxn_vgndy1Y-xDoEhpmxcsvofAiP-ITIAPkfA>
-    <xmx:k_7GY5Z6Dnp88oXouzKtLwyKb1DWtOu9uC4pnL_E9WIQsHuz7OxO2g>
-    <xmx:k_7GYza62EwHI5CUM1-hB40biML0yder_VcCrH57XwRSnAkME6WnDQ>
-    <xmx:lP7GY5sqpwy3X9FiXGNCey3fbbDJTBqnXvKJjiXMrRfogFAbcVEsUw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 69C92B60086; Tue, 17 Jan 2023 15:01:23 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
-Mime-Version: 1.0
-Message-Id: <4c4478d3-5b11-450a-9b6d-9e30e52b8f6d@app.fastmail.com>
-In-Reply-To: <98636010-fb0b-1771-e81f-cce90740d358@gmail.com>
-References: <20230117172825.3170190-1-arnd@kernel.org>
- <98636010-fb0b-1771-e81f-cce90740d358@gmail.com>
-Date:   Tue, 17 Jan 2023 21:01:03 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tariq Toukan" <ttoukan.linux@gmail.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Saeed Mahameed" <saeedm@nvidia.com>,
-        "Leon Romanovsky" <leon@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Tom Rix" <trix@redhat.com>, "Tariq Toukan" <tariqt@nvidia.com>,
-        "Maxim Mikityanskiy" <maximmi@nvidia.com>,
-        "Gal Pressman" <gal@nvidia.com>, "Lama Kayal" <lkayal@nvidia.com>,
-        "Moshe Tal" <moshet@nvidia.com>, Netdev <netdev@vger.kernel.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] mlx5: reduce stack usage in mlx5_setup_tc
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 16:39:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BA939BAA
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:01:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673985703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5BQpAmV2pgCsbRtNwN3ZnWFBsEHFptUi8fvWmjdDRno=;
+        b=f4ViyFJo9bm2gGXEirnVK5YbRXyoUDPB3ZN4Z4pm6dwkEln+evIEyNYR8+M+2qdJwx3NhI
+        TTP+AQ+KjX23HqLGCuRG3VMwA4Ea9dOSQpPrdSIsvOJQc4Omd/ZP/N+VPIP4iYJYSWEa2V
+        RsZpV1phOuuGyCN8hFKnZ3oFU9PHMqo=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-59-klB90QffOEy2H6RLqjJFug-1; Tue, 17 Jan 2023 15:01:42 -0500
+X-MC-Unique: klB90QffOEy2H6RLqjJFug-1
+Received: by mail-pg1-f198.google.com with SMTP id e11-20020a63d94b000000b0048988ed9a6cso14341018pgj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:01:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5BQpAmV2pgCsbRtNwN3ZnWFBsEHFptUi8fvWmjdDRno=;
+        b=17+Kr7rnJx3Vwe7JTHLBLti5lI0yiTmy+63BaqsckM/YgimX4SVl/NHNIBNEMMb+Us
+         scSAmyMCjNcMvFn3xj/piaEzHCKsArV2kw1yvfjIfBqYHV2ARiNv/W/IgIBKbFNoR8Zc
+         MKWOzP+oxpQD7WEYjB/lfWGBkhCl7PRxAm++qs+4/MLpPmpwiP3vEl6SEgQY9WdlV39j
+         TyBjQcmCd/qRUQuey8VqT5o0WUE53g7Y3htQVtQ8kfHYx8mJzOj4GEWgZTFFaw7VjmYN
+         VUQMBeeMUjPXE4jqbihyW9SGqBorTn+HJYTWdSGqBalMkoS72P8G0I3tuyyF+/qwd/vZ
+         PSJQ==
+X-Gm-Message-State: AFqh2krBN4QqwAtOEWfUrTPfohkvPIO5+//aSKINXHAdiSxpw1nnW3OJ
+        Xqv1lfQ2+u+X4pXaepZYbiTZh/9HA49w07Sb7Qaq5/3/WrDUuGC3yIED2pHIjnQt0hGtZCHzlhp
+        nx/X9zUZReJIYujASDIK2tzzpewlNPLJMXUazn+66
+X-Received: by 2002:a65:66c9:0:b0:498:84f3:85f0 with SMTP id c9-20020a6566c9000000b0049884f385f0mr352190pgw.558.1673985701322;
+        Tue, 17 Jan 2023 12:01:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtHYYJpgy7FdEJ+EH+RwomrMrCtFcWjgc7VlFOeecPjKBJUj8aIvEzhLgoedJ6OJHbSouXvFbRou0kQJ68mgNE=
+X-Received: by 2002:a65:66c9:0:b0:498:84f3:85f0 with SMTP id
+ c9-20020a6566c9000000b0049884f385f0mr352185pgw.558.1673985701039; Tue, 17 Jan
+ 2023 12:01:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20230117172649.52465-1-wander@redhat.com> <23a15414-927c-ba0d-eb6a-58f6191ce17b@redhat.com>
+ <c7cae935-c378-24bf-7e9c-bbf5feb4185a@redhat.com>
+In-Reply-To: <c7cae935-c378-24bf-7e9c-bbf5feb4185a@redhat.com>
+From:   Wander Lairson Costa <wander@redhat.com>
+Date:   Tue, 17 Jan 2023 17:01:29 -0300
+Message-ID: <CAAq0SUmNTvdvhp+67XW+OV6N2DSDjLR5M_CFWBaAAG354kWiMg@mail.gmail.com>
+Subject: Re: [PATCH] rtmutex: ensure we wake up the top waiter
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "open list:LOCKING PRIMITIVES" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023, at 18:46, Tariq Toukan wrote:
-> On 17/01/2023 19:28, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> Clang warns about excessive stack usage on 32-bit targets:
->> 
->> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1184) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
->> static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
->> 
->> It turns out that both the mlx5e_setup_tc_mqprio_dcb() function and
->> the mlx5e_safe_switch_params() function it calls have a copy of
->> 'struct mlx5e_params' on the stack, and this structure is fairly
->> large.
->> 
->> Use dynamic allocation for both.
->> 
-
->>   
->> -	err = mlx5e_safe_switch_params(priv, &new_params,
->> +	err = mlx5e_safe_switch_params(priv, new_params,
->>   				       mlx5e_num_channels_changed_ctx, NULL, true);
->>   
+On Tue, Jan 17, 2023 at 4:40 PM Waiman Long <longman@redhat.com> wrote:
 >
-> Is this change really required, even after new_chs are dynamically 
-> allocated?
-> As this code pattern of static local new_params repeats in all callers 
-> of mlx5e_safe_switch_params, let's not change this one alone if not 
-> necessary.
+> On 1/17/23 14:32, Waiman Long wrote:
+> > On 1/17/23 12:26, Wander Lairson Costa wrote:
+> >> In task_blocked_on_lock() we save the owner, release the wait_lock and
+> >> call rt_mutex_adjust_prio_chain(). Before we acquire the wait_lock
+> >> again, the owner may release the lock and deboost.
+> > Are you referring to task_blocks_on_rt_mutex(), not
+> > task_blocked_on_lock()?
+> >>
+> >> rt_mutex_adjust_prio_chain() acquires the wait_lock. In the requeue
+> >> phase, waiter may be initially in the top of the queue, but after
+> >> dequeued and requeued it may no longer be true.
+> >>
+> >> This scenario ends up waking the wrong task, which will verify it is no
+> >> the top waiter and comes back to sleep. Now we have a situation in which
+> >> no task is holding the lock but no one acquires it.
+> >>
+> >> We can reproduce the bug in PREEMPT_RT with stress-ng:
+> >>
+> >> while true; do
+> >>      stress-ng --sched deadline --sched-period 1000000000 \
+> >>              --sched-runtime 800000000 --sched-deadline \
+> >>              1000000000 --mmapfork 23 -t 20
+> >> done
+> >>
+> >> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> >> ---
+> >>   kernel/locking/rtmutex.c | 5 +++--
+> >>   1 file changed, 3 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> >> index 010cf4e6d0b8..728f434de2bb 100644
+> >> --- a/kernel/locking/rtmutex.c
+> >> +++ b/kernel/locking/rtmutex.c
+> >> @@ -901,8 +901,9 @@ static int __sched
+> >> rt_mutex_adjust_prio_chain(struct task_struct *task,
+> >>            * then we need to wake the new top waiter up to try
+> >>            * to get the lock.
+> >>            */
+> >> -        if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
+> >> -            wake_up_state(waiter->task, waiter->wake_state);
+> >> +        top_waiter = rt_mutex_top_waiter(lock);
+> >> +        if (prerequeue_top_waiter != top_waiter)
+> >> +            wake_up_state(top_waiter->task, top_waiter->wake_state);
+> >>           raw_spin_unlock_irq(&lock->wait_lock);
+> >>           return 0;
+> >>       }
+> >
+> > I would say that if a rt_mutex has no owner but have waiters, we
+> > should always wake up the top waiter whether or not it is the current
+> > waiter. So what is the result of the stress-ng run above? Is it a
+> > hang? It is not clear from your patch description.
+>
+> BTW, if it is a hang. What arch has this problem? x86 or arm64? There is
+> a recent report of some rt_mutex locking issue in arm64, I believe. I
+> don't know if it will be related. So it is important to know in what
+> arch you see this problem.
+>
 
-I'm not sure any more now, I actually did the patch a few weeks ago
-and only now came across it while going through my backlog.
+x86_64. Notice, at least in my test case, it only manifested under PREEMPT_RT.
 
-Generally speaking, the 'new_params' structure on the stack is
-too large, but I no longer see warnings after my patch.
+> Cheers,
+> Longman
+>
 
-> Same for the noinline_for_stack. Are they really needed even after using 
-> dynamic allocation for new_chs?
-
-I've reverted both of those hunks now, let me try reproducing the
-original randconfig reports and see what still happens.
-
-   Arnd
