@@ -2,84 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB01C66E72E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F56C66E732
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjAQTlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S230312AbjAQTmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjAQTfy (ORCPT
+        with ESMTP id S233972AbjAQThj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:35:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F521723
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673980856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iFiAegt8WNgL5MZXxVPS9mQqy9Ss59WQtK/8IB6U8eA=;
-        b=FCne1nSzUUUptpo2A4Y4oQwsN2sQyjKaamPLp1zmSJREuvjcaic3kX1tris8nfcTckyx89
-        Zx/SkDZiR2kuHO4KGPy0vMjZ/fnG7xo9fyVZrLS4pkrbWd9knwvS0Oe+q3vvh93E3zwBKu
-        7+DS7I7lo1hVRGL4xEGRxKLEhCijb+E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-7Q5xTnuUMu6dbfLp4O-8ag-1; Tue, 17 Jan 2023 13:40:55 -0500
-X-MC-Unique: 7Q5xTnuUMu6dbfLp4O-8ag-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2A11857A84;
-        Tue, 17 Jan 2023 18:40:54 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA68B2166B29;
-        Tue, 17 Jan 2023 18:40:51 +0000 (UTC)
-Message-ID: <0110b1d1-17c4-49a3-64c0-ad7d7b8cbd29@redhat.com>
-Date:   Tue, 17 Jan 2023 13:40:51 -0500
+        Tue, 17 Jan 2023 14:37:39 -0500
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EF04B76A;
+        Tue, 17 Jan 2023 10:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673980951; x=1705516951;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cA4HYuEGUOIYFtTMnUv0jIRa3mM2Uph77RshWkkciWg=;
+  b=R3dQvc4Vx8PdiSPjJeryXYAeUYQvKoWWPSEwSas2wsVfWyqwO2Q0gnak
+   fk47NGlFvlHJtpK39KbQ7tVic0PEpMnezVHb9p8FOUhtovT9elQQ+0myi
+   sruHa+eCnR5lxsrIV8O32w21hxywLXrunh2GE4yH77WFC2cF/wkaexn1W
+   E=;
+X-IronPort-AV: E=Sophos;i="5.97,224,1669075200"; 
+   d="scan'208";a="255801131"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 18:41:54 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com (Postfix) with ESMTPS id 172858111D;
+        Tue, 17 Jan 2023 18:41:52 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 17 Jan 2023 18:41:51 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.56) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
+ Tue, 17 Jan 2023 18:41:48 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <kerneljasonxing@gmail.com>
+CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+        <kernelxing@tencent.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <yoshfuji@linux-ipv6.org>
+Subject: Re: [PATCH v6 net] tcp: avoid the lookup process failing to get sk in ehash table
+Date:   Tue, 17 Jan 2023 10:41:40 -0800
+Message-ID: <20230117184140.7010-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230117175340.91712-1-kerneljasonxing@gmail.com>
+References: <20230117175340.91712-1-kerneljasonxing@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Byungchul Park <byungchul.park@lge.com>,
-        linux-kernel@vger.kernel.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
-        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
-        gwan-gyeong.mun@intel.com
-References: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
- <CAHk-=whpkWbdeZE1zask8YPzVYevJU2xOXqOposBujxZsa2-tQ@mail.gmail.com>
- <Y8bmeffIQ3iXU3Ux@boqun-archlinux>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y8bmeffIQ3iXU3Ux@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D44UWC001.ant.amazon.com (10.43.162.26) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,80 +67,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 13:18, Boqun Feng wrote:
-> [Cc Waiman]
->
-> On Mon, Jan 16, 2023 at 10:00:52AM -0800, Linus Torvalds wrote:
->> [ Back from travel, so trying to make sense of this series.. ]
->>
->> On Sun, Jan 8, 2023 at 7:33 PM Byungchul Park <byungchul.park@lge.com> wrote:
->>> I've been developing a tool for detecting deadlock possibilities by
->>> tracking wait/event rather than lock(?) acquisition order to try to
->>> cover all synchonization machanisms. It's done on v6.2-rc2.
->> Ugh. I hate how this adds random patterns like
->>
->>          if (timeout == MAX_SCHEDULE_TIMEOUT)
->>                  sdt_might_sleep_strong(NULL);
->>          else
->>                  sdt_might_sleep_strong_timeout(NULL);
->>     ...
->>          sdt_might_sleep_finish();
->>
->> to various places, it seems so very odd and unmaintainable.
->>
->> I also recall this giving a fair amount of false positives, are they all fixed?
->>
->  From the following part in the cover letter, I guess the answer is no?
->
-> 	...
->          6. Multiple reports are allowed.
->          7. Deduplication control on multiple reports.
->          8. Withstand false positives thanks to 6.
-> 	...
->
-> seems to me that the logic is since DEPT allows multiple reports so that
-> false positives are fitlerable by users?
->
->> Anyway, I'd really like the lockdep people to comment and be involved.
-> I never get Cced, so I'm unware of this for a long time...
->
-> A few comments after a quick look:
->
-> *	Looks like the DEPT dependency graph doesn't handle the
-> 	fair/unfair readers as lockdep current does. Which bring the
-> 	next question.
->
-> *	Can DEPT pass all the selftests of lockdep in
-> 	lib/locking-selftests.c?
->
-> *	Instead of introducing a brand new detector/dependency tracker,
-> 	could we first improve the lockdep's dependency tracker? I think
-> 	Byungchul also agrees that DEPT and lockdep should share the
-> 	same dependency tracker and the benefit of improving the
-> 	existing one is that we can always use the self test to catch
-> 	any regression. Thoughts?
->
-> Actually the above sugguest is just to revert revert cross-release
-> without exposing any annotation, which I think is more practical to
-> review and test.
->
-> I'd sugguest we 1) first improve the lockdep dependency tracker with
-> wait/event in mind and then 2) introduce wait related annotation so that
-> users can use, and then 3) look for practical ways to resolve false
-> positives/multi reports with the help of users, if all goes well,
-> 4) make it all operation annotated.
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Wed, 18 Jan 2023 01:53:40 +0800
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> While one cpu is working on looking up the right socket from ehash
+> table, another cpu is done deleting the request socket and is about
+> to add (or is adding) the big socket from the table. It means that
+> we could miss both of them, even though it has little chance.
+> 
+> Let me draw a call trace map of the server side.
+>    CPU 0                           CPU 1
+>    -----                           -----
+> tcp_v4_rcv()                  syn_recv_sock()
+>                             inet_ehash_insert()
+>                             -> sk_nulls_del_node_init_rcu(osk)
+> __inet_lookup_established()
+>                             -> __sk_nulls_add_node_rcu(sk, list)
+> 
+> Notice that the CPU 0 is receiving the data after the final ack
+> during 3-way shakehands and CPU 1 is still handling the final ack.
+> 
+> Why could this be a real problem?
+> This case is happening only when the final ack and the first data
+> receiving by different CPUs. Then the server receiving data with
+> ACK flag tries to search one proper established socket from ehash
+> table, but apparently it fails as my map shows above. After that,
+> the server fetches a listener socket and then sends a RST because
+> it finds a ACK flag in the skb (data), which obeys RST definition
+> in RFC 793.
+> 
+> Besides, Eric pointed out there's one more race condition where it
+> handles tw socket hashdance. Only by adding to the tail of the list
+> before deleting the old one can we avoid the race if the reader has
+> already begun the bucket traversal and it would possibly miss the head.
+> 
+> Many thanks to Eric for great help from beginning to end.
+> 
+> Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
+> Suggested-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+> ---
+> v3,4,5,6:
+> 1) nit: adjust the coding style.
+> 
+> v2:
+> 1) add the sk node into the tail of list to prevent the race.
+> 2) fix the race condition when handling time-wait socket hashdance.
+> ---
+>  net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
+>  net/ipv4/inet_timewait_sock.c | 12 ++++++------
+>  2 files changed, 21 insertions(+), 8 deletions(-)
+> 
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index 24a38b56fab9..f58d73888638 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+>  	spin_lock(lock);
+>  	if (osk) {
+>  		WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
+> -		ret = sk_nulls_del_node_init_rcu(osk);
+> -	} else if (found_dup_sk) {
+> +		ret = sk_hashed(osk);
+> +		if (ret) {
+> +			/* Before deleting the node, we insert a new one to make
+> +			 * sure that the look-up-sk process would not miss either
+> +			 * of them and that at least one node would exist in ehash
+> +			 * table all the time. Otherwise there's a tiny chance
+> +			 * that lookup process could find nothing in ehash table.
+> +			 */
+> +			__sk_nulls_add_node_tail_rcu(sk, list);
+> +			sk_nulls_del_node_init_rcu(osk);
+> +		}
+> +		goto unlock;
+> +	}
+> +	if (found_dup_sk) {
+>  		*found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
+>  		if (*found_dup_sk)
+>  			ret = false;
+> @@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
+>  	if (ret)
+>  		__sk_nulls_add_node_rcu(sk, list);
+>  
+> +unlock:
+>  	spin_unlock(lock);
+>  
+>  	return ret;
+> diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+> index 1d77d992e6e7..b66f2dea5a78 100644
+> --- a/net/ipv4/inet_timewait_sock.c
+> +++ b/net/ipv4/inet_timewait_sock.c
+> @@ -91,20 +91,20 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
+>  }
+>  EXPORT_SYMBOL_GPL(inet_twsk_put);
+>  
+> -static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
+> -				   struct hlist_nulls_head *list)
+> +static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
+> +					struct hlist_nulls_head *list)
+>  {
+> -	hlist_nulls_add_head_rcu(&tw->tw_node, list);
+> +	hlist_nulls_add_tail_rcu(&tw->tw_node, list);
+>  }
+>  
+>  static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
+> -				    struct hlist_head *list)
+> +					struct hlist_head *list)
+>  {
+>  	hlist_add_head(&tw->tw_bind_node, list);
+>  }
+>  
+>  static void inet_twsk_add_bind2_node(struct inet_timewait_sock *tw,
+> -				     struct hlist_head *list)
+> +					struct hlist_head *list)
+>  {
+>  	hlist_add_head(&tw->tw_bind2_node, list);
+>  }
 
-I agree with your suggestions. In fact, the lockdep code itself is one 
-of major overheads when running a debug kernel. If we have another set 
-of parallel dependency tracker, we may slow down a debug kernel even 
-more. So I would rather prefer improving the existing lockdep code 
-instead creating a completely new one.
+You need not change inet_twsk_add_bind_node() and
+inet_twsk_add_bind2_node().
 
-I do agree that the lockdep code itself is now rather complex. A 
-separate dependency tracker, however, may undergo similar transformation 
-over time to become more and more complex due to the needs to meet 
-different requirement and constraints.
+Thanks,
+Kuniyuki
 
-Cheers,
-Longman
 
+> @@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
+>  
+>  	spin_lock(lock);
+>  
+> -	inet_twsk_add_node_rcu(tw, &ehead->chain);
+> +	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
+>  
+>  	/* Step 3: Remove SK from hash chain */
+>  	if (__sk_nulls_del_node_init_rcu(sk))
+> -- 
+> 2.37.3
