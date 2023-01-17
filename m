@@ -2,149 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD6B66E1D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BFF66E1AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjAQPPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S232707AbjAQPJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjAQPPe (ORCPT
+        with ESMTP id S232699AbjAQPJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:15:34 -0500
-X-Greylist: delayed 379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 07:15:32 PST
-Received: from h7.fbrelay.privateemail.com (h7.fbrelay.privateemail.com [162.0.218.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7801733460;
-        Tue, 17 Jan 2023 07:15:32 -0800 (PST)
-Received: from MTA-09-3.privateemail.com (mta-09.privateemail.com [198.54.127.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by h7.fbrelay.privateemail.com (Postfix) with ESMTPS id 7901560222;
-        Tue, 17 Jan 2023 10:09:11 -0500 (EST)
-Received: from mta-09.privateemail.com (localhost [127.0.0.1])
-        by mta-09.privateemail.com (Postfix) with ESMTP id ADA7818000A5;
-        Tue, 17 Jan 2023 10:09:08 -0500 (EST)
-Received: from bpappas-XPS-13-9310.ucf.edu (050-088-208-136.res.spectrum.com [50.88.208.136])
-        by mta-09.privateemail.com (Postfix) with ESMTPA id 3525E18000A6;
-        Tue, 17 Jan 2023 10:08:57 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
-        s=default; t=1673968148;
-        bh=ZBTABHRAmG+D05AOR8APAmPUuxMqGh+RixprC8KC7Fg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZtnUDEverhCjMgnJDlCnhUI7h5H3c8kniUIptA0zmVYo+aEOcUaiat+oSQD4yloR6
-         hBA6xWBw3GinVz3D/O3H+bz3n6Hzst5Vo7TInceipqysJ1gL8ouZkvxp7XhdrJ7s+J
-         AU9uB24zAq+TDpNPEz39gRdu+WNx0YPzbv/cfRJoBlDPP9huYpBM5Q2N/vdxTCMc6V
-         amCczZc43PimUEekzqoZlLFrAunfTug1W9RqnJsI1Rhk/sRGnK4rH7JfeOmPvpCFvT
-         y4+CtOqri1r+YwVearS2IwEW446tpKBT2jjPgqjG8F7Z9VtdQ+fJveBjzEFoE4fo7b
-         KE7o1Ij3xNIQA==
-From:   Brent Pappas <bpappas@pappasbrent.com>
-To:     hdegoede@redhat.com
-Cc:     mchehab@kernel.org, ailus@linux.intel.com,
-        gregkh@linuxfoundation.org, andy@kernel.org, error27@gmail.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Brent Pappas <bpappas@pappasbrent.com>
-Subject: [PATCH] staging: media: atomisp: pci: Replace bytes macros with functions
-Date:   Tue, 17 Jan 2023 10:08:41 -0500
-Message-Id: <20230117150841.18061-1-bpappas@pappasbrent.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 17 Jan 2023 10:09:04 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5E43D0AF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:09:03 -0800 (PST)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id CE43B100476CC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:09:02 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id HnaAp4I2pjCuEHnaApgQvf; Tue, 17 Jan 2023 15:09:02 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=fOX8YbWe c=1 sm=1 tr=0 ts=63c6ba0e
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=j6bprNooAAAA:8
+ a=VwQbUJbxAAAA:8 a=k-0BSgzrAAAA:8 a=8pif782wAAAA:8 a=pGLkceISAAAA:8
+ a=NEAV23lmAAAA:8 a=9yQLS_lEidnesFFjoOcA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=ABifrie-J5MA:10:uccc_2email_address a=fS_Hu1hw59wj44055X5l:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=IbN6WrKXhHvVD0qv-cjL:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=wbZT1gpHALhRw4FFTDIH4R5KGNlIwHFfOmLRykYKWHA=; b=jjt84+iZZHebKJvxUGy0MrLofL
+        tGfwysnqduUoDKBUQjVrStTU87S0CDlydewqG0OJmwqQQ/6i+wb02qBANaeIac9+oEzrqLNZ2Hf21
+        yPWCQ7cwFxCPrpBIWru1s8W5Hi11YlE+XYmRegNe4Ds2gK4lGGOmKpp4SugYXFgo2pGLKwj3rHooE
+        EyMB6d1yxei62ngO9ooDqDm6I2cAFRNgWvDjsbGGHYC0YMMSIl9qS8JqoKfJuCN0mZrh/PB85nsTo
+        Vpne+rVxvnuWp/VunSMQpblr7hU1IvvYQWjQsJfw2Yk1VGuB+ds0nsjaj2kjk2L2ggTTo7eHTrc6s
+        QraNtfEw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51708 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pHna9-002785-HM;
+        Tue, 17 Jan 2023 08:09:01 -0700
+Subject: Re: [PATCH 0/2] Change PWM-controlled LED pin active mode and
+ algorithm
+To:     Nylon Chen <nylon.chen@sifive.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        nylon7717@gmail.com, zong.li@sifive.com, greentime.hu@sifive.com,
+        vincent.chen@sifive.com, Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-pwm@vger.kernel.org
+References: <20230113083115.2590-1-nylon.chen@sifive.com>
+ <Y8GjySjm9OjoZvCF@spud> <95F1EAA0-D8D6-4F8A-8049-5E7BFDE4C06C@jrtc27.com>
+ <CAHh=Yk-WJMOc-h9V47CyMQpyXZ5hDrtOPnPE2QKkJKzMhjh+Cg@mail.gmail.com>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <eb1ce3b1-309f-ca1c-f24b-bdbcfa7c494b@w6rz.net>
+Date:   Tue, 17 Jan 2023 07:08:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <CAHh=Yk-WJMOc-h9V47CyMQpyXZ5hDrtOPnPE2QKkJKzMhjh+Cg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pHna9-002785-HM
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51708
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 6
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the function-like macros FPNTBL_BYTES, SCTBL_BYTES, and
-MORPH_PLANE_BYTES with static inline functions to comply with Linux coding
-style standards.
+On 1/17/23 1:32 AM, Nylon Chen wrote:
+> Hi Conor, Jessica
+>
+> thanks for your reply.
+>
+> Jessica Clarke <jrtc27@jrtc27.com> 於 2023年1月14日 週六 上午3:24寫道：
+>> On 13 Jan 2023, at 18:32, Conor Dooley <conor@kernel.org> wrote:
+>>> +CC Uwe, Thierry, linux-pwm
+>>>
+>>> Hey Nylon,
+>>>
+>>> Please run scripts/get_maintainer.pl before sending patches, you missed
+>>> both me & the PWM maintainers unfortunately!
+>>> AFAIK, the PWM maintainers use patchwork, so you will probably have to
+>>> resend this patchset so that it is on their radar.
+>>> I've marked the series as "Changes Requested" on the RISC-V one.
+> I got it. I will base it on get_maintainer.pl, re-sent it.
+>>> On Fri, Jan 13, 2023 at 04:31:13PM +0800, Nylon Chen wrote:
+>>>
+>>>> According to the circuit diagram of User LEDs - RGB described in the
+>>>> manual hifive-unmatched-schematics-v3.pdf[0].
+>>>> The behavior of PWM is acitve-high.
+>>>>
+>>>> According to the descriptionof PWM for pwmcmp in SiFive FU740-C000
+>>>> Manual[1].
+>>>> The pwm algorithm is (PW) pulse active time  = (D) duty * (T) period[2].
+>>>> The `frac` variable is pulse "inactive" time so we need to invert it.
+>>>>
+>>>> So this patchset removes active-low in DTS and adds reverse logic to
+>>>> the driver.
+>>>>
+>>>> [0]:https://sifive-china.oss-cn-zhangjiakou.aliyuncs.com/HiFIve%20Unmatched/hifive-unmatched-schematics-v3.pdf
+>>>> [1]:https://sifive-china.oss-cn-zhangjiakou.aliyuncs.com/HiFIve%20Unmatched/fu740-c000-manual-v1p2.pdf
+>>>> [2]:https://en.wikipedia.org/wiki/Duty_cycle
+>>> Please delete link 2, convert the other two to standard Link: tags and
+>>> put this information in the dts patch. Possibly into the PWM patch too,
+>>> depending on what the PWM maintainers think.
+> I got it. I will fix it.
+>>> This info should be in the commit history IMO and the commit message for
+>>> the dts patch says what's obvious from the diff without any explanation
+>>> as to why.
+>>>
+>>> I did a bit of looking around on lore, to see if I could figure out
+>>> why it was done like this in the first place, and I found:
+>>> https://lore.kernel.org/linux-pwm/CAJ2_jOG2M03aLBgUOgGjWH9CUxq2aTG97eSX70=UaSbGCMMF_g@mail.gmail.com/
+>> That DTS documentation makes no sense to me, why does what the LED is
+>> wired to matter? Whether you have your transistor next to ground or
+>> next to Vdd doesn’t matter, what matters is whether the transistor is
+>> on or off. Maybe what they mean is whether the *PWM's output* / *the
+>> transistor's input* is pulled to ground or Vdd? In which case the
+>> property would indeed not apply here.
+>>
+>> Unless that’s written assuming the LED is wired directly to the PWM, in
+>> which case it would make sense, but that’s a very narrow-minded view of
+>> what the PWM output is (directly) driving.
+>>
+>> Jess
+>>
+> This is a HiFive Unmatched/Unleashed LED-PWM layout
+>
+>              VDD
+>                 |
+>                 |
+>             _____
+>             \        /   LED
+>              \     /
+>                ---
+>                 |
+>                 |
+>                 |
+>           ______
+>          |              |
+>          -             |
+>          ^    -->    |------ PWM
+>          |___|___|
+>                 |
+>                 |
+>                __
+>                 -
+>              GND
+>
+> - the waveform
+> e.g. duty=30s, period=100s, actvie-high = 30%, active-low = 70%
+>
+> V
+> ^
+> |
+> | ----------|
+> |             |
+> |             |
+> |______ |__________ > t
+>
+> When VCC is high, the LED will be illuminated, which is an active-high
+> logic. This is why we need to remove "active-low".
+>
+> So, according to my understanding, Unleashed's DTS should also remove
+> active-low.
+>>> That doesn't explain the driver, but it does explain the dts being that
+>>> way. Perhaps a Fixes tag is also in order? But only if both patches get
+>>> one, otherwise backporting would lead to breakage.
+>>>
+>>> The min() construct appears to have been there since the RFC driver was
+>>> first posted.
+>>>
+>>> Thanks,
+>>> Conor.
+>>>
+>>>> Nylon Chen (2):
+>>>>   riscv: dts: sifive unmatched: Remove PWM controlled LED's active-low
+>>> nit: s/sifive unmatched:/sifive: unmatched:/
+> I got it. I will fix it.
+>
+>>>>     properties
+>>>>   pwm: sifive: change the PWM controlled LED algorithm
+>>>>
+>>>> arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 4 ----
+>>>> drivers/pwm/pwm-sifive.c                            | 1 +
+>>>> 2 files changed, 1 insertion(+), 4 deletions(-)
+>>>>
+>>>> --
+>>>> 2.36.1
 
-Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
----
- .../staging/media/atomisp/pci/sh_css_params.c | 34 +++++++++++--------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+I've tested this patch. For some reason, the heartbeat function no 
+longer works for D12. This is my /etc/udev/rules.d/99-pwm-leds.rules 
+file contents:
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index f08564f58242..fe28d75a62a4 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -98,17 +98,23 @@
- #include "sh_css_frac.h"
- #include "ia_css_bufq.h"
- 
--#define FPNTBL_BYTES(binary) \
--	(sizeof(char) * (binary)->in_frame_info.res.height * \
--	 (binary)->in_frame_info.padded_width)
-+static inline size_t fpntbl_bytes(const struct ia_css_binary *binary)
-+{
-+	return (sizeof(char) * binary->in_frame_info.res.height *
-+			binary->in_frame_info.padded_width);
-+}
- 
--#define SCTBL_BYTES(binary) \
--	(sizeof(unsigned short) * (binary)->sctbl_height * \
--	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
-+static inline size_t sctbl_bytes(const struct ia_css_binary *binary)
-+{
-+	return (sizeof(unsigned short) * binary->sctbl_height *
-+			binary->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS);
-+}
- 
--#define MORPH_PLANE_BYTES(binary) \
--	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
--	 (binary)->morph_tbl_height)
-+static inline size_t morph_plane_bytes(const struct ia_css_binary *binary)
-+{
-+	return (SH_CSS_MORPH_TABLE_ELEM_BYTES *
-+			binary->morph_tbl_aligned_width * binary->morph_tbl_height);
-+}
- 
- /* We keep a second copy of the ptr struct for the SP to access.
-    Again, this would not be necessary on the chip. */
-@@ -3279,7 +3285,7 @@ sh_css_params_write_to_ddr_internal(
- 	if (binary->info->sp.enable.fpnr) {
- 		buff_realloced = reallocate_buffer(&ddr_map->fpn_tbl,
- 						   &ddr_map_size->fpn_tbl,
--						   (size_t)(FPNTBL_BYTES(binary)),
-+						   fpntbl_bytes(binary),
- 						   params->config_changed[IA_CSS_FPN_ID],
- 						   &err);
- 		if (err) {
-@@ -3304,7 +3310,7 @@ sh_css_params_write_to_ddr_internal(
- 
- 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
- 						   &ddr_map_size->sc_tbl,
--						   SCTBL_BYTES(binary),
-+						   sctbl_bytes(binary),
- 						   params->sc_table_changed,
- 						   &err);
- 		if (err) {
-@@ -3538,8 +3544,7 @@ sh_css_params_write_to_ddr_internal(
- 			buff_realloced |=
- 			    reallocate_buffer(virt_addr_tetra_x[i],
- 					    virt_size_tetra_x[i],
--					    (size_t)
--					    (MORPH_PLANE_BYTES(binary)),
-+					    morph_plane_bytes(binary),
- 					    params->morph_table_changed,
- 					    &err);
- 			if (err) {
-@@ -3549,8 +3554,7 @@ sh_css_params_write_to_ddr_internal(
- 			buff_realloced |=
- 			    reallocate_buffer(virt_addr_tetra_y[i],
- 					    virt_size_tetra_y[i],
--					    (size_t)
--					    (MORPH_PLANE_BYTES(binary)),
-+					    morph_plane_bytes(binary),
- 					    params->morph_table_changed,
- 					    &err);
- 			if (err) {
--- 
-2.34.1
+# D12 LED: heartbeat
+SUBSYSTEM=="leds", KERNEL=="d12", ACTION=="add", ATTR{trigger}="heartbeat"
+
+# D2 RGB LED: boot status
+SUBSYSTEM=="leds", KERNEL=="d2", ACTION=="add", 
+ATTR{trigger}="default-on", ATTR{multi_intensity}="25 25 25"
+
+This is from https://github.com/sifive/meta-sifive, but modified for the 
+multi_intensity driver introduced in Linux 6.0.
+
 
