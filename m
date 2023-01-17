@@ -2,117 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBF966DB86
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A094966DB8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbjAQKug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S235474AbjAQKve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236388AbjAQKuc (ORCPT
+        with ESMTP id S235952AbjAQKv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:50:32 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E342F7AC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:50:30 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so4506857wml.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:50:30 -0800 (PST)
+        Tue, 17 Jan 2023 05:51:26 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6786055AF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:50:57 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id d2so10010885wrp.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:50:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=D9jd9NHczZgFXOBD1bpOo1DL4FpoGpPRXqYk3V82vSY=;
-        b=a3b9VWUDOReejVZSdM+GD7VBBwz+GTOsn4QHM0vqW7c8KJoGN4yuuC4DvtiUivC2ED
-         KeLVm0uDIJzMS97A/2YrV4k4uGhBPHgOxUBjoqVZ1TaO/vm0JQ+8kstVQE88qKLVdZ5p
-         ReuK8vNHrLBUoiykZftYjrZtCai13Jioz8PZQFtgZDqgVfezsJnvoLwl5UiSYKQui0O6
-         ZQWkyVKlp+yCCT+FHex9bMeMkgbNZXYqSvpTB8DcnBlkmDsNeuDJ0x3MCRPicC06o3Fm
-         luGEPKoihDs0mxnXjMCTGximcsRVLrxwVjde0qVVYeQW4I6/Ki9EytF6elefpZzt+idz
-         ABLQ==
+        bh=Zhxs9CJoNXeVBDeYCzAO+K+fcy1P75fyv8sqXSizqUU=;
+        b=G9tdTK5sVLk/0OVhvoIMlLP+9SH5y3Kev4SJlNqiZ98XOyahDllnPhZDJi9Qr1l/qD
+         koHHyQVKoqS07A1rcMBTlqqCXWcOI7UJ9XQs75XNnzJ5L6axa8n8eA00gpHv1jTVXTk2
+         RBYA6VN0jeHXJouOG3DE9+c8JtemKdthQTRQAN/blVl5XkLrtglw+1wjU0Y+FLEz4LXU
+         OOnA8Ewwj45Ja1zBirwJDyiF+5mzqKrL+Ju60QQa5Tr1Gl6gAVh0q76VGZVurRGUOe55
+         Kg5IrfHy1S4KzuKH8Spume76eh9MSNEdxH2MXXBVMzIaSWJe925P0FNhiZo6snZNUZ4h
+         x0xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9jd9NHczZgFXOBD1bpOo1DL4FpoGpPRXqYk3V82vSY=;
-        b=CoI4mb9L41V4yualj53hr060a3Lh88EK/zsboy+33GjcD6b46wQpBPCFsWT6T/BR4v
-         VTZjmwknLxQrYiD4WX/phv8mBJWNO1nCo+TG6EE7yYeGbnXpDFBMOlPu1EbIOPUUTUtk
-         mZcK18uGAvzNc8X4a4wtLO7MWgbYnPDMwrFpquQsQARAXljP0Aq/uPC5M43H/qjumIem
-         d2s1Cvo1ubjzFx5UiR2LgZQ7iYA8GfhD+WWROaL29CYwhYSO98jZvgBjKWojY3OetmpY
-         D4li4EvAfcuSvSP/CVWSb0n7o/29nuDbZeqNtnvTbbKOuvS5/euyTmyKu12xeVjSN0j8
-         v6MQ==
-X-Gm-Message-State: AFqh2ko9OO+vUGwRDdqCzL0z9PZfYjLU4078oP6907Alq7IzLaOTCeA+
-        T4Xilf+13W2XQpS0QEtAhJdP6Q==
-X-Google-Smtp-Source: AMrXdXsCxuO37tf5Lddvjm4A1oZoPmUwFz7MlOVrlAFcEuIZANGmSyPewmWZkNgr7pwAOiceQQQa+g==
-X-Received: by 2002:a05:600c:24ce:b0:3da:18c5:e48b with SMTP id 14-20020a05600c24ce00b003da18c5e48bmr11372912wmu.18.1673952629499;
-        Tue, 17 Jan 2023 02:50:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003d98438a43asm34696977wmc.34.2023.01.17.02.50.27
+        bh=Zhxs9CJoNXeVBDeYCzAO+K+fcy1P75fyv8sqXSizqUU=;
+        b=flLtMubvIJ7GPqks0VjnbT8xq1SBeHafFKN/mxDRLzhDOdDN4PAiN84XY8uJlAGj3n
+         Pzuu2v2VfxOeWCN1rbHKtqGS8qR+W4iCyalkOlU5TCrb8dIEZBDtO2RWw6x8f7d0P3CZ
+         8kafZdF8ioKvrXeo3EUc94oY17wdyGA8i1HqLqSOrwBi8bfPNuBH35Gq5zaKX+NM4+z6
+         KAQfoyGKz7RY5ubCYJKyd+OzBtO6/eygypAMfSPb+FSFqyJaWEAy+nUOlKB7CgSywopD
+         kaHhqkhXX4Ds3/rqL3APaKpHwCeqivUf4nvDldiTSbb5Nhnreq+AN7NmuP1QMTdqSquc
+         ZzRA==
+X-Gm-Message-State: AFqh2koLPMI6EKI1IhB6DtnUsS91bmqkxoUypqow5YCi5jXYqlj0eHLN
+        Z6ivN8Nl2W5yXLNFE7idCwTRDw==
+X-Google-Smtp-Source: AMrXdXschRU4A/N7SinUkbP2mMVqD3FMWbnc3U+i5DZT+xbbAhBIaGIn1VoIRgKK5ksr6c002sCWeg==
+X-Received: by 2002:a5d:50c9:0:b0:2b4:790e:32f3 with SMTP id f9-20020a5d50c9000000b002b4790e32f3mr2319403wrt.68.1673952655955;
+        Tue, 17 Jan 2023 02:50:55 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:17d8:e5ec:f870:7b46? ([2a02:6b6a:b566:0:17d8:e5ec:f870:7b46])
+        by smtp.gmail.com with ESMTPSA id q4-20020adfdfc4000000b002bc6c180738sm25739579wrn.90.2023.01.17.02.50.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 02:50:29 -0800 (PST)
-Message-ID: <c7787be5-b328-4507-ba51-dd26bb9ae408@linaro.org>
-Date:   Tue, 17 Jan 2023 11:50:26 +0100
+        Tue, 17 Jan 2023 02:50:55 -0800 (PST)
+Message-ID: <0268b524-870f-2add-4f63-276b449459d8@bytedance.com>
+Date:   Tue, 17 Jan 2023 10:50:54 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 2/3] dt-bindings: soc: meta: Add meta cld driver
- bindings
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [External] Re: [v2 0/6] KVM: arm64: implement vcpu_is_preempted
+ check
 Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     garnermic@fb.com, Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230117094425.19004-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230117094425.19004-3-Delphine_CC_Chiu@Wiwynn.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230117094425.19004-3-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     Marc Zyngier <maz@kernel.org>, catalin.marinas@arm.com,
+        will@kernel.org, steven.price@arm.com, pbonzini@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, mark.rutland@arm.com, bagasdotme@gmail.com,
+        fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com
+References: <20221104062105.4119003-1-usama.arif@bytedance.com>
+ <87k048f3cm.wl-maz@kernel.org>
+ <180b91af-a2aa-2cfd-eb7f-b2825c4e3dbe@bytedance.com>
+ <86r0y1nmep.wl-maz@kernel.org>
+ <95efd030-27f6-5668-a25e-9fbf210bfa1c@bytedance.com>
+ <66bc7368-aabc-9ec3-f4ba-a3bbeed5938b@bytedance.com>
+In-Reply-To: <66bc7368-aabc-9ec3-f4ba-a3bbeed5938b@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 10:44, Delphine CC Chiu wrote:
-> Add a device tree bindings for Meta control logic device.
 
-Subject: drop second/last, redundant "bindings". The "dt-bindings"
-prefix is already stating that these are bindings.
 
-Subject: Drop "driver"
-
+On 05/12/2022 13:43, Usama Arif wrote:
 > 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> ---
->  .../misc/meta,control-logic-device.txt        | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/meta,control-logic-device.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/misc/meta,control-logic-device.txt b/Documentation/devicetree/bindings/misc/meta,control-logic-device.txt
-> new file mode 100644
-> index 000000000000..e966368e2fd6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/meta,control-logic-device.txt
+> On 24/11/2022 13:55, Usama Arif wrote:
+>>
+>>
+>> On 18/11/2022 00:20, Marc Zyngier wrote:
+>>> On Mon, 07 Nov 2022 12:00:44 +0000,
+>>> Usama Arif <usama.arif@bytedance.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 06/11/2022 16:35, Marc Zyngier wrote:
+>>>>> On Fri, 04 Nov 2022 06:20:59 +0000,
+>>>>> Usama Arif <usama.arif@bytedance.com> wrote:
+>>>>>>
+>>>>>> This patchset adds support for vcpu_is_preempted in arm64, which
+>>>>>> allows the guest to check if a vcpu was scheduled out, which is
+>>>>>> useful to know incase it was holding a lock. vcpu_is_preempted can
+>>>>>> be used to improve performance in locking (see owner_on_cpu usage in
+>>>>>> mutex_spin_on_owner, mutex_can_spin_on_owner, rtmutex_spin_on_owner
+>>>>>> and osq_lock) and scheduling (see available_idle_cpu which is used
+>>>>>> in several places in kernel/sched/fair.c for e.g. in wake_affine to
+>>>>>> determine which CPU can run soonest):
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>> pvcy shows a smaller overall improvement (50%) compared to
+>>>>>> vcpu_is_preempted (277%).  Host side flamegraph analysis shows that
+>>>>>> ~60% of the host time when using pvcy is spent in kvm_handle_wfx,
+>>>>>> compared with ~1.5% when using vcpu_is_preempted, hence
+>>>>>> vcpu_is_preempted shows a larger improvement.
+>>>>>
+>>>>> And have you worked out *why* we spend so much time handling WFE?
+>>>>>
+>>>>>     M.
+>>>>
+>>>> Its from the following change in pvcy patchset:
+>>>>
+>>>> diff --git a/arch/arm64/kvm/handle_exit.c 
+>>>> b/arch/arm64/kvm/handle_exit.c
+>>>> index e778eefcf214..915644816a85 100644
+>>>> --- a/arch/arm64/kvm/handle_exit.c
+>>>> +++ b/arch/arm64/kvm/handle_exit.c
+>>>> @@ -118,7 +118,12 @@ static int kvm_handle_wfx(struct kvm_vcpu *vcpu)
+>>>>          }
+>>>>
+>>>>          if (esr & ESR_ELx_WFx_ISS_WFE) {
+>>>> -               kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
+>>>> +               int state;
+>>>> +               while ((state = kvm_pvcy_check_state(vcpu)) == 0)
+>>>> +                       schedule();
+>>>> +
+>>>> +               if (state == -1)
+>>>> +                       kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
+>>>>          } else {
+>>>>                  if (esr & ESR_ELx_WFx_ISS_WFxT)
+>>>>                          vcpu_set_flag(vcpu, IN_WFIT);
+>>>>
+>>>>
+>>>> If my understanding is correct of the pvcy changes, whenever pvcy
+>>>> returns an unchanged vcpu state, we would schedule to another
+>>>> vcpu. And its the constant scheduling where the time is spent. I guess
+>>>> the affects are much higher when the lock contention is very
+>>>> high. This can be seem from the pvcy host side flamegraph as well with
+>>>> (~67% of the time spent in the schedule() call in kvm_handle_wfx), For
+>>>> reference, I have put the graph at:
+>>>> https://uarif1.github.io/pvlock/perf_host_pvcy_nmi.svg
+>>>
+>>> The real issue here is that we don't try to pick the right vcpu to
+>>> run, and strictly rely on schedule() to eventually pick something that
+>>> can run.
+>>>
+>>> An interesting to do would be to try and fit the directed yield
+>>> mechanism there. It would be a lot more interesting than the one-off
+>>> vcpu_is_preempted hack, as it gives us a low-level primitive on which
+>>> to construct things (pvcy is effectively a mwait-like primitive).
+>>
+>> We could use kvm_vcpu_yield_to to yield to a specific vcpu, but how 
+>> would we determine which vcpu to yield to?
+>>
+>> IMO vcpu_is_preempted is very well integrated in a lot of core kernel 
+>> code, i.e. mutex, rtmutex, rwsem and osq_lock. It is also used in 
+>> scheduler to determine better which vCPU we can run on soonest, select 
+>> idle core, etc. I am not sure if all of these cases will be optimized 
+>> by pvcy? Also, with vcpu_is_preempted, some of the lock heavy 
+>> benchmarks come down from spending around 50% of the time in lock to 
+>> less than 1% (so not sure how much more room is there for improvement).
+>>
+>> We could also use vcpu_is_preempted to optimize IPI performance (along 
+>> with directed yield to target IPI vCPU) similar to how its done in x86 
+>> (https://lore.kernel.org/all/1560255830-8656-2-git-send-email-wanpengli@tencent.com/). 
+>> This case definitely wont be covered by pvcy.
+>>
+>> Considering all the above, i.e. the core kernel integration already 
+>> present and possible future usecases of vcpu_is_preempted, maybe its 
+>> worth making vcpu_is_preempted work on arm independently of pvcy?
+>>
+> 
+> Hi,
+> 
+> Just wanted to check if there are any comments on above? I can send a v3 
+> with the doc and code fixes suggested in the earlier reviews if it makes 
+> sense?
+> 
+> Thanks,
+> Usama
+> 
+>> Thanks,
+>> Usama
+>>
 
-New bindings only in DT schema format. Start
-Documentation/devicetree/bindings/writing-schema.rst,
-example-schema.yaml and other docs.
+Hi,
 
+The discussion on the patches had died down around November. I have sent 
+v3 of the patches 
+(https://lore.kernel.org/all/20230117102930.1053337-1-usama.arif@bytedance.com/) 
+to hopefully restart it as I think that there is a significant 
+performance improvement to be had with vcpu_is_preempted being 
+implemented in arm64 which is well integrated in mutex, rtmutex, rwsem, 
+osq_lock and scheduler, and could potentially be used to improve the IPI 
+performance in the future.
 
+Thanks,
+Usama
 
-Best regards,
-Krzysztof
-
+>>>
+>>>     M.
+>>>
