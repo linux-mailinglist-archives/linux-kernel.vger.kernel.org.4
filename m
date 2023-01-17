@@ -2,185 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B775366D81D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD04B66D81E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235457AbjAQIYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S236047AbjAQIZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236133AbjAQIY0 (ORCPT
+        with ESMTP id S235983AbjAQIZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:24:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310E62ED58;
-        Tue, 17 Jan 2023 00:24:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD6EA611F2;
-        Tue, 17 Jan 2023 08:24:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E0EC433F1;
-        Tue, 17 Jan 2023 08:24:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673943843;
-        bh=jOMA2ItWhbyt6drah2KbBQDJgxvQk73yFlOfbO12fu4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ls0BQqaL23lBXhvrtbco3O6ro6b1+RhXmNl4/Mdz6e+k2JDSy7ZdQTYJNeENmVc0T
-         U1Yt33cs8/uUvDdt3cwrpXhFusU2Xyj6IElSjBwVVzTZm2kCeuuusisknHIzU9FF0+
-         iB2FFgpKaPaeWYge/fxtQFEz0j0+je1R4BSF5ZSdY5jU8EyjgZuP5I/AuHahvStnXf
-         apmrRFs0gHXYSux7PaGbuUvGyK9WhpR/FE8fzdWwFeQwbDcV0aUpIRYla23oe586S4
-         OMJm8CHF2MzvlFz/mdvrFmA/gY4yte5G0jLiNwrUDSi/4f9CCtJkHkc21fq5SidYnG
-         yLOCuy6LZYn9g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pHhGZ-0007NH-6G; Tue, 17 Jan 2023 09:24:23 +0100
-Date:   Tue, 17 Jan 2023 09:24:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] firmware: Add support for Qualcomm UEFI Secure
- Application
-Message-ID: <Y8ZbN5LNn2fk0/xi@hovoldconsulting.com>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-4-luzmaximilian@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723224949.1089973-4-luzmaximilian@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 03:25:25 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D030028877
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:25:23 -0800 (PST)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230117082522epoutp04e3b430851980023181a96a4d79debc70~7CyDe7yy91131511315epoutp04c
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:25:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230117082522epoutp04e3b430851980023181a96a4d79debc70~7CyDe7yy91131511315epoutp04c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1673943922;
+        bh=8NAQJBZpr5N/v+b0k3lefIIF8pKLozgny3VDnBKSN3E=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=WLWLceJJne/xaDrIO6VRxWUYp2k0BY7+Y7QaMkOlIrFPhyhy2AJU49avimv5FWdCc
+         08WKltCuIsnmVwxByUMQZ2nmB14dt1IeQor5cfwO6GzH6kYwmQOuumny0rXCEO0kRi
+         deYgPfo3t2cPFfPBtOY0uLoyZchS0evRwwR4DfN4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20230117082521epcas1p4b6ed10bf4e8b211c80f512fc2dfce74e~7CyDBzAc00969309693epcas1p49;
+        Tue, 17 Jan 2023 08:25:21 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.241]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Nx25F57N3z4x9Py; Tue, 17 Jan
+        2023 08:25:21 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        20.E4.19973.17B56C36; Tue, 17 Jan 2023 17:25:21 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230117082521epcas1p22a709521a9e6d2346d06ac220786560d~7CyCnJgtd1754817548epcas1p2F;
+        Tue, 17 Jan 2023 08:25:21 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230117082521epsmtrp1fdb2f962ef9dbf01c6c4b84c45052f13~7CyCmV1v62182621826epsmtrp1h;
+        Tue, 17 Jan 2023 08:25:21 +0000 (GMT)
+X-AuditID: b6c32a35-21ffd70000014e05-cc-63c65b7186fb
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        75.90.02211.17B56C36; Tue, 17 Jan 2023 17:25:21 +0900 (KST)
+Received: from jaewon-linux.10.32.193.11 (unknown [10.253.100.104]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230117082521epsmtip170e7972f03d43bb85bc10272625ef386~7CyCaUakw1543715437epsmtip1G;
+        Tue, 17 Jan 2023 08:25:21 +0000 (GMT)
+From:   Jaewon Kim <jaewon31.kim@samsung.com>
+To:     john.stultz@linaro.org, sumit.semwal@linaro.org,
+        daniel.vetter@ffwll.ch, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        jaewon31.kim@gmail.com, Jaewon Kim <jaewon31.kim@samsung.com>
+Subject: [PATCH] dma-buf: system_heap: avoid reclaim for order 4
+Date:   Tue, 17 Jan 2023 17:25:08 +0900
+Message-Id: <20230117082508.8953-1-jaewon31.kim@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIKsWRmVeSWpSXmKPExsWy7bCmvm5h9LFkg+83NSzmrF/DZrHw4V1m
+        i9WbfC26N89ktOh9/4rJ4sxvXYvLu+awWdxb85/V4vW3ZcwWp+5+Znfg8jj85j2zx95vC1g8
+        ds66y+6xaVUnm8emT5PYPe5c28PmcWLGbxaPvi2rGD0+b5IL4IzKtslITUxJLVJIzUvOT8nM
+        S7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBulNJoSwxpxQoFJBYXKykb2dTlF9a
+        kqqQkV9cYquUWpCSU2BWoFecmFtcmpeul5daYmVoYGBkClSYkJ2xausmloKJ3BUPvnxhbmBc
+        wdnFyMkhIWAicWBhA2sXIxeHkMAORom7b49AOZ8YJT7e+8sE4XxjlPgy+zAjTMvC/9+hqvYy
+        SrxZ/wqq6gejxPQ/u1lAqtgEtCXeL5gEViUi0M8o8eLLNiaQBLNAqcTbNyeYQWxhAQeJKZ9P
+        AxVxcLAIqEp0PigFCfMK2Ehc2rOAFWKbvMTqDQeYQeZICNxjl+javZoNIuEisXLlBWYIW1ji
+        1fEt7BC2lMTL/jYou1yi8fI0qJoKid4th6CGGkv09oD0cgDdoymxfpc+RFhRYufvuYwQZ/JJ
+        vPvaA3aahACvREebEESJmkTLs69QU2Qk/v57BmV7SDSvaQJ7XUggVmL/43NsExhlZyEsWMDI
+        uIpRLLWgODc9tdiwwBAeS8n5uZsYwWlPy3QH48S3H/QOMTJxMB5ilOBgVhLh9dt1OFmINyWx
+        siq1KD++qDQntfgQoykwuCYyS4km5wMTb15JvKGJpYGJmZGJhbGlsZmSOK9NxLpkIYH0xJLU
+        7NTUgtQimD4mDk6pBqbCTxu/1zs8f3u6ycj28568n7cb5po4XxDemB7R46m/Yb4Cr7Ta2t7p
+        2irZD2b4OOsujyq9t/uli1ugUI3vyu3GvpJ5Ma8/7/9bEfW2lfPjP88F7mf6D8nK1e2/Gb/Z
+        ptL906N3RYYX8y5NmGF59WRcisauV39lds20/honNOvCRsFtCX9MQjv9Lr2YfqDk9ZZJkoVl
+        Zjmr1U9oOC94by6h3bhDs7/uw78gyyOszqdLFsi5d71k3Zn2+YdZhQwL69TlySaiOzKWLgqX
+        DvXWMz/1a4ZUEsMewZl+3OyuRp0WetdvlN3WPlX97e6HpX9CVQ9M3Xb8WVhOhQa35Ozb9sFX
+        GVZvTE65sX//d2E+nq9KLMUZiYZazEXFiQDrJPt+BAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPLMWRmVeSWpSXmKPExsWy7bCSnG5h9LFkg43zhC3mrF/DZrHw4V1m
+        i9WbfC26N89ktOh9/4rJ4sxvXYvLu+awWdxb85/V4vW3ZcwWp+5+Znfg8jj85j2zx95vC1g8
+        ds66y+6xaVUnm8emT5PYPe5c28PmcWLGbxaPvi2rGD0+b5IL4IzisklJzcksSy3St0vgyli1
+        dRNLwUTuigdfvjA3MK7g7GLk5JAQMJFY+P87axcjF4eQwG5GiY4/LSwQCRmJN+efAtkcQLaw
+        xOHDxRA13xgl3j74yAhSwyagLfF+wSSwZhGB6YwSf2atYgVJMAtUSvy7fQvMFhZwkJjy+TQr
+        yCAWAVWJzgelIGFeARuJS3sWsELskpdYveEA8wRGngWMDKsYJVMLinPTc4sNCwzzUsv1ihNz
+        i0vz0vWS83M3MYLDUEtzB+P2VR/0DjEycTAeYpTgYFYS4fXbdThZiDclsbIqtSg/vqg0J7X4
+        EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBiavhbn/5i5QvM73LkfN233y2lQhvpTX
+        2XFOFxXKpwbf1wqa7sb49t6jhomfDgn7q65Icv7y9W217HHHQg3dFpvEOa228yJ3/Yu7Kmx+
+        gWOTzYknbKWrewW+irzZFbfu8dvzTOl/6oI3u1av8crcJSxXZCP8UJNpketjV6NzQauc7jIY
+        rFs5LWvW1SyDnXU+fCxZ/0IS/ba42BiEK6foS0lO+d5SpL1JOExv++3ieWx19i9ePpvplPJo
+        rr4C58YFX6Y2sB2TO7dxqqLoXRVTuT8a+RrHbpUVRtZ/mf8x+VjL9jkBiyzsVNPCBAw2+Fqo
+        Cgi+ONmv5TePKy/A4eGJh4+Odwo8/3R51ib5JQX6UkosxRmJhlrMRcWJAANtHBeyAgAA
+X-CMS-MailID: 20230117082521epcas1p22a709521a9e6d2346d06ac220786560d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230117082521epcas1p22a709521a9e6d2346d06ac220786560d
+References: <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcas1p2.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 12:49:48AM +0200, Maximilian Luz wrote:
-> On platforms using the Qualcomm UEFI Secure Application (uefisecapp),
-> EFI variables cannot be accessed via the standard interface in EFI
-> runtime mode. The respective functions return EFI_UNSUPPORTED. On these
-> platforms, we instead need to talk to uefisecapp. This commit provides
-> support for this and registers the respective efivars operations to
-> access EFI variables from the kernel.
-> 
-> Communication with uefisecapp follows the standard Qualcomm Trusted
-> Environment (TEE or TrEE) / Secure OS conventions via the respective SCM
-> call interface. This is also the reason why variable access works
-> normally while boot services are active. During this time, said SCM
-> interface is managed by the boot services. When calling
-> ExitBootServices(), the ownership is transferred to the kernel.
-> Therefore, UEFI must not use that interface itself (as multiple parties
-> accessing this interface at the same time may lead to complications) and
-> cannot access variables for us.
-> 
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-> ---
+Using order 4 pages would be helpful for many IOMMUs, but it could spend
+quite much time in page allocation perspective.
 
-> +static struct platform_driver qcom_uefisecapp_driver = {
-> +	.probe = qcom_uefisecapp_probe,
-> +	.remove = qcom_uefisecapp_remove,
-> +	.driver = {
-> +		.name = "qcom_tee_uefisecapp",
-> +		.of_match_table = qcom_uefisecapp_dt_match,
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> +	},
-> +};
-> +module_platform_driver(qcom_uefisecapp_driver);
+The order 4 allocation with __GFP_RECLAIM may spend much time in
+reclaim and compation logic. __GFP_NORETRY also may affect. These cause
+unpredictable delay.
 
-I noticed that for efivarfs to work, you're currently relying on having
-the firmware still claim that the variable services are supported in the
-RT_PROP table so that efi core registers the default ops at subsys init
-time (which are later overridden by this driver).
+To get reasonable allocation speed from dma-buf system heap, use
+HIGH_ORDER_GFP for order 4 to avoid reclaim.
 
-Otherwise efivarfs may fail to initialise when built in:
-
-	static __init int efivarfs_init(void)
-	{
-		if (!efivars_kobject())
-			return -ENODEV;
-
-		return register_filesystem(&efivarfs_type);
-	}
-
-	module_init(efivarfs_init);
-
-With recent X13s firmware the corresponding bit in the RT_PROP table has
-been cleared so that efivarfs would fail to initialise. Similar problem
-when booting with 'efi=noruntime'.
-
-One way to handle this is to register also the qcom_uefisecapp_driver at
-subsys init time and prevent it from being built as a module (e.g. as is
-done for the SCM driver). I'm using the below patch for this currently.
-
-I guess the Google GSMI implementation suffers from a similar problem.
-
-Johan
-
-
-From 8fecce12d215bd8cab1b8c8f9f0d1e1fe20fe6e7 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan+linaro@kernel.org>
-Date: Sun, 15 Jan 2023 15:32:34 +0100
-Subject: [PATCH] firmware: qcom_tee_uefisecapp: register at subsys init
-
-Register efivars at subsys init time so that it is available when
-efivarfs probes. For the same reason, also prevent building the driver
-as a module.
-
-This is specifically needed on platforms such as the Lenovo Thinkpad
-X13s where the firmware has cleared the variable services in the RT_PROP
-table so that efi core does not register any efivar callbacks at subsys
-init time (which are later overridden).
-
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
 ---
- drivers/firmware/Kconfig               | 2 +-
- drivers/firmware/qcom_tee_uefisecapp.c | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/dma-buf/heaps/system_heap.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index 4e9e2c227899..48e712e363da 100644
---- a/drivers/firmware/Kconfig
-+++ b/drivers/firmware/Kconfig
-@@ -231,7 +231,7 @@ config QCOM_TEE
- 	select QCOM_SCM
- 
- config QCOM_TEE_UEFISECAPP
--	tristate "Qualcomm TrEE UEFI Secure App client driver"
-+	bool "Qualcomm TrEE UEFI Secure App client driver"
- 	select QCOM_TEE
- 	depends on EFI
- 	help
-diff --git a/drivers/firmware/qcom_tee_uefisecapp.c b/drivers/firmware/qcom_tee_uefisecapp.c
-index 65573e4b815a..e83bce4da70a 100644
---- a/drivers/firmware/qcom_tee_uefisecapp.c
-+++ b/drivers/firmware/qcom_tee_uefisecapp.c
-@@ -754,7 +754,12 @@ static struct platform_driver qcom_uefisecapp_driver = {
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index e8bd10e60998..5a405e99ef1e 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -42,11 +42,10 @@ struct dma_heap_attachment {
  };
--module_platform_driver(qcom_uefisecapp_driver);
-+
-+static int __init qcom_uefisecapp_init(void)
-+{
-+	return platform_driver_register(&qcom_uefisecapp_driver);
-+}
-+subsys_initcall(qcom_uefisecapp_init);
  
- MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
- MODULE_DESCRIPTION("Client driver for Qualcomm TrEE/TZ UEFI Secure App");
+ #define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
+-#define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
+ #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+ 				| __GFP_NORETRY) & ~__GFP_RECLAIM) \
+ 				| __GFP_COMP)
+-static gfp_t order_flags[] = {HIGH_ORDER_GFP, MID_ORDER_GFP, LOW_ORDER_GFP};
++static gfp_t order_flags[] = {HIGH_ORDER_GFP, HIGH_ORDER_GFP, LOW_ORDER_GFP};
+ /*
+  * The selection of the orders used for allocation (1MB, 64K, 4K) is designed
+  * to match with the sizes often found in IOMMUs. Using order 4 pages instead
 -- 
-2.38.2
+2.17.1
+
