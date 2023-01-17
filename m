@@ -2,107 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5503466E557
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4E566E554
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjAQRy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S230465AbjAQRxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjAQRuh (ORCPT
+        with ESMTP id S230474AbjAQRul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:50:37 -0500
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22BD4C0ED;
-        Tue, 17 Jan 2023 09:39:42 -0800 (PST)
-Received: by mail-pl1-f174.google.com with SMTP id b17so26783855pld.7;
-        Tue, 17 Jan 2023 09:39:42 -0800 (PST)
+        Tue, 17 Jan 2023 12:50:41 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C2C4C6E3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:39:57 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id i65so20630873pfc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XK7xzdzdVe8CAOdpvnaMlGGiF3ESCl5P5F97tw3Hmvg=;
+        b=Bo/fvXvQjMj2VkfNfsG2/XkizXgJueapBJER2ZI5hoyThFRdHPDLfDEWHax8kqkUnu
+         rhCvjfeJBSJp57/LgGBStLlQ+V1dTU8CRMrnnJcZzQfNNN7wkkSBWdbeDwju5gDaXRZO
+         snC0/uTv9HYHju7rfgUaDawdhqNzat1jwwJVA40UISoxLice8ydvtcgME3HWm8mNFOHD
+         J/mPYbcBuAb5twGkIGywQTVK+jOkNQW2XVgTcn23nUTaORTUw4Kgpabow1kRDRWGzZPa
+         A1S8ZV2KU9ogph6ebuVar0k7i1dyLkexssoW61wdfUIuOi+Yask/PtExCbqVPZ34sdZX
+         RT0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l0Bl9DHBHJ8aVewkblTNTyqqFzHO/bksoIQSiFnCMsI=;
-        b=oxp0XZe7dAeDBRhRR3sdS70e3NEZS7qFKpwi440rTpNa3i+BefYLDYSyTXSfmYkaN3
-         HSbKpI21GPBxegLPP64PCT7bQcI7IWMjJudtw9Rjp4w67cLcGmsWJfpLG67OmJRQeSlt
-         nxwHPhyUamvIPhh1VMYeLkd2YBvyZiODE+ud5gAfwzqPrJp7cbSkUZnfEId0gq7w7H+f
-         sGwSm7azty8rpfQnwauyErEJWg48uPK8ksczOpjvlTR5lVQ/v40a8dNX+SO1eoCnV0Rk
-         WsG7pavg9HMCwzSGv/rXvdayLBzZr+Bs6cwIf2+PSFwvnZsfecoRJr5kUbueX7MZUS63
-         AIXA==
-X-Gm-Message-State: AFqh2kqY07PEM1TE//tJ+VptcQjDxWIeHpprz/X4oya+IaSNNqqIEYQc
-        jFbJnM4My7nwxLPhwbB6u4I=
-X-Google-Smtp-Source: AMrXdXtH8e1aiVkRGfVOydjbOOyk4U68xnYWdn8ym5N+grRWQauq5PKf01E85tokrV6/bQURz1fPSQ==
-X-Received: by 2002:a05:6a20:2d10:b0:b8:7389:2760 with SMTP id g16-20020a056a202d1000b000b873892760mr3841790pzl.44.1673977182028;
-        Tue, 17 Jan 2023 09:39:42 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:f632:d9f5:6cbb:17d0? ([2620:15c:211:201:f632:d9f5:6cbb:17d0])
-        by smtp.gmail.com with ESMTPSA id p13-20020a65490d000000b0048f8efc53a6sm17589946pgs.80.2023.01.17.09.39.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 09:39:41 -0800 (PST)
-Message-ID: <bc47c99a-8315-ab73-8ab2-a26674cadf95@acm.org>
-Date:   Tue, 17 Jan 2023 09:39:38 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XK7xzdzdVe8CAOdpvnaMlGGiF3ESCl5P5F97tw3Hmvg=;
+        b=0y5B1s1HG566VJ7ETqaufwyAesYgTNfn1Ickwvn5610C8rLVg/iicak41uSbB3Ccc5
+         EqzZ8P2hz87rWcmijSb4tlSJFSntNu5h/Cd3kQKWYTJHviaruotvvipxLLKiJ8StNfmF
+         mz8xLUyXwL5L+wB8bigXrQMNgRpCWS9rEQ2lMQis3g4zK++5ppWPPsuvXvxKMH+Q3rUI
+         HA9SAQu7zKDMLI/Sm0Zl3Seem47qtnVLAjA5j1tTwN1nBeLiuKpYoxYuo+qjuSSFZV8p
+         SgpT/Ah0SgKHTfavRyu7K7xlhBY8y38gQyx2lx9Hq7VOWwR4ECxv2il7QEO4gD+EaU4Z
+         VkTA==
+X-Gm-Message-State: AFqh2koK9tZbJDGEf99bXjNHkbktDUP1X0ydF/uEWYHZFMETUu56E7kk
+        cX1zIJW6O+TsNmlx7KNTJSU80UC5gm9PIbJ7gk2Fig==
+X-Google-Smtp-Source: AMrXdXveAFX9cyZAAbfPqAt2oTkm5zlLnLt9gJol5S7J+lqdFJfIu+5uFGMXlrnRISTw3fQbg7WhXp2PvPQreY1MuRc=
+X-Received: by 2002:a65:6c15:0:b0:492:703:3f03 with SMTP id
+ y21-20020a656c15000000b0049207033f03mr366761pgu.403.1673977196822; Tue, 17
+ Jan 2023 09:39:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] qla2xxx: fix printk format string
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Saurav Kashyap <skashyap@marvell.com>,
-        Tom Rix <trix@redhat.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230117170029.2387516-1-arnd@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230117170029.2387516-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230117172825.3170190-1-arnd@kernel.org>
+In-Reply-To: <20230117172825.3170190-1-arnd@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 17 Jan 2023 09:39:45 -0800
+Message-ID: <CAKwvOdn5dubVN6qetnWJgHb-wektML_ptQ53M2JBgOeX_+r9Jg@mail.gmail.com>
+Subject: Re: [PATCH] mlx5: reduce stack usage in mlx5_setup_tc
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, Tariq Toukan <tariqt@nvidia.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>, Lama Kayal <lkayal@nvidia.com>,
+        Moshe Tal <moshet@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 09:00, Arnd Bergmann wrote:
+On Tue, Jan 17, 2023 at 9:28 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
 > From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Printing a size_t value that is the result of the sizeof() operator requires
-> using the %z format string modifier to avoid a warning on 32-bit architectures:
-> 
-> drivers/scsi/qla2xxx/qla_mid.c: In function 'qla_create_buf_pool':
-> drivers/scsi/qla2xxx/qla_mid.c:1094:51: error: format '%ld' expects argument of type 'long int', but argument 5 has type 'unsigned int' [-Werror=format=]
->   1094 |                     "Failed to allocate buf_map(%ld).\n", sz * sizeof(unsigned long));
->        |                                                 ~~^       ~~~~~~~~~~~~~~~~~~~~~~~~~~
->        |                                                   |          |
->        |                                                   long int   unsigned int
->        |                                                 %d
-> 
-> Fixes: 82d8dfd2a238 ("scsi: qla2xxx: edif: Fix performance dip due to lock contention")
+>
+> Clang warns about excessive stack usage on 32-bit targets:
+>
+> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1184) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
+> static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
+>
+> It turns out that both the mlx5e_setup_tc_mqprio_dcb() function and
+> the mlx5e_safe_switch_params() function it calls have a copy of
+> 'struct mlx5e_params' on the stack, and this structure is fairly
+> large.
+
+The logic changes LGTM, but were the noinline_for_stack left behind
+from earlier local revisions? Do we still need those if these structs
+have been moved from the stack?
+
+>
+> Use dynamic allocation for both.
+>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   drivers/scsi/qla2xxx/qla_mid.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-> index c6ca39b8e23d..1483f6258f92 100644
-> --- a/drivers/scsi/qla2xxx/qla_mid.c
-> +++ b/drivers/scsi/qla2xxx/qla_mid.c
-> @@ -1091,7 +1091,7 @@ int qla_create_buf_pool(struct scsi_qla_host *vha, struct qla_qpair *qp)
->   	qp->buf_pool.buf_map   = kcalloc(sz, sizeof(long), GFP_KERNEL);
->   	if (!qp->buf_pool.buf_map) {
->   		ql_log(ql_log_warn, vha, 0x0186,
-> -		    "Failed to allocate buf_map(%ld).\n", sz * sizeof(unsigned long));
-> +		    "Failed to allocate buf_map(%zd).\n", sz * sizeof(unsigned long));
->   		return -ENOMEM;
->   	}
->   	sz = qp->req->length * sizeof(void *);
+>  .../net/ethernet/mellanox/mlx5/core/en_main.c | 36 ++++++++++++-------
+>  1 file changed, 23 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index 6bb0fdaa5efa..e5198c26e383 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -2993,37 +2993,42 @@ static int mlx5e_switch_priv_channels(struct mlx5e_priv *priv,
+>         return err;
+>  }
+>
+> -int mlx5e_safe_switch_params(struct mlx5e_priv *priv,
+> +noinline_for_stack int mlx5e_safe_switch_params(struct mlx5e_priv *priv,
+>                              struct mlx5e_params *params,
+>                              mlx5e_fp_preactivate preactivate,
+>                              void *context, bool reset)
+>  {
+> -       struct mlx5e_channels new_chs = {};
+> +       struct mlx5e_channels *new_chs;
+>         int err;
+>
+>         reset &= test_bit(MLX5E_STATE_OPENED, &priv->state);
+>         if (!reset)
+>                 return mlx5e_switch_priv_params(priv, params, preactivate, context);
+>
+> -       new_chs.params = *params;
+> +       new_chs = kzalloc(sizeof(*new_chs), GFP_KERNEL);
+> +       if (!new_chs)
+> +               return -ENOMEM;
+> +       new_chs->params = *params;
+>
+> -       mlx5e_selq_prepare_params(&priv->selq, &new_chs.params);
+> +       mlx5e_selq_prepare_params(&priv->selq, &new_chs->params);
+>
+> -       err = mlx5e_open_channels(priv, &new_chs);
+> +       err = mlx5e_open_channels(priv, new_chs);
+>         if (err)
+>                 goto err_cancel_selq;
+>
+> -       err = mlx5e_switch_priv_channels(priv, &new_chs, preactivate, context);
+> +       err = mlx5e_switch_priv_channels(priv, new_chs, preactivate, context);
+>         if (err)
+>                 goto err_close;
+>
+> +       kfree(new_chs);
+>         return 0;
+>
+>  err_close:
+> -       mlx5e_close_channels(&new_chs);
+> +       mlx5e_close_channels(new_chs);
+>
+>  err_cancel_selq:
+>         mlx5e_selq_cancel(&priv->selq);
+> +       kfree(new_chs);
+>         return err;
+>  }
+>
+> @@ -3419,10 +3424,10 @@ static void mlx5e_params_mqprio_reset(struct mlx5e_params *params)
+>         mlx5e_params_mqprio_dcb_set(params, 1);
+>  }
+>
+> -static int mlx5e_setup_tc_mqprio_dcb(struct mlx5e_priv *priv,
+> +static noinline_for_stack int mlx5e_setup_tc_mqprio_dcb(struct mlx5e_priv *priv,
+>                                      struct tc_mqprio_qopt *mqprio)
+>  {
+> -       struct mlx5e_params new_params;
+> +       struct mlx5e_params *new_params;
+>         u8 tc = mqprio->num_tc;
+>         int err;
+>
+> @@ -3431,10 +3436,13 @@ static int mlx5e_setup_tc_mqprio_dcb(struct mlx5e_priv *priv,
+>         if (tc && tc != MLX5E_MAX_NUM_TC)
+>                 return -EINVAL;
+>
+> -       new_params = priv->channels.params;
+> -       mlx5e_params_mqprio_dcb_set(&new_params, tc ? tc : 1);
+> +       new_params = kmemdup(&priv->channels.params,
+> +                            sizeof(priv->channels.params), GFP_KERNEL);
+> +       if (!new_params)
+> +               return -ENOMEM;
+> +       mlx5e_params_mqprio_dcb_set(new_params, tc ? tc : 1);
+>
+> -       err = mlx5e_safe_switch_params(priv, &new_params,
+> +       err = mlx5e_safe_switch_params(priv, new_params,
+>                                        mlx5e_num_channels_changed_ctx, NULL, true);
+>
+>         if (!err && priv->mqprio_rl) {
+> @@ -3445,6 +3453,8 @@ static int mlx5e_setup_tc_mqprio_dcb(struct mlx5e_priv *priv,
+>
+>         priv->max_opened_tc = max_t(u8, priv->max_opened_tc,
+>                                     mlx5e_get_dcb_num_tc(&priv->channels.params));
+> +
+> +       kfree(new_params);
+>         return err;
+>  }
+>
+> @@ -3533,7 +3543,7 @@ static struct mlx5e_mqprio_rl *mlx5e_mqprio_rl_create(struct mlx5_core_dev *mdev
+>         return rl;
+>  }
+>
+> -static int mlx5e_setup_tc_mqprio_channel(struct mlx5e_priv *priv,
+> +static noinline_for_stack int mlx5e_setup_tc_mqprio_channel(struct mlx5e_priv *priv,
+>                                          struct tc_mqprio_qopt_offload *mqprio)
+>  {
+>         mlx5e_fp_preactivate preactivate;
+> --
+> 2.39.0
+>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+
+-- 
+Thanks,
+~Nick Desaulniers
