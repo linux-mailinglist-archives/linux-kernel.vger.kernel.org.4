@@ -2,322 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68A866E186
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779AA66E18C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbjAQO63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
+        id S230505AbjAQPCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjAQO5k (ORCPT
+        with ESMTP id S232700AbjAQPBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:57:40 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DAC3E611;
-        Tue, 17 Jan 2023 06:57:39 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HEgXV3009373;
-        Tue, 17 Jan 2023 14:57:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=XJUS31OMejqMwAp10cRDrNALATh1Qi+y3CP7SptYo9g=;
- b=UzAc3rKp+2GKKoOtC0/NA+DOEAPcN44P9fpF2NOCcM19d7AcL9oWckcZAIBhM43M5kOr
- hDZonc+2rfIUwX7/6upiFdM//7GrrmKtALnLbIohGGbU/BgL+urI2/NX4yCd9ewM2RPw
- hN6DDCYvzwKC5/i11bWK4OHYa8kYEcuZE4JDu2/4HrJWFT54wPlAyGMflNFIxV4Mn2LW
- 3f+isPnMS2VDBihvb6KVDxGAhOaT1ZuU932uh244CWnu7EG18Zs3PNd8LDm+o1VtqkLX
- In7tictf96Trum23sqvhrKrtl3O1tZWqypeMQgH5cmVtxew+kfj7lXq19X8BD3WDpA3T tQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5b189p2v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 14:57:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HEvNR7015956
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 14:57:23 GMT
-Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 17 Jan 2023 06:57:22 -0800
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: [PATCH v17 9/9] arm64: dts: qcom: sm8250: Add tpdm mm/prng
-Date:   Tue, 17 Jan 2023 06:57:08 -0800
-Message-ID: <20230117145708.16739-10-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230117145708.16739-1-quic_jinlmao@quicinc.com>
-References: <20230117145708.16739-1-quic_jinlmao@quicinc.com>
+        Tue, 17 Jan 2023 10:01:25 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB12240BE4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:59:58 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9886A688EC;
+        Tue, 17 Jan 2023 14:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673967597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qLgqTbJWdzveKP+zt6MOjmsbrgQhAVlcSqf1/F/Fke4=;
+        b=ySVbLUfhfhMuGGGA1cCrcJPB12Nh4JfvKhday4ev5IN4NX70+MK/TMW3H0HzJ+N/GShlkD
+        SURoM+I7swFA8zGBUmi57EsPdTKBwfB356yvfi8e+5OTgl/4whqp2MkPQ9Nn5Wg6Exdk/0
+        uV6Y9yF2M6rWyiXayAui/CFzaYbbjWE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673967597;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qLgqTbJWdzveKP+zt6MOjmsbrgQhAVlcSqf1/F/Fke4=;
+        b=iUZVkJUec3OMQOXPAYO27VCrg7WvhIqSBcEPQcKNBIIAp5iZsx2kmLZpt3Z7HyspweTmMx
+        0ALO48kmTg2hBADw==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 206602C141;
+        Tue, 17 Jan 2023 14:59:52 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 14:59:51 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     Raghavendra K T <raghavendra.kt@amd.com>
+Cc:     = <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        xu xin <cgel.zte@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Colin Cross <ccross@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Hugh Dickins <hughd@google.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Disha Talreja <dishaa.talreja@amd.com>
+Subject: Re: [RFC PATCH V1 1/1] sched/numa: Enhance vma scanning logic
+Message-ID: <20230117145951.s2jmva4v54lfrhds@suse.de>
+References: <cover.1673610485.git.raghavendra.kt@amd.com>
+ <67bf778d592c39d02444825c416c2ed11d2ef4b2.1673610485.git.raghavendra.kt@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kU3GiKP3oXPPRlsX9T2dmiNuc4TFU80w
-X-Proofpoint-ORIG-GUID: kU3GiKP3oXPPRlsX9T2dmiNuc4TFU80w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_06,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=860 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301170121
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <67bf778d592c39d02444825c416c2ed11d2ef4b2.1673610485.git.raghavendra.kt@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tpdm mm and tpdm prng for sm8250.
+Note that the cc list is excessive for the topic.
 
-+---------------+                +-------------+
-|  tpdm@6c08000 |                |tpdm@684C000 |
-+-------|-------+                +------|------+
-        |                               |
-+-------|-------+                       |
-| funnel@6c0b000|                       |
-+-------|-------+                       |
-        |                               |
-+-------|-------+                       |
-|funnel@6c2d000 |                       |
-+-------|-------+                       |
-        |                               |
-        |    +---------------+          |
-        +----- tpda@6004000  -----------+
-             +-------|-------+
-                     |
-             +-------|-------+
-             |funnel@6005000 |
-             +---------------+
+On Mon, Jan 16, 2023 at 07:05:34AM +0530, Raghavendra K T wrote:
+>  During the Numa scanning make sure only relevant vmas of the
+> tasks are scanned.
+> 
+> Logic:
+> 1) For the first two time allow unconditional scanning of vmas
+> 2) Store recent 4 unique tasks (last 8bits of PIDs) accessed the vma.
+>   False negetives in case of collison should be fine here.
+> 3) If more than 4 pids exist assume task indeed accessed vma to
+>  to avoid false negetives
+> 
+> Co-developed-by: Bharata B Rao <bharata@amd.com>
+> (initial patch to store pid information)
+> 
+> Suggested-by: Mel Gorman <mgorman@techsingularity.net>
+> Signed-off-by: Bharata B Rao <bharata@amd.com>
+> Signed-off-by: Raghavendra K T <raghavendra.kt@amd.com>
+> ---
+>  include/linux/mm_types.h |  2 ++
+>  kernel/sched/fair.c      | 32 ++++++++++++++++++++++++++++++++
+>  mm/memory.c              | 21 +++++++++++++++++++++
+>  3 files changed, 55 insertions(+)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 500e536796ca..07feae37b8e6 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -506,6 +506,8 @@ struct vm_area_struct {
+>  	struct mempolicy *vm_policy;	/* NUMA policy for the VMA */
+>  #endif
+>  	struct vm_userfaultfd_ctx vm_userfaultfd_ctx;
+> +	unsigned int accessing_pids;
+> +	int next_pid_slot;
+>  } __randomize_layout;
+>  
 
-Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 164 +++++++++++++++++++++++++++
- 1 file changed, 164 insertions(+)
+This should be behind CONFIG_NUMA_BALANCING but per-vma state should also be
+tracked in its own struct and allocated on demand iff the state is required.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index dab5579946f3..221fcbdb47a5 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2746,6 +2746,73 @@ stm_out: endpoint {
- 			};
- 		};
+>  struct kioctx_table;
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index e4a0b8bd941c..944d2e3b0b3c 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -2916,6 +2916,35 @@ static void reset_ptenuma_scan(struct task_struct *p)
+>  	p->mm->numa_scan_offset = 0;
+>  }
+>  
+> +static bool vma_is_accessed(struct vm_area_struct *vma)
+> +{
+> +	int i;
+> +	bool more_pids_exist;
+> +	unsigned long pid, max_pids;
+> +	unsigned long current_pid = current->pid & LAST__PID_MASK;
+> +
+> +	max_pids = sizeof(unsigned int) * BITS_PER_BYTE / LAST__PID_SHIFT;
+> +
+> +	/* By default we assume >= max_pids exist */
+> +	more_pids_exist = true;
+> +
+> +	if (READ_ONCE(current->mm->numa_scan_seq) < 2)
+> +		return true;
+> +
+> +	for (i = 0; i < max_pids; i++) {
+> +		pid = (vma->accessing_pids >> i * LAST__PID_SHIFT) &
+> +			LAST__PID_MASK;
+> +		if (pid == current_pid)
+> +			return true;
+> +		if (pid == 0) {
+> +			more_pids_exist = false;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return more_pids_exist;
+> +}
+
+I get the intent is to avoid PIDs scanning VMAs that it has never faulted
+within but it seems unnecessarily complex to search on every fault to track
+just 4 pids with no recent access information. The pid modulo BITS_PER_WORD
+couls be used to set a bit on an unsigned long to track approximate recent
+acceses and skip VMAs that do not have the bit set. That would allow more
+recent PIDs to be tracked although false positives would still exist. It
+would be necessary to reset the mask periodically.
+
+Even tracking 4 pids, a reset is periodically needed. Otherwise it'll
+be vulnerable to changes in phase behaviour causing all pids to scan all
+VMAs again.
+
+> @@ -3015,6 +3044,9 @@ static void task_numa_work(struct callback_head *work)
+>  		if (!vma_is_accessible(vma))
+>  			continue;
+>  
+> +		if (!vma_is_accessed(vma))
+> +			continue;
+> +
+>  		do {
+>  			start = max(start, vma->vm_start);
+>  			end = ALIGN(start + (pages << PAGE_SHIFT), HPAGE_SIZE);
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 8c8420934d60..fafd78d87a51 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4717,7 +4717,28 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+>  	pte_t pte, old_pte;
+>  	bool was_writable = pte_savedwrite(vmf->orig_pte);
+>  	int flags = 0;
+> +	int pid_slot = vma->next_pid_slot;
+>  
+> +	int i;
+> +	unsigned long pid, max_pids;
+> +	unsigned long current_pid = current->pid & LAST__PID_MASK;
+> +
+> +	max_pids = sizeof(unsigned int) * BITS_PER_BYTE / LAST__PID_SHIFT;
+> +
+
+Won't build on defconfig
+
+> +	/* Avoid duplicate PID updation */
+> +	for (i = 0; i < max_pids; i++) {
+> +		pid = (vma->accessing_pids >> i * LAST__PID_SHIFT) &
+> +			LAST__PID_MASK;
+> +		if (pid == current_pid)
+> +			goto skip_update;
+> +	}
+> +
+> +	vma->next_pid_slot = (++pid_slot) % max_pids;
+> +	vma->accessing_pids &= ~(LAST__PID_MASK << (pid_slot * LAST__PID_SHIFT));
+> +	vma->accessing_pids |= ((current_pid) <<
+> +			(pid_slot * LAST__PID_SHIFT));
+> +
+
+The PID tracking and clearing should probably be split out but that aside,
+what about do_huge_pmd_numa_page?
+
+First off though, expanding VMA size by more than a word for NUMA balancing
+is probably a no-go.
+
+This is a build-tested only prototype to illustrate how VMA could track
+NUMA balancing state. It starts with applying the scan delay to every VMA
+instead of every task to avoid scanning new or very short-lived VMAs. I
+went back to my old notes on how I hoped to reduce excessive scanning in
+NUMA balancing and it happened to be second on my list and straight-forward
+to prototype in a few minutes.
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index f3f196e4d66d..3cebda5cc8a7 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -620,6 +620,9 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+ 	vma->vm_mm = mm;
+ 	vma->vm_ops = &dummy_vm_ops;
+ 	INIT_LIST_HEAD(&vma->anon_vma_chain);
++#ifdef CONFIG_NUMA_BALANCING
++	vma->numab = NULL;
++#endif
+ }
  
-+		tpda@6004000 {
-+			compatible = "qcom,coresight-tpda", "arm,primecell";
-+			reg = <0 0x06004000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					tpda_out_funnel_qatb: endpoint {
-+						remote-endpoint = <&funnel_qatb_in_tpda>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@9 {
-+					reg = <9>;
-+					tpda_9_in_tpdm_mm: endpoint {
-+						remote-endpoint = <&tpdm_mm_out_tpda9>;
-+					};
-+				};
-+
-+				port@17 {
-+					reg = <23>;
-+					tpda_23_in_tpdm_prng: endpoint {
-+						remote-endpoint = <&tpdm_prng_out_tpda_23>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6005000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06005000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_qatb_out_funnel_in0: endpoint {
-+						remote-endpoint = <&funnel_in0_in_funnel_qatb>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_qatb_in_tpda: endpoint {
-+						remote-endpoint = <&tpda_out_funnel_qatb>;
-+					};
-+				};
-+			};
-+		};
-+
- 		funnel@6041000 {
- 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
- 			reg = <0 0x06041000 0 0x1000>;
-@@ -2765,6 +2832,13 @@ in-ports {
- 				#address-cells = <1>;
- 				#size-cells = <0>;
+ static inline void vma_set_anonymous(struct vm_area_struct *vma)
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 3b8475007734..3c0cfdde33e0 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -526,6 +526,10 @@ struct anon_vma_name {
+ 	char name[];
+ };
  
-+				port@6 {
-+					reg = <6>;
-+					funnel_in0_in_funnel_qatb: endpoint {
-+						remote-endpoint = <&funnel_qatb_out_funnel_in0>;
-+					};
-+				};
++struct vma_numab {
++	unsigned long next_scan;
++};
 +
- 				port@7 {
- 					reg = <7>;
- 					funnel0_in7: endpoint {
-@@ -2882,6 +2956,22 @@ etr_in: endpoint {
- 			};
- 		};
+ /*
+  * This struct describes a virtual memory area. There is one of these
+  * per VM-area/task. A VM area is any part of the process virtual memory
+@@ -593,6 +597,9 @@ struct vm_area_struct {
+ #endif
+ #ifdef CONFIG_NUMA
+ 	struct mempolicy *vm_policy;	/* NUMA policy for the VMA */
++#endif
++#ifdef CONFIG_NUMA_BALANCING
++	struct vma_numab *numab;	/* NUMA Balancing state */
+ #endif
+ 	struct vm_userfaultfd_ctx vm_userfaultfd_ctx;
+ } __randomize_layout;
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 9f7fe3541897..2d34c484553d 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -481,6 +481,9 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
  
-+		tpdm@684c000 {
-+			compatible = "qcom,coresight-tpdm", "arm,primecell";
-+			reg = <0 0x0684c000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					tpdm_prng_out_tpda_23: endpoint {
-+						remote-endpoint = <&tpda_23_in_tpdm_prng>;
-+					};
-+				};
-+			};
-+		};
-+
- 		funnel@6b04000 {
- 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
- 			arm,primecell-periphid = <0x000bb908>;
-@@ -2966,6 +3056,80 @@ replicator_in: endpoint {
- 			};
- 		};
+ void vm_area_free(struct vm_area_struct *vma)
+ {
++#ifdef CONFIG_NUMA_BALANCING
++	kfree(vma->numab);
++#endif
+ 	free_anon_vma_name(vma);
+ 	kmem_cache_free(vm_area_cachep, vma);
+ }
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c36aa54ae071..6a1cffdfc76b 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3027,6 +3027,23 @@ static void task_numa_work(struct callback_head *work)
+ 		if (!vma_is_accessible(vma))
+ 			continue;
  
-+		tpdm@6c08000 {
-+			compatible = "qcom,coresight-tpdm", "arm,primecell";
-+			reg = <0 0x06c08000 0 0x1000>;
++		/* Initialise new per-VMA NUMAB state. */
++		if (!vma->numab) {
++			vma->numab = kzalloc(sizeof(struct vma_numab), GFP_KERNEL);
++			if (!vma->numab)
++				continue;
 +
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
++			vma->numab->next_scan = now +
++				msecs_to_jiffies(sysctl_numa_balancing_scan_delay);
++		}
 +
-+			out-ports {
-+				port {
-+					tpdm_mm_out_funnel_dl_mm: endpoint {
-+						remote-endpoint = <&funnel_dl_mm_in_tpdm_mm>;
-+					};
-+				};
-+			};
-+		};
++		/*
++		 * After the first scan is complete, delay the balancing scan
++		 * for new VMAs.
++		 */
++		if (mm->numa_scan_seq && time_before(jiffies, vma->numab->next_scan))
++			continue;
 +
-+		funnel@6c0b000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06c0b000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_dl_mm_out_funnel_dl_center: endpoint {
-+					remote-endpoint = <&funnel_dl_center_in_funnel_dl_mm>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@3 {
-+					reg = <3>;
-+					funnel_dl_mm_in_tpdm_mm: endpoint {
-+						remote-endpoint = <&tpdm_mm_out_funnel_dl_mm>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6c2d000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06c2d000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				port {
-+					tpdm_mm_out_tpda9: endpoint {
-+						remote-endpoint = <&tpda_9_in_tpdm_mm>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@2 {
-+					reg = <2>;
-+					funnel_dl_center_in_funnel_dl_mm: endpoint {
-+					remote-endpoint = <&funnel_dl_mm_out_funnel_dl_center>;
-+					};
-+				};
-+			};
-+		};
-+
- 		etm@7040000 {
- 			compatible = "arm,coresight-etm4x", "arm,primecell";
- 			reg = <0 0x07040000 0 0x1000>;
+ 		do {
+ 			start = max(start, vma->vm_start);
+ 			end = ALIGN(start + (pages << PAGE_SHIFT), HPAGE_SIZE);
+
 -- 
-2.39.0
-
+Mel Gorman
+SUSE Labs
