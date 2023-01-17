@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BA166DF78
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E8466DF86
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjAQNx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S231347AbjAQNyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjAQNxE (ORCPT
+        with ESMTP id S230465AbjAQNxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:53:04 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B1A3C2A3;
-        Tue, 17 Jan 2023 05:52:12 -0800 (PST)
-Date:   Tue, 17 Jan 2023 13:52:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1673963530;
-        bh=3rWEGZOUr60uGBv8riGkTZ/UN/j6SPZdmfmhK0SEaZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OMfmUovDF3e2N8f2jfQJ+AZV9Ba5ItyUVHG253dDNK0QMuxDhlc1DFuSeRjp/HVDa
-         cudbwzK6hLNQMNfHTX/+DKHP/arFWKO62LwsSVH7f9O8Q73v62WIojRJZQWsyVgB5S
-         eYGAzif4b1GHCTUOv+OcD46XEkaNxp4u9YWZ+Pqo=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Nicolas Schier <n.schier@avm.de>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] kernel/.gitignore: ignore temporary kheaders_data
- directory
-Message-ID: <20230117135208.pyyziocg7kc25vfy@t-8ch.de>
-References: <20230117-kernel-kheaders-gitignore-v1-1-2a3a070efd0d@weissschuh.net>
- <Y8ZdGIDj+0nSqjkF@buildd.core.avm.de>
+        Tue, 17 Jan 2023 08:53:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB0935B4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:52:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673963547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zCNIOWyp6BvkZ2wh9MfUHSp5MAA9j0ACgJb6RoOlUO0=;
+        b=RAzPTz2WXsIRDRK96l3OjVCRglq+2hqU+Isb4trMR6yVuDDhpAD1WOsS3R4si9W19LunoR
+        uG/0v9XcBKpJ/r9VYbJpR4pQIiseKJJy6I8zqqrI+x1ruYfrwX0M+KZ6xjBPR6KJACIVeS
+        jYmmzHtUKZ++RgE7FeLM3q+kyHHleOM=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-259-hu6OFv5APaSdpkBEg2VCnw-1; Tue, 17 Jan 2023 08:52:25 -0500
+X-MC-Unique: hu6OFv5APaSdpkBEg2VCnw-1
+Received: by mail-lf1-f70.google.com with SMTP id x12-20020a056512130c00b004cc7af49b05so10245683lfu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:52:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zCNIOWyp6BvkZ2wh9MfUHSp5MAA9j0ACgJb6RoOlUO0=;
+        b=FBQLKQ8eeX5X0dApKlxCCtPST95tgrPAUgBuh42ZixmLcSc0gH725SaWElAp+EIddj
+         v3BgOJCpshrhqDqpFGxDpxJwtn5irpHY0JV55t9Q3R5zL+lmryCkfbugzRxdivsPsJNz
+         QLY8S4znJC8kPUZ7LZYgfOOMdkFJx9xzUPK8Rwlb0Uw6F331cvdUctYdTKnTqe7BJkuo
+         03tgAIa2eZxwcO73wdax7q7tWVLH7AwYGiN+5lfqoQ/yYhO//1DFotQvUvKxUXfgLN/m
+         W1izyhWemfv3EnSN/34QImHYQCCokY0i6ZNpP3/EydJSzluU/AQq4Gm8QnXto+sbsL6g
+         uJJA==
+X-Gm-Message-State: AFqh2kqggIuA51QjL12EEu0JPYV5b15JC2ISbqaF2go7v2qOCEYJCpk2
+        DSAVidWqgenhANm4x5KrHe9hi9nvaqngOCyerYbHqTpLTHFZydw9XLNbS3mNIWNlNCRT9nACJ8J
+        3L3xHNpzeynhaWk2yUXJIs5FjLGcEGqffo15j2XX/
+X-Received: by 2002:ac2:4ade:0:b0:4d0:7b7:65dc with SMTP id m30-20020ac24ade000000b004d007b765dcmr133417lfp.122.1673963544333;
+        Tue, 17 Jan 2023 05:52:24 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs9jCpstio+iSjdAor3NZ75bz+2Dnozw/p6Ykmo64gLJfiYXc3udp+wH4Z3eIPBKX1dEiSO07P7nXfvqprRwdo=
+X-Received: by 2002:ac2:4ade:0:b0:4d0:7b7:65dc with SMTP id
+ m30-20020ac24ade000000b004d007b765dcmr133416lfp.122.1673963544131; Tue, 17
+ Jan 2023 05:52:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y8ZdGIDj+0nSqjkF@buildd.core.avm.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117150212.3d8ee843@canb.auug.org.au>
+In-Reply-To: <20230117150212.3d8ee843@canb.auug.org.au>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Tue, 17 Jan 2023 14:52:12 +0100
+Message-ID: <CACO55ttvqwnmGS=4gig-AOy+67bDesdj2S9HDJ3hS=uyN0NGOQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the kspp tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:34:01AM +0100, Nicolas Schier wrote:
-> On Tue, Jan 17, 2023 at 05:15:25AM +0000, Thomas Weiﬂschuh wrote:
-> > If the kheaders archive generation is interrupted then this directory
-> > may be left. Ignore it, it will be deleted by the next run of
-> > kernel/gen_kheaders.sh.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > ---
-> >  kernel/.gitignore | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/kernel/.gitignore b/kernel/.gitignore
-> > index c6b299a6b786..57ab1d703763 100644
-> > --- a/kernel/.gitignore
-> > +++ b/kernel/.gitignore
-> > @@ -1,3 +1,4 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  /config_data
-> >  /kheaders.md5
-> > +/kheaders_data.tar.xz.tmp/
-> 
-> What about removing the temporary directory on failure instead?  E.g.:
-> 
-> diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-> index 473036b43c83..c656b72a3cdc 100755
-> --- a/kernel/gen_kheaders.sh
-> +++ b/kernel/gen_kheaders.sh
-> @@ -61,6 +61,8 @@ echo "  GEN     $tarfile"
->  rm -rf $cpio_dir
->  mkdir $cpio_dir
->  
-> +trap "rm -rf ${cpio_dir}" EXIT
-> +
->  if [ "$building_out_of_srctree" ]; then
->         (
->                 cd $srctree
-> 
-> 
-> Otherwise, I'd suggest to extent this .gitignore patch by also adding
-> 
->    clean-files += kheaders_data.tar.xz.tmp/
-> 
-> to kernel/Makefile.
+On Tue, Jan 17, 2023 at 5:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> The following commit is also in the drm-misc tree as a different commit
+> (but the same patch):
+>
+>   06b19f46455c ("drm/nouveau/fb/ga102: Replace zero-length array of trailing structs with flex-array")
+>
 
-Thanks for the suggestions.
-I went with the clean-files aproach.
-This allows the introspection of the directory on errors and seems to
-match what is done elsewhere.
+which branch? Because I just fetched the remote and don't have this
+commit in my local repo
 
-Thomas
+> This is commit
+>
+>   54d47689c6e3 ("drm/nouveau/fb/ga102: Replace zero-length array of trailing structs with flex-array")
+>
+> in the drm-misc tree.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+
