@@ -2,84 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137A8670E4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A90F670E4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjARAAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S229554AbjARAAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjAQX7c (ORCPT
+        with ESMTP id S229525AbjARAAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:59:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02C1893CC;
-        Tue, 17 Jan 2023 15:14:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53FABB81A62;
-        Tue, 17 Jan 2023 23:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7012C433D2;
-        Tue, 17 Jan 2023 23:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673997258;
-        bh=UyCduLUKDHMuOlRKdVS07Ic8VuPeGTimn3Gjp7iIcuQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=prWGvCBKzqqnRYOonvhjMq6+HuXZbQ2bfu69j6jTopGc49O7slkoNWl99+J3sTOOv
-         fqpj0RKNXt9Fm/40r3Th2EjwutW6hokYmVsQpnNMBDaBIIO+5qQ24qhMVkFY/cYezZ
-         3w9sh5VsObHXNzDod1HUKS5obzITXfKfbY6JI4JgsntOOULF/alKpv0szDoiOT7sbT
-         HJ1Qkj/Yu8/o/QR/q4DeRFj85RJPR9GnJVdP8MK3UwWtEvPTmsWK+Tz5XTNpGCn2b5
-         BEPGKuw6GqJ3DgkhLhboFjXXfl1s0ZUV7fuPncg9oQJDREU3lRngcQdIzt/qmLRCEU
-         k0Oj0YW3kfYGw==
-Date:   Tue, 17 Jan 2023 17:14:16 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Stefan Roese <sr@denx.de>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/portdrv: Avoid enabling AER on Thunderbolt devices
-Message-ID: <20230117231416.GA158056@bhelgaas>
+        Tue, 17 Jan 2023 19:00:22 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F4723304;
+        Tue, 17 Jan 2023 15:14:46 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 127so7536859pfe.4;
+        Tue, 17 Jan 2023 15:14:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYYclJT0SRDfx3j8T+Q0suM7DxwMbnZVfV94sfe2l/Q=;
+        b=SUGzEMXa0jJdEwFho5rOpwE6/0R8GdrrgHWuJ9A1SrVwo77Hm3LTMmEb9SEudLh8Vl
+         /PzoC5ZdwJBap1nOWNR9fwyuVyVfUtPNjJ1xqesNmhIPl2n741WqCP891qVps8pR771i
+         jlcTzyQG9GLGcc+1IdjZpqQuF7qa+qCEuAd+8c8VA6FhYh5k+5zRE8Un0G3Zkd263osf
+         ejBQthbTJSE4AsyTQ8SfjlBqabcl0D0R0YbOudEw1v6QXBLDy+lAQsBnd0O/WJe8F25Q
+         kqP/KwLHw3TdMoHU+Pu2+wS3+0D0w5BxqSnXnMW5GdPQQScGDJi0wcedNHPdein62LSj
+         o9Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xYYclJT0SRDfx3j8T+Q0suM7DxwMbnZVfV94sfe2l/Q=;
+        b=Qg8gmOedMZ1zppRSfQEBYqMtZuvzn8Erttv0UQ0XSs+DFv0rfzI7Qt9bo8knevBHyS
+         KgCnERthijW1crCBKm6rEADQalusKpciVwzUvY5PcKOh8x32Z7jhZPP+EXyZFT+sSemg
+         677DAguRZEJ+JLu1wz28v8URiOay8ztSekjM//8djcSFRrm1fH16pWPxVLScJlSkXeVa
+         ps7UiCCxgytG72j4pd/wTlZplbKjwJAtrbaszQUQLV4c6xmvAM0wIkHtlX52ednfXcFe
+         V47GpNUyGJm6URxUl6qjcvckc/wIkKVyV6zDI6igyXoa8Izh8CkwLPxwcX+rp86WzcU1
+         qqZg==
+X-Gm-Message-State: AFqh2krQMwyF5tfn2xuk9TdB2iQ563aDH6zwnF9Mcsn7exV5niDFdhkn
+        BwIobZjwFGR0Gpz60ehLjzMtv6h6G9JQbw==
+X-Google-Smtp-Source: AMrXdXvOL5Zurqa1giRr2W+k4fK1YThD3bN38NPuR85GBFd2A050lb3UL4kQDBziA5MMZRUaGpH0Sw==
+X-Received: by 2002:a62:5341:0:b0:57f:c170:dc6 with SMTP id h62-20020a625341000000b0057fc1700dc6mr4178981pfb.14.1673997286354;
+        Tue, 17 Jan 2023 15:14:46 -0800 (PST)
+Received: from localhost (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id z30-20020aa7991e000000b005898fcb7c2bsm16244841pff.170.2023.01.17.15.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 15:14:45 -0800 (PST)
+Date:   Tue, 17 Jan 2023 23:14:44 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Eric Dumazet <edumazet@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v10] virtio/vsock: replace virtio_vsock_pkt with
+ sk_buff
+Message-ID: <Y8cr5KosN5kZaOgK@bullseye>
+References: <20230113222137.2490173-1-bobby.eshleman@bytedance.com>
+ <20230116111207.yxlwh4jlejtn4ple@sgarzare-redhat>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230116111207.yxlwh4jlejtn4ple@sgarzare-redhat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 11:30:31PM +0800, Kai-Heng Feng wrote:
-> We are seeing igc ethernet device on Thunderbolt dock stops working
-> after S3 resume because of AER error, or even make S3 resume freeze:
-> pcieport 0000:00:1d.0: AER: Multiple Corrected error received: 0000:00:1d.0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00008000/00002000
-> pcieport 0000:00:1d.0:    [15] HeaderOF
-> pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a000052 00000000 00000000
-> pcieport 0000:00:1d.0: AER:   Error of this Agent is reported first
-> pcieport 0000:04:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> pcieport 0000:04:01.0:   device [8086:1136] error status/mask=00300000/00000000
-> pcieport 0000:04:01.0:    [20] UnsupReq               (First)
-> pcieport 0000:04:01.0:    [21] ACSViol
-> pcieport 0000:04:01.0: AER:   TLP Header: 34000000 04000052 00000000 00000000
-> thunderbolt 0000:05:00.0: AER: can't recover (no error_detected callback)
+On Mon, Jan 16, 2023 at 12:12:07PM +0100, Stefano Garzarella wrote:
+> On Fri, Jan 13, 2023 at 10:21:37PM +0000, Bobby Eshleman wrote:
+> > This commit changes virtio/vsock to use sk_buff instead of
+> > virtio_vsock_pkt. Beyond better conforming to other net code, using
+> > sk_buff allows vsock to use sk_buff-dependent features in the future
+> > (such as sockmap) and improves throughput.
+> > 
+> > This patch introduces the following performance changes:
+> > 
+> > Tool: Uperf
+> > Env: Phys Host + L1 Guest
+> > Payload: 64k
+> > Threads: 16
+> > Test Runs: 10
+> > Type: SOCK_STREAM
+> > Before: commit b7bfaa761d760 ("Linux 6.2-rc3")
+> > 
+> > Before
+> > ------
+> > g2h: 16.77Gb/s
+> > h2g: 10.56Gb/s
+> > 
+> > After
+> > -----
+> > g2h: 21.04Gb/s
+> > h2g: 10.76Gb/s
+> > 
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > 
+> > ---
+> > Changes in v10:
+> > - vhost/vsock: use virtio_vsock_skb_dequeue()
+> > - vhost/vsock: remove extra iov_length() call
+> > - vhost/vsock: also consider hdr when evaluating that incoming size is
+> >  valid
+> > - new uperf data
+> 
+> Tests seem fine!
+> 
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Is this a regression?  E.g., is this something that started after
-f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native") or
-something similar?
+Thank you for all of the reviews and testing!
 
-Bjorn
+Best,
+Bobby
