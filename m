@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E3B66E848
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7D966E855
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjAQVQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S229691AbjAQVWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjAQVPH (ORCPT
+        with ESMTP id S229532AbjAQVRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:15:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3353B0D4;
-        Tue, 17 Jan 2023 11:37:36 -0800 (PST)
+        Tue, 17 Jan 2023 16:17:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3E94994C;
+        Tue, 17 Jan 2023 11:40:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4D861514;
-        Tue, 17 Jan 2023 19:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EB4C433D2;
-        Tue, 17 Jan 2023 19:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673984255;
-        bh=t6g2SSM3g8PpaGH31BjO5/jj+xwDslS5NO8uD6va4Dk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=qiDs3bkWnP14mvlyz7SIVFjUhWxhf1YTO3Uo5P5IO9Uvne5aFZKEYmG863Nw4vURX
-         tgoCvlVbtnp7BYXhiqgGFVqE7TcmuqiQ6SZqzDwyvgUAb+alPnKxZrGK/x50chrimo
-         pH67AEptS+Ku9QSetT2pM6ynOhjPxZWbI6UXJo9/+ypiM7jcxsnsLwGL/XI1zR35jn
-         Pfk3rZC2w6QVnzmicuojaHfU4AZq9fCYQLRo2VrutsctsE82FS8JjKBSWT33lkESda
-         SREPYLkesLoRvWxhH7oeQWAHjWw3VDbLnoh13DDCb1gYoLipDGuYA2mCJeOoL4M/I4
-         xMCKC3tLlk/cg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F23A35C0543; Tue, 17 Jan 2023 11:37:34 -0800 (PST)
-Date:   Tue, 17 Jan 2023 11:37:34 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu@vger.kernel.org, fweisbec@gmail.com, urezki@gmail.com
-Subject: Re: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and
- suspend
-Message-ID: <20230117193734.GO2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230112005223.2329802-1-joel@joelfernandes.org>
- <20230115162504.08ef72b0@rorschach.local.home>
- <CAEXW_YSNurO-hK+q2amP6wa96jr0KkZ_ggF+5x_sTHESC9vpNw@mail.gmail.com>
- <20230117143224.6fbf7da8@gandalf.local.home>
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA50DB81331;
+        Tue, 17 Jan 2023 19:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E837C433D2;
+        Tue, 17 Jan 2023 19:40:01 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 14:40:00 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Israel Rukshin <israelr@nvidia.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Keith Busch <kbusch@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: Re: [PATCH rdma-next 06/13] RDMA/core: Introduce MR type for crypto
+ operations
+Message-ID: <20230117144000.6efc56b2@gandalf.local.home>
+In-Reply-To: <5b8fadc00c0fcc0c0ba3a5dcc9e7b9012c6b5859.1673873422.git.leon@kernel.org>
+References: <cover.1673873422.git.leon@kernel.org>
+        <5b8fadc00c0fcc0c0ba3a5dcc9e7b9012c6b5859.1673873422.git.leon@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117143224.6fbf7da8@gandalf.local.home>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 02:32:24PM -0500, Steven Rostedt wrote:
-> On Sun, 15 Jan 2023 16:34:58 -0500
-> Joel Fernandes <joel@joelfernandes.org> wrote:
-> 
-> > > > +EXPORT_SYMBOL_GPL(rcu_async_hurry);
-> > > >  
-> > >
-> > > Where do you plan on calling these externally, as they are being
-> > > marked exported?
-> > >
-> > > If you allow random drivers to enable this, I can see something
-> > > enabling it and hitting an error path that causes it to never disable
-> > > it.  
-> > 
-> > You mean, just like rcu_expedite_gp() ?
-> > 
-> > > I wouldn't have EXPORT_SYMBOL_GPL() unless you really know that it is
-> > > needed externally.  
-> > 
-> > At the moment it is not called externally but in the future, it could
-> > be from rcutorture. If you see rcu_expedite_gp(), that is exported
-> > too. I was just modeling it around that API.
-> 
-> The reason for the export should have been mentioned in the change log if
-> the patch is not obvious to why it is being exported.
+On Mon, 16 Jan 2023 15:05:53 +0200
+Leon Romanovsky <leon@kernel.org> wrote:
 
-Would something like this suffice?  With attribution, of course.
+> index 17642aa54437..b6a3d82b89ca 100644
+> --- a/include/trace/events/rdma_core.h
+> +++ b/include/trace/events/rdma_core.h
+> @@ -371,6 +371,39 @@ TRACE_EVENT(mr_integ_alloc,
+>  		__entry->max_num_meta_sg, __entry->rc)
+>  );
+>  
+> +TRACE_EVENT(mr_crypto_alloc,
+> +	TP_PROTO(
+> +		const struct ib_pd *pd,
+> +		u32 max_num_sg,
+> +		const struct ib_mr *mr
+> +	),
+> +
+> +	TP_ARGS(pd, max_num_sg, mr),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(u32, pd_id)
+> +		__field(u32, mr_id)
+> +		__field(u32, max_num_sg)
+> +		__field(int, rc)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->pd_id = pd->res.id;
+> +		if (IS_ERR(mr)) {
+> +			__entry->mr_id = 0;
+> +			__entry->rc = PTR_ERR(mr);
+> +		} else {
+> +			__entry->mr_id = mr->res.id;
+> +			__entry->rc = 0;
+> +		}
+> +		__entry->max_num_sg = max_num_sg;
+> +	),
+> +
+> +	TP_printk("pd.id=%u mr.id=%u max_num_sg=%u rc=%d",
+> +		__entry->pd_id, __entry->mr_id, __entry->max_num_sg,
+> +		__entry->rc)
+> +);
+> +
 
-	Export rcu_async_should_hurry(), rcu_async_hurry(), and
-	rcu_async_relax() for later use by rcutorture.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-							Thanx, Paul
+-- Steve
+
+>  TRACE_EVENT(mr_dereg,
+>  	TP_PROTO(
+>  		const struct ib_mr *mr
+
