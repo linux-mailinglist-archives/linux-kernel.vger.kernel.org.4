@@ -2,113 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EDB66D947
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E567D66D94A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236433AbjAQJGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S236403AbjAQJGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbjAQJFr (ORCPT
+        with ESMTP id S236322AbjAQJGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:05:47 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C4030B22;
-        Tue, 17 Jan 2023 01:01:15 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso8509776pjb.0;
-        Tue, 17 Jan 2023 01:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sysl900IrcFFi2TfHQ/z8o1gLJYPUzPi/XTOajMFP5s=;
-        b=VC+BeuxFB4UP6hq2dtPPySdo9s8b6MfVvuTe5T66eeoWQAufPzSPGav4Id7ILnxRPv
-         KfEYJc4mitHJzbPGt0CXLI9/JEIezgzttg2eLQ7jG5ELjlpgtbNwStOnbfWr7RDceuXy
-         KbabKKGa3xdFgEuMdZuW3JBzxp1SHBVzqB1AbAql2/EICTcUeOP4IRJlO75D7KPYI+qU
-         ByPqJMJ3G3geATRvnSsWmkq1/YE1J8TP2SFAJFzHS3xXy9fFOAqu77cUqo95euaFn3Ic
-         c5SSwCVgC6i13tGolq9OmT5wUzngBVjxKOrfUzjwRsXwjarf+bdSQGdPwVIKI5lX8z1E
-         NnBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sysl900IrcFFi2TfHQ/z8o1gLJYPUzPi/XTOajMFP5s=;
-        b=fldfT2T1vPPUfML+MYFE6ljsiUVZ8rzUaqvVAiBi23rcASu4qy5tmEwbikk/cGP3A8
-         NT284R2ZfM/jskjugnLYVp+wlQGOM+AC/fMHpb0mk1pF3V9sM1VJmTP8TRLsXTO7vogT
-         WGPGlV5NaaM9kRlWH1SLzNHEG03cY0MJnnQ1jDgjHJ64TivNMjiXu+/n5p01sv3SM5Fn
-         HQJcSsDqLi8q9iXrPc3KwRNlp+37usbv5r+mueqJrfuTr8OT85zl0EfsVffDHHz+2lLt
-         66u4Kag1z9EPnnIPSH2LP9ierRYE6UyMnnZGNzM1FbI70hxuvdH4T+7HgN5LI4LQJ5HU
-         6Zfg==
-X-Gm-Message-State: AFqh2kp7fp1zcBe1gl4TEY1Qhp2KbYF4AoOnBz8UsYoV3amz5idmb/6Z
-        Zs9NzGBaLZi9dJ+HxugVsn8=
-X-Google-Smtp-Source: AMrXdXvD7Q9KHQmbhNc92/yKRfnw3jtsMfMoYpOwomWGEtMqWH2p/kSispHYpfqkki+y6DioDEMuSQ==
-X-Received: by 2002:a17:902:f70e:b0:194:6c1b:60b9 with SMTP id h14-20020a170902f70e00b001946c1b60b9mr3143394plo.25.1673946074705;
-        Tue, 17 Jan 2023 01:01:14 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-28.three.co.id. [180.214.233.28])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b001925ec4664esm20616309plh.172.2023.01.17.01.01.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 01:01:13 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id B3210104432; Tue, 17 Jan 2023 16:01:10 +0700 (WIB)
-Date:   Tue, 17 Jan 2023 16:01:10 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
-Message-ID: <Y8Zj1kVH1ZsTT9VE@debian.me>
-References: <20230116154803.321528435@linuxfoundation.org>
+        Tue, 17 Jan 2023 04:06:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC7931E0E;
+        Tue, 17 Jan 2023 01:01:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03ECF61217;
+        Tue, 17 Jan 2023 09:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF6EC433D2;
+        Tue, 17 Jan 2023 09:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673946087;
+        bh=RCqS3nTyPkoxO7ZgcJfu9N4L+LZ0ONOPuzr2k9qjISQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FkCrXu2S+1A1LDVxNCS5+xHeZHRBD/hPas8S+cZAzq87aik5vDzUHfek1aExKUYG2
+         4cLnizoYvBZ8UTvrXhFvvY/Y3JSN7RDbqG3DyliHUkuPY3zEc33NQ72yJdebftB6/W
+         +PimfIQl4s4r+wrNwe5PSlopBk0HnsO2U5eHyfVVjMUgqo1GOvWXe3FZUsW5kz4X+5
+         73jXdNBRMEgbvl+D3zgKGrNDPp0+DwSkS5ERfasgJdDoYeEUzw+Xy+GIc9K5voPO6C
+         JBIX9YLHsm06Il8v+RbUAIVMAxKqsbWU/HRce4Jm0oYCKyLmgB5m7a4gk9sEnG67ev
+         Y94cCcL30viaw==
+Date:   Tue, 17 Jan 2023 14:31:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jayesh Choudhary <j-choudhary@ti.com>
+Cc:     peter.ujfalusi@gmail.com, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dmaengine: ti: k3-udma: remove non-fatal probe
+ deferral log
+Message-ID: <Y8Zj41+ljmIq3duz@matsya>
+References: <20230117051855.29644-1-j-choudhary@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AB3Wrsy8pv5BIByR"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116154803.321528435@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230117051855.29644-1-j-choudhary@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17-01-23, 10:48, Jayesh Choudhary wrote:
+> Drop the non-fatal probe deferral log for getting MSI domain.
+> This makes the kernel log clean and we do not get recurring logs
+> stating: "Failed to get MSI domain".
 
---AB3Wrsy8pv5BIByR
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks
 
-On Mon, Jan 16, 2023 at 04:48:43PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 183 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-=20
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---AB3Wrsy8pv5BIByR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8Zj0QAKCRD2uYlJVVFO
-o44ZAP4wptgSFff335a9du3tsByRgSiFcdRi9hNkV8FnjsdHmAD/SnmDT8narLfp
-8BlLd7gsVD1+dEtnuqhlLW8gR3D74gc=
-=pgAb
------END PGP SIGNATURE-----
-
---AB3Wrsy8pv5BIByR--
+-- 
+~Vinod
