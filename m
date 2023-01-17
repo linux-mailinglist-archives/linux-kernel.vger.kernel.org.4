@@ -2,45 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D069166E6F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB5866E6F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbjAQT1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S233914AbjAQT2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbjAQTS4 (ORCPT
+        with ESMTP id S234607AbjAQTUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:18:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA65329E1E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:31:17 -0800 (PST)
+        Tue, 17 Jan 2023 14:20:05 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EBA39CCD
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:31:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=qIZV5K+/xr1UoFFR6Rbeq72ce6bK5Ezfx6CLbuorILw=; b=acdEQGlGDVaYZ9+w6V4F2qm1c9
-        MZMCk+p+IbQLerrd14XN5KIcqCPj5YqLffiGtXcGSCuc096GXcYJsf4566cDtDKLhsx0NiPBv0WAf
-        Db+aBmF7j2iWzb7VC/G2uBD5bqFi/64phkbP/8yjObKBwqwOXbVD/e+Q9yXYQOmTW7bS9Q5VS8POl
-        zLRsQwNLXhxnZ7sPKgsqow++F3M565TVYFWwKWmXwzeluAqJjBdAdrNSFSSvr9MpU1klyKQr3LKcK
-        oieHC4P9I+hLDpRw+pPkHikkHu1vya61A42MfewEpbFwL4C5/aTlXLLKQV0YUjd6rVUctCYxoCNtC
-        vbTiDngw==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHqjs-00FS6D-Fr; Tue, 17 Jan 2023 18:31:16 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Andrei Stefanescu <andrei.stefanescu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] regulator: mcp16502: add enum MCP16502_REG_HPM description
-Date:   Tue, 17 Jan 2023 10:31:15 -0800
-Message-Id: <20230117183115.1910-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XOWH/rrh6ZwUR3NtNFpStWrY3413qwbEpZPbUHzeOYU=; b=QXObLVc6E0Sba1GiETNKrU3kk+
+        I6MRfDXh8mveD0UkUd8NieH6TBBtZ+5GWD8Tb5ibXVdOBvyfQwexuVUXNiCyqQ+EXdshpDpdOnlRy
+        BT/SBALT3FJS/9VCB1Vm4wXkgad0ZsW0UrCK1Zl/CMOO4NbrIAP5+9+wbx9LLXAbEMQ7BmHe69vcx
+        uwtaBUAJhTt+T1p5LxM981DhepdlM1P8aARLPRwoBarBJQsF2HdGPerkv36JmOmsIkCNlBp9IN/su
+        d2xwurYrKCnWElYrYo/sw9IDiVU86SMHaoBIq4yKK9RzGQxZlXEhrQyEGSnpi+E4/TzMVeQv06Cvn
+        9ke8lCMw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHqk3-009uWh-Sc; Tue, 17 Jan 2023 18:31:27 +0000
+Date:   Tue, 17 Jan 2023 18:31:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Jann Horn <jannh@google.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+Message-ID: <Y8bpfzYvWq/3ttr+@casper.infradead.org>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-42-surenb@google.com>
+ <CAG48ez3ZNt+B3XvAMP1OaeEYuwpXJ1epmT9YtNonFLEJ6yANVQ@mail.gmail.com>
+ <CAJuCfpFruHecz9NssGGFrG-RqbJFHCfRuZ7c6GbTBD4x4AU8aA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpFruHecz9NssGGFrG-RqbJFHCfRuZ7c6GbTBD4x4AU8aA@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -50,30 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add description for MCP16502_REG_HPM to prevent a kernel-doc warning:
+On Tue, Jan 17, 2023 at 10:26:32AM -0800, Suren Baghdasaryan wrote:
+> On Tue, Jan 17, 2023 at 10:12 AM Jann Horn <jannh@google.com> wrote:
+> >
+> > On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > rw_semaphore is a sizable structure of 40 bytes and consumes
+> > > considerable space for each vm_area_struct. However vma_lock has
+> > > two important specifics which can be used to replace rw_semaphore
+> > > with a simpler structure:
+> > [...]
+> > >  static inline void vma_read_unlock(struct vm_area_struct *vma)
+> > >  {
+> > > -       up_read(&vma->vm_lock->lock);
+> > > +       if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > +               wake_up(&vma->vm_mm->vma_writer_wait);
+> > >  }
+> >
+> > I haven't properly reviewed this, but this bit looks like a
+> > use-after-free because you're accessing the vma after dropping your
+> > reference on it. You'd have to first look up the vma->vm_mm, then do
+> > the atomic_dec_and_test(), and afterwards do the wake_up() without
+> > touching the vma. Or alternatively wrap the whole thing in an RCU
+> > read-side critical section if the VMA is freed with RCU delay.
+> 
+> vm_lock->count does not control the lifetime of the VMA, it's a
+> counter of how many readers took the lock or it's negative if the lock
+> is write-locked.
 
-drivers/regulator/mcp16502.c:90: warning: Enum value 'MCP16502_REG_HPM' not described in enum 'mcp16502_reg'
+Yes, but ...
+	
+	Task A:
+	atomic_dec_and_test(&vma->vm_lock->count)
+			Task B:
+			munmap()
+			write lock
+			free VMA
+			synchronize_rcu()
+			VMA is really freed
+        wake_up(&vma->vm_mm->vma_writer_wait);
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Andrei Stefanescu <andrei.stefanescu@microchip.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
-v2: remove Fixes: tag, add Rev-by.
+... vma is freed.
 
- drivers/regulator/mcp16502.c |    1 +
- 1 file changed, 1 insertion(+)
+Now, I think this doesn't occur.  I'm pretty sure that every caller of
+vma_read_unlock() is holding the RCU read lock.  But maybe we should
+have that assertion?
 
-diff -- a/drivers/regulator/mcp16502.c b/drivers/regulator/mcp16502.c
---- a/drivers/regulator/mcp16502.c
-+++ b/drivers/regulator/mcp16502.c
-@@ -77,6 +77,7 @@
-  * @MCP16502_REG_A: active state register
-  * @MCP16502_REG_LPM: low power mode state register
-  * @MCP16502_REG_HIB: hibernate state register
-+ * @MCP16502_REG_HPM: high-performance mode register
-  * @MCP16502_REG_SEQ: startup sequence register
-  * @MCP16502_REG_CFG: configuration register
-  */
