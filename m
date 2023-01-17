@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4EA66E4BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E812066E4BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjAQRUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S235233AbjAQRUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbjAQRTt (ORCPT
+        with ESMTP id S235173AbjAQRT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:19:49 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E964B1B7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:07 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso189279pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:07 -0800 (PST)
+        Tue, 17 Jan 2023 12:19:56 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A4C4B767
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:11 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id x26so3318697qkj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:19:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4+uVVLZLx9S3b5j+KW2LdAGdGkzXPxcqIXMG9Qphu4=;
-        b=Zmn3vSdzFkudY+uxAJeib6OqefKZoI53M+UVhVxk2WqR2FoAQbJhzqbFjoyLB3qXB9
-         lHMKsdUruoW6hzOcRIWmshuAOb9h8Y/4UBcZi1pttXgzlfscvTA9tjaah3KbnJGxxBLJ
-         /3QDrtBjDmHfkOVpCl977w9bfXT5XyLiEzbDZ+kWPBRK6u1r9MNoJDdnMj7oT3XfBFtu
-         dAdo+4aGgprK/zoYlyKrdcETQJ8ra6JbFEkwq7ciUPFGyAlZz6/v1YCzxsrjFeXPedhJ
-         /6Dvo50B3sKEMIz7aE9c049Ta9U81C+hcjVUYchXseAfDiIxshTY43AbOe19k47/xzyT
-         QDPw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=06UlRa9qoCSN0KxTaeOEMXbLBq36exmUoY5DZI2ecZ0=;
+        b=pPnAHaRiZz2oMe5Yon/YcD/l34YoYVe7lYC8X8CeMN1X+Vj7PUIUAlkFbVEQ4R2qbH
+         Eow/19XdM9p/GmXXF16h4Qzcs+mP7YVR5obqZY0BGUw4oo+W+BQeJ34YIPekQIcAChy6
+         BROSiSElXgqj8yAkhpQVM6cntfhTlpJGIqr3jo+6MmV3zVT1n7lvzZR8J1lJnuxDEHjc
+         FMKtBYDoXlpSEbTHPHHPwYXTw8k7fvGyqct78MOw/VJT1n/ht8WfX4o9iRq8MbJLROyj
+         R8hfjO5tyKUaoUR37ZhoVjhamEsvv8/AfT9HRvGfp+bF4HoJlXIISWgUgYinKY/CQG9k
+         ZfPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M4+uVVLZLx9S3b5j+KW2LdAGdGkzXPxcqIXMG9Qphu4=;
-        b=V6v3bj0lIJ7hJa8L6o6p4ArSm5NfHMR8l5KlTT1f3X+1oHaQcf5u1K99NVaextO8tH
-         nj4cZBSQTu5Zj7oMYN+IVxDlzfUdQRVK4LAHs1SbQD2CkvCSpB4TFOiY4Saf3zuGBDw+
-         ATAM0LVCLlMzzM3kHw3v/04IvUQDPboAWhK7qdPiB669n2p5+zjNskaadjTJOC6rOX9y
-         kx8J7jZ/ekWoB4E2eWS8yMcCE+NQErQ2kObGjCX/ZRcwnZZoR9hGeR5mbgLCWDqDoTSY
-         +LUJu3GnClFp/a+vd9Wiio/02mzc3kDiypvAn+VLj+7aBHEVRBWRiV0dYPYUSKLuQ9gk
-         qVLw==
-X-Gm-Message-State: AFqh2krectvA6gusWbrHVJBOb6pwNJVVIpFN/HKyO+w9Xbf90xq+PwCW
-        Bnpjp8HFMtmlVQwQcdjPKicNGw==
-X-Google-Smtp-Source: AMrXdXuNA5Xq8t9IxmI5BkWk1YUjI2YY7hE8dkqUdf57/E+MmKpR4ttvP/Oqs+rhiKGbfUTmqtB5lQ==
-X-Received: by 2002:a05:6a20:93a4:b0:b8:e33c:f160 with SMTP id x36-20020a056a2093a400b000b8e33cf160mr89085pzh.0.1673975947148;
-        Tue, 17 Jan 2023 09:19:07 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b001943d58268csm15120181plb.55.2023.01.17.09.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:19:06 -0800 (PST)
-Date:   Tue, 17 Jan 2023 17:19:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com
-Subject: Re: [PATCH RFC v7 07/64] KVM: SEV: Handle KVM_HC_MAP_GPA_RANGE
- hypercall
-Message-ID: <Y8bYhpITRA+RZzWK@google.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-8-michael.roth@amd.com>
- <Y8GAGB73ZKElDYPI@zn.tnic>
- <Y8GEGnmD90bySl8C@google.com>
- <460524f8-e52b-e195-3bd2-27e41f367f5d@amd.com>
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=06UlRa9qoCSN0KxTaeOEMXbLBq36exmUoY5DZI2ecZ0=;
+        b=z06sSwq05L/oc7ilTM9AIYOyrY6z2vbUvDHW5Xc81H0zPWek3DCVLzV0xsptqqcfo1
+         Qm1KneSdzhOTKN7lVwSH3OFxyUXkXvdoRXpWe6wrz7j7g7sM/lg/hc8JkfWo+WL/Yyti
+         j2u+l8qVcjmRekHQiSeUJJwfE/0CbjIDJdNADuZAyqUGFY8kDk75HuaCXU4FUam2iVQf
+         sIhXW/IjltAT1KzE7IXyk7b5fTTyuY7V5dPaY31+Qq5NzJeatJG1GfHsxReLwk8pItQ8
+         eud7olYToRUV5c+qz2ktD7UnUhp9Aelh+C50qVM8kh/Gy/ozIf76W4wFfToF6BmLO2Wz
+         GQPQ==
+X-Gm-Message-State: AFqh2koAeuxfT7TC20qf7pS3ifKAvjBxuVOyKNaQ/NWWpsBKTXRc1re6
+        WmvmpysfXOWc2lJCKDtK0Ju2BIOghrKP2Gt8W5k=
+X-Google-Smtp-Source: AMrXdXtka5YaMVLNI+mzHwlBB3TJF0Ykj9QFK6P0G2icoLGL2NRSxu+br/z0FrhZampkgecCjVUIG6WkPXwfNqHgqHE=
+X-Received: by 2002:a05:620a:66d:b0:706:17d4:aac1 with SMTP id
+ a13-20020a05620a066d00b0070617d4aac1mr215240qkh.13.1673975950642; Tue, 17 Jan
+ 2023 09:19:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <460524f8-e52b-e195-3bd2-27e41f367f5d@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Sender: belloabubakar20002@gmail.com
+Received: by 2002:ac8:4e56:0:0:0:0:0 with HTTP; Tue, 17 Jan 2023 09:19:10
+ -0800 (PST)
+From:   Bello Abubakar <belloabubaka94@gmail.com>
+Date:   Tue, 17 Jan 2023 09:19:10 -0800
+X-Google-Sender-Auth: J9JzNJ-lAQnAZPXEKR_MTjY2xOg
+Message-ID: <CAM5VdHHj3jP1Zpo-L7DmzL9itdWsDaAXqSOZ5ekKXF0YFCR5dQ@mail.gmail.com>
+Subject: URGENT REPLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,
+        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:732 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5468]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [belloabubakar20002[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [belloabubaka94[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023, Nikunj A. Dadhania wrote:
-> On 13/01/23 21:47, Sean Christopherson wrote:
-> > It's perfectly legal for userspace to create the private memslot in response
-> > to a guest request.
-> 
-> Sean, did not understand this part, how could a memslot be created on a guest request?
+Hello
+I am a relative of a politically exposed person (PEP) that is in
+financial regulation. Due to my present health condition, I'd decided
+to write through this email for the security reason.
 
-KVM_HC_MAP_GPA_RANGE gets routed to host userspace, at that point userspace can
-take any action it wants to satisfy the guest request.  E.g. a userspace+guest
-setup could define memory as shared by default, and only create KVM_MEM_PRIVATE
-memslots for memory that the guest explicitly requests to be mapped private.
+Therefore, kindly treat this as top secret for the security reason.
+I'd after fasting and prayer choose to write not you particularly but
+I believing in probability of you being a confidant chosen by chance;
+luck to help and share in this noble cause.
 
-I don't anticipate any real world use cases actually doing something like that,
-but I also don't see any value in going out of our way to disallow it.  Normally
-I like to be conservative when it comes to KVM's uAPI, e.g. allow the minimum
-needed to support known use cases, but restricting KVM_HC_MAP_GPA_RANGE doesn't
-actually achieve anything and just makes things more complex for KVM.  E.g. the
-behavior is non-deterministic from KVM's perspective if a userspace memslots update
-is in-progress.
+I need your assistant to conduct secret transfers of family's funds
+worth =E2=82=AC90.5 millions Euros. It was deposited in bank clandestinely.
+
+I am in grave condition and I expect my death any moment now and I
+want to donate the fund to less privilege and you will be rewarded
+with reasonable percentage of the fund if you can assist.
+
+Please contact me back for more details,
+
+Yours truly,
+Bello Abubakar
