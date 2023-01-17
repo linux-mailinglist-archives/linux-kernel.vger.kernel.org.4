@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B79E670B3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BE3670B21
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjAQWHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S229941AbjAQWEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjAQWF6 (ORCPT
+        with ESMTP id S229727AbjAQWD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:05:58 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7533D5C0D9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:28:43 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id p66so15472222iof.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:28:43 -0800 (PST)
+        Tue, 17 Jan 2023 17:03:59 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DBF9EFC;
+        Tue, 17 Jan 2023 12:30:48 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so123531wmq.1;
+        Tue, 17 Jan 2023 12:30:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6lBLtQcwXXW0D4MwnkLaJbFSlKXy17eV5mc4KZgrNg=;
-        b=aJ1tuCqCEyVYlKQ3YOYO3zSRB48viA6UM19LIAhgZpv4eGDtYMK/hPPo5lfXgu+gTS
-         M+n1QCd/7KOhkd/YvSx5PKyIGahYeRaRSV3luKpLj+YUzBh1z1C4rdBug3i5gt6VJHD1
-         39PJ1/Yodm39kmb9guNck1iq5XvL2xrPhssLwKDLzrKFQnQ1xeFi+kC4I4GZpNT/eBpb
-         abGCyD4BAVT7vVVXEJdAV9lOIkQSg8qUbJc6A1EUb6vTmPXnnOMDcovrH9fQo2UpnH0l
-         cKSBU2d7t0U9wiJWBcBPmqXGrs0e92f8O5N9QZo7wxujcaSt0nmgoUC4wJTaq7OBQpsv
-         F8Zg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4AjmrbeLkRHl9VUwyGR8qAetWemt0qiCWTiRfwIoY0g=;
+        b=ZxnZSWWVNS/IJBg+zqox+aaOnKaQzvheMFTpK3NxkVq1D7qs/gid+4UuTjbjJkuISr
+         YadZM7pbfXUf9hO6QpoJLxdffPnAWQvFwtchHyBL8u9WSAYCIrYsMORVgFDhGd1EN+Fu
+         /Dxj+67F6R5QJRmgZGoHIu7zClWs1Po/d+umcyY4D/adaE58onfTcEeTTA9ScHeidcJv
+         U30yanjpmEmREdRtopDWn0gBdaHqXLTzSnZCJagJ8qFrGnxE8MyktQBJe0PWKkVoCp4i
+         1a1oU+/9JRiE8KEtf48u5p0vXzgKRDopBSC8Om/whagLagFM9zeX8t9T1w2aqTkh5kjm
+         W0AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w6lBLtQcwXXW0D4MwnkLaJbFSlKXy17eV5mc4KZgrNg=;
-        b=F2l4XF+5F1Cp+61/C980b6L5MAv6aNCxUf26zMzwUMeSaU9siHQw6y0ecqat3F6DLW
-         hPsV5yIf4UACLF20DPsedAEVPti4AUo35gyJLx4DublPmttJnqcZJDsuQx1CEuyduewD
-         IdDpg6tjrdrorO1tMRvX4H7OorO1Hvn8NVPXOdwevu2UhuArrwq/bzf8VfiENFqQnFaQ
-         unkT59K0jpYlLLCCv6FraSNVCYHrA2o+f0nkwHcpFfB/8mX8oyPldR0ln7SghJWQ1Ly0
-         skgSn8IJv4MVb2Bvw4MfH9SKULNgQCM1pfSNKBjA6jM7+CbAIrttVfwRyYYGLeOOTgEL
-         hdZQ==
-X-Gm-Message-State: AFqh2kowV5Jlxv5MD2Nuv/gW2e/IE7byFXwLTiSjqpb2h9dm1TiXMaDH
-        7+GXdyXE4Qa3zCxlfpYC2wTpGAEOXU7Bqts5SYIDZw==
-X-Google-Smtp-Source: AMrXdXsdfz3ZSkVOQq7xodxuPXlHOjr2OrBoiOuZE3Eq2JZpQR9esxUP0A6G43/Zbr959H9oSQiEOLhkS8jLPG4mH0c=
-X-Received: by 2002:a02:c884:0:b0:39e:9d33:a47 with SMTP id
- m4-20020a02c884000000b0039e9d330a47mr309615jao.58.1673987322674; Tue, 17 Jan
- 2023 12:28:42 -0800 (PST)
+        bh=4AjmrbeLkRHl9VUwyGR8qAetWemt0qiCWTiRfwIoY0g=;
+        b=HirObTaOijy0tTEWr6KNZi2CxIRb8HiQXzuf8GiYXiYGs0kZlx3mjNKA/OhHax/Dvn
+         CFMx4eJaPvJT0y81WfKvDd1MBzG9QU3NVa8IMmBOF2RrIWpj+vyvHW29nO8dSGKIYKZH
+         BFANtqmVcD+x68NBNZGbWiBIiOB0BR10kDEsU18PqTeXj7ZCi5SF8fIYXQvlIncSw3v3
+         RZPtk2vX92tzC1re67O68lnsR1PcUHm1I76T86tQ9mUs9H84CuHB1vMDHXjayiugr8sL
+         qWXH9w7SmnE5uEX7GfsFJUi5G8SAuf3MYfeFaS0VnkLpddOv4Uy6UtK2kWlD5bmedM26
+         KTZQ==
+X-Gm-Message-State: AFqh2kqNCo1gyJh7nqC3gLnTBUmgqljRY5jNoOYlh4jq1kGy/IzxEI3+
+        Xd+58WW/UsBSkFOrpAu1l1BtTUYreYQxqQ==
+X-Google-Smtp-Source: AMrXdXsKCMb84vJQUWrxopvyY4qcAg1MqmN6wlig5WbPiP0IRwM6Ca8t6rATsygAPvHe81GmrBcDBQ==
+X-Received: by 2002:a05:600c:6001:b0:3da:f80a:5e85 with SMTP id az1-20020a05600c600100b003daf80a5e85mr4257919wmb.26.1673987446789;
+        Tue, 17 Jan 2023 12:30:46 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c1d0e00b003da105437besm21934507wms.29.2023.01.17.12.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 12:30:46 -0800 (PST)
+Date:   Tue, 17 Jan 2023 23:30:38 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Pierluigi Passaro <pierluigi.passaro@gmail.com>,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, eran.m@variscite.com,
+        nate.d@variscite.com, francesco.f@variscite.com,
+        pierluigi.p@variscite.com
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Message-ID: <202301180330.5rmOhXOw-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-19-surenb@google.com>
- <Y8a9+ywh65fmuKvv@dhcp22.suse.cz>
-In-Reply-To: <Y8a9+ywh65fmuKvv@dhcp22.suse.cz>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Jan 2023 21:28:06 +0100
-Message-ID: <CAG48ez2Adwqs8Vvm3YUKwpx8qzV1wWtnUdWVo1UphjzADjMZQQ@mail.gmail.com>
-Subject: Re: [PATCH 18/41] mm/khugepaged: write-lock VMA while collapsing a
- huge page
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
-        posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230115161006.16431-1-pierluigi.p@variscite.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,45 +76,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 4:25 PM Michal Hocko <mhocko@suse.com> wrote:
-> On Mon 09-01-23 12:53:13, Suren Baghdasaryan wrote:
-> > Protect VMA from concurrent page fault handler while collapsing a huge
-> > page. Page fault handler needs a stable PMD to use PTL and relies on
-> > per-VMA lock to prevent concurrent PMD changes. pmdp_collapse_flush(),
-> > set_huge_pmd() and collapse_and_free_pmd() can modify a PMD, which will
-> > not be detected by a page fault handler without proper locking.
->
-> I am struggling with this changelog. Maybe because my recollection of
-> the THP collapsing subtleties is weak. But aren't you just trying to say
-> that the current #PF handling and THP collapsing need to be mutually
-> exclusive currently so in order to keep that assumption you have mark
-> the vma write locked?
->
-> Also it is not really clear to me how that handles other vmas which can
-> share the same thp?
+Hi Pierluigi,
 
-It's not about the hugepage itself, it's about how the THP collapse
-operation frees page tables.
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Before this series, page tables can be walked under any one of the
-mmap lock, the mapping lock, and the anon_vma lock; so when khugepaged
-unlinks and frees page tables, it must ensure that all of those either
-are locked or don't exist. This series adds a fourth lock under which
-page tables can be traversed, and so khugepaged must also lock out that one.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pierluigi-Passaro/net-mdio-force-deassert-MDIO-reset-signal/20230116-001044
+patch link:    https://lore.kernel.org/r/20230115161006.16431-1-pierluigi.p%40variscite.com
+patch subject: [PATCH] net: mdio: force deassert MDIO reset signal
+config: xtensa-randconfig-m041-20230116
+compiler: xtensa-linux-gcc (GCC) 12.1.0
 
-There is a codepath in khugepaged that iterates through all mappings
-of a file to zap page tables (retract_page_tables()), which locks each
-visited mm with mmap_write_trylock() and now also does
-vma_write_lock().
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
+smatch warnings:
+drivers/net/mdio/fwnode_mdio.c:144 fwnode_mdiobus_register_phy() warn: missing unwind goto?
 
-I think one aspect of this patch that might cause trouble later on, if
-support for non-anonymous VMAs is added, is that retract_page_tables()
-now does vma_write_lock() while holding the mapping lock; the page
-fault handling path would probably take the locks the other way
-around, leading to a deadlock? So the vma_write_lock() in
-retract_page_tables() might have to become a trylock later on.
+vim +144 drivers/net/mdio/fwnode_mdio.c
 
-Related: Please add the new VMA lock to the big lock ordering comments
-at the top of mm/rmap.c. (And maybe later mm/filemap.c, if/when you
-add file VMA support.)
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  114  int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  115  				struct fwnode_handle *child, u32 addr)
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  116  {
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  117  	struct mii_timestamper *mii_ts = NULL;
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  118  	struct pse_control *psec = NULL;
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  119  	struct phy_device *phy;
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  120  	bool is_c45 = false;
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  121  	u32 phy_id;
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  122  	int rc;
+3f08f04af6947d Pierluigi Passaro 2023-01-15  123  	int reset_deassert_delay = 0;
+3f08f04af6947d Pierluigi Passaro 2023-01-15  124  	struct gpio_desc *reset_gpio;
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  125  
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  126  	psec = fwnode_find_pse_control(child);
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  127  	if (IS_ERR(psec))
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  128  		return PTR_ERR(psec);
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  129  
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  130  	mii_ts = fwnode_find_mii_timestamper(child);
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  131  	if (IS_ERR(mii_ts)) {
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  132  		rc = PTR_ERR(mii_ts);
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  133  		goto clean_pse;
+                                                                ^^^^^^^^^^^^^^^
+
+5e82147de1cbd7 Oleksij Rempel    2022-10-03  134  	}
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  135  
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  136  	rc = fwnode_property_match_string(child, "compatible",
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  137  					  "ethernet-phy-ieee802.3-c45");
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  138  	if (rc >= 0)
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  139  		is_c45 = true;
+bc1bee3b87ee48 Calvin Johnson    2021-06-11  140  
+3f08f04af6947d Pierluigi Passaro 2023-01-15  141  	reset_gpio = fwnode_gpiod_get_index(child, "reset", 0, GPIOD_OUT_LOW, "PHY reset");
+3f08f04af6947d Pierluigi Passaro 2023-01-15  142  	if (reset_gpio == ERR_PTR(-EPROBE_DEFER)) {
+3f08f04af6947d Pierluigi Passaro 2023-01-15  143  		dev_dbg(&bus->dev, "reset signal for PHY@%u not ready\n", addr);
+3f08f04af6947d Pierluigi Passaro 2023-01-15 @144  		return -EPROBE_DEFER;
+                                                                ^^^^^^^^^^^^^^^^^^^^
+Looks like there needs to be some clean up done before the return.
+(Sometimes the kbuild-bot doesn't include the whole function in these
+emails. I'm not sure what the rules are.).
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
