@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AF166DAB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFFB66DA0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbjAQKQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
+        id S236510AbjAQJe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236584AbjAQKQS (ORCPT
+        with ESMTP id S236607AbjAQJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:16:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E14B468C;
-        Tue, 17 Jan 2023 02:16:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EE6AFCE13D0;
-        Tue, 17 Jan 2023 10:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD55CC433EF;
-        Tue, 17 Jan 2023 10:16:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673950567;
-        bh=dR7qjIIVRbYazvMmMxGCs47GM4Gnhrj2RGb3TbXFphc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kN4e5rFpIUwh/OsYkUvK1DGM20Yt0lDq4YaqzsCaSxja4iHHmNxvVUdgN+15NQ+y+
-         Ibgc3ygNvUynuraztV8+lqksTtGgLbZNzMnL4qYooeP2hgv9HPyaZER97wxt+ak8Sz
-         B5AB6Ay3Qyy+KSY5P1kiWxVKTe4TNDVFR6E32Yrg=
-Date:   Tue, 17 Jan 2023 10:32:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/64] 5.10.164-rc1 review
-Message-ID: <Y8ZrIb3sdTUqbt3t@kroah.com>
-References: <20230116154743.577276578@linuxfoundation.org>
- <CAEUSe786JgSDJOtCU_tB81ddYxJk_sSfgzM33r7iFccsU7O5QA@mail.gmail.com>
+        Tue, 17 Jan 2023 04:33:25 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1887E44A1;
+        Tue, 17 Jan 2023 01:32:50 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H9WYq8129934;
+        Tue, 17 Jan 2023 03:32:34 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673947954;
+        bh=+N4fJ7UvYcL31lhx3PT2sqSpjRoDoDBgG+OHb6Sl8A8=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=KWwUmo2Jk1GdpxiVyOfzxeZCaTvZW3tsdPgyS07xE4e7S3AgBOilGryRVaG7795LK
+         YNXa2W6zIKnxJ77Ea6wSgOeISyMDB1LleVao/jW+z5b+X/pSB4ChKaXE+FNVnbmDve
+         EXoku8dmoIIa+WkhfUc/+92mQRbcdDUBvoy4lFvA=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H9WYQ3104669
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Jan 2023 03:32:34 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
+ Jan 2023 03:32:34 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 17 Jan 2023 03:32:34 -0600
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H9WUju009929;
+        Tue, 17 Jan 2023 03:32:30 -0600
+Message-ID: <d978d797-2e04-89b0-4585-68d28347f469@ti.com>
+Date:   Tue, 17 Jan 2023 15:02:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEUSe786JgSDJOtCU_tB81ddYxJk_sSfgzM33r7iFccsU7O5QA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+CC:     Andrew Davis <afd@ti.com>, Matt Ranostay <mranostay@ti.com>,
+        <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <r-gunasekaran@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH v7 7/8] arm64: dts: ti: k3-j721s2-main: Add PCIe device
+ tree node
+Content-Language: en-US
+To:     Achal Verma <a-verma1@ti.com>
+References: <20221122101616.770050-1-mranostay@ti.com>
+ <20221122101616.770050-8-mranostay@ti.com>
+ <a88349a2-94ac-1980-1998-a45ac5525f6b@ti.com>
+ <20230117092331.GA3277247@desktop-3598>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230117092331.GA3277247@desktop-3598>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 12:58:35PM -0600, Daniel Díaz wrote:
-> Hello!
-> 
-> On Mon, 16 Jan 2023 at 10:06, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.10.164 release.
-> > There are 64 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.164-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> Preliminarily,
-> 
-> | /builds/linux/drivers/gpu/drm/msm/dp/dp_aux.c: In function 'dp_aux_isr':
-> | /builds/linux/drivers/gpu/drm/msm/dp/dp_aux.c:427:14: error: 'isr'
-> undeclared (first use in this function); did you mean 'idr'?
-> |   427 |         if (!isr)
-> |       |              ^~~
-> |       |              idr
-> 
-> It's currently failing for arm, arm64, (not i386) and x86, with GCC 8,
-> 10, 11, 12; Clang 15 and nightly. We'll test the extended set of
-> architectures and update momentarily.
+Hello Achal,
 
-Thanks for the report, now fixed up in my tree, I'll push out a new -rc2
-later today with it.
+On 17/01/23 14:53, Achal Verma wrote:
+>  Tue, Nov 29, 2022 at 11:53:46AM -0600, Andrew Davis wrote:
+>> On 11/22/22 4:16 AM, Matt Ranostay wrote:
+>>> From: Aswath Govindraju <a-govindraju@ti.com>
+>>>
+>>> Add PCIe1 RC device tree node for the single PCIe instance present on
+>>> the j721s2.
+>>>
+>>> Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+>>> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+>>> ---
+>>>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 41 ++++++++++++++++++++++
+>>>   1 file changed, 41 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>>> index 2858ba589d54..27631ef32bf5 100644
+>>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>>> @@ -841,6 +841,47 @@ serdes0: serdes@5060000 {
+>>>   		};
+>>>   	};
+>>> +	pcie1_rc: pcie@2910000 {
+>>
+>> NIT: Not sure we need to call this "_rc", and "1", 0 index these names for
+>> consistency, "pcie0".
+> 
+> Sure, I will name this node as "pcie0_rc" in next patch and "_rc" is because it can be used in endpoint mode too for which "pcie0_ep" node can be added in future.
 
-greg k-h
+The naming is based on the PCIe instance documented in the Technical Reference
+Manual (TRM). For example, consider J7200 SoC which has "pcie1_rc" even though
+it has no "pcie0_rc". This convention is based on the numbering used in the TRM.
+
+Regards,
+Siddharth.
