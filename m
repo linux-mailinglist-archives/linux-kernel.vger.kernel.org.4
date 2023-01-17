@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E727D66E3B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422C966E3BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjAQQgv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 17 Jan 2023 11:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S232504AbjAQQio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbjAQQgS (ORCPT
+        with ESMTP id S232533AbjAQQiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:36:18 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AED53A5A6;
-        Tue, 17 Jan 2023 08:36:04 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id D3B6E2000F;
-        Tue, 17 Jan 2023 16:36:01 +0000 (UTC)
-Message-ID: <3dc9061bd123188ed64401d1504f919162e3dd99.camel@hadess.net>
-Subject: Re: [RFC] USB: core: Add wireless_status sysfs attribute
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 17 Jan 2023 17:36:01 +0100
-In-Reply-To: <Y8bJbM0+XcT6MRq9@kroah.com>
-References: <d9f8b9413c10fcf067658979d16a4f5c7abe69e7.camel@hadess.net>
-         <Y8bJbM0+XcT6MRq9@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 17 Jan 2023 11:38:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5C643937
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:37:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8FCEB81909
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6253C433D2;
+        Tue, 17 Jan 2023 16:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673973469;
+        bh=eW6//3cViUuJfCKFm7UUOh5i0BW9IwBnC51sdT2hYj4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uOEqgQbh+YGTEHnq3WnnzljRLzzHKWAdHf9R8kD9AgfcQvtZcVr8dSl7NgEzcffJR
+         ppjbOgDJARB8Gd6orJYPTBgDVI+30vEM0QLtW/Eh1niGNoMF+JLUc0adNFLC9KeIC/
+         NXbncMuURU5FhjdtfBkcn9t55Qmfw+mUu0ZFFBsRX9Tqjt7D4Du5MWG5bDnJ3M2DaQ
+         PcNP2uFNO/YNsC87NoG1lMG4Au3JeBw0nL3oEpwklhOaE1rdiEhhLAl+QjBH84CHSb
+         sIMC4Cw5gfC3D59JC+OGZ2zUwQyDLjbh0UyZxgX0+6MGG3hKADBz7EKd4H78lBEzwH
+         foY8mSuQ/oToQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/selftest: fix intel_selftest_modify_policy argument types
+Date:   Tue, 17 Jan 2023 17:37:29 +0100
+Message-Id: <20230117163743.1003219-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-17 at 17:14 +0100, Greg Kroah-Hartman wrote:
-> On Tue, Jan 17, 2023 at 04:17:23PM +0100, Bastien Nocera wrote:
-> > Hey,
-> > 
-> > TLDR: new sysfs attribute that makes it possible to leave receivers
-> > for
-> > wireless headsets plugged in. At the USB level, or at the base
-> > driver
-> > level?
-> > 
-> > Longer version:
-> > I started working on implementing support for some wireless
-> > headsets
-> > that use USB receivers to communicate to the headset itself.
-> 
-> Would this also include wireless keyboard/mice recievers?
+From: Arnd Bergmann <arnd@arndb.de>
 
-This could also be used by certain keyboard or mice receivers, if the
-keyboard or mouse is kept constantly connected and there's a way to
-find out whether it's connected or not.
+The definition of intel_selftest_modify_policy() does not match the
+declaration, as gcc-13 points out:
 
-> Why is "wireless" somehow a special attribute that userspace needs to
-> know about?
+drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c:29:5: error: conflicting types for 'intel_selftest_modify_policy' due to enum/integer mismatch; have 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, u32)' {aka 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, unsigned int)'} [-Werror=enum-int-mismatch]
+   29 | int intel_selftest_modify_policy(struct intel_engine_cs *engine,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c:11:
+drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.h:28:5: note: previous declaration of 'intel_selftest_modify_policy' with type 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, enum selftest_scheduler_modify)'
+   28 | int intel_selftest_modify_policy(struct intel_engine_cs *engine,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-"wireless" isn't the attribute user-space would be interested in,
-"wireless status" would be. If the headset's wireless status is
-"disconnected", then the headset is unavailable. Then user-space can
-route the audio accordingly.
+Change the type in the definition to match.
 
-> > The USB receivers have multiple interfaces, and independent drivers
-> > for
-> > each, as is wont to do for USB devices. There's usually a HID
-> > interface
-> > to do the custom stuff (LEDs, battery status, connection status,
-> > etc.)
-> > and a standard audio class interface.
-> 
-> This probably should be an interface attribute (as Alan points out),
-> as
-> it's not a device attribute (think about updating the firmware for
-> one
-> of these, that's on an interface for the reciever you plugged in, not
-> on
-> the other end of the wireless connection...)
+Fixes: 617e87c05c72 ("drm/i915/selftest: Fix hangcheck self test for GuC submission")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-OK, fair enough.
+diff --git a/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c b/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
+index 310fb83c527e..2990dd4d4a0d 100644
+--- a/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
++++ b/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
+@@ -28,8 +28,7 @@ struct intel_engine_cs *intel_selftest_find_any_engine(struct intel_gt *gt)
+ 
+ int intel_selftest_modify_policy(struct intel_engine_cs *engine,
+ 				 struct intel_selftest_saved_policy *saved,
+-				 u32 modify_type)
+-
++				 enum selftest_scheduler_modify modify_type)
+ {
+ 	int err;
+ 
+-- 
+2.39.0
 
-> > Those drivers don't know anything about each other, and getting
-> > them to
-> > talk to each other would be rather complicated. Additionally the
-> > audio
-> > interface is still somewhat functional when the headset is
-> > disconnected.
-> 
-> Those drivers shouldn't know about each other, that's up to userspace
-> to
-> group and control if needed.  No kernel interactions should be
-> needed.
-> 
-> > In the end, I came up with this new sysfs attribute that would make
-> > it
-> > possible for user-space (PulseAudio or Pipewire) to know whether
-> > the
-> > receiver is plugged in or not.
-> 
-> Again, should be an interface attribute, if at all.
-> 
-> > That allows user-space to not show the battery information for the
-> > device (rather than 0 percent), not offer the headset as an output,
-> > and
-> > potentially automatically switch to it when the headset is powered
-> > on.
-> 
-> Same for a keyboard/mouse, right?
-
-Yes, although I haven't found devices where this would be useful.
-
-I'll reimplement this as an interface attribute.
-
-Thanks very much to you and Alan for the quick replies.
-
-Cheers
