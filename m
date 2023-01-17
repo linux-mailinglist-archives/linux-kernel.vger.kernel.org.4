@@ -2,184 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F39366D6CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C3166D6E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235383AbjAQHUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S235708AbjAQH10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbjAQHUP (ORCPT
+        with ESMTP id S235491AbjAQH0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:20:15 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C6823308
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:20:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673940014; x=1705476014;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=55aRiUYG1F+uXWUMziRoUIIjIBYEkYWCtHPFVikJKAg=;
-  b=H9iF1nKqtRDjgUlZ22sN0Uszlc1mA0YuQgHSPZ9KgbIk6XIBAJqGoMxn
-   igRHHhXjbH+YHIuLqa0zXim6h2ObCvQZWg9Ohyr2NYnmwr59KGf/+SEhX
-   QCajQp31WWy7WRBt2168G9emWoKlHRz86a/3nKIRbqj5wtrGN0rcWUpMU
-   TWI4ZnvHGR3AFul4wc02LDYH3evwxyl2K+VP81HZlGyv2uhFetIzp8NIa
-   596FB72HYsaL/6G+vsZvF80TIGPBWEdbEViCx24Iwj5NrlampjLyuBEE4
-   PfHSHDnm0H1Tv2EyratLBtuI1/uO29Z77DjdA5aa/7eaWcqJLwXqLKwTX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="308192079"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="308192079"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 23:20:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="661194248"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="661194248"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jan 2023 23:20:13 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 23:20:13 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 23:20:12 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 23:20:12 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 16 Jan 2023 23:20:12 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FHam6UvgBgcUirPy4dR/kLZI51ivXuUNa50IJVjkLSG1M3f7Mo6997ak/OUt9MnwiECcY3nqVor0x4MhvpQxMC0zBP0JxIuCt0GYKc5YooWDakNoZFPCvfHjoMLqwzEaAtj+lfv+Hf/nPEUmhJ2bazS9CUx2u/muD04usRhypMgPLhHIGbYz+jAl0qQ/EJ+5etxie98bvhT754dJBANUTD8UmSG9gWa1KqQDgPDxgfLoqUAyiWcwXosrGRhLOliINnO5uPY8Qov8ElBL5kgpdNDNaMNVh5UB52yGXVVJbWTICUIAuSQKFOQPB0uIERUkmXkvn7HGe9NjHkIW2qqoLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xTmK+1a6X2ML9rFgCQtnCOq0gcvURxef4xWMVrVZaMU=;
- b=J623nw0fWPf7F8JMINgkmDW15mFuLgQtsxQp+crvINeW83//J2lVpKMbb1tx31SNIQqTCXC8h1LRofsBEC6OMT83rCjxJLH8MaEdkwfKIESYUd1uC8l3175XldpsgGd+5gBvhBDiucp39X4+eR8eVGSQDssu7zGXJXXgSPN2y0bkZqircr5dGTd+wXKCecA1TPZIGm73Zemz/d/xKOtJsPWAj47ilLeMsp5m0t8+HoKrheVqHig9SZkpgBTktrtJZYvvRBsgfI4BB1Q65MVDy60DtUi4ojJuWPiq+K0HMci2RZEBjaSGRvvEo50PCgDVRLHK08xM0o5sJbI/Vhhz3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
- by BY1PR11MB8008.namprd11.prod.outlook.com (2603:10b6:a03:534::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
- 2023 07:20:09 +0000
-Received: from PH8PR11MB6779.namprd11.prod.outlook.com
- ([fe80::878d:c56c:28fd:e1cd]) by PH8PR11MB6779.namprd11.prod.outlook.com
- ([fe80::878d:c56c:28fd:e1cd%5]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 07:20:08 +0000
-Date:   Tue, 17 Jan 2023 15:19:58 +0800
-From:   Oliver Sang <oliver.sang@intel.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-CC:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, <oe-lkp@lists.linux.dev>,
-        <lkp@intel.com>, Mike Rapoport <rppt@linux.ibm.com>,
-        Christoph Lameter <cl@linux.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [linus:master] [mm, slub] 0af8489b02:
- kernel_BUG_at_include/linux/mm.h
-Message-ID: <Y8ZMHi4IGP+v7biC@xsang-OptiPlex-9020>
-References: <41276905-b8a5-76ae-8a17-a8ec6558e988@suse.cz>
- <Y7Qxucg5le7WOzr7@xsang-OptiPlex-9020>
- <Y7VBFLHY/PMbb4XS@hyeyoo>
- <Y7Yr3kEkDEd51xns@xsang-OptiPlex-9020>
- <3f7fa3b3-9623-5c4c-94b1-a41dea6eaaf2@suse.cz>
- <Y7weKyxIY+QFYq6j@xsang-OptiPlex-9020>
- <Y71t89JMgtRoNHM/@xsang-OptiPlex-9020>
- <d024b846-9282-4ecd-eafd-2e5571932a72@suse.cz>
- <Y7+7KUyuo/9HeCF2@xsang-OptiPlex-9020>
- <bbf4fc3e-a9c2-83aa-d50a-8f7cb5b2bf4b@suse.cz>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <bbf4fc3e-a9c2-83aa-d50a-8f7cb5b2bf4b@suse.cz>
-X-ClientProxiedBy: SGBP274CA0017.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::29)
- To PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
+        Tue, 17 Jan 2023 02:26:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E2AC140
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:25:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673940357;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iizuc0HQbsrm6BiEPcueJvdkUUwR6glPVHvzA95lMhU=;
+        b=bH6VDIJa9tmg4/XI/flN+Um9EVTZuSh/x911W7vFo3RbXdXMc0pfryYh/+/U9FJjXVG98m
+        YUa1PTshyS+jdYCPHbFGEc4buXE6+4ZxUSiIbBjL7AxX+PCL99II12BG1+5GnF6Wt5QbPi
+        h704BTL77p8W1nswcuE+56SQzDNjE04=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-8-JHuFw--APPKAtJ0gFrLlcw-1; Tue, 17 Jan 2023 02:25:56 -0500
+X-MC-Unique: JHuFw--APPKAtJ0gFrLlcw-1
+Received: by mail-yb1-f199.google.com with SMTP id k135-20020a25248d000000b007d689f92d6dso7182968ybk.22
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:25:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iizuc0HQbsrm6BiEPcueJvdkUUwR6glPVHvzA95lMhU=;
+        b=hsZCAnrdUfu9gMTUS3tVb1cujwT/MrH67oKOo5nx64FYNL+07fKEiH5ArAWHfaTSJq
+         LrunF+Y/R/QYlc1KadfQXNNp5IZcfFpTZd91fzH52klLaTk+VpAxwDDM1F5h+jAopSj/
+         /fDhOueOGvrr+G9Pt/TdZm/z3+HmU4VDDzWXovaC6NfOmTlEG8zWXV0I+STfdLiE3UCa
+         pLo7wz8jc071p4KW5PjGs0+m1P5JdNnN3Od6LMYfxYr6dRNHCCbZv3Rj8i4yqPVCkrvK
+         lAeF+PRVEoTUb6VBAZWWoZI4GDb1BMxreGtl3omCpDyFqr9hX/EG2Ad2F4FYpQZCP7MX
+         k8Mg==
+X-Gm-Message-State: AFqh2kpPvfagkF5r+5KPKYhJLAWjSdpJGhVvfNzW/l5T46YAub7rrWZr
+        bQU1r8dBHOb/5Qvzu1XTnIii/yyHynek9qi/A0GklpPpfRg7MkDqtcVnQ9Bc4vkknKzaVQax9+k
+        hxcM0dAXsrhri7Vech6HoanvEDjN8iynpO2xYD7Ir
+X-Received: by 2002:a81:1103:0:b0:41e:2266:9718 with SMTP id 3-20020a811103000000b0041e22669718mr323173ywr.294.1673940355521;
+        Mon, 16 Jan 2023 23:25:55 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXstuo6LF90CJhyvHfiyx4S3DUpMqR5LxKbDWfkNRjMvlhwOuFX+qqyZlYODQ71Z5o/ohL+ywjyKm+hlr/g3C5M=
+X-Received: by 2002:a81:1103:0:b0:41e:2266:9718 with SMTP id
+ 3-20020a811103000000b0041e22669718mr323163ywr.294.1673940355271; Mon, 16 Jan
+ 2023 23:25:55 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|BY1PR11MB8008:EE_
-X-MS-Office365-Filtering-Correlation-Id: f559544e-7d75-4f8c-7d3b-08daf85b4380
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oj23ksss0Q3KXH309F3fSkQGRSnM5doOD/kBVFs/vUwAfLK292QsZ8ZYWEOFsxos/GuCF0o0Lo64Y+6zPvZZsxj7GDUNaBRRbEdewylPyY0JcQDvUJYWEImkTfuq91GKu590hyiSCKKkEOPy1lQiCCWFFD0gfdYznyYiRdzkj4TNLLwpJlY4ED2+NXnYa7Xpyl6NTwxKEDKacwWalVHzMen6+GRnknBIrcqRwrDx9mJLwLff5F5htSnp7Z476G0cvYfUTIT4aFdhI+OguygKZPcA+xNWkbCc/Njvwv1MNtHjIORSOscR4kF6wRMPthQP8X9rq5oPoPy+YL6tj9QMTAezbhU0f9dpMvBsGgcj3mLhHBycR2NDXk8xzrAxfC9Gz3SDDIovUFyK8SVdzSEW2+O1T10amKb9+yi/vjfju+HNasVUhSjwFeBFaPtAI7y4+Tl80VbxYPuhyqy1trnAnTqscuwtIRk7lOXLvCgdfvPuUf9ljcvmuim5n292YrhuDnY0swA+e1tA+fu8XKG4ltAu3/PrhkbYAnu5tF9FeXMpAcRFVjnN3pdWlKmOrxwpJox2XBGLCJ6MxVyqPtZRHE7DgSUsCqokGZUFdZm/GIRV7Xi9KCPPFZtgr3dXkrkXSzie9OAcdpJtzAXLaVJG4VO9W9hFBk2k/Q8g7yweMcDPaa7IIxMrXNxgeNfSv+QebrmOM+0h4UcyRLH7arG1nu7jDGCWX856gThgMHx4Dhc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(366004)(39860400002)(396003)(346002)(136003)(451199015)(9686003)(478600001)(6486002)(82960400001)(41300700001)(966005)(6512007)(38100700002)(66556008)(186003)(316002)(54906003)(86362001)(33716001)(66476007)(66946007)(26005)(5660300002)(2906002)(6506007)(6666004)(8936002)(4326008)(44832011)(4744005)(6916009)(8676002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XVh4IjefmTmIw/WgtPIrQg5IWPccwD3udmn5X/nVfB3/D4s2n7UAJkc8rM+8?=
- =?us-ascii?Q?Q8zPDxs+euNBODOF2CS1RHYTEk2feP4Y04np7LGKJ/7WN9PteWB3kFHz+hsT?=
- =?us-ascii?Q?4pHTsVb4IJtL/Bl4hTYSHY6zYYcqjdvlg5//SCPLZX5GyYsC4URhC4kWruio?=
- =?us-ascii?Q?isUXxozwF84nTjIGt6vWk4plfVaU41eyY0evwBkk79VMatNAbOLng6qSWpu2?=
- =?us-ascii?Q?ACB7qz+48aw5ijNMJC4lmfHH7D8miy1fLKP02vRC7FiJC3j+N9kKaua0RJ7F?=
- =?us-ascii?Q?gLPXm0TviWzjfE/jU3XaO7Zb0nzRLwE/Prz6DDQ9tqcERoZ0ZusoCtmGkAqx?=
- =?us-ascii?Q?sYI8kuLBdVR8Bv8TkcGmBD+OZKWnzCKIxfDUJkY2EIFCixIfVfSNGQjjM+mX?=
- =?us-ascii?Q?DZuKVKyHHfUra0NHVsBvv1UJYVBUF79Ha4fG7di7buE68JtLbLcDBhzwUWtk?=
- =?us-ascii?Q?wtD5B6CpjzMVDXO9+KIFZgncuCtVaU9F3MztwG0gxIv9ZZEfMv8PS5bw1oXt?=
- =?us-ascii?Q?l2dGstVSZiTQ0sE/2emQqR4lZJa44pPZ9eR5/zLvHCijdutzuF8hUR/CwRto?=
- =?us-ascii?Q?bEZR3Mqxp1ybgXd/7N1zeQzdshRzE81stcRCOsLB6Pmeo78+kPR6ksNzBsJT?=
- =?us-ascii?Q?MX/ewl3c8fB/7XUD9YLmeyF5Mdx6dxAPcimzN6sqciirpvRGb/Qsot2oifUi?=
- =?us-ascii?Q?DxtawEJwLouoHrUfT9jFL07LvfQ2C9XZrD3kn1lRgrujCEADhVzWXjdbYUNL?=
- =?us-ascii?Q?Awy7T74gM3cAmX5fY6LJKR4CcBSPiygQ7TSX4x/BEcD3Als+LzALHJG1GEk6?=
- =?us-ascii?Q?iQDkdw1KmxU9WHRJdowoVtaRD9/ZWXOaV8wZPKzmS/nt4tcVnON4PHvIG3pB?=
- =?us-ascii?Q?XGZr8dS9bMJrLtWKjOwuEzqnWpNs3JisWfuQovAqetYY2ZGMvW/d2bvKbocu?=
- =?us-ascii?Q?+aSIS/jI+y17TYATCJnzI+atRinb8cGlWh/Y903zf5Hu0FrFtfQJWS/KPwXS?=
- =?us-ascii?Q?F1yulxSy6Gc9OlEVgX789Djk0eenIIa4UW43Pqu+LNht3PoZEVtqcHXbkuB1?=
- =?us-ascii?Q?LWhhMXegWwjjCBaOYimMVwLZGdJh3MWH0Bd89nXOrL3oWcnGp7cPHK98W7Bi?=
- =?us-ascii?Q?stbK2/GN0dqSYNhmzGJp7MHq9YglD7ukJcOQLKCxiIL7Le8xAXbs4d1SOW3y?=
- =?us-ascii?Q?m+3tk6zKT5RTt93yG/NTaa8urHwHBh80K15eXskknJH345pV/YrvW61B+Vs0?=
- =?us-ascii?Q?nr1J5XJiwGWzv52RpxGSs6PWKMZaFkI+ZgH7rFBgPRH9KMehaKQkQMpthXaV?=
- =?us-ascii?Q?Dvi+joTPqApiOE8i/UskQfFrdDFwkHAv+shnGgkKyu1Dzx8Y2kq3S19sd/Qx?=
- =?us-ascii?Q?J2ZojFIafVBOCdn5w+qegLpaC+DIFjBrsZI9BX37njJFIitUfbSowf2fphzu?=
- =?us-ascii?Q?E9pmDK+9Vl65ABn8wdoyvao3xEDtwA4Ff75/UPeZO0HVKhuZ8SfChToFXHHe?=
- =?us-ascii?Q?Zi3wUcqSz2vWFR4CNVfIFpuTOr/pM4npGS5NHbIc41PnrI6JCGNtq5hHQ/RR?=
- =?us-ascii?Q?JdKcliyme8OyIjjC65XK8ofl8OBv7bucStwgHdwW4SRmZk6SCYwg3FHSyMpQ?=
- =?us-ascii?Q?5A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f559544e-7d75-4f8c-7d3b-08daf85b4380
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 07:20:08.6427
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pjt0thWS1Ar85kHDIEduSuciI3h0dwTojQzeYBqf/RQNzj51PyeFYGzzc+utWhw3tcy9NWdiXNPeDVKdD28DbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8008
-X-OriginatorOrg: intel.com
+References: <20230112142218.725622-1-eperezma@redhat.com> <20230112142218.725622-3-eperezma@redhat.com>
+ <DM8PR12MB5400B2FF15EA6DB00AB840EBABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
+ <CAJaqyWeJOwcAj=mr5R4qHqWSjK1dQ-SxMNVF0HYkPtdoO2BaGQ@mail.gmail.com> <521e9601-b9b1-19f0-24cb-89fb2e7ed164@nvidia.com>
+In-Reply-To: <521e9601-b9b1-19f0-24cb-89fb2e7ed164@nvidia.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Tue, 17 Jan 2023 08:25:18 +0100
+Message-ID: <CAJaqyWfor5boWZBxMCSg8tQY==7WRQsHDY2Ce=jTtxEud6rPCA@mail.gmail.com>
+Subject: Re: [RFC 2/3] vdpa/mlx5: conditionally delete cvq iotlb in destroy_mr
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     "mst@redhat.com" <mst@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Parav Pandit <parav@nvidia.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "sgarzare@redhat.com" <sgarzare@redhat.com>,
+        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Vlastimil,
+On Tue, Jan 17, 2023 at 8:08 AM Eli Cohen <elic@nvidia.com> wrote:
+>
+>
+> On 16/01/2023 20:03, Eugenio Perez Martin wrote:
+> > On Mon, Jan 16, 2023 at 8:03 AM Eli Cohen <elic@nvidia.com> wrote:
+> >>> From: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> >>> Sent: Thursday, 12 January 2023 16:22
+> >>> To: mst@redhat.com; Eli Cohen <elic@nvidia.com>
+> >>> Cc: linux-kernel@vger.kernel.org; Parav Pandit <parav@nvidia.com>;
+> >>> lulu@redhat.com; jasowang@redhat.com; virtualization@lists.linux-
+> >>> foundation.org; sgarzare@redhat.com; si-wei.liu@oracle.com
+> >>> Subject: [RFC 2/3] vdpa/mlx5: conditionally delete cvq iotlb in destr=
+oy_mr
+> >>>
+> >>> mlx5_vdpa_destroy_mr can be called by setting a map to data ASID afte=
+r
+> >>> populating control virtqueue ASID iotlb.  Control vq iotlb must not b=
+e
+> >>> cleared, since it will not be populated again.
+> >>>
+> >>> Adding a conditional in the function so the caller specifies if it is
+> >>> resetting, cleaning, or just changing data memory.
+> >>>
+> >>> Fixes: 8fcd20c30704 ("vdpa/mlx5: Support different address spaces for
+> >>> control and data")
+> >>> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> >>> ---
+> >>>   drivers/vdpa/mlx5/core/mlx5_vdpa.h |  2 +-
+> >>>   drivers/vdpa/mlx5/core/mr.c        |  5 +++--
+> >>>   drivers/vdpa/mlx5/net/mlx5_vnet.c  | 12 ++++++------
+> >>>   3 files changed, 10 insertions(+), 9 deletions(-)
+> >>>
+> >>> diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> >>> b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> >>> index 058fbe28107e..000b144019ec 100644
+> >>> --- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> >>> +++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> >>> @@ -119,7 +119,7 @@ int mlx5_vdpa_handle_set_map(struct
+> >>> mlx5_vdpa_dev *mvdev, struct vhost_iotlb *io
+> >>>                             bool *change_map, unsigned int asid);
+> >>>   int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_i=
+otlb
+> >>> *iotlb,
+> >>>                        unsigned int asid);
+> >>> -void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev);
+> >>> +void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev, bool
+> >>> delete_cvq_iotlb);
+> >>>
+> >>>   #define mlx5_vdpa_warn(__dev, format, ...)
+> >>> \
+> >>>        dev_warn((__dev)->mdev->device, "%s:%d:(pid %d) warning: "
+> >>> format, __func__, __LINE__,     \
+> >>> diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.=
+c
+> >>> index ae34dcac9a3f..878ee94efa78 100644
+> >>> --- a/drivers/vdpa/mlx5/core/mr.c
+> >>> +++ b/drivers/vdpa/mlx5/core/mr.c
+> >>> @@ -491,7 +491,7 @@ static void destroy_user_mr(struct mlx5_vdpa_dev
+> >>> *mvdev, struct mlx5_vdpa_mr *mr
+> >>>        }
+> >>>   }
+> >>>
+> >>> -void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev)
+> >>> +void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev, bool
+> >>> delete_cvq_iotlb)
+> >>>   {
+> >>>        struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
+> >>>
+> >>> @@ -499,7 +499,8 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev
+> >>> *mvdev)
+> >>>        if (!mr->initialized)
+> >>>                goto out;
+> >>>
+> >>> -     prune_iotlb(mvdev);
+> >>> +     if (delete_cvq_iotlb)
+> >>> +             prune_iotlb(mvdev);
+> >>>        if (mr->user_mr)
+> >>>                destroy_user_mr(mvdev, mr);
+> >>>        else
+> >>> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> >>> b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> >>> index 6632651b1e54..1f1f341f602b 100644
+> >>> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> >>> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> >>> @@ -2433,7 +2433,7 @@ static int mlx5_vdpa_change_map(struct
+> >>> mlx5_vdpa_dev *mvdev,
+> >>>                goto err_mr;
+> >>>
+> >>>        teardown_driver(ndev);
+> >>> -     mlx5_vdpa_destroy_mr(mvdev);
+> >>> +     mlx5_vdpa_destroy_mr(mvdev, mvdev-
+> >>>> group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid);
+> >> Looks to me we need to handle this in a more generic manner. The asid =
+should be used conditionally for either CVQ or data VQ updates. You are pro=
+tecting CVQ but same thing should hold also for data VQs iotlb.
+> > I agree. Maybe the best option is to replace the boolean indicating
+> > the ASID we want to destroy mr? Then, at cleanup, we can iterate by
+> > all vq groups / ASID.
+>
+> I think mlx5_vdpa_destroy_mr() should get the asid as an argument and
+> have a logic such as:
+>
+> if (asid =3D=3D data asid)
+>
+>      destroy_data_mr
+>
+>
+> if (asid =3D=3D ctrl_vq_asid)
+>
+>      prune_iotlb()
+>
+>
+> return
+>
 
-On Thu, Jan 12, 2023 at 08:56:59AM +0100, Vlastimil Babka wrote:
-> 
-> Actually no, by "obscure" means with CONFIG_SLUB_DEBUG it wouldn't happen
-> anymore. But this is the opposite, it seems to happen a lot. I would have
-> preferred that slub debugging catches some slab misuse, but this seems
-> useful too. With such fail rates you can perhaps try ealier kernels than 6.0
-> and eventually find the truly clean and first bad release and bisect?
+I agree.
 
-Thanks a lot for guidance!
+> Since we have only two groups, one for data and for control, I don't
+> think we need to iterate.
+>
 
-yeah, we reached back to until v5.14-rc1 which still has similar issue,
-and v5.13 is clean. new bisection was triggered then we got '7118fc2906'
+I mean to iterate on mlx5_vdpa_reset and mlx5_vdpa_free. Or, at least,
+to call mlx5_vdpa_destroy_mr(asid=3Ddata) and
+mlx5_vdpa_destroy_mr(asid=3Dcontrol) one after another.
 
-this was already reported as
-"[linus:master] [hugetlb]  7118fc2906: kernel_BUG_at_lib/list_debug.c"
-at https://lore.kernel.org/all/202301170941.49728982-oliver.sang@intel.com/
-and I add you, Hyeonggon, Feng and Fengwei there.
+Thanks!
 
-hope that would be helpful.
+> >
+> >> Meaning, if qemu wants to update only CVQ than data VQ translation mus=
+t not be affected.
+> > _mlx5_vdpa_create_mr. is the one that checks it If I recall correctly.
+> > It is not obvious in this change though.
+> >
+> > Thanks!
+> >
+> >>>        err =3D mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+> >>>        if (err)
+> >>>                goto err_mr;
+> >>> @@ -2449,7 +2449,7 @@ static int mlx5_vdpa_change_map(struct
+> >>> mlx5_vdpa_dev *mvdev,
+> >>>        return 0;
+> >>>
+> >>>   err_setup:
+> >>> -     mlx5_vdpa_destroy_mr(mvdev);
+> >>> +     mlx5_vdpa_destroy_mr(mvdev, mvdev-
+> >>>> group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid);
+> >>>   err_mr:
+> >>>        return err;
+> >>>   }
+> >>> @@ -2578,7 +2578,7 @@ static void mlx5_vdpa_set_status(struct
+> >>> vdpa_device *vdev, u8 status)
+> >>>        return;
+> >>>
+> >>>   err_setup:
+> >>> -     mlx5_vdpa_destroy_mr(&ndev->mvdev);
+> >>> +     mlx5_vdpa_destroy_mr(&ndev->mvdev, true);
+> >>>        ndev->mvdev.status |=3D VIRTIO_CONFIG_S_FAILED;
+> >>>   err_clear:
+> >>>        up_write(&ndev->reslock);
+> >>> @@ -2604,7 +2604,7 @@ static int mlx5_vdpa_reset(struct vdpa_device
+> >>> *vdev)
+> >>>        down_write(&ndev->reslock);
+> >>>        teardown_driver(ndev);
+> >>>        clear_vqs_ready(ndev);
+> >>> -     mlx5_vdpa_destroy_mr(&ndev->mvdev);
+> >>> +     mlx5_vdpa_destroy_mr(&ndev->mvdev, true);
+> >>>        ndev->mvdev.status =3D 0;
+> >>>        ndev->cur_num_vqs =3D 0;
+> >>>        ndev->mvdev.cvq.received_desc =3D 0;
+> >>> @@ -2691,7 +2691,7 @@ static void mlx5_vdpa_free(struct vdpa_device
+> >>> *vdev)
+> >>>        ndev =3D to_mlx5_vdpa_ndev(mvdev);
+> >>>
+> >>>        free_resources(ndev);
+> >>> -     mlx5_vdpa_destroy_mr(mvdev);
+> >>> +     mlx5_vdpa_destroy_mr(mvdev, true);
+> >>>        if (!is_zero_ether_addr(ndev->config.mac)) {
+> >>>                pfmdev =3D pci_get_drvdata(pci_physfn(mvdev->mdev->pde=
+v));
+> >>>                mlx5_mpfs_del_mac(pfmdev, ndev->config.mac);
+> >>> @@ -3214,7 +3214,7 @@ static int mlx5_vdpa_dev_add(struct
+> >>> vdpa_mgmt_dev *v_mdev, const char *name,
+> >>>   err_res2:
+> >>>        free_resources(ndev);
+> >>>   err_mr:
+> >>> -     mlx5_vdpa_destroy_mr(mvdev);
+> >>> +     mlx5_vdpa_destroy_mr(mvdev, true);
+> >>>   err_res:
+> >>>        mlx5_vdpa_free_resources(&ndev->mvdev);
+> >>>   err_mpfs:
+> >>> --
+> >>> 2.31.1
+>
 
