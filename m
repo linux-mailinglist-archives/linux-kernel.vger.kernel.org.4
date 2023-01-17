@@ -2,123 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132B366D720
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F8266D725
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235896AbjAQHpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S235936AbjAQHqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbjAQHp3 (ORCPT
+        with ESMTP id S235947AbjAQHqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:45:29 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67EC23DA9;
-        Mon, 16 Jan 2023 23:45:25 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6E6D624E208;
-        Tue, 17 Jan 2023 15:45:23 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 15:45:23 +0800
-Received: from [192.168.125.95] (113.72.144.207) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 15:45:22 +0800
-Message-ID: <02174460-87b8-bb1c-7b6f-39694fa416c3@starfivetech.com>
-Date:   Tue, 17 Jan 2023 15:45:22 +0800
+        Tue, 17 Jan 2023 02:46:11 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF4C7EE1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:46:10 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id b7so3643966wrt.3
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:46:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DMmc7/6yXt4mypmxVkgQDFhHLoHU+0OuLMviLqWVx+A=;
+        b=JSyDCVbIbjBQ1xD2ArsijWppzNSE86iMsxJQ+4itnbir88y3d9yVVcRwLsdC7oQ+cg
+         UrPyDarZRi4gwrrFCg2blJJKaTO7lYAl2CLauthE9EjaLCz1ufELFDIuCRMYuvWWUe47
+         YLuySGp5G1jQiObp2sqR9c9NO/c7iLnkDbecmzXBO7Ag3Ay53v0bTcfJ7Y3BaXNJDoFI
+         3O/ZTWfGflEe1U446bWlySQ9XqmlefUQG4jfIPI9UEvravTyZsNu/vczsAaALblx4gq4
+         Ak1yaNfXziEuP3wB49E5afCS7aqst6+CBDIo1t4Q0iOK9LfYPhtA1tqcKx+G+S/+tVcN
+         9jVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DMmc7/6yXt4mypmxVkgQDFhHLoHU+0OuLMviLqWVx+A=;
+        b=ULoHl0rCcVZ4Rp3o4GAPanXdcjDVT4S5/UjJ/2T0XkaMLREsNPUpIvSX1zTVXf36Ca
+         a7UuCO0EP+S467+UI3KcwL04hOLzNsaWQVQSYqJCmZyFV6PRBlRHhofYN0gyyugtDSjf
+         KJUAoSGlYs0XiUS2xRX8HZ7U6ud9BfZNMX6eilDKNKQb67+s2gQCQUK0wInTgfcRN6zU
+         0c0+2iJ0ZbRz7PUjxTV3N1qM+WWM4WvNyva21djzLFbtTZMpOnPfiM6gfxiEKwNLU5vA
+         8GvGBqnmWuIC8p9TkEmpsdfbjsKDHi9FrvcYDWId8PaxXrUolHuImAmvtMOUEZbhrko/
+         tYeg==
+X-Gm-Message-State: AFqh2kraSAnv8FqEM50XcwyfVEXm3b74HQcakY4ZkLObhoubLday9Kgx
+        UYWiZkFbCh2tSHIZ9tL7p7I03g==
+X-Google-Smtp-Source: AMrXdXtUxakW05hWNg2POhjXdlv3VgtuswvL3Udt4m7t6k4qlXSnBGFVf8dJ2ejUwjfcGDH9YjSn+A==
+X-Received: by 2002:adf:fa88:0:b0:2bd:d85f:55cc with SMTP id h8-20020adffa88000000b002bdd85f55ccmr1960711wrr.21.1673941568684;
+        Mon, 16 Jan 2023 23:46:08 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i6-20020adfe486000000b002423dc3b1a9sm27630444wrm.52.2023.01.16.23.46.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 23:46:08 -0800 (PST)
+Message-ID: <8ee5f6ef-80cb-2e0f-6681-598ccc697291@linaro.org>
+Date:   Tue, 17 Jan 2023 08:46:05 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/3] JH7110 PMU Support
+Subject: Re: [PATCH v3 2/7] dt-bindings: net: snps,dwmac: Update the maxitems
+ number of resets and reset-names
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230116074259.22874-1-walker.chen@starfivetech.com>
- <Y8WjKArEZH5zd5jb@spud>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <Y8WjKArEZH5zd5jb@spud>
-Content-Type: text/plain; charset="UTF-8"
+To:     yanhong wang <yanhong.wang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20230106030001.1952-1-yanhong.wang@starfivetech.com>
+ <20230106030001.1952-3-yanhong.wang@starfivetech.com>
+ <2328562d-59a2-f60e-b17b-6cf16392e01f@linaro.org>
+ <84e783a6-0aea-a6ba-13a0-fb29c66cc81a@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <84e783a6-0aea-a6ba-13a0-fb29c66cc81a@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.207]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/17 3:19, Conor Dooley wrote:
-> Hey Walker,
+On 17/01/2023 07:52, yanhong wang wrote:
 > 
-> On Mon, Jan 16, 2023 at 03:42:56PM +0800, Walker Chen wrote:
->> Hello,
->> 
->> This patchset adds PMU (Power Management Unit) controller driver for the
->> StarFive JH7110 SoC. In order to meet low power requirements, PMU is
->> designed for including multiple PM domains that can be used for power
->> gating of selected IP blocks for power saving by reduced leakage
->> current. The first patch adds device tree binding for PM domain provider
->> and consumer. The second patch adds pmu driver and support JH7110 SoC.
->> The last patch adds device node about pmu to JH7110 dts. 
->> 
->> The series has been tested on the VisionFive 2 boards which equip with
->> JH7110 SoC and works normally.
 > 
-> For the series:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> On 2023/1/6 20:44, Krzysztof Kozlowski wrote:
+>> On 06/01/2023 03:59, Yanhong Wang wrote:
+>>> Some boards(such as StarFive VisionFive v2) require more than one value
+>>> which defined by resets property, so the original definition can not
+>>> meet the requirements. In order to adapt to different requirements,
+>>> adjust the maxitems number definition.
+>>>
+>>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>>> ---
+>>>  .../devicetree/bindings/net/snps,dwmac.yaml   | 36 ++++++++++++++-----
+>>>  1 file changed, 28 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> index e26c3e76ebb7..f7693e8c8d6d 100644
+>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>> @@ -132,14 +132,6 @@ properties:
+>>>          - pclk
+>>>          - ptp_ref
+>>>  
+>>> -  resets:
+>>> -    maxItems: 1
+>>> -    description:
+>>> -      MAC Reset signal.
+>>> -
+>>> -  reset-names:
+>>> -    const: stmmaceth
+>>> -
+>>>    power-domains:
+>>>      maxItems: 1
+>>>  
+>>> @@ -463,6 +455,34 @@ allOf:
+>>>              Enables the TSO feature otherwise it will be managed by
+>>>              MAC HW capability register.
+>>>  
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: starfive,jh7110-dwmac
+>>> +
+>>
+>> Looking at your next binding patch, this seems a bit clearer. First of
+>> all, this patch on itself has little sense. It's not usable on its own,
+>> because you need the next one.
+>>
+>> Probably the snps,dwmac should be just split into common parts used by
+>> devices. It makes code much less readable and unnecessary complicated to
+>> support in one schema both devices and re-usability.
+>>
+>> Otherwise I propose to make the resets/reset-names just like clocks are
+>> made: define here wide constraints and update all other users of this
+>> binding to explicitly restrict resets.
+>>
+>>
 > 
-> I'm hoping that someone with knowledge of the power APIs will take a
-> look now that the driver looks to be in a pretty good state (to my naive
-> eyes at least).
+> Thanks, refer to the definition of clocks. If it is defined as follows, is it OK?
 > 
->> Changes in v3:
->> - Rebased on tag v6.1.
-> 
-> FYI, please pick something more recent than that.
-> Ideally, the last -rc1, which in this case is v6.2-rc1.
+> properties:
+>   resets:
+>     minItems: 1
+>     maxItems: 3
+>     additionalItems: true
 
-OK, the next version will be rebased to the latest kernel. 
+Drop
 
-> It's helpful to do this, as when I went to apply your patch, there were
-> some conflicts that needed to be sorted out. Because of your prerequisite
-> patches, the usual `b4` commands would not usable. E.g.
-> 
-> b4 am -3 20230116074259.22874-1-walker.chen@starfivetech.com
-> Analyzing 4 messages in the thread
-> Checking attestation on all messages, may take a moment...
-> ---
->   [PATCH v3 1/3] dt-bindings: power: Add starfive,jh7110-pmu
->   [PATCH v3 2/3] soc: starfive: Add StarFive JH71XX pmu driver
->   [PATCH v3 3/3] riscv: dts: starfive: add pmu controller node
-> ---
-> Total patches: 3
-> Preparing fake-am for v3: JH7110 PMU Support
->   ERROR: Could not find matching blob for MAINTAINERS (85e8f83161d7)
->          If you know on which tree this patchset is based,
->          add it as a remote and perform "git remote update"
->          in order to fetch the missing objects.
-> 
-> Fortunately, this is just a driver addition so despite `b4` not
-> helping it was easy to resolve but for other patches in the future,
-> this may not be the case.
-> 
-> Assuming the dt maintainers are happy with the binding, ping me in 2
-> weeks if no-one else has commented and I'll apply patches 1 & 2.
+>     items:
+>       - description: MAC Reset signal.
 
-Could I drop patch 3 and rebase patch 1 & 2 on the latest mainline then submit as v4 ?
+Drop both
+
+> 
+>   reset-names:
+>     minItems: 1
+>     maxItems: 3
+>     additionalItems: true
+
+Drop
+
+>     contains:
+>       enum:
+>         - stmmaceth
+
+Drop all
+
+> 
+> 
+> allOf:
+>   - if:
+>       properties:
+>         compatible:
+>           contains:
+>             const: starfive,jh7110-dwmac
+>     then:
+>       properties:
+>         resets:
+>           minItems: 2
+>           maxItems: 2
+>         reset-names:
+>           items:
+>             - const: stmmaceth
+>             - const: ahb
+>       required:
+>         - resets
+>         - reset-names  
+>     else:
+>       properties:
+>         resets:
+>           maxItems: 1
+>           description:
+>             MAC Reset signal.
+> 
+>         reset-names:
+>           const: stmmaceth
+> 
+> Do you have any other better suggestions?
+
+More or less like this but the allOf should not be in snps,dwmac schema
+but in individual schemas. The snps,dwmac is growing unmaintainable...
 
 Best regards,
-Walker
+Krzysztof
 
