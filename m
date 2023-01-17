@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318AA66D793
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220F366D753
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbjAQIJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S235838AbjAQHz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235958AbjAQIJH (ORCPT
+        with ESMTP id S235772AbjAQHzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:09:07 -0500
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 00:09:04 PST
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37C3A27494;
-        Tue, 17 Jan 2023 00:09:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=r3n04DJgFHVshEDEg+
-        AUJ2higmuVvr0IAv+oKTfkU5w=; b=hvPQEkl7vLmnnVGbiby/qgFOJ3lbmnooCD
-        mk4X6V8gWMeAM4D03HtPowa+m0EjoldoyOxvG0GDf9vRwlx9boOSKJ6RfYDNVTg7
-        qyyyNQHAPASyAZT3J/4+MBA6AzCL1Tu81R4Kv12k1Z5mBeFfuikDu/LCassZfrZq
-        U5ypyA7nI=
-Received: from bj.company.local (unknown [210.12.115.82])
-        by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wB3nUX6U8ZjmpW1Ag--.1680S2;
-        Tue, 17 Jan 2023 15:53:30 +0800 (CST)
-From:   Jie Wang <wangjie2011cs@163.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangjie2011cs@163.com
-Subject: [PATCH] block: check disk flag before setting scan bit
-Date:   Tue, 17 Jan 2023 15:53:29 +0800
-Message-Id: <20230117075329.14968-1-wangjie2011cs@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: _____wB3nUX6U8ZjmpW1Ag--.1680S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1UAFy8Kw4xZF1Dtr1rtFb_yoW8Ar1xpF
-        4kCFW5Kay8Xws0gFWqga1Iyr15Ga92yw48JFW3A39FvwnxArsakF4kKa4DCFy7trW7A3y2
-        gF1FgFW5WFyxuFJanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRcdb5UUUUU=
-X-Originating-IP: [210.12.115.82]
-X-CM-SenderInfo: pzdqwytlhsiiwrfvqiywtou0bp/1tbiRxz5RFc7aKEkegAAsd
+        Tue, 17 Jan 2023 02:55:22 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0BF24480;
+        Mon, 16 Jan 2023 23:55:18 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id hw16so61516467ejc.10;
+        Mon, 16 Jan 2023 23:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Doys/SC0QOZ3upK94vMab3sn1eoA5ffBssidJQpR6WE=;
+        b=T7vjsLXATy6+GqiZT3hsLButMHNBLRladrcF5/He5OPGnFCjvUiXtlLVxdY+dP7iWW
+         hdkiuhaAaYo0QJZFRu1k6OoyFL6wLHV8LGBM2mGhlr9Iljzq792ZX2Rtxr0LeYNE2z+S
+         7wEMFCxC5mNwH5rI+dVxhl3mJJEyTNHkUydVBnrCMPeS7GLQ1tYPnKnBZzj3ASUom26S
+         aQwcHsr7MuzGbWyiCUhq9RYdpK1a+M5sM+WsZSIJQcVy5X1stM/STILqMb37S8hW2ngU
+         O/3sOPeR1n+CsDp7jjqrRUKfbu5WQsTwa3DlB4VV1CP7r+rEH1lhs3m67s8kiiZBTmOQ
+         TtmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Doys/SC0QOZ3upK94vMab3sn1eoA5ffBssidJQpR6WE=;
+        b=MOSiVSI3hRPexEkEWV9xT5muetD4T3NUmyJQjH1NB3h9XUqysKj6AgoMx+Veu3Mp4B
+         1gI7q0wcM6I/0Q4VBpuYkkcJ20qCbdXM5+rNpi/ppU/4GaIBgK3FJlCH8BL7nuisZp1J
+         12yFWmRspV/hzhkp8HB5iYHgHQRBV+F5CrE+/Vq+vWq2fgjgVdoWQUtMF88jsBFQwqNj
+         VHXBBf9c7JnocklqTh0Uw9SGnv7+kKJXTfO4HRHwfsC/BrCZaVJGhi6uc6okHEqKQFbn
+         SMnUMp/LnAcNsK6e0Dhj9JRQiPCLnZ9XITgrvNP7c0g91Fu1X3NbPRvRd7Gv0cgwv+bj
+         0fkA==
+X-Gm-Message-State: AFqh2kqhzO97heZcunE7uWYQTKvDxK3aGxUX3oYXWH5hcn+4u3it89e4
+        L05ItuThH5cs+ulmb6ZLp4sl/0BYxPv1+zzixx4=
+X-Google-Smtp-Source: AMrXdXtUspQBMKsdRawiO8iv21L66kOBo9o4QJxwo4y9amKrjl4eUvOXWL7oAQ8jT7OtiXFbPEJk/ALc+HxbDdpaNBA=
+X-Received: by 2002:a17:906:ce36:b0:7c1:6f86:ec4 with SMTP id
+ sd22-20020a170906ce3600b007c16f860ec4mr200821ejb.621.1673942116562; Mon, 16
+ Jan 2023 23:55:16 -0800 (PST)
+MIME-Version: 1.0
+References: <2b4bc0b22fac32ab3a7262240019486804c1691f.1673806409.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <2b4bc0b22fac32ab3a7262240019486804c1691f.1673806409.git.christophe.jaillet@wanadoo.fr>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Tue, 17 Jan 2023 09:55:04 +0200
+Message-ID: <CAEnQRZC=JNGixTRVDnEK0p5rZWuQbOmQvApTUM5=0iJN9pzVRw@mail.gmail.com>
+Subject: Re: [PATCH] firmware: imx-dsp: Fix an error handling path in imx_dsp_setup_channels()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Paul Olaru <paul.olaru@nxp.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to scan partitions for disk who has set flag GENHD_FL_NO_PART in
-driver code. In disk_scan_partitions function, the same checking is
-existing, so we believe this change is reasonable.
+On Sun, Jan 15, 2023 at 8:35 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If mbox_request_channel_byname() fails, the memory allocated a few lines
+> above still need to be freed before going to the error handling path.
+>
+> Fixes: 046326989a18 ("firmware: imx: Save channel name for further use")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-In our case, some virtual block devices are not managed by GPT, then scan
-partition operation is not a must. So we set GENHD_FL_NO_PART flag in
-driver intended to avoid partitions being dropped/added.
-But GD_NEED_PART_SCAN bit was still set by bdev_check_media_change, which
-causing problems here.
+Good catch.
 
-Signed-off-by: Jie Wang <wangjie2011cs@163.com>
----
- block/disk-events.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/block/disk-events.c b/block/disk-events.c
-index aee25a7e1ab7..68d911135bc7 100644
---- a/block/disk-events.c
-+++ b/block/disk-events.c
-@@ -284,7 +284,8 @@ bool bdev_check_media_change(struct block_device *bdev)
- 	if (__invalidate_device(bdev, true))
- 		pr_warn("VFS: busy inodes on changed media %s\n",
- 			bdev->bd_disk->disk_name);
--	set_bit(GD_NEED_PART_SCAN, &bdev->bd_disk->state);
-+	if (!(bdev->bd_disk->flags & GENHD_FL_NO_PART))
-+		set_bit(GD_NEED_PART_SCAN, &bdev->bd_disk->state);
- 	return true;
- }
- EXPORT_SYMBOL(bdev_check_media_change);
-@@ -310,7 +311,8 @@ bool disk_force_media_change(struct gendisk *disk, unsigned int events)
- 	if (__invalidate_device(disk->part0, true))
- 		pr_warn("VFS: busy inodes on changed media %s\n",
- 			disk->disk_name);
--	set_bit(GD_NEED_PART_SCAN, &disk->state);
-+	if (!(bdev->bd_disk->flags & GENHD_FL_NO_PART))
-+		set_bit(GD_NEED_PART_SCAN, &disk->state);
- 	return true;
- }
- EXPORT_SYMBOL_GPL(disk_force_media_change);
--- 
-2.17.1
-
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
