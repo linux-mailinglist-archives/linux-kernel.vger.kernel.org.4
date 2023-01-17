@@ -2,246 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E4666E3BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D853466E3A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbjAQQhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S229803AbjAQQe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbjAQQgd (ORCPT
+        with ESMTP id S230064AbjAQQeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:36:33 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8BE40BD9;
-        Tue, 17 Jan 2023 08:36:26 -0800 (PST)
+        Tue, 17 Jan 2023 11:34:22 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8082140BC2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:34:20 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id q23-20020a17090a065700b002290913a521so15472417pje.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:34:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673973387; x=1705509387;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nn2BkIRNIFmmDApFWjskyFFViHGsos8gqmoxmmwOQL8=;
-  b=ZGoyXkzgsYkOSZTqulzSvhNH/vbntzjEWf+GKWXsbIxWW7Ca9ItSK+0k
-   UIeU9itRooz6v//JqxYkn11cm7PDVzUwS/4lVYR/UE9YvGtV69I64c2gi
-   jRaq6M/79NhxWvTgzsLoCosuEn1swfjRnzp+o6jFVkEpefbQu6UWcWM/R
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.97,224,1669075200"; 
-   d="scan'208";a="171991209"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 16:34:29 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com (Postfix) with ESMTPS id 3BED5C1A38;
-        Tue, 17 Jan 2023 16:34:24 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 17 Jan 2023 16:34:24 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.56) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
- Tue, 17 Jan 2023 16:34:21 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <kerneljasonxing@gmail.com>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kernelxing@tencent.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <yoshfuji@linux-ipv6.org>
-Subject: Re: [PATCH v5 net] tcp: avoid the lookup process failing to get sk in ehash table
-Date:   Tue, 17 Jan 2023 08:34:13 -0800
-Message-ID: <20230117163413.6162-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CAL+tcoB1-MqMf3Yn_qBTbTC9UNBhVW+93j30KJ9zaangkfQHWA@mail.gmail.com>
-References: <CAL+tcoB1-MqMf3Yn_qBTbTC9UNBhVW+93j30KJ9zaangkfQHWA@mail.gmail.com>
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RlZqHzGUK9sPKKEmcxJQVC8fJtWdk0oagrgJ42/FWUo=;
+        b=GagBZ/fJ0HIkXHzRy0CbCmfPpWlzsJy94tpCQ8EM447gdtHwUNdr+/0ms8CyEKLf1H
+         87BAPR3m4cGTNmHhS8FQWCA3jItdgTfg2O1y324ETrJm9wif/kqBuR0HABESY8b/QAXW
+         IdA3nGsd/k2ZqRgAvcYxZeCzmgBjDiOyukOBmUMFSdxgtarQPCrC3WBhG1hEtHyio7lz
+         MzrrcIHf6oGoCuyNiTRgvEzRwP444dif738YtJUGeanCHpbfef03LW6AovbhF8dvV0XM
+         1zN6puNvHyQtXK+RTTCXdAlDnDwIGobsKZXyE9Dho+bA5WDucJ5i+fSls2V2hPVXYH+n
+         HUjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RlZqHzGUK9sPKKEmcxJQVC8fJtWdk0oagrgJ42/FWUo=;
+        b=L42IYZmRX2vj6FgnnXmVIZiLvzxazisTVQ6LbMxGE+JOtFLMxrFUzAZ1L/Hi0UfZ8Y
+         cYwPdadGLE0idIExDR3dVj4YsNmXaaD/zJeSJVnvgiLfwP9znqDGmjHYDBLonYh3SWKY
+         gEO+k1wKxwT3KyWg1crnY4OtbItFyU/6BwpaKPFWm13zF14sq4hLvsupW6wjydpv1RGn
+         kTUEXAqEY/RqElNFmpO/nRHIvZanneho6f2j3BEivSI/Fh/u7xvbw5QkGUPKnsJfisnk
+         476g25BQa8t3IsoLZFQ7qeefY6ivHdVAPypMwGRMsmkmiXGs7WqN/SF6pCb0gtXJeEKA
+         8DIQ==
+X-Gm-Message-State: AFqh2kp25kEZP91DqT+lboIjh+YwoZvloLawV6iKjCopomXTi/UUKsG4
+        1dIkFIT/WfRPVYguOFs+eGR5TQ==
+X-Google-Smtp-Source: AMrXdXsfdieWfN0MIWgnbSJR6LpHJOm0kOFvhc/mphSIUbDTi7tsqX9OyAWcQeZT7PRkx/BuaGfRaQ==
+X-Received: by 2002:a17:90a:9503:b0:227:679:17df with SMTP id t3-20020a17090a950300b00227067917dfmr2436705pjo.0.1673973259775;
+        Tue, 17 Jan 2023 08:34:19 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y7-20020a17090a474700b00219463262desm18118727pjg.39.2023.01.17.08.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 08:34:19 -0800 (PST)
+Date:   Tue, 17 Jan 2023 16:34:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <Y8bOB7VuVIsxoMcn@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <Y8HTITl1+Oe0H7Gd@google.com>
+ <20230117124107.GA273037@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D44UWB004.ant.amazon.com (10.43.161.205) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117124107.GA273037@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 17 Jan 2023 10:15:45 +0800
-> On Tue, Jan 17, 2023 at 12:54 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> >
-> > From:   Jason Xing <kerneljasonxing@gmail.com>
-> > Date:   Mon, 16 Jan 2023 18:33:41 +0800
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > While one cpu is working on looking up the right socket from ehash
-> > > table, another cpu is done deleting the request socket and is about
-> > > to add (or is adding) the big socket from the table. It means that
-> > > we could miss both of them, even though it has little chance.
-> > >
-> > > Let me draw a call trace map of the server side.
-> > >    CPU 0                           CPU 1
-> > >    -----                           -----
-> > > tcp_v4_rcv()                  syn_recv_sock()
-> > >                             inet_ehash_insert()
-> > >                             -> sk_nulls_del_node_init_rcu(osk)
-> > > __inet_lookup_established()
-> > >                             -> __sk_nulls_add_node_rcu(sk, list)
-> > >
-> > > Notice that the CPU 0 is receiving the data after the final ack
-> > > during 3-way shakehands and CPU 1 is still handling the final ack.
-> > >
-> > > Why could this be a real problem?
-> > > This case is happening only when the final ack and the first data
-> > > receiving by different CPUs. Then the server receiving data with
-> > > ACK flag tries to search one proper established socket from ehash
-> > > table, but apparently it fails as my map shows above. After that,
-> > > the server fetches a listener socket and then sends a RST because
-> > > it finds a ACK flag in the skb (data), which obeys RST definition
-> > > in RFC 793.
-> > >
-> > > Besides, Eric pointed out there's one more race condition where it
-> > > handles tw socket hashdance. Only by adding to the tail of the list
-> > > before deleting the old one can we avoid the race if the reader has
-> > > already begun the bucket traversal and it would possibly miss the head.
-> > >
-> > > Many thanks to Eric for great help from beginning to end.
-> > >
-> > > Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-> > > Suggested-by: Eric Dumazet <edumazet@google.com>
-> > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
-> >
-> > I guess there could be regression if a workload has many long-lived
+On Tue, Jan 17, 2023, Chao Peng wrote:
+> On Fri, Jan 13, 2023 at 09:54:41PM +0000, Sean Christopherson wrote:
+> > > +	list_for_each_entry(notifier, &data->notifiers, list) {
+> > > +		notifier->ops->invalidate_start(notifier, start, end);
+> > 
+> > Two major design issues that we overlooked long ago:
+> > 
+> >   1. Blindly invoking notifiers will not scale.  E.g. if userspace configures a
+> >      VM with a large number of convertible memslots that are all backed by a
+> >      single large restrictedmem instance, then converting a single page will
+> >      result in a linear walk through all memslots.  I don't expect anyone to
+> >      actually do something silly like that, but I also never expected there to be
+> >      a legitimate usecase for thousands of memslots.
+> > 
+> >   2. This approach fails to provide the ability for KVM to ensure a guest has
+> >      exclusive access to a page.  As discussed in the past, the kernel can rely
+> >      on hardware (and maybe ARM's pKVM implementation?) for those guarantees, but
+> >      only for SNP and TDX VMs.  For VMs where userspace is trusted to some extent,
+> >      e.g. SEV, there is value in ensuring a 1:1 association.
+> > 
+> >      And probably more importantly, relying on hardware for SNP and TDX yields a
+> >      poor ABI and complicates KVM's internals.  If the kernel doesn't guarantee a
+> >      page is exclusive to a guest, i.e. if userspace can hand out the same page
+> >      from a restrictedmem instance to multiple VMs, then failure will occur only
+> >      when KVM tries to assign the page to the second VM.  That will happen deep
+> >      in KVM, which means KVM needs to gracefully handle such errors, and it means
+> >      that KVM's ABI effectively allows plumbing garbage into its memslots.
 > 
-> Sorry, I don't understand. This patch does not add two kinds of
-> sockets into the ehash table all the time, but reverses the order of
-> deleting and adding sockets only.
-
-Not really.  It also reverses the order of sockets in ehash.  We were
-able to find newer sockets faster than older ones.  If a workload has
-many long-lived sockets, they would add constant time on newer socket's
-lookup.
-
-
-> The final result is the same as the
-> old time. I'm wondering why it could cause some regressions if there
-> are loads of long-lived connections.
+> It may not be a valid usage, but in my TDX environment I do meet below
+> issue.
 > 
-> > connections, but the change itself looks good.  I left a minor comment
-> > below.
-> >
-> > Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> >
+> kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0x80000000 ua=0x7fe1ebfff000 ret=0
+> kvm_set_user_memory AddrSpace#0 Slot#1 flags=0x4 gpa=0xffc00000 size=0x400000 ua=0x7fe271579000 ret=0
+> kvm_set_user_memory AddrSpace#0 Slot#2 flags=0x4 gpa=0xfeda0000 size=0x20000 ua=0x7fe1ec09f000 ret=-22
 > 
-> Thanks for reviewing :)
+> Slot#2('SMRAM') is actually an alias into system memory(Slot#0) in QEMU
+> and slot#2 fails due to below exclusive check.
 > 
-> >
-> > > ---
-> > > v5:
-> > > 1) adjust the style once more.
-> > >
-> > > v4:
-> > > 1) adjust the code style and make it easier to read.
-> > >
-> > > v3:
-> > > 1) get rid of else-if statement.
-> > >
-> > > v2:
-> > > 1) adding the sk node into the tail of list to prevent the race.
-> > > 2) fix the race condition when handling time-wait socket hashdance.
-> > > ---
-> > >  net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
-> > >  net/ipv4/inet_timewait_sock.c |  6 +++---
-> > >  2 files changed, 18 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> > > index 24a38b56fab9..f58d73888638 100644
-> > > --- a/net/ipv4/inet_hashtables.c
-> > > +++ b/net/ipv4/inet_hashtables.c
-> > > @@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
-> > >       spin_lock(lock);
-> > >       if (osk) {
-> > >               WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
-> > > -             ret = sk_nulls_del_node_init_rcu(osk);
-> > > -     } else if (found_dup_sk) {
-> > > +             ret = sk_hashed(osk);
-> > > +             if (ret) {
-> > > +                     /* Before deleting the node, we insert a new one to make
-> > > +                      * sure that the look-up-sk process would not miss either
-> > > +                      * of them and that at least one node would exist in ehash
-> > > +                      * table all the time. Otherwise there's a tiny chance
-> > > +                      * that lookup process could find nothing in ehash table.
-> > > +                      */
-> > > +                     __sk_nulls_add_node_tail_rcu(sk, list);
-> > > +                     sk_nulls_del_node_init_rcu(osk);
-> > > +             }
-> > > +             goto unlock;
-> > > +     }
-> > > +     if (found_dup_sk) {
-> > >               *found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
-> > >               if (*found_dup_sk)
-> > >                       ret = false;
-> > > @@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
-> > >       if (ret)
-> > >               __sk_nulls_add_node_rcu(sk, list);
-> > >
-> > > +unlock:
-> > >       spin_unlock(lock);
-> > >
-> > >       return ret;
-> > > diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-> > > index 1d77d992e6e7..6d681ef52bb2 100644
-> > > --- a/net/ipv4/inet_timewait_sock.c
-> > > +++ b/net/ipv4/inet_timewait_sock.c
-> > > @@ -91,10 +91,10 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(inet_twsk_put);
-> > >
-> > > -static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
-> > > +static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
-> > >                                  struct hlist_nulls_head *list)
-> >
-> > nit: Please indent here.
-> >
-> 
-> Before I submitted the patch, I did the check through
-> ./script/checkpatch.py and it outputted some information (no warning,
-> no error) as you said.
-> The reason I didn't change that is I would like to leave this part
-> untouch as it used to be. I have no clue about whether I should send a
-> v7 patch to adjust the format if necessary.
+> Currently I changed QEMU code to mark these alias slots as shared
+> instead of private but I'm not 100% confident this is correct fix.
 
-checkpatch.pl does not check everything.  You will find most functions
-under net/ipv4/*.c have same indentation in arguments.  I would recommend
-enforcing such styles on editor like
+That's a QEMU bug of sorts.  SMM is mutually exclusive with TDX, QEMU shouldn't
+be configuring SMRAM (or any SMM memslots for that matter) for TDX guests.
 
-  $ cat ~/.emacs.d/init.el
-  (setq-default c-default-style "linux")
+Actually, KVM should enforce that by disallowing SMM memslots for TDX guests.
+Ditto for SNP guests and UPM-backed SEV and SEV-ES guests.  I think it probably
+even makes sense to introduce that restriction in the base UPM support, e.g.
+something like the below.  That would unnecessarily prevent emulating SMM for
+KVM_X86_PROTECTED_VM types that aren't encrypted, but IMO that's an acceptable
+limitation until there's an actual use case for KVM_X86_PROTECTED_VM guests beyond
+SEV (my thought is that KVM_X86_PROTECTED_VM will mostly be a vehicle for selftests
+and UPM-based SEV and SEV-ES guests).
 
-Thanks,
-Kuniyuki
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 48b7bdad1e0a..0a8aac821cb0 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4357,6 +4357,14 @@ bool kvm_arch_has_private_mem(struct kvm *kvm)
+        return kvm->arch.vm_type != KVM_X86_DEFAULT_VM;
+ }
+ 
++bool kvm_arch_nr_address_spaces(struct kvm *kvm)
++{
++       if (kvm->arch.vm_type != KVM_X86_DEFAULT_VM)
++               return 1;
++
++       return KVM_ADDRESS_SPACE_NUM;
++}
++
+ static bool kvm_is_vm_type_supported(unsigned long type)
+ {
+        return type == KVM_X86_DEFAULT_VM ||
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 97801d81ee42..e0a3fc819fe5 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2126,7 +2126,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+             mem->restricted_offset + mem->memory_size < mem->restricted_offset ||
+             0 /* TODO: require gfn be aligned with restricted offset */))
+                return -EINVAL;
+-       if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
++       if (as_id >= kvm_arch_nr_address_spaces(vm) || id >= KVM_MEM_SLOTS_NUM)
+                return -EINVAL;
+        if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+                return -EINVAL;
 
-> 
-> Thanks,
-> Jason
-> 
-> >
-> > >  {
-> > > -     hlist_nulls_add_head_rcu(&tw->tw_node, list);
-> > > +     hlist_nulls_add_tail_rcu(&tw->tw_node, list);
-> > >  }
-> > >
-> > >  static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
-> > > @@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
-> > >
-> > >       spin_lock(lock);
-> > >
-> > > -     inet_twsk_add_node_rcu(tw, &ehead->chain);
-> > > +     inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
-> > >
-> > >       /* Step 3: Remove SK from hash chain */
-> > >       if (__sk_nulls_del_node_init_rcu(sk))
-> > > --
-> > > 2.37.3
