@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220F366D753
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA20666D751
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbjAQHz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S235721AbjAQHzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235772AbjAQHzW (ORCPT
+        with ESMTP id S235457AbjAQHzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:55:22 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0BF24480;
-        Mon, 16 Jan 2023 23:55:18 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id hw16so61516467ejc.10;
-        Mon, 16 Jan 2023 23:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Doys/SC0QOZ3upK94vMab3sn1eoA5ffBssidJQpR6WE=;
-        b=T7vjsLXATy6+GqiZT3hsLButMHNBLRladrcF5/He5OPGnFCjvUiXtlLVxdY+dP7iWW
-         hdkiuhaAaYo0QJZFRu1k6OoyFL6wLHV8LGBM2mGhlr9Iljzq792ZX2Rtxr0LeYNE2z+S
-         7wEMFCxC5mNwH5rI+dVxhl3mJJEyTNHkUydVBnrCMPeS7GLQ1tYPnKnBZzj3ASUom26S
-         aQwcHsr7MuzGbWyiCUhq9RYdpK1a+M5sM+WsZSIJQcVy5X1stM/STILqMb37S8hW2ngU
-         O/3sOPeR1n+CsDp7jjqrRUKfbu5WQsTwa3DlB4VV1CP7r+rEH1lhs3m67s8kiiZBTmOQ
-         TtmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Doys/SC0QOZ3upK94vMab3sn1eoA5ffBssidJQpR6WE=;
-        b=MOSiVSI3hRPexEkEWV9xT5muetD4T3NUmyJQjH1NB3h9XUqysKj6AgoMx+Veu3Mp4B
-         1gI7q0wcM6I/0Q4VBpuYkkcJ20qCbdXM5+rNpi/ppU/4GaIBgK3FJlCH8BL7nuisZp1J
-         12yFWmRspV/hzhkp8HB5iYHgHQRBV+F5CrE+/Vq+vWq2fgjgVdoWQUtMF88jsBFQwqNj
-         VHXBBf9c7JnocklqTh0Uw9SGnv7+kKJXTfO4HRHwfsC/BrCZaVJGhi6uc6okHEqKQFbn
-         SMnUMp/LnAcNsK6e0Dhj9JRQiPCLnZ9XITgrvNP7c0g91Fu1X3NbPRvRd7Gv0cgwv+bj
-         0fkA==
-X-Gm-Message-State: AFqh2kqhzO97heZcunE7uWYQTKvDxK3aGxUX3oYXWH5hcn+4u3it89e4
-        L05ItuThH5cs+ulmb6ZLp4sl/0BYxPv1+zzixx4=
-X-Google-Smtp-Source: AMrXdXtUspQBMKsdRawiO8iv21L66kOBo9o4QJxwo4y9amKrjl4eUvOXWL7oAQ8jT7OtiXFbPEJk/ALc+HxbDdpaNBA=
-X-Received: by 2002:a17:906:ce36:b0:7c1:6f86:ec4 with SMTP id
- sd22-20020a170906ce3600b007c16f860ec4mr200821ejb.621.1673942116562; Mon, 16
- Jan 2023 23:55:16 -0800 (PST)
+        Tue, 17 Jan 2023 02:55:15 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE9F12F10;
+        Mon, 16 Jan 2023 23:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tgCjPXZFRRY4U5M39+VA82RbzFcfXvKIe9LgETkZp/M=; b=daFNcSbOIYK0jdtwJF4dvqi+Cz
+        sq9lGDnRVCMCvOT3snc5ultyZrXmRkgdSjpdIj0V+kMSUYaWkrYS3cb9cnAbi9sYygG9tBS2Hqeoc
+        PWDEvYLF0sFdxN+9hB0Ujnk4jrZOYPA2V5QhZSg8D00FOiDlKdqr5lXo75Qs4m7hW1Gh1Eeku44KZ
+        zsB0RQ3ahRJq7JAEIeMb06dppOTAziVrldpKAALG8/7R+0z4anqO1z/0jlU7PFIpqiIbDRY5yjxY7
+        doEQeKgw/QMF8lU8yHyEEWiXzVHYKcbAgKIjbY9GxorO8Qg6VNwZotrPgkzIEkARRB50nzhDS8Z3M
+        Qca2vnYg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHgoG-00DFpG-R7; Tue, 17 Jan 2023 07:55:08 +0000
+Date:   Mon, 16 Jan 2023 23:55:08 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 02/34] iov_iter: Use IOCB/IOMAP_WRITE/op_is_write
+ rather than iterator direction
+Message-ID: <Y8ZUXEB/W+K0Jt6k@infradead.org>
+References: <167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk>
+ <167391049698.2311931.13641162904441620555.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-References: <2b4bc0b22fac32ab3a7262240019486804c1691f.1673806409.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <2b4bc0b22fac32ab3a7262240019486804c1691f.1673806409.git.christophe.jaillet@wanadoo.fr>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Tue, 17 Jan 2023 09:55:04 +0200
-Message-ID: <CAEnQRZC=JNGixTRVDnEK0p5rZWuQbOmQvApTUM5=0iJN9pzVRw@mail.gmail.com>
-Subject: Re: [PATCH] firmware: imx-dsp: Fix an error handling path in imx_dsp_setup_channels()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Paul Olaru <paul.olaru@nxp.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167391049698.2311931.13641162904441620555.stgit@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 8:35 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> If mbox_request_channel_byname() fails, the memory allocated a few lines
-> above still need to be freed before going to the error handling path.
->
-> Fixes: 046326989a18 ("firmware: imx: Save channel name for further use")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Mon, Jan 16, 2023 at 11:08:17PM +0000, David Howells wrote:
+> Use information other than the iterator direction to determine the
+> direction of the I/O:
+> 
+>  (*) If a kiocb is available, use the IOCB_WRITE flag.
+> 
+>  (*) If an iomap_iter is available, use the IOMAP_WRITE flag.
+> 
+>  (*) If a request is available, use op_is_write().
 
-Good catch.
+The really should be three independent patches.  Plus another one
+to drop the debug checks in cifs.
 
-Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+The changes themselves look good to me.
+
+>  
+> +static unsigned char iov_iter_rw(const struct iov_iter *i)
+> +{
+> +	return i->data_source ? WRITE : READ;
+> +}
+
+It might as well make sense to just open code this in the only
+caller as well (yet another patch).
