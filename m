@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC77C66DEFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B8566DEE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjAQNip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S232113AbjAQNan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjAQNie (ORCPT
+        with ESMTP id S230167AbjAQNag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:38:34 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477EB59C6;
-        Tue, 17 Jan 2023 05:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673962713; x=1705498713;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=1YxIhrDQKE2lDqlUyO/ARVgD5QjeSGAHzdlrkVl5mCo=;
-  b=FVs309qlXE78B/GssbtiD3lcrLHRsXs0LWTpSX3bPI1VX5MnhjUqEIyK
-   QJP44sF2pnZSLspTukaj9oFzkmWPYZs3egj9PjEHMp9FwXrtSlaw6bh0R
-   zuaJ0c0tz0Wpy8vbZwPYZi7J/IEz7OIRGv23X16xlv9gHmII35eDXs09H
-   AA6G/MZqhrLlu1MmC1ZWljcI0i6v3EuwGGflRY8N5YV8TjTfiXQxShVxj
-   VswTR/Vo1DTBFZubbZyH7zsITbqoxlUgBG8I2rgZ+/L6Y6YZtzz36AwK1
-   gyxy9TC4vkKGuug6kKK9iG3tV8jjTys5v09lApvjGZ24gjyZ//07LfFWg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="324748849"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="324748849"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 05:38:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="783240137"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="783240137"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2023 05:38:03 -0800
-Date:   Tue, 17 Jan 2023 21:30:15 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-Message-ID: <20230117133015.GE273037@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
- <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
+        Tue, 17 Jan 2023 08:30:36 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E35134C2C;
+        Tue, 17 Jan 2023 05:30:35 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id x36so10403530ede.13;
+        Tue, 17 Jan 2023 05:30:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MBwIoMBPyxUVrndCKlTiGJI/DLVDR0WmkczeSTQwFd4=;
+        b=beWkEeyZZuJ+yMBXEOznjupxkcQSbVFWkQ6pYjwk8tfO1hSG10YiU0TKZP595fH0fP
+         C8gqgYqdldl+o3S/Ybu/DSwVM+Fh/GDNtZc++Jci2d2+nc4YlggHgnQz2avZ+cMmVwJy
+         merKJ8oYzfpvAxDG7gpXYTyPgLyFr8xVUXFaPPv7nkDe1EpPhV0E9V02JuscCyqCODc+
+         1AN+juj3ymMz0aYN3yNEQpauo8CM1JqKiesVg8LKNBb2nmSBXxrctL0Zt4WcSlJgAf0Y
+         tdDWDHpTKCUflAQWjAsXZI/UJBVhpqMT1A/MPEln1yxhmB2JaWd5ccuTi9EaduFqHDQP
+         YWgQ==
+X-Gm-Message-State: AFqh2kr16LTEIaV+jkOqqbfK4lQPlWRR/UbHUD2YUUksorwObIVowL2h
+        pYr/Yp3OvvAze7n7DjxPhaa+yk/Bh1gCrjLEU/k=
+X-Google-Smtp-Source: AMrXdXu3alUkSln2qykUNLTegOZ+xdifU8V3d9czapg5aFnIMArXmnakmgYKdtZVESamFhXZnir11ffTh5InSFRkNZY=
+X-Received: by 2002:aa7:dd41:0:b0:47e:4f0b:7ad9 with SMTP id
+ o1-20020aa7dd41000000b0047e4f0b7ad9mr238376edw.239.1673962233779; Tue, 17 Jan
+ 2023 05:30:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230115235202.24695-1-bhuwz@163.com>
+In-Reply-To: <20230115235202.24695-1-bhuwz@163.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Jan 2023 14:30:17 +0100
+Message-ID: <CAJZ5v0iobEEpOY-ww6GqBbKk-MKmyWFSLi8akVUM9fZT7foSUw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Send CPUFREQ_CREATE_POLICY notification after
+ the perf domain creation.
+To:     Vincent Wang <bhuwz@163.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Wang <vincentwang3@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:21:10AM +0800, Binbin Wu wrote:
-> 
-> On 12/2/2022 2:13 PM, Chao Peng wrote:
-> > In confidential computing usages, whether a page is private or shared is
-> > necessary information for KVM to perform operations like page fault
-> > handling, page zapping etc. There are other potential use cases for
-> > per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> > or exec-only, etc.) without having to modify memslots.
-> > 
-> > Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> > userspace to operate on the per-page memory attributes.
-> >    - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
-> >      a guest memory range.
-> >    - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
-> >      memory attributes.
-> > 
-> > KVM internally uses xarray to store the per-page memory attributes.
-> > 
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
-> > ---
-> >   Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
-> >   arch/x86/kvm/Kconfig           |  1 +
-> >   include/linux/kvm_host.h       |  3 ++
-> >   include/uapi/linux/kvm.h       | 17 ++++++++
-> 
-> Should the changes introduced in this file also need to be added in
-> tools/include/uapi/linux/kvm.h ?
+On Mon, Jan 16, 2023 at 12:52 AM Vincent Wang <bhuwz@163.com> wrote:
+>
+> From: Vincent Wang <vincentwang3@lenovo.com>
+>
+> We found the following issue during kernel boot on android phone:
+>
+> [    1.325272][    T1] cpu cpu0: EM: created perf domain
+> [    1.329317][    T1] cpu cpu4: EM: created perf domain
+> [    1.337597][   T76] pd_init: no EM found for CPU7
+> [    1.350849][    T1] cpu cpu7: EM: created perf domain
+>
+> pd init for cluster2 is executed in a kworker thread and
+> is earlier than the perf domain creation for cluster2.
+>
+> pd_init() is called from the cpufreq notification of
+> CPUFREQ_CREATE_POLICY in cpufreq_online(), which is earlier
+> than that cpufreq_driver->register_em() is called.
+>
+> To avoid this issue, cpufreq notification should be sent after
+> the perf domain creation.
+>
+> Signed-off-by: Vincent Wang <vincentwang3@lenovo.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 7e56a42750ea..af8836069398 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1430,9 +1430,6 @@ static int cpufreq_online(unsigned int cpu)
+>                         policy->max_freq_req = NULL;
+>                         goto out_destroy_policy;
+>                 }
+> -
+> -               blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+> -                               CPUFREQ_CREATE_POLICY, policy);
+>         }
 
-Yes I think. But I'm hesitate to include in this patch or not. I see
-many commits sync kernel kvm.h to tools's copy. Looks that is done
-periodically and with a 'pull' model.
+AFAICS, in some cases, this may cause cpufreq_online() to send
+CPUFREQ_REMOVE_POLICY without sending CPUFREQ_CREATE_POLICY which is
+generally confusing to its callers.
 
-Chao
+I'm wondering if you can reorder the EM registration before the
+initialization of frequency QoS for the policy?
+
+>
+>         if (cpufreq_driver->get && has_target()) {
+> @@ -1506,6 +1503,9 @@ static int cpufreq_online(unsigned int cpu)
+>                  */
+>                 if (cpufreq_driver->register_em)
+>                         cpufreq_driver->register_em(policy);
+> +
+> +               blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+> +                               CPUFREQ_CREATE_POLICY, policy);
+>         }
+>
+>         ret = cpufreq_init_policy(policy);
+> --
