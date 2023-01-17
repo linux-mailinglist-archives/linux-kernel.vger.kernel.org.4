@@ -2,169 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3A166E8CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B1766E8CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjAQV5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S229521AbjAQV5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjAQVvv (ORCPT
+        with ESMTP id S230259AbjAQVvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 16:51:51 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 96743A249
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:15:07 -0800 (PST)
-Received: (qmail 180556 invoked by uid 1000); 17 Jan 2023 15:15:06 -0500
-Date:   Tue, 17 Jan 2023 15:15:06 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-Message-ID: <Y8cBypKx4gM3wBJa@rowland.harvard.edu>
-References: <Y8RmEtBnwqOzNhsK@rowland.harvard.edu>
- <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
- <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
- <20230116221357.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8aKlNY4Z0z2Yqs0@andrea>
- <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CA237556;
+        Tue, 17 Jan 2023 12:17:05 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id p185so5821945oif.2;
+        Tue, 17 Jan 2023 12:17:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LWeHEeDhyytvt0z9wAJVJnP5zvi6qEzhrzvFt2FSXKo=;
+        b=nqG++bv5SMbCkyItEJsopYmCrNQYBZliMYHw9/BRsf2f8/1TTZvisz1XWI3HAG3V1a
+         7shFtILFudcopzSS8ZojA9U6N/q9Yt60PvZnQMrF12YF6cLVfkBJ6g5tUw5woHJxROKY
+         KyOyVJCTonnlE1ueXx5f+TSkZ3h2U7TPBuQ4jeajT8M0eN0zjojAfFRqH92Jc75oiT3A
+         UXgEqPUKJb/fCXf7mR+TcxnTDNm89juDo/8M70nnp0BpzP036aGwXa0gz+FcIG0Gj08e
+         SBmBJSFE9/zoSENXn8Q1TDgtxsYP6Ej6deVYv5qJG3X5OoW9EIqBWS3ilXsYAGVMQ81k
+         yM3A==
+X-Gm-Message-State: AFqh2kpdgwrEqkYBuVIk1mZ0JnjAKXoR/I+CJMM67IhqXaVDX4Mja9Ci
+        7VxXXtLSBniOUxs+tJ8LxQ==
+X-Google-Smtp-Source: AMrXdXvN97KhxW15va857G2nD7sxVdqeGZh+s1NP2CQrFacIO7mFtVEcuvxG4t9ucxbdl0jh4jbfPw==
+X-Received: by 2002:a05:6808:b31:b0:360:ceb6:1f6f with SMTP id t17-20020a0568080b3100b00360ceb61f6fmr1910323oij.54.1673986624462;
+        Tue, 17 Jan 2023 12:17:04 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bu10-20020a0568300d0a00b0066eb4e9242esm17229273otb.67.2023.01.17.12.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 12:17:03 -0800 (PST)
+Received: (nullmailer pid 3636832 invoked by uid 1000);
+        Tue, 17 Jan 2023 20:17:03 -0000
+Date:   Tue, 17 Jan 2023 14:17:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: bridge: Add GPIO display
+ mux binding
+Message-ID: <20230117201703.GA3555326-robh@kernel.org>
+References: <20230116110820.2615650-1-treapking@chromium.org>
+ <20230116110820.2615650-2-treapking@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230116110820.2615650-2-treapking@chromium.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:43:08AM -0800, Paul E. McKenney wrote:
-> On Tue, Jan 17, 2023 at 10:56:34AM -0500, Alan Stern wrote:
-> > Isn't it true that the current code will flag srcu-bad-nesting if a 
-> > litmus test has non-nested overlapping SRCU read-side critical sections?
+On Mon, Jan 16, 2023 at 07:08:19PM +0800, Pin-yen Lin wrote:
+> From: Nicolas Boichat <drinkcat@chromium.org>
 > 
-> Now that you mention it, it does indeed, flagging srcu-bad-nesting.
+> Add bindings for Generic GPIO mux driver.
 > 
-> Just to see if I understand, different-values yields true if the set
-> contains multiple elements with the same value mapping to different
-> values.  Or, to put it another way, if the relation does not correspond
-> to a function.
-
-As I understand it, given a relation r (i.e., a set of pairs of events), 
-different-values(r) returns the sub-relation consisting of those pairs 
-in r for which the value associated with the first event of the pair is 
-different from the value associated with the second event of the pair.
-
-For srcu_read_lock() and loads in general, the associated value is the 
-value returned by the function call.  For srcu_read_unlock() and stores 
-in general, the associated value is the value (i.e., the second 
-argument) passed to the function call.
-
-> Or am I still missing something?
+> Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> ---
 > 
-> > And if it is true, is there any need to change the memory model at this 
-> > point?
-> > 
-> > (And if it's not true, that's most likely due to a bug in herd7.)
+> Changes in v2:
+> - Referenced existing dt-binding schemas from graph.yaml
+> - Added ddc-i2c-bus into the bindings
 > 
-> Agreed, changes must wait for SRCU support in herd7.
-
-Apparently the only change necessary is to make the srcu_read_lock and 
-srcu_read_unlock events act like loads and stores.  In particular, they 
-need to be subject to the standard rules for calculating dependencies.
-
-Right now the behavior is kind of strange.  The following simple litmus 
-test:
-
-C test
-{}
-P0(int *x)
-{
-	int r1;
-	r1 = srcu_read_lock(x);
-	srcu_read_unlock(x, r1);
-}
-exists (~0:r1=0)
-
-produces the following output from herd7:
-
-Test test Allowed
-States 1
-0:r1=906;
-Ok
-Witnesses
-Positive: 1 Negative: 0
-Condition exists (not (0:r1=0))
-Observation test Always 1 0
-Time test 0.01
-Hash=2f42c87ae9c1d267f4e80c66f646b9bb
-
-Don't ask me where that 906 value comes from or why it is't 0.  Also, 
-herd7's graphical output shows there is no data dependency from the lock 
-to the unlock, but we need to have one.
-
-> At which point something roughly similar to this might work?
+>  .../bindings/display/bridge/gpio-mux.yaml     | 95 +++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
 > 
-> let srcu-rscs = return_value(Srcu-lock) ; (dep | rfi)* ;
-> 		parameter(Srcu-unlock, 2)
+> diff --git a/Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml b/Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
+> new file mode 100644
+> index 000000000000..da29ba078f05
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
+> @@ -0,0 +1,95 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/bridge/gpio-mux.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic display mux (1 input, 2 outputs)
+> +
+> +maintainers:
+> +  - Nicolas Boichat <drinkcat@chromium.org>
+> +
+> +description: |
+> +  This bindings describes a simple display (e.g. HDMI) mux, that has 1
+> +  input, and 2 outputs. The mux status is controlled by hardware, and
+> +  its status is read back using a GPIO.
+> +
+> +properties:
+> +  compatible:
+> +    const: gpio-display-mux
+> +
+> +  detect-gpios:
+> +    maxItems: 1
+> +    description: GPIO that indicates the active output
 
-I can't tell what that's supposed to mean.  In any case, I think what 
-you want would be:
+What are we detecting? That implies an input, but this is selecting the 
+output path, right? Or what does 'mux status is controlled by hardware' 
+mean exactly? Something else? That does not sound very generic.
 
-let srcu-rscs = ([Srcu-lock] ; data ; [Srcu-unlock]) & loc
+In any case, we have a common mux binding so any kind of mux control 
+could be used here, not just GPIO. Then you can make this just a generic 
+display mux.
 
-> Given an Srcu-down and an Srcu-up:
+> +
+> +  ddc-i2c-bus:
+> +    description: phandle link to the I2C controller used for DDC EDID probing
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+
+This belongs in the connector node(s). 
+
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: |
+> +          Video port for input.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: |
+> +          2 video ports for output.
+> +          The reg value in the endpoints matches the GPIO status: when
+> +          GPIO is asserted, endpoint with reg value <1> is selected.
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - detect-gpios
+> +  - ports
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    hdmi_mux: hdmi_mux {
+> +      compatible = "gpio-display-mux";
+> +      detect-gpios = <&pio 36 GPIO_ACTIVE_HIGH>;
+> +      pinctrl-names = "default";
+> +      pinctrl-0 = <&hdmi_mux_pins>;
+> +      ddc-i2c-bus = <&hdmiddc0>;
+> +
+> +      ports {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        port@0 { /* input */
+> +          reg = <0>;
+> +
+> +          hdmi_mux_in: endpoint {
+> +            remote-endpoint = <&hdmi0_out>;
+> +          };
+> +        };
+> +
+> +        port@1 { /* output */
+> +          reg = <1>;
+> +
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          hdmi_mux_out_anx: endpoint@0 {
+> +            reg = <0>;
+> +            remote-endpoint = <&dp_bridge_in>;
+> +          };
+> +
+> +          hdmi_mux_out_hdmi: endpoint@1 {
+> +            reg = <1>;
+> +            remote-endpoint = <&hdmi_connector_in>;
+> +          };
+> +        };
+> +      };
+> +    };
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 > 
-> let srcu-rscs = ( return_value(Srcu-lock) ; (dep | rfi)* ;
-> 		  parameter(Srcu-unlock, 2) ) |
-> 		( return_value(Srcu-down) ; (dep | rf)* ;
-> 		  parameter(Srcu-up, 2) )
-> 
-> Seem reasonable, or am I missing yet something else?
-
-Not at all reasonable.
-
-For one thing, consider this question: Which statements lie inside a 
-read-side critical section?
-
-With srcu_read_lock() and a matching srcu_read_unlock(), the answer is 
-clear: All statements po-between the two.  With srcu_down_read() and 
-srcu_up_read(), the answer is cloudy in the extreme.
-
-Also, bear in mind that the Fundamental Law of RCU is formulated in 
-terms of stores propagating to a critical section's CPU.  What are we to 
-make of this when a single critical section can belong to more than one 
-CPU?
-
-Indeed, given:
-
-	P0(int *x) {
-		srcu_down_read(x);
-	}
-
-	P1(int *x) {
-		srcu_up_read(x);
-	}
-
-what are we to make of executions in which P1 executes before P0?
-
-Alan
