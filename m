@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8BB670B75
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA0666E8CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjAQWMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S229463AbjAQV4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjAQWKe (ORCPT
+        with ESMTP id S229588AbjAQV4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:10:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF70743929;
-        Tue, 17 Jan 2023 12:21:40 -0800 (PST)
+        Tue, 17 Jan 2023 16:56:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFA73EC46;
+        Tue, 17 Jan 2023 12:23:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93A066149D;
-        Tue, 17 Jan 2023 20:21:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B80C433EF;
-        Tue, 17 Jan 2023 20:21:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93B0F61518;
+        Tue, 17 Jan 2023 20:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC958C433EF;
+        Tue, 17 Jan 2023 20:23:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673986899;
-        bh=Ahz305irfJEYEaciGSCUAan8ZvfkPNYtPrVTtLvOXos=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TqYdeTp6e10o5DYlnE8KI3d6byA6xxpoDBDurmwtb3JYU2l9nXVwc2aTyocueSPjc
-         wi94QKnu2rHO/Pwf4OVcW3h/d8BaxIIRnk9EGHZdjedfKFJMRG1RhuVRKKvMLKXcGX
-         3vbWodHDylNutfHma9Jhfgep4OtNZKQPcKFqjYpTpkUOf5OaHZ19/NJlBQRmcIBmZT
-         l9kfbs17hJPftaKRIyEJIQ3eps5bFoV6IIM0xTJYeA14YrJFhU6Mk9A5RSP7s+6KGy
-         nsVRXRrwUKHN6oLpm5fc+REKYJUllN6sNGbdLKxPY+yXGm52hRSf9ZQiwSIgoTwEYq
-         CZGEcxKl6/ojw==
-From:   SeongJae Park <sj@kernel.org>
-Cc:     Alon Zahavi <zahavi.alon@gmail.com>,
-        almaz.alexandrovich@paragon-software.com, ntfs3@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Tal Lossos <tallossos@gmail.com>,
-        stable@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH] ntfs3: Fix attr_punch_hole() null pointer derenference
-Date:   Tue, 17 Jan 2023 20:21:36 +0000
-Message-Id: <20230117202136.116810-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220815110712.36982-1-zahavi.alon@gmail.com>
-References: 
+        s=k20201202; t=1673987014;
+        bh=n6m+ald1WgX//enXYtbifctYkdlMCaoOBEM/pBEAw0M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Y3nk2mG5ymMIQ3hrg9lHGrndqDLsxu+f1KXLkc4BdaaCxDxG4p76LCBai7GJJjVbI
+         64bwAa/u5TOD31JSp0gx8oA7gt4JT+7qPtK+wTx7ttveT26EBslgqER/u0jdY1nD0i
+         WIG3921swwcOcEDY87rF4egoJIxX6IsMfKGz41eE6QnOH1/VsqNfiLtaHhjwrgH9s/
+         7ZNVOXs/RDMYq9IdgQkW70PID7gfQLRTKl1PQ+cyRHCJVTf+9zYkx6EErIPm5WinfK
+         TAQW7C1uvhUKi+lDJyMDVVKzs1qyDtbArtIbdtc4H8j6C3oiVCpVKb3c2zda3Ba8rp
+         G9A/zjtLJO4Ug==
+Date:   Tue, 17 Jan 2023 14:23:32 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] misc: pci_endpoint_test: drop initial kernel-doc marker
+Message-ID: <20230117202332.GA144641@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230113063937.20912-1-rdunlap@infradead.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, 15 Aug 2022 14:07:12 +0300 Alon Zahavi <zahavi.alon@gmail.com> wrote:
-
-> From: Alon Zahavi <zahavi.alon@gmail.com>
+On Thu, Jan 12, 2023 at 10:39:37PM -0800, Randy Dunlap wrote:
+> This beginning comment is not kernel-doc, so change the "/**" to a
+> normal "/*" comment to prevent a kernel-doc warning:
 > 
-> The bug occours due to a misuse of `attr` variable instead of `attr_b`.
-> `attr` is being initialized as NULL, then being derenfernced
-> as `attr->res.data_size`.
+> drivers/misc/pci_endpoint_test.c:3: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Host side test driver to test endpoint functionality
 > 
-> This bug causes a crash of the ntfs3 driver itself,
-> If compiled directly to the kernel, it crashes the whole system.
-> 
-> Signed-off-by: Alon Zahavi <zahavi.alon@gmail.com>
-> Co-developed-by: Tal Lossos <tallossos@gmail.com>
-> Signed-off-by: Tal Lossos <tallossos@gmail.com>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> Cc: Krzysztof Wilczyński <kw@linux.com>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: Kishon Vijay Abraham I <kishon@kernel.org>
+> Cc: linux-pci@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-This patch has now merged in mainline as
-6d5c9e79b726cc473d40e9cb60976dbe8e669624.  stable@, could you please merge this
-in stable kernels?
-
-Fixes: be71b5cba2e64 ("fs/ntfs3: Add attrib operations") # 5.14
-
-
-Thanks,
-SJ
+Applied to pci/misc for v6.3, thanks!
 
 > ---
->  fs/ntfs3/attrib.c | 2 +-
+>  drivers/misc/pci_endpoint_test.c |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-> index e8c00dda42ad..4e74bc8f01ed 100644
-> --- a/fs/ntfs3/attrib.c
-> +++ b/fs/ntfs3/attrib.c
-> @@ -1949,7 +1949,7 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
->  		return -ENOENT;
->  
->  	if (!attr_b->non_res) {
-> -		u32 data_size = le32_to_cpu(attr->res.data_size);
-> +		u32 data_size = le32_to_cpu(attr_b->res.data_size);
->  		u32 from, to;
->  
->  		if (vbo > data_size)
-> -- 
-> 2.25.1
-> 
-> 
+> diff -- a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> --- a/drivers/misc/pci_endpoint_test.c
+> +++ b/drivers/misc/pci_endpoint_test.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> -/**
+> +/*
+>   * Host side test driver to test endpoint functionality
+>   *
+>   * Copyright (C) 2017 Texas Instruments
