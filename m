@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6B466E389
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F4766E38F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjAQQ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S231205AbjAQQ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjAQQ1N (ORCPT
+        with ESMTP id S230064AbjAQQ3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:27:13 -0500
+        Tue, 17 Jan 2023 11:29:22 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BACD18173;
-        Tue, 17 Jan 2023 08:27:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C6218173
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:29:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673972832; x=1705508832;
+  t=1673972962; x=1705508962;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=HxFIc/F4tODmGWHQvVFrU/McHRhB0/99ZlsYIwoeLug=;
-  b=g+Lr213l0P00HO48cbQgG1Eup8Iytd2hTmWn8Hr8Fhc7oQXteO37unsu
-   LN+PSDyiVcfuUfWw8gQgarHqFdKp3S34XzPur9gCHNpzigx2ku8Vecji7
-   uxp912XJBzlRYnwrUCOgQz5a/GiY8YxRuJ4HqnXIjFE/39y6k8nPZ2cQe
-   OOHtlPi4WJZZ+vwQ3h7vfe9wnz4hEv5DEKimxKs00bOphjPDDa8z9zFLO
-   /ZMLPiN99clwfOcFPaZCkaVq0pRzFvrNGaxxr2ZRXqfZggOEuNd0yZ3sb
-   3Sr14Xriw7krGlDi/jHths8FfeAY3qZ+IE7sRy0J9erEQOnmdPGJhYqPZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="410977281"
+  bh=J25ZO4Fo+CyEJQWifu6vL4gf36afFOMMlBdBWdwNLd4=;
+  b=A/8x6Y1STH0WOkopHf/w7L6me7GnGgcmz2FI4DHp9KCAfHMasuYLnoLB
+   mjNpQW+pxtbv6OxR/eXW4MPeeIPZuP+yTKWx0nmW2MN8EwOEwKMWQgCkx
+   kucv1AI33xmjZVPks4gfSwRNxp30S2DKOem6O4vFWJX5yFQ3Y0J1u1/4X
+   kq+qPFHTx7CyOzXQ3BrfPZeD8QEAI2qJVcIYca3k+nBzNGvFaZ4+rDk27
+   +9+dbIHUHZoG3/ud04iH0AeltH1EyWSC9Geni4cJcAHxksjlQy1V4gKL9
+   nICGQEgHYaaQsdINS6apoPWuLB512Sm78B487jkIqGqldnlUKCU7qbKKz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="410978100"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="410977281"
+   d="scan'208";a="410978100"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:25:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="833230009"
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:29:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="833230990"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="833230009"
-Received: from rdaly-mobl.ger.corp.intel.com (HELO [10.213.212.83]) ([10.213.212.83])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:25:11 -0800
-Message-ID: <db60bb1d-51b6-6830-5a4c-100ba38a2dbc@linux.intel.com>
-Date:   Tue, 17 Jan 2023 16:25:09 +0000
+   d="scan'208";a="833230990"
+Received: from youli-mobl1.amr.corp.intel.com (HELO [10.255.228.205]) ([10.255.228.205])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:29:21 -0800
+Message-ID: <e491fe87-2c2a-e9d2-3cd9-dfc7535f7c27@intel.com>
+Date:   Tue, 17 Jan 2023 08:29:28 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [RFC 04/12] drm/cgroup: Track clients per owning process
+Subject: Re: [PATCH v4 6/6] x86/microcode/intel: Print when early microcode
+ loading fails
 Content-Language: en-US
-To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Brian Welty <brian.welty@intel.com>, Kenny.Ho@amd.com,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org, "T . J . Mercier" <tjmercier@google.com>
-References: <20230112165609.1083270-1-tvrtko.ursulin@linux.intel.com>
- <20230112165609.1083270-5-tvrtko.ursulin@linux.intel.com>
- <20230117160311.GA15842@linux.intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230117160311.GA15842@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Ingo Molnar <mingo@kernel.org>, alison.schofield@intel.com,
+        reinette.chatre@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
+References: <20230109153555.4986-1-ashok.raj@intel.com>
+ <20230109153555.4986-7-ashok.raj@intel.com> <Y8ROaoJtUtj5bPcx@zn.tnic>
+ <Y8bI4BBst78qrApD@a4bf019067fa.jf.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y8bI4BBst78qrApD@a4bf019067fa.jf.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,60 +69,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 17/01/2023 16:03, Stanislaw Gruszka wrote:
-> Hi
+On 1/17/23 08:12, Ashok Raj wrote:
+> On Sun, Jan 15, 2023 at 08:05:14PM +0100, Borislav Petkov wrote:
+>> On Mon, Jan 09, 2023 at 07:35:55AM -0800, Ashok Raj wrote:
+>>> Currently when early microcode loading fails there is no way for the
+>>> user to know that the update failed.
+>> Of course there is - there's no early update message in dmesg.
+> Sorry Boris, didn't comprehend. 
 > 
-> On Thu, Jan 12, 2023 at 04:56:01PM +0000, Tvrtko Ursulin wrote:
->> From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
->>
->> To enable propagation of settings from the cgroup drm controller to drm we
->> need to start tracking which processes own which drm clients.
->>
->> Implement that by tracking the struct pid pointer of the owning process in
->> a new XArray, pointing to a structure containing a list of associated
->> struct drm_file pointers.
->>
->> Clients are added and removed under the filelist mutex and RCU list
->> operations are used below it to allow for lockless lookup.
->>
->> Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+> Without user making some additional steps to check the revision in the
+> default location and the current rev reported to find the update failed.
 > 
-> <snip>
-> 
->> +int drm_clients_open(struct drm_file *file_priv)
->> +{
->> +	struct drm_device *dev = file_priv->minor->dev;
->> +	struct drm_pid_clients *clients;
->> +	bool new_client = false;
->> +	unsigned long pid;
->> +
->> +	lockdep_assert_held(&dev->filelist_mutex);
->> +
->> +	pid = (unsigned long)rcu_access_pointer(file_priv->pid);
->> +	clients = xa_load(&drm_pid_clients, pid);
->> +	if (!clients) {
->> +		clients = __alloc_clients();
->> +		if (!clients)
->> +			return -ENOMEM;
->> +		new_client = true;
->> +	}
->> +	atomic_inc(&clients->num);
->> +	list_add_tail_rcu(&file_priv->clink, &clients->file_list);
->> +	if (new_client) {
->> +		void *xret;
->> +
->> +		xret = xa_store(&drm_pid_clients, pid, clients, GFP_KERNEL);
->> +		if (xa_err(xret)) {
->> +			list_del_init(&file_priv->clink);
->> +			kfree(clients);
->> +			return PTR_ERR(clients);
-> 
-> This looks incorrect, rather xa_err(xret) should be returned.
+> Maybe that's what you meant.
 
-Thanks, looks like a copy & paste error. Noted to correct before next 
-public post.
+I think a better changelog might help here.  The original was a bit too
+absolute.  There is, as Boris pointed out, a way to tell if a failure
+occurred.  But, that method is a bit unfriendly to our users.
 
-Regards,
+--
 
-Tvrtko
+When early microcode loading succeeds, the kernel prints a message via
+print_ucode_info() that starts with 'early update:'.  If loading fails,
+apply_microcode_early() returns before that message is printed.  This
+means that users must know to go looking for that message.  They can
+infer a early microcode loading failure if they do not see the message.
+
+That's not great for users.  Instead of expecting them to infer this, be
+more explicit about it.  Instead of bailing out and returning from
+apply_microcode_early(), stash the error code off and plumb it down to
+print_ucode_info().
+
+This ensures that a message of some kind is printed on all early loads:
+successes *and* failures.  This should make it easier for our hapless
+users to figure out when a failure occurred.
