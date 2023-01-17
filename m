@@ -2,197 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AB6670D13
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2121E670D97
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjAQXRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:17:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S230019AbjAQXeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjAQXPt (ORCPT
+        with ESMTP id S230048AbjAQXcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:15:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B133B0CD
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:02:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673989353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7w76HtfzwdcmqP5jdkU9ZLwca97vCioI41/SywejLwE=;
-        b=M/fIwXXcTo7ILdgRtL++tSXWvi1IhF0WtUZ5Np8wkGkcAUNiXpS230rdFfjuu1L2ZFbOMn
-        W1uLsJRvBjuQZg835XGK6t/kDoG+8xDOCRio786rrCE6nZlht15YD5pMh57I9ZTYwqNnnh
-        VboeeJ9lTkaf/YP08PxFIzNzJWwrMj8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-554-lVCDMP6vM5CkTz4IUw167g-1; Tue, 17 Jan 2023 16:02:32 -0500
-X-MC-Unique: lVCDMP6vM5CkTz4IUw167g-1
-Received: by mail-ej1-f69.google.com with SMTP id wz4-20020a170906fe4400b0084c7e7eb6d0so22479699ejb.19
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:02:32 -0800 (PST)
+        Tue, 17 Jan 2023 18:32:54 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E383CE33
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:03:14 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id v17so5699441oie.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:03:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zfEqVK+RYVz2dN9ZOupR4yHgB7WZQv3MJYztxeL+5Xc=;
+        b=LDfx9vc+Y38Mn1Rs0kcG0pXmB1UTfEU/iOvU7gmofIoKOya9iHq6VfoY1qU/kBB0k6
+         vlxeI9awjroyWOiws1Kj+ylDPMGff9OYplninlS7bWj20s3Iqrz+VFqv9YDDOnkIUhAG
+         pLyGgUT+2y+xCj6EAGD+Wosk/sh+sMqq1t0xOaZmikJsKMfxobPgIwPiPseY2nw5qXe+
+         8Bn23e45g8OElQ6sBCbErDUAaoJSZKKiYg1XY+DmtfPO5NOHPk7bi1viLmweWPp8UX7T
+         PLHsVxe45pZPQ1xtEhBX/6yscP8QfaXu5y206tNE7jxIGeqiWvtmA4/QTuYWZylZIU7f
+         0leA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7w76HtfzwdcmqP5jdkU9ZLwca97vCioI41/SywejLwE=;
-        b=3cFyrSt+1Sb1YgTDcrEZiFMMAZyS2rnsxZEWmbVMM1GQy6R6MQbzIUcE7FqJrlWEOd
-         FmbJTTCo0GQdYMqCFBL2oocVkSOnXYnR5hx/iqx3iw6/IqUzR+lndq5hYgQFQm42JEle
-         pad9/VZtECXYdj0JL1Ucmver3HhyPPSnk0hR7RDwJi/r6oTVfVbCRQv18tESoRBi/SX6
-         YeUmURCJgloIHdfH/ciiOZWKIsncb2BunZS43FvOD0R5JeVO7jp9229Sl6wPiL3OafoS
-         TCEnnHArp3f6lnX1RcZ8lcD1ZwNANxWPQ7ThSAZuukjun6t4XoKUxKSrWs4PYXDPoxCh
-         XNVg==
-X-Gm-Message-State: AFqh2koUXMhBKiphKFb8y5SrDfpvAcFolI1vD6q0ovUvi1u9QdtvZvLb
-        pPgckaXbsjwUfmP4KZ2NpjYKrWlLV+NuYwpOlPW/DEE7joQP8S5MAOu5ShZh/Jw1RnqbZIguKJb
-        8hyHHq/2Ujn1X49P6Z56DUimB
-X-Received: by 2002:a17:906:f49:b0:864:8c78:e7ff with SMTP id h9-20020a1709060f4900b008648c78e7ffmr524130ejj.23.1673989351199;
-        Tue, 17 Jan 2023 13:02:31 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvAJSrzqGgbRw1prAYhG1g+FMQCC1Uscp3OUxHkrUrWI/VWjJQOxnfATQw4f1HIT+XTEqIsJg==
-X-Received: by 2002:a17:906:f49:b0:864:8c78:e7ff with SMTP id h9-20020a1709060f4900b008648c78e7ffmr524102ejj.23.1673989350949;
-        Tue, 17 Jan 2023 13:02:30 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id q21-20020a17090676d500b0086a2e31d1c1sm5876991ejn.28.2023.01.17.13.02.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 13:02:30 -0800 (PST)
-Message-ID: <a204fdeb-b2bb-5c61-8a75-de6dd244892a@redhat.com>
-Date:   Tue, 17 Jan 2023 22:02:29 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zfEqVK+RYVz2dN9ZOupR4yHgB7WZQv3MJYztxeL+5Xc=;
+        b=r49TTO+J1HT3l3IACfyqiqZ9TyCMonSI16218Bh9ViuoXsPcYF7yqSVci3z+cHxsCP
+         N2UNCN7Nvo4ngijXRogTrWg4kMpy1yGZuLd2dDMZakaLEt6gxjw2xrdoN1Zmatv0yXGh
+         i3i9gSRs44yTHWHp2hbQJpmzdkWw9Z7CDZseXezE2myTl9XaFFmlbGTZ36UqmNKRT3g4
+         ADa/V46weMEtxfwx1yyw3A/4428/9z05kSIeDegrgT4TyKx44QuLJNn56+XauPNbv6lL
+         SdWfdnBQcTUL7OPOrvF0pW4D7NNUJILPxzgxQeUNxN905Y46ULetIzlwDJK9IXXodeTs
+         HGdA==
+X-Gm-Message-State: AFqh2koY+dduPKGaj4viHx1hmi06fwQTKh3JMNYElwK6FsXlTb+lBjcb
+        Zjjjeth4VKrCTGFLLrSrtL9P8Gnoi8TeQB4OUkA80YTS
+X-Google-Smtp-Source: AMrXdXvDFWC8RH8P2THHJkEJ8U8eikLyA3GduhlkdGUC68h6pM+zXj1AXAk7a9ylP3xIx2YJx2ehvp/stRmWfBk9Uxs=
+X-Received: by 2002:aca:2807:0:b0:35b:f5f7:3ed0 with SMTP id
+ 7-20020aca2807000000b0035bf5f73ed0mr299595oix.46.1673989393929; Tue, 17 Jan
+ 2023 13:03:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] iio: light: cm32181: Fix PM support on system with 2 I2C
- resources
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
-Cc:     Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
+References: <20230117205452.195298-1-hamza.mahfooz@amd.com>
+In-Reply-To: <20230117205452.195298-1-hamza.mahfooz@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 17 Jan 2023 16:03:01 -0500
+Message-ID: <CADnq5_Njw0uFYnB7--A=0Zv78ETLeXpNvH6Zc4znpTPLLQgwkA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: fix issues with driver unload
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <roman.li@amd.com>, dri-devel@lists.freedesktop.org,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        hersen wu <hersenxs.wu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         linux-kernel@vger.kernel.org
-References: <20230117160951.282581-1-kai.heng.feng@canonical.com>
- <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
-Content-Language: en-US, nl
-In-Reply-To: <5c95d25b-ff26-053b-efc8-5f6fd979c7e2@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jan 17, 2023 at 3:55 PM Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
+>
+> Currently, we run into a number of WARN()s when attempting to unload the
+> amdgpu driver (e.g. using "modprobe -r amdgpu"). These all stem from
+> calling drm_encoder_cleanup() too early. So, to fix this we can stop
+> calling drm_encoder_cleanup() in amdgpu_dm_fini() and instead have it be
+> called from amdgpu_dm_encoder_destroy(). Also, we don't need to free in
+> amdgpu_dm_encoder_destroy() since mst_encoders[] isn't explicitly
+> allocated by the slab allocater.
+>
+> Fixes: f74367e492ba ("drm/amdgpu/display: create fake mst encoders ahead of time (v4)")
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 
-On 1/17/23 18:19, Hans de Goede wrote:
-> Hi,
-> 
-> On 1/17/23 17:09, Kai-Heng Feng wrote:
->> Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
->> with 2 I2C resources") creates a second client for the actual I2C
->> address, but the "struct device" passed to PM ops is the first client
->> that can't talk to the sensor.
->>
->> That means the I2C transfers in both suspend and resume routines can
->> fail and blocking the whole suspend process.
->>
->> Instead of using the first client for I2C transfer, store the cm32181
->> private struct on both cases so the PM ops can get the correct I2C
->> client to perfrom suspend and resume.
->>
->> Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
->> Tested-by: Wahaj <wahajaved@protonmail.com>
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> 
-> Thank you for this fix. I had looking into this on my todo list,
-> since I have been seeing some bug reports about this too.
-> 
-> One remark inline:
-> 
->> ---
->>  drivers/iio/light/cm32181.c | 11 +++++++----
->>  1 file changed, 7 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
->> index 001055d097509..0f319c891353c 100644
->> --- a/drivers/iio/light/cm32181.c
->> +++ b/drivers/iio/light/cm32181.c
->> @@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
->>  	if (!indio_dev)
->>  		return -ENOMEM;
->>  
->> +	i2c_set_clientdata(client, indio_dev);
->> +
-> 
-> Why move this up, the suspend/resume callbacks cannot run until
-> probe() completes, so no need for this change.
-> 
->>  	/*
->>  	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
->>  	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
->> @@ -458,9 +460,9 @@ static int cm32181_probe(struct i2c_client *client)
->>  		client = i2c_acpi_new_device(dev, 1, &board_info);
->>  		if (IS_ERR(client))
->>  			return PTR_ERR(client);
->> -	}
->>  
->> -	i2c_set_clientdata(client, indio_dev);
->> +		i2c_set_clientdata(client, indio_dev);
->> +	}
-> 
-> And moving it inside the if block here (instead of just dropping it)
-> is also weird. I guess you meant to just delete it since you moved it up.
-> 
->>  
->>  	cm32181 = iio_priv(indio_dev);
->>  	cm32181->client = client;
-> 
-> Also note that the ->client used in suspend/resume now is not set until
-> here, so moving the i2c_set_clientdata() up really does not do anything.
-> 
-> I beleive it would be best to just these 2 hunks from the patch and
-> only keep the changes to the suspend/resume callbacks.
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 
-p.s.
-
-I believe that this will likely also fix:
-https://bugzilla.redhat.com/show_bug.cgi?id=2152281
-
-Can you please add a:
-
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
-
-to the next version.
-
-Regards,
-
-Hans
-
-
-
-> 
-> 
->> @@ -490,7 +492,8 @@ static int cm32181_probe(struct i2c_client *client)
->>  
->>  static int cm32181_suspend(struct device *dev)
->>  {
->> -	struct i2c_client *client = to_i2c_client(dev);
->> +	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
->> +	struct i2c_client *client = cm32181->client;
->>  
->>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
->>  					 CM32181_CMD_ALS_DISABLE);
->> @@ -498,8 +501,8 @@ static int cm32181_suspend(struct device *dev)
->>  
->>  static int cm32181_resume(struct device *dev)
->>  {
->> -	struct i2c_client *client = to_i2c_client(dev);
->>  	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
->> +	struct i2c_client *client = cm32181->client;
->>  
->>  	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
->>  					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
-> 
-
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c           | 4 ----
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 1 -
+>  2 files changed, 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 9547037857b6..5cc14ed2e93e 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -1733,10 +1733,6 @@ static void amdgpu_dm_fini(struct amdgpu_device *adev)
+>                 adev->dm.vblank_control_workqueue = NULL;
+>         }
+>
+> -       for (i = 0; i < adev->dm.display_indexes_num; i++) {
+> -               drm_encoder_cleanup(&adev->dm.mst_encoders[i].base);
+> -       }
+> -
+>         amdgpu_dm_destroy_drm_device(&adev->dm);
+>
+>  #if defined(CONFIG_DRM_AMD_SECURE_DISPLAY)
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> index bbeeee7c5d7c..5fa9bab95038 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> @@ -492,7 +492,6 @@ static const struct drm_connector_helper_funcs dm_dp_mst_connector_helper_funcs
+>  static void amdgpu_dm_encoder_destroy(struct drm_encoder *encoder)
+>  {
+>         drm_encoder_cleanup(encoder);
+> -       kfree(encoder);
+>  }
+>
+>  static const struct drm_encoder_funcs amdgpu_dm_encoder_funcs = {
+> --
+> 2.39.0
+>
