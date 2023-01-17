@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689EB66D6E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8328066D6EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235656AbjAQHaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S235805AbjAQHaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbjAQH34 (ORCPT
+        with ESMTP id S235679AbjAQH37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:29:56 -0500
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE3222A38;
-        Mon, 16 Jan 2023 23:29:54 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZm6e-J_1673940576;
-Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZm6e-J_1673940576)
+        Tue, 17 Jan 2023 02:29:59 -0500
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E85D22DC1;
+        Mon, 16 Jan 2023 23:29:55 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZm6e2H_1673940589;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZm6e2H_1673940589)
           by smtp.aliyun-inc.com;
-          Tue, 17 Jan 2023 15:29:48 +0800
+          Tue, 17 Jan 2023 15:29:49 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Ian Rogers <irogers@google.com>
@@ -40,13 +40,12 @@ Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
         Shuai Xue <xueshuai@linux.alibaba.com>,
         Zhuo Song <zhuo.song@linux.alibaba.com>,
         Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v8 0/9] Add metrics for neoverse-n2-v2
-Date:   Tue, 17 Jan 2023 15:29:24 +0800
-Message-Id: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH v8 1/9] perf pmu: Add #slots literal support for arm64
+Date:   Tue, 17 Jan 2023 15:29:25 +0800
+Message-Id: <1673940573-90503-2-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
+References: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
         USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
@@ -56,184 +55,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v7:
-- Change pmu_core__find_same to pmu__find_core_pmu as suggested by Ian.
-- Returned NAN when can't find a pmu or the value from */caps/slots is
-  zero, in perf_pmu__cpu_slots_per_cycle, as suggested by John.
-- Link: https://lore.kernel.org/all/1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-Changes since v6:
-- Split patch 1 into 3 smaller patches as suggested by Ian.
-- Change perf_pmu__get_slots to perf_pmu__cpu_slots_per_cycle,
-  per John's suggestion;
-- Return NAN instead of 0 in perf_pmu__cpu_slots_per_cycle weak
-  function, per John's suggestion;
-- Factor out pmu_core__find_same function, per John's suggestion.
-- Link: https://lore.kernel.org/all/1673017529-1429208-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-Changes since v5:
-- Add common topdownL1 metrics in sbsa.json as suggested by John;
-- Correct PKI/MPKI ScaleUnit to 1PKI/1MPKI;
-- Link: https://lore.kernel.org/all/1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-Changes since v4:
-- Add MPKI/PKI “ScaleUnit”;
-- Add acked-by from Ian Rogers;
-- Link: https://lore.kernel.org/all/1671799045-1108027-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-Changes since v3:
-- Add ipc_rate metric;
-- Drop the PublicDescription;
-- Describe PEutilization metrics in more detail;
-- Link: https://lore.kernel.org/all/1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-Changes since v2:
-- Correct the furmula of Branch metrics;
-- Add more PE utilization metrics;
-- Add more TLB metrics;
-- Add “ScaleUnit” for some metrics;
-- Add a newline at the end of the file;
-- Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-Changes since v1:
-- Corrected formula for topdown L1 due to wrong counts for stall_slot
-  and stall_slot_frontend; 
-- Link: https://lore.kernel.org/all/1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com/
-
-This series does the following things:
-
 The slots in each architecture may be different, so add #slots literal
 to obtain the slots of different architectures, and the #slots can be
-applied in the topdown metric. Currently, The #slots just support for
-arm64, and other architectures will return NAN.
+applied in the metric. Currently, The #slots just support for arm64,
+and other architectures will return NAN.
 
-The metrics of topdown L1 are from ARM sbsa7.0 platform design doc[0],
-D37-38, which are standard. So put them in the common file sbsa.json of
-arm64 and add general metric support, so that other cores besides n2/v2
-can also be reused.
+On arm64, the value of slots is from the register PMMIR_EL1.SLOT, which
+I can read in /sys/bus/event_source/device/armv8_pmuv3_*/caps/slots.
+PMMIR_EL1.SLOT might read as zero if the PMU version is lower than
+ID_AA64DFR0_EL1_PMUVer_V3P4 or the STALL_SLOT event is not implemented.
 
-Then add topdownL1 metric for neoverse-n2-v2, and due to the wrong count
-of stall_slot and stall_slot_frontend on neoverse-n2, the real stall_slot
-and real stall_slot_frontend need to subtract cpu_cycles, so overwrite
-the "MetricExpr" for neoverse-n2.
-Reference from ARM neoverse-n2 errata notice [1], D117.
+Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+---
+ tools/perf/arch/arm64/util/pmu.c | 35 +++++++++++++++++++++++++++++++++--
+ tools/perf/util/expr.c           |  5 +++++
+ tools/perf/util/pmu.c            |  6 ++++++
+ tools/perf/util/pmu.h            |  1 +
+ 4 files changed, 45 insertions(+), 2 deletions(-)
 
-Since neoverse-n2/neoverse-v2 does not yet support topdown L2, metricgroups
-such as Cache, TLB, Branch, InstructionsMix, and PEutilization will be added
-to further analysis of performance bottlenecks in the following patches.
-Reference from ARM PMU guide [2][3].
-
-[0] https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
-[1] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
-[2] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
-[3] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
-
-Tested in neoverse-n2:
-
-$./perf list
-...
-Metric Groups:
-
-Branch:
-  branch_miss_pred_rate
-       [The rate of branches mis-predited to the overall branches]
-  branch_mpki
-       [The rate of branches mis-predicted per kilo instructions]
-  branch_pki
-       [The rate of branches retired per kilo instructions]
-Cache:
-  l1d_cache_miss_rate
-       [The rate of L1 D-Cache misses to the overall L1 D-Cache]
-  l1d_cache_mpki
-       [The rate of L1 D-Cache misses per kilo instructions]
-...
-
-
-$sudo ./perf stat -M TLB false_sharing 2
-
- Performance counter stats for 'false_sharing 2':
-
-            29,940      L2D_TLB                          #     20.0 %  l2_tlb_miss_rate         (42.36%)
-             5,998      L2D_TLB_REFILL                                                          (42.36%)
-             1,753      L1I_TLB_REFILL                   #      0.1 %  l1i_tlb_miss_rate        (43.17%)
-         2,173,957      L1I_TLB                                                                 (43.17%)
-       327,944,763      L1D_TLB                          #      0.0 %  l1d_tlb_miss_rate        (43.98%)
-            22,485      L1D_TLB_REFILL                                                          (43.98%)
-           497,210      L1I_TLB                          #      0.0 %  itlb_walk_rate           (44.83%)
-                28      ITLB_WALK                                                               (44.83%)
-       821,488,762      INST_RETIRED                     #      0.0 MPKI  itlb_mpki             (43.97%)
-               122      ITLB_WALK                                                               (43.97%)
-               744      DTLB_WALK                        #      0.0 %  dtlb_walk_rate           (43.01%)
-       263,913,146      L1D_TLB                                                                 (43.01%)
-       779,073,875      INST_RETIRED                     #      0.0 MPKI  dtlb_mpki             (42.07%)
-             1,050      DTLB_WALK                                                               (42.07%)
-
-       0.435864901 seconds time elapsed
-
-       1.201384000 seconds user
-       0.000000000 seconds sys
-
-
-$sudo ./perf stat -M TopDownL1 false_sharing 2
-
- Performance counter stats for 'false_sharing 2':
-
-     3,408,960,257      cpu_cycles                       #      0.0 %  bad_speculation
-                                                  #      5.1 %  retiring                 (66.79%)
-    19,576,079,610      stall_slot                                                              (66.79%)
-       877,673,452      op_spec                                                                 (66.79%)
-       876,324,270      op_retired                                                              (66.79%)
-     3,406,548,064      cpu_cycles                       #     26.7 %  frontend_bound           (67.08%)
-     7,961,814,801      stall_slot_frontend                                                     (67.08%)
-     3,415,528,440      cpu_cycles                       #     68.8 %  backend_bound            (66.43%)
-    11,746,647,747      stall_slot_backend                                                      (66.43%)
-
-       0.455229807 seconds time elapsed
-
-       1.243216000 seconds user
-       0.000000000 seconds sys
-
-$sudo ./perf stat -M branch sleep 1
-
- Performance counter stats for 'sleep 1':
-
-           901,495      INST_RETIRED                     #    223.6 PKI  branch_pki
-           201,603      BR_RETIRED
-           901,495      INST_RETIRED                     #     10.0 MPKI  branch_mpki
-             9,004      BR_MIS_PRED_RETIRED
-             9,004      BR_MIS_PRED_RETIRED              #      4.5 %  branch_miss_pred_rate
-           201,603      BR_RETIRED
-
-       1.000794467 seconds time elapsed
-
-       0.000905000 seconds user
-       0.000000000 seconds sys
-
-
-Jing Zhang (9):
-  perf pmu: Add #slots literal support for arm64
-  perf jevent: Add general metrics support
-  perf vendor events arm64: Add common topdown L1 metrics
-  perf vendor events arm64: Add topdown L1 metrics for neoverse-n2-v2
-  perf vendor events arm64: Add TLB metrics for neoverse-n2-v2
-  perf vendor events arm64: Add cache metrics for neoverse-n2-v2
-  perf vendor events arm64: Add branch metrics for neoverse-n2-v2
-  perf vendor events arm64: Add PE utilization metrics for
-    neoverse-n2-v2
-  perf vendor events arm64: Add instruction mix metrics for
-    neoverse-n2-v2
-
- tools/perf/arch/arm64/util/pmu.c                   |  35 ++-
- .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 273 +++++++++++++++++++++
- tools/perf/pmu-events/arch/arm64/sbsa.json         |  30 +++
- tools/perf/pmu-events/jevents.py                   |   2 +
- tools/perf/util/expr.c                             |   5 +
- tools/perf/util/pmu.c                              |   6 +
- tools/perf/util/pmu.h                              |   1 +
- 7 files changed, 350 insertions(+), 2 deletions(-)
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/sbsa.json
-
+diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+index 477e513..9e674ca 100644
+--- a/tools/perf/arch/arm64/util/pmu.c
++++ b/tools/perf/arch/arm64/util/pmu.c
+@@ -3,8 +3,10 @@
+ #include <internal/cpumap.h>
+ #include "../../../util/cpumap.h"
+ #include "../../../util/pmu.h"
++#include <api/fs/fs.h>
++#include <math.h>
+ 
+-const struct pmu_events_table *pmu_events_table__find(void)
++static struct perf_pmu *pmu__find_core_pmu(void)
+ {
+ 	struct perf_pmu *pmu = NULL;
+ 
+@@ -19,8 +21,37 @@ const struct pmu_events_table *pmu_events_table__find(void)
+ 		if (pmu->cpus->nr != cpu__max_cpu().cpu)
+ 			return NULL;
+ 
+-		return perf_pmu__find_table(pmu);
++		return pmu;
+ 	}
+ 
+ 	return NULL;
+ }
++
++const struct pmu_events_table *pmu_events_table__find(void)
++{
++	struct perf_pmu *pmu = pmu__find_core_pmu();
++
++	if (pmu)
++		return perf_pmu__find_table(pmu);
++
++	return NULL;
++}
++
++double perf_pmu__cpu_slots_per_cycle(void)
++{
++	char path[PATH_MAX];
++	unsigned long long slots = 0;
++	struct perf_pmu *pmu = pmu__find_core_pmu();
++
++	if (pmu) {
++		scnprintf(path, PATH_MAX,
++			EVENT_SOURCE_DEVICE_PATH "%s/caps/slots", pmu->name);
++		/*
++		 * The value of slots is not greater than 32 bits, but sysfs__read_int
++		 * can't read value with 0x prefix, so use sysfs__read_ull instead.
++		 */
++		sysfs__read_ull(path, &slots);
++	}
++
++	return slots ? (double)slots : NAN;
++}
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index 00dcde3..c1da20b 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -19,6 +19,7 @@
+ #include <linux/zalloc.h>
+ #include <ctype.h>
+ #include <math.h>
++#include "pmu.h"
+ 
+ #ifdef PARSER_DEBUG
+ extern int expr_debug;
+@@ -448,6 +449,10 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
+ 		result = topology->core_cpus_lists;
+ 		goto out;
+ 	}
++	if (!strcmp("#slots", literal)) {
++		result = perf_pmu__cpu_slots_per_cycle();
++		goto out;
++	}
+ 
+ 	pr_err("Unrecognized literal '%s'", literal);
+ out:
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 2bdeb89..cbb4fbf 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -19,6 +19,7 @@
+ #include <regex.h>
+ #include <perf/cpumap.h>
+ #include <fnmatch.h>
++#include <math.h>
+ #include "debug.h"
+ #include "evsel.h"
+ #include "pmu.h"
+@@ -1993,3 +1994,8 @@ int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+ 	*ucpus_ptr = unmatched_cpus;
+ 	return 0;
+ }
++
++double __weak perf_pmu__cpu_slots_per_cycle(void)
++{
++	return NAN;
++}
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 69ca000..fd414ba 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -259,4 +259,5 @@ int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+ 
+ char *pmu_find_real_name(const char *name);
+ char *pmu_find_alias_name(const char *name);
++double perf_pmu__cpu_slots_per_cycle(void);
+ #endif /* __PMU_H */
 -- 
 1.8.3.1
 
