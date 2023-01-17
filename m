@@ -2,130 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B87D670D0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B8F670D12
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjAQXQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S229510AbjAQXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjAQXNr (ORCPT
+        with ESMTP id S229632AbjAQXPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:13:47 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E8C305DC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:01:23 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id p24so34788454plw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:01:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oik7f+Obtqb9oYcFCZxNF6kU7CTToRcYlL6LRTQBU44=;
-        b=ZObfXX2Gb1HxVqeXxJx1k/YW5m5gwg1cpLLrVlMJ2+pTnSXrvA7vpoSoraw63QCidF
-         ATflzj3vD699uzgaDMpc+H5Stx+Bk1CmS3m7ZxtMsPPnw4BGlICH2lsHbYAnib5mUN/D
-         s/ib+uqIP792gG7o0TE2rd/ahd1agJ7UZwsJ8xTirF7G7tA6AuYHgellrnCR5ABCgRgQ
-         UVN9t+QVyXJQI13PC63B0MxKm1FvAs1g7ATiJfiOfgo6PhSo3Z86PVs/uxt+7Cdw+pv0
-         4XZk1v9hL8f/zUdMR+0AT4qMWskyZZTC/WTkOEYcwPg68EqucSCcC/TaMIPSUNkoVGDH
-         v/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oik7f+Obtqb9oYcFCZxNF6kU7CTToRcYlL6LRTQBU44=;
-        b=49HsjKy4wgQ+PYMswm63g7TdHll+Xnw5V431d481qo/mNblcATSailbsbNyxeFLfpn
-         F4SdNCJNpLIAwIFhDvPA368lXlM8YMaa/2AsyGmodN5j6yWPl2RzbqG+llk8AMH/9BoD
-         PpUIqV1Va/Iq1Au/R/meVMCSFAufDtnYTHDJf8e441KMbiP5htlsrDJHJW97pW7yvGJD
-         aG/sCyqr+yipGbYW/TdKFPryPrSWjswgslKeOjV7qPAbOlMgEx+xNuwzrl2YhKgindJQ
-         X1dL1jrxECN0H9gR+SrUXeeSwVuZmeHMaMGorOhqS9tA4HCzqBs0pd6CGIxnvXh9nV2v
-         0hWA==
-X-Gm-Message-State: AFqh2krEsaDhjO8/bsLhrhuwVYIrKQ8aJ+6WRGGa5WrVo9nUhS6k2l/8
-        /X3qh+sY2MHzthmELmmB3ZPrTA==
-X-Google-Smtp-Source: AMrXdXuhF09L1YSr6t9q2XBspLKlA69sK9BoqznjJjzvbl1iIrMmIFqZtvr7VXKd6/UbaIerQX9lig==
-X-Received: by 2002:a05:6a21:33a1:b0:ac:af5c:2970 with SMTP id yy33-20020a056a2133a100b000acaf5c2970mr2853170pzb.3.1673989282322;
-        Tue, 17 Jan 2023 13:01:22 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902ecca00b00189a7fbfd44sm21521000plh.211.2023.01.17.13.01.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:01:21 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:01:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
-Message-ID: <Y8cMnjHFNIFaoX27@google.com>
-References: <cover.1673539699.git.isaku.yamahata@intel.com>
- <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
- <20230113151258.00006a6d@gmail.com>
- <Y8F1uPsW56fVdhmC@google.com>
- <20230114111621.00001840@gmail.com>
- <Y8bFCb+rs25dKcMY@google.com>
- <20230117214414.00003229@gmail.com>
- <Y8cLcY12zDWqO8nd@google.com>
+        Tue, 17 Jan 2023 18:15:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5244345B;
+        Tue, 17 Jan 2023 13:03:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95BA06130C;
+        Tue, 17 Jan 2023 21:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECD6C433D2;
+        Tue, 17 Jan 2023 21:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673989414;
+        bh=Z1yj3AKv/D0tTj/52SlF339uoYemMNAwZOwWB+tc454=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Qxhz+jC1xMpz2hMxYPK3Fyh4vjWrdfcgaKBkL7uTJJnC0AR3xgxbyOcKTMfIcyRrP
+         AYmt3oofTG03GXnkvUzYXq6B9lzVS1XvEv6TkW/q3LFBjL1IMLQOZmrs5liSdvbQJW
+         SxQO0Q2zNOh6jOFzLoBPJ6hbJKJacULQYJOv86oD3VuUrBAllXWs6icRmaqdrWmHwH
+         DZhLOrZQyflX2bFV1PQqJFwTVERJ22jqnNAnUSIX/CP1ZUSaQbb9HRO+DlctktpwoI
+         lI88hzMjLIdt4jst+ktPd44D6sK2OiSnbqhoouKJmb+gipkGxwsaSGs2ET5ind+cOm
+         V5rxjIHXj5PLA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Tariq Toukan <tariqt@nvidia.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>, Lama Kayal <lkayal@nvidia.com>,
+        Moshe Tal <moshet@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] [v2] mlx5: reduce stack usage in mlx5_setup_tc
+Date:   Tue, 17 Jan 2023 22:01:55 +0100
+Message-Id: <20230117210324.1371169-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8cLcY12zDWqO8nd@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023, Sean Christopherson wrote:
-> On Tue, Jan 17, 2023, Zhi Wang wrote:
-> > 2) As TDX module doesn't provide contention-and-wait, I guess the following
-> > approach might have been discussed when designing this "retry".
-> > 
-> > KERNEL                          TDX MODULE
-> > 
-> > SEAMCALL A   ->                 PATH A: Taking locks
-> > 
-> > SEAMCALL B   ->                 PATH B: Contention on a lock
-> > 
-> >              <-                 Return "operand busy"
-> > 
-> > SEAMCALL B   -|
-> >               |  <- Wait on a kernel waitqueue
-> > SEAMCALL B  <-|
-> > 
-> > SEAMCALL A   <-                 PATH A: Return
-> > 
-> > SEAMCALL A   -|
-> >               |  <- Wake up the waitqueue
-> > SEMACALL A  <-| 
-> > 
-> > SEAMCALL B  ->                  PATH B: Taking the locks
-> > ...
-> > 
-> > Why not this scheme wasn't chosen?
-> 
-> AFAIK, I don't think a waitqueue approach as ever been discussed publicly.  Intel
-> may have considered the idea internally, but I don't recall anything being proposed
-> publically (though it's entirely possible I just missed the discussion).
-> 
-> Anways, I don't think a waitqueue would be a good fit, at least not for S-EPT
-> management, which AFAICT is the only scenario where KVM does the arbitrary "retry
-> X times and hope things work".  If the contention occurs due to the TDX Module
-> taking an S-EPT lock in VM-Enter, then KVM won't get a chance to do the "Wake up
-> the waitqueue" action until the next VM-Exit, which IIUC is well after the TDX
-> Module drops the S-EPT lock.  In other words, immediately retrying and then punting
-> the problem further up the stack in KVM does seem to be the least awful "solution"
-> if there's contention.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Oh, the other important piece I forgot to mention is that dropping mmu_lock deep
-in KVM's MMU in order to wait isn't always an option.  Most flows would play nice
-with dropping mmu_lock and sleeping, but some paths, e.g. from the mmu_notifier,
-(conditionally) disallow sleeping.
+Clang warns about excessive stack usage on 32-bit targets:
+
+drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1184) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
+static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
+
+It turns out that both the mlx5e_setup_tc_mqprio_dcb() function and
+the mlx5e_safe_switch_params() function it calls have a copy of
+'struct mlx5e_params' on the stack, and this structure is fairly
+large.
+
+Use dynamic allocation for the inner one.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2: simplify the patch
+---
+ .../net/ethernet/mellanox/mlx5/core/en_main.c   | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 6bb0fdaa5efa..b0b872728653 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -2998,32 +2998,37 @@ int mlx5e_safe_switch_params(struct mlx5e_priv *priv,
+ 			     mlx5e_fp_preactivate preactivate,
+ 			     void *context, bool reset)
+ {
+-	struct mlx5e_channels new_chs = {};
++	struct mlx5e_channels *new_chs;
+ 	int err;
+ 
+ 	reset &= test_bit(MLX5E_STATE_OPENED, &priv->state);
+ 	if (!reset)
+ 		return mlx5e_switch_priv_params(priv, params, preactivate, context);
+ 
+-	new_chs.params = *params;
++	new_chs = kzalloc(sizeof(*new_chs), GFP_KERNEL);
++	if (!new_chs)
++		return -ENOMEM;
++	new_chs->params = *params;
+ 
+-	mlx5e_selq_prepare_params(&priv->selq, &new_chs.params);
++	mlx5e_selq_prepare_params(&priv->selq, &new_chs->params);
+ 
+-	err = mlx5e_open_channels(priv, &new_chs);
++	err = mlx5e_open_channels(priv, new_chs);
+ 	if (err)
+ 		goto err_cancel_selq;
+ 
+-	err = mlx5e_switch_priv_channels(priv, &new_chs, preactivate, context);
++	err = mlx5e_switch_priv_channels(priv, new_chs, preactivate, context);
+ 	if (err)
+ 		goto err_close;
+ 
++	kfree(new_chs);
+ 	return 0;
+ 
+ err_close:
+-	mlx5e_close_channels(&new_chs);
++	mlx5e_close_channels(new_chs);
+ 
+ err_cancel_selq:
+ 	mlx5e_selq_cancel(&priv->selq);
++	kfree(new_chs);
+ 	return err;
+ }
+ 
+-- 
+2.39.0
+
