@@ -2,720 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3998F66D67F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EE166D67E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbjAQGo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 01:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S235729AbjAQGoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 01:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235736AbjAQGoG (ORCPT
+        with ESMTP id S235686AbjAQGoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 01:44:06 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7061F90D;
-        Mon, 16 Jan 2023 22:44:03 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 761F424E1BD;
-        Tue, 17 Jan 2023 14:44:02 +0800 (CST)
-Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 14:44:02 +0800
-Received: from [192.168.125.128] (113.72.144.207) by EXMBX161.cuchost.com
- (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 14:44:01 +0800
-Message-ID: <01824dab-ed75-973a-c1bc-562a1a9370a1@starfivetech.com>
-Date:   Tue, 17 Jan 2023 14:39:55 +0800
+        Tue, 17 Jan 2023 01:44:03 -0500
+X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Jan 2023 22:44:01 PST
+Received: from esa6.fujitsucc.c3s2.iphmx.com (esa6.fujitsucc.c3s2.iphmx.com [68.232.159.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934E11F494
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 22:44:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1673937842; x=1705473842;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=IVr4EMOh0nSwVXeUynaxIfDqxbjvDUa6v4WuBLbJEg4=;
+  b=f2qK3M2dRhheRjmXKPYTGvUAbRS97Q3ZUC7bBKiOYrzeky1+XSmWkqsD
+   bKmTKNKCi6DKGS39CVkEx5oWf4QVRS/fcpbOU9jCTUvL6+/q3+aT+SfNw
+   PZYBu/RnRt1D3zWcBnXfDbkMw4LBdqDknc4ndDzXhsRX2Z3mYQ+eU0GhZ
+   tUUxDJyU5K+4dO9Ip7kDzkPa+bIyCCS9/2nUdvD3kTHYuBfQ4Ej4RplKh
+   axMvC0ijXPTbtm6sTqhMwbd+WljPoi8DICeiyWb3Ux+Hid78YEfj30SOY
+   CQdUeROkLW0gVYxuFZj5Q73B+OUvSGcI2atyjXOOcK8SJ0XzsW/+4XsgW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="74693872"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669042800"; 
+   d="scan'208";a="74693872"
+Received: from mail-os0jpn01lp2104.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.104])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 15:40:50 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mP2YHXzC6sTdYPei25vGagL9Lgpo7ZBXomHBEGOe+DQwkRAs/CrneaMNbWaqWhi8NeFY6ncA5Y1U/75cTYKpZClKUExeRzujmQjB2k0+S+bqk5h4bk5A++jySuz7+F1n9OKsHpc2TYd9KLtMId+yhlJshmJwVjLvc1Oic6HkfSw/hxP7e3uyi1XGe7iwXYOc5c0/GDuGf10qVGTt3Zhw6iAquE7085+bbz3B4RDCgFtrhNrFhXXf0b9IFkQ5mnLtlRQli672qe/d/5mIoR6h/RtHRPRKMKYrzcKAsTwoHdjQF5rxnJCSra2Dxo2qZd3PyCDCqScVTuvo3sk9amEHmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IVr4EMOh0nSwVXeUynaxIfDqxbjvDUa6v4WuBLbJEg4=;
+ b=fJ7GTh4uv8EvJYxLdDg2yB8ezVmcspi3VYCc2Bh4iuPbbb2eIuZRSIsUvtQW/8oI6ah0neo3n2Udg6bFvTW/71363a4/R6zNGp6QtYGTHhkxJYwIz2nfvF/pVrnX9WUzKNRRUvcnpz6uVS248vJ7XEhkUZlEOV5hKOYyVs3e2lGjnRSMaEFkHfdVtAhX7Lla3MPiKZZsSGMvOF0sqcNbJargVswyWinylD2/OGO/uWlEzvL/X2eyovaTPeLzydC2T2wW5ygZEVZA+nxjEC64CBwD2ZMK3iYnD9TB+PI6+2Cz7LhTC/vIOQfZqs+9Z6gLGDWgebfeBOcb2GX/wwhiHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from OS3PR01MB9269.jpnprd01.prod.outlook.com (2603:1096:604:1c7::8)
+ by OS3PR01MB8288.jpnprd01.prod.outlook.com (2603:1096:604:1a3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Tue, 17 Jan
+ 2023 06:40:47 +0000
+Received: from OS3PR01MB9269.jpnprd01.prod.outlook.com
+ ([fe80::5706:2260:7e38:c637]) by OS3PR01MB9269.jpnprd01.prod.outlook.com
+ ([fe80::5706:2260:7e38:c637%6]) with mapi id 15.20.6002.012; Tue, 17 Jan 2023
+ 06:40:47 +0000
+From:   "Masahiko Yamada (Fujitsu)" <yamada.masahiko@fujitsu.com>
+To:     "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "acme@kernel.org" <acme@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "namhyung@kernel.org" <namhyung@kernel.org>
+CC:     "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 0/1] perf: fix reset interface potential failure
+Thread-Topic: [PATCH 0/1] perf: fix reset interface potential failure
+Thread-Index: AQHY+vJyjO9qsHnX5UKkyuivNjC9Wq6igBeA
+Date:   Tue, 17 Jan 2023 06:40:46 +0000
+Message-ID: <OS3PR01MB9269B2010B90029682F9E78BF3C69@OS3PR01MB9269.jpnprd01.prod.outlook.com>
+References: <20221118020016.1571100-1-yamada.masahiko@fujitsu.com>
+In-Reply-To: <20221118020016.1571100-1-yamada.masahiko@fujitsu.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
+ =?iso-2022-jp?B?Y2UwNTBfQWN0aW9uSWQ9ZjZkY2E0ZWItZDIyZi00MjE4LThkM2MtZDcw?=
+ =?iso-2022-jp?B?NjhjODMwNTg3O01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFi?=
+ =?iso-2022-jp?B?NGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9h?=
+ =?iso-2022-jp?B?NzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxl?=
+ =?iso-2022-jp?B?ZD10cnVlO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQt?=
+ =?iso-2022-jp?B?M2IwZjRmZWNlMDUwX01ldGhvZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9OYW1lPUZV?=
+ =?iso-2022-jp?B?SklUU1UtUkVTVFJJQ1RFRBskQiJMJT8lUhsoQjtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRl?=
+ =?iso-2022-jp?B?PTIwMjMtMDEtMTdUMDY6MTQ6NDRaO01TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?iso-2022-jp?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX1NpdGVJZD1hMTlmMTIx?=
+ =?iso-2022-jp?B?ZC04MWUxLTQ4NTgtYTlkOC03MzZlMjY3ZmQ0Yzc7?=
+x-shieldmailcheckerpolicyversion: FJ-ISEC-20181130-VDI-enc
+x-securitypolicycheck: OK by SHieldMailChecker v2.6.2
+x-shieldmailcheckermailid: 596dd29e71934096941b84376f41b844
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS3PR01MB9269:EE_|OS3PR01MB8288:EE_
+x-ms-office365-filtering-correlation-id: 55933cf9-9b12-45fb-7735-08daf855c3f2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BdYkzGQ1j5gPn9fxPfb0P8bL0+VRuKVeBVBCoXejz62/hIrodpYWciDY33LGf70QS7QdCXHyX/suVyOKngP8cbyBNBxuS2sESHgugrkgVxUfjRpiYqzcD0D4xtYJMPfqT+WR5MkQaHHZYm3TY5rMouQDdjZNnHXbYGbS2TEr7q8mLXJ1rk4p62CiS7tYG9p6h3A0gWVZc2koD+x5a3oGo7yk0prLojqm6xO3xG4wSSoEimTwAP5GU1qRbKg08tZV3UDb7UgnFTfWC2AxZDAG/W3P0cKX6PbOemj5Noj4ELsYloX2UbEMG/6zRO4xomtW9GKPtjyHW5nbJP/9Ah7Iy7ymcIM4BCjHOR7hPQPYErESwcmkAKAeEZpde465JlEqN22Nvuya5AZIq6uEvhYXiAVHeF2RzbTMo3m4bnMsaI3WdQWlh7K3ZoH+vWJxWl/TLq11Nw6W57GwGYQRTY8RMflUL1SdlhBeT68KqnHrYHHrGHG3MwOQu+sGQqH2xL/wvJKLEBAZhe6GAxrTJcGkbjL/purLX1bZPkZzlPmkTJSZ5pW4v45oe5Q6defoVkXjPUA1rdw3l6vbeGOAxJnwHhQmCg1faQLVOE0qOetvhRa0pbotkJyMjHFr3DbJPN0HYQgI/Q37/3TBBzZ3YGuF2J29QMZHPnWgiyrFwxOndKVFJOc1kZ+ilgesjvuutuOpdnL/Ryr/epJ3oBgqKSQAug==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB9269.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(376002)(39860400002)(396003)(1590799012)(451199015)(8676002)(66556008)(41300700001)(186003)(122000001)(66946007)(5660300002)(52536014)(76116006)(66476007)(4326008)(66446008)(64756008)(54906003)(82960400001)(38070700005)(1580799009)(110136005)(8936002)(316002)(2906002)(86362001)(38100700002)(71200400001)(85182001)(7696005)(478600001)(9686003)(55016003)(26005)(6506007)(33656002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?U2pBV25vUzBBaHZNWDNnelhEWFNPSlBqQlQxbVNpVDBBMjJYYmxtU3Vp?=
+ =?iso-2022-jp?B?c3BPczhsOS9rYSt3UlNFVy94V0t1RloxSEVjblBqclhGcXFWUEpEMWZx?=
+ =?iso-2022-jp?B?SENRUVhBSUZmaEo3WU1IWmJpVVNwSVN1Z21pVXBJcnk0UE1SNTBmcGFG?=
+ =?iso-2022-jp?B?anp5V2kveGs1SjRLOTgwK1R3ODNrQ0hZc05xTUtrczBlOWYxak1LeWpu?=
+ =?iso-2022-jp?B?cGxobEpQUytiZmZmSWtFb2x0TFZreGhDVHhHa1JGU0hRU25EMTl4c0pl?=
+ =?iso-2022-jp?B?a25XYzJvTWlsamJjOHVOeFhaQ1JJU01ESnkvbjR3cFdTQ1l2Z0x1cUJo?=
+ =?iso-2022-jp?B?NURQRml3aEVMeVQxR1VhY0JqZ3cwVkdGZmlUdG4zVDVKRC9Ra2c4MVlx?=
+ =?iso-2022-jp?B?RUpPV0g3NWNOaCtJQjNSYVRqWklMUVdKNnZ6Mnpwa2tyMlBLczNyZGRH?=
+ =?iso-2022-jp?B?RFByVVBuSGRJb1kvRWhYdWpGY3d1R2tNQTNQU0pGQTVrZk0zSmdCWDQ5?=
+ =?iso-2022-jp?B?aUNqT1VSY05HRFdkakJWdHIxcXVhYlZxYUdCOEtQbWE3Zzh0a3F1SVYv?=
+ =?iso-2022-jp?B?aDlKMGhhcWV5RWV4VXNNcW93aDNXUXVPQVBZU0JrTWF3cG9YSjNwdC9M?=
+ =?iso-2022-jp?B?NXhocUtITDZVeW03am9idzg5clQ3QWVkVTQ1OFAzZ3hUaFlTQmJ0OEV6?=
+ =?iso-2022-jp?B?c1pEd2Z5ZTBGQkh0bllrWUYzTE0vQ3VNOE9paFN0UHNQbkYwRmJESExy?=
+ =?iso-2022-jp?B?YTFGcEZNSnJNZzUvNHhUWkpyMENGZTRjbDZJY1o0bm1yYy9vVGF6RGNI?=
+ =?iso-2022-jp?B?aHd4WVI2MTJVSzE2VEhkRVcrSHFIQi9ySzN6aWI5cWtrNG0zK3VCT3hZ?=
+ =?iso-2022-jp?B?RDl6YlJJUmxiZGt2RzhOelRLZEZPY1N4SjFMa1Q5bUdUdTV1NnJaNEU5?=
+ =?iso-2022-jp?B?eXdKNmtKbUFCb3hNR2FsVjEzU01LYVp2ZU1VcTBhbnBtNkljd05qcEVo?=
+ =?iso-2022-jp?B?NWFYMlZWQnVESm1zQVhzMS9hY09aZ1ZvRDhCcWdVTmlJK050YkprWUxp?=
+ =?iso-2022-jp?B?bS9HdHlEZUVHU1pacmJlRDlLRHdlYXV3TDg5OVh6bHh5R3BOTU5mblNy?=
+ =?iso-2022-jp?B?NG5rQ2hQbmg0TjZ5bGtlSitydk4yY3lTSGlPUkozYmhlam03WXhIZGtE?=
+ =?iso-2022-jp?B?Um5KL3dDMlY4ZHBpMSt2cEpONjkybEVsYUVJc3dzSjZYTWxkMncyMHRK?=
+ =?iso-2022-jp?B?U0pldUlVVU4vRWEzVi9GUHBtTnNnLzFrelpLM1MvTGNGOGpGZFVGSk9u?=
+ =?iso-2022-jp?B?V1JwRXY1T3FsaWkyL0hVYzhyb2UxTGo4RTJNU1l1UVcxRGNwNTk0QUt6?=
+ =?iso-2022-jp?B?QS9JZFlWYTRaNTdydlhzSFBFTUpBczF4ZGJDaG5XeEVYWm03L3lOdVpr?=
+ =?iso-2022-jp?B?bmU3NnhIY0xFdmlOOU9DOHR6VkdzbkpQaTlWYUhVc1BmcmJ4RitDeDI5?=
+ =?iso-2022-jp?B?ODFEVTlpRlJaMjdyVjkwaGk0blVEQkZYMHh6dE1GYloveDA4T3grTnVT?=
+ =?iso-2022-jp?B?WUJDT1BMUTkrOVRXaUpXRk5MWmw4UjlXS2pUcmJQUVFPWWhqQnZlRkxl?=
+ =?iso-2022-jp?B?TGFkOFhkTlJtMkhoNHNvRGJVVXp0VzNSMjdXaEJMUmY1cENPN1ZtOS8v?=
+ =?iso-2022-jp?B?dGVvUWlDZTZYbStMTUwzZm9UYVNOM3VlL1J6TDdYUTFQODZsYlMvMzRn?=
+ =?iso-2022-jp?B?ZUpIUG9WTjhRQnJoQkQ0Wlk0TkNXUHpqVytRTmlTME5qdWhGL0Ewa203?=
+ =?iso-2022-jp?B?WDF3OWNNWnA1d0lzdkdKZnBGZmVJT3psUm1UYmVWR3pOMjlxWVJKOU9a?=
+ =?iso-2022-jp?B?NEptdGxQM1RNQ0dNVnMwRUVoSjd3czRlc3FjOG1DR0NkeEpYdGdBLzdl?=
+ =?iso-2022-jp?B?aHNUTkpWMTB5ai8rZHY0eVNqMGNwdGZacHErZGdib0R6QlBqQmh4WFRy?=
+ =?iso-2022-jp?B?QlJiNHozcG5aQ3AwSXZRMlNCWDZKZEpyUmM2VUdBZDlDVTlCQXlHclBF?=
+ =?iso-2022-jp?B?bi9EdDgrUDN0VjN4d1JmKys5V3NnZ2VwMStQRUs0c083NFZLZDlLWktE?=
+ =?iso-2022-jp?B?NG8xdG0xR0tGOENLQVB6bzhLY1pVSjF4ZjlYRHNJNnZpazk5Z2ExTEVo?=
+ =?iso-2022-jp?B?Tks5YXFGQ2RjYzQvMitzMjA4WFIyaWdoOXJFQ2twcUptZVQyZVZySEVj?=
+ =?iso-2022-jp?B?RE1URzVFbmh0M1lOODNZMmZZYWFUSEJFZjJRMDl2dDZRTDg0VFR2Uzhi?=
+ =?iso-2022-jp?B?NFB0R1FWZHNDZDJ3OXNTcUN3UDRqbm03WUE9PQ==?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 2/3] clocksource: Add StarFive timer driver
-Content-Language: en-US
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
- <20221223094801.181315-3-xingyu.wu@starfivetech.com>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <20221223094801.181315-3-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.144.207]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX161.cuchost.com
- (172.16.6.71)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?iso-2022-jp?B?ZjN3WkVHaUUvTjVCc1I5a1oyb0Rra3RVVEpDdVZJVVo5ZlJjNEdSeHRB?=
+ =?iso-2022-jp?B?MnFXRFVzdU9uazlzdmhrMG8wUm5PZE9BRldsVHJrK2o2K3NQZDZ3ejMw?=
+ =?iso-2022-jp?B?Wm1ocy8vWElnS0I1QWNkSzh3Y1RKbkJhLzVLZWVLNi9seUVnOGZuYmxn?=
+ =?iso-2022-jp?B?QzlBSWZlRTcrSTdBaW5QbkQxK0kwNjlkSEJMeUFmcnQ5N3FBMVZkRHda?=
+ =?iso-2022-jp?B?ZTJPZk5vS2lYZXplVUVkTytadXpXNGlkRVdxNGdZY2pFbXoxMUtRY0V2?=
+ =?iso-2022-jp?B?czZ3QlBZdnVNTE94NFo0LzFpTWRMWmk3Z1EvTzUwU25TOHRLeUQrQUNF?=
+ =?iso-2022-jp?B?OGFaTWJaYVdWbVhYd3NCQi9rczIyR09WU2FjWDRDNmdEQkpHcXJEUXlm?=
+ =?iso-2022-jp?B?eG5rNVFETStCODVxOGhLeW53YjZsakR1RXpJTnBGb0EvRSt1VDhBSk9X?=
+ =?iso-2022-jp?B?UlpJMFZJdmRBVEJza3lYSlRXZzRsTlM1SjgzcXhiMitZZlJUZjV3a0E2?=
+ =?iso-2022-jp?B?emNrb0V3TG4vTXczTkQ1R0xYY0tSYlFPcURycGRvYlplNlM4dUs4VnYz?=
+ =?iso-2022-jp?B?am55R0FyRFY5NFhZNjRJZitJWXRqN0l3ZmFPN2NiVTV6V0cxbys4QVE3?=
+ =?iso-2022-jp?B?SmpNSTRpZjhEbXpMb2pjNUJSNEJNM3V0bERuemVudXpNZzViTFpPYUg0?=
+ =?iso-2022-jp?B?RFEraHVYaTV0MmY5YjNiR3JPUWw5R1BBSjlRV2lWUm1ZNm4rc2hBR0VQ?=
+ =?iso-2022-jp?B?amY3eCs5MnJ3NTVYN1ZnR0h0cFd4d2xlNDBzcE1zYWhidmwrSmdmY0NC?=
+ =?iso-2022-jp?B?YkIzMW9WNC9ZMXRqMmtibXJtNWxpamVYUnl6bnpsS0dpLzFlUmtvc2ZN?=
+ =?iso-2022-jp?B?TVRwT2d6UjlJUEdXbGJTRGRCaE1rbkJHNDhJMVBnSDRtaW9sNXg3Rkt2?=
+ =?iso-2022-jp?B?WVJwR3BBUkxXVWhCd3I4a25tUkpGVThzdkxKYW1LN3RFSlYybmprWSs5?=
+ =?iso-2022-jp?B?NnFWeVprODFiSXNuS3pUbFZsc0FoSVNkSzhzdUpNZVYzdVFpVDIvY0dz?=
+ =?iso-2022-jp?B?S3pjc0VITnhVZ09rLzJ2Z2kyR1BRT3ZVV2djV2pWdm1BWHFqNnJ2eWNO?=
+ =?iso-2022-jp?B?WFpHRjBzbFRienZPWVUwRHRSQ1Y0RzlCUG9qWmIwTnZXSDQ1Z3EyRnBy?=
+ =?iso-2022-jp?B?bkdRZFlmcndKTlowdVdENmZvY2ZUM0d3ZTc2RTVHSzhuYXVOZXpXNngx?=
+ =?iso-2022-jp?B?K1hTMkxCYmZERnFTdjRSWjVuMWZqUDErT0RKRk0vWHpIL21HdDkxVkZy?=
+ =?iso-2022-jp?B?b3ZNOUxNVE80bk81RW5KYkFFUlNSaklPMENvSkdwQjlwNHRl?=
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB9269.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55933cf9-9b12-45fb-7735-08daf855c3f2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2023 06:40:46.9233
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8e7K6OW3Jr57Vab93poMYAVKc4YzmbFXMAddho/WRKMZwFT7HXwf4SbfpqFNkS6hyNahhKjkLML0BE/NNrq1CXJUNUemHOASyMG+hHCIUy8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8288
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/23 17:48, Xingyu Wu wrote:
-> Add timer driver for the StarFive JH7110 SoC.
-> 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
->  MAINTAINERS                          |   7 +
->  drivers/clocksource/Kconfig          |  12 +
->  drivers/clocksource/Makefile         |   1 +
->  drivers/clocksource/timer-starfive.c | 465 +++++++++++++++++++++++++++
->  drivers/clocksource/timer-starfive.h | 104 ++++++
->  5 files changed, 589 insertions(+)
->  create mode 100644 drivers/clocksource/timer-starfive.c
->  create mode 100644 drivers/clocksource/timer-starfive.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a70c1d0f303e..340ad9e0a31f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19623,6 +19623,13 @@ F:	Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
->  F:	drivers/reset/starfive/
->  F:	include/dt-bindings/reset/starfive*
->  
-> +STARFIVE TIMER DRIVER
-> +M:	Samin Guo <samin.guo@starfivetech.com>
-> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/timer/starfive*
-> +F:	drivers/clocksource/timer-starfive*
-> +
->  STATIC BRANCH/CALL
->  M:	Peter Zijlstra <peterz@infradead.org>
->  M:	Josh Poimboeuf <jpoimboe@kernel.org>
-> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-> index 4469e7f555e9..11400b3a8f5c 100644
-> --- a/drivers/clocksource/Kconfig
-> +++ b/drivers/clocksource/Kconfig
-> @@ -630,6 +630,18 @@ config RISCV_TIMER
->  	  is accessed via both the SBI and the rdcycle instruction.  This is
->  	  required for all RISC-V systems.
->  
-> +config STARFIVE_TIMER
-> +	bool "Timer for the STARFIVE SoCs"
-> +	depends on RISCV && OF && (SOC_STARFIVE || COMPILE_TEST)
-> +	select TIMER_OF
-> +	select CLKSRC_MMIO
-> +	default SOC_STARFIVE
-> +	help
-> +	  This enables the timers for StarFive SoCs. On RISC-V platform,
-> +	  the system has started RISCV_TIMER. But you can also use these timers
-> +	  to do a lot more on StarFive SoCs. These timers can provide much
-> +	  higher precision than RISCV_TIMER.
-> +
->  config CLINT_TIMER
->  	bool "CLINT Timer for the RISC-V platform" if COMPILE_TEST
->  	depends on GENERIC_SCHED_CLOCK && RISCV
-> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-> index 64ab547de97b..276695d95cdc 100644
-> --- a/drivers/clocksource/Makefile
-> +++ b/drivers/clocksource/Makefile
-> @@ -80,6 +80,7 @@ obj-$(CONFIG_INGENIC_TIMER)		+= ingenic-timer.o
->  obj-$(CONFIG_CLKSRC_ST_LPC)		+= clksrc_st_lpc.o
->  obj-$(CONFIG_X86_NUMACHIP)		+= numachip.o
->  obj-$(CONFIG_RISCV_TIMER)		+= timer-riscv.o
-> +obj-$(CONFIG_STARFIVE_TIMER)		+= timer-starfive.o
->  obj-$(CONFIG_CLINT_TIMER)		+= timer-clint.o
->  obj-$(CONFIG_CSKY_MP_TIMER)		+= timer-mp-csky.o
->  obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
-> diff --git a/drivers/clocksource/timer-starfive.c b/drivers/clocksource/timer-starfive.c
-> new file mode 100644
-> index 000000000000..8db413a22fdc
-> --- /dev/null
-> +++ b/drivers/clocksource/timer-starfive.c
-> @@ -0,0 +1,465 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Starfive Timer driver
-> + *
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + *
-> + * Author:
-> + * Xingyu Wu <xingyu.wu@starfivetech.com>
-> + * Samin Guo <samin.guo@starfivetech.com>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/clockchips.h>
-> +#include <linux/clocksource.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/irq.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_clk.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/reset.h>
-> +#include <linux/sched_clock.h>
-> +
-> +#include "timer-starfive.h"
-> +
-> +struct starfive_timer __initdata starfive_timer_jh7110 = {
-> +	.ctrl		= STARFIVE_TIMER_JH7110_CTL,
-> +	.load		= STARFIVE_TIMER_JH7110_LOAD,
-> +	.enable		= STARFIVE_TIMER_JH7110_ENABLE,
-> +	.reload		= STARFIVE_TIMER_JH7110_RELOAD,
-> +	.value		= STARFIVE_TIMER_JH7110_VALUE,
-> +	.intclr		= STARFIVE_TIMER_JH7110_INT_CLR,
-> +	.intmask	= STARFIVE_TIMER_JH7110_INT_MASK,
-> +	.timer_base	= {STARFIVE_TIMER_BASE(0), STARFIVE_TIMER_BASE(1),
-> +			   STARFIVE_TIMER_BASE(2), STARFIVE_TIMER_BASE(3)},
-> +};
-> +
-> +static inline struct starfive_clkevt *to_starfive_clkevt(struct clock_event_device *evt)
-> +{
-> +	return container_of(evt, struct starfive_clkevt, evt);
-> +}
-> +
-> +/* 0:continuous-run mode, 1:single-run mode */
-> +static inline void starfive_timer_set_mod(struct starfive_clkevt *clkevt, int mod)
-> +{
-> +	writel(mod, clkevt->ctrl);
-> +}
-> +
-> +/* Interrupt Mask Register, 0:Unmask, 1:Mask */
-> +static inline void starfive_timer_int_enable(struct starfive_clkevt *clkevt)
-> +{
-> +	writel(INTMASK_ENABLE_DIS, clkevt->intmask);
-> +}
-> +
-> +static inline void starfive_timer_int_disable(struct starfive_clkevt *clkevt)
-> +{
-> +	writel(INTMASK_ENABLE, clkevt->intmask);
-> +}
-> +
-> +/*
-> + * BIT(0): Read value represent channel intr status.
-> + * Write 1 to this bit to clear interrupt. Write 0 has no effects.
-> + * BIT(1): "1" means that it is clearing interrupt. BIT(0) can not be written.
-> + */
-> +static inline void starfive_timer_int_clear(struct starfive_clkevt *clkevt)
-> +{
-> +	/* waiting interrupt can be to clearing */
-> +	u32 value;
-> +	int ret = 0;
-> +
-> +	value = readl(clkevt->intclr);
-> +	ret = readl_poll_timeout_atomic(clkevt->intclr, value,
-> +					!(value & STARFIVE_TIMER_JH7110_INT_STATUS_CLR_AVA),
-> +					STARFIVE_DELAY_US, STARFIVE_TIMEOUT_US);
-> +	if (!ret)
-> +		writel(1, clkevt->intclr);
-> +}
-> +
-> +/*
-> + * The initial value to be loaded into the
-> + * counter and is also used as the reload value.
-> + */
-> +static inline void starfive_timer_set_load(struct starfive_clkevt *clkevt, u32 val)
-> +{
-> +	writel(val, clkevt->load);
-> +}
-> +
-> +static inline u32 starfive_timer_get_val(struct starfive_clkevt *clkevt)
-> +{
-> +	return readl(clkevt->value);
-> +}
-> +
-> +/*
-> + * Write RELOAD register to reload preset value to counter.
-> + * (Write 0 and write 1 are both ok)
-> + */
-> +static inline void starfive_timer_set_reload(struct starfive_clkevt *clkevt)
-> +{
-> +	writel(1, clkevt->reload);
-> +}
-> +
-> +static inline void starfive_timer_enable(struct starfive_clkevt *clkevt)
-> +{
-> +	writel(TIMER_ENA, clkevt->enable);
-> +}
-> +
-> +static inline void starfive_timer_disable(struct starfive_clkevt *clkevt)
-> +{
-> +	writel(TIMER_ENA_DIS, clkevt->enable);
-> +}
-> +
-> +static void timer_shutdown(struct starfive_clkevt *clkevt)
-> +{
-> +	starfive_timer_int_disable(clkevt);
-> +	starfive_timer_disable(clkevt);
-> +	starfive_timer_int_clear(clkevt);
-> +}
-> +
-> +static void starfive_timer_suspend(struct clock_event_device *evt)
-> +{
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	clkevt->reload_val = starfive_timer_get_val(clkevt);
-> +
-> +	starfive_timer_disable(clkevt);
-> +	starfive_timer_int_disable(clkevt);
-> +	starfive_timer_int_clear(clkevt);
-> +}
-> +
-> +static void starfive_timer_resume(struct clock_event_device *evt)
-> +{
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	starfive_timer_set_load(clkevt, clkevt->reload_val);
-> +	starfive_timer_set_reload(clkevt);
-> +	starfive_timer_int_enable(clkevt);
-> +	starfive_timer_enable(clkevt);
-> +}
-> +
-> +static int starfive_timer_tick_resume(struct clock_event_device *evt)
-> +{
-> +	starfive_timer_resume(evt);
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_timer_shutdown(struct clock_event_device *evt)
-> +{
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	timer_shutdown(clkevt);
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_get_clock_rate(struct starfive_clkevt *clkevt, struct device_node *np)
-> +{
-> +	int ret;
-> +	u32 rate;
-> +
-> +	if (clkevt->clk) {
-> +		clkevt->rate = clk_get_rate(clkevt->clk);
-> +		if (clkevt->rate > 0) {
-> +			pr_debug("clk_get_rate clkevt->rate: %d\n", clkevt->rate);
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	/* Next we try to get clock-frequency from dts.*/
-> +	ret = of_property_read_u32(np, "clock-frequency", &rate);
-> +	if (!ret) {
-> +		pr_debug("Timer: try get clock-frequency:%d Hz\n", rate);
-> +		clkevt->rate = rate;
-> +		return 0;
-> +	}
-> +	pr_err("Timer: get rate failed, need clock-frequency define in dts.\n");
-> +
-> +	return -ENOENT;
-> +}
-> +
-> +static int starfive_clocksource_init(struct starfive_clkevt *clkevt,
-> +				     const char *name, struct device_node *np)
-> +{
-> +	starfive_timer_set_mod(clkevt, MOD_CONTIN);
-> +	starfive_timer_set_load(clkevt, STARFIVE_MAX_TICKS);  /* val = rate --> 1s */
-> +	starfive_timer_int_disable(clkevt);
-> +	starfive_timer_int_clear(clkevt);
-> +	starfive_timer_int_enable(clkevt);
-> +	starfive_timer_enable(clkevt);
-> +
-> +	return clocksource_mmio_init(clkevt->value, name, clkevt->rate,
-> +				     STARFIVE_CLOCK_SOURCE_RATING, STARFIVE_VALID_BITS,
-> +				     clocksource_mmio_readl_down);
-> +}
-> +
-> +/*
-> + * IRQ handler for the timer
-> + */
-> +static irqreturn_t starfive_timer_interrupt(int irq, void *priv)
-> +{
-> +	struct clock_event_device *evt = (struct clock_event_device *)priv;
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	starfive_timer_int_clear(clkevt);
-> +
-> +	if (evt->event_handler)
-> +		evt->event_handler(evt);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int starfive_timer_set_periodic(struct clock_event_device *evt)
-> +{
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	starfive_timer_disable(clkevt);
-> +	starfive_timer_set_mod(clkevt, MOD_CONTIN);
-> +	starfive_timer_set_load(clkevt, clkevt->periodic);
-> +	starfive_timer_int_disable(clkevt);
-> +	starfive_timer_int_clear(clkevt);
-> +	starfive_timer_int_enable(clkevt);
-> +	starfive_timer_enable(clkevt);
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_timer_set_oneshot(struct clock_event_device *evt)
-> +{
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	starfive_timer_disable(clkevt);
-> +	starfive_timer_set_mod(clkevt, MOD_SINGLE);
-> +	starfive_timer_set_load(clkevt, STARFIVE_MAX_TICKS);
-> +	starfive_timer_int_disable(clkevt);
-> +	starfive_timer_int_clear(clkevt);
-> +	starfive_timer_int_enable(clkevt);
-> +	starfive_timer_enable(clkevt);
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_timer_set_next_event(unsigned long next,
-> +					 struct clock_event_device *evt)
-> +{
-> +	struct starfive_clkevt *clkevt = to_starfive_clkevt(evt);
-> +
-> +	starfive_timer_disable(clkevt);
-> +	starfive_timer_set_mod(clkevt, MOD_SINGLE);
-> +	starfive_timer_set_load(clkevt, next);
-> +	starfive_timer_enable(clkevt);
-> +
-> +	return 0;
-> +}
-> +
-> +static void starfive_set_clockevent(struct clock_event_device *evt)
-> +{
-> +	evt->features	= CLOCK_EVT_FEAT_PERIODIC |
-> +			  CLOCK_EVT_FEAT_ONESHOT |
-> +			  CLOCK_EVT_FEAT_DYNIRQ;
-> +	evt->set_state_shutdown	= starfive_timer_shutdown;
-> +	evt->set_state_periodic	= starfive_timer_set_periodic;
-> +	evt->set_state_oneshot	= starfive_timer_set_oneshot;
-> +	evt->set_state_oneshot_stopped = starfive_timer_shutdown;
-> +	evt->tick_resume	= starfive_timer_tick_resume;
-> +	evt->set_next_event	= starfive_timer_set_next_event;
-> +	evt->suspend		= starfive_timer_suspend;
-> +	evt->resume		= starfive_timer_resume;
-> +	evt->rating		= STARFIVE_CLOCKEVENT_RATING;
-> +}
-> +
-> +static int starfive_clockevents_register(struct starfive_clkevt *clkevt, unsigned int irq,
-> +					 struct device_node *np, const char *name)
-> +{
-> +	int ret = 0;
-> +
-> +	ret = starfive_get_clock_rate(clkevt, np);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	clkevt->periodic = DIV_ROUND_CLOSEST(clkevt->rate, HZ);
-> +
-> +	starfive_set_clockevent(&clkevt->evt);
-> +	clkevt->evt.name = name;
-> +	clkevt->evt.irq = irq;
-> +	clkevt->evt.cpumask = cpu_possible_mask;
-> +
-> +	ret = request_irq(irq, starfive_timer_interrupt,
-> +			  IRQF_TIMER | IRQF_IRQPOLL, name, &clkevt->evt);
-> +	if (ret)
-> +		pr_err("%s: request_irq failed\n", name);
-> +
-> +	clockevents_config_and_register(&clkevt->evt, clkevt->rate,
-> +					STARFIVE_MIN_TICKS, STARFIVE_MAX_TICKS);
-> +
-> +	return ret;
-> +}
-> +
-> +static void __init starfive_clkevt_base_init(struct starfive_timer *timer,
-> +					     struct starfive_clkevt *clkevt,
-> +					     void __iomem *base, int index)
-> +{
-> +	void __iomem *timer_base;
-> +
-> +	timer_base	= base + timer->timer_base[index];
-> +	clkevt->base	= timer_base;
-> +	clkevt->ctrl	= timer_base + timer->ctrl;
-> +	clkevt->load	= timer_base + timer->load;
-> +	clkevt->enable	= timer_base + timer->enable;
-> +	clkevt->reload	= timer_base + timer->reload;
-> +	clkevt->value	= timer_base + timer->value;
-> +	clkevt->intclr	= timer_base + timer->intclr;
-> +	clkevt->intmask	= timer_base + timer->intmask;
-> +}
-> +
-> +static int __init starfive_timer_jh7110_of_init(struct device_node *np)
-> +{
-> +	int index, count, irq, ret;
-> +	const char *name = NULL;
-> +	struct clk *clk;
-> +	struct clk *pclk;
-> +	struct reset_control *prst;
-> +	struct reset_control *rst;
-> +	struct starfive_clkevt *clkevt[STARFIVE_NR_TIMERS];
-> +	void __iomem *base;
-> +	struct starfive_timer *timer = &starfive_timer_jh7110;
-> +
-> +	base = of_iomap(np, 0);
-> +	if (!base)
-> +		return -ENXIO;
-> +
-> +	if (!of_device_is_available(np)) {
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	pclk = of_clk_get_by_name(np, "apb");
-> +	if (!IS_ERR(pclk)) {
-> +		if (clk_prepare_enable(pclk))
-> +			pr_warn("pclk for %pOFn is present, but could not be activated\n", np);
-> +	/*
-> +	 * Clock framework support is late, continue on
-> +	 * anyways if we don't find a matching clock.
-> +	 */
-> +	} else if (PTR_ERR(pclk) != -EPROBE_DEFER) {
-> +		ret = PTR_ERR(pclk);
-> +		goto err;
-> +	}
-> +
-> +	prst = of_reset_control_get(np, "apb");
-> +	if (!IS_ERR(prst)) {
-> +		ret = reset_control_deassert(prst);
-> +		if (ret)
-> +			goto prst_err;
-> +	/*
-> +	 * Reset framework support is late, continue on
-> +	 * anyways if we don't find a matching reset.
-> +	 */
-> +	} else if (PTR_ERR(prst) != -EPROBE_DEFER) {
-> +		ret = PTR_ERR(prst);
-> +		goto prst_err;
-> +	}
-> +
-> +	/* The number of timers used is determined according to the device tree. */
-> +	count = of_irq_count(np);
-> +	if (count > STARFIVE_NR_TIMERS || count <= 0) {
-> +		ret = -EINVAL;
-> +		goto count_err;
-> +	}
-> +
-> +	for (index = 0; index < count; index++) {
-> +		of_property_read_string_index(np, "clock-names", index, &name);
-> +		if (strncmp(name, "timer", strlen("timer")))
-> +			continue;
-> +
-> +		clkevt[index] = kzalloc(sizeof(*clkevt[index]), GFP_KERNEL);
-> +		if (!clkevt[index]) {
-> +			ret = -ENOMEM;
-> +			goto clkevt_err;
-> +		}
-> +
-> +		starfive_clkevt_base_init(timer, clkevt[index], base, index);
-> +
-> +		/* Ensure timers are disabled */
-> +		starfive_timer_disable(clkevt[index]);
-> +
-> +		clk = of_clk_get_by_name(np, name);
-> +		if (!IS_ERR(clk)) {
-> +			clkevt[index]->clk = clk;
-> +			if (clk_prepare_enable(clkevt[index]->clk))
-> +				pr_warn("clk for %pOFn is present, but could not be activated\n",
-> +					np);
-> +		} else if (PTR_ERR(clk) != -EPROBE_DEFER) {
-> +			ret = PTR_ERR(clk);
-> +			goto clk_err;
-> +		}
-> +
-> +		rst = of_reset_control_get(np, name);
-> +		if (!IS_ERR(rst)) {
-> +			clkevt[index]->rst = rst;
-> +			ret = reset_control_deassert(clkevt[index]->rst);
-> +			if (ret)
-> +				goto rst_err;
-> +		}
-> +
-> +		irq = irq_of_parse_and_map(np, index);
-> +		if (irq < 0) {
-> +			ret = -EINVAL;
-> +			goto irq_err;
-> +		}
-> +
-> +		snprintf(clkevt[index]->name, sizeof(clkevt[index]->name), "%s.ch%d",
-> +			 np->full_name, index);
-> +
-> +		ret = starfive_clockevents_register(clkevt[index], irq, np, clkevt[index]->name);
-> +		if (ret) {
-> +			pr_err("%s: init clockevents failed.\n", clkevt[index]->name);
-> +			goto register_err;
-> +		}
-> +		clkevt[index]->irq = irq;
-> +
-> +		ret = starfive_clocksource_init(clkevt[index], clkevt[index]->name, np);
-> +		if (ret)
-> +			goto init_err;
-> +	}
-> +	if (!IS_ERR(pclk))
-> +		clk_put(pclk);
-> +
-> +	return 0;
-> +
-> +init_err:
-> +register_err:
-> +	free_irq(clkevt[index]->irq, &clkevt[index]->evt);
-> +irq_err:
-> +rst_err:
-> +clk_err:
-> +	/* Only unregister the failed timer and the rest timers continue to work. */
-> +	if (!clkevt[index]->rst) {
-> +		reset_control_assert(clkevt[index]->rst);
-> +		reset_control_put(clkevt[index]->rst);
-> +	}
-> +	if (!clkevt[index]->clk) {
-> +		clk_disable_unprepare(clkevt[index]->clk);
-> +		clk_put(clkevt[index]->clk);
-> +	}
-> +	kfree(clkevt[index]);
-> +clkevt_err:
-> +count_err:
-> +prst_err:
-> +	if (!IS_ERR(pclk)) {
-> +		/* If no other timer successfully registers, pclk is disabled. */
-> +		if (!index)
-> +			clk_disable_unprepare(pclk);
-> +		clk_put(pclk);
-> +	}
-> +err:
-> +	iounmap(base);
-> +	return ret;
-> +}
-> +
-> +TIMER_OF_DECLARE(starfive_timer_jh7110, "starfive,jh7110-timers", starfive_timer_jh7110_of_init);
-> diff --git a/drivers/clocksource/timer-starfive.h b/drivers/clocksource/timer-starfive.h
-> new file mode 100644
-> index 000000000000..9fd3303b31d1
-> --- /dev/null
-> +++ b/drivers/clocksource/timer-starfive.h
-> @@ -0,0 +1,104 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#ifndef __STARFIVE_TIMER_H__
-> +#define __STARFIVE_TIMER_H__
-> +
-> +#define STARFIVE_NR_TIMERS		TIMERS_MAX
-> +/* Bias: Timer0-0x0, Timer1-0x40, Timer2-0x80, and so on. */
-> +#define STARFIVE_PER_TIMER_LEN		0x40
-> +#define STARFIVE_TIMER_BASE(x)		((TIMER_##x) * STARFIVE_PER_TIMER_LEN)
-> +
-> +#define STARFIVE_CLOCK_SOURCE_RATING	200
-> +#define STARFIVE_VALID_BITS		32
-> +#define STARFIVE_DELAY_US		0
-> +#define STARFIVE_TIMEOUT_US		10000
-> +#define STARFIVE_CLOCKEVENT_RATING	300
-> +#define STARFIVE_MAX_TICKS		0xffffffff
-> +#define STARFIVE_MIN_TICKS		0xf
-> +
-> +/*
-> + * JH7110 timer TIMER_INT_STATUS:
-> + * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> + * |     Bits     | 08~31 | 7 | 6 | 5 |  4  | 3 | 2 | 1 | 0 |
-> + * ----------------------------------------------------------
-> + * | timer(n)_int |  res  | 6 | 5 | 4 | Wdt | 3 | 2 | 1 | 0 |
-> + * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> + *
-> + * Software can read this register to know which interrupt is occurred.
-> + */
-> +#define STARFIVE_TIMER_JH7110_INT_STATUS	0x00
-> +#define STARFIVE_TIMER_JH7110_CTL		0x04
-> +#define STARFIVE_TIMER_JH7110_LOAD		0x08
-> +#define STARFIVE_TIMER_JH7110_ENABLE		0x10
-> +#define STARFIVE_TIMER_JH7110_RELOAD		0x14
-> +#define STARFIVE_TIMER_JH7110_VALUE		0x18
-> +#define STARFIVE_TIMER_JH7110_INT_CLR		0x20
-> +#define STARFIVE_TIMER_JH7110_INT_MASK		0x24
-> +#define STARFIVE_TIMER_JH7110_INT_STATUS_CLR_AVA	BIT(1)
-> +
-> +enum STARFIVE_TIMERS {
-> +	TIMER_0 = 0,
-> +	TIMER_1,
-> +	TIMER_2,
-> +	TIMER_3,
-> +	TIMER_4,  /*WDT*/
-> +	TIMER_5,
-> +	TIMER_6,
-> +	TIMER_7,
-> +	TIMERS_MAX
-> +};
-> +
-> +enum TIMERI_INTMASK {
-> +	INTMASK_ENABLE_DIS = 0,
-> +	INTMASK_ENABLE = 1
-> +};
-> +
-> +enum TIMER_MOD {
-> +	MOD_CONTIN = 0,
-> +	MOD_SINGLE = 1
-> +};
-> +
-> +enum TIMER_CTL_EN {
-> +	TIMER_ENA_DIS	= 0,
-> +	TIMER_ENA	= 1
-> +};
-> +
-> +enum {
-> +	INT_CLR_AVAILABLE = 0,
-> +	INT_CLR_NOT_AVAILABLE = 1
-> +};
-> +
-> +struct starfive_timer {
-> +	u32 ctrl;
-> +	u32 load;
-> +	u32 enable;
-> +	u32 reload;
-> +	u32 value;
-> +	u32 intclr;
-> +	u32 intmask;
-> +	u32 wdt_lock;   /* 0x3c+i*0x40 watchdog use ONLY */
-> +	u32 timer_base[STARFIVE_NR_TIMERS];
-> +};
-> +
-> +struct starfive_clkevt {
-> +	struct clock_event_device evt;
-> +	struct clk *clk;
-> +	struct reset_control *rst;
-> +	char name[20];
-> +	int irq;
-> +	u32 periodic;
-> +	u32 rate;
-> +	u32 reload_val;
-> +	void __iomem *base;
-> +	void __iomem *ctrl;
-> +	void __iomem *load;
-> +	void __iomem *enable;
-> +	void __iomem *reload;
-> +	void __iomem *value;
-> +	void __iomem *intclr;
-> +	void __iomem *intmask;
-> +};
-> +#endif /* __STARFIVE_TIMER_H__ */
+Dear all
 
-Hi Daniel/Thomas,
+> There is a potential bug where PERF_EVENT_IOC_RESET
+> does not work when accessing PMU registers directly
+> from userspace in the perf_event interface.
+>=20
+> In the x86 environment, the kernel(perf_event reset handling) has a
+> potential failure, but it works with the papi library side workaround.
+> The PMU register direct access feature from user space was implemented in
+> the perf_event facility from linux-5.18 version in the arm64 environment,
+> but it does not work with the workaround on the papi library side in the
+> arm64 environment.
+> The workaround worked in the x86 environment and not in the arm64
+> environment because in the arm64 environment, only CPU_CYCLES was
+> a 64 bit counter and the rest were 32 bit counters, so the workaround
+> cleared the upper 32 bits of the value measured by CPU_CYCLES.
+>=20
+> For this reason, we have created a patch on the kernel
+> that fixes a potential perf_event reset failure.
 
-Could you please help to review and provide any comments on this patch?
-Thanks.
+I have not received any comments or objections to this patch so far,=20
+but could you give me any comments on this patch?
 
 Best regards,
-Xingyu Wu
+Masahiko Yamada
 
