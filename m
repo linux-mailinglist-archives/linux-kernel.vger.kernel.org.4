@@ -2,49 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39AC466E2D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC8066E2DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjAQPzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
+        id S230039AbjAQP4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjAQPy6 (ORCPT
+        with ESMTP id S230175AbjAQPz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:54:58 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29E9986AF;
-        Tue, 17 Jan 2023 07:54:57 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1874A1FB;
-        Tue, 17 Jan 2023 07:55:39 -0800 (PST)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8854B3F67D;
-        Tue, 17 Jan 2023 07:54:55 -0800 (PST)
-Message-ID: <99a03fae-47fa-8f19-1768-4aeb28cac182@arm.com>
-Date:   Tue, 17 Jan 2023 15:54:54 +0000
+        Tue, 17 Jan 2023 10:55:59 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561914C2D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:55:58 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id k13so1384911plg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:55:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UbgquiiX7N3OGbZUAey4uX+ltor2RNYMswldRrMABEY=;
+        b=jzu8BDcQXQEi5N0lmqcvWWqwPv/CoaFJwZGGPGN0yqOhoHz6ZuEuiNbiH8cBYNstFF
+         g2KXjCnA8E4OkMAwYq5gNWmrvelJL8U6H6xP3Mn/J3OhpgZMWpYT/CDiuIt8oLPkLqxZ
+         wqh6tjGMwu/awfI4GSyHfwCDwirBHRgui1tqoiPDxDkcvRZZD7B0al8/Qvr4N8PQJYBE
+         B9CuQlEK/8/YDtRW74IpaW/liZ2SVJtFWBNkUfsU0KecZbJJq6dNZ3w2HbCvN9XD4qoI
+         U41K2PsLl2VUf3SG1YluVNWxt4/Z0aUmt9al1sstjAQ3n2TW9sCPtdF0+dGsDIe06ljb
+         Dq2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UbgquiiX7N3OGbZUAey4uX+ltor2RNYMswldRrMABEY=;
+        b=WswQTdcMGeDG0k7g6NAM8Ce329sG6hjkfZMqHfFYzg9/KtCL0WQqYF0piWIFX7LK1H
+         on8S7MZ4EwHrS4YLyVXtbZqVDAddYNIfn6nX2Q/9PsAU0U9ILorRzns60VqHWPRk+AJO
+         KBMS63jAc4lXrWn4LIWyMUNouUqtla2u7d2/vDpPiipRyFlicLM+WLI11uLNKx0BlISj
+         WM3hQfV0URKshpczhfy0CYcw7VcCkIXRpic+IjljwUlLtN2IYd7SzM3dWMWT5u8aSa04
+         yOOSoP1VjfDPsV74AF0V+jGd9gpOLAjN9Vz+EFFLlN5vg8GbzhG8tN4vyMOyKu1GxlMF
+         qilw==
+X-Gm-Message-State: AFqh2kovaXpVraPInDcco5vJhMBEcN7aEIeqCWF94ivwxs2DBdnlE6sP
+        cz1EinxyNWVnTKrjxUR1EW7XyC0E8vWxrZVS
+X-Google-Smtp-Source: AMrXdXtU4h4WpUPuHSkzluQ4H80BcZY2RsZAvMKNoxPZndfx5WIGX6pMpN7KnbrmaNRFaVh80/bHYA==
+X-Received: by 2002:a05:6a20:7d8d:b0:b8:c859:7fc4 with SMTP id v13-20020a056a207d8d00b000b8c8597fc4mr268884pzj.1.1673970957653;
+        Tue, 17 Jan 2023 07:55:57 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 127-20020a630985000000b004ba55bd69ddsm8969026pgj.57.2023.01.17.07.55.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 07:55:57 -0800 (PST)
+Date:   Tue, 17 Jan 2023 15:55:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8bFCb+rs25dKcMY@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
+ <20230113151258.00006a6d@gmail.com>
+ <Y8F1uPsW56fVdhmC@google.com>
+ <20230114111621.00001840@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 01/15] coresight: trace-id: Add API to dynamically
- assign Trace ID values
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
-References: <20230116124928.5440-1-mike.leach@linaro.org>
- <20230116124928.5440-2-mike.leach@linaro.org>
- <1896a73b-eb7b-7ffb-272d-115a10adeb71@arm.com>
- <CAJ9a7VixL9f2Cm7A780V311KH2G2giryeH9dG0p2e4zWBwA3iQ@mail.gmail.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <CAJ9a7VixL9f2Cm7A780V311KH2G2giryeH9dG0p2e4zWBwA3iQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230114111621.00001840@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,108 +83,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 13:02, Mike Leach wrote:
-> On Mon, 16 Jan 2023 at 14:16, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>
->> Hi Mike
->>
->> On 16/01/2023 12:49, Mike Leach wrote:
->>> The existing mechanism to assign Trace ID values to sources is limited
->>> and does not scale for larger multicore / multi trace source systems.
->>>
->>> The API introduces functions that reserve IDs based on availabilty
->>> represented by a coresight_trace_id_map structure. This records the
->>> used and free IDs in a bitmap.
->>>
->>> CPU bound sources such as ETMs use the coresight_trace_id_get_cpu_id
->>> coresight_trace_id_put_cpu_id pair of functions. The API will record
->>> the ID associated with the CPU. This ensures that the same ID will be
->>> re-used while perf events are active on the CPU. The put_cpu_id function
->>> will pend release of the ID until all perf cs_etm sessions are complete.
->>>
->>> For backward compatibility the functions will attempt to use the same
->>> CPU IDs as the legacy system would have used if these are still available.
->>>
->>> Non-cpu sources, such as the STM can use coresight_trace_id_get_system_id /
->>> coresight_trace_id_put_system_id.
->>>
->>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
->>> ---
->>>    drivers/hwtracing/coresight/Makefile          |   2 +-
->>>    .../hwtracing/coresight/coresight-trace-id.c  | 265 ++++++++++++++++++
->>>    .../hwtracing/coresight/coresight-trace-id.h  | 156 +++++++++++
->>>    include/linux/coresight-pmu.h                 |  10 +
->>>    4 files changed, 432 insertions(+), 1 deletion(-)
->>>    create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
->>>    create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
->>>
->>> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
->>> index b6c4a48140ec..329a0c704b87 100644
->>> --- a/drivers/hwtracing/coresight/Makefile
->>> +++ b/drivers/hwtracing/coresight/Makefile
->>> @@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
->>>    coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
->>>                coresight-sysfs.o coresight-syscfg.o coresight-config.o \
->>>                coresight-cfg-preload.o coresight-cfg-afdo.o \
->>> -             coresight-syscfg-configfs.o
->>> +             coresight-syscfg-configfs.o coresight-trace-id.o
->>>    obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
->>>    coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
->>>                      coresight-tmc-etr.o
->>> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
->>> new file mode 100644
->>> index 000000000000..9b85c376cb12
->>> --- /dev/null
->>> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
->>> @@ -0,0 +1,265 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>
->> ...
->>
->>> +int coresight_trace_id_read_cpu_id(int cpu)
->>> +{
->>> +     return _coresight_trace_id_read_cpu_id(cpu);
->>> +}
->>> +EXPORT_SYMBOL_GPL(coresight_trace_id_read_cpu_id);
->>> +
->>> +int coresight_trace_id_get_system_id(void)
->>> +{
->>> +     return coresight_trace_id_map_get_system_id(&id_map_default);
->>> +}
->>> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_system_id);
->>> +
->>> +void coresight_trace_id_put_system_id(int id)
->>> +{
->>> +     coresight_trace_id_map_put_system_id(&id_map_default, id);
->>> +}
->>> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
->>> +
->>> +void coresight_trace_id_perf_start(void)
->>> +{
->>> +     atomic_inc(&perf_cs_etm_session_active);
->>> +}
->>> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
->>> +
->>> +void coresight_trace_id_perf_stop(void)
->>> +{
->>> +     if (!atomic_dec_return(&perf_cs_etm_session_active))
->>> +             coresight_trace_id_release_all_pending();
->>> +}
->>> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
->>> +
->>
->> This blank new line at the end of the file generates a checkpatch
->> warning for me. I have fixed it locally and applied it.
->>
-> OK, thanks.
+On Sat, Jan 14, 2023, Zhi Wang wrote:
+> On Fri, 13 Jan 2023 15:16:08 +0000 > Sean Christopherson <seanjc@google.com> wrote:
 > 
-> The only thing I get out of checkpatch.pl for this patch (and indeed
-> the entire set) is:
+> > On Fri, Jan 13, 2023, Zhi Wang wrote:
+> > > Better add a FIXME: here as this has to be fixed later.
+> > 
+> > No, leaking the page is all KVM can reasonably do here.  An improved
+> > comment would be helpful, but no code change is required.
+> > tdx_reclaim_page() returns an error if and only if there's an
+> > unexpected, fatal error, e.g. a SEAMCALL with bad params, incorrect
+> > concurrency in KVM, a TDX Module bug, etc.  Retrying at a later point is
+> > highly unlikely to be successful.
 > 
-> WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+> Hi:
+> 
+> The word "leaking" sounds like a situation left unhandled temporarily.
+> 
+> I checked the source code of the TDX module[1] for the possible reason to
+> fail when reviewing this patch:
+> 
+> tdx-module-v1.0.01.01.zip\src\vmm_dispatcher\api_calls\tdh_phymem_page_reclaim.c
+> tdx-module-v1.0.01.01.zip\src\vmm_dispatcher\api_calls\tdh_phymem_page_wbinvd.c
+> 
+> a. Invalid parameters. For example, page is not aligned, PA HKID is not zero...
+> 
+> For invalid parameters, a WARN_ON_ONCE() + return value is good enough as
+> that is how kernel handles similar situations. The caller takes the
+> responsibility.
+>  
+> b. Locks has been taken in TDX module. TDR page has been locked due to another
+> SEAMCALL, another SEAMCALL is doing PAMT walk and holding PAMT lock... 
+> 
+> This needs to be improved later either by retry or taking tdx_lock to avoid
+> TDX module fails on this.
 
-Ah, sorry. It is not the checkpatch, but git am complained. Sorry for 
-the confusion.
+No, tdx_reclaim_page() already retries TDH.PHYMEM.PAGE.RECLAIM if the target page
+is contended (though I'd question the validity of even that), and TDH.PHYMEM.PAGE.WBINVD
+is performed only when reclaiming the TDR.  If there's contention when reclaiming
+the TDR, then KVM effectively has a use-after-free bug, i.e. leaking the page is
+the least of our worries.
 
-Cheers
-Suzuki
+
+On Thu, Jan 12, 2023 at 8:34 AM <isaku.yamahata@intel.com> wrote:
+> +static int tdx_reclaim_page(hpa_t pa, bool do_wb, u16 hkid)
+> +{
+> +       struct tdx_module_output out;
+> +       u64 err;
+> +
+> +       do {
+> +               err = tdh_phymem_page_reclaim(pa, &out);
+> +               /*
+> +                * TDH.PHYMEM.PAGE.RECLAIM is allowed only when TD is shutdown.
+> +                * state.  i.e. destructing TD.
+> +                * TDH.PHYMEM.PAGE.RECLAIM  requires TDR and target page.
+> +                * Because we're destructing TD, it's rare to contend with TDR.
+> +                */
+> +       } while (err == (TDX_OPERAND_BUSY | TDX_OPERAND_ID_RCX));
+> +       if (WARN_ON_ONCE(err)) {
+> +               pr_tdx_error(TDH_PHYMEM_PAGE_RECLAIM, err, &out);
+> +               return -EIO;
+> +       }
+> +
+> +       if (do_wb) {
+> +               /*
+> +                * Only TDR page gets into this path.  No contention is expected
+> +                * because of the last page of TD.
+> +                */
+> +               err = tdh_phymem_page_wbinvd(set_hkid_to_hpa(pa, hkid));
+> +               if (WARN_ON_ONCE(err)) {
+> +                       pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
+> +                       return -EIO;
+> +               }
+> +       }
+> +
+> +       tdx_clear_page(pa);
+> +       return 0;
+> +}
