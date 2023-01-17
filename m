@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B9C66E017
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCD366E019
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjAQONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S231735AbjAQON7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjAQONK (ORCPT
+        with ESMTP id S232250AbjAQONm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:13:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391C23BD86;
-        Tue, 17 Jan 2023 06:13:09 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FB436602D6D;
-        Tue, 17 Jan 2023 14:13:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673964787;
-        bh=oFAvNTJOfGp0hIujd0mtIWD6lM3Y8O++iEYEPxPMVoU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oa0JxU/LvrQSWt8rhVcuNQ9TCECIEaVKmYuByj48oUDxvdHrPZESypm8Cyv5iB3W2
-         aVEVsk/gP8OGsxfuC9YjEdkd9zs+COOEnp3ObheQvDX0/Vai5z0Ap6ZjKnip6wWito
-         tOAPBoNNalF4DG+ffjm+BoCc2NHV/IP0/ew7Udi0BfrPM6BitqozG7fpgmOPGz8TGu
-         RemW6YzI0nLb5R3KYvUkURte1qtJ8L9OEyonIr/u+YjQiEXD1PJEHDq2cnW6770teJ
-         FpB+5oUAetY+isyGVu7dQrj4F0waN3IpzC7h/Si+g/V1YuQp5jFctulmW78XY5LNaX
-         2D84S3RogT+tw==
-Message-ID: <4553efe5-6c8a-4421-b125-ffa97d51b88e@collabora.com>
-Date:   Tue, 17 Jan 2023 15:13:04 +0100
+        Tue, 17 Jan 2023 09:13:42 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF153BD86;
+        Tue, 17 Jan 2023 06:13:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=kkWpEbdhvO9/WJMoBB3MOxQsl6iaZufmOeTDARQQiuM=; b=RusiT9QT2rv87W+fSdOaBIPtk2
+        dfGWgfX+1Hj73f0cxDv+9PxhuIwIVLCHIHmW0+ONwGfQztRC3+9fmE4hElqwowvjFw9gGmgNKYNMc
+        z08s0j/mqLljUnuNUG+YnPaNb1V0FWPMWNdueaxC79cKZVFLLU4rGNw1pgS4kmPp/XXA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pHmiQ-002KUd-8i; Tue, 17 Jan 2023 15:13:30 +0100
+Date:   Tue, 17 Jan 2023 15:13:30 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Pierluigi Passaro <pierluigi.passaro@gmail.com>,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.p@variscite.com
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Message-ID: <Y8atCtZdV96cj3n1@lunn.ch>
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <Y8QzI2VUY6//uBa/@lunn.ch>
+ <f691f339-9e50-b968-01e1-1821a2f696e7@metafoo.de>
+ <Y8SSb+tJsfJ3/DvH@lunn.ch>
+ <cc338014-8a2b-87e9-7684-20b57aae4ac3@metafoo.de>
+ <Y8alV6FUKsN2x2XZ@lunn.ch>
+ <54eb0ee4-7d9e-7025-f984-b1e026c18c3d@metafoo.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V2 2/2] usb: gadget: u_ether: Don't warn in
- gether_setup_name_default()
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20230116155545.101391-1-jonathanh@nvidia.com>
- <20230116155545.101391-2-jonathanh@nvidia.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20230116155545.101391-2-jonathanh@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54eb0ee4-7d9e-7025-f984-b1e026c18c3d@metafoo.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-W dniu 16.01.2023 o 16:55, Jon Hunter pisze:
-> The function gether_setup_name_default() is called by various USB
-> ethernet gadget drivers. This function always generates the MAC address
-> for the ethernet gadget device and always prints a warning when
-> generating the MAC address. Given that these messages are expected, make
-> these debug prints instead of warnings.
+> > > I think part of the problem is that for C45 there are a few other fields
+> > > that get populated by the ID detection, such as devices_in_package and
+> > > mmds_present. Is this something we can do after running the PHY drivers
+> > > probe function? Or is it too late at that point?
+> > As i hinted, it needs somebody to actually debug this and figure out
+> > why it does not work.
+> > 
+> > I think what i did above is part of the solution. You need to actually
+> > read the ID from the DT, which if you never call fwnode_get_phy_id()
+> > you never do.
+> > 
+> > You then need to look at phy_bus_match() and probably remove the
+> > 
+> > 		return 0;
+> > 	} else {
+> > 
+> > so that C22 style ID matching is performed if matching via
+> > c45_ids.device_ids fails.
 > 
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> Sorry, I've should have been more clear. I did try your proposed change a
+> while ago. The problem why it does not work is that there are other fields
+> in the phy data structure that get initialized when reading the IDs for C45.
+> Such as which MMD addresses are valid.
 
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+So lets take this one step at a time.
 
-> ---
-> V1 -> V2: Changed print to debug instead of info.
-> 
->   drivers/usb/gadget/function/u_ether.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> index be8e7b448933..8feb40e38137 100644
-> --- a/drivers/usb/gadget/function/u_ether.c
-> +++ b/drivers/usb/gadget/function/u_ether.c
-> @@ -845,13 +845,13 @@ struct net_device *gether_setup_name_default(const char *netname)
->   	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
->   
->   	eth_random_addr(dev->dev_mac);
-> -	pr_warn("using random self ethernet address %pM\n", dev->dev_mac);
-> +	pr_debug("using random self ethernet address %pM\n", dev->dev_mac);
->   
->   	/* by default we always have a random MAC address */
->   	net->addr_assign_type = NET_ADDR_RANDOM;
->   
->   	eth_random_addr(dev->host_mac);
-> -	pr_warn("using random host ethernet address %pM\n", dev->host_mac);
-> +	pr_debug("using random host ethernet address %pM\n", dev->host_mac);
->   
->   	net->netdev_ops = &eth_netdev_ops;
->   
+Does this change at least get the driver loaded?
 
+There is some code in phy-c45.c which needs
+phydev->c45_ids.mmds_present. So maybe after the driver has probed,
+and the device should be accessible, we need to call get_phy_c45_ids()
+to fill in the missing IDs?
+
+   Andrew
