@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE6B670C1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66152670C03
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjAQWuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
+        id S229684AbjAQWrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjAQWru (ORCPT
+        with ESMTP id S229582AbjAQWqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:47:50 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFED9B4E1A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:49:07 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pHtog-0004mh-3v; Tue, 17 Jan 2023 22:48:26 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pHtoa-006lhq-DJ; Tue, 17 Jan 2023 22:48:20 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pHtoZ-00DhVz-MN; Tue, 17 Jan 2023 22:48:19 +0100
-Date:   Tue, 17 Jan 2023 22:48:06 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        lee@kernel.org, thierry.reding@gmail.com, corbet@lwn.net,
-        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [v4 0/5] Support pwm/tach driver for aspeed ast26xx
-Message-ID: <20230117214806.ptnnhgxmlvyzjdzp@pengutronix.de>
-References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+        Tue, 17 Jan 2023 17:46:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D5BC171;
+        Tue, 17 Jan 2023 13:49:13 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673992151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0EySvKf7KDIdxXLtAWjoJUjTf/tsFhH8nu8922rYbz4=;
+        b=zlhaEqb4TYh2ZRuBkbkaFUODzaJzybzmp94wrNZ2DHgN3LcfnjQwxzMVr0K0pQuCafVpwt
+        0gcfgOfsw042jRYHA7Gsv1zcIYQU24zntAiBeFj83PPNAU7juwuMfg7xj4SDVl3+m0OkZ8
+        Jrkq2iyAZh9Zn6UthxWqpfwswXoXULsL1lHVSPQrYc+AyupkKB1Ep0Pd4pZpng2DdTd1Yp
+        c13bWY8n/h89FHupOwCiSiFBY1wZwMB0ZdApku7YMvAewUrOD+ztr1MAaBnF3ej/1DBEzC
+        r/rtcoo9Nse+0nyLvYpXr5waDphf+Q1yB9HmZoAQobnZ4laAKbdWTmHvuT1aMw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673992151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0EySvKf7KDIdxXLtAWjoJUjTf/tsFhH8nu8922rYbz4=;
+        b=YnRV+X6yqAJ6pyt3ZIY4niaQaGvNztmiXlWVgf6Ql8uakG1IC9gh+YResQ8mxBagzHX6oR
+        2CgS9YvOqsstl/Cw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        coverity-bot <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        coverity-bot <keescook+coverity-bot@chromium.org>
+Subject: Re: [PATCH] printk: Use scnprintf() to print the message about the
+ dropped messages on a console
+In-Reply-To: <20230117161031.15499-1-pmladek@suse.com>
+References: <20230117161031.15499-1-pmladek@suse.com>
+Date:   Tue, 17 Jan 2023 22:54:21 +0106
+Message-ID: <87r0vsq1cq.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y5jqbiyht4hvalnt"
-Content-Disposition: inline
-In-Reply-To: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-01-17, Petr Mladek <pmladek@suse.com> wrote:
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1530570 ("Memory - corruptions")
+> Fixes: c4fcc617e148 ("printk: introduce console_prepend_dropped() for dropped messages")
+> Link: https://lore.kernel.org/r/202301131544.D9E804CCD@keescook
+> Signed-off-by: Petr Mladek <pmladek@suse.com>
 
---y5jqbiyht4hvalnt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Billy,
-
-I wonder if you address the feedback you got for this series. I think
-there are no big issues left, are there?
-
-There is only one patch left open in the PWM patchwork (i.e. the patch
-implementing the driver that already has my Reviewed-by tag). I'll
-discard that one, too, as "changes requested" and hope you will send a
-v5.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---y5jqbiyht4hvalnt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHF5MACgkQwfwUeK3K
-7Am6Rgf/dyL2yHQajtxCDMIEYXoOPD0fs1U+AFUQZWILgnBky3GTsjqPb+iRF0Zr
-w+4QERyKzgxAyfJE3EptEtnxjBOPWZ1JKx1tBpJDsEBem7ew5QmjSZ9vX28jfcaa
-NR8HzbJdZKOdM/Brmd3jCKGNj63CYH8rD0CW4mUf07oVvw55j6g1ZULwVvHnOGse
-DG9GpBgzzhaIPYapwlkhIdfeESU84fWfQLlOxdcNxR4/8OXDCO2lUbzXULBVbjUe
-lzBlQzwJk2bQegMSAIXRIACskEMbmoMY6RBKJCJUEniyIcPyJ8//YGW1pHq8fnRO
-xriqAmZs2kKuyqloDKo4g/GVvGVikQ==
-=FqEI
------END PGP SIGNATURE-----
-
---y5jqbiyht4hvalnt--
+Reviewed-by: John Ogness <john.ogness@linutronix.de>
