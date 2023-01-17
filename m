@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F7666D545
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 05:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B1266D547
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 05:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjAQEPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 23:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S235355AbjAQEP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 23:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbjAQEOk (ORCPT
+        with ESMTP id S235303AbjAQEPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 23:14:40 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B723C62
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 20:14:38 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id bk15so14977209ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 20:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=futuring-girl-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zDKtcvtIFf+y3VGztWmfwnQISP0yBigN3Ccwm/hiUK0=;
-        b=54pwdyFuQao0yiFXoRpb3zxlQhCUMcKCmJ2/n3bCVvo8cyajV60H6C5hcnRhJCIDzJ
-         2td93sZbOnSa28pLgqAw0/PoCjHhZ4xtPpfUd89yOpY7VySpIlXbVyfQnlpUpGnS03lL
-         9nv0rbf0WJJW443a1eZ5EOJ3Zx6S5bjRpQHoZCQ2lA1JPVCITvnlDDsLgmt3wkM6hByF
-         scj8fCB+NUWKtsn8cHLKekKJZlSX6FLPkoD7BAX61xYnPheKGaCe7Q3r8Z7Ug6C5UqPC
-         ObzUisWGAA97Wr6Fsxt7JgL26PPMtgEpsTN25KkJrjgNGpuL7BDzn4VmGtrOyu6Ihun0
-         n0mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zDKtcvtIFf+y3VGztWmfwnQISP0yBigN3Ccwm/hiUK0=;
-        b=kziN5OFplhBYEamTN18c9p0U51qwl8DzLeFky9E4Rki+2/6dirkAD0q4f73TQ57lXQ
-         NfLETrl79ouj9HvDF9GryrEPkisQ2onf7JZG9t7N4W+LzBtqDFn7z8EFBcx8Q/FKYISq
-         5VvVFLkNyS2rsnCntVEjLKd7chT4tMa7OS9z/hQ+rizmg7tEKQ32jEyiPWfnvA0CsxrC
-         uBeNCGgUg/axzxAO0uPzerVKPM91+HF1wF6RtrvkbaLml/+UEhLNP8aBtPi3UBHGccg5
-         NmAKAp1Jm/4PF3hoPleEAwsxkjGWsm+9H+rsEWrEIa6g7U9h/uP0RuaNdJbRfr1NJWR8
-         jHAg==
-X-Gm-Message-State: AFqh2koTxDabsh3WIP4IH36rpDWMY0Cdj72vsvL3R9DE/UO/uXsd0FUm
-        hplJeibyv8atUUlezswVVqVhyjsWb71+41HhaCoI1A==
-X-Google-Smtp-Source: AMrXdXtJPZDPoMdGM+6WhpO0nIkoLS5sWjW5h+CYpA1K2txuLO3Ta6YC6FkoDbzeDHsMWYHGV1a7f87eAVCI7B8FbmU=
-X-Received: by 2002:a17:907:78d6:b0:872:5a3e:3be4 with SMTP id
- kv22-20020a17090778d600b008725a3e3be4mr72348ejc.649.1673928877030; Mon, 16
- Jan 2023 20:14:37 -0800 (PST)
+        Mon, 16 Jan 2023 23:15:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DA72385A
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 20:15:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eeaHVXVVYLUZhPJsx3SPIZ13iIAgts/Qp1qngWaTzqA=; b=V1SsFbxr+Ofyz74nBDy89AeApK
+        ITCGUjTbUYk0t0GnfGJvQhOi9bTVMlDqqYPb8ZKyHGX5VKrdGajG/0IrlkT3xwVNJVJSs4MpOHcw4
+        1o3BcV8OuH63EI4/DaISzfONMgNKgWqv43cR4icParaJPBeZsXbFhtI/hZ9hVPY5QBmJ4kPQOQo9+
+        /yrPBQTtijA7/1rRlDK6Douvko5c/dkV2Ky2jYh5sVdhTSuHkgq0S24m5GoQcx34KzJOkOg50L8SH
+        +o+lKJ45URFR4xZn3YUppCurr5mmiHlhfZGl6DFTS8eI4elQrX2C4k5DVWe8JUmKi0dPAYw1xpnER
+        vA/RBWKA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHdMg-009MFh-CK; Tue, 17 Jan 2023 04:14:26 +0000
+Date:   Tue, 17 Jan 2023 04:14:26 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+Message-ID: <Y8YgomKF189vmgLz@casper.infradead.org>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-42-surenb@google.com>
+ <Y8UxnqPCTLbbD+2F@localhost>
 MIME-Version: 1.0
-References: <20230116154803.321528435@linuxfoundation.org>
-In-Reply-To: <20230116154803.321528435@linuxfoundation.org>
-From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
-Date:   Tue, 17 Jan 2023 13:14:25 +0900
-Message-ID: <CAKL4bV7=cY5qWxtKpuLfKUkXEWd6tgSL2oeWVXPmiwNkrKZdHw@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8UxnqPCTLbbD+2F@localhost>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Mon, Jan 16, 2023 at 11:14:38AM +0000, Hyeonggon Yoo wrote:
+> > @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+> >  static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> >  {
+> >  	/* Check before locking. A race might cause false locked result. */
+> > -	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > +	if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> >  		return false;
+> >  
+> > -	if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+> > +	if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
+> >  		return false;
+> >  
+> > +	/* If atomic_t overflows, restore and fail to lock. */
+> > +	if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
+> > +		if (atomic_dec_and_test(&vma->vm_lock->count))
+> > +			wake_up(&vma->vm_mm->vma_writer_wait);
+> > +		return false;
+> > +	}
+> > +
+> >  	/*
+> >  	 * Overflow might produce false locked result.
+> >  	 * False unlocked result is impossible because we modify and check
+> >  	 * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+> >  	 * modification invalidates all existing locks.
+> >  	 */
+> > -	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > -		up_read(&vma->vm_lock->lock);
+> > +	if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > +		if (atomic_dec_and_test(&vma->vm_lock->count))
+> > +			wake_up(&vma->vm_mm->vma_writer_wait);
+> >  		return false;
+> >  	}
+> 
+> With this change readers can cause writers to starve.
+> What about checking waitqueue_active() before or after increasing
+> vma->vm_lock->count?
 
-On Tue, Jan 17, 2023 at 12:54 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 183 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.7-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-
-6.1.7-rc1 tested.
-
-x86_64
-
-build successfully completed
-boot successfully completed
-
-Lenovo ThinkPad X1 Nano Gen1(Intel i5-1130G7, arch linux)
-
-Thanks
-
-Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
+I don't understand how readers can starve a writer.  Readers do
+atomic_inc_unless_negative() so a writer can always force readers
+to fail.
