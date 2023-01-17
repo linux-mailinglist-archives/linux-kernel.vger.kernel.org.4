@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E19866E644
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDA966E660
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjAQSmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S234529AbjAQSqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234193AbjAQShy (ORCPT
+        with ESMTP id S235234AbjAQSk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:37:54 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCFE302BD;
-        Tue, 17 Jan 2023 10:08:38 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id jr10so20585443qtb.7;
-        Tue, 17 Jan 2023 10:08:38 -0800 (PST)
+        Tue, 17 Jan 2023 13:40:27 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA5B2B601
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:12:03 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id n85so7625002iod.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:12:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNtUwk8pZ+4ME/1vifRLekNO13Wg5Zu56Lt21b5zZ/E=;
-        b=NUkTrZoP7W+dbV5M8TQ8QZ6EJ7AeGCEJe1YDCK4M3eOtriQU0VMF0jrTQfZKZ04nX3
-         tObhhl6SQ2s5vYRuVz0gifyjTCXvFFqjWl+foeDKQjIJ1LSYJjYBhUE1xbKZtrcLqo2Z
-         WLSR545diQKAiZhOEwCRqYEnywadjsPloZrSJW1WjO9wH7ptol5kfIBGQT2J6Z+oPcUq
-         e5bKJNMfyBEPGKCPfLlc5LXIRFHEPjarEbVgrNua0YSVPStVGuCH2Ws6+4vRqOqHIOeR
-         oKWk5W/o7VnUE7D8rQpa5OwRaV6ErauCSQr0Tq2X2N6redlnD2o1Cs9bxxQz1s0511XO
-         CYlQ==
+        bh=dcrz3u05liU0MW9kY4AJIlBTNw63wTKDLbyoxh2Gq7o=;
+        b=LOjmK81sP9RZFAMR4E8fCCpKxP67Nz6qc4uKkLVPkpHjSZ0SakfGstIAUpYIpSI07l
+         aiQ3xDCMFAyArWyIbdn9MV2vFoK0FOFT9fpzj3uJjiQuKN+gHMlFt9Sz0VcR5i+Bzwe3
+         Kx6DzAEpRZ+6HJ/hEuT2a0SqHWa/T36LxiDrEewq7V3aM5yNWU4iXZYCAoNVQkEY7sdw
+         6eQQ9GO4uGLBoOuC/ENtRzBdFIOLybzL/F0OeALa9dyEoJtEvEBKcNkVp1GqE5OEw78i
+         QradsZza/j1i5r7w3V7jkhtJPrbMQH+Z5nrzIVonts+Wo9joxZLWOtKfFMNC3Ueb23YO
+         utyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mNtUwk8pZ+4ME/1vifRLekNO13Wg5Zu56Lt21b5zZ/E=;
-        b=ZgPhYhv5ojWf06JPhu+SzYaYXr1rEa7yVPVCPuxf6wwbJ7T6YANfkmk1tCwIaWAsqd
-         0RrkWIkuFkwdoxUnukAUCO4n29fKxF+Tf9IMOgyTgkL0w6OfJEGWU1j3pU9H1kOkPf/X
-         jwS0OBPYVFQfdeDSjiQzrlIYaTiepiKhGC8hb8jIXMDme4sttpWVuJO5/G4pIWSx8SlX
-         alnYjSY7AyXqrPaHaSpECAYcKUz+0/F5VxmO/EJ1MYB+oaIkoTSqevRveq52BwuVokmB
-         VtFbVmV4YHJK1BWESh8gHvzFvnvKJ/ieVybLUCS3sO83QUqVl95dxkqWRHerNHDV0Cpk
-         i7JQ==
-X-Gm-Message-State: AFqh2kr0NEAefj1jd6dwJTo0Or9YQNulbkfRXc0aUjvFeddP2hPiDBho
-        6/mTQ3lDDVFzjvx4a79+wF9VR5EFdyByTkTdBcM=
-X-Google-Smtp-Source: AMrXdXvNpef78aF7A4F+6Aj+fH25NTbcazp1VYsDIP18+HyLQeo70AF3aJANwdtMB6J/E6tCNsz6V29gc0SCtxWin7k=
-X-Received: by 2002:a05:622a:5c8c:b0:3b6:30c5:6d26 with SMTP id
- ge12-20020a05622a5c8c00b003b630c56d26mr188562qtb.429.1673978917903; Tue, 17
- Jan 2023 10:08:37 -0800 (PST)
+        bh=dcrz3u05liU0MW9kY4AJIlBTNw63wTKDLbyoxh2Gq7o=;
+        b=YfOGBOETyZrYfnHNdXlaB7z1UpAk2qkBos1dwHFYxX1WKz+1j1+dMEVGaSqx63X4W/
+         pGdlW+5exopb0epn5wLvbffhzEp9kFtsJeF8zd3Bnd+jPYsLX9ZjAN2PoMjFp0WtiubX
+         V4J9LX1RSoCw9exXzzOjrSL0a5YQ4LjpYuOk9yFJhmwhYOLz6jC/1SahTY1R8rSrGlxL
+         gl4SkGnQDsvTRvTL2pLZlHr5GQmKcK1h9iYyU5d+7tl4hzVKVOesDx2flBR26weD7pZE
+         2hikjD4f6TxIipUHaYAXHtsoiv6+oQU0TEkjOL1J0fytzhWXyauEUmiXIocewcVnH4eI
+         ozsA==
+X-Gm-Message-State: AFqh2kqHRisDG3v4shRb1GZ72nY8G88u/vKWNbTf/ecyOwQIcsOJIBYZ
+        QCFPR8wyoZK6TIZ5Ln8e1tCUDbm6RfpIFf2ex+DtUA==
+X-Google-Smtp-Source: AMrXdXsgW7Mw7qSRUXKXfN+rdxMVcw5NgXHaFtzV+np+Si6HoBmXxOeDmNDFe8VfWaSsmByezu+xjIBOp9/ez1+o9/0=
+X-Received: by 2002:a02:c884:0:b0:39e:9d33:a47 with SMTP id
+ m4-20020a02c884000000b0039e9d330a47mr264435jao.58.1673979122352; Tue, 17 Jan
+ 2023 10:12:02 -0800 (PST)
 MIME-Version: 1.0
-References: <Y8bARLuFubMVILIN@smile.fi.intel.com> <20230117161659.31232-1-bpappas@pappasbrent.com>
-In-Reply-To: <20230117161659.31232-1-bpappas@pappasbrent.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 17 Jan 2023 20:08:01 +0200
-Message-ID: <CAHp75VcxaSXeMNmkPoMnA+zjp+JWmHp5aE+2yPhXaqxMC6QWEQ@mail.gmail.com>
-Subject: Re: [PATCH v2] media: atomisp: pci: Replace bytes macros with functions
-To:     Brent Pappas <bpappas@pappasbrent.com>
-Cc:     andy@kernel.org, ailus@linux.intel.com, error27@gmail.com,
-        gregkh@linuxfoundation.org, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mchehab@kernel.org
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-42-surenb@google.com>
+In-Reply-To: <20230109205336.3665937-42-surenb@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 19:11:26 +0100
+Message-ID: <CAG48ez3ZNt+B3XvAMP1OaeEYuwpXJ1epmT9YtNonFLEJ6yANVQ@mail.gmail.com>
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +84,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 6:17 PM Brent Pappas <bpappas@pappasbrent.com> wrote:
->
-> Thank you for the advice Andy.
-> I took a look in overflow.h and found the size_mul function, I assume this
-> is what I should be using to prevent accidental overflow.
-> I also removed the inline keyword from the function definitions because
-> Dan (error27@gmail.com) recommended that I do so in reply to an earlier
-> patch I submitted.
+On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> rw_semaphore is a sizable structure of 40 bytes and consumes
+> considerable space for each vm_area_struct. However vma_lock has
+> two important specifics which can be used to replace rw_semaphore
+> with a simpler structure:
+[...]
+>  static inline void vma_read_unlock(struct vm_area_struct *vma)
+>  {
+> -       up_read(&vma->vm_lock->lock);
+> +       if (atomic_dec_and_test(&vma->vm_lock->count))
+> +               wake_up(&vma->vm_mm->vma_writer_wait);
+>  }
 
-Now you need to properly form a commit message. What you have done
-above is good for the comment (goes near to changelog).
-
-...
-
-> +static size_t fpntbl_bytes(const struct ia_css_binary *binary)
-> +{
-> +       return size_mul(sizeof(char),
-> +                       size_mul(binary->in_frame_info.res.height,
-> +                                binary->in_frame_info.padded_width));
-
-I recommend using array_size() and array3_size() rather than open coding them.
-
-> +}
-
-...
-
-> +       return size_mul(sizeof(unsigned short),
-
-> +                               size_mul(binary->sctbl_height,
-> +                                        size_mul(binary->sctbl_aligned_width_per_color,
-> +                                                 IA_CSS_SC_NUM_COLORS)));
-
-array3_size()
-
-and so on.
-
--- 
-With Best Regards,
-Andy Shevchenko
+I haven't properly reviewed this, but this bit looks like a
+use-after-free because you're accessing the vma after dropping your
+reference on it. You'd have to first look up the vma->vm_mm, then do
+the atomic_dec_and_test(), and afterwards do the wake_up() without
+touching the vma. Or alternatively wrap the whole thing in an RCU
+read-side critical section if the VMA is freed with RCU delay.
