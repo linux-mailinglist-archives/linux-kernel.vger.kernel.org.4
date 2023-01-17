@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C1F66E79F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1D566E7AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjAQUUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        id S232607AbjAQUZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjAQUQ2 (ORCPT
+        with ESMTP id S233644AbjAQUV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:16:28 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FB438678
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:11:33 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id s26so7522199ioa.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:11:33 -0800 (PST)
+        Tue, 17 Jan 2023 15:21:27 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1A95CE5F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:13:32 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id j1so7089591iob.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:13:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7KqTypsImNZmniW91zYe1yhsSZXhDDo+Q5hJ0Ux/67g=;
-        b=UJm5J0133XcPj/n9gOAm6r3L7ghjKGThYDwcs+Zgq7sNkIMIcxWhaNZzVuL50g4xll
-         axzO/2NBWRKO+Z0p4Dtg2gqYPioHnM1gdkcm2UrgwvuSHatKZ6+h4jIoNA5wP4301xq8
-         bX8YgqaO+YX60wmJoloHl/jpzC+5HvvMpLLUA=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=33Ncea+r49M0JFeF3LtrfUuUT4g5hGuOl0GtEnc7zfw=;
+        b=M82Qd6AI0hYaULrWAi7eXudgqNOdBArrqWl8NUWMhweZ1mgAI2BOdntQuu6w6SxKp3
+         uPJGFLbnFvsoOAWbhlp5NMRCHg+Ij7ymAgzX0aOEZfRkK1FUl2Sw7+1qzFBooxTHNDFH
+         QwP5WpHzLvBQvF6ibc3RcXcXxlP0nI86XHv6uJSb+9THDwwqwYrQ5yeOi9sTFLXgYRRW
+         ucAECxKZmfng297NPeMfRzYIf4RRtEH/TGcdtzC4B45Z7WI2Rn9YTRlrTOKIM3kJaq0P
+         Vgk2T1bWc1Hp06NcNbnlU8lfB32azU1uJViZMnpHy9r0yXJ2JHPoMOPAq+kDhSVl3qrN
+         7/LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7KqTypsImNZmniW91zYe1yhsSZXhDDo+Q5hJ0Ux/67g=;
-        b=ZsPyIyr+TYnV2WVQvZ3k9CIrHVVTTY5PwK0P3/mWzN7/+S1e5nO+d94VVwEmVmshvF
-         qK+SA3q7LBkm1j58I/GYnCKo7RzbymD6GmSFbmOwxRuhk+mL9Uj0D7RdIwZrYgUXjPXw
-         Ce3TUulIx6yTdBRm/pqdnktjsc/wn/NGU8FU9WEiN3yxb51pjq85KSwM76xinGCh8ccS
-         T8tmv/54c6TaOGWct0mcrZtmQ94mX58L467vOhJNosE6yspobhgRgV9CoD+nWZHs1dXI
-         CKPYHuIM3JuBPubIluFSruxws+vV4mDQcgtsShlavzO9xZblkuqExm9AIJwUorOHHu60
-         78sA==
-X-Gm-Message-State: AFqh2kqABN9DOwkEqofGQJpmXRuwbeJYuMXYx3vHaBhY7FQYPnQauph4
-        lAD7t0s184iT8wWTwk0o+xVWhA==
-X-Google-Smtp-Source: AMrXdXv06uyeDWiXTa4ZqSisvQmjvagEnrIOsILeZlEu05Jt0IeZXrEA56J9nzCM0i6dIo4ZkDaupA==
-X-Received: by 2002:a6b:8fcd:0:b0:704:d16d:4a59 with SMTP id r196-20020a6b8fcd000000b00704d16d4a59mr422934iod.2.1673982692512;
-        Tue, 17 Jan 2023 11:11:32 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a7-20020a927f07000000b002eb1137a774sm9328008ild.59.2023.01.17.11.11.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 11:11:31 -0800 (PST)
-Message-ID: <1eed08d1-c100-6ca5-63f3-73487970b08e@linuxfoundation.org>
-Date:   Tue, 17 Jan 2023 12:11:30 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=33Ncea+r49M0JFeF3LtrfUuUT4g5hGuOl0GtEnc7zfw=;
+        b=4EWWeJqN2zos9Z+4XytpCh/SXadJQtmcdQabISMOj1sKHqJ19As+2S2ALzWgbnf3oD
+         OwhXOtG372exQo4UhYqiHaUOICcwIBMb0Ex9bpOaGG3pS8gh1cL+o18PeY7RkZBIwhzt
+         XDSe4wDdu0dKzAOsIxaTe7ZVj7Lp6DnKoY8pk6395w28P+aplQUrBli6czWcJyTRA+nM
+         VlVWknG+GuPGCYWMMjmSOmbDLK71ZAJFHfpMkUvuvNhzL7jN7uKXbby1dLzFvg3/wxPN
+         NcN9QS1RtipQlKWQ38sJ8zyzAjgzW7pB76UAE9odutCjxmw/cGnEh62pOsI2xmexDzK/
+         0G1Q==
+X-Gm-Message-State: AFqh2kpfnrYA2tTa8XqBQvMnO3Z7wQuXxHY8ki46yuQaSj54oTRQmLM8
+        LmajotL+CTL4OmZtUeznvoZHCSitdsNNrRbgAAesnA==
+X-Google-Smtp-Source: AMrXdXsDLyLv3tnBqT3yJqNdPKtwS3NIDmj8Ad2h0WWLOnTb1J4nJmCvaMK3XkzXh05XxIo4fWEHMFhVoNhEqk6Lc5Q=
+X-Received: by 2002:a5d:945a:0:b0:6e3:2350:744c with SMTP id
+ x26-20020a5d945a000000b006e32350744cmr199633ior.2.1673982805815; Tue, 17 Jan
+ 2023 11:13:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [tip:sched/core 7/28] rseq.c:139:37: error: 'AT_RSEQ_ALIGN'
- undeclared; did you mean 'R_SH_ALIGN'?
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, Shuah Khan <shuah@kernel.org>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <202301170348.7WLKH1pl-lkp@intel.com>
- <bfa719c3-bd1f-5fc4-40ab-6dc6822b7628@efficios.com>
- <4449d8b5-b7a5-0f09-5b42-7b70ba00f8f6@linuxfoundation.org>
- <Y8ZlKOsN1wGk9tTc@gmail.com>
- <37625f31-6ac2-1f90-d864-e4644820bba3@efficios.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <37625f31-6ac2-1f90-d864-e4644820bba3@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230111133351.807024-1-jannh@google.com>
+In-Reply-To: <20230111133351.807024-1-jannh@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 20:12:49 +0100
+Message-ID: <CAG48ez36Nio9GzU_m168AEJMXxtcNtdgq6YpAhLq-aKNQA_9fg@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,75 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 10:44, Mathieu Desnoyers wrote:
-> On 2023-01-17 04:06, Ingo Molnar wrote:
->>
->> * Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->>> On 1/16/23 13:18, Mathieu Desnoyers wrote:
->>>> On 2023-01-16 14:40, kernel test robot wrote:
->>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
->>>>> head:   79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
->>>>> commit: 03f5c0272d1b59343144e199becc911dae52c37e [7/28] selftests/rseq: Use ELF auxiliary vector for extensible rseq
->>>>> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
->>>>> reproduce:
->>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=03f5c0272d1b59343144e199becc911dae52c37e
->>>>>           git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
->>>>>           git fetch --no-tags tip sched/core
->>>>>           git checkout 03f5c0272d1b59343144e199becc911dae52c37e
->>>>>           make O=/tmp/kselftest headers
->>>>>           make O=/tmp/kselftest -C tools/testing/selftests
->>>>>
->>>>> If you fix the issue, kindly add following tag where applicable
->>>>> | Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> In order to fix this, I need to change -I../../../../usr/include/ for $(KHDR_INCLUDES) in tools/testing/selftests/rseq/Makefile
->>>>
->>>> I can find 25 odd uses of the same pattern in the kernel selftests. Should I fix them all in one go ?
->>>
->>> kselftest build depends on headers installed in the root directory.
-> 
-> By "root directory", do you mean kernel sources root directory or build output root directory ?
-> 
->>> The main makefile enforces this dependency.
-> 
-> How ? I figure that tools/testing/selftests/lib.mk overrides KHDR_INCLUDES if it is not defined yet:
-> 
-> ifeq ($(KHDR_INCLUDES),)
-> KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
-> endif
-> 
-> and selftests makefiles include ../lib.mk.
-> 
-> This KHDR_INCLUDES can be modified by O=... when built from the kernel top level, thus using tools/testing/selftests/Makefile:
-> 
-> ifneq ($(KBUILD_OUTPUT),)
-> [...]
->    KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
-> else
-> [...]
->    KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
-> endif
-> 
-> But it's up to the individual selftests to actually use $(KHDR_INCLUDES). In many cases, they hardcode -I../../../../usr/include/ which is bogus when the build root (O=...) differs from the source root.
-> 
->   If this test is being
->>> built without installing headers by itself, I think the scripts that
->>> build individual tests have to makes sure headers are installed first.
-> 
-> The headers were previously built by "make O=/tmp/kselftest headers", as it should, it's just that the selftest makefile uses a hardcoded path that is relative to the source directory, and it appears that this pattern is repeated all across the selftests.
-> 
+On Wed, Jan 11, 2023 at 2:33 PM Jann Horn <jannh@google.com> wrote:
+> If an ->anon_vma is attached to the VMA, collapse_and_free_pmd() requires
+> it to be locked. retract_page_tables() bails out if an ->anon_vma is
+> attached, but does this check before holding the mmap lock (as the comment
+> above the check explains).
 
-selftests Makefile used to install headers and there has been a recent
-change to have mani Makefile (root) to install it. As a result individual
-test builds (running make in the test directory) requires header install
-now.
+@akpm please replace the commit message with the following, and maybe
+also add a "Link:" entry pointing to
+https://lore.kernel.org/linux-mm/CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com/
+for the reproducer.
 
-I think the hard-coded includes are a problem and we have to fix them for
-all cases i.e make O=, individual test builds.
 
-If you are still up for it, please send patch.
+If an ->anon_vma is attached to the VMA, collapse_and_free_pmd() requires
+it to be locked.
+Page table traversal is allowed under any one of the mmap lock, the
+anon_vma lock (if the VMA is associated with an anon_vma), and the
+mapping lock (if the VMA is associated with a mapping); and so to be
+able to remove page tables, we must hold all three of them.
+retract_page_tables() bails out if an ->anon_vma is attached, but
+does this check before holding the mmap lock (as the comment above
+the check explains).
 
-thanks,
--- Shuah
+If we racily merge an existing ->anon_vma (shared with a child process)
+from a neighboring VMA, subsequent rmap traversals on pages belonging to
+the child will be able to see the page tables that we are concurrently
+removing while assuming that nothing else can access them.
 
+Repeat the ->anon_vma check once we hold the mmap lock to ensure that there
+really is no concurrent page table access.
+
+Hitting this bug causes a lockdep warning in collapse_and_free_pmd(),
+in the line
+"lockdep_assert_held_write(&vma->anon_vma->root->rwsem)".
+It can also lead to use-after-free access.
