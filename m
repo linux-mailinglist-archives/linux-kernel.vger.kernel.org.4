@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E91366E239
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC8B66E23F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjAQPdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
+        id S230124AbjAQPe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjAQPdI (ORCPT
+        with ESMTP id S229539AbjAQPeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:33:08 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC53FF20;
-        Tue, 17 Jan 2023 07:33:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VQZ7HmGNIOLXCftXZ531kTqZjZKKw65xP3ndBtQciAM=; b=VG5hFdcYWwFqpDE9EAjMtC6qO3
-        VPHPjGO9Ui0yZNu0fMG3jMdiCkVw0AwY+DLmpfxnZPFaFLvec70QkaYtpLLE1/ZVX9k9gY1PNsv/B
-        3BqQBK3pZxgsUlXOW9JT4/0TWiom2A0aR9sc313eM3Hm12Q7DEq2g9nxY+pkSEiIP8uFvPJFma9lH
-        CdAcwcv+o2PSAgkPxpbYLA/yvpzzKR6CP7XFjCUem83jH1EC2z2WPhm52LsDSjpAbi9ps03RjNUS/
-        s0d8ddXwRej5Ma/ElT/UyivbQBHifIoGEokXiWprN719tlzMreAbJ2hoVov2IUDw9957Nl+4bWnGu
-        l263FwYA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHnxQ-00Eqmi-BS; Tue, 17 Jan 2023 15:33:04 +0000
-Date:   Tue, 17 Jan 2023 07:33:04 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     gregkh@linuxfoundation.org, russell.h.weight@intel.com,
-        tianfei.zhang@intel.com, shaozhengchao@huawei.com,
-        colin.i.king@gmail.com, error27@gmail.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] test_firmware: Use kstrtobool() instead of strtobool()
-Message-ID: <Y8a/sILCmAt7oHLv@bombadil.infradead.org>
-References: <34f04735d20e0138695dd4070651bd860a36b81c.1673688120.git.christophe.jaillet@wanadoo.fr>
+        Tue, 17 Jan 2023 10:34:22 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A5941B49;
+        Tue, 17 Jan 2023 07:34:21 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="389221880"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="389221880"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:34:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="609281951"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="609281951"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 17 Jan 2023 07:34:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1pHnyW-00Adds-2m;
+        Tue, 17 Jan 2023 17:34:12 +0200
+Date:   Tue, 17 Jan 2023 17:34:12 +0200
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Brent Pappas <bpappas@pappasbrent.com>
+Cc:     hdegoede@redhat.com, mchehab@kernel.org, ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, error27@gmail.com,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: media: atomisp: pci: Replace bytes macros with
+ functions
+Message-ID: <Y8a/9GI+OsSRo+te@smile.fi.intel.com>
+References: <20230117150841.18061-1-bpappas@pappasbrent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <34f04735d20e0138695dd4070651bd860a36b81c.1673688120.git.christophe.jaillet@wanadoo.fr>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230117150841.18061-1-bpappas@pappasbrent.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 10:22:03AM +0100, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
-> 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
-> 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Tue, Jan 17, 2023 at 10:08:41AM -0500, Brent Pappas wrote:
+> Replace the function-like macros FPNTBL_BYTES, SCTBL_BYTES, and
+> MORPH_PLANE_BYTES with static inline functions to comply with Linux coding
+> style standards.
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Thank you!
 
-  Luis
+But I think what you need, besides dropping unneeded parentheses is to use some
+macros from overflow.h.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
