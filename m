@@ -2,138 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8729A670E73
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ACB670E76
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjARAMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S229681AbjARAOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjARAMO (ORCPT
+        with ESMTP id S229577AbjARAN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:12:14 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2B158651;
-        Tue, 17 Jan 2023 15:28:48 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HNA99f020899;
-        Tue, 17 Jan 2023 23:28:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Q+bGzy/bpjnZHbKLCwdyOhG2zG9LQH4Betp8bptyByI=;
- b=PPcL81pC0M/Ik9DTywv4tvSTuIcHacuX5NyK6uz5OdpjIGWcyuYaA/Dhr4uaQrzLWhnt
- GlHqXc0nJl1WdKqlcJo9PlDe193PP9BjIziirx/G8EXIcLWSg5Z1SYV9cKxiPiVhE/0g
- zwjdSF+AJ6PFSutEXM43uButyqsTWtvOJsCFcx86Q9zZPipYTaJCWhNLeYoKFeQku210
- 7v1nE2X2T0KjiRTXXoa9Nk2T+UcnCXo/pvE+boRJ/ravUC+SfX5BCuc+40wTpoCUg5/v
- YgrYjSL7LbvMj5SPg0+fKF/t0n+Jeh9DBsnQczHlFHpChHFeFARvQl6pdEnL3RSsbWQK dQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5nkqa0ya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 23:28:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HNSeuS003574
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 23:28:40 GMT
-Received: from [10.110.108.90] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
- 2023 15:28:39 -0800
-Message-ID: <982748a3-25d2-0d27-f6bd-d38e0a89796d@quicinc.com>
-Date:   Tue, 17 Jan 2023 15:28:38 -0800
+        Tue, 17 Jan 2023 19:13:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E798CD200;
+        Tue, 17 Jan 2023 15:31:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7640761588;
+        Tue, 17 Jan 2023 23:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E87AC433EF;
+        Tue, 17 Jan 2023 23:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673998263;
+        bh=gX7M02TttoCc8S5RPwEXyV27eIRgsayZQ2pGPcyLZ3M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ixzAcMagECl/baI4IaKYNOpGdQJOJkjkfXvuJn87XqFVcXiosbOzAmy96L8R0nGiD
+         9+zsVxepnnCJhKPfWv3acTFjNcVBYfSWEaLGw0TcWDtuafprlLKoH8L2ZZOyTqeIQl
+         +yl/lDlTOuGpnQiS/0o5KBF1BwW73ZnoJAJtdRzZR1mnKqjrkANaZN6L9XrwfH0ANP
+         k02FE2C3dEuYdsmcWUc73EdzYdLH/Ln5GuOhk37qqYeZYTAZISbRt5f1FEBTrTuM2I
+         je/v+iTB/IvQ4ppRIdzhyFIGT6CZ4JTNstc9MyXk9gtXYiXTRGjz4vHKK68XqKGQG3
+         +DtD30WIT6xig==
+Date:   Wed, 18 Jan 2023 01:30:57 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, ashish.kalra@amd.com, harald@profian.com,
+        Nikunj A Dadhania <nikunj@amd.com>
+Subject: Re: [PATCH RFC v7 11/64] KVM: SEV: Support private pages in
+ LAUNCH_UPDATE_DATA
+Message-ID: <Y8cvsS27o1BaUNPz@kernel.org>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-12-michael.roth@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dpu: Remove some unused variables
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        <robdclark@gmail.com>
-CC:     <dmitry.baryshkov@linaro.org>, <sean@poorly.run>,
-        <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230112033823.24901-1-jiapeng.chong@linux.alibaba.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230112033823.24901-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: V7nQ25PECL1WMN6KHUqMTVBs_syTmRGg
-X-Proofpoint-ORIG-GUID: V7nQ25PECL1WMN6KHUqMTVBs_syTmRGg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_10,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- mlxscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170187
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214194056.161492-12-michael.roth@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/11/2023 7:38 PM, Jiapeng Chong wrote:
-> Variables 'sc8280xp_regdma' and 'sm8350_regdma' are defined in the
-> dpu_hw_catalog.c file, but not used elsewhere, so remove these unused
-> variables.
+On Wed, Dec 14, 2022 at 01:40:03PM -0600, Michael Roth wrote:
+> From: Nikunj A Dadhania <nikunj@amd.com>
 > 
-> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:2029:37: warning: unused variable 'sc8280xp_regdma'.
-> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:2053:37: warning: unused variable 'sm8350_regdma'.
+> Pre-boot guest payload needs to be encrypted and VMM has copied it
+> over to the private-fd. Add support to get the pfn from the memfile fd
+> for encrypting the payload in-place.
 > 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3722
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-We should be adding the regdma entries to .dma_cfg of these chipsets.
-
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 16 ----------------
->   1 file changed, 16 deletions(-)
+>  arch/x86/kvm/svm/sev.c | 79 ++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 64 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 0f3da480b066..79bbef93948f 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -2026,14 +2026,6 @@ static const struct dpu_vbif_cfg sdm845_vbif[] = {
->   	},
->   };
->   
-> -static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-> -	.base = 0x0,
-> -	.version = 0x00020000,
-> -	.trigger_sel_off = 0x119c,
-> -	.xin_id = 7,
-> -	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-> -};
-> -
->   static const struct dpu_reg_dma_cfg sdm845_regdma = {
->   	.base = 0x0, .version = 0x1, .trigger_sel_off = 0x119c
->   };
-> @@ -2050,14 +2042,6 @@ static const struct dpu_reg_dma_cfg sm8250_regdma = {
->   	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
->   };
->   
-> -static const struct dpu_reg_dma_cfg sm8350_regdma = {
-> -	.base = 0x400,
-> -	.version = 0x00020000,
-> -	.trigger_sel_off = 0x119c,
-> -	.xin_id = 7,
-> -	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-> -};
-> -
->   static const struct dpu_reg_dma_cfg sm8450_regdma = {
->   	.base = 0x0,
->   	.version = 0x00020000,
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index a7e4e3005786..ae4920aeb281 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -107,6 +107,11 @@ static inline bool is_mirroring_enc_context(struct kvm *kvm)
+>  	return !!to_kvm_svm(kvm)->sev_info.enc_context_owner;
+>  }
+>  
+> +static bool kvm_is_upm_enabled(struct kvm *kvm)
+> +{
+> +	return kvm->arch.upm_mode;
+> +}
+> +
+>  /* Must be called with the sev_bitmap_lock held */
+>  static bool __sev_recycle_asids(int min_asid, int max_asid)
+>  {
+> @@ -382,6 +387,38 @@ static int sev_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  	return ret;
+>  }
+>  
+> +static int sev_get_memfile_pfn_handler(struct kvm *kvm, struct kvm_gfn_range *range, void *data)
+> +{
+> +	struct kvm_memory_slot *memslot = range->slot;
+> +	struct page **pages = data;
+> +	int ret = 0, i = 0;
+> +	kvm_pfn_t pfn;
+> +	gfn_t gfn;
+> +
+> +	for (gfn = range->start; gfn < range->end; gfn++) {
+> +		int order;
+> +
+> +		ret = kvm_restricted_mem_get_pfn(memslot, gfn, &pfn, &order);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (is_error_noslot_pfn(pfn))
+> +			return -EFAULT;
+> +
+> +		pages[i++] = pfn_to_page(pfn);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int sev_get_memfile_pfn(struct kvm *kvm, unsigned long addr,
+> +			       unsigned long size, unsigned long npages,
+> +			       struct page **pages)
+> +{
+> +	return kvm_vm_do_hva_range_op(kvm, addr, size,
+> +				      sev_get_memfile_pfn_handler, pages);
+> +}
+> +
+>  static struct page **sev_pin_memory(struct kvm *kvm, unsigned long uaddr,
+>  				    unsigned long ulen, unsigned long *n,
+>  				    int write)
+> @@ -424,16 +461,25 @@ static struct page **sev_pin_memory(struct kvm *kvm, unsigned long uaddr,
+>  	if (!pages)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	/* Pin the user virtual address. */
+> -	npinned = pin_user_pages_fast(uaddr, npages, write ? FOLL_WRITE : 0, pages);
+> -	if (npinned != npages) {
+> -		pr_err("SEV: Failure locking %lu pages.\n", npages);
+> -		ret = -ENOMEM;
+> -		goto err;
+> +	if (kvm_is_upm_enabled(kvm)) {
+> +		/* Get the PFN from memfile */
+> +		if (sev_get_memfile_pfn(kvm, uaddr, ulen, npages, pages)) {
+> +			pr_err("%s: ERROR: unable to find slot for uaddr %lx", __func__, uaddr);
+> +			ret = -ENOMEM;
+> +			goto err;
+> +		}
+> +	} else {
+> +		/* Pin the user virtual address. */
+> +		npinned = pin_user_pages_fast(uaddr, npages, write ? FOLL_WRITE : 0, pages);
+> +		if (npinned != npages) {
+> +			pr_err("SEV: Failure locking %lu pages.\n", npages);
+> +			ret = -ENOMEM;
+> +			goto err;
+> +		}
+> +		sev->pages_locked = locked;
+>  	}
+>  
+>  	*n = npages;
+> -	sev->pages_locked = locked;
+>  
+>  	return pages;
+>  
+> @@ -514,6 +560,7 @@ static int sev_launch_update_shared_gfn_handler(struct kvm *kvm,
+>  
+>  	size = (range->end - range->start) << PAGE_SHIFT;
+>  	vaddr_end = vaddr + size;
+> +	WARN_ON(size < PAGE_SIZE);
+>  
+>  	/* Lock the user memory. */
+>  	inpages = sev_pin_memory(kvm, vaddr, size, &npages, 1);
+> @@ -554,13 +601,16 @@ static int sev_launch_update_shared_gfn_handler(struct kvm *kvm,
+>  	}
+>  
+>  e_unpin:
+> -	/* content of memory is updated, mark pages dirty */
+> -	for (i = 0; i < npages; i++) {
+> -		set_page_dirty_lock(inpages[i]);
+> -		mark_page_accessed(inpages[i]);
+> +	if (!kvm_is_upm_enabled(kvm)) {
+> +		/* content of memory is updated, mark pages dirty */
+> +		for (i = 0; i < npages; i++) {
+> +			set_page_dirty_lock(inpages[i]);
+> +			mark_page_accessed(inpages[i]);
+> +		}
+> +		/* unlock the user pages */
+> +		sev_unpin_memory(kvm, inpages, npages);
+>  	}
+> -	/* unlock the user pages */
+> -	sev_unpin_memory(kvm, inpages, npages);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -609,9 +659,8 @@ static int sev_launch_update_priv_gfn_handler(struct kvm *kvm,
+>  			goto e_ret;
+>  		kvm_release_pfn_clean(pfn);
+>  	}
+> -	kvm_vm_set_region_attr(kvm, range->start, range->end,
+> -		true /* priv_attr */);
+>  
+> +	kvm_vm_set_region_attr(kvm, range->start, range->end, KVM_MEMORY_ATTRIBUTE_PRIVATE);
+>  e_ret:
+>  	return ret;
+>  }
+> -- 
+> 2.25.1
+> 
+
+kvm_vm_set_region_attr() should be fixed already in:
+
+https://lore.kernel.org/all/20221214194056.161492-11-michael.roth@amd.com/
+
+BR, Jarkko
+
