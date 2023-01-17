@@ -2,189 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3805A66E5C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057A866E5CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjAQSPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S229606AbjAQSQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbjAQSMf (ORCPT
+        with ESMTP id S233148AbjAQSOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:12:35 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F6F3FF02
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:54:28 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r30so7027873wrr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:54:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PDzwAFI7NBesRBvPpfeIPtEzZSb+xUUpXwXOHSl1luo=;
-        b=Hr42PPN/ETUhkQGNTUqP2occd6d3n44+ZN007SdYA9cv6gNhuuwLqKhtjrAPecDX7K
-         KdC2P5AHmQsCPAmrwB8+OqVAo07XHmwec01YcbupJqGHJVam3RQ1I8jl2XnMvPrZljCK
-         ZMOQLB70YjCOnNXKZI/38urIgrZaF6buAtGI6z+ltzklGbxq/UmC2e3Gk1ujgnhFz5lg
-         1EROEohGLtn3b7YtN+kSvooBR7shAwv2EHtIpz0OE5dCdRyqKzWwMVnL37h4mEHNeztP
-         KYMgu2KavRql6RmqsEf4G5E4Dm6i6BGGDLh00BGK9DmOHZNeSdV3ryp2bBuXpmJfWQly
-         cgcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PDzwAFI7NBesRBvPpfeIPtEzZSb+xUUpXwXOHSl1luo=;
-        b=TrDNjIvdRSpZuTumbP1mVP77wKdNVjpBZwkp6mit0hjieoTuIMZhAPoN3fUe3lmd1Z
-         jpiyjEkrf4u1cQGqq4DpaiMj8JCrOD+k8zxou0kPoS1XXD8VJCAwTnhNhC/ZDhetVWkz
-         li+AJmhsUcxHdEb3E6DEglWUZa3eHusThDic1nhHHt//Prj8ukjchqAcDFnnyCJYTgaE
-         guAv6Y4bhgukYgdeXqABr3+HTNbVeThXb/Si4WVlSs9nNnOq2QFtKOgCNdo51UFQa6CN
-         Ym8oLV0YR6jrTHY2d54YPbZ4N+Xe1MfNQ9aY+/7Kl9oVD7n77Wnpekws+eA5uCiiWuGc
-         /uXw==
-X-Gm-Message-State: AFqh2krjEtN6SN0bhSNb6C9l57I8XWH0NB0hlTBgTX0iiaIfUcO8TbtF
-        PCQ3xf7gfbIIboWDBl34ICDlMQ==
-X-Google-Smtp-Source: AMrXdXu2SY+DU3MzEjMVnIbsWRFlLT57464MW3lnYliLEfIm4ztW1Ty8bc4WuTfr7sZG3hwwh4KuQQ==
-X-Received: by 2002:a5d:45cd:0:b0:2bd:d94f:432c with SMTP id b13-20020a5d45cd000000b002bdd94f432cmr3716401wrs.26.1673978066786;
-        Tue, 17 Jan 2023 09:54:26 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v14-20020adff68e000000b002365730eae8sm29487213wrp.55.2023.01.17.09.54.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 09:54:26 -0800 (PST)
-Message-ID: <5ebee797-aa87-8db4-228c-dfe236ad32f8@linaro.org>
-Date:   Tue, 17 Jan 2023 18:54:22 +0100
+        Tue, 17 Jan 2023 13:14:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3105959E42;
+        Tue, 17 Jan 2023 09:55:00 -0800 (PST)
+Date:   Tue, 17 Jan 2023 17:54:56 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673978097;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PQcgs/gZzBl+B7TsSGFyPNXbOKfIcXW+ewk0g5LuBAs=;
+        b=FebkwlXyNt/QvcRlqP2e2ODF801LwQvy8pLHm8+5rYd+GUBTR8EpwhgYXkk6i1gkoj20U2
+        JwmSwDQW8hJgeFtgOSmbrcRWmKc4f9Tscn/RQpPjL0YzK0j4aM5LvSwtVGG0Dlweq8Sj3g
+        eCNtLWKzpZJsxichtENTxeJAmEIcayVjnfaBON5o6ysUiVb/x2eUrQayS2YOUHoNxNntPi
+        f3JS7d7/7+TmzujPzCXVvwd/cEWyQmLJiYn6/3tDGF//2bzVrJP6PkDKOLOCD7LuWab3uS
+        0cDjwRmxQqQpd+uPpCHz6IdwdZk2sqbYUTfRtYZnRJaaLuLYqB8vc5+nbKSuYw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673978097;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PQcgs/gZzBl+B7TsSGFyPNXbOKfIcXW+ewk0g5LuBAs=;
+        b=Pe4ejAGe7ctTLneORQMPSIfvAlhqga7TqaZ+dLqhAp/T8W2t3po691JVAXtYHUUrtJsWuy
+        8gO1XNYGsO9YZ9Cw==
+From:   "tip-bot2 for Ming Lei" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] blk-mq: Build default queue map via group_cpus_evenly()
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        John Garry <john.g.garry@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20221227022905.352674-7-ming.lei@redhat.com>
+References: <20221227022905.352674-7-ming.lei@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 03/19] dt-bindings: bus: add CDX bus controller device
- tree bindings
-Content-Language: en-US
-To:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, eric.auger@redhat.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
-        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
-        saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org,
-        yishaih@nvidia.com, jgg@ziepe.ca, jgg@nvidia.com,
-        robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
-        masahiroy@kernel.org, ndesaulniers@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, git@amd.com
-References: <20230117134139.1298-1-nipun.gupta@amd.com>
- <20230117134139.1298-4-nipun.gupta@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230117134139.1298-4-nipun.gupta@amd.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <167397809674.4906.6016765295947842293.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 14:41, Nipun Gupta wrote:
-> Add device tree bindings for CDX bus controller.
+The following commit has been merged into the irq/core branch of tip:
 
-Subject: drop second/last, redundant "device tree bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
+Commit-ID:     6a6dcae8f486c3f3298d0767d34505121c7b0b81
+Gitweb:        https://git.kernel.org/tip/6a6dcae8f486c3f3298d0767d34505121c7b0b81
+Author:        Ming Lei <ming.lei@redhat.com>
+AuthorDate:    Tue, 27 Dec 2022 10:29:05 +08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 17 Jan 2023 18:50:06 +01:00
 
-> 
-> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> ---
->  .../bindings/bus/xlnx,cdxbus-controller.yaml  | 68 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/xlnx,cdxbus-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/bus/xlnx,cdxbus-controller.yaml b/Documentation/devicetree/bindings/bus/xlnx,cdxbus-controller.yaml
-> new file mode 100644
-> index 000000000000..b2f186864021
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/bus/xlnx,cdxbus-controller.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/bus/xlnx,cdxbus-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: AMD CDX bus controller
-> +
-> +description: |
-> +  CDX bus controller for AMD devices is implemented to dynamically
-> +  detect CDX bus and devices on these bus using the firmware.
-> +  The CDX bus manages multiple FPGA based hardware devices, which
-> +  can support network, crypto or any other specialized type of
-> +  devices. These FPGA based devices can be added/modified dynamically
-> +  on run-time.
-> +
-> +  All devices on the CDX bus will have a unique streamid (for IOMMU)
-> +  and a unique device ID (for MSI) corresponding to a requestor ID
-> +  (one to one associated with the device). The streamid and deviceid
-> +  are used to configure SMMU and GIC-ITS respectively.
-> +
-> +  iommu-map property is used to define the set of stream ids
-> +  corresponding to each device and the associated IOMMU.
-> +
-> +  The MSI writes are accompanied by sideband data (Device ID).
-> +  The msi-map property is used to associate the devices with the
-> +  device ID as well as the associated ITS controller.
-> +
-> +  rproc property (xlnx,rproc) is used to identify the remote processor
-> +  with which APU (Application Processor Unit) interacts to find out
-> +  the bus and device configuration.
-> +
-> +maintainers:
-> +  - Nipun Gupta <nipun.gupta@amd.com>
-> +  - Nikhil Agarwal <nikhil.agarwal@amd.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,cdxbus-controller
+blk-mq: Build default queue map via group_cpus_evenly()
 
-This misses SoC specific compatible. Drop "bus" - redundant. I would
-also say - drop controller - do you see any other devices with such
-compatible naming? Use naming consistent with other devices in the
-kernel. Just open some controllers - SPI, I2C etc. and look there.
+The default queue mapping builder of blk_mq_map_queues doesn't take NUMA
+topo into account, so the built mapping is pretty bad, since CPUs
+belonging to different NUMA node are assigned to same queue. It is
+observed that IOPS drops by ~30% when running two jobs on same hctx
+of null_blk from two CPUs belonging to two NUMA nodes compared with
+from same NUMA node.
 
-> +
-> +  iommu-map: true
+Address the issue by reusing group_cpus_evenly() for building queue mapping
+since group_cpus_evenly() does group cpus according to CPU/NUMA locality.
 
-No mask?
+Also performance data becomes more stable with this given correct queue
+mapping is applied wrt. numa locality viewpoint, for example, on one two
+nodes arm64 machine with 160 cpus, node 0(cpu 0~79), node 1(cpu 80~159):
 
-> +
-> +  msi-map: true
-> +
-> +  xlnx,rproc:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      phandle to the remoteproc_r5 rproc node using which APU interacts
-> +      with remote processor.
-> +
-> +required:
-> +  - compatible
-> +  - iommu-map
-> +  - msi-map
-> +  - xlnx,rproc
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    cdxbus-controller {
+1) modprobe null_blk nr_devices=1 submit_queues=2
 
-Node names should be generic, so just cdx.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+2) run 'fio(t/io_uring -p 0 -n 4 -r 20 /dev/nullb0)', and observe that
+IOPS becomes much stable on multiple tests:
 
-> +        compatible = "xlnx,cdxbus-controller";
-> +        /* define map for RIDs 250-259 */
-> +        iommu-map = <250 &smmu 250 10>;
+ - unpatched: IOPS is 2.5M ~ 4.5M
+ - patched:   IOPS is 4.3M ~ 5.0M
 
-Best regards,
-Krzysztof
+Lots of drivers may benefit from the change, such as nvme pci poll,
+nvme tcp, ...
 
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: John Garry <john.g.garry@oracle.com>
+Reviewed-by: Jens Axboe <axboe@kernel.dk>                                                                                                                                                                                                    
+Link: https://lore.kernel.org/r/20221227022905.352674-7-ming.lei@redhat.com
+
+---
+ block/blk-mq-cpumap.c | 63 ++++++++----------------------------------
+ 1 file changed, 13 insertions(+), 50 deletions(-)
+
+diff --git a/block/blk-mq-cpumap.c b/block/blk-mq-cpumap.c
+index 9c2fce1..0c612c1 100644
+--- a/block/blk-mq-cpumap.c
++++ b/block/blk-mq-cpumap.c
+@@ -10,66 +10,29 @@
+ #include <linux/mm.h>
+ #include <linux/smp.h>
+ #include <linux/cpu.h>
++#include <linux/group_cpus.h>
+ 
+ #include <linux/blk-mq.h>
+ #include "blk.h"
+ #include "blk-mq.h"
+ 
+-static int queue_index(struct blk_mq_queue_map *qmap,
+-		       unsigned int nr_queues, const int q)
+-{
+-	return qmap->queue_offset + (q % nr_queues);
+-}
+-
+-static int get_first_sibling(unsigned int cpu)
+-{
+-	unsigned int ret;
+-
+-	ret = cpumask_first(topology_sibling_cpumask(cpu));
+-	if (ret < nr_cpu_ids)
+-		return ret;
+-
+-	return cpu;
+-}
+-
+ void blk_mq_map_queues(struct blk_mq_queue_map *qmap)
+ {
+-	unsigned int *map = qmap->mq_map;
+-	unsigned int nr_queues = qmap->nr_queues;
+-	unsigned int cpu, first_sibling, q = 0;
+-
+-	for_each_possible_cpu(cpu)
+-		map[cpu] = -1;
+-
+-	/*
+-	 * Spread queues among present CPUs first for minimizing
+-	 * count of dead queues which are mapped by all un-present CPUs
+-	 */
+-	for_each_present_cpu(cpu) {
+-		if (q >= nr_queues)
+-			break;
+-		map[cpu] = queue_index(qmap, nr_queues, q++);
++	const struct cpumask *masks;
++	unsigned int queue, cpu;
++
++	masks = group_cpus_evenly(qmap->nr_queues);
++	if (!masks) {
++		for_each_possible_cpu(cpu)
++			qmap->mq_map[cpu] = qmap->queue_offset;
++		return;
+ 	}
+ 
+-	for_each_possible_cpu(cpu) {
+-		if (map[cpu] != -1)
+-			continue;
+-		/*
+-		 * First do sequential mapping between CPUs and queues.
+-		 * In case we still have CPUs to map, and we have some number of
+-		 * threads per cores then map sibling threads to the same queue
+-		 * for performance optimizations.
+-		 */
+-		if (q < nr_queues) {
+-			map[cpu] = queue_index(qmap, nr_queues, q++);
+-		} else {
+-			first_sibling = get_first_sibling(cpu);
+-			if (first_sibling == cpu)
+-				map[cpu] = queue_index(qmap, nr_queues, q++);
+-			else
+-				map[cpu] = map[first_sibling];
+-		}
++	for (queue = 0; queue < qmap->nr_queues; queue++) {
++		for_each_cpu(cpu, &masks[queue])
++			qmap->mq_map[cpu] = qmap->queue_offset + queue;
+ 	}
++	kfree(masks);
+ }
+ EXPORT_SYMBOL_GPL(blk_mq_map_queues);
+ 
