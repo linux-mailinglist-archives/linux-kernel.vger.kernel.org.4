@@ -2,85 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F68966E2D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AC466E2D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbjAQPxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S230376AbjAQPzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbjAQPxB (ORCPT
+        with ESMTP id S229762AbjAQPy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:53:01 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEAFC55AD;
-        Tue, 17 Jan 2023 07:52:58 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 905DE20DFE9A; Tue, 17 Jan 2023 07:52:58 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 905DE20DFE9A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1673970778;
-        bh=3NZCtRK3OOYyaszjw8eLOn5YIJHXVKjO2S3F0Zwdygs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KamhbA+yDFn/R9/614rnJfl4WspLcMyiqsYgzG9TvUhpCpJxZbo+eKhZCNJhac0+I
-         brZSAoa4X10J52aYfQgstAFcASysnn0BGYm1B+WpAV87micQ8QEt2JX3DS7QSgHUJN
-         TnTjrOvfO3KRyJdyuNbINCwzTSSlTfAJW980AFUA=
-Date:   Tue, 17 Jan 2023 07:52:58 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH 4/4] dt-bindings: hv: Add dt-bindings for VMBus
-Message-ID: <20230117155258.GA14857@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
- <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
- <31d78b4c-1416-d8cb-a187-bf924168ee1e@linaro.org>
- <20230117151325.GA9806@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <23a7ae1d-cd49-8c78-5284-4134755ea19a@linaro.org>
+        Tue, 17 Jan 2023 10:54:58 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29E9986AF;
+        Tue, 17 Jan 2023 07:54:57 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1874A1FB;
+        Tue, 17 Jan 2023 07:55:39 -0800 (PST)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8854B3F67D;
+        Tue, 17 Jan 2023 07:54:55 -0800 (PST)
+Message-ID: <99a03fae-47fa-8f19-1768-4aeb28cac182@arm.com>
+Date:   Tue, 17 Jan 2023 15:54:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23a7ae1d-cd49-8c78-5284-4134755ea19a@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 01/15] coresight: trace-id: Add API to dynamically
+ assign Trace ID values
+Content-Language: en-US
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
+        quic_jinlmao@quicinc.com
+References: <20230116124928.5440-1-mike.leach@linaro.org>
+ <20230116124928.5440-2-mike.leach@linaro.org>
+ <1896a73b-eb7b-7ffb-272d-115a10adeb71@arm.com>
+ <CAJ9a7VixL9f2Cm7A780V311KH2G2giryeH9dG0p2e4zWBwA3iQ@mail.gmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CAJ9a7VixL9f2Cm7A780V311KH2G2giryeH9dG0p2e4zWBwA3iQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 04:41:22PM +0100, Krzysztof Kozlowski wrote:
-> On 17/01/2023 16:13, Saurabh Singh Sengar wrote:
-> > On Mon, Jan 16, 2023 at 07:55:13PM +0100, Krzysztof Kozlowski wrote:
-> >> On 16/01/2023 17:48, Saurabh Sengar wrote:
-> >>> Add dt-bindings for Hyper-V VMBus
-> >>>
-> >>> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> >>> ---
-> >>>  .../devicetree/bindings/hv/msft,vmbus.yaml         | 34 ++++++++++++++++++++++
-> >>
-> >> Also, there is no "hv" hardware, so that's not correct location. If your
-> >> bindings describe firmware, this should go to firmware. Otherwise, this
-> >> does not look like suitable for DT. We do not describe software stuff in DT.
-> > 
-> > VMBus is a virtual device this is simmilar to virtio. I can rename this folder to vmbus.
-> >
+On 17/01/2023 13:02, Mike Leach wrote:
+> On Mon, 16 Jan 2023 at 14:16, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>
+>> Hi Mike
+>>
+>> On 16/01/2023 12:49, Mike Leach wrote:
+>>> The existing mechanism to assign Trace ID values to sources is limited
+>>> and does not scale for larger multicore / multi trace source systems.
+>>>
+>>> The API introduces functions that reserve IDs based on availabilty
+>>> represented by a coresight_trace_id_map structure. This records the
+>>> used and free IDs in a bitmap.
+>>>
+>>> CPU bound sources such as ETMs use the coresight_trace_id_get_cpu_id
+>>> coresight_trace_id_put_cpu_id pair of functions. The API will record
+>>> the ID associated with the CPU. This ensures that the same ID will be
+>>> re-used while perf events are active on the CPU. The put_cpu_id function
+>>> will pend release of the ID until all perf cs_etm sessions are complete.
+>>>
+>>> For backward compatibility the functions will attempt to use the same
+>>> CPU IDs as the legacy system would have used if these are still available.
+>>>
+>>> Non-cpu sources, such as the STM can use coresight_trace_id_get_system_id /
+>>> coresight_trace_id_put_system_id.
+>>>
+>>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+>>> ---
+>>>    drivers/hwtracing/coresight/Makefile          |   2 +-
+>>>    .../hwtracing/coresight/coresight-trace-id.c  | 265 ++++++++++++++++++
+>>>    .../hwtracing/coresight/coresight-trace-id.h  | 156 +++++++++++
+>>>    include/linux/coresight-pmu.h                 |  10 +
+>>>    4 files changed, 432 insertions(+), 1 deletion(-)
+>>>    create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
+>>>    create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
+>>> index b6c4a48140ec..329a0c704b87 100644
+>>> --- a/drivers/hwtracing/coresight/Makefile
+>>> +++ b/drivers/hwtracing/coresight/Makefile
+>>> @@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
+>>>    coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
+>>>                coresight-sysfs.o coresight-syscfg.o coresight-config.o \
+>>>                coresight-cfg-preload.o coresight-cfg-afdo.o \
+>>> -             coresight-syscfg-configfs.o
+>>> +             coresight-syscfg-configfs.o coresight-trace-id.o
+>>>    obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
+>>>    coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
+>>>                      coresight-tmc-etr.o
+>>> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
+>>> new file mode 100644
+>>> index 000000000000..9b85c376cb12
+>>> --- /dev/null
+>>> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
+>>> @@ -0,0 +1,265 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>
+>> ...
+>>
+>>> +int coresight_trace_id_read_cpu_id(int cpu)
+>>> +{
+>>> +     return _coresight_trace_id_read_cpu_id(cpu);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_read_cpu_id);
+>>> +
+>>> +int coresight_trace_id_get_system_id(void)
+>>> +{
+>>> +     return coresight_trace_id_map_get_system_id(&id_map_default);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_system_id);
+>>> +
+>>> +void coresight_trace_id_put_system_id(int id)
+>>> +{
+>>> +     coresight_trace_id_map_put_system_id(&id_map_default, id);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
+>>> +
+>>> +void coresight_trace_id_perf_start(void)
+>>> +{
+>>> +     atomic_inc(&perf_cs_etm_session_active);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
+>>> +
+>>> +void coresight_trace_id_perf_stop(void)
+>>> +{
+>>> +     if (!atomic_dec_return(&perf_cs_etm_session_active))
+>>> +             coresight_trace_id_release_all_pending();
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
+>>> +
+>>
+>> This blank new line at the end of the file generates a checkpatch
+>> warning for me. I have fixed it locally and applied it.
+>>
+> OK, thanks.
 > 
-> Then virtio directory. The directories are per subsystems (hardware
-> classes).
-
-Apologies if I was not clear, I meant to say this is a device conceptually
-similar to virtio. But this driver has nothing to do with virtio, we should
-be creating a new folder for it OR I am fine moving it under bus if that's
-okay.
-
+> The only thing I get out of checkpatch.pl for this patch (and indeed
+> the entire set) is:
 > 
-> Best regards,
-> Krzysztof
+> WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+
+Ah, sorry. It is not the checkpatch, but git am complained. Sorry for 
+the confusion.
+
+Cheers
+Suzuki
