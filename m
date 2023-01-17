@@ -2,104 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1C766E2A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510DB66E2AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbjAQPqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S234508AbjAQPrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbjAQPqJ (ORCPT
+        with ESMTP id S232013AbjAQPqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:46:09 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EAF27D74;
-        Tue, 17 Jan 2023 07:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673970253; x=1705506253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GG5BwYt5PVPYxx6sAHKdfDO8GiFSj+dmo4JKzIxwxnk=;
-  b=FQKq3PO0c0zP4qN8vIM/soOpiHekFCwU0iKlEe4nAg/YUdiWFAeARA7Y
-   Vkm1Gv6GIwxfmNJtEuh+TTI5quacQX3IyYJCXxJmCnLQRk4RtC4NsjAd1
-   hvjllxF2HOc7+qRiuYaPYHeBENgLv8h/yb2fRre1OO0KDcQ70vgVx2hIV
-   /9M4dz2tejITi1ETt/TAzwMeNRalydqGNo4YWNwsTmDiMaxSA5Ci0d6d9
-   nq734aceF5PRRAIuMmO7dTyxfoOq0KSUXOW+ezEnxeNLXvwme7sMQ2zhs
-   fzTH4GjsHeXIUb6TcazbNlxQxc9w3HVeasAvLLt+Jat/mzoCoE9FlIu6C
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="305103017"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="305103017"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:44:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="659428148"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="659428148"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 17 Jan 2023 07:44:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pHo83-00AdrD-3C;
-        Tue, 17 Jan 2023 17:44:03 +0200
-Date:   Tue, 17 Jan 2023 17:44:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v2 1/2] pinctrl: Proofreading and updating the
- documentation accordingly
-Message-ID: <Y8bCQ9QlhMpFdTiC@smile.fi.intel.com>
-References: <20230116153347.15786-1-andriy.shevchenko@linux.intel.com>
- <CACRpkdbVa3XEDzcuy7iCqx0cvj4trzPe7N0B5PswA1mQ7O+GtA@mail.gmail.com>
- <Y8avtfifZpy89rS3@smile.fi.intel.com>
- <CACRpkdYTFDsU7xhu812Lh1mA1Hs9kGeid+akR84ervAsaxVYkg@mail.gmail.com>
- <Y8a4BAotZAax9Zx4@smile.fi.intel.com>
- <Y8bCBMoeNHlBG97a@smile.fi.intel.com>
+        Tue, 17 Jan 2023 10:46:15 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B6D4520F;
+        Tue, 17 Jan 2023 07:44:18 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id g23so18340993plq.12;
+        Tue, 17 Jan 2023 07:44:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SWrdPrJQ2dQ91kDOjWJkS+4RqBJUBQfv6QIuLSyM9I=;
+        b=UfjBW2gl5PrilCKQ09slxhjentzlYCZijk7sT0uORMq8iF2ZigqnbAhAODxPzcNKjB
+         KxRnWaRB7ptoYxd5WEalSKZBqBd9eOMissfzFINSFPPE/+k5h0VVAuMx6gu/kfYcodzp
+         fxJGZCQRGS0/vK6phA/fenAyq3s3j2cPgxacNJtXo4qliQVGHEQYvLnH/zPx/DChjmQI
+         mgAlkLL+cpEpq3v21frncwWSc68ibctU+1ClyuEiA9esIDuifnaxD8Nfjq+4npOG4XFB
+         4v3qik88iMn0OkpQ+ah/pLb2Ox1TPSlx+nZGXC3KFuo37NOYochFyFRtW2YP7572yQz+
+         sQqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2SWrdPrJQ2dQ91kDOjWJkS+4RqBJUBQfv6QIuLSyM9I=;
+        b=6Tcq3wJDLezylS5oltETXlv2XPmCga5Oiwj4hlSP4p+RnWRNR5DNmkJA27TjRG1lho
+         LeRqqRAa/MK1gfIvgdiOFbK13NPhfEtGs0iy58dkus+G4Lbj3K8pjqu9bwpCVq6YZOkv
+         pjgTgXjBIxUGav2e9fXByB+fRonhQQ1lwLvzPoOIIXbUjWRuTekEOOtexrFe6F9INAdH
+         tBx5g/9zwKj2HYRigS+U3piVBI4x/CkDnHJ2+BCQhnDf3WbKIjUuFjMQ3fl8dqaGtw6w
+         gS7k6WQj5+hA5QtYtbBZjxhjWCPuLw0Q9ye/s12K2E+jxzF4qee8Hx8J0tdugwQAEQya
+         dzrQ==
+X-Gm-Message-State: AFqh2koWESzHTldFiUbuHBkxxCWrTcDR66b5Oxy/OrTWkJbLroZ9753X
+        2BXUBD0pzJdmRHswACH89dY=
+X-Google-Smtp-Source: AMrXdXsXbduBfp8s9Wh2MGgxK8AjT98WtiSTSTKmj/6nr5poi1ses823mGd+BrQU9pKF5zWxfoR0fg==
+X-Received: by 2002:a17:90a:30d:b0:225:f901:ebf8 with SMTP id 13-20020a17090a030d00b00225f901ebf8mr3436692pje.18.1673970257740;
+        Tue, 17 Jan 2023 07:44:17 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id l14-20020a17090aec0e00b0022908f1398dsm8909736pjy.32.2023.01.17.07.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 07:44:17 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH v5 1/2] dt-bindings: leds: backlight: Add Kinetic KTZ8866 backlight
+Date:   Tue, 17 Jan 2023 23:44:07 +0800
+Message-Id: <20230117154408.1882-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8bCBMoeNHlBG97a@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 05:43:00PM +0200, Andy Shevchenko wrote:
-> On Tue, Jan 17, 2023 at 05:00:20PM +0200, Andy Shevchenko wrote:
-> > On Tue, Jan 17, 2023 at 03:26:31PM +0100, Linus Walleij wrote:
-> > > On Tue, Jan 17, 2023 at 3:24 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
+Add Kinetic KTZ8866 backlight binding documentation.
 
-...
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+Changes in v2:
+  - Remove "items" between "compatible" and "const: kinetic,ktz8866"
+  - Change "additionalProperties" to "unevaluatedProperties"
 
-> > > > Actually I have missed the repetition of the comment I put in v1,
-> > > > i.e.  that this would be good to be attached to my PR where the
-> > > > struct pinfunction et al. have been introduced. Can I have your
-> > > > Ack?
-> > > 
-> > > Sure go ahead,
-> > 
-> > So, which tag to use?
-> > 
-> > "Acked-by: Linus Walleij <linus.walleij@linaro.org>" ?
-> 
-> Added this tag and pushed to my tree, thanks!
-> 
-> P.S. Tell me if I should do somehow else.
+Changes in v3:
+  - Add Krzysztof's R-b
 
-Note, I have slightly amended couple of lines, and if you keep the patches
-in your tree as well it may be a minor conflict.
+Changes in v4:
+  - Drop Krzysztof's R-b
+  - Add some new properties
 
+Changes in v5:
+  - Add missing enum under property description.
+  - Rename uncorrect properties.
+
+ .../leds/backlight/kinetic,ktz8866.yaml       | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+
+diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+new file mode 100644
+index 000000000000..1efc29b0632f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/backlight/kinetic,ktz8866.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Kinetic Technologies KTZ8866 backlight
++
++maintainers:
++  - Jianhua Lu <lujianhua000@gmail.com>
++
++description: |
++  The Kinetic Technologies KTZ8866 is a high efficiency 6-sinks led backlight
++  with dual lcd bias power.
++  https://www.kinet-ic.com/ktz8866/
++
++allOf:
++  - $ref: common.yaml#
++
++properties:
++  compatible:
++    const: kinetic,ktz8866
++
++  current-num-sinks:
++    description: Number of LED current sinks.
++    enum: [1, 2, 3, 4, 5, 6]
++
++  current-ramping-time-us:
++    description: LED current ramping time in microseconds.
++    enum: [2, 4, 8, 16, 32, 64, 128, 192, 256, 320, 384, 448, 512, 576, 640]
++
++  led-ramping-time-us:
++    description: LED on/off ramping time in microseconds.
++    enum: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]
++
++  enable-lcd-bias:
++    description: Set if we want to output bias power supply for LCD.
++    type: boolean
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    backlight {
++        compatible = "kinetic,ktz8866";
++
++        pinctrl-names = "default";
++        pinctrl-0 = <&bl_en_default>;
++
++        current-num-sinks = <5>;
++        current-ramping-time-us = <128>;
++        led-ramping-time-us = <1>;
++        enable-lcd-bias;
++    };
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.38.2
 
