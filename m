@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B357F66DAB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B7966DAC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbjAQKPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S236573AbjAQKRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbjAQKPr (ORCPT
+        with ESMTP id S236731AbjAQKRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:15:47 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E182717;
-        Tue, 17 Jan 2023 02:15:45 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 041533200976;
-        Tue, 17 Jan 2023 05:15:41 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 17 Jan 2023 05:15:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673950541; x=1674036941; bh=XKPMNAyWjO
-        5bizn8aYIilfV14edG3KsI/pCa+0iqYeY=; b=RsTUlsCP5+0mD/5GnmSUTdJf99
-        zah1MhwXxfftnOQLzqebONzyrYjfGAhOjYGBhj7L4maM6yMoZQ5GZQeP5TVJwWc9
-        1Z2tRYVGWu79PaLu9tU9ucqTR432+bf/M7qFYvAd0dEHES7qIXA0DTW+hDpophXg
-        OlMmUBufJw3RDDMPLzq4CAygIG7WL9Kej2il/YTZSL0Hn2LLQtEqDHAwqmhIChls
-        gK0jm1FU0llZ1PnuCcqD+3TFM2xoaa8W+Bp8tKDm+7bTmlDrHes4jZSmzvJ4XldW
-        YDqKVBU5oWlcsC26V2qL7KiaU/O81yK55YNWYVgdimTo1dTgE7GdTx/Yckuw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673950541; x=1674036941; bh=XKPMNAyWjO5bizn8aYIilfV14edG
-        3KsI/pCa+0iqYeY=; b=h6BZnIehpQI/LEW8ZCQUUvp2rv01TCxOPSAfZ4Om+lcL
-        UczDG5NsVuF9/wbBKrexYrnZsPTX4KbgPcaHWk2C9xK5gUGmdVUjfeu80xp1bESr
-        riHSnGfxAuWzpaHmq8pww07Y+hduSK9yguVWnzXYj+l+KbBwfgjPimb/zeVyhB0l
-        whdm0WErVDlpDQSvI35C1XO827z0HaXw4IKKF+HJr7zQIWpIYfRWztxfr+03yeIv
-        UBLS0wjdq9B5kDwVseLF79X6QoUamkH+29Nn6+lbrIsJzrsEc41PPZMRiEEIw8gX
-        BzM8zKo9eI52ZvLzBGpMm2dp7Ww+wIcWrOcW1N2Kyw==
-X-ME-Sender: <xms:TXXGY_Me-piRPSzPJ9BaVYFh10Uy_7dhRxnLzDO1ekJxowXLOmy9mQ>
-    <xme:TXXGY5-bR2R5A1IpwR0iqjazySsXbt36ycWl3z1LwnyMP_MRrlnDhdLouWxKNKVjp
-    OOh9d5_2QRJ_wwtBN8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtiedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:TXXGY-R0QliJEiJlxn5gse2ZKWXqhtVfhxt3fXy87m0TC5G_aTYY_g>
-    <xmx:TXXGYzsJZAicISpxSXhM-pyXeVAAQKJJNqAJjE9CgsHbii4rBN8G2w>
-    <xmx:TXXGY3e0ilskgs2rLoXaBX9oMtjvU51s3vd32RqAnKMtrIOK8rCTaw>
-    <xmx:TXXGY5tL2xvXOED1GU-796BGvLeOvLHR6t4rvjuq3i9kvtJsjbm9WQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 01C10B60086; Tue, 17 Jan 2023 05:15:40 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
-Mime-Version: 1.0
-Message-Id: <a699e52a-db19-4374-a4bc-a3948ecc43ef@app.fastmail.com>
-In-Reply-To: <20230117100845.16708-1-nikita.shubin@maquefel.me>
-References: <20230117100845.16708-1-nikita.shubin@maquefel.me>
-Date:   Tue, 17 Jan 2023 11:15:20 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nikita Shubin" <nikita.shubin@maquefel.me>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Lukasz Majewski" <lukma@denx.de>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] gpio: ep93xx: convert driver to DT
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Jan 2023 05:17:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7404E18B27;
+        Tue, 17 Jan 2023 02:17:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6CB5B8126A;
+        Tue, 17 Jan 2023 10:16:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A813C433F0;
+        Tue, 17 Jan 2023 10:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673950618;
+        bh=tFX5ZU4Q5D44JoBgXvWOpc5HjwCKpEkVT0aIsph/94I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CGq/0peZJuO0PlmuiKT7p95kDn9/Q8KunfPZinkS8P6aiPxwgrze0A5/Mf9FLbPFJ
+         j3zaYr0wmvckJIaetjZQAM4PRWTws/fxtIICKL7xyvTRzj6sJEtBm7Fp+ucmcFAe5w
+         29U+xMhJdDCu25cm1sEslBfB443WB+oB/EwD7wxo=
+Date:   Tue, 17 Jan 2023 11:16:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/658] 5.4.229-rc1 review
+Message-ID: <Y8Z1mBZCwQuv/clZ@kroah.com>
+References: <20230116154909.645460653@linuxfoundation.org>
+ <20230116202025.GA3397667@roeck-us.net>
+ <Y8Zt42qAQ2BQdxL2@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8Zt42qAQ2BQdxL2@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023, at 11:08, Nikita Shubin wrote:
-
+On Tue, Jan 17, 2023 at 10:44:03AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Jan 16, 2023 at 12:20:25PM -0800, Guenter Roeck wrote:
+> > Runtime:
+> > 
+> > Building ppc64:pseries:pseries_defconfig:smp2:net,pcnet:initrd ... running ......R... failed (crashed)
+> > 
+> > BUG: Kernel NULL pointer dereference at 0x00000000
+> > Faulting instruction address: 0xc000000000046cc8
+> > Oops: Kernel access of bad area, sig: 11 [#1]
+> > BE SMP NR_CPUS=2048 NUMA pSeries
+> > Modules linked in:
+> > CPU: 1 PID: 1 Comm: swapper/0 Not tainted 4.19.270-rc1-00522-gc75d2b5524ab #1
+> > NIP:  c000000000046cc8 LR: c000000000046ca4 CTR: 0000000000000000
+> > REGS: c00000003e6878f0 TRAP: 0380   Not tainted  (4.19.270-rc1-00522-gc75d2b5524ab)
+> > MSR:  8000000002009032 <SF,VEC,EE,ME,IR,DR,RI>  CR: 84000882  XER: 00000000
+> > CFAR: c000000000162cf8 IRQMASK: 0
+> > GPR00: c000000000046ca4 c00000003e687b70 c000000001772000 0000000000000000
+> > GPR04: 0000000000000001 0000000000000001 c00000003e687990 00000000bc24d52c
+> > GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000003
+> > GPR12: 0000000024000882 c00000003ffff300 c000000000010e34 0000000000000000
+> > GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> > GPR20: 0000000000000000 0000000000000000 c00000000125eea8 0000000000000001
+> > GPR24: c000000001379cd8 c000000001419f20 c0000000017b7d68 c0000000017b7d68
+> > GPR28: 0000000000000000 0000000000000002 c00000000160efe8 c00000000168ac60
+> > NIP [c000000000046cc8] .eeh_init+0x48/0x220
+> > LR [c000000000046ca4] .eeh_init+0x24/0x220
+> > Call Trace:
+> > [c00000003e687b70] [c000000000046ca4] .eeh_init+0x24/0x220 (unreliable)
+> > [c00000003e687c00] [c00000000001065c] .do_one_initcall+0x7c/0x430
+> > [c00000003e687ce0] [c000000001394db4] .kernel_init_freeable+0x538/0x62c
+> > [c00000003e687dc0] [c000000000010e4c] .kernel_init+0x18/0x14c
+> > [c00000003e687e30] [c00000000000c0d0] .ret_from_kernel_thread+0x58/0x68
+> > Instruction dump:
+> > 3c62ffd7 38631c10 4811c021 60000000 2c030000 408201c8 3d22000b e92904e0
+> > 2c290000 41820198 f8410028 e9290008 <e9490000> 7d4903a6 e8490008 4e800421
+> > ---[ end trace 8912d02d3e80c4ae ]---
 > 
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id ep93xx_gpio_match[] = {
-> +	{ .compatible = "cirrus,ep93xx-gpio" },
-> +	{ /* end of table */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ep93xx_gpio_match);
-> +#endif
-> +
->  static struct platform_driver ep93xx_gpio_driver = {
->  	.driver		= {
->  		.name	= "gpio-ep93xx",
-> +		.of_match_table = ep93xx_gpio_match,
->  	},
->  	.probe		= ep93xx_gpio_probe,
+> This is odd, and I don't know how to track that down.  Any hints?
 
-The #ifdef here is wrong and will cause a build failure because
-of the unconditional reference to the variable.
+Let me pull out some powerpc patches that are in this area and push out
+a -rc2 to see if that resolves the issue.
 
-Just remove the #ifdef/#endif.
+thanks,
 
-    Arnd
+greg k-h
