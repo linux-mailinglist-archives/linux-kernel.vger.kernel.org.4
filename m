@@ -2,161 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FB866DF45
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A3066DF48
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjAQNso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:48:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S230075AbjAQNtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjAQNsD (ORCPT
+        with ESMTP id S231151AbjAQNsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:48:03 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CE934C1F;
-        Tue, 17 Jan 2023 05:48:02 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso6239512pjg.2;
-        Tue, 17 Jan 2023 05:48:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsZvgpdsbOSZhJAZ1QAJPedjqfxUnjeKrZqaXm358r0=;
-        b=Y0aqBtoOHjCVqYsvR98g7ZosHRR3wcidEggRSlAS73WqTuKhr0y1bCfXnTshMho+4c
-         u4yJoh3kRcHoOAQlItFDcr9kQ733A4bCElXX9l7MPOo60dl5ZZknfZ/7ZFL+stS8Mb4y
-         ZUxh3exectYTZre84JGIPrgKieU8WCd2AWzz9izq40ACJzf9KTs9cFdRt1E4obi8V2ib
-         7o1HhrqhYneJyNYoZy0ynyoAz20U/NHHqhzrYlcwWIc1dkS7eMQQKqYuD+EEUUz2a7wg
-         ZMPATcxthLmkKPQHTPsCYeCZCAjv0ZeqzgswFWF5eSPP4IV1jQvEOFv6amj5Aj2AXWhO
-         6Obg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nsZvgpdsbOSZhJAZ1QAJPedjqfxUnjeKrZqaXm358r0=;
-        b=kAs/XcscsmzouA/mzrscmH6VFB+Z7AUnYf1C5mVcseu9L5mUDW2FN0HGmzvhnDjuKa
-         /z5nuMQASzic7Dd5CNMKNJJITja/zUW+o90FnYXu82chqZSQ917xyUvHOxPv/bQW522A
-         54SPBAtUd7+GkJxJS/yvKBWKZVKrdRYRJFyamXd8FzzDydVBFV5v8HbsymlcTz8Nqfd0
-         KyS44TODZ9zbDPqhpCQI9vJLs0nerBD/ruLd6K1k2eetZb56AgzTNnSllbtg0LsWqDEy
-         a+aVSaVp1EhI89HUI+7kuT95SPokPohPG7rtwz4EMy7xPArGU6os22LiPFBJ4H94s3Tb
-         nxCw==
-X-Gm-Message-State: AFqh2kqxRATeycY2ogcBTjzu+D2x0Hg2sDyCca7vnhA3J9GOz9WBS/WU
-        bHk7HvhuD4QU/sGxPB4C2Dc=
-X-Google-Smtp-Source: AMrXdXu/zWBQUKC6ZNgX4gXkB2pdzeuGV+K0owx8758eOjlAQC+ZwRI1EVhNsBftFCuNwmBqxEowSA==
-X-Received: by 2002:a17:902:c10d:b0:191:3aad:cf33 with SMTP id 13-20020a170902c10d00b001913aadcf33mr4164697pli.55.1673963281835;
-        Tue, 17 Jan 2023 05:48:01 -0800 (PST)
-Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id a3-20020a170902900300b00189393ab02csm3747958plp.99.2023.01.17.05.47.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 05:48:01 -0800 (PST)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Helge Deller <deller@gmx.de>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH v4 2/2] dt-bindings: leds: backlight: Add Kinetic KTZ8866 backlight
-Date:   Tue, 17 Jan 2023 21:47:42 +0800
-Message-Id: <20230117134742.23238-2-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.38.2
-In-Reply-To: <20230117134742.23238-1-lujianhua000@gmail.com>
-References: <20230117134742.23238-1-lujianhua000@gmail.com>
+        Tue, 17 Jan 2023 08:48:50 -0500
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E7E3B655;
+        Tue, 17 Jan 2023 05:48:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=zUXO5MQWynUldS0R2rs0QRnzYyd0wOp6rw/Wma8Gg9k=; b=IZSfPZP/+bpbkNFPHN7i5ARwH0
+        VMkNbBOj8ibXEWe6H6Sxu0TWsikx7kApAYi1WzeODrsvAKrb/l4/KtiLdW4u+VL4xenRwYUZ5K+44
+        eNP46WXpnOn1aEL8cZBTQG06uUN4SJNOcDC0Ny2drT6nDQwhQ1TYBmNp6j7vNQ/uAX/kvU8vmjwKU
+        BJjbC7/ZrKSyGob+C+4HjA7vgTDxblv35QiUSwcJwIQBtyU6PnaA1HFdJ96YyK09D9tLD7d85XBRv
+        dXhPRNxrV7eeaWzx42fL8gZXDrBUy966xHQV8T3X/88f7WUZ676IeLfxvfPezJbTStGyuYcFirMaN
+        Km2Yiy2Q==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1pHmKN-0000B7-EW; Tue, 17 Jan 2023 14:48:39 +0100
+Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1pHmKM-000MJd-RK; Tue, 17 Jan 2023 14:48:39 +0100
+Message-ID: <54eb0ee4-7d9e-7025-f984-b1e026c18c3d@metafoo.de>
+Date:   Tue, 17 Jan 2023 05:48:34 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Pierluigi Passaro <pierluigi.passaro@gmail.com>,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eran.m@variscite.com, nate.d@variscite.com,
+        francesco.f@variscite.com, pierluigi.p@variscite.com
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <Y8QzI2VUY6//uBa/@lunn.ch> <f691f339-9e50-b968-01e1-1821a2f696e7@metafoo.de>
+ <Y8SSb+tJsfJ3/DvH@lunn.ch> <cc338014-8a2b-87e9-7684-20b57aae4ac3@metafoo.de>
+ <Y8alV6FUKsN2x2XZ@lunn.ch>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <Y8alV6FUKsN2x2XZ@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26784/Tue Jan 17 09:29:12 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Kinetic KTZ8866 backlight binding documentation.
+On 1/17/23 05:40, Andrew Lunn wrote:
+>>> So compatible "ethernet-phy-ieee802.3-c45" results in is_c45 being set
+>>> true. The if (is_c45 || is then true, so it does not need to call
+>>> fwnode_get_phy_id(child, &phy_id) so ignores whatever ID is in DT and
+>>> asks the PHY.
+>>>
+>>> Try this, totally untested:
+>>>
+>>> diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+>>> index b782c35c4ac1..13be23f8ac97 100644
+>>> --- a/drivers/net/mdio/fwnode_mdio.c
+>>> +++ b/drivers/net/mdio/fwnode_mdio.c
+>>> @@ -134,10 +134,10 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+>>>           if (rc >= 0)
+>>>                   is_c45 = true;
+>>> -       if (is_c45 || fwnode_get_phy_id(child, &phy_id))
+>>> +       if (fwnode_get_phy_id (child, &phy_id))
+>>>                   phy = get_phy_device(bus, addr, is_c45);
+>>>           else
+>>> -               phy = phy_device_create(bus, addr, phy_id, 0, NULL);
+>>> +               phy = phy_device_create(bus, addr, phy_id, is_c45, NULL);
+>>>           if (IS_ERR(phy)) {
+>>>                   rc = PTR_ERR(phy);
+>>>                   goto clean_mii_ts;
+>>>
+>> I think part of the problem is that for C45 there are a few other fields
+>> that get populated by the ID detection, such as devices_in_package and
+>> mmds_present. Is this something we can do after running the PHY drivers
+>> probe function? Or is it too late at that point?
+> As i hinted, it needs somebody to actually debug this and figure out
+> why it does not work.
+>
+> I think what i did above is part of the solution. You need to actually
+> read the ID from the DT, which if you never call fwnode_get_phy_id()
+> you never do.
+>
+> You then need to look at phy_bus_match() and probably remove the
+>
+> 		return 0;
+> 	} else {
+>
+> so that C22 style ID matching is performed if matching via
+> c45_ids.device_ids fails.
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
-Changes in v2:
-  - Remove "items" between "compatible" and "const: kinetic,ktz8866"
-  - Change "additionalProperties" to "unevaluatedProperties"
-
-Changes in v3:
-  - Add Krzysztof's R-b
-
-Changes in v4:
-  - Drop Krzysztof's R-b
-  - Add some new properties
-
- .../leds/backlight/kinetic,ktz8866.yaml       | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-
-diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-new file mode 100644
-index 000000000000..18571d69accb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/backlight/kinetic,ktz8866.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Kinetic Technologies KTZ8866 backlight
-+
-+maintainers:
-+  - Jianhua Lu <lujianhua000@gmail.com>
-+
-+description: |
-+  The Kinetic Technologies KTZ8866 is a high efficiency 6-sinks led backlight
-+  with dual lcd bias power.
-+  https://www.kinet-ic.com/ktz8866/
-+
-+allOf:
-+  - $ref: common.yaml#
-+
-+properties:
-+  compatible:
-+    const: kinetic,ktz8866
-+
-+  current-num-sinks:
-+    description: Number of LED current sinks.
-+
-+  current-ramping-time:
-+    description: LED current ramping time.
-+
-+  led-ramping-time:
-+    description: LED on/off ramping time.
-+
-+  enable-lcd-bias:
-+    description: Set if we want to output bias power supply for LCD.
-+    type: boolean
-+
-+required:
-+  - compatible
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    backlight {
-+        compatible = "kinetic,ktz8866";
-+
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&bl_en_default>;
-+
-+        current-num-sinks = <5>;
-+        current-ramping-time = <128>;
-+        led-ramping-time = <1>;
-+        enable-lcd-bias;
-+    };
--- 
-2.38.2
+Sorry, I've should have been more clear. I did try your proposed change 
+a while ago. The problem why it does not work is that there are other 
+fields in the phy data structure that get initialized when reading the 
+IDs for C45. Such as which MMD addresses are valid.
 
