@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CFC670DBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A67670DBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjAQXgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:36:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S230116AbjAQXgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjAQXez (ORCPT
+        with ESMTP id S230099AbjAQXez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 18:34:55 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5AF4A1F1;
-        Tue, 17 Jan 2023 13:25:25 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:25:23 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0034ABFA;
+        Tue, 17 Jan 2023 13:25:28 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:25:24 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673990723;
+        s=2020; t=1673990724;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zL73PGKxStZ9fCgcTgYJXXkZ8/OuGHCrN4AUGABWof0=;
-        b=qgQpzMddFMLd75rQQqljVgltj7CxOnG1q0/MJHb7cxTx1Gxbk+J6/87TB5JhjMJkuzFHBc
-        nLV9oV8AO3AAwDLOZd3V4YF5yfLMOOb8Rx6Pf73k02WoYi7IuN44IUmmL+V3LjwXD/4yAq
-        TgRHf1XfiGS3L/H5zAIjvEZhw/c9nRiajV8JfwQgeRQlridcMYuIRSdfaIGlb0xkz8q/18
-        N9zjo0lrMpNIUpT3qdVVREUzTGSUGSdyOSmn1vhqKEwwNnykQkAqX7zvA9os57CMRPUHcx
-        bziS5F70SPFpz8y5N03NJdZWUpG4KnPSDWGlMgu8Hlbmhf6U8QTa4bSiqNy3mw==
+        bh=npxTRuCXN8Zea0Y5+TsmPieCTiZPV77v7bfWVZBrhBY=;
+        b=ebDD0jZZphOcD4ua2PdkST0jLkKJ6fpmF9O4BPstVQQPYY3tdRdG81lRdjT5lBlLYJ1sGC
+        Wo0kow4hWm4qg2QB55jMZSUEIibNP1E8PDu2WZbRmX8Tret+JeENLLZkfy2gYSljATBcGj
+        ZhJa7VIVU17daSYBJto03SpGV6QIs4i0Bq92cWYdTY0O2OOw5YAUa9QzFJkun3X/+YP03D
+        GK08DVOR+xzAyVhUcNdLYvMSzQntKnWNpaqamJBFjeUpwNKuhV8M9u35K4rw3tbSr2SqdK
+        /5fnoF5L8NDUX/Cc8Wmy+sgxctH89EUUJiij/jkNTOtEbzxmOT0vqF75jAFJbg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673990723;
+        s=2020e; t=1673990724;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zL73PGKxStZ9fCgcTgYJXXkZ8/OuGHCrN4AUGABWof0=;
-        b=TUpb+7t4RNfGe6lTmWmH8S8CakL46MXa/PxfRhjJo8XXZXWe4GIxG8sh/hEomIEV4rqIA0
-        IA4O41SnI8vhskDg==
+        bh=npxTRuCXN8Zea0Y5+TsmPieCTiZPV77v7bfWVZBrhBY=;
+        b=r0NoYGO1JYA3Flb291jYZ3rrdCMLL/0iWPSFhegtq/ibCQ+THv7JZvWKah+POfXIIToDXF
+        FUNqNJKnoNZMfwCw==
 From:   "tip-bot2 for Kim Phillips" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/cpu, kvm: Add the Null Selector Clears Base feature
+Subject: [tip: x86/cpu] x86/cpu, kvm: Add support for CPUID_80000021_EAX
 Cc:     Kim Phillips <kim.phillips@amd.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230116230159.1511393-5-kim.phillips@amd.com>
-References: <20230116230159.1511393-5-kim.phillips@amd.com>
+In-Reply-To: <20230110224643.452273-3-kim.phillips@amd.com>
+References: <20230110224643.452273-3-kim.phillips@amd.com>
 MIME-Version: 1.0
-Message-ID: <167399072346.4906.15780876678821426051.tip-bot2@tip-bot2>
+Message-ID: <167399072423.4906.5544069451240267115.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,95 +66,130 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cpu branch of tip:
 
-Commit-ID:     b1366f515fd65fb83518fded6520894efa4e228f
-Gitweb:        https://git.kernel.org/tip/b1366f515fd65fb83518fded6520894efa4e228f
+Commit-ID:     15fea09b029d43fd1f3069f5e957ce9dc282f052
+Gitweb:        https://git.kernel.org/tip/15fea09b029d43fd1f3069f5e957ce9dc282f052
 Author:        Kim Phillips <kim.phillips@amd.com>
-AuthorDate:    Mon, 16 Jan 2023 17:01:56 -06:00
+AuthorDate:    Tue, 10 Jan 2023 16:46:37 -06:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
 CommitterDate: Tue, 17 Jan 2023 13:00:12 +01:00
 
-x86/cpu, kvm: Add the Null Selector Clears Base feature
+x86/cpu, kvm: Add support for CPUID_80000021_EAX
 
-The Null Selector Clears Base feature was being open-coded for KVM in
-__do_cpuid_func().  Add it to its newly added CPUID leaf 0x80000021 EAX
-proper, and propagate it in kvm_set_cpu_caps() instead.
+Add support for CPUID leaf 80000021, EAX. The majority of the features will be
+used in the kernel and thus a separate leaf is appropriate.
 
-Also drop the bit description comments now it's more self-describing.
+Include KVM's reverse_cpuid entry because features are used by VM guests, too.
 
-  [ bp: Convert test in check_null_seg_clears_base() too. ]
+  [ bp: Massage commit message. ]
 
 Signed-off-by: Kim Phillips <kim.phillips@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230116230159.1511393-5-kim.phillips@amd.com
+Link: https://lore.kernel.org/r/20230110224643.452273-3-kim.phillips@amd.com
 ---
- arch/x86/include/asm/cpufeatures.h |  1 +
- arch/x86/kernel/cpu/common.c       |  4 +---
- arch/x86/kvm/cpuid.c               | 10 +++-------
- 3 files changed, 5 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/cpufeature.h        | 7 +++++--
+ arch/x86/include/asm/cpufeatures.h       | 2 +-
+ arch/x86/include/asm/disabled-features.h | 3 ++-
+ arch/x86/include/asm/required-features.h | 3 ++-
+ arch/x86/kernel/cpu/common.c             | 3 +++
+ arch/x86/kvm/reverse_cpuid.h             | 1 +
+ 6 files changed, 14 insertions(+), 5 deletions(-)
 
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+index 1a85e1f..ce0c8f7 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -32,6 +32,7 @@ enum cpuid_leafs
+ 	CPUID_8000_0007_EBX,
+ 	CPUID_7_EDX,
+ 	CPUID_8000_001F_EAX,
++	CPUID_8000_0021_EAX,
+ };
+ 
+ #define X86_CAP_FMT_NUM "%d:%d"
+@@ -94,8 +95,9 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
+ 	   CHECK_BIT_IN_MASK_WORD(REQUIRED_MASK, 17, feature_bit) ||	\
+ 	   CHECK_BIT_IN_MASK_WORD(REQUIRED_MASK, 18, feature_bit) ||	\
+ 	   CHECK_BIT_IN_MASK_WORD(REQUIRED_MASK, 19, feature_bit) ||	\
++	   CHECK_BIT_IN_MASK_WORD(REQUIRED_MASK, 20, feature_bit) ||	\
+ 	   REQUIRED_MASK_CHECK					  ||	\
+-	   BUILD_BUG_ON_ZERO(NCAPINTS != 20))
++	   BUILD_BUG_ON_ZERO(NCAPINTS != 21))
+ 
+ #define DISABLED_MASK_BIT_SET(feature_bit)				\
+ 	 ( CHECK_BIT_IN_MASK_WORD(DISABLED_MASK,  0, feature_bit) ||	\
+@@ -118,8 +120,9 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
+ 	   CHECK_BIT_IN_MASK_WORD(DISABLED_MASK, 17, feature_bit) ||	\
+ 	   CHECK_BIT_IN_MASK_WORD(DISABLED_MASK, 18, feature_bit) ||	\
+ 	   CHECK_BIT_IN_MASK_WORD(DISABLED_MASK, 19, feature_bit) ||	\
++	   CHECK_BIT_IN_MASK_WORD(DISABLED_MASK, 20, feature_bit) ||	\
+ 	   DISABLED_MASK_CHECK					  ||	\
+-	   BUILD_BUG_ON_ZERO(NCAPINTS != 20))
++	   BUILD_BUG_ON_ZERO(NCAPINTS != 21))
+ 
+ #define cpu_has(c, bit)							\
+ 	(__builtin_constant_p(bit) && REQUIRED_MASK_BIT_SET(bit) ? 1 :	\
 diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 901128e..6bed80c 100644
+index b70111a..b890058 100644
 --- a/arch/x86/include/asm/cpufeatures.h
 +++ b/arch/x86/include/asm/cpufeatures.h
-@@ -430,6 +430,7 @@
- /* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
- #define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" No Nested Data Breakpoints */
- #define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
-+#define X86_FEATURE_NULL_SEL_CLR_BASE	(20*32+ 6) /* "" Null Selector Clears Base */
+@@ -13,7 +13,7 @@
+ /*
+  * Defines x86 CPU feature bits
+  */
+-#define NCAPINTS			20	   /* N 32-bit words worth of info */
++#define NCAPINTS			21	   /* N 32-bit words worth of info */
+ #define NBUGINTS			1	   /* N 32-bit bug flags */
  
  /*
-  * BUG word(s)
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index c44b56f..5dfa4fb 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -124,6 +124,7 @@
+ #define DISABLED_MASK17	0
+ #define DISABLED_MASK18	0
+ #define DISABLED_MASK19	0
+-#define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
++#define DISABLED_MASK20	0
++#define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 21)
+ 
+ #endif /* _ASM_X86_DISABLED_FEATURES_H */
+diff --git a/arch/x86/include/asm/required-features.h b/arch/x86/include/asm/required-features.h
+index aff7747..7ba1726 100644
+--- a/arch/x86/include/asm/required-features.h
++++ b/arch/x86/include/asm/required-features.h
+@@ -98,6 +98,7 @@
+ #define REQUIRED_MASK17	0
+ #define REQUIRED_MASK18	0
+ #define REQUIRED_MASK19	0
+-#define REQUIRED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 20)
++#define REQUIRED_MASK20	0
++#define REQUIRED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 21)
+ 
+ #endif /* _ASM_X86_REQUIRED_FEATURES_H */
 diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index e6f3234..e6bf9b1 100644
+index b7ac85a..e6f3234 100644
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
-@@ -1685,9 +1685,7 @@ void check_null_seg_clears_base(struct cpuinfo_x86 *c)
- 	if (!IS_ENABLED(CONFIG_X86_64))
- 		return;
+@@ -1093,6 +1093,9 @@ void get_cpu_cap(struct cpuinfo_x86 *c)
+ 	if (c->extended_cpuid_level >= 0x8000001f)
+ 		c->x86_capability[CPUID_8000_001F_EAX] = cpuid_eax(0x8000001f);
  
--	/* Zen3 CPUs advertise Null Selector Clears Base in CPUID. */
--	if (c->extended_cpuid_level >= 0x80000021 &&
--	    cpuid_eax(0x80000021) & BIT(6))
-+	if (cpu_has(c, X86_FEATURE_NULL_SEL_CLR_BASE))
- 		return;
++	if (c->extended_cpuid_level >= 0x80000021)
++		c->x86_capability[CPUID_8000_0021_EAX] = cpuid_eax(0x80000021);
++
+ 	init_scattered_cpuid_features(c);
+ 	init_speculation_control(c);
  
- 	/*
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 88c9700..04f2f48 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -742,10 +742,12 @@ void kvm_set_cpu_caps(void)
- 		F(SME_COHERENT));
+diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
+index 042d0ac..81f4e9c 100644
+--- a/arch/x86/kvm/reverse_cpuid.h
++++ b/arch/x86/kvm/reverse_cpuid.h
+@@ -68,6 +68,7 @@ static const struct cpuid_reg reverse_cpuid[] = {
+ 	[CPUID_12_EAX]        = {0x00000012, 0, CPUID_EAX},
+ 	[CPUID_8000_001F_EAX] = {0x8000001f, 0, CPUID_EAX},
+ 	[CPUID_7_1_EDX]       = {         7, 1, CPUID_EDX},
++	[CPUID_8000_0021_EAX] = {0x80000021, 0, CPUID_EAX},
+ };
  
- 	kvm_cpu_cap_mask(CPUID_8000_0021_EAX,
--		F(NO_NESTED_DATA_BP) | F(LFENCE_RDTSC)
-+		F(NO_NESTED_DATA_BP) | F(LFENCE_RDTSC) | F(NULL_SEL_CLR_BASE)
- 	);
- 	if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
- 		kvm_cpu_cap_set(X86_FEATURE_LFENCE_RDTSC);
-+	if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
-+		kvm_cpu_cap_set(X86_FEATURE_NULL_SEL_CLR_BASE);
- 
- 	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,
- 		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |
-@@ -1230,9 +1232,6 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		entry->ebx = entry->ecx = entry->edx = 0;
- 		cpuid_entry_override(entry, CPUID_8000_0021_EAX);
- 		/*
--		 * Pass down these bits:
--		 *    EAX      6      NSCB, Null selector clear base
--		 *
- 		 * Other defined bits are for MSRs that KVM does not expose:
- 		 *   EAX      3      SPCL, SMM page configuration lock
- 		 *   EAX      13     PCMSR, Prefetch control MSR
-@@ -1240,10 +1239,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		 * KVM doesn't support SMM_CTL.
- 		 *   EAX       9     SMM_CTL MSR is not supported
- 		 */
--		entry->eax &= BIT(6);
- 		entry->eax |= BIT(9);
--		if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
--			entry->eax |= BIT(6);
- 		break;
- 	/*Add support for Centaur's CPUID instruction*/
- 	case 0xC0000000:
+ /*
