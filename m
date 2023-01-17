@@ -2,273 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A9466DA4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAB866DA56
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbjAQJtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S236191AbjAQJwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236364AbjAQJtF (ORCPT
+        with ESMTP id S236111AbjAQJwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:49:05 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA049EFF;
-        Tue, 17 Jan 2023 01:49:04 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H9mpar076280;
-        Tue, 17 Jan 2023 03:48:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673948931;
-        bh=GjnHvmjaqRuivD2+TCoVa4qL7sR/yAIRVbLbk9FEq2w=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=tdF3+rPLdTescDz0XCqTofDUouXRjhzrx0+5NxizXTtmqEqYHV+yGq+yL6W3UtlXh
-         9RNaNs2y6ylJWkK6ULhADrHsU77mTDf35r1IG4Mn7ZDsLStKbUXE/AfkFzt/0vos0t
-         wKs20Bev+qItpx9lDzdbbYBvYsUcnQX805wnrcV0=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H9mohj015176
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Jan 2023 03:48:50 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
- Jan 2023 03:48:50 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 17 Jan 2023 03:48:50 -0600
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H9mkoh026204;
-        Tue, 17 Jan 2023 03:48:47 -0600
-Message-ID: <4b844b29-43b1-9e42-6682-678963514766@ti.com>
-Date:   Tue, 17 Jan 2023 15:18:46 +0530
+        Tue, 17 Jan 2023 04:52:45 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0EAF2A9AD;
+        Tue, 17 Jan 2023 01:52:41 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxLuvnb8ZjWBECAA--.6283S3;
+        Tue, 17 Jan 2023 17:52:39 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxrb7kb8ZjkK8aAA--.55653S3;
+        Tue, 17 Jan 2023 17:52:37 +0800 (CST)
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix undeclared identifier build
+ errors of test_bpf_nf.c
+To:     Yonghong Song <yhs@meta.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+References: <1673844908-11533-1-git-send-email-yangtiezhu@loongson.cn>
+ <14e0f634f084d0f07e447638c490da60943507d6.camel@gmail.com>
+ <556dc633-e7fb-da8a-1fa9-757684edd3a4@oracle.com>
+ <dffe5523-4ff7-8b27-46fa-079a9556166f@meta.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d299be28-42f5-b387-5b54-74694ff5f340@loongson.cn>
+Date:   Tue, 17 Jan 2023 17:52:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <s-vadapalli@ti.com>
-Subject: Re: [PATCH net-next v2] net: ethernet: ti: am65-cpsw/cpts: Fix CPTS
- release action
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>
-References: <20230116044517.310461-1-s-vadapalli@ti.com>
- <Y8T8+rWrvv6gfNxa@unreal> <f83831f8-b827-18df-36d4-48d9ff0056e1@ti.com>
- <b33c25c5-c93f-6860-b0a5-58279022a91c@kernel.org>
- <aebaa171-bf4e-c143-a186-a37cd34b724e@ti.com>
- <55308aa9-029d-8f00-7781-8841e3911e1c@kernel.org>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <55308aa9-029d-8f00-7781-8841e3911e1c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <dffe5523-4ff7-8b27-46fa-079a9556166f@meta.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dxrb7kb8ZjkK8aAA--.55653S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3XF1xKF48tr47WFWfWw1fCrg_yoWfGr1rpa
+        48AFZYk3WkGF45trsYk392gFWrtws7XFWUJr18try2v34vvF97Jr4xKrW3GrsxurZ5tFs5
+        A34IgF1SvryrAw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcApnDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/23 14:57, Roger Quadros wrote:
-> Siddharth,
-> 
-> On 17/01/2023 07:00, Siddharth Vadapalli wrote:
->> Roger, Leon,
->>
->> On 16/01/23 21:31, Roger Quadros wrote:
->>> Hi Siddharth,
->>>
->>> On 16/01/2023 09:43, Siddharth Vadapalli wrote:
->>>>
->>>>
->>>> On 16/01/23 13:00, Leon Romanovsky wrote:
->>>>> On Mon, Jan 16, 2023 at 10:15:17AM +0530, Siddharth Vadapalli wrote:
->>>>>> The am65_cpts_release() function is registered as a devm_action in the
->>>>>> am65_cpts_create() function in am65-cpts driver. When the am65-cpsw driver
->>>>>> invokes am65_cpts_create(), am65_cpts_release() is added in the set of devm
->>>>>> actions associated with the am65-cpsw driver's device.
->>>>>>
->>>>>> In the event of probe failure or probe deferral, the platform_drv_probe()
->>>>>> function invokes dev_pm_domain_detach() which powers off the CPSW and the
->>>>>> CPSW's CPTS hardware, both of which share the same power domain. Since the
->>>>>> am65_cpts_disable() function invoked by the am65_cpts_release() function
->>>>>> attempts to reset the CPTS hardware by writing to its registers, the CPTS
->>>>>> hardware is assumed to be powered on at this point. However, the hardware
->>>>>> is powered off before the devm actions are executed.
->>>>>>
->>>>>> Fix this by getting rid of the devm action for am65_cpts_release() and
->>>>>> invoking it directly on the cleanup and exit paths.
->>>>>>
->>>>>> Fixes: f6bd59526ca5 ("net: ethernet: ti: introduce am654 common platform time sync driver")
->>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->>>>>> ---
->>>>>> Changes from v1:
->>>>>> 1. Fix the build issue when "CONFIG_TI_K3_AM65_CPTS" is not set. This
->>>>>>    error was reported by kernel test robot <lkp@intel.com> at:
->>>>>>    https://lore.kernel.org/r/202301142105.lt733Lt3-lkp@intel.com/
->>>>>> 2. Collect Reviewed-by tag from Roger Quadros.
->>>>>>
->>>>>> v1:
->>>>>> https://lore.kernel.org/r/20230113104816.132815-1-s-vadapalli@ti.com/
->>>>>>
->>>>>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 ++++++++
->>>>>>  drivers/net/ethernet/ti/am65-cpts.c      | 15 +++++----------
->>>>>>  drivers/net/ethernet/ti/am65-cpts.h      |  5 +++++
->>>>>>  3 files changed, 18 insertions(+), 10 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>> index 5cac98284184..00f25d8a026b 100644
->>>>>> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
->>>>>> @@ -1913,6 +1913,12 @@ static int am65_cpsw_am654_get_efuse_macid(struct device_node *of_node,
->>>>>>  	return 0;
->>>>>>  }
->>>>>>  
->>>>>> +static void am65_cpsw_cpts_cleanup(struct am65_cpsw_common *common)
->>>>>> +{
->>>>>> +	if (IS_ENABLED(CONFIG_TI_K3_AM65_CPTS) && common->cpts)
->>>>>
->>>>> Why do you have IS_ENABLED(CONFIG_TI_K3_AM65_CPTS), if
->>>>> am65_cpts_release() defined as empty when CONFIG_TI_K3_AM65_CPTS not set?
->>>>>
->>>>> How is it possible to have common->cpts == NULL?
->>>>
->>>> Thank you for reviewing the patch. I realize now that checking
->>>> CONFIG_TI_K3_AM65_CPTS is unnecessary.
->>>>
->>>> common->cpts remains NULL in the following cases:
->>
->> I realized that the cases I mentioned are not explained clearly. Therefore, I
->> will mention the cases again, along with the section of code they correspond to,
->> in order to make it clear.
->>
->> Case-1: am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not
->> enabled. This corresponds to the following section within am65_cpsw_init_cpts():
->>
->> if (!IS_ENABLED(CONFIG_TI_K3_AM65_CPTS))
->> 	return 0;
->>
->> In this case, common->cpts remains NULL, but it is not a problem even if the
->> am65_cpsw_nuss_probe() fails later, since the am65_cpts_release() function is
->> NOP. Thus, this case is not an issue.
->>
->> Case-2: am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not present
->> in the device tree. This corresponds to the following section within
->> am65_cpsw_init_cpts():
->>
->> node = of_get_child_by_name(dev->of_node, "cpts");
->> if (!node) {
->> 	dev_err(dev, "%s cpts not found\n", __func__);
->> 	return -ENOENT;
->> }
->>
->> In this case as well, common->cpts remains NULL, but it is not a problem because
->> the probe fails and the execution jumps to "err_of_clear", which doesn't invoke
->> am65_cpsw_cpts_cleanup(). Therefore, common->cpts being NULL is not a problem.
->>
->> Case-3 and Case-4 are described later in this mail.
->>
->>>> 1. am65_cpsw_init_cpts() returns 0 since CONFIG_TI_K3_AM65_CPTS is not enabled.
->>>> 2. am65_cpsw_init_cpts() returns -ENOENT since the cpts node is not defined.
->>>> 3. The call to am65_cpts_create() fails within the am65_cpsw_init_cpts()
->>>> function with a return value of 0 when cpts is disabled.
->>>
->>> In this case common->cpts is not NULL and is set to error pointer.
->>> Probe will continue normally.
->>> Is it OK to call any of the cpts APIs with invalid handle?
->>> Also am65_cpts_release() will be called with invalid handle.
->>
->> Yes Roger, thank you for pointing it out. When I wrote "cpts is disabled", I had
->> meant that the following section is executed within the am65_cpsw_init_cpts()
->> function:
->>
->> Case-3:
->>
->> cpts = am65_cpts_create(dev, reg_base, node);
->> if (IS_ERR(cpts)) {
->> 	int ret = PTR_ERR(cpts);
->>
->> 	of_node_put(node);
->> 	if (ret == -EOPNOTSUPP) {
->> 		dev_info(dev, "cpts disabled\n");
->> 		return 0;
->> 	}
->>
->> ......
->> }
->>
->> Leon,
->>
->> In the above code, when the section corresponding to:
->> dev_info(dev, "cpts disabled\n");
->>
->> is executed, CONFIG_TI_K3_AM65_CPTS is enabled. Therefore, the
->> am65_cpts_release() is not NOP. If the probe fails after the call to
->> am65_cpsw_init_cpts(), then the am65_cpsw_cpts_cleanup() function will be called
->> in the cleanup path of probe, which needs to check for common->cpts not being
->> NULL. This is because common->cpts is NULL after returning 0 from the
->> am65_cpsw_init_cpts() function at the
->> dev_info(dev, "cpts disabled\n");
->>
->> section. Thus, I believe that in this case, am65_cpts_release() shouldn't be
->> invoked from the am65_cpsw_cpts_cleanup() function, since it would have already
->> been invoked from am65_cpts_create()'s cleanup path. This can be ensured by
->> checking whether common->cpts is NULL or not, before invoking
->> am65_cpts_release() within am65_cpsw_cpts_cleanup().
->>
-> 
-> Yes, I agree.
-> 
->>>
->>>> 4. The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
->>>> fails with an error.
->>>
->>> In this case common->cpts is not NULL and will invoke am65_cpts_release() with
->>> invalid handle.
->>
->> Case-4: The call to am65_cpts_create() within the am65_cpsw_init_cpts() function
->> fails with an error. This corresponds to the following section within
->> am65_cpsw_init_cpts():
->>
->> cpts = am65_cpts_create(dev, reg_base, node);
->> if (IS_ERR(cpts)) {
->> ......
->> 	dev_err(dev, "cpts create err %d\n", ret);
->> 	return ret;
->> }
->> 	
->>
->> Roger,
->>
->> If the call to am65_cpts_create() fails with an error other than -EOPNOTSUPP,
->> which corresponds to Case-4, the call to am65_cpts_release() would have been
->> invoked within the am65_cpts_create()'s cleanup path itself if necessary. Also,
->> when the error is not -EOPNOTSUPP, the am65_cpsw_init_cpts() function returns an
->> error, due to which the execution jumps to "err_of_clear" in
->> am65_cpsw_nuss_probe(). Therefore, am65_cpsw_cpts_cleanup() is not invoked in
->> this case, due to which common->cpts being NULL is not a problem.
-> 
-> Correct.
-> 
->>
->>
->> Roger, Leon, please review my comments and let me know. I think that Case-3
->> demands checking whether common->cpts is NULL or not, within the
->> am65_cpsw_cpts_cleanup() function.
-> 
-> Do you really need a separate am65_cpsw_cpts_cleanup() or can just add
-> the NULL check in am65_cpts_release()?
 
-Adding a NULL check in am65_cpts_release() works too. I will implement this in
-the v3 patch, if there are no objections to this approach. Leon, please let me
-know if this is acceptable.
 
-Regards,
-Siddharth.
+On 01/17/2023 02:48 PM, Yonghong Song wrote:
+>
+>
+> On 1/16/23 5:54 AM, Alan Maguire wrote:
+>> On 16/01/2023 12:30, Eduard Zingerman wrote:
+>>> On Mon, 2023-01-16 at 12:55 +0800, Tiezhu Yang wrote:
+>>>> $ make -C tools/testing/selftests/bpf/
+>>>>
+>>>>    CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+>>>> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier
+>>>> 'NF_NAT_MANIP_SRC'
+>>>>                  bpf_ct_set_nat_info(ct, &saddr, sport,
+>>>> NF_NAT_MANIP_SRC);
+>>>>                                                         ^
+>>>> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier
+>>>> 'NF_NAT_MANIP_DST'
+>>>>                  bpf_ct_set_nat_info(ct, &daddr, dport,
+>>>> NF_NAT_MANIP_DST);
+>>>>                                                         ^
+>>>> 2 errors generated.
+>>>>
+>>>> Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c
+>>>> to fix the above build errors.
+>>>>
+>>>> Fixes: b06b45e82b59 ("selftests/bpf: add tests for
+>>>> bpf_ct_set_nat_info kfunc")
+>>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>>> ---
+>>>>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
+>>>>   1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>> index 227e85e..114f961 100644
+>>>> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+>>>> @@ -34,6 +34,11 @@ __be16 dport = 0;
+>>>>   int test_exist_lookup = -ENOENT;
+>>>>   u32 test_exist_lookup_mark = 0;
+>>>>   +enum nf_nat_manip_type {
+>>>> +    NF_NAT_MANIP_SRC,
+>>>> +    NF_NAT_MANIP_DST
+>>>> +};
+>>>> +
+>>>
+>>> This is confusing, when I build the kernel/tests I get the declaration
+>>> the "enum nf_nat_manip_type" from the vmlinux.h (which is included
+>>> from test_bpf_nf.c).
+>>> Which means that this patch results in compilation error with my
+>>> configuration.
+>>> Is there a chance that your kernel is configured without some
+>>> necessary netfilter
+>>> configuration options? Have you tried this patch with BPF CI?
+>>>
+>>
+>> Yep; I suspect if CONFIG_NF_NAT=m , the required definitions won't
+>> make it
+>> into vmlinux.h. The reference tools/testing/seftests/bpf/config has
+>> CONFIG_NF_NAT=y so it is at least documented in the referenced config.
+>>
+>> I'd suggest going the route of
+>>
+>> commit aa67961f3243dfff26c47769f87b4d94b07ec71f
+>> Author: Martin KaFai Lau <martin.lau@kernel.org>
+>> Date:   Tue Dec 6 11:35:54 2022 -0800
+>>
+>>      selftests/bpf: Allow building bpf tests with
+>> CONFIG_XFRM_INTERFACE=[m|n]
+>>      ...and adding/using local definitons like:
+>>
+>> enum nf_nat_manip_type_local {
+>>     NF_NAT_MANIP_SRC_LOCAL,
+>>     NF_NAT_MANIP_DST_LOCAL
+>> };
+>
+> The above won't support core, and since preserve_access_index attribute
+> does not support enum for now. We need to use bpf_core_enum_value to
+> retrieve the proper value through CORE.
+>
+> could you try the following?
+>
+> enum nf_nat_manip_type___local {
+>     NF_NAT_MANIP_SRC___LOCAL,
+>     NF_NAT_MANIP_DST___LOCAL,
+> };
+
+This is OK, it is similar with commit 1058b6a78db2 ("selftests/bpf: Do 
+not fail build if CONFIG_NF_CONNTRACK=m/n").
+
+>
+> ...
+> bpf_ct_set_nat_info(ct, &saddr, sport, bpf_core_enum_value(enum
+> nf_nat_manip_type___local,  NF_NAT_MANIP_SRC___LOCAL));
+> ...
+>
+> bpf_ct_set_nat_info(ct, &daddr, dport, bpf_core_enum_value(enum
+> nf_nat_manip_type___local,  NF_NAT_MANIP_DST___LOCAL));
+>
+> whether it works or not? Could you also try if the
+> enumerator sequence in enum nf_nat_manip_type___local changed?
+>
+>>
+>> ...to avoid the name clash.
+>>
+>>
+>> Alan
+
+I tested this on x86_64 fedora 36, using config-5.17.5-300.fc36.x86_64
+to generate .config, CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, there are
+no definitions of NF_NAT_MANIP_SRC and NF_NAT_MANIP_DST in vmlinux.h,
+build test_bpf_nf.c failed.
+
+$ grep -w CONFIG_NF_CONNTRACK /boot/config-5.17.5-300.fc36.x86_64
+CONFIG_NF_CONNTRACK=m
+$ grep -w CONFIG_NF_NAT /boot/config-5.17.5-300.fc36.x86_64
+CONFIG_NF_NAT=m
+
+I tested with various configs, the definitions of NF_NAT_MANIP_SRC and
+NF_NAT_MANIP_DST in vmlinux.h only depend on CONFIG_NF_CONNTRACK=y.
+
+(1) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, no definitions
+$ grep -w CONFIG_NF_CONNTRACK .config
+CONFIG_NF_CONNTRACK=m
+$ grep -w CONFIG_NF_NAT .config
+CONFIG_NF_NAT=m
+$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+$
+
+(2) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=y, no definitions
+This case is unable, because CONFIG_NF_NAT depends on CONFIG_NF_CONNTRACK.
+
+(3) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=n, no definitions
+$ grep -w CONFIG_NF_CONNTRACK .config
+CONFIG_NF_CONNTRACK=m
+$ grep -w CONFIG_NF_NAT .config
+# CONFIG_NF_NAT is not set
+$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+$
+
+(4) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=m, have definitions
+$ grep -w CONFIG_NF_CONNTRACK .config
+CONFIG_NF_CONNTRACK=y
+$ grep -w CONFIG_NF_NAT .config
+CONFIG_NF_NAT=m
+$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+	NF_NAT_MANIP_SRC = 0,
+$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+	NF_NAT_MANIP_DST = 1,
+
+(5) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=y, have definitions
+$ grep -w CONFIG_NF_CONNTRACK .config
+CONFIG_NF_CONNTRACK=y
+$ grep -w CONFIG_NF_NAT .config
+CONFIG_NF_NAT=y
+$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+	NF_NAT_MANIP_SRC = 0,
+$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+	NF_NAT_MANIP_DST = 1,
+
+(6) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=n, have definitions
+$ grep -w CONFIG_NF_CONNTRACK .config
+CONFIG_NF_CONNTRACK=y
+$ grep -w CONFIG_NF_NAT .config
+# CONFIG_NF_NAT is not set
+$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+	NF_NAT_MANIP_SRC = 0,
+$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+	NF_NAT_MANIP_DST = 1,
+
+(7) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=n, no definitions
+$ grep -w CONFIG_NF_CONNTRACK .config
+# CONFIG_NF_CONNTRACK is not set
+$ grep -w CONFIG_NF_NAT .config
+$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
+$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
+$
+
+(8) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=y, no definitions
+This case is unable, because CONFIG_NF_NAT depends on CONFIG_NF_CONNTRACK.
+
+Here is an alternative change to check whether CONFIG_NF_CONNTRACK
+is m, enum nf_nat_manip_type___local is simple, which one is better?
+
+$ git diff tools/testing/selftests/bpf/
+diff --git a/tools/testing/selftests/bpf/Makefile 
+b/tools/testing/selftests/bpf/Makefile
+index 22533a18705e..f3cf02046c20 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -325,7 +325,7 @@ endif
+
+  CLANG_SYS_INCLUDES = $(call 
+get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+  BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
+-            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
++            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) -I$(TOOLSINCDIR)  \
+              -I$(abspath $(OUTPUT)/../usr/include)
+
+  CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c 
+b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index 227e85e85dda..f2101807072f 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -2,6 +2,7 @@
+  #include <vmlinux.h>
+  #include <bpf/bpf_helpers.h>
+  #include <bpf/bpf_endian.h>
++#include <linux/kconfig.h>
+
+  #define EAFNOSUPPORT 97
+  #define EPROTO 71
+@@ -34,6 +35,13 @@ __be16 dport = 0;
+  int test_exist_lookup = -ENOENT;
+  u32 test_exist_lookup_mark = 0;
+
++#if IS_MODULE(CONFIG_NF_CONNTRACK)
++enum nf_nat_manip_type {
++       NF_NAT_MANIP_SRC,
++       NF_NAT_MANIP_DST
++};
++#endif
++
+  struct nf_conn;
+
+  struct bpf_ct_opts___local {
+
+Note that when unset CONFIG_NF_CONNTRACK, there are much more
+build errors, I do not know whether it is necessary to fix it
+and how to fix it properly. Here, I only consider the failed
+case CONFIG_NF_CONNTRACK=m.
+
+Thanks,
+Tiezhu
+
