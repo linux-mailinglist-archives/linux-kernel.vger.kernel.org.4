@@ -2,212 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A0666E0E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A38266E0ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjAQOhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229663AbjAQOhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjAQOhM (ORCPT
+        with ESMTP id S230304AbjAQOhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:37:12 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320838A65
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:37:11 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d2so10670676wrp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g8U58V+S9Cd2Mdkpu5VF1Bqqde3yGQwmZlcrk/ih2GQ=;
-        b=tvd3+zOaH2g0F7ul6jSTN9nUUW8xdit1D29E7qMgnIlGVsFhi+J5HyxJ0wuiHpEL7B
-         6irgkUl5bIfAWampDApKWHZ0TgFoiwual5VhISeNZIBR/5RqnbfhkB8D4MdA5phT40Wv
-         pwneDgc+IrEWQNe4g6ia7hIUPpSp7ruGCxK55irQFbmCTMKaP+tB92OqT3xekTqEXawa
-         5puoq755UK9d5FKlSm4HWKteuYd7Zbz6QsTcm5G7tHoB7UTRBYN7IuNj4+iZzfB9UV4T
-         xlvfmsA1XXTilRW07ZTMkxvv7LybSujFwes2c+gMJaOKuJzGnhUUP2VLZ5c8gFADl5Sd
-         iSrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g8U58V+S9Cd2Mdkpu5VF1Bqqde3yGQwmZlcrk/ih2GQ=;
-        b=A7ulorjv7j9YxHChTQZ34fDb5EAnpIrqXYZMBZKJ09db/Yjei99k2CcVSQfag5VLRu
-         eW7kmWrhORoCwmDVftvT3TYvr/sCYmOaaGbEHlzZOACdvtYHGIEiaaF2gY+3GAkjm/1B
-         E7t1aoBS0sj6bR+Y1YX+jrrPYa/4Llji0yiBjny43JzcKroE4aOyoC0WnI/erDpBJ758
-         bDuTKFRgmM9+comFiwslZzbKEmQlNCIFBLh5OY/xGgEq6sgsnOFxTKbATZ9fiUEZPnor
-         45GkcrYDEpZX3jxtYAc4Um0qOHKL58Pb8XNI6rYhThtbw5pSs9wbRPIknkcFzlt+4HXh
-         Qg3Q==
-X-Gm-Message-State: AFqh2kqS1O0lGv9agyz98drMTbfEA4V0WrvbmXp0/5r4404jDqrAyt9C
-        TFZXNusUDPg7hYKpB96VOtqXkQ==
-X-Google-Smtp-Source: AMrXdXu7i9LVXQ3sUQozr7I7PscaQ94+yY2qjZEyUaMnE+b0N+3NivSSuaMe9EAJKtTkRgsSZ2Dv0Q==
-X-Received: by 2002:a5d:5b0e:0:b0:28e:f7a:9ff2 with SMTP id bx14-20020a5d5b0e000000b0028e0f7a9ff2mr3373574wrb.69.1673966229636;
-        Tue, 17 Jan 2023 06:37:09 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id o13-20020a5d670d000000b002bdc19f8e8asm17119266wru.79.2023.01.17.06.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 06:37:09 -0800 (PST)
-Date:   Tue, 17 Jan 2023 14:37:07 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] backlight: ktz8866: Add support for Kinetic
- KTZ8866 backlight
-Message-ID: <Y8ayk8kXfFsCOzxG@aspen.lan>
-References: <20230117134742.23238-1-lujianhua000@gmail.com>
- <Y8aq1aJd8QJCo3RU@aspen.lan>
- <Y8aswmc8dkzM+RsB@Gentoo>
+        Tue, 17 Jan 2023 09:37:42 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB111F91C;
+        Tue, 17 Jan 2023 06:37:40 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30HEbV87002278;
+        Tue, 17 Jan 2023 08:37:31 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673966251;
+        bh=aCv0izhGJ8pLbRZgtc8okDdGtm8vBu+xlDmmDZf9OP4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=vtBppDSZS7PaOMdlS34LOJ0vROYjEU8MxPc1+XV8UCleJv5rkE92MFKiG9ldQXiWS
+         bjSNg+T4dL3sgr+rP68bVkacev1+TFlrigv4BB7OXmF+c5JoDnl3+fkeE6LqGWKjYh
+         HWHJld9YG894qPs3Eh9kl4teVpsqBKttTzQqSVto=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30HEbVmB044848
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Jan 2023 08:37:31 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
+ Jan 2023 08:37:31 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 17 Jan 2023 08:37:31 -0600
+Received: from [172.24.145.199] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30HEbQmP034620;
+        Tue, 17 Jan 2023 08:37:27 -0600
+Message-ID: <4adf6533-4bcd-57d4-3eff-748d57c4e7f1@ti.com>
+Date:   Tue, 17 Jan 2023 20:07:26 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8aswmc8dkzM+RsB@Gentoo>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 2/2] remoteproc: k3-r5: Use separate compatible string
+ for TI AM62 SoC family
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <p.zabel@pengutronix.de>, <linux-remoteproc@vger.kernel.org>,
+        <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>,
+        <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
+References: <20221227145216.1524-1-devarsht@ti.com>
+ <20221227145216.1524-3-devarsht@ti.com> <20230110183505.GA2741090@p14s>
+ <92afeb82-8b62-b771-ac27-1a21574c2204@ti.com> <20230116164112.GA3242647@p14s>
+From:   Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <20230116164112.GA3242647@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:12:18PM +0800, Jianhua Lu wrote:
-> On Tue, Jan 17, 2023 at 02:04:05PM +0000, Daniel Thompson wrote:
-> > On Tue, Jan 17, 2023 at 09:47:41PM +0800, Jianhua Lu wrote:
-> > > Add support for Kinetic KTZ8866 backlight, which is used in
-> > > Xiaomi tablet, Mi Pad 5 series. This driver lightly based on
-> > > downstream implementation [1].
-> > > [1] https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/elish-r-oss/drivers/video/backlight/ktz8866.c
-> > >
-> > > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> > > ---
-> > > Changes in v2:
-> > >   - Add missing staitc modifier to ktz8866_write function.
-> > >
-> > > Changes in v3:
-> > >   - Add 2022 to Copyright line.
-> > >   - Sort headers.
-> > >   - Remove meaningless comment.
-> > >   - Use definitions instead of hardcoding.
-> > >   - Add missing maintainer info.
-> > >
-> > > Changes in v4:
-> > >   - Change 2022 to 2023.
-> > >   - Remove useless macro and enum.
-> > >   - Describe settings by devicetree.
-> > >   - Move header file to C file.
-> > >
-> > >  MAINTAINERS                       |   6 +
-> > >  drivers/video/backlight/Kconfig   |   8 ++
-> > >  drivers/video/backlight/Makefile  |   1 +
-> > >  drivers/video/backlight/ktz8866.c | 195 ++++++++++++++++++++++++++++++
-> > >  4 files changed, 210 insertions(+)
-> > >  create mode 100644 drivers/video/backlight/ktz8866.c
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 42fc47c6edfd..2084e74e1b58 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -11674,6 +11674,12 @@ M:	John Hawley <warthog9@eaglescrag.net>
-> > >  S:	Maintained
-> > >  F:	tools/testing/ktest
-> > >
-> > > +KTZ8866 BACKLIGHT DRIVER
-> > > +M:	Jianhua Lu <lujianhua000@gmail.com>
-> > > +S:	Maintained
-> > > +F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-> > > +F:	drivers/video/backlight/ktz8866.c
-> > > +
-> > >  L3MDEV
-> > >  M:	David Ahern <dsahern@kernel.org>
-> > >  L:	netdev@vger.kernel.org
-> > > diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-> > > index 936ba1e4d35e..2845fd7e33ad 100644
-> > > --- a/drivers/video/backlight/Kconfig
-> > > +++ b/drivers/video/backlight/Kconfig
-> > > @@ -190,6 +190,14 @@ config BACKLIGHT_KTD253
-> > >  	  which is a 1-wire GPIO-controlled backlight found in some mobile
-> > >  	  phones.
-> > >
-> > > +config BACKLIGHT_KTZ8866
-> > > +	tristate "Backlight Driver for Kinetic KTZ8866"
-> > > +	depends on I2C
-> > > +	select REGMAP_I2C
-> > > +	help
-> > > +		Say Y to enabled the backlight driver for the Kinetic KTZ8866
-> > > +		found in Xiaomi Mi Pad 5 series.
-> > > +
-> > >  config BACKLIGHT_LM3533
-> > >  	tristate "Backlight Driver for LM3533"
-> > >  	depends on MFD_LM3533
-> > > diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-> > > index e815f3f1deff..f70a819c304c 100644
-> > > --- a/drivers/video/backlight/Makefile
-> > > +++ b/drivers/video/backlight/Makefile
-> > > @@ -36,6 +36,7 @@ obj-$(CONFIG_BACKLIGHT_HP680)		+= hp680_bl.o
-> > >  obj-$(CONFIG_BACKLIGHT_HP700)		+= jornada720_bl.o
-> > >  obj-$(CONFIG_BACKLIGHT_IPAQ_MICRO)	+= ipaq_micro_bl.o
-> > >  obj-$(CONFIG_BACKLIGHT_KTD253)		+= ktd253-backlight.o
-> > > +obj-$(CONFIG_BACKLIGHT_KTZ8866)		+= ktz8866.o
-> > >  obj-$(CONFIG_BACKLIGHT_LM3533)		+= lm3533_bl.o
-> > >  obj-$(CONFIG_BACKLIGHT_LM3630A)		+= lm3630a_bl.o
-> > >  obj-$(CONFIG_BACKLIGHT_LM3639)		+= lm3639_bl.o
-> > > diff --git a/drivers/video/backlight/ktz8866.c b/drivers/video/backlight/ktz8866.c
-> > > new file mode 100644
-> > > index 000000000000..98916f92d069
-> > > --- /dev/null
-> > > +++ b/drivers/video/backlight/ktz8866.c
-> > > @@ -0,0 +1,195 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Backlight driver for the Kinetic KTZ8866
-> > > + *
-> > > + * Copyright (C) 2023 Jianhua Lu <lujianhua000@gmail.com>
-> >
-> > Shouldn't this be:
-> > Copyright (C) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
-> >
-> > > +static int ktz8866_probe(struct i2c_client *client,
-> > > +			 const struct i2c_device_id *id)
-> > > +{
-> > > +	struct backlight_device *backlight_dev;
-> > > +	struct backlight_properties props;
-> > > +	struct ktz8866 *ktz;
-> > > +
-> > > +	ktz = devm_kzalloc(&client->dev, sizeof(*ktz), GFP_KERNEL);
-> > > +	if (!ktz)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ktz->client = client;
-> > > +	ktz->regmap = devm_regmap_init_i2c(client, &ktz8866_regmap_config);
-> > > +
-> > > +	if (IS_ERR(ktz->regmap)) {
-> > > +		dev_err(&client->dev, "failed to init regmap\n");
-> > > +		return PTR_ERR(ktz->regmap);
-> > > +	}
-> > > +
-> > > +	memset(&props, 0, sizeof(props));
-> > > +	props.type = BACKLIGHT_RAW;
-> > > +	props.max_brightness = MAX_BRIGHTNESS;
-> > > +	props.brightness = DEFAULT_BRIGHTNESS;
-> >
-> > There is still pending feedback from v3.
-> >
-> > | Please set the scale property correctly. "Unknown" is never correct for
-> > | new drivers.
-> Do you means backlight_properties.backlight_scale?
+Hi Mathieu,
 
-props.scale = BACKLIGHT_SCALE_<whatever_is_correct_for_this_hardware>;
+On 16/01/23 22:11, Mathieu Poirier wrote:
+> On Mon, Jan 16, 2023 at 11:58:55AM +0530, Devarsh Thakkar wrote:
+>> Hi Mathieu,
+>>
+>> Thanks for the review.
+>>
+>> On 11/01/23 00:05, Mathieu Poirier wrote:
+>>> On Tue, Dec 27, 2022 at 08:22:16PM +0530, Devarsh Thakkar wrote:
+>>>> AM62 and AM62A SoCs use single core R5F which is a new scenario
+>>>> different than the one being used with CLUSTER_MODE_SINGLECPU
+>>>> which is for utilizing a single core from a set of cores available
+>>>> in R5F cluster present in the SoC.
+>>>>
+>>>> To support this single core scenario map it with
+>>>> newly defined CLUSTER_MODE_NONE and use it when
+>>>> compatible is set to ti,am62-r5fss.
+>>>>
+>>>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+>>>> ---
+>>>> V2: Fix indentation and ordering issues as per review comments
+>>>> V3: Change CLUSTER_MODE_NONE value to -1
+>>>> V4: No change
+>>>> V5: No change (fixing typo in email address)
+>>>> ---
+>>>>  drivers/remoteproc/ti_k3_r5_remoteproc.c | 57 ++++++++++++++++++------
+>>>>  1 file changed, 44 insertions(+), 13 deletions(-)
+>>>>
+>>>> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+>>>> index 0481926c6975..127f1f68e592 100644
+>>>> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
+>>>> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+>>>> @@ -74,9 +74,11 @@ struct k3_r5_mem {
+>>>>   *   Split mode      : AM65x, J721E, J7200 and AM64x SoCs
+>>>>   *   LockStep mode   : AM65x, J721E and J7200 SoCs
+>>>>   *   Single-CPU mode : AM64x SoCs only
+>>>> + *   None            : AM62x, AM62A SoCs
+>>>>   */
+>>>>  enum cluster_mode {
+>>>> -	CLUSTER_MODE_SPLIT = 0,
+>>>> +	CLUSTER_MODE_NONE = -1,
+>>>
+>>> s/CLUSTER_MODE_NONE/CLUSTER_MODE_ONECORE
+>>>
+>>> And add it after CLUSTER_MODE_SINGLECPU
+>> Ok, i will then add it in dt-bindings too.
+>>>
+>>>> +	CLUSTER_MODE_SPLIT,
+>>>>  	CLUSTER_MODE_LOCKSTEP,
+>>>>  	CLUSTER_MODE_SINGLECPU,
+>>>>  };
+>>>> @@ -86,11 +88,13 @@ enum cluster_mode {
+>>>>   * @tcm_is_double: flag to denote the larger unified TCMs in certain modes
+>>>>   * @tcm_ecc_autoinit: flag to denote the auto-initialization of TCMs for ECC
+>>>>   * @single_cpu_mode: flag to denote if SoC/IP supports Single-CPU mode
+>>>> + * @is_single_core: flag to denote if SoC/IP has only single core R5
+>>>>   */
+>>>>  struct k3_r5_soc_data {
+>>>>  	bool tcm_is_double;
+>>>>  	bool tcm_ecc_autoinit;
+>>>>  	bool single_cpu_mode;
+>>>> +	bool is_single_core;
+>>>>  };
+>>>>  
+>>>>  /**
+>>>> @@ -838,7 +842,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
+>>>>  
+>>>>  	core0 = list_first_entry(&cluster->cores, struct k3_r5_core, elem);
+>>>>  	if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
+>>>> -	    cluster->mode == CLUSTER_MODE_SINGLECPU) {
+>>>> +	    cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>> +	    cluster->mode == CLUSTER_MODE_NONE) {
+>>>>  		core = core0;
+>>>>  	} else {
+>>>>  		core = kproc->core;
+>>>> @@ -853,7 +858,7 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
+>>>>  		boot_vec, cfg, ctrl, stat);
+>>>>  
+>>>>  	/* check if only Single-CPU mode is supported on applicable SoCs */
+>>>> -	if (cluster->soc_data->single_cpu_mode) {
+>>>> +	if (cluster->soc_data->single_cpu_mode || cluster->soc_data->is_single_core) {
+>>>
+>>> Everywhere other than k3_r5_probe(), cluster->mode should be used.  Otherwise it
+>>> is wildly confusing and error prone.  Please resend this set with an extra
+>>> preamble patch that fixes this.
+>> I agree wherever possible we should do that but some places in the code we are
+>> overriding and fine-tuning the cluster-mode value based on firmware configs
+>> For e.g. here we are overriding the user selected cluster mode from split mode
+>> to single cpu mode if firmware says so and SoC supports single cpu mode.
+> 
+> Overriding cluster->mode happens after this and as such, there is no reason why
+> it can't be used in the if() clause.  Moreover, reading your V6, this part is
+> completely omitted.  Omission? Bug? Feature?
+> 
+I omitted this change after re-checking, since it was not required, I was
+using it to jump to config but it works fine even without this change since
+anyway the control reaches there as lockstep cluster mode is not set in this
+scenario.
 
-(the memset means you are currently setting the scale to
-BACKLIGHT_SCALE_UNKNOWN )
-
-
-Daniel.
+Best Regards
+Devarsh
+>>>
+>>>>  		single_cpu =
+>>>>  			!!(stat & PROC_BOOT_STATUS_FLAG_R5_SINGLECORE_ONLY);
+>>>>  		if (single_cpu && cluster->mode == CLUSTER_MODE_SPLIT) {
+>>>> @@ -1074,6 +1079,7 @@ static void k3_r5_adjust_tcm_sizes(struct k3_r5_rproc *kproc)
+>>>>  
+>>>>  	if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
+>>>>  	    cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>> +	    cluster->mode == CLUSTER_MODE_NONE ||
+>>>>  	    !cluster->soc_data->tcm_is_double)
+>>>>  		return;
+>>>>  
+>>>> @@ -1147,7 +1153,9 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
+>>>>  	atcm_enable = cfg & PROC_BOOT_CFG_FLAG_R5_ATCM_EN ?  1 : 0;
+>>>>  	btcm_enable = cfg & PROC_BOOT_CFG_FLAG_R5_BTCM_EN ?  1 : 0;
+>>>>  	loczrama = cfg & PROC_BOOT_CFG_FLAG_R5_TCM_RSTBASE ?  1 : 0;
+>>>> -	if (cluster->soc_data->single_cpu_mode) {
+>>>> +	if (cluster->soc_data->is_single_core) {
+>>>> +		mode = CLUSTER_MODE_NONE;
+>>>> +	} else if (cluster->soc_data->single_cpu_mode) {
+>>>>  		mode = cfg & PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE ?
+>>>>  				CLUSTER_MODE_SINGLECPU : CLUSTER_MODE_SPLIT;
+>>>
+>>> Same comment as above.
+>> Here also we are overriding user selected cluster mode based on firmware
+>> returned config value and soc data.
+> 
+> Same comment as above.
+> 
+>>>
+>>>>  	} else {
+>>>> @@ -1271,7 +1279,8 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
+>>>>  
+>>>>  		/* create only one rproc in lockstep mode or single-cpu mode */
+>>>>  		if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
+>>>> -		    cluster->mode == CLUSTER_MODE_SINGLECPU)
+>>>> +		    cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>>>> +		    cluster->mode == CLUSTER_MODE_NONE)
+>>>>  			break;
+>>>>  	}
+>>>>  
+>>>> @@ -1704,21 +1713,32 @@ static int k3_r5_probe(struct platform_device *pdev)
+>>>>  	 * default to most common efuse configurations - Split-mode on AM64x
+>>>>  	 * and LockStep-mode on all others
+>>>>  	 */
+>>>
+>>> The above comment needs to be adjusted.
+>> Will do.
+>>
+>> Regards,
+>> Devarsh
+>>>
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>> -	cluster->mode = data->single_cpu_mode ?
+>>>> +	if (!data->is_single_core)
+>>>> +		cluster->mode = data->single_cpu_mode ?
+>>>>  				CLUSTER_MODE_SPLIT : CLUSTER_MODE_LOCKSTEP;
+>>>> +	else
+>>>> +		cluster->mode = CLUSTER_MODE_NONE;
+>>>> +
+>>>>  	cluster->soc_data = data;
+>>>>  	INIT_LIST_HEAD(&cluster->cores);
+>>>>  
+>>>> -	ret = of_property_read_u32(np, "ti,cluster-mode", &cluster->mode);
+>>>> -	if (ret < 0 && ret != -EINVAL) {
+>>>> -		dev_err(dev, "invalid format for ti,cluster-mode, ret = %d\n",
+>>>> -			ret);
+>>>> -		return ret;
+>>>> +	if (!data->is_single_core) {
+>>>> +		ret = of_property_read_s32(np, "ti,cluster-mode", &cluster->mode);
+>>>> +		if (ret < 0 && ret != -EINVAL) {
+>>>> +			dev_err(dev, "invalid format for ti,cluster-mode, ret = %d\n", ret);
+>>>> +			return ret;
+>>>> +		}
+>>>>  	}
+>>>>  
+>>>>  	num_cores = of_get_available_child_count(np);
+>>>> -	if (num_cores != 2) {
+>>>> -		dev_err(dev, "MCU cluster requires both R5F cores to be enabled, num_cores = %d\n",
+>>>> +	if (num_cores != 2 && !data->is_single_core) {
+>>>> +		dev_err(dev, "MCU cluster requires both R5F cores to be enabled but num_cores is set to = %d\n",
+>>>> +			num_cores);
+>>>> +		return -ENODEV;
+>>>> +	}
+>>>> +
+>>>> +	if (num_cores != 1 && data->is_single_core) {
+>>>> +		dev_err(dev, "SoC supports only single core R5 but num_cores is set to %d\n",
+>>>>  			num_cores);
+>>>>  		return -ENODEV;
+>>>>  	}
+>>>> @@ -1760,18 +1780,28 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
+>>>>  	.tcm_is_double = false,
+>>>>  	.tcm_ecc_autoinit = false,
+>>>>  	.single_cpu_mode = false,
+>>>> +	.is_single_core = false,
+>>>>  };
+>>>>  
+>>>>  static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
+>>>>  	.tcm_is_double = true,
+>>>>  	.tcm_ecc_autoinit = true,
+>>>>  	.single_cpu_mode = false,
+>>>> +	.is_single_core = false,
+>>>>  };
+>>>>  
+>>>>  static const struct k3_r5_soc_data am64_soc_data = {
+>>>>  	.tcm_is_double = true,
+>>>>  	.tcm_ecc_autoinit = true,
+>>>>  	.single_cpu_mode = true,
+>>>> +	.is_single_core = false,
+>>>> +};
+>>>> +
+>>>> +static const struct k3_r5_soc_data am62_soc_data = {
+>>>> +	.tcm_is_double = false,
+>>>> +	.tcm_ecc_autoinit = true,
+>>>> +	.single_cpu_mode = false,
+>>>> +	.is_single_core = true,
+>>>>  };
+>>>>  
+>>>>  static const struct of_device_id k3_r5_of_match[] = {
+>>>> @@ -1779,6 +1809,7 @@ static const struct of_device_id k3_r5_of_match[] = {
+>>>>  	{ .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
+>>>>  	{ .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
+>>>>  	{ .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
+>>>> +	{ .compatible = "ti,am62-r5fss",  .data = &am62_soc_data, },
+>>>>  	{ .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
+>>>>  	{ /* sentinel */ },
+>>>>  };
+>>>> -- 
+>>>> 2.17.1
+>>>>
