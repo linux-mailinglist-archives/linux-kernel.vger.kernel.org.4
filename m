@@ -2,143 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F3E670C1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE6B670C1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjAQWtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S229754AbjAQWuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjAQWrt (ORCPT
+        with ESMTP id S229970AbjAQWru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:47:49 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE5532520;
-        Tue, 17 Jan 2023 13:47:52 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id v6so46990252edd.6;
-        Tue, 17 Jan 2023 13:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2pVx7h4GXYwRMqM2mQoWvBx9P7rA8jeO4z/gGfLdACY=;
-        b=iC3f3HnSOhWbWpnmiHeT4Y1TwZbjcLUEV/+SjFxpwG68ZSWNmjeL8fHcXpAyPK9RLW
-         HCX/cez0yt2XzCZqUTCgc2Un7XjcgAuOrzpIk5bB8QfKrT8fQJm3XHO0wzjP23U1MBQt
-         HhhY+qq+WHbXokrCaxNzMSs/BAS2vQqzgY8jHK923/9XUq+iN7CZO7uBuCa613ZpRMIY
-         Ki7ya2L8zmCgDefO/EJNafKrQkqik9+qa9XZyZpFuKRsIVqMa4KoK6Pw3YhvX8L4QRMD
-         JfMhWlsXEFxyULcfNc0EsxU1qopQxfTxCFQI/hCtDoJc0pssp3W94ih/U4jCyeW9eQ5O
-         aRqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2pVx7h4GXYwRMqM2mQoWvBx9P7rA8jeO4z/gGfLdACY=;
-        b=sqj11gCRC8a18cK5eOa46IIY5cwJ1fvM/ZCe3BBmQxRHajFB/U1MmlSdtXBTczXSJQ
-         48VsjXzeqwH6E/DqIj3/YlPuY6ntcFPI5Et0yVdCZwPHgd/wom1IF62l7xy4PHZdFj4z
-         gM1pNzu980rkkqbP/YA6UlLBliuDqKqzIXJNgsBM6RcQHEs5hXESySI3oqXOaAru/rka
-         ECJDa4kR3UigD/ePya/25KAzb6PNxCKNUx2B7oV8iaKu3qUaNog31TgU/oFcvn5YIp0E
-         naloBi0n12vcLK1gNfCkhbPq8Oi3tN3BZJkN9K0iKVCuglt55qLrMBn5WJEEGdvjP75I
-         ABIg==
-X-Gm-Message-State: AFqh2kqS2M+FxDIZeYfBFYcLzLhIA72kpyExiT2H2/vthY304K45g0dq
-        CKn2tR7Y3E4upfIRUMmSiy8=
-X-Google-Smtp-Source: AMrXdXvVgBgFQ6P9kgPf5tuaC1a6S9fOIotbTpXVz/gBOxTSdClsR515jvZoaFmzs9z5XLKLEXer5g==
-X-Received: by 2002:a05:6402:449a:b0:499:376e:6b2b with SMTP id er26-20020a056402449a00b00499376e6b2bmr4744457edb.0.1673992070706;
-        Tue, 17 Jan 2023 13:47:50 -0800 (PST)
-Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
-        by smtp.gmail.com with ESMTPSA id m17-20020a50ef11000000b0049c4e3d4139sm5754220eds.89.2023.01.17.13.47.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:47:50 -0800 (PST)
-Date:   Tue, 17 Jan 2023 22:47:53 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
-        sbhatta@marvell.com, linux-doc@vger.kernel.org,
-        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
-        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
-Subject: [PATCH net-next 1/1] drivers/phylib: fix coverity issue
-Message-ID: <5061b6d09d0cd69c832c9c0f2f1a6848d3a5ab1c.1673991998.git.piergiorgio.beruto@gmail.com>
+        Tue, 17 Jan 2023 17:47:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFED9B4E1A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:49:07 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtog-0004mh-3v; Tue, 17 Jan 2023 22:48:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtoa-006lhq-DJ; Tue, 17 Jan 2023 22:48:20 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtoZ-00DhVz-MN; Tue, 17 Jan 2023 22:48:19 +0100
+Date:   Tue, 17 Jan 2023 22:48:06 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        lee@kernel.org, thierry.reding@gmail.com, corbet@lwn.net,
+        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [v4 0/5] Support pwm/tach driver for aspeed ast26xx
+Message-ID: <20230117214806.ptnnhgxmlvyzjdzp@pengutronix.de>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y5jqbiyht4hvalnt"
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coverity reported the following:
 
-*** CID 1530573:    (UNINIT)
-drivers/net/phy/phy-c45.c:1036 in genphy_c45_plca_set_cfg()
-1030     				return ret;
-1031
-1032     			val = ret;
-1033     		}
-1034
-1035     		if (plca_cfg->node_cnt >= 0)
-vvv     CID 1530573:    (UNINIT)
-vvv     Using uninitialized value "val".
-1036     			val = (val & ~MDIO_OATC14_PLCA_NCNT) |
-1037     			      (plca_cfg->node_cnt << 8);
-1038
-1039     		if (plca_cfg->node_id >= 0)
-1040     			val = (val & ~MDIO_OATC14_PLCA_ID) |
-1041     			      (plca_cfg->node_id);
-drivers/net/phy/phy-c45.c:1076 in genphy_c45_plca_set_cfg()
-1070     				return ret;
-1071
-1072     			val = ret;
-1073     		}
-1074
-1075     		if (plca_cfg->burst_cnt >= 0)
-vvv     CID 1530573:    (UNINIT)
-vvv     Using uninitialized value "val".
-1076     			val = (val & ~MDIO_OATC14_PLCA_MAXBC) |
-1077     			      (plca_cfg->burst_cnt << 8);
-1078
-1079     		if (plca_cfg->burst_tmr >= 0)
-1080     			val = (val & ~MDIO_OATC14_PLCA_BTMR) |
-1081     			      (plca_cfg->burst_tmr);
+--y5jqbiyht4hvalnt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is not actually creating a real problem because the path leading to
-'val' being used uninitialized will eventually override the full content
-of that variable before actually using it for writing the register.
-However, the fix is simple and comes at basically no cost.
+Hello Billy,
 
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1530573 ("UNINIT")
-Fixes: 493323416fed ("drivers/net/phy: add helpers to get/set PLCA configuration")
----
- drivers/net/phy/phy-c45.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I wonder if you address the feedback you got for this series. I think
+there are no big issues left, are there?
 
-diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-index cff83220595c..9f9565a4819d 100644
---- a/drivers/net/phy/phy-c45.c
-+++ b/drivers/net/phy/phy-c45.c
-@@ -999,8 +999,8 @@ EXPORT_SYMBOL_GPL(genphy_c45_plca_get_cfg);
- int genphy_c45_plca_set_cfg(struct phy_device *phydev,
- 			    const struct phy_plca_cfg *plca_cfg)
- {
-+	u16 val = 0;
- 	int ret;
--	u16 val;
- 
- 	// PLCA IDVER is read-only
- 	if (plca_cfg->version >= 0)
--- 
-2.37.4
+There is only one patch left open in the PWM patchwork (i.e. the patch
+implementing the driver that already has my Reviewed-by tag). I'll
+discard that one, too, as "changes requested" and hope you will send a
+v5.
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--y5jqbiyht4hvalnt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHF5MACgkQwfwUeK3K
+7Am6Rgf/dyL2yHQajtxCDMIEYXoOPD0fs1U+AFUQZWILgnBky3GTsjqPb+iRF0Zr
+w+4QERyKzgxAyfJE3EptEtnxjBOPWZ1JKx1tBpJDsEBem7ew5QmjSZ9vX28jfcaa
+NR8HzbJdZKOdM/Brmd3jCKGNj63CYH8rD0CW4mUf07oVvw55j6g1ZULwVvHnOGse
+DG9GpBgzzhaIPYapwlkhIdfeESU84fWfQLlOxdcNxR4/8OXDCO2lUbzXULBVbjUe
+lzBlQzwJk2bQegMSAIXRIACskEMbmoMY6RBKJCJUEniyIcPyJ8//YGW1pHq8fnRO
+xriqAmZs2kKuyqloDKo4g/GVvGVikQ==
+=FqEI
+-----END PGP SIGNATURE-----
+
+--y5jqbiyht4hvalnt--
