@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9E466D3C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A4966D3CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbjAQBRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 20:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S233304AbjAQB0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 20:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbjAQBRk (ORCPT
+        with ESMTP id S230040AbjAQB0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 20:17:40 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD2124101;
-        Mon, 16 Jan 2023 17:17:39 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1442977d77dso30523259fac.6;
-        Mon, 16 Jan 2023 17:17:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=F4Bj+9QmhG6TNUKdKsjnHuIPQwjxlaYL7LZm3G7wZxA=;
-        b=VuneVeKCpRfJ4p6wsrtSnpVslcKRx+gP7oNUYc/Kxw99NIl/VkOGbYGg9zILxrXYSC
-         zIL5ktZ721gZLq99DLI5fkR7Yq/hm6JKBWsHihwlsHZqZDGOGOwNG9ZZY75ZVC0d9iHP
-         vd0rHtGPRVBJ17CuJl55c8zqseHvWGu+7pUu1EBtdkLXdLJKJRqetuTPEphYscXBNRvC
-         io2XgCzinyjEcUHAx50pW4CCJMQKt4/E/W6eVzQCczDV4hZsceunb5R7DVvxOpodcSYV
-         M8Y1pqfGQBJW/xiVvStPaPleFfn0mY3V2PlgoOlkoEBSpe+0tpp4dRIDzFXs6Gk5toGH
-         52Gw==
-X-Gm-Message-State: AFqh2krnq1cGaRoRbfeaon9fobV/Z9HYNLqZw4HZWCT4/Nj1FwKUr9r/
-        iiXl68RagQ9oy4UK1b2smg==
-X-Google-Smtp-Source: AMrXdXvyn5tRRIBo75GpJ3Ah/S7lll9isVzYuogPxxl78Gv5qOMGaO9/SAB1qriEJIwYcJbxeqwSRQ==
-X-Received: by 2002:a05:6870:bf0d:b0:150:c935:201d with SMTP id qh13-20020a056870bf0d00b00150c935201dmr880763oab.20.1673918258217;
-        Mon, 16 Jan 2023 17:17:38 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056870e75200b0014866eb34cesm654464oak.48.2023.01.16.17.17.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 17:17:37 -0800 (PST)
-Received: (nullmailer pid 1512748 invoked by uid 1000);
-        Tue, 17 Jan 2023 01:17:36 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Mon, 16 Jan 2023 20:26:04 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7981EFEA;
+        Mon, 16 Jan 2023 17:26:02 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NwrnF5bvXz4xG5;
+        Tue, 17 Jan 2023 12:25:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1673918756;
+        bh=L5BxRwBIjGaxgwaMH9MFPPUWp51rN4zJLW/6C/Yr0hI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dJBZP7tkWgk72jNAUI7VGH1PsvtUbpuA0Dh0eYXB7uuVPAeK5GCF5wan0APnSQH/V
+         bBVUqNUmz9ljQKEwEGsrHAkNX+/7lGwJM/d16oj2bYAzZEZ/43O+xpdALy8z0+94lF
+         u/NpT42nwGLxrGJ2sGJtlLsF7xTmDUfK2j/pIHBaGb15LS2Jn9Sw2Hl8WLbmfgeMPE
+         EWusflkX3cXtiXOXQ7ZVjm4lDBevXtGcLPXS+UcN55qn1avdqfU6KcsAD7CmrViO1n
+         fnW2Sbc4TpAJb1PvkTwTsnL7fl8bXQRusWAn6oQ5BrRKGxXkB2eBBFTIr5ANoJFN6Z
+         LSTDSkJbTQmcw==
+Date:   Tue, 17 Jan 2023 12:25:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: linux-next: manual merge of the iio tree with the arm-soc tree
+Message-ID: <20230117122552.64f70650@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     daniel.lezcano@linaro.org, kys@microsoft.com, robh+dt@kernel.org,
-        wei.liu@kernel.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        haiyangz@microsoft.com, mikelley@microsoft.com,
-        ssengar@microsoft.com, linux-hyperv@vger.kernel.org,
-        devicetree@vger.kernel.org, decui@microsoft.com
-In-Reply-To: <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
- <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
-Message-Id: <167391822562.1511774.11947732900116239438.robh@kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: hv: Add dt-bindings for VMBus
-Date:   Mon, 16 Jan 2023 19:17:36 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/pf0aG.cNpqye9VKkHz_RMxl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/pf0aG.cNpqye9VKkHz_RMxl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 16 Jan 2023 08:48:08 -0800, Saurabh Sengar wrote:
-> Add dt-bindings for Hyper-V VMBus
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  .../devicetree/bindings/hv/msft,vmbus.yaml         | 34 ++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hv/msft,vmbus.yaml
-> 
+Hi all,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Today's linux-next merge of the iio tree got a conflict in:
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hv/msft,vmbus.yaml:20:9: [warning] too many spaces before colon (colons)
-./Documentation/devicetree/bindings/hv/msft,vmbus.yaml:30:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
+  MAINTAINERS
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/hv/msft,vmbus.example.dts'
-Documentation/devicetree/bindings/hv/msft,vmbus.yaml:30:1: found a tab character where an indentation space is expected
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/hv/msft,vmbus.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/hv/msft,vmbus.yaml:30:1: found a tab character where an indentation space is expected
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hv/msft,vmbus.yaml: ignoring, error parsing file
-make: *** [Makefile:1508: dt_binding_check] Error 2
+between commit:
 
-doc reference errors (make refcheckdocs):
+  59ce53421673 ("MAINTAINERS: update file entries after arm multi-platform =
+rework and mach-pxa removal")
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com
+from the arm-soc tree and commit:
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+  08025a3bd9e0 ("dt-bindings: iio: adc: ep93xx: Add cirrus,ep9301-adc descr=
+iption")
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+from the iio tree.
 
-pip3 install dtschema --upgrade
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+--=20
+Cheers,
+Stephen Rothwell
 
+diff --cc MAINTAINERS
+index 390d79c20a59,9ff472ca1244..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -2071,8 -2091,10 +2071,10 @@@ M:	Hartley Sweeten <hsweeten@visionengr
+  M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+  S:	Maintained
++ F:	Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
+ +F:	arch/arm/boot/compressed/misc-ep93xx.h
+  F:	arch/arm/mach-ep93xx/
+ -F:	arch/arm/mach-ep93xx/include/mach/
++ F:	drivers/iio/adc/ep93xx_adc.c
+ =20
+  ARM/CLKDEV SUPPORT
+  M:	Russell King <linux@armlinux.org.uk>
+
+--Sig_/pf0aG.cNpqye9VKkHz_RMxl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPF+SAACgkQAVBC80lX
+0Gy1/wf+JgiMusmIb9Nl9rt1k07t2L6+uEg5nVwZcSeNSFE2ny4uZU9+58VVi6Zl
+rYPkGWVkdZJV4MFDMM8u1GtdJd57ckHf+CdXKDFzJo5xfUIgO/qXNrug0JyP6CR1
+tTLiVIRb6+DDpfYGccXKc3gZJUKsjx3BBAC5itjA26BjRiCGvvSpYSKRshs05NPQ
+iaim9n4OAmcCW6djo71P1HJTY/1LO1wF7PXewwG5yRcVfgbtlWNcDDPDteEXFg3Q
+bZNQ4yqNz3t9LWes+gpKC7IHB/7mQfpqKW9FtG/DZ4J5HM3GeIkzEMoagXQz81e5
+LQlNxfVUeROlVGG32Z9cz5+mJzIHSA==
+=R1Ck
+-----END PGP SIGNATURE-----
+
+--Sig_/pf0aG.cNpqye9VKkHz_RMxl--
