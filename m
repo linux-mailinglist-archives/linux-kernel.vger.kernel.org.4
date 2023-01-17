@@ -2,124 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2776F66E6FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D35F66E6FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjAQTar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S233273AbjAQTbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbjAQTTE (ORCPT
+        with ESMTP id S235183AbjAQTU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:19:04 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C5F4391D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:31:58 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-4a263c4ddbaso435496847b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:31:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hTLKMGXMSAT6MMmNyJi78XQQyP4rpea0yj1IeoSeHZk=;
-        b=cYvU74tR9mP6Fn9b7plkY3/qUjiSWAQ8Nqo6zWa89Tvw3EfblIo+iwk47g313J50zD
-         OI4yi6Ydglcj6heTHBV+OqDdwSJdnr4wqTbrPmLmh9mqThWV5UYKM05VFEyTkYkAXo3j
-         QMlnnmbDe/lKf1GxHO5kvU0IsXr+gApsS4fTkOq58OZbDpcCBOXxdRO1KDTxZLEelrTC
-         m1K0eNZmldk1GQtixeCW1w6HH+dj9szNi1qhHJcN/MOVBP2CYZjpyXxYNkaGlkAf0JZG
-         TY6bU4vvOEanEihNcw0eqEUfw/p+tEb9UMV8eQ3gmuV1CSkeyLzVwMRJSYmZhbCyUoWj
-         hjlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hTLKMGXMSAT6MMmNyJi78XQQyP4rpea0yj1IeoSeHZk=;
-        b=oThYYxT6RQBiU9HqUr4s3KBH5Jh9vlc/AladuyPZqUr8SPIk1Ce4I7Cc3ZAXYL2JH0
-         McBkZY1lt0oqZRi+eMIKbtgmpW3GUzg2JqrSFFvcJd6yreBXbXA52mCIKxTJwfs1jXGC
-         CGGJbZl3ifcgMjeeXxp3/NzEVbRfKsDqe9z9gMpsYhtiOWle2MJfaoGnM/NtQiximafJ
-         d6f7n5FI1VrIWWoqMDOkhYiBCwrwg+yh3o/2AQ+fpT1Ychv632DvElEKvEGdSvqSCoSx
-         Nr0PBMZAHCnt5ccdc7HloDt9dyh5csomlEWNrZzOZQ9MC8EEOBB49ncp1a3Yh0hTknSs
-         4Ztw==
-X-Gm-Message-State: AFqh2kpKLT0GB4eQoEbSUlDhgj2rk7rs/+YmagRB3nqvGT6XzT0gXRWn
-        G8MBwDNYuDx/9jVEY5aKuYSDIsRVhg4qhRrCdRbR2g==
-X-Google-Smtp-Source: AMrXdXs6T2EsIuWbVNsgZ9FO4pipeSzz0cOT2UbbLv043lEgdSZy2eMw0rqySTLBWnP8z9Z1+X2S15P7ragQaUTzb4Q=
-X-Received: by 2002:a81:1d2:0:b0:433:f1c0:3f1c with SMTP id
- 201-20020a8101d2000000b00433f1c03f1cmr558134ywb.438.1673980317150; Tue, 17
- Jan 2023 10:31:57 -0800 (PST)
+        Tue, 17 Jan 2023 14:20:58 -0500
+Received: from h5.fbrelay.privateemail.com (h5.fbrelay.privateemail.com [162.0.218.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107F92312D;
+        Tue, 17 Jan 2023 10:32:30 -0800 (PST)
+Received: from MTA-10-4.privateemail.com (mta-10.privateemail.com [68.65.122.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by h5.fbrelay.privateemail.com (Postfix) with ESMTPS id 4F3726002B;
+        Tue, 17 Jan 2023 18:32:29 +0000 (UTC)
+Received: from mta-10.privateemail.com (localhost [127.0.0.1])
+        by mta-10.privateemail.com (Postfix) with ESMTP id 5022918000A2;
+        Tue, 17 Jan 2023 13:32:15 -0500 (EST)
+Received: from bpappas-XPS-13-9310.net.ucf.edu (unknown [132.170.212.18])
+        by mta-10.privateemail.com (Postfix) with ESMTPA id 156F9180009F;
+        Tue, 17 Jan 2023 13:32:02 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=pappasbrent.com;
+        s=default; t=1673980335;
+        bh=9tfJHMfquKiMaSi0dIV592j2HgRcbJho137zYx7AinU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m5m0mC81auHjGwcitxEiIW9qQZnWrm/aLrL5F6Vszpo803bmYPrx6OlmZpkvP3GBA
+         jtr6lpaidV8qjwZnKQsRgK/IN9/VfGRCuFvArbUuEPqoNlp/ilH6fJf8H/t8h+0dB0
+         Q+dZwhXl5MsqWiO5+3K6cfFbVNLRKHgUHQbZTKEGQMM3Q7MdgWNmAPpSGpO25Gnk5h
+         Kzjug6I9Un70kzSl4q0Ntj4zdLUBNj/V7loq0afDt5bgWnaoWyBdEf+qHbwOngD16F
+         9lPOJiVt5Cf9YObHfW/4LEFKvhJkh1dMOnDCZjVEzbLFmkMLUdE4KdELWOwWmhlUD6
+         C8jMuh6ZeypFQ==
+From:   Brent Pappas <bpappas@pappasbrent.com>
+To:     andy.shevchenko@gmail.com
+Cc:     ailus@linux.intel.com, andy@kernel.org, bpappas@pappasbrent.com,
+        error27@gmail.com, gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mchehab@kernel.org
+Subject: [PATCH v3] media: atomisp: pci: Replace bytes macros with functions
+Date:   Tue, 17 Jan 2023 13:31:52 -0500
+Message-Id: <20230117183152.6521-1-bpappas@pappasbrent.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHp75VcxaSXeMNmkPoMnA+zjp+JWmHp5aE+2yPhXaqxMC6QWEQ@mail.gmail.com>
+References: <CAHp75VcxaSXeMNmkPoMnA+zjp+JWmHp5aE+2yPhXaqxMC6QWEQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230109205336.3665937-42-surenb@google.com> <20230116140649.2012-1-hdanton@sina.com>
- <CAJuCfpHoHcZxQZgt4Ki1kiBu9O+sANZQambOa+1gSQu2brPoyA@mail.gmail.com>
- <20230117031632.2321-1-hdanton@sina.com> <CAJuCfpFq23m-KYKaDoCS2K2aM8rO7j8aPa0nVPs-_xP2Sf6GGg@mail.gmail.com>
- <20230117083355.2374-1-hdanton@sina.com> <CAJuCfpGU3c102mLZBY6UzkbW-DtfpYF77wLgzFpRWagBw8XfMQ@mail.gmail.com>
- <Y8bodcnhyMox+QjG@casper.infradead.org>
-In-Reply-To: <Y8bodcnhyMox+QjG@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 17 Jan 2023 10:31:46 -0800
-Message-ID: <CAJuCfpHU2WPHU1-9m3mnS6i3Od_kVE+P23nqvWDo1+kkh00M8Q@mail.gmail.com>
-Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hillf Danton <hdanton@sina.com>, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net,
-        peterz@infradead.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:27 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Tue, Jan 17, 2023 at 10:21:28AM -0800, Suren Baghdasaryan wrote:
-> > static inline bool vma_read_trylock(struct vm_area_struct *vma)
-> > {
-> >        int count, new;
-> >
-> >         /* Check before locking. A race might cause false locked result. */
-> >        if (READ_ONCE(vma->vm_lock->lock_seq) ==
-> >            READ_ONCE(vma->vm_mm->mm_lock_seq))
-> >                 return false;
-> >
-> >         count = atomic_read(&vma->vm_lock->count);
-> >         for (;;) {
-> >               /*
-> >                * Is VMA is write-locked? Overflow might produce false
-> > locked result.
-> >                * False unlocked result is impossible because we modify and check
-> >                * vma->vm_lock_seq under vma->vm_lock protection and
-> > mm->mm_lock_seq
-> >                * modification invalidates all existing locks.
-> >                */
-> >               if (count < 0)
-> >                         return false;
-> >
-> >              new = count + 1;
-> >              /* If atomic_t overflows, fail to lock. */
-> >              if (new < 0)
-> >                         return false;
-> >
-> >              /*
-> >               * Atomic RMW will provide implicit mb on success to pair
-> > with smp_wmb in
-> >               * vma_write_lock, on failure we retry.
-> >               */
-> >               new = atomic_cmpxchg(&vma->vm_lock->count, count, new);
-> >                 if (new == count)
-> >                         break;
-> >                 count = new;
-> >                 cpu_relax();
->
-> The cpu_relax() is exactly the wrong thing to do here.  See this thread:
-> https://lore.kernel.org/linux-fsdevel/20230113184447.1707316-1-mjguzik@gmail.com/
+Replace the function-like macros FPNTBL_BYTES, SCTBL_BYTES, and
+MORPH_PLANE_BYTES with static inline functions to comply with Linux coding
+style standards.
+Replace multiplication with calls to size_mul to prevent accidental
+arithmetic overflow.
 
-Thanks for the pointer, Matthew. I think we can safely remove
-cpu_relax() since it's unlikely the count is constantly changing under
-a reader.
+Signed-off-by: Brent Pappas <bpappas@pappasbrent.com>
+---
+Changelog:
+V1 -> V2: Use size_mul to perform size_t multiplication without risk of
+		  overflow.
+		  Remove the inline keyword from function definitions.
 
->
+V2 -> V3: Add commit message.
+
+ .../staging/media/atomisp/pci/sh_css_params.c | 38 +++++++++++--------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index f08564f58242..7e111df5c09d 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -98,17 +98,27 @@
+ #include "sh_css_frac.h"
+ #include "ia_css_bufq.h"
+ 
+-#define FPNTBL_BYTES(binary) \
+-	(sizeof(char) * (binary)->in_frame_info.res.height * \
+-	 (binary)->in_frame_info.padded_width)
++static size_t fpntbl_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(sizeof(char),
++			size_mul(binary->in_frame_info.res.height,
++				 binary->in_frame_info.padded_width));
++}
+ 
+-#define SCTBL_BYTES(binary) \
+-	(sizeof(unsigned short) * (binary)->sctbl_height * \
+-	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
++static size_t sctbl_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(sizeof(unsigned short),
++				size_mul(binary->sctbl_height,
++					 size_mul(binary->sctbl_aligned_width_per_color,
++						  IA_CSS_SC_NUM_COLORS)));
++}
+ 
+-#define MORPH_PLANE_BYTES(binary) \
+-	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
+-	 (binary)->morph_tbl_height)
++static size_t morph_plane_bytes(const struct ia_css_binary *binary)
++{
++	return size_mul(SH_CSS_MORPH_TABLE_ELEM_BYTES,
++					size_mul(binary->morph_tbl_aligned_width,
++						 binary->morph_tbl_height));
++}
+ 
+ /* We keep a second copy of the ptr struct for the SP to access.
+    Again, this would not be necessary on the chip. */
+@@ -3279,7 +3289,7 @@ sh_css_params_write_to_ddr_internal(
+ 	if (binary->info->sp.enable.fpnr) {
+ 		buff_realloced = reallocate_buffer(&ddr_map->fpn_tbl,
+ 						   &ddr_map_size->fpn_tbl,
+-						   (size_t)(FPNTBL_BYTES(binary)),
++						   fpntbl_bytes(binary),
+ 						   params->config_changed[IA_CSS_FPN_ID],
+ 						   &err);
+ 		if (err) {
+@@ -3304,7 +3314,7 @@ sh_css_params_write_to_ddr_internal(
+ 
+ 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
+ 						   &ddr_map_size->sc_tbl,
+-						   SCTBL_BYTES(binary),
++						   sctbl_bytes(binary),
+ 						   params->sc_table_changed,
+ 						   &err);
+ 		if (err) {
+@@ -3538,8 +3548,7 @@ sh_css_params_write_to_ddr_internal(
+ 			buff_realloced |=
+ 			    reallocate_buffer(virt_addr_tetra_x[i],
+ 					    virt_size_tetra_x[i],
+-					    (size_t)
+-					    (MORPH_PLANE_BYTES(binary)),
++					    morph_plane_bytes(binary),
+ 					    params->morph_table_changed,
+ 					    &err);
+ 			if (err) {
+@@ -3549,8 +3558,7 @@ sh_css_params_write_to_ddr_internal(
+ 			buff_realloced |=
+ 			    reallocate_buffer(virt_addr_tetra_y[i],
+ 					    virt_size_tetra_y[i],
+-					    (size_t)
+-					    (MORPH_PLANE_BYTES(binary)),
++					    morph_plane_bytes(binary),
+ 					    params->morph_table_changed,
+ 					    &err);
+ 			if (err) {
+-- 
+2.34.1
+
