@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC08366E338
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2903D66E33A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjAQQOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S231151AbjAQQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjAQQOm (ORCPT
+        with ESMTP id S230268AbjAQQQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:14:42 -0500
+        Tue, 17 Jan 2023 11:16:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475C13E62C;
-        Tue, 17 Jan 2023 08:14:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17363BDBF;
+        Tue, 17 Jan 2023 08:16:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7415B81889;
-        Tue, 17 Jan 2023 16:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D661C433EF;
-        Tue, 17 Jan 2023 16:14:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6873FB81889;
+        Tue, 17 Jan 2023 16:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9918AC433D2;
+        Tue, 17 Jan 2023 16:16:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673972078;
-        bh=+onl2tpFkqXG6O+TgImNUgWo6QrOd0ZCO4JWbyipcO0=;
+        s=korg; t=1673972198;
+        bh=JDdKiExkdHHBvFjl0JAbqgCBVMtsUjtunEQuXNFiEeA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vke+Xo1PYfQ4YRIsSQ1G/z6dWmbesojPwzwgjZ11fPCScwrdIaWyb2CSGO7d+ICRs
-         S9/ZPcaQNNdsrS58Zj+SSULmWgUI+vZMaIowMuC2UCXIg/OSljUsOxICo4gWHuT//+
-         21pQh50ChDM6xpvjPwbmvXT3/XJYdWHv/rPFvO4w=
-Date:   Tue, 17 Jan 2023 17:14:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC] USB: core: Add wireless_status sysfs attribute
-Message-ID: <Y8bJbM0+XcT6MRq9@kroah.com>
-References: <d9f8b9413c10fcf067658979d16a4f5c7abe69e7.camel@hadess.net>
+        b=hFIokIh8FPRI/MDifDwqLBbv7xE/Si8Fa9gf7NcCFI0/pWqu81fykNf9Y8T3MrlwT
+         KoJb79OKvPyjjiUFWAusoeIS2ZjlZ3BemvdsRCVWs6giySdiKVmdd0sel35e2iHIX7
+         1jvRyKtCqVSWS43YgQHD7UESDBj4X9y8PB7T7ziM=
+Date:   Tue, 17 Jan 2023 17:16:35 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     WritePaper <clangllvm@126.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: security enhancement by limiting the offensive eBPF
+ helpers
+Message-ID: <Y8bJ48Q5mcDOxS3c@kroah.com>
+References: <20230117151256.605977-1-clangllvm@126.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d9f8b9413c10fcf067658979d16a4f5c7abe69e7.camel@hadess.net>
+In-Reply-To: <20230117151256.605977-1-clangllvm@126.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,52 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 04:17:23PM +0100, Bastien Nocera wrote:
-> Hey,
+On Tue, Jan 17, 2023 at 11:12:56PM +0800, WritePaper wrote:
+> The bpf_send_singal and bpf_override_return is similar to
+> bpf_write_user and can affect userspace processes. Thus, these two
+> helpers should also be constraint by security lockdown.
 > 
-> TLDR: new sysfs attribute that makes it possible to leave receivers for
-> wireless headsets plugged in. At the USB level, or at the base driver
-> level?
+> Signed-off-by: WritePaper <clangllvm@126.com>
+> ---
+>  include/linux/security.h | 3 +++
+>  kernel/trace/bpf_trace.c | 6 ++++--
+>  2 files changed, 7 insertions(+), 2 deletions(-)
 > 
-> Longer version:
-> I started working on implementing support for some wireless headsets
-> that use USB receivers to communicate to the headset itself.
 
-Would this also include wireless keyboard/mice recievers?
+Hi,
 
-Why is "wireless" somehow a special attribute that userspace needs to
-know about?
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-> The USB receivers have multiple interfaces, and independent drivers for
-> each, as is wont to do for USB devices. There's usually a HID interface
-> to do the custom stuff (LEDs, battery status, connection status, etc.)
-> and a standard audio class interface.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-This probably should be an interface attribute (as Alan points out), as
-it's not a device attribute (think about updating the firmware for one
-of these, that's on an interface for the reciever you plugged in, not on
-the other end of the wireless connection...)
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
 
-> Those drivers don't know anything about each other, and getting them to
-> talk to each other would be rather complicated. Additionally the audio
-> interface is still somewhat functional when the headset is
-> disconnected.
-
-Those drivers shouldn't know about each other, that's up to userspace to
-group and control if needed.  No kernel interactions should be needed.
-
-> In the end, I came up with this new sysfs attribute that would make it
-> possible for user-space (PulseAudio or Pipewire) to know whether the
-> receiver is plugged in or not.
-
-Again, should be an interface attribute, if at all.
-
-> That allows user-space to not show the battery information for the
-> device (rather than 0 percent), not offer the headset as an output, and
-> potentially automatically switch to it when the headset is powered on.
-
-Same for a keyboard/mouse, right?
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
