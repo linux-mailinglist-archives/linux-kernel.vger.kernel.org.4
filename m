@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A2B66E139
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C37066E145
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbjAQOsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S231730AbjAQOtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbjAQOrx (ORCPT
+        with ESMTP id S230253AbjAQOt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:47:53 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C2C3F2B9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:47:47 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id hw16so64040638ejc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:47:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wh94K8a1yeUOU/noK9WkXCMow8tn4jBURVysgienBhI=;
-        b=ZDTDpbneKrcUAWsUMYlB/DsliAwSu1H1MdlQxEsXK4OCl5wKgQe0DKiliq+cUfbrBJ
-         1QiUfo4ejG7NB01f5XIIXat42kkj0VJ5OCL1fLA/7/Bcqz+TkLJdxMGC4PGhf5oda7Nu
-         eYEF3IKIFyjpp1JFlzKISJzHLQU8VxH3vh5RFgrsI4/1VSjCQvpbVekSEv4uDxXQMEjW
-         fN38SwicPSvbrCKTUwGlLG4YAmJsrshSyzelrcSKQ53TwbQnrj88Y0V2y+U9bMqpz/g5
-         OHnCoTrg/4S6GES0kJWYx7MGbApE8zddkYiY32CVcHW4x9u4IjTYbvWVaLPmnUbNzjlF
-         Zvag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wh94K8a1yeUOU/noK9WkXCMow8tn4jBURVysgienBhI=;
-        b=pPeapwQKCwbeCH3PEDsu9ToST0HZHywwJHHrqKwnmcQww67iwvTo0sat1XUeBZQaem
-         AFlmsMDE/jied4IRIZziQQSVa2aXt3gIO9IFJnnAUKsJyHYO4BIhE4K9YU8bRDWyDTll
-         +f3mPmK61TMqwYIwbJj/PLUWbVOQWc8He1QmH7YO9eMJzDuIeY4y0AhHu9YgAF55P74c
-         vQgvHf6FnZ6df9DgMVBjuMRW75haZfhQk4pF+QvNcIl4ToP4Hdi94MwqApnXgbfeO+V0
-         gHd123heznQnvdvf8Ne87nVRcZeWmT9KuWIAItUqZcOzc9pZQrUUOxFUUFLLHSd5LaIl
-         YbmA==
-X-Gm-Message-State: AFqh2krjHPNRpb7MXuv8dhN8WOw7P6qkce9zz4saZUDTkrCgEe4vOFPp
-        fG58tx51fAuJ5PvC8sE4UNGnFg==
-X-Google-Smtp-Source: AMrXdXtOPe6BBTiewo8cA0tR0zOAYhxtjEKhMKiQ/haGi1750FasO4dhwFGRmGGPzTS+n98Du8QBDg==
-X-Received: by 2002:a17:907:a092:b0:86d:c466:6b16 with SMTP id hu18-20020a170907a09200b0086dc4666b16mr3199087ejc.7.1673966865591;
-        Tue, 17 Jan 2023 06:47:45 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id wb9-20020a170907d50900b0087045ae5935sm2893891ejc.1.2023.01.17.06.47.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 06:47:45 -0800 (PST)
-Message-ID: <3a7fbbdf-6fb6-f9db-eed7-fe53607db69d@linaro.org>
-Date:   Tue, 17 Jan 2023 16:47:44 +0200
+        Tue, 17 Jan 2023 09:49:29 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C943B0C5;
+        Tue, 17 Jan 2023 06:49:27 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30HEnLro057971;
+        Tue, 17 Jan 2023 08:49:21 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673966961;
+        bh=5+/kXxi2YlDMZkueyyvxa62mN6egOAn9YBd8b5IS9Yc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=bhMYtKG3lfgAhsuKJ0HQIjnjkVHGT49W6qCtEJO5ECcAvCbHKnKsU1ZbN+uMgl/Z8
+         eNWMOGpTMt8ySGdPEhLPlgnn5S9pkM6E1yjkMpAt4dVdxwC1uN2Tye0b+owKEUJ5/K
+         nQnFW7RnGkx4B/sX1S+aQNSK2sa7UquNhThpE31A=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30HEnLYB024635
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Jan 2023 08:49:21 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
+ Jan 2023 08:49:21 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 17 Jan 2023 08:49:21 -0600
+Received: from [10.250.235.217] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30HEnGZ3019770;
+        Tue, 17 Jan 2023 08:49:16 -0600
+Message-ID: <cfd56381-e9b1-b316-319c-c1f504daf1d9@ti.com>
+Date:   Tue, 17 Jan 2023 20:19:15 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 6/6] phy: qcom-qmp-ufs: Add SM8550 support
-Content-Language: en-GB
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-References: <20230117142015.509675-1-abel.vesa@linaro.org>
- <20230117142015.509675-7-abel.vesa@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230117142015.509675-7-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 2/3] dt-bindings: remoteproc: ti: Add new compatible
+ for AM62 SoC family
+Content-Language: en-US
+To:     Devarsh Thakkar <devarsht@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
+        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
+CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <a-bhatia1@ti.com>, <j-luthra@ti.com>
+References: <20230116151906.549384-1-devarsht@ti.com>
+ <20230116151906.549384-3-devarsht@ti.com>
+ <1a70a28b-b406-4d84-ced9-4d66bad94652@linaro.org>
+ <bd0460de-eff2-9162-4edb-d3527041d7a6@ti.com>
+From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
+In-Reply-To: <bd0460de-eff2-9162-4edb-d3527041d7a6@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 16:20, Abel Vesa wrote:
-> Add SM8550 specific register layout and table configs.
+Hi Devarsh,
+
+On 1/17/2023 10:54 AM, Devarsh Thakkar wrote:
+> Hi Krzysztof,
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 96 +++++++++++++++++++++++++
->   1 file changed, 96 insertions(+)
+> On 17/01/23 00:36, Krzysztof Kozlowski wrote:
+>> On 16/01/2023 16:19, Devarsh Thakkar wrote:
+>>> AM62 family of devices don't have a R5F cluster, instead
+>>> they have single core DM R5F.
+>>> Add new compatible string ti,am62-r5fss to support this scenario.
+>>>
+>>
+>> This is a friendly reminder during the review process.
+>>
+>> It looks like you received a tag and forgot to add it.
+>>
+>> If you do not know the process, here is a short explanation:
+>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+>> versions. However, there's no need to repost patches *only* to add the
+>> tags. The upstream maintainer will do that for acks received on the
+>> version they apply.
+>>
+>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>
+>> If a tag was not added on purpose, please state why and what changed.
+> I apologize if it was not clear but yes I didn't put the tag as
+> patch was updated to use cluster-mode=3 for am62x as per review comments on
+> https://lore.kernel.org/all/20230110183505.GA2741090@p14s/
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+It would be helpful in future if you document why tag was dropped as
+part of change log (below tearline) to indicate its intentional.
 
--- 
-With best wishes
-Dmitry
+> 
+> I'll append a note below commit message on Reviewed-By
+> removal when I post the next series.
 
+> Regards
+> Devarsh
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
