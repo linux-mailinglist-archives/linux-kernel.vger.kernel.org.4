@@ -2,128 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2DD66D6E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689EB66D6E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbjAQH2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S235656AbjAQHaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbjAQH2f (ORCPT
+        with ESMTP id S235491AbjAQH34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:28:35 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E95C22A38
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:28:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D5EF63801F;
-        Tue, 17 Jan 2023 07:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673940512; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U0mBcioZaX4vf05VyQP2/c5bzQDfLI3vqPDrd98/xE0=;
-        b=cBRdVAWVauQu+ma+pgmWpgKDB50C9YxN56HyyUV0BBuyMKCSqojnRukr37eDN3yJDHvGaX
-        VJl6+ahzBgsCkWdrogKfhBI0fruoc1jF+dA0xMzHgb46D8X6T7eV57VvyhBuwz9q5tJxsB
-        I/Cu6JY9A5RAPAYLGUAco86zLWP7DxI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673940512;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U0mBcioZaX4vf05VyQP2/c5bzQDfLI3vqPDrd98/xE0=;
-        b=eCovFWZWudSp4fISHCKSx8qMutH78yK8Aa3TCOvwL/0QLa+INl8y8Q1GaGnVA+nJymMCDX
-        n+CAx46zc0hs0dCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACE6C13357;
-        Tue, 17 Jan 2023 07:28:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NkwSKSBOxmN8NQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 17 Jan 2023 07:28:32 +0000
-Message-ID: <7506d259-1e07-eb74-332b-c0a9064a4a1b@suse.cz>
-Date:   Tue, 17 Jan 2023 08:28:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] mm: use stack_depot_early_init for kmemleak
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Tue, 17 Jan 2023 02:29:56 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE3222A38;
+        Mon, 16 Jan 2023 23:29:54 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VZm6e-J_1673940576;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VZm6e-J_1673940576)
+          by smtp.aliyun-inc.com;
+          Tue, 17 Jan 2023 15:29:48 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Borislav Petkov <bp@alien8.de>
-References: <1673935169-30019-1-git-send-email-zhaoyang.huang@unisoc.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <1673935169-30019-1-git-send-email-zhaoyang.huang@unisoc.com>
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH v8 0/9] Add metrics for neoverse-n2-v2
+Date:   Tue, 17 Jan 2023 15:29:24 +0800
+Message-Id: <1673940573-90503-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 06:59, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> 
-> Mirsad report bellow error which caused by stack_depot_init failed in kvcalloc.
-> Solve this by having stackdepot use stack_depot_early_init.
+Changes since v7:
+- Change pmu_core__find_same to pmu__find_core_pmu as suggested by Ian.
+- Returned NAN when can't find a pmu or the value from */caps/slots is
+  zero, in perf_pmu__cpu_slots_per_cycle, as suggested by John.
+- Link: https://lore.kernel.org/all/1673601740-122788-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-This is not ideal because kmemleak can be configured so that it's only
-enabled on boot with kmemleak=on and not always.
-Please look into stack_depot_want_early_init() as suggested:
-https://lore.kernel.org/all/f53653bd-aab1-637e-c034-62761f262a03@suse.cz/
+Changes since v6:
+- Split patch 1 into 3 smaller patches as suggested by Ian.
+- Change perf_pmu__get_slots to perf_pmu__cpu_slots_per_cycle,
+  per John's suggestion;
+- Return NAN instead of 0 in perf_pmu__cpu_slots_per_cycle weak
+  function, per John's suggestion;
+- Factor out pmu_core__find_same function, per John's suggestion.
+- Link: https://lore.kernel.org/all/1673017529-1429208-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-> On 1/4/23 17:08, Mirsad Goran Todorovac wrote:
-> I hate to bring bad news again, but there seems to be a problem with the output of /sys/kernel/debug/kmemleak:
-> 
-> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff951c118568b0 (size 16):
-> comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
->     hex dump (first 16 bytes):
->       6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
->     backtrace:
->  [root@pc-mtodorov ~]#
->    Apparently, backtrace of called functions on the stack is no longer printed with the list of memory leaks.
->  This appeared on Lenovo desktop 10TX000VCR, with AlmaLinux 8.7 and BIOS version M22KT49A (11/10/2022)
->  and 6.2-rc1 and 6.2-rc2 builds.
->  This worked on 6.1 with the same CONFIG_KMEMLEAK=y and MGLRU enabled on a vanilla mainstream kernel
->  from Mr. Torvalds' tree. I don't know if this is deliberate feature for some reason or a bug.
->  Please find attached the config, lshw and kmemleak output.
-> 
-> reported-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> ---
->  lib/Kconfig.debug | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 401ad4b..50cc9f5 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -727,6 +727,7 @@ config DEBUG_KMEMLEAK
->  	select KALLSYMS
->  	select CRC32
->  	select STACKDEPOT
-> +	select STACKDEPOT_ALWAYS_INIT
->  	help
->  	  Say Y here if you want to enable the memory leak
->  	  detector. The memory allocation/freeing is traced in a way
+Changes since v5:
+- Add common topdownL1 metrics in sbsa.json as suggested by John;
+- Correct PKI/MPKI ScaleUnit to 1PKI/1MPKI;
+- Link: https://lore.kernel.org/all/1672745976-2800146-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+Changes since v4:
+- Add MPKI/PKI “ScaleUnit”;
+- Add acked-by from Ian Rogers;
+- Link: https://lore.kernel.org/all/1671799045-1108027-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+Changes since v3:
+- Add ipc_rate metric;
+- Drop the PublicDescription;
+- Describe PEutilization metrics in more detail;
+- Link: https://lore.kernel.org/all/1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+Changes since v2:
+- Correct the furmula of Branch metrics;
+- Add more PE utilization metrics;
+- Add more TLB metrics;
+- Add “ScaleUnit” for some metrics;
+- Add a newline at the end of the file;
+- Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+Changes since v1:
+- Corrected formula for topdown L1 due to wrong counts for stall_slot
+  and stall_slot_frontend; 
+- Link: https://lore.kernel.org/all/1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com/
+
+This series does the following things:
+
+The slots in each architecture may be different, so add #slots literal
+to obtain the slots of different architectures, and the #slots can be
+applied in the topdown metric. Currently, The #slots just support for
+arm64, and other architectures will return NAN.
+
+The metrics of topdown L1 are from ARM sbsa7.0 platform design doc[0],
+D37-38, which are standard. So put them in the common file sbsa.json of
+arm64 and add general metric support, so that other cores besides n2/v2
+can also be reused.
+
+Then add topdownL1 metric for neoverse-n2-v2, and due to the wrong count
+of stall_slot and stall_slot_frontend on neoverse-n2, the real stall_slot
+and real stall_slot_frontend need to subtract cpu_cycles, so overwrite
+the "MetricExpr" for neoverse-n2.
+Reference from ARM neoverse-n2 errata notice [1], D117.
+
+Since neoverse-n2/neoverse-v2 does not yet support topdown L2, metricgroups
+such as Cache, TLB, Branch, InstructionsMix, and PEutilization will be added
+to further analysis of performance bottlenecks in the following patches.
+Reference from ARM PMU guide [2][3].
+
+[0] https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+[1] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
+[2] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
+[3] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
+
+Tested in neoverse-n2:
+
+$./perf list
+...
+Metric Groups:
+
+Branch:
+  branch_miss_pred_rate
+       [The rate of branches mis-predited to the overall branches]
+  branch_mpki
+       [The rate of branches mis-predicted per kilo instructions]
+  branch_pki
+       [The rate of branches retired per kilo instructions]
+Cache:
+  l1d_cache_miss_rate
+       [The rate of L1 D-Cache misses to the overall L1 D-Cache]
+  l1d_cache_mpki
+       [The rate of L1 D-Cache misses per kilo instructions]
+...
+
+
+$sudo ./perf stat -M TLB false_sharing 2
+
+ Performance counter stats for 'false_sharing 2':
+
+            29,940      L2D_TLB                          #     20.0 %  l2_tlb_miss_rate         (42.36%)
+             5,998      L2D_TLB_REFILL                                                          (42.36%)
+             1,753      L1I_TLB_REFILL                   #      0.1 %  l1i_tlb_miss_rate        (43.17%)
+         2,173,957      L1I_TLB                                                                 (43.17%)
+       327,944,763      L1D_TLB                          #      0.0 %  l1d_tlb_miss_rate        (43.98%)
+            22,485      L1D_TLB_REFILL                                                          (43.98%)
+           497,210      L1I_TLB                          #      0.0 %  itlb_walk_rate           (44.83%)
+                28      ITLB_WALK                                                               (44.83%)
+       821,488,762      INST_RETIRED                     #      0.0 MPKI  itlb_mpki             (43.97%)
+               122      ITLB_WALK                                                               (43.97%)
+               744      DTLB_WALK                        #      0.0 %  dtlb_walk_rate           (43.01%)
+       263,913,146      L1D_TLB                                                                 (43.01%)
+       779,073,875      INST_RETIRED                     #      0.0 MPKI  dtlb_mpki             (42.07%)
+             1,050      DTLB_WALK                                                               (42.07%)
+
+       0.435864901 seconds time elapsed
+
+       1.201384000 seconds user
+       0.000000000 seconds sys
+
+
+$sudo ./perf stat -M TopDownL1 false_sharing 2
+
+ Performance counter stats for 'false_sharing 2':
+
+     3,408,960,257      cpu_cycles                       #      0.0 %  bad_speculation
+                                                  #      5.1 %  retiring                 (66.79%)
+    19,576,079,610      stall_slot                                                              (66.79%)
+       877,673,452      op_spec                                                                 (66.79%)
+       876,324,270      op_retired                                                              (66.79%)
+     3,406,548,064      cpu_cycles                       #     26.7 %  frontend_bound           (67.08%)
+     7,961,814,801      stall_slot_frontend                                                     (67.08%)
+     3,415,528,440      cpu_cycles                       #     68.8 %  backend_bound            (66.43%)
+    11,746,647,747      stall_slot_backend                                                      (66.43%)
+
+       0.455229807 seconds time elapsed
+
+       1.243216000 seconds user
+       0.000000000 seconds sys
+
+$sudo ./perf stat -M branch sleep 1
+
+ Performance counter stats for 'sleep 1':
+
+           901,495      INST_RETIRED                     #    223.6 PKI  branch_pki
+           201,603      BR_RETIRED
+           901,495      INST_RETIRED                     #     10.0 MPKI  branch_mpki
+             9,004      BR_MIS_PRED_RETIRED
+             9,004      BR_MIS_PRED_RETIRED              #      4.5 %  branch_miss_pred_rate
+           201,603      BR_RETIRED
+
+       1.000794467 seconds time elapsed
+
+       0.000905000 seconds user
+       0.000000000 seconds sys
+
+
+Jing Zhang (9):
+  perf pmu: Add #slots literal support for arm64
+  perf jevent: Add general metrics support
+  perf vendor events arm64: Add common topdown L1 metrics
+  perf vendor events arm64: Add topdown L1 metrics for neoverse-n2-v2
+  perf vendor events arm64: Add TLB metrics for neoverse-n2-v2
+  perf vendor events arm64: Add cache metrics for neoverse-n2-v2
+  perf vendor events arm64: Add branch metrics for neoverse-n2-v2
+  perf vendor events arm64: Add PE utilization metrics for
+    neoverse-n2-v2
+  perf vendor events arm64: Add instruction mix metrics for
+    neoverse-n2-v2
+
+ tools/perf/arch/arm64/util/pmu.c                   |  35 ++-
+ .../arch/arm64/arm/neoverse-n2-v2/metrics.json     | 273 +++++++++++++++++++++
+ tools/perf/pmu-events/arch/arm64/sbsa.json         |  30 +++
+ tools/perf/pmu-events/jevents.py                   |   2 +
+ tools/perf/util/expr.c                             |   5 +
+ tools/perf/util/pmu.c                              |   6 +
+ tools/perf/util/pmu.h                              |   1 +
+ 7 files changed, 350 insertions(+), 2 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/metrics.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/sbsa.json
+
+-- 
+1.8.3.1
 
