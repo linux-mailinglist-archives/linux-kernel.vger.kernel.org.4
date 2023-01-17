@@ -2,150 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F8766E76A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D246C66E76C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbjAQUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S231202AbjAQUHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbjAQUE1 (ORCPT
+        with ESMTP id S232686AbjAQUFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:04:27 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C387496F
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:55:46 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id v19so29377808ybv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:55:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hjk26ZZoZCfL6kjko8l/pSHnRgndFb4Mk147LRzA91E=;
-        b=Mt+sJp5dwuIsL+Ko5cT1XtmvNX0+vXcya9w3KxCAGiP5wEFud5o530HskF9og8ZMkd
-         ljvA9NKCih7KjYskMBb5clv4araVsgVH8bivehaUbVs1zXmC/Q33zJ2WQgBH8wLEh0Ww
-         LO52zNPDud7WwXKOiScqFdlxb/HA84LcUefakhGKNdWzRjfSLYoc+FzRvi5aIbasr4/1
-         iGt43X07P5GiJPZJVy/5QSn6qq+xCbFLi962ogszxOLly8aqpiMkM3flx1tsWJ3TC+lM
-         JwJqwtVwEAaEziK1WoW3RHASnzImrfdF+niEuev4vFd01otF7C+PJQGmm/v884HYR4zi
-         v9EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hjk26ZZoZCfL6kjko8l/pSHnRgndFb4Mk147LRzA91E=;
-        b=2FC22DkqP7MkMlGhoLWw55QENpcQvSW9c1bvBR67f8DZFTSsF/B7I2Qw923gKTPPyr
-         c+AMTZQA8aSr/dO5YTCgVwsiOnonVbFVNY+cZPXYdOch0tiLE+C46yNUZEDNTjLBuoMV
-         egsurlNxv21S4uHFipbm63M0aSkQ9Hos9o71vE8d2zDy4whHBqtRLaWrAtyI8TgzYrI/
-         zEH/gAEQXbF3FJQYznxy+XSZMBt7WVGmRxDjl1msfZPYaGtyvc25bP+h3kwLWDj8avp0
-         za0UGwErCqWvjo5MHV+6Gu3Wjr49HDN0GRzrwUK9BTO0Xzj15THLnkHLH9QLDEIPR+Ki
-         UJEw==
-X-Gm-Message-State: AFqh2kraX4eF0IE8+D1UooPz2kQwNwBhe+BknkoORzK8gsuFHfHjmaTB
-        ePqFXtf9Z4cC/3HLbBq2mUQnJZ/FLgR+riWhX8jcTw==
-X-Google-Smtp-Source: AMrXdXsB68dzuUro7SI9IrfjHxCTvw8eBu3xk1m8gxflhvDRkqqF3qc7tx3EmnQTV75nr092zIYy1Q+gFJMC6cvTzv8=
-X-Received: by 2002:a5b:cc8:0:b0:7ba:78b1:9fcc with SMTP id
- e8-20020a5b0cc8000000b007ba78b19fccmr507280ybr.593.1673981745113; Tue, 17 Jan
- 2023 10:55:45 -0800 (PST)
+        Tue, 17 Jan 2023 15:05:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406D3A591;
+        Tue, 17 Jan 2023 10:57:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F4088614E3;
+        Tue, 17 Jan 2023 18:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1216DC433D2;
+        Tue, 17 Jan 2023 18:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673981826;
+        bh=G9tSeRpjSWF6i+zuXxtGGep/zPeWLfIpxu1vq3NYTSw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kqaA/u2CAenJkPgq8HUh/VteJ2RhY8jAxb6PqZ+OT7C6FASNC8rHWo9d255gjpWtc
+         sAJeI620rk8JVh89g4LO5AxBy/kmri/7o3TQ3c6kzhpRFM2VjuQQuEJDgMGV5pjGXc
+         90456W+imT2BXbUF9bhEcnXJWlg74mwYrL2FWU4bKAv7b88FF9uX6phzbcHHQCwFIT
+         74yWZSdslLpB8l5yb0v7V2UqKlNPDd6YcZpj3aqyqS47fRFbH5Z8wqjCHPdfyiT4Re
+         LSRUC1Msgdlr7NQyp7LGW9YqD0mfu4u5HFBo8d6K1NfeVyK0xZ11ehIwk6lWkKroy/
+         92/9Az23uADcQ==
+Date:   Tue, 17 Jan 2023 19:57:03 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v2 2/2] i2c: dev: don't allow user-space to deadlock the
+ kernel
+Message-ID: <Y8bvf9k2K62EscEo@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20221229160045.535778-1-brgl@bgdev.pl>
+ <20221229160045.535778-3-brgl@bgdev.pl>
 MIME-Version: 1.0
-References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-42-surenb@google.com>
- <CAG48ez3ZNt+B3XvAMP1OaeEYuwpXJ1epmT9YtNonFLEJ6yANVQ@mail.gmail.com>
- <CAJuCfpFruHecz9NssGGFrG-RqbJFHCfRuZ7c6GbTBD4x4AU8aA@mail.gmail.com>
- <Y8bpfzYvWq/3ttr+@casper.infradead.org> <CAJuCfpHkgRDpMJXd6vnCmB50PnSOwDY9pjhW5LcdR+fU5JUseA@mail.gmail.com>
- <Y8btYASD3jmdCf5n@casper.infradead.org>
-In-Reply-To: <Y8btYASD3jmdCf5n@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 17 Jan 2023 10:55:33 -0800
-Message-ID: <CAJuCfpGcufxmL7A-ea_JDKU2pxrTQJ7Sez7C6zcVyFK9q1CXUg@mail.gmail.com>
-Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jann Horn <jannh@google.com>, akpm@linux-foundation.org,
-        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
-        posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X/UsmnCClaapha46"
+Content-Disposition: inline
+In-Reply-To: <20221229160045.535778-3-brgl@bgdev.pl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:47 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Tue, Jan 17, 2023 at 10:36:42AM -0800, Suren Baghdasaryan wrote:
-> > On Tue, Jan 17, 2023 at 10:31 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > On Tue, Jan 17, 2023 at 10:26:32AM -0800, Suren Baghdasaryan wrote:
-> > > > On Tue, Jan 17, 2023 at 10:12 AM Jann Horn <jannh@google.com> wrote:
-> > > > >
-> > > > > On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > > rw_semaphore is a sizable structure of 40 bytes and consumes
-> > > > > > considerable space for each vm_area_struct. However vma_lock has
-> > > > > > two important specifics which can be used to replace rw_semaphore
-> > > > > > with a simpler structure:
-> > > > > [...]
-> > > > > >  static inline void vma_read_unlock(struct vm_area_struct *vma)
-> > > > > >  {
-> > > > > > -       up_read(&vma->vm_lock->lock);
-> > > > > > +       if (atomic_dec_and_test(&vma->vm_lock->count))
-> > > > > > +               wake_up(&vma->vm_mm->vma_writer_wait);
-> > > > > >  }
-> > > > >
-> > > > > I haven't properly reviewed this, but this bit looks like a
-> > > > > use-after-free because you're accessing the vma after dropping your
-> > > > > reference on it. You'd have to first look up the vma->vm_mm, then do
-> > > > > the atomic_dec_and_test(), and afterwards do the wake_up() without
-> > > > > touching the vma. Or alternatively wrap the whole thing in an RCU
-> > > > > read-side critical section if the VMA is freed with RCU delay.
-> > > >
-> > > > vm_lock->count does not control the lifetime of the VMA, it's a
-> > > > counter of how many readers took the lock or it's negative if the lock
-> > > > is write-locked.
-> > >
-> > > Yes, but ...
-> > >
-> > >         Task A:
-> > >         atomic_dec_and_test(&vma->vm_lock->count)
-> > >                         Task B:
-> > >                         munmap()
-> > >                         write lock
-> > >                         free VMA
-> > >                         synchronize_rcu()
-> > >                         VMA is really freed
-> > >         wake_up(&vma->vm_mm->vma_writer_wait);
-> > >
-> > > ... vma is freed.
-> > >
-> > > Now, I think this doesn't occur.  I'm pretty sure that every caller of
-> > > vma_read_unlock() is holding the RCU read lock.  But maybe we should
-> > > have that assertion?
-> >
-> > Yep, that's what this patch is doing
-> > https://lore.kernel.org/all/20230109205336.3665937-27-surenb@google.com/
-> > by calling vma_assert_no_reader() from __vm_area_free().
->
-> That's not enough though.  Task A still has a pointer to vma after it
-> has called atomic_dec_and_test(), even after vma has been freed by
-> Task B, and before Task A dereferences vma->vm_mm.
 
-Ah, I see your point now. I guess I'll have to store vma->vm_mm in a
-local variable and call mmgrab() before atomic_dec_and_test(), then
-use it in wake_up() and call mmdrop(). Is that what you are thinking?
+--X/UsmnCClaapha46
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Bartosz,
+
+> If we open an i2c character device and then unbind the underlying i2c
+> adapter (either by unbinding it manually via sysfs or - for a real-life
+> example - when unplugging a USB device with an i2c adaper), the kernel
+> thread calling i2c_del_adapter() will become blocked waiting for the
+> completion that only completes once all references to the character
+> device get dropped.
+>=20
+> In order to fix that, we introduce a couple changes. They need to be
+> part of a single commit in order to preserve bisectability. First, drop
+> the dev_release completion. That removes the risk of a deadlock but
+> we now need to protect the character device structures against NULL
+> pointer dereferences. To that end introduce an rw semaphore. It will
+> protect the dummy i2c_client structure against dropping the adapter from
+> under it. It will be taken for reading by all file_operations callbacks
+> and for writing by the notifier's unbind handler. This way we don't
+> prohibit the syscalls that don't get in each other's way from running
+> concurrently but the adapter will not be unbound before all syscalls
+> return.
+>=20
+> Finally: upon being notified about an unbind event for the i2c adapter,
+> we take the lock for writing and set the adapter pointer in the character
+> device's structure to NULL. This "numbs down" the device - it still exists
+> but is no longer functional. Meanwhile every syscall callback checks that
+> pointer after taking the lock but before executing any code that requires
+> it. If it's NULL, we return an error to user-space.
+>=20
+> This way we can safely open an i2c device from user-space, unbind the
+> device without triggering a deadlock and any subsequent system-call for
+> the file descriptor associated with the removed adapter will gracefully
+> fail.
+>=20
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+First of all, thank you for tackling this problem. It was long overdue
+and I really appreciate that you took the initiative to get it solved.
+
+Here are some review comments already. I'd like to do some more testing.
+So far, everything works nicely. Also, I'd like to invite more people to
+have a look at this code. We really don't want to have a regression
+here, so more eyes are very welcome.
+
+
+> @@ -1713,25 +1715,7 @@ void i2c_del_adapter(struct i2c_adapter *adap)
+> =20
+>  	i2c_host_notify_irq_teardown(adap);
+> =20
+> -	/* wait until all references to the device are gone
+> -	 *
+> -	 * FIXME: This is old code and should ideally be replaced by an
+> -	 * alternative which results in decoupling the lifetime of the struct
+> -	 * device from the i2c_adapter, like spi or netdev do. Any solution
+> -	 * should be thoroughly tested with DEBUG_KOBJECT_RELEASE enabled!
+
+Have you done this? Debugging with DEBUG_KOBJECT_RELEASE enabled?
+
+> -	 */
+> -	init_completion(&adap->dev_released);
+>  	device_unregister(&adap->dev);
+> -	wait_for_completion(&adap->dev_released);
+
+So, this is basically the key change. I think you handled the userspace
+part via i2c-dev well. I don't have proof yet, but my gut feeling
+wonders if this is complete. Aren't there maybe sysfs-references as
+well. I need to check.
+
+> -
+> -	/* free bus id */
+> -	mutex_lock(&core_lock);
+> -	idr_remove(&i2c_adapter_idr, adap->nr);
+> -	mutex_unlock(&core_lock);
+> -
+> -	/* Clear the device structure in case this adapter is ever going to be
+> -	   added again */
+> -	memset(&adap->dev, 0, sizeof(adap->dev));
+
+Any reason you didn't add this to release function above? Reading the
+introducing commit, the old drivers needings this still exist IMO.
+(Yes, they should be converted to use the i2c-mux subsystem, but I don't
+think someone will do this)
+
+> @@ -44,8 +45,14 @@ struct i2c_dev {
+>  	struct i2c_adapter *adap;
+>  	struct device dev;
+>  	struct cdev cdev;
+> +	struct rw_semaphore sem;
+
+I'd like to name it 'rwsem' so it is always super-clear what it is.
+
+>  };
+> =20
+> +static inline struct i2c_dev *to_i2c_dev(struct inode *ino)
+
+I'd also prefer a more specific 'inode_to_i2c_dev' function name.
+Personally, I'd also name the argument 'inode' but I'll leave that to
+you.
+
+> +{
+> +	return container_of(ino->i_cdev, struct i2c_dev, cdev);
+> +}
+
+=2E..
+
+Doesn't the function 'name_show()' also need protection? It dereferences
+i2c_dev->adap.
+
+So much for now,
+
+   Wolfram
+
+
+--X/UsmnCClaapha46
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPG73sACgkQFA3kzBSg
+KbauKA/+P+G7QieucmYlIvLJCy0GYf+XfAxJFptxcRGu8NuWp5l7eYNXHDoVQiL3
+kym6GXU+7uMrsppjiGhuBFc9cXE8xtFAyboIXmJjWhlUUOAiOsYpWQA8GdbnnR/W
+t7C8AVIW97bj7/R58KBZf43KRlOhMOSe7X6QL771ztSpXL6IQTW7pB0+YMZcdI84
+7tWMyl8vH3+e2FRpvygucVcAldnMh4b8jymWbWUJ9SD9fi1kolfdhffyyuRTRM7+
+RqsQ7Uvq1thwQDikMQ1RWAsK7PR59HIiCni+esg0Cnkbnc8bdk4Tgk1PMxjKyt7E
+2kfhl12h4NxAWXSDVCerRd5wZq6anwNSGLeJmyWKl1bNTyQAyXiLjpGK2WhQmNtR
+sM1KKMqvf8bDSYVrpz5cVX2vgBM4FqbQvvKtAm9xVyz1UgU08d4IvSOAKxXdwD/G
+1rOoFqch1rL2VdibomcWC/yiEMtgp8XbQB60rmiAA4i9lPqJxOWWY7MpTMYvLVYB
+99YQ//ALPbYMizQ/+8yvWOzhHTMdnLEFl980bwUhSpO/KajKKiOBXPWoaKnHOCZ6
+xNPIoucLVN969JaId2vThtZyBrFmtA1Gm/WpGt1OBlVKUEWoPMUPJ800ETQm5Izs
+eBpwJO7Jq/B3ee7AYCopB88YCjnU458cKtZV1Uot3fjT4FtOW0M=
+=c3wR
+-----END PGP SIGNATURE-----
+
+--X/UsmnCClaapha46--
