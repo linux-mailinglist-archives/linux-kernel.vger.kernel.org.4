@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B80566D5DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AC266D5E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbjAQGFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 01:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S235594AbjAQGFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 01:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbjAQGFA (ORCPT
+        with ESMTP id S235612AbjAQGFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 01:05:00 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5662C4ED4;
-        Mon, 16 Jan 2023 22:04:59 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VZlgqjr_1673935485;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VZlgqjr_1673935485)
-          by smtp.aliyun-inc.com;
-          Tue, 17 Jan 2023 14:04:56 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     vneethv@linux.ibm.com
-Cc:     oberpar@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] s390/chsc: Switch over to memdup_user()
-Date:   Tue, 17 Jan 2023 14:04:43 +0800
-Message-Id: <20230117060443.62153-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 17 Jan 2023 01:05:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7A91F92D;
+        Mon, 16 Jan 2023 22:05:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=i95Bj8Tr9xoekMAaCSBax6WW3QQZv9faY/6wdPnW11s=; b=Smxr3cdFUm9ViiON7uzeg4qGsE
+        BdfsUYfz3/shimYz3oS8mWvTEJhlNzv+h24NFO+Cz/ytdgRQjE9E9K0gFSAs1FnmnjTp/l9dV1T31
+        2R75ugt6CBbP5+bJ7Fh/5EpXTTFH1yNzqmgc/HEPIgw44wlmwfMg9WiCK6msTORG/nOuq8V8fEUn/
+        xZKt7zPfODx9iZjMNs0daJWmW2WKh+M14X81BF1Y8q5EvMPuPLCARQYYCSLvmjD/fyw3ZvEpqB0u2
+        hqoxanDurkJH+yxesKMWLhLw43wRWUGvq0IFJ1ZQSC4+pKHzkycYN2ASc7KE5WnvWaQfaCXok+PUk
+        PLStB4gA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHf5g-00D26l-Ai; Tue, 17 Jan 2023 06:05:00 +0000
+Date:   Mon, 16 Jan 2023 22:05:00 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Fabio Fantoni <fantonifabio@tiscali.it>
+Cc:     Christoph Hellwig <hch@infradead.org>, corbet@lwn.net,
+        axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergei Shtepa <sergei.shtepa@veeam.com>
+Subject: Re: [PATCH v2] documentation: fix Generic Block Device Capability
+Message-ID: <Y8Y6jLdXnnBTps7l@infradead.org>
+References: <20230110132104.12499-1-fantonifabio@tiscali.it>
+ <Y8WPFMFxpfdZKs5a@infradead.org>
+ <62a18c7d-93d9-657e-48fd-1af06d6d1d9e@tiscali.it>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62a18c7d-93d9-657e-48fd-1af06d6d1d9e@tiscali.it>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use memdup_user rather than duplicating its implementation, this is a
-little bit restricted to reduce false positives.
+On Mon, Jan 16, 2023 at 07:14:41PM +0100, Fabio Fantoni wrote:
+> Il 16/01/2023 18:53, Christoph Hellwig ha scritto:
+> > On Tue, Jan 10, 2023 at 02:21:04PM +0100, Fabio Fantoni wrote:
+> > > - * ``GENHD_FL_REMOVABLE``: indicates that the block device gives access to
+> > > + * ``GENHD_FL_REMOVABLE`` (0x01): indicates that the block device gives access to
+> > The numberic values really do not belong into the documentation.  They
+> > are just implementation details.
+> > 
+> Thanks for reply, if values are not into the documentation see from
+> /sys/block/<disk>/capability output what flags are enabled will require look
+> to source code of include/linux/blkdev.h and
+> Documentation/block/capability.rst will be less useful, or I'm wrong?
 
-./drivers/s390/cio/chsc_sch.c:703:7-14: WARNING opportunity for memdup_user.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3785
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/s390/cio/chsc_sch.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/s390/cio/chsc_sch.c b/drivers/s390/cio/chsc_sch.c
-index 180ab899289c..097769a955c3 100644
---- a/drivers/s390/cio/chsc_sch.c
-+++ b/drivers/s390/cio/chsc_sch.c
-@@ -700,15 +700,11 @@ static int chsc_ioctl_conf_comp_list(void __user *user_ccl)
- 	sccl_area = (void *)get_zeroed_page(GFP_KERNEL | GFP_DMA);
- 	if (!sccl_area)
- 		return -ENOMEM;
--	ccl = kzalloc(sizeof(*ccl), GFP_KERNEL);
--	if (!ccl) {
--		ret = -ENOMEM;
--		goto out_free;
--	}
--	if (copy_from_user(ccl, user_ccl, sizeof(*ccl))) {
--		ret = -EFAULT;
--		goto out_free;
--	}
-+
-+	ccl = memdup_user(user_ccl, sizeof(*ccl));
-+	if (IS_ERR(ccl))
-+		return PTR_ERR(ccl);
-+
- 	sccl_area->request.length = 0x0020;
- 	sccl_area->request.code = 0x0030;
- 	sccl_area->fmt = ccl->req.fmt;
--- 
-2.20.1.7.g153144c
-
+Urgg.  I think this file is generally just a bad idea.  The flags are
+kernel internal and not isolated from userspace.  It seems nothing broke
+with the various renumbering lately, but we need to isolate it from
+the implementation details.  And if it really should be a user API
+we need a text version of it.
