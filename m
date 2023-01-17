@@ -2,380 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590F3670D2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75756670D27
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjAQXU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S229719AbjAQXUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAQXUb (ORCPT
+        with ESMTP id S229953AbjAQXTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:20:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89F35D122
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:06:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673989612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bKk9f7e5Yleo+prYdw0iH3hbLZ17vENtX6XlppAd1xw=;
-        b=H+sW6L0CXJm9XMRluonQiNoGimekqkpvyghu5mfjbz07QC2i9BdSYyNKbKIRlGlveQvJM9
-        XYSmo2cfFlYO6d2oouZ2zhUSzoQfliCbLBdFWDtVOqcUH1N5FB26+HtrvL04RddPKv59Yq
-        Xbtlsa/En8Afufgs4ulTPzXALKcEoJg=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-281-vAVlsMtkMdSxN5Mb3yO5tQ-1; Tue, 17 Jan 2023 16:06:45 -0500
-X-MC-Unique: vAVlsMtkMdSxN5Mb3yO5tQ-1
-Received: by mail-yb1-f198.google.com with SMTP id i135-20020a25d18d000000b007e64108adb4so6338866ybg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:06:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bKk9f7e5Yleo+prYdw0iH3hbLZ17vENtX6XlppAd1xw=;
-        b=JT1T5/bNbhqs6jMISJuHDWWAFwTvAsOM2J6aWGIyetQjmgwsj/IpxJJ+6PY+H4fhgx
-         I0NQKk62QSbFzyuRbxvwDJhH328pkGJrYeqxi31Ay+xWGh1iK0+q4yZv0wVX1QCTBZ+9
-         FReTZ7u0XpzEpBi59Gg2q+lCK9wd63khf798wkke+5Pf9NXIE3nrU3XwvuwH+la5EOwL
-         AH4wX4DUrfLIJtz4Xdotzc2ZNP9/kaCW0wGB2+9Y2ukEhDoS1hCjl9BkQSxl/G8Xv8S3
-         5PptMMhMVpF2qmwAKWrLUU3kZfosrT/WU6mg4TbEBH+xXX1CtrQwtwTSA39QZfNfGwy3
-         ioEg==
-X-Gm-Message-State: AFqh2krMQHnW42PrDjBVgn1ZsAKaaI6IAPIPuSCJmA/husfDo/O2x66C
-        27KhZ+nbFKNq3MvFpqZ4lAHoB9Wsd/77Gj/Ccnfb4XMOC643wetzPtavSTRWFQGYGiXaY20H8C6
-        gBJf3vHsX6zdzdwraw589d8KN
-X-Received: by 2002:a05:7500:58a:b0:f0:2adf:ae3d with SMTP id n10-20020a057500058a00b000f02adfae3dmr376911gac.36.1673989605064;
-        Tue, 17 Jan 2023 13:06:45 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtJDQrCN2P1BEejhV6KQl5Pj7xf4V6bwRkqIyA4ip/U/9RoNFp238q6BsVVuZ0FSLiMvE43Kw==
-X-Received: by 2002:a05:7500:58a:b0:f0:2adf:ae3d with SMTP id n10-20020a057500058a00b000f02adfae3dmr376903gac.36.1673989604619;
-        Tue, 17 Jan 2023 13:06:44 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id t5-20020a05620a450500b006fa8299b4d5sm21132728qkp.100.2023.01.17.13.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:06:43 -0800 (PST)
-Date:   Tue, 17 Jan 2023 16:06:40 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 35/46] hugetlb: add MADV_COLLAPSE for hugetlb
-Message-ID: <Y8cN4G0ICoSSggS+@x1n>
-References: <20230105101844.1893104-1-jthoughton@google.com>
- <20230105101844.1893104-36-jthoughton@google.com>
+        Tue, 17 Jan 2023 18:19:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17053E45;
+        Tue, 17 Jan 2023 13:07:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCDF2B819B0;
+        Tue, 17 Jan 2023 21:06:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FAAC433D2;
+        Tue, 17 Jan 2023 21:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673989617;
+        bh=CysGW8OdPPONp0Zukni5r38vCtpff9N6XeNykqoQOXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CEc2eLqrLqFqh6QCXhO2xYmHbtppsBHl+wfbUatH19HEKa5NMpfRp1igSqm+S0Zrk
+         kAe3W2IMfiO+srDEdo/GwE0shTpOxJGH1IqalWuMRAP8PHs01KmEtIirQkySpYEbSB
+         C5UMSGup7X29ksarUC6tgD7jr0QYLrjD7CF0/AQFlZXGVcInj8BGY9sOtXjFuTnbBr
+         BwSJi6EeTX12L1SLecF4bXu4428e4xeoHDIenelc9wPuboI2Agt7gDmM+LYfa3rVPd
+         ELfTR+qJ9pPM0KLXT+bfo/uXSuJ+/2nc1cc28NFrpEQlWNUN2zPPyfrdsu2/6FIVrn
+         lGFmvcRyaaCUg==
+Date:   Tue, 17 Jan 2023 15:06:54 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>
+Subject: Re: [PATCH v3 7/8] arm64: dts: qcom: Add Square apq8039-t2 board
+Message-ID: <20230117210654.ojrhlt6c5hdy3whm@builder.lan>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-8-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230105101844.1893104-36-jthoughton@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230117024846.1367794-8-bryan.odonoghue@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 10:18:33AM +0000, James Houghton wrote:
-> This is a necessary extension to the UFFDIO_CONTINUE changes. When
-> userspace finishes mapping an entire hugepage with UFFDIO_CONTINUE, the
-> kernel has no mechanism to automatically collapse the page table to map
-> the whole hugepage normally. We require userspace to inform us that they
-> would like the mapping to be collapsed; they do this with MADV_COLLAPSE.
+On Tue, Jan 17, 2023 at 02:48:45AM +0000, Bryan O'Donoghue wrote:
+> The apq8039-t2 is an apq8039 based board paired with a wcn3680b WiFi
+> chipset.
 > 
-> If userspace has not mapped all of a hugepage with UFFDIO_CONTINUE, but
-> only some, hugetlb_collapse will cause the requested range to be mapped
-> as if it were UFFDIO_CONTINUE'd already. The effects of any
-> UFFDIO_WRITEPROTECT calls may be undone by a call to MADV_COLLAPSE for
-> intersecting address ranges.
-> 
-> This commit is co-opting the same madvise mode that has been introduced
-> to synchronously collapse THPs. The function that does THP collapsing
-> has been renamed to madvise_collapse_thp.
-> 
-> As with the rest of the high-granularity mapping support, MADV_COLLAPSE
-> is only supported for shared VMAs right now.
-> 
-> MADV_COLLAPSE has the same synchronization as huge_pmd_unshare.
-> 
-> Signed-off-by: James Houghton <jthoughton@google.com>
+> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Co-developed-by: Jun Nie <jun.nie@linaro.org>
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> Co-developed-by: Benjamin Li <benl@squareup.com>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
+> Co-developed-by: James Willcox <jwillcox@squareup.com>
+> Signed-off-by: James Willcox <jwillcox@squareup.com>
+> Co-developed-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> Co-developed-by: Joseph Gates <jgates@squareup.com>
+> Signed-off-by: Joseph Gates <jgates@squareup.com>
+> Co-developed-by: Max Chen <mchen@squareup.com>
+> Signed-off-by: Max Chen <mchen@squareup.com>
+> Co-developed-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  include/linux/huge_mm.h |  12 +--
->  include/linux/hugetlb.h |   8 ++
->  mm/hugetlb.c            | 164 ++++++++++++++++++++++++++++++++++++++++
->  mm/khugepaged.c         |   4 +-
->  mm/madvise.c            |  18 ++++-
->  5 files changed, 197 insertions(+), 9 deletions(-)
+>  arch/arm64/boot/dts/qcom/Makefile       |   1 +
+>  arch/arm64/boot/dts/qcom/apq8039-t2.dts | 557 ++++++++++++++++++++++++
+>  2 files changed, 558 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
 > 
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index a1341fdcf666..5d1e3c980f74 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -218,9 +218,9 @@ void __split_huge_pud(struct vm_area_struct *vma, pud_t *pud,
->  
->  int hugepage_madvise(struct vm_area_struct *vma, unsigned long *vm_flags,
->  		     int advice);
-> -int madvise_collapse(struct vm_area_struct *vma,
-> -		     struct vm_area_struct **prev,
-> -		     unsigned long start, unsigned long end);
-> +int madvise_collapse_thp(struct vm_area_struct *vma,
-> +			 struct vm_area_struct **prev,
-> +			 unsigned long start, unsigned long end);
->  void vma_adjust_trans_huge(struct vm_area_struct *vma, unsigned long start,
->  			   unsigned long end, long adjust_next);
->  spinlock_t *__pmd_trans_huge_lock(pmd_t *pmd, struct vm_area_struct *vma);
-> @@ -367,9 +367,9 @@ static inline int hugepage_madvise(struct vm_area_struct *vma,
->  	return -EINVAL;
->  }
->  
-> -static inline int madvise_collapse(struct vm_area_struct *vma,
-> -				   struct vm_area_struct **prev,
-> -				   unsigned long start, unsigned long end)
-> +static inline int madvise_collapse_thp(struct vm_area_struct *vma,
-> +				       struct vm_area_struct **prev,
-> +				       unsigned long start, unsigned long end)
->  {
->  	return -EINVAL;
->  }
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index c8524ac49b24..e1baf939afb6 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -1298,6 +1298,8 @@ bool hugetlb_hgm_eligible(struct vm_area_struct *vma);
->  int hugetlb_alloc_largest_pte(struct hugetlb_pte *hpte, struct mm_struct *mm,
->  			      struct vm_area_struct *vma, unsigned long start,
->  			      unsigned long end);
-> +int hugetlb_collapse(struct mm_struct *mm, struct vm_area_struct *vma,
-> +		     unsigned long start, unsigned long end);
->  #else
->  static inline bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
->  {
-> @@ -1318,6 +1320,12 @@ int hugetlb_alloc_largest_pte(struct hugetlb_pte *hpte, struct mm_struct *mm,
->  {
->  	return -EINVAL;
->  }
-> +static inline
-> +int hugetlb_collapse(struct mm_struct *mm, struct vm_area_struct *vma,
-> +		     unsigned long start, unsigned long end)
-> +{
-> +	return -EINVAL;
-> +}
->  #endif
->  
->  static inline spinlock_t *huge_pte_lock(struct hstate *h,
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 5b6215e03fe1..388c46c7e77a 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -7852,6 +7852,170 @@ int hugetlb_alloc_largest_pte(struct hugetlb_pte *hpte, struct mm_struct *mm,
->  	return 0;
->  }
->  
-> +static bool hugetlb_hgm_collapsable(struct vm_area_struct *vma)
-> +{
-> +	if (!hugetlb_hgm_eligible(vma))
-> +		return false;
-> +	if (!vma->vm_private_data)	/* vma lock required for collapsing */
-> +		return false;
-> +	return true;
-> +}
-> +
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index e442a81895d04..5c47d1fb50b01 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= apq8039-t2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> new file mode 100644
+> index 0000000000000..21f5a21f76135
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> @@ -0,0 +1,557 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Collapse the address range from @start to @end to be mapped optimally.
+> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020-2023, Linaro Ltd.
 > + *
-> + * This is only valid for shared mappings. The main use case for this function
-> + * is following UFFDIO_CONTINUE. If a user UFFDIO_CONTINUEs an entire hugepage
-> + * by calling UFFDIO_CONTINUE once for each 4K region, the kernel doesn't know
-> + * to collapse the mapping after the final UFFDIO_CONTINUE. Instead, we leave
-> + * it up to userspace to tell us to do so, via MADV_COLLAPSE.
-> + *
-> + * Any holes in the mapping will be filled. If there is no page in the
-> + * pagecache for a region we're collapsing, the PTEs will be cleared.
-> + *
-> + * If high-granularity PTEs are uffd-wp markers, those markers will be dropped.
 > + */
-> +int hugetlb_collapse(struct mm_struct *mm, struct vm_area_struct *vma,
-> +			    unsigned long start, unsigned long end)
-> +{
-> +	struct hstate *h = hstate_vma(vma);
-> +	struct address_space *mapping = vma->vm_file->f_mapping;
-> +	struct mmu_notifier_range range;
-> +	struct mmu_gather tlb;
-> +	unsigned long curr = start;
-> +	int ret = 0;
-> +	struct page *hpage, *subpage;
-> +	pgoff_t idx;
-> +	bool writable = vma->vm_flags & VM_WRITE;
-> +	bool shared = vma->vm_flags & VM_SHARED;
-> +	struct hugetlb_pte hpte;
-> +	pte_t entry;
 > +
-> +	/*
-> +	 * This is only supported for shared VMAs, because we need to look up
-> +	 * the page to use for any PTEs we end up creating.
-> +	 */
-> +	if (!shared)
-> +		return -EINVAL;
+> +/dts-v1/;
 > +
-> +	/* If HGM is not enabled, there is nothing to collapse. */
-> +	if (!hugetlb_hgm_enabled(vma))
-> +		return 0;
+> +#include "msm8939.dtsi"
+> +#include "msm8939-pm8916.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +#include <dt-bindings/sound/apq8016-lpass.h>
 > +
-> +	/*
-> +	 * We lost the VMA lock after splitting, so we can't safely collapse.
-> +	 * We could improve this in the future (like take the mmap_lock for
-> +	 * writing and try again), but for now just fail with ENOMEM.
-> +	 */
-> +	if (unlikely(!hugetlb_hgm_collapsable(vma)))
-> +		return -ENOMEM;
+> +/ {
+> +	model = "Square, Inc. T2 Devkit";
+> +	compatible = "square,apq8039-t2", "qcom,msm8939";
 > +
-> +	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, mm,
-> +				start, end);
-> +	mmu_notifier_invalidate_range_start(&range);
-> +	tlb_gather_mmu(&tlb, mm);
-> +
-> +	/*
-> +	 * Grab the VMA lock and mapping sem for writing. This will prevent
-> +	 * concurrent high-granularity page table walks, so that we can safely
-> +	 * collapse and free page tables.
-> +	 *
-> +	 * This is the same locking that huge_pmd_unshare requires.
-> +	 */
-> +	hugetlb_vma_lock_write(vma);
-> +	i_mmap_lock_write(vma->vm_file->f_mapping);
-> +
-> +	while (curr < end) {
-> +		ret = hugetlb_alloc_largest_pte(&hpte, mm, vma, curr, end);
-> +		if (ret)
-> +			goto out;
-> +
-> +		entry = huge_ptep_get(hpte.ptep);
-> +
-> +		/*
-> +		 * There is no work to do if the PTE doesn't point to page
-> +		 * tables.
-> +		 */
-> +		if (!pte_present(entry))
-> +			goto next_hpte;
-> +		if (hugetlb_pte_present_leaf(&hpte, entry))
-> +			goto next_hpte;
-> +
-> +		idx = vma_hugecache_offset(h, vma, curr);
-> +		hpage = find_get_page(mapping, idx);
-> +
-> +		if (hpage && !HPageMigratable(hpage)) {
-> +			/*
-> +			 * Don't collapse a mapping to a page that is pending
-> +			 * a migration. Migration swap entries may have placed
-> +			 * in the page table.
-> +			 */
-> +			ret = -EBUSY;
-> +			put_page(hpage);
-> +			goto out;
-> +		}
-> +
-> +		if (hpage && PageHWPoison(hpage)) {
-> +			/*
-> +			 * Don't collapse a mapping to a page that is
-> +			 * hwpoisoned.
-> +			 */
-> +			ret = -EHWPOISON;
-> +			put_page(hpage);
-> +			/*
-> +			 * By setting ret to -EHWPOISON, if nothing else
-> +			 * happens, we will tell userspace that we couldn't
-> +			 * fully collapse everything due to poison.
-> +			 *
-> +			 * Skip this page, and continue to collapse the rest
-> +			 * of the mapping.
-> +			 */
-> +			curr = (curr & huge_page_mask(h)) + huge_page_size(h);
-> +			continue;
-> +		}
-> +
-> +		/*
-> +		 * Clear all the PTEs, and drop ref/mapcounts
-> +		 * (on tlb_finish_mmu).
-> +		 */
-> +		__unmap_hugepage_range(&tlb, vma, curr,
-> +			curr + hugetlb_pte_size(&hpte),
-> +			NULL,
-> +			ZAP_FLAG_DROP_MARKER);
-> +		/* Free the PTEs. */
-> +		hugetlb_free_pgd_range(&tlb,
-> +				curr, curr + hugetlb_pte_size(&hpte),
-> +				curr, curr + hugetlb_pte_size(&hpte));
-> +		if (!hpage) {
-> +			huge_pte_clear(mm, curr, hpte.ptep,
-> +					hugetlb_pte_size(&hpte));
-> +			goto next_hpte;
-> +		}
-> +
-> +		page_dup_file_rmap(hpage, true);
-> +
-> +		subpage = hugetlb_find_subpage(h, hpage, curr);
-> +		entry = make_huge_pte_with_shift(vma, subpage,
-> +						 writable, hpte.shift);
-> +		set_huge_pte_at(mm, curr, hpte.ptep, entry);
-> +next_hpte:
-> +		curr += hugetlb_pte_size(&hpte);
-> +
-> +		if (curr < end) {
-> +			/* Don't hold the VMA lock for too long. */
-> +			hugetlb_vma_unlock_write(vma);
-> +			cond_resched();
-> +			hugetlb_vma_lock_write(vma);
+> +	qcom,board-id = <0x53 0x54>;
+> +	qcom,msm-id = <239 0>, <239 0x30000>, <241 0x30000>, <263 0x30000>;
 
-The intention is good here but IIUC this will cause vma lock to be taken
-after the i_mmap_rwsem, which can cause circular deadlocks.  If to do this
-properly we'll need to also release the i_mmap_rwsem.
+Would it be possible to include and use dt-bindings/arm/qcom,ids.h here?
 
-However it may make the resched() logic over complicated, meanwhile for 2M
-huge pages I think this will be called for each 2M range which can be too
-fine grained, so it looks like the "cur < end" check is a bit too aggresive.
-
-The other thing is I noticed that the long period of mmu notifier
-invalidate between start -> end will (in reallife VM context) causing vcpu
-threads spinning.
-
-I _think_ it's because is_page_fault_stale() (when during a vmexit
-following a kvm page fault) always reports true during the long procedure
-of MADV_COLLAPSE if to be called upon a large range, so even if we release
-both locks here it may not tremedously on the VM migration use case because
-of the long-standing mmu notifier invalidation procedure.
-
-To summarize.. I think a simpler start version of hugetlb MADV_COLLAPSE can
-drop this "if" block, and let the userapp decide the step size of COLLAPSE?
-
-> +		}
-> +	}
-> +out:
-> +	i_mmap_unlock_write(vma->vm_file->f_mapping);
-> +	hugetlb_vma_unlock_write(vma);
-> +	tlb_finish_mmu(&tlb);
-> +	mmu_notifier_invalidate_range_end(&range);
-> +	return ret;
-> +}
 > +
->  #endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
+> +	aliases {
+> +		mmc0 = &sdhc_1;
+> +		mmc1 = &sdhc_2;
+> +		serial0 = &blsp1_uart1;
+> +		serial1 = &blsp1_uart2;
+> +	};
+[..]
+> +&pm8916_gpios {
+> +	gpio-line-names =
+> +		"PM_GPIO1",     /* WIFI_GPIO1_PRE */
+> +		"PM_GPIO2",     /* WIFI_GPIO2_PRE */
+> +		"PM_GPIO3",
+> +		"PM_GPIO4";
+> +};
+> +
+> +&pronto {
 
--- 
-Peter Xu
+As mentioned in the dtsi patch, please sort your nodes by label,
+alphabetically. You may choose to group the pinctrl nodes last in the
+file...
 
+Regards,
+Bjorn
+
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&wcnss_pin_a>;
+> +	status = "okay";
+> +
+> +	iris {
+> +		compatible = "qcom,wcn3680";
+> +	};
+> +};
