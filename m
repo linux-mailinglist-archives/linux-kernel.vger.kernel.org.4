@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4898666D93C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EDB66D947
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236370AbjAQJEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S236433AbjAQJGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbjAQJBp (ORCPT
+        with ESMTP id S236428AbjAQJFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:01:45 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73906302AA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:00:18 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4d59d518505so244367417b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:00:18 -0800 (PST)
+        Tue, 17 Jan 2023 04:05:47 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C4030B22;
+        Tue, 17 Jan 2023 01:01:15 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id cx21-20020a17090afd9500b00228f2ecc6dbso8509776pjb.0;
+        Tue, 17 Jan 2023 01:01:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWrGRRnQR7P9BWZ46zuqWgfIj5Ef7uJjsTZLk6XnJnQ=;
-        b=tY0+J6UTEEMiVAGR65U4uevw6sZKF9RDSfJewWtJtt1catXoc1rLkGwxOti6Qyd15b
-         bQF1FaoYSWE1o3zDGjAUSneyffWVBfYA+XQE4Ra0kzRuMuyNwQwtRlgUXJHqvmyvvq9L
-         RIs2y8JrOWWPo16zRwwlQ1lqEbbS+4miEqSKXA0IC099LMbUWgjbAVxFhTZB1oWKmG/m
-         iEX0xn63WRu7tCfItKyIAUN0CNh596fRUWRDcgx0wk596RAwWjqQO750Bpm74smIYwWU
-         dvLvHvdp/CaoPVYha+h5yScoxMIPaN+8OTaon7Peg5Gbuh2tUzwl7ROs6UNi4KBMayNp
-         3VDg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sysl900IrcFFi2TfHQ/z8o1gLJYPUzPi/XTOajMFP5s=;
+        b=VC+BeuxFB4UP6hq2dtPPySdo9s8b6MfVvuTe5T66eeoWQAufPzSPGav4Id7ILnxRPv
+         KfEYJc4mitHJzbPGt0CXLI9/JEIezgzttg2eLQ7jG5ELjlpgtbNwStOnbfWr7RDceuXy
+         KbabKKGa3xdFgEuMdZuW3JBzxp1SHBVzqB1AbAql2/EICTcUeOP4IRJlO75D7KPYI+qU
+         ByPqJMJ3G3geATRvnSsWmkq1/YE1J8TP2SFAJFzHS3xXy9fFOAqu77cUqo95euaFn3Ic
+         c5SSwCVgC6i13tGolq9OmT5wUzngBVjxKOrfUzjwRsXwjarf+bdSQGdPwVIKI5lX8z1E
+         NnBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zWrGRRnQR7P9BWZ46zuqWgfIj5Ef7uJjsTZLk6XnJnQ=;
-        b=AtNvHQbPyIM2u7lEpSo4IjlGiomXUBeb19R7ccRxXa8ieWdZ8+EZShlhUsJhs6ZKjv
-         TGWxTdburwaZuxX1kvROnDlYre9zBI3iMjBgzn+x9DaxUhip2SQViQXXUB4VuqZqkNR3
-         s2ssxe0w8nF+ZZcUkgeDAQPrWoHoDlXJInrQdOBpWDkV+n6m6yS4cRvgiYv5NJ5eZhZy
-         VKx3nacU8PR9f8WAlWC0+/4bAsbRRvJN6PlkIM19M7VguUP9HFKSmRTX6/QYxivCEiLo
-         cr/0cPozpo9bWST7krh55K+65b1EKXuDQU1jeMAl5c2Z8VwKXjd8RYMpIRbuVIcvE2Q5
-         SyNQ==
-X-Gm-Message-State: AFqh2kq25+Mx8haACwep70bWWBa0qZHSUSVVmakzWfS3JW8A29fRGybX
-        zPuMPcW6NJ6pCG91YpRA7Yq3p2Ar/MrvUl81NjGLGWdnA52pwA==
-X-Google-Smtp-Source: AMrXdXsX+lunu2PMfTZooXWKP5EL/xr/pFaQ3Qz2R1n+3dVJqALyQmHmC7MvW+oCmJUFG0sc9Msp1vUTRlmSUNMYOpE=
-X-Received: by 2002:a0d:f282:0:b0:4ed:c96d:1b89 with SMTP id
- b124-20020a0df282000000b004edc96d1b89mr361994ywf.130.1673946017721; Tue, 17
- Jan 2023 01:00:17 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sysl900IrcFFi2TfHQ/z8o1gLJYPUzPi/XTOajMFP5s=;
+        b=fldfT2T1vPPUfML+MYFE6ljsiUVZ8rzUaqvVAiBi23rcASu4qy5tmEwbikk/cGP3A8
+         NT284R2ZfM/jskjugnLYVp+wlQGOM+AC/fMHpb0mk1pF3V9sM1VJmTP8TRLsXTO7vogT
+         WGPGlV5NaaM9kRlWH1SLzNHEG03cY0MJnnQ1jDgjHJ64TivNMjiXu+/n5p01sv3SM5Fn
+         HQJcSsDqLi8q9iXrPc3KwRNlp+37usbv5r+mueqJrfuTr8OT85zl0EfsVffDHHz+2lLt
+         66u4Kag1z9EPnnIPSH2LP9ierRYE6UyMnnZGNzM1FbI70hxuvdH4T+7HgN5LI4LQJ5HU
+         6Zfg==
+X-Gm-Message-State: AFqh2kp7fp1zcBe1gl4TEY1Qhp2KbYF4AoOnBz8UsYoV3amz5idmb/6Z
+        Zs9NzGBaLZi9dJ+HxugVsn8=
+X-Google-Smtp-Source: AMrXdXvD7Q9KHQmbhNc92/yKRfnw3jtsMfMoYpOwomWGEtMqWH2p/kSispHYpfqkki+y6DioDEMuSQ==
+X-Received: by 2002:a17:902:f70e:b0:194:6c1b:60b9 with SMTP id h14-20020a170902f70e00b001946c1b60b9mr3143394plo.25.1673946074705;
+        Tue, 17 Jan 2023 01:01:14 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-28.three.co.id. [180.214.233.28])
+        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b001925ec4664esm20616309plh.172.2023.01.17.01.01.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 01:01:13 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id B3210104432; Tue, 17 Jan 2023 16:01:10 +0700 (WIB)
+Date:   Tue, 17 Jan 2023 16:01:10 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
+Message-ID: <Y8Zj1kVH1ZsTT9VE@debian.me>
+References: <20230116154803.321528435@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230116124704.30470-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230116124704.30470-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 17 Jan 2023 10:00:06 +0100
-Message-ID: <CACRpkdaEJV59myaH44aJMZrLUe5xEw98Q=jVnVbEUgMT6xMsgw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] gpio: pcf857x: Get rid of legacy platform data
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AB3Wrsy8pv5BIByR"
+Content-Disposition: inline
+In-Reply-To: <20230116154803.321528435@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 1:46 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
 
-> Platform data is a legacy interface to supply device properties
-> to the driver. In this case we don't have in-kernel users for it.
-> Moreover it uses plain GPIO numbers which is no-no for a new code.
->
-> Just remove it for good.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+--AB3Wrsy8pv5BIByR
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Mon, Jan 16, 2023 at 04:48:43PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.7 release.
+> There are 183 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-Yours,
-Linus Walleij
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--AB3Wrsy8pv5BIByR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8Zj0QAKCRD2uYlJVVFO
+o44ZAP4wptgSFff335a9du3tsByRgSiFcdRi9hNkV8FnjsdHmAD/SnmDT8narLfp
+8BlLd7gsVD1+dEtnuqhlLW8gR3D74gc=
+=pgAb
+-----END PGP SIGNATURE-----
+
+--AB3Wrsy8pv5BIByR--
