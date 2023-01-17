@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422C966E3BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0291E66E3C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjAQQio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S232721AbjAQQi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjAQQiT (ORCPT
+        with ESMTP id S230453AbjAQQik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:38:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5C643937
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:37:52 -0800 (PST)
+        Tue, 17 Jan 2023 11:38:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E161303CD;
+        Tue, 17 Jan 2023 08:38:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8FCEB81909
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:37:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6253C433D2;
-        Tue, 17 Jan 2023 16:37:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27951614DB;
+        Tue, 17 Jan 2023 16:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263ABC433D2;
+        Tue, 17 Jan 2023 16:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673973469;
-        bh=eW6//3cViUuJfCKFm7UUOh5i0BW9IwBnC51sdT2hYj4=;
+        s=k20201202; t=1673973518;
+        bh=K6sp7vxwz2kbyJDM0TQqlfRJA30AWKr6mOQv83dI0PA=;
         h=From:To:Cc:Subject:Date:From;
-        b=uOEqgQbh+YGTEHnq3WnnzljRLzzHKWAdHf9R8kD9AgfcQvtZcVr8dSl7NgEzcffJR
-         ppjbOgDJARB8Gd6orJYPTBgDVI+30vEM0QLtW/Eh1niGNoMF+JLUc0adNFLC9KeIC/
-         NXbncMuURU5FhjdtfBkcn9t55Qmfw+mUu0ZFFBsRX9Tqjt7D4Du5MWG5bDnJ3M2DaQ
-         PcNP2uFNO/YNsC87NoG1lMG4Au3JeBw0nL3oEpwklhOaE1rdiEhhLAl+QjBH84CHSb
-         sIMC4Cw5gfC3D59JC+OGZ2zUwQyDLjbh0UyZxgX0+6MGG3hKADBz7EKd4H78lBEzwH
-         foY8mSuQ/oToQ==
+        b=Wfs8Li5beijwB4/pPLy54lafHB/pKGjIBEDJqNJykOC0XG7rusmyBtaWLETWAGofy
+         iDG2fPKsnqZYSgdCdoxcYOP84l4oIvbEHcv4vI23t+amVbLbhWA2ewK0tvfAUDpbIZ
+         qaLOKpM2kvCzH0nxGXt6ATu/J7NMSKj1ZZM5mpsY3peQASWh+cS6iDI9RlgTAeLIxo
+         XCy2iHVSmDQq4nQGHuCpE5AAEaakJ/GUKKjjQnweunX/D5UArtHUKFioUHDlXA3Pr9
+         s4wFY/NeVhKCJQcHotuuLdzsy1+JD9ENKh/5aYLjSGgAi10F3bzEDEYLP5jQgf2hqm
+         PcC6ed4Ui6mrw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/i915/selftest: fix intel_selftest_modify_policy argument types
-Date:   Tue, 17 Jan 2023 17:37:29 +0100
-Message-Id: <20230117163743.1003219-1-arnd@kernel.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: stex: fix MU_MAX_DELAY typecheck
+Date:   Tue, 17 Jan 2023 17:38:27 +0100
+Message-Id: <20230117163834.1053763-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,39 +55,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The definition of intel_selftest_modify_policy() does not match the
-declaration, as gcc-13 points out:
+time_after() expects arguments of the same type, but gcc-13 changed the
+way that typeof(MU_MAX_DELAY) is determined, causing a build warning as
+'before + MU_MAX_DELAY * HZ' gets promoted to a 64-bit integer:
 
-drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c:29:5: error: conflicting types for 'intel_selftest_modify_policy' due to enum/integer mismatch; have 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, u32)' {aka 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, unsigned int)'} [-Werror=enum-int-mismatch]
-   29 | int intel_selftest_modify_policy(struct intel_engine_cs *engine,
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c:11:
-drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.h:28:5: note: previous declaration of 'intel_selftest_modify_policy' with type 'int(struct intel_engine_cs *, struct intel_selftest_saved_policy *, enum selftest_scheduler_modify)'
-   28 | int intel_selftest_modify_policy(struct intel_engine_cs *engine,
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/linux/bitops.h:7,
+                 from include/linux/kernel.h:22,
+                 from drivers/scsi/stex.c:13:
+drivers/scsi/stex.c: In function 'stex_common_handshake':
+include/linux/typecheck.h:12:25: error: comparison of distinct pointer types lacks a cast [-Werror]
+   12 |         (void)(&__dummy == &__dummy2); \
+      |                         ^~
+include/linux/jiffies.h:106:10: note: in expansion of macro 'typecheck'
+  106 |          typecheck(unsigned long, b) && \
+      |          ^~~~~~~~~
+drivers/scsi/stex.c:1035:29: note: in expansion of macro 'time_after'
+ 1035 |                         if (time_after(jiffies, before + MU_MAX_DELAY * HZ)) {
 
-Change the type in the definition to match.
+Change the enum definition so all values fit into an unsigned
+32-bit number.
 
-Fixes: 617e87c05c72 ("drm/i915/selftest: Fix hangcheck self test for GuC submission")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/stex.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c b/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
-index 310fb83c527e..2990dd4d4a0d 100644
---- a/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
-+++ b/drivers/gpu/drm/i915/selftests/intel_scheduler_helpers.c
-@@ -28,8 +28,7 @@ struct intel_engine_cs *intel_selftest_find_any_engine(struct intel_gt *gt)
+diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
+index 8def242675ef..23462d3c9850 100644
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -110,7 +110,7 @@ enum {
+ 	TASK_ATTRIBUTE_ORDERED			= 0x2,
+ 	TASK_ATTRIBUTE_ACA			= 0x4,
  
- int intel_selftest_modify_policy(struct intel_engine_cs *engine,
- 				 struct intel_selftest_saved_policy *saved,
--				 u32 modify_type)
--
-+				 enum selftest_scheduler_modify modify_type)
- {
- 	int err;
+-	SS_STS_NORMAL				= 0x80000000,
++	SS_STS_NORMAL				= 0x80000000u,
+ 	SS_STS_DONE				= 0x40000000,
+ 	SS_STS_HANDSHAKE			= 0x20000000,
  
+@@ -120,7 +120,7 @@ enum {
+ 
+ 	SS_I2H_REQUEST_RESET			= 0x2000,
+ 
+-	SS_MU_OPERATIONAL			= 0x80000000,
++	SS_MU_OPERATIONAL			= 0x80000000u,
+ 
+ 	STEX_CDB_LENGTH				= 16,
+ 	STATUS_VAR_LEN				= 128,
+@@ -173,7 +173,7 @@ enum {
+ 	ST_ADDITIONAL_MEM_MIN			= 0x80000,
+ 	PMIC_SHUTDOWN				= 0x0D,
+ 	PMIC_REUMSE					= 0x10,
+-	ST_IGNORED					= -1,
++	ST_IGNORED					= -1u,
+ 	ST_NOTHANDLED				= 7,
+ 	ST_S3						= 3,
+ 	ST_S4						= 4,
 -- 
 2.39.0
 
