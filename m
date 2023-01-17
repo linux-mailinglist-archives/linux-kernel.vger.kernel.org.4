@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA0666E8CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A573670B4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjAQV4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S229862AbjAQWJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjAQV4G (ORCPT
+        with ESMTP id S229839AbjAQWIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:56:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFA73EC46;
-        Tue, 17 Jan 2023 12:23:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93B0F61518;
-        Tue, 17 Jan 2023 20:23:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC958C433EF;
-        Tue, 17 Jan 2023 20:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673987014;
-        bh=n6m+ald1WgX//enXYtbifctYkdlMCaoOBEM/pBEAw0M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Y3nk2mG5ymMIQ3hrg9lHGrndqDLsxu+f1KXLkc4BdaaCxDxG4p76LCBai7GJJjVbI
-         64bwAa/u5TOD31JSp0gx8oA7gt4JT+7qPtK+wTx7ttveT26EBslgqER/u0jdY1nD0i
-         WIG3921swwcOcEDY87rF4egoJIxX6IsMfKGz41eE6QnOH1/VsqNfiLtaHhjwrgH9s/
-         7ZNVOXs/RDMYq9IdgQkW70PID7gfQLRTKl1PQ+cyRHCJVTf+9zYkx6EErIPm5WinfK
-         TAQW7C1uvhUKi+lDJyMDVVKzs1qyDtbArtIbdtc4H8j6C3oiVCpVKb3c2zda3Ba8rp
-         G9A/zjtLJO4Ug==
-Date:   Tue, 17 Jan 2023 14:23:32 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] misc: pci_endpoint_test: drop initial kernel-doc marker
-Message-ID: <20230117202332.GA144641@bhelgaas>
+        Tue, 17 Jan 2023 17:08:07 -0500
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BD23D911;
+        Tue, 17 Jan 2023 12:23:39 -0800 (PST)
+Received: by mail-ot1-f52.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so8799461otf.8;
+        Tue, 17 Jan 2023 12:23:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AJGfJjVZYc/66/mbjIyBiEpogYyo22lwKH5yEocCOfs=;
+        b=gcPXewYuxEV8is8Pja6mngK+rmLxc3RCopQmp27nf5JWLIDR9Ft5IYpvRHNb7ZtLgy
+         do/scSeWnl1i7viJHDn9NccHz9hwasQ9Bo7Ku0ym+A513zfbD91bqhHIGPJ0rB3Ah6Ut
+         U+zf0fL9II+ehu6NA6BZ1URyvijQOcsUlXHnOuZDwIBg1sGknSdT//J5TZmNFr5O7wvI
+         +ra8jeXqlS4p2QKdoWzNFxxJWWq8PGnecKGKJAJ/jNhvHHKkoGv7v/h1eJ1sWyl72e4c
+         A80Vs5AQnfqPr/I7A2gG+nqhtxNK+2t8+gih25TOj/ihYQCpaTfeSasOUKB2rZ8h2EK9
+         YcXA==
+X-Gm-Message-State: AFqh2kp+NMPjb/mak3GB/emNNrvj46dGSPMaEs+feT49Rby97fq84SWu
+        z64JB6AtTiMCkQcrHUsF/g==
+X-Google-Smtp-Source: AMrXdXtrtMdthMi3WcbT2+KHvHkH22ask+SpyijR4WuOxDKY7bn2nv2wDl5pydtTKRPFzdumN9/Y9g==
+X-Received: by 2002:a9d:3e2:0:b0:682:65f3:c437 with SMTP id f89-20020a9d03e2000000b0068265f3c437mr13384664otf.22.1673987018555;
+        Tue, 17 Jan 2023 12:23:38 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f8-20020a9d5e88000000b00684c9c77754sm1593341otl.69.2023.01.17.12.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 12:23:38 -0800 (PST)
+Received: (nullmailer pid 3646579 invoked by uid 1000);
+        Tue, 17 Jan 2023 20:23:37 -0000
+Date:   Tue, 17 Jan 2023 14:23:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Faiz Abbas <faiz.abbas@arm.com>
+Cc:     robh+dt@kernel.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alsa-devel@alsa-project.org, Deepak.Pandey@arm.com,
+        Anurag.Koul@arm.com, kuninori.morimoto.gx@renesas.com
+Subject: Re: [PATCH v2] ASoC: dt-bindings: simple-card: Document
+ simple-audio-card,plat
+Message-ID: <167398701684.3646521.11165836455939789490.robh@kernel.org>
+References: <20230117061808.18422-1-faiz.abbas@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230113063937.20912-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230117061808.18422-1-faiz.abbas@arm.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 10:39:37PM -0800, Randy Dunlap wrote:
-> This beginning comment is not kernel-doc, so change the "/**" to a
-> normal "/*" comment to prevent a kernel-doc warning:
-> 
-> drivers/misc/pci_endpoint_test.c:3: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Host side test driver to test endpoint functionality
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Cc: Krzysztof Wilczyński <kw@linux.com>
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Cc: Kishon Vijay Abraham I <kishon@kernel.org>
-> Cc: linux-pci@vger.kernel.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Applied to pci/misc for v6.3, thanks!
-
+On Tue, 17 Jan 2023 11:48:08 +0530, Faiz Abbas wrote:
+> The simple card driver already has support for a simple-audio-card,plat
+> property but its not reflected in the documentation. Add documentation
+> for this plat property.
+> 
+> Signed-off-by: Faiz Abbas <faiz.abbas@arm.com>
 > ---
->  drivers/misc/pci_endpoint_test.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v1:
+> 1. Updated commit message to indicate the property already exists
+> 2. Removed redundant example
+> 3. Fixed formatting issue found by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 > 
-> diff -- a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-> --- a/drivers/misc/pci_endpoint_test.c
-> +++ b/drivers/misc/pci_endpoint_test.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> -/**
-> +/*
->   * Host side test driver to test endpoint functionality
->   *
->   * Copyright (C) 2017 Texas Instruments
+>  Documentation/devicetree/bindings/sound/simple-card.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
