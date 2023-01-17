@@ -2,274 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76B966E6EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4D066E6E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjAQT0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S231253AbjAQTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbjAQTQP (ORCPT
+        with ESMTP id S234182AbjAQTOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:16:15 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636BD521C9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:29:53 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HGSYkA020285;
-        Tue, 17 Jan 2023 18:29:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2022-7-12;
- bh=Oh8j5JfAQkUPI8oYF+iUmi7/QCok3tXE7mRi6Smqwf8=;
- b=eB8gVcxXjGhHjIYF/fmbKrlYRjJp8nBpR2ttqkOHTQfUXoPKjGi9qumZ3s2GfagiK5Sj
- jDpLw+2xjkb0bGNCgBGBhfcQLT0KzteQpgDGnzL0lKsvlsCgraYo51k7nENTTzg1kqLL
- Y60EKHdtUx/GS1z8irqi1WqS0b12Ru0lppPBTl0NuUXyXjc9jA+Z8m/jvXKCdgZ0xPXV
- lfWDu9XsrWxFM+5abEefaeQku0Ot5+ndITzHCjazxx9BGQcV5cH+yY20ay00IPm780t9
- qnj/CtdDWk3fp3f1/oIGswoAn7aRjqPsC57zzCBtxT9u5eo/5OfTC97h6VewalY67Cr2 bw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3jtunjk5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 18:29:25 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30HI4t5E015217;
-        Tue, 17 Jan 2023 18:29:24 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n4rq4preh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 18:29:24 +0000
+        Tue, 17 Jan 2023 14:14:11 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D778C45BCB
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673980162; x=1705516162;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Uv9SI4nUVi9GnAZlQJAVruTR0kAH6Tiav9cr74CCGwg=;
+  b=KosLKTos2h3osPU9B9cqP7UrSJaeWH+0ELdoS4jsBp0JTAEe48pvZwtz
+   PGeedlqEQ9Ig2fcDborigUv2kqqWvjiVZLTKAMN9NBqJA+sQttaBBZb95
+   zwQ0saQ8gZwFxjUZ5TmwE4ApAcNmtbz/dKXIJ9E5F83/7t9C/7HYVQxZG
+   JAjPmxQTDje2L/XWQIvu3/nu4QGp/3qVn+kyXFAC+MEl641lIrVq3dJSa
+   cicUGg7oQgJLg/PEr+5pbvInzasm6aSJcHxBnFJC4q7dlDYmrpx0jRtDY
+   TXTJyGkVELSKilIQSyNfs8fyNhKNPvGYmRmM00KjzGBJnmVjy9xrmNPxK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="304460716"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="304460716"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 10:29:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="783341844"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="783341844"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2023 10:29:20 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 17 Jan 2023 10:29:20 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 17 Jan 2023 10:29:19 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 17 Jan 2023 10:29:19 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 17 Jan 2023 10:29:19 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HPYsWBhKRBI7+TZ8aTsRAdNdTIj99SivgVo0JQiibyW/7X8N/CAKrcpN9Fg9APE+k86YX2U2iAeywbZ8QTbFFH6oBV3sbhAyM9GJYo3sApa9ozS1dxQtncZve4GM6bmFbt2ftwIwJoUj03irNW/8gaJRBJUKMvO7uD2mCD24b6PFdeg9Y5JEUP30hhrBLoNsEADeCWVZ6wk5OEaEBjjNu5ffn3Pdg3986XRcxOu3CRa/WbAv6K/9OSWAcf80bLE24TJNzxD0s69wtA8B5D8C5DcNA0gBrUkUBjSK051x0UJVi+2ZEqQPDTOOPzm54bP3pehUpZK3fM8CvRLK8NGFaQ==
+ b=YosfcQM0u+53wpAHXGH8ds14lHVwIwfx10JCyvhkdf9cq9POyV0Gbu4Y/Pu8cPJSj9nMUWddGnoPeJ7v5wJVhvZvfLSb2TLG3u7E9ED+el3thUdmVxwBojwGuhK6hmPjJ9aoL/stkV0DQ6n6JP7cWUi3IibC6V0MtljEZXkyDwD3kLgvmLQdPCwCBkJN9V4vc4uZW5tMok0TTeC4y+h9Hsx83H0OHLREplwtnpjMCCyg5PSuvEPZ2EshROeKlRbcEQlUax+hhbJGR5rW2upcdHBq5nA3ocSpFl0t7OUFS2tqa5S7jCNbdtTLhL8Q7AhJwYWqcH6jd/63Pyn2n0SPOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oh8j5JfAQkUPI8oYF+iUmi7/QCok3tXE7mRi6Smqwf8=;
- b=hcX1ce0cTsUpa5+bdYZ6uwY9YeT56vST7A6MfR+aPQga+bNn98ZtmExNGqkt0iQT4HS/35ojVqWrrIlllmiFxKkXaN4pfjxUEQNjLtt/Co5BR3AL4UJD8x26V/IR1GBz3uoyBvla+cUCGC5wwY3E0/kUaeEquIfTJF8lIfvapiTVf/mfBBB7/6ajM6iSeBK/XpClt/KJ6wQi2l19hBECepQnpCWNn8Mu9GAUZdCQwYL+bZKkjdARGVaEsmuhNhFzoRtFDIDFDuz3MYHBnBxRdP4DMdsWUeUWBTU7ypxJozLsodbxYT2Bbg2wiIzb5femCNN7aosi1CsU+Zi/Goe1lg==
+ bh=sLB+08cmR87sRTDQjYXqkruSldvbcUnwxBU8jdCZp58=;
+ b=YDm4/WlOWNE3xG6FE6XOWkU6ZL/sIkN46d2VsN3szHa7fRLMsAcbdCbgWCI9GQqDXr5qvnMlb50L7o7rpHn28wHM61Fe8cjcEka0EZ+i0NTDSeUz6/JIhlVgjJJMnzi6o7ZjTk6ksa9fuGrsQQOjTZ6bMGP6LX99+lbWjfK9Y9+dTiJZI20H0gwAf/ePRipYvXwUZIFGTODsY4HhJ4TxNKEHhyU99E3pTCEoVht4YOuB0LTJJy7dauRn9vNdcYvS0maTTz5mxem4cGw69+eXYrbCCndxImYltoohcLVakv/uffvEfu8ZRJQ32n3TNuDU81gOAZfQMGt3JF/jb5q9nw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oh8j5JfAQkUPI8oYF+iUmi7/QCok3tXE7mRi6Smqwf8=;
- b=ApU3DH030b6rm9cj3saNJ9xNKqQdqedLl4zpAduX+Qk1caDu7kE7u+Y1CZWZQSrYWJ3ZhCrjOclfuU5Ut2w+qt1G85uXxTyt033513V6MOvOh2zKUMhUeCx//UZc5SV4BJwBbN7vh8diyRhQmPnN8sBDsr+jMku7BjPUM6dEszI=
-Received: from DS7PR10MB5117.namprd10.prod.outlook.com (2603:10b6:5:3a6::17)
- by SJ0PR10MB4639.namprd10.prod.outlook.com (2603:10b6:a03:2db::19) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by PH0PR11MB7541.namprd11.prod.outlook.com (2603:10b6:510:26d::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Tue, 17 Jan
- 2023 18:29:22 +0000
-Received: from DS7PR10MB5117.namprd10.prod.outlook.com
- ([fe80::93ca:e22f:aa6d:94d9]) by DS7PR10MB5117.namprd10.prod.outlook.com
- ([fe80::93ca:e22f:aa6d:94d9%2]) with mapi id 15.20.6002.011; Tue, 17 Jan 2023
- 18:29:22 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        naoya.horiguchi@nec.com,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH] mm/hugetlb: convert get_hwpoison_huge_page() to folios
-Date:   Tue, 17 Jan 2023 10:29:17 -0800
-Message-Id: <20230117182917.73729-1-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0188.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::13) To DS7PR10MB5117.namprd10.prod.outlook.com
- (2603:10b6:5:3a6::17)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Tue, 17 Jan
+ 2023 18:29:18 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::16c0:1ae3:13ee:c40e]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::16c0:1ae3:13ee:c40e%6]) with mapi id 15.20.5986.018; Tue, 17 Jan 2023
+ 18:29:18 +0000
+From:   "Yu, Fenghua" <fenghua.yu@intel.com>
+To:     James Morse <james.morse@arm.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
+        "lcherian@marvell.com" <lcherian@marvell.com>,
+        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
+        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        "peternewman@google.com" <peternewman@google.com>
+Subject: RE: [PATCH v2 08/18] x86/resctrl: Queue mon_event_read() instead of
+ sending an IPI
+Thread-Topic: [PATCH v2 08/18] x86/resctrl: Queue mon_event_read() instead of
+ sending an IPI
+Thread-Index: AQHZJ3hXXNy7ItZKE0GbLj+Jq0J8EK6hSgIg
+Date:   Tue, 17 Jan 2023 18:29:18 +0000
+Message-ID: <IA1PR11MB6097ED9919B408116EFE161E9BC69@IA1PR11MB6097.namprd11.prod.outlook.com>
+References: <20230113175459.14825-1-james.morse@arm.com>
+ <20230113175459.14825-9-james.morse@arm.com>
+In-Reply-To: <20230113175459.14825-9-james.morse@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB6097:EE_|PH0PR11MB7541:EE_
+x-ms-office365-filtering-correlation-id: e5d2e54f-44d6-4766-476d-08daf8b8beab
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GdBiX6tA+YWsIXDPhCs5d0emR++pt0upZsUvViulSvw02ijst3hF28Yu3TPyEmhencOLYQb3V3Nnt1fVTPiD7sd1BQS0FUIi0wmSwB9VjWSBtWHcYA5Lr+HlYr97BE5/Zi0Qt/YTI7+qYLIg10EbSEWBzTCV7WeQxwymOeNBUYNGII9pSrzNW8VNgsTS4MTUf/Gi3m1yc0sdvxGNpwdRqAq5ney4w6tlPQYJhQ85jqTCJXFH64bLgZKVDNthiFZBbzA6d2kRoVLIdXu+5d+aNeTkngqudIUyH8we6vGm5FtrOnFkRacs9mBbJ+ONIU/XhlfkIywRoq6gD787xXGaGPm/lB6wwvFIN8o/bBbtK1qsH+kGLTcpQxV9tlq5Qvxd4i+/y11MLDFiAGMQQxigYDInaTLMt4KVv0aXr7zXoRvLxN9Tz+RU2K3rljC5ojyj5i0VtHARdIKQd18Kxky4u1OB4QP5E8qIxwCI5F1jjyGD7WH0n4v59JerhAnjZc9N87z+4Rqkcdv63d4n/xaYCVopggkH8IRm2raALZ/f3KYZW9Vl8ORzIyL9NXVpzFojDjQEOg/zIzkg5osqlpD50gEW/ttpBTNsCc4Ak4nwhSk5w+/PPGTgAn9KlZM0yRzsZPoYJwYKh6k27TeQ6Y7979GFy6EDf8DNncJ4R3jhKLHmvQxDZDz+H94sBKnHQ7iwUfQPAuIyrZlpHQknRKgwYw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199015)(83380400001)(55016003)(86362001)(7416002)(38070700005)(52536014)(122000001)(82960400001)(2906002)(5660300002)(8936002)(38100700002)(316002)(8676002)(478600001)(6506007)(66476007)(9686003)(71200400001)(26005)(186003)(64756008)(66556008)(7696005)(76116006)(66446008)(4326008)(66946007)(110136005)(54906003)(41300700001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FmSknXDMsy92MmBkVyAifNmrQ+uVyw1JhFchfctzToLX+Jogvj8sGgRo+Q4I?=
+ =?us-ascii?Q?fAzhEnCzOgTJBUe6uKTuaj0ZYrQWyfnmGgrV+RoCsqXqaSFxVD15ml548J12?=
+ =?us-ascii?Q?5SVFhBupreDlX+YdU5bbXeTJjmHMzuCyphuJzyvnVZWScJ3aphQzMNUpFWsV?=
+ =?us-ascii?Q?oAZLU4ZkEIWOuPZJ9DCAd0717UeRlbHWKol/iAXoEYgxjSIc+arWOCOSWEzY?=
+ =?us-ascii?Q?8bQdaY/pSkh19SXrcvfJFKLcyWtNjS3Vdp40KzK8M+8XoyEBUGCmEgEvbkvQ?=
+ =?us-ascii?Q?9uY8hEjwiXngrZTAFu47RsKlbIhVjeTnoQRpDqXh8ML8fJr+acMjYbBX9wHq?=
+ =?us-ascii?Q?8XyWK0OdmfurxWBiEPQ04NAemC4Oy3HSoF5I+DDc3B9ibwWCYTFgRKNOmNet?=
+ =?us-ascii?Q?z+Nodpd4NGdoyOrR+IIKWD2KGxBkrbu3/hRm2bn6067w7DzNUOAWisHU4v0h?=
+ =?us-ascii?Q?AFPeiFxRbH410IUKQPRNuDP7YuiHKd/nZZJGzE9wUphAHDcMVZJpE6MgKEoq?=
+ =?us-ascii?Q?gYp0nx2xwY/p9nwDDc2YlStd39ElYBGtPaM/QDcOvuSV6hZXbg0GhJ04z8zo?=
+ =?us-ascii?Q?n+mI4pqT9Gi9h16EwKW5AWykganFhGcUCKV2dF7c/uw7d9pp1So92EH4mMED?=
+ =?us-ascii?Q?vZ2Ftx9YKTZ8vhHzPMcgxmB2bug/HiUsMWfH1SJ7Ow+QMiHMQA2lJmlbSONV?=
+ =?us-ascii?Q?mBk27nK6d9RiNYq5q0qT1vBUqbujjzWPYXQ6aeTkPoWkPzGoxljzZdUPJ3xO?=
+ =?us-ascii?Q?pqz6W9cqKcLEoTTr9/s5nZ5lvv1Ll2m2WlImdrCVXOTt6iLbOMnQL66buh98?=
+ =?us-ascii?Q?wj8jmmKnUDUfAXEVktd0TMN9/gx0Q9XYa5/EXRBWynaY/O1tekoFgOndr/zB?=
+ =?us-ascii?Q?HZzM7ZKV4+/EgyLNSDwjDr3pvLnYBA13a21g1edAnWx1SBuORLftm0rHmnEY?=
+ =?us-ascii?Q?y51fSaEBp4SemMzEDC5msQFUUxOGvMazV6HmXRpVUlvR6m1Cx90E8B2+asl4?=
+ =?us-ascii?Q?f0/ERNNlh6avkMiqH9QJAJgchQyqBQBc4GNDdHyXqnd+t10z/P/rmQeCv7zF?=
+ =?us-ascii?Q?D4gKl1surQeh+72T3DwhXhX4BZzXlj5ng9i8Lfb94MnhJiEYKs7mJ/4fDAOg?=
+ =?us-ascii?Q?72lf52jgAUWgCet0YSDKQ3HXpA88LNxhCvbVk/B6R30TAVf2g5mb4c8Ta/DX?=
+ =?us-ascii?Q?Ce2zIRnqKQg55Z2ODh3pUFKE1hVk1Bif+pPoWBQu4CQK4JOrQ8I5M7Lck5Ea?=
+ =?us-ascii?Q?4vSBgzZ8Yai1pdzxcz8COqd17FXgMU1JNhl1yxqC502v4sJwFesPNUT0OU1k?=
+ =?us-ascii?Q?TJabQIMidzchGKqf5enKM9Vu9dOnrHMFdRr8zALOuFqqnkVWn/WMhARGsWaF?=
+ =?us-ascii?Q?xwa+H4eE9vWfSDh7eJYreqB8Jx5ibT81uOwdb4OL9Zte7Zz8+JOzR9CVqNu7?=
+ =?us-ascii?Q?ab4pAAnI5kXU4sPRnRW5QuwAqIbkgE+q0wGPhupGPjrih3u0jpcoyCsI9tIE?=
+ =?us-ascii?Q?gd8K19k1NLFqg1CV5rEep+Ynwr96ZTs5nSWlK18AiXQ1yi7gb0t7+QHBH29J?=
+ =?us-ascii?Q?ZTLh+d7q0RZ+lyBlU1A=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5117:EE_|SJ0PR10MB4639:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7bac1b41-f737-486d-cb1e-08daf8b8c0cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ilEnUfKNzbwR04Q1QMI57w0VL3Rl1CHnLPmZkpgRWrsfgsSrg7c8KnfEj4o/aZgqv2EdGd4z+YP/wUaiHidCmZiL9JL8qd5qWcyZ0BmeP9jdSwYo6SdfCb0+1GuJJMoqlWJdUs66a9yioc22sXJlMSPpUG73twHL+ZgiIkas6fobG3yFf9KfJoRhlAPK+kgPwelOcMXQDuMtRulapJgYXssjq3KRwNQEIDCpo28aehGW2Se3AThyOkTUe3Sr9LVXU/7JtABGmB+kfjdEnpKSeUKKdP2j2BB217sG2bJa0OUpGvPapZ9Eivmdb/BvZGgJPqfySNRnueBVMCYJXJQX/THL41Uu0VwvdExtVJTfuAJVVR/EBInQYBvO4szdUmWhPYWInA6+kmrBFjpKiyMVznodApNsj9hwYHIKJdMhZzgjbFrW9aOe5qGNjUuuxwcsxL56Nlh4paOTI+r6yoHJ+ckKXPdUpKLnCP5EHQLoTkpUSx9mUd+dQ6s5TwEm3EIlF0iBYdamz2sV3h0bK+dp0K7X8qZISLzU6sX3ygV+UIFZ2hHAQGFFAgwx9eVuVIV7mdKbQJ6nViy64Dt9OUz2kGV6kKUj4iWG6JH/aYWITxfMXbnxklmeYvHYEo1ZGPq8IawtHDB/tiCzbgxEnoeYZnqKcdXeAuAOMdL1lS1geBt4a+7F0fpp0wLfMAaT5x3B
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5117.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(396003)(346002)(136003)(39860400002)(451199015)(38100700002)(86362001)(8936002)(44832011)(5660300002)(41300700001)(36756003)(6666004)(66946007)(66476007)(4326008)(8676002)(66556008)(2906002)(1076003)(83380400001)(2616005)(26005)(478600001)(6486002)(186003)(107886003)(6512007)(6506007)(316002)(14583001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8+VAxGnwfpeUxiM2LMYWKDGEkrcq5AMjE1AukGOh5FXLRmLP3ga77qI1sfk7?=
- =?us-ascii?Q?laJ1hVbuN40zHY6jpQqWpyG9MKqp19GLAPEcTHoev9Pg/1xVElsCa6IAX26b?=
- =?us-ascii?Q?4gryAitidfoxAIHumkBOg2/t8PqFfi1+i5gAr/Y3VjDSiNwHynLoL5rMWJLk?=
- =?us-ascii?Q?dSsc5hrqMCEJB7mdy/EjBrlBlRuSgY8e4/vSM+syzuWqsaKb+IzRL/+4+m1I?=
- =?us-ascii?Q?ePZI/Ioqhyi25nESNOhk56bTbzLwT1A2Q+P4bMJoj9aIl11DLnV5d6VoFJll?=
- =?us-ascii?Q?FGiq6jtQnk2VIPCWiV06pGR4OeFqNzKFePKVNFMO5eNFH+/TXPzawVqIG+OF?=
- =?us-ascii?Q?HUKKqP2L26yiYA6tYDDl+VzUnIB74uwXtEpC0OCzw1Ers7zVj45D+f3mVJZR?=
- =?us-ascii?Q?SyPrECv/dMmjXPXEOMRdkb3qI0U7LnyERsaCVpVyG1WhhrxVFwIUa/iHo65z?=
- =?us-ascii?Q?L4FLxFO1Lrkl7lT6guwb2QaM6ZEsaRiZKYA/TzpOeF7WCy1H/+k5mHZXjvRo?=
- =?us-ascii?Q?ZPY+2LRQ/jVleAAiBXha1qgnXLspL9fcXlMkXTVDtzsdKD4iuW3zzDKfEyYa?=
- =?us-ascii?Q?7U92dAZYJy5yaKC92GZV84wcgGKtG+1qml9VFDg00/Dj8s/TTpwtTvp2POm1?=
- =?us-ascii?Q?uP6vppz2Znnp2xe+B3yzZLlPKVKyKw5tHkyrCaTx9jnYBAJkvEsFEyV8+3tv?=
- =?us-ascii?Q?P6V+FUGkMKwlOK/TT0x0qWpra2EJKCtFPsEsttWv50iW/tosskf5LCbV9tog?=
- =?us-ascii?Q?SyMLg8MnnlG39Ml4ZX4+afiO/iaXc2WtFpGKR0u/mHt6VRFuOFMvCe2cTQAv?=
- =?us-ascii?Q?n99a8R4hCxym2MzgsUzIGq1Zc+02WpQC60hw7bqcIBWWVd68SrszC7brO+ca?=
- =?us-ascii?Q?qQG3+5VI4vMUe4IjWNi4YI6yju6ZiXE+xACcHAcT7ISZqkI0yQ3NQbsD9fTE?=
- =?us-ascii?Q?HonKaD5ffjO7X5t1vkODZ4V+WrO7raHxo/Q5tmNkVq25nNL2VX01eSClTEmP?=
- =?us-ascii?Q?MhP6TMRiqJfdZzAIYbFZq3w87YD/sjsb8QOy8n43gwxPvd7YhQFq9XS7DOMf?=
- =?us-ascii?Q?2XWpJsz1ENsitA6o6fQ/V4/QUbd5wd3N+fgW5qbiLU4xUGZZ1gZPsl8l8GWK?=
- =?us-ascii?Q?olHIx/0G/OeC4FFqTCJFOfkEX/D2n+7MLy8yRpyfvAiIjpqCVg242u6HyowR?=
- =?us-ascii?Q?YSjS1AEPTU/YaOnwZcCMrcsizJodtbDyQh3e/D9p4XUg7VDUpjipQJH968y5?=
- =?us-ascii?Q?++aDi2p7lSyuBoepGx6PUlFVXibYCgE2GgBJAWYFOFTl+xaR1mjk0XUkrfUv?=
- =?us-ascii?Q?6y0JssYQq5vK81jaodRNBr1FE9pG1BSZtBevTrg5OqK/nRRz6qAiVm80oOmZ?=
- =?us-ascii?Q?ReIgzs/rDjm372Fh/JSsFCpyzhEAybrrcco6fU/PKS4+YpS6OoPTMBmMOvt+?=
- =?us-ascii?Q?U9lUqIghVakzwTmJHH5F7Wi1X/zSEKUVLW8uxDPcG8Qz9qCCOYK8lwuyOz7G?=
- =?us-ascii?Q?qLw4rJnjUoDhdK4irXxpG1jPVGsAhmxcmumxHdDLvkAkxZ/jMZ9XwB7pNNq2?=
- =?us-ascii?Q?XseEkb1G4xP0bC4K63gkrCZyPzsDnHXh3bA/0SSIRYRR8HNw7cuGQJ94KGR/?=
- =?us-ascii?Q?Ig=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?JtJ3ZoHGoREZIVT7YU8hQbmefmPr9WPrOCxDLp27Dy9VMVr4CYjVDbtRZHvs?=
- =?us-ascii?Q?R+jCFL1mj2DRWagVLP4LPLuqzh0Ri8ywZ5et6ziMS1yUWtRfW9jNY0R64KeV?=
- =?us-ascii?Q?iFX4RZS4XjfU624pXPUrg8q9yPumXTMZnDdUM/EoLjFuF0slmCwKMI/v3ldJ?=
- =?us-ascii?Q?mXHKHZw27Bqp6okpCKM5CSTVwKv3oRQKQzS2vki3IuK+SOBFHRzx09GzM7Dp?=
- =?us-ascii?Q?5tMKTNiG3AqIubrdqe+8UIRHqzJ2WF1ClOsdKnKVYRSCP4veK0X0pK0Bb0g6?=
- =?us-ascii?Q?jDldHmytVFM6uYjMldSeGiZdTjhBMsR1p9QsZ79O6twgXZdEv8mLNxyCE5f3?=
- =?us-ascii?Q?hqIm61t6gecvaDzCZYZevxItQm9QKbCuH7/3pSUl4LHldRfoF2SqiDjmSaR0?=
- =?us-ascii?Q?hu/8d1SF9w8CMqbTQ/1u+TtEaHQ0UM8ZNrfbXrpNZkAknLqPRN72KaGUeaSG?=
- =?us-ascii?Q?a1cPiqjJchzEmpWAjKR1MssLBZYBDY+B3JiGciAqwU3tLLny4O/Smj381lfK?=
- =?us-ascii?Q?AW7sxh6UISSTaOkQ2Y2AFKmEoIxbJIjG9RVbuzHo4NZeJFnWVdaOTP4RNlKy?=
- =?us-ascii?Q?2cU5RFmQHLjPJOQld0XS9FcsgzxWEqJBR8pn/3s0qr3nCIOn/QJ/h8e/hECd?=
- =?us-ascii?Q?K6jFiebCNIAZd9BsjqRej7DSBa7w+alH3Sa1g3k+p3zx5CacqvP0WAMfs2Z3?=
- =?us-ascii?Q?xglXhMJKlTnNIgksHM8fkmBNLEoCrDZhVVx35WVcsahOpSJpimLBQ2JhBulJ?=
- =?us-ascii?Q?sevOq0t4RK4vYWyOpVAwZOYHOeVAF6zA9TyCm6eUlu/tf9nmqcuomkXoehtV?=
- =?us-ascii?Q?w94ui2C/jXAmgN/U3uOT9KDrRidVMO+aTXiYNE16hyRO2F+QM44JZJm5Mx3d?=
- =?us-ascii?Q?lLA05HE8ZegUVne2HET7RwLHsHZ6K0JCx3f1CgfhYmqcQ2+Z5rnlHu2VdvG5?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bac1b41-f737-486d-cb1e-08daf8b8c0cd
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5117.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 18:29:22.0929
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5d2e54f-44d6-4766-476d-08daf8b8beab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2023 18:29:18.2444
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x+BHIM08+V3G/mOCaCZ9TWEEaJbZFshJ20skCuTUbkoQKvBM8JUx9jjbBNh8sGTetk5RyGM8QTKz2y+evQUZYU/AR+sp+IcRpE854ZjDNGk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4639
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_10,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170147
-X-Proofpoint-GUID: 8pqPNnBuN-3T6ifhF-0wjLJ0AFASGF2k
-X-Proofpoint-ORIG-GUID: 8pqPNnBuN-3T6ifhF-0wjLJ0AFASGF2k
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MPB+eaHr4X0AAtoYLw+NPMwmyXBKhbwGk1RxhpMhKRbN55wfbelSPBaeiusJNv71lZLLpQbMG3OUWzKd4+Q0jA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7541
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Straightforward conversion of get_hwpoison_huge_page() to
-get_hwpoison_hugetlb_folio(). Reduces two references to a head page in
-memory-failure.c
+Hi, James,
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
----
- include/linux/hugetlb.h |  2 +-
- mm/hugetlb.c            | 10 +++++-----
- mm/memory-failure.c     | 22 +++++++++++-----------
- 3 files changed, 17 insertions(+), 17 deletions(-)
+> x86 is blessed with an abundance of monitors, one per RMID, that can be r=
+ead
+> from any CPU in the domain. MPAMs monitors reside in the MMIO MSC, the
+> number implemented is up to the manufacturer. This means when there are
+> fewer monitors than needed, they need to be allocated and freed.
+>=20
+> Worse, the domain may be broken up into slices, and the MMIO accesses for
+> each slice may need performing from different CPUs.
+>=20
+> These two details mean MPAMs monitor code needs to be able to sleep, and =
+IPI
+> another CPU in the domain to read from a resource that has been sliced.
+>=20
+> mon_event_read() already invokes mon_event_count() via IPI, which means t=
+his
+> isn't possible.
+>=20
+> Change mon_event_read() to schedule mon_event_count() on a remote CPU
+> and wait, instead of sending an IPI. This function is only used in respon=
+se to a
+> user-space filesystem request (not the timing sensitive overflow code).
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index eed1beed23b6..076bb8c037af 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -171,7 +171,7 @@ bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
- long hugetlb_unreserve_pages(struct inode *inode, long start, long end,
- 						long freed);
- int isolate_hugetlb(struct folio *folio, struct list_head *list);
--int get_hwpoison_huge_page(struct page *page, bool *hugetlb, bool unpoison);
-+int get_hwpoison_hugetlb_folio(struct folio *folio, bool *hugetlb, bool unpoison);
- int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
- 				bool *migratable_cleared);
- void putback_active_hugepage(struct page *page);
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index a5340a807874..7a7422a43538 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -7284,18 +7284,18 @@ int isolate_hugetlb(struct folio *folio, struct list_head *list)
- 	return ret;
- }
- 
--int get_hwpoison_huge_page(struct page *page, bool *hugetlb, bool unpoison)
-+int get_hwpoison_hugetlb_folio(struct folio *folio, bool *hugetlb, bool unpoison)
- {
- 	int ret = 0;
- 
- 	*hugetlb = false;
- 	spin_lock_irq(&hugetlb_lock);
--	if (PageHeadHuge(page)) {
-+	if (folio_test_hugetlb(folio)) {
- 		*hugetlb = true;
--		if (HPageFreed(page))
-+		if (folio_test_hugetlb_freed(folio))
- 			ret = 0;
--		else if (HPageMigratable(page) || unpoison)
--			ret = get_page_unless_zero(page);
-+		else if (folio_test_hugetlb_migratable(folio) || unpoison)
-+			ret = folio_try_get(folio);
- 		else
- 			ret = -EBUSY;
- 	}
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index ee8548a8b049..7b53fe287ea7 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1257,28 +1257,28 @@ static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
- 
- static int __get_hwpoison_page(struct page *page, unsigned long flags)
- {
--	struct page *head = compound_head(page);
-+	struct folio *folio = page_folio(page);
- 	int ret = 0;
- 	bool hugetlb = false;
- 
--	ret = get_hwpoison_huge_page(head, &hugetlb, false);
-+	ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, false);
- 	if (hugetlb)
- 		return ret;
- 
- 	/*
--	 * This check prevents from calling get_page_unless_zero() for any
--	 * unsupported type of page in order to reduce the risk of unexpected
--	 * races caused by taking a page refcount.
-+	 * This check prevents from calling folio_try_get() for any
-+	 * unsupported type of folio in order to reduce the risk of unexpected
-+	 * races caused by taking a folio refcount.
- 	 */
--	if (!HWPoisonHandlable(head, flags))
-+	if (!HWPoisonHandlable(&folio->page, flags))
- 		return -EBUSY;
- 
--	if (get_page_unless_zero(head)) {
--		if (head == compound_head(page))
-+	if (folio_try_get(folio)) {
-+		if (&folio->page == compound_head(page))
- 			return 1;
- 
- 		pr_info("%#lx cannot catch tail\n", page_to_pfn(page));
--		put_page(head);
-+		folio_put(folio);
- 	}
- 
- 	return 0;
-@@ -1347,11 +1347,11 @@ static int get_any_page(struct page *p, unsigned long flags)
- 
- static int __get_unpoison_page(struct page *page)
- {
--	struct page *head = compound_head(page);
-+	struct folio *folio = page_folio(page);
- 	int ret = 0;
- 	bool hugetlb = false;
- 
--	ret = get_hwpoison_huge_page(head, &hugetlb, true);
-+	ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, true);
- 	if (hugetlb)
- 		return ret;
- 
--- 
-2.39.0
+But mkdir mon group needs mon_event_count() to reset RMID state.
+If mon_event_count() is called much later, the RMID state may be used
+before it's reset. E.g. prev_msr might be non-0 value. That will cause
+overflow code failure.
 
+Seems this may happen on both x86 and arm64. At least need to make sure
+RMID state reset happens before it's used.
+
+>=20
+> This allows MPAM to hide the slice behaviour from resctrl, and to keep th=
+e
+> monitor-allocation in monitor.c.
+>=20
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 7 +++++--
+>  arch/x86/kernel/cpu/resctrl/internal.h    | 2 +-
+>  arch/x86/kernel/cpu/resctrl/monitor.c     | 6 ++++--
+>  3 files changed, 10 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+> b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+> index 1df0e3262bca..4ee3da6dced7 100644
+> --- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+> +++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+> @@ -532,8 +532,11 @@ void mon_event_read(struct rmid_read *rr, struct
+> rdt_resource *r,
+>  		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
+>  		    int evtid, int first)
+>  {
+> +	/* When picking a cpu from cpu_mask, ensure it can't race with cpuhp
+> */
+> +	lockdep_assert_held(&rdtgroup_mutex);
+> +
+>  	/*
+> -	 * setup the parameters to send to the IPI to read the data.
+> +	 * setup the parameters to pass to mon_event_count() to read the data.
+>  	 */
+>  	rr->rgrp =3D rdtgrp;
+>  	rr->evtid =3D evtid;
+> @@ -542,7 +545,7 @@ void mon_event_read(struct rmid_read *rr, struct
+> rdt_resource *r,
+>  	rr->val =3D 0;
+>  	rr->first =3D first;
+>=20
+> -	smp_call_function_any(&d->cpu_mask, mon_event_count, rr, 1);
+> +	smp_call_on_cpu(cpumask_any(&d->cpu_mask), mon_event_count, rr,
+> +false);
+>  }
+>=20
+>  int rdtgroup_mondata_show(struct seq_file *m, void *arg) diff --git
+> a/arch/x86/kernel/cpu/resctrl/internal.h
+> b/arch/x86/kernel/cpu/resctrl/internal.h
+> index adae6231324f..1f90a10b75a1 100644
+> --- a/arch/x86/kernel/cpu/resctrl/internal.h
+> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+> @@ -514,7 +514,7 @@ void closid_free(int closid);  int alloc_rmid(u32 clo=
+sid);
+> void free_rmid(u32 closid, u32 rmid);  int rdt_get_mon_l3_config(struct
+> rdt_resource *r); -void mon_event_count(void *info);
+> +int mon_event_count(void *info);
+>  int rdtgroup_mondata_show(struct seq_file *m, void *arg);  void
+> mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
+>  		    struct rdt_domain *d, struct rdtgroup *rdtgrp, diff --git
+> a/arch/x86/kernel/cpu/resctrl/monitor.c
+> b/arch/x86/kernel/cpu/resctrl/monitor.c
+> index 190ac183139e..d309b830aeb2 100644
+> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+> @@ -509,10 +509,10 @@ static void mbm_bw_count(u32 closid, u32 rmid,
+> struct rmid_read *rr)  }
+>=20
+>  /*
+> - * This is called via IPI to read the CQM/MBM counters
+> + * This is scheduled by mon_event_read() to read the CQM/MBM counters
+>   * on a domain.
+>   */
+> -void mon_event_count(void *info)
+> +int mon_event_count(void *info)
+>  {
+>  	struct rdtgroup *rdtgrp, *entry;
+>  	struct rmid_read *rr =3D info;
+> @@ -545,6 +545,8 @@ void mon_event_count(void *info)
+>  	 */
+>  	if (ret =3D=3D 0)
+>  		rr->err =3D 0;
+> +
+> +	return 0;
+>  }
+>=20
+>  /*
+> --
+> 2.30.2
+
+Thanks.
+
+-Fenghua
