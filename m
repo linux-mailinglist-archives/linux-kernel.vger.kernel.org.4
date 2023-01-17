@@ -2,118 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FF366D7A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9D966D7B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236023AbjAQIMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S236014AbjAQINS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbjAQIMi (ORCPT
+        with ESMTP id S236011AbjAQINK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:12:38 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC492196A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 00:12:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673943157; x=1705479157;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4cVsvcHZOuTyOZVcrN6WYDuJRfsdenPtfqYqTQoPctA=;
-  b=K9QmwRtdLVSrnlLNGezuk0opEUkN8cRNqdx24sn8ozs8L9IY5J0e+0rN
-   PStSyEJ7txbVgQPE8vQVzWS/LeMLxCIvG1NWXCmgCOxOv9t0BTPqJ4HdZ
-   5cqXocc/oQBoAwprWBy45ZUB1zb++WVQzrIMNlWXX1gKunrZw/iPED3Dj
-   5+tEC4Z/wp/2Y29iTLkL0YKhkJoC+lCxM6giG65I6SMjSZlwrJBZ1rtcY
-   7L+1S5Y7hyGT8aTt8PPbn/gD5t5I2+nJa5LCI+5k7TlnLtrCgPJu7Oxis
-   dv24UTqtMJ2pB5fe6m+qriQLEoP/KoQgQtvMPv9WivDDhuN+/9GpCMB5t
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="389138227"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="389138227"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 00:12:21 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="801653024"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="801653024"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.187.178]) ([10.252.187.178])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 00:12:18 -0800
-Message-ID: <214ee67e-19f5-265f-63be-f8a6108d25d1@linux.intel.com>
-Date:   Tue, 17 Jan 2023 16:12:16 +0800
+        Tue, 17 Jan 2023 03:13:10 -0500
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1A51E9DF;
+        Tue, 17 Jan 2023 00:13:09 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-4c24993965eso405670997b3.12;
+        Tue, 17 Jan 2023 00:13:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+0mtXWox6f/NnnSWyWGALB0u87thJNG7mMvXmuR94U=;
+        b=jVv02TO18xqJueJSpfPMI3vdvKYnqgActdlCSTTeRg8tML0zLxVOASEEebExnVAFSK
+         x+AkVv99/gX/UpvsNEZV/L2sXJffKgXb344ullBC4R/TZNjw1d+EfgrSBx/XRnNgGu+d
+         ksxgeSHpxzsLArI1/pqAxFZTfO+wHi+QftoKX27TeaFt/e3lBok3DorzbJEVS+dRz07J
+         ochGDGZJUukytIA21gYpkMJ/yDK8YNZRXfIEJVMfKMNgkXfhc9qcWXdMXDnzgmW7Cz9r
+         +O2pm6RONrbOshH56w9qV0TVDQuHxsZ/zmfzSdTdRBnjE1hVYxMR3hXJZSBFFENrFnPn
+         4Pfw==
+X-Gm-Message-State: AFqh2kqCHVkC1cNzai9NHnaMY8Twyyt3YkhvxdZsHPrlbqRMJbi58/Be
+        LFCs0g8tqdXydGcPpdfqA30mkyqlUlh26xOUeZM=
+X-Google-Smtp-Source: AMrXdXtOYuSh6lqMHf4lazcedbF7svOOcUxTDPnHOBqqLdxedW9YyZez9tERqvrD0JpJAkJzmP2fnEf/We8Ybn+ecHE=
+X-Received: by 2002:a81:1609:0:b0:4db:694e:f2be with SMTP id
+ 9-20020a811609000000b004db694ef2bemr280998yww.390.1673943189034; Tue, 17 Jan
+ 2023 00:13:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com
-Subject: Re: [PATCH 4/7] iommu/vt-d: Add IOMMU perfmon support
-To:     "Liang, Kan" <kan.liang@linux.intel.com>, joro@8bytes.org,
-        will@kernel.org, dwmw2@infradead.org, robin.murphy@arm.com,
-        robert.moore@intel.com, rafael.j.wysocki@intel.com,
-        lenb@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230111202504.378258-1-kan.liang@linux.intel.com>
- <20230111202504.378258-5-kan.liang@linux.intel.com>
- <05624df9-bea1-5e95-55d6-02ac2d93c68c@linux.intel.com>
- <dd68ac33-f418-cc1a-9ce7-3cdc97282771@linux.intel.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <dd68ac33-f418-cc1a-9ce7-3cdc97282771@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112214015.1014857-1-namhyung@kernel.org> <Y8Fb45iZ5yp3TUDD@krava>
+In-Reply-To: <Y8Fb45iZ5yp3TUDD@krava>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 17 Jan 2023 00:12:57 -0800
+Message-ID: <CAM9d7cjUAOhME8jf=sRbzWFcaGssaXRhhL9rwkBxSLjdPaZg8w@mail.gmail.com>
+Subject: Re: [PATCHSET 0/8] perf/core: Prepare sample data for BPF
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/16 23:12, Liang, Kan wrote:
->>> +static void iommu_pmu_start(struct perf_event *event, int flags)
->>> +{
->>> +    struct iommu_pmu *iommu_pmu = iommu_event_to_pmu(event);
->>> +    struct intel_iommu *iommu = iommu_pmu->iommu;
->>> +    struct hw_perf_event *hwc = &event->hw;
->>> +    u64 count;
->>> +
->>> +    if (WARN_ON_ONCE(!(hwc->state & PERF_HES_STOPPED)))
->>> +        return;
->>> +
->>> +    if (WARN_ON_ONCE(hwc->idx < 0 || hwc->idx >= IOMMU_PMU_IDX_MAX))
->>> +        return;
->>> +
->>> +    if (flags & PERF_EF_RELOAD)
->>> +        WARN_ON_ONCE(!(event->hw.state & PERF_HES_UPTODATE));
->>> +
->>> +    hwc->state = 0;
->>> +
->>> +    /* Always reprogram the period */
->>> +    count = dmar_readq(iommu_event_base(iommu_pmu, hwc->idx));
->>> +    local64_set((&hwc->prev_count), count);
->>> +
->>> +    ecmd_submit_sync(iommu, DMA_ECMD_ENABLE, hwc->idx, false, 0);
->> What happens when emcmd_submit_sync() returns an error? How should we
->> handle this case? The same queestion to other places in this patch.
->>
-> The existing perf_event subsystem doesn't handle the error, because
-> other PMUs never trigger such errors. Perf usually check all the PMU
-> counters once at the beginning when registering/initializing them.
-> 
-> For IOMMU PMU, the error will be ignored. I think it should be OK. Because
-> - It's a corner case, which is very unlikely to happen.
-> - The worst case is that the user will get <not count> with perf
-> command, which can the user some hints.
-> 
-> If it's not good enough, I think we can add a WARN_ON_ONCE() here and
-> everywhere for ecmd to dump the error in the dmesg.
-> 
-> What do you think?
+Hi Jiri,
 
-No need for a WARN() here. If the hardware is stuck, there should be
-warnings everywhere.
+On Fri, Jan 13, 2023 at 5:26 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Thu, Jan 12, 2023 at 01:40:07PM -0800, Namhyung Kim wrote:
+> > Hello,
+> >
+> > The perf_prepare_sample() is to fill the perf sample data and update the
+> > header info before sending it to the ring buffer.  But we want to use it
+> > for BPF overflow handler so that it can access the sample data to filter
+> > relevant ones.
+> >
+> > Changes in v2)
+> >  * the layout change is merged
+> >  * reduce branches using __cond_set  (PeterZ)
+> >  * add helpers to set dynamic sample data  (PeterZ)
+> >  * introduce perf_prepare_header()  (PeterZ)
+> >  * call perf_prepare_sample() before bpf_overflow_handler unconditionally
+> >
+> > This means the perf_prepare_handler() can be called more than once.  To
+> > avoid duplicate work, use the data->sample_flags and save the data size.
+> >
+> > I also added a few of helpers to set those information accordingly.
+> > But it looks some fields like REGS_USER, STACK_USER and AUX are saved in
+> > the perf_prepare_sample() so I didn't add the helpers for them.
+> >
+> > After than we can just check the filtered_sample_type flags begin zero
+> > to determine if it has more work.  In that case, it needs to update the
+> > data->type since it's possible to miss when PMU driver sets all required
+> > sample flags before calling perf_prepare_sample().
+> >
+> > The code is also available at 'perf/prepare-sample-v2' branch in
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> >
+> > Thanks,
+> > Namhyung
+> >
+> >
+> > Cc: Song Liu <song@kernel.org>
+> > Cc: bpf@vger.kernel.org
+> >
+> >
+> > Namhyung Kim (8):
+> >   perf/core: Save the dynamic parts of sample data size
+> >   perf/core: Add perf_sample_save_callchain() helper
+> >   perf/core: Add perf_sample_save_raw_data() helper
+> >   perf/core: Add perf_sample_save_brstack() helper
+> >   perf/core: Set data->sample_flags in perf_prepare_sample()
+> >   perf/core: Do not pass header for sample id init
+> >   perf/core: Introduce perf_prepare_header()
+> >   perf/core: Call perf_prepare_sample() before running BPF
+>
+> lgtm, I ran the bpf selftests on top of that and it's ok
 
-It's fine to me if you add above comments around the code.
+Thanks for your review.  I'll add your Acked-by and Tested-by
+in the v3. :)
 
---
-Best regards,
-baolu
+Thanks,
+Namhyung
