@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6779066DFDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D704466DFE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjAQOEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S231294AbjAQOF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjAQOEK (ORCPT
+        with ESMTP id S231348AbjAQOFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:04:10 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD4038EAB
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:04:09 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id r2so30682723wrv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4LXP+MvmQsKOsJ5hed0UZC24OVAbgZXP4avzgJImfo=;
-        b=opFgH3H9FQHOvkzBbVCJtTAWCFhR4Gl5cpi5yVHXNLW4da+cPYgoa34+Yc5btwsON6
-         wAFkWy9rpieA3cmX4wsInZCIhTwJyh4pf0ch+AlCuup/auiH2i2TrLh5sqb9j/Hod/Lz
-         WFM9X0msAR+amngpn9QrYSrXPiEFSTRc6ek40te5liqS/P46vGr52CTA6lftavMtiHgY
-         PPOdyZ/VhU/H812UoNX++Ky93zdzjsBhROMSZ+EgdH/K7S0UOuteh68xzTo2RX104+TW
-         usKWw3EHHG1EXoAnUSZfbfjDh5z6fU8a1bp61o5K/dIGqEyCrgzJMPSwqrswaFBiw6Vt
-         HeHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y4LXP+MvmQsKOsJ5hed0UZC24OVAbgZXP4avzgJImfo=;
-        b=VP/ARs9YEt0O8FPDPXMqCyMzYvezeoneCHA7zdju8KAKmK17MJgmWGNyoXb78yKkl9
-         9ZvqxrL85sQm8Lcnr8s5wzxR4tGnmMErUSkOM6LIhif2Z7/kxIj0Ap7D1h+wbOmwDxOx
-         7d0v1mRgtx9OtqhGVCZ9016F0J5aZdk2hLhT1X1EuOPWGCkkP11dx9dvX3MKcJYB1ec1
-         b/ku7ENJtB/rrLit39pxk8uOeuZZOxZ7B+NWYAzuXPnHmkLqXAIvTldA7HM2fWfwMAVm
-         IffnyRKGYAws6+a5vp6Z75mcJ2Pz2Ndy3Q9ec6A4ylzNhbWI6Clc7x1ihIX12l1+YgKC
-         8QBQ==
-X-Gm-Message-State: AFqh2krXNbVim+CxoL7by0nHQxEamIG2FW+JVzFqsij94s73XcxWGiTm
-        xaJM5xYT7IJZt0/v14OmiTn9dw==
-X-Google-Smtp-Source: AMrXdXvgQIsKAuGnrCo5SfyGi1kiUlgYMiOXbXCSkybN7DpkVs2OGedhHFnEkAHf5h4Swg1d0vCHsw==
-X-Received: by 2002:adf:e841:0:b0:2b9:d6ba:21f1 with SMTP id d1-20020adfe841000000b002b9d6ba21f1mr2885264wrn.21.1673964247673;
-        Tue, 17 Jan 2023 06:04:07 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id m15-20020adffe4f000000b002bdd155ca4dsm14561248wrs.48.2023.01.17.06.04.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 06:04:07 -0800 (PST)
-Date:   Tue, 17 Jan 2023 14:04:05 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] backlight: ktz8866: Add support for Kinetic
- KTZ8866 backlight
-Message-ID: <Y8aq1aJd8QJCo3RU@aspen.lan>
-References: <20230117134742.23238-1-lujianhua000@gmail.com>
+        Tue, 17 Jan 2023 09:05:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A5D39CE4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:05:12 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHmaF-0001cm-6Y; Tue, 17 Jan 2023 15:05:03 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHmaE-006gpI-EZ; Tue, 17 Jan 2023 15:05:02 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHmaD-00Dbhv-PJ; Tue, 17 Jan 2023 15:05:01 +0100
+Date:   Tue, 17 Jan 2023 15:05:01 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Sayyed, Mubin" <mubin.sayyed@amd.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "treding@nvidia.com" <treding@nvidia.com>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
+        "mubin10@gmail.com" <mubin10@gmail.com>,
+        "krzk@kernel.org" <krzk@kernel.org>
+Subject: Re: [LINUX PATCH 3/3] pwm: pwm-cadence: Add support for TTC PWM
+Message-ID: <20230117140501.3g3mk6htzworeqij@pengutronix.de>
+References: <20230112071526.3035949-1-mubin.sayyed@amd.com>
+ <20230112071526.3035949-4-mubin.sayyed@amd.com>
+ <20230112212514.aez6oj4zfcivknk5@pengutronix.de>
+ <DM4PR12MB5938E26F6A7DFC9A1875233D9DC69@DM4PR12MB5938.namprd12.prod.outlook.com>
+ <20230117112724.nnokjmfffeb2wbnp@pengutronix.de>
+ <DM4PR12MB5938774A495A246EE5557BEF9DC69@DM4PR12MB5938.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="44z4uhgknr7nhdlv"
 Content-Disposition: inline
-In-Reply-To: <20230117134742.23238-1-lujianhua000@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <DM4PR12MB5938774A495A246EE5557BEF9DC69@DM4PR12MB5938.namprd12.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,131 +68,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:47:41PM +0800, Jianhua Lu wrote:
-> Add support for Kinetic KTZ8866 backlight, which is used in
-> Xiaomi tablet, Mi Pad 5 series. This driver lightly based on
-> downstream implementation [1].
-> [1] https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/elish-r-oss/drivers/video/backlight/ktz8866.c
->
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-> Changes in v2:
->   - Add missing staitc modifier to ktz8866_write function.
->
-> Changes in v3:
->   - Add 2022 to Copyright line.
->   - Sort headers.
->   - Remove meaningless comment.
->   - Use definitions instead of hardcoding.
->   - Add missing maintainer info.
->
-> Changes in v4:
->   - Change 2022 to 2023.
->   - Remove useless macro and enum.
->   - Describe settings by devicetree.
->   - Move header file to C file.
->
->  MAINTAINERS                       |   6 +
->  drivers/video/backlight/Kconfig   |   8 ++
->  drivers/video/backlight/Makefile  |   1 +
->  drivers/video/backlight/ktz8866.c | 195 ++++++++++++++++++++++++++++++
->  4 files changed, 210 insertions(+)
->  create mode 100644 drivers/video/backlight/ktz8866.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 42fc47c6edfd..2084e74e1b58 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11674,6 +11674,12 @@ M:	John Hawley <warthog9@eaglescrag.net>
->  S:	Maintained
->  F:	tools/testing/ktest
->
-> +KTZ8866 BACKLIGHT DRIVER
-> +M:	Jianhua Lu <lujianhua000@gmail.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-> +F:	drivers/video/backlight/ktz8866.c
-> +
->  L3MDEV
->  M:	David Ahern <dsahern@kernel.org>
->  L:	netdev@vger.kernel.org
-> diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-> index 936ba1e4d35e..2845fd7e33ad 100644
-> --- a/drivers/video/backlight/Kconfig
-> +++ b/drivers/video/backlight/Kconfig
-> @@ -190,6 +190,14 @@ config BACKLIGHT_KTD253
->  	  which is a 1-wire GPIO-controlled backlight found in some mobile
->  	  phones.
->
-> +config BACKLIGHT_KTZ8866
-> +	tristate "Backlight Driver for Kinetic KTZ8866"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +		Say Y to enabled the backlight driver for the Kinetic KTZ8866
-> +		found in Xiaomi Mi Pad 5 series.
-> +
->  config BACKLIGHT_LM3533
->  	tristate "Backlight Driver for LM3533"
->  	depends on MFD_LM3533
-> diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-> index e815f3f1deff..f70a819c304c 100644
-> --- a/drivers/video/backlight/Makefile
-> +++ b/drivers/video/backlight/Makefile
-> @@ -36,6 +36,7 @@ obj-$(CONFIG_BACKLIGHT_HP680)		+= hp680_bl.o
->  obj-$(CONFIG_BACKLIGHT_HP700)		+= jornada720_bl.o
->  obj-$(CONFIG_BACKLIGHT_IPAQ_MICRO)	+= ipaq_micro_bl.o
->  obj-$(CONFIG_BACKLIGHT_KTD253)		+= ktd253-backlight.o
-> +obj-$(CONFIG_BACKLIGHT_KTZ8866)		+= ktz8866.o
->  obj-$(CONFIG_BACKLIGHT_LM3533)		+= lm3533_bl.o
->  obj-$(CONFIG_BACKLIGHT_LM3630A)		+= lm3630a_bl.o
->  obj-$(CONFIG_BACKLIGHT_LM3639)		+= lm3639_bl.o
-> diff --git a/drivers/video/backlight/ktz8866.c b/drivers/video/backlight/ktz8866.c
-> new file mode 100644
-> index 000000000000..98916f92d069
-> --- /dev/null
-> +++ b/drivers/video/backlight/ktz8866.c
-> @@ -0,0 +1,195 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Backlight driver for the Kinetic KTZ8866
-> + *
-> + * Copyright (C) 2023 Jianhua Lu <lujianhua000@gmail.com>
 
-Shouldn't this be:
-Copyright (C) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
+--44z4uhgknr7nhdlv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +static int ktz8866_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	struct backlight_device *backlight_dev;
-> +	struct backlight_properties props;
-> +	struct ktz8866 *ktz;
-> +
-> +	ktz = devm_kzalloc(&client->dev, sizeof(*ktz), GFP_KERNEL);
-> +	if (!ktz)
-> +		return -ENOMEM;
-> +
-> +	ktz->client = client;
-> +	ktz->regmap = devm_regmap_init_i2c(client, &ktz8866_regmap_config);
-> +
-> +	if (IS_ERR(ktz->regmap)) {
-> +		dev_err(&client->dev, "failed to init regmap\n");
-> +		return PTR_ERR(ktz->regmap);
-> +	}
-> +
-> +	memset(&props, 0, sizeof(props));
-> +	props.type = BACKLIGHT_RAW;
-> +	props.max_brightness = MAX_BRIGHTNESS;
-> +	props.brightness = DEFAULT_BRIGHTNESS;
+On Tue, Jan 17, 2023 at 12:55:06PM +0000, Sayyed, Mubin wrote:
+> Hi Uwe,
+>=20
+> > -----Original Message-----
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > Sent: Tuesday, January 17, 2023 4:57 PM
+> > To: Sayyed, Mubin <mubin.sayyed@amd.com>
+> > Cc: robh+dt@kernel.org; treding@nvidia.com; linux-pwm@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> > kernel@vger.kernel.org; git (AMD-Xilinx) <git@amd.com>; Simek, Michal
+> > <michal.simek@amd.com>; Paladugu, Siva Durga Prasad
+> > <siva.durga.prasad.paladugu@amd.com>; mubin10@gmail.com;
+> > krzk@kernel.org
+> > Subject: Re: [LINUX PATCH 3/3] pwm: pwm-cadence: Add support for TTC
+> > PWM
+> >=20
+> > Hello Mubin,
+> >=20
+> > On Tue, Jan 17, 2023 at 09:58:10AM +0000, Sayyed, Mubin wrote:
+> > > > On Thu, Jan 12, 2023 at 12:45:26PM +0530, Mubin Sayyed wrote:
+> > > > Is there a public manual for the hardware? If yes, please mention a=
+ link
+> > here.
+> > > [Mubin]: I did not find any public manual from cadence. However, deta=
+ils
+> > can be found in Zynq-7000/ Zynq UltraScale/Versal ACAP TRM available
+> > publicly.
+> >=20
+> > Thenk please add a link to that one.
+> >=20
+> > > > how does the output pin behave between the writes in this function
+> > > > (and the others in .apply())?
+> > > [Mubin]:  ttc_pwm_apply  is disabling counters before calling this
+> > > function, and enabling it back immediately after it.  So, output pin
+> > > would be low during configuration.
+> >=20
+> > Please document this behaviour (i.e. "A disabled PWM emits a zero") in a
+> > paragraph at the top of the driver in the format that e.g.
+> > drivers/pwm/pwm-pxa.c is using. Also please test if it emits a zero or =
+the
+> > inactive level, i.e. if the output depends on the polarity setting.
+>=20
+> [Mubin]: will confirm behavior on hardware and document it.
+> >=20
+> > > > > +		rate =3D clk_get_rate(priv->clk);
+> > > > > +
+> > > > > +		/* Prevent overflow by limiting to the maximum possible
+> > period */
+> > > > > +		period_cycles =3D min_t(u64, state->period, ULONG_MAX *
+> > NSEC_PER_SEC);
+> > > > > +		period_cycles =3D DIV_ROUND_CLOSEST(period_cycles * rate,
+> > > > > +NSEC_PER_SEC);
+> > > >
+> > > > DIV_ROUND_CLOSEST isn't suiteable to work with u64. (That's also the
+> > > > reason for the build bot report.)
+> > > >
+> > > > The usual alternative trick here is to do:
+> > > >
+> > > > 	if (rate > NSEC_PER_SEC)
+> > > > 		return -EINVAL;
+> > > >
+> > > > 	period_cycles =3D mul_u64_u64_div_u64(state->period, rate,
+> > > > NSEC_PER_SEC);
+> > > [Mubin]: Initially I tried mul_u64_u64_div_u64, it was impacting
+> > > accuracy while generating PWM signal of high frequency(output
+> > > frequency above 5 MHZ,  input 100 MHZ ). Usage of DIV_ROUND_CLOSEST
+> > > improved accuracy. Can you please suggest better alternative for
+> > > improving accuracy.
+> >=20
+> > Unless I'm missing something, you have to adjust your definition of acc=
+uracy
+> > :-)
+> >=20
+> > If you request (say) a period of 149 ns and the nearest actual values y=
+our
+> > hardware can provide left and right of that is 140 ns and 150 ns, 140ns=
+ is the
+> > one to select. That is pick the biggest possible period not bigger than=
+ the
+> > requested period. And with that pick the biggest possible duty_cycle not
+> > bigger than the requested duty_cycle. (i.e. it's a bug to emit period=
+=3D150ns if
+> > 149 was requested.)
+> >=20
+> > There are ideas to implement something like
+> >=20
+> > 	pwm_apply_nearest(...);
+> >=20
+> > but that's still in the idea stage (and will depend on the lowlevel dri=
+vers
+> > implementing the strategy described above).
+> [Mubin]: Thanks for explaining, will switch to mul_u64_u64_div_u64,
+> though percentage of deviation would be more for PWM signal of high
+> frequency. For example, requested period is 50 ns,  requested duty
+> cycle is 49 ns(98%), actual duty cycle set by driver would be 40ns
+> (80%).
 
-There is still pending feedback from v3.
+Note it's a trade-off to let drivers round down and not nearest. The
+motivating reasons are:
 
-| Please set the scale property correctly. "Unknown" is never correct for
-| new drivers.
+ - division rounding down is the default in C, so it's a tad easier
+ - there are less corner cases
+   (There are two strange effects that I'm aware of:
+    - Consider for example a hardware that can implement periods of
+      length 49.2 ns, 49.4 ns and 50.7 ns (and nothing in-between). If
+      you request 50 ns, you get 49.4. .get_state would then tell you
+      that the hardware has configured 49 ns. But if you request 49
+      ns, you don't get 49.4 ns.
+    - Rounding to the nearest time is different to rounding to the
+      nearest frequency:
+      Consider a hardware than can configure a period of 200 ns (freq:
+      5 MHz) and 300 ns (freq: 3.33333 MHz). If you request 249 ns
+      (freq: 4.016 MHz) you'd get 200 ns if you round to the nearest
+      time, but 300 if you round to the nearest frequency.
+   Both problems don't happen with rounding down.)
+ - .get_state which is supposed to be the inverse of .apply() needs one
+   more distinction of cases.
+   (That is, if the nearest integer above or below the actual value
+   should be returned. And additionally another arbitraty choice what to
+   return for 50.5 ns)
 
-Do not ignore feedback. You should either act on it or, if you disagree
-or need additional clarification then, reply on the mail thread.
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Daniel.
+--44z4uhgknr7nhdlv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPGqwoACgkQwfwUeK3K
+7AkM8wf+JDYaihGR6rqCYTVhy6yNXYiaq/V1gpUkE1qzcYpsiVvGJTeCfZy1Tvj6
+IKMDHPqNzkj1zmLXoZR9HvuJvYZsK3uPgRcpaSgeCjbF6DaUP1SArJsnx0s1UJwn
+c0EQEWzxQtTXFtS721Zi7oAGXpfF2LCO0+ayHJ8kgKi3aGL3/Ko1sSS8HbquCAPU
+LgwsFCJ+G3fVSiGcQ+/8b+LiEXh5vg1ErrlSMoGKzqBYOlJ12g31MzqQT4pMj7Bg
+5xSu/k+WTavFmOKSZ+BtdCt1Be68cVXIcGmex/s32O6BWVeupDZAZfgHFS7GAc1J
+gtYDlbx1riMHGh0GZXsIAmWqNlbzhg==
+=IAJm
+-----END PGP SIGNATURE-----
+
+--44z4uhgknr7nhdlv--
