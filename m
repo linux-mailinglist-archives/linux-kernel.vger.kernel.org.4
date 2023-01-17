@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44D366DD0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4928466DD1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236713AbjAQMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S235559AbjAQMCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236593AbjAQMAB (ORCPT
+        with ESMTP id S236132AbjAQMCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:00:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4EA36FD9;
-        Tue, 17 Jan 2023 03:59:57 -0800 (PST)
+        Tue, 17 Jan 2023 07:02:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC1636085;
+        Tue, 17 Jan 2023 04:02:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16A12B81187;
-        Tue, 17 Jan 2023 11:59:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B004C433D2;
-        Tue, 17 Jan 2023 11:59:54 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 65629CE0E83;
+        Tue, 17 Jan 2023 12:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CCDC433EF;
+        Tue, 17 Jan 2023 12:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673956794;
-        bh=aTQYYKmLmNf07nxBHwjaA+StqUovg0SS7JYEnCH+EZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JcktzRZbthNjyz+5qDuk41oZMxJYCCPDkgEXy01vFYTwlnZjxjziBy/fjRBFrmcSa
-         E+PMfnpmsxQOvk4Nnoif+2kebtJFzsk6MLmCF0naHyrUxRwLUY0egDjGMueOewYX9U
-         jY95uj2yF2tCHsBQgxOnBrKJInMJKFTeLLsroP9Qz+Zmb5S5ohasJ2sIlHVuXyrdKU
-         +JQlAVyRuTN0m1l13Oc+TNnPPuP7Sr59v4b9nO4VxcqClgsxIrXN9pyrNM8z/w85BT
-         oBD2AKo9teesJp1MkdO9eUCNiMo/mj0umhmkVIhKlpMUQYQSsiQ5U2bWLoyBYl3VOM
-         zsK3K8o3KkQoA==
-Date:   Tue, 17 Jan 2023 13:59:51 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Israel Rukshin <israelr@nvidia.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Keith Busch <kbusch@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Selvin Xavier <selvin.xavier@broadcom.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Yishai Hadas <yishaih@nvidia.com>
-Subject: Re: [PATCH rdma-next 11/13] nvme: Introduce a local variable
-Message-ID: <Y8aNt9YB9irSVXNo@unreal>
-References: <cover.1673873422.git.leon@kernel.org>
- <cf5bc542e014f465f7ae443e52e70def2993aef1.1673873422.git.leon@kernel.org>
- <c095c9a9-0e77-c8ab-d34e-f4ab42b11938@nvidia.com>
+        s=k20201202; t=1673956948;
+        bh=CKlIXRz91IRPYHZiS5PjXrbKb/M2dV/YQZOMxzLWTGs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O0D55epM/2aYLDIbeYyeXzSyuGB7zbusuYm5LZ1xX7A5Thg98J7IsbaZdjI8RSNax
+         0rya5Ir2VK9eVNDRkmdrCW6O71cyr4ILsr0+4kgp4N5WN1V8IAk1cusg8Ekg6gpx6s
+         5CylZfuAk9Df0rmw0lHaAnlNzyutheB8th+TvMd5vWy7iYpq4kAVqSlEsvyyNv3+1P
+         e+kO6WTm9fqSAbwvyod500zVRNHyrf5SgU/k1inE+PI9bgzIftFw/tRdkOfR6I+0++
+         wl+ob1gafEl6NMSVPSyJrLrQAxZiQbR/mJU/Tx3LQzYdLoN7W9EwP73SL1WF8nWf1X
+         HZk6JFHUy1u+A==
+From:   rfoss@kernel.org
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Foss <rfoss@kernel.org>
+Subject: [PATCH v1 0/3] SM8350 Display DTS
+Date:   Tue, 17 Jan 2023 13:02:20 +0100
+Message-Id: <20230117120223.1055225-1-rfoss@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c095c9a9-0e77-c8ab-d34e-f4ab42b11938@nvidia.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,37 +53,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 12:32:59AM +0000, Chaitanya Kulkarni wrote:
-> On 1/16/23 05:05, Leon Romanovsky wrote:
-> > From: Israel Rukshin <israelr@nvidia.com>
-> > 
-> > The patch doesn't change any logic.
-> > 
-> > Signed-off-by: Israel Rukshin <israelr@nvidia.com>
-> > Signed-off-by: Leon Romanovsky <leon@kernel.org>
-> > ---
-> >   drivers/nvme/host/core.c | 7 ++++---
-> >   1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> > index 7be562a4e1aa..51a9880db6ce 100644
-> > --- a/drivers/nvme/host/core.c
-> > +++ b/drivers/nvme/host/core.c
-> > @@ -1870,6 +1870,7 @@ static void nvme_update_disk_info(struct gendisk *disk,
-> >   	sector_t capacity = nvme_lba_to_sect(ns, le64_to_cpu(id->nsze));
-> >   	unsigned short bs = 1 << ns->lba_shift;
-> >   	u32 atomic_bs, phys_bs, io_opt = 0;
-> > +	struct nvme_ctrl *ctrl = ns->ctrl;
-> >   
-> 
-> I don't think this patch is needed, existing code is more readable and
-> gives much clarity that we are accessing ctrl from namespace since we
-> are in nvme_update_disk_info() which is namespace based.
+From: Robert Foss <rfoss@kernel.org>
 
-I don't have strong opinion here.
+This series was split out of v4 of the SM8350 DSI series[1],
+and now only contains the DTS changes related Display on SM8350.
 
-Thanks
 
-> 
-> -ck
-> 
+[1] https://lore.kernel.org/all/20221230153554.105856-1-robert.foss@linaro.org/
+
+Robert Foss (3):
+  arm64: dts: qcom: sm8350: Add display system nodes
+  arm64: dts: qcom: sm8350-hdk: Enable display & dsi nodes
+  arm64: dts: qcom: sm8350-hdk: Enable lt9611uxc dsi-hdmi bridge
+
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 127 ++++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi    | 297 +++++++++++++++++++++++-
+ 2 files changed, 420 insertions(+), 4 deletions(-)
+
+-- 
+2.34.1
+
