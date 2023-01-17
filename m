@@ -2,106 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561EA670D5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949C5670D66
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjAQX1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S229471AbjAQX2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjAQX0a (ORCPT
+        with ESMTP id S229503AbjAQX1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:26:30 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6188C5084F;
-        Tue, 17 Jan 2023 13:26:34 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HJtLUg006414;
-        Tue, 17 Jan 2023 21:26:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=mTIgEIUb70Uqc/ceSLL8F8lZ4X68bD+rbf2CA97c87Y=;
- b=ghuDgZrzZ0zZNIyGR2nch+erl/pUAHrW3aZzjjSkVjjebgEhw+HB4F7gZXYnmLn0hKqd
- FwGmlfZdFXMvjK6ah7xfKVWdMT3oaT/eNC7oVKg0ja6PMFcPVehCR84E4czpBr0J5cws
- osZoqEZq6sVQzzXeXBdPV0vK82L7+upb1eTOrrL2wn8RJOIg4qhWml06uDlHJUGPT7L0
- y6SwM1phJac22ZvKmJHIiGRZtfv4EX1n0jrHazEguTxXSEvLl/E0GCGJwxPpEh+qx0OG
- u694DEi5MU46hnWRHW3D/AoQFXFhApWBg2JGYuE2/yrNiPYfoU44J017vcRoSabzPby/ Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n5pehc5rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 21:26:20 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30HKwBiX029439;
-        Tue, 17 Jan 2023 21:26:19 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n5pehc5qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 21:26:19 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30HK2HaN019324;
-        Tue, 17 Jan 2023 21:26:18 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3n3m17g612-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 21:26:18 +0000
-Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30HLQH8K21692882
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 21:26:17 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47E3A78060;
-        Tue, 17 Jan 2023 23:08:30 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B8A37805F;
-        Tue, 17 Jan 2023 23:08:25 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.128.24])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 17 Jan 2023 23:08:25 +0000 (GMT)
-Message-ID: <8ef12c81acf42ea87dde8f500485412f0b9f29a2.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Matthew Garrett <mgarrett@aurora.tech>
-Cc:     William Roberts <bill.c.roberts@gmail.com>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Date:   Tue, 17 Jan 2023 16:26:11 -0500
-In-Reply-To: <CAHSSk058UoBY2nDx8U7-siG_dbjNSKZaPukZVjSnq=f=CBSKsw@mail.gmail.com>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
-         <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
-         <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
-         <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
-         <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
-         <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
-         <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
-         <CAHSSk058UoBY2nDx8U7-siG_dbjNSKZaPukZVjSnq=f=CBSKsw@mail.gmail.com>
+        Tue, 17 Jan 2023 18:27:43 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCF15B474;
+        Tue, 17 Jan 2023 13:28:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=0pP+pN1M5uU+rh2BuIa07VvA0EQmkYWSfKV/yjrljRU=;
+        t=1673990894; x=1675200494; b=yIfEx+dXdtMUSaUaWXJ0nyjAMqBqQ4jwhC2bYMGl37FB8N3
+        0gAed30N1xGlDu8kTtnU5Jas47j9GKE8gALGQXuUm4VxdA2Yby9W+lreC+SA2mTwxf4b7nO+VLIDT
+        7PVkrLtOdvYPMKyl0WzJB6TV7Uzgxbm221b5i7jNoK+CJYcvx/MgcDprLK/bOT2sdzSiEWMXHVjX4
+        xYru9cLH55Hp/2ba4vn+0LMR00njs2/kr5W5My2hZUJZOYgGNednjRhhWGnEdNLfA+h1O8LOwMpwn
+        c4+UHnQsvOY9hnyHcedF4XPU00AYjHW1bIxdw0oAwBBP4AeiA28/KMOYq8022W/A==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pHtUs-004p1v-37;
+        Tue, 17 Jan 2023 22:27:59 +0100
+Message-ID: <a81cb8cd088e715936895ec6bb07cfdc8fec37c1.camel@sipsolutions.net>
+Subject: Re: [PATCH net-next] wifi: airo: use strscpy() to instead of
+ strncpy()
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     yang.yang29@zte.com.cn, kvalo@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, brauner@kernel.org,
+        julia.lawall@inria.fr, gustavoars@kernel.org, jason@zx2c4.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
+Date:   Tue, 17 Jan 2023 22:27:57 +0100
+In-Reply-To: <202212231052044562664@zte.com.cn>
+References: <202212231052044562664@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mMMNlrVlyvpgz9k2WwVb_-8pq86gj_9d
-X-Proofpoint-ORIG-GUID: Q89gwD3oNzvjTTM2_it6RY4oWwj9BaT6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_10,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 impostorscore=0 spamscore=0 clxscore=1015
- suspectscore=0 mlxlogscore=421 lowpriorityscore=0 malwarescore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301170168
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,40 +58,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-14 at 19:05 -0800, Matthew Garrett wrote:
-> On Sat, Jan 14, 2023 at 6:55 AM James Bottomley <jejb@linux.ibm.com>
-> wrote:
-> > Can we go back again to why you can't use locality?  It's exactly
-> > designed for this since locality is part of creation data. 
-> > Currently everything only uses locality 0, so it's impossible for
-> > anyone on Linux to produce a key with anything other than 0 in the
-> > creation data for locality.  However, the dynamic launch people are
-> > proposing that the Kernel should use Locality 2 for all its
-> > operations, which would allow you to distinguish a key created by
-> > the kernel from one created by a user by locality.
-> > 
-> > I think the previous objection was that not all TPMs implement
-> > locality, but then not all laptops have TPMs either, so if you ever
-> > come across one which has a TPM but no locality, it's in a very
-> > similar security boat to one which has no TPM.
-> 
-> It's not a question of TPM support, it's a question of platform
-> support. Intel chipsets that don't support TXT simply don't forward
-> requests with non-0 locality. Every Windows-sticker laptop since 2014
-> has shipped with a TPM, but the number that ship with TXT support is
-> a very small percentage of that. I agree that locality is the obvious
-> solution for a whole bunch of problems, but it's just not usable in
-> the generic case.
+On Fri, 2022-12-23 at 10:52 +0800, yang.yang29@zte.com.cn wrote:
+> From: Xu Panda <xu.panda@zte.com.cn>
+>=20
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
+>=20
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+> ---
+>  drivers/net/wireless/cisco/airo.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cis=
+co/airo.c
+> index 7c4cc5f5e1eb..600a64f671ce 100644
+> --- a/drivers/net/wireless/cisco/airo.c
+> +++ b/drivers/net/wireless/cisco/airo.c
+> @@ -6067,8 +6067,7 @@ static int airo_get_nick(struct net_device *dev,
+>  	struct airo_info *local =3D dev->ml_priv;
+>=20
+>  	readConfigRid(local, 1);
+> -	strncpy(extra, local->config.nodeName, 16);
+> -	extra[16] =3D '\0';
+> +	strscpy(extra, local->config.nodeName, 17);
+>  	dwrq->length =3D strlen(extra);
+>=20
 
-How sure are you of this statement?  Of all the Laptops I have with
-TPM2 (a sample size of 2), my old Dell XPS-13 (a 9350 bought in 2016
-with a TPM 1.2 that was firmware upgraded to 2.0) has a Nuvoton TIS TPM
-that doesn't respond on any locality other than 0.  However, my more
-modern Inspiron 13 2-in-1 (a 7391 from 2019 recently bought
-refurbished) has an Intel PTT TPM using the CRB interface and responds
-fine on locality 1 and also indicates that locality in the creation
-data.  Neither of these laptops has TXT nor the SMX extensions, so that
-would seem to indicate your statement above isn't universal.
+Again, why bother. But is this even correct/identical behaviour?
+Wouldn't it potentially read 17 input bytes before forcing NUL-
+termination?
 
-James
-
+johannes
