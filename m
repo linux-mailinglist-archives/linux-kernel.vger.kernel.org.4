@@ -2,228 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F86566D429
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9C266D434
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbjAQCQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 21:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S235309AbjAQCT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 21:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbjAQCQY (ORCPT
+        with ESMTP id S235119AbjAQCTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 21:16:24 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2CE2331B;
-        Mon, 16 Jan 2023 18:16:23 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id y19so9512978edc.2;
-        Mon, 16 Jan 2023 18:16:23 -0800 (PST)
+        Mon, 16 Jan 2023 21:19:23 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A15A233E1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 18:19:22 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id v30so43095116edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 18:19:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBHH5FzfccMmW32bjhWXzbJMdoz9l8k0pEXILz+K/G4=;
-        b=Xl1eixT2wQcyDnNB929ADbEnCtq/OPkfs3Df44lrgkdR7Dtcv8dcM4dSdRxmjcgHbi
-         4OjieMETZzrr4pcO/FPkmN0VdH028SxvqyLf9ubYIIb9vvBX/vt2t8I8CW2hT5mM+28f
-         Sag9uGq43lnbaj9ByMf0acjTwVd/q1i25P9Ovdr17wDY4kI4XyPbWHK9cDknocQPvknC
-         HXiZpzzkudGm+S1zufj9vqH335TYYEvFNy/QoHnyxdrV3XF3YnfUH2o198vsL17uwyrG
-         6f1F6sRAAuwyDKuIT9eKNIIhA6Zvlcs5ICxk2MkVpVkyVHWhEKMaUAzb5h1TaJEBcmvE
-         cMvg==
+        bh=hcQxc2tbryNUtqB3FYleqM+oCMe9Hi/eZebyk02NgNg=;
+        b=Yw7RS40Ju3wfv111tJNUpkOAASKxbHu2DMGPt6VJDGX2wCFlgTh4/KUu0O/n2XS3q8
+         jO8VXR+6xfK/duKX7v6GKpQ9fLa1tuvOxfIBEqHMeCjEJe0zIZbbZVCNWNux2+uRo0qH
+         8C7Rz+dpqvnHM+kZ7jy9XrHGpPL0gRO3S5+uATiX9SqME8f66CO51wieubwsgnRL8ZxF
+         J6PNk6o6Z3oazbZwYrMMpN8Ly/W2QdnVLCZMpMFLf//2cZsPh0xRWQNV6JjxZ/tAo272
+         ubpbax6ishQWvi8Z7uOjNi6ktm/CHLZubygSmyWaeTTGuYdIdi/pp7ocD4TLRHYJmUO/
+         ST0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SBHH5FzfccMmW32bjhWXzbJMdoz9l8k0pEXILz+K/G4=;
-        b=sJSGms8h9d1byspnBi3u/QGfmGfv2iDQn3C+sjQxzGhkOjn2grg6intdRl9ZKYu7pv
-         9C5j7UUir5LNgpr4LIxYVPZ3IDQgxHXqS7XQgHoGALeV2OI5v2J60mBX7Y4zh7p0PQal
-         RTeV/mEhUOz5lgHbSsujNRY7BeZjK8CFIa0tQtLL9PCCgSkNDeH+aWohp6eBKlgGDYTZ
-         2AcrINnOfR8eH8uTz0julgE7/2nBorAdjCO+uwLKk2MZqjfd5L90r3yLwwoLvqXGCibn
-         l2OnU3nkZn/TsPSykuBqj8ZNPVUumw/wGTR/oiR4t+XC/dPr4FKKsRHiziilS3Ni0z7A
-         vmkg==
-X-Gm-Message-State: AFqh2kri1c7yWguHCOyJuCnNvkrUit7g5XRoke2yqkp+Wz/Z67VD5KZt
-        JSy87oozy8BYeFSTCC48zJUVBgsBDkjMgvJKa9og42v4nf0=
-X-Google-Smtp-Source: AMrXdXs1BabaqynfU4EP/SWQXq0h7y29wxFIADNUYGGatv0TblCffUaiP5c83qyBcrFUvFnA+etya6Odiurz99leiJE=
-X-Received: by 2002:aa7:d1c3:0:b0:49a:b8ee:ef4b with SMTP id
- g3-20020aa7d1c3000000b0049ab8eeef4bmr118623edp.143.1673921781795; Mon, 16 Jan
- 2023 18:16:21 -0800 (PST)
+        bh=hcQxc2tbryNUtqB3FYleqM+oCMe9Hi/eZebyk02NgNg=;
+        b=V/cVB0G5Tel3QoL7zukLzSd87EIKHgzU2ib7EyRhHcPW02AD5ObrSmDz/GcGoyqRFP
+         RIpF3zyymPXS7SYA3mEtECwKnMa4hDBOJF/pO9O6wKZrp7jCzlnbZ/r1oa5/JERzcsyW
+         XSL9WTKR1O1TfJ0Hh1o86iOuURxgupl8XkW+6/nPWe2nWvjPtKXD18wZuDIuCrg4RA6k
+         w2Hz6ygRriqsMIn4V4IKOlq/U08Mnbu4rnkTwOydyY8LqaKV4Tv7EheWAsRcqrrrU39U
+         2aBJUob+b5d2PJ07heax5ZiSkeBLzyUW5M0Xx4S1UVAGrruehrVofhLdsUi+gVmWovBd
+         +zRw==
+X-Gm-Message-State: AFqh2krMCrL8WdvofCoAum6XfYBdeCrljI+8eFlPEjKOKdddxek7uNDn
+        vOAZWrRXBhHtrsET7XOyQitN9GP+q54WM6aYsWjQxg==
+X-Google-Smtp-Source: AMrXdXsCy8vynyxh4AU3GM9pr3pm51Ag+IGCft88mylhcRAoyRnQoxx9bZMTerPRX5zPxA07iVr4D6wqLtkheFZelzw=
+X-Received: by 2002:a05:6402:551a:b0:49d:feca:266d with SMTP id
+ fi26-20020a056402551a00b0049dfeca266dmr151454edb.388.1673921960718; Mon, 16
+ Jan 2023 18:19:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20230116103341.70956-1-kerneljasonxing@gmail.com> <20230116165344.30185-1-kuniyu@amazon.com>
-In-Reply-To: <20230116165344.30185-1-kuniyu@amazon.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 17 Jan 2023 10:15:45 +0800
-Message-ID: <CAL+tcoB1-MqMf3Yn_qBTbTC9UNBhVW+93j30KJ9zaangkfQHWA@mail.gmail.com>
-Subject: Re: [PATCH v5 net] tcp: avoid the lookup process failing to get sk in
- ehash table
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kernelxing@tencent.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org
+References: <20230112145424.3791276-1-etienne.carriere@linaro.org>
+ <20230112145424.3791276-3-etienne.carriere@linaro.org> <20230113204231.GA2873887-robh@kernel.org>
+In-Reply-To: <20230113204231.GA2873887-robh@kernel.org>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Tue, 17 Jan 2023 03:19:09 +0100
+Message-ID: <CAN5uoS9MrKXUrmR1Y=c9J8D03muBKPJcQk64YFHwOwBO_GX5jw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: arm: optee: add interrupt controller properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 12:54 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+On Fri, 13 Jan 2023 at 21:42, Rob Herring <robh@kernel.org> wrote:
 >
-> From:   Jason Xing <kerneljasonxing@gmail.com>
-> Date:   Mon, 16 Jan 2023 18:33:41 +0800
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > While one cpu is working on looking up the right socket from ehash
-> > table, another cpu is done deleting the request socket and is about
-> > to add (or is adding) the big socket from the table. It means that
-> > we could miss both of them, even though it has little chance.
-> >
-> > Let me draw a call trace map of the server side.
-> >    CPU 0                           CPU 1
-> >    -----                           -----
-> > tcp_v4_rcv()                  syn_recv_sock()
-> >                             inet_ehash_insert()
-> >                             -> sk_nulls_del_node_init_rcu(osk)
-> > __inet_lookup_established()
-> >                             -> __sk_nulls_add_node_rcu(sk, list)
-> >
-> > Notice that the CPU 0 is receiving the data after the final ack
-> > during 3-way shakehands and CPU 1 is still handling the final ack.
-> >
-> > Why could this be a real problem?
-> > This case is happening only when the final ack and the first data
-> > receiving by different CPUs. Then the server receiving data with
-> > ACK flag tries to search one proper established socket from ehash
-> > table, but apparently it fails as my map shows above. After that,
-> > the server fetches a listener socket and then sends a RST because
-> > it finds a ACK flag in the skb (data), which obeys RST definition
-> > in RFC 793.
-> >
-> > Besides, Eric pointed out there's one more race condition where it
-> > handles tw socket hashdance. Only by adding to the tail of the list
-> > before deleting the old one can we avoid the race if the reader has
-> > already begun the bucket traversal and it would possibly miss the head.
-> >
-> > Many thanks to Eric for great help from beginning to end.
-> >
-> > Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-> > Suggested-by: Eric Dumazet <edumazet@google.com>
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
+> On Thu, Jan 12, 2023 at 03:54:23PM +0100, Etienne Carriere wrote:
+> > Adds optional interrupt controller properties used when OP-TEE generates
+> > interrupt events optee driver shall notified to its registered
+> > interrupt consumer. The example shows how OP-TEE can trigger a wakeup
+> > interrupt event consumed by a gpio-keys compatible device.
 >
-> I guess there could be regression if a workload has many long-lived
+> Why do we need this in DT? It's not a GPIO key, but an abuse of the
+> binding. It looks like unnecessary abstraction to me.
 
-Sorry, I don't understand. This patch does not add two kinds of
-sockets into the ehash table all the time, but reverses the order of
-deleting and adding sockets only. The final result is the same as the
-old time. I'm wondering why it could cause some regressions if there
-are loads of long-lived connections.
+This is when for example OP-TEE world controller a IOs controller
+device. When some IOs are relate to OP-TEE feature, the controller
+route to OP-TEE handler.
+When the IO detection relates to Linux irqs it is routed to Linux,
+using optee driver irqchip.
+As Linux uses DT for device drivers to get their interrupt (controler
+phandle + arg), defining the irqchip in the DT of the platform running
+that OP-TEE firmware make sense to me.
 
-> connections, but the change itself looks good.  I left a minor comment
-> below.
->
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
->
-
-Thanks for reviewing :)
+The same way OP-TEE can be in charge of the wakeup source controllers
+and notify Linxu of event for the wakeup that relate to Linux
+services.
 
 >
+>
+> >
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 > > ---
-> > v5:
-> > 1) adjust the style once more.
+> >  .../arm/firmware/linaro,optee-tz.yaml         | 19 ++++++++++++++++++-
+> >  1 file changed, 18 insertions(+), 1 deletion(-)
 > >
-> > v4:
-> > 1) adjust the code style and make it easier to read.
+> > diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+> > index d4dc0749f9fd..42874ca21b7e 100644
+> > --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+> > @@ -40,6 +40,11 @@ properties:
+> >        HVC #0, register assignments
+> >        register assignments are specified in drivers/tee/optee/optee_smc.h
 > >
-> > v3:
-> > 1) get rid of else-if statement.
+> > +  interrupt-controller: true
+> > +
+> > +  "#interrupt-cells":
+> > +    const: 1
+> > +
+> >  required:
+> >    - compatible
+> >    - method
+> > @@ -48,12 +53,24 @@ additionalProperties: false
 > >
-> > v2:
-> > 1) adding the sk node into the tail of list to prevent the race.
-> > 2) fix the race condition when handling time-wait socket hashdance.
-> > ---
-> >  net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
-> >  net/ipv4/inet_timewait_sock.c |  6 +++---
-> >  2 files changed, 18 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> > index 24a38b56fab9..f58d73888638 100644
-> > --- a/net/ipv4/inet_hashtables.c
-> > +++ b/net/ipv4/inet_hashtables.c
-> > @@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
-> >       spin_lock(lock);
-> >       if (osk) {
-> >               WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
-> > -             ret = sk_nulls_del_node_init_rcu(osk);
-> > -     } else if (found_dup_sk) {
-> > +             ret = sk_hashed(osk);
-> > +             if (ret) {
-> > +                     /* Before deleting the node, we insert a new one to make
-> > +                      * sure that the look-up-sk process would not miss either
-> > +                      * of them and that at least one node would exist in ehash
-> > +                      * table all the time. Otherwise there's a tiny chance
-> > +                      * that lookup process could find nothing in ehash table.
-> > +                      */
-> > +                     __sk_nulls_add_node_tail_rcu(sk, list);
-> > +                     sk_nulls_del_node_init_rcu(osk);
-> > +             }
-> > +             goto unlock;
-> > +     }
-> > +     if (found_dup_sk) {
-> >               *found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
-> >               if (*found_dup_sk)
-> >                       ret = false;
-> > @@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
-> >       if (ret)
-> >               __sk_nulls_add_node_rcu(sk, list);
-> >
-> > +unlock:
-> >       spin_unlock(lock);
-> >
-> >       return ret;
-> > diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-> > index 1d77d992e6e7..6d681ef52bb2 100644
-> > --- a/net/ipv4/inet_timewait_sock.c
-> > +++ b/net/ipv4/inet_timewait_sock.c
-> > @@ -91,10 +91,10 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
-> >  }
-> >  EXPORT_SYMBOL_GPL(inet_twsk_put);
-> >
-> > -static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
-> > +static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
-> >                                  struct hlist_nulls_head *list)
+> >  examples:
+> >    - |
+> > +    #include <dt-bindings/input/input.h>
+> >      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> >      firmware  {
+> > -        optee  {
+> > +        optee: optee {
+> >              compatible = "linaro,optee-tz";
+> >              method = "smc";
+> >              interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
+> > +            interrupt-controller;
+> > +            #interrupt-cells = <1>;
+> > +        };
+> > +    };
+> > +
+> > +    wake_up {
+> > +        compatible = "gpio-keys";
+> > +
+> > +        button {
+> > +            linux,code = <KEY_WAKEUP>;
+> > +            interrupts-extended = <&optee 0>;
 >
-> nit: Please indent here.
->
+> In the end, you just need optee IRQ #0 to generate KEY_WAKEUP. Does
+> either the optee interrupt number or the key code need to be
+> configurable? If so, why? Why isn't #0 just wakeup and the driver can
+> send KEY_WAKEUP?
 
-Before I submitted the patch, I did the check through
-./script/checkpatch.py and it outputted some information (no warning,
-no error) as you said.
-The reason I didn't change that is I would like to leave this part
-untouch as it used to be. I have no clue about whether I should send a
-v7 patch to adjust the format if necessary.
+The OP-TEE driver is a generic firmware driver. Platforms do not have
+specific hooks in it.
+A generic DT definition of the irqs exposed by opte driver irqchip
+allows consumers to get their irq resource.
+I even think 'allows' above could be replaced by is-required-by.
 
-Thanks,
-Jason
+Here, binding KEY_WAKEUP to the OP-TEE firmware related irq line from
+the platform DT reuses existing drivers and bindings to get a irq
+wkaeup source, signaling KEY_WAKEUP even, when wakeup stouce
+controller is assigned to (controller by) OP-TEE world.
+This is an example. Maybe the binding are miss used, but I don't see
+why. Another example I plan to post is building an mailbox for SMCI
+notification from a SCMI service host in OP-TEE. OP-TEE would use this
+optee irqchip to get the interrupt related to the SCMI notification
+channel. In embedded system, limited resources can be shared by
+subsystems.
 
 >
-> >  {
-> > -     hlist_nulls_add_head_rcu(&tw->tw_node, list);
-> > +     hlist_nulls_add_tail_rcu(&tw->tw_node, list);
-> >  }
-> >
-> >  static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
-> > @@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
-> >
-> >       spin_lock(lock);
-> >
-> > -     inet_twsk_add_node_rcu(tw, &ehead->chain);
-> > +     inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
-> >
-> >       /* Step 3: Remove SK from hash chain */
-> >       if (__sk_nulls_del_node_init_rcu(sk))
-> > --
-> > 2.37.3
+> DT is for non-discoverable hardware that we can't fix. Why repeat that
+> for software interfaces to firmware?
+
+Do you mean the optee driver should enumerate the interrupt lines
+exposed by OP-TEE and register each line accordingly?
+This is doable I guess. But that would not prevent Linux kernel DT to
+define a interrupt controller consumer device nodes can refer to for
+their need.
+
+BR,
+Etienne
+
+>
+> Rob
