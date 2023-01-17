@@ -2,318 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAB866DA56
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8519366DA58
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbjAQJwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S236216AbjAQJy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbjAQJwp (ORCPT
+        with ESMTP id S236111AbjAQJyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:52:45 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0EAF2A9AD;
-        Tue, 17 Jan 2023 01:52:41 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxLuvnb8ZjWBECAA--.6283S3;
-        Tue, 17 Jan 2023 17:52:39 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxrb7kb8ZjkK8aAA--.55653S3;
-        Tue, 17 Jan 2023 17:52:37 +0800 (CST)
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix undeclared identifier build
- errors of test_bpf_nf.c
-To:     Yonghong Song <yhs@meta.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-References: <1673844908-11533-1-git-send-email-yangtiezhu@loongson.cn>
- <14e0f634f084d0f07e447638c490da60943507d6.camel@gmail.com>
- <556dc633-e7fb-da8a-1fa9-757684edd3a4@oracle.com>
- <dffe5523-4ff7-8b27-46fa-079a9556166f@meta.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <d299be28-42f5-b387-5b54-74694ff5f340@loongson.cn>
-Date:   Tue, 17 Jan 2023 17:52:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 17 Jan 2023 04:54:21 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2114.outbound.protection.outlook.com [40.107.255.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C242A9A7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:54:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NSDO3woNzIc4ONXQrmHiqGB8Ll8z/Q+d7SMXmK6VCNb569Zy4qA9j2e4gih7nET3xqvOagUfPcGSzFVMFO+7vTqd0RfS3zfISKv+rEP17HORGvmsVuFOjiGBdDid41xe7waowx+lq4iC4kTqHgEA/Xg6pE4QJo1yGbuOpfLrIier7rFQeE+eqzTMluefL1Zufn0gJ25FR4lIlKP+2Ne0/yuOBgKUpdOmUZQQrMMPUAKd7oIMQOmLNheZGnlZRaqi1h0hJeJym0Gu7+C2+Q4oJ2xkDe/TcvRgOI0UFZvywCaSqt6xJr1UPVujtHip6Y4fjUvQWwgvC2uWj22ZqvsLJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uTrEb2Cwr9F7vWkD0UMRfe1+egrfVdeiqDQjljagu4g=;
+ b=D+jt3oZjG4zBnM4pN3tVBcOePpYDjjieKCys40OWPfUO2KnYW2A1igCAlBdgsb/32eMWoSHhrW/ocqBrFFxA7LtzepoBdpSLRGSlmqBJ/zHyy5B9Xauwli1AjdpijD6M3PrIkJvyvBIV+VtUBRA7DMSwgl8kT58MEY+5ADqznv0UMkc7CCJZa0nz5V5e3+ca8ONiTX3jtedOsSJOFqJwE3drUEw3tV8ShJlu7f0WwdbglcZeJ+P5hK45jGjtp+qATS+6XHC9RS+Qsjj0UOTNHdERrQmo/XaexyYCnbhyV9bQOpoCDgtxBd/rHhKbuNWeyKBuM5NXJ9lO2zP/9jcL3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uTrEb2Cwr9F7vWkD0UMRfe1+egrfVdeiqDQjljagu4g=;
+ b=m2kdxy41oHRWZbJlIC+vdGKZU5Urmx2KcAqW9/tznPsZO1BWDBS9xGLtV/MSTIu9A+qwPMgu9x50wxf8SR9xWTB8sLsGIBpic/L1aW984NdropJpHmPx2pVAlCoFLiwvT47cf54aCo+LMyJS2nXaDwgZXKE8ieqKbVVeyi84faQWaGCD5vDdAVlqh5Bi7+hor6+H+ti5Jlw88NoCKta4AbM/a6hCemQCwcmavlb1lPUKXGr5UhmC6h5OpFy7GnheWHbVN/kDsE+2tnZ1tU7ruXK+2odUCSakRaBay7LK72cqseZ5lEteOl0RdQl0yvZuiKKfzDKUw8zqB4yKFTA10A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SG2PR06MB5287.apcprd06.prod.outlook.com (2603:1096:4:1df::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
+ 2023 09:54:16 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Tue, 17 Jan 2023
+ 09:54:16 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: fix to check warm_data_age_threshold
+Date:   Tue, 17 Jan 2023 17:54:07 +0800
+Message-Id: <20230117095407.37398-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0048.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::17)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
-In-Reply-To: <dffe5523-4ff7-8b27-46fa-079a9556166f@meta.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Dxrb7kb8ZjkK8aAA--.55653S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3XF1xKF48tr47WFWfWw1fCrg_yoWfGr1rpa
-        48AFZYk3WkGF45trsYk392gFWrtws7XFWUJr18try2v34vvF97Jr4xKrW3GrsxurZ5tFs5
-        A34IgF1SvryrAw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcApnDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5287:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2074cf09-3ebe-4aa0-220a-08daf870cb8b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AUR77EBxYT7lAQEock5u7mXhtV5HU40MwQ4BMJtPB605A/crbLDGV990GdbFhr5eadUpCckOLbCyhzyESGBapPuwewiILOqFNSAANtguX7telX/sfSYlwV5JxlWq5q8pIwNVXiblqEA3PyGBFa4Mw/tJQttBcH2XdV3/3qREHFwgEEaiaegnJutbQRwo1j+qnKkq8/2ltD55cAelyqV3IoTE9ceWexZsPJckDSpbEUUBBX+kZJ/0fAKVjXZ4yLZZG8WhEKiZ78ZV/v+8a4KCf/WxsIh8TB4xaJeXt92/o6PSj4/J4xlNn0LJxmt82291QiBY/UkF27cclnVPB9IfFeXxlGBCDyrl0Mgjg4ll0Y96Ajg+jfr4FHt/150OoTsWxgjZTImT0Ta6gJZnGmsGhKQZ/BeMYvOqEH7ffTIO3SOefDgsKe4iYQkSR18FNYWb/AfTb6ODO8Afphx4hrLOSle9qp4ed0d/S8XEfjJGdk0pXYHtRLvEOqEyWPtSLBZILc9dMUcyjxeJQOWZu814cH+nFPkW17efUr7zeu0cWvSdSfRGLmRqO/QnPtfv+fgVNUGK1wb0AiDXzOmL+lgW/3i5YDp3ldg70+GOEbnuoCGUMMNomUlq/Ky4sBdBjyTfHlWOPUk7DuiqRAq/lCYz4GwjsVPoGsMeaXVf8wvAON4OofLQolJVrGDdEQktQhM8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(376002)(136003)(346002)(451199015)(6486002)(4744005)(8936002)(478600001)(5660300002)(4326008)(41300700001)(26005)(66476007)(66556008)(8676002)(66946007)(36756003)(2906002)(186003)(316002)(86362001)(52116002)(38100700002)(38350700002)(6506007)(6666004)(107886003)(1076003)(6512007)(2616005)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?G9ENNNWLYhn7G4VT9/y1VAfi53ijOLblbs335QSelqPIC1o2JGR3/GO5W69C?=
+ =?us-ascii?Q?GtxMgdlsaRqpXGBtY42rK76dyqH/RsRG8868tJfbLkGzOOyIPnUl4fIT1kzk?=
+ =?us-ascii?Q?lP6KGEST2Im+4pVSrFK1qoR9fFHR3aFG07GP9vrbe2Mq+07101V8NU6Xg+tR?=
+ =?us-ascii?Q?hkV6N9tCKMo8UImGyRbKEypqGcFFsTMug8clKYhFfYxAJr74eTpwbzLCWMPj?=
+ =?us-ascii?Q?UR3WFslJZv6PSS5m9YgmJRnTUoOOCsTZiNsqnbEy57Io0j+VFEs3etgJOa2c?=
+ =?us-ascii?Q?tp9fiUVKANdtO/6ZRc5VIZY++sb+YJix7by6G+tx2/qmX//kQbSeJH/34KCg?=
+ =?us-ascii?Q?BnnK/d1cfrcsCd3R7BeRggEFHSudsCXjsNbCtUBBgqDQfwVTpqFeq0612a0v?=
+ =?us-ascii?Q?Mipl95Hlf6mWOTw877SNESMAdmbbUDiIpU2n1Ycp5d/7TjB91Q+v9y98IDxR?=
+ =?us-ascii?Q?eHUNBQxqvDjJ4n4nNcBrv0IsfFpXVLePh98whhNRVrROc2QR6TDOLZEOi16d?=
+ =?us-ascii?Q?FuOmgiwr4rvQO7FV7M6BmdQICVg6jbFqMzVmc1ZSeWe2P+5RCFCFFvS+tHBM?=
+ =?us-ascii?Q?MeLUIemPM71QxOgkRb8Az6a4cUqr5l/fpAludTw5NixRX6sp30fc02L6GXQ0?=
+ =?us-ascii?Q?QLQoWsdoBbFk/Dwi46//M9bRtWQ/z9Ku7EBaPO+TASm5OGvZFq877vP08xUs?=
+ =?us-ascii?Q?hYPuC09R9gc+rzPnso4pZYgti8UItxrS2KCa8rhoIskRIeMc/jouObDzLYaM?=
+ =?us-ascii?Q?8tlvK2ubpb+s8sp5PaOSyuaRcoMrYvGGVtBfW+gzLkh/H39Ypv75x64IAcSP?=
+ =?us-ascii?Q?BF5C6AUy6ZVMR02hRVy4NBgTLBibIz/U6SeS/2PfGspK4OBzo7J26MMHagT+?=
+ =?us-ascii?Q?+Xj8oELJl/EIMtkg37xW+9iGmac6uptbCdwP3wRBWrx5mQACf/dmTsmmgXQQ?=
+ =?us-ascii?Q?0Tcaaa8A8OGUjY3VsO2MfgP++HqVmkavXi927zF0bMROuV9kVf4hyDOMWVcl?=
+ =?us-ascii?Q?dj1e94EHELGwCKMGCANfVShathF46TFlTdsMvU2xmfGLFyQudB5n1w2H/I7r?=
+ =?us-ascii?Q?PqZvHrWKpUwe4CVJ5rYt2LEDgzs1LkxfWkQ998DB0/GIUFcDabN9LXTk/QFN?=
+ =?us-ascii?Q?RWJvgD6sO2qfykABg19EDK0PlEIyFrZxzjzzsgg6iCv135h0Rf/+uKX7epev?=
+ =?us-ascii?Q?Dbr/a56FqAJaE9AWQ4muwnVVtXBKGYOv7MO7GZUmZblTK0jAyCBUYxcAbGfl?=
+ =?us-ascii?Q?KQLFBAc4QW8OaFgk7MYzOe+hU5PdoSzxN3u+2P+5sALrlSdFWhHDxy74cE6O?=
+ =?us-ascii?Q?KF5C8C/9VP8I5RleBy32w3CjOkYlPC/fi9+GzfqRvowZBnkZ425eIV9mKHDr?=
+ =?us-ascii?Q?2x5FTLZHABMqwlAiQa7v3nH/f19IQxHNDgm35MAO67PrScasWTN5VLzK/JYt?=
+ =?us-ascii?Q?+qGHO4EG5GlNKbU0L8sCitkzcYHjE/r/8MByFCQOu1bGtuRg7n+u75ubFbXT?=
+ =?us-ascii?Q?SLtYxHfMbN/Td5EdKJYkwfI1RstquBOtkiwgnnNvOWceuKiiLuFh3BJ4LImv?=
+ =?us-ascii?Q?yWjVuoDNKc5RTifFluZb+0tDUtWQgffVEMZ053y3?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2074cf09-3ebe-4aa0-220a-08daf870cb8b
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 09:54:16.3921
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u0CH34Tp0rqvv8FSkTz5OIO6fC1nBTO0SvZAvUsAvuhgL7xdhP4j75IIFk6N+wbpqOnXAXRFgzJ6G+5R+5pgCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5287
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hot_data_age_threshold is a non-zero positive number, and
+condition 2 includes condition 1, so there is no need to
+additionally judge whether t is 0. And we need to judge
+whether hot_data_age_threshold exceeds the number of available
+blocks.
 
+Fixes: 71644dff4811 ("f2fs: add block_age-based extent cache")
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/sysfs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-On 01/17/2023 02:48 PM, Yonghong Song wrote:
->
->
-> On 1/16/23 5:54 AM, Alan Maguire wrote:
->> On 16/01/2023 12:30, Eduard Zingerman wrote:
->>> On Mon, 2023-01-16 at 12:55 +0800, Tiezhu Yang wrote:
->>>> $ make -C tools/testing/selftests/bpf/
->>>>
->>>>    CLNG-BPF [test_maps] test_bpf_nf.bpf.o
->>>> progs/test_bpf_nf.c:160:42: error: use of undeclared identifier
->>>> 'NF_NAT_MANIP_SRC'
->>>>                  bpf_ct_set_nat_info(ct, &saddr, sport,
->>>> NF_NAT_MANIP_SRC);
->>>>                                                         ^
->>>> progs/test_bpf_nf.c:163:42: error: use of undeclared identifier
->>>> 'NF_NAT_MANIP_DST'
->>>>                  bpf_ct_set_nat_info(ct, &daddr, dport,
->>>> NF_NAT_MANIP_DST);
->>>>                                                         ^
->>>> 2 errors generated.
->>>>
->>>> Copy the definitions in include/net/netfilter/nf_nat.h to test_bpf_nf.c
->>>> to fix the above build errors.
->>>>
->>>> Fixes: b06b45e82b59 ("selftests/bpf: add tests for
->>>> bpf_ct_set_nat_info kfunc")
->>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>>> ---
->>>>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
->>>>   1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>> index 227e85e..114f961 100644
->>>> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->>>> @@ -34,6 +34,11 @@ __be16 dport = 0;
->>>>   int test_exist_lookup = -ENOENT;
->>>>   u32 test_exist_lookup_mark = 0;
->>>>   +enum nf_nat_manip_type {
->>>> +    NF_NAT_MANIP_SRC,
->>>> +    NF_NAT_MANIP_DST
->>>> +};
->>>> +
->>>
->>> This is confusing, when I build the kernel/tests I get the declaration
->>> the "enum nf_nat_manip_type" from the vmlinux.h (which is included
->>> from test_bpf_nf.c).
->>> Which means that this patch results in compilation error with my
->>> configuration.
->>> Is there a chance that your kernel is configured without some
->>> necessary netfilter
->>> configuration options? Have you tried this patch with BPF CI?
->>>
->>
->> Yep; I suspect if CONFIG_NF_NAT=m , the required definitions won't
->> make it
->> into vmlinux.h. The reference tools/testing/seftests/bpf/config has
->> CONFIG_NF_NAT=y so it is at least documented in the referenced config.
->>
->> I'd suggest going the route of
->>
->> commit aa67961f3243dfff26c47769f87b4d94b07ec71f
->> Author: Martin KaFai Lau <martin.lau@kernel.org>
->> Date:   Tue Dec 6 11:35:54 2022 -0800
->>
->>      selftests/bpf: Allow building bpf tests with
->> CONFIG_XFRM_INTERFACE=[m|n]
->>      ...and adding/using local definitons like:
->>
->> enum nf_nat_manip_type_local {
->>     NF_NAT_MANIP_SRC_LOCAL,
->>     NF_NAT_MANIP_DST_LOCAL
->> };
->
-> The above won't support core, and since preserve_access_index attribute
-> does not support enum for now. We need to use bpf_core_enum_value to
-> retrieve the proper value through CORE.
->
-> could you try the following?
->
-> enum nf_nat_manip_type___local {
->     NF_NAT_MANIP_SRC___LOCAL,
->     NF_NAT_MANIP_DST___LOCAL,
-> };
-
-This is OK, it is similar with commit 1058b6a78db2 ("selftests/bpf: Do 
-not fail build if CONFIG_NF_CONNTRACK=m/n").
-
->
-> ...
-> bpf_ct_set_nat_info(ct, &saddr, sport, bpf_core_enum_value(enum
-> nf_nat_manip_type___local,  NF_NAT_MANIP_SRC___LOCAL));
-> ...
->
-> bpf_ct_set_nat_info(ct, &daddr, dport, bpf_core_enum_value(enum
-> nf_nat_manip_type___local,  NF_NAT_MANIP_DST___LOCAL));
->
-> whether it works or not? Could you also try if the
-> enumerator sequence in enum nf_nat_manip_type___local changed?
->
->>
->> ...to avoid the name clash.
->>
->>
->> Alan
-
-I tested this on x86_64 fedora 36, using config-5.17.5-300.fc36.x86_64
-to generate .config, CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, there are
-no definitions of NF_NAT_MANIP_SRC and NF_NAT_MANIP_DST in vmlinux.h,
-build test_bpf_nf.c failed.
-
-$ grep -w CONFIG_NF_CONNTRACK /boot/config-5.17.5-300.fc36.x86_64
-CONFIG_NF_CONNTRACK=m
-$ grep -w CONFIG_NF_NAT /boot/config-5.17.5-300.fc36.x86_64
-CONFIG_NF_NAT=m
-
-I tested with various configs, the definitions of NF_NAT_MANIP_SRC and
-NF_NAT_MANIP_DST in vmlinux.h only depend on CONFIG_NF_CONNTRACK=y.
-
-(1) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=m, no definitions
-$ grep -w CONFIG_NF_CONNTRACK .config
-CONFIG_NF_CONNTRACK=m
-$ grep -w CONFIG_NF_NAT .config
-CONFIG_NF_NAT=m
-$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
-$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
-$
-
-(2) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=y, no definitions
-This case is unable, because CONFIG_NF_NAT depends on CONFIG_NF_CONNTRACK.
-
-(3) CONFIG_NF_CONNTRACK=m, CONFIG_NF_NAT=n, no definitions
-$ grep -w CONFIG_NF_CONNTRACK .config
-CONFIG_NF_CONNTRACK=m
-$ grep -w CONFIG_NF_NAT .config
-# CONFIG_NF_NAT is not set
-$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
-$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
-$
-
-(4) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=m, have definitions
-$ grep -w CONFIG_NF_CONNTRACK .config
-CONFIG_NF_CONNTRACK=y
-$ grep -w CONFIG_NF_NAT .config
-CONFIG_NF_NAT=m
-$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
-	NF_NAT_MANIP_SRC = 0,
-$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
-	NF_NAT_MANIP_DST = 1,
-
-(5) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=y, have definitions
-$ grep -w CONFIG_NF_CONNTRACK .config
-CONFIG_NF_CONNTRACK=y
-$ grep -w CONFIG_NF_NAT .config
-CONFIG_NF_NAT=y
-$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
-	NF_NAT_MANIP_SRC = 0,
-$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
-	NF_NAT_MANIP_DST = 1,
-
-(6) CONFIG_NF_CONNTRACK=y, CONFIG_NF_NAT=n, have definitions
-$ grep -w CONFIG_NF_CONNTRACK .config
-CONFIG_NF_CONNTRACK=y
-$ grep -w CONFIG_NF_NAT .config
-# CONFIG_NF_NAT is not set
-$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
-	NF_NAT_MANIP_SRC = 0,
-$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
-	NF_NAT_MANIP_DST = 1,
-
-(7) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=n, no definitions
-$ grep -w CONFIG_NF_CONNTRACK .config
-# CONFIG_NF_CONNTRACK is not set
-$ grep -w CONFIG_NF_NAT .config
-$ grep NF_NAT_MANIP_SRC tools/testing/selftests/bpf/tools/include/vmlinux.h
-$ grep NF_NAT_MANIP_DST tools/testing/selftests/bpf/tools/include/vmlinux.h
-$
-
-(8) CONFIG_NF_CONNTRACK=n, CONFIG_NF_NAT=y, no definitions
-This case is unable, because CONFIG_NF_NAT depends on CONFIG_NF_CONNTRACK.
-
-Here is an alternative change to check whether CONFIG_NF_CONNTRACK
-is m, enum nf_nat_manip_type___local is simple, which one is better?
-
-$ git diff tools/testing/selftests/bpf/
-diff --git a/tools/testing/selftests/bpf/Makefile 
-b/tools/testing/selftests/bpf/Makefile
-index 22533a18705e..f3cf02046c20 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -325,7 +325,7 @@ endif
-
-  CLANG_SYS_INCLUDES = $(call 
-get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-  BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
--            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
-+            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) -I$(TOOLSINCDIR)  \
-              -I$(abspath $(OUTPUT)/../usr/include)
-
-  CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c 
-b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 227e85e85dda..f2101807072f 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -2,6 +2,7 @@
-  #include <vmlinux.h>
-  #include <bpf/bpf_helpers.h>
-  #include <bpf/bpf_endian.h>
-+#include <linux/kconfig.h>
-
-  #define EAFNOSUPPORT 97
-  #define EPROTO 71
-@@ -34,6 +35,13 @@ __be16 dport = 0;
-  int test_exist_lookup = -ENOENT;
-  u32 test_exist_lookup_mark = 0;
-
-+#if IS_MODULE(CONFIG_NF_CONNTRACK)
-+enum nf_nat_manip_type {
-+       NF_NAT_MANIP_SRC,
-+       NF_NAT_MANIP_DST
-+};
-+#endif
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index e396851a6dd1..b59595daf3ef 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -689,7 +689,10 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 	}
+ 
+ 	if (!strcmp(a->attr.name, "warm_data_age_threshold")) {
+-		if (t == 0 || t <= sbi->hot_data_age_threshold)
++		block_t avail_user_block_count;
 +
-  struct nf_conn;
-
-  struct bpf_ct_opts___local {
-
-Note that when unset CONFIG_NF_CONNTRACK, there are much more
-build errors, I do not know whether it is necessary to fix it
-and how to fix it properly. Here, I only consider the failed
-case CONFIG_NF_CONNTRACK=m.
-
-Thanks,
-Tiezhu
++		avail_user_block_count = sbi->user_block_count - sbi->current_reserved_blocks;
++		if (t <= sbi->hot_data_age_threshold || t >= avail_user_block_count)
+ 			return -EINVAL;
+ 		if (t == *ui)
+ 			return count;
+-- 
+2.25.1
 
