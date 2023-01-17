@@ -2,140 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7CD66D861
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADC666D853
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235915AbjAQIka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S235877AbjAQIgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 03:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbjAQIkZ (ORCPT
+        with ESMTP id S235754AbjAQIgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:40:25 -0500
-X-Greylist: delayed 376 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 00:40:20 PST
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C228A901C;
-        Tue, 17 Jan 2023 00:40:20 -0800 (PST)
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Tue, 17 Jan 2023 09:34:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1673944442; bh=kMwk25Pa4sf73B3ViO7ZeW5zKO+tJBR7mWWrhfli0aY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Exi2r7Cb7dAUxj2dbia0L2NZ0e2N47abL4qOxy1DLs3jJG5ZRkrDb3T8mbiacFM0q
-         6r+0FMV1tA6LyDOY5EPgXXvqUaTaeWaGYdWSsHUrMgC7Kmz8Aqb7bqQEYPAGY185dd
-         KH5z7QLVstlrhzYFD7oJ/YlhV+zhwbFCQD2zUUcM=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPA id 4193580AA6;
-        Tue, 17 Jan 2023 09:34:02 +0100 (CET)
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id 3784B1816D2; Tue, 17 Jan 2023 09:34:02 +0100 (CET)
-Date:   Tue, 17 Jan 2023 09:34:01 +0100
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] kernel/.gitignore: ignore temporary kheaders_data
- directory
-Message-ID: <Y8ZdGIDj+0nSqjkF@buildd.core.avm.de>
-References: <20230117-kernel-kheaders-gitignore-v1-1-2a3a070efd0d@weissschuh.net>
+        Tue, 17 Jan 2023 03:36:10 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE3D2ED77;
+        Tue, 17 Jan 2023 00:35:48 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30H8Z9BS4127953
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 17 Jan 2023 00:35:09 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30H8Z9BS4127953
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1673944511;
+        bh=vqQlJ3TrrAtDYO6yWi6ppwxx2A6H0krCYOzj335kUj4=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Q0Zb6XImYJwgch3/y8/gj/iQy9mgf7QT/iSdmIKSriM+2/nAC2TuyC1G91P2mhUr7
+         CAxvc/oP5+kT1XT/vmEu6jd8lvuYY0Zvlhfgf+k7bliLwON53gTId8AVpgEhK8xVOZ
+         o2KJTQwLS3N9h7TFYJjmUI7gt8bZ8gVH8gyDvkMvViMyY8MacGfN6x1MagIHXQsHTf
+         IysA8W12o4ShQJ+18Men1u5F1HaJ+OwvQcri3RifCqrGDwK4PJvSOgFkQIY/FcrF41
+         k+DdNsB9xKtOdiVxF2krhhDx4M9bNRoxnQEGvaBUkrj5/t8Go/VxRNTnMZuWLXm4DI
+         kGHiTfwiX1H/Q==
+Date:   Tue, 17 Jan 2023 00:35:06 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Andy Lutomirski <luto@amacapital.net>
+CC:     Yann Droneaud <ydroneaud@opteya.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Florian Weimer <fweimer@redhat.com>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_0/4=5D_random=3A_a_simple_vDSO?= =?US-ASCII?Q?_mechanism_for_reseeding_userspace_CSPRNGs?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <15F7D57C-8CC6-4CAE-8B7E-6F480B5F4133@amacapital.net>
+References: <585ddb35-adc5-f5cf-4db3-27571f394108@zytor.com> <15F7D57C-8CC6-4CAE-8B7E-6F480B5F4133@amacapital.net>
+Message-ID: <34C12E41-1914-4C93-8635-F3FDBADA1EBE@zytor.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ty33j4u5WgmG6v6/"
-Content-Disposition: inline
-In-Reply-To: <20230117-kernel-kheaders-gitignore-v1-1-2a3a070efd0d@weissschuh.net>
-X-purgate-ID: 149429::1673944442-A756973F-F5F3902E/0/0
-X-purgate-type: clean
-X-purgate-size: 2731
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On January 16, 2023 11:49:42 AM PST, Andy Lutomirski <luto@amacapital=2Enet=
+> wrote:
+>
+>
+>> On Jan 13, 2023, at 7:16 PM, H=2E Peter Anvin <hpa@zytor=2Ecom> wrote:
+>>=20
+>> =EF=BB=BFOn 1/12/23 11:55, Yann Droneaud wrote:
+>>> Hi
+>>> 12 janvier 2023 =C3=A0 18:07 "Jason A=2E Donenfeld" <Jason@zx2c4=2Ecom=
+> a =C3=A9crit:
+>>> =20
+>>>> Sorry Yann, but I'm not interested in this approach, and I don't thin=
+k
+>>>> reviewing the details of it are a good allocation of time=2E I don't
+>>>> want to lock the kernel into having specific reseeding semantics that
+>>>> are a contract with userspace, which is what this approach does=2E
+>>> This patch adds a mean for the kernel to tell userspace: between the
+>>> last time you call us with getrandom(timestamp,, GRND_TIMESTAMP),
+>>> something happened that trigger an update to the opaque cookie given
+>>> to getrandom(timestamp, GRND_TIMESTAMP)=2E When such update happen,
+>>> userspace is advised to discard buffered random data and retry=2E
+>>> The meaning of the timestamp cookie is up to the kernel, and can be
+>>> changed anytime=2E Userspace is not expected to read the content of th=
+is
+>>> blob=2E Userspace only acts on the length returned by getrandom(,, GRN=
+D_TIMESTAMP):
+>>>  -1 : not supported
+>>>   0 : cookie not updated, no need to discard buffered data
+>>>  >0 : cookie updated, userspace should discard buffered data
+>>> For the cookie, I've used a single u64, but two u64 could be a better =
+start,
+>>> providing room for implementing improved behavior in future kernel ver=
+sions=2E
+>>>> Please just let me iterate on my original patchset for a little bit,
+>>>> without adding more junk to the already overly large conversation=2E
+>>> I like the simplicity of my so called "junk"=2E It's streamlined, does=
+n't
+>>> require a new syscall, doesn't require a new copy of ChaCha20 code=2E
+>>> I'm sorry it doesn't fit your expectations=2E
+>>=20
+>> Why would anything more than a 64-bit counter be ever necessary? It onl=
+y needs to be incremented=2E
+>
+>This is completely broken with CRIU or, for that matter, with VM forking=
+=2E
+>
+>>=20
+>> Let user space manage keeping track of the cookie matching its own buff=
+ers=2E You do NOT want this to be stateful, because that's just begging for=
+ multiple libraries to step on each other=2E
+>>=20
+>> Export the cookie from the vdso and voli=C3=A0, a very cheap check arou=
+nd any user space randomness buffer will work:
+>>=20
+>>    static clone_cookie_t last_cookie;
+>>    clone_cookie_t this_cookie;
+>>=20
+>>    this_cookie =3D get_clone_cookie();
+>>    do {
+>>        while (this_cookie !=3D last_cookie) {
+>>            last_cookie =3D this_cookie;
+>>            reinit_randomness();
+>>            this_cookie =3D get_clone_cookie();
+>>        }
+>>=20
+>>        extract_randomness_from_buffer();
+>>        this_cookie =3D get_clone_cookie();
+>>    } while (this_cookie !=3D last_cookie);
+>>=20
+>>    last_cookie =3D this_cookie;
+>>=20
+>>    -hpa
+>
 
---Ty33j4u5WgmG6v6/
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Jan 2023 09:34:01 +0100
-From: Nicolas Schier <n.schier@avm.de>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] kernel/.gitignore: ignore temporary kheaders_data
- directory
-
-On Tue, Jan 17, 2023 at 05:15:25AM +0000, Thomas Wei=C3=9Fschuh wrote:
-> If the kheaders archive generation is interrupted then this directory
-> may be left. Ignore it, it will be deleted by the next run of
-> kernel/gen_kheaders.sh.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> ---
->  kernel/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/kernel/.gitignore b/kernel/.gitignore
-> index c6b299a6b786..57ab1d703763 100644
-> --- a/kernel/.gitignore
-> +++ b/kernel/.gitignore
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  /config_data
->  /kheaders.md5
-> +/kheaders_data.tar.xz.tmp/
-
-What about removing the temporary directory on failure instead?  E.g.:
-
-diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
-index 473036b43c83..c656b72a3cdc 100755
---- a/kernel/gen_kheaders.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -61,6 +61,8 @@ echo "  GEN     $tarfile"
- rm -rf $cpio_dir
- mkdir $cpio_dir
-=20
-+trap "rm -rf ${cpio_dir}" EXIT
-+
- if [ "$building_out_of_srctree" ]; then
-        (
-                cd $srctree
-
-
-Otherwise, I'd suggest to extent this .gitignore patch by also adding
-
-   clean-files +=3D kheaders_data.tar.xz.tmp/
-
-to kernel/Makefile.
-
-Kind regards,
-Nicolas
-
---Ty33j4u5WgmG6v6/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmPGXXkACgkQiMa8nIia
-bbj14g//aT1UvWM7Aac9PChXlBal4d2NpCrojDoGrwUxmGX4tH0vwpaxBHeRe3lB
-Txdmktd+PmlJnZ0YHpaTgyKIKottb26yOhCO9CcKwgw1UY27K34n4b7GrV8rpu4I
-sWUDJb5hvfyraIh0n2YqQcRvIJIPRg3t24kc4ZrTS27GdYUMCq8hP3ykA7ol3K9g
-sFDGrPrZF2CPrYEChq1xmbML39occib8ytoSpOxc/cQrent7LyYI3oopBYFV1FDI
-KNMCbkvXgX96ZGJrjXdhMjODZ3apSBARMs67e9iS3BsTGjwPNHstWvkm3VTzmI+U
-5kH2zwyPAdovU6I9iS92hgXZ+hHAem4jpNwBJJbAeB5EtRc3WcxPpcBDp6OxPxFd
-kgQmc6MEB0BOURsipXmNAurxBwZWTYXQLZ6hM22e7G3mv5ZMjgrM4jZ8ZWuHzPRj
-2QKZgXEwGd/w0gwi7ZeTzYEofi+NiRPimzk71a0nWIVo6vmX7QkBJQHrHbela/Ay
-ghogsnAHxNAlYcsp3nXaOpfEUEDAn/oaCUFcQZEvGEjsWXz7vxbTTtAP7Xv9RE+t
-2CuuyIEeRGj4WBF6yYstwY5hnw08X+9v3Vhb0OO1elQkycqyCwOKrtKA3ouPwot3
-9vkqZxyeV8ihXJMHlkFT/j2AphRrlSNv2N8Q14tpg/UBfpHb15A=
-=qPSK
------END PGP SIGNATURE-----
-
---Ty33j4u5WgmG6v6/--
+For those you would randomize the counter=2E
