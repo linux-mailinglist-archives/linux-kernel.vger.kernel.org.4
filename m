@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8481366DB8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5340666DB90
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbjAQKxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
+        id S236156AbjAQKx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbjAQKwm (ORCPT
+        with ESMTP id S236594AbjAQKwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:52:42 -0500
+        Tue, 17 Jan 2023 05:52:51 -0500
 Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2C8305E6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:52:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2573303F9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:52:48 -0800 (PST)
 Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 930C244C101D;
-        Tue, 17 Jan 2023 10:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 930C244C101D
+        by mail.ispras.ru (Postfix) with ESMTPSA id 31B2244C101E;
+        Tue, 17 Jan 2023 10:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 31B2244C101E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1673952758;
-        bh=W+6gRdef0k52Vjrjx/yONZ2ai8LdoBBFD8BbNXJ1V2c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JXjJ/Oh1TAsyFP1lGsmOot3Tk42JjCLmdAKckewn58wdNJsTLW5g04eIp/ygFKxhs
-         6DMH1CK+kmRdcn9Rjry+bbthNsP2Bod7P6pHHLYQjKxU/F3QyFu9m5/k0/nzROy+0l
-         LGLqj1T92uQvz/cXV5X+k9zq3/A77Tr72hueA9dM=
+        s=default; t=1673952767;
+        bh=dGy1xNl2G2/14BqmxD3Z5TPjwoKzMoc8HvevkbhoXhc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WoptNKAXc39Pxz4Y3honDfHZmBXpt0/OBWUWHMT+Z6lV+0VPkWdiv4LKFA6bLs3ew
+         Dlq8tu42kMMs+wFekzAoUXq5Fdi3BS0EZ+enHRF4rOa0np4PcoUZpNT0hQy9LxzkKA
+         /m06bW5QjT8JuIP+aQqHw+IuX28oI0dsjbdWi8wQ=
 From:   Fedor Pchelkin <pchelkin@ispras.ru>
 To:     Phillip Lougher <phillip@squashfs.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, linux-kernel@vger.kernel.org,
         Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: [PATCH 0/1] squashfs: harden sanity check in squashfs_read_xattr_id_table
-Date:   Tue, 17 Jan 2023 13:52:25 +0300
-Message-Id: <20230117105226.329303-1-pchelkin@ispras.ru>
+        lvc-project@linuxtesting.org,
+        syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
+Subject: [PATCH 1/1] squashfs: harden sanity check in squashfs_read_xattr_id_table
+Date:   Tue, 17 Jan 2023 13:52:26 +0300
+Message-Id: <20230117105226.329303-2-pchelkin@ispras.ru>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230117105226.329303-1-pchelkin@ispras.ru>
+References: <20230117105226.329303-1-pchelkin@ispras.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -47,31 +50,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+While mounting a corrupted filesystem, a signed integer '*xattr_ids' can
+become less than zero. This leads to the incorrect computation of 'len'
+and 'indexes' values which can cause null-ptr-deref in copy_bio_to_actor()
+or out-of-bounds accesses in the next sanity checks inside
+squashfs_read_xattr_id_table().
 
-Syzkaller reports the following problem [1].
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
-null-ptr-deref in cache_first_page() happens because 'data[i]' is not
-properly initialized in squashfs_read_table(): this is due to its 'length'
-argument being zero (thus causing 'pages' being zero, too).
-squashfs_read_table() is called twice from squashfs_read_xattr_id_table().
-After the first call, 'id_table->xattr_ids' signed value is processed: if
-a filesystem is corrupted, I suppose, a negative value is written to it
-(in copy_bio_to_actor(), as I understand). So then 'len' and 'indexes'
-values become incorrect (in this case, equal to zero), and it causes the
-bug. I've added the additional check for '*xattr_ids' not being negative.
+Fixes: 506220d2ba21 ("squashfs: add more sanity checks in xattr id lookup")
+Reported-by: syzbot+082fa4af80a5bb1a9843@syzkaller.appspotmail.com
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ fs/squashfs/xattr_id.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But, actually, I don't quite understand why 'xattr_ids' field has
-different types in 'struct squashfs_xattr_id_table' and
-'struct squashfs_sb_info'. Probably that would be an issue. For example,
-in squashfs_xattr_lookup() we compare unsigned 'index' with signed
-'msblk->xattr_ids'. So maybe convert 'xattr_ids' field in
-'struct squashfs_sb_info' to unsigned type? And that, I think, would fix
-the problem described in the patch as well.
+diff --git a/fs/squashfs/xattr_id.c b/fs/squashfs/xattr_id.c
+index 087cab8c78f4..f6d78cbc3e74 100644
+--- a/fs/squashfs/xattr_id.c
++++ b/fs/squashfs/xattr_id.c
+@@ -76,7 +76,7 @@ __le64 *squashfs_read_xattr_id_table(struct super_block *sb, u64 table_start,
+ 	/* Sanity check values */
+ 
+ 	/* there is always at least one xattr id */
+-	if (*xattr_ids == 0)
++	if (*xattr_ids <= 0)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	len = SQUASHFS_XATTR_BLOCK_BYTES(*xattr_ids);
+-- 
+2.34.1
 
-[1] https://syzkaller.appspot.com/bug?id=8cf937ba2cde11be769fe8a1330c8d9153e3d7fa
-
---
-Regards,
-
-Fedor
