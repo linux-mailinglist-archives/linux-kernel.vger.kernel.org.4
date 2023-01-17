@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD6066E34E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D3266E35D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjAQQVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S229695AbjAQQVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjAQQVN (ORCPT
+        with ESMTP id S229889AbjAQQVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:21:13 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A8C3F2A7;
-        Tue, 17 Jan 2023 08:21:10 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x36so11141212ede.13;
-        Tue, 17 Jan 2023 08:21:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kivy3jjwYzn/JSNdHib7sOuDADuWRA8LRyBLPMjZpsw=;
-        b=lhzHuEISQLNBnbnHTdwp8z0zhTajtQGyI9rlUAHOK2/dHfdisep4Uryyj0ATZc77i/
-         /OODhNip16HPrLO7yMjA1HnKAovGCLpMCxpLNO2eFXMqaaY9o7yKTxafqt6qPsDcap0y
-         kfZvsMjgyAJpVtfv8wC4iVmfzWKU73T9YgXJY/2DV2689Qc1sDlM/N6m/lyDLZ/a+sK2
-         qDWkKqaGXsFLZSOrOYlCbgS+9hObrEjpnuFdo1LjyBwi6m4UGl5zvUdy0VNjlgqEEfH4
-         P6Tlwm7y0kawyQli3EKqE24h6KX2hh2TudreAR+NHUsQDYDxHvduGNjJbSJG6DRWBlg9
-         ERZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kivy3jjwYzn/JSNdHib7sOuDADuWRA8LRyBLPMjZpsw=;
-        b=MjV+OSitMrdKTsD83gge0RG8pWdgEhB6oKnbFqNAoYZJAX7EjNVU5qBYIxmo2wka1p
-         ff5/mXib66XngxIHdQd5ChHyhy46IV+eK8uZd6+8/o7NRvvLSLCszcWodw0/PQ9OyCIE
-         9K4u9s4DPmPZlV+thDnKppFeS+ZfYaeoSidIzok9I/nXJy+o1brAz122LwDfeQnzbgH3
-         VKA+7Bn7cI2/EXn7C4uIln4I0Hez33+PmEkO6XtEb1QP+AL3FOv7G1JieESZm/UsA8Mx
-         EBknDW8uj8goj5z9hc31ggf1Vbzr3bUfSCYddO/DyGZxYk6Am0UBJoDMadB1jnUnDuQm
-         vSsg==
-X-Gm-Message-State: AFqh2ko03b2Y5F0qI5PKNFEH7J3P92BYiIaP6QcDsQmwHyy1EDVEQvvv
-        IrXac6IsYE2yxtVE4Ro4TSggndpBolJGPikp/L8=
-X-Google-Smtp-Source: AMrXdXubGYZD7aTuuhUm2OVgI5EY37JQNqhACjZ7vVZCoKjTFv0ui636JHLvkUs2+m+OPe9YPBXbALJzyat2gtiWImM=
-X-Received: by 2002:aa7:cac6:0:b0:46a:e6e3:b3cf with SMTP id
- l6-20020aa7cac6000000b0046ae6e3b3cfmr379150edt.333.1673972468743; Tue, 17 Jan
- 2023 08:21:08 -0800 (PST)
-MIME-Version: 1.0
-References: <SJ0PR04MB7248C599DE6F006F94997CF180C39@SJ0PR04MB7248.namprd04.prod.outlook.com>
- <CAADnVQK4ucv=LugqZ3He9ubwdxDu6ohaBKr2E=TX0UT65+7WpQ@mail.gmail.com>
- <CACYkzJ75aNbH4w_GzYjrNPKis1x24KOu_33DniY_ig5s3ycobg@mail.gmail.com> <SJ0PR04MB724883C0DC180E3A45CBB36780C69@SJ0PR04MB7248.namprd04.prod.outlook.com>
-In-Reply-To: <SJ0PR04MB724883C0DC180E3A45CBB36780C69@SJ0PR04MB7248.namprd04.prod.outlook.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 17 Jan 2023 08:20:57 -0800
-Message-ID: <CAADnVQKvoy9L9es=YAr7JkcKR2GGn_uH=Q1Cp89N2KkwB4jgAg@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Add CONFIG_BPF_HELPER_STRICT
-To:     Pwn Kernel <kernel.pwn@outlook.com>
-Cc:     KP Singh <kpsingh@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>, bristot <bristot@redhat.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 17 Jan 2023 11:21:40 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A265A3EFE0;
+        Tue, 17 Jan 2023 08:21:39 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HEbExR003566;
+        Tue, 17 Jan 2023 16:21:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=cg96SnQCqORoWKdPdsLknlM+aptVO8mCOtYYDlx2JgY=;
+ b=XmksmQGJat8kWnfxVIbK4EiyeHNk/px5J8lsPCZcwo7j1TlOTE88sTCmMGDF2JjqXpFD
+ aB+tkfzk1Amogju1q6IF/NTqPP9roDku3zsUNew6aozUhFiJDFQ1JBAjzrNzEzqCnygj
+ YDcuUDfcFHy+la0zS21tRHgbvnq70assq5edO1/ckN+0/k+kTY1HUWxeWoyhsHpxee9s
+ A8TQZAGdgH4exJY+RTMSMUYutZNQJlDdlJjqTt+8lKxBK/UAahneMbDyBNV3hOD3SmSo
+ v/AmqEU7aZZYwcn8npo5CMXmcET9ug224YXVsSIKfD0K9jNw2r3HtiCZ3w+zIjhr8tXX qA== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3j3nnyya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 16:21:36 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 30HGLWG5014779;
+        Tue, 17 Jan 2023 16:21:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3n3nfk7sum-1;
+        Tue, 17 Jan 2023 16:21:32 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30HGLWg1014774;
+        Tue, 17 Jan 2023 16:21:32 GMT
+Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 30HGLVJ2014773;
+        Tue, 17 Jan 2023 16:21:32 +0000
+Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
+        id B31314B06; Tue, 17 Jan 2023 08:21:30 -0800 (PST)
+From:   Kalyan Thota <quic_kalyant@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com
+Subject: [PATCH 0/3] Allow composer fallbacks for color features
+Date:   Tue, 17 Jan 2023 08:21:25 -0800
+Message-Id: <1673972488-30140-1-git-send-email-quic_kalyant@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cB_wSQ1_KLobwF_95PJA3bCadlxkTVGp
+X-Proofpoint-ORIG-GUID: cB_wSQ1_KLobwF_95PJA3bCadlxkTVGp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_08,2023-01-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 bulkscore=0 suspectscore=0 mlxlogscore=530 phishscore=0
+ clxscore=1011 mlxscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301170130
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,14 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:25 PM Pwn Kernel <kernel.pwn@outlook.com> wrote:
->
-> Thank you for your suggestion so much, we understand it.
->
-> In the other hand, Do you think if add several lockdown reasons like LOCKDOWN_BPF_SEND_SIGNAL and  LOCKDOWN_BPF_OVERRIDE_RETURN will be better or acceptable for this?
->
-> Thanks for your advice!
+This series will enable color features on sc7280 target which has primary panel as eDP
 
-Please do not top post and don't use html in your replies.
-Please learn the process first:
-https://docs.kernel.org/process/development-process.html
+The series removes dspp allocation based on encoder type and allows the datapath reservation
+even if dspps are not available.
+
+The series also adds a check to fail the composition during atomic check , if color management is requested 
+and no dspps are allocated in the datapath.
+
+This can allow composer fallbacks for color features if no relevant HW blocks are available.
+
+Kalyan Thota (3):
+  drm/msm/disp/dpu1: allow reservation even if dspps are not available.
+  drm/msm/disp/dpu1: allow dspp selection for all the interfaces
+  drm/msm/disp/dpu1: fail atomic check if color feature is requested
+    with no dspp
+
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 11 +++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 18 +++++++++---------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c      |  8 +++++++-
+ 3 files changed, 27 insertions(+), 10 deletions(-)
+
+-- 
+2.7.4
+
