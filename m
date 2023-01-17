@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56D766D48F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777DF66D48B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 03:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbjAQCuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 21:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S235259AbjAQCuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 21:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbjAQCt4 (ORCPT
+        with ESMTP id S235591AbjAQCtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 21:49:56 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC5B33463;
-        Mon, 16 Jan 2023 18:43:03 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NwtTV5mHYz501TL;
-        Tue, 17 Jan 2023 10:42:22 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl1.zte.com.cn with SMTP id 30H2gFa3047682;
-        Tue, 17 Jan 2023 10:42:15 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 17 Jan 2023 10:42:17 +0800 (CST)
-Date:   Tue, 17 Jan 2023 10:42:17 +0800 (CST)
-X-Zmail-TransId: 2af963c60b09602345dd
-X-Mailer: Zmail v1.0
-Message-ID: <202301171042170334662@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <rafael@kernel.org>
-Cc:     <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <rui.zhang@intel.com>, <srinivas.pandruvada@linux.intel.com>,
-        <dave@stgolabs.net>, <chuansheng.liu@intel.com>,
-        <joeyli.kernel@gmail.com>, <jiasheng@iscas.ac.cn>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsL2ludDM0MHhfdGhlcm1hbDogQ29udmVydCB0byB1c2Ugc3lzZnNfZW1pdF9hdCgpIEFQSQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30H2gFa3047682
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C60B0E.000/4NwtTV5mHYz501TL
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 16 Jan 2023 21:49:49 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2CB3346C
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 18:42:56 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d3so32103036plr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 18:42:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ci0ShutkyKqbRS5y4WPW5+YhID9YQTVWD129Yl/CGkY=;
+        b=QjjequB+bplNYxUEtGQzwSjo9+VvYNN/XhKvzZM0XlamFEbJs90Tth5t1TD3XAzRJz
+         JIvQGcRMwo0hwiH373b81nt6gPyhXwCWqvWLp2DM1FxT/KdKXTIdLWTaU8ICEMu7xpQd
+         5sceRvnB1/uFx94inIZAolVq0Pu95Ag3afa4A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ci0ShutkyKqbRS5y4WPW5+YhID9YQTVWD129Yl/CGkY=;
+        b=8GptYfj1VVQ9K91gGW/3Oa0my321NH1uC2GHgSeMpGK3d2Ih+8dRJP2+oZhkEl9Q3Q
+         2f6HFe6KnIb3C0CFG25vWV9QwYER1QkQgXv81irEmy26ZLvRG0pbaOB0NXCWD9ydkQfX
+         zVGlCA1e5AIGk7KINCRbhT1GHuH+dKijZ08fC25pH33AHCrIB+n02ud6SEj2lrFTc92z
+         yw81WcfIT+WVmzB0xqavcf5hdVcQXLkjbBOiz1ZERC57EEJOuMX8lw9L1dyvego+0DR7
+         wqymChUxkLhrHq1MwAyGVUDX9Z3mFRMxyi4qRPAzlvWG6JbiCk+rPAgE2cQZVbxI+IZi
+         duLQ==
+X-Gm-Message-State: AFqh2kpWSklR75bvDYkudMnP8TdcvOwP5vF9xfcNddpRDCta3GjCn+RD
+        s3oZk9kKNTmS9yE7/OCh+vSZxA==
+X-Google-Smtp-Source: AMrXdXt9saMUMMymJC5GYhQSjizFrnpQID9HqmpQqPvwSrzjohq15SMwxJxf2Mno4CcOWYP9KWe9Dg==
+X-Received: by 2002:a17:902:7b85:b0:193:3bf7:40e6 with SMTP id w5-20020a1709027b8500b001933bf740e6mr735478pll.53.1673923364863;
+        Mon, 16 Jan 2023 18:42:44 -0800 (PST)
+Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with ESMTPSA id e2-20020a170902784200b0017d97d13b18sm19958534pln.65.2023.01.16.18.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 18:42:44 -0800 (PST)
+From:   Judy Hsiao <judyhsiao@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH v3] arm64: dts: qcom: sc7280: add display port audio
+Date:   Tue, 17 Jan 2023 02:42:36 +0000
+Message-Id: <20230117024236.1442437-1-judyhsiao@chromium.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+1. Add DisplayPort sound node and lpass_cpu node.
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+2. Adjust the dai-link order to make the order to
+   be consistent with sc7280-herobrine-audio-rt5682-3mic.dtsi.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+
 ---
- .../thermal/intel/int340x_thermal/int3400_thermal.c    | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index db8a6f63657d..c1fc4a78607c 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -130,10 +130,7 @@ static ssize_t available_uuids_show(struct device *dev,
+Changes in v3:
+- Add more detail in the commit message.
 
- 	for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; i++) {
- 		if (priv->uuid_bitmap & (1 << i))
--			length += scnprintf(&buf[length],
--					    PAGE_SIZE - length,
--					    "%s\n",
--					    int3400_thermal_uuids[i]);
-+			length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
- 	}
+Changes in v2:
+- Fix the commit message format.
 
- 	return length;
-@@ -151,10 +148,7 @@ static ssize_t current_uuid_show(struct device *dev,
+ .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
- 	for (i = 0; i <= INT3400_THERMAL_CRITICAL; i++) {
- 		if (priv->os_uuid_mask & BIT(i))
--			length += scnprintf(&buf[length],
--					    PAGE_SIZE - length,
--					    "%s\n",
--					    int3400_thermal_uuids[i]);
-+			length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
- 	}
-
- 	if (length)
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+index af685bc35e10..69e7aa7b2f6c 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+@@ -33,9 +33,22 @@ codec {
+ 		};
+ 
+ 		dai-link@1 {
+-			link-name = "ALC5682";
++			link-name = "DisplayPort";
+ 			reg = <1>;
+ 
++			cpu {
++				sound-dai = <&lpass_cpu LPASS_DP_RX>;
++			};
++
++			codec {
++				sound-dai = <&mdss_dp>;
++			};
++		};
++
++		dai-link@2 {
++			link-name = "ALC5682";
++			reg = <2>;
++
+ 			cpu {
+ 				sound-dai = <&lpass_cpu MI2S_PRIMARY>;
+ 			};
+@@ -92,6 +105,10 @@ dai-link@1 {
+ 		reg = <MI2S_SECONDARY>;
+ 		qcom,playback-sd-lines = <0>;
+ 	};
++
++	dai-link@5 {
++		reg = <LPASS_DP_RX>;
++	};
+ };
+ 
+ /* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
 -- 
-2.25.1
+2.39.0.314.g84b9a713c41-goog
+
