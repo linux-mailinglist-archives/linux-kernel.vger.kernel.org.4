@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FA266E277
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEB466E288
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbjAQPlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S232825AbjAQPn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjAQPkP (ORCPT
+        with ESMTP id S232871AbjAQPm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:40:15 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480C8442C1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:38:02 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-212-3-NW2l7vPvm0IpR6lhilGA-1; Tue, 17 Jan 2023 15:37:59 +0000
-X-MC-Unique: 3-NW2l7vPvm0IpR6lhilGA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 15:37:43 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 17 Jan 2023 15:37:43 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'ye.xingchen@zte.com.cn'" <ye.xingchen@zte.com.cn>,
-        "3chas3@gmail.com" <3chas3@gmail.com>
-CC:     "linux-atm-general@lists.sourceforge.net" 
-        <linux-atm-general@lists.sourceforge.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH linux-next] atm: lanai: Use dma_zalloc_coherent()
-Thread-Topic: [PATCH linux-next] atm: lanai: Use dma_zalloc_coherent()
-Thread-Index: AQHZKlWc44pBM0uMrEWvu+tqrnPEAq6ivi6Q
-Date:   Tue, 17 Jan 2023 15:37:43 +0000
-Message-ID: <913000213dd14e3b9da69270134aafa3@AcuMS.aculab.com>
-References: <202301171721076625091@zte.com.cn>
-In-Reply-To: <202301171721076625091@zte.com.cn>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 17 Jan 2023 10:42:57 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FC146718;
+        Tue, 17 Jan 2023 07:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Kom6on8j6mSNlJKtIXaCMnBU1kbmwG1jw9oAyKkQ8ns=; b=0iiZ3N7aFYhkbvtWJZx5cdptZS
+        yb4woqkr/28SlChyuHssCvO+LdsYqwYMCR2KlpWDwgmjj2sGMuJ/1ZlV/ZEfOZFtyjNjL1VL/IrwN
+        v1SuDbSLbyxR34UrffovTlISRU/haUH1EExpP577jpfmPn2jxCepaOuwgJY4FyyV2FT+8E7irqrDQ
+        gjeBMOw3aaNA7s3VmYYiSyGoECcK+Q2fxYa3zRNjdcREhFW9BCh/gO/CxuFjTV26rhuLDJJnWiZiC
+        hdj49a074N0AC5/Y25Mm/bfEoigKL0XIdK0/rpPSw1H2n46K+U8vZ7JcmHCz9ypQ9z46RxJy0C7aJ
+        XuwroYCw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHo3i-00EsoZ-1G; Tue, 17 Jan 2023 15:39:34 +0000
+Date:   Tue, 17 Jan 2023 07:39:33 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
+Message-ID: <Y8bBNcWZ9gZDk+LR@bombadil.infradead.org>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogeWUueGluZ2NoZW5AenRlLmNvbS5jbg0KPiBTZW50OiAxNyBKYW51YXJ5IDIwMjMgMDk6
-MjENCj4gDQo+IEluc3RlYWQgb2YgdXNpbmcgZG1hX2FsbG9jX2NvaGVyZW50KCkgYW5kIG1lbXNl
-dCgpIGRpcmVjdGx5IHVzZQ0KPiBkbWFfemFsbG9jX2NvaGVyZW50KCkuDQoNCkknbSBzdXJlIEkn
-dmUgYSBicmFpbiBjZWxsIHRoYXQgcmVtZW1iZXJzIHRoYXQgZG1hX2FsbG9jX2NvaGVyZW50KCkN
-CmFsd2F5cyB6ZXJvcyB0aGUgYnVmZmVyLg0KU28gdGhlICd6YWxsb2MnIHZhcmlhbnQgaXNuJ3Qg
-bmVlZGVkIGFuZCB0aGUgbWVtc2V0KCkgY2FuIGp1c3QNCmJlIGRlbGV0ZWQuDQpPVE9IIGlzIGl0
-IHJlYWxseSB3b3J0aCB0aGUgY2h1cm4uDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
+> 
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
+> 
+> While at it, include the corresponding header file (<linux/kstrtox.h>)
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This patch is part of a serie that axes all usages of strtobool().
+> Each patch can be applied independently from the other ones.
+> 
+> The last patch of the serie removes the definition of strtobool().
+> 
+> You may not be in copy of the cover letter. So, if needed, it is available
+> at [1].
+> 
+> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
+> ---
 
+Queued up to modules-next.
+
+  Luis
