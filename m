@@ -2,105 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1D566E7AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7CC66E788
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjAQUZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:25:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S232484AbjAQUK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbjAQUV1 (ORCPT
+        with ESMTP id S234511AbjAQUHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:21:27 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1A95CE5F
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:13:32 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id j1so7089591iob.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:13:32 -0800 (PST)
+        Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBA53FF29
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1322d768ba7so32973732fac.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=33Ncea+r49M0JFeF3LtrfUuUT4g5hGuOl0GtEnc7zfw=;
-        b=M82Qd6AI0hYaULrWAi7eXudgqNOdBArrqWl8NUWMhweZ1mgAI2BOdntQuu6w6SxKp3
-         uPJGFLbnFvsoOAWbhlp5NMRCHg+Ij7ymAgzX0aOEZfRkK1FUl2Sw7+1qzFBooxTHNDFH
-         QwP5WpHzLvBQvF6ibc3RcXcXxlP0nI86XHv6uJSb+9THDwwqwYrQ5yeOi9sTFLXgYRRW
-         ucAECxKZmfng297NPeMfRzYIf4RRtEH/TGcdtzC4B45Z7WI2Rn9YTRlrTOKIM3kJaq0P
-         Vgk2T1bWc1Hp06NcNbnlU8lfB32azU1uJViZMnpHy9r0yXJ2JHPoMOPAq+kDhSVl3qrN
-         7/LA==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
+         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
+         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
+         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
+         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
+         BObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=33Ncea+r49M0JFeF3LtrfUuUT4g5hGuOl0GtEnc7zfw=;
-        b=4EWWeJqN2zos9Z+4XytpCh/SXadJQtmcdQabISMOj1sKHqJ19As+2S2ALzWgbnf3oD
-         OwhXOtG372exQo4UhYqiHaUOICcwIBMb0Ex9bpOaGG3pS8gh1cL+o18PeY7RkZBIwhzt
-         XDSe4wDdu0dKzAOsIxaTe7ZVj7Lp6DnKoY8pk6395w28P+aplQUrBli6czWcJyTRA+nM
-         VlVWknG+GuPGCYWMMjmSOmbDLK71ZAJFHfpMkUvuvNhzL7jN7uKXbby1dLzFvg3/wxPN
-         NcN9QS1RtipQlKWQ38sJ8zyzAjgzW7pB76UAE9odutCjxmw/cGnEh62pOsI2xmexDzK/
-         0G1Q==
-X-Gm-Message-State: AFqh2kpfnrYA2tTa8XqBQvMnO3Z7wQuXxHY8ki46yuQaSj54oTRQmLM8
-        LmajotL+CTL4OmZtUeznvoZHCSitdsNNrRbgAAesnA==
-X-Google-Smtp-Source: AMrXdXsDLyLv3tnBqT3yJqNdPKtwS3NIDmj8Ad2h0WWLOnTb1J4nJmCvaMK3XkzXh05XxIo4fWEHMFhVoNhEqk6Lc5Q=
-X-Received: by 2002:a5d:945a:0:b0:6e3:2350:744c with SMTP id
- x26-20020a5d945a000000b006e32350744cmr199633ior.2.1673982805815; Tue, 17 Jan
- 2023 11:13:25 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=Q+gc0CqkQXmJAfAeVrw5pGR3eQGVoQVap0sxRoJcD0/vyfyXhZBqQjuSPgqJjA4sjU
+         JiTT0RMn5W+no8axO8lukLfzBGTSP5VVKt3adGjWZXLev2S8yAjp5DH2xZ4Gni9kI91q
+         nF/xcFsPyomjbHFCzoGH4CHviQVFBmaHYfCdAkm+dnBtEqG1/kYcML0lAk1yepVz2RP0
+         gOozG5dvVfe+X7nqpz7/g6j7TBDPSb6wdfPARClfJ5NpSLZUH2pUydomhxsZMAzPGJgJ
+         6LNbKZe9hOS1DQiuiX6lqyKScXLRSb/YlU8/Ag8M8bxBOLQtgALukxSzs6fp0c/gBkGa
+         O36Q==
+X-Gm-Message-State: AFqh2koalovh1kT2erxoQnuOlwPiJna0PoLCcEV89848n0+zRbFPR3FO
+        Yh0ubrkCTSTk2HDCWxLgUBDT4A==
+X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
+X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
+        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
+Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+Date:   Tue, 17 Jan 2023 13:13:38 -0600
 MIME-Version: 1.0
-References: <20230111133351.807024-1-jannh@google.com>
-In-Reply-To: <20230111133351.807024-1-jannh@google.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Jan 2023 20:12:49 +0100
-Message-ID: <CAG48ez36Nio9GzU_m168AEJMXxtcNtdgq6YpAhLq-aKNQA_9fg@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <20230116071306.GA15848@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 11, 2023 at 2:33 PM Jann Horn <jannh@google.com> wrote:
-> If an ->anon_vma is attached to the VMA, collapse_and_free_pmd() requires
-> it to be locked. retract_page_tables() bails out if an ->anon_vma is
-> attached, but does this check before holding the mmap lock (as the comment
-> above the check explains).
+On 1/16/23 01:13, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
+>> I'm still maintaining and using this port in Debian.
+>>
+>> It's a bit disappointing that people keep hammering on it. It works fine for me.
+> 
+> What platforms do you (or your users) use it on?
 
-@akpm please replace the commit message with the following, and maybe
-also add a "Link:" entry pointing to
-https://lore.kernel.org/linux-mm/CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com/
-for the reproducer.
+3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
+sh4 emulator.
 
+I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
+different kinds of boards running it here). There's an existing mmu version of
+j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
+released yet, I have yet to get that to run Linux because the mmu code would
+need adapting, but the most recent customer projects were on the existing nommu
+SOC, as was last year's ASIC work via sky130.
 
-If an ->anon_vma is attached to the VMA, collapse_and_free_pmd() requires
-it to be locked.
-Page table traversal is allowed under any one of the mmap lock, the
-anon_vma lock (if the VMA is associated with an anon_vma), and the
-mapping lock (if the VMA is associated with a mapping); and so to be
-able to remove page tables, we must hold all three of them.
-retract_page_tables() bails out if an ->anon_vma is attached, but
-does this check before holding the mmap lock (as the comment above
-the check explains).
+My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
+little blue one is... sh4a I think? (It can run the same userspace, I haven't
+replaced that board's kernel since I got it, I think it's the type Glaubitz is
+using? It's mostly in case he had an issue I couldn't reproduce on different
+hardware, or if I spill something on my N40.)
 
-If we racily merge an existing ->anon_vma (shared with a child process)
-from a neighboring VMA, subsequent rmap traversals on pages belonging to
-the child will be able to see the page tables that we are concurrently
-removing while assuming that nothing else can access them.
+I also have a physical sh2 board on the shelf which I haven't touched in years
+(used to comparison test during j2 development, and then the j2 boards replaced it).
 
-Repeat the ->anon_vma check once we hold the mmap lock to ensure that there
-really is no concurrent page table access.
+I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
+really convenient: neither of my physical boards boot from SD card so replacing
+the kernel requires reflashing soldered in flash. (They'll net mount userspace
+but I haven't gotten either bootloader to net-boot a kernel.)
 
-Hitting this bug causes a lockdep warning in collapse_and_free_pmd(),
-in the line
-"lockdep_assert_held_write(&vma->anon_vma->root->rwsem)".
-It can also lead to use-after-free access.
+I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
+bash script that builds bootable toybox systems for a dozen-ish architectures,
+including building a kernel configured to run under qemu:
+
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+
+And I ship the resulting bootable system images, most recent release is at:
+
+  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+
+As described at:
+
+  http://landley.net/toybox/faq.html#mkroot
+
+Various people in Japan have more hardware, but I haven't made it physically
+back there since 2020. (My residency card expired during the pandemic.)
+
+Rob
