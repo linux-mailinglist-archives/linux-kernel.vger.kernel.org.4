@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDB766E4A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5C566E471
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjAQRRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S233848AbjAQRIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:08:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbjAQRQo (ORCPT
+        with ESMTP id S231742AbjAQRH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:16:44 -0500
-X-Greylist: delayed 529 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 09:15:50 PST
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC7249039
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:15:50 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3E3E3581CF6;
-        Tue, 17 Jan 2023 12:07:00 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 17 Jan 2023 12:07:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1673975220; x=
-        1673982420; bh=OBgdXpJBXM8o0qloG5WjFFCtSTsxtIOycEpkPC9isio=; b=f
-        NfbTJ5s4+EOpk6I2z8hIGqJtcR6GzivpJNNxhcIwkeBx8Qp7LfF3orN0ERntE9mU
-        KmYzbkLS1wrTmSNGPPyLL+FDIjMlXKo36yAoo0I+9HgraAWW/J1mDsAd5C0bzl4v
-        v6Jopc1Nu0QeroyFOW8Ji6Je8YWtgFQiWsLDJEbok6u8SIy3DGoUi3nm3ym1jTJP
-        b2sVAK/35wSniidyxhyv5QHaNmiSzVNaFro3DvgzjlTgCXYCzNEHfDZU9mJgvQSU
-        gamZeoGvlGqervqs9RCwejpsT5OqLwexnNayJmfhG4WS4ZJxFcVaG+escLAGHlSL
-        Fa/QOLpv7rHxRYIprLU6Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673975220; x=
-        1673982420; bh=OBgdXpJBXM8o0qloG5WjFFCtSTsxtIOycEpkPC9isio=; b=k
-        ZRRoyPjtgG86dS6URFKZnWY+VWgNuk8kSq8wwpFWVwhGBkotqSEv4N1nkPTr1Djd
-        4wMXlJyf8UJPsU7VITbKyzAJvNLH/LcN9ejR13AEb8rbjhNV5exytRrFICVRxkTi
-        w/b5YFWxjo2X3yWuRfVvcSBdPbKBlRLoEGb/l4fKVpsL3GYchWPvjNtDhUc9hyXY
-        VpetE0tHWRnp0fuSTGBnIBJ2ncOSjLUn00HVBlflNh7vf6k3rc6F25pYJwo9+2Hs
-        xeR2FY6qhGu3tYclTS3/htU8vIuzpNKBQath5RyrNWJwupXQTAeEbUFi7eUmRl9a
-        eKIPofpDiKLMPqHHlYj/A==
-X-ME-Sender: <xms:stXGY5RV2BB9622TowvBI0tsQ7TEo3LjMahnJl6jVlgIJ2JVOq-GQg>
-    <xme:stXGYyyEZQ1M1sMc1eyRCpMJu-Kuv3c8wn7h_oJI2xyBmBOJ1e1MYa1gIfoBiBS7j
-    IyvPnlla-E0dy-XagY>
-X-ME-Received: <xmr:stXGY-0m6eAGgmVwNcTwy5PyhudPJiMtlB5AmcPI_kn0G9bco6iKq3_k05j3RjsGXqxaBVew4D6LklU64TIGpsmgqjZPPVzo1vSsEOlPcWOmjg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtiedgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepleeifffgvdetjeejueejieehuedvteeigeehtefhhfeifeegleekudek
-    teegueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:stXGYxDtnen6LWxSsc2SiTR045WdZZZ0KrBtsusDJRxnc_SuRUa8Rw>
-    <xmx:stXGYygUPgIS7ckQ_mMx1ySriSwla10nfqKW4pzfOxTi87UPBZI8gA>
-    <xmx:stXGY1ohUYBCtGKxb4zWzAXxH6Mszy_Uwqz-_zRDsigp3QVh_tLqMg>
-    <xmx:tNXGY9TJq_HbUCIk66GC3_FrRWMijjfbNOtKU1w_bhkC8faaYKC8yg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 17 Jan 2023 12:06:58 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?utf-8?q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230117165258.1979922-1-arnd@kernel.org>
-References: <20230117165258.1979922-1-arnd@kernel.org>
-Subject: Re: (subset) [PATCH] vc4: fix build failure in vc4_dsi_dev_probe()
-Message-Id: <167397520092.2619750.10136491549623905687.b4-ty@cerno.tech>
-Date:   Tue, 17 Jan 2023 18:06:40 +0100
+        Tue, 17 Jan 2023 12:07:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076352BEFD
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:07:57 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHpRB-0003GK-8T; Tue, 17 Jan 2023 18:07:53 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHpR9-006jNY-47; Tue, 17 Jan 2023 18:07:51 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHpR8-00DesE-4e; Tue, 17 Jan 2023 18:07:50 +0100
+Date:   Tue, 17 Jan 2023 18:07:49 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [PATCH v7 00/10] Designware PWM driver updates for OF
+Message-ID: <20230117170749.vff5av32m6djc5dz@pengutronix.de>
+References: <20221223153820.404565-1-ben.dooks@sifive.com>
+ <46703b00-97d3-c21d-fbe1-71208fb50f73@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m7xx7b55ldi3cgzf"
+Content-Disposition: inline
+In-Reply-To: <46703b00-97d3-c21d-fbe1-71208fb50f73@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 Jan 2023 17:52:51 +0100, Arnd Bergmann wrote:
-> The bridge->of_node field is defined inside of an #ifdef, which
-> results in a build failure when compile-testing the vc4_dsi driver
-> without CONFIG_OF:
-> 
-> drivers/gpu/drm/vc4/vc4_dsi.c: In function 'vc4_dsi_dev_probe':
-> drivers/gpu/drm/vc4/vc4_dsi.c:1822:20: error: 'struct drm_bridge' has no member named 'of_node'
->  1822 |         dsi->bridge.of_node = dev->of_node;
-> 
-> [...]
 
-Applied to drm/drm-misc (drm-misc-next).
+--m7xx7b55ldi3cgzf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
-Maxime
+Hello Ben,
+
+On Tue, Jan 17, 2023 at 04:39:34PM +0000, Ben Dooks wrote:
+> On 23/12/2022 15:38, Ben Dooks wrote:
+> > An updated set of patches for the Designware PWM driver
+> > split into PCI and OF versions. I think I got all the
+> > review issues in this set.
+> >=20
+> > Sorry for the delay in getting this out, between conferences
+> > and other absences there has been little time to deal with
+> > this set. I will be now out of office until 3rd Jan 2023.
+>=20
+> Hi, how's the progress on review and getting this set finalised?
+
+Speaking for me:
+
+Your patch set isn't forgotton. It's just that my time is limited and
+reviewing a new driver is time intensive.
+
+I'm sorry I cannot give feedback in a more timely manner, but I will
+come to it eventually.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--m7xx7b55ldi3cgzf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPG1eMACgkQwfwUeK3K
+7AlzdQf/QUmeI4a1TFkUr15wS6W3iWDAylkgqXR4laiuB7kf6DN/uGDrCHCmch+n
+A7bzpFN16H0i39OSEwM6NLb27z5GDR/NPjjqnq1nXj7/9j2D240JDlYUxMSsnlot
+5ZgSEJWhzVWKSPBpgbhx92jPTlCK4qcFwpIcFtGw+UoTCZjK7ZN/cLDcRxl+szwj
+wDkA1cGwM21N7xZ9dtHXRMUJM45ReXU+BBCN6bbzNyFh/apiYkOH/bYwy4g4ssy+
+TgThWOBWOaxu8NGnegQjIcHK3eTPWVm5U3YTQm8l4ld8vvKOsk26oaUPxq7sXpjS
+f7LR0ThbA9nPrT/p/mnm3K1YCgXEYA==
+=HF7T
+-----END PGP SIGNATURE-----
+
+--m7xx7b55ldi3cgzf--
