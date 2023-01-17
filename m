@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79D8670E0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5313670E11
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjAQXt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S229737AbjAQXwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjAQXte (ORCPT
+        with ESMTP id S229472AbjAQXvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:49:34 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B174F344
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:59:03 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id 18so47259246edw.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:59:03 -0800 (PST)
+        Tue, 17 Jan 2023 18:51:22 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F07572E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:01:09 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s21so3058592edi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:01:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bna1Go+FLPWZPO+Q65HkXvlvtGtXMjbIMGmdWudjb8E=;
-        b=SXEXN4zAt0S8uxdQAAbuzPEfDs+2gUgOVxUyZIqwyoFvU5gUH+sBt+cuITwbAuo055
-         QQXw8bCXGg5lptXHjpWKN1NbFkKZxdfHss6hgNw10E9w9ALQHIuqPrnbBPrss6VjtRkb
-         GP9ZiBSPUIBeenGZA5q++JngkMUWHGQyuwshey8h6xai6MQY7GeX84ai4MSaQ9GOHIYZ
-         oP9J3yPcVpozQ9e0Fq6nAp3BrADANgplgrm2onZv9pDxFUPtVbO5xEniRfTdgQbC62dp
-         acw8zhCv4aCs4G1sm0B/kziyBjM2RTVFiwoTONP9pY5D0QLq3sCJrziKfkiaea2ZBgYU
-         Zu1g==
+        bh=36ojNrGFeLlO1WRePHzVkOKkUUAt+mzyuzgpCW6PfVQ=;
+        b=jaENkkvKRPa/iJ4S60jFT8yAwmEyoPQlMWJNJ7EzqWGC+3vb+MJp6NKWHSK8JfZ+rt
+         CLjgK6fHyYjB0MJznyvWCSLjfcIYVpoSWp4bhJyCMXHTJ4XsXfk+ptd2OpscHNGfmMhu
+         MouGs4GP5Op8L/PuwT2YF9+S9w8YlnjcSehWgqvBMVQFDoUMR2JqqnCfmnrqN4zpZsEO
+         YJCdFF3fHlTdk4dlz0/I0mBGONaEezELtG1D/Lg9BtAJC9dt8zQsPPNCg6mn15OdSIAz
+         HwYhSUqyzEcxgQdmbPWSajo9Y1yhX6HpGnDZnKxqtXP7MB3wmnWMjdHP2hyVbp9lRJn+
+         AOYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Bna1Go+FLPWZPO+Q65HkXvlvtGtXMjbIMGmdWudjb8E=;
-        b=q63Zp7rFBM81Dy4i5x6/30XXpPsCX9LdiFhgB8NtJ4j5+YQaAP1LVlfkb9TzpJv5Y4
-         qLPM2rYv96ec3uGTR7rQtiwGyLcpmcSVtP/csHbWCM7URm7aTM7NQBf67pnFu54aX+xV
-         naGO9AiVd1rvrpDH4VbNavx4WR5/7+BWkiLYvfuMBBwJ4jYb2/eeyCe5rW4phXM3IpJr
-         tHv6HhgIXsr3dfTICxE5xJtkazsLcxuBbyU80KKJ9f1GYEhZJmC9gAjTCsAeF6xZhCE9
-         q+8vjQIr2xlxQ5XOSLduZVOncICjttrXEP4tN7vIWOuCTtFpgDLPxWMMQpmHHNS5cCRb
-         +cUA==
-X-Gm-Message-State: AFqh2kqB+qoNFbSF+XmAM2DkJpgcmbyh6LS//o2xRkuPhjs5Hnqd/Oh3
-        1GgsWqEBaNqyfObhyRdKjz2z5Sd2T+9GM41naV3qlJ4Tmu04Mw==
-X-Google-Smtp-Source: AMrXdXtj/BOtB5PM/YeFNzbYlnJMctr7Ss11djAm3clEWb1KMmuzi1BrQwFCaY24rxwj7vdIeBQZOopIAXVc0CEtDdo=
-X-Received: by 2002:aa7:da51:0:b0:49e:4936:bbd8 with SMTP id
- w17-20020aa7da51000000b0049e4936bbd8mr31755eds.410.1673996341742; Tue, 17 Jan
- 2023 14:59:01 -0800 (PST)
+        bh=36ojNrGFeLlO1WRePHzVkOKkUUAt+mzyuzgpCW6PfVQ=;
+        b=twoIlYADKCuVeyYyCXS5Y9YFwKvUZbn1p5Y54ZuPHpllLd4Dx474pTkG2BiuXlyc1I
+         LTGhpypLm+PAIVDPC98gDqyus7zXdTLGlq5eqwgjrxkFy7Ok2DTNB67SmHINRDf/aAQ4
+         Ic90XWv8hyCjDJA6NJjfw5tRLnvS1OQhfH+S2Cr58Msf0k9ChEBLC26In+P1gyf0EHJd
+         7aoE8wPjJLn5IINPLZMXTwqH0ggTPIM9+9zZ//Pt4HkeUdKoto8mWNyFwcMvL+4bRo94
+         fBSGpmguFLPp6dKqGD+vFzBsk5quAP9ljSy+YNTNzN/TynPU+APtSeMjiaFg6MzJPmEK
+         qVbQ==
+X-Gm-Message-State: AFqh2kqMulx977ddf+mnT4gPm4Ifn2qu7ragfY5UYl9I2pz3SihREX7u
+        aESYOcUiMRFGqdAlBg0g1ElBrk5s/3ik+Yo9zORkmQ==
+X-Google-Smtp-Source: AMrXdXsGqLZTAXgdag+HHZacewzf5CT33O5WG5+Gy6NMYX06iOrS3y2ryIkO3mO8fcLcm9Kc17Q8hcS3vt42FRZ1e/I=
+X-Received: by 2002:aa7:db98:0:b0:49e:160c:e9b0 with SMTP id
+ u24-20020aa7db98000000b0049e160ce9b0mr502864edt.425.1673996468046; Tue, 17
+ Jan 2023 15:01:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-2-vannapurve@google.com> <Y8cVhFIM1EoLHO/V@google.com>
-In-Reply-To: <Y8cVhFIM1EoLHO/V@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 17 Jan 2023 14:58:48 -0800
-Message-ID: <CAGtprH-Z9=pKM1XxYYQTvwA161BCdgeRbRFQjV=HaV+4Qfo3=w@mail.gmail.com>
-Subject: Re: [V2 PATCH 1/6] KVM: x86: Add support for testing private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+References: <b740c9fb-edba-92ba-59fb-7a5592e5dfc@google.com>
+ <dc9f7bb0-77d4-8b0e-c6b6-ece3f77ed326@redhat.com> <32be06f-f64-6632-4c36-bed7c0695a3b@google.com>
+ <7ff97950-b524-db06-9ad6-e98b80dcfefa@redhat.com> <CAHbLzkqjooxnAwqK7vZoJpP2bSUTCUgv3UtWsZgo444jpGSfoA@mail.gmail.com>
+ <86d5f618-800d-9672-56c4-9309ef222a39@redhat.com> <CAAa6QmSByYrWkp+8K0NK+pocKT0CVj83RaVUB1VqMPvuPHnpNQ@mail.gmail.com>
+ <d50eb6f2-0585-7441-081b-cadaa5901c6e@redhat.com>
+In-Reply-To: <d50eb6f2-0585-7441-081b-cadaa5901c6e@redhat.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Tue, 17 Jan 2023 15:00:30 -0800
+Message-ID: <CAAa6QmR6KeCCMHGyR9jkwk-KCwb_FTcEfnKeHRJ2U7+3SVz7hg@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Yang Shi <shy828301@gmail.com>, Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jann Horn <jannh@google.com>, Song Liu <songliubraving@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -85,34 +74,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 1:39 PM Sean Christopherson <seanjc@google.com> wrote:
+On Mon, Jan 9, 2023 at 12:50 AM David Hildenbrand <david@redhat.com> wrote:
 >
-> On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> > Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
-> > @@ -272,13 +274,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> >               .rsvd = err & PFERR_RSVD_MASK,
-> >               .user = err & PFERR_USER_MASK,
-> >               .prefetch = prefetch,
-> > -             .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> > +             .is_tdp = is_tdp,
-> >               .nx_huge_page_workaround_enabled =
-> >                       is_nx_huge_page_enabled(vcpu->kvm),
+> >>>>>>
+> >>>>>> Side note: set_huge_pmd() wins the award of "ugliest mm function of early
+> >>>>>> 2023". I was briefly concerned how do_set_pmd() decides whether the PMD can be
+> >>>>>> writable or not. Turns out it's communicated via vm_fault->flags. Just
+> >>>>>> horrible.
 > >
-> >               .max_level = KVM_MAX_HUGEPAGE_LEVEL,
-> >               .req_level = PG_LEVEL_4K,
-> >               .goal_level = PG_LEVEL_4K,
-> > +             .is_private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
-> > +                             kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
->
-> After looking at the SNP+UPM series, I think we should forego a dedicated Kconfig
-> for testing and instead add a new VM type for UPM-capable guests.  The new type,
-> e.g. KVM_X86_PROTECTED_VM, can then be used to leverage UPM for "legacy" SEV and
-> SEV-ES guests, as well as for UPM-capable guests that don't utilize per-VM
-> memory encryption, e.g. KVM selftests.
->
-> Carrying test-only behavior is obviously never ideal, and it would pretty much have
-> to be mutually exclusive with "real" usage of UPM, otherwise the KVM logics gets
-> unnecessarily complex.
 
-Ack, the newly added VM type fits better here with SEV/SEV-ES and
-non-confidential selftests being able to share this framework.
+Hey David,
+
+Sorry for the late response here.
+
+> > My first Linux award! :) At least it's not "worst mm security issue of
+> > early 2023". I'll take it!
+>
+> Good that you're not taking my words the wrong way.
+>
+> MADV_COLLAPSE is a very useful feature (especially also for THP tests
+> [1]). I wish I could have looked at some of the patches earlier. But we
+> cannot wait forever to get something merged, otherwise we'd never get
+> bigger changes upstream.
+>
+> ... so there is plenty of time left in 2023 to cleanup khugepaged.c :P
+>
+>
+> [1] https://lkml.kernel.org/r/20230104144905.460075-1-david@redhat.com
+
+Yes, thank you for these tests. I have them open in another tab along
+with a mental TODO to take a closer look at them, and response
+half-written. In-place collapse of anonymous memory *is* something
+that I was interested in exploring later (I have a use-case for it;
+hugepage-aware malloc() implementations). I'm taking so long on it
+(sorry) b/c I need to review your point (2) (all PTE's mapping
+exclusively). Hopefully I can get to it shortly.
+
+> [...]
+>
+>
+> >> For example: why even *care* about the complexity of installing a PMD in
+> >> collapse_pte_mapped_thp() using set_huge_pmd() just for MADV_COLLAPSE?
+> >>
+> >> Sure, we avoid a single page fault afterwards, but is this *really*
+> >> worth the extra code here? I mean, after we installed the PMD, the page
+> >> could just get reclaimed either way, so there is no guarantee that we
+> >> have a PMD mapped once we return to user space IIUC.
+> >
+> > A valid question. The first reason is just semantic symmetry for
+> > MADV_COLLAPSE called on anon vs file/shmem memory. It would be nice to
+> > say that "on success, the memory range provided will be backed by
+> > PMD-mapped hugepages", rather than special-casing file/shmem.
+>
+> But there will never be such a guarantee, right? We could even see a
+> split before just before we return to user space IIRC.
+
+Absolutely. But at least we are *attempting* for symmetry here; though
+admittedly, even a successful return code provides no guarantees.
+Perhaps this is a weak argument by itself, though.
+
+> >
+> > The second reason has a more practical use case. In userfaultfd-based
+> > live migration (using  UFFDIO_REGISTER_MODE_MINOR) pages are migrated
+> > at 4KiB granularity, and it may take a long (O(many minutes)) for the
+> > transfer of all pages to complete. To avoid severe performance
+> > degradation on the target guest, the vmm wants to MADV_COLLAPSE
+> > hugepage-sized regions as they fill up. Since the guest memory is
+> > still uffd-registered, requiring refault post-MADV_COLLAPSE won't
+> > work, since the uffd machinery will intercept the fault, and no PMD
+> > will be mapped. As such, either uffd needs to be taught to install PMD
+> > mappings, or the PMD mapping already must be in-place.
+>
+> That's an interesting point, thanks. I assume we'd get another minor
+> fault and when resolving that, we'll default to a PTE mapping.
+
+Yes-ish; I think it depends on how userspace decides to deal with the
+event. At least in my own test cases, IIRC (hazy memory here), we
+ended up in some loop of:
+
+done faulting all 512 pages -> MADV_COLLAPSE -> fault -> copy page ->
+done faulting all 512 pages -> ...
+
+Thanks,
+Zach
+
+
+> --
+> Thanks,
+>
+> David / dhildenb
+>
