@@ -2,90 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D2266DA22
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28F266DA2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbjAQJlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S236714AbjAQJmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236619AbjAQJkq (ORCPT
+        with ESMTP id S236477AbjAQJlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:40:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5240C30B1C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:38:43 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673948322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=huHxyGFkEMa6d1D0Au6QELxVkmDV59quuX0vGDYSXaY=;
-        b=pgh2qjtwzxp/nJa3JrElZ2JxShuREDd68JdE2OsjHkpHfJlyUDOKhRrPHHP4aLudOTRna9
-        Ns9ZLINgGtYh/9Yy5OXlS7Iryt+jSX6KnbowoOc+o52zSMTIEL2osZlRP566fmne9/fjuu
-        ZmpeNn7FqoMO4ZjnHBsk+hW8XeI2BTxfKI0BiPlz9++cxLkhjbReiTTnuXX0d99+D9VoyW
-        g/HGppyULW2tu1E8C/CCkTpYwLTmH4LYmEhXqFs2+A+AuSoa8mr5HitkUNDjgTTDRP8o11
-        VgmPfnADVuuAUrHyEcD75uqOO+pxfaN4vsuAZflJsl3DNol/pH0TEED2VIblBQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673948322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=huHxyGFkEMa6d1D0Au6QELxVkmDV59quuX0vGDYSXaY=;
-        b=px5BPESDxGc8ZR6+hAf/v8dN6WWVHToWOLpC98VyASSEh0tO4D1ZyJAulu/8o5HD2KwtT1
-        GhXenrlzW8lISbDA==
-To:     Yipeng Zou <zouyipeng@huawei.com>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        hewenliang4@huawei.com, chris.zjh@huawei.com, liaochang1@huawei.com
-Subject: Re: [RFC PATCH] irqchip/gic-v3: wait irq done to set affinity
-In-Reply-To: <89553b60-c5dc-76ad-67a4-594858ebedee@huawei.com>
-References: <20230106082136.68501-1-zouyipeng@huawei.com>
- <86pmbrop11.wl-maz@kernel.org>
- <89553b60-c5dc-76ad-67a4-594858ebedee@huawei.com>
-Date:   Tue, 17 Jan 2023 10:38:41 +0100
-Message-ID: <87tu0plcv2.ffs@tglx>
+        Tue, 17 Jan 2023 04:41:06 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FC8233D9;
+        Tue, 17 Jan 2023 01:39:50 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H9dVR0074470;
+        Tue, 17 Jan 2023 03:39:31 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1673948371;
+        bh=hCiMEEOZ0FA8xfOwTl/n4EZiudIDwrwZeoE9cRopsZM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=cvWEJ4Gj9JaBKSK0BBWt5ooV2x9m9QfJfCM0v5TB7WWQZEPc8is83BIpbShZzcwqr
+         NFwqcfEFgR/ZljXrDeRfHsuTYJJEQ2+FQwBjQEvdipZL+Zrqes3rdkxngaq2b5uru+
+         xkVITYKTvik9s+e7s9uR76Jqs9IAF01MWxBuSi1o=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H9dVWR108848
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Jan 2023 03:39:31 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
+ Jan 2023 03:39:31 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 17 Jan 2023 03:39:31 -0600
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H9dPuq018076;
+        Tue, 17 Jan 2023 03:39:26 -0600
+Message-ID: <3bd25e86-37c9-e2c5-d957-2ed111a3f4a7@ti.com>
+Date:   Tue, 17 Jan 2023 15:09:25 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <kristo@kernel.org>,
+        <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next 5/5] arm64: dts: ti: k3-am625-sk: Add cpsw3g cpts
+ PPS support
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>
+References: <20230111114429.1297557-1-s-vadapalli@ti.com>
+ <20230111114429.1297557-6-s-vadapalli@ti.com>
+ <6ae650c9-d68d-d2fc-8319-b7784cd2a749@kernel.org>
+ <a889a47f-5f44-1ae6-1ab7-3b7e7011b4f7@ti.com>
+ <2007adb5-0980-eee3-8d2f-e30183cf408e@kernel.org>
+ <4d7ac24a-0a35-323c-045c-cc5b3d3c715a@ti.com>
+ <566700c6-df9b-739b-81ff-8745eea10ff3@ti.com>
+ <7bc26f28-2541-8cc4-3cde-abbe4bdf8911@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <7bc26f28-2541-8cc4-3cde-abbe4bdf8911@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 09 2023 at 20:26, Yipeng Zou wrote:
-> =E5=9C=A8 2023/1/6 19:55, Marc Zyngier =E5=86=99=E9=81=93:
-> index 973ede0197e3..fad08ccb7fd9 100644
-> --- a/drivers/irqchip/irq-gic-v3-its.c
-> +++ b/drivers/irqchip/irq-gic-v3-its.c
-> @@ -1667,6 +1667,9 @@ static int its_set_affinity(struct irq_data *d,=20
-> const struct cpumask *mask_val,
->
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* don't set the affinity whe=
-n the target cpu is same as=20
-> current one */
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cpu !=3D prev_cpu) {
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 // wait irq done on all cpus
-> +
+Roger,
 
-There is no way to wait here. The caller holds the interrupt descriptor
-lock.
+On 17/01/23 15:00, Roger Quadros wrote:
+> On 17/01/2023 07:28, Siddharth Vadapalli wrote:
+>> Vignesh,
+>>
+>> On 16/01/23 22:00, Vignesh Raghavendra wrote:
+>>>
+>>>
+>>> On 16/01/23 9:35 pm, Roger Quadros wrote:
+>>>>>>> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>>>>> index 4f179b146cab..962a922cc94b 100644
+>>>>>>> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>>>>> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>>>>> @@ -366,6 +366,10 @@ &cpsw3g {
+>>>>>>>  	pinctrl-names = "default";
+>>>>>>>  	pinctrl-0 = <&main_rgmii1_pins_default
+>>>>>>>  		     &main_rgmii2_pins_default>;
+>>>>>>> +
+>>>>>>> +	cpts@3d000 {
+>>>>>>> +		ti,pps = <2 1>;
+>>>>>>> +	};
+>>>>>>>  };
+>>>>>>>  
+>>>>>>>  &cpsw_port1 {
+>>>>>>> @@ -464,3 +468,19 @@ partition@3fc0000 {
+>>>>>>>  		};
+>>>>>>>  	};
+>>>>>>>  };
+>>>>>>> +
+>>>>>>> +#define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x10000 | val)
+>>>>>> Should this go in ./include/dt-bindings/pinctrl/k3.h ?
+>>>>>> That way every board DT file doesn't have to define it.
+>>>>>>
+>>>>>> The name should be made more platform specific.
+>>>>>> e.g. K3_TS_OFFSET if it is the same for all K3 platforms.
+>>>>>> If not then please add Platform name instead of K3.
+>>>>> The offsets are board specific. If it is acceptable, I will add board specific
+>>>>> macro for the TS_OFFSET definition in the ./include/dt-bindings/pinctrl/k3.h
+>>>>> file. Please let me know.
+>>>> If it is board specific then it should remain in the board file.
+>>>
+>>>
+>>> The values you pass to macro maybe board specific. But the macro
+>>> definition itself same for a given SoC right? Also, is its same across
+>>> K3 family ?
+>>>
+> 
+> I misunderstood then. I agree with Vignesh.
+> 
+>>> Please use SoC specific prefix like AM62X_TS_OFFSET() or K3_TS_OFFSET()
+>>> accordingly.
+>>
+>> For certain SoCs including AM62X, the macro is:
+>> #define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x10000 | val)
+>> while for other SoCs (refer [0]), the macro is:
+>> #define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x80000000 | val)
+>>
+>> Therefore, I will use SoC specific prefix in the macro. Please let me know if
+>> the SoC specific macro can be added to the ./include/dt-bindings/pinctrl/k3.h
+>> file for each SoC. If not, I will add the SoC specific macro in the board file
+>> itself.
+> 
+> Not in board file please. It should go in ./include/dt-bindings/pinctrl/k3.h
 
-If this is really an issue for LPI, then the only way to deal with that
-is CONFIG_GENERIC_PENDING_IRQ, which delays the affinity change to
-interrupt context
+Thank you for letting me know. I will do so in the device-tree series that I
+will post once the bindings and driver patches get merged.
 
-Why on earth must all the known hardware mistakes be repeated over and
-over?
+The v2 series for the bindings and driver patches that I am referring to is at:
+https://lore.kernel.org/r/20230116085534.440820-1-s-vadapalli@ti.com/
 
-Thanks,
-
-        tglx
+Regards,
+Siddharth.
