@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E44C66E28E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DEE66E291
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbjAQPoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S233966AbjAQPo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbjAQPnl (ORCPT
+        with ESMTP id S233686AbjAQPoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:43:41 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FECC4900D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:41:26 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q10so11695030wrs.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:41:26 -0800 (PST)
+        Tue, 17 Jan 2023 10:44:21 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D7A4996B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:42:09 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d9so33903592pll.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:42:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Sq5mqKsexCWXCOic8J9pe+B3N8PYnTwi9qY7eGHBxk=;
-        b=rMtBegvKhr4EUsWsXeJbJPR4lIPhWn0VjwHAXcJ0LSgDBrkeHLrGw0MxB3AlVV2SLC
-         ZF6zVHCstouiIxxHulQuzpiPf+554IuqNSod1odrHmBulVH0asDz3UXu6DQ+3kh6r5IS
-         rIKs2olglP3f8NOqecLABX4Q0qFQhGWzTBSGmHKm1BiAEQxUsvqMP6zguAxdNr5uRCd8
-         dlK+4jjllZ7kj2DCxYzAngRj5osdHxyekJYlBEzQUN3zj8hLZLvWXXsooTGCfcdOo6NT
-         XTqXDA431ApzH6c2FOGlB0jHcvYPFfKyxZryr6ym/Sa3Nikg0J5wGToTfmFzWrCkZFeo
-         7Z5Q==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=raIP5zSqF/STW+kTCBVQJ+PuTh0fIF3QkrpzqbxnVwM=;
+        b=Fboqqh9dagbWo2L8wq1Lo26iSaSU57WhxjC/fOz7ecCUNGGEDVLeXoK5K/pHZwcsFV
+         N9jlLxyCR6qNXQQ4U7mpMErHB3ZrEWyqQtK2JQndhA0MmCFiGJ+4PPhTRD0Wix0EL65j
+         MsYHUDHxtRNkvOQ0WUDga80seOuHKWPkpKj+FGWEAdrMpGI0dVnRWM5khsCPm4X7lwaH
+         x+1LaU365neNHCMM/NnCQEGLIUB0p9uhI/3oVwVMGYmas44XJFXRd2YVZkXp0yoqHUtJ
+         ciWpysAmyUCCthwpSIl7KFTDHsYIFtORoQMrRwss/5rncAUrPaGaZx9iAg7bu43XjA0x
+         fYcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Sq5mqKsexCWXCOic8J9pe+B3N8PYnTwi9qY7eGHBxk=;
-        b=gTqXRT/GCkXqeipbH0Fu6PLZzRWxn8tGbZ35bhVDIf6t+Qa4Q4wq8AZPhlsZTaqn5q
-         wdiNdmBEMi1daQmVUnidLYWhV403aT43ApxItSCZbxctki+BIZgSWGm14VvJJYwbjo8L
-         zwlxuZc0DYgCEZfLFcD9wjT+ETn0EZpGKou1K72y/utSOvKEASNRzKHVaq88uUTua02b
-         7AgHVUUCTdxtsErMSKrb4oAsRqEPdSbG/A8wFwC7QuPIv0QqoI17s17C3glNDn3Wbzw0
-         /XbgVxbTiqyLkQv4LmFbe3tQNF3umRP9axwp3Hb359Si2GdSNxSf4Fl0VoPh/RwppPOa
-         XrZQ==
-X-Gm-Message-State: AFqh2kpJxR/6GhqDCuJGBXEK0tV26ZJ1+BBFhcVNxNgTw/KnKnxk63YZ
-        kvIesTeM/YPZOJrG+3Of3Q3p3w==
-X-Google-Smtp-Source: AMrXdXsZ1dgrVfEXi6FqUzbhTJkQGI2CqN5bloBxIDTiXwohuBAau4tN5lLMDf5WfR/m7bGjogUd0w==
-X-Received: by 2002:a5d:6e0e:0:b0:2bb:6c50:a559 with SMTP id h14-20020a5d6e0e000000b002bb6c50a559mr2992490wrz.38.1673970085079;
-        Tue, 17 Jan 2023 07:41:25 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o14-20020a5d58ce000000b002879c013b8asm28863436wrf.42.2023.01.17.07.41.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 07:41:24 -0800 (PST)
-Message-ID: <23a7ae1d-cd49-8c78-5284-4134755ea19a@linaro.org>
-Date:   Tue, 17 Jan 2023 16:41:22 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=raIP5zSqF/STW+kTCBVQJ+PuTh0fIF3QkrpzqbxnVwM=;
+        b=s9hur4Qcp13fQCXq1WAdRnRJorIfNpuz/GhUKmT3VRzYapAQ2X8ZAGhTFcXU6jB2SO
+         xUyuOox7YT30ZKNVgxVkWiOusuRrVyo6yIzZp499zGeFZOhPBsqtrs84vv3dqo3lhkNG
+         TIsWIigEy51fZzU/b1Aw1p6+3Xo6pd0KkR7UgMMQJs/nv89BrKyOnUY4lrJiOf8qHclS
+         ksmD0YRwwV7ouonb0T2duzqGz2wrvAm4p7qJVoNp775cbj6mP4//ZLz6eUvaXrMoPtc6
+         GqVmZY38LZzrxpNR0h2X+XjFrTCU4reWakzSwH/Cw9lzG7EJTF5z+ttxcm2TGexJLFEA
+         RVaw==
+X-Gm-Message-State: AFqh2koR+M6G7omS4ibSAMu91ZZ0onCNB97HYXsRdRNY/VpADhKk+rGq
+        CKpdu+sLX9wjBeMGNjvQNNOdMQ==
+X-Google-Smtp-Source: AMrXdXtc4FtedAeo9e0ZaQ0CoHayTm55NeSTXxytLBxVQsTrdtckjUUE0ev7gjaj6X6vcVC1fBOKfQ==
+X-Received: by 2002:a05:6a20:a883:b0:a4:efde:2ed8 with SMTP id ca3-20020a056a20a88300b000a4efde2ed8mr2357042pzb.0.1673970128358;
+        Tue, 17 Jan 2023 07:42:08 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p10-20020a17090a348a00b00218d894fac3sm20692438pjb.3.2023.01.17.07.42.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 07:42:07 -0800 (PST)
+Date:   Tue, 17 Jan 2023 15:42:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
+        james.morse@arm.com, suzuki.poulose@arm.com,
+        oliver.upton@linux.dev, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
+        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
+        ardb@kernel.org, peterx@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH 4/4] KVM: Improve warning report in
+ mark_page_dirty_in_slot()
+Message-ID: <Y8bBzKF17IdZP9eF@google.com>
+References: <20230116040405.260935-1-gshan@redhat.com>
+ <20230116040405.260935-5-gshan@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 4/4] dt-bindings: hv: Add dt-bindings for VMBus
-Content-Language: en-US
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
- <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
- <31d78b4c-1416-d8cb-a187-bf924168ee1e@linaro.org>
- <20230117151325.GA9806@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230117151325.GA9806@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116040405.260935-5-gshan@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/01/2023 16:13, Saurabh Singh Sengar wrote:
-> On Mon, Jan 16, 2023 at 07:55:13PM +0100, Krzysztof Kozlowski wrote:
->> On 16/01/2023 17:48, Saurabh Sengar wrote:
->>> Add dt-bindings for Hyper-V VMBus
->>>
->>> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
->>> ---
->>>  .../devicetree/bindings/hv/msft,vmbus.yaml         | 34 ++++++++++++++++++++++
->>
->> Also, there is no "hv" hardware, so that's not correct location. If your
->> bindings describe firmware, this should go to firmware. Otherwise, this
->> does not look like suitable for DT. We do not describe software stuff in DT.
-> 
-> VMBus is a virtual device this is simmilar to virtio. I can rename this folder to vmbus.
->
+On Mon, Jan 16, 2023, Gavin Shan wrote:
+> There are two warning reports about the dirty ring in the function.
+> We have the wrong assumption that the dirty ring is always enabled when
+> CONFIG_HAVE_KVM_DIRTY_RING is selected.
 
-Then virtio directory. The directories are per subsystems (hardware
-classes).
+No, it's not a wrong assumption, becuase it's not an assumption.  The intent is
+to warn irrespective of dirty ring/log enabling.  The orignal code actually warned
+irrespective of dirty ring support[1], again intentionally.  The
+CONFIG_HAVE_KVM_DIRTY_RING check was added because s390 can mark pages dirty from
+an worker thread[2] and s390 has no plans to support the dirty ring.
 
-Best regards,
-Krzysztof
+The reason for warning even if dirty ring isn't enabled is so that bots can catch
+potential KVM bugs without having to set up a dirty ring or enable dirty logging.
 
+[1] 2efd61a608b0 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
+[2] e09fccb5435d ("KVM: avoid warning on s390 in mark_page_dirty")
