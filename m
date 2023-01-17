@@ -2,404 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E6466E15F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB4366E180
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbjAQOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S232782AbjAQO6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjAQOze (ORCPT
+        with ESMTP id S229865AbjAQO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:55:34 -0500
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102543E62B;
-        Tue, 17 Jan 2023 06:55:32 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-15f64f2791dso1889995fac.7;
-        Tue, 17 Jan 2023 06:55:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r0xOPUwMGbHKwlz1eX+ZfzIFwn/1MAHYgP6guftK2G0=;
-        b=QsmuofTh3tL6pNnLGIlkEw0QvnnBuTtu77jvG0AJmRrq3CdRtBCU0LEZ8btw0eJz7b
-         +lzlAhyGb/1qWGKWeo+HfbzqZelrZT7QStCVepLvwk7YMACAiHsAqhWvjxembfvYG+qH
-         59cC+Yuhr3L7Yz1KIWN+DsgeiYgeq66fpcciMugUMYoYe6nFyAmL2CIN7RUjxwx0sRsc
-         sYuBxaCB8IJe8HKnpjhjIXTsCYoo7Stuws3Qg/vJ7eqMcGNGE0F+lgWugrp1+Q9OJ1gX
-         kod1mfB2IjoURiLzzTkgr0go0b0zBDc3bH8zP01uon/3AaXj6rdNuyoRZW1anmXXXo5H
-         M2ww==
-X-Gm-Message-State: AFqh2krxanjSKePbknml8NCAnkReyKQkrKrO2Xg90bm19zLgmPUO+OJl
-        TXS/6ppTpdwb321b32CfGQ==
-X-Google-Smtp-Source: AMrXdXsNUJ00dTOKvt2jfPMH4Ze0uTp6cmxdG4fza3JfdEkyhCZe9BD6Z//VMQY6JmDD12zrOOWqFg==
-X-Received: by 2002:a05:6870:2f02:b0:15f:3213:dfc6 with SMTP id qj2-20020a0568702f0200b0015f3213dfc6mr1901825oab.35.1673967331153;
-        Tue, 17 Jan 2023 06:55:31 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056870d20400b0013ae5246449sm16348572oac.22.2023.01.17.06.55.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 06:55:30 -0800 (PST)
-Received: (nullmailer pid 3058299 invoked by uid 1000);
-        Tue, 17 Jan 2023 14:55:29 -0000
-Date:   Tue, 17 Jan 2023 08:55:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Li Yang <leoyang.li@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 01/10] dt-bindings: soc: fsl: cpm_qe: Add TSA
- controller
-Message-ID: <20230117145529.GA3044055-robh@kernel.org>
-References: <20230113103759.327698-1-herve.codina@bootlin.com>
- <20230113103759.327698-2-herve.codina@bootlin.com>
+        Tue, 17 Jan 2023 09:57:40 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BD03E61D;
+        Tue, 17 Jan 2023 06:57:38 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HEf8r3015405;
+        Tue, 17 Jan 2023 14:57:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=K/Sg7i2oDpFXGZ+Sbsjhr4UwMuOFMGT8YWkU+dkQAgQ=;
+ b=Am7U5Q9szw993tu+8Sq2CMmRrhfmi48lFlcwpg+iHGy5XZFvN9bYTretw83ZLbzYg2UH
+ frlwNfSfMltVTW/gMc4wdynLFUYdORJRKDsj9E99g4e1CxZV1bPzp70K/NdWtJztux/k
+ zEv5lvXm1+aoTk/E5JqRFlRLjdonDJg4lYUii3v51VQcEI4V1ET+vk/B0HvU5vS0hOPT
+ 3RmbA3cpVHaeWFe+fRbvjNAhgqS0lOU/q6ljMCjGCLKSiKJUxQnlGTL4iAVSAGyjT6rl
+ KLbwPzrf34iA8kW/Xo64d2QNWURW2MRKOnklG6KdoO1dSUljsM9pMYG3jfxu4HT9C3if WA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3npgdf8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 14:57:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HEvKfv012030
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 14:57:20 GMT
+Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 17 Jan 2023 06:57:19 -0800
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: [PATCH v17 0/9] Coresight: Add support for TPDM and TPDA
+Date:   Tue, 17 Jan 2023 06:56:59 -0800
+Message-ID: <20230117145708.16739-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113103759.327698-2-herve.codina@bootlin.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kiwLuPHgtUEWjRHXI-xbewjXhRBEzf_d
+X-Proofpoint-ORIG-GUID: kiwLuPHgtUEWjRHXI-xbewjXhRBEzf_d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_06,2023-01-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
+ impostorscore=0 phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301170121
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:37:50AM +0100, Herve Codina wrote:
-> Add support for the time slot assigner (TSA)
-> available in some PowerQUICC SoC such as MPC885
-> or MPC866.
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
-An odd line wrap length... 
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+    coresight: core: Use IDR for non-cpu bound sources' paths.
 
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  .../bindings/soc/fsl/cpm_qe/fsl,tsa.yaml      | 260 ++++++++++++++++++
->  include/dt-bindings/soc/fsl,tsa.h             |  13 +
->  2 files changed, 273 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml
->  create mode 100644 include/dt-bindings/soc/fsl,tsa.h
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml
-> new file mode 100644
-> index 000000000000..eb17b6119abd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,tsa.yaml
-> @@ -0,0 +1,260 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,tsa.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PowerQUICC CPM Time-slot assigner (TSA) controller
-> +
-> +maintainers:
-> +  - Herve Codina <herve.codina@bootlin.com>
-> +
-> +description: |
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+     Coresight: Add coresight TPDM source driver
+     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+     coresight-tpdm: Add DSB dataset support
+     coresight-tpdm: Add integration test support
 
-Don't need '|' if no formatting.
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+     Coresight: Add TPDA link driver
+     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
 
-> +  The TSA is the time-slot assigner that can be found on some
-> +  PowerQUICC SoC.
-> +  Its purpose is to route some TDM time-slots to other internal
-> +  serial controllers.
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add tpdm mm/prng for sm8250
 
-Wrap at 80.
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
 
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - fsl,mpc885-tsa
-> +          - fsl,mpc866-tsa
-> +      - const: fsl,cpm1-tsa
-> +
-> +  reg:
-> +    items:
-> +      - description: SI (Serial Interface) register base
-> +      - description: SI RAM base
-> +
-> +  reg-names:
-> +    items:
-> +      - const: si_regs
-> +      - const: si_ram
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^tdm@[0-1]$':
-> +    description:
-> +      The TDM managed by this controller
-> +    type: object
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
 
-       additionalProperties: false
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
 
-> +
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 1
-> +        description:
-> +          The TDM number for this TDM, 0 for TDMa and 1 for TDMb
-> +
-> +      fsl,common-rxtx-pins:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description:
-> +          The hardware can use four dedicated pins for Tx clock,
-> +          Tx sync, Rx clock and Rx sync or use only two pins,
-> +          Tx/Rx clock and Rx/Rx sync.
-> +          Without the 'fsl,common-rxtx-pins' property, the four
-> +          pins are used. With the 'fsl,common-rxtx-pins' property,
-> +          two pins are used.
-> +
-> +      clocks:
-> +        minItems: 2
-> +        maxItems: 4
-> +
-> +      clock-names:
-> +        minItems: 2
-> +        maxItems: 4
-> +
-> +      fsl,mode:
+There must be a tpda between tpdm and the sink. When there are some
+other trace event hw components in the same HW block with tpdm, tpdm
+and these hw components will connect to the coresight funnel. When
+there is only tpdm trace hw in the HW block, tpdm will connect to
+tpda directly.
+  
+    +---------------+                +-------------+
+    |  tpdm@6c08000 |                |tpdm@684C000 |
+    +-------|-------+                +------|------+
+            |                               |
+    +-------|-------+                       |
+    | funnel@6c0b000|                       |
+    +-------|-------+                       |
+            |                               |
+    +-------|-------+                       |
+    |funnel@6c2d000 |                       |
+    +-------|-------+                       |
+            |                               |
+            |    +---------------+          |
+            +----- tpda@6004000  -----------+
+                 +-------|-------+
+                         |
+                 +-------|-------+
+                 |funnel@6005000 |
+                 +---------------+
 
-'mode' is a bit vague. It's already used as well which can be a problem 
-if there are differing types. (There's not in this case)
+This patch series depends on patch series:
+[v7,00/15] coresight: Add new API to allocate trace source ID values
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20230116124928.5440-1-mike.leach@linaro.org/
 
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        enum: [normal, echo, internal-loopback, control-loopback]
-> +        default: normal
-> +        description: |
-> +          Operational mode:
-> +            - normal:
-> +                Normal operation
-> +            - echo:
-> +                Automatic echo. Rx data is resent on Tx
-> +            - internal-loopback:
-> +                The TDM transmitter is connected to the receiver.
-> +                Data appears on Tx pin.
-> +            - control-loopback:
-> +                The TDM transmitter is connected to the receiver.
-> +                The Tx pin is disconnected.
-> +
-> +      fsl,rx-frame-sync-delay-bits:
-> +        enum: [0, 1, 2, 3]
-> +        default: 0
-> +        description: |
-> +          Receive frame sync delay in number of bits.
-> +          Indicates the delay between the Rx sync and the first bit of the
-> +          Rx frame. 0 for no bit delay. 1, 2 or 3 for 1, 2 or 3 bits delay.
-> +
-> +      fsl,tx-frame-sync-delay-bits:
-> +        enum: [0, 1, 2, 3]
-> +        default: 0
-> +        description: |
-> +          Transmit frame sync delay in number of bits.
-> +          Indicates the delay between the Tx sync and the first bit of the
-> +          Tx frame. 0 for no bit delay. 1, 2 or 3 for 1, 2 or 3 bits delay.
-> +
-> +      fsl,clock-falling-edge:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description: |
-> +          Data is sent on falling edge of the clock (and received on the
-> +          rising edge).
-> +          If 'clock-falling-edge' is not present, data is sent on the
-> +          rising edge (and received on the falling edge).
-> +
-> +      fsl,fsync-rising-edge:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description:
-> +          Frame sync pulses are sampled with the rising edge of the channel
-> +          clock. If 'fsync-rising-edge' is not present, pulses are sample
-> +          with e falling edge.
-> +
-> +      fsl,double-speed-clock:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description:
-> +          The channel clock is twice the data rate.
-> +
-> +      fsl,tx-ts-routes:
-> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +        description: |
-> +          A list of tupple that indicates the Tx time-slots routes.
-> +            tx_ts_routes =
-> +               < 2 0 >, /* The first 2 time slots are not used */
-> +               < 3 1 >, /* The next 3 ones are route to SCC2 */
-> +               < 4 0 >, /* The next 4 ones are not used */
-> +               < 2 2 >; /* The nest 2 ones are route to SCC3 */
-> +        items:
-> +          items:
-> +            - description:
-> +                The number of time-slots
-> +              minimum: 1
-> +              maximum: 64
-> +            - description: |
-> +                The source serial interface (dt-bindings/soc/fsl,tsa.h
-> +                defines these values)
-> +                 - 0: No destination
-> +                 - 1: SCC2
-> +                 - 2: SCC3
-> +                 - 3: SCC4
-> +                 - 4: SMC1
-> +                 - 5: SMC2
-> +              enum: [0, 1, 2, 3, 4, 5]
-> +        minItems: 1
-> +        maxItems: 64
-> +
-> +      fsl,rx-ts-routes:
-> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +        description: |
-> +          A list of tupple that indicates the Rx time-slots routes.
-> +            tx_ts_routes =
-> +               < 2 0 >, /* The first 2 time slots are not used */
-> +               < 3 1 >, /* The next 3 ones are route from SCC2 */
-> +               < 4 0 >, /* The next 4 ones are not used */
-> +               < 2 2 >; /* The nest 2 ones are route from SCC3 */
-> +        items:
-> +          items:
-> +            - description:
-> +                The number of time-slots
-> +              minimum: 1
-> +              maximum: 64
-> +            - description: |
-> +                The destination serial interface (dt-bindings/soc/fsl,tsa.h
-> +                defines these values)
-> +                 - 0: No destination
-> +                 - 1: SCC2
-> +                 - 2: SCC3
-> +                 - 3: SCC4
-> +                 - 4: SMC1
-> +                 - 5: SMC2
-> +              enum: [0, 1, 2, 3, 4, 5]
-> +        minItems: 1
-> +        maxItems: 64
-> +
-> +    allOf:
-> +      # If fsl,common-rxtx-pins is present, only 2 clocks are needed.
-> +      # Else, the 4 clocks must be present.
-> +      - if:
-> +          required:
-> +            - fsl,common-rxtx-pins
-> +        then:
-> +          properties:
-> +            clocks:
-> +              items:
-> +                - description: External clock connected to L1RSYNC pin
-> +                - description: External clock connected to L1RCLK pin
-> +            clock-names:
-> +              items:
-> +                - const: l1rsync
-> +                - const: l1rclk
-> +        else:
-> +          properties:
-> +            clocks:
-> +              items:
-> +                - description: External clock connected to L1RSYNC pin
-> +                - description: External clock connected to L1RCLK pin
-> +                - description: External clock connected to L1TSYNC pin
-> +                - description: External clock connected to L1TCLK pin
-> +            clock-names:
-> +              items:
-> +                - const: l1rsync
-> +                - const: l1rclk
-> +                - const: l1tsync
-> +                - const: l1tclk
+TPDM_TPDA commit tree:
+https://git.codelinaro.org/clo/linux-kernel/coresight/-/commits/tpdm-tpda-v17
 
-As the names are the same, just the length varies between 2 or 4, move 
-all this to the main definition and here just put constraints on the 
-length.
+Changes in V17:
+1. Rebase changes on V7 coresight: Add new API to allocate trace source ID values
+2. Add documentation for TPDA and TPDM under
+Documentation/tracing/coresight/. (Suzuki K Poulose <suzuki.poulose@arm.com>)
 
-> +
-> +    required:
-> +      - reg
-> +      - clocks
-> +      - clock-names
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/fsl,tsa.h>
-> +
-> +    tsa@ae0 {
-> +        compatible = "fsl,mpc885-tsa", "fsl,cpm1-tsa";
-> +        reg = <0xae0 0x10>,
-> +              <0xc00 0x200>;
-> +        reg-names = "si_regs", "si_ram";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        tdm@0 {
-> +            /* TDMa */
-> +            reg = <0>;
-> +
-> +            clocks = <&clk_l1rsynca>, <&clk_l1rclka>;
-> +            clock-names = "l1rsync", "l1rclk";
-> +
-> +            fsl,common-rxtx-pins;
-> +            fsl,fsync-rising-edge;
-> +
-> +            fsl,tx-ts-routes = < 2 0 >,             /* TS 0..1 */
-> +                           < 24 FSL_CPM_TSA_SCC4 >, /* TS 2..25 */
-> +                           < 1 0 >,                 /* TS 26 */
-> +                           < 5 FSL_CPM_TSA_SCC3 >;  /* TS 27..31 */
-> +
-> +            fsl,rx-ts-routes = < 2 0 >,             /* TS 0..1 */
-> +                           < 24 FSL_CPM_TSA_SCC4 >, /* 2..25 */
-> +                           < 1 0 >,                 /* TS 26 */
-> +                           < 5 FSL_CPM_TSA_SCC3 >;  /* TS 27..31 */
-> +        };
-> +    };
-> diff --git a/include/dt-bindings/soc/fsl,tsa.h b/include/dt-bindings/soc/fsl,tsa.h
-> new file mode 100644
-> index 000000000000..2cc44e867dbe
-> --- /dev/null
-> +++ b/include/dt-bindings/soc/fsl,tsa.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-> +
-> +#ifndef __DT_BINDINGS_SOC_FSL_TSA_H
-> +#define __DT_BINDINGS_SOC_FSL_TSA_H
-> +
-> +#define FSL_CPM_TSA_NU		0	/* Pseuso Cell Id for not used item */
-> +#define FSL_CPM_TSA_SCC2	1
-> +#define FSL_CPM_TSA_SCC3	2
-> +#define FSL_CPM_TSA_SCC4	3
-> +#define FSL_CPM_TSA_SMC1	4
-> +#define FSL_CPM_TSA_SMC2	5
-> +
-> +#endif
-> -- 
-> 2.38.1
-> 
+Changes in V16:
+1. Update device tree changes to match up with device tree bindings.
+3. Update the copyright year to 2023.
+
+Changes in V15:
+1. coresight-tpda: Add more comments in trace id function.
+2. qcom,coresight-tpdm.yaml: Add more comments in description.
+3. Push "arm64: dts: qcom: sm8250: Add coresight components" out this series. 
+
+Changes in V14:
+rebase to "[v5,00/14] coresight: Add new API to allocate trace source ID values" and latest 6.x kernel
+
+Changes in V13:
+1. Fix the conflicts when apply patches to the latest base line.
+
+Changes in V12:
+1. Clear bits for atid before setting them and relese atid when tpda
+remove. -- Suzuki K Poulose <suzuki.poulose@arm.com>
+
+Changes in V11:
+1. Change dev_info to dev_dbg in TPDM/TPDA drivers. -- Suzuki K Poulose <suzuki.poulose@arm.com>
+2. Merge sysfs API change of integration_test to integration_test driver
+change. -- Suzuki K Poulose <suzuki.poulose@arm.com>
+
+Changes in V10:
+1. Fix the error of TPDM yaml file. -- Rob Herring <robh@kernel.org>
+
+Changes in V9:
+1. Rename yaml file for TPDM/TPDA and fix the error for the yaml files.
+-- Rob Herring <robh@kernel.org>
+
+Changes in V8:
+1. Use spinlock to protect drvdata of TPDM/TPDA -- Suzuki K Poulose <suzuki.poulose@arm.com>
+2. Use CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS as source type for TPDM -- Suzuki K Poulose <suzuki.poulose@arm.com>
+3. Fix the warning for yaml file of TPDM/TPDA -- Rob Herring <robh@kernel.org>
+
+Changes in V7:
+1. Update the commit title and move the changes to right place which
+is sorted by address for dtsi changes. -- Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Changes in V6:
+1. Update maintainers in tpdm/tpda yaml file. -- Mike Leach <mike.leach@linaro.org>
+2. Set the .remove function pointer in the amba_driver structure
+   of tpdm/tpda driver. Add tpda_remove function for tpda driver. -- Mike Leach <mike.leach@linaro.org>
+3. Define datasets of tpdm as unsigned long. -- Mike Leach <mike.leach@linaro.org>
+4. Move all coresight nodes to sm8250.dtsi.
+   -- Mike Leach <mike.leach@linaro.org>;Konrad Dybcio <konrad.dybcio@somainline.org>
+5. Remove CORESIGHT_TPDM_INTEGRATION_TEST config. -- Mike Leach <mike.leach@linaro.org>
+
+Changes in V5:
+1. Keep the ETM source paths per-CPU and use IDR for other sources'
+paths. (Suzuki K Poulose <suzuki.poulose@arm.com>)
+
+Changes in V4:
+1. Drop trace id for tpdm source as its trace atid is defined by the tpda.
+Allocate tpda's atid dynamically.  (Mike Leach)
+
+Changes in V3:
+1. Use bitmap to assign the trace id. (Mathieu Poirier)
+
+Changes in V2:
+1. Use IDR to store the path of sources. (Mathieu Poirier)
+2. Only add integration_test/enable/disable for TPDM. No other configs.
+(Mathieu Poirier)
+3. Move coresight dtsi changes to sm8250.dtsi. (Suzuki K Poulose)
+
+Mao Jinlong (9):
+  coresight: core: Use IDR for non-cpu bound sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Add CoreSight TPDM hardware
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  Documentation: trace: Add documentation for TPDM and TPDA
+  arm64: dts: qcom: sm8250: Add tpdm mm/prng
+
+ .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
+ .../bindings/arm/qcom,coresight-tpda.yaml     | 129 +++++++++
+ .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++++++
+ .../trace/coresight/coresight-tpda.rst        |  52 ++++
+ .../trace/coresight/coresight-tpdm.rst        |  43 +++
+ MAINTAINERS                                   |   1 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 164 +++++++++++
+ drivers/hwtracing/coresight/Kconfig           |  23 ++
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  42 ++-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 211 ++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  35 +++
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 259 ++++++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  62 +++++
+ include/linux/coresight.h                     |   1 +
+ 15 files changed, 1118 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+ create mode 100644 Documentation/trace/coresight/coresight-tpda.rst
+ create mode 100644 Documentation/trace/coresight/coresight-tpdm.rst
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+
+-- 
+2.39.0
+
