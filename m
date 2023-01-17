@@ -2,98 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA6A66E728
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB01C66E72E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjAQTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S229890AbjAQTlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbjAQTfI (ORCPT
+        with ESMTP id S229987AbjAQTfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:35:08 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EAB38011
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:53 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id l125so13839536vsc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HzP1xFoLjj5jhJ3xNiat0BSRJmicxmV9UzOSz4HXrGI=;
-        b=lk2Ol42uH592eFDM/2k/N+xqYAdoODD5g/N7UJ7JKoDCDd9fEllMgDaV5J/zMwowGJ
-         sylAwhCm918hE3r70qdAMJnL6ktDsrxkF9TElCPUsfufClV394XIYhJBBgqfTl8ftiJ7
-         tbR78n4ln2EH8StsOtl5QJTYqIkA2qIC7hzkI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HzP1xFoLjj5jhJ3xNiat0BSRJmicxmV9UzOSz4HXrGI=;
-        b=LYLBLrZZiipmXh9iaV44vhRk0APpVVa+zCzPD8LKDscqN8wjSd05wd/pWFUOBoUA2l
-         S7O19gwlOH2PL6wXHE5YNgqLVc+k0Di2fSCqZX4p47HrdxcS3Bl0ttUkYqpWEOPbi1a9
-         PE7imW772M9BPSsNZY+85wEW/aGXj7evOcgUVLNjHuGWS1vq1KVDXCd2okQgkUEd42L/
-         +W6VGaPPuaqUNGvKAqOiYM/iC2y2hYf0akVRlmEpwpOgMAGazNz9ZtimM2A6iYNo3np8
-         5iE7jBke8p2a/LbfKEwl11D+Lnpi3biz9t1tM0gSeDfeBuQcM03ns9kSWrbBRbX6Jn43
-         +20Q==
-X-Gm-Message-State: AFqh2kqJcSv29m/pjcrKg1UZS4kIlGLXJDcs0tUoxOiRGsP74Ygx9qFm
-        /DdSLn0TcakZWgK6nYvHaeMVRlxHYhhf7r+J
-X-Google-Smtp-Source: AMrXdXuCkFNtk3b4zF85HMByvyito1T7PWWIv7b0CX7WwhEuOYORR4pJqioo1BOJdDFn4zA6hvs/uA==
-X-Received: by 2002:a05:6102:1482:b0:3d0:c56e:bc1d with SMTP id d2-20020a056102148200b003d0c56ebc1dmr2064705vsv.30.1673980852148;
-        Tue, 17 Jan 2023 10:40:52 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id b7-20020a0561023a0700b003d3fc32d3eesm142012vsu.30.2023.01.17.10.40.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 10:40:50 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id k6so24273758vsk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:50 -0800 (PST)
-X-Received: by 2002:a67:bb14:0:b0:3ce:acca:5b77 with SMTP id
- m20-20020a67bb14000000b003ceacca5b77mr466044vsn.70.1673980850013; Tue, 17 Jan
- 2023 10:40:50 -0800 (PST)
+        Tue, 17 Jan 2023 14:35:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F521723
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673980856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iFiAegt8WNgL5MZXxVPS9mQqy9Ss59WQtK/8IB6U8eA=;
+        b=FCne1nSzUUUptpo2A4Y4oQwsN2sQyjKaamPLp1zmSJREuvjcaic3kX1tris8nfcTckyx89
+        Zx/SkDZiR2kuHO4KGPy0vMjZ/fnG7xo9fyVZrLS4pkrbWd9knwvS0Oe+q3vvh93E3zwBKu
+        7+DS7I7lo1hVRGL4xEGRxKLEhCijb+E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-304-7Q5xTnuUMu6dbfLp4O-8ag-1; Tue, 17 Jan 2023 13:40:55 -0500
+X-MC-Unique: 7Q5xTnuUMu6dbfLp4O-8ag-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2A11857A84;
+        Tue, 17 Jan 2023 18:40:54 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CA68B2166B29;
+        Tue, 17 Jan 2023 18:40:51 +0000 (UTC)
+Message-ID: <0110b1d1-17c4-49a3-64c0-ad7d7b8cbd29@redhat.com>
+Date:   Tue, 17 Jan 2023 13:40:51 -0500
 MIME-Version: 1.0
-References: <20230117085212.1.If242b1cd61b2e87e312dd9cf81e20301bae2a5a4@changeid>
-In-Reply-To: <20230117085212.1.If242b1cd61b2e87e312dd9cf81e20301bae2a5a4@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 17 Jan 2023 10:40:38 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XNazmGuFkdUEcNoitkced4uuy5C1CJBK4vgpbdZU5AWg@mail.gmail.com>
-Message-ID: <CAD=FV=XNazmGuFkdUEcNoitkced4uuy5C1CJBK4vgpbdZU5AWg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180: set ath10k output power
- calibration string
-To:     Yunlong Jia <ecs.beijing2022@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Henry Sun <henrysun@google.com>,
-        Abhishek Kumar <kuabhs@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v7 00/23] DEPT(Dependency Tracker)
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Byungchul Park <byungchul.park@lge.com>,
+        linux-kernel@vger.kernel.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com,
+        42.hyeyoo@gmail.com, chris.p.wilson@intel.com,
+        gwan-gyeong.mun@intel.com
+References: <1673235231-30302-1-git-send-email-byungchul.park@lge.com>
+ <CAHk-=whpkWbdeZE1zask8YPzVYevJU2xOXqOposBujxZsa2-tQ@mail.gmail.com>
+ <Y8bmeffIQ3iXU3Ux@boqun-archlinux>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y8bmeffIQ3iXU3Ux@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 1/17/23 13:18, Boqun Feng wrote:
+> [Cc Waiman]
+>
+> On Mon, Jan 16, 2023 at 10:00:52AM -0800, Linus Torvalds wrote:
+>> [ Back from travel, so trying to make sense of this series.. ]
+>>
+>> On Sun, Jan 8, 2023 at 7:33 PM Byungchul Park <byungchul.park@lge.com> wrote:
+>>> I've been developing a tool for detecting deadlock possibilities by
+>>> tracking wait/event rather than lock(?) acquisition order to try to
+>>> cover all synchonization machanisms. It's done on v6.2-rc2.
+>> Ugh. I hate how this adds random patterns like
+>>
+>>          if (timeout == MAX_SCHEDULE_TIMEOUT)
+>>                  sdt_might_sleep_strong(NULL);
+>>          else
+>>                  sdt_might_sleep_strong_timeout(NULL);
+>>     ...
+>>          sdt_might_sleep_finish();
+>>
+>> to various places, it seems so very odd and unmaintainable.
+>>
+>> I also recall this giving a fair amount of false positives, are they all fixed?
+>>
+>  From the following part in the cover letter, I guess the answer is no?
+>
+> 	...
+>          6. Multiple reports are allowed.
+>          7. Deduplication control on multiple reports.
+>          8. Withstand false positives thanks to 6.
+> 	...
+>
+> seems to me that the logic is since DEPT allows multiple reports so that
+> false positives are fitlerable by users?
+>
+>> Anyway, I'd really like the lockdep people to comment and be involved.
+> I never get Cced, so I'm unware of this for a long time...
+>
+> A few comments after a quick look:
+>
+> *	Looks like the DEPT dependency graph doesn't handle the
+> 	fair/unfair readers as lockdep current does. Which bring the
+> 	next question.
+>
+> *	Can DEPT pass all the selftests of lockdep in
+> 	lib/locking-selftests.c?
+>
+> *	Instead of introducing a brand new detector/dependency tracker,
+> 	could we first improve the lockdep's dependency tracker? I think
+> 	Byungchul also agrees that DEPT and lockdep should share the
+> 	same dependency tracker and the benefit of improving the
+> 	existing one is that we can always use the self test to catch
+> 	any regression. Thoughts?
+>
+> Actually the above sugguest is just to revert revert cross-release
+> without exposing any annotation, which I think is more practical to
+> review and test.
+>
+> I'd sugguest we 1) first improve the lockdep dependency tracker with
+> wait/event in mind and then 2) introduce wait related annotation so that
+> users can use, and then 3) look for practical ways to resolve false
+> positives/multi reports with the help of users, if all goes well,
+> 4) make it all operation annotated.
 
-On Tue, Jan 17, 2023 at 12:57 AM Yunlong Jia <ecs.beijing2022@gmail.com> wrote:
->
-> Add the string to load RF output power table for pazquel360 project.
->
-> Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
->
-> ---
->
->  arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi | 4 ++++
->  1 file changed, 4 insertions(+)
+I agree with your suggestions. In fact, the lockdep code itself is one 
+of major overheads when running a debug kernel. If we have another set 
+of parallel dependency tracker, we may slow down a debug kernel even 
+more. So I would rather prefer improving the existing lockdep code 
+instead creating a completely new one.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+I do agree that the lockdep code itself is now rather complex. A 
+separate dependency tracker, however, may undergo similar transformation 
+over time to become more and more complex due to the needs to meet 
+different requirement and constraints.
+
+Cheers,
+Longman
+
