@@ -2,119 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B6C66E31B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 462A566E328
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbjAQQKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S232391AbjAQQMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjAQQKH (ORCPT
+        with ESMTP id S231584AbjAQQML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:10:07 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F05D86A1;
-        Tue, 17 Jan 2023 08:10:06 -0800 (PST)
-Received: from HP-EliteBook-x360-830-G8-Notebook-PC.. (1-171-185-203.dynamic-ip.hinet.net [1.171.185.203])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 303CA43818;
-        Tue, 17 Jan 2023 16:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1673971804;
-        bh=ccFUstwQc0Hww0K4JjiSXVFRIzjCID1ql9cu6Hc1KDQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=FoeGgXVe30mb89rBFt/PZ5eUWf2EQEt2nNfAXqg10nKXu9g2Ah6L8YsTTHt4/jdQL
-         5cQI9Ua24aWDXhLy5xR0k6kXr04NpkBdaqv1g7p+oFCYoZCiJeTLqHgN0GlX8d4CVe
-         rjatwyI9YMqZOt3z4lJxIxbEaP+YaTemjLxL96tJDy2LR/21EOfwrEGvRKQhHktLIR
-         Y+Z+aSwegcYyWDBBzqcu4+D1PPZlr3WlJ709+Zdv+r7Y7QlOV5H3/0kiv5GwOMTOCs
-         lpgm6H9l9V41GBGFfBHu91O0oEGJpG0RWuzVylojGlJOlvXcwVOcfMM//FPSQzT8/z
-         4jKW232iKglvw==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
-Cc:     hdegoede@redhat.com, Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Wahaj <wahajaved@protonmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: light: cm32181: Fix PM support on system with 2 I2C resources
-Date:   Wed, 18 Jan 2023 00:09:51 +0800
-Message-Id: <20230117160951.282581-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 17 Jan 2023 11:12:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A283B3D3;
+        Tue, 17 Jan 2023 08:12:10 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9E4E01F385;
+        Tue, 17 Jan 2023 16:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673971929; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=185VNqtOqrWbrz+iqnibvY2OKcoNRPZvWlFEs/lSiyw=;
+        b=DFisV2MPDS3tQ97+t5ehDa1oiSns+MsIadujPEsel0Q3rDNaZ88r2bgBdYYDX/JAu3gGpr
+        phicHXPF6isX3ScM6jjUBVLwHeex3nLoYufaOlT/aVGoU7XFuWz4hSLRG5F8adkUylQhyi
+        VcXUynz/RJ7SEwQw3AdBsjbPa8ESaJ8=
+Received: from alley.suse.cz (unknown [10.100.208.146])
+        by relay2.suse.de (Postfix) with ESMTP id 4A24C2C141;
+        Tue, 17 Jan 2023 16:12:08 +0000 (UTC)
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        coverity-bot <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        coverity-bot <keescook+coverity-bot@chromium.org>
+Subject: [PATCH] printk: Use scnprintf() to print the message about the dropped messages on a console
+Date:   Tue, 17 Jan 2023 17:10:31 +0100
+Message-Id: <20230117161031.15499-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices
-with 2 I2C resources") creates a second client for the actual I2C
-address, but the "struct device" passed to PM ops is the first client
-that can't talk to the sensor.
+Use scnprintf() for printing the message about dropped messages on
+a console. It returns the really written length of the message.
+It prevents potential buffer overflow when the returned length is
+later used to copy the buffer content.
 
-That means the I2C transfers in both suspend and resume routines can
-fail and blocking the whole suspend process.
+Note that the previous code was safe because the scratch buffer was
+big enough and the message always fit in. But scnprintf() makes
+it more safe, definitely.
 
-Instead of using the first client for I2C transfer, store the cm32181
-private struct on both cases so the PM ops can get the correct I2C
-client to perfrom suspend and resume.
-
-Fixes: 68c1b3dd5c48 ("iio: light: cm32181: Add PM support")
-Tested-by: Wahaj <wahajaved@protonmail.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1530570 ("Memory - corruptions")
+Fixes: c4fcc617e148 ("printk: introduce console_prepend_dropped() for dropped messages")
+Link: https://lore.kernel.org/r/202301131544.D9E804CCD@keescook
+Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/iio/light/cm32181.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ kernel/printk/printk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-index 001055d097509..0f319c891353c 100644
---- a/drivers/iio/light/cm32181.c
-+++ b/drivers/iio/light/cm32181.c
-@@ -440,6 +440,8 @@ static int cm32181_probe(struct i2c_client *client)
- 	if (!indio_dev)
- 		return -ENOMEM;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 55338bfd3b55..a9b7dade0d2e 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2716,7 +2716,7 @@ static void console_prepend_dropped(struct printk_message *pmsg, unsigned long d
+ 	char *outbuf = &pbufs->outbuf[0];
+ 	size_t len;
  
-+	i2c_set_clientdata(client, indio_dev);
-+
+-	len = snprintf(scratchbuf, scratchbuf_sz,
++	len = scnprintf(scratchbuf, scratchbuf_sz,
+ 		       "** %lu printk messages dropped **\n", dropped);
+ 
  	/*
- 	 * Some ACPI systems list 2 I2C resources for the CM3218 sensor, the
- 	 * SMBus Alert Response Address (ARA, 0x0c) and the actual I2C address.
-@@ -458,9 +460,9 @@ static int cm32181_probe(struct i2c_client *client)
- 		client = i2c_acpi_new_device(dev, 1, &board_info);
- 		if (IS_ERR(client))
- 			return PTR_ERR(client);
--	}
- 
--	i2c_set_clientdata(client, indio_dev);
-+		i2c_set_clientdata(client, indio_dev);
-+	}
- 
- 	cm32181 = iio_priv(indio_dev);
- 	cm32181->client = client;
-@@ -490,7 +492,8 @@ static int cm32181_probe(struct i2c_client *client)
- 
- static int cm32181_suspend(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
-+	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-+	struct i2c_client *client = cm32181->client;
- 
- 	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
- 					 CM32181_CMD_ALS_DISABLE);
-@@ -498,8 +501,8 @@ static int cm32181_suspend(struct device *dev)
- 
- static int cm32181_resume(struct device *dev)
- {
--	struct i2c_client *client = to_i2c_client(dev);
- 	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-+	struct i2c_client *client = cm32181->client;
- 
- 	return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
- 					 cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
 -- 
-2.34.1
+2.35.3
 
