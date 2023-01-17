@@ -2,175 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE25670BC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343B1670BD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjAQWk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S229588AbjAQWns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjAQWj3 (ORCPT
+        with ESMTP id S229748AbjAQWmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:39:29 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFDA4A219
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:20:42 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id p24so34972810plw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 14:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSGOsJAtpiNhXze0eb7NkEGJHEgCM3o3h68MxeurWOQ=;
-        b=d21qx3XZ6vWnpM2uMNOpnaDrS6JFYZLqsPmQZR4rEDpPNDTK7CxWECLavKnY5flXhE
-         xYn3PSdRgFwFcUMkYcOEnDq3GHlWRS49qWlUXrbUqbvIH0yCw15L6qX0Z0C94FHLKOkc
-         VvFcZS93yqCWJXeQtYmHhWSxuVqHgPxtrcq7aaxyIoZJVF4uLEpeizfgCV+lD2wyjlno
-         OT6u3A6pd+rbjY8jz41OW/xfuyUQV1LORUTY9ehw+XngDyK2N6nDiauJ67MVNuXg3oWL
-         Kwnw8HaQavzOcd85p16aGf4pQ+7HlvzaCHiW/NewsYN2nc4MXSXIaVdSXzsZaeFyzTxa
-         Hi5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lSGOsJAtpiNhXze0eb7NkEGJHEgCM3o3h68MxeurWOQ=;
-        b=zWyOSZp5i4zme+WO/m5AIAfhLNUyBL+7LVArHJkL8Ql2H/MGjNRxjAb/pjkok7OkfY
-         MUq2uc5bxTMgmUp1hcKh81p/SW1RnE7Ma0zlrpxa4estNF69rmkOGOoioNDaFjGJ85jq
-         hFYhS/kc476cZ6rafdbDOKWLhhZTBp0jDQmi3NlYWslS1m5xXuusyZkbBBEJ4HSsEqzV
-         6NdTZL1p+KpiGeo2kkSbAZ6ndn50OW7WRyTQBUvorcwzzXKMTczDxq4p4524xntTqvZT
-         CxAo4hLAlzAqNPmQMKbf+WtpPOcktmPmXxCxLaLQuinwDQB98y+2E7/pMk5oYApFa9QI
-         theA==
-X-Gm-Message-State: AFqh2kqbOlBswvDj8fmYpSEh7mwoDsf161jJVPgoVtXjIBf5EYD2STYV
-        pVrCFVDkpHo97LtTC/CnjAfsMSHJvhnEwX53TO18vw==
-X-Google-Smtp-Source: AMrXdXv1tNSDA/vdVXrwznsUrTfJP5P5q4ykJ1GIOQkYbHKQCS2WJEk7FEHpnkKj40mxqilmHFwVqHlzOhVZdPBqT8w=
-X-Received: by 2002:a17:902:d506:b0:193:3760:1ca3 with SMTP id
- b6-20020a170902d50600b0019337601ca3mr310680plg.98.1673994041426; Tue, 17 Jan
- 2023 14:20:41 -0800 (PST)
+        Tue, 17 Jan 2023 17:42:43 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1CC474C6;
+        Tue, 17 Jan 2023 14:29:48 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HMQfer016497;
+        Tue, 17 Jan 2023 22:29:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=L3lrNdGwPI64g1imGZgAD0hLzBBqC1j4gjf4j57+EE0=;
+ b=YHlZxMt+7XD299eEHaW9sYS2VYx8EpJ0BYWQcEHJLxs+Fv6mgxcywKxjVK784CBg02W/
+ Aw6sP1cZUsYQhDs/AhtQchbMMHgVeqHJQhEt7dLZgLOwJptqrIE9tu28q5Hph1Hs3OBV
+ kXNhaalYKkK9V2zn1TpYv+Tddcu5eDHkxbdrxogNkdVdj0802bm3tnCRkz61IvUz3042
+ Sb5Uc3UsXn6Tn1poIKZj+cP5XxgkhrXTPQmgiAZmnkV/WaEjABcJC4bH8nd2+zmQJ2B8
+ 0cKW1ahfwIB94Sd61ODebkpLrJBp9V3xKDJhORs2VYUA8KJbwTdS5zj/cTVfkXupYd+S uA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n55cxbcfr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 22:29:33 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HMTW46019089
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 22:29:32 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
+ 2023 14:29:31 -0800
+Message-ID: <59bddf7a-f420-cccd-8029-65052f834c62@quicinc.com>
+Date:   Tue, 17 Jan 2023 14:29:31 -0800
 MIME-Version: 1.0
-References: <20230117023335.1690727-31-Liam.Howlett@oracle.com> <20230117191109.116438-1-sj@kernel.org>
-In-Reply-To: <20230117191109.116438-1-sj@kernel.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 17 Jan 2023 14:20:30 -0800
-Message-ID: <CAGS_qxru93E+=6nD31=8UGS=7ADnb3VG3hv=hfh-R1zVcqTJ3w@mail.gmail.com>
-Subject: Re: [PATCH v3 30/48] mm/damon: Stop using vma_mas_store() for maple
- tree store
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Liam Howlett <liam.howlett@oracle.com>, brendanhiggins@google.com,
-        kunit-dev@googlegroups.com,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "damon@lists.linux.dev" <damon@lists.linux.dev>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 05/28] virt: gunyah: Add hypercalls to identify Gunyah
+To:     Alex Elder <elder@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>
+CC:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-acpi@vger.kernel.org>
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <20221219225850.2397345-6-quic_eberman@quicinc.com>
+ <63bbc640-9b0c-95af-3d35-291da0323db3@linaro.org>
+ <4e8a7fdf-8c91-cf2f-d369-c67b7584f580@quicinc.com>
+ <b2819f68-8672-4909-c787-d1bdbd35da2e@linaro.org>
+Content-Language: en-US
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <b2819f68-8672-4909-c787-d1bdbd35da2e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: miyKeSpHg7UHbXYqZwTyLjr8gHpRWoe-
+X-Proofpoint-ORIG-GUID: miyKeSpHg7UHbXYqZwTyLjr8gHpRWoe-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_10,2023-01-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=917 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301170179
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:11 AM SeongJae Park <sj@kernel.org> wrote:
->
-> Cc-ing kunit people.
->
-> Hi Liam,
->
->
-> Could we put touching file name on the summary?
-> E.g., mm/damon/vaddr-test: Stop using ...
->
-> On Tue, 17 Jan 2023 02:34:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
->
-> > From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-> >
-> > Prepare for the removal of the vma_mas_store() function by open coding
-> > the maple tree store in this test code.  Set the range of the maple
-> > state and call the store function directly.
-> >
-> > Cc: SeongJae Park <sj@kernel.org>
-> > Cc: damon@lists.linux.dev
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > ---
-> >  mm/damon/vaddr-test.h | 19 +++++++++++++------
-> >  1 file changed, 13 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
-> > index bce37c487540..6098933d3272 100644
-> > --- a/mm/damon/vaddr-test.h
-> > +++ b/mm/damon/vaddr-test.h
-> > @@ -14,19 +14,26 @@
-> >
-> >  #include <kunit/test.h>
-> >
-> > -static void __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
-> > +static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
-> >                       ssize_t nr_vmas)
-> >  {
-> > -     int i;
-> > +     int i, ret = -ENOMEM;
-> >       MA_STATE(mas, mt, 0, 0);
-> >
-> >       if (!nr_vmas)
-> > -             return;
-> > +             return -ENOENT;
 
-We could pass in the `test` object here and give more detailed info, e.g.
-  (if !nr_vmas)
-     kunit_skip(test, "...");
 
-And below could be
+On 1/17/2023 11:20 AM, Alex Elder wrote:
+> On 1/10/23 11:56 AM, Elliot Berman wrote:
+>>>> There are two calls to help identify Gunyah:
+>>>>
+>>>> 1. gh_hypercall_get_uid() returns a UID when running under a Gunyah
+>>>>     hypervisor.
+>>>> 2. gh_hypercall_hyp_identify() returns build information and a set of
+>>>>     feature flags that are supported by Gunyah.
+>>>
+>>> The first is a "service", while the second is a "hypercall".
+>>> Can you explain the distinction?  The sentence at the top
+>>> refers to both as "hypercalls".
+>>>
+>>
+>> I learned more details about this to answer your question. "get_uid()" 
+>> is a standardized call that is ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID 
+>> defined in include/arm-smccc.h. I'll use that.
+> 
+> You didn't really explain the distinction between hypercall
+> and service in Gunyah.  Both are encoded as "vendor specific
+> hypervisor service calls" according to the SVCCC specification.
+> I haven't found where ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID
+> gets handled, but I accept your answer that it's basically
+> a standard call.  The "get UID" is the only one that's defined
+> as a Gunyah "service"; the rest are hypercalls.
+> 
 
-bool stored_all = false; // instead of ret
-...
-for (...) {
+This came from a Gunyah implementation detail that separates standard 
+(service) calls from the non-standard calls. I was following the 
+distinction from Gunyah code not realizing that it's actually a 
+standardized call that Linux would already have support for.
 
-}
-stored_all = true;
+Thanks,
+Elliot
 
-failed:
-  mas_unlock(&mas);
-  if (!stored_all) kunit_skip(test, "failed to...");
-
-> >
-> >       mas_lock(&mas);
-> > -     for (i = 0; i < nr_vmas; i++)
-> > -             vma_mas_store(&vmas[i], &mas);
-> > +     for (i = 0; i < nr_vmas; i++) {
-> > +             mas_set_range(&mas, vmas[i].vm_start, vmas[i].vm_end - 1);
-> > +             if (mas_store_gfp(&mas, &vmas[i], GFP_KERNEL))
-> > +                     goto failed;
-> > +     }
-> > +     ret = 0;
-> > +
-> > +failed:
-> >       mas_unlock(&mas);
-> > +     return ret;
-> >  }
-> >
-> >  /*
-> > @@ -71,7 +78,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
-> >       };
-> >
-> >       mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
-> > -     __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas));
-> > +     KUNIT_EXPECT_EQ(test, __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)), 0);
->
-> In case of the __link_vmas() failure, I think we should skip this test using
-> 'kunit_skip()', rather marking this test failed.
-
-As noted above, I'd suggest we also pass in the `test` object to
-__link_vmas() and call kunit_skip() from there.
-
->
->
-> Thanks,
-> SJ
-
-Daniel
+> It's not a big deal, I just noticed the difference and was
+> curious about it.
+> 
+>                      -Alex
