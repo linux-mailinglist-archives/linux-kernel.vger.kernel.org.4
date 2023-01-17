@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8177366E3C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF3266E3CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbjAQQjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S231794AbjAQQkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbjAQQjQ (ORCPT
+        with ESMTP id S233300AbjAQQkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:39:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAC745216
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:39:14 -0800 (PST)
+        Tue, 17 Jan 2023 11:40:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B24445215
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:40:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 669F8B81909
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:39:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D5FC433D2;
-        Tue, 17 Jan 2023 16:39:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2630614D9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 16:40:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE44CC433EF;
+        Tue, 17 Jan 2023 16:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673973552;
-        bh=ySEJMU3KFh+SZ1kFanOfIpyzm2CVjH6uK0xDkFyQROU=;
+        s=k20201202; t=1673973602;
+        bh=8FfTQZrqyhnZxAAYd4VyprghfHyBrSE/ve6LyDRtWTk=;
         h=From:To:Cc:Subject:Date:From;
-        b=eW7zq9g1aG1mp/LEKIMRBrKcu7V83Wp32f8TQWHkG7X1GY8T/FqSazEJLctqAuZN2
-         7BqfQEtSyZhKlXvqJDAyvO8qeHGoS8/sbDOoEQJWRe4WhtinlYRUC+FTkBkNfUVFnX
-         pMnMkh/cwVDHf2o2hJikIYAflfIeZfxuYlYPEwEDV6/jUlWFMV2gyE7f+HJspVLx72
-         /kU/EMUzt51+eW92mKUCN5mMRcDyCgpbAUBHHl3213CZhlIwGupRg0jCXZUWIuUur/
-         uA75N4S6APQJjsSCptU54CwkzuPmFgcmr6IRt7+9MTOv7C2h7T17ot3l4fVf/hX6k7
-         VSISGdV7hoSCg==
+        b=oYoZOPhi7sLGeQdjqXEzkYfVO0oZyyN+isGYwClSsk+NynvndqE2R5OvvL0WQJA7p
+         12mc3xH+iu3JVpQNY5qCVK4pIbscQApA99AE69u1PkAqjvSQoDbmOKwZxDsi+gVpuV
+         a6PHnU3ZbXIGq7iRDi9o9w2qd8I2sBJX2k0mjZdce1UfLRoo4vqnlTF1ZIoIdDty5w
+         RAnDaSyLmnHxKxQ5CaTvV7TMEpqbi0HpzzK5QtyJsVvZ+1qH5jVLMhhP3J5pEEIdwK
+         17m5KoEweHls4uxnyKxcYaCbhddRzEUqiiwCvVptGyxOdjUGdzvTYQdLj8d/YyeUmc
+         v1IuNVQblHQiQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] nouveau: fix nv50_wndw_new_() prototype
-Date:   Tue, 17 Jan 2023 17:39:00 +0100
-Message-Id: <20230117163907.1081223-1-arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: vchiq_arm: fix enum vchiq_status return types
+Date:   Tue, 17 Jan 2023 17:39:32 +0100
+Message-Id: <20230117163957.1109872-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,41 +61,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-gcc-13 complains about a mismatched function declaration:
+gcc-13 notices a type mismatch between function declaration
+and definition for a few functions that have been converted
+from returning vchiq specific status values to regular error
+codes:
 
-drivers/gpu/drm/nouveau/dispnv50/wndw.c:696:1: error: conflicting types for 'nv50_wndw_new_' due to enum/integer mismatch; have 'int(const struct nv50_wndw_func *, struct drm_device *, enum drm_plane_type,  const char *, int,  const u32 *, u32,  enum nv50_disp_interlock_type,  u32,  struct nv50_wndw **)' {aka 'int(const struct nv50_wndw_func *, struct drm_device *, enum drm_plane_type,  const char *, int,  const unsigned int *, unsigned int,  enum nv50_disp_interlock_type,  unsigned int,  struct nv50_wndw **)'} [-Werror=enum-int-mismatch]
-  696 | nv50_wndw_new_(const struct nv50_wndw_func *func, struct drm_device *dev,
-      | ^~~~~~~~~~~~~~
-In file included from drivers/gpu/drm/nouveau/dispnv50/wndw.c:22:
-drivers/gpu/drm/nouveau/dispnv50/wndw.h:36:5: note: previous declaration of 'nv50_wndw_new_' with type 'int(const struct nv50_wndw_func *, struct drm_device *, enum drm_plane_type,  const char *, int,  const u32 *, enum nv50_disp_interlock_type,  u32,  u32,  struct nv50_wndw **)' {aka 'int(const struct nv50_wndw_func *, struct drm_device *, enum drm_plane_type,  const char *, int,  const unsigned int *, enum nv50_disp_interlock_type,  unsigned int,  unsigned int,  struct nv50_wndw **)'}
-   36 | int nv50_wndw_new_(const struct nv50_wndw_func *, struct drm_device *,
-      |     ^~~~~~~~~~~~~~
+drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:662:5: error: conflicting types for 'vchiq_initialise' due to enum/integer mismatch; have 'int(struct vchiq_instance **)' [-Werror=enum-int-mismatch]
+drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:1411:1: error: conflicting types for 'vchiq_use_internal' due to enum/integer mismatch; have 'int(struct vchiq_state *, struct vchiq_service *, enum USE_TYPE_E)' [-Werror=enum-int-mismatch]
+drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:1468:1: error: conflicting types for 'vchiq_release_internal' due to enum/integer mismatch; have 'int(struct vchiq_state *, struct vchiq_service *)' [-Werror=enum-int-mismatch]
 
-All the callers are ok, just the header file mixes up the order of
-the arguments.
+Change the declarations to match the actual function definition.
 
-Fixes: 53e0a3e70de6 ("drm/nouveau/kms/nv50-: simplify tracking of channel interlocks")
+Fixes: a9fbd828be7f ("staging: vchiq_arm: drop enum vchiq_status from vchiq_*_internal")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/nouveau/dispnv50/wndw.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../staging/vc04_services/include/linux/raspberrypi/vchiq.h   | 2 +-
+ drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/dispnv50/wndw.h b/drivers/gpu/drm/nouveau/dispnv50/wndw.h
-index 591c852f326b..76a6ae5d5652 100644
---- a/drivers/gpu/drm/nouveau/dispnv50/wndw.h
-+++ b/drivers/gpu/drm/nouveau/dispnv50/wndw.h
-@@ -35,8 +35,9 @@ struct nv50_wndw {
+diff --git a/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h b/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
+index db1441c0cc66..690ab7165b2c 100644
+--- a/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
++++ b/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
+@@ -86,7 +86,7 @@ struct vchiq_service_params_kernel {
  
- int nv50_wndw_new_(const struct nv50_wndw_func *, struct drm_device *,
- 		   enum drm_plane_type, const char *name, int index,
--		   const u32 *format, enum nv50_disp_interlock_type,
--		   u32 interlock_data, u32 heads, struct nv50_wndw **);
-+		   const u32 *format, u32 heads,
-+		   enum nv50_disp_interlock_type, u32 interlock_data,
-+		   struct nv50_wndw **);
- void nv50_wndw_flush_set(struct nv50_wndw *, u32 *interlock,
- 			 struct nv50_wndw_atom *);
- void nv50_wndw_flush_clr(struct nv50_wndw *, u32 *interlock, bool flush,
+ struct vchiq_instance;
+ 
+-extern enum vchiq_status vchiq_initialise(struct vchiq_instance **pinstance);
++extern int vchiq_initialise(struct vchiq_instance **pinstance);
+ extern enum vchiq_status vchiq_shutdown(struct vchiq_instance *instance);
+ extern enum vchiq_status vchiq_connect(struct vchiq_instance *instance);
+ extern enum vchiq_status vchiq_open_service(struct vchiq_instance *instance,
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
+index 2851ef6b9cd0..cd20eb18f275 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.h
+@@ -100,10 +100,10 @@ vchiq_dump_platform_use_state(struct vchiq_state *state);
+ extern void
+ vchiq_dump_service_use_state(struct vchiq_state *state);
+ 
+-extern enum vchiq_status
++extern int
+ vchiq_use_internal(struct vchiq_state *state, struct vchiq_service *service,
+ 		   enum USE_TYPE_E use_type);
+-extern enum vchiq_status
++extern int
+ vchiq_release_internal(struct vchiq_state *state,
+ 		       struct vchiq_service *service);
+ 
 -- 
 2.39.0
 
