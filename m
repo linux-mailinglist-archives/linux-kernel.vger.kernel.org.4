@@ -2,242 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE645670E15
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D20B670E2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjAQXwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S230031AbjAQXxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjAQXvy (ORCPT
+        with ESMTP id S229919AbjAQXwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:51:54 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027054FACC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:03:20 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id s3so9120405edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S0Utky4CcDja9H/9iX4tDNCU4emwig6oC4agaGJhUUc=;
-        b=OHrC/QTQCvGHxvqsw4stPInLZeBh5zNkTPdbPyqckyBMvQu5n2I6oZxzOIVhCDH1lA
-         AMLMW2FuQYBuhwNIPGrwCh+lOtyGPyVNw3XMv0+hq9AevSLYzjvpRLbjA2e+gQ6eY6p5
-         BGkfkbshhEUd7TJeK6SEp3JmXMv7y0aLAejGGYrMdRThup5OXqITNGZVNtmNooFkr2T7
-         HpwMLi6MiMZel6nw2TbZ5FniIwmyBLDQnZywjBGmcPLaDLxuDGvUcBdvnExBrUlW3HGC
-         3Pvsg+QvnFJ8QSesDm5Y3TgPw+FeR04hHsqGZiMUAd2z0LyvdvLwN4QNX+fWbz3SYiYs
-         9PVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S0Utky4CcDja9H/9iX4tDNCU4emwig6oC4agaGJhUUc=;
-        b=h1qttcYZojOGORR6ChAznfx/oRUDiTw0wneciScmp8ZRvrwBt+ETsCK8wXvIIHucFT
-         /8B1/L6libQeN1bEp02K0Y6TvuLHgz6tKGvrxg2ypGJCyZsVHt4w1PRlSweJMjQbtBSJ
-         TtPCcv8QsPduRIQoRKdLoebO92HcUPGpNUh6Eo6p0323O0yr1CQAGa8oSXPuKvGcGmDM
-         m5R5W2VhLa9Ho5NKilrCuFPzNEV1iIvKPA9KjxqscC6lr/zewNTeuLRUZde2hRPUvdaL
-         gNRQ0vTqnkCIyMYcLsSr73npQ2V/CV8DW8eNczAhDyiswEIDrGUJaONV2QWFMRGgY5pp
-         xLAQ==
-X-Gm-Message-State: AFqh2koSshN000xyiLJMNqdX+GM2dKRcJUIlC8zEFm0klfdk2cdDhEYP
-        vKwiQZ0iGrXBPad2OJtZfrOYeaye4QlN/QVcbkiOcA==
-X-Google-Smtp-Source: AMrXdXvkOyq5MZjBOOsq4MiLIkJKFeCxVaiXzr1XNoCLZy3kjB0ruBBffvwH30VV28c3JrcgVvzIPJNOcBc7xKb7WeY=
-X-Received: by 2002:a05:6402:3d4:b0:491:6a35:9852 with SMTP id
- t20-20020a05640203d400b004916a359852mr627295edw.182.1673996599128; Tue, 17
- Jan 2023 15:03:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-3-vannapurve@google.com> <Y8cXMCBzNcuzniXS@google.com>
-In-Reply-To: <Y8cXMCBzNcuzniXS@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 17 Jan 2023 15:03:06 -0800
-Message-ID: <CAGtprH-jXuYs4MqNupxi2aEQ3ohp0PyqpNZd0UDu8yqF+57aXw@mail.gmail.com>
-Subject: Re: [V2 PATCH 2/6] KVM: Selftests: Add support for private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+        Tue, 17 Jan 2023 18:52:02 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EE83A9A;
+        Tue, 17 Jan 2023 15:05:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1673996713; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xas+WWnU0h9XNtsIj3PC1hwar1e/lTCwSRez9hjFWFQ=;
+        b=OHXopnoa0C2i0W8pYsoCvD1Aeo0SpZtThVWG9Mff5xglEGv6UOTU+78cCATIqpOGbQXpyk
+        HHCeOuHOD16Ui+AsASMKBme3kyaUHcC2ztLuiFtGYB3vLbJw4X481wHpZ8WfB7AsKb/GvL
+        p6W9cRWb2f/FEXrLAkTiHCCfH2H7Zrk=
+Message-ID: <846b27400a72db8ca9b7497a6c032bdaacd62fc6.camel@crapouillou.net>
+Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
+ channels, part 1
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org
+Date:   Tue, 17 Jan 2023 23:05:10 +0000
+In-Reply-To: <20230117213556.vdurctncvnjom62g@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+         <20221024205213.327001-2-paul@crapouillou.net>
+         <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
+         <CVZAKR.06MA7BGA170W3@crapouillou.net>
+         <20221117132927.mom5klfd4eww5amk@pengutronix.de>
+         <SKFJLR.07UMT1VWJOD52@crapouillou.net>
+         <20230117213556.vdurctncvnjom62g@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 1:46 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> > Add support for registering private memory with kvm using
-> > KVM_SET_USER_MEMORY_REGION ioctl.
-> >
-> > Helper function to query extended userspace mem region is introduced to
-> > allow memory conversion.
-> >
-> > vm_mem_backing_src types is extended to contain additional guest memory
-> > source types to cover the cases where guest memory can be backed by both
-> > anonymous memory and restricted memfd.
-> >
-> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> > ---
-> >  .../selftests/kvm/include/kvm_util_base.h     | 12 +++-
-> >  .../testing/selftests/kvm/include/test_util.h |  4 ++
-> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 58 +++++++++++++++++--
-> >  tools/testing/selftests/kvm/lib/test_util.c   | 11 ++++
-> >  4 files changed, 78 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > index c7685c7038ff..4ad99f295f2a 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > @@ -31,7 +31,10 @@ typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
-> >  typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
-> >
-> >  struct userspace_mem_region {
-> > -     struct kvm_userspace_memory_region region;
-> > +     union {
-> > +             struct kvm_userspace_memory_region region;
-> > +             struct kvm_userspace_memory_region_ext region_ext;
->
-> As discussed in the UPM series, we're trending towards adding an entirely new
-> struct+ioctl(), kvm_userspace_memory_region2, instead of extending the existing
-> struct.  The == -> >= hack you had to add in kvm_do_ioctl() below is one of the
-> reason for that change.
->
+Hi Uwe,
 
-Ack.
+Le mardi 17 janvier 2023 =C3=A0 22:35 +0100, Uwe Kleine-K=C3=B6nig a =C3=A9=
+crit=C2=A0:
+> Hello Paul,
+>=20
+> On Fri, Nov 18, 2022 at 09:55:40AM +0000, Paul Cercueil wrote:
+> > Le jeu. 17 nov. 2022 =C3=A0 14:29:27 +0100, Uwe Kleine-K=C3=B6nig
+> > <u.kleine-koenig@pengutronix.de> a =C3=A9crit :
+> > > Hello Paul,
+> > >=20
+> > > On Tue, Oct 25, 2022 at 11:02:00AM +0100, Paul Cercueil wrote:
+> > > > =C2=A0Le mar. 25 oct. 2022 =C3=A0 08:21:29 +0200, Uwe Kleine-K=C3=
+=B6nig
+> > > > =C2=A0<u.kleine-koenig@pengutronix.de> a =C3=A9crit :
+> > > > =C2=A0> Hello,
+> > > > =C2=A0>
+> > > > =C2=A0> On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil
+> > > > wrote:
+> > > > =C2=A0> >=C2=A0 The "duty > cycle" trick to force the pin level of =
+a
+> > > > disabled
+> > > > TCU2
+> > > > =C2=A0> >=C2=A0 channel would only work when the channel had been e=
+nabled
+> > > > =C2=A0> > previously.
+> > > > =C2=A0> >
+> > > > =C2=A0> >=C2=A0 Address this issue by enabling the PWM mode in
+> > > > jz4740_pwm_disable
+> > > > =C2=A0> >=C2=A0 (I know, right) so that the "duty > cycle" trick wo=
+rks
+> > > > before
+> > > > =C2=A0> > disabling
+> > > > =C2=A0> >=C2=A0 the PWM channel right after.
+> > > > =C2=A0> >
+> > > > =C2=A0> >=C2=A0 This issue went unnoticed, as the PWM pins on the
+> > > > majority of
+> > > > the
+> > > > =C2=A0> > boards
+> > > > =C2=A0> >=C2=A0 tested would default to the inactive level once the
+> > > > corresponding
+> > > > =C2=A0> > TCU
+> > > > =C2=A0> >=C2=A0 clock was enabled, so the first call to
+> > > > jz4740_pwm_disable()
+> > > > would
+> > > > =C2=A0> > not
+> > > > =C2=A0> >=C2=A0 actually change the pin levels.
+> > > > =C2=A0> >
+> > > > =C2=A0> >=C2=A0 On the GCW Zero however, the PWM pin for the backli=
+ght
+> > > > (PWM1,
+> > > > which
+> > > > =C2=A0> > is
+> > > > =C2=A0> >=C2=A0 a TCU2 channel) goes active as soon as the timer1 c=
+lock
+> > > > is
+> > > > enabled.
+> > > > =C2=A0> >=C2=A0 Since the jz4740_pwm_disable() function did not wor=
+k on
+> > > > channels not
+> > > > =C2=A0> >=C2=A0 previously enabled, the backlight would shine at fu=
+ll
+> > > > brightness
+> > > > =C2=A0> > from
+> > > > =C2=A0> >=C2=A0 the moment the backlight driver would probe, until =
+the
+> > > > backlight
+> > > > =C2=A0> > driver
+> > > > =C2=A0> >=C2=A0 tried to *enable* the PWM output.
+> > > > =C2=A0> >
+> > > > =C2=A0> >=C2=A0 With this fix, the PWM pins will be forced inactive=
+ as
+> > > > soon as
+> > > > =C2=A0> >=C2=A0 jz4740_pwm_apply() is called (and might be reconfig=
+ured
+> > > > to
+> > > > active if
+> > > > =C2=A0> >=C2=A0 dictated by the pwm_state). This means that there i=
+s
+> > > > still a
+> > > > tiny
+> > > > =C2=A0> > time
+> > > > =C2=A0> >=C2=A0 frame between the .request() and .apply() callbacks=
+ where
+> > > > the
+> > > > PWM
+> > > > =C2=A0> > pin
+> > > > =C2=A0> >=C2=A0 might be active. Sadly, there is no way to fix this
+> > > > issue: it
+> > > > is
+> > > > =C2=A0> >=C2=A0 impossible to write a PWM channel's registers if th=
+e
+> > > > corresponding
+> > > > =C2=A0> > clock
+> > > > =C2=A0> >=C2=A0 is not enabled, and enabling the clock is what caus=
+es the
+> > > > PWM
+> > > > pin
+> > > > =C2=A0> > to go
+> > > > =C2=A0> >=C2=A0 active.
+> > > > =C2=A0> >
+> > > > =C2=A0> >=C2=A0 There is a workaround, though, which complements th=
+is
+> > > > fix:
+> > > > simply
+> > > > =C2=A0> >=C2=A0 starting the backlight driver (or any PWM client dr=
+iver)
+> > > > with a
+> > > > =C2=A0> > "init"
+> > > > =C2=A0> >=C2=A0 pinctrl state that sets the pin as an inactive GPIO=
+. Once
+> > > > the
+> > > > =C2=A0> > driver is
+> > > > =C2=A0> >=C2=A0 probed and the pinctrl state switches to "default",=
+ the
+> > > > regular PWM
+> > > > =C2=A0> > pin
+> > > > =C2=A0> >=C2=A0 configuration can be used as it will be properly dr=
+iven.
+> > > > =C2=A0> >
+> > > > =C2=A0> >=C2=A0 Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap fr=
+om
+> > > > parent
+> > > > node")
+> > > > =C2=A0> >=C2=A0 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > > > =C2=A0> >=C2=A0 Cc: stable@vger.kernel.org
+> > > > =C2=A0>
+> > > > =C2=A0> OK, understood the issue. I think there is another similar
+> > > > issue:
+> > > > The
+> > > > =C2=A0> clk is get and enabled only in the .request() callback. The
+> > > > result is (I
+> > > > =C2=A0> think---depends on a few further conditions) that if you
+> > > > have the
+> > > > =C2=A0> backlight driver as a module and the bootloader enables the
+> > > > backlight to
+> > > > =C2=A0> show a splash screen, the backlight goes off because of the
+> > > > =C2=A0> clk_disable_unused initcall.
+> > > >=20
+> > > > =C2=A0I will have to verify, but I'm pretty sure disabling the cloc=
+k
+> > > > doesn't
+> > > > =C2=A0change the pin level back to inactive.
+> > >=20
+> > > Given that you set the clk's rate depending on the period to
+> > > apply, I'd
+> > > claim that you need to keep the clk on. Maybe it doesn't hurt,
+> > > because
+> > > another component of the system keeps the clk running, but it's
+> > > wrong
+> > > anyhow. Assumptions like these tend to break on new chip
+> > > revisions.
+> >=20
+> > If the backlight driver is a module then it will probe before the
+> > clk_disable_unused initcall, unless something is really wrong.
+>=20
+> I'd claim the clk_disable_unused initcall is called before userspace
+> starts and so before the module can be loaded. Who is wrong here?
 
-> > +     };
-> >       struct sparsebit *unused_phy_pages;
-> >       int fd;
-> >       off_t offset;
-> > @@ -196,7 +199,7 @@ static inline bool kvm_has_cap(long cap)
-> >
-> >  #define kvm_do_ioctl(fd, cmd, arg)                                           \
-> >  ({                                                                           \
-> > -     static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");   \
-> > +     static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) >= _IOC_SIZE(cmd), "");   \
-> >       ioctl(fd, cmd, arg);                                                    \
-> >  })
-> >
-> > @@ -384,6 +387,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
-> >  void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
-> >  void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
-> >  void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
-> > +
-> >  struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
-> >  vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
-> >  vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
-> > @@ -715,6 +719,10 @@ struct kvm_userspace_memory_region *
-> >  kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
-> >                                uint64_t end);
-> >
-> > +struct kvm_userspace_memory_region_ext *
-> > +kvm_userspace_memory_region_ext_find(struct kvm_vm *vm, uint64_t start,
-> > +                              uint64_t end);
-> > +
-> >  #define sync_global_to_guest(vm, g) ({                               \
-> >       typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));     \
-> >       memcpy(_p, &(g), sizeof(g));                            \
-> > diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> > index 80d6416f3012..aea80071f2b8 100644
-> > --- a/tools/testing/selftests/kvm/include/test_util.h
-> > +++ b/tools/testing/selftests/kvm/include/test_util.h
-> > @@ -103,6 +103,8 @@ enum vm_mem_backing_src_type {
-> >       VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
-> >       VM_MEM_SRC_SHMEM,
-> >       VM_MEM_SRC_SHARED_HUGETLB,
-> > +     VM_MEM_SRC_ANONYMOUS_AND_RESTRICTED_MEMFD,
-> > +     VM_MEM_SRC_ANON_HTLB2M_AND_RESTRICTED_MEMFD,
->
-> There's no need for a dedicated flag in the backing type, vm_userspace_mem_region_add()
-> already takes the memslot's flags and can simply key off KVM_MEM_PRIVATE.
->
+Probably me.
 
-I switched to using a dedicated flag thinking that it might be handy
-when private memory can be backed by huge pages. For now it makes
-sense to avoid adding it.
+> > So the backlight would stay ON if it was enabled by the bootloader,
+> > unless the DTB decides it doesn't have to be.
+>=20
+> Don't understand that. How could hte DTB decide the backlight can be
+> disabled?
 
-> > @@ -881,6 +915,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
-> >       struct userspace_mem_region *region;
-> >       size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
-> >       size_t alignment;
-> > +     int restricted_memfd = -1;
->
-> No need to initialize to -1, KVM is supposed to ignore the restrictedmem fd if
-> !KVM_MEM_PRIVATE, and if KVM_MEM_PRIVATE is set, selftests must provide a valid fd.
->
-> >       TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
-> >               "Number of guest pages is not compatible with the host. "
->
-> This is what I ended up with after splitting out the conversion to
-> KVM_SET_USER_MEMORY_REGION2 to a separate patch.
->
-> --
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 7c1f81f93ba3..26c6830c1aa1 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -32,6 +32,11 @@ int open_path_or_exit(const char *path, int flags)
->         return fd;
->  }
->
-> +static int memfd_restricted(unsigned int flags)
-> +{
-> +       return syscall(__NR_memfd_restricted, flags);
-> +}
-> +
->  /*
->   * Open KVM_DEV_PATH if available, otherwise exit the entire program.
->   *
-> @@ -980,6 +985,15 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->         }
->
->         region->backing_src_type = src_type;
-> +
-> +       if (flags & KVM_MEM_PRIVATE) {
-> +               region->region.restricted_fd = memfd_restricted(0);
-> +               region->region.restricted_offset = 0;
-> +
-> +               TEST_ASSERT(region->region.restricted_fd >= 0,
-> +                           "Failed to create restricted memfd");
-> +       }
-> +
->         region->unused_phy_pages = sparsebit_alloc();
->         sparsebit_set_num(region->unused_phy_pages,
->                 guest_paddr >> vm->page_shift, npages);
-> @@ -992,9 +1006,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->         TEST_ASSERT(ret == 0, "KVM_SET_USER_MEMORY_REGION2 IOCTL failed,\n"
->                 "  rc: %i errno: %i\n"
->                 "  slot: %u flags: 0x%x\n"
-> -               "  guest_phys_addr: 0x%lx size: 0x%lx",
-> +               "  guest_phys_addr: 0x%lx size: 0x%lx restricted fd: %d\n",
->                 ret, errno, slot, flags,
-> -               guest_paddr, (uint64_t) region->region.memory_size);
-> +               guest_paddr, (uint64_t) region->region.memory_size,
-> +               region->region.restricted_fd);
->
->         /* Add to quick lookup data structures */
->         vm_userspace_mem_region_gpa_insert(&vm->regions.gpa_tree, region);
+I don't remember what I meant by that :)
+=C2=A0
+> > Anyway, I can try your suggestion, and move the trick to force-
+> > disable PWM
+> > pins in the probe(). After that, the clocks can be safely disabled,
+> > so I can
+> > disable them (for the disabled PWMs) at the end of the probe and
+> > re-enable
+> > them again in their respective .request() callback.
+>=20
+> I really lost track of the problem here and would appreciate a new
+> submission of the remaining (and improved?) patches.
 
-Ack.
+Sure. I still have the patchset on the backburner and plan to
+(eventually) send an updated version.
+
+If you are fishing for patches I think you can take patches 3/5 and 4/5
+of this patchset. Then I won't have to send them again in v2.
+
+Cheers,
+-Paul
