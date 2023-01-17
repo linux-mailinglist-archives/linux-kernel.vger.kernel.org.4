@@ -2,138 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAE8670C18
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B06670C0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjAQWtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S229973AbjAQWtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjAQWrp (ORCPT
+        with ESMTP id S230041AbjAQWrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:47:45 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A0EB4E0D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:48:49 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id g23so19333117plq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:48:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kWE1pBRG4fQ1NY4iQchgCsAlYp+fjyZRHYiBxqI6Ppc=;
-        b=Ytivk0p3o3pKPR4jxRDApSW/X8kWJmOSU/vDUt9s1/F/HroGSdex4UY8cLNEMmie/M
-         SJHUrBNsemSTxj4PVT9ABl9rcmXciGL4VBfmkFcaTCLOmPzzeYKcSeCXZ4cAwgHiJimv
-         P5A/+mzpvc7I5IwbDpnNQroG3uEIK3/5pYOCtujUe/zOU4LXQdqgLIq9FP3Q8YhyADsX
-         +uLJ+IaHx9dxXMM7FC0nBUojSzt7FpQ0Vjr0BfWkXXwaMP20MrlXhoZvPgDK2Rf+cKY0
-         NsT2rt/S1e8PyBz8noED+BbjaMjl8Ndsq0XEF5oRKatjF9vLXme/E0dv/4FPKaUF6x7G
-         mc9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kWE1pBRG4fQ1NY4iQchgCsAlYp+fjyZRHYiBxqI6Ppc=;
-        b=gYvIWw8NOvY7kXd+lWJSndZAnl7d6WzmUJMALkGzLgP6x0j5sglSOZXKZyiwi5tZio
-         XONGuP+zlOF+pBZUFTXEm2GWQ27aomLpZRlkJBWzBOK3zHnLQYLFkUd5cnHVIKlULkqt
-         m7XBW+6TOD6ONiimuLr7naEwMAkygQpGeIOVwYdekpmY2d+fZi18hp3JXvawLAwG9E9f
-         delLmCvff4cDt6+0IO19LajZBRomJSWVLIBTjyBknOhs04zVLqOX+JDEaIDUiu0xmcM4
-         uz5MZfoP1A/G9yN8+r07J7aDnw+VvassQ5l3dTKcXpq06R0LgqgGPFuHH81dGQrgDT8P
-         69lg==
-X-Gm-Message-State: AFqh2kqiwVqissCCWhTNJmkIbwp9X9tc3tMPrBDRBJquNycFlJLiN7Ka
-        qb+wzUK8pkLsuSxnXGWy/GN4MQ==
-X-Google-Smtp-Source: AMrXdXvPkZgs3rtHgy0SGs5XB8Ijo6KKK7MXq+jTg0acICkNfD3dp3J3EcjMZ9hdAQ+KOHkyvoqjTw==
-X-Received: by 2002:a17:90b:3941:b0:225:e761:6d2b with SMTP id oe1-20020a17090b394100b00225e7616d2bmr2761268pjb.1.1673992129057;
-        Tue, 17 Jan 2023 13:48:49 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id nk16-20020a17090b195000b00212e5068e17sm11884pjb.40.2023.01.17.13.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:48:48 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:48:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 3/6] KVM: selftests: x86: Add
- IS_ALIGNED/IS_PAGE_ALIGNED helpers
-Message-ID: <Y8cXvS2gKcK8tU2D@google.com>
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-4-vannapurve@google.com>
+        Tue, 17 Jan 2023 17:47:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81D749012;
+        Tue, 17 Jan 2023 13:50:41 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673992240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9kRvzgCBVx5CsqZCT0iVya/YuDwD7HvQx/Cdez2OwYE=;
+        b=FmB0R3FWVjeezvBTl+OQJhL03fZ9wAuT6NypmKWIyV9GNt1Fq1xulnRnzRI1YsJqDNaijF
+        3gUGS/eoBjK+CB1Tk5PE6FX/fqZe8oBmJEKH7crllx2jlfcuVs9qUn8fqT0Ksm4t2/KHWg
+        qvAeQLfjoDK5StxfglOc/NIGTz2JIVKofzXUhmfIK6rgIRqI03lDOhtduH70Oh1JNYpSh7
+        hI8v9nXWiE+1oEiZKM8vv2yG6m4948t3ubhOi25Vd2Gl3jg5grNKEbNnxHvScJc+sr3ZFI
+        3x4HI7ztFPTZ17igeR5EpjZbgrN4VHYjptf1vtQrx60zBqvc7W1WbYFfm4sIZA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673992240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9kRvzgCBVx5CsqZCT0iVya/YuDwD7HvQx/Cdez2OwYE=;
+        b=yjCanFJ8Zq9WV1KKf+FZelQ0VydqlG6wcxsPQ3lHAcaYAt6NUH8Cd1kwT4oXLHjvlfNaZJ
+        K9L7IPHH/y1qWOBg==
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v4 19/19] irqdomain: Switch to per-domain locking
+In-Reply-To: <20230116135044.14998-20-johan+linaro@kernel.org>
+References: <20230116135044.14998-1-johan+linaro@kernel.org>
+ <20230116135044.14998-20-johan+linaro@kernel.org>
+Date:   Tue, 17 Jan 2023 22:50:39 +0100
+Message-ID: <87mt6gkez4.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205232341.4131240-4-vannapurve@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> Add IS_ALIGNED/IS_PAGE_ALIGNED helpers for selftests.
-> 
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util_base.h    | 3 +++
->  tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 4ad99f295f2a..7ba32471df50 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -170,6 +170,9 @@ extern enum vm_guest_mode vm_mode_default;
->  #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
->  #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
->  
-> +/* @a is a power of 2 value */
-> +#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
+On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
+> The IRQ domain structures are currently protected by the global
+> irq_domain_mutex. Switch to using more fine-grained per-domain locking,
+> which may potentially speed up parallel probing somewhat.
 
-IS_ALIGNED() is provided by tools/include/linux/bitmap.h
+Does it or not?
 
->  struct vm_guest_mode_params {
->  	unsigned int pa_bits;
->  	unsigned int va_bits;
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index 5d310abe6c3f..4d5dd9a467e1 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -279,6 +279,7 @@ static inline unsigned int x86_model(unsigned int eax)
->  #define PAGE_SHIFT		12
->  #define PAGE_SIZE		(1ULL << PAGE_SHIFT)
->  #define PAGE_MASK		(~(PAGE_SIZE-1) & PHYSICAL_PAGE_MASK)
-> +#define IS_PAGE_ALIGNED(x)	IS_ALIGNED(x, PAGE_SIZE)
+If not then why adding all this churn for no real value?
 
-I certainly don't object to adding IS_PAGE_ALIGNED(), but it's not needed for
-this series.  Verifying that KVM doesn't allow an unaligned page conversion during
-KVM_HC_MAP_GPA_RANGE belongs in a separate test+series, as that doesn't have a
-strict dependency on UPM.
+Thanks,
 
-TL;DR: this patch can be dropped, for now at least.
-
->  #define HUGEPAGE_SHIFT(x)	(PAGE_SHIFT + (((x) - 1) * 9))
->  #define HUGEPAGE_SIZE(x)	(1UL << HUGEPAGE_SHIFT(x))
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
+        tglx
