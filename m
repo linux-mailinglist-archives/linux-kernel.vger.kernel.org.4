@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEEF66DC36
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC6666DC32
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236678AbjAQLUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 06:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S236838AbjAQLU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 06:20:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236638AbjAQLU3 (ORCPT
+        with ESMTP id S236245AbjAQLUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 06:20:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3CE33459;
-        Tue, 17 Jan 2023 03:20:24 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 680FB5CB40;
-        Tue, 17 Jan 2023 11:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673954423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XPjwrcXmuFGkQbX3taDI9ie1BtTBZf9HP9xMBmIbYHg=;
-        b=QejvsoIMCwUtGFOfkF1T35ph+Pp2eQzJX1oyMUJutWnO+tPAsvBOMrdBi4xcU66AK82Jpj
-        L2h504x44J6hR1jOtzYRPKj26VV/Z3xpKB/V7Q47FF2SHxkwSJy6QMHUelno/9wipM6ruN
-        1sBKFQPCcoYXQYsvjBy5+L5MRMJOt34=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D90852C141;
-        Tue, 17 Jan 2023 11:20:22 +0000 (UTC)
-Date:   Tue, 17 Jan 2023 12:20:20 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        coverity-bot <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: console_prepend_dropped(): Memory - corruptions
-Message-ID: <Y8aEdDxQrQICQtem@alley>
-References: <202301131544.D9E804CCD@keescook>
- <Y8KAhaiZQOWTcfyF@google.com>
- <Y8V8tqMJeB7t+rcJ@alley>
- <Y8YRBo7ZmtzWT4J1@google.com>
- <877cxl3abr.fsf@jogness.linutronix.de>
- <Y8ZTlVX3HQUVkU13@google.com>
+        Tue, 17 Jan 2023 06:20:47 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218A42BEE8;
+        Tue, 17 Jan 2023 03:20:45 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H9e8It032650;
+        Tue, 17 Jan 2023 12:20:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Uhl/6ZnzLSC5uEBKCTotjT83reAKyaaW0IgeDaV1PQA=;
+ b=bDmYpYBBtMhMF1oA0Pakp6oHR/Dj5n7knQTUJI0gTVvLRBQJP8ZFygyNsCeakq2482rE
+ hziTdVg0BC1UvZVlTGe+8Rtw1GijcTwLfv/l2x3I8OCmJLAE7KtvFUWXdiCjxspxsfFx
+ 7HZlCoi0Nx7a7buLNS3RVrNn/2bH0P0leVcm1tHmVP8FT4NE5KrFLcHUemaJexwAmrgW
+ hPgwoT5WK31P38uO1u8gbnv8Sr7rSEwzMv4HjbzPnzCzHOh4CNn7PF0zoU6GYobS86gU
+ FfFQUwyh+2TVuFPBKSYmYXXvluSWuLqAxh/GHzYYn4MZsLk+HhnUgViGRr8CcQP1h77r mw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3n3m5q0dmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 12:20:35 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5DD0A10002A;
+        Tue, 17 Jan 2023 12:20:24 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5A6DE20B222;
+        Tue, 17 Jan 2023 12:20:24 +0100 (CET)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Tue, 17 Jan
+ 2023 12:20:23 +0100
+Message-ID: <e27f3293-2d3e-af7d-187e-ec73fa15de02@foss.st.com>
+Date:   Tue, 17 Jan 2023 12:20:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8ZTlVX3HQUVkU13@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] ARM: dts: stm32: Fix User button on stm32mp135f-dk
+Content-Language: en-US
+To:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230116115727.1121169-1-amelie.delaunay@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230116115727.1121169-1-amelie.delaunay@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_05,2023-01-17_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,58 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-01-17 16:51:49, Sergey Senozhatsky wrote:
-> On (23/01/17 08:16), John Ogness wrote:
-> > On 2023-01-17, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > > On (23/01/16 17:35), Petr Mladek wrote:
-> > >> 	len = snprintf(scratchbuf, scratchbuf_sz,
-> > >> 		       "** %lu printk messages dropped **\n", dropped);
-> > >
-> > > Wouldn't
-> > >
-> > > 	if (WARN_ON_ONCE(len + PRINTK_PREFIX_MAX >= outbuf_sz))
-> > > 		return;
-> > >
-> > > prevent us from doing something harmful?
+Hi Amélie
 
-The problem is that it compares outbuf_sz that is bigger than
-scratchbuf.
-
-The above check should prevent crash in:
-
-	memmove(outbuf + len, outbuf, pmsg->outbuf_len + 1);
-
-But it would not prevent out-of-bound access to scratchbuf in:
-
-	memcpy(outbuf, scratchbuf, len);
-
-
-That said, the coverity report is pretty confusing. It is below
-the memmove() so that it looks like the memmove() is dangerous.
-But it talks about "scratchbuf" so that it probably describes
-the real problem in "memcpy()".
-
-
-> > Sure. But @0len is supposed to contain the number of bytes in
-> > @scratchbuf, which theoretically it does not. snprintf() is the wrong
-> > function to use here, even if there is not real danger in this
-> > situation.
+On 1/16/23 12:57, Amelie Delaunay wrote:
+> This patch fixes the following dtbs_check warning on stm32mp135f-dk:
+> arch/arm/boot/dts/stm32mp135f-dk.dtb: gpio-keys: 'user-pa13' does not match any of the regexes: '^(button|event|key|switch|(button|event|key|switch)-[a-z0-9-]+|[a-z0-9-]+-(button|event|key|switch))$', 'pinctrl-[0-9]+'
+>  From schema: Documentation/devicetree/bindings/input/gpio-keys.yaml
 > 
-> Oh, yes, I agree that snprintf() should be replaced. Maybe we can go
-> even a bit furhter and replace all snprintf()-s in kernel/printk/*
-> (well, in a similar fashion, just in case). I'm just trying to understand
-> what type of assumptions does coverity make here and so far everything
-> looks rather peculiar.
+> It renames user-pa13 node into button-user so that it matches gpio-keys
+> bindings.
+> 
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+> ---
+>   arch/arm/boot/dts/stm32mp135f-dk.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
+> index 9ff5a3eaf55b..931877d6ddb9 100644
+> --- a/arch/arm/boot/dts/stm32mp135f-dk.dts
+> +++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
+> @@ -40,7 +40,7 @@ optee@dd000000 {
+>   	gpio-keys {
+>   		compatible = "gpio-keys";
+>   
+> -		user-pa13 {
+> +		button-user {
+>   			label = "User-PA13";
+>   			linux,code = <BTN_1>;
+>   			gpios = <&gpioa 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 
-Note that we sometimes need snprintf() to compute the needed size
-of the buffer. For example, vsnprintf() in vprintk_store() is
-correct.
 
-It looks to me that snprintf() in console_prepend_dropped() is the
-only real problem.
+Thanks for the cleaning. Applied on stm32-next.
 
-Well, it would be nice to replace the few sprintf() calls. They look safe
-because the size of the output is limited by the printf format but...
-
-Best Regards,
-Petr
+Thanks.
+Alex
