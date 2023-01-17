@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1E366E412
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF0B66E416
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjAQQuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S233868AbjAQQvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjAQQud (ORCPT
+        with ESMTP id S233278AbjAQQvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:50:33 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE1212F2F;
-        Tue, 17 Jan 2023 08:50:32 -0800 (PST)
+        Tue, 17 Jan 2023 11:51:03 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4197D1E9E4;
+        Tue, 17 Jan 2023 08:51:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673974232; x=1705510232;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=D/hQ52k01Iqixqps9WlZErrx2s7zv8CoaISCEZlZo9g=;
-  b=AdFjiF+BLeA3DH+LFYoSTaNWCBpU1aQX/cohRQYyes/jW9ka7CUO/DnZ
-   NszKXQ9IyxQjUIlxhUNPc0ycDDnfAXpy7Hzulep56sgKudw6hmli8thrj
-   Ou30K8j7Iic8Z60Tt5uiPsAN+9LKWLo6q/DXnzJ5Fl4kufKxT2tcAATPJ
-   ijP3w4fZ2H34X7Nwml9aJXIayAIkpz+5sMRvaNMIfcD7dSzwuU1LWZLbC
-   tqKHIOqFRxgIOGNhd2BJkPRGQeB647MZmKoUINuMblhsZ3Q31k/fIiYRc
-   kNFyEDrQpuLmY7v8wSA+d7BukF7yECfT3O9i89EShHCAtT/gbniRpkpeW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="389246831"
+  t=1673974263; x=1705510263;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DAmxMlbu+x5zp49k+P0zill7H3H48lEvCLdvP9/FK1Q=;
+  b=H5axUeiDOmzpM4oNy+MHo7BWfClS1ymLKG3McaeFsKStCSMU+3P68AqI
+   tsEoKb24KcrUEyc+C4bopuPw5HS0s3lBgF8GGWHgx1TUXiIAtfYiaYDj7
+   oiR5PT4DAxBLWuAd3/9ez59YC92v3dj54Vjg5JSoJD7cikkr7HPgwfKGA
+   RkSTQFYKBuBfHO14lMoGgPmF0YLXJHaHR6CMZP035PV2WThqTGy9U20eV
+   /i8HvmziqdjE4UXl3kt5hTM06y4KONc9e67a5z6LuYprqxF3+P4lawlp2
+   EbAiRnjAzr9j0oxFnnVlE6gnS8rPZGf7DjXErjL+CmHHJZ2JjTZ8FoQyb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="312619380"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="389246831"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:50:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="748097485"
+   d="scan'208";a="312619380"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:51:02 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="801812559"
 X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="748097485"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jan 2023 08:50:31 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: int340x_thermal: Add production mode attribute
-Date:   Tue, 17 Jan 2023 08:50:29 -0800
-Message-Id: <20230117165029.2782484-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+   d="scan'208";a="801812559"
+Received: from youli-mobl1.amr.corp.intel.com (HELO [10.255.228.205]) ([10.255.228.205])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:51:02 -0800
+Message-ID: <7f969b09-438b-cee3-be4c-e08b97457b12@intel.com>
+Date:   Tue, 17 Jan 2023 08:51:09 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] acpi: fix suspend with Xen PV
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <lenb@kernel.org>,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>
+References: <20230117155724.22940-1-jgross@suse.com>
+ <CAJZ5v0iCAT2W-m1T-v1wSBw+GQerhMAp1hT6SioJ53RQY=oA3g@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAJZ5v0iCAT2W-m1T-v1wSBw+GQerhMAp1hT6SioJ53RQY=oA3g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,118 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible that system manufacturer locks further thermal tuning. In
-this case user space calibration tools should not try to adjust thermal
-configuration.
+On 1/17/23 08:47, Rafael J. Wysocki wrote:
+>> Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as Xen PV guest")
+>> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+>> Signed-off-by: Juergen Gross <jgross@suse.com>
+>> ---
+>> V2:
+>> - new approach, avoid calling acpi_get_wakeup_address()
+> I'll queue this up for 6.3 if the x86 people don't object.
 
-Add an attribute "production_mode". This attribute is only present when
-the ACPI DCFG method is present under INT3400 device scope.
-
-When DCFG evaluates to non 0, user space configuration tools should exit.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../driver-api/thermal/intel_dptf.rst         |  4 ++
- .../intel/int340x_thermal/int3400_thermal.c   | 48 +++++++++++++++++++
- 2 files changed, 52 insertions(+)
-
-diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-index 372bdb4d04c6..9a7b651ba764 100644
---- a/Documentation/driver-api/thermal/intel_dptf.rst
-+++ b/Documentation/driver-api/thermal/intel_dptf.rst
-@@ -84,6 +84,10 @@ DPTF ACPI Drivers interface
- 	https:/github.com/intel/thermal_daemon for decoding
- 	thermal table.
- 
-+``production_mode`` (RO)
-+	When non zero, manufacturer locked thermal configuration from
-+	further changes.
-+
- 
- ACPI Thermal Relationship table interface
- ------------------------------------------
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index db8a6f63657d..ec5ec07ccf41 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -60,6 +60,8 @@ struct int3400_thermal_priv {
- 	int odvp_count;
- 	int *odvp;
- 	u32 os_uuid_mask;
-+	int production_mode;
-+	bool production_mode_support;
- 	struct odvp_attr *odvp_attrs;
- };
- 
-@@ -315,6 +317,43 @@ static int int3400_thermal_get_uuids(struct int3400_thermal_priv *priv)
- 	return result;
- }
- 
-+static ssize_t production_mode_show(struct device *dev, struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
-+
-+	return sprintf(buf, "%d\n", priv->production_mode);
-+}
-+
-+static DEVICE_ATTR_RO(production_mode);
-+
-+static int production_mode_init(struct int3400_thermal_priv *priv)
-+{
-+	unsigned long long mode;
-+	acpi_status status;
-+	int ret;
-+
-+	status = acpi_evaluate_integer(priv->adev->handle, "DCFG", NULL, &mode);
-+	/* If the method is not present, this is not an error */
-+	if (ACPI_FAILURE(status))
-+		return 0;
-+
-+	ret = sysfs_create_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
-+	if (ret)
-+		return ret;
-+
-+	priv->production_mode_support = true;
-+	priv->production_mode = mode;
-+
-+	return 0;
-+}
-+
-+void production_mode_exit(struct int3400_thermal_priv *priv)
-+{
-+	if (priv->production_mode_support)
-+		sysfs_remove_file(&priv->pdev->dev.kobj, &dev_attr_production_mode.attr);
-+}
-+
- static ssize_t odvp_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
-@@ -610,8 +649,15 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 	if (result)
- 		goto free_sysfs;
- 
-+	result = production_mode_init(priv);
-+	if (result)
-+		goto free_notify;
-+
- 	return 0;
- 
-+free_notify:
-+	acpi_remove_notify_handler(priv->adev->handle, ACPI_DEVICE_NOTIFY,
-+				   int3400_notify);
- free_sysfs:
- 	cleanup_odvp(priv);
- 	if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
-@@ -638,6 +684,8 @@ static int int3400_thermal_remove(struct platform_device *pdev)
- {
- 	struct int3400_thermal_priv *priv = platform_get_drvdata(pdev);
- 
-+	production_mode_exit(priv);
-+
- 	acpi_remove_notify_handler(
- 			priv->adev->handle, ACPI_DEVICE_NOTIFY,
- 			int3400_notify);
--- 
-2.31.1
-
+That 'Fixes:' patch looked to me like it was applied during the 6.2
+merge window.  I would have expected a fix to go up for 6.2 final.
