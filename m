@@ -2,195 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092C566DE9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B1566DEA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237107AbjAQNSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S236794AbjAQNT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237116AbjAQNSA (ORCPT
+        with ESMTP id S235653AbjAQNTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:18:00 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2112.outbound.protection.outlook.com [40.107.117.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD4939BB2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:17:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HoihBhxPq+vsMo2yLxWtTNLHIu8aGskRl4x0ZvGTEqdJ09jglJ5I8E/AudEe6F7wxKSWQq0kytlaE22+NppEze2q+77uMdCU8jshp+k9DK0aGOVGI+0XOdDxMCIxnqkekzL4Vu4NcTbElSmBxfpSlcl81xWVpYyDOnam3mMSGVM8pP4nffLdh0EYxkh1/K3wAeLUHOWXS3b06KnlwjpvfTeoy7iG5hBZilZok3H3ik0OMo/mmBfoF3EgHG8Cw9Er80C/ZW/d9pjIQ3ybe3iN2ldArybKKRwhiXV4Npzc7U9+TifgH2Bmkj3mn9xgxF/TcMJNpCMrsfRm017DsiPkhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8bMnH5jWPEKaNdGYDSsNc8HEQKql/H1lFBS/NuavcTI=;
- b=kfFB23Pk954Al02WKBzGgiwRIN3UKburpc5nENDAEzBk0VgtqSHYV57Wwb09iW6IaR2rQCylAEPXQ2irHDBlWhss4amJt8UbydG9cf65xOq79nYD7hClCtlTSF8O9xGyBMBK4VGEEmWpOvU5SWQaDManWwsFYda9G0jPm2H8eXDLsCGnAGQ/sQF8gBaT61wTI8k34PBqIPQbWmLXAZhnGw+gBDRY0w7PYtTsMAi0ZgNf+0xwar+pWWblXW4vfvnWClnT9tZVnxplps6YM/VIo0S/pUDbzV/YBpW+JDN0cUFeZ+C2fceFMTn5D3T+OcskBmEKV0Qv137QGdJMIvsAVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8bMnH5jWPEKaNdGYDSsNc8HEQKql/H1lFBS/NuavcTI=;
- b=YxEh9Y2eP7Hzhg6tpQIPDKGm7p1bLX3HQtXlLKKpGJzSNDUw3Tg5/cMBKnWPcq4RI0uF470kxjByg5yOjNspDmMgN0sGEXMDOcvgZTwEbvmptfWfD7YuspTIEUIe4HZYkp2V5DxVeHFNHebp5j/oy4pqln7TYzBTb6DnEYJkxGKrv1LH4bRw4QLh7oF2JmSYMTxnEo8w1TSrVvfE6X7R+qY34w0IX7ZPhA0mI0cwUnVBLdk4dItbxABy8iCbHKLGrQ7zTVeTIOtmXPLb5o0Zp6LYeyVMo59L8CAbdwWe+7+wOkyWkn6Lb0kMOpENQHjjrtyTwbxb54gSQv1yF7tvAw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB5566.apcprd06.prod.outlook.com (2603:1096:820:c4::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Tue, 17 Jan
- 2023 13:17:51 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6002.012; Tue, 17 Jan 2023
- 13:17:50 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: export compress_percent and compress_watermark entries
-Date:   Tue, 17 Jan 2023 21:17:40 +0800
-Message-Id: <20230117131740.76597-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR04CA0019.apcprd04.prod.outlook.com
- (2603:1096:404:f6::31) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 17 Jan 2023 08:19:25 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B98838EAD;
+        Tue, 17 Jan 2023 05:19:24 -0800 (PST)
+Date:   Tue, 17 Jan 2023 13:19:19 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1673961562; bh=pZa+dtTdSMjanJ9Lbe1aX8Frcq6MgE+SaT/yIDljxS0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b6JM5KZKuej1lrKNVnqFhfw7VDRd32K69KLc8fG49arUzQ/O4nPfmcTYqjgs/iYGD
+         RrVnSPlJNlc8axsI1XrDoE0S4/l5AMuD/lyQDDuAhpIVIBl5TomQYmrQs8nBGb/lG5
+         1/Z8EHz5ib5ZzMfyTS4P3RMO3D0YRz7BoNcnoHRw=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        Amy Parker <apark0006@student.cerritos.edu>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kheaders: explicitly validate existence of cpio command
+Message-ID: <20230117131919.3ywkaptian2y242d@t-8ch.de>
+References: <20230117-kernel-kheaders-cpio-v1-1-058d3e1c8621@weissschuh.net>
+ <Y8ZgTgtA9oH8W17Y@buildd.core.avm.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB5566:EE_
-X-MS-Office365-Filtering-Correlation-Id: efa2afb8-2722-44ed-ac12-08daf88d3be9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1YhKBBMs94CVubTDZea41d6vE+bK3CNpxZCIgAOaduGFQjmnQqHoqR7z5NQ67T1vDSvpPpi6t47ar4rvpPTy1nINpTq3q3auLYozNTqAmEpl2diLr6RNqIu3Oknoaw6XjgaEn4Mpo+Q6tvm37iPK6NF/0xwqVNJUlU5JGerg2cYUYSjh8MrhXBJtPdqWc1uOPNNFaLKRRLju/PJM5Fawp0Ryo+ATNnA8v5dIS+vUzQMGrijMPvo9A+HffvFKR+lezdsb4moqAp+HjWmqSNSPLdelLnXXBMieklIIBJekxckCMqqARV/0ubG4129Z63mNcAHmcQX5PgOTAdCQQM/9QoTlgpOcRmp0IAfIOEXkE/5DMHoqG7IpCPoizylQq3v0F+aPgYWRokm1p2ohCtx5q9fdN4n6585D4EVICIhHOINJv99kniYxQEPdthTZnJDKpmbAjaAUeugtfDphzOTCu0PMRxjcq+uBSbWfEo3smi45+shy25++JqIUr5DJtTct/gvChCQnWYTZMEdK24tpJ3Yn4H7pyxZd3i2nTFDwfx5uoKeLnHvRPGOV0JMbEbVaC08aKEQyFtvKBwP0voQpV0397wMowCCECcDbJMi/QBdZT6hpyx29S7pJ2OQenxB/KVtPHELLOpZPowX8CXA5GAccS00R/O902ba91307c8XqI2ignxfKgHj5Gr+n607di00N658gIS8uwdT0qy+HJQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(451199015)(83380400001)(38100700002)(38350700002)(86362001)(5660300002)(2906002)(8936002)(8676002)(4326008)(66476007)(66946007)(66556008)(41300700001)(6512007)(6506007)(186003)(26005)(2616005)(1076003)(316002)(19627235002)(478600001)(107886003)(6666004)(52116002)(6486002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GElBx84mvsoyUA//7GmlrNTm6/ocjBt5n6pnMXzwYbY7Gmf9h46lpn3jmzjR?=
- =?us-ascii?Q?PA3tjsg9oIJidITM6hyXtPUX0yRE+/J5DOpb/AdW5V/xmzDelay4ceD0Reaj?=
- =?us-ascii?Q?dXn53P3fB2SiLvyZtEkbV1Sby7KZo5Z1OXvAQBRa3GAVRZgvcCEeMiqlIjlT?=
- =?us-ascii?Q?g5x4D6TneLqv0x668zCJEvgtf827Aa4vB67ClfPkTHA56+LG7jwlzydxsjJu?=
- =?us-ascii?Q?ZN+WT6UKqWjnxKGm2PzjKxR9BlCoSyPBNOUthRhq2LfBVjoeoTCvFmVHEG0O?=
- =?us-ascii?Q?U8V4OmYgutvyI4pNz1HLDEGoWCuZzn1Ubh4V1/rCskpo3DjfSzQ2NrAjgL76?=
- =?us-ascii?Q?1QKzYi9f6lzvc4Q32x5rFxJnp/z9QRoxS2/zM0jPH7JD1FUGMHAsJeZGB4Ub?=
- =?us-ascii?Q?LCm7cYpS+SgJ39oeaL1nkyhg/rFPvcendyHtoUykZbxr7z/awTkOiCgBnbn9?=
- =?us-ascii?Q?xN+D1LrUGztNZ9QuPnqzxphC0ICLDlgJYsBqqyiNxogWpyBHXoMeWCJq/jh6?=
- =?us-ascii?Q?0Sus6xPOGD9k27FQ/qMFQimg9wJBt4TSnHkY6xNOJv+kTj39xrWAdNF4Z2qd?=
- =?us-ascii?Q?knffZuH+EGmi954q1fPr8/OhyXL8Dfo6ieQ1EfXuOMjlanFqDH18onWEduTR?=
- =?us-ascii?Q?REUyUpmw3kIh2EJTESUClNXYpdzgo9fHECD8QvIXRyQWSAqua7ogCbB9kcbV?=
- =?us-ascii?Q?XZ4BsOlCpEGgIpIkLcxdtAkMwuUJkpbE1T5tYkqht43Nh32RICyu5WhsqPKl?=
- =?us-ascii?Q?os/wt0NiTiA/drUuWhlKEunvEn/BpcgCg/q0zfZjU7PkZimIi4/JrfAstNKR?=
- =?us-ascii?Q?h9ugxDC+OQwOE4YvcRN6pqG21wmIad9BKYHY6vWvwHBrLhUl6WEPrETDYAV/?=
- =?us-ascii?Q?kPV0yMFFP736wuKYVALPcSHd4TqDdfATXVtwwD4hew+fMxOkuQy1HSRYTDlJ?=
- =?us-ascii?Q?B1le/u2I3icFIEmBXgWZfczIvDmCuvsq/dYlPTS9xzCNj5dq2QDQW9mpfgGj?=
- =?us-ascii?Q?R4S2SRvH3/vL60OaALbXffmPQod7R5vbmpyFRpadu57pb+5BZvNSgcm2jirV?=
- =?us-ascii?Q?GQ4vWbTeI9UMjjGZqPvxmX+4LgCWNDpZSyUDFmEm1MJVL/IyFdI4R+nCJEwL?=
- =?us-ascii?Q?HBLA8Ichu+qezB+QOgYMRwmEfbV2WgL9l5CgfT9rMEs+MQbxlXrXBWfPkoV3?=
- =?us-ascii?Q?Ty8eQ5HfDMVay5j12fO3lIVn7I2dFPduokWuNmmZRWAu4BZ/9b71lwM6AkAk?=
- =?us-ascii?Q?58Uz9RkEAB6mvgsQRIAG/TlwYfJ7STFsbGFlVjMY7sxiXSUmye5syKJk9X4o?=
- =?us-ascii?Q?b2hZ9ls6tP5ei5w5D0E/MgMYBq9JH2gNgqFfeEh4wqwl232XZzBW6AUwDr2k?=
- =?us-ascii?Q?Iky23NNnwk7ODkn+jKDuykcPReh+K+trFCgVQZTuleME/ZlGyNerAEXm19Pt?=
- =?us-ascii?Q?bfTueYzYrUy2mMuC7n9kRJmcqY1zswZHwsmHCK222+ib3evSJlaaCGrWm+4A?=
- =?us-ascii?Q?foPzo7KwBSKomoinR7gbh9vxDaAqc4ZvXTn0LMUPHokY1E3bshC4LJNNqxm+?=
- =?us-ascii?Q?ArMMBN6aOboR2OWKvRzA2LyvIJ7YJx0f8uB93ur6?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efa2afb8-2722-44ed-ac12-08daf88d3be9
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 13:17:50.7635
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3dbNRdYjn+xKsRfsqwktrGHqM5NEVLP4x1l/6VJ50LMBfu5Mhb00bjJrk2q7+QOYhnt5PqoohxeRmuNfHgZjqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5566
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y8ZgTgtA9oH8W17Y@buildd.core.avm.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch export below sysfs entries for better control cached
-compress page count.
+On Tue, Jan 17, 2023 at 09:46:02AM +0100, Nicolas Schier wrote:
+> On Tue, Jan 17, 2023 at 05:30:43AM +0000, Thomas Weißschuh wrote:
+> > If the cpio command is not available the error emitted by
+> > gen_kheaders.so is not clear as all output of the call to cpio is
+> > discarded:
+> > 
+> > GNU make 4.4:
+> > 
+> >   GEN     kernel/kheaders_data.tar.xz
+> > find: 'standard output': Broken pipe
+> > find: write error
+> > make[2]: *** [kernel/Makefile:157: kernel/kheaders_data.tar.xz] Error 127
+> > make[1]: *** [scripts/Makefile.build:504: kernel] Error 2
+> > 
+> > GNU make < 4.4:
+> > 
+> >   GEN     kernel/kheaders_data.tar.xz
+> > make[2]: *** [kernel/Makefile:157: kernel/kheaders_data.tar.xz] Error 127
+> > make[2]: *** Waiting for unfinished jobs....
+> > make[1]: *** [scripts/Makefile.build:504: kernel] Error 2
+> > 
+> > Add an explicit check that will trigger a clear message about the issue:
+> > 
+> >   CHK     kernel/kheaders_data.tar.xz
+> > ./kernel/gen_kheaders.sh: line 17: type: cpio: not found
+> 
+> Thanks for the patch!  What would you think about an even more verbose
+> message?  Perhaps something like:
+> 
+>     echo >&2 ' *** "cpio" is required for "CONFIG_IKHEADERS". >&2
 
-/sys/fs/f2fs/<disk>/compress_watermark
-/sys/fs/f2fs/<disk>/compress_percent
+Wouldn't hurt obviously.
+The other scripts used by the kernel don't seem to try to provide this
+kind of explicit message either, though.
+Having a line number, some sort of "not found" and the name of the
+command are enough, in my opinion.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- Documentation/ABI/testing/sysfs-fs-f2fs | 17 +++++++++++++++++
- fs/f2fs/sysfs.c                         | 18 ++++++++++++++++++
- 2 files changed, 35 insertions(+)
+> Reviewed-by: Nicolas Schier <n.schier@avm.de>
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 75420c242cc4..920562742655 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -717,3 +717,20 @@ Description:	Controls background discard granularity of inner discard thread
- 		is smaller than granularity. The unit size is one block(4KB), now only
- 		support configuring in range of [0, 512].
- 		Default: 512
-+
-+what:		/sys/fs/f2fs/<disk>/compress_watermark
-+date:		january 2023
-+contact:	"yangtao li" <frank.li@vivo.com>
-+description:	when compress_cache is on, it controls free memory watermark
-+		in order to limit caching compress page. If free memory is lower
-+		than watermark, then deny caching compress page. The value should be in
-+		range of [0, 100], by default it was initialized as 20(%).
-+
-+what:		/sys/fs/f2fs/<disk>/compress_percent
-+date:		january 2023
-+contact:	"yangtao li" <frank.li@vivo.com>
-+description:	when compress_cache is on, it controls cached page
-+		percent(compress pages / free_ram) in order to limit caching compress page.
-+		If cached page percent exceed threshold, then deny caching compress page.
-+		The value should be in range of [0, 100], by default it was initialized
-+		as 20(%).
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index e396851a6dd1..37c6ef080f7e 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -598,6 +598,20 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		sbi->compr_new_inode = 0;
- 		return count;
- 	}
-+
-+	if (!strcmp(a->attr.name, "compress_percent")) {
-+		if (t > 100)
-+			return -EINVAL;
-+		*ui = t;
-+		return count;
-+	}
-+
-+	if (!strcmp(a->attr.name, "compress_watermark")) {
-+		if (t > 100)
-+			return -EINVAL;
-+		*ui = t;
-+		return count;
-+	}
- #endif
- 
- 	if (!strcmp(a->attr.name, "atgc_candidate_ratio")) {
-@@ -932,6 +946,8 @@ F2FS_FEATURE_RO_ATTR(compression);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_written_block, compr_written_block);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_saved_block, compr_saved_block);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compr_new_inode, compr_new_inode);
-+F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_percent, compress_percent);
-+F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, compress_watermark, compress_watermark);
- #endif
- F2FS_FEATURE_RO_ATTR(pin_file);
- 
-@@ -1038,6 +1054,8 @@ static struct attribute *f2fs_attrs[] = {
- 	ATTR_LIST(compr_written_block),
- 	ATTR_LIST(compr_saved_block),
- 	ATTR_LIST(compr_new_inode),
-+	ATTR_LIST(compress_percent),
-+	ATTR_LIST(compress_watermark),
- #endif
- 	/* For ATGC */
- 	ATTR_LIST(atgc_candidate_ratio),
--- 
-2.25.1
+Thanks!
 
+Thomas
