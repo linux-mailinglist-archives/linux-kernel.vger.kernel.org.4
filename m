@@ -2,260 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFE366D952
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F05766D959
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbjAQJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S235634AbjAQJKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbjAQJHB (ORCPT
+        with ESMTP id S236454AbjAQJJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:07:01 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7077E3253F;
-        Tue, 17 Jan 2023 01:01:57 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H8ss9j015150;
-        Tue, 17 Jan 2023 09:01:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=y53Qn37kMzi9Fhc62GXAcreyZwbb55uF4YIqNoU/oFs=;
- b=NQQX7wcrhlQTSk0+HHdQI/t3/9lmobkzjkCIS/8yIWhx+/6daPeM2HW+RFqqxv5B5kNm
- jqd7XzzV1XG0eoGIf/VZ6cTAYpTEftlTUaBVJT2IaIp+Jfx5DRsfdrKUqghommtyrVS9
- HRFlZd4ABeXTqLsJTL76p845+w2uOjGrT8synpdUDv8AHjsVZFXPpL5i763hbRB6A+3d
- S2u6OO+W0pm6cNX+ZWH+4u0kZGus9tz7ZTINw/JwVTy5uK6Zwx+/jovHcAvl5iu1hYvw
- gVTLQoxNBENM+qbBZeTzVWZjeq9tg20hu5miDFwHlYV3549/f+K+gGNO6JQLVjezGKv6 WA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5pbm88g5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 09:01:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H91lPi011467
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 09:01:47 GMT
-Received: from [10.216.62.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
- 2023 01:01:41 -0800
-Message-ID: <4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com>
-Date:   Tue, 17 Jan 2023 14:31:38 +0530
+        Tue, 17 Jan 2023 04:09:41 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A613302A4;
+        Tue, 17 Jan 2023 01:03:46 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id p185so4281152oif.2;
+        Tue, 17 Jan 2023 01:03:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=0NAtipYSyTW+GwDFf12zqOPhjTjzg7AWvFqV0EBka+Q=;
+        b=eN26VWG15wRzfEmyfbgEpgrnkd+1vEg9MtMA4OwJsJffJd9jrJ+X/urBex/z60kcXE
+         QSbODoslFuO3oZPzu8gv46JFExd0s/znOcTeQ32KB2yUlI2VGUUvZ0W0cgcfRslIyf1p
+         i5B5FHmvWmflMFjGJtmRHFLfsxp9l5/cQy9QNFnLZpz62TtUQ1G5cAhLWKPEVURtM6Ri
+         2RQjwCP6qJPCcUaW0AWToJaLi7+SuNOLpKAaFELXqpbDQNqnQ0tAscuSJhuh/wXkSqg5
+         TWhlFURWN08stm1Jk3H/GhuZ8iwulvTkygpjA6LxXGgAlWeANY2EZLIT56vCAw8t1m1i
+         GV+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0NAtipYSyTW+GwDFf12zqOPhjTjzg7AWvFqV0EBka+Q=;
+        b=EvqC3pakVdFZU1S5vYXhCd+qpS0wK5GWuw9emJ5qQgxM/uO75cyA4zRofedaAvl0rx
+         Eu8sMNlUq7tR5ZmKMTVgifajPggNeIbwDhBGawPZuaT+hzIftZTbefMxsE+V/0wJh9Yv
+         K/0/1YxXzlhs7gRgHeV9xVcOmp3Vvvh4cCy1hRug62v8Ev2ikQq6MbU/8ngpncPfvt2W
+         UdIq60/3Y2CcN7yKumnzlVPsO/5YJLvpO6mSpFe4YtOkJQ1JiuhyK7fLdFlWhD2cN4Kf
+         UJlMapTtfaLGlNEHQ//oH+jxuWq1Amd+FIAEw2yIX5TMj5Vv1fGIgselCibF/Q3+rCfh
+         6v9Q==
+X-Gm-Message-State: AFqh2kr3/xx7B7oVNo6lqJ6hZRGaPe1a2JmSE8dG5LzakShvaqtkx2xA
+        wsgSwh/IFvtn6Gg/LXtZYSkk490CCBU=
+X-Google-Smtp-Source: AMrXdXuyuk41ifaJojeX4IsRrNf98cQzYgZjR7zyulKHdhUtsWWWQukx9Ch3bOZcdsg3yFr9AxI26g==
+X-Received: by 2002:a05:6808:6d7:b0:360:c338:b958 with SMTP id m23-20020a05680806d700b00360c338b958mr1024178oih.55.1673946225861;
+        Tue, 17 Jan 2023 01:03:45 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v63-20020acaac42000000b003670342726fsm2108210oie.12.2023.01.17.01.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 01:03:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bdcef623-58c0-fd59-f833-79b3e117604a@roeck-us.net>
+Date:   Tue, 17 Jan 2023 01:03:43 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Build regressions/improvements in v6.2-rc4
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
- <20230116163401.GA2371990-robh@kernel.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230116163401.GA2371990-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <CAHk-=wgcOEWvT-WjmRf-zCCXyFJaVVFH=26BPQ+N1OFTTnN=RA@mail.gmail.com>
+ <20230116122924.116745-1-geert@linux-m68k.org>
+ <46ba7912-3df6-dff9-792-49f4eaadefec@linux-m68k.org>
+ <Y8V94PKtaWO3yRS4@osiris> <20230116184127.GA1721129@roeck-us.net>
+ <Y8Zi89nN+ONOEki7@osiris>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Y8Zi89nN+ONOEki7@osiris>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YvWsNEaZzIa9SDxjuaJaoWCx5FHsxqGw
-X-Proofpoint-GUID: YvWsNEaZzIa9SDxjuaJaoWCx5FHsxqGw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_04,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=687
- mlxscore=0 priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170075
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/16/2023 10:04 PM, Rob Herring wrote:
-> On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
->> Add bindings to indicate properties required to support multiport
->> on Snps Dwc3 controller.
+On 1/17/23 00:57, Heiko Carstens wrote:
+> On Mon, Jan 16, 2023 at 10:41:27AM -0800, Guenter Roeck wrote:
+>> On Mon, Jan 16, 2023 at 05:40:00PM +0100, Heiko Carstens wrote:
+>>> On Mon, Jan 16, 2023 at 01:36:34PM +0100, Geert Uytterhoeven wrote:
+>>>> On Mon, 16 Jan 2023, Geert Uytterhoeven wrote:
+>>>>> JFYI, when comparing v6.2-rc4[1] to v6.2-rc3-8-g1fe4fd6f5cad346e[3], the summaries are:
+>>>>>   - build errors: +1/-5
+>>>>
+>>>>    + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' reading 128 bytes from a region of size 0 [-Werror=stringop-overread]:  => 57:33
+>>>>
+>>>> s390x-gcc11/s390-allmodconfig
+>>>>
+>>>> /kisskb/src/arch/s390/kernel/setup.c: In function 'setup_lowcore_dat_on':
+>>>> /kisskb/src/include/linux/fortify-string.h:57:33: error: '__builtin_memcpy' reading 128 bytes from a region of size 0 [-Werror=stringop-overread]
+>>>>     57 | #define __underlying_memcpy     __builtin_memcpy
+>>>>        |                                 ^
+>>>> /kisskb/src/include/linux/fortify-string.h:578:9: note: in expansion of macro '__underlying_memcpy'
+>>>>    578 |         __underlying_##op(p, q, __fortify_size);                        \
+>>>>        |         ^~~~~~~~~~~~~
+>>>> /kisskb/src/include/linux/fortify-string.h:623:26: note: in expansion of macro '__fortify_memcpy_chk'
+>>>>    623 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+>>>>        |                          ^~~~~~~~~~~~~~~~~~~~
+>>>> /kisskb/src/arch/s390/kernel/setup.c:526:9: note: in expansion of macro 'memcpy'
+>>>>    526 |         memcpy(abs_lc->cregs_save_area, S390_lowcore.cregs_save_area,
+>>>>        |         ^~~~~~
+>>>>
+>>>> Looks like this was "'__builtin_memcpy' offset [0, 127] is out of the bounds
+>>>> [0, 0]" before.
+>>>
+>>> Thanks for reporting. Of course this doesn't happen with gcc-12, and
+>>> this code will be rewritten with the next merge window anyway.
+>>> But to workaround this with gcc-11, we could go with the below:
+>>>
 >>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
->>   1 file changed, 47 insertions(+), 6 deletions(-)
+>> This is because of
 >>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index 6d78048c4613..3ea051beb2f8 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -81,15 +81,26 @@ properties:
->>   
->>     phys:
->>       minItems: 1
->> -    maxItems: 2
->> +    maxItems: 8
->>   
->>     phy-names:
->>       minItems: 1
->> -    maxItems: 2
->> -    items:
->> -      enum:
->> -        - usb2-phy
->> -        - usb3-phy
->> +    maxItems: 8
->> +    oneOf:
->> +    - items:
->> +        enum:
->> +          - usb2-phy
->> +          - usb3-phy
->> +    - items:
->> +        enum:
->> +          - usb2-phy_port0
->> +          - usb2-phy_port1
->> +          - usb2-phy_port2
->> +          - usb2-phy_port3
->> +          - usb3-phy_port0
->> +          - usb3-phy_port1
->> +          - usb3-phy_port2
->> +          - usb3-phy_port3
+>> #define S390_lowcore (*((struct lowcore *) 0))
+>>
+>> and is fixed with something like
+>>
+>> #define S390_lowcore (*((struct lowcore *) absolute_pointer(0)))
+>>
+>> See commit f6b5f1a56987 ("compiler.h: Introduce absolute_pointer macro").
 > 
-> usbN-portM
+> Yes, I'm aware of that. However absolute_pointer() is not an option for
+> S390_lowcore. See also commit f0be87c42cbd ("gcc-12: disable
+> '-Warray-bounds' universally for now") and the referenced s390 commit.
 > 
->>   
->>     resets:
->>       minItems: 1
->> @@ -360,6 +371,22 @@ properties:
->>       description:
->>         Enable USB remote wakeup.
->>   
->> +  num-ports:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      This property indicates the number of ports present on the target that
->> +      are to be serviced by the DWC3 controller.
->> +    minimum: 1
->> +    maximum: 4
->> +
->> +  num-ss-ports:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      This property indicates the number of SS capable ports present on the
->> +      target that are to be serviced by the DWC3 controller.
->> +    minimum: 1
->> +    maximum: 4
+
+Interesting. It works (builds) just fine for me after the above suggested
+change.
+
+Guenter
+
+>> The problem is only seen with gcc 11.2. I don't see it with 11.3 or 12.2.
 > 
-> This information is redundant. 'phy-names' tells you how many ports of
-> each.
-> 
-Hi Rob,
+> FWIW, the compile warning is seen with gcc 11.1 and 11.2, but not with any
+> other compiler. Given that this isn't the first report, I'm tempted to
+> workaround this now.
 
-  Thanks for the review. The reason I wanted to introduce two more 
-variables is to get info on number of ports  and ss-capable ports 
-present on hardware whether or not the user provides them in DTSI file.
-
-In the code there are two types of per port / per phy operations:
-a) Modifying GUSB2PFYCFG and GUSB3PIPECTL registers per phy.
-b) Generic Phy operations - per phy.
-
-In today's code, if someone doesn't mention the SSPHY in DTSI, 
-dwc->usb3_generic_phy will be NULL and any call to phy operations will 
-just bail out. And irrespective of whether we provide SS Phy in DTSI or 
-not, we still configure GUSB3PIPECTL register.
-
-Consider the following cases:
-
-1. There are 3 ports and 2 of them are SS capable and all phy's are 
-mentioned in DTSI.
-
-phy-names= "usb2-port0", "usb3-port0", "usb2-port1", "usb3-port1", 
-"usb2-port2"
-
-When we count them in the driver, we get num ports as 3 (presuming 
-num-ports = num of hs ports) and num-ss-ports = 2.
-
-Since there is no ambiguity in which all ports to configure, we can 
-modify GUSB2PHYCFG registers for all 3 HS Phy's and GUSB3PIPECTL for 
-both SS Phy's.
-This is a proper scenario.
-
-2. If the user skips providing SS Phy on Port-0, then:
-
-phy-names= "usb2-port0", "usb2-port1", "usb3-port1", "usb2-port2"
-
-If we count the phys, we end up getting num-ports=3 and num-ss-ports=1.
-
-Since in the driver code, we are not keeping track of which ports are SS 
-capable and which ones are not, we end up configuring
-GUSB2PIPECTL(port-0) instead of port-1  as the num-ss-ports is "1" which 
-is incorrect.
-
-3. If the user skips providing one complete port, in this case port-1 is 
-skipped, then:
-
-phy-names= "usb2-port0", "usb3-port0", "usb2-port2"
-
-If we count the phys, we end up getting num-ports=2 and num-ss-ports=1.
-
-Since in the driver code, we are not keeping track of which ports are SS 
-capable and which ones are not, we end up configuring 
-GUSB2PHYCFG(port-0) and GUSB2PHYCFG(port-1) instead of port-2 which is 
-incorrect.
-
-To avoid these scenarios, if we can get the exact number of SS Ports and 
-Ports in total present on the HW, we can configure all the registers 
-whether the phy's are provided in DTSI or not. (This is of no harm I 
-believe as it still works in today's code)
-
-Incase the 2nd and 3rd scenarios are not allowed and user *MUST* declare 
-all the phy's in the DTSI, then I can go ahead and remove these 
-properties and count them in the driver code.
-
-Thanks,
-Krishna,
-
->> +
->>   unevaluatedProperties: false
->>   
->>   required:
->> @@ -388,4 +415,18 @@ examples:
->>         snps,dis_u2_susphy_quirk;
->>         snps,dis_enblslpm_quirk;
->>       };
->> +  - |
->> +    usb@4a000000 {
->> +      compatible = "snps,dwc3";
->> +      reg = <0x4a000000 0xcfff>;
->> +      interrupts = <0 92 4>;
->> +      clocks = <&clk 1>, <&clk 2>, <&clk 3>;
->> +      clock-names = "bus_early", "ref", "suspend";
->> +      num-ports = <2>;
->> +      num-ss-ports = <1>;
->> +      phys = <&usb2_phy0>, <&usb3_phy0>, <&usb2_phy1>;
->> +      phy-names = "usb2-phy_port0", "usb3-phy_port0", "usb2-phy_port1";
->> +      snps,dis_u2_susphy_quirk;
->> +      snps,dis_enblslpm_quirk;
->> +    };
-> 
-> Does a different number of phys really need its own example?
-> 
-> Rob
