@@ -2,158 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BBB66E404
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17DD66E406
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjAQQrr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 17 Jan 2023 11:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S231419AbjAQQs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbjAQQrb (ORCPT
+        with ESMTP id S231337AbjAQQsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:47:31 -0500
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D33686B3;
-        Tue, 17 Jan 2023 08:47:26 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id v10so44693314edi.8;
-        Tue, 17 Jan 2023 08:47:26 -0800 (PST)
+        Tue, 17 Jan 2023 11:48:10 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B441BAFF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:48:08 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id g205so6875753pfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:48:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nwULElhPTzwU0Cn91yFb7oU/NqXKv5A/BuICJ7dBarw=;
+        b=D3qBcSGY4pnz+IV+Rq/MlkNeGRLQX7tlJDfX6I5795w+2ZnWKerNBwdyLnM3yQbpvI
+         +e/+uyko+k71WnxPGLS5VmfQuv85i5wXU7ptROYr17ufsMPDnJBY10mfVOSRkT1pk5KN
+         25H22Fi+CtMLkhgU1bBBjq6yk/hMaJ8PdJRmpLD8YzNVIA3rFW3yddTViu9bXrNrpFFs
+         g80Ej20m0L3ouV2UU+P9Qkjf8oCpM9B7H07mTvo6oIoiueiNGMNLaW3OpWlgKM2xUb7W
+         sUx5hLODny7o+zFshRT0r+NiF/qN9HjpJl8lvCLW7w1AijZct38Z6nz+loaNqvjkxCRt
+         2K5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MW1lWHP2SnntF7BPwVjstED8maTOD84cMu75qGigYkU=;
-        b=jV/SjsjtGYaBABWLA+XVvyGa6sZS18MD4qHR26c2hTLYFdj1TXK3+RWdfqJRVAH+lz
-         pzspVbE8OaIweEwYyCN6VyPtMWm9Qv6xYX0Qix0VjvIyw8R6oT0pLJpvGp0m3UJRuz1J
-         xSix9i+v8FIpB74TLA2E+2+oWOkObQMUkxYVlN69hQoWixmXlHmaPDmIKb0tAXaYuJ41
-         DIssz/XOjuUi3Jy8BNIci01hddDx0cZoAHRxAThK3NTjR6b1pKRb/gWtKy/HlIYAwvNM
-         A5ZUUUHc7NGmslRTFhYJWH/s977BRJqsi/i4qXVR9RGafLmveD/N/3RClajR4bZKKckZ
-         /Jbg==
-X-Gm-Message-State: AFqh2kpsMem6Gq5RFWLnLl5fHbkrTCm+r1WIgdRYBx3vXvPi1umSPUnd
-        SIjyTW5MutWetbIybgI6OOEPKR0J+1oBlE/JR1s=
-X-Google-Smtp-Source: AMrXdXs33uPygCWA6d+K8cs5n+Ubw1HA4Oysng1ssnvF0dYOab252cMqJ0bUWCEg6Ur3BYBJwOdSKL1TIESwydq5t9Y=
-X-Received: by 2002:aa7:c3cb:0:b0:499:c651:625d with SMTP id
- l11-20020aa7c3cb000000b00499c651625dmr427388edr.413.1673974044780; Tue, 17
- Jan 2023 08:47:24 -0800 (PST)
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nwULElhPTzwU0Cn91yFb7oU/NqXKv5A/BuICJ7dBarw=;
+        b=NiC4vD1fRU6wtwLrbfsVoN5QA2UxiOeqoSjofP13/KVakLMRyfaC+42cipso+P+zpU
+         UMq/yfQymF+FYLaKFajN065AGmEfa2mCUWUed8/6M2gNum99ANaNdLa66NKKnXDMirO8
+         A7o06m3gF1Zs7dnJI+iRgdGKj8B9cplREicaxFwM99fpZl9q8iZ5f2LZFtoq+MRnJxR0
+         iYTrz6NJ9xIt4OCp29UHSZjwKQhngdM/ML95Hn2Ot4YLU1FXQKOQZV0TYYiB5W//Xxpa
+         6yxR8n0rfgkxih2RzTb8P9A4dcp0wou4C+NzUTLYeDHS8A3FCbqe+MJDTQzYVKzj4UJG
+         7COg==
+X-Gm-Message-State: AFqh2kqkL7zpkcU4jtCV5Mwqwb5pc3+bmLoOS74jZyCVYVtmUZ/NOopL
+        QG3EIIzKXQgPuKjId+ZezQol0Q==
+X-Google-Smtp-Source: AMrXdXvfI+bNX8pSPmRlAIN/95q/1EHqR4L7aYxetwfgCqF2PuOlKuv2jdtmNDatFJmd/G+2z9Kzxw==
+X-Received: by 2002:a62:1981:0:b0:58b:be84:da12 with SMTP id 123-20020a621981000000b0058bbe84da12mr4148898pfz.17.1673974088013;
+        Tue, 17 Jan 2023 08:48:08 -0800 (PST)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id x4-20020a634844000000b0044046aec036sm17519683pgk.81.2023.01.17.08.48.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 Jan 2023 08:48:07 -0800 (PST)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Wysocki, Rafael J'" <rafael.j.wysocki@intel.com>,
+        "'Huang Rui'" <ray.huang@amd.com>, <li.meng@amd.com>
+Cc:     <linux-kernel@vger.kernel.org>, <sedat.dilek@gmail.com>,
+        "'Jinzhou Su'" <Jinzhou.Su@amd.com>, <linux-pm@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com> <7964ec80-4d02-6c9c-ff9e-a6a8a0c427c3@intel.com>
+In-Reply-To: <7964ec80-4d02-6c9c-ff9e-a6a8a0c427c3@intel.com>
+Subject: RE: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
+Date:   Tue, 17 Jan 2023 08:48:07 -0800
+Message-ID: <004e01d92a93$79f21e50$6dd65af0$@telus.net>
 MIME-Version: 1.0
-References: <20230117155724.22940-1-jgross@suse.com>
-In-Reply-To: <20230117155724.22940-1-jgross@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Jan 2023 17:47:13 +0100
-Message-ID: <CAJZ5v0iCAT2W-m1T-v1wSBw+GQerhMAp1hT6SioJ53RQY=oA3g@mail.gmail.com>
-Subject: Re: [PATCH v2] acpi: fix suspend with Xen PV
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQEknpZUEiBrgHDxpFXXuJtNDAGNIAJYvhVor/khjdA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 4:57 PM Juergen Gross <jgross@suse.com> wrote:
+On 2023.01.17 07:40 Rafael wrote:
+> On 1/17/2023 3:03 PM, Sedat Dilek wrote:
+>> Hi,
+>> I regularly test:
+>> $ LANG=3DC LC_ALL=3DC make -C tools/ clean 2>&1 | tee =
+../make-log_tools-clean.txt
+>> This removes:
+>>
+>> $ git status -s
+>> D tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> D tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>>
+>> Checking the log:
+>>
+>> $ grep pstate_tracer.py ../make-log_tools-clean.txt
+>> 89:rm -f -r   =
+/home/dileks/src/linux/git/tools/testing/selftests/amd-pstate/../../../po=
+wer/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> /home/dileks/src/linux/git/tools/t
+>> =
+esting/selftests/amd-pstate/../../../power/x86/intel_pstate_tracer/intel_=
+pstate_tracer.py
+>>
+>> Is that intended or not?
 >
-> Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
-> Xen PV guest") missed one code path accessing real_mode_header, leading
-> to dereferencing NULL when suspending the system under Xen:
+> I don't think so.
 >
->     [  348.284004] PM: suspend entry (deep)
->     [  348.289532] Filesystems sync: 0.005 seconds
->     [  348.291545] Freezing user space processes ... (elapsed 0.000 seconds) done.
->     [  348.292457] OOM killer disabled.
->     [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.104 seconds) done.
->     [  348.396612] printk: Suspending console(s) (use no_console_suspend to debug)
->     [  348.749228] PM: suspend devices took 0.352 seconds
->     [  348.769713] ACPI: EC: interrupt blocked
->     [  348.816077] BUG: kernel NULL pointer dereference, address: 000000000000001c
->     [  348.816080] #PF: supervisor read access in kernel mode
->     [  348.816081] #PF: error_code(0x0000) - not-present page
->     [  348.816083] PGD 0 P4D 0
->     [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
->     [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1.3-1.fc32.qubes.x86_64 #1
->     [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.01 07/03/2022
->     [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
->
-> Fix that by adding an optional acpi callback allowing to skip setting
-> the wakeup address, as in the Xen PV case this will be handled by the
-> hypervisor anyway.
->
-> Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as Xen PV guest")
-> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
-> V2:
-> - new approach, avoid calling acpi_get_wakeup_address()
+> Doug?
 
-I'll queue this up for 6.3 if the x86 people don't object.
+Nothing should ever remove the intel_pstate_tracer.py source file.
 
-Thanks!
+Sedat, Thank you for your report.
+I get the same results when running your test.
 
-> ---
->  arch/x86/include/asm/acpi.h | 8 ++++++++
->  drivers/acpi/sleep.c        | 6 +++++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-> index 65064d9f7fa6..8eb74cf386db 100644
-> --- a/arch/x86/include/asm/acpi.h
-> +++ b/arch/x86/include/asm/acpi.h
-> @@ -14,6 +14,7 @@
->  #include <asm/mmu.h>
->  #include <asm/mpspec.h>
->  #include <asm/x86_init.h>
-> +#include <asm/cpufeature.h>
->
->  #ifdef CONFIG_ACPI_APEI
->  # include <asm/pgtable_types.h>
-> @@ -63,6 +64,13 @@ extern int (*acpi_suspend_lowlevel)(void);
->  /* Physical address to resume after wakeup */
->  unsigned long acpi_get_wakeup_address(void);
->
-> +static inline bool acpi_skip_set_wakeup_address(void)
-> +{
-> +       return cpu_feature_enabled(X86_FEATURE_XENPV);
-> +}
-> +
-> +#define acpi_skip_set_wakeup_address acpi_skip_set_wakeup_address
-> +
->  /*
->   * Check if the CPU can handle C2 and deeper
->   */
-> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> index 0b557c0d405e..4ca667251272 100644
-> --- a/drivers/acpi/sleep.c
-> +++ b/drivers/acpi/sleep.c
-> @@ -60,13 +60,17 @@ static struct notifier_block tts_notifier = {
->         .priority       = 0,
->  };
->
-> +#ifndef acpi_skip_set_wakeup_address
-> +#define acpi_skip_set_wakeup_address() false
-> +#endif
-> +
->  static int acpi_sleep_prepare(u32 acpi_state)
->  {
->  #ifdef CONFIG_ACPI_SLEEP
->         unsigned long acpi_wakeup_address;
->
->         /* do we have a wakeup address for S2 and S3? */
-> -       if (acpi_state == ACPI_STATE_S3) {
-> +       if (acpi_state == ACPI_STATE_S3 && !acpi_skip_set_wakeup_address()) {
->                 acpi_wakeup_address = acpi_get_wakeup_address();
->                 if (!acpi_wakeup_address)
->                         return -EFAULT;
-> --
+Note that I know nothing about Makefiles and such, but
+think the guilty commit is this one:
+
+commit ba2d788aa873da9c65ff067ca94665853eab95f0
+Author: Meng Li <li.meng@amd.com>
+Date:   Mon Oct 31 16:49:22 2022 +0800
+
+    selftests: amd-pstate: Trigger tbench benchmark and test cpus
+
+    Add tbench.sh trigger the tbench testing and monitor the cpu desire
+    performance, frequency, load, power consumption and throughput etc.
+
+    Signed-off-by: Meng Li <li.meng@amd.com>
+    Acked-by: Huang Rui <ray.huang@amd.com>
+    Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+
+diff --git a/tools/testing/selftests/amd-pstate/Makefile =
+b/tools/testing/selftests/amd-pstate/Makefile
+index 6f4c7b01e3bb..cac8dedb7226 100644
+--- a/tools/testing/selftests/amd-pstate/Makefile
++++ b/tools/testing/selftests/amd-pstate/Makefile
+@@ -4,7 +4,15 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger =
+"run_tests"
+ all:
+
++uname_M :=3D $(shell uname -m 2>/dev/null || echo not)
++ARCH ?=3D $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e =
+s/x86_64/x86/)
++
++ifeq (x86,$(ARCH))
++TEST_GEN_FILES +=3D =
+../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
++TEST_GEN_FILES +=3D =
+../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++endif
++
+ TEST_PROGS :=3D run.sh
+-TEST_FILES :=3D basic.sh
++TEST_FILES :=3D basic.sh tbench.sh
+
+ include ../lib.mk
+diff --git a/tools/testing/selftests/amd-pstate/run.sh =
+b/tools/testing/selftests/amd-pstate/run.sh
+...
+
+And if I do this:
+
+doug@s19:~/kernel/linux$ git diff
+diff --git a/tools/testing/selftests/amd-pstate/Makefile =
+b/tools/testing/selftests/amd-pstate/Makefile
+index 5f195ee756d6..5fd1424db37d 100644
+--- a/tools/testing/selftests/amd-pstate/Makefile
++++ b/tools/testing/selftests/amd-pstate/Makefile
+@@ -7,11 +7,6 @@ all:
+ uname_M :=3D $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?=3D $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e =
+s/x86_64/x86/)
+
+-ifeq (x86,$(ARCH))
+-TEST_GEN_FILES +=3D =
+../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+-TEST_GEN_FILES +=3D =
+../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+-endif
+-
+ TEST_PROGS :=3D run.sh
+ TEST_FILES :=3D basic.sh tbench.sh gitsource.sh
+
+The source files do not get deleted with Sedat's test.
+
+... Doug
+
+
