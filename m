@@ -2,554 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C7A66D4E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF55C66D4E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235618AbjAQDIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 22:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S235319AbjAQDLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 22:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbjAQDIb (ORCPT
+        with ESMTP id S235214AbjAQDLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 22:08:31 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BC0221A3A;
-        Mon, 16 Jan 2023 19:08:27 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8DxcvAqEcZjwgICAA--.6659S3;
-        Tue, 17 Jan 2023 11:08:26 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPuQmEcZjT4oaAA--.15194S3;
-        Tue, 17 Jan 2023 11:08:23 +0800 (CST)
-Message-ID: <d55578dd-ec56-51df-4d68-d2237f04263c@loongson.cn>
-Date:   Tue, 17 Jan 2023 11:08:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
-To:     Rob Herring <robh@kernel.org>, Sui Jingfeng <15330273260@189.cn>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>,
-        suijingfeng <suijingfeng@loongson.cn>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
+        Mon, 16 Jan 2023 22:11:51 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCCD17145;
+        Mon, 16 Jan 2023 19:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673925110; x=1705461110;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=8ZtziamPYwKKN1KpLuBDYO317YmqaBGIGZA6fPSg5dg=;
+  b=h3RnEfpfBnLATEKWmm8+0/pwwxiasu+SS99TTSsS/X5q5jme/WSwkgRu
+   pzTQ4fjduufZvGjSfAs6ToEGrHbNGF0Xqt/JOsQXUm6JYgiI5vYi+3d7K
+   vYgruJp3RHTdsKcpfNkKjNIgwLwRIZLy+xlwgGc+hpXQRtQ9l9v+da/Ga
+   0hpNJYQ4KLJBrARKiwGmcuB2f8FvTeSS4wR6n6XnZikli8US2JIl0Rce9
+   oBA6yxN82jfUFMuRSunM8V7r4mRFy0eRjRoAQh6lrrZk0rIH/6PCWxhWX
+   mWiVQLNrAv/ylPRLe+Fx2c59mPqrrTwzevVhliVPly2Pwsf/pREmTXnQ6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="323296989"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="323296989"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 19:11:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="833017079"
+X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
+   d="scan'208";a="833017079"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga005.jf.intel.com with ESMTP; 16 Jan 2023 19:11:49 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 16 Jan 2023 19:11:49 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 19:11:49 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 16 Jan 2023 19:11:49 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AQJuF/yxlj8vi54sj5AcOSAHTCxdwvvLeqvp55BzVY0SlpX6igq8hFRsy1DH8Y5nxbOGa/EGDV2K/jWc3QzgFKO8ittoh4IkWJchQdrGU8f7Br3qJFv/CfuzumviRmh+h9avXJqNMMtpiq9IgtVph9PsGIocS5Hi2mtjA16BQFEDX2Rg+WmTYfUn7npI6N9DHu4wSppiXpQ31ctVgMPhcNXgcLBEsb/vgF7EzbJ92rOuE/94MSR1EwNGZYNpTZVsqMewAtMQE2lBZWxN1ix400h2RMQTyQNPhWRGECCtKMPtw/Sa+mtwAofMCfXo8cJDKeJOr9t0otrvGgHqH5OGVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8ZtziamPYwKKN1KpLuBDYO317YmqaBGIGZA6fPSg5dg=;
+ b=EMv9VNb0XE9tNbmE/oMdtlQpinmxRbO+KGv5Wz+ftt1P3ZOJ4mCEbpnkgQ8qLMK8WN0jWVo8ZsQhT7LOy8Y44mGd+yrWtH5KLZkv+LlBuf7M6FMMNlU37TX9+azJDJv2mb3Y82/MTvFd21vLsNSZdwUeesrOUQTcetrGioKzHzjwWrpEXdOiYP892pR3mwLH2k7ZTsij91JftKoDRM44odJRpW0KHIokukxMHuZf145lp/fJdNvlHB6NWg01MDysaF+To6BKnO05e/uM8ykvxPNP2g60j17Bnaxu4mAgSFySi/2Fto5E8A7hEmlG4TFn6LTFTDuDDV5udcpM3TJ9xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH7PR11MB6980.namprd11.prod.outlook.com (2603:10b6:510:208::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Tue, 17 Jan
+ 2023 03:11:46 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3f19:b226:ebf1:b04a]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3f19:b226:ebf1:b04a%6]) with mapi id 15.20.5986.019; Tue, 17 Jan 2023
+ 03:11:46 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v11 058/113] KVM: TDX: MTRR: implement get_mt_mask() for
+ TDX
+Thread-Topic: [PATCH v11 058/113] KVM: TDX: MTRR: implement get_mt_mask() for
+ TDX
+Thread-Index: AQHZJqWir7JSMuEP5k+09IxeugZm166h9Y6A
+Date:   Tue, 17 Jan 2023 03:11:46 +0000
+Message-ID: <1a32f2570f13fa0125ddbbceeabcd36fc4beb9db.camel@intel.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+         <21e0d94ccf2fd3d766d6aa7b45441791c04e5e4f.1673539699.git.isaku.yamahata@intel.com>
+In-Reply-To: <21e0d94ccf2fd3d766d6aa7b45441791c04e5e4f.1673539699.git.isaku.yamahata@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Sui jingfeng <suijingfeng@loongson.cn>
-In-Reply-To: <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxPuQmEcZjT4oaAA--.15194S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvAXoW3Kr47ZryDZw1fGw4kXFyxXwb_yoW8Xw45Jo
-        WfZwsIvw1xtry7A345A34xXFZIv3sruw13Aa17ArnxCrWUKas8GF1aqw1rur4fCrW3Aa18
-        Aa42gws8AF4jv3Wfn29KB7ZKAUJUUUjU529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
-        0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jCMKZUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH7PR11MB6980:EE_
+x-ms-office365-filtering-correlation-id: 0b2aae5d-a1d2-4a25-0feb-08daf8389110
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qVES/ByO8sC7oKveC0bQYvWI5i8NXL1SUzq8729tjkZsyou/fkErw4y8S+dfYM6FHjhgPjuH3vvOGhuyneHsdHTzhTspRxcMHxrLKqBZeuPo8jT84f4p56quof6f2picx04+u+N5s1U1Dh3WJQ266AqG+i9gLDmgQT+hC3Xw8NE0+oTzkyu3Mk/bp1W//SgKeu9fTXIl2nJgj6ilqdarGRBiOzwKV/XAWDR0SC3y3Gg4lZtgNSUWTHC4ANQwia55SC7qgNG/um3c62YErIXxNooZO84YF4u7MZzebFQIhKg46chMUcdNTmsn7aeF2+KywZpPKV67K5RM0tYS75H+tN9EQ7A6pmBYB0ssO8Nid6MeyOmMWqgy9CPzaLU7j+y3MjHJ4WNvSIHOrod9xOpSEssQvEUAT+bFPb7foEZG0cU6dRMn/CnOBwivcAtt2wugK34eE1kknjcu10lAJd69z1pQgdiW2hUOw0v7fry2T+6OMfpQJ7pQ92grB/2nrthZOKx1Maj3mPZc8I/I2IU8zswEjXM72Y9gsISnx7S/ZbD20PGF6MCRCW8UJZKcsKJ67sGhnPScCscqhu8BfIIa0suCqQ7UHVxxjDKq3d1IZXI16fvNh9kFb64DAD6hzHeshVVgD6gLJ7ec4QQEdf/MIIEe7TAQQCfYXysNv+PS1l2AAKjVWtpn+GbxasZxBvy02/DoWV3hfTjr8OUjNgqdbIA9hUsmbl7YRKU1xf38jds=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199015)(8936002)(8676002)(41300700001)(76116006)(91956017)(66476007)(66556008)(38070700005)(4326008)(66946007)(66446008)(64756008)(316002)(6636002)(478600001)(54906003)(2616005)(36756003)(2906002)(5660300002)(110136005)(26005)(6486002)(71200400001)(82960400001)(6512007)(86362001)(6506007)(186003)(122000001)(38100700002)(966005)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VE5BamhJM0Vuc3pQRUw1WXR2dXlwOWJ1MS9jQVlDbWNlOWp6MnhjWWUwcng2?=
+ =?utf-8?B?WW9lQndQa0lvUnBQd2NnbjBxRStocXZta2VCaXFkZllzMk9hQ3J0Rit0Q2dW?=
+ =?utf-8?B?bUlralFJZmlwUlJYMDZZZ1JoZVNpZkdHbnMweDZyL0lkNE92Q1BSWlY4NnJh?=
+ =?utf-8?B?UmwrQmU1S3hUWmc1TnM3V0hvNWVpQ3MrK1dEdUY0TUtYbmxlRFJUYnFOdm1M?=
+ =?utf-8?B?VWh5WUs4cTlQblVsL05zM3E1aktGUTRLa3VEMTVYR0hMU0ZrejdmbENSWk12?=
+ =?utf-8?B?N1VCZWRScnRpSGdDVUVtTHZ3NVVnS2FpK0NEWldCNVNNVWx3ZWxJbmlRZ3F0?=
+ =?utf-8?B?SGFkM20wTkFkYW0yTjZUZElFckpVNmhvKzVQRXhwR1krMXVXdEg0Z2Ivckgr?=
+ =?utf-8?B?VmNidW1qMG8zSnNhQnVHRWZKemVJOWFwdlNRWWNCZTNGbTdONUFKLzQwS2Jz?=
+ =?utf-8?B?dEJyMkNvYVJBUHc0REx3aURIK0pWOU4zWHdkaEREWllkQnZnb0FocEZVTFFH?=
+ =?utf-8?B?d1lPOWZpdDlWNlB1QWdEeFZUYXZDYjhjbzhHMm9KZ3RFeHBHa0pjOUJXNDkv?=
+ =?utf-8?B?WWtkU0IrQzNveWh1VFUvdzBScDlKYjdpVHc3ZDNMZTd5UnRhZU5uaEV2MVI0?=
+ =?utf-8?B?a2NWOHBtb3lGSHVLVWxpcXpZRTRyNStlTUdQQ1ZCWG1LaXVtZXNmdURINWMz?=
+ =?utf-8?B?UXFFVkRDbmdMYW50QnhiOGRIT3RQdGVwQUs5QTZyMHFXbC8xZncwOGtvVm0v?=
+ =?utf-8?B?TTJjUWN5c1k4R0hUZm1tbEd5NXJlbkRsZE9kazZKRUt1dHFSRmM0TVhKZjNF?=
+ =?utf-8?B?VlkvV1c1akVhd1k1L2YvNEVlSHBGVkZNODRBbEpwRDJSSG1ZQ0RsMHNLdGlm?=
+ =?utf-8?B?TmRYdWREdFhvNUtWU2Z5VDh2K0N4RUhudGlybkYxUEN1aHMxUERsUEFZTUxx?=
+ =?utf-8?B?Z08wZkVWVmVSQno2dHR0cFlsVWhjSGVPQ1BaczBZZFQvK1VONUtRQkc1V05v?=
+ =?utf-8?B?MjZsM2ZySWtVTS8veGtXWEpvalY4UDRibGFBVUp1QmVEWmFZMGdvdGU3Q2F3?=
+ =?utf-8?B?M2g4czVwcEhheG1FSEFMZWxmMUlsT0tuODM3Ym9IYW8xeVFLc0xUaU1paVRI?=
+ =?utf-8?B?a2hBalBhTmpwZTU4QlVrN2ZvaTRYTVRkRWZlVEdMWk9WVXdnRWtYdUdRd0I5?=
+ =?utf-8?B?TjRTZy8zYWU0SkpFT2lpTkZvckpIT1ltM2o2NjNtNC9Fdk5qQURucVVsSitI?=
+ =?utf-8?B?QUVBYmNKQlQ2RUpVVUFqaStzUEVNaUs3MjEzUEk0bEt6QVhZNTg2WldOejFs?=
+ =?utf-8?B?N1pUV3ZvSWFyOFlJQ0hxUWF2R3c4bllvaVZabXI2bnQ1VDJNcTZaUEZnSnBU?=
+ =?utf-8?B?REJtWEllbHhFOHkzR3IveVJBVm5pTGloQlFjSXRJaXhkMzFaZGVZandlc3VU?=
+ =?utf-8?B?cjVwWXluSHdLUHBSZWN4VWRRdEs2V0dndVUvamdyNEFSSjVweElLMXJBaXo0?=
+ =?utf-8?B?TjYycGlWa0FCdVdyeE4xTyt2QlgzdExoWWN1SEJMQ014b2Z2NTFkd1IyRW03?=
+ =?utf-8?B?SmJqanJ4b3BQQjM0WmhEdDJwQmNnTjJ1UkI3UFJFTFBOVVdiRkh0K1cxWHlF?=
+ =?utf-8?B?MnVNR3pDb01jMGhyWkQrYlBBNG9kc0t2R1Z3anhVeVM3VU1QY1hyd1RuNDRU?=
+ =?utf-8?B?dDRvY2VDNjFGTzVKQXc5M01LQUNBbHF2RGlhU1dKa3pFV1VtdlBURWg4RGJF?=
+ =?utf-8?B?VjQzSXlydWhob3VzbjV4amJjQXdWSGhOL0Nzc0pQcE95QkZ0REhzS1J6dTFL?=
+ =?utf-8?B?NU5LSDVMODZvMXBZNW9TVDd4djdXL2pYNHRYYVlBbTU4emczRXJwbUk5YkJk?=
+ =?utf-8?B?NkhHTUJmU29tMVZSWC80QzI3VHRIS280V3dJOVlxeFNYVzhiS2FTMVhuVTh2?=
+ =?utf-8?B?UXNPREltNTFXTVJqUEhkV3lDSE5CR0s4cmVaZ2J1MDNOLzg4Q3RwTVVnKzlh?=
+ =?utf-8?B?NHF1V2s3d0ZnRk5oUGJBbW5zQ1FwYlZQNW4yZ0RHTVV5L2hFMElOT1FEaCth?=
+ =?utf-8?B?K0l4MDBuRFczNzA3MytlZ0puTy9Wc0lEY1J6aHdTQVVDbFd6bmtObmxtNmhT?=
+ =?utf-8?B?eTRWSFd5Zjg3S0s4SndVYUtadi94QlRyTzYyR0RoR3Z5K0hseW8reTJ2RlNp?=
+ =?utf-8?B?Qnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7A45C8AF151EB84B9FD7419F6E1C2968@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b2aae5d-a1d2-4a25-0feb-08daf8389110
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2023 03:11:46.1640
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: elua6ib8V4kQ+lKu5opv004zEsegP6eWXjWb+m30j7s/E/EgnEpa+97vjG88IvfFe893rxbFuIV0QpzMu2LRWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6980
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/3/23 04:49, Rob Herring wrote:
-> On Tue, Mar 22, 2022 at 12:29:16AM +0800, Sui Jingfeng wrote:
->> From: suijingfeng <suijingfeng@loongson.cn>
->>
->> There is a display controller in loongson's LS2K1000 SoC and LS7A1000
->> bridge chip, the display controller is a PCI device in those chips. It
->> has two display pipes but with only one hardware cursor. Each way has
->> a DVO interface which provide RGB888 signals, vertical & horizontal
->> synchronisations, data enable and the pixel clock. Each CRTC is able to
->> scanout from 1920x1080 resolution at 60Hz, the maxmium resolution is
->> 2048x2048 according to the hardware spec. Loongson display controllers
->> are simple which require scanout buffers to be physically contiguous.
->>
->> For LS7A1000 bridge chip, the DC is equipped with a dedicated video RAM
->> which is typically 64MB or more. In this case, VRAM helper based driver
->> is intend to be used. While LS2K1000 is a SoC, only system memory is
->> available. Therefore CMA helper based driver is intend to be used. It is
->> possible to use VRAM helper based solution by carving out part of system
->> memory as VRAM though.
->>
->> For LS7A1000, there are 4 dedicated GPIOs whose control register is
->> located at the DC register space, They are used to emulate two way i2c.
->> One for DVO0, another for DVO1. LS2K1000 and LS2K0500 SoC don't have such
->> GPIO hardwared, they grab i2c adapter from other module, either general
->> purpose GPIO emulated i2c or hardware i2c adapter.
->>
->>      +------+            +-----------------------------------+
->>      | DDR4 |            |  +-------------------+            |
->>      +------+            |  | PCIe Root complex |   LS7A1000 |
->>         || MC0           |  +--++---------++----+            |
->>    +----------+  HT 3.0  |     ||         ||                 |
->>    | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->>    |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->>    +----------+          | +--------+  +-+--+-+    +---------+   +------+
->>         || MC1           +---------------|--|----------------+
->>      +------+                            |  |
->>      | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->>      +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->>                        +-------+                      +------+
->>
->> The above picture give a simple usage of LS7A1000, note that the encoder
->> is not necessary adv7125 or tfp410, other candicates can be ch7034b,
->> sil9022, ite66121 and lt8618 etc.
->>
->> v2: Fixup warnings reported by kernel test robot
->>
->> v3: Fix more grammar mistakes in Kconfig reported by Randy Dunlap and give
->>      more details about lsdc.
->>
->> v4:
->>     1) Add dts required and explain why device tree is required.
->>     2) Give more description about lsdc and VRAM helper based driver.
->>     3) Fix warnings reported by kernel test robot.
->>     4) Introduce stride_alignment member into struct lsdc_chip_desc, the
->>        stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0500.
->>
->> v5:
->>     1) Using writel and readl replace writeq and readq, to fix kernel test
->>        robot report build error on other archtecture.
->>     2) Set default fb format to XRGB8888 at crtc reset time.
->>
->> v6:
->>     1) Explain why we are not switch to drm dridge subsystem on ls2k1000.
->>     2) Explain why tiny drm driver is not suitable for us.
->>     3) Give a short description of the trival dirty uppdate implement based
->>        on CMA helper.
->>
->> v7:
->>     1) Remove select I2C_GPIO and I2C_LS2X in Kconfig, it is not ready now
->>     2) Licensing issues are fixed suggested by Krzysztof Kozlowski.
->>     3) Remove lsdc_pixpll_print(), part of it move to debugfs.
->>     4) Set prefer_shadow to true if vram based driver is in using.
->>     5) Replace double blank lines with single line in all files.
->>     6) Verbose cmd line parameter is replaced with drm_dbg()
->>     7) All warnnings reported by ./scripts/checkpatch.pl --strict are fixed
->>     8) Get edid from dtb support is removed as suggested by Maxime Ripard
->>     9) Fix typos and various improvement
->>
->> v8:
->>     1) Drop damage update implement and its command line.
->>     2) Drop DRM_LSDC_VRAM_DRIVER config option as suggested by Maxime.
->>     3) Deduce DC's identification from its compatible property.
->>     4) Drop the board specific dts patch.
->>     5) Add documention about the display controller device node.
->>
->> v9:
->>     1) Fix the warnings reported by checkpatch script and fix typos
->>
->> v10:
->>     1) Pass `make dt_binding_check` validation
->>     2) Fix warnings reported by kernel test robot
->>
->> v11:
->>     1) Convert the driver to use drm bridge and of graph framework.
->>     2) Dump register value support through debugfs.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/Kconfig             |   2 +
->>   drivers/gpu/drm/Makefile            |   1 +
->>   drivers/gpu/drm/lsdc/Kconfig        |  23 ++
->>   drivers/gpu/drm/lsdc/Makefile       |  13 +
->>   drivers/gpu/drm/lsdc/lsdc_crtc.c    | 396 +++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_drv.c     | 547 ++++++++++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_drv.h     | 197 ++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_i2c.c     | 235 ++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_i2c.h     |  42 ++
->>   drivers/gpu/drm/lsdc/lsdc_irq.c     |  58 +++
->>   drivers/gpu/drm/lsdc/lsdc_irq.h     |  18 +
->>   drivers/gpu/drm/lsdc/lsdc_output.c  | 262 +++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_output.h  |  24 ++
->>   drivers/gpu/drm/lsdc/lsdc_pci_drv.c | 328 ++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_plane.c   | 470 +++++++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_pll.c     | 574 ++++++++++++++++++++++++++++
->>   drivers/gpu/drm/lsdc/lsdc_pll.h     |  88 +++++
->>   drivers/gpu/drm/lsdc/lsdc_regs.h    | 220 +++++++++++
->>   18 files changed, 3498 insertions(+)
->>   create mode 100644 drivers/gpu/drm/lsdc/Kconfig
->>   create mode 100644 drivers/gpu/drm/lsdc/Makefile
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_output.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_output.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_pci_drv.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
->>   create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
-> [...]
->
->> diff --git a/drivers/gpu/drm/lsdc/lsdc_i2c.c b/drivers/gpu/drm/lsdc/lsdc_i2c.c
->> new file mode 100644
->> index 000000000000..55beed9266fa
->> --- /dev/null
->> +++ b/drivers/gpu/drm/lsdc/lsdc_i2c.c
->> @@ -0,0 +1,235 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * KMS driver for Loongson display controller
-> Not really a useful comment since every file has the same one.
->
->> + * Copyright (C) 2022 Loongson Corporation
->> + */
->> +
->> +/*
->> + * Authors:
->> + *      Sui Jingfeng <suijingfeng@loongson.cn>
->> + */
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/pci.h>
->> +
->> +#include "lsdc_drv.h"
->> +#include "lsdc_regs.h"
->> +#include "lsdc_i2c.h"
->> +
->> +/*
->> + * ls7a_gpio_i2c_set - set the state of a gpio pin indicated by mask
->> + * @mask: gpio pin mask
->> + */
->> +static void ls7a_gpio_i2c_set(struct lsdc_i2c * const li2c, int mask, int state)
->> +{
->> +	unsigned long flags;
->> +	u8 val;
->> +
->> +	spin_lock_irqsave(&li2c->reglock, flags);
-> What are you protecting? Doesn't the caller serialize calls to these
-> functions?
-
-Hi,  there are some old ls7a1000 bridge chip product still in use at 
-china market,
-
-The display controller in old ls7a1000 bridge chip does not support 
-concurrent  register access properly,
-
-when two or more threads writing the dc registers at the same time, the  
-ls7a1000 bridge chip will hung.
-
-But the hung only happen at low occurrence, wrap register access with 
-spin lock is more stable in practice
-
-for old ls7a1000 bridge chip.
-
->> +
->> +	if (state) {
->> +		val = readb(li2c->dir_reg);
->> +		val |= mask;
->> +		writeb(val, li2c->dir_reg);
->> +	} else {
->> +		val = readb(li2c->dir_reg);
->> +		val &= ~mask;
->> +		writeb(val, li2c->dir_reg);
->> +
->> +		val = readb(li2c->dat_reg);
->> +		if (state)
-> This condition is never true. We're in the 'else' because !state.
->
->> +			val |= mask;
->> +		else
->> +			val &= ~mask;
->> +		writeb(val, li2c->dat_reg);
-> Shouldn't you set the data register low first and then change the
-> direction? Otherwise, you may be driving high for a moment. However, if
-> high is always done by setting the direction as input, why write the
-> data register each time? I'm assuming whatever is written to the dat_reg
-> is maintained regardless of pin state.
->
->> +	}
->> +
->> +	spin_unlock_irqrestore(&li2c->reglock, flags);
->> +}
->> +
->> +/*
->> + * ls7a_gpio_i2c_get - read value back from gpio pin
->> + * @mask: gpio pin mask
->> + */
->> +static int ls7a_gpio_i2c_get(struct lsdc_i2c * const li2c, int mask)
->> +{
->> +	unsigned long flags;
->> +	u8 val;
->> +
->> +	spin_lock_irqsave(&li2c->reglock, flags);
->> +
->> +	/* first set this pin as input */
->> +	val = readb(li2c->dir_reg);
->> +	val |= mask;
->> +	writeb(val, li2c->dir_reg);
->> +
->> +	/* then get level state from this pin */
->> +	val = readb(li2c->dat_reg);
->> +
->> +	spin_unlock_irqrestore(&li2c->reglock, flags);
->> +
->> +	return (val & mask) ? 1 : 0;
->> +}
->> +
->> +/* set the state on the i2c->sda pin */
->> +static void ls7a_i2c_set_sda(void *i2c, int state)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_set(li2c, li2c->sda, state);
->> +}
->> +
->> +/* set the state on the i2c->scl pin */
->> +static void ls7a_i2c_set_scl(void *i2c, int state)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_set(li2c, li2c->scl, state);
->> +}
->> +
->> +/* read the value from the i2c->sda pin */
->> +static int ls7a_i2c_get_sda(void *i2c)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_get(li2c, li2c->sda);
->> +}
->> +
->> +/* read the value from the i2c->scl pin */
->> +static int ls7a_i2c_get_scl(void *i2c)
->> +{
->> +	struct lsdc_i2c * const li2c = (struct lsdc_i2c *)i2c;
->> +
->> +	return ls7a_gpio_i2c_get(li2c, li2c->scl);
->> +}
->> +
->> +/*
->> + * mainly for dc in ls7a1000 which have builtin gpio emulated i2c
->> + *
->> + * @index : output channel index, 0 for DVO0, 1 for DVO1
->> + */
->> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev, void *base, unsigned int index)
->> +{
->> +	char compat[32] = {0};
->> +	unsigned int udelay = 5;
->> +	unsigned int timeout = 2200;
->> +	int nr = -1;
->> +	struct i2c_adapter *adapter;
->> +	struct lsdc_i2c *li2c;
->> +	struct device_node *i2c_np;
->> +	int ret;
->> +
->> +	li2c = devm_kzalloc(dev, sizeof(*li2c), GFP_KERNEL);
->> +	if (!li2c)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	li2c->index = index;
->> +	li2c->dev = dev;
->> +
->> +	if (index == 0) {
->> +		li2c->sda = 0x01;
->> +		li2c->scl = 0x02;
->> +	} else if (index == 1) {
->> +		li2c->sda = 0x04;
->> +		li2c->scl = 0x08;
-> Just require this to be in DT rather than having some default.
->
->> +	}
->> +
->> +	spin_lock_init(&li2c->reglock);
->> +
->> +	snprintf(compat, sizeof(compat), "lsdc,i2c-gpio-%d", index);
-> compatible values shouldn't have an index and you shouldn't need a
-> index in DT. You need to iterate over child nodes with matching
-> compatible.
->
->> +	i2c_np = of_find_compatible_node(dev->of_node, NULL, compat);
->> +	if (i2c_np) {
->> +		u32 sda, scl;
->> +
->> +		dev_dbg(dev, "Has %s property in the DT", compat);
->> +
->> +		/*  */
->> +		ret = of_property_read_u32(i2c_np, "sda", &sda);
-> Custom properties need a vendor prefix.
->
->> +		if (ret == 0)
->> +			li2c->sda = 1 << sda;
->> +
->> +		ret = of_property_read_u32(i2c_np, "scl", &scl);
->> +		if (ret == 0)
->> +			li2c->scl = 1 << scl;
->> +
->> +		/* Optional properties which made the driver more flexible */
->> +		of_property_read_u32(i2c_np, "udelay", &udelay);
->> +		of_property_read_u32(i2c_np, "timeout", &timeout);
-> These aren't documented. Do you really need them in DT?
->
->> +		of_property_read_u32(i2c_np, "reg", &nr);
->> +	}
->> +
->> +	dev_dbg(dev, "%s: sda=%u, scl=%u, nr=%d, udelay=%u, timeout=%u\n",
->> +		compat, li2c->sda, li2c->scl, nr, udelay, timeout);
->> +
->> +	li2c->reg_base = base;
->> +
->> +	li2c->dir_reg = li2c->reg_base + LS7A_DC_GPIO_DIR_REG;
->> +	li2c->dat_reg = li2c->reg_base + LS7A_DC_GPIO_DAT_REG;
->> +
->> +	li2c->bit.setsda = ls7a_i2c_set_sda;
->> +	li2c->bit.setscl = ls7a_i2c_set_scl;
->> +	li2c->bit.getsda = ls7a_i2c_get_sda;
->> +	li2c->bit.getscl = ls7a_i2c_get_scl;
->> +	li2c->bit.udelay = udelay;
->> +	li2c->bit.timeout = usecs_to_jiffies(timeout);
->> +	li2c->bit.data = li2c;
->> +
->> +	adapter = &li2c->adapter;
->> +	adapter->algo_data = &li2c->bit;
->> +	adapter->owner = THIS_MODULE;
->> +	adapter->class = I2C_CLASS_DDC;
->> +	adapter->dev.parent = dev;
->> +	adapter->nr = nr;
->> +	if (i2c_np) {
->> +		adapter->dev.of_node = i2c_np;
->> +		of_node_put(i2c_np);
->> +	}
->> +
->> +	strscpy(adapter->name, &compat[5], sizeof(adapter->name));
->> +
->> +	i2c_set_adapdata(adapter, li2c);
->> +
->> +	ret = i2c_bit_add_numbered_bus(adapter);
-> Why do you care what the bus number is? You shouldn't need to.
->
->> +	if (ret) {
->> +		if (i2c_np)
->> +			of_node_put(i2c_np);
->> +
->> +		devm_kfree(dev, li2c);
->> +		return ERR_PTR(ret);
->> +	}
->> +
->> +	return li2c;
->> +}
->> +
->> +void lsdc_destroy_i2c(struct drm_device *ddev, struct lsdc_i2c *li2c)
->> +{
->> +	struct i2c_adapter *adapter;
->> +
->> +	if (li2c) {
->> +		adapter = &li2c->adapter;
->> +
->> +		if (adapter && adapter->dev.of_node)
->> +			of_node_put(adapter->dev.of_node);
->> +
->> +		devm_kfree(ddev->dev, li2c);
->> +	}
->> +}
->> +
->> +struct i2c_adapter *lsdc_get_i2c_adapter(struct lsdc_device *ldev,
->> +					 unsigned int index)
->> +{
->> +	const struct lsdc_chip_desc * const descp = ldev->desc;
->> +	struct lsdc_i2c *li2c;
->> +
->> +	if (index >= descp->num_of_crtc) {
->> +		drm_err(ldev->ddev, "I2c adapter is no more than %u, %u\n",
->> +			descp->num_of_crtc, index);
->> +		return NULL;
->> +	}
->> +
->> +	li2c = ldev->li2c[index];
->> +	if (li2c)
->> +		return &li2c->adapter;
->> +
->> +	return NULL;
->> +}
->> diff --git a/drivers/gpu/drm/lsdc/lsdc_i2c.h b/drivers/gpu/drm/lsdc/lsdc_i2c.h
->> new file mode 100644
->> index 000000000000..4ab825143eb4
->> --- /dev/null
->> +++ b/drivers/gpu/drm/lsdc/lsdc_i2c.h
->> @@ -0,0 +1,42 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * KMS driver for Loongson display controller
->> + * Copyright (C) 2022 Loongson Corporation
->> + */
->> +
->> +/*
->> + * Authors:
->> + *      Sui Jingfeng <suijingfeng@loongson.cn>
->> + */
->> +
->> +#ifndef __LSDC_I2C__
->> +#define __LSDC_I2C__
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/i2c-algo-bit.h>
->> +#include <linux/pci.h>
->> +
->> +struct lsdc_i2c {
->> +	struct device *dev;
->> +	struct i2c_adapter adapter;
->> +	struct i2c_algo_bit_data bit;
->> +	/* @reglock: protects concurrent register access */
->> +	spinlock_t reglock;
->> +	void __iomem *reg_base;
->> +	void __iomem *dir_reg;
->> +	void __iomem *dat_reg;
->> +	int index;
->> +	/* pin bit mask */
->> +	u8 sda;
->> +	u8 scl;
->> +};
->> +
->> +void lsdc_destroy_i2c(struct drm_device *ddev, struct lsdc_i2c *li2c);
->> +
->> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev,
->> +				      void *base,
->> +				      unsigned int index);
->> +
->> +struct i2c_adapter *lsdc_get_i2c_adapter(struct lsdc_device *ldev,
->> +					 unsigned int index);
->> +#endif
-
+T24gVGh1LCAyMDIzLTAxLTEyIGF0IDA4OjMyIC0wODAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
+b20gd3JvdGU6DQo+IEZyb206IElzYWt1IFlhbWFoYXRhIDxpc2FrdS55YW1haGF0YUBpbnRlbC5j
+b20+DQo+IA0KPiBBbHRob3VnaCBURFggc3VwcG9ydHMgb25seSBXQiBmb3IgcHJpdmF0ZSBHUEEs
+IE1UUlIvUEFUIGZvciBzaGFyZWQgR1BBDQo+IHNob3VsZCBiZSBzdXBwb3J0ZWQuIEltcGxlbWVu
+dCBnZXRfbXRfbWFzaygpIGZvbGxvd2luZyB2bXggY2FzZS4NCg0KQnkgZmFyIHRoaXMgaXMgdGhl
+IGZpcnN0IHBhdGNoIHRvIGhhbmRsZSBNVFJSL1BBVC4gIFRoZXJlJ3MgYWJzb2x1dGVseSBubw0K
+YmFja2dyb3VuZCBoYXZlIGJlZW4gZXhwbGFpbmVkLg0KDQpTbyB3aGF0IGFib3V0IE1UUlIvUEFU
+IHJlbGF0ZWQgTVNScyBoYW5kbGluZz8gIE5vIGNvZGUgbmVlZGVkIHRvIGhhbmRsZT8NCg0KSSB3
+YXMgZXhwZWN0aW5nIHRoZXJlIHNob3VsZCBiZSBhdCBsZWFzdCBzb21lIHdvcmRzIGhlcmUgdG8g
+ZXhwbGFpbiBob3cgVERYDQpoYW5kbGVzIHRoZW0sIGFuZCBpZiBubyBoYW5kbGluZyBpcyByZXF1
+aXJlZCBpbiBLVk0sIHdoeS4NCg0KVy9vIHRob3NlLCBJIGRvbid0IHRoaW5rIHRoaXMgcGF0Y2gg
+aXMgcmV2aWV3YWJsZS4gIA0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBJc2FrdSBZYW1haGF0YSA8
+aXNha3UueWFtYWhhdGFAaW50ZWwuY29tPg0KPiAtLS0NCj4gIGFyY2gveDg2L2t2bS92bXgvbWFp
+bi5jICAgIHwgMTAgKysrKysrKysrLQ0KPiAgYXJjaC94ODYva3ZtL3ZteC90ZHguYyAgICAgfCAx
+OSArKysrKysrKysrKysrKysrKysrDQo+ICBhcmNoL3g4Ni9rdm0vdm14L3g4Nl9vcHMuaCB8ICAy
+ICsrDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDMwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rdm0vdm14L21haW4uYyBiL2FyY2gveDg2L2t2
+bS92bXgvbWFpbi5jDQo+IGluZGV4IDc3MGQxYjI5ZDFjMy4uNDMxOWY2ZDdhNGRhIDEwMDY0NA0K
+PiAtLS0gYS9hcmNoL3g4Ni9rdm0vdm14L21haW4uYw0KPiArKysgYi9hcmNoL3g4Ni9rdm0vdm14
+L21haW4uYw0KPiBAQCAtMTU4LDYgKzE1OCwxNCBAQCBzdGF0aWMgdm9pZCB2dF9sb2FkX21tdV9w
+Z2Qoc3RydWN0IGt2bV92Y3B1ICp2Y3B1LCBocGFfdCByb290X2hwYSwNCj4gIAl2bXhfbG9hZF9t
+bXVfcGdkKHZjcHUsIHJvb3RfaHBhLCBwZ2RfbGV2ZWwpOw0KPiAgfQ0KPiAgDQo+ICtzdGF0aWMg
+dTggdnRfZ2V0X210X21hc2soc3RydWN0IGt2bV92Y3B1ICp2Y3B1LCBnZm5fdCBnZm4sIGJvb2wg
+aXNfbW1pbykNCj4gK3sNCj4gKwlpZiAoaXNfdGRfdmNwdSh2Y3B1KSkNCj4gKwkJcmV0dXJuIHRk
+eF9nZXRfbXRfbWFzayh2Y3B1LCBnZm4sIGlzX21taW8pOw0KPiArDQo+ICsJcmV0dXJuIHZteF9n
+ZXRfbXRfbWFzayh2Y3B1LCBnZm4sIGlzX21taW8pOw0KPiArfQ0KPiArDQo+ICBzdGF0aWMgaW50
+IHZ0X21lbV9lbmNfaW9jdGwoc3RydWN0IGt2bSAqa3ZtLCB2b2lkIF9fdXNlciAqYXJncCkNCj4g
+IHsNCj4gIAlpZiAoIWlzX3RkKGt2bSkpDQo+IEBAIC0yNjcsNyArMjc1LDcgQEAgc3RydWN0IGt2
+bV94ODZfb3BzIHZ0X3g4Nl9vcHMgX19pbml0ZGF0YSA9IHsNCj4gIA0KPiAgCS5zZXRfdHNzX2Fk
+ZHIgPSB2bXhfc2V0X3Rzc19hZGRyLA0KPiAgCS5zZXRfaWRlbnRpdHlfbWFwX2FkZHIgPSB2bXhf
+c2V0X2lkZW50aXR5X21hcF9hZGRyLA0KPiAtCS5nZXRfbXRfbWFzayA9IHZteF9nZXRfbXRfbWFz
+aywNCj4gKwkuZ2V0X210X21hc2sgPSB2dF9nZXRfbXRfbWFzaywNCj4gIA0KPiAgCS5nZXRfZXhp
+dF9pbmZvID0gdm14X2dldF9leGl0X2luZm8sDQo+ICANCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2
+L2t2bS92bXgvdGR4LmMgYi9hcmNoL3g4Ni9rdm0vdm14L3RkeC5jDQo+IGluZGV4IGU2ODgxNjk5
+OTM4Ny4uYzRjNWE4Zjc4NmMxIDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9rdm0vdm14L3RkeC5j
+DQo+ICsrKyBiL2FyY2gveDg2L2t2bS92bXgvdGR4LmMNCj4gQEAgLTMwOSw2ICszMDksMjUgQEAg
+aW50IHRkeF92bV9pbml0KHN0cnVjdCBrdm0gKmt2bSkNCj4gIAlyZXR1cm4gMDsNCj4gIH0NCj4g
+IA0KPiArdTggdGR4X2dldF9tdF9tYXNrKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSwgZ2ZuX3QgZ2Zu
+LCBib29sIGlzX21taW8pDQo+ICt7DQo+ICsJLyogVERYIHByaXZhdGUgR1BBIGlzIGFsd2F5cyBX
+Qi4gKi8NCj4gKwlpZiAoZ2ZuICYga3ZtX2dmbl9zaGFyZWRfbWFzayh2Y3B1LT5rdm0pKSB7DQoN
+CkZpcnN0IG9mIGFsbCwgcHJpdmF0ZSBHUEEgZG9lc24ndCBoYXZlICdzaGFyZWQgYml0JyBzZXQs
+IHNvIGNvbW1lbnQgIGRvZXNuJ3QNCnJlZmxlY3QgY29kZS4NCg0KU2Vjb25kbHkgKGFuZCBhZ2Fp
+biksIElJVUMgdGhlIHNoYXJlZCBiaXQgb2YgdGhlIGdmbiBoYXMgYmVlbiBzdHJpcHBlZCBvdXQg
+bG9uZw0KdGltZSBhZ28sIHNvIHRoaXMgaXMgaW5jb3JyZWN0Lg0KDQpQbGVhc2UgZG9uJ3Qgc2xp
+ZW50bHkgaWdub3JlIG90aGVyIHBlb3BsZSdzIGNvbW1lbnQ6DQoNCmh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2xrbWwvWTE5TnpsUWN3aFYlMkYyd2wzQGRlYmlhbi5tZS9ULyNtZjMxOWQ1YjcxODUx
+OTcwOTM2MmY5ZjA5NGJmYzViNTNmZDg3MDI0MQ0KDQoNCg0KPiArCQlXQVJOX09OX09OQ0UoaXNf
+bW1pbyk7DQo+ICsJCXJldHVybiAgTVRSUl9UWVBFX1dSQkFDSyA8PCBWTVhfRVBUX01UX0VQVEVf
+U0hJRlQ7DQoNClNob3VsZG4ndCB5b3UgYWxzbyBpbmNsdWRlIFZNWF9FUFRfSVBBVF9CSVQ/ICBJ
+IGxvc3QgeW91ciBsb2dpYy4uDQoNCj4gKwl9DQo+ICsNCj4gKwlpZiAoaXNfbW1pbykNCj4gKwkJ
+cmV0dXJuIE1UUlJfVFlQRV9VTkNBQ0hBQkxFIDw8IFZNWF9FUFRfTVRfRVBURV9TSElGVDsNCj4g
+Kw0KPiArCS8qDQo+ICsJICogRGV2aWNlIGFzc2lnbmVtbnQgd2l0aG91dCBWVC1kIHNub29waW5n
+IGNhcGFiaWxpdHkgd2l0aCBzaGFyZWQtR1BBDQo+ICsJICogaXMgZHViaW91cy4NCj4gKwkgKi8N
+Cj4gKwlXQVJOX09OX09OQ0Uoa3ZtX2FyY2hfaGFzX25vbmNvaGVyZW50X2RtYSh2Y3B1LT5rdm0p
+KTsNCg0KSXMgdGhlcmUgYW55IGNvZGUgdG8gcmVqZWN0IHN1Y2ggY2FzZSBhdCB0aGUgYmVnaW5u
+aW5nLCBmb3IgaW5zdGFuY2UsIGRvbid0DQphbGxvdyBhc3NpZ25pbmcgZGV2aWNlIGluIHN1Y2gg
+Y2FzZT8NCg0KPiArCXJldHVybiAoTVRSUl9UWVBFX1dSQkFDSyA8PCBWTVhfRVBUX01UX0VQVEVf
+U0hJRlQpIHwgVk1YX0VQVF9JUEFUX0JJVDsNCj4gK30NCj4gKw0KPiAgaW50IHRkeF92Y3B1X2Ny
+ZWF0ZShzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpDQo+ICB7DQo+ICAJc3RydWN0IGt2bV9jcHVpZF9l
+bnRyeTIgKmU7DQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rdm0vdm14L3g4Nl9vcHMuaCBiL2Fy
+Y2gveDg2L2t2bS92bXgveDg2X29wcy5oDQo+IGluZGV4IDhhZTY4OTkyOTM0Ny4uZDkwM2UwZjYw
+NmQzIDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9rdm0vdm14L3g4Nl9vcHMuaA0KPiArKysgYi9h
+cmNoL3g4Ni9rdm0vdm14L3g4Nl9vcHMuaA0KPiBAQCAtMTU0LDYgKzE1NCw3IEBAIHZvaWQgdGR4
+X3ZtX2ZyZWUoc3RydWN0IGt2bSAqa3ZtKTsNCj4gIGludCB0ZHhfdmNwdV9jcmVhdGUoc3RydWN0
+IGt2bV92Y3B1ICp2Y3B1KTsNCj4gIHZvaWQgdGR4X3ZjcHVfZnJlZShzdHJ1Y3Qga3ZtX3ZjcHUg
+KnZjcHUpOw0KPiAgdm9pZCB0ZHhfdmNwdV9yZXNldChzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUsIGJv
+b2wgaW5pdF9ldmVudCk7DQo+ICt1OCB0ZHhfZ2V0X210X21hc2soc3RydWN0IGt2bV92Y3B1ICp2
+Y3B1LCBnZm5fdCBnZm4sIGJvb2wgaXNfbW1pbyk7DQo+ICANCj4gIGludCB0ZHhfdm1faW9jdGwo
+c3RydWN0IGt2bSAqa3ZtLCB2b2lkIF9fdXNlciAqYXJncCk7DQo+ICBpbnQgdGR4X3ZjcHVfaW9j
+dGwoc3RydWN0IGt2bV92Y3B1ICp2Y3B1LCB2b2lkIF9fdXNlciAqYXJncCk7DQo+IEBAIC0xNzYs
+NiArMTc3LDcgQEAgc3RhdGljIGlubGluZSB2b2lkIHRkeF92bV9mcmVlKHN0cnVjdCBrdm0gKmt2
+bSkge30NCj4gIHN0YXRpYyBpbmxpbmUgaW50IHRkeF92Y3B1X2NyZWF0ZShzdHJ1Y3Qga3ZtX3Zj
+cHUgKnZjcHUpIHsgcmV0dXJuIC1FT1BOT1RTVVBQOyB9DQo+ICBzdGF0aWMgaW5saW5lIHZvaWQg
+dGR4X3ZjcHVfZnJlZShzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpIHt9DQo+ICBzdGF0aWMgaW5saW5l
+IHZvaWQgdGR4X3ZjcHVfcmVzZXQoc3RydWN0IGt2bV92Y3B1ICp2Y3B1LCBib29sIGluaXRfZXZl
+bnQpIHt9DQo+ICtzdGF0aWMgaW5saW5lIHU4IHRkeF9nZXRfbXRfbWFzayhzdHJ1Y3Qga3ZtX3Zj
+cHUgKnZjcHUsIGdmbl90IGdmbiwgYm9vbCBpc19tbWlvKSB7IHJldHVybiAwOyB9DQo+ICANCj4g
+IHN0YXRpYyBpbmxpbmUgaW50IHRkeF92bV9pb2N0bChzdHJ1Y3Qga3ZtICprdm0sIHZvaWQgX191
+c2VyICphcmdwKSB7IHJldHVybiAtRU9QTk9UU1VQUDsgfQ0KPiAgc3RhdGljIGlubGluZSBpbnQg
+dGR4X3ZjcHVfaW9jdGwoc3RydWN0IGt2bV92Y3B1ICp2Y3B1LCB2b2lkIF9fdXNlciAqYXJncCkg
+eyByZXR1cm4gLUVPUE5PVFNVUFA7IH0NCg0K
