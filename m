@@ -2,207 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BF666E5EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FC066E5FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjAQSXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
+        id S229775AbjAQS3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjAQSUb (ORCPT
+        with ESMTP id S229629AbjAQS1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:20:31 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE05C0F5;
-        Tue, 17 Jan 2023 09:56:59 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so8573722otf.8;
-        Tue, 17 Jan 2023 09:56:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=65Gekgr8R32c2O/eU3xbaPl1FoUqCeO8TUOCrXdg/ss=;
-        b=yDOvY8lPigD4v/AjMuIAKI4i9q6CZ1JV5uWiM+W9t4nfS8WM1nR6IF2WSZTYBWD1fm
-         E51vMItFAFE3G2AtjMHQEnO/EsLx4od/GzIJxFzeulcD879QtgzYg3rEvlwAxiyi5LgU
-         MyTLz1BkFI6v5ww5qfcPkBTT5HBSIA0Bg/Gxzkvv/9TpGfP6CD9mB6fh6Vv8X65vvsYg
-         M2AVeGOMND+1Ip9uDERHBEK9SKxXh+g0a6koVmvz8h4BlKWnUwQMGRqEqQgC1v/5NJ4E
-         Kmcb/X8I9KAn3xlcVHAXl3dyLmkwCyZnpbGBX/wgHImB5vtR4qAEs+0qeROWI+/f083p
-         zf0w==
-X-Gm-Message-State: AFqh2koayQ0DTPw1cVEFXjTW65jYe/XCXrXtI18tvwtfDyCdGiAtaMhG
-        qgOBcp5HXUGI7lRCQ91elw==
-X-Google-Smtp-Source: AMrXdXuorlkUKc8aeolXvCd1bFLHz0KynukT6/3yjkUch+obkJ1YmHBZjafb3WHY2tsFzDNShft/HA==
-X-Received: by 2002:a05:6830:1652:b0:686:4382:13aa with SMTP id h18-20020a056830165200b00686438213aamr1965161otr.32.1673978218257;
-        Tue, 17 Jan 2023 09:56:58 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a9d5e88000000b00684c9c77754sm1389376otl.69.2023.01.17.09.56.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:56:57 -0800 (PST)
-Received: (nullmailer pid 3314301 invoked by uid 1000);
-        Tue, 17 Jan 2023 17:56:57 -0000
-Date:   Tue, 17 Jan 2023 11:56:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <20230117175657.GA3275060-robh@kernel.org>
-References: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
+        Tue, 17 Jan 2023 13:27:55 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60F45BF7;
+        Tue, 17 Jan 2023 09:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oTQ51UdTzrcO70uhBDlVnjUBjeBv3ulnXFGtTiGIm0k=; b=T+nS/B++wLjSplKMC1zkLdoVCy
+        zlTMepyVcgrVjUvgmzLOniKFcoIDT9QmRogGeAob6c9cOy+2VluTCn5AHsufqp/nOtq2HxM/GPPgz
+        Bb6Kq/kqlh18qtJPCV+JJc4PwahXaSZz9s8mBG17OtrgQrXDVHZ1xwLrMsOO0gnnuU+bbiFpvcnYT
+        oVCqkjPSNIHC5P8LiyjStPbDusChy3qM8i1IZbq5OozthAVMuyUCIZ0Og6vkfxo9+dtqZwJxGz9fp
+        k5D6QGoFM6N5dZj4hT6pO4zylc5wCLgtY0/gk67ciyQevkbPmEr7Sg1z2GhwUuFL68nQcmWzwMFMw
+        JMDpA5Cg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36164)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pHqEN-0008Cm-SG; Tue, 17 Jan 2023 17:58:43 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pHqEH-0007Ag-CE; Tue, 17 Jan 2023 17:58:37 +0000
+Date:   Tue, 17 Jan 2023 17:58:37 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Landen.Chao@mediatek.com, Samer.El-Haj-Mahmoud@arm.com,
+        andrew@lunn.ch, andriy.shevchenko@linux.intel.com,
+        davem@davemloft.net, edumazet@google.com, f.fainelli@gmail.com,
+        hkallweit1@gmail.com, jaz@semihalf.com, kuba@kernel.org,
+        linus.walleij@linaro.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        olteanv@gmail.com, pabeni@redhat.com, rafael@kernel.org,
+        sean.wang@mediatek.com, tn@semihalf.com, vivien.didelot@gmail.com
+Subject: Re: [net-next: PATCH v4 2/8] net: mdio: switch fixed-link PHYs API
+ to fwnode_
+Message-ID: <Y8bhzex/k05i9NCQ@shell.armlinux.org.uk>
+References: <20230116173420.1278704-1-mw@semihalf.com>
+ <20230116173420.1278704-3-mw@semihalf.com>
+ <Y8WOVVnFInEoXLVX@shell.armlinux.org.uk>
+ <CAPv3WKcbuY0kmM0trfS++at=r4KhCsp2bZ1kBL2r+-YJe=kE3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPv3WKcbuY0kmM0trfS++at=r4KhCsp2bZ1kBL2r+-YJe=kE3w@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:11:14PM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Introduce a binding for GPIO-based mux hardware used for connecting,
-> disconnecting and switching orientation of the SBU lines in USB Type-C
-> applications.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Expanded the example to indicate how this fits with the TCPM
-> - Updated maintainer email address.
-> 
->  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 110 ++++++++++++++++++
->  1 file changed, 110 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> new file mode 100644
-> index 000000000000..bf4b1d016e1f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> @@ -0,0 +1,110 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: GPIO-based SBU mux
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description:
-> +  In USB Type-C applications the SBU lines needs to be connected, disconnected
-> +  and swapped depending on the altmode and orientation. This binding describes
-> +  a family of hardware solutions which switches between these modes using GPIO
-> +  signals.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - onnn,fsusb43l10x
-> +          - pericom,pi3usb102
-> +      - const: gpio-sbu-mux
-> +
-> +  enable-gpios:
-> +    description: Switch enable GPIO
-> +
-> +  select-gpios:
-> +    description: Orientation select
-> +
-> +  vcc-supply:
-> +    description: power supply
-> +
-> +  mode-switch:
-> +    description: Flag the port as possible handle of altmode switching
-> +    type: boolean
-> +
-> +  orientation-switch:
-> +    description: Flag the port as possible handler of orientation switching
-> +    type: boolean
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
-> +    description:
-> +      A port node to link the SBU mux to a TypeC controller for the purpose of
-> +      handling altmode muxing and orientation switching.
-> +
-> +required:
-> +  - compatible
-> +  - enable-gpios
-> +  - select-gpios
-> +  - mode-switch
-> +  - orientation-switch
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    tcpm {
-> +        connector {
-> +            compatible = "usb-c-connector";
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    tcpm_hs_out: endpoint {
-> +                        remote-endpoint = <&usb_hs_phy_in>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +                    tcpm_ss_out: endpoint {
-> +                        remote-endpoint = <&usb_ss_phy_in>;
-> +                    };
-> +                };
-> +
-> +                port@2 {
-> +                    reg = <2>;
-> +                    tcpm_sbu_out: endpoint {
-> +                        remote-endpoint = <&sbu_mux_in>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +    sbu-mux {
-> +        compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-> +
-> +        enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
-> +        select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-> +
-> +        mode-switch;
-> +        orientation-switch;
-> +
-> +        port {
-> +            sbu_mux_in: endpoint {
-> +                remote-endpoint = <&tcpm_sbu_out>;
-> +            };
+Hi Marcin,
 
-Don't you need a connection to whatever drives SBU? Maybe your case is 
-fixed because the phy does the DP/USB muxing? But the binding needs to 
-support the worst case which I guess would be all the muxing/switching 
-is done by separate board level components.
+On Tue, Jan 17, 2023 at 05:20:01PM +0100, Marcin Wojtas wrote:
+> Hi Russell,
+> 
+> 
+> pon., 16 sty 2023 o 18:50 Russell King (Oracle) <linux@armlinux.org.uk>
+> napisał(a):
+> >
+> > On Mon, Jan 16, 2023 at 06:34:14PM +0100, Marcin Wojtas wrote:
+> > > fixed-link PHYs API is used by DSA and a number of drivers
+> > > and was depending on of_. Switch to fwnode_ so to make it
+> > > hardware description agnostic and allow to be used in ACPI
+> > > world as well.
+> >
+> > Would it be better to let the fixed-link PHY die, and have everyone use
+> > the more flexible fixed link implementation in phylink?
+> >
+> ,
+> This patchset did not intend to introduce any functional change, simply
+> switch to a more generic HW description abstraction. Killing
+> of/fwnode_phy_(de)register_fixed_link entirely seems to be a challenge, as
+> there are a lot of users beyond the DSA. Otoh I see a value in having
+> of_/fwnode_phy_is_fixed_link check, afaik there is no equivalent in
+> phylink...
 
-Rob
+Phylink provides a much improved implementation of fixed-link that is
+way more flexible than the phylib approach - it can implement speeds
+in excess of 1G. DSA already supports phylink with modern updated
+drivers that do not use the "adjust_link" implementation.
+
+What I'm proposing is that we don't bring the baggage of the phylib
+based fixed link forwards into fwnode, and leave this to be DT-only.
+I think this is what Andrew and Vladimir have also said.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
