@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B2866E76F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A6466E776
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjAQUJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S234906AbjAQUJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbjAQUG2 (ORCPT
+        with ESMTP id S233661AbjAQUG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 15:06:28 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53C0442EC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:57:59 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id b17so26989565pld.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:57:59 -0800 (PST)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FFC42BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:00:07 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id y69so818892iof.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:00:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nO2TVNnVOIEJ9cBerRh0wJxo05XQ3/3OZ+JFJTzT4f4=;
-        b=Tw6Xp7D6tk8hzI32VYz9Sh4oZnfuZnHqsPMkI862wFRDvLRDkgYIRiWG2SUrB03U5R
-         kSRXWoIa6OM7sBGA2XPn0IpcvSAtl79c0VbYh4UiPJcEZbb9YDLc+fE4O25L4H6ucx3b
-         l1MnrlA++X2c1GCtCN4KiQ4phthqiXm5RJ3vviCtHTSHZNYjBdNxPUaUEZMZGwTGOALj
-         2x4+O5smSfd0PmewOUe80sYtMLFAbU46lkGlCA6NjckPm7q1V9IZTocrP8Ai4OKgEVTC
-         bcV5uqogLcSpcr+ZFXX6PO2oaF7HZUvHZtMw2AhcaP6H0+A0BAtmhnlMbv8scDWieuUe
-         H/OQ==
+        bh=/Wdw6HE8HTpF7TjWP3fEjV+IfKA8kpoKQVjC2fd8a/M=;
+        b=TI/jZm0TgXF1KqXD5ofQO3vjXscEbgReusDd9NZUiFO+rZ4ufxMxY0Wm4LXbNCDrcg
+         VPncWQa1E7kGB48K1ouW/fIGNKtaTHLaj6Z/N+1njok2FFlr1LQOk6B6mXTmTM4tDkDf
+         IT/vZNPwYX1bRsGgO77+sUA8PUaha5GZWJLZLvBjr/LdPPd7VppF5lAXYrpbp3pdyZxj
+         qnWiHWo+K3KJh9Ng2IQXIddcOyASz5CtMRx5zrwOlml0CTgVQgdC17VWPPFTv7BoO/Vk
+         VQiZrTXpH0fg9i9Oc4wCLj9yLYrY/QAd4sRfKUHBx+5Dam1c45UI9qdnx24fctaC4QRp
+         myrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nO2TVNnVOIEJ9cBerRh0wJxo05XQ3/3OZ+JFJTzT4f4=;
-        b=wBIAcAetnwFdcBSPaJJvwNnNxb4H7DOsOgvPk1bzbroTiseyf+Np9ZAsVDd5dxmNnt
-         EbuuAfake9udn7RW7JBkJbZ8B7Ui8K1uwoorLahFLAvHFjq3l8lot/ZhOSXFzwK6/Nme
-         ytwvPN4rXYViiab+itMkUQd1Zzh9BomW0CMmGqbUnZ+vemPxzWG7WlJEOg2g/QkkSlVU
-         b6NLzbyQQpWnAdX9hc/pZhwHS3pyOGFnfkmvtk50+YcB8y70MKRwv5EIkn3dbxR5L4Kx
-         un6AZBzL9ZJDPzLcPnmSH7bHdM3ga+7YHngzAEBiQMO8d4nNh0LjtQ8Bjn+5khPD+282
-         gK4A==
-X-Gm-Message-State: AFqh2koM9cMQUPdJucfkbx3SktXZuuB8R4NYaipAo8CGwVziVyF58BIn
-        twffNbI6DL5VmqO8JFepQ03nSoOsZZlBJanh5eE=
-X-Google-Smtp-Source: AMrXdXsoJUSjp9vSRwB9qyAzd4ifSmdDjpF2CC1Viyfn6HGg5LWheC0BYaDOAxx2LX2SbhnOxU1jI0M39osXCRMTpkY=
-X-Received: by 2002:a17:90a:2807:b0:219:f1a2:b641 with SMTP id
- e7-20020a17090a280700b00219f1a2b641mr364645pjd.97.1673981878643; Tue, 17 Jan
- 2023 10:57:58 -0800 (PST)
+        bh=/Wdw6HE8HTpF7TjWP3fEjV+IfKA8kpoKQVjC2fd8a/M=;
+        b=g3qKOz7JNgJU61kGyQ6LPSgTPsDv5ic9hUZWfXv2pN7yLvJqH5CUbTQ3S5Gka+cS/e
+         15tjDtdlyYrfU7X4QK8zodpaRPUb86k0Tyc8GDXbKJWAvTE5c+T2UoB8OpqspkdPIUUC
+         4CTOaQ9sMkjPBuDyjozat3ueFnlRJptFciKunuTWHtXElDTrCToVdmmU07ec/yc1GNsl
+         ggYnwnVNggMw9LQAf+gJv7ImukDe/iGcpuWjfV4JLxWZhFXjJ2ECN6BiHnHJ5ZiqSwHP
+         tlROkhW3W1xmoeuE6ojMIfn8pvgxRGuQ8JIIRF1VRAUnBuymvgEIOKwDJW1ShsVLSU+Q
+         +66A==
+X-Gm-Message-State: AFqh2krlb1L+ifOJQpi+rvZoL5LpRrSQLEQ5+Afre1hfJRtdl/UYiGcr
+        lSJTyXLTE/eufp2p8t5IDBcf6tMIH4A6wtrfFXbSnQ==
+X-Google-Smtp-Source: AMrXdXv6MqZXsvF44Gv12CcJfMs1PLhgpGnFRLlBquHPxqID9PTjCHdbpCsREcfjUMjSH1VGmrPetxKzt6MQiokOUYI=
+X-Received: by 2002:a05:6602:2108:b0:704:9cd9:2dc7 with SMTP id
+ x8-20020a056602210800b007049cd92dc7mr305485iox.154.1673982006407; Tue, 17 Jan
+ 2023 11:00:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20230111133351.807024-1-jannh@google.com> <20230112085649.gvriasb2t5xwmxkm@box.shutemov.name>
- <CAG48ez3434wZBKFFbdx4M9j6eUwSUVPd4dxhzW_k_POneSDF+A@mail.gmail.com> <20230115190654.mehtlyz2rxtg34sl@box.shutemov.name>
-In-Reply-To: <20230115190654.mehtlyz2rxtg34sl@box.shutemov.name>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 17 Jan 2023 10:57:47 -0800
-Message-ID: <CAHbLzkrgz3mV=nt_m6b4MV7bWz2-woOjf27sY0+xB9iFunuBsw@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: Fix ->anon_vma race
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-42-surenb@google.com>
+ <CAG48ez3ZNt+B3XvAMP1OaeEYuwpXJ1epmT9YtNonFLEJ6yANVQ@mail.gmail.com>
+ <CAJuCfpFruHecz9NssGGFrG-RqbJFHCfRuZ7c6GbTBD4x4AU8aA@mail.gmail.com>
+ <Y8bpfzYvWq/3ttr+@casper.infradead.org> <CAJuCfpHkgRDpMJXd6vnCmB50PnSOwDY9pjhW5LcdR+fU5JUseA@mail.gmail.com>
+ <Y8btYASD3jmdCf5n@casper.infradead.org> <CAJuCfpGcufxmL7A-ea_JDKU2pxrTQJ7Sez7C6zcVyFK9q1CXUg@mail.gmail.com>
+In-Reply-To: <CAJuCfpGcufxmL7A-ea_JDKU2pxrTQJ7Sez7C6zcVyFK9q1CXUg@mail.gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 19:59:29 +0100
+Message-ID: <CAG48ez3Je1Jht_vqJf-qQ5R=KDuE1gzmHy5wN8oYZTwr+0PwBA@mail.gmail.com>
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +88,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 11:07 AM Kirill A. Shutemov
-<kirill@shutemov.name> wrote:
+On Tue, Jan 17, 2023 at 7:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> On Tue, Jan 17, 2023 at 10:47 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Tue, Jan 17, 2023 at 10:36:42AM -0800, Suren Baghdasaryan wrote:
+> > > On Tue, Jan 17, 2023 at 10:31 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > > >
+> > > > On Tue, Jan 17, 2023 at 10:26:32AM -0800, Suren Baghdasaryan wrote:
+> > > > > On Tue, Jan 17, 2023 at 10:12 AM Jann Horn <jannh@google.com> wrote:
+> > > > > >
+> > > > > > On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > > > > rw_semaphore is a sizable structure of 40 bytes and consumes
+> > > > > > > considerable space for each vm_area_struct. However vma_lock has
+> > > > > > > two important specifics which can be used to replace rw_semaphore
+> > > > > > > with a simpler structure:
+> > > > > > [...]
+> > > > > > >  static inline void vma_read_unlock(struct vm_area_struct *vma)
+> > > > > > >  {
+> > > > > > > -       up_read(&vma->vm_lock->lock);
+> > > > > > > +       if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > > > > > +               wake_up(&vma->vm_mm->vma_writer_wait);
+> > > > > > >  }
+> > > > > >
+> > > > > > I haven't properly reviewed this, but this bit looks like a
+> > > > > > use-after-free because you're accessing the vma after dropping your
+> > > > > > reference on it. You'd have to first look up the vma->vm_mm, then do
+> > > > > > the atomic_dec_and_test(), and afterwards do the wake_up() without
+> > > > > > touching the vma. Or alternatively wrap the whole thing in an RCU
+> > > > > > read-side critical section if the VMA is freed with RCU delay.
+> > > > >
+> > > > > vm_lock->count does not control the lifetime of the VMA, it's a
+> > > > > counter of how many readers took the lock or it's negative if the lock
+> > > > > is write-locked.
+> > > >
+> > > > Yes, but ...
+> > > >
+> > > >         Task A:
+> > > >         atomic_dec_and_test(&vma->vm_lock->count)
+> > > >                         Task B:
+> > > >                         munmap()
+> > > >                         write lock
+> > > >                         free VMA
+> > > >                         synchronize_rcu()
+> > > >                         VMA is really freed
+> > > >         wake_up(&vma->vm_mm->vma_writer_wait);
+> > > >
+> > > > ... vma is freed.
+> > > >
+> > > > Now, I think this doesn't occur.  I'm pretty sure that every caller of
+> > > > vma_read_unlock() is holding the RCU read lock.  But maybe we should
+> > > > have that assertion?
+> > >
+> > > Yep, that's what this patch is doing
+> > > https://lore.kernel.org/all/20230109205336.3665937-27-surenb@google.com/
+> > > by calling vma_assert_no_reader() from __vm_area_free().
+> >
+> > That's not enough though.  Task A still has a pointer to vma after it
+> > has called atomic_dec_and_test(), even after vma has been freed by
+> > Task B, and before Task A dereferences vma->vm_mm.
 >
-> On Fri, Jan 13, 2023 at 08:28:59PM +0100, Jann Horn wrote:
-> > No, that lockdep assert has to be there. Page table traversal is
-> > allowed under any one of the mmap lock, the anon_vma lock (if the VMA
-> > is associated with an anon_vma), and the mapping lock (if the VMA is
-> > associated with a mapping); and so to be able to remove page tables,
-> > we must hold all three of them.
->
-> Okay, that's fair. I agree with the patch now. Maybe adjust the commit
-> message a bit?
+> Ah, I see your point now. I guess I'll have to store vma->vm_mm in a
+> local variable and call mmgrab() before atomic_dec_and_test(), then
+> use it in wake_up() and call mmdrop(). Is that what you are thinking?
 
-Yeah, the explanation makes sense to me too. Reviewed-by: Yang Shi
-<shy828301@gmail.com>
-
->
-> Anyway:
->
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@intel.linux.com>
->
-> BTW, I've noticied that you recently added tlb_remove_table_sync_one().
-> I'm not sure why it is needed. Why IPI in pmdp_collapse_flush() in not
-> good enough to serialize against GUP fast?
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
+You shouldn't need mmgrab()/mmdrop(), because whoever is calling you
+for page fault handling must be keeping the mm_struct alive.
