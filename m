@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5350E66D58B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3050466D58E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbjAQFTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 00:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
+        id S234972AbjAQFVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 00:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234972AbjAQFTF (ORCPT
+        with ESMTP id S234840AbjAQFVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 00:19:05 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6862927495;
-        Mon, 16 Jan 2023 21:19:04 -0800 (PST)
+        Tue, 17 Jan 2023 00:21:09 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01D45263
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 21:21:00 -0800 (PST)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H5Iv1Z020132;
-        Mon, 16 Jan 2023 23:18:57 -0600
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H5KrXL073175;
+        Mon, 16 Jan 2023 23:20:53 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673932737;
-        bh=xxpvyte8xzl5f5vxPL1FLw2ijhBS7X3ez0AbKJFIno4=;
+        s=ti-com-17Q1; t=1673932853;
+        bh=4KrU4rKvHGWN4haTjPdOGhuOQFXUGMP+s8OimkmkKiY=;
         h=From:To:CC:Subject:Date;
-        b=KGri07oPD8mrRlO2r8kJv/K9uwDFf+7E1gDXBE/hDBzvXF338fVW+hbtv+cDpijQR
-         t4Ov8fz/6KJRv9hSmQdLVpBy6CvS3VFtyRidZgbmPWIKbCtQJ2kcdbC9Thn4/kz2Xl
-         O/grTG/jZjk+CodAI1KNmmnVVtWQMnj/BKGMMaQc=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H5IvkG112351
+        b=CWhPZTKxeUiTrjXcNRVI6G2Kp52K8v7V3M59aoOEDBvty9cz7Rwusvd/Am2ynBIF0
+         vpaWv7wBuyx033sN/2J5ucvtgvO2rlEzvzhtLtAeErjRaKEkOcS9dqBNO15ek1hqVj
+         pPSE6Q07qyX+2gnL5LTMKxlzV2Ln9NoJ8bQ/P0lo=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H5KrbW113434
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 16 Jan 2023 23:18:57 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 16 Jan 2023 23:20:53 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 16
- Jan 2023 23:18:56 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2023 23:20:53 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 16 Jan 2023 23:18:56 -0600
+ Frontend Transport; Mon, 16 Jan 2023 23:20:53 -0600
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H5IuiY049602;
-        Mon, 16 Jan 2023 23:18:56 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H5Kq5v014241;
+        Mon, 16 Jan 2023 23:20:52 -0600
 From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <vkoul@kernel.org>, <peter.ujfalusi@gmail.com>
-CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-choudhary@ti.com>
-Subject: [PATCH v2] dmaengine: ti: k3-udma: remove non-fatal probe deferral log
-Date:   Tue, 17 Jan 2023 10:48:55 +0530
-Message-ID: <20230117051855.29644-1-j-choudhary@ti.com>
+To:     <nm@ti.com>, <ssantosh@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <j-choudhary@ti.com>
+Subject: [PATCH v2] soc: ti: k3-ringacc: remove non-fatal probe deferral log
+Date:   Tue, 17 Jan 2023 10:50:52 +0530
+Message-ID: <20230117052052.29953-1-j-choudhary@ti.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,23 +66,23 @@ This makes the kernel log clean and we do not get recurring logs
 stating: "Failed to get MSI domain".
 
 Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 ---
 
 Changelog v1->v2:
-- Removed print instead of dropping the loglevel
-- Retained 'acked-by' from v1 patch
+- Removed the print instead of dropping the loglevel according to the comment
+  on similar patch for udma:
+  <https://lore.kernel.org/all/Y6wiXlZh1MUL2WrF@matsya/>
+  
+v1 patch: <https://lore.kernel.org/all/20221128102138.529398-1-j-choudhary@ti.com/>
 
-v1: <https://patchwork.kernel.org/project/linux-dmaengine/patch/20221128101334.512816-1-j-choudhary@ti.com/>
-
- drivers/dma/ti/k3-udma.c | 1 -
+ drivers/soc/ti/k3-ringacc.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index eb76f0e58536..7e23a6fdef95 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -5376,7 +5376,6 @@ static int udma_probe(struct platform_device *pdev)
+diff --git a/drivers/soc/ti/k3-ringacc.c b/drivers/soc/ti/k3-ringacc.c
+index e01e4d815230..776407f80dd4 100644
+--- a/drivers/soc/ti/k3-ringacc.c
++++ b/drivers/soc/ti/k3-ringacc.c
+@@ -1367,7 +1367,6 @@ static int k3_ringacc_init(struct platform_device *pdev,
  	dev->msi.domain = of_msi_get_domain(dev, dev->of_node,
  					    DOMAIN_BUS_TI_SCI_INTA_MSI);
  	if (!dev->msi.domain) {
