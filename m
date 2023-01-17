@@ -2,263 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFEF66D3D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC7366D3D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbjAQBhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 20:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S235042AbjAQBir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 20:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbjAQBh0 (ORCPT
+        with ESMTP id S234550AbjAQBi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 20:37:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25C0241F0
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 17:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673919400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OaLWp1o2d67rAK4VOTZ3mI0wZ9vtLhQhgbJPLb7b6EE=;
-        b=TMx2z0fV2SfjKeyQe1f5s6NJSwfkXbQht+JydTZuP/mH0GOyDMdfwUBTBTMBK17HzekKVE
-        jv03HvgTU+ZZZ1mQghH2LdgmYgVGsQm5Kdh6kVXEiYdX5YvecgmaRxiS/ZZs0YbO0xg4me
-        jnMGKSKrkJY+F5vG8q7+sqp6SDZ/wmo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-CRqzrvs_P5CSQm69KHxHAA-1; Mon, 16 Jan 2023 20:36:35 -0500
-X-MC-Unique: CRqzrvs_P5CSQm69KHxHAA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 16 Jan 2023 20:38:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03282887F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 17:38:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 311FD3C0DDD1;
-        Tue, 17 Jan 2023 01:36:34 +0000 (UTC)
-Received: from [10.22.18.0] (unknown [10.22.18.0])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 520A653AA;
-        Tue, 17 Jan 2023 01:36:33 +0000 (UTC)
-Message-ID: <5375c559-8c67-3cef-11a9-abeecb75a09f@redhat.com>
-Date:   Mon, 16 Jan 2023 20:36:33 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69136B810BD
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04230C43392
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673919503;
+        bh=6I6qWiZy6+VUHL/BjgqW5ooPHVYKqIo8pjsdpLzyhJM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Uxp8WjQMOD1iV74W2WXYsEwNnKRGE0lhIviQY5FqQ7Mdw/vd5KD1zTKaC/MUyBbeD
+         39N9VNrYjQh4awIY7UQpNiFPb03zjd+EQasCWKhTtKI5iMWQnx2ZVOzuccryhPs9tg
+         oBOCUGok/coBej/8h+M8P/L+heGRslB68jIrvQgOdnvCZqOYuMI1AMQXgrgdO05LSQ
+         3DMTvv6As2f1rFB8414m5OkdZ3ApipyrNzZyWrIU/lNgykeAaY97+hm9/0dsCvC9YL
+         STEDKiZzkHOqBmFPtLlE4G4w59DEojLNKVkuqe6ylERUzozi0wFr3emkaNBpEa+GNp
+         nt/ztCsuE5Rog==
+Received: by mail-ej1-f48.google.com with SMTP id vm8so71898016ejc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 17:38:22 -0800 (PST)
+X-Gm-Message-State: AFqh2kot3dBH7uz3kDX1wc8z+ZyYp/lYBqiXw5pIQS9m0gf4yphhMFNB
+        uN5GH6RSLVkmLIdG+6Zg4ZzQK4Dkue3m6NMqNQg=
+X-Google-Smtp-Source: AMrXdXsuy/+hu9YZJiwbj1ERS++KdqjNREl+w+fhFyyt/KJk1es4EKClr4/cdxR7/yu/s8nsvUMnoQ/MeClPnRlUkGk=
+X-Received: by 2002:a17:906:a28a:b0:7c0:ff76:7866 with SMTP id
+ i10-20020a170906a28a00b007c0ff767866mr58519ejz.272.1673919501199; Mon, 16 Jan
+ 2023 17:38:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 4/3] locking/lockdep: Improve the deadlock scenario print
- for sync and read lock
-Content-Language: en-US
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, seanjc@google.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Luczaj <mhal@rbox.co>
-References: <20230113065955.815667-1-boqun.feng@gmail.com>
- <20230113235722.1226525-1-boqun.feng@gmail.com>
- <221e35b8-88f5-5fc5-6961-6a8ce060a97b@redhat.com>
- <Y8XRNdrW3t1jvpMF@boqun-archlinux>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y8XRNdrW3t1jvpMF@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1673255274-18238-1-git-send-email-tangyouling@loongson.cn>
+ <1673255274-18238-2-git-send-email-tangyouling@loongson.cn>
+ <6f1a1f3c-4569-c427-76ae-2f7093cb5e9f@loongson.cn> <CAAhV-H55Kj4gMnORHfQUYJ3KBueLv7j+ktkNP9cE-=32nEShzg@mail.gmail.com>
+ <972e4d0c69dea4e9659eb9459072b2b7b2fd963b.camel@xry111.site>
+In-Reply-To: <972e4d0c69dea4e9659eb9459072b2b7b2fd963b.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 17 Jan 2023 09:38:11 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7KpR3wKUYVR2mSfbCuwbONAmPwSB9oaLAE-4zGhx1r4g@mail.gmail.com>
+Message-ID: <CAAhV-H7KpR3wKUYVR2mSfbCuwbONAmPwSB9oaLAE-4zGhx1r4g@mail.gmail.com>
+Subject: Re: [PATCH 1/4] LoongArch: Use trampoline for exception handlers and
+ kill la.abs
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/16/23 17:35, Boqun Feng wrote:
-> On Mon, Jan 16, 2023 at 05:21:09PM -0500, Waiman Long wrote:
->> On 1/13/23 18:57, Boqun Feng wrote:
->>> Lock scenario print is always a weak spot of lockdep splats. Improvement
->>> can be made if we rework the dependency search and the error printing.
->>>
->>> However without touching the graph search, we can improve a little for
->>> the circular deadlock case, since we have the to-be-added lock
->>> dependency, and know whether these two locks are read/write/sync.
->>>
->>> In order to know whether a held_lock is sync or not, a bit was
->>> "stolen" from ->references, which reduce our limit for the same lock
->>> class nesting from 2^12 to 2^11, and it should still be good enough.
->>>
->>> Besides, since we now have bit in held_lock for sync, we don't need the
->>> "hardirqoffs being 1" trick, and also we can avoid the __lock_release()
->>> if we jump out of __lock_acquire() before the held_lock stored.
->>>
->>> With these changes, a deadlock case evolved with read lock and sync gets
->>> a better print-out from:
->>>
->>> 	[...]  Possible unsafe locking scenario:
->>> 	[...]
->>> 	[...]        CPU0                    CPU1
->>> 	[...]        ----                    ----
->>> 	[...]   lock(srcuA);
->>> 	[...]                                lock(srcuB);
->>> 	[...]                                lock(srcuA);
->>> 	[...]   lock(srcuB);
->>>
->>> to
->>>
->>> 	[...]  Possible unsafe locking scenario:
->>> 	[...]
->>> 	[...]        CPU0                    CPU1
->>> 	[...]        ----                    ----
->>> 	[...]   rlock(srcuA);
->>> 	[...]                                lock(srcuB);
->>> 	[...]                                lock(srcuA);
->>> 	[...]   sync(srcuB);
->>>
->>> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
->>> ---
->>>    include/linux/lockdep.h  |  3 ++-
->>>    kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
->>>    2 files changed, 34 insertions(+), 17 deletions(-)
->>>
->>> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
->>> index ba09df6a0872..febd7ecc225c 100644
->>> --- a/include/linux/lockdep.h
->>> +++ b/include/linux/lockdep.h
->>> @@ -134,7 +134,8 @@ struct held_lock {
->>>    	unsigned int read:2;        /* see lock_acquire() comment */
->>>    	unsigned int check:1;       /* see lock_acquire() comment */
->>>    	unsigned int hardirqs_off:1;
->>> -	unsigned int references:12;					/* 32 bits */
->>> +	unsigned int sync:1;
->>> +	unsigned int references:11;					/* 32 bits */
->>>    	unsigned int pin_count;
->>>    };
->>> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
->>> index cffa026a765f..4031d87f6829 100644
->>> --- a/kernel/locking/lockdep.c
->>> +++ b/kernel/locking/lockdep.c
->>> @@ -1880,6 +1880,8 @@ print_circular_lock_scenario(struct held_lock *src,
->>>    	struct lock_class *source = hlock_class(src);
->>>    	struct lock_class *target = hlock_class(tgt);
->>>    	struct lock_class *parent = prt->class;
->>> +	int src_read = src->read;
->>> +	int tgt_read = tgt->read;
->>>    	/*
->>>    	 * A direct locking problem where unsafe_class lock is taken
->>> @@ -1907,7 +1909,10 @@ print_circular_lock_scenario(struct held_lock *src,
->>>    	printk(" Possible unsafe locking scenario:\n\n");
->>>    	printk("       CPU0                    CPU1\n");
->>>    	printk("       ----                    ----\n");
->>> -	printk("  lock(");
->>> +	if (tgt_read != 0)
->>> +		printk("  rlock(");
->>> +	else
->>> +		printk("  lock(");
->>>    	__print_lock_name(target);
->>>    	printk(KERN_CONT ");\n");
->>>    	printk("                               lock(");
->>> @@ -1916,7 +1921,12 @@ print_circular_lock_scenario(struct held_lock *src,
->>>    	printk("                               lock(");
->>>    	__print_lock_name(target);
->>>    	printk(KERN_CONT ");\n");
->>> -	printk("  lock(");
->>> +	if (src_read != 0)
->>> +		printk("  rlock(");
->>> +	else if (src->sync)
->>> +		printk("  sync(");
->>> +	else
->>> +		printk("  lock(");
->>>    	__print_lock_name(source);
->>>    	printk(KERN_CONT ");\n");
->>>    	printk("\n *** DEADLOCK ***\n\n");
->> src can be sync() but not the target. Is there a reason why that is the
->> case?
->>
-> The functions annotated by sync() don't create real critical sections,
-> so no lock dependency can be created from a sync(), for example:
+On Mon, Jan 16, 2023 at 1:41 PM Xi Ruoyao <xry111@xry111.site> wrote:
 >
-> 	synchronize_srcu(A);
-> 	mutex_lock(B);
+> On Mon, 2023-01-16 at 09:30 +0800, Huacai Chen wrote:
+> > On Sat, Jan 14, 2023 at 2:38 PM Jinyang He <hejinyang@loongson.cn>
+> > wrote:
+> > >
+> > > Hi, Ruoyao and Youling,
+> > >
+> > > I care about the performance when NUMA enabled. We set CSR.EENTRY
+> > > for each possible cpus where is NUMA-relative. So, I guess the more
+> > > codes in NUMA-relative memory makes more performance. If we just set
+> > > handler_trampoline as exception handler, the performance may be
+> > > influenced.
+> > So copying both the handlers and handler_trampoline can solve the
+> > problem? If that is possible, please do that on top of the latest code
+> > in
+> > https://github.com/loongson/linux/commits/loongarch-next
 >
-> no dependency from A to B. In the scenario case, if we see a dependency
-> target -> source, the target cannot be a lock_sync(). I will add better
-> documentation later.
-Right, the dependency won't happen since you reduce lock_sync() to 
-mostly do validate_chain() without actually storing it in the lock chain 
-which I did miss in my initial review. Without that, a dependency may 
-happen if an NMI happens between lock_acquire() and lock_release() in 
-lock_sync().
->>> @@ -4530,7 +4540,13 @@ mark_usage(struct task_struct *curr, struct held_lock *hlock, int check)
->>>    					return 0;
->>>    		}
->>>    	}
->>> -	if (!hlock->hardirqs_off) {
->>> +
->>> +	/*
->>> +	 * For lock_sync(), don't mark the ENABLED usage, since lock_sync()
->>> +	 * creates no critical section and no extra dependency can be introduced
->>> +	 * by interrupts
->>> +	 */
->>> +	if (!hlock->hardirqs_off && !hlock->sync) {
->>>    		if (hlock->read) {
->>>    			if (!mark_lock(curr, hlock,
->>>    					LOCK_ENABLED_HARDIRQ_READ))
->>> @@ -4909,7 +4925,7 @@ static int __lock_is_held(const struct lockdep_map *lock, int read);
->>>    static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
->>>    			  int trylock, int read, int check, int hardirqs_off,
->>>    			  struct lockdep_map *nest_lock, unsigned long ip,
->>> -			  int references, int pin_count)
->>> +			  int references, int pin_count, int sync)
->>>    {
->>>    	struct task_struct *curr = current;
->>>    	struct lock_class *class = NULL;
->>> @@ -4960,7 +4976,8 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
->>>    	class_idx = class - lock_classes;
->>> -	if (depth) { /* we're holding locks */
->>> +	if (depth && !sync) {
->>> +		/* we're holding locks and the new held lock is not a sync */
->>>    		hlock = curr->held_locks + depth - 1;
->>>    		if (hlock->class_idx == class_idx && nest_lock) {
->>>    			if (!references)
->>> @@ -4994,6 +5011,7 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
->>>    	hlock->trylock = trylock;
->>>    	hlock->read = read;
->>>    	hlock->check = check;
->>> +	hlock->sync = !!sync;
->>>    	hlock->hardirqs_off = !!hardirqs_off;
->>>    	hlock->references = references;
->>>    #ifdef CONFIG_LOCK_STAT
->>> @@ -5055,6 +5073,10 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
->>>    	if (!validate_chain(curr, hlock, chain_head, chain_key))
->>>    		return 0;
->>> +	/* For lock_sync(), we are done here since no actual critical section */
->>> +	if (hlock->sync)
->>> +		return 1;
->>> +
->>>    	curr->curr_chain_key = chain_key;
->>>    	curr->lockdep_depth++;
->>>    	check_chain_key(curr);
->> Even with sync, there is still a corresponding lock_acquire() and
->> lock_release(), you can't exit here without increasing lockdep_depth. That
->> can cause underflow.
->>
-> I actually remove the __lock_release() in lock_sync() in this patch, so
-> I think it's OK. But I must admit the whole submission is to give David
-> something to see whether the output is an improvement, so I probably
-> should separate the output changes and the lock_sync() internall into
-> two patches (and the later can also be folded into the introduction
-> patch).
+> Hi folks,
+>
+> I just wrote the trampoline code as a PoC to show "relocatable kernel
+> can work" and there must be some better way.  But I'm too sad to write
+> any serious code in this month, and I don't have access to a LoongArch
+> NUMA system.  So I think it's better to leave the job for you guys now
+> :).
+Hmm, I hope this series can be merged in 6.3. :)
 
-I saw that now. You may not need to separate it into 2 patches since 
-there is some dependency between the two. You do have to document the 2 
-different changes in your patch description.
-
-Cheers,
-Longman
-
+Huacai
+>
+> Best regards
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
