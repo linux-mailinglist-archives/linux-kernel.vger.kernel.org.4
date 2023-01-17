@@ -2,329 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C019466DE95
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D614D66DE98
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236129AbjAQNQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S237076AbjAQNRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236819AbjAQNQq (ORCPT
+        with ESMTP id S236861AbjAQNQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:16:46 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CECAC4C07;
-        Tue, 17 Jan 2023 05:16:44 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 048B7C14;
-        Tue, 17 Jan 2023 05:17:26 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 223C03F67D;
-        Tue, 17 Jan 2023 05:16:27 -0800 (PST)
-Date:   Tue, 17 Jan 2023 13:16:21 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
-        linus.walleij@linaro.org, shawnguo@kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
-        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
-        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
-        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com,
-        rostedt@goodmis.org, mhiramat@kernel.org, frederic@kernel.org,
-        paulmck@kernel.org, pmladek@suse.com, senozhatsky@chromium.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, ryabinin.a.a@gmail.com, glider@google.com,
-        andreyknvl@gmail.com, dvyukov@google.com,
-        vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
-Message-ID: <Y8afpbHtDOqAHq9M@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230112194314.845371875@infradead.org>
- <Y8WCWAuQSHN651dA@FVFF77S0Q05N.cambridge.arm.com>
- <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
+        Tue, 17 Jan 2023 08:16:59 -0500
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA641CAD8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:16:57 -0800 (PST)
+Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
+        by mta-01.yadro.com (Proxmox) with ESMTP id 048FE341A7F;
+        Tue, 17 Jan 2023 16:16:56 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=mta-01; bh=HWxnzh6UTvudLwf3K4
+        PlegtuzcCCHkSoFSTSPm922Nw=; b=sF/xKMLFxuot8BC3xynDoykpef70d60pPA
+        31EkkMWPYyiwWKZuAP+oASDsvKtRMYHhIxdGa+KxYh2Imy7+VkSjbPNiMUBfqeNh
+        /EDFLIYw9ZxppAblkdwF2UaMcK73kFF2crPfC2Rb0jxE6TMkozYL5oaLzBcMNenR
+        bIdC5rlao=
+Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Proxmox) with ESMTPS id EEBBC341A78;
+        Tue, 17 Jan 2023 16:16:55 +0300 (MSK)
+Received: from [10.199.21.212] (10.199.21.212) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Tue, 17 Jan
+ 2023 16:16:55 +0300
+Message-ID: <1514c929-5a98-0e58-e038-9bb4537d5189@yadro.com>
+Date:   Tue, 17 Jan 2023 16:16:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH -next V7 6/7] samples: ftrace: Add riscv support for
+ SAMPLE_FTRACE_DIRECT[_MULTI]
+Content-Language: en-US
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <guoren@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <anup@brainfault.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <conor.dooley@microchip.com>, <heiko@sntech.de>,
+        <rostedt@goodmis.org>, <mhiramat@kernel.org>, <jolsa@redhat.com>,
+        <bp@suse.de>, <jpoimboe@kernel.org>, <andy.chiu@sifive.com>,
+        <linux@yadro.com>
+References: <20230112090603.1295340-1-guoren@kernel.org>
+ <20230112090603.1295340-7-guoren@kernel.org>
+ <a83dc6de-8fda-439d-b2dd-d05786e642eb@yadro.com>
+ <CAAYs2=jj2uiF3P_B1tXQTHdYOmcN7dRcMyPx2tW2kg4QWvq3Lg@mail.gmail.com>
+From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
+In-Reply-To: <CAAYs2=jj2uiF3P_B1tXQTHdYOmcN7dRcMyPx2tW2kg4QWvq3Lg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.199.21.212]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:26:29AM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 16, 2023 at 04:59:04PM +0000, Mark Rutland wrote:
+Hi, Song,
+
+On 17.01.2023 12:32, Song Shuai wrote:
 > 
-> > I'm sorry to have to bear some bad news on that front. :(
+> Hi, Evgenii:
 > 
-> Moo, something had to give..
+> Evgenii Shatokhin <e.shatokhin@yadro.com> 于2023年1月16日周一 14:30写道：
 > 
+>>
+>> Hi,
+>>
+>> On 12.01.2023 12:06, guoren@kernel.org wrote:
+>>> From: Song Shuai <suagrfillet@gmail.com>
+>>>
+>>> select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+>>> for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
+>>> the ftrace-direct*.c files in samples/ftrace/.
+>>>
+>>> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+>>> Tested-by: Guo Ren <guoren@kernel.org>
+>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>> ---
+>>>    arch/riscv/Kconfig                          |  2 ++
+>>>    samples/ftrace/ftrace-direct-modify.c       | 33 ++++++++++++++++++
+>>>    samples/ftrace/ftrace-direct-multi-modify.c | 37 +++++++++++++++++++++
+>>>    samples/ftrace/ftrace-direct-multi.c        | 22 ++++++++++++
+>>>    samples/ftrace/ftrace-direct-too.c          | 26 +++++++++++++++
+>>>    samples/ftrace/ftrace-direct.c              | 22 ++++++++++++
+>>>    6 files changed, 142 insertions(+)
+>>
+>> The samples were built OK now, but ftrace-direct-multi and
+>> ftrace-direct-multi-modify report incorrect values of ip/pc it seems.
+>>
+>> I ran 'insmod ftrace-direct-multi.ko', waited a little and then checked
+>> the messages in the trace:
+>>
+>> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+>> #              | |         |   |||||     |         |
+>>        migration/1-19      [001] .....  3858.532131: my_direct_func1: my
+>> direct func1 ip 0
+>>        migration/0-15      [000] d.s2.  3858.532136: my_direct_func1: my
+>> direct func1 ip ff60000001ba9600
+>>        migration/0-15      [000] d..2.  3858.532204: my_direct_func1: my
+>> direct func1 ip ff60000003334d00
+>>        migration/0-15      [000] .....  3858.532232: my_direct_func1: my
+>> direct func1 ip 0
+>>          rcu_sched-14      [001] .....  3858.532257: my_direct_func1: my
+>> direct func1 ip 0
+>>             insmod-415     [000] .....  3858.532270: my_direct_func1: my
+>> direct func1 ip 7fffffffffffffff
+>>             <idle>-0       [001] ..s1.  3858.539051: my_direct_func1: my
+>> direct func1 ip ff60000001ba9600
+>>             <idle>-0       [001] dns2.  3858.539124: my_direct_func1: my
+>> direct func1 ip ff60000001ba9600
+>>          rcu_sched-14      [001] .....  3858.539208: my_direct_func1: my
+>> direct func1 ip 0
+>> [...]
+>>
+>> If I understand it right, my_direct_func1() should print the address of
+>> some location in the code, probably - at the beginning of the traced
+>> functions.
+>>
+>> The printed values (0x0, 0x7fffffffffffffff, ...) are not valid code
+>> addresses.
+>>
+> The invalid code address is only printed by accessing the schedule()
+> function's first argument whose address stores in a0 register.
+> While schedule() actually has no parameter declared, so my_direct_func
+> just prints the a0 in the context of the schedule()'s caller and
+> the address maybe varies depending on the caller.
 > 
-> > IIUC what's happenign here is the PSCI cpuidle driver has entered idle and RCU
-> > is no longer watching when arm64's cpu_suspend() manipulates DAIF. Our
-> > local_daif_*() helpers poke lockdep and tracing, hence the call to
-> > trace_hardirqs_off() and the RCU usage.
-> 
-> Right, strictly speaking not needed at this point, IRQs should have been
-> traced off a long time ago.
+> I can't really understand why tracing the first argument of the
+> schedule() function, but it seems nonsense at this point.
 
-True, but there are some other calls around here that *might* end up invoking
-RCU stuff (e.g. the MTE code).
+The question is, what should be passed as the argument(s) of 
+my_direct_func() in this particular sample module. The kernel docs and 
+commit logs seem to contain no info on that.
 
-That all needs a noinstr cleanup too, which I'll sort out as a follow-up.
+With direct functions, I suppose, the trampoline can pass anything it 
+wants to my_direct_func(), not just the arguments of the traced function.
 
-> > I think we need RCU to be watching all the way down to cpu_suspend(), and it's
-> > cpu_suspend() that should actually enter/exit idle context. That and we need to
-> > make cpu_suspend() and the low-level PSCI invocation noinstr.
-> > 
-> > I'm not sure whether 32-bit will have a similar issue or not.
-> 
-> I'm not seeing 32bit or Risc-V have similar issues here, but who knows,
-> maybe I missed somsething.
-
-I reckon if they do, the core changes here give us the infrastructure to fix
-them if/when we get reports.
-
-> In any case, the below ought to cure the ARM64 case and remove that last
-> known RCU_NONIDLE() user as a bonus.
-
-The below works for me testing on a Juno R1 board with PSCI, using defconfig +
-CONFIG_PROVE_LOCKING=y + CONFIG_DEBUG_LOCKDEP=y + CONFIG_DEBUG_ATOMIC_SLEEP=y.
-I'm not sure how to test the LPI / FFH part, but it looks good to me.
-
-FWIW:
-
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
-
-Sudeep, would you be able to give the LPI/FFH side a spin with the kconfig
-options above?
-
-Thanks,
-Mark.
+I'd check what these sample modules do on x86 and would try to match 
+that behaviour on RISC-V.
 
 > 
-> ---
-> diff --git a/arch/arm64/kernel/cpuidle.c b/arch/arm64/kernel/cpuidle.c
-> index 41974a1a229a..42e19fff40ee 100644
-> --- a/arch/arm64/kernel/cpuidle.c
-> +++ b/arch/arm64/kernel/cpuidle.c
-> @@ -67,10 +67,10 @@ __cpuidle int acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
->  	u32 state = lpi->address;
->  
->  	if (ARM64_LPI_IS_RETENTION_STATE(lpi->arch_flags))
-> -		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(psci_cpu_suspend_enter,
-> +		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM_RCU(psci_cpu_suspend_enter,
->  						lpi->index, state);
->  	else
-> -		return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
-> +		return CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(psci_cpu_suspend_enter,
->  					     lpi->index, state);
->  }
->  #endif
-> diff --git a/arch/arm64/kernel/suspend.c b/arch/arm64/kernel/suspend.c
-> index e7163f31f716..0fbdf5fe64d8 100644
-> --- a/arch/arm64/kernel/suspend.c
-> +++ b/arch/arm64/kernel/suspend.c
-> @@ -4,6 +4,7 @@
->  #include <linux/slab.h>
->  #include <linux/uaccess.h>
->  #include <linux/pgtable.h>
-> +#include <linux/cpuidle.h>
->  #include <asm/alternative.h>
->  #include <asm/cacheflush.h>
->  #include <asm/cpufeature.h>
-> @@ -104,6 +105,10 @@ int cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
->  	 * From this point debug exceptions are disabled to prevent
->  	 * updates to mdscr register (saved and restored along with
->  	 * general purpose registers) from kernel debuggers.
-> +	 *
-> +	 * Strictly speaking the trace_hardirqs_off() here is superfluous,
-> +	 * hardirqs should be firmly off by now. This really ought to use
-> +	 * something like raw_local_daif_save().
->  	 */
->  	flags = local_daif_save();
->  
-> @@ -120,6 +125,8 @@ int cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
->  	 */
->  	arm_cpuidle_save_irq_context(&context);
->  
-> +	ct_cpuidle_enter();
-> +
->  	if (__cpu_suspend_enter(&state)) {
->  		/* Call the suspend finisher */
->  		ret = fn(arg);
-> @@ -133,8 +140,11 @@ int cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
->  		 */
->  		if (!ret)
->  			ret = -EOPNOTSUPP;
-> +
-> +		ct_cpuidle_exit();
->  	} else {
-> -		RCU_NONIDLE(__cpu_suspend_exit());
-> +		ct_cpuidle_exit();
-> +		__cpu_suspend_exit();
->  	}
->  
->  	arm_cpuidle_restore_irq_context(&context);
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 4fc4e0381944..312a34ef28dc 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -69,16 +69,12 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
->  	else
->  		pm_runtime_put_sync_suspend(pd_dev);
->  
-> -	ct_cpuidle_enter();
-> -
->  	state = psci_get_domain_state();
->  	if (!state)
->  		state = states[idx];
->  
->  	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
->  
-> -	ct_cpuidle_exit();
-> -
->  	if (s2idle)
->  		dev_pm_genpd_resume(pd_dev);
->  	else
-> @@ -192,7 +188,7 @@ static __cpuidle int psci_enter_idle_state(struct cpuidle_device *dev,
->  {
->  	u32 *state = __this_cpu_read(psci_cpuidle_data.psci_states);
->  
-> -	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state[idx]);
-> +	return CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(psci_cpu_suspend_enter, idx, state[idx]);
->  }
->  
->  static const struct of_device_id psci_idle_state_match[] = {
-> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-> index e7bcfca4159f..f3a044fa4652 100644
-> --- a/drivers/firmware/psci/psci.c
-> +++ b/drivers/firmware/psci/psci.c
-> @@ -462,11 +462,22 @@ int psci_cpu_suspend_enter(u32 state)
->  	if (!psci_power_state_loses_context(state)) {
->  		struct arm_cpuidle_irq_context context;
->  
-> +		ct_cpuidle_enter();
->  		arm_cpuidle_save_irq_context(&context);
->  		ret = psci_ops.cpu_suspend(state, 0);
->  		arm_cpuidle_restore_irq_context(&context);
-> +		ct_cpuidle_exit();
->  	} else {
-> +		/*
-> +		 * ARM64 cpu_suspend() wants to do ct_cpuidle_*() itself.
-> +		 */
-> +		if (!IS_ENABLED(CONFIG_ARM64))
-> +			ct_cpuidle_enter();
-> +
->  		ret = cpu_suspend(state, psci_suspend_finisher);
-> +
-> +		if (!IS_ENABLED(CONFIG_ARM64))
-> +			ct_cpuidle_exit();
->  	}
->  
->  	return ret;
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index 630c879143c7..3183aeb7f5b4 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -307,7 +307,7 @@ extern s64 cpuidle_governor_latency_req(unsigned int cpu);
->  #define __CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter,			\
->  				idx,					\
->  				state,					\
-> -				is_retention)				\
-> +				is_retention, is_rcu)			\
->  ({									\
->  	int __ret = 0;							\
->  									\
-> @@ -319,9 +319,11 @@ extern s64 cpuidle_governor_latency_req(unsigned int cpu);
->  	if (!is_retention)						\
->  		__ret =  cpu_pm_enter();				\
->  	if (!__ret) {							\
-> -		ct_cpuidle_enter();					\
-> +		if (!is_rcu)						\
-> +			ct_cpuidle_enter();				\
->  		__ret = low_level_idle_enter(state);			\
-> -		ct_cpuidle_exit();					\
-> +		if (!is_rcu)						\
-> +			ct_cpuidle_exit();				\
->  		if (!is_retention)					\
->  			cpu_pm_exit();					\
->  	}								\
-> @@ -330,15 +332,21 @@ extern s64 cpuidle_governor_latency_req(unsigned int cpu);
->  })
->  
->  #define CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx)	\
-> -	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 0)
-> +	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 0, 0)
->  
->  #define CPU_PM_CPU_IDLE_ENTER_RETENTION(low_level_idle_enter, idx)	\
-> -	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 1)
-> +	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 1, 0)
->  
->  #define CPU_PM_CPU_IDLE_ENTER_PARAM(low_level_idle_enter, idx, state)	\
-> -	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, state, 0)
-> +	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, state, 0, 0)
-> +
-> +#define CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(low_level_idle_enter, idx, state)	\
-> +	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, state, 0, 1)
->  
->  #define CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(low_level_idle_enter, idx, state)	\
-> -	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, state, 1)
-> +	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, state, 1, 0)
-> +
-> +#define CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM_RCU(low_level_idle_enter, idx, state)	\
-> +	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, state, 1, 1)
->  
->  #endif /* _LINUX_CPUIDLE_H */
+> As for this patch, it just impls a simple mcount (direct_caller) to
+> trace kernel functions, and basically saves the necessary ABI,
+> call the tracing function, and restores the ABI, just like other arches do.
+> so It shouldn't be blamed.
+> 
+> I started an independent patch to replace schedule with kick_process
+> to make these samples more reasonable. And It has no conflict with the
+> current patch, so we can go on.
+> 
+> Link: https://lore.kernel.org/linux-kernel/20230117091101.3669996-1-suagrfillet@gmail.com/T/#u
+> 
+>> The same issue is with ftrace-direct-multi-modify.ko.
+>>
+>> Is anything missing here?
+>>
+>>>
+>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>>> index 307a9f413edd..e944af44f681 100644
+>>> --- a/arch/riscv/Kconfig
+>>> +++ b/arch/riscv/Kconfig
+>>> @@ -112,6 +112,8 @@ config RISCV
+>>>           select HAVE_POSIX_CPU_TIMERS_TASK_WORK
+>>>           select HAVE_REGS_AND_STACK_ACCESS_API
+>>>           select HAVE_FUNCTION_ARG_ACCESS_API
+>>> +       select HAVE_SAMPLE_FTRACE_DIRECT
+>>> +       select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+>>>           select HAVE_STACKPROTECTOR
+>>>           select HAVE_SYSCALL_TRACEPOINTS
+>>>           select HAVE_RSEQ
+>>> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+>>> index de5a0f67f320..be7bf472c3c7 100644
+>>> --- a/samples/ftrace/ftrace-direct-modify.c
+>>> +++ b/samples/ftrace/ftrace-direct-modify.c
+>>> @@ -23,6 +23,39 @@ extern void my_tramp2(void *);
+>>>
+>>>    static unsigned long my_ip = (unsigned long)schedule;
+>>>
+>>> +#ifdef CONFIG_RISCV
+>>> +
+>>> +asm (" .pushsection    .text, \"ax\", @progbits\n"
+>>> +"      .type           my_tramp1, @function\n"
+>>> +"      .globl          my_tramp1\n"
+>>> +"   my_tramp1:\n"
+>>> +"      addi sp,sp,-16\n"
+>>> +"      sd   t0,0(sp)\n"
+>>> +"      sd   ra,8(sp)\n"
+>>> +"      call my_direct_func1\n"
+>>> +"      ld   t0,0(sp)\n"
+>>> +"      ld   ra,8(sp)\n"
+>>> +"      addi sp,sp,16\n"
+>>> +"      jr t0\n"
+>>> +"      .size           my_tramp1, .-my_tramp1\n"
+>>> +
+>>> +"      .type           my_tramp2, @function\n"
+>>> +"      .globl          my_tramp2\n"
+>>> +"   my_tramp2:\n"
+>>> +"      addi sp,sp,-16\n"
+>>> +"      sd   t0,0(sp)\n"
+>>> +"      sd   ra,8(sp)\n"
+>>> +"      call my_direct_func2\n"
+>>> +"      ld   t0,0(sp)\n"
+>>> +"      ld   ra,8(sp)\n"
+>>> +"      addi sp,sp,16\n"
+>>> +"      jr t0\n"
+>>> +"      .size           my_tramp2, .-my_tramp2\n"
+>>> +"      .popsection\n"
+>>> +);
+>>> +
+>>> +#endif /* CONFIG_RISCV */
+>>> +
+>>>    #ifdef CONFIG_X86_64
+>>>
+>>>    #include <asm/ibt.h>
+>>> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+>>> index d52370cad0b6..10884bf418f7 100644
+>>> --- a/samples/ftrace/ftrace-direct-multi-modify.c
+>>> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
+>>> @@ -21,6 +21,43 @@ void my_direct_func2(unsigned long ip)
+>>>    extern void my_tramp1(void *);
+>>>    extern void my_tramp2(void *);
+>>>
+>>> +#ifdef CONFIG_RISCV
+>>> +
+>>> +asm (" .pushsection    .text, \"ax\", @progbits\n"
+>>> +"      .type           my_tramp1, @function\n"
+>>> +"      .globl          my_tramp1\n"
+>>> +"   my_tramp1:\n"
+>>> +"       addi sp,sp,-24\n"
+>>> +"       sd   a0,0(sp)\n"
+>>> +"       sd   t0,8(sp)\n"
+>>> +"       sd   ra,16(sp)\n"
+>>> +"       call my_direct_func1\n"
+>>> +"       ld   a0,0(sp)\n"
+>>> +"       ld   t0,8(sp)\n"
+>>> +"       ld   ra,16(sp)\n"
+>>> +"       addi sp,sp,24\n"
+>>> +"      jr t0\n"
+>>> +"      .size           my_tramp1, .-my_tramp1\n"
+>>> +
+>>> +"      .type           my_tramp2, @function\n"
+>>> +"      .globl          my_tramp2\n"
+>>> +"   my_tramp2:\n"
+>>> +"       addi sp,sp,-24\n"
+>>> +"       sd   a0,0(sp)\n"
+>>> +"       sd   t0,8(sp)\n"
+>>> +"       sd   ra,16(sp)\n"
+>>> +"       call my_direct_func2\n"
+>>> +"       ld   a0,0(sp)\n"
+>>> +"       ld   t0,8(sp)\n"
+>>> +"       ld   ra,16(sp)\n"
+>>> +"       addi sp,sp,24\n"
+>>> +"      jr t0\n"
+>>> +"      .size           my_tramp2, .-my_tramp2\n"
+>>> +"      .popsection\n"
+>>> +);
+>>> +
+>>> +#endif /* CONFIG_RISCV */
+>>> +
+>>>    #ifdef CONFIG_X86_64
+>>>
+>>>    #include <asm/ibt.h>
+>>> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+>>> index ec1088922517..a35bf43bf6d7 100644
+>>> --- a/samples/ftrace/ftrace-direct-multi.c
+>>> +++ b/samples/ftrace/ftrace-direct-multi.c
+>>> @@ -16,6 +16,28 @@ void my_direct_func(unsigned long ip)
+>>>
+>>>    extern void my_tramp(void *);
+>>>
+>>> +#ifdef CONFIG_RISCV
+>>> +
+>>> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
+>>> +"       .type           my_tramp, @function\n"
+>>> +"       .globl          my_tramp\n"
+>>> +"   my_tramp:\n"
+>>> +"       addi sp,sp,-24\n"
+>>> +"       sd   a0,0(sp)\n"
+>>> +"       sd   t0,8(sp)\n"
+>>> +"       sd   ra,16(sp)\n"
+>>> +"       call my_direct_func\n"
+>>> +"       ld   a0,0(sp)\n"
+>>> +"       ld   t0,8(sp)\n"
+>>> +"       ld   ra,16(sp)\n"
+>>> +"       addi sp,sp,24\n"
+>>> +"       jr t0\n"
+>>> +"       .size           my_tramp, .-my_tramp\n"
+>>> +"       .popsection\n"
+>>> +);
+>>> +
+>>> +#endif /* CONFIG_RISCV */
+>>> +
+>>>    #ifdef CONFIG_X86_64
+>>>
+>>>    #include <asm/ibt.h>
+>>> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+>>> index e13fb59a2b47..3b62e33c2e6d 100644
+>>> --- a/samples/ftrace/ftrace-direct-too.c
+>>> +++ b/samples/ftrace/ftrace-direct-too.c
+>>> @@ -18,6 +18,32 @@ void my_direct_func(struct vm_area_struct *vma,
+>>>
+>>>    extern void my_tramp(void *);
+>>>
+>>> +#ifdef CONFIG_RISCV
+>>> +
+>>> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
+>>> +"       .type           my_tramp, @function\n"
+>>> +"       .globl          my_tramp\n"
+>>> +"   my_tramp:\n"
+>>> +"       addi sp,sp,-40\n"
+>>> +"       sd   a0,0(sp)\n"
+>>> +"       sd   a1,8(sp)\n"
+>>> +"       sd   a2,16(sp)\n"
+>>> +"       sd   t0,24(sp)\n"
+>>> +"       sd   ra,32(sp)\n"
+>>> +"       call my_direct_func\n"
+>>> +"       ld   a0,0(sp)\n"
+>>> +"       ld   a1,8(sp)\n"
+>>> +"       ld   a2,16(sp)\n"
+>>> +"       ld   t0,24(sp)\n"
+>>> +"       ld   ra,32(sp)\n"
+>>> +"       addi sp,sp,40\n"
+>>> +"       jr t0\n"
+>>> +"       .size           my_tramp, .-my_tramp\n"
+>>> +"       .popsection\n"
+>>> +);
+>>> +
+>>> +#endif /* CONFIG_RISCV */
+>>> +
+>>>    #ifdef CONFIG_X86_64
+>>>
+>>>    #include <asm/ibt.h>
+>>> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+>>> index 1f769d0db20f..2cfe5a7d2d70 100644
+>>> --- a/samples/ftrace/ftrace-direct.c
+>>> +++ b/samples/ftrace/ftrace-direct.c
+>>> @@ -15,6 +15,28 @@ void my_direct_func(struct task_struct *p)
+>>>
+>>>    extern void my_tramp(void *);
+>>>
+>>> +#ifdef CONFIG_RISCV
+>>> +
+>>> +asm ("       .pushsection    .text, \"ax\", @progbits\n"
+>>> +"       .type           my_tramp, @function\n"
+>>> +"       .globl          my_tramp\n"
+>>> +"   my_tramp:\n"
+>>> +"       addi sp,sp,-24\n"
+>>> +"       sd   a0,0(sp)\n"
+>>> +"       sd   t0,8(sp)\n"
+>>> +"       sd   ra,16(sp)\n"
+>>> +"       call my_direct_func\n"
+>>> +"       ld   a0,0(sp)\n"
+>>> +"       ld   t0,8(sp)\n"
+>>> +"       ld   ra,16(sp)\n"
+>>> +"       addi sp,sp,24\n"
+>>> +"       jr t0\n"
+>>> +"       .size           my_tramp, .-my_tramp\n"
+>>> +"       .popsection\n"
+>>> +);
+>>> +
+>>> +#endif /* CONFIG_RISCV */
+>>> +
+>>>    #ifdef CONFIG_X86_64
+>>>
+>>>    #include <asm/ibt.h>
+>>> --
+>>> 2.36.1
+> 
+> --
+> Thanks,
+> Song
+> 
+
+Regards,
+Evgenii
+
