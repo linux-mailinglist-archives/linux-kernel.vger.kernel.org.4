@@ -2,387 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D6066E050
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CE266E05E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbjAQOVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S232191AbjAQOXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbjAQOUk (ORCPT
+        with ESMTP id S231749AbjAQOWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:20:40 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851003C284;
-        Tue, 17 Jan 2023 06:20:39 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id d188so14836541oia.3;
-        Tue, 17 Jan 2023 06:20:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MH3H3V+eBq5T/xfJKkVDESQ+piPgSdjZmzNrx2AMZm8=;
-        b=AlzWW2iNvLsJHXgHAH1FnRtV+uMxKFvPu4kQ8Z23+6VcmiYOWrLts1aXUdoN8dZCT2
-         /GppHN/M3pY6BWnEAlkL/uZg/JGSmvBxvf7SzlOJBRVzxehReoBayHVUBye34ezBgPDl
-         HYd0vmDovahmbgAcxYx81c8sqofVU/SpKO3q+qBaSCERBWMbrUPbSNOdUyuosF/0ewCA
-         TOYFd3YHDKRt0CQ1uqZEl9SWyLJ6ut86GJDyYg5okTJtOrE+mRwYFtyIfDS5XjAa+twX
-         9J0HxKXPTxrstOcd2SjWTh6In+II6HJ76pCG+c5H9eOhDMlcSekW+t831oEepSCBdjZF
-         SCvg==
-X-Gm-Message-State: AFqh2kp0OUidjQM9FfPWVdA/gGRrBNb+v3TSVotZ2Ffa2ItPY8uSOdbn
-        oz/AAi5Ga6ZyPHQ0AZEWyz99X6gjfA==
-X-Google-Smtp-Source: AMrXdXu+6+mQmD5rSN8+f5f0xrTmZPjX86EHAvtAq4lpWrtw9TRfKcOHMi7OrRnzy4HW7S2MI5nnzg==
-X-Received: by 2002:a05:6808:641:b0:360:bc5d:2ed2 with SMTP id z1-20020a056808064100b00360bc5d2ed2mr1643776oih.53.1673965238642;
-        Tue, 17 Jan 2023 06:20:38 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t17-20020a0568080b3100b0035bd1909a66sm7271237oij.57.2023.01.17.06.20.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 06:20:38 -0800 (PST)
-Received: (nullmailer pid 3008024 invoked by uid 1000);
-        Tue, 17 Jan 2023 14:20:37 -0000
-Date:   Tue, 17 Jan 2023 08:20:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH 3/4] Drivers: hv: vmbus: Device Tree support
-Message-ID: <20230117142037.GA2995150-robh@kernel.org>
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
- <1673887688-19151-4-git-send-email-ssengar@linux.microsoft.com>
-MIME-Version: 1.0
+        Tue, 17 Jan 2023 09:22:31 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57573FF03;
+        Tue, 17 Jan 2023 06:21:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ePirdxuVc9ah3EJ+d04a+va8MLpMoJNmco4fluTz4VF/MslH6dmD4kzSlIjFxT8QCJ49VH1pmpWWUyJDvbZfkRAwfUOtjE5/T3ls/gbFQRzuGS9aVYyDDnkeL0qtn+grhMgDVxNGb88n+JgWU1VQ4Jr8D+TXuTd36wnujGV5ZPViiiUbvaofivl/YQewjekvmP2dLXbGi+WBhLeKCqa/4DNtICyQZRQLnO4QylkXZs3Sg/yid6iX7iQUtal5bxiiyOzyp5wDmlWMaK2BPQIuMzfeUFDdfL7KPYAwWneE3YxQy5Dx54YHLaR1InjIs6+dXrr/9eb5ECKfS79jHqlq2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GzcxGyxBcI6XwuuXf+1G5uFCGWKr0Dmzf11HvWa/5/w=;
+ b=KiEQonOtG5N3su9driETicCTPt/3zn5uyymIqtSTrTM5AUqljUOV/arGVFgHFwdlFXBjgqTQVsMlszVd9GHbscRsDB9jWPHFWCLGJ0PLwfSJrJbDBRpczPZhD0TOu4wjJ43XR3QxlxfkDUBdA5vZcyybApz3a8GLUPIk4NQsBvwymnBHQ+h8JO4m1TdtucQCGcAkK4E87on1AjJax59IYYTJH6GZp6Dy0Ia7KZsQMg/WHcLJNlhPsHVQfR7s8ahabqceqByI0o0GTSYbZcx+T9IWf5uQgjp639XqvQfjTkikSRmfOkE47AsI8GEvekoksDvrQuGE1UkiA9Hiaz235w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GzcxGyxBcI6XwuuXf+1G5uFCGWKr0Dmzf11HvWa/5/w=;
+ b=Ot/jAa486fwo2cswCAnTYcegqnn3BlsBvdm7INiyez/RvCT7U2Akyvfq06F/BbaKSmzQjtKT0S9n4JKh95mvT5rpppwlYPoE0JZiJ+4ogX8V56KATOpMQzxUnieje/8q8NiGYwmqWzZ4NJ4vBLJkrPv2irziqQFG/JWBrUbrkU74vHusQv73tX5GFUi27v5HJX0kChgzZY+1S1jTBfa9bbWENY3RHZe/Oq5eCjLWR/8jPuwJSHiZfWtiA5VE3DuLR+QWCbPRDOMxmmjkV7MJP9oQP+IcvLxWeVxdUGkywcLigXABPwEABo5LItdS2xzRqz23CSG+msCMf0YMycJasw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
+ 2023 14:21:19 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.6002.013; Tue, 17 Jan 2023
+ 14:21:19 +0000
+Date:   Tue, 17 Jan 2023 10:21:18 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Israel Rukshin <israelr@nvidia.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Keith Busch <kbusch@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: Re: [PATCH rdma-next 03/13] RDMA: Split kernel-only create QP flags
+ from uverbs create QP flags
+Message-ID: <Y8au3ni8NVBPI5hu@nvidia.com>
+References: <cover.1673873422.git.leon@kernel.org>
+ <6e46859a58645d9f16a63ff76592487aabc9971d.1673873422.git.leon@kernel.org>
+ <Y8WL2gQqqeZdMvr6@nvidia.com>
+ <Y8aOe68Q49lvsjv8@unreal>
+ <Y8anaBBZDOGF471q@nvidia.com>
+ <Y8atPjQ1x75tBdib@unreal>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1673887688-19151-4-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y8atPjQ1x75tBdib@unreal>
+X-ClientProxiedBy: BLAPR05CA0024.namprd05.prod.outlook.com
+ (2603:10b6:208:36e::20) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5174:EE_
+X-MS-Office365-Filtering-Correlation-Id: e46fd2e1-021f-499b-dc62-08daf8961a32
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s6nq8BNayMMZWn3OC3qTDHxxJnwiWbBy11YrT7kmHnWVA6kZMMLMBn6hFvoTcTt6VtGBIhtyjFlksGPVVKAZd11g7iKDe9A03C72MMQ0R1P71FJiSmvOqAVKMkJ4SMJfm1MljM8smPHYKOKsa/LJE3TxvINzRJgsqjLiaU7mR+uIYRdsQfzqDxPQlW/zB+yGu6Y74uuiouW5FF8N7QOTeRprvQZA8oCmo3QqP7idvjvte3ult9RdWlbriwyNiowC6mDJ2F8GHhyVPskbeeixpKPpvLtZ0kgXVUKXtn96PncZbRJ51GyaKwAtf2zBql3m60Db2VvLeodL2VDT31QZ/5H2p4CcPff6Du51mx56MN865Lz4ZK1ypws6FqjeR+/9n14z5kErHxQFOj/zA4oBuEJT4y+QiJmZGphhhV5zXMCFpypSvtqct2jqaqJ5EFmMSQoEdyBlJ9WdbrOjUlsQTf1VuTnwuQABJBku+0f+mv8umd4TcsbSBOsSYhrzWsrtlO6Ao57gqSlXt+5SF+POw1hae1WKHZ9YQSDSjR12giRa9cVzTM0CT/hjvN4r4lCkhdIozFNJeEYu9Nv6i0gJxLc27qal0hlPk1TxiUYb9QG2tMnfR4kXuYypR2iMiDKSygd0LD/+WAUF+tg6SvFwMA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(366004)(396003)(451199015)(2616005)(66476007)(41300700001)(186003)(66946007)(6916009)(8676002)(6512007)(66556008)(4326008)(26005)(36756003)(86362001)(5660300002)(8936002)(107886003)(54906003)(478600001)(316002)(6506007)(7416002)(2906002)(38100700002)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ktFCzKxzvxP2CrSGrmcl+tknN27b4DjZwVFRqzZJZH1/PyjfqGzqc17wSipd?=
+ =?us-ascii?Q?rbQSxZmbrYeL480aKT+ffHuKSB3z0h2QbZhysFS1xh3Ieh5SUlKTKkLdbAlb?=
+ =?us-ascii?Q?K3YdCWOBCoEcuXRLL9KLGb2SxH37WraZKobygxzqGML4uN2FFkPu4PolyMp9?=
+ =?us-ascii?Q?KR/GwV6fxk6qwT/eTC7+qq4DWoHmxwVf5tyftgkz7OqfFD2uZIWnLmRyO3HH?=
+ =?us-ascii?Q?Hpr2M3QyJESk/342RODMs89YVcOhelQN8YjQYQuCQsNX/lEf5SXOyQgrVqd1?=
+ =?us-ascii?Q?IlHR4bSrJUooPzGx4Ybjd0fpPZW6jhFU+FJBW/NHleRq4l6tXzscT9Nd5ygk?=
+ =?us-ascii?Q?HnwmRPpZbT3KLpP8EqleOIMLU4JGnCFaDY7HHjmQQTNxX/h1IyjZkiA9wntV?=
+ =?us-ascii?Q?ExSISQ5QocSq4Jj0s4t/ClTJkycsEkXDa/i0GBvQkLtxjKs+aF9eYuIcXipw?=
+ =?us-ascii?Q?HX45Hxa8w06O4ix1zaG7bedptTjhrRo74b1bT6PMtOaTJwcyJie8ovrVXUKu?=
+ =?us-ascii?Q?gXTzZAx29pCmvlHUVQkg33h/m+LRcvgy3wSk2maaJy/bITXMlOExZXgGNOPI?=
+ =?us-ascii?Q?g4IGAC6dp5hr9VILUpMudGuUvDEOp5e5pZSvUjZBgR0w03p6C9rFau5IyECM?=
+ =?us-ascii?Q?eKQw9UcdaJwGKhi4HL++PNUeehJ4Cy3dPALm4Lea6FX9NY3XDrkZ6Rf8188C?=
+ =?us-ascii?Q?TcpJSUToARDU5faLP9si0W3O1cia1bhaDLAjpaXcp6xk/qNJveAjTZ7avM5K?=
+ =?us-ascii?Q?7ZpcB5c3npmAcs/ABlnlANzal3IS/Cqb5eJmnnd1mQSmMIg+SxgrePWstFxA?=
+ =?us-ascii?Q?sSROGvOW9Hn6niIRotY0P8EsM2VSka9JISJfvMl/QbvYXq2XwIbZeZWOydGJ?=
+ =?us-ascii?Q?1xmiVWcU0emfueupi2QNqe/ZRqB/g1omtmkIE3OdQu0hy+rEZCQIpcK1qX2N?=
+ =?us-ascii?Q?FMBJNZ0d1xNEbg0WZ4ANF40mi2PZhvpgfXFq4WfnEg9AyV6aYSiGMKhJS6ZE?=
+ =?us-ascii?Q?sjM3tZWrYwZF6ZzdeFKmw6qsBMNOJsMaH/4ThwZIWh/Oln+3NwOC0pm53Png?=
+ =?us-ascii?Q?DAuy9x4VwWyRKhwv3ohXstx2iiR//WSmv5+B5m9mtoSBCn8yzu0UAFBQJs+e?=
+ =?us-ascii?Q?VN0dmn5OUY69xlTte9V9ohGPkB77XwQ+dvH7ah+s8YZKrBJq5NLDzgmgTwqe?=
+ =?us-ascii?Q?6gqX/AYIqXvI5Pbjx586/MG+Iv9XJktVPdbZ14zcWiX05J41y5K9aOCwhOMK?=
+ =?us-ascii?Q?vP40N9NAPfFSiYcMCo2e36mKQLNyWXWLTC9reR0zWmJs8LaJehE8yhIJ9MBU?=
+ =?us-ascii?Q?Dh+x8RLM6WV2CM8RTc6fPTePRDKbYvqhZSP3WrvZuoOCjsWKdXt6Y7tnpYDW?=
+ =?us-ascii?Q?KXexJBlJtDz24Nji2USX2kbPKJ3njxzjAkpUFDQ6ZtgA5neETiyWwd4+FRXx?=
+ =?us-ascii?Q?ef9CDDEX47PKUqoExl88XzCSTyNiUe20tvoxB5JVXO9Rq0XTf0soF78oA91l?=
+ =?us-ascii?Q?w+HZV0AyL37y5NOrCA8wmb1kwDMAc9lR84Zt2HwRbSfpi0pBiHuvgW8PytmO?=
+ =?us-ascii?Q?VZVT37FhPIMG1XtYSAYXDrMi+LFWJZ+da66fVZI5?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e46fd2e1-021f-499b-dc62-08daf8961a32
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 14:21:19.6557
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vh9Woi2sy1rcOcg2Pi5ukvYefztPS5pzWl05OedFEYdMflPfo0KtnrEkaxzcwba2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5174
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 08:48:07AM -0800, Saurabh Sengar wrote:
-> Update the driver to use vmbus_root_dev device instead of acpi_device,
-> which can be assigned to either ACPI or OF device, making VMBus agnostic
-> to whether the device is using ACPI or device tree.
+On Tue, Jan 17, 2023 at 04:14:22PM +0200, Leon Romanovsky wrote:
+> On Tue, Jan 17, 2023 at 09:49:28AM -0400, Jason Gunthorpe wrote:
+> > On Tue, Jan 17, 2023 at 02:03:07PM +0200, Leon Romanovsky wrote:
+> > > On Mon, Jan 16, 2023 at 01:39:38PM -0400, Jason Gunthorpe wrote:
+> > > > On Mon, Jan 16, 2023 at 03:05:50PM +0200, Leon Romanovsky wrote:
+> > > > 
+> > > > > diff --git a/drivers/infiniband/hw/mlx4/mlx4_ib.h b/drivers/infiniband/hw/mlx4/mlx4_ib.h
+> > > > > index 17fee1e73a45..c553bf0eb257 100644
+> > > > > --- a/drivers/infiniband/hw/mlx4/mlx4_ib.h
+> > > > > +++ b/drivers/infiniband/hw/mlx4/mlx4_ib.h
+> > > > > @@ -184,7 +184,7 @@ enum mlx4_ib_qp_flags {
+> > > > >  	/* Mellanox specific flags start from IB_QP_CREATE_RESERVED_START */
+> > > > >  	MLX4_IB_ROCE_V2_GSI_QP = MLX4_IB_QP_CREATE_ROCE_V2_GSI,
+> > > > >  	MLX4_IB_SRIOV_TUNNEL_QP = 1 << 30,
+> > > > > -	MLX4_IB_SRIOV_SQP = 1 << 31,
+> > > > > +	MLX4_IB_SRIOV_SQP = 1ULL << 31,
+> > > > >  };
+> > > > 
+> > > > These should be moved to a uapi if we are saying they are userspace
+> > > > available
+> > > > 
+> > > > But I'm not sure they are?
+> > > 
+> > > I don't think so.
+> > 
+> > Then they should be > 32 bits right?
 > 
-> When built for OF, the driver registers as a platform driver and includes
-> a 'of' probe function that is alternate to the existing ACPI registration
-> and probe when built for ACPI. The VMBus driver maintains its registration
-> as the bus that other VMBus devices plug into, regardless of whether it is
-> initially probed and initialized via ACPI or OF.
+> Right now, they are in reserved range:
+>         /* reserve bits 26-31 for low level drivers' internal use */
+>         IB_QP_CREATE_RESERVED_START             = 1 << 26,
+>         IB_QP_CREATE_RESERVED_END               = 1ULL << 31,
 > 
-> This change also introduce vmbus_remove_mmio function, which helps removing
-> the duplicate code for mmio cleanup between APIC and OF driver.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  drivers/hv/vmbus_drv.c | 190 ++++++++++++++++++++++++++++++++++++++++---------
->  1 file changed, 155 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 1901556..894b360 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -11,11 +11,13 @@
->  
->  #include <linux/init.h>
->  #include <linux/module.h>
-> -#include <linux/device.h>
-> +#include <linux/platform_device.h>
->  #include <linux/interrupt.h>
->  #include <linux/sysctl.h>
->  #include <linux/slab.h>
->  #include <linux/acpi.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
->  #include <linux/completion.h>
->  #include <linux/hyperv.h>
->  #include <linux/kernel_stat.h>
-> @@ -44,14 +46,14 @@ struct vmbus_dynid {
->  	struct hv_vmbus_device_id id;
->  };
->  
-> -static struct acpi_device  *hv_acpi_dev;
-> -
->  static int hyperv_cpuhp_online;
->  
->  static void *hv_panic_page;
->  
->  static long __percpu *vmbus_evt;
->  
-> +static struct device *vmbus_root_dev;
-> +
->  /* Values parsed from ACPI DSDT */
->  int vmbus_irq;
->  int vmbus_interrupt;
-> @@ -136,17 +138,13 @@ static int hv_die_panic_notify_crash(struct notifier_block *self,
->  	return NOTIFY_DONE;
->  }
->  
-> -static const char *fb_mmio_name = "fb_range";
->  static struct resource *fb_mmio;
->  static struct resource *hyperv_mmio;
->  static DEFINE_MUTEX(hyperv_mmio_lock);
->  
->  static int vmbus_exists(void)
->  {
-> -	if (hv_acpi_dev == NULL)
-> -		return -ENODEV;
-> -
-> -	return 0;
-> +	return vmbus_root_dev ? 0 : -ENODEV;
->  }
->  
->  static u8 channel_monitor_group(const struct vmbus_channel *channel)
-> @@ -932,7 +930,7 @@ static int vmbus_dma_configure(struct device *child_device)
->  	 * On x86/x64 coherence is assumed and these calls have no effect.
->  	 */
->  	hv_setup_dma_ops(child_device,
-> -		device_get_dma_attr(&hv_acpi_dev->dev) == DEV_DMA_COHERENT);
-> +		device_get_dma_attr(vmbus_root_dev) == DEV_DMA_COHERENT);
->  	return 0;
->  }
->  
-> @@ -2090,7 +2088,7 @@ int vmbus_device_register(struct hv_device *child_device_obj)
->  		     &child_device_obj->channel->offermsg.offer.if_instance);
->  
->  	child_device_obj->device.bus = &hv_bus;
-> -	child_device_obj->device.parent = &hv_acpi_dev->dev;
-> +	child_device_obj->device.parent = vmbus_root_dev;
->  	child_device_obj->device.release = vmbus_device_release;
->  
->  	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
-> @@ -2151,7 +2149,26 @@ void vmbus_device_unregister(struct hv_device *device_obj)
->  	device_unregister(&device_obj->device);
->  }
->  
-> +static void vmbus_remove_mmio(void)
-> +{
-> +	struct resource *cur_res;
-> +	struct resource *next_res;
-> +
-> +	if (hyperv_mmio) {
-> +		if (fb_mmio) {
-> +			__release_region(hyperv_mmio, fb_mmio->start,
-> +					 resource_size(fb_mmio));
-> +			fb_mmio = NULL;
-> +		}
-> +
-> +		for (cur_res = hyperv_mmio; cur_res; cur_res = next_res) {
-> +			next_res = cur_res->sibling;
-> +			kfree(cur_res);
-> +		}
-> +	}
-> +}
->  
-> +#ifdef CONFIG_ACPI
->  /*
->   * VMBUS is an acpi enumerated device. Get the information we
->   * need from DSDT.
-> @@ -2264,21 +2281,7 @@ static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
->  
->  static void vmbus_acpi_remove(struct acpi_device *device)
->  {
-> -	struct resource *cur_res;
-> -	struct resource *next_res;
-> -
-> -	if (hyperv_mmio) {
-> -		if (fb_mmio) {
-> -			__release_region(hyperv_mmio, fb_mmio->start,
-> -					 resource_size(fb_mmio));
-> -			fb_mmio = NULL;
-> -		}
-> -
-> -		for (cur_res = hyperv_mmio; cur_res; cur_res = next_res) {
-> -			next_res = cur_res->sibling;
-> -			kfree(cur_res);
-> -		}
-> -	}
-> +	vmbus_remove_mmio();
->  }
->  
->  static void vmbus_reserve_fb(void)
-> @@ -2319,8 +2322,9 @@ static void vmbus_reserve_fb(void)
->  	 * reserving a larger area and make it smaller until it succeeds.
->  	 */
->  	for (; !fb_mmio && (size >= 0x100000); size >>= 1)
-> -		fb_mmio = __request_region(hyperv_mmio, start, size, fb_mmio_name, 0);
-> +		fb_mmio = __request_region(hyperv_mmio, start, size, "fb_range", 0);
->  }
-> +#endif /* CONFIG_ACPI */
->  
->  /**
->   * vmbus_allocate_mmio() - Pick a memory-mapped I/O range.
-> @@ -2441,13 +2445,14 @@ void vmbus_free_mmio(resource_size_t start, resource_size_t size)
->  }
->  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
->  
-> +#ifdef CONFIG_ACPI
->  static int vmbus_acpi_add(struct acpi_device *device)
->  {
->  	acpi_status result;
->  	int ret_val = -ENODEV;
->  	struct acpi_device *ancestor;
->  
-> -	hv_acpi_dev = device;
-> +	vmbus_root_dev = &device->dev;
->  
->  	/*
->  	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
-> @@ -2492,6 +2497,72 @@ static int vmbus_acpi_add(struct acpi_device *device)
->  		vmbus_acpi_remove(device);
->  	return ret_val;
->  }
-> +#endif
-> +
-> +#ifdef CONFIG_OF
-> +static int vmbus_of_driver_probe(struct platform_device *dev)
-> +{
-> +	struct resource **cur_res = &hyperv_mmio;
-> +	struct device_node *np;
-> +	const __be32 *ranges;
-> +	u32 nr_addr, nr_size, nr_parent_addr_cells, nr_ranges;
-> +	u32 range_len, range_size;
-> +	int i;
-> +
-> +	vmbus_root_dev = &dev->dev;
-> +	np = vmbus_root_dev->of_node;
-> +
-> +	if (of_property_read_u32(np, "#address-cells", &nr_addr))
-> +		return -ENOENT;
-> +	if (of_property_read_u32(np, "#size-cells", &nr_size))
-> +		return -ENOENT;
-> +	nr_parent_addr_cells = of_n_addr_cells(np);
-> +
-> +	if (nr_parent_addr_cells != 2 || nr_addr != 2 || nr_size != 1) {
-> +		pr_err("Address format is not supported\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ranges = of_get_property(np, "ranges", &range_len);
-> +	if (!ranges)
-> +		return -ENOENT;
-> +
-> +	range_size = nr_parent_addr_cells + nr_addr + nr_size; // in cells
-> +	nr_ranges = range_len / sizeof(__be32) / range_size;
-> +
-> +	for (i = 0; i < nr_ranges; ++i, ranges += range_size) {
-> +		struct resource *res;
-> +		/*
-> +		 * The first u64 in the ranges description isn't used currently.
-> +		 * u64 _ = of_read_number(ranges, nr_parent_addr_cells);
-> +		 */
-> +		u64 start = of_read_number(ranges + nr_parent_addr_cells, nr_addr);
-> +		u32 len = of_read_number(ranges + nr_parent_addr_cells + nr_addr, nr_size);
+> If we move them to kernel part, we will need to define reserved range
+> there too. So we just "burn" extra bits just for mlx4, also I don't see
+> any reason to promote mlx4 bits to be general ones.
 
-These are all standard properties, so you shouldn't be parsing them 
-yourself. Likely you are doing it wrong. For example, where do you 
-handle address translations in parent nodes?
+Is the reserved range kernel only? It would be nice to clarify that
+detail
 
-Use or add to what is in drivers/of/address.c.
+If yes we should move it so that userspace cannot set it. Do we have a
+bug here already?
 
-
-> +		pr_debug("VMBUS DeviceTree MMIO region start %#llx, %#x\n", start, len);
-> +
-> +		res = kzalloc(sizeof(*res), GFP_ATOMIC);
-> +		if (!res)
-> +			return -ENOMEM;
-> +
-> +		res->name = "hyperv mmio";
-> +		res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
-> +		res->start = start;
-> +		res->end = start + len;
-> +
-> +		*cur_res = res;
-> +		cur_res = &res->sibling;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int vmbus_of_driver_remove(struct platform_device *dev)
-> +{
-> +	vmbus_remove_mmio();
-> +	return 0;
-> +}
-> +#endif
->  
->  #ifdef CONFIG_PM_SLEEP
->  static int vmbus_bus_suspend(struct device *dev)
-> @@ -2630,6 +2701,9 @@ static int vmbus_bus_resume(struct device *dev)
->  #define vmbus_bus_resume NULL
->  #endif /* CONFIG_PM_SLEEP */
->  
-> +#define DRV_NAME "vmbus"
-> +
-> +#ifdef CONFIG_ACPI
->  static const struct acpi_device_id vmbus_acpi_device_ids[] = {
->  	{"VMBUS", 0},
->  	{"VMBus", 0},
-> @@ -2659,7 +2733,7 @@ static int vmbus_bus_resume(struct device *dev)
->  };
->  
->  static struct acpi_driver vmbus_acpi_driver = {
-> -	.name = "vmbus",
-> +	.name = DRV_NAME,
->  	.ids = vmbus_acpi_device_ids,
->  	.ops = {
->  		.add = vmbus_acpi_add,
-> @@ -2669,6 +2743,7 @@ static int vmbus_bus_resume(struct device *dev)
->  	.drv.probe_type = PROBE_FORCE_SYNCHRONOUS,
->  };
->  
-> +#endif
->  static void hv_kexec_handler(void)
->  {
->  	hv_stimer_global_cleanup();
-> @@ -2737,7 +2812,32 @@ static void hv_synic_resume(void)
->  	.resume = hv_synic_resume,
->  };
->  
-> -static int __init hv_acpi_init(void)
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id vmbus_of_match[] = {
-> +	{
-> +		.name = "msft,vmbus",
-> +		.compatible = "msft,vmbus",
-> +		.data = NULL
-> +	},
-> +	{
-> +		/* sentinel */
-> +	},
-> +};
-> +MODULE_DEVICE_TABLE(of, vmbus_of_match);
-> +
-> +static struct platform_driver vmbus_platform_driver = {
-> +	.probe = vmbus_of_driver_probe,
-> +	.remove = vmbus_of_driver_remove,
-> +	.driver = {
-> +		.name = DRV_NAME,
-> +		.of_match_table = of_match_ptr(vmbus_of_match),
-> +		.pm = &vmbus_pm,
-> +		.bus = &hv_bus,
-> +	}
-> +};
-> +#endif
-> +
-> +static int __init vmbus_init(void)
->  {
->  	int ret;
->  
-> @@ -2747,18 +2847,27 @@ static int __init hv_acpi_init(void)
->  	if (hv_root_partition && !hv_nested)
->  		return 0;
->  
-> +#ifdef CONFIG_ACPI
-
-Use 'if (IS_ENABLED(CONFIG_ACPI))' here and anywhere else you can.
-
-Rob
+Jason
