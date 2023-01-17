@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B3F66DF29
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3D666DF2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjAQNoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S230004AbjAQNqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjAQNng (ORCPT
+        with ESMTP id S229876AbjAQNpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:43:36 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C5435263;
-        Tue, 17 Jan 2023 05:43:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=VGaAWzb+vg166BG+ToU6thlaLyp9+9c0uKkVxaL39SY=; b=cA3LM7qrfWjstNkPnlBYUDMIhx
-        A4XcQsXfVUvPdsDAQvolMZV/slYsq57uS/7bZUB09RPj2mV/+aN0XiESt93fonJiNj4Amo+F2FEl2
-        25Nj07RrGnWCcFgq0x7gR4J5EB1fJ73o360iXZNgSXyGPHzppqksR9xbAobNrtjJKl0c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pHmEx-002KGQ-95; Tue, 17 Jan 2023 14:43:03 +0100
-Date:   Tue, 17 Jan 2023 14:43:03 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pierluigi Passaro <pierluigi.p@variscite.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Pierluigi Passaro <pierluigi.passaro@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eran Matityahu <eran.m@variscite.com>,
-        Nate Drude <Nate.D@variscite.com>,
-        Francesco Ferraro <francesco.f@variscite.com>
-Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
-Message-ID: <Y8al5zE5zwu0CET5@lunn.ch>
-References: <20230115161006.16431-1-pierluigi.p@variscite.com>
- <Y8QzI2VUY6//uBa/@lunn.ch>
- <f691f339-9e50-b968-01e1-1821a2f696e7@metafoo.de>
- <Y8SSb+tJsfJ3/DvH@lunn.ch>
- <AM6PR08MB43767C522EDAAF962B3AA73AFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
+        Tue, 17 Jan 2023 08:45:54 -0500
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFAB3B645;
+        Tue, 17 Jan 2023 05:45:10 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so21013333wma.1;
+        Tue, 17 Jan 2023 05:45:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kyBnNPnDUwves3WFQbNhme3EQHSXwTRHL2ezHpfEKZc=;
+        b=khD7vYqmf4zQEMaRV2CftJ0Dnt/zQ8EOiSAWNXXm4jvPGO1qoh8eKnrV5uNWlxyqB5
+         xE3s+ReqYrbEx48eVRLQkWXoXJsN+JRBIr9YGjN6hlUR0WhJ0dqs97ASqZoY0xMPBkBL
+         7VRhthQB+QFXmBmiC0xqrGG4oJjaa97PQSCGVxk8YccoQuT1pbUHWD7vkmSttIAdWd7j
+         ArjKoMqDG337HDehIXju6QPeFKcZfkV6ts23HdCdiNIGRzKVwDRL1ihaT7Rc7BKU9S/x
+         0P8iow33LSyy24IRhRiwcDyorWqW6xnb1GZhkO2B2aSP/nkOEHuGvFYYYvPlHMOYGXBu
+         2ptA==
+X-Gm-Message-State: AFqh2kqhOi9i9lKBGb3v47W7W9/c9BKRVTPvHA0UPPmVRqAPgy0J4wJF
+        MnWHu+4fQlzE0W9+vqPZqeQ=
+X-Google-Smtp-Source: AMrXdXsZ3l7oAhGyRFZfiNngZZyFb/TNsE+JwKnbtWb4vkoOQEQco5EceFtorXYPYtY3QDteBR6NSg==
+X-Received: by 2002:a05:600c:4fc9:b0:3d9:f769:2115 with SMTP id o9-20020a05600c4fc900b003d9f7692115mr3129597wmq.26.1673963108504;
+        Tue, 17 Jan 2023 05:45:08 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id m18-20020a05600c4f5200b003c71358a42dsm55222683wmq.18.2023.01.17.05.45.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 05:45:08 -0800 (PST)
+Date:   Tue, 17 Jan 2023 13:45:06 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, mikelley@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] Drivers: hv: Make remove callback of hyperv driver
+ void returned
+Message-ID: <Y8amYlEJPzTSw9YY@liuwe-devbox-debian-v2>
+References: <TYCP286MB2323A93C55526E4DF239D3ACCAFA9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM6PR08MB43767C522EDAAF962B3AA73AFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <TYCP286MB2323A93C55526E4DF239D3ACCAFA9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 08:39:31AM +0000, Pierluigi Passaro wrote:
-> On Mon, Jan 16, 2023 at 12:55 AM Andrew Lunn <andrew@lunn.ch> wrote:
-> > > Specifying the ID as part of the compatible string works for clause 22 PHYs,
-> > > but for clause 45 PHYs it does not work. The code always wants to read the
-> > > ID from the PHY itself. But I do not understand things well enough to tell
-> > > whether that's a fundamental restriction of C45 or just our implementation
-> > > and the implementation can be changed to fix it.
-> > >
-> > > Do you have some thoughts on this?
-> >
-> > Do you have more details about what goes wrong? Which PHY driver is
-> > it? What compatibles do you put into DT for the PHY?
-> >
-> We use both AR8033 and ADIN1300: these are 10/100/1000 PHYs.
-> They are both probed after the MDIO bus, but skipped if the reset was
-> asserted while probing the MDIO bus.
-> However, for iMX6UL and iMX7 we use C22, not C45.
+On Thu, Jan 05, 2023 at 10:51:23PM +0800, Dawei Li wrote:
+> Since commit fc7a6209d571 ("bus: Make remove callback return
+> void") forces bus_type::remove be void-returned, it doesn't
+> make much sense for any bus based driver implementing remove
+> callbalk to return non-void to its caller.
+> 
+> As such, change the remove function for Hyper-V VMBus based
+> drivers to return void.
+> 
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
 
-I never said it did. Please read the actual emails, then you would of
-noticed we have go off on tangent and are trying to fix another issue.
+Applied to hyperv-next. Thanks.
 
-	Andrew
+Wei.
