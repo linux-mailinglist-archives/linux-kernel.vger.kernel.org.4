@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0291E66E3C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA2766E3C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbjAQQi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S232570AbjAQQjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjAQQik (ORCPT
+        with ESMTP id S232533AbjAQQis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:38:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E161303CD;
-        Tue, 17 Jan 2023 08:38:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27951614DB;
-        Tue, 17 Jan 2023 16:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263ABC433D2;
-        Tue, 17 Jan 2023 16:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673973518;
-        bh=K6sp7vxwz2kbyJDM0TQqlfRJA30AWKr6mOQv83dI0PA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Wfs8Li5beijwB4/pPLy54lafHB/pKGjIBEDJqNJykOC0XG7rusmyBtaWLETWAGofy
-         iDG2fPKsnqZYSgdCdoxcYOP84l4oIvbEHcv4vI23t+amVbLbhWA2ewK0tvfAUDpbIZ
-         qaLOKpM2kvCzH0nxGXt6ATu/J7NMSKj1ZZM5mpsY3peQASWh+cS6iDI9RlgTAeLIxo
-         XCy2iHVSmDQq4nQGHuCpE5AAEaakJ/GUKKjjQnweunX/D5UArtHUKFioUHDlXA3Pr9
-         s4wFY/NeVhKCJQcHotuuLdzsy1+JD9ENKh/5aYLjSGgAi10F3bzEDEYLP5jQgf2hqm
-         PcC6ed4Ui6mrw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: stex: fix MU_MAX_DELAY typecheck
-Date:   Tue, 17 Jan 2023 17:38:27 +0100
-Message-Id: <20230117163834.1053763-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 11:38:48 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE52A40BDF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:38:45 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ss4so69402015ejb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:38:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FGt3taqkfQNtUXdS8P0ISc5oukWa5ussrZyaKbMEgG4=;
+        b=7AAGdJ2lP3NAfke5Nele3LjbLLc+b2UGABWPVmB5FTyzTVuqDS/a0j8GgPiX70+FbP
+         MIubFwAvZh5H5d/35nBl/0hged5mC9QCuBf1C88UlMwg5SGstc+8/F+7Z5hbFtXpnf50
+         CpB1r2yE5aFaFgtcfzMWim4iRum8mcw86ufkBjp9HCLyX7uwgfs/RPLQbqTXuRMMZqQq
+         JAQkcCtPCxkMQKOwfuIInz99yMLgVjpnAbOQU6Eo9yIYxQQtKpWZVQ9SEzJ/Jn9h8S5y
+         TO8nX8Ux6fHWjGckTasVT0jlmG9h+te+T+XQdvkM7FHFkbsng9uwj5yJBWp7MVRVcfdV
+         zPng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FGt3taqkfQNtUXdS8P0ISc5oukWa5ussrZyaKbMEgG4=;
+        b=oZGk2qckDrYFbHPUU9h+l6xVeeDD1uPPb3Dld3NgTDCuWFj0oQc8KPqT0FdiIw2HgV
+         /u9Ls03JbZuFizunWVMOUQO4hMOoQfqSBpK2wNqsW8jSRdL7phHct0W6jFKjgO14EYZH
+         78hP0ywuqyp90jbB5vXZGvF1O73VITgvOhrLtkIIr9wfPPY8Y8NJpewzK8jvZnr5vGaL
+         jF20egcruUvMuXniELM6FBjMjTr2utX9CQu3WbMBUuYzXUqrS37CvtAKGcGUt4QbST0v
+         qLs4RnP1z67y1y97fnoC70UiW/N1W6CF0nSw2HEmZk8WpTVmdJpbdhxlzhiZ3sjIHYZW
+         Hfsg==
+X-Gm-Message-State: AFqh2kqV90g8d/dAVzkNM6Ot5gQUzGtZAjpk/eC86UlHdNYRhGjq/kII
+        z9Wl6OPIdD7yb5Jb/KqpG3bszA==
+X-Google-Smtp-Source: AMrXdXtnPJbLSz3z6ouhNvSwIea01W/5k3WwvIvgrDwOeoZykQFCWzCe69J1N5rk1OrhUbDofqKkXg==
+X-Received: by 2002:a17:906:edc9:b0:870:2f70:c63e with SMTP id sb9-20020a170906edc900b008702f70c63emr3590282ejb.18.1673973524437;
+        Tue, 17 Jan 2023 08:38:44 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id f17-20020a170906495100b0086dd8f20a6asm4177738ejt.77.2023.01.17.08.38.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 08:38:44 -0800 (PST)
+Date:   Tue, 17 Jan 2023 16:38:41 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <20230117163841.d5jv6ysqf5kmvvmh@airbuntu>
+References: <20230113134056.257691-1-vincent.guittot@linaro.org>
+ <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 01/16/23 09:07, Dietmar Eggemann wrote:
 
-time_after() expects arguments of the same type, but gcc-13 changed the
-way that typeof(MU_MAX_DELAY) is determined, causing a build warning as
-'before + MU_MAX_DELAY * HZ' gets promoted to a 64-bit integer:
+[...]
 
-In file included from include/linux/bitops.h:7,
-                 from include/linux/kernel.h:22,
-                 from drivers/scsi/stex.c:13:
-drivers/scsi/stex.c: In function 'stex_common_handshake':
-include/linux/typecheck.h:12:25: error: comparison of distinct pointer types lacks a cast [-Werror]
-   12 |         (void)(&__dummy == &__dummy2); \
-      |                         ^~
-include/linux/jiffies.h:106:10: note: in expansion of macro 'typecheck'
-  106 |          typecheck(unsigned long, b) && \
-      |          ^~~~~~~~~
-drivers/scsi/stex.c:1035:29: note: in expansion of macro 'time_after'
- 1035 |                         if (time_after(jiffies, before + MU_MAX_DELAY * HZ)) {
+> Not sure if people get what `performance requirements` mean here? I know
+> we want to use `performance` rather `bandwidth hint` to describe what
+> uclamp is. So shouldn't we use `utilization but also uclamp`?
 
-Change the enum definition so all values fit into an unsigned
-32-bit number.
+We do have the uclamp doc now which explains this, no? I'm not keen on
+utilization because it's an overloaded term. In the context of uclamp
+- utilization _signal_ in the scheduler is used to indicate performance
+requirements of a workload, no?
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/scsi/stex.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Using 'uclamp hint' if you found it really confusing, is fine by me. But I'd
+rather steer away from 'bandwidth' or 'utilization' when describing uclamp and
+its intention.
 
-diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
-index 8def242675ef..23462d3c9850 100644
---- a/drivers/scsi/stex.c
-+++ b/drivers/scsi/stex.c
-@@ -110,7 +110,7 @@ enum {
- 	TASK_ATTRIBUTE_ORDERED			= 0x2,
- 	TASK_ATTRIBUTE_ACA			= 0x4,
- 
--	SS_STS_NORMAL				= 0x80000000,
-+	SS_STS_NORMAL				= 0x80000000u,
- 	SS_STS_DONE				= 0x40000000,
- 	SS_STS_HANDSHAKE			= 0x20000000,
- 
-@@ -120,7 +120,7 @@ enum {
- 
- 	SS_I2H_REQUEST_RESET			= 0x2000,
- 
--	SS_MU_OPERATIONAL			= 0x80000000,
-+	SS_MU_OPERATIONAL			= 0x80000000u,
- 
- 	STEX_CDB_LENGTH				= 16,
- 	STATUS_VAR_LEN				= 128,
-@@ -173,7 +173,7 @@ enum {
- 	ST_ADDITIONAL_MEM_MIN			= 0x80000,
- 	PMIC_SHUTDOWN				= 0x0D,
- 	PMIC_REUMSE					= 0x10,
--	ST_IGNORED					= -1,
-+	ST_IGNORED					= -1u,
- 	ST_NOTHANDLED				= 7,
- 	ST_S3						= 3,
- 	ST_S4						= 4,
--- 
-2.39.0
+I like using performance requirements because it enforces what this hint
+actually means.
 
+
+Cheers
+
+--
+Qais Yousef
