@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F64670E7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916DB670E85
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 01:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjARARH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 19:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S229730AbjARAWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 19:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjARAPU (ORCPT
+        with ESMTP id S229490AbjARAWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:15:20 -0500
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702EF460AF
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:32:27 -0800 (PST)
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 63C1D802B140
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:32:11 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id C7E541003FCFE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 23:31:51 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id HvQlp9fkfDYThHvQlpf0SG; Tue, 17 Jan 2023 23:31:51 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=MNSlJOVl c=1 sm=1 tr=0 ts=63c72fe7
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RvmDmJFTN0MA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=lb01DMPh1KD_TAXAQEMA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0c9KU8BALnIxYZl0E+kamgkJ1+Wdp8kUNPckk9gJ9j8=; b=DqomZFc+je6H+epBDHK61LpUWb
-        LPVLicc31fVSjsrwfFCYdFnbKpPx4JVTLJzi74MDL5hr1U9WwRNrijINZTGF/2UtkDw3bbUZ8WCWD
-        2l2Yt7Xf9ZE10fqKC4ucMJpAbkqK6IupTidli+S0/B5CPcOi1WkXSYMRtbKZufuQVxxxE3psHoLQj
-        NazQCHL3mTB8S/DZT060gfPuDuf4bA4mw6FPeCVDN6b6TXmr8eZVl3KiowDj54lWZn48i+NzZGKLG
-        dZIKseLHmhrZxnb3ycDDANPRw4EH2rGbzWtNiCv1KBw7DqyKHszDXMBB7lCoPc1sU3dVP1IPgKkhr
-        dykPUn5w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51800 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pHvQk-001DVB-Gy;
-        Tue, 17 Jan 2023 16:31:50 -0700
-Subject: Re: [PATCH 6.1 000/176] 6.1.7-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230117124546.116438951@linuxfoundation.org>
-In-Reply-To: <20230117124546.116438951@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <d7538100-c0c7-9903-d016-f615fb18e67e@w6rz.net>
-Date:   Tue, 17 Jan 2023 15:31:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pHvQk-001DVB-Gy
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:51800
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Tue, 17 Jan 2023 19:22:03 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A698755288
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:36:50 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id dc11-20020a056a0035cb00b00589a6a97519so11501357pfb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:36:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HaUGak2G7cecQv8T9ZdGOoPgbZOZkSx+mC6eBv9kBwQ=;
+        b=lfQu6S8OD/g3UTfppdNZjL3V+WH3TrKQ3gxxL1Q4rD8vS+gFz+IU4eah9iTT39t2XG
+         1LUE4PY0gteSGFE5jDLQw4hvN6ykTZMti7nj0ZbzzxfGGRrXQpafvvi3aUwDOzfWbmR5
+         HKSuPwIwoffbU9hbC79l8nD1r0LcZmvXbLlb2SP0m8NuIsmhJkVio6VQwnbFqLXkkGG8
+         pzCB5yz+fTfX0bEtGkTKHuVVxnI18g3A720m6xyJnYItcvOMyHWutJjABIwsqHM9B//r
+         n67Vij47S+zooSes0Ns+Q+dljKrIflSygAuc4z6HFtMPrIRkbIXnTV9c8Qew18qXBIaG
+         dABw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HaUGak2G7cecQv8T9ZdGOoPgbZOZkSx+mC6eBv9kBwQ=;
+        b=vYjMmBK4AR94A1CPeTLuosfR4sK6VmyIKTGo8SHZZ8Lytip/Mx1S8H9jcrs89fcfLe
+         YqQaQk0U1ysk2vRT8sfd1OMU0EdrAWTfCNclfBsmdGkKKgGKYMyP4voCS+fJSR9C/p8c
+         ATMqwPGUdQMU0tzGcOGtw+cgFal6Oh5wHCQMWQz7oeLrZOs6cP5TULRqB035ddsP0iCQ
+         zd6bzCnnbQtmpIGWDo5H/2a2EPfJIA8SOZt1p1RIUI0qeE+bcgXCLXnOqJ2XvMy/rDCt
+         TgCFSZecPCQYs2nkXjNbomjuGKklmPmnnPu1zQsY2eCIfLjn2NkD2XUSjPbxD91NJ9g1
+         jPyw==
+X-Gm-Message-State: AFqh2ko32QW1VfEjei0b+vu2I1/K8/j8zU4XeIHEgKeQ8oACxmJ0mheV
+        ca1mKO1B6o+xr31UwKZFaYH/Javrtzg/snS0mA==
+X-Google-Smtp-Source: AMrXdXs9XtCfW7FcHAYBD8FdwiwULDpulbnJJBgeVPXNRbTxKFmc1P7VLn9MIitOOgcyXZHdLjpw+2N+aFSUUobVHg==
+X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
+ (user=ackerleytng job=sendgmr) by 2002:aa7:9a5c:0:b0:58d:ce71:97d7 with SMTP
+ id x28-20020aa79a5c000000b0058dce7197d7mr321996pfj.76.1673998609046; Tue, 17
+ Jan 2023 15:36:49 -0800 (PST)
+Date:   Tue, 17 Jan 2023 23:36:44 +0000
+In-Reply-To: <b406d6e22a768d7b4faa5f2d9dca338069359f9a.1667110240.git.isaku.yamahata@intel.com>
+Mime-Version: 1.0
+Message-ID: <diqzcz7cd983.fsf@ackerleytng-cloudtop-sg.c.googlers.com>
+Subject: Re: [PATCH v10 067/108] KVM: TDX: Add helper assembly function to TDX vcpu
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
+        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
+        sagis@google.com, dmatlack@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,26 +68,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/17/23 4:48 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.7 release.
-> There are 176 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.7-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> TDX defines an API to run TDX vcpu with its own ABI.  Define an assembly
+> helper function to run TDX vcpu to hide the special ABI so that C code can
+> call it with function call ABI.
 
-Tested-by: Ron Economos <re@w6rz.net>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/vmenter.S | 157 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 157 insertions(+)
 
+> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+> index 8477d8bdd69c..9066eea1ede5 100644
+> --- a/arch/x86/kvm/vmx/vmenter.S
+> +++ b/arch/x86/kvm/vmx/vmenter.S
+> @@ -3,6 +3,7 @@
+>   #include <asm/asm.h>
+>   #include <asm/asm-offsets.h>
+>   #include <asm/bitsperlong.h>
+> +#include <asm/errno.h>
+>   #include <asm/kvm_vcpu_regs.h>
+>   #include <asm/nospec-branch.h>
+>   #include <asm/percpu.h>
+> @@ -31,6 +32,13 @@
+>   #define VCPU_R15	__VCPU_REGS_R15 * WORD_SIZE
+>   #endif
+
+> +#ifdef CONFIG_INTEL_TDX_HOST
+> +#define TDENTER 		0
+> +#define EXIT_REASON_TDCALL	77
+> +#define TDENTER_ERROR_BIT	63
+> +#define seamcall		.byte 0x66,0x0f,0x01,0xcf
+> +#endif
+> +
+>   .section .noinstr.text, "ax"
+
+>   /**
+> @@ -350,3 +358,152 @@ SYM_FUNC_START(vmx_do_interrupt_nmi_irqoff)
+>   	pop %_ASM_BP
+>   	RET
+>   SYM_FUNC_END(vmx_do_interrupt_nmi_irqoff)
+> +
+> +#ifdef CONFIG_INTEL_TDX_HOST
+> +
+> +.pushsection .noinstr.text, "ax"
+> +
+> +/**
+> + * __tdx_vcpu_run - Call SEAMCALL(TDENTER) to run a TD vcpu
+> + * @tdvpr:	physical address of TDVPR
+> + * @regs:	void * (to registers of TDVCPU)
+> + * @gpr_mask:	non-zero if guest registers need to be loaded prior to  
+> TDENTER
+> + *
+> + * Returns:
+> + *	TD-Exit Reason
+> + *
+> + * Note: KVM doesn't support using XMM in its hypercalls, it's the HyperV
+> + *	 code's responsibility to save/restore XMM registers on TDVMCALL.
+> + */
+> +SYM_FUNC_START(__tdx_vcpu_run)
+> +	push %rbp
+> +	mov  %rsp, %rbp
+> +
+> +	push %r15
+> +	push %r14
+> +	push %r13
+> +	push %r12
+> +	push %rbx
+> +
+> +	/* Save @regs, which is needed after TDENTER to capture output. */
+> +	push %rsi
+> +
+> +	/* Load @tdvpr to RCX */
+> +	mov %rdi, %rcx
+> +
+> +	/* No need to load guest GPRs if the last exit wasn't a TDVMCALL. */
+> +	test %dx, %dx
+> +	je 1f
+> +
+> +	/* Load @regs to RAX, which will be clobbered with $TDENTER anyways. */
+> +	mov %rsi, %rax
+> +
+> +	mov VCPU_RBX(%rax), %rbx
+> +	mov VCPU_RDX(%rax), %rdx
+> +	mov VCPU_RBP(%rax), %rbp
+> +	mov VCPU_RSI(%rax), %rsi
+> +	mov VCPU_RDI(%rax), %rdi
+> +
+> +	mov VCPU_R8 (%rax),  %r8
+> +	mov VCPU_R9 (%rax),  %r9
+> +	mov VCPU_R10(%rax), %r10
+> +	mov VCPU_R11(%rax), %r11
+> +	mov VCPU_R12(%rax), %r12
+> +	mov VCPU_R13(%rax), %r13
+> +	mov VCPU_R14(%rax), %r14
+> +	mov VCPU_R15(%rax), %r15
+> +
+> +	/*  Load TDENTER to RAX.  This kills the @regs pointer! */
+> +1:	mov $TDENTER, %rax
+> +
+> +2:	seamcall
+> +
+> +	/*
+> +	 * Use same return value convention to tdxcall.S.
+> +	 * TDX_SEAMCALL_VMFAILINVALID doesn't conflict with any TDX status code.
+> +	 */
+> +	jnc 3f
+> +	mov $TDX_SEAMCALL_VMFAILINVALID, %rax
+> +	jmp 5f
+> +3:
+> +
+> +	/* Skip to the exit path if TDENTER failed. */
+> +	bt $TDENTER_ERROR_BIT, %rax
+> +	jc 5f
+> +
+> +	/* Temporarily save the TD-Exit reason. */
+> +	push %rax
+> +
+> +	/* check if TD-exit due to TDVMCALL */
+> +	cmp $EXIT_REASON_TDCALL, %ax
+> +
+> +	/* Reload @regs to RAX. */
+> +	mov 8(%rsp), %rax
+> +
+> +	/* Jump on non-TDVMCALL */
+> +	jne 4f
+> +
+> +	/* Save all output from SEAMCALL(TDENTER) */
+> +	mov %rbx, VCPU_RBX(%rax)
+> +	mov %rbp, VCPU_RBP(%rax)
+> +	mov %rsi, VCPU_RSI(%rax)
+> +	mov %rdi, VCPU_RDI(%rax)
+> +	mov %r10, VCPU_R10(%rax)
+> +	mov %r11, VCPU_R11(%rax)
+> +	mov %r12, VCPU_R12(%rax)
+> +	mov %r13, VCPU_R13(%rax)
+> +	mov %r14, VCPU_R14(%rax)
+> +	mov %r15, VCPU_R15(%rax)
+> +
+> +4:	mov %rcx, VCPU_RCX(%rax)
+> +	mov %rdx, VCPU_RDX(%rax)
+> +	mov %r8,  VCPU_R8 (%rax)
+> +	mov %r9,  VCPU_R9 (%rax)
+> +
+> +	/*
+> +	 * Clear all general purpose registers except RSP and RAX to prevent
+> +	 * speculative use of the guest's values.
+> +	 */
+> +	xor %rbx, %rbx
+> +	xor %rcx, %rcx
+> +	xor %rdx, %rdx
+> +	xor %rsi, %rsi
+> +	xor %rdi, %rdi
+> +	xor %rbp, %rbp
+> +	xor %r8,  %r8
+> +	xor %r9,  %r9
+> +	xor %r10, %r10
+> +	xor %r11, %r11
+> +	xor %r12, %r12
+> +	xor %r13, %r13
+> +	xor %r14, %r14
+> +	xor %r15, %r15
+> +
+> +	/* Restore the TD-Exit reason to RAX for return. */
+> +	pop %rax
+> +
+> +	/* "POP" @regs. */
+> +5:	add $8, %rsp
+> +	pop %rbx
+> +	pop %r12
+> +	pop %r13
+> +	pop %r14
+> +	pop %r15
+> +
+> +	pop %rbp
+> +	RET
+> +
+> +6:	cmpb $0, kvm_rebooting
+> +	je 1f
+> +	mov $TDX_SW_ERROR, %r12
+
+While compiling the tree at
+https://github.com/intel/tdx/tree/kvm-upstream, it seems like
+compilation was failing because TDX_SW_ERROR was not defined. Perhaps
+asm/tdx.h needs to be added.
+
+> +	orq %r12, %rax
+> +	jmp 5b
+> +1:	ud2
+> +	/* Use FAULT version to know what fault happened. */
+> +	_ASM_EXTABLE_FAULT(2b, 6b)
+> +
+> +SYM_FUNC_END(__tdx_vcpu_run)
+> +
+> +.popsection
+> +
+> +#endif
+> --
+> 2.25.1
