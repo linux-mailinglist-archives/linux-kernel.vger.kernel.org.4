@@ -2,85 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEED166E8A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141D466E8AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjAQVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S229934AbjAQVnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjAQViq (ORCPT
+        with ESMTP id S229482AbjAQVjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:38:46 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA1D34C2B
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:03:46 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id C6E575C013F;
-        Tue, 17 Jan 2023 15:03:45 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 17 Jan 2023 15:03:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673985825; x=1674072225; bh=rblLYzdt4t
-        B35h0HqI9SRH1Q3dV8Re767GfH9e1W2X4=; b=QMtpF7pga9HfjcN+olkKLnpiOz
-        zjH1UI6YIYXIEO4g3H4gZVr09obMpM2wn/3Mwq2lhx4wfyONEPxdwIzUHSyTY2vz
-        6vi3D9cYMkvqZU1E9Q+1MOIWYpUv1BlJc45xFY+zKJfCo5hrR1iQGQbbKcnoKPYA
-        G046b6i77O8MKh1XlkCAamkdaeJo5EaxgJtFfZ9MPnzQD4nCvMeAvRE1Im6oHD+2
-        vItpUuO6VlcUUQ3TTj4+L53/XJLFsJBm4kZybhzxH51wxu1+ed7/GdHlMwXc6U8Q
-        OdNYdagDOFpTMo1E+K/V29sjqRicmjkOnjjEFQwCSoh2fb9nwLBfzQ/m5pdQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673985825; x=1674072225; bh=rblLYzdt4tB35h0HqI9SRH1Q3dV8
-        Re767GfH9e1W2X4=; b=nIg87I6gE04+yhDLIy07Un1EFCzGQM9ak5ikpLCbQIj+
-        pM2riMowXvqfGpKq67NTuS4NizCMKh/i73xpGtZaFUD0sVfWVz47Vn+9PmcPHovh
-        ZaI/b5MZYdWNdZWRBWjJSieu8vsF/k2dnm98axeF8Z/8WDuk+EnF0CT0YVGiLQ1W
-        MEAQu1WbADvuSRAbvse3qZNWsb/HadMK63zvxrpCLZpI4o+AZ53NvvzUZgBTRQmI
-        SzZSs7RHS7BslGlTmMnxSCF4TbCZfIQYHsYtutbee0DTDEvah19cOmOJzTsXmLQN
-        20cFOBpp6ArIZG0loS9xsiF8ezvEAFD1ZEJzw9CmDg==
-X-ME-Sender: <xms:If_GYwBi7w8z0NqfbSC9RDpE-NFKVcX9e-ab82IJlwAp6lUxr7Fe_w>
-    <xme:If_GYyjW7noJMxG8D0Z08UFK1oGseihEAO81lgXLpzF-DOCD7pcaKw0CIoMGkGdNx
-    eIWphZf7b7l21DPV3g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtiedgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:If_GYzl3WQBQVoW0p5gYqkLgBpKSYPzMH1Ug5NOIMpJo5VmNXAnypA>
-    <xmx:If_GY2xlpCI1iKRNlqmUAiHEic_KBsBS1SyoB87SwX6YPl9KYYANOw>
-    <xmx:If_GY1T78dbxasgvS7sjbMajUqSXEoQbxdO8j_5ErZohLyTopmHYOw>
-    <xmx:If_GY2Q62hB9dbEAX-KyCW0XOftYTBaDLnhuun8WQvAB9kPc3SNlhg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5DA97B60086; Tue, 17 Jan 2023 15:03:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
-Mime-Version: 1.0
-Message-Id: <eec4d2fd-f305-452a-a47f-83203da494df@app.fastmail.com>
-In-Reply-To: <d6166b85-01df-405b-3112-d9bde16b6bd9@amd.com>
-References: <20230117164133.1245749-1-arnd@kernel.org>
- <d6166b85-01df-405b-3112-d9bde16b6bd9@amd.com>
-Date:   Tue, 17 Jan 2023 21:03:26 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tanmay Shah" <tanmays@amd.com>, "Arnd Bergmann" <arnd@kernel.org>,
-        "Michal Simek" <michal.simek@xilinx.com>
-Cc:     soc@kernel.org, "Tanmay Shah" <tanmay.shah@xilinx.com>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Ben Levinsky" <ben.levinsky@amd.com>,
-        "Ronak Jain" <ronak.jain@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] firmware: zynqmp: fix declarations for gcc-13
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Tue, 17 Jan 2023 16:39:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805E24DE20
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:04:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673985859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mzwnjP64jKMnxG92NfKkitU4148esuOMPr7a584cgLk=;
+        b=QhqW9VRdExrzHwYwrvKVavAUajZ4v3YuVqsriqRxWvswXYu7nQ4kmGT1inTt43DzVRmNGy
+        Y6BLWJMzz3sxj9lzrjOA2IHUEgMA1s8G+taielUmwnpF5Mv33Kb4lpbLcrWlCUX4TWgK+O
+        2PYs/oaEByd5EX7b3xJWuigGoBQhUOA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-386-WyPdpVY-NTm7S2NM8-Ri0A-1; Tue, 17 Jan 2023 15:04:18 -0500
+X-MC-Unique: WyPdpVY-NTm7S2NM8-Ri0A-1
+Received: by mail-wr1-f72.google.com with SMTP id l18-20020adfa392000000b002bbd5c680a3so6070128wrb.14
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:04:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzwnjP64jKMnxG92NfKkitU4148esuOMPr7a584cgLk=;
+        b=XpxEjBnXVfWV33wXFKD/KBZ5vgB3Y75du5C17udn9CgaOB9AfLSa3P9/Xv7abU1p3r
+         fZNRn2AYnsQ8Jif6wTmuSKCBNe85+dqxR+7RJQWcn4QfjJDyyAAKn0HlE5IRt5kl2ria
+         P3wyX24sl95TpIPXfvSHj9Bu0uK+N6fvp0TAtZlWsWY0IholRgBORSDXxE+z3KCj/yrh
+         dZO1o73ED/aaaGKQr+AaUUWNE7bjdeAA6Bg8caDvXJLPhHTCpoqxuTywrHANkTSlDGsP
+         SKJh9Ed2QJ8D8eMzC/brrtlBdO4Xg92R83MfnIbMvQOYAdIJ6X3jUagoeFM/NzhvdUYM
+         0T3w==
+X-Gm-Message-State: AFqh2krIhI1pHJdmRtwUD3+fYcMUOEGHp2pxwZSoHy5Ncr9qSR146/qm
+        IM0FYtiFZGea0UWCTZx8eI9VAKt4GZ9VO4RHpN1uikwGQBv4riaNKJJlsKweO3wjBXYNrnxaKGY
+        R+N1ykz0QLT1kd+W9zdJVWK+H
+X-Received: by 2002:a05:600c:4b06:b0:3da:fdf6:6a59 with SMTP id i6-20020a05600c4b0600b003dafdf66a59mr75362wmp.33.1673985857058;
+        Tue, 17 Jan 2023 12:04:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuIpUpkEp1rT4yuT2zy4Jbbp9JpTBEf3SA3uw7zXp5dsbH8kudKBX3Hqk6N1uroDz//cIJZHg==
+X-Received: by 2002:a05:600c:4b06:b0:3da:fdf6:6a59 with SMTP id i6-20020a05600c4b0600b003dafdf66a59mr75351wmp.33.1673985856802;
+        Tue, 17 Jan 2023 12:04:16 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003d974076f13sm40500906wmo.3.2023.01.17.12.04.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 12:04:16 -0800 (PST)
+Message-ID: <077a3ecf-c0e1-7b77-7b46-1acfef734769@redhat.com>
+Date:   Tue, 17 Jan 2023 21:04:15 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] drm: panel: visionox: add backlight dependency
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ondrej Jirman <megi@xff.cz>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230117165522.2104380-1-arnd@kernel.org>
+ <CACRpkdb0rA8DmiGj79f6+6qOCChUuQrYzmQ+Yjk6BxeBzjM4_A@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CACRpkdb0rA8DmiGj79f6+6qOCChUuQrYzmQ+Yjk6BxeBzjM4_A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,21 +88,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023, at 20:53, Tanmay Shah wrote:
-> This looks good to me. Thanks for fixing this.
+On 1/17/23 19:22, Linus Walleij wrote:
+> On Tue, Jan 17, 2023 at 5:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> 
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The newly added driver uses the backlight subsystem but is missing the
+>> corresponding Kconfig dependency:
+>>
+>> arm-linux-gnueabi-ld: drivers/gpu/drm/panel/panel-visionox-vtdr6130.o: in function `visionox_vtdr6130_probe':
+>> panel-visionox-vtdr6130.c:(.text+0xdee): undefined reference to `devm_backlight_device_register'
+>>
+>> Fixes: 65dc9360f741 ("drm: panel: Add Himax HX8394 panel controller driver")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Patch applied, thanks for fixing this!
+> 
+> Yours,
+> Linus Walleij
 >
-> Something must have gone wrong when I ran sparse check on this patch.
 
-I don't think any of our previous tooling caught this, only gcc-13
-changed some of the behavior around enums.
+Thanks Arnd and Linus for fixing this. Sorry that I missed it
+while upstreaming the driver.
 
-> Just one question, does this patch need "fixes:" tag?
+-- 
+Best regards,
 
-Probably a good idea:
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-Fixes: a5e56980cfb7 ("firmware: xilinx: Add RPU configuration APIs")
-
-I can apply this directly to the soc fixes branch if you like
-and add that line.
-
-     Arnd
