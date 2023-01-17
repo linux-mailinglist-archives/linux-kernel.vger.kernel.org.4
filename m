@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5309966D9BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7767666D995
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbjAQJYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S236451AbjAQJPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbjAQJXR (ORCPT
+        with ESMTP id S236667AbjAQJOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:23:17 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8CE4C06
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:18:31 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so7601130wmc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:18:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=tnJ5DdYrw54qQSx3lEI+x+lBLUOeQnMl1o76vv7Dgu4=;
-        b=elVY3nR3vVxjUxSkeUPM277bE5WR5Yv1YPiiHAzuFxbrxRH4z7x+TVUV/kw01Q22TI
-         5VOFKNEh9TJjkFGh5AZztVRZDDjgYelylcw8u6htm5ws62jgXKIMDsXWIGtGeblBEwD/
-         q4Aq5nuZBKajSlU8Ww+nkrwR/ITwB6fxC6RwxjHWTwrPn+jMiM74jM8YE6xAh9TJ9qt6
-         k0/1KI5RFcalaQH4gk61OVKV8XCMay2sqRchMpeZ4U/XGPwMXIet7EcE2cJAW6wIQSP+
-         aO9c4z/BXvYaL49+HL5nEmlQNb/UPolssJCfPmQhRN+QsyZKMTtFLleIjZd+8jutWWS/
-         S4Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tnJ5DdYrw54qQSx3lEI+x+lBLUOeQnMl1o76vv7Dgu4=;
-        b=wwzO+73mH9F/vIUy2wE6oAXwxPSLi+fb2SIw2S2o5PRHN/4uHCY4AIFGEQydkxxi5l
-         WOoMdelw6VFURKo0PCk54a5kjcW5T2Gnd0TR0IovU2M9K9ORFs+58YOPhEgKP2azFAeP
-         xGvM0Nc8ihx9ls0GG6GIzdzLxqCjPHlyPNg75IL3FxTWYZXPnF5AGJ7gCjVRZnnH5wzF
-         6RTTQBdmDfI8X8D1hLc2UFEsvY5zRctwzFgpTeLXBFHol80fzRl1rJ+EPcY3CbBFuqMn
-         AXVHst9VNifO5kDfZsTbqIrn5tjZSejcj8MTlAicpqO5NmLYVVaIzGLQtaVp+nAKTJPK
-         yLRQ==
-X-Gm-Message-State: AFqh2kqU9xfsC2uIuXr5/ScGMPYz2RXm4GE5AXYIJyIA17WK+7ki+2wC
-        07/98+aSwzquiVNOFFAl6F6SzQ==
-X-Google-Smtp-Source: AMrXdXvDAOYefx+I2HK3Eib4cvfR8BUz4uU/fSfbsNpNlRCgv8K3V0M707BZH2a1DbPUP+dJK0l1WQ==
-X-Received: by 2002:a05:600c:982:b0:3da:f5b5:13ec with SMTP id w2-20020a05600c098200b003daf5b513ecmr2230308wmp.34.1673947109790;
-        Tue, 17 Jan 2023 01:18:29 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id m23-20020a05600c3b1700b003db0cab0844sm276263wms.40.2023.01.17.01.18.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 01:18:29 -0800 (PST)
-References: <20230116091637.272923-1-jbrunet@baylibre.com>
- <20230116091637.272923-2-jbrunet@baylibre.com>
- <4be60ea2-cb67-7695-1144-bf39453e9e1f@kernel.org>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Da Xue <da@lessconfused.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] dt-bindings: net: add amlogic gxl mdio
- multiplexer
-Date:   Tue, 17 Jan 2023 10:05:56 +0100
-In-reply-to: <4be60ea2-cb67-7695-1144-bf39453e9e1f@kernel.org>
-Message-ID: <1jzgah1puj.fsf@starbuckisacylon.baylibre.com>
+        Tue, 17 Jan 2023 04:14:05 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F6B30B24
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:06:53 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3F6295C00E4;
+        Tue, 17 Jan 2023 04:06:15 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 17 Jan 2023 04:06:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1673946375; x=1674032775; bh=bBFBHdgUEx
+        DtLc/7PnHuZCFolfc8GR5+frlbC+WuxQ4=; b=BKpkK/uu5m1z1sNkezqUciat0Z
+        KCxQJIb8Uqfsca0VG2Hq1sKEJYBpKQ5S5Zd2AKuodusHQ4F7KczG7NBQD0AyBPWE
+        Om1HJOFqA6c6BnpILuW5eTr70Y+NAXGVCbDYAos416zhrr10Dxhlq6Y8Ay6vQZMb
+        Bzw440eknpSGWtpww9t83FiRT0RDmzLzN+rjU4VdM/V4ei6L8m34n/kPu5IIEWjz
+        vVjOO8lsCbeXMMtBJN3t2F23sS6atOEOw+Gp/K3CH1TM8ohfJhVkFTi9wy2/s5Al
+        h1vw4jKrcc6JhMWt8wtPwMExwGQ56DFVNM9jUB0DcEMPTl2NDlUwv1/HG1YQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1673946375; x=1674032775; bh=bBFBHdgUExDtLc/7PnHuZCFolfc8GR5+frl
+        bC+WuxQ4=; b=KXodEdAgLxLnX5G0K3mUsjlOBNf5clBOSH7kW8zTuZVzun+LG5I
+        fFn2BZ+QLh7ahpiFcmCsmHP22HDavDgrpSjkiBdx2XfFctWb0RsbByFua0eOxMOl
+        qzePwDrad0fG4n7eWk07XyX4NC4fpf8/8WhfSVqTOvvsR3ozz+9ugnZZcF5Kum9G
+        Mc/vLZAASa5MJG6pVzv1Y6Q+5am3nOyjndFs0eVCqp5yJWYPtKkjuunLgmXsZuXO
+        wZ3o6uEDnOlI13pylrCDJFp3ebsu/LzGZinjuWtIozTiI1jJgcYZaeWW/dqmXgJ9
+        IQc8zddcn4fpRxov00Mz95+jC3kpyt3MaBw==
+X-ME-Sender: <xms:BmXGY9nYlvb3T1sNjzAcBwreLwH5fmMcHuU8OfcXeNoZ2DvkBP9GgA>
+    <xme:BmXGY41mD-MTV-u4bgAK_FN8-i_gw70_jMbJHGdVL5l_BDEO3DJzipJa1mpgQ7bwS
+    rSjBQkHba_UUkW5xbE>
+X-ME-Received: <xmr:BmXGYzqwDUugU_Oeqeg8dBjvCzmmf7yZFwtJQtUp45AcqW1HvKwTi-5RQ6oSxuw4SC7XkIU1Mj1JjyuktzWw4fQp-r9VVF3P1_-gtCkSOCWI09QQmmgRSaQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddthedgudefudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
+    dtredttdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
+    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepffdvueelff
+    evkeduhfetjeduffeghfettdfguedtgfdvgfeufeduheevheevkeeknecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihessh
+    grkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:BmXGY9mQg0d_jSwkaIVRtzdcPNaGMzsznzqNXQPhFpN9MBVIIlEBGQ>
+    <xmx:BmXGY71md5kfUijFt804Yxo97Bu87av6gMt7LziVvovdTycF4jfU4Q>
+    <xmx:BmXGY8soR7utB0zHDzNI_WH1_LSAvZO9Zlnq4ABEr3Ai6KStYu3vNA>
+    <xmx:B2XGY5CuT-p34ph1JC6Cha2StnKOWmaw9Peq9FQbw-N5Iw0zWtA4DA>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 17 Jan 2023 04:06:13 -0500 (EST)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     tiwai@suse.de
+Cc:     linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH 0/1] firewire: fix memory leak for payload of request subaction to IEC 61883-1 FCP region
+Date:   Tue, 17 Jan 2023 18:06:09 +0900
+Message-Id: <20230117090610.93792-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On Tue 17 Jan 2023 at 09:31, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+This single patch fixes a bug of Linux FireWire subsystem for kernel
+v2.6.33 or later. In detail, please refer patch comment.
 
-> On 16/01/2023 10:16, Jerome Brunet wrote:
->> Add documentation for the MDIO bus multiplexer found on the Amlogic GXL
->> SoC family
->
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
->
+My intension of this cover-letter is to request sound subsystem maintainer
+to send it to mainline since upstream of Linux FireWire subsystem is
+already inactive.
 
-Hi Krzysztof,
+To Iwai-san, I would be pleased if you alternatively send it to mainline.
 
-I do use get_maintainers.pl but I also filter based on past experience
-to avoid spamming to much. It seems I stayed on the pre-2015
-requirement to send only to devicetree list (I was actually making an
-exception specifically for DT) ... and there was no complain so far ;)
 
-I've read documentation again and it is explicit. This will be fixed for
-v2.
+Thanks
 
-Thanks for pointing this out.
+Takashi Sakamoto (1):
+  firewire: fix memory leak for payload of request subaction to IEC
+    61883-1 FCP region
+
+ drivers/firewire/core-cdev.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+-- 
+2.37.2
+
