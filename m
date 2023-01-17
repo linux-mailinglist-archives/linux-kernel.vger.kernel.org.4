@@ -2,139 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE5966E7A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C1F66E79F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbjAQUWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
+        id S232091AbjAQUUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbjAQUPX (ORCPT
+        with ESMTP id S231373AbjAQUQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:15:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB0910A90
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:11:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3536152B
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 19:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A0DC433EF;
-        Tue, 17 Jan 2023 19:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673982671;
-        bh=fF8gp2hSR6+JJn7LTuIwE4xKl7pKegt4qrFJr/3TmQI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IP2SlV7FAbCxTKuKD83g0Aqt+q0bIf/PP1hl8zSoMy9ZG/zIaFVd4CCwkoS3XpZB9
-         7Cg4Dx+F4aAXVi5y19f6td9OMtAeakfR0YXpIUjPpj6gBuz76uPcbNN3XCFxFRiTEF
-         RmpBuuU313btpOh/ZLYLDlUz8yu+aTBo9ammh2Q8dezChyC0XKSlhUN22S6NerjN/k
-         M2HVcWKdzQ8a+2eIt/W+wBr9sYInx37oy9+B9zIpxLsBbxG1nGNdJOaHDhPNaq00DW
-         8n+Tb3Wtt7Tv1ANEhnfizKVm3cYVpGZDOeISB1IS7QKSU6wRhmoc6i7TU4gf4xKJga
-         uoq9pm9B4M3YA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     brendanhiggins@google.com, kunit-dev@googlegroups.com,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        SeongJae Park <sj@kernel.org>,
-        "damon@lists.linux.dev" <damon@lists.linux.dev>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 30/48] mm/damon: Stop using vma_mas_store() for maple tree store
-Date:   Tue, 17 Jan 2023 19:11:09 +0000
-Message-Id: <20230117191109.116438-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230117023335.1690727-31-Liam.Howlett@oracle.com>
-References: 
+        Tue, 17 Jan 2023 15:16:28 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FB438678
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:11:33 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id s26so7522199ioa.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:11:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7KqTypsImNZmniW91zYe1yhsSZXhDDo+Q5hJ0Ux/67g=;
+        b=UJm5J0133XcPj/n9gOAm6r3L7ghjKGThYDwcs+Zgq7sNkIMIcxWhaNZzVuL50g4xll
+         axzO/2NBWRKO+Z0p4Dtg2gqYPioHnM1gdkcm2UrgwvuSHatKZ6+h4jIoNA5wP4301xq8
+         bX8YgqaO+YX60wmJoloHl/jpzC+5HvvMpLLUA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7KqTypsImNZmniW91zYe1yhsSZXhDDo+Q5hJ0Ux/67g=;
+        b=ZsPyIyr+TYnV2WVQvZ3k9CIrHVVTTY5PwK0P3/mWzN7/+S1e5nO+d94VVwEmVmshvF
+         qK+SA3q7LBkm1j58I/GYnCKo7RzbymD6GmSFbmOwxRuhk+mL9Uj0D7RdIwZrYgUXjPXw
+         Ce3TUulIx6yTdBRm/pqdnktjsc/wn/NGU8FU9WEiN3yxb51pjq85KSwM76xinGCh8ccS
+         T8tmv/54c6TaOGWct0mcrZtmQ94mX58L467vOhJNosE6yspobhgRgV9CoD+nWZHs1dXI
+         CKPYHuIM3JuBPubIluFSruxws+vV4mDQcgtsShlavzO9xZblkuqExm9AIJwUorOHHu60
+         78sA==
+X-Gm-Message-State: AFqh2kqABN9DOwkEqofGQJpmXRuwbeJYuMXYx3vHaBhY7FQYPnQauph4
+        lAD7t0s184iT8wWTwk0o+xVWhA==
+X-Google-Smtp-Source: AMrXdXv06uyeDWiXTa4ZqSisvQmjvagEnrIOsILeZlEu05Jt0IeZXrEA56J9nzCM0i6dIo4ZkDaupA==
+X-Received: by 2002:a6b:8fcd:0:b0:704:d16d:4a59 with SMTP id r196-20020a6b8fcd000000b00704d16d4a59mr422934iod.2.1673982692512;
+        Tue, 17 Jan 2023 11:11:32 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id a7-20020a927f07000000b002eb1137a774sm9328008ild.59.2023.01.17.11.11.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:11:31 -0800 (PST)
+Message-ID: <1eed08d1-c100-6ca5-63f3-73487970b08e@linuxfoundation.org>
+Date:   Tue, 17 Jan 2023 12:11:30 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [tip:sched/core 7/28] rseq.c:139:37: error: 'AT_RSEQ_ALIGN'
+ undeclared; did you mean 'R_SH_ALIGN'?
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, Shuah Khan <shuah@kernel.org>,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <202301170348.7WLKH1pl-lkp@intel.com>
+ <bfa719c3-bd1f-5fc4-40ab-6dc6822b7628@efficios.com>
+ <4449d8b5-b7a5-0f09-5b42-7b70ba00f8f6@linuxfoundation.org>
+ <Y8ZlKOsN1wGk9tTc@gmail.com>
+ <37625f31-6ac2-1f90-d864-e4644820bba3@efficios.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <37625f31-6ac2-1f90-d864-e4644820bba3@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc-ing kunit people.
-
-Hi Liam,
-
-
-Could we put touching file name on the summary?
-E.g., mm/damon/vaddr-test: Stop using ...
-
-On Tue, 17 Jan 2023 02:34:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
-
-> From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+On 1/17/23 10:44, Mathieu Desnoyers wrote:
+> On 2023-01-17 04:06, Ingo Molnar wrote:
+>>
+>> * Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>>> On 1/16/23 13:18, Mathieu Desnoyers wrote:
+>>>> On 2023-01-16 14:40, kernel test robot wrote:
+>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+>>>>> head:   79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
+>>>>> commit: 03f5c0272d1b59343144e199becc911dae52c37e [7/28] selftests/rseq: Use ELF auxiliary vector for extensible rseq
+>>>>> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+>>>>> reproduce:
+>>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=03f5c0272d1b59343144e199becc911dae52c37e
+>>>>>           git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>>>>>           git fetch --no-tags tip sched/core
+>>>>>           git checkout 03f5c0272d1b59343144e199becc911dae52c37e
+>>>>>           make O=/tmp/kselftest headers
+>>>>>           make O=/tmp/kselftest -C tools/testing/selftests
+>>>>>
+>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> In order to fix this, I need to change -I../../../../usr/include/ for $(KHDR_INCLUDES) in tools/testing/selftests/rseq/Makefile
+>>>>
+>>>> I can find 25 odd uses of the same pattern in the kernel selftests. Should I fix them all in one go ?
+>>>
+>>> kselftest build depends on headers installed in the root directory.
 > 
-> Prepare for the removal of the vma_mas_store() function by open coding
-> the maple tree store in this test code.  Set the range of the maple
-> state and call the store function directly.
+> By "root directory", do you mean kernel sources root directory or build output root directory ?
 > 
-> Cc: SeongJae Park <sj@kernel.org>
-> Cc: damon@lists.linux.dev
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  mm/damon/vaddr-test.h | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+>>> The main makefile enforces this dependency.
 > 
-> diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
-> index bce37c487540..6098933d3272 100644
-> --- a/mm/damon/vaddr-test.h
-> +++ b/mm/damon/vaddr-test.h
-> @@ -14,19 +14,26 @@
->  
->  #include <kunit/test.h>
->  
-> -static void __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
-> +static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
->  			ssize_t nr_vmas)
->  {
-> -	int i;
-> +	int i, ret = -ENOMEM;
->  	MA_STATE(mas, mt, 0, 0);
->  
->  	if (!nr_vmas)
-> -		return;
-> +		return -ENOENT;
->  
->  	mas_lock(&mas);
-> -	for (i = 0; i < nr_vmas; i++)
-> -		vma_mas_store(&vmas[i], &mas);
-> +	for (i = 0; i < nr_vmas; i++) {
-> +		mas_set_range(&mas, vmas[i].vm_start, vmas[i].vm_end - 1);
-> +		if (mas_store_gfp(&mas, &vmas[i], GFP_KERNEL))
-> +			goto failed;
-> +	}
-> +	ret = 0;
-> +
-> +failed:
->  	mas_unlock(&mas);
-> +	return ret;
->  }
->  
->  /*
-> @@ -71,7 +78,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
->  	};
->  
->  	mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
-> -	__link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas));
-> +	KUNIT_EXPECT_EQ(test, __link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)), 0);
+> How ? I figure that tools/testing/selftests/lib.mk overrides KHDR_INCLUDES if it is not defined yet:
+> 
+> ifeq ($(KHDR_INCLUDES),)
+> KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+> endif
+> 
+> and selftests makefiles include ../lib.mk.
+> 
+> This KHDR_INCLUDES can be modified by O=... when built from the kernel top level, thus using tools/testing/selftests/Makefile:
+> 
+> ifneq ($(KBUILD_OUTPUT),)
+> [...]
+>    KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
+> else
+> [...]
+>    KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+> endif
+> 
+> But it's up to the individual selftests to actually use $(KHDR_INCLUDES). In many cases, they hardcode -I../../../../usr/include/ which is bogus when the build root (O=...) differs from the source root.
+> 
+>   If this test is being
+>>> built without installing headers by itself, I think the scripts that
+>>> build individual tests have to makes sure headers are installed first.
+> 
+> The headers were previously built by "make O=/tmp/kselftest headers", as it should, it's just that the selftest makefile uses a hardcoded path that is relative to the source directory, and it appears that this pattern is repeated all across the selftests.
+> 
 
-In case of the __link_vmas() failure, I think we should skip this test using
-'kunit_skip()', rather marking this test failed.
+selftests Makefile used to install headers and there has been a recent
+change to have mani Makefile (root) to install it. As a result individual
+test builds (running make in the test directory) requires header install
+now.
 
+I think the hard-coded includes are a problem and we have to fix them for
+all cases i.e make O=, individual test builds.
 
-Thanks,
-SJ
+If you are still up for it, please send patch.
 
->  
->  	__damon_va_three_regions(&mm, regions);
->  
-> -- 
-> 2.35.1
+thanks,
+-- Shuah
+
