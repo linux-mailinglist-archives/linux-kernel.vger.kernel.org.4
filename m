@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CD166D5A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A9766D5A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjAQFgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 00:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S235406AbjAQFhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 00:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235245AbjAQFgV (ORCPT
+        with ESMTP id S234327AbjAQFgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 00:36:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1473F17CD4;
-        Mon, 16 Jan 2023 21:36:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0A97B80E76;
-        Tue, 17 Jan 2023 05:36:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A99BC433F0;
-        Tue, 17 Jan 2023 05:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673933777;
-        bh=asJm1FEO3RCTI9yXgHpd6dK9DTZntJ1KAbCE9ko3y+Y=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=IcYiayCbWMGTTFIh0EEe0exejTDmWE9l0RjFiqBj98UmqkCalRXE3C4omasKau9Bn
-         jByxdAKp/url4C9UtT8N3buxBDAVUl8pIhA0cyyfCncNXwsME08M3yDSzL6wbMSs2l
-         8Z+CLVvKCSlRGs2954djFxzzG43Tk16nTxCB1S/yrGKJ/Ie8X6pmznF8r+XMw9iXzO
-         Vx6yd0zWBVruK3dFlS1Q0+nXYxeK7C/8IJlgmKyM14LrsXfzEdViJwcMpolYOCKzG8
-         0Cf5w5VIXYfPR7JGSYS01vSKylK5D5BxdQpZ4s8Dy7Ja5leb0RXU17tcz1dXIjH8kp
-         i2jJpYQEnpdZQ==
-Date:   Tue, 17 Jan 2023 11:06:12 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Srba <Michael.Srba@seznam.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "phy: qualcomm: usb28nm: Add MDM9607 init
- sequence"
-Message-ID: <Y8YzzCEqGi3m9fWM@matsya>
-References: <20221214223733.648167-1-marijn.suijten@somainline.org>
- <Y8GY51Cfkj7o1MJs@matsya>
- <20230116203549.5jzd2olxua662n6w@SoMainline.org>
+        Tue, 17 Jan 2023 00:36:42 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07932799D;
+        Mon, 16 Jan 2023 21:36:41 -0800 (PST)
+Date:   Tue, 17 Jan 2023 05:36:37 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1673933799; bh=oba6/bCy0Rb5hWMxSdHbU7NQMwYatUQpsIdj9M8X3zc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E3Wnk/Wfq/l5MRwxABzc+86xfblfON9WX6AaC2rYXCqwpx7wgWcSE6azdIYV8MIdl
+         a3ksRHl7UiC34bN2VDyXjtE6N8ZAMGYGclEFjHlHcCNXfk8jnQmWgExddV50Dq07Ix
+         LkZ0WEzWXohB+cAfikGe/NotsV7PyQU2aQLbh+7g=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Amy Parker <apark0006@student.cerritos.edu>
+Cc:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: Kernel builds now failing
+Message-ID: <20230117053637.viuu75chipgx42oi@t-8ch.de>
+References: <CAPOgqxFva=tOuh1UitCSN38+28q3BNXKq19rEsVNPRzRqKqZ+g@mail.gmail.com>
+ <20230116195357.2jq7q262tongxw52@t-8ch.de>
+ <CAPOgqxFtH4Ezb1xVm3kOLBnOnQfpbs4==Kpefhaxz4JhOObqOA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230116203549.5jzd2olxua662n6w@SoMainline.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPOgqxFtH4Ezb1xVm3kOLBnOnQfpbs4==Kpefhaxz4JhOObqOA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-01-23, 21:35, Marijn Suijten wrote:
-> On 2023-01-13 23:16:15, Vinod Koul wrote:
-> > On 14-12-22, 23:37, Marijn Suijten wrote:
-> > > This reverts commit 557a28811c7e0286d3816842032db5eb7bb5f156.
-> > > 
-> > > This commit introduced an init sequence from downstream DT [1] in the
-> > > driver.  As mentioned by the comment above the HSPHY_INIT_CFG macro for
-> > > this sequence:
-> > > 
-> > >     /*
-> > >      * The macro is used to define an initialization sequence.  Each tuple
-> > >      * is meant to program 'value' into phy register at 'offset' with 'delay'
-> > >      * in us followed.
-> > >      */
-> > > 
-> > > Instead of corresponding to offsets into the phy register, the sequence
-> > > read by the downstream driver [2] is passed into ulpi_write [3] which
-> > > crafts the address-value pair into a new value and writes it into the
-> > > same register at USB_ULPI_VIEWPORT [4].  In other words, this init
-> > > sequence is programmed into the hardware in a totally different way than
-> > > downstream and is unlikely to achieve the desired result, if the hsphy
-> > > is working at all.
-> > > 
-> > > An alternative method needs to be found to write these init values at
-> > > the desired location.  Fortunately mdm9607 did not land upstream yet [5]
-> > > and should have its compatible revised to use the generic one, instead
-> > > of a compatible that writes wrong data to the wrong registers.
-> > 
-> > Applied after adding missing subsystem tag, thanks
+On Mon, Jan 16, 2023 at 03:10:25PM -0800, Amy Parker wrote:
+> On Mon, Jan 16, 2023 at 11:54 AM Thomas Weiﬂschuh <linux@weissschuh.net> wrote:
+> > I expect this to be due to a change in make 4.4 that ignores SIGPIPEs [0].
+> > So programs called from make will not receive a SIGPIPE when writing to
+> > a closed pipe but instead an EPIPE write error.
+> > `find` does not seem to handle this.
 > 
-> Thanks, it wasn't clear to me whether to suffix the title when already
-> included in the Revert: "phy: qualcomm: ..." title :)
+> Thank you so much for the clarification! I've also seen reports of
+> other tools not handling it (such as `yes').
 
-A revert patch is a patch as well so the patch rules apply there as well,
-so should say "subsystem tag: other tags: Revert foo..."
+I think this analysis was wrong. For me I got this error because on a
+new ArchLinux installation the command "cpio" is not present, leading to
+this cryptic error.
+I sent a patch to make the error more obvious:
+https://lore.kernel.org/all/20230117-kernel-kheaders-cpio-v1-1-058d3e1c8621@weissschuh.net/
 
-Thanks
--- 
-~Vinod
+Does it work for you after installing the package "cpio"?
+
+It does not explain why it only stopped working for you recently,
+though.
+
+> > This behavior in make is new and I can't find a reasoning for it.
+> > It also breaks other softwares builds.
+> 
+> Are you aware of active discussion regarding this on Savannah, or
+> should I go and report the effects there?
+> 
+> > For now you can disable CONFIG_IKHEADERS and the build should work
+> > again.
+> 
+> Alright, thanks. Did that, and re-ran my kernel build (allmodconfig).
+> All works now.
+> 
+> > [0] make 4.4 was packaged for ArchLinux on 5th of January, so it would
+> > fit the timeline.
+> 
+> Yep, running Make 4.4.
