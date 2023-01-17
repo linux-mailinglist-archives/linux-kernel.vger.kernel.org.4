@@ -2,147 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23594670C2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC2A670C3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjAQWxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S229734AbjAQW6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjAQWwF (ORCPT
+        with ESMTP id S229981AbjAQW5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:52:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105A74DCD7;
-        Tue, 17 Jan 2023 13:40:15 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1673991592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MGlhxDfvMswyv1SvAr4PTIZoEWhp6ukErC3lnvtfzms=;
-        b=WCrx1f1BxleMDIz8u0yeTbWlkiEiKEN122P+7xwcPwRYApnZsKV1L7CNPoYK9myJHRs+Y4
-        pDyXg+Ki+0F5eGyXxqr9iMuHGNsqAXgYYBNmbh2B47lQQJTBGHsk+ahQKIpx386EeT0UIA
-        UHvdcGsnWrvn4lq605gpRNzK+0UTQzwGFe4lOzBs7fcxIjFnPjFrLuMUu6w+EWSPFjT0K2
-        omrVWTQ85N3CKAu2PX6dYrQn8R/C8LbwpTqI4OnC18PBbPi6PJP0UCmScHk/5uatomXpiC
-        mnlpFyjwlFt+B41gfzJuveVNkzsAMukT7zWeOtC8AJXTxr3rl8dq0OXR7/5E2g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1673991592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MGlhxDfvMswyv1SvAr4PTIZoEWhp6ukErC3lnvtfzms=;
-        b=N6LgIkMUYxa6WRP/QzNw6ztcv7ZBHwqm2zHX/j2/UL0W2IqnlpbLf0d4Yx1U6dZcAdnhk4
-        yL+zZjZdkX1kfsBg==
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Tue, 17 Jan 2023 17:57:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4963577C7;
+        Tue, 17 Jan 2023 13:41:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4DF6155C;
+        Tue, 17 Jan 2023 21:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F27C433D2;
+        Tue, 17 Jan 2023 21:40:33 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 16:40:29 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
         linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 09/19] irqdomain: Fix mapping-creation race
-In-Reply-To: <20230116135044.14998-10-johan+linaro@kernel.org>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-10-johan+linaro@kernel.org>
-Date:   Tue, 17 Jan 2023 22:39:51 +0100
-Message-ID: <87sfg8kfh4.ffs@tglx>
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu@vger.kernel.org, fweisbec@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and
+ suspend
+Message-ID: <20230117164029.434a2336@gandalf.local.home>
+In-Reply-To: <20230117193734.GO2948950@paulmck-ThinkPad-P17-Gen-1>
+References: <20230112005223.2329802-1-joel@joelfernandes.org>
+        <20230115162504.08ef72b0@rorschach.local.home>
+        <CAEXW_YSNurO-hK+q2amP6wa96jr0KkZ_ggF+5x_sTHESC9vpNw@mail.gmail.com>
+        <20230117143224.6fbf7da8@gandalf.local.home>
+        <20230117193734.GO2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
+On Tue, 17 Jan 2023 11:37:34 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-> Parallel probing (e.g. due to asynchronous probing) of devices that share
-> interrupts can currently result in two mappings for the same hardware
-> interrupt to be created.
+> > The reason for the export should have been mentioned in the change log if
+> > the patch is not obvious to why it is being exported.  
+> 
+> Would something like this suffice?  With attribution, of course.
+> 
+> 	Export rcu_async_should_hurry(), rcu_async_hurry(), and
+> 	rcu_async_relax() for later use by rcutorture.
 
-This lacks an explanation why this can happen.
+Yes thanks. That way, at least a git blame will give some rationale for the
+export.
 
-> @@ -802,6 +811,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
->  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
->  		type &= IRQ_TYPE_SENSE_MASK;
->  
-> +	mutex_lock(&irq_domain_mutex);
-> +
->  	/*
->  	 * If we've already configured this interrupt,
->  	 * don't do it again, or hell will break loose.
-> @@ -814,7 +825,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
->  		 * interrupt number.
->  		 */
->  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
-> -			return virq;
-> +			goto out;
->  
->  		/*
->  		 * If the trigger type has not been set yet, then set
-> @@ -823,36 +834,43 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
->  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
->  			irq_data = irq_get_irq_data(virq);
->  			if (!irq_data)
-> -				return 0;
-> +				goto err;
->  
->  			irqd_set_trigger_type(irq_data, type);
-> -			return virq;
-> +			goto out;
->  		}
->  
->  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
->  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
-> -		return 0;
-> +		goto err;
->  	}
->  
->  	if (irq_domain_is_hierarchy(domain)) {
-> -		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
-> +		virq = ___irq_domain_alloc_irqs(domain, -1, 1, NUMA_NO_NODE,
-> +						fwspec, false, NULL);
->  		if (virq <= 0)
-> -			return 0;
-> +			goto err;
->  	} else {
->  		/* Create mapping */
->  		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
->  		if (!virq)
-> -			return virq;
-> +			goto err;
->  	}
->  
->  	irq_data = irq_get_irq_data(virq);
->  	if (WARN_ON(!irq_data))
-> -		return 0;
-> +		goto err;
->  
->  	/* Store trigger type */
->  	irqd_set_trigger_type(irq_data, type);
-> +out:
-> +	mutex_unlock(&irq_domain_mutex);
->  
->  	return virq;
-> +err:
-> +	mutex_unlock(&irq_domain_mutex);
-> +
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(irq_create_fwspec_mapping);
-
-You can spare that goto churn by renaming the existing function to
-irq_create_fwspec_mapping_locked() and invoked that guarded by the
-mutex, no?
-
-Thanks,
-
-        tglx
+-- Steve
