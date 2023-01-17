@@ -2,97 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4DF66DEA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56D166DEBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbjAQNTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S236857AbjAQN1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236789AbjAQNTv (ORCPT
+        with ESMTP id S236347AbjAQN1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:19:51 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E0839B8E;
-        Tue, 17 Jan 2023 05:19:47 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id s67so21925571pgs.3;
-        Tue, 17 Jan 2023 05:19:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U+mHMoqOxjmqlEKrrvnWJRDjZ0/NgeDWv0+LnS3FTis=;
-        b=HDNHDgJaLjQvC4ODh63qdBSKzGq8Ri77vm3rywY8ZkY39iyX+tsnS/bQloA5fydjJA
-         Gr8D/UE39tbGqpj4brtX91M2fYNY3NjPiYuwFEMwxSC6trAJmW5H8yfAQo6fWbUbwL+I
-         G4mWWoF3R0XRiSypyGAjJNkNeYwXgYWJ3X23P0l+LRkqKyy0cW68g8kd+t5wDfbnZ9ip
-         +5CPG9NL+dq6Rbgrzhf3dVNZccLmsdmfyfRKmGszQIcb2O3jiWCQWwD/JTjLEefApiBh
-         xKTIOiBKegbSIXkaYeXmc/gZDbdX+UNPNgqkNj/BWf9MfpSvcQVqI7v4CCtgA/pIBNgc
-         Ts3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U+mHMoqOxjmqlEKrrvnWJRDjZ0/NgeDWv0+LnS3FTis=;
-        b=FM729lY0TD/3j5Ok4aP2WhJvn3zabeBsBj42g1Xdc6DxhSHK07JoszVyVBq87zCyh7
-         h3wGh6Fvahm/nDpUH333Ao6Gr5MArt3MZFwXrAOSR95XoYHlTaG6yBRnqFV59iY3CgWt
-         I/c1PUVgOARID5s+vIZG/VAfv36ij/Fcq1SzcR9rHPFz6cgLauxkv7GzgHU/UGajg+Uz
-         4+BfBp1Wmx7vu6Fezz+5ZxfKaJVMWr6630hPars6e343pLaT3iRNV+zT00McT2/4Nx9I
-         Q+U5NloA+zvFSHvKkA20mZ8/+1VH0PWYHFsWN/XtPkYXgLGQrs6lm7EFQ0b0kAZqULg1
-         ha/A==
-X-Gm-Message-State: AFqh2konDmNvE78+I4EFCLbB+yP452n/ABTjSK9aZw3uq+G5v8PmUbhU
-        HHw1MeERKr92OZUcEkMImC525wHsjFhxXPjxt9c=
-X-Google-Smtp-Source: AMrXdXtJ+wI0o3LZ3iVb7QJNPU+v5VCjfsfJIvOOAXonGRm2rTJbG86U9Yk5+BouX0OFe4amGOJTBmIsmbTHH3RBW5o=
-X-Received: by 2002:a62:e40a:0:b0:580:8b92:ecff with SMTP id
- r10-20020a62e40a000000b005808b92ecffmr302635pfh.4.1673961586875; Tue, 17 Jan
- 2023 05:19:46 -0800 (PST)
+        Tue, 17 Jan 2023 08:27:37 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A086534C01;
+        Tue, 17 Jan 2023 05:27:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673962056; x=1705498056;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=OkxN9qHIfugzlGcYWrmJzkTgsJkFyQ0089rnB9xhbso=;
+  b=FZZ67c5fd67JbVwO7XsESIoD/yIBVevp/EuOVI6JMN/vb1e3rb5QghW+
+   xW3WzHxkFezkA6H5M4B6PIQJ3ocXJTrcMXDx5fQ9xJMDqY/xkz/jv0Jxe
+   MMOgo00Ut1cnuyScd1obC/JgTIRJnFmToGuk9PihgCkMNRSM7foyg8qYi
+   ra/Ft3lQlZDbxzvLY6Euo4xschTv6pYVZYZ03GkwqUPAlE0HatBGOGQfh
+   Hpfyg9+JmneyxbNuWHTviVrDajfWKtEeaQbJNuh1yDiir40oi53WfpQWi
+   QEIEVeaUsIILnxfhQ45K1GoDvVPrVmFPrhzf4q4ZowOpOQovTBkWXzEjA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="410930540"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="410930540"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 05:27:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="722655367"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="722655367"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Jan 2023 05:27:25 -0800
+Date:   Tue, 17 Jan 2023 21:19:37 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230117131937.GD273037@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
 MIME-Version: 1.0
-References: <20230116154747.036911298@linuxfoundation.org>
-In-Reply-To: <20230116154747.036911298@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Tue, 17 Jan 2023 05:19:35 -0800
-Message-ID: <CAJq+SaC9Vrp5R0Mt78tBCDiT30tW1o6KyFvYooosq_Wt18-fqQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/86] 5.15.89-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8H5Z3e4hZkFxAVS@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.15.89 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.89-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On Sat, Jan 14, 2023 at 12:37:59AM +0000, Sean Christopherson wrote:
+> On Fri, Dec 02, 2022, Chao Peng wrote:
+> > This patch series implements KVM guest private memory for confidential
+> > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > TDX-protected guest memory, machine check can happen which can further
+> > crash the running host system, this is terrible for multi-tenant
+> > configurations. The host accesses include those from KVM userspace like
+> > QEMU. This series addresses KVM userspace induced crash by introducing
+> > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > via a fd-based approach, but it can never access the guest memory
+> > content.
+> > 
+> > The patch series touches both core mm and KVM code. I appreciate
+> > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > reviews are always welcome.
+> >   - 01: mm change, target for mm tree
+> >   - 02-09: KVM change, target for KVM tree
+> 
+> A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> is available here:
+> 
+>   git@github.com:sean-jc/linux.git x86/upm_base_support
+> 
+> It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> a WIP.
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+Thanks very much for doing this. Almost all of your comments are well
+received, except for two cases that need more discussions which have
+replied individually.
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+> 
+> As for next steps, can you (handwaving all of the TDX folks) take a look at what
+> I pushed and see if there's anything horrifically broken, and that it still works
+> for TDX?
 
-Thanks.
+I have integrated this into my local TDX repo, with some changes (as I
+replied individually), the new code basically still works with TDX.
+
+I have also asked other TDX folks to take a look.
+
+> 
+> Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
+> (and I mean that).
+> 
+> On my side, the two things on my mind are (a) tests and (b) downstream dependencies
+> (SEV and TDX).  For tests, I want to build a lists of tests that are required for
+> merging so that the criteria for merging are clear, and so that if the list is large
+> (haven't thought much yet), the work of writing and running tests can be distributed.
+> 
+> Regarding downstream dependencies, before this lands, I want to pull in all the
+> TDX and SNP series and see how everything fits together.  Specifically, I want to
+> make sure that we don't end up with a uAPI that necessitates ugly code, and that we
+> don't miss an opportunity to make things simpler.  The patches in the SNP series to
+> add "legacy" SEV support for UPM in particular made me slightly rethink some minor
+> details.  Nothing remotely major, but something that needs attention since it'll
+> be uAPI.
+> 
+> I'm off Monday, so it'll be at least Tuesday before I make any more progress on
+> my side.
+
+Appreciate your effort. As for the next steps, if you see something we
+can do parallel, feel free to let me know.
+
+Thanks,
+Chao
