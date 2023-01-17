@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2121E670D97
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF90670D1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjAQXeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S229502AbjAQXTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjAQXcy (ORCPT
+        with ESMTP id S229605AbjAQXRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:32:54 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E383CE33
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:03:14 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id v17so5699441oie.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:03:14 -0800 (PST)
+        Tue, 17 Jan 2023 18:17:25 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF50485B2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:03:57 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id y69so992578iof.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:03:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfEqVK+RYVz2dN9ZOupR4yHgB7WZQv3MJYztxeL+5Xc=;
-        b=LDfx9vc+Y38Mn1Rs0kcG0pXmB1UTfEU/iOvU7gmofIoKOya9iHq6VfoY1qU/kBB0k6
-         vlxeI9awjroyWOiws1Kj+ylDPMGff9OYplninlS7bWj20s3Iqrz+VFqv9YDDOnkIUhAG
-         pLyGgUT+2y+xCj6EAGD+Wosk/sh+sMqq1t0xOaZmikJsKMfxobPgIwPiPseY2nw5qXe+
-         8Bn23e45g8OElQ6sBCbErDUAaoJSZKKiYg1XY+DmtfPO5NOHPk7bi1viLmweWPp8UX7T
-         PLHsVxe45pZPQ1xtEhBX/6yscP8QfaXu5y206tNE7jxIGeqiWvtmA4/QTuYWZylZIU7f
-         0leA==
+        bh=nhao4yhxvo1b0ca4/4XXHiPX2DFuPMAuoXXjxRqWTzk=;
+        b=Ugmy2ZqKnLRTOnr8n+vgJmW7jKcWi4hXccBOn2Gki6Zrag7MoLWtZ+TwC6KAa1rMXw
+         wXpyQ8nmNJOrUrseDG9EzHysaXMjM04aS5x2xNylWaAN9xvvdISifj6fE++htaLmbddR
+         j81VjCX2xsB852mW5SqUWN0nd9IvIVdfgHX33Hh2tu0XchQY05liQxtto9CUhXsnf9k7
+         f6y6oOhGyoxCPLOEL45q+HGd9pmFyOS5F/LZR7OgkHsj8ga1IKTsgBSDZYIAGdZSdz8P
+         SnaqeJ4jBFGrrKdUvkPzy7SEBae8MWN4qiEkG94kK43jVC7Q6PfwYVJUCo/XaiKekGkY
+         8s8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zfEqVK+RYVz2dN9ZOupR4yHgB7WZQv3MJYztxeL+5Xc=;
-        b=r49TTO+J1HT3l3IACfyqiqZ9TyCMonSI16218Bh9ViuoXsPcYF7yqSVci3z+cHxsCP
-         N2UNCN7Nvo4ngijXRogTrWg4kMpy1yGZuLd2dDMZakaLEt6gxjw2xrdoN1Zmatv0yXGh
-         i3i9gSRs44yTHWHp2hbQJpmzdkWw9Z7CDZseXezE2myTl9XaFFmlbGTZ36UqmNKRT3g4
-         ADa/V46weMEtxfwx1yyw3A/4428/9z05kSIeDegrgT4TyKx44QuLJNn56+XauPNbv6lL
-         SdWfdnBQcTUL7OPOrvF0pW4D7NNUJILPxzgxQeUNxN905Y46ULetIzlwDJK9IXXodeTs
-         HGdA==
-X-Gm-Message-State: AFqh2koY+dduPKGaj4viHx1hmi06fwQTKh3JMNYElwK6FsXlTb+lBjcb
-        Zjjjeth4VKrCTGFLLrSrtL9P8Gnoi8TeQB4OUkA80YTS
-X-Google-Smtp-Source: AMrXdXvDFWC8RH8P2THHJkEJ8U8eikLyA3GduhlkdGUC68h6pM+zXj1AXAk7a9ylP3xIx2YJx2ehvp/stRmWfBk9Uxs=
-X-Received: by 2002:aca:2807:0:b0:35b:f5f7:3ed0 with SMTP id
- 7-20020aca2807000000b0035bf5f73ed0mr299595oix.46.1673989393929; Tue, 17 Jan
- 2023 13:03:13 -0800 (PST)
+        bh=nhao4yhxvo1b0ca4/4XXHiPX2DFuPMAuoXXjxRqWTzk=;
+        b=Blc3yaoMBBp1A2u+yF1N8KfPZtQbbvuui6MPLv5rzEisaW/z9gAsqe1AVX3u0NCPY5
+         4u6jP1u5ByeMsOvkoY86BJquH9iF+vn8ZBskd35YLsgGb5j7q6wUTUKNyinwyYHwzzz6
+         w2Tr5aHyP5Hr2bQde3aDhhewQDuANlNmnuamY5S+aMcze0zgW26JdghYYVP28MXKGJW3
+         acZweJQ3lN+JnurDcNZoF7ES4ZD47XwigVMuU5YpjufZ/pCVEXQZATkIlv5XtditFc9M
+         F8Hk5XtR6EU07hP7t98ZcKkzMrXyY7hFgSrK8V7sCKpsU7Dc11LnD4V92iSZplX1Al2X
+         91bg==
+X-Gm-Message-State: AFqh2kq01vbxqwcSLw4M3t75DC46GXFbjCWZt6HcZP1YE31cS6Z1+Jfc
+        Yy0/h7ZOzoXc8NorUlGn3R2LdcKJTXn9zTfSMNINog==
+X-Google-Smtp-Source: AMrXdXsMeP8M6U4I8iASTh2mqrZYLm+ikxBgVtUSVf76IGFGfS0Npq61yI+0jkuo5OgGYf5QPFQKrSgcpAZ1h7kJHBc=
+X-Received: by 2002:a02:cb45:0:b0:39e:6dd8:6c96 with SMTP id
+ k5-20020a02cb45000000b0039e6dd86c96mr345507jap.246.1673989436533; Tue, 17 Jan
+ 2023 13:03:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20230117205452.195298-1-hamza.mahfooz@amd.com>
-In-Reply-To: <20230117205452.195298-1-hamza.mahfooz@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 17 Jan 2023 16:03:01 -0500
-Message-ID: <CADnq5_Njw0uFYnB7--A=0Zv78ETLeXpNvH6Zc4znpTPLLQgwkA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: fix issues with driver unload
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Roman Li <roman.li@amd.com>, dri-devel@lists.freedesktop.org,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        hersen wu <hersenxs.wu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-29-surenb@google.com>
+In-Reply-To: <20230109205336.3665937-29-surenb@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 22:03:20 +0100
+Message-ID: <CAG48ez2cK1M=fgkYi4bPdWX7uOm15Omv6EjFgXUkS2QsqiwGSg@mail.gmail.com>
+Subject: Re: [PATCH 28/41] mm: introduce lock_vma_under_rcu to be used from
+ arch-specific code
+To:     Suren Baghdasaryan <surenb@google.com>, willy@infradead.org,
+        liam.howlett@oracle.com
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        peterz@infradead.org, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,53 +85,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 3:55 PM Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
->
-> Currently, we run into a number of WARN()s when attempting to unload the
-> amdgpu driver (e.g. using "modprobe -r amdgpu"). These all stem from
-> calling drm_encoder_cleanup() too early. So, to fix this we can stop
-> calling drm_encoder_cleanup() in amdgpu_dm_fini() and instead have it be
-> called from amdgpu_dm_encoder_destroy(). Also, we don't need to free in
-> amdgpu_dm_encoder_destroy() since mst_encoders[] isn't explicitly
-> allocated by the slab allocater.
->
-> Fixes: f74367e492ba ("drm/amdgpu/display: create fake mst encoders ahead of time (v4)")
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+On Mon, Jan 9, 2023 at 9:54 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> Introduce lock_vma_under_rcu function to lookup and lock a VMA during
+> page fault handling. When VMA is not found, can't be locked or changes
+> after being locked, the function returns NULL. The lookup is performed
+> under RCU protection to prevent the found VMA from being destroyed before
+> the VMA lock is acquired. VMA lock statistics are updated according to
+> the results.
+> For now only anonymous VMAs can be searched this way. In other cases the
+> function returns NULL.
+[...]
+> +struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+> +                                         unsigned long address)
+> +{
+> +       MA_STATE(mas, &mm->mm_mt, address, address);
+> +       struct vm_area_struct *vma, *validate;
+> +
+> +       rcu_read_lock();
+> +       vma = mas_walk(&mas);
+> +retry:
+> +       if (!vma)
+> +               goto inval;
+> +
+> +       /* Only anonymous vmas are supported for now */
+> +       if (!vma_is_anonymous(vma))
+> +               goto inval;
+> +
+> +       if (!vma_read_trylock(vma))
+> +               goto inval;
+> +
+> +       /* Check since vm_start/vm_end might change before we lock the VMA */
+> +       if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
+> +               vma_read_unlock(vma);
+> +               goto inval;
+> +       }
+> +
+> +       /* Check if the VMA got isolated after we found it */
+> +       mas.index = address;
+> +       validate = mas_walk(&mas);
 
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Question for Maple Tree experts:
 
-> ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c           | 4 ----
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 1 -
->  2 files changed, 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 9547037857b6..5cc14ed2e93e 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -1733,10 +1733,6 @@ static void amdgpu_dm_fini(struct amdgpu_device *adev)
->                 adev->dm.vblank_control_workqueue = NULL;
->         }
->
-> -       for (i = 0; i < adev->dm.display_indexes_num; i++) {
-> -               drm_encoder_cleanup(&adev->dm.mst_encoders[i].base);
-> -       }
-> -
->         amdgpu_dm_destroy_drm_device(&adev->dm);
->
->  #if defined(CONFIG_DRM_AMD_SECURE_DISPLAY)
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> index bbeeee7c5d7c..5fa9bab95038 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-> @@ -492,7 +492,6 @@ static const struct drm_connector_helper_funcs dm_dp_mst_connector_helper_funcs
->  static void amdgpu_dm_encoder_destroy(struct drm_encoder *encoder)
->  {
->         drm_encoder_cleanup(encoder);
-> -       kfree(encoder);
->  }
->
->  static const struct drm_encoder_funcs amdgpu_dm_encoder_funcs = {
-> --
-> 2.39.0
->
+Are you allowed to use mas_walk() like this? If the first mas_walk()
+call encountered a single-entry tree, it would store mas->node =
+MAS_ROOT, right? And then the second call would go into
+mas_state_walk(), mas_start() would return NULL, mas_is_ptr() would be
+true, and then mas_state_walk() would return the result of
+mas_start(), which is NULL? And we'd end up with mas_walk() returning
+NULL on the second run even though the tree hasn't changed?
+
+> +       if (validate != vma) {
+> +               vma_read_unlock(vma);
+> +               count_vm_vma_lock_event(VMA_LOCK_MISS);
+> +               /* The area was replaced with another one. */
+> +               vma = validate;
+> +               goto retry;
+> +       }
+> +
+> +       rcu_read_unlock();
+> +       return vma;
+> +inval:
+> +       rcu_read_unlock();
+> +       count_vm_vma_lock_event(VMA_LOCK_ABORT);
+> +       return NULL;
+> +}
