@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A545A66D55D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 05:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9F566D560
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 05:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbjAQE2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 23:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S235236AbjAQEc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 23:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233398AbjAQE16 (ORCPT
+        with ESMTP id S235060AbjAQEcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 23:27:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C5A658A
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 20:27:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673929631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8UBWWLwvMiOr6L+z7we+Q7JSzanvEE4bw3BkUZVsmF0=;
-        b=J1diJfZNx8sxBaCni+jthlEO1aIFjwAYY3MJFW7HIkwTK4g/cN7cRIl8JGxhnW6FozP9Jj
-        vbvtA3IVXtx5FNRYJsEhkfPmrD0p+f6ACrxEBGJ361WDw0CmZh0CDpAx88ViSC2nPo4KzE
-        M6+j9Uj0TbZt2PMVu1PpIF5QAiLZTfU=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-625-bbNclhtFMv66ZL-xTnfhIA-1; Mon, 16 Jan 2023 23:27:09 -0500
-X-MC-Unique: bbNclhtFMv66ZL-xTnfhIA-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-15ef646668bso2497133fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 20:27:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8UBWWLwvMiOr6L+z7we+Q7JSzanvEE4bw3BkUZVsmF0=;
-        b=ec6NB4hxn4EgNJQOpOAb0lKqpFJdt1a7BWjjMr7EEAhk6QLIYiAhN2AOPXZE5SESLA
-         Xvpb/sIo+EmoyNfWKri9PSD4AVOgbuFx0m0PJe7ruMNFly/V4H2jzFo1rP/zcyL9MSfU
-         /bLfxTB26U8zgBInU6C3yfue0vrpF+8eG49+Ikte6LEq4wXqQ6qDcQCSUX6NI5acFf2Y
-         9CKaHC4E/aGxc7wL+Z1JDZVkoBB0tytpSxJAcLez/VHnZUQvLcTf/l5OaPo6N5wLbOJl
-         eVS+Iqqh8Qh+F/BQYqE3v2NTh5OyQsWH1Q9D0ytMGZ/1CCsue86AzZU05claK5ewOr7o
-         f8/A==
-X-Gm-Message-State: AFqh2ko1x4+RooPvWIH7cFrfBnvFJkUTxUuxpIzcqmzFhEhq+uIuSD4L
-        weCrbdhu4W3Z/QnwU5X7loJ4fqJbvCRBLvStrbIsJ5a6vAqDg29NFgbXQYuS/FiX6jS6zU/eHNI
-        3vJBjVROQYIMRoevvLJsJkNCF5nA9y1Ae/oUeQwoL
-X-Received: by 2002:a05:6871:10e:b0:15b:96b5:9916 with SMTP id y14-20020a056871010e00b0015b96b59916mr158815oab.280.1673929628344;
-        Mon, 16 Jan 2023 20:27:08 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtupA/6WBzUmJl+6Zu/dq8kAyUyACJiGdlm+VS0K02Srz3uqlvAppZX93F9SuB1/bC3rktvXfYdCFvGM2GZCKk=
-X-Received: by 2002:a05:6871:10e:b0:15b:96b5:9916 with SMTP id
- y14-20020a056871010e00b0015b96b59916mr158814oab.280.1673929628131; Mon, 16
- Jan 2023 20:27:08 -0800 (PST)
+        Mon, 16 Jan 2023 23:32:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6532F2196F;
+        Mon, 16 Jan 2023 20:32:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E95AB80D9A;
+        Tue, 17 Jan 2023 04:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4ECBC433EF;
+        Tue, 17 Jan 2023 04:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673929969;
+        bh=wv4vTWupspHSDjaQ/HXuU2c8mRlHtDUbV90EP+bLE4Y=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=luJtdmlfCNtdbs0AlHYhqPdIyGoW0C0RtePyOlx7rhtbo6HjyLIUbye6plQvEkoHk
+         eH0HtSLdQRaKgFfAf0XI1qjADuBIKScpkXUKIRSjIqrnc1mJAXW+gIMxehjmRmqH0B
+         PaG/P0KAUqHWAusnopkW60wQHAoPHNcySy5ZLuvbpiIfA+sePZT/Exm4zqj3M+RCE+
+         tagQtpMEMNFPYfNQ5YrXQRkiX/vssSQZ3vIb9C2rafPDezSqME1Ej8oBNGJ2fx2hHg
+         g/OK+krCl4FXnQefZdJyjbPJkaOEzxT36ZAzicNy4+B00MehXQvVdyPoH8XXNexCkz
+         GrqZA9tQrqo+Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 494525C06D0; Mon, 16 Jan 2023 20:32:49 -0800 (PST)
+Date:   Mon, 16 Jan 2023 20:32:49 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Remove impossible wakeup rcu GP kthread action from
+ rcu_report_qs_rdp()
+Message-ID: <20230117043249.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230117021955.1967316-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-References: <75a2cb16-9e39-4123-de8e-b846c9b482f0@norrbonn.se>
-In-Reply-To: <75a2cb16-9e39-4123-de8e-b846c9b482f0@norrbonn.se>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 17 Jan 2023 12:26:57 +0800
-Message-ID: <CACGkMEu-hZ2x8EnstJ_FQ7tWMj=zLf7GAcwyHuAzvQQncTqEYg@mail.gmail.com>
-Subject: Re: vhost-net
-To:     Jonas Bonn <jonas@norrbonn.se>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117021955.1967316-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 4:59 PM Jonas Bonn <jonas@norrbonn.se> wrote:
->
-> Hi,
->
-> I have a question about using vhost-net with an IFF_TUN device.  I'm
-> uncertain about the behaviour I'm seeing which is:
->
-> i)  on RX, the descriptor contains no Ethernet header, which is what I
-> was expecting
-> ii)  on TX, the first 14 bytes of the transmitted _IP_ packet are lost;
-> if I prepend an extra 14 bytes (zeroes) before the IP packet and extend
-> the packet length accordingly, then things appear to work as expected.
->
-> In vhost_net_build_xdp() it appears that the userspace packet data is
-> copied verbatim to an XDP packet structure that assumes the presence of
-> an ethernet header; as such, the IP header is copied into the ethernet
-> header area.  I think this accounts for losing the first 14 bytes of the
-> IP header...
->
-> If I set SO_SNDBUF to something less than INT_MAX, then the XDP path is
-> bypassed and transmission of IP packets works.  This means that knowing
-> the value of SO_SNDBUF becomes important in the userspace application in
-> order to know whether an extra 14 bytes needs to be prepended to the IP
-> packet... which is awkward, at best.
+On Tue, Jan 17, 2023 at 10:19:55AM +0800, Zqiang wrote:
+> When inovke rcu_report_qs_rdp(), if current CPU's rcu_data structure's ->
+> grpmask has not been cleared from the corresponding rcu_node structure's
+> ->qsmask, after that will clear and report quiescent state, but in this
+> time, this also means that current grace period is not end, the current
+> grace period is ongoing, because the rcu_gp_in_progress() currently return
+> true, so for non-offloaded rdp, invoke rcu_accelerate_cbs() is impossible
+> to return true.
+> 
+> This commit therefore remove impossible rcu_gp_kthread_wake() calling.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/rcu/tree.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index b2c204529478..477eb1a374e5 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1956,7 +1956,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  {
+>  	unsigned long flags;
+>  	unsigned long mask;
+> -	bool needwake = false;
+>  	bool needacc = false;
+>  	struct rcu_node *rnp;
+>  
+> @@ -1988,7 +1987,7 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  		 * NOCB kthreads have their own way to deal with that...
+>  		 */
+>  		if (!rcu_rdp_is_offloaded(rdp)) {
+> -			needwake = rcu_accelerate_cbs(rnp, rdp);
+> +			rcu_accelerate_cbs(rnp, rdp);
 
-It's a bug.
+If it is impossible, we should use WARN_ON_ONCE() or similar.  Just
+in case the system disagrees on the impossibility.  ;-)
 
->
-> For an IFF_TUN device, should vhost-net not be adding an implicit
-> ethernet header in _build_xdp()?
+							Thanx, Paul
 
-Probably.
-
-Actually, this makes me think that we should disable XDP for TUN?
-
-> Can this be done without backward
-> compatibility implications?
->
-
-The path is used by vhost-net only, so I think we are fine.
-
-Patch is more than welcomed.
-
-Thanks
-
-> Thanks,
-> Jonas
->
-
+>  		} else if (!rcu_segcblist_completely_offloaded(&rdp->cblist)) {
+>  			/*
+>  			 * ...but NOCB kthreads may miss or delay callbacks acceleration
+> @@ -2000,8 +1999,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  		rcu_disable_urgency_upon_qs(rdp);
+>  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+>  		/* ^^^ Released rnp->lock */
+> -		if (needwake)
+> -			rcu_gp_kthread_wake();
+>  
+>  		if (needacc) {
+>  			rcu_nocb_lock_irqsave(rdp, flags);
+> -- 
+> 2.25.1
+> 
