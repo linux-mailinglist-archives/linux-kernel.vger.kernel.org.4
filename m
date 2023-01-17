@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1C866E4D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C2566E4DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjAQRYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
+        id S232577AbjAQR0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbjAQRW6 (ORCPT
+        with ESMTP id S230147AbjAQRZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:22:58 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40B149948
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:22:43 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id r15so4538018qtx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wkcBqmofA04c9jcFvMRG1CTfOla63rohknUm+bkZuI=;
-        b=Zmv4mLxdPkwdhWU2+KlKPYPoZDU6vd0YR886xdzB2ZdFVWwZ7UsXLPBqUCQ5n6wYYE
-         y0hvuwyht3n0D8zLJaoqZVhYMTBx2N7uzU/ATZlotJwwW+DUFZUe2jp4bU6MoXlnRS+k
-         ytr/2zUVDgyKjFAIvGfwsLtQpvUe+dSwwG/oU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1wkcBqmofA04c9jcFvMRG1CTfOla63rohknUm+bkZuI=;
-        b=OR77pB59Kt0gxYmEd0pfxBbFYusI9e7hV2o11Tj7U0/9PHNJ65oG0rWBFlS5/La8Fi
-         E7AEa61eNg7xHj9JQ44OyYyl1LWnxH61PApZjgBKbVU+TBm0Gb9rzLRi+vM/j+gKCGg0
-         LO1dWSSH2kGdZr9VHQuX25e+JebrnBsYix5cEEJpU4DmTPPbFcxgkgTN4Jb0jjeAkGqd
-         LoWKs2fonJWK5aO0G+tw3w7m9obUiM9V7nnT0NhlosyUVq14fN50g2kxP7IFYGa95cMz
-         YmKV8sDJgYOT9/YbRy4+5+WniZTM99Khq9oOi05O7rkvPoMycY+3/7PQrYkmMA7WRnlw
-         CM2A==
-X-Gm-Message-State: AFqh2kqVE+8Xp3u9ji2PUzm2bBltyWIVDMkVlHY6QoDrYsIhXGB22QfK
-        I3kbM6CSDtng5JyZ7VyTM3xLgpxjt+uK9ZY5
-X-Google-Smtp-Source: AMrXdXvM6MkFCoyuLltu5sVD2Ozw2G9Jx/PIZnXd6Clqaz+CvYICTV3UVwmFhOKbxPPn2T/cIuz0dw==
-X-Received: by 2002:a05:622a:4a0f:b0:3b0:b9a4:a20f with SMTP id fv15-20020a05622a4a0f00b003b0b9a4a20fmr5413903qtb.4.1673976162702;
-        Tue, 17 Jan 2023 09:22:42 -0800 (PST)
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com. [209.85.219.42])
-        by smtp.gmail.com with ESMTPSA id m5-20020ac86885000000b0039cba52974fsm16255085qtq.94.2023.01.17.09.22.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 09:22:42 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id j9so22110954qvt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:22:42 -0800 (PST)
-X-Received: by 2002:a05:6214:5d11:b0:531:7593:f551 with SMTP id
- me17-20020a0562145d1100b005317593f551mr193396qvb.89.1673976162017; Tue, 17
- Jan 2023 09:22:42 -0800 (PST)
+        Tue, 17 Jan 2023 12:25:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B6046706;
+        Tue, 17 Jan 2023 09:24:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5BD6B8166E;
+        Tue, 17 Jan 2023 17:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1BF1C433F0;
+        Tue, 17 Jan 2023 17:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673976294;
+        bh=KC6Cqdox5PMT4Fg/LqX4+EbIIxzPEvcJfLC8UsQ29qQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nnCHEsqnLTKVK0s2IzoHZ1KqwB/vrMDGIYRPqOp+liW2QDONQWlvWr7QX3K1dT5q6
+         JDLAGl9sAdNNM/nx2X+CAdLuhTyc35r5uUsFhfqtkDgcv+S6s3PXM0nNZ6zCyfVxCF
+         TLTF+tyJqxZKNTPtQfWghB7rjmurg/g/CreZUkRa62PFT7tA5Uk3rpr2iwSA5QwxoM
+         tohtfWoqcio12ZeOGfb0bu6nJNtuxutut0mPGtuTjuo5VnPwkWj1pdd3vA1Ox2ELnJ
+         m41soeFDoZZ2hEzbgZw828LjtVXb7dMpY8351sBJKKyszX3OYtXijswjE5sn55Wcl8
+         AGWhH3lcUYvBA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Vincent Shih <vincent.sunplus@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: sunplus: fix format string for printing resource
+Date:   Tue, 17 Jan 2023 18:24:44 +0100
+Message-Id: <20230117172450.2938962-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <d101b94f-cbd6-dac0-f5d1-f6cb32585d0c@I-love.SAKURA.ne.jp>
-In-Reply-To: <d101b94f-cbd6-dac0-f5d1-f6cb32585d0c@I-love.SAKURA.ne.jp>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 17 Jan 2023 09:22:26 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whpViMCG7aN-e0fsdJmSdpNVqTyvCWhzS_XkD-u2jxm_Q@mail.gmail.com>
-Message-ID: <CAHk-=whpViMCG7aN-e0fsdJmSdpNVqTyvCWhzS_XkD-u2jxm_Q@mail.gmail.com>
-Subject: Re: [GIT PULL] tomoyo update for v6.2
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 2:58 AM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
->   git://git.osdn.net/gitroot/tomoyo/tomoyo-test1.git tags/tomoyo-pr-20230117
+From: Arnd Bergmann <arnd@arndb.de>
 
-Pulled, but I really would have liked a proper pull request with shortlog etc.
+On 32-bit architectures with 64-bit resource_size_t, sp_rtc_probe()
+causes a compiler warning:
 
-               Linus
+drivers/rtc/rtc-sunplus.c: In function 'sp_rtc_probe':
+drivers/rtc/rtc-sunplus.c:243:33: error: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
+  243 |         dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The best way to print a resource is the special %pR format string,
+and similarly to print a pointer we can use %p and avoid the cast.
+
+Fixes: fad6cbe9b2b4 ("rtc: Add driver for RTC in Sunplus SP7021")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/rtc/rtc-sunplus.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/rtc/rtc-sunplus.c b/drivers/rtc/rtc-sunplus.c
+index e8e2ab1103fc..4b578e4d44f6 100644
+--- a/drivers/rtc/rtc-sunplus.c
++++ b/drivers/rtc/rtc-sunplus.c
+@@ -240,8 +240,8 @@ static int sp_rtc_probe(struct platform_device *plat_dev)
+ 	if (IS_ERR(sp_rtc->reg_base))
+ 		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc->reg_base),
+ 					    "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
+-	dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
+-		sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
++	dev_dbg(&plat_dev->dev, "res = %pR, reg_base = %p\n",
++		sp_rtc->res, sp_rtc->reg_base);
+ 
+ 	sp_rtc->irq = platform_get_irq(plat_dev, 0);
+ 	if (sp_rtc->irq < 0)
+-- 
+2.39.0
+
