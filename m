@@ -2,226 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122F466DDC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD61066DDD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbjAQMjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S236724AbjAQMjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236129AbjAQMjF (ORCPT
+        with ESMTP id S235897AbjAQMjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:39:05 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BC535252;
-        Tue, 17 Jan 2023 04:39:04 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5E8310C;
-        Tue, 17 Jan 2023 13:38:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673959141;
-        bh=0xanUWyMoxJnvXqqNZ5UOGy3oyg6sQdr/aJLg0bLmX0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lhXA6EOBtju3hz7RVGApa3gFkm8IjwyEevWIttJjwuSssA6tWWX3VMk4dP6KCwshf
-         D1TXAw5l8b9t1Vd5W0sbVT1fBO26Skg59JiGVMd89TgWhDkXbpcp0S0PTFKKS9B67y
-         fFirV+o2rzHN81rIAuhffeTrNvXXekunotwKsK54=
-Message-ID: <808e831f-4282-0e58-ebb2-2f556aaeaca4@ideasonboard.com>
-Date:   Tue, 17 Jan 2023 14:38:57 +0200
+        Tue, 17 Jan 2023 07:39:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A5EC36B38;
+        Tue, 17 Jan 2023 04:39:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D469C143D;
+        Tue, 17 Jan 2023 04:40:31 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F6B53F67D;
+        Tue, 17 Jan 2023 04:39:33 -0800 (PST)
+Date:   Tue, 17 Jan 2023 12:39:31 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, nsekhar@ti.com, brgl@bgdev.pl,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
+        bcain@quicinc.com, chenhuacai@kernel.org, kernel@xen0n.name,
+        geert@linux-m68k.org, sammy@sammy.net, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        frederic@kernel.org, paulmck@kernel.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ryabinin.a.a@gmail.com,
+        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
+Message-ID: <20230117123931.3ocl3ckkf72kusbz@bogus>
+References: <20230112194314.845371875@infradead.org>
+ <Y8WCWAuQSHN651dA@FVFF77S0Q05N.cambridge.arm.com>
+ <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 3/4] dt-bindings: panel: Introduce dual-link LVDS
- panel
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Guo Ren <guoren@kernel.org>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Linux RISC-V List <linux-riscv@lists.infradead.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
-        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230103064615.5311-1-a-bhatia1@ti.com>
- <20230103064615.5311-4-a-bhatia1@ti.com>
- <09f1ca83-c7d5-a186-6fa6-09cdd7a0b9cc@collabora.com>
- <431ddd82-055b-2526-3d5e-f6563e48d264@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <431ddd82-055b-2526-3d5e-f6563e48d264@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/2023 18:21, Aradhya Bhatia wrote:
-> Hi Angelo,
+On Tue, Jan 17, 2023 at 11:26:29AM +0100, Peter Zijlstra wrote:
+> On Mon, Jan 16, 2023 at 04:59:04PM +0000, Mark Rutland wrote:
 > 
-> Thanks for taking a look at the patches!
+> > I'm sorry to have to bear some bad news on that front. :(
 > 
-> On 03-Jan-23 17:21, AngeloGioacchino Del Regno wrote:
->> Il 03/01/23 07:46, Aradhya Bhatia ha scritto:
->>> Dual-link LVDS interfaces have 2 links, with even pixels traveling on
->>> one link, and odd pixels on the other. These panels are also generic in
->>> nature, with no documented constraints, much like their single-link
->>> counterparts, "panel-lvds".
->>>
->>> Add a new compatible, "panel-dual-lvds", and a dt-binding document for
->>> these panels.
->>>
->>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->>> ---
->>>   .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
->>>   MAINTAINERS                                   |   1 +
->>>   2 files changed, 158 insertions(+)
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
->>> new file mode 100644
->>> index 000000000000..88a7aa2410be
->>> --- /dev/null
->>> +++ 
->>> b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
->>> @@ -0,0 +1,157 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/display/panel/panel-dual-lvds.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Generic Dual-Link LVDS Display Panel
->>> +
->>> +maintainers:
->>> +  - Aradhya Bhatia <a-bhatia1@ti.com>
->>> +  - Thierry Reding <thierry.reding@gmail.com>
->>> +
->>> +description: |
->>> +  A dual-LVDS interface is a dual-link connection with the even pixels
->>> +  traveling on one link, and the odd pixels traveling on the other.
->>> +
->>> +allOf:
->>> +  - $ref: panel-common.yaml#
->>> +  - $ref: /schemas/display/lvds.yaml/#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - items:
->>> +          - enum:
->>> +              - lincolntech,lcd185-101ct
->>> +              - microtips,13-101hieb0hf0-s
->>> +          - const: panel-dual-lvds
->>> +      - const: panel-dual-lvds
->>> +
->>> +  ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +
->>> +    properties:
->>> +      port@0:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description: The sink for first set of LVDS pixels.
->>> +
->>> +        properties:
->>> +          dual-lvds-odd-pixels:
->>> +            type: boolean
->>> +
->>> +          dual-lvds-even-pixels:
->>> +            type: boolean
->>> +
->>> +        oneOf:
->>> +          - required: [dual-lvds-odd-pixels]
->>
->> One question: why do we need a "panel-dual-lvds" compatible?
->> A Dual-LVDS panel is a LVDS panel using two ports, hence still a 
->> panel-lvds.
->>
->> If you're doing this to clearly distinguish, for human readability 
->> purposes,
->> single-link vs dual-link panels, I think that this would still be 
->> clear even
->> if we use panel-lvds alone because dual-link panels, as you wrote in this
->> binding, does *require* two ports, with "dual-lvds-{odd,even}-pixels" 
->> properties.
+> Moo, something had to give..
 > 
-> Yes, while they are both LVDS based panels the extra LVDS sink in these
-> panels, and the capability to decode and display the 2 sets of signals
-> are enough hardware differences that warrant for an addition of a new
-> compatible.
 > 
->>
->> So... the devicetree node would look like this:
->>
->> panel {
->>      compatible = "vendor,panel", "panel-lvds";
->>      ....
->>      ports {
->>          port@0 {
->>              .....
->>              -> dual-lvds-odd-pixels <-
->>          }
->>
->>          port@1 {
->>              .....
->>              -> dual-lvds-even-pixels <-
->>          };
->>      };
->> };
->>
->>> +          - required: [dual-lvds-even-pixels]
->>
->> ...Though, if you expect dual-lvds panels to get other quirks in the 
->> future,
->> that's a whole different story and you may actually need the 
->> panel-dual-lvds
->> compatible.
+> > IIUC what's happenign here is the PSCI cpuidle driver has entered idle and RCU
+> > is no longer watching when arm64's cpu_suspend() manipulates DAIF. Our
+> > local_daif_*() helpers poke lockdep and tracing, hence the call to
+> > trace_hardirqs_off() and the RCU usage.
 > 
-> Yes, exactly. Even while being non-smart, there are going to be more
-> quirks in future. And it would be better if they have their own
-> compatible/binding, and are not getting appended in an ever-growing
-> if-else ladder. :)
+> Right, strictly speaking not needed at this point, IRQs should have been
+> traced off a long time ago.
+> 
+> > I think we need RCU to be watching all the way down to cpu_suspend(), and it's
+> > cpu_suspend() that should actually enter/exit idle context. That and we need to
+> > make cpu_suspend() and the low-level PSCI invocation noinstr.
+> > 
+> > I'm not sure whether 32-bit will have a similar issue or not.
+> 
+> I'm not seeing 32bit or Risc-V have similar issues here, but who knows,
+> maybe I missed somsething.
+> 
+> In any case, the below ought to cure the ARM64 case and remove that last
+> known RCU_NONIDLE() user as a bonus.
+>
 
-I can imagine a panel which you can use with a single LVDS link if the 
-clock is high enough, or two LVDS links if the clock has to be lower. Is 
-that a dual-lvds panel? =)
+Thanks for the fix. I tested the series and did observe the same splat
+with both DT and ACPI boot(they enter idle in different code paths). Thanks
+to Mark for reminding me about ACPI. With this fix, I see the splat is
+gone in both DT(cpuidle-psci.c) and ACPI(acpi_processor_idle.c).
 
-But probably that situation is no different than a panel that can work 
-with DSI or DPI input.
+You can add:
 
-Still, I'm agree with Angelo in that a new compatible string for dual 
-link lvds feels a bit odd. That said, it's possible the panel-lvds 
-bindings might get rather confusing. So I don't have a strong feeling here.
+Tested-by: Sudeep Holla <sudeep.holla@arm.com>
 
-  Tomi
-
+--
+Regards,
+Sudeep
