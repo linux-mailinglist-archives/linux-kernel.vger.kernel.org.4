@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1720670CF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D34670D8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjAQXNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        id S229739AbjAQXcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjAQXNB (ORCPT
+        with ESMTP id S230003AbjAQXbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:13:01 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E5B8874B;
-        Tue, 17 Jan 2023 12:56:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NxLlp56Rcz4xMx;
-        Wed, 18 Jan 2023 07:56:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1673988983;
-        bh=JURaEdE8CMeLGxxVxQfYP3YHQFwTCFjuZtmFFKcP1SY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HFmgvjCT4hnwui+3XW3WWuRB/ZIVIC+IvKxZIORl3JzW7D3Dm+e/f2BbxlzOit7dB
-         aYa2A0tj4hieeB1cVpYvFKoi1ym6wqlZUF2HWC9ki0DiKX+S4jU3zgkfGTrZO/UJQF
-         0p3veyIeqJAofiIQ5NOl+UyqPKCfrNBaB7qMPitdxe6qQjN7XrF1z+B8GXWnHebQ0a
-         WSXmBGIgSkmVJBThKSpi5pK8pMTkNyQM7xF52KYxs5hxI+J3lB1ODjitcrpwpVHEtj
-         mXqJkhe0LPCrOU4kVHGLb6XY3V014E2Mk/8BTy3uY9/98xV3kXR0i3Ui1jyY9xgmxc
-         vF6QTl2YiFpdw==
-Date:   Wed, 18 Jan 2023 07:56:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the kspp tree
-Message-ID: <20230118075620.60250ca2@canb.auug.org.au>
-In-Reply-To: <CACO55ttvqwnmGS=4gig-AOy+67bDesdj2S9HDJ3hS=uyN0NGOQ@mail.gmail.com>
-References: <20230117150212.3d8ee843@canb.auug.org.au>
-        <CACO55ttvqwnmGS=4gig-AOy+67bDesdj2S9HDJ3hS=uyN0NGOQ@mail.gmail.com>
+        Tue, 17 Jan 2023 18:31:34 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00D78C939;
+        Tue, 17 Jan 2023 12:57:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673989036; x=1705525036;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=HUcDI0BDItLq7xPF3mfX4cfv5vHR9dKnvrxx0RnOSpw=;
+  b=hIHtaNoCthkwQOEzYTSI/lWkxomc4UtVqUHZkBrS5x8cCRyod7q1bJdM
+   oGfVBWfqBzV4eBXG2JtvJUz963Kph1tO7HIfASCS3GdkrYKBZcNRLcb1s
+   APNHvBbU9NKumBgTRLSw1eXsEX10rL8dkd4dieYBDrEJONSFFeUXI9Dnf
+   CjkmcqPbULtrN/+HqEsg8TrF8F+nBvrN2Rur8YiZsXJjsFuIiGCiCChU6
+   kB+9nAWDNsfedrIoRxr1Nek4MNIeDWcQHXbiPBdMT/sT/nTB4zZlBxq8+
+   QaS2gYlyXYlHkDexO6EkO+uZQvI5TQCS8UG0abbimMGZ7hMYU3EeT2lvy
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,224,1669100400"; 
+   d="scan'208";a="197058697"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2023 13:57:06 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 17 Jan 2023 13:57:06 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 17 Jan 2023 13:57:04 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>, <jbe@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jerry Ray <jerry.ray@microchip.com>
+Subject: [net-next: PATCH v7 0/7] dsa: lan9303: Move to PHYLINK
+Date:   Tue, 17 Jan 2023 14:56:56 -0600
+Message-ID: <20230117205703.25960-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/roh3be+LjwRG1po+YE_hoN2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,62 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/roh3be+LjwRG1po+YE_hoN2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This patch series moves the lan9303 driver to use the phylink
+api away from phylib.
 
-Hi Karol,
+Migrating to phylink means removing the .adjust_link api. The
+functionality from the adjust_link is moved to the phylink_mac_link_up
+api.  The code being removed only affected the cpu port.  The other
+ports on the LAN9303 do not need anything from the phylink_mac_link_up
+api.
 
-On Tue, 17 Jan 2023 14:52:12 +0100 Karol Herbst <kherbst@redhat.com> wrote:
->
-> On Tue, Jan 17, 2023 at 5:02 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
-> >
-> > The following commit is also in the drm-misc tree as a different commit
-> > (but the same patch):
-> >
-> >   06b19f46455c ("drm/nouveau/fb/ga102: Replace zero-length array of tra=
-iling structs with flex-array")
-> > =20
->=20
-> which branch? Because I just fetched the remote and don't have this
-> commit in my local repo
+Patches:
+ 0001 - Whitespace only change aligning the dsa_switch_ops members.
+	No code changes.
+ 0002 - Moves the Turbo bit initialization out of the adjust_link api and
+	places it in a driver initialization execution path. It only needs
+	to be initialized once, it is never changed, and it is not a
+	per-port flag.
+ 0003 - Adds exception handling logic in the extremely unlikely event that
+	the read of the device fails.
+ 0004 - Performance optimization that skips a slow register write if there
+	is no need to perform it.
+ 0005 - Change the way we identify the xMII port as phydev will be NULL
+	when this logic is moved into phylink_mac_link_up.
+ 0006 - Removes adjust_link and begins using the phylink dsa_switch_ops
+	apis.
+ 0007 - Adds XMII port flow control settings in the phylink_mac_link_up()
+	api while cleaning up the ANEG / speed / duplex implementation.
+---
+v6->v7:
+  - Moved the initialization of the Turbo bit into lan9303_setup().
+  - Added a macro for determining is a port is an XMII port.
+  - Added setting the XMII flow control in the phylink_mac_link_up() API.
+  - removed unnecessary error handling and cleaned up the code flow in
+    phylink_mac_link_up().
+v5->v6:
+  - Moved to using port number to identify xMII port for the LAN9303.
+v4->v5:
+  - Created prep patches to better show how things migrate.
+  - cleaned up comments.
+v3->v4:
+  - Addressed whitespace issues as a separate patch.
+  - Removed port_max_mtu api patch as it is unrelated to phylink migration.
+  - Reworked the implementation to preserve the adjust_link functionality
+    by including it in the phylink_mac_link_up api.
+v2->v3:
+  Added back in disabling Turbo Mode on the CPU MII interface.
+  Removed the unnecessary clearing of the phy supported interfaces.
+v1->v2:
+  corrected the reported mtu size, removing ETH_HLEN and ETH_FCS_LEN
 
-That was from
-git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git (branch
-for-next/kspp) yesterday.  It was the top commit in that branch.  It is
-still there today (I am not saying it should not be).
+ drivers/net/dsa/lan9303-core.c | xx ++++++++++++--------
+ 1 file changed
 
-> > This is commit
-> >
-> >   54d47689c6e3 ("drm/nouveau/fb/ga102: Replace zero-length array of tra=
-iling structs with flex-array")
-> >
-> > in the drm-misc tree.
-
-That was from git://anongit.freedesktop.org/drm/drm-misc (branch
-for-linux-next) yesterday.  It was the top commit in that branch.  It
-is still there today (again, I am not saying it should not be) but the
-branch has moved on.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/roh3be+LjwRG1po+YE_hoN2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPHC3QACgkQAVBC80lX
-0GzxyAf9FiQpvKWIWXkG5ENB8aCFwuWvd/MajLzDeMrtpfRzTMdkzo6kA5CM4Axq
-r1sYV2d/rY305uM6Wt3t32Fo/nzKZubPR1AjaGgXhXXqCgHjDmFDR/h2P1YR9Rxv
-6/kauy8dJ5HacdmR9mFvz9fSjWAzwKITyzCF/njYxnRiUGUGTYt0AQd0g+0Iuv8q
-4AlvdN/bue/gqHbrgLbg+crMxEZ/PVz/fJrL4eLi72Zst1lBomuoaOGzwyzd6sqt
-E63o5dyUu21n2ABGNgHKUi9mcKlI419DYWPxlR55O3dHnLLaISFJj9y1Rti9psT4
-ABukiUOMWYiUbODihnq6hhApP4aopQ==
-=pYPj
------END PGP SIGNATURE-----
-
---Sig_/roh3be+LjwRG1po+YE_hoN2--
