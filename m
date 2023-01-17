@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA8566E2CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0248C66E2D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 16:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjAQPwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 10:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S229944AbjAQPxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 10:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233903AbjAQPwM (ORCPT
+        with ESMTP id S229694AbjAQPw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:52:12 -0500
-Received: from smtp.tiscali.it (santino-notr.mail.tiscali.it [213.205.33.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33D801D935
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:51:35 -0800 (PST)
-Received: from [192.168.178.50] ([79.21.79.228])
-        by santino.mail.tiscali.it with 
-        id 9rrU2902i4vZGgn01rrVmv; Tue, 17 Jan 2023 15:51:32 +0000
-X-Spam-Final-Verdict: clean
-X-Spam-State: 0
-X-Spam-Score: -100
-X-Spam-Verdict: clean
-x-auth-user: fantonifabio@tiscali.it
-Message-ID: <521902b6-d40d-f445-dbee-0280e526cae0@tiscali.it>
-Date:   Tue, 17 Jan 2023 16:51:26 +0100
+        Tue, 17 Jan 2023 10:52:27 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE6B222E1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 07:52:11 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-268-eD-OPVowPHOo76euoQg45A-1; Tue, 17 Jan 2023 15:52:09 +0000
+X-MC-Unique: eD-OPVowPHOo76euoQg45A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
+ 2023 15:52:08 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Tue, 17 Jan 2023 15:52:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Amy Parker' <apark0006@student.cerritos.edu>,
+        "willy@infradead.org" <willy@infradead.org>
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] dax: use switch statement over chained ifs
+Thread-Topic: [PATCH] dax: use switch statement over chained ifs
+Thread-Index: AQHZKhj2H8rtmpwLA0eRPGwdtTlpaa6iwgdQ
+Date:   Tue, 17 Jan 2023 15:52:08 +0000
+Message-ID: <11f5a5ab96e143689c07531c9e5e704a@AcuMS.aculab.com>
+References: <CAPOgqxF_xEgKspetRJ=wq1_qSG3h8mkyXC58TXkUvx0agzEm_A@mail.gmail.com>
+In-Reply-To: <CAPOgqxF_xEgKspetRJ=wq1_qSG3h8mkyXC58TXkUvx0agzEm_A@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Reply-To: fantonifabio@tiscali.it
-Subject: Re: [PATCH v2] documentation: fix Generic Block Device Capability
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     corbet@lwn.net, axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergei Shtepa <sergei.shtepa@veeam.com>
-References: <20230110132104.12499-1-fantonifabio@tiscali.it>
- <Y8WPFMFxpfdZKs5a@infradead.org>
- <62a18c7d-93d9-657e-48fd-1af06d6d1d9e@tiscali.it>
- <Y8Y6jLdXnnBTps7l@infradead.org>
-From:   Fabio Fantoni <fantonifabio@tiscali.it>
-In-Reply-To: <Y8Y6jLdXnnBTps7l@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Antivirus: Avast (VPS 230117-2, 17/1/2023), Outbound message
-X-Antivirus-Status: Clean
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tiscali.it; s=smtp;
-        t=1673970693; bh=htFWbz6gHdfiZHubJoYDHAUUk8NJyt1xhcczoshiPb8=;
-        h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To;
-        b=24SUTDbJqs2YXRS69GAiYaenfKYRr+NmRN1iTwQdOjaQ3cdoDronuyncqeisnUvJW
-         GS6Il7F0wRxXUfqKgTVkEUd3mAgpKZ2JCoG0462uwii3u91E7NJNv5KMu4y3qmzsNl
-         Ub9l+4bX3Ed6VBNlbGnbfpzAQN3xIwIQP+OHEdDs=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/01/2023 07:05, Christoph Hellwig ha scritto:
-> On Mon, Jan 16, 2023 at 07:14:41PM +0100, Fabio Fantoni wrote:
->> Il 16/01/2023 18:53, Christoph Hellwig ha scritto:
->>> On Tue, Jan 10, 2023 at 02:21:04PM +0100, Fabio Fantoni wrote:
->>>> - * ``GENHD_FL_REMOVABLE``: indicates that the block device gives access to
->>>> + * ``GENHD_FL_REMOVABLE`` (0x01): indicates that the block device gives access to
->>> The numberic values really do not belong into the documentation.  They
->>> are just implementation details.
->>>
->> Thanks for reply, if values are not into the documentation see from
->> /sys/block/<disk>/capability output what flags are enabled will require look
->> to source code of include/linux/blkdev.h and
->> Documentation/block/capability.rst will be less useful, or I'm wrong?
-> Urgg.  I think this file is generally just a bad idea.  The flags are
-> kernel internal and not isolated from userspace.  It seems nothing broke
-> with the various renumbering lately, but we need to isolate it from
-> the implementation details.  And if it really should be a user API
-> we need a text version of it.
-
-Up to 5.13 the page was "ok" 
-(https://www.kernel.org/doc/html/v5.13/block/capability.html) from 5.14 
-doc comments of other functions was appaired, from 5.17 the flags had 
-"major" changes and values was removed from doc comment 
-(https://www.kernel.org/doc/html/v5.17/block/capability.html)
-
-With this patch return to have only block capability flags in this file 
-and including the values: https://snipboard.io/QrN6hg.jpg
-
-But as you tell that this file is a bad idea, 
-Documentation/block/capability.rst should be removed?
-
-About if should be a user API, I don't have enough experience to be able 
-to say if and in which cases it could be useful on the user side. From 
-what I could see with the documentation page correct is that you can at 
-least immediately see (after a very fast search) for example if the 
-block device is removable and if it is partitionable. And even if the 
-values was changed pointing to the doc page of the used kernel version 
-and having the values in doc is still possible see what flags are 
-enabled from doc page.
+RnJvbTogQW15IFBhcmtlcg0KPiBTZW50OiAxNyBKYW51YXJ5IDIwMjMgMDI6MTENCj4gDQo+IFRo
+aXMgcGF0Y2ggdXNlcyBhIHN3aXRjaCBzdGF0ZW1lbnQgZm9yIHBlX29yZGVyLCB3aGljaCBpbXBy
+b3Zlcw0KPiByZWFkYWJpbGl0eSBhbmQgb24gc29tZSBwbGF0Zm9ybXMgbWF5IG1pbm9ybHkgaW1w
+cm92ZSBwZXJmb3JtYW5jZS4gSXQNCj4gYWxzbywgdG8gaW1wcm92ZSByZWFkYWJpbGl0eSwgcmVj
+b2duaXplcyB0aGF0IGBQQUdFX1NISUZUIC0gUEFHRV9TSElGVCcgaXMNCj4gYSBjb25zdGFudCwg
+YW5kIHVzZXMgMCBpbiBpdHMgcGxhY2UgaW5zdGVhZC4NCg0KVGhlIGNvbXBpbGVyIGlzIHByZXR0
+eSBtdWNoIGd1YXJhbnRlZWQgdG8gZG8gdGhhdCBhbnl3YXkuDQpUaGUgJ2NoYWluZWQgaWZzJyBj
+YW4gZ2VuZXJhdGUgYmV0dGVyIGNvZGUgYmVjYXVzZSB0aGUNCmNvbW1vbiBjYXNlIGNhbiBiZSBw
+dXQgZmlyc3QuDQpUaGUgY29tcGlsZXIgd2lsbCBiYXNlIGl0cyAnY2hhaW5lZCBpZnMnIChqdW1w
+IHRhYmxlcw0KY2FuJ3QgYmUgdXNlZCBkdWUgdG8gY3B1ICdmZWF0dXJlcycgLSBhbmQgd291bGQg
+YmUgc2xvd2VyDQphbnl3YXkgd2l0aCBvbmx5IGEgZmV3IGxhYmVscykgb24gbWluaW1pc2luZyB0
+aGUgbnVtYmVyDQpvZiBjb25kaXRpb25hbHMuDQoNCihOZXZlciBtaW5kIGFueSBvZiB0aGUgb3Ro
+ZXIgcHJvYmxlbXMuKQ0KDQoJRGF2aWQNCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQW15IFBhcmtl
+ciA8YXBhcmswMDA2QHN0dWRlbnQuY2Vycml0b3MuZWR1Pg0KPiAtLS0NCj4gIGZzL2RheC5jIHwg
+MTMgKysrKysrKystLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgNSBk
+ZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9mcy9kYXguYyBiL2ZzL2RheC5jDQo+IGlu
+ZGV4IGM0OGEzYTkzYWIyOS4uZThiZWVkNjAxMzg0IDEwMDY0NA0KPiAtLS0gYS9mcy9kYXguYw0K
+PiArKysgYi9mcy9kYXguYw0KPiBAQCAtMzIsMTMgKzMyLDE2IEBADQo+IA0KPiAgc3RhdGljIGlu
+bGluZSB1bnNpZ25lZCBpbnQgcGVfb3JkZXIoZW51bSBwYWdlX2VudHJ5X3NpemUgcGVfc2l6ZSkN
+Cj4gIHsNCj4gLSAgICBpZiAocGVfc2l6ZSA9PSBQRV9TSVpFX1BURSkNCj4gLSAgICAgICAgcmV0
+dXJuIFBBR0VfU0hJRlQgLSBQQUdFX1NISUZUOw0KPiAtICAgIGlmIChwZV9zaXplID09IFBFX1NJ
+WkVfUE1EKQ0KPiArICAgIHN3aXRjaCAocGVfc2l6ZSkgew0KPiArICAgIGNhc2UgUEVfU0laRV9Q
+VEU6DQo+ICsgICAgICAgIHJldHVybiAwOw0KPiArICAgIGNhc2UgUEVfU0laRV9QTUQ6DQo+ICAg
+ICAgICAgIHJldHVybiBQTURfU0hJRlQgLSBQQUdFX1NISUZUOw0KPiAtICAgIGlmIChwZV9zaXpl
+ID09IFBFX1NJWkVfUFVEKQ0KPiArICAgIGNhc2UgUEVfU0laRV9QVUQ6DQo+ICAgICAgICAgIHJl
+dHVybiBQVURfU0hJRlQgLSBQQUdFX1NISUZUOw0KPiAtICAgIHJldHVybiB+MDsNCj4gKyAgICBk
+ZWZhdWx0Og0KPiArICAgICAgICByZXR1cm4gfjA7DQo+ICsgICAgfQ0KPiAgfQ0KPiANCj4gIC8q
+IFdlIGNob29zZSA0MDk2IGVudHJpZXMgLSBzYW1lIGFzIHBlci16b25lIHBhZ2Ugd2FpdCB0YWJs
+ZXMgKi8NCj4gLS0NCj4gMi4zOS4wDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
