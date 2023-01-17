@@ -2,171 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4A566D732
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0054366D733
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjAQHr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
+        id S231216AbjAQHsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 02:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235975AbjAQHrY (ORCPT
+        with ESMTP id S235869AbjAQHrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:47:24 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B232244BF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:47:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673941643; x=1705477643;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=SFNjn0V6NQlopCaF8xibTUZCm3t0/YFIlHOG+78/CxI=;
-  b=jGsdTEskHKT5tEMvc2YHKs5aAQgjfxciISAO2Hk6t11Ef4RkIsXSB+OJ
-   bhEo3Wr5Rokusj4+iqo3Snnn5aAg+rclSlHq6whmhyketLzxqrVtsciee
-   ZOALL5XQjAMNvgRnU0TjaKbCb28aGj0vSG/TQQGramR7yfLNci/Q//hJs
-   qwSI+ZFOU3o5iRHgJgyfGcVc2a3MSuL3UqWIeUlUxmpwtyAwT/Y6ScKSZ
-   7QE64aHh8YwR3D045rRveu5g+yu2QfueaV9WWZvNI7VlUsXdYZYInjX/j
-   MLROJArzB+hAH83yj3AYSPHDR62MSdAeVvfEziRJaBHQUg/yi41oVXHTy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="305007101"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="305007101"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2023 23:47:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="689708383"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="689708383"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jan 2023 23:47:21 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 23:47:20 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 23:47:20 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 16 Jan 2023 23:47:20 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RMoMs2iFzSI4b051eivlyutBoIsK/2ASoQkcbArbHYFVMGtaHtHBTe0UwGKiY1XauNNK7OGyzt9ZZe0h+dtOccNbFQIDnkJTEQJWYYkPGuTi9Zf5D0uF2MvUOTH1Cz3T+XEnZg1MJUk0XWK8U3S9yEnYLqD225NQx2woFY7IGYae9MLjcTPRF8Uj8XK/0kR0rtdPqLcfpf8xHbPcBIJYWgegDV7Z/vgjlrAYhcbDsj69SFCD2nEVmnC/HXTr0F0AzlwjMk1skib4Xnqbo95ndy8qDfEubAweICUVoWZp9d1RWhvS1K0uT3WYOLymhKlFcTsK7DnaodD+a18OmSPHAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Zb5zDv15o4VDYgDHfoHxHFBsirNOYiUQ1k5d1QjHbQ=;
- b=ecnVV+CWAnG9zuOEsOl8YqFaHffpn1CAgm33vs01Vvg7D7ThcwvGqOUUdgSOFgGKlLVTAlb8s1J4C9shVmxywN5bmRa4FyhyLiluUX3eVQj5HhHfSd3OiB/rWtLVJ6wC+dNiXUuDUiaccZiycLHu/+IEO30zd+Qc1+PMPsWOEHzkJpVYp6KmcxDV6V6QT4vYG/1/9syMfU1ZgUu8Fo++ednoymliVERePI8IxTD5ANt9IAAYXogz1td2GYdz/Wsi8ZNJ8C6ysiF86TZVifaUTjSQmzE2oWt6QIZLmYlPEWpNex+2k0avBYl73maPk+woxSk1VLGi4Tefh2jlkHVWfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
- by PH0PR11MB7712.namprd11.prod.outlook.com (2603:10b6:510:290::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
- 2023 07:47:16 +0000
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::1531:707:dec4:68b4]) by CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::1531:707:dec4:68b4%3]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 07:47:16 +0000
-Message-ID: <94f49d5f-9e57-68c0-8c86-36a790c7c729@intel.com>
-Date:   Tue, 17 Jan 2023 15:47:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.1
-Subject: Re: [linus:master] [hugetlb] 7118fc2906:
- kernel_BUG_at_lib/list_debug.c
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        kernel test robot <oliver.sang@intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
-        Youquan Song <youquan.song@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Feng Tang <feng.tang@intel.com>
-References: <202301170941.49728982-oliver.sang@intel.com>
- <2f483247-da76-9ec9-3e51-f690939f4585@suse.cz>
-From:   "Yin, Fengwei" <fengwei.yin@intel.com>
-In-Reply-To: <2f483247-da76-9ec9-3e51-f690939f4585@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0015.apcprd02.prod.outlook.com
- (2603:1096:3:17::27) To CO1PR11MB4820.namprd11.prod.outlook.com
- (2603:10b6:303:6f::8)
+        Tue, 17 Jan 2023 02:47:25 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE075244A4
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:47:22 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Bxa+qJUsZjuQoCAA--.6161S3;
+        Tue, 17 Jan 2023 15:47:21 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+SHUsZjJqMaAA--.15695S3;
+        Tue, 17 Jan 2023 15:47:20 +0800 (CST)
+Subject: Re: [PATCH v3 5/5] LoongArch: Add generic ex-handler unwind in
+ prologue unwinder
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jinyang He <hejinyang@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20230112004048.26191-1-hejinyang@loongson.cn>
+ <CAAhV-H417wC+Bh6-EeD6sKmqgrJDP8kQPFZ9xu19Ev9Egdu1YQ@mail.gmail.com>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <d513fb21-2767-eece-2333-f7064dcdf3be@loongson.cn>
+Date:   Tue, 17 Jan 2023 15:47:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4820:EE_|PH0PR11MB7712:EE_
-X-MS-Office365-Filtering-Correlation-Id: 61c2a3cf-a802-4fd5-016e-08daf85f0d66
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mYh8Kb3d/yHkZYLYtaig/+PP/zQZa1GX8fx7pPf7LBExIYzUTB35lfQ1cnX8Jm7xIR4sEv2IL+cltavPhHrHK26/l0nWIHH0RUeOB7uZho1Q6YfsBoxpig9sD3qfsRDeswYS5FT4tTSptATgcD7ozJ8eHqT1eZlVHChlCykfCIJnEqKHHWG+4RAvuiL2Oh2To2PHJTRWlz5QiRICGXomTZIZplSbPwHsfWQcSxPtFYQYJ/aCpUCeirphbyRqDxFKAMejDFfdstxOjcWWCvGRD/RhLV0tNTkcuV/5mH3XiBtHHYxtNYSU7smb3EoIkfc5RRyzeZ4tAfoKYAz3pHlot8XV9ucKj0VqXCjW+YLLd+FlJNcKl2kZgJodBWSXJ2qEKhoGTz+Xz1FUIFoUG9RLu6gWy9vDbVhmHW5M1IhM2SymTnBrv5OjztLgt4pk/SWrKqvaVyZOLB5BAIhsNMZyHveXQ7MsfUJeGCZchUyTuF41BmUhvIXPTLA4T9ImjPJ4K77fhlPcsSI8G2eXzLlJmkSyEaNmZlDDk5e8Q7lOGp5oBr7+gt3vsozVog6e+zYJj2I4kTZIUJyAZZPHjobFubR5y8Q+oFfd7DSCViLVREnEH5no3kMpoR6TjpXcZWO+uYH1fxb3V+yLex5IJP/fP/Z3IBWoC78YGUX/iTK03GDjG/AxOsDDLrbkyy+eY86HMMSe8qXTOX7xu16VUv/BADYJWckVx7GmExqGJOju8iE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(136003)(39860400002)(366004)(451199015)(83380400001)(31686004)(54906003)(110136005)(6486002)(6512007)(36756003)(478600001)(31696002)(186003)(38100700002)(2616005)(86362001)(82960400001)(2906002)(41300700001)(4744005)(53546011)(107886003)(26005)(6506007)(6666004)(66556008)(4326008)(8676002)(66946007)(66476007)(7416002)(8936002)(316002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZkdOUEptWUt2dWtLVXBVZlgvNG4wR09jakVIdFBMUjNCMGREK3RnOFVPdHpQ?=
- =?utf-8?B?d0ZmUEsyQUo3WmNPY2NBc2MyNHBtL1psd1IxQ3pDb1JudnQ4NEg4SjJzeGZ2?=
- =?utf-8?B?WkNFRHozQ3dUR3lZeFduQmtBSThVcW96cFZhbllCMkhnTGgrdmk2QTdQYnoy?=
- =?utf-8?B?UHNRRnQrYUpvN1F2L3dLREFpUUJwd0ZTc0JHTWJPdmQyZ29tbE55VjkvRE9H?=
- =?utf-8?B?bG5vWUFHNXVqbUpuQWJWcGZMTnNNcUNzMVZIVGR1dlRpbyt5Wjc3Ry9mUmlz?=
- =?utf-8?B?RXYwVEkyb2FlakxCcVRmU3VMM2JaeDI3LytYTXFKR1FzOHNGSG5iUi9lTEdB?=
- =?utf-8?B?TzVCNmw1dWJ3R0lxSUgrdU5qOTFZYUNIT0ZOR2RzSm55ZzUrYjdXR2lFV1J1?=
- =?utf-8?B?c1pxei9OWmJjYXMzN0M1MTFvZDNPU20rbHcrb1piWjYxUzA4VTMwbElQVGtu?=
- =?utf-8?B?ZjZwNE5iN2U0WHQ5VFgwYXpmUFJ4em1jbTY3cmJqbVpUN2IyNUVCMTFvU0xW?=
- =?utf-8?B?czFVdWU4TG9sN3A4ZXhQQ1p6SWw1TGZ6Z3F4WVBkTEEwZWxPbVlWTXphREY0?=
- =?utf-8?B?K2p3NkF1KzVmZ3EzVi9JVmxNY1k1QTFFV3gyeE5Zc3Q1VVh0MlpOb3AxSksz?=
- =?utf-8?B?T3FwSWhBY1JYRU5rTzRSMmVNazYxRi9NMXJ0UlAveEhrNDhGRDNiaS9JR2Qr?=
- =?utf-8?B?ZWtXekVrRU5DMFB5RTQ4MWgyL0ZJQmhxOGxFMkZXY3NyZ1o4R0ExZVlINDlt?=
- =?utf-8?B?U29hS2owanF5WmlIWGlFU3h3ajh5UXVtK3oza2g5ZHJkZjN5ODhEbDZuRXJL?=
- =?utf-8?B?d0tIK1gvYkh4WVB2Y3VrMVJuVUJiTnhwVEtGYXhxcXYrbUxhT2NiZzI4bXpL?=
- =?utf-8?B?ZUpyRmd1SUljVmU0Y3E5WjFqSUYwZGRvUGdsSjNMUm4xR2ZpYUM0TUFCTkYw?=
- =?utf-8?B?VEVQampnckRIcjlpY0Y3a0dBak8zem1vYUNkc3A0VGNidEY5ei9UMWtBTDB2?=
- =?utf-8?B?Vy9NSzBkNEVXdjU5elBOaGc1VWh2dktITlIwVWFoek9jc2FxRUxNS0hQRmN2?=
- =?utf-8?B?OVh3cGN4Z2t3SHJyTEhrZjZIVnhLcHBOUFEwTVduN1lLZStHZ2ZyTHU1OUR3?=
- =?utf-8?B?dW5SSzkyLys5ZVJ3aFBlQlI5d3dHVmt0ZG9IMVNMdDA4YWNIUlNtU3hLTHZq?=
- =?utf-8?B?VnFNdXdyRGxwdDg0SDNKWDZIZGVYamFsanlreHlpbGtqSk1kM2RTMVBsNWFL?=
- =?utf-8?B?eEFncHd4RksxenpTTUx1WC9XNzQvbTZEcTROY3p3ajcxM1hhSU5EMU13YVZs?=
- =?utf-8?B?ZWE1T1UweVdhdy9aYXpOVEJaUGpBa1F0MCtyQXJXREJrN1ZmNE4wWXBqdk1N?=
- =?utf-8?B?amRLdFIzclQvTlFFZFhFeWZmWk5rdkVGRWFMYWo4d0UvM2hQU2ZZamNGL0Q4?=
- =?utf-8?B?UTdlZXpPKy9vajZIOUlEUHpYcTByVXJBQ2d3aW1HRGZvVm9lak1OdS9NNFBG?=
- =?utf-8?B?RTNGRkU2YzVTRnlpd2JNdjJMTEp1YUZQdEY3NDJsNUk3YzJ3V25wYVAzZ1RW?=
- =?utf-8?B?MDdLM2Qzc2wwazhnN3dOaHZxdTh2eXBqdDBmdDdjblgrTXh4M2lqR0ZsQzNG?=
- =?utf-8?B?WmNRSTFVQ1A2MEpzK1JKV0c1UVBxUmVUR0xsVWtiT0FNelFsSUlUUDl1R2FU?=
- =?utf-8?B?dHcyQ1ZSa3BITGxGZW13Q0RVbmMvK0JGUHBiQXVZeFljTXpaVkxCbTNiZHNZ?=
- =?utf-8?B?RUxkRzJRczdFNG1DWEtlODFBaGVxTDBGNDRQZmk2K1o0NzRoZG1sREx1WmZX?=
- =?utf-8?B?Wnl2eHZlZTdtQTVKNllZa0JDS1NpQXlIdVB3ZEs0cDFPODhnemNJRm5yQUZx?=
- =?utf-8?B?ZkRhK1ZMWjJvNkJna09scFZuTm1ZcE1JUFFkNHZrK3VjdDZUcTV5aStTdS9l?=
- =?utf-8?B?YmpOM2hlbHU3Ny8rWlZTdXVJMmRjSUxuUFNNQm8rV3pEdEtMdjVJZmtqcFN0?=
- =?utf-8?B?TVRqZ3dTdzkvTHlNcWE1V3BlSkp0L29QU1RMVXZqY2pNLyt4NlBsS0o4ckRq?=
- =?utf-8?B?RlNGNmQvOTZGWG1ESklxTHcwM1M3b1kxQkRDWVRMQjV2V0pBeGpvVDlVM2x1?=
- =?utf-8?Q?jS7nhNJQGu+HTZldwlhQs8lWp?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61c2a3cf-a802-4fd5-016e-08daf85f0d66
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 07:47:15.9840
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gJXIEelmeInFRgOEEpYFKBBosSsW4JP+Z0KzBbVwdJATEW51mCLHv8URoUE/0O+HNBnkAo0y/8TGcXDHz+Rlww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7712
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H417wC+Bh6-EeD6sKmqgrJDP8kQPFZ9xu19Ev9Egdu1YQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cxf+SHUsZjJqMaAA--.15695S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKrWrGryUAw1xAF1fZFy5Jwb_yoW3Gr1fpF
+        95CFn5GF48Kry2qryUXryDur95Aw1kCr17KF9rKa4rGFnFvryfWr1vy34v9FWDJrW8WryI
+        vFn5Xr9I9a13ta7anT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -175,23 +70,238 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/17/2023 3:39 PM, Vlastimil Babka wrote:
-> So either the assumption of refcount being already 0 is wrong (shouldn't be,
-> AFAIK?), or this atomic operation effectively prevents some very subtle race
-> (although IIRC atomic_set() has no barrier semantics defined, it could still
-> affect a specific CPU?
-Is there difference of atomic_set() for 32bit and 64bit? This issue is only
-triggered on 32bit configuration.
-
+On 2023/1/17 下午2:25, Huacai Chen wrote:
+> On Thu, Jan 12, 2023 at 8:41 AM Jinyang He <hejinyang@loongson.cn> wrote:
+>>
+>> When exception is triggered, code flow go handle_\exception in some
+>> cases. One of stackframe in this case as follows,
+>>
+>> high -> +-------+
+>>          | REGS  |  <- a pt_regs
+>>          |       |
+>>          |       |  <- ex trigger
+>>          | REGS  |  <- ex pt_regs   <-+
+>>          |       |                    |
+>>          |       |                    |
+>> low  -> +-------+           ->unwind-+
+>>
+>> When unwinder unwind to handler_\exception it cannot go on prologue
+>> analysis. It is asynchronous code flow, we should get the next frame
+>> PC from regs->csr_era but not from regs->regs[1]. And we copy the
+>> handler codes to eentry in the early time and copy the handler codes
+>> to NUMA-relative memory named pcpu_handlers if NUMA is enabled. Thus,
+>> unwinder cannot unwind normally. Therefore, try to give some hint in
+>> handler_\exception and fixup it in unwind_next_frame.
+>>
+>> Reported-by: Qing Zhang <zhangqing@loongson.cn>
+>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>> ---
+>>   arch/loongarch/include/asm/unwind.h     |   2 +-
+>>   arch/loongarch/kernel/genex.S           |   3 +
+>>   arch/loongarch/kernel/unwind_prologue.c | 100 +++++++++++++++++++++---
+>>   arch/loongarch/mm/tlb.c                 |   2 +-
+>>   4 files changed, 92 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+>> index cb428e1b19af..a38eb152aefb 100644
+>> --- a/arch/loongarch/include/asm/unwind.h
+>> +++ b/arch/loongarch/include/asm/unwind.h
+>> @@ -22,7 +22,7 @@ struct unwind_state {
+>>          char type; /* UNWINDER_XXX */
+>>          struct stack_info stack_info;
+>>          struct task_struct *task;
+>> -       bool first, error, is_ftrace;
+>> +       bool first, error, reset;
+> Hi, Qing,
+> Do you think is_reset is better than reset here?
 > 
-> I guess we could
-> - try to restore that set_page_count(p, 0); on current kernel to see if it
-> kills the bug
-I tried this. But didn't try too hard. 20 times reboot didn't trigger the issue
-with this line added to commit 0af8489b02.
+>>          int graph_idx;
+>>          unsigned long sp, pc, ra;
+>>   };
+>> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+>> index 75e5be807a0d..7e5c293ed89f 100644
+>> --- a/arch/loongarch/kernel/genex.S
+>> +++ b/arch/loongarch/kernel/genex.S
+>> @@ -67,14 +67,17 @@ SYM_FUNC_END(except_vec_cex)
+>>          .macro  BUILD_HANDLER exception handler prep
+>>          .align  5
+>>          SYM_FUNC_START(handle_\exception)
+>> +       666:
+>>          BACKUP_T0T1
+>>          SAVE_ALL
+>>          build_prep_\prep
+>>          move    a0, sp
+>>          la.abs  t0, do_\handler
+>>          jirl    ra, t0, 0
+>> +       668:
+>>          RESTORE_ALL_AND_RET
+> I think the 668 label should be after RESTORE_ALL_AND_RET, right?
 
-Without this line, hit the issue 4 times in 10 times reboot testing.
+This means that the value of ra after do_\handler is called, the 668 
+label should come after jirl.
 
+Thanks
+-Qing
+> 
+> Huacai
+> 
+>>          SYM_FUNC_END(handle_\exception)
+>> +       SYM_DATA(unwind_hint_\exception, .word 668b - 666b)
+>>          .endm
+>>
+>>          BUILD_HANDLER ade ade badv
+>> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
+>> index e6c3f2ee507c..e52c18c2b604 100644
+>> --- a/arch/loongarch/kernel/unwind_prologue.c
+>> +++ b/arch/loongarch/kernel/unwind_prologue.c
+>> @@ -2,21 +2,100 @@
+>>   /*
+>>    * Copyright (C) 2022 Loongson Technology Corporation Limited
+>>    */
+>> +#include <linux/cpumask.h>
+>>   #include <linux/ftrace.h>
+>>   #include <linux/kallsyms.h>
+>>
+>>   #include <asm/inst.h>
+>> +#include <asm/loongson.h>
+>>   #include <asm/ptrace.h>
+>> +#include <asm/setup.h>
+>>   #include <asm/unwind.h>
+>>
+>> -static inline void unwind_state_fixup(struct unwind_state *state)
+>> +extern const int unwind_hint_ade;
+>> +extern const int unwind_hint_ale;
+>> +extern const int unwind_hint_bp;
+>> +extern const int unwind_hint_fpe;
+>> +extern const int unwind_hint_fpu;
+>> +extern const int unwind_hint_lsx;
+>> +extern const int unwind_hint_lasx;
+>> +extern const int unwind_hint_lbt;
+>> +extern const int unwind_hint_ri;
+>> +extern const int unwind_hint_watch;
+>> +extern unsigned long eentry;
+>> +#ifdef CONFIG_NUMA
+>> +extern unsigned long pcpu_handlers[NR_CPUS];
+>> +#endif
+>> +
+>> +static inline bool scan_handler(unsigned long entry_offset)
+>>   {
+>> -#ifdef CONFIG_DYNAMIC_FTRACE
+>> -       static unsigned long ftrace = (unsigned long)ftrace_call + 4;
+>> +       int idx, offset;
+>>
+>> -       if (state->pc == ftrace)
+>> -               state->is_ftrace = true;
+>> +       if (entry_offset >= EXCCODE_INT_START * VECSIZE)
+>> +               return false;
+>> +
+>> +       idx = entry_offset / VECSIZE;
+>> +       offset = entry_offset % VECSIZE;
+>> +       switch (idx) {
+>> +       case EXCCODE_ADE:
+>> +               return offset == unwind_hint_ade;
+>> +       case EXCCODE_ALE:
+>> +               return offset == unwind_hint_ale;
+>> +       case EXCCODE_BP:
+>> +               return offset == unwind_hint_bp;
+>> +       case EXCCODE_FPE:
+>> +               return offset == unwind_hint_fpe;
+>> +       case EXCCODE_FPDIS:
+>> +               return offset == unwind_hint_fpu;
+>> +       case EXCCODE_LSXDIS:
+>> +               return offset == unwind_hint_lsx;
+>> +       case EXCCODE_LASXDIS:
+>> +               return offset == unwind_hint_lasx;
+>> +       case EXCCODE_BTDIS:
+>> +               return offset == unwind_hint_lbt;
+>> +       case EXCCODE_INE:
+>> +               return offset == unwind_hint_ri;
+>> +       case EXCCODE_WATCH:
+>> +               return offset == unwind_hint_watch;
+>> +       default:
+>> +               return false;
+>> +       }
+>> +}
+>> +
+>> +static inline bool fix_exceptions(unsigned long pc)
+>> +{
+>> +#ifdef CONFIG_NUMA
+>> +       int cpu;
+>> +
+>> +       for_each_possible_cpu(cpu) {
+>> +               if (!pcpu_handlers[cpu])
+>> +                       continue;
+>> +               if (scan_handler(pc - pcpu_handlers[cpu]))
+>> +                       return true;
+>> +       }
+>>   #endif
+>> +       return scan_handler(pc - eentry);
+>> +}
+>> +
+>> +/*
+>> + * As we meet ftrace_regs_entry, reset first flag like first doing
+>> + * tracing. Prologue analysis will stop soon because PC is at entry.
+>> + */
+>> +static inline bool fix_ftrace(unsigned long pc)
+>> +{
+>> +#ifdef CONFIG_DYNAMIC_FTRACE
+>> +       return pc == (unsigned long)ftrace_call + LOONGARCH_INSN_SIZE;
+>> +#else
+>> +       return false;
+>> +#endif
+>> +}
+>> +
+>> +static inline bool unwind_state_fixup(struct unwind_state *state)
+>> +{
+>> +       if (!fix_exceptions(state->pc) && !fix_ftrace(state->pc))
+>> +               return false;
+>> +       state->reset = true;
+>> +       return true;
+>>   }
+>>
+>>   /*
+>> @@ -39,14 +118,10 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>>          if (state->sp >= info->end || state->sp < info->begin)
+>>                  return false;
+>>
+>> -       if (state->is_ftrace) {
+>> -               /*
+>> -                * As we meet ftrace_regs_entry, reset first flag like first doing
+>> -                * tracing. Prologue analysis will stop soon because PC is at entry.
+>> -                */
+>> +       if (state->reset) {
+>>                  regs = (struct pt_regs *)state->sp;
+>>                  state->first = true;
+>> -               state->is_ftrace = false;
+>> +               state->reset = false;
+>>                  state->pc = regs->csr_era;
+>>                  state->ra = regs->regs[1];
+>>                  state->sp = regs->regs[3];
+>> @@ -111,8 +186,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
+>>
+>>   out:
+>>          state->first = false;
+>> -       unwind_state_fixup(state);
+>> -       return !!__kernel_text_address(state->pc);
+>> +       return unwind_state_fixup(state) || __kernel_text_address(state->pc);
+>>   }
+>>
+>>   static bool next_frame(struct unwind_state *state)
+>> diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
+>> index da3681f131c8..8bad6b0cff59 100644
+>> --- a/arch/loongarch/mm/tlb.c
+>> +++ b/arch/loongarch/mm/tlb.c
+>> @@ -251,7 +251,7 @@ static void output_pgtable_bits_defines(void)
+>>   }
+>>
+>>   #ifdef CONFIG_NUMA
+>> -static unsigned long pcpu_handlers[NR_CPUS];
+>> +unsigned long pcpu_handlers[NR_CPUS];
+>>   #endif
+>>   extern long exception_handlers[VECSIZE * 128 / sizeof(long)];
+>>
+>> --
+>> 2.34.3
+>>
+>>
 
-Regards
-Yin, Fengwei
