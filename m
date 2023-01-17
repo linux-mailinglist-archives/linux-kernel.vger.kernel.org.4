@@ -2,107 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E04A670CEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7E7670CF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjAQXNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S229546AbjAQXNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjAQXMP (ORCPT
+        with ESMTP id S229837AbjAQXMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:12:15 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE436843E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:54:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C5rGtkvmtdII4ctZxqLo7bGId075bzYEQ/KJ232bwjZoSR5ukyXk8fpHqsSXNElTSHx77bvnXHuXXFkyJN5c5BeNoR3JpLhHWz2mDN1eREaPsyCyEMShUp2qCjsbwiyfVZCbJZ1ZFhXpr3kkdVGUeoaUlYll+tKOrc45SpSwStlQQkSKFNym6miC7Rf0gW/RfPdNItTXvl5TPQUg8wmzWWnYR78KRcfgzYHOx1PEncDKMVTrvVjD7YWAOzMsj9P/6G51agtOZdpc6rduAufk47Jk86eJ1VZ3SQM/RFzHchxapFgh07Bd2qJvCtS2Q7yauEYsHvbEGrU+hywCcvqCpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SjsEJxCIiNQrr3lC3kqt+LaH6vRabUEFOrfiLlZ39qQ=;
- b=dXpQc1B/Vy6j7WjcYJUa7uvnDd0Td2yyidUX3FKKkFmxbNw0CCLnQjB6j7QGWPzA9ON4PPk8INA1trurDZ62elzpUkQpqbPqgwGUeEeC3zZsjyF7mPODjphwDjPdywDLuKbSrVVOxcxbg+eRuK55V01pKQIYxUgZnHrGyzuoR9bdUtm5UntAd2JvAh6pW1SiWdBnhcxZ8QSJWe3SkKhrldoDioY4jQ+Zb2ncxSEJhptAUmf1RGLLdH5YdjfJgIKL2fYWBp7F9XQJz/P4FUYDX7Nbx5yHp9oXfP8f235Muis5NoPYDDm6mDLzXvKR3aoPmbC5xKwdYw3GWdYY0dl8ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SjsEJxCIiNQrr3lC3kqt+LaH6vRabUEFOrfiLlZ39qQ=;
- b=m6eUFKfCCMc/2Dk4y9JKsGLZyBFmZjmn/CkP8YG0weVsddQVmt6fD2vNQ0ih+Z6b1yNL2XSDMc8a3Y6/1RvAxqEzgxPL6/AV6CKwXnJgDPCQdr5TL7pcBtXJXdMEe4i/77n0dVa4We7pQwMFikV/L/EGyQlkvW+/WSjoVkC/iIs=
-Received: from MW4P221CA0011.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::16)
- by DS7PR12MB5984.namprd12.prod.outlook.com (2603:10b6:8:7f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
- 2023 20:54:55 +0000
-Received: from CO1NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8b:cafe::dd) by MW4P221CA0011.outlook.office365.com
- (2603:10b6:303:8b::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
- Transport; Tue, 17 Jan 2023 20:54:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT025.mail.protection.outlook.com (10.13.175.232) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Tue, 17 Jan 2023 20:54:54 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 17 Jan
- 2023 14:54:52 -0600
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Wayne Lin <Wayne.Lin@amd.com>,
-        Roman Li <roman.li@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        hersen wu <hersenxs.wu@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Lyude Paul <lyude@redhat.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/display: fix issues with driver unload
-Date:   Tue, 17 Jan 2023 15:54:51 -0500
-Message-ID: <20230117205452.195298-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 18:12:54 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104FB6842B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:56:22 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gz9-20020a17090b0ec900b002290bda1b07so249017pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PWUEuVg2yLbTHhqGOKyu9+dynRi4bd1JoGcQcp8LkiE=;
+        b=CDR7oKCSBCtZ7Uc6Kccsr0D1zllHnPIaN6GhkhQWPOiXtmAlruy0P841YnVvkQEdxb
+         nJubvqqOeKZCIc88MmU8d1wSeuQ3VRxjgt2EHZPftdgGm1Oxhn/ty/MkPPRdK8w/39eb
+         46cXmu/CQDDOI/F0rJpCaxo6lTMZXAI88izYbeSxGFmUdG84scp0kLvq+kZP8u6G3Auu
+         nSn7AI65adzRexcXErxJOOnUNqmc1fOtO5eTgSwJG8AJbuQVVdA9ZD0DfwGbpEg9g3bB
+         MKbzalcJIvTWZMnRM1MTjKQETtypbhC4/C4pU/IJ+PHvth1t9tinEXj6S0oFWorXahkb
+         G4Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PWUEuVg2yLbTHhqGOKyu9+dynRi4bd1JoGcQcp8LkiE=;
+        b=QhfK8QGTJ8sGCEiEDkMp8UncdNT1aZ+B+Iyksk6o7Vewpv6HdmWS6C4hCTvUHwi/Lt
+         SkhAlPO06oUxxywy06ObSmvnK9Ee3LUhAvO0TISLR+GXnvsGzBjIEsxaO9a/p+P9GHsv
+         sbs5tCT2Eo0t/2KUErMO03eq2GEqBtGlpq4y+txI4XGtFm2CECyGpistpHqdkh4T5N7i
+         j8DcCA5zDnyH1EilgPgNz38Zsen9b1OmClVsWe8PhZ+Rk6hSEKqbIMJ5DapGpldGTRjF
+         n4G7XerCHgKuDYYnpx+hIXToVh3ggiyH2bU5iq6RrkrtJawuB/ecZasKQya06lRv7c8P
+         UiAg==
+X-Gm-Message-State: AFqh2koUs+Lxkm6VKsI5X4Y6js0V5z7ue1dLaO65iHm8X6cwYZzuLtlJ
+        UIdeenH21DS/1MUa6a+9W3FeLQ==
+X-Google-Smtp-Source: AMrXdXvMnv6DNWNWJNTeOXhjc6KqDbYltMUPd/NjKUObtCSPm5o9Rt930RYPL0nc90qlXIH89q5ioA==
+X-Received: by 2002:a17:903:2614:b0:193:256d:8afe with SMTP id jd20-20020a170903261400b00193256d8afemr2327220plb.2.1673988981743;
+        Tue, 17 Jan 2023 12:56:21 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id v7-20020a1709028d8700b00186bc66d2cbsm21698818plo.73.2023.01.17.12.56.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 12:56:21 -0800 (PST)
+Date:   Tue, 17 Jan 2023 20:56:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v11 018/113] KVM: TDX: create/destroy VM structure
+Message-ID: <Y8cLcY12zDWqO8nd@google.com>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <68fa413e61d7471657174bc7c83bde5c842e251f.1673539699.git.isaku.yamahata@intel.com>
+ <20230113151258.00006a6d@gmail.com>
+ <Y8F1uPsW56fVdhmC@google.com>
+ <20230114111621.00001840@gmail.com>
+ <Y8bFCb+rs25dKcMY@google.com>
+ <20230117214414.00003229@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT025:EE_|DS7PR12MB5984:EE_
-X-MS-Office365-Filtering-Correlation-Id: a774ee50-c2d3-4d9b-1e3c-08daf8cd15d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IIJXRV0xL4/PuhjQQR2BETjTrEUgUQnFxJGvNplZMIVYU1jZV/cg7LmhYWVBjA1rfNywbuMg6EGHp15aE/pfO4lefHGcXgv1czktYhQP6ghPI3+3zYlBkPfMFWkMQZWRxvZNReo8nlSGc3uEiF2gq0MUCa22VcRfODxZAYjSUZhQagRYqA060ffpWhz5sOG4W8NDHeKderzdq8a3mjwCX3czTsu+88xBgBgMG2zGfn7YgFJUz4zrjeXOz8wQXwoabWt4P178xMkbATsug5jXEn7l5Z5qH9OE71g3jfmImCxYkgaStNjhozcb++lfc1DpKJ5NKxd+ZCYyYKMpEGGiUaBHuWZ8f74DoOKxI8cvj1MuI/Ua0ZTyVTDVtvI4OA1MohPU26YmIrHHoxs3VSKD6Tpq7afrRgP61jLR3wQcN3diMqD2Jx4nv5anj9rg07FGaGyoxAlyhQ47CQAMYjzGU/6Sj6JUCsot1vk/rfbKrX0ZwVa5IbEP6f5mUG49IQN+RN78Pp2BHaq5ow1I9XUc/L0mJPl9knoj6GJg3RHH5Q4cdcpIs+o9thJiR9hmkAW0rZzCfFcSTRhe/ZGsSuRNozHCBKHdMHOZnDRYs5FvfMK+T2CjYh5/N6mFIPGnCiyGCCovNFvRb6v0euiHY7wA9uB4k48FyYB/HCoqAoPiRQtstUxAT/I3gMVFjRI53M6yMV+Hje46z+0j9LVaN10is8/YjabL3yj19tXLiTmVehTRPC458Qw5a4kxTsqPpDLzTXBjYZnFivZkyJynnxwLpA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(36756003)(356005)(86362001)(6916009)(8936002)(8676002)(4326008)(44832011)(70586007)(70206006)(5660300002)(2906002)(36860700001)(82740400003)(81166007)(83380400001)(478600001)(316002)(54906003)(47076005)(40460700003)(40480700001)(41300700001)(82310400005)(1076003)(26005)(16526019)(336012)(426003)(2616005)(186003)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 20:54:54.2860
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a774ee50-c2d3-4d9b-1e3c-08daf8cd15d2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5984
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117214414.00003229@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,48 +83,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we run into a number of WARN()s when attempting to unload the
-amdgpu driver (e.g. using "modprobe -r amdgpu"). These all stem from
-calling drm_encoder_cleanup() too early. So, to fix this we can stop
-calling drm_encoder_cleanup() in amdgpu_dm_fini() and instead have it be
-called from amdgpu_dm_encoder_destroy(). Also, we don't need to free in
-amdgpu_dm_encoder_destroy() since mst_encoders[] isn't explicitly
-allocated by the slab allocater.
+On Tue, Jan 17, 2023, Zhi Wang wrote:
+> On Tue, 17 Jan 2023 15:55:53 +0000
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Sat, Jan 14, 2023, Zhi Wang wrote:
+> > > On Fri, 13 Jan 2023 15:16:08 +0000 > Sean Christopherson <seanjc@google.com> wrote:
+> > > 
+> > > > On Fri, Jan 13, 2023, Zhi Wang wrote:
+> > > > > Better add a FIXME: here as this has to be fixed later.
+> > > > 
+> > > > No, leaking the page is all KVM can reasonably do here.  An improved
+> > > > comment would be helpful, but no code change is required.
+> > > > tdx_reclaim_page() returns an error if and only if there's an
+> > > > unexpected, fatal error, e.g. a SEAMCALL with bad params, incorrect
+> > > > concurrency in KVM, a TDX Module bug, etc.  Retrying at a later point is
+> > > > highly unlikely to be successful.
+> > > 
+> > > Hi:
+> > > 
+> > > The word "leaking" sounds like a situation left unhandled temporarily.
+> > > 
+> > > I checked the source code of the TDX module[1] for the possible reason to
+> > > fail when reviewing this patch:
+> > > 
+> > > tdx-module-v1.0.01.01.zip\src\vmm_dispatcher\api_calls\tdh_phymem_page_reclaim.c
+> > > tdx-module-v1.0.01.01.zip\src\vmm_dispatcher\api_calls\tdh_phymem_page_wbinvd.c
+> > > 
+> > > a. Invalid parameters. For example, page is not aligned, PA HKID is not zero...
+> > > 
+> > > For invalid parameters, a WARN_ON_ONCE() + return value is good enough as
+> > > that is how kernel handles similar situations. The caller takes the
+> > > responsibility.
+> > >  
+> > > b. Locks has been taken in TDX module. TDR page has been locked due to another
+> > > SEAMCALL, another SEAMCALL is doing PAMT walk and holding PAMT lock... 
+> > > 
+> > > This needs to be improved later either by retry or taking tdx_lock to avoid
+> > > TDX module fails on this.
+> > 
+> > No, tdx_reclaim_page() already retries TDH.PHYMEM.PAGE.RECLAIM if the target page
+> > is contended (though I'd question the validity of even that), and TDH.PHYMEM.PAGE.WBINVD
+> > is performed only when reclaiming the TDR.  If there's contention when reclaiming
+> > the TDR, then KVM effectively has a use-after-free bug, i.e. leaking the page is
+> > the least of our worries.
+> > 
+> 
+> Hi:
+> 
+> Thanks for the reply. "Leaking" is the consquence of even failing in retry. I
+> agree with this. But I was questioning if "retry" is really a correct and only
+> solution when encountering lock contention in the TDX module as I saw that there
+> are quite some magic numbers are going to be introduced because of "retry" and
+> there were discussions about times of retry should be 3 or 1000 in TDX guest
+> on hyper-V patches. It doesn't sound right.
 
-Fixes: f74367e492ba ("drm/amdgpu/display: create fake mst encoders ahead of time (v4)")
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c           | 4 ----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c | 1 -
- 2 files changed, 5 deletions(-)
+Ah, yeah, I'm speaking only with respect to leaking pages on failure in this
+specific scenario.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 9547037857b6..5cc14ed2e93e 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -1733,10 +1733,6 @@ static void amdgpu_dm_fini(struct amdgpu_device *adev)
- 		adev->dm.vblank_control_workqueue = NULL;
- 	}
- 
--	for (i = 0; i < adev->dm.display_indexes_num; i++) {
--		drm_encoder_cleanup(&adev->dm.mst_encoders[i].base);
--	}
--
- 	amdgpu_dm_destroy_drm_device(&adev->dm);
- 
- #if defined(CONFIG_DRM_AMD_SECURE_DISPLAY)
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index bbeeee7c5d7c..5fa9bab95038 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -492,7 +492,6 @@ static const struct drm_connector_helper_funcs dm_dp_mst_connector_helper_funcs
- static void amdgpu_dm_encoder_destroy(struct drm_encoder *encoder)
- {
- 	drm_encoder_cleanup(encoder);
--	kfree(encoder);
- }
- 
- static const struct drm_encoder_funcs amdgpu_dm_encoder_funcs = {
--- 
-2.39.0
+> Compare to an typical *kernel lock* case, an execution path can wait on a
+> waitqueue and later will be woken up. We usually do contention-wait-and-retry
+> and we rarely just do contention and retry X times. In TDX case, I understand
+> that it is hard for the TDX module to provide similar solutions as an execution
+> path can't stay long in the TDX module.
 
+Let me preface the below comments by saying that this is the first time that I've
+seen the "Single-Step and Zero-Step Attacks Mitigation Mechanisms" behavior, i.e.
+the first time I've been made aware that the TDX Module can apparently decide
+to take S-EPT locks in the VM-Enter path.
+
+> 
+> 1) We can always take tdx_lock (linux kernel lock) when calling a SEAMCALL
+> that touch the TDX internal locks. But the downside is we might lose some
+> concurrency.
+
+This isn't really feasible in practice.  Even if tdx_lock were made a spinlock
+(it's currently a mutex) so that it could it could be taken inside kvm->mmu_lock,
+acquiring a per-VM lock, let alone a global lock, in KVM's page fault handling
+path is not an option.  KVM has a hard requirement these days of being able to
+handle multiple page faults in parallel.
+
+> 2) As TDX module doesn't provide contention-and-wait, I guess the following
+> approach might have been discussed when designing this "retry".
+> 
+> KERNEL                          TDX MODULE
+> 
+> SEAMCALL A   ->                 PATH A: Taking locks
+> 
+> SEAMCALL B   ->                 PATH B: Contention on a lock
+> 
+>              <-                 Return "operand busy"
+> 
+> SEAMCALL B   -|
+>               |  <- Wait on a kernel waitqueue
+> SEAMCALL B  <-|
+> 
+> SEAMCALL A   <-                 PATH A: Return
+> 
+> SEAMCALL A   -|
+>               |  <- Wake up the waitqueue
+> SEMACALL A  <-| 
+> 
+> SEAMCALL B  ->                  PATH B: Taking the locks
+> ...
+> 
+> Why not this scheme wasn't chosen?
+
+AFAIK, I don't think a waitqueue approach as ever been discussed publicly.  Intel
+may have considered the idea internally, but I don't recall anything being proposed
+publically (though it's entirely possible I just missed the discussion).
+
+Anways, I don't think a waitqueue would be a good fit, at least not for S-EPT
+management, which AFAICT is the only scenario where KVM does the arbitrary "retry
+X times and hope things work".  If the contention occurs due to the TDX Module
+taking an S-EPT lock in VM-Enter, then KVM won't get a chance to do the "Wake up
+the waitqueue" action until the next VM-Exit, which IIUC is well after the TDX
+Module drops the S-EPT lock.  In other words, immediately retrying and then punting
+the problem further up the stack in KVM does seem to be the least awful "solution"
+if there's contention.
+
+That said, I 100% agree that the arbitrary retry stuff is awful.  The zero-step
+interaction in particular isn't acceptable.
+
+Intel folks, encountering "TDX_OPERAND_BUSY | TDX_OPERAND_ID_SEPT" on VM-Enter
+needs to be treated as a KVM bug, even if it means teaching KVM to kill the VM
+if a vCPU is on the cusp of triggerring the "pre-determined number" of EPT faults
+mentioned in this snippet:
+
+  After a pre-determined number of such EPT violations occur on the same instruction,
+  the TDX module starts tracking the GPAs that caused Secure EPT faults and fails
+  further host VMM attempts to enter the TD VCPU unless previously faulting private
+  GPAs are properly mapped in the Secure EPT.
+
+If the "pre-determined number" is too low to avoid false positives, e.g. if it can
+be tripped by a vCPU spinning while a different vCPU finishes handling a fault,
+then either the behavior of the TDX Module needs to be revisited, or KVM needs to
+stall vCPUs that are approaching the threshold until all outstanding S-EPT faults
+have been serviced.
+
+KVM shouldn't be spuriously zapping private S-EPT entries since the backing memory
+is pinned, which means the only way for a vCPU to truly get stuck faulting on a
+single instruction is if userspace is broken/malicious, in which case userspace
+gets to keep the pieces.
