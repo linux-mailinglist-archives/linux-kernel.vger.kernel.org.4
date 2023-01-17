@@ -2,194 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B3F670B7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D21670B1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjAQWO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S229655AbjAQWER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjAQWNr (ORCPT
+        with ESMTP id S229773AbjAQWDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:13:47 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFB437B55
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:35 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NxKpW2t2fz9v7Yx
-        for <linux-kernel@vger.kernel.org>; Wed, 18 Jan 2023 04:13:39 +0800 (CST)
-Received: from [10.81.216.132] (unknown [10.81.216.132])
-        by APP2 (Coremail) with SMTP id GxC2BwCnLWQoA8djNiekAA--.31938S2;
-        Tue, 17 Jan 2023 21:21:09 +0100 (CET)
-Message-ID: <8385813c-f649-946a-a0ba-54475824f37d@huaweicloud.com>
-Date:   Tue, 17 Jan 2023 21:20:54 +0100
+        Tue, 17 Jan 2023 17:03:19 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2975B461
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ud5so78156149ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
+        b=ee9ZsxFH0+TOnSXcPrEGkTd9TlTqtZr8Jzdq1Pc/ZubpNyLzAegr1AYxHJ163b0TUy
+         dQQCDckhQGbOqH/LVs697vIWIUgWVjqkezi+1Fb/X67JNEVsvTfG8taaSxj9XMcdqnat
+         wuxIENu4lgwtZL3RwMb9XYuzJ3VDaPaHclj4No3S72WGGpkquszBpdzpLTRm/m/xuDVV
+         8T7LsomWI6BDi0D4N0JCzOZLjGpkxVUV7UVosfuwrrCZ162QSbHBlAOAjs9iM/HTdmIY
+         jo+76qdlqTimsnv4Ll2PCZmWskdhr9cuU2EFxMkUFQGntxOtxZich/LI1zMt8fJgl3Xn
+         Cgpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
+        b=CgWX7dJHUDxqcyAoiIw8AajYv/GYMfNYmkWyhFyqEJb+7M8JeMVLZMao37rQuIs67w
+         HSZgSH8JTnNOYU6GaKqk4Xr+WqKxbThCRN+8V0Mcjfbgo+DtPeDL1DpioxIDUZrwz81i
+         tNSBczliBrJU8juusT6f5imzil6oDyY5lpquswj6ogBk1ElNHC9529t0QVgwBSHCNiD4
+         be8hrgw+fbiiNTFoaQyBB0bUagzFXjIaoX86C10OEgeVks6pNq6Z1Xmt6WRdPnc3xYXQ
+         FdDqJLaUwunPbSLWLeYNqcDYATRE/UvMqXBNG4sOjaJjBJaAZFPbK7o+9H/jRMSWZwVX
+         +CDg==
+X-Gm-Message-State: AFqh2krVQ4weHAC5EndMQWU5gJiNEBo4L3UCgoG7WjqoS7rgu7OPAOST
+        AJqcAAJvvzlF6gcAAPEMYaWZ3w==
+X-Google-Smtp-Source: AMrXdXs9uRo49QUx37/1Ds+MJCE8jo71WpvZDXyr3NVprgNsVLSvnGgypIdXZ+kNkxM/vZUXmVO/Fw==
+X-Received: by 2002:a17:907:a710:b0:7c0:f71b:8b3 with SMTP id vw16-20020a170907a71000b007c0f71b08b3mr4253213ejc.57.1673986858902;
+        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id k14-20020a17090632ce00b00871ac327db6sm2238452ejk.45.2023.01.17.12.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
+Date:   Tue, 17 Jan 2023 20:20:56 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <20230117202056.zx2pl22miufcrcu3@airbuntu>
+References: <20230113134056.257691-1-vincent.guittot@linaro.org>
+ <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+ <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+ <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Internal vs. external barriers (was: Re: Interesting LKMM litmus
- test)
-To:     paulmck@kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>, will <will@kernel.org>,
-        "boqun.feng" <boqun.feng@gmail.com>, npiggin <npiggin@gmail.com>,
-        dhowells <dhowells@redhat.com>,
-        "j.alglave" <j.alglave@ucl.ac.uk>,
-        "luc.maranget" <luc.maranget@inria.fr>, akiyks <akiyks@gmail.com>,
-        dlustig <dlustig@nvidia.com>, joel <joel@joelfernandes.org>,
-        urezki <urezki@gmail.com>,
-        quic_neeraju <quic_neeraju@quicinc.com>,
-        frederic <frederic@kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20230116042329.GN2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WTXS73qTBpUzcI@rowland.harvard.edu>
- <20230116190652.GZ2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8WjmTFnqbAnS1Pz@rowland.harvard.edu>
- <20230116221357.GA2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8aKlNY4Z0z2Yqs0@andrea>
- <20230117151416.GI2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y8bFMgDSUZymXUsS@rowland.harvard.edu>
- <20230117174308.GK2948950@paulmck-ThinkPad-P17-Gen-1>
- <306bf79f-51db-473f-636c-e1d7d1dc685e@huaweicloud.com>
- <20230117185521.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <20230117185521.GN2948950@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwCnLWQoA8djNiekAA--.31938S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFWkurW7CFWUtrW8CF13twb_yoWrXF1UpF
-        W5KFZ3ta1DWFs29rn2kw17XFySyaySqa9xArn8JF18Zay5Xr1SgF4ftr4FvrsxArWxJrn0
-        va1Yv345A3yDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUFDGOUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/16/23 14:56, Dietmar Eggemann wrote:
+> On 16/01/2023 12:23, Vincent Guittot wrote:
+> > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>
+> >> On 13/01/2023 14:40, Vincent Guittot wrote:
+> 
+> [...]
+> 
+> >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
+> >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> >>>
+> >>> +     /* Return true only if the utlization doesn't fit its capacity */
+> >>
+> >> s/utlization/utilization
+> >> s/its/CPU ?
+> >>
+> >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+> >>>  }
+> >>
+> >> cpu_overutilized() is the only place where we now only test for
+> >> !util_fits_cpu(). The new comment says we only care about utilization
+> >> not fitting CPU capacity.
+> >>
+> >> Does this mean the rq uclamp values are not important here and we could
+> >> go back to use fits_capacity()?
+> >>
+> >> Not sure since util_fits_cpu() is still coded differently:
+> > 
+> > uclamp_min is not important but uclamp_max still cap the utilization
+> 
+> OK, makes sense.
+> 
+> I.e. we could pass in `rq_util_min = 0` to avoid fetching it
+> unnecessary? In case `fits == 1` before the uclamp_min condition in
+> util_fits_cpu() it doesn't matter if we switch to return `-1` when
+> called from cpu_overutilized(). Detail though ...
+> 
+> [...]
+> 
+> >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> >>>
+> >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+> >>>                       continue;
+> >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
+> >>> +
+> >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> >>> +
+> >>> +             /* This CPU fits with all capacity and performance requirements */
+> >>
+> >> In task_fits_cpu() `utilization and performance (better uclamp)
+> >> requirements` term was used. I assume it's the same thing here?
+> >>
+> >>> +             if (fits > 0)
+> >>>                       return cpu;
+> >>> +             /*
+> >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+> >>> +              * for the CPU with highest performance capacity.
+> >>                                             ^^^^^^^^^^^^^^^^^^^^
+> >>
+> >> Do we use a new CPU capacity value `performance capacity (1)` here?
+> >>
+> >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+> >>
+> >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+> >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+> >> to return -1. Shouldn't (1) and (2) be the same?
+> > 
+> > I'm all in favor of both being capacity_orig_of(cpu) -
+> > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+> 
+> I think we need a handy name for this new capacity value, which seems to
+> be `capacity_orig - capacity reduced by thermal`. And we should either
+> use `thermal_load_avg` or `thermal pressure` for the latter part. And
+> then we should use this consistently in all these places:
+> util_fits_cpu(), feec(), sic().
 
-On 1/17/2023 7:55 PM, Paul E. McKenney wrote:
+So we had reports from Xuewen that not using instantaneous pressure causes
+problems.
 
-> On Tue, Jan 17, 2023 at 07:27:29PM +0100, Jonas Oberhauser wrote:
->> On 1/17/2023 6:43 PM, Paul E. McKenney wrote:
->>> Just to see if I understand, different-values yields true if the set
->>> contains multiple elements with the same value mapping to different
->>> values.  Or, to put it another way, if the relation does not correspond
->>> to a function.
->> based on https://lkml.org/lkml/2019/1/10/155:
-> Ah, thank you for the pointer!
+Lukasz came up with this patch to help address the problem, but it's still
+waiting discussions. I think we need to discuss this problem more there.
 
-What troubles me is that this is the only reference I could find as to 
-what the meaning of different-values is. Herd7 is a great tool for 
-specifying memory models, but the documentation could be heavily improved.
+	https://lore.kernel.org/lkml/20220429091245.12423-1-lukasz.luba@arm.com/
 
->> I think different-values(r) is the same as r \ same-values, where
->> same-values links all reads and writes that have the same value (e.g.,
->> "write 5 to x" and "read 5 from y").
->>
->> With this in mind, I think the idea is to 1) forbid partial overlap, and
->> using the different-values to 2) force them to provide the appropriate
->> value.
->> This works because apparently srcu-lock is a read and srcu-unlock is a
->> write, so in case of
->> int r1 = srcu-lock(&ss);   ==>  Read(&ss, x), r1 := x
->> ...
->> srcu-unlock(&ss, r1);  ==> Write(&ss, r1), which is Write(&ss, x)
->>
->> This guarantees that the read and write have the same value, hence
->> different-values(...) will be the empty relation, and so no flag.
-> Might it instead match the entire event?
+At the moment there's no good solution and either comes with its own set of
+caveat(s). Being consistent is not an option now AFAICT? We need to improve
+thermal_load_avg() response time first somehow.
 
-Which event?
+For now, to make best decision - we look at instantaneous. But when falling
+back - I think using the long term pressure signal makes more sense because we
+wouldn't be doing this fallback path if everything works as expected thermal
+wise.
 
-Btw, if you want to state that a relation is functional (e.g., that 
-srcu-rscs only matches each lock event to at most one unlock event), one 
-way to do so is to state
+At least, that's what I think is a good trade-of for now :)
 
-flag ~empty ((srcu-rscs ; srcu-rscs^-1) \ id) as srcu-use-multiple-lock
 
-I visualize this as two different locks pointing via srcu-rscs to the 
-same unlock.
-Analogously,
+Thanks!
 
-flag ~empty ((srcu-rscs^-1 ; srcu-rscs) \ id) as srcu-reuse-lock-idx
-
-should flag if a single lock points to two different unlocks (note: in a 
-single execution! this does not flag `int idx = srcu_lock(&ss); if { 
-...; srcu_unlock(&ss,idx); } else { ... ; srcu_unlock(&ss,idx) ;... } `).
-
-[snipping in here a part written by Alan:]
-
-> I think what you want would be:
->
-> let srcu-rscs = ([Srcu-lock] ; data ; [Srcu-unlock]) & loc
->
-
-I think it makes more sense to define
-     let srcu-rscs = ([Srcu-lock] ; (whatever relation says "I'm using 
-the return value as the second input") ; [Srcu-unlock])
-and then to do
-     flag ~empty srcu-rscs\loc as srcu-passing-idx-to-wrong-unlock
-to flag cases where you try to pass an index from one srcu_struct to 
-another.
-
->>> Agreed, changes must wait for SRCU support in herd7.
->>>
->> I would like instead to be able to give names to the arguments of events
->> that become dependency relations, like
->>     event srcu_unlock(struct srcu_struct *srcu_addr, struct srcu_token
->> *srcu_data)
->> and then
->>      let srcu-rscs = [Srcu-lock] ; srcu_data ; (data; rfi)*
->>
->> Personally I would also like to not have Linux-specific primitives in
->> herd7/cat, that means that to understand LKMM you also need to understand
->> the herd7 tool, and sounds quite brittle.
->>
->> I would prefer if herd7 had some means to define custom events/instructions
->> and uninterpreted relations between them, like
->>
->> relation rf : [write] x [read]
->> [read] <= range(rf)
->> empty rf ;rf^-1 \ id
->>
->> and some way to say
->> [read] ; .return <= rf^-1 ; .data
->> (where .return is a functional relation relating every event to the value it
->> returns, and .xyz is the functional relation relating every event to the
->> value of its argument xyz).
-> I am glad that I asked rather than kneejerk filing a bug report.  ;-)
-
-Please send me a link if you open a thread, then I'll voice my wishes as well.
-Maybe Luc is in a wish-fulfilling mood?
-
-best wishes,
-jonas
-
-PS:
-
-> Other thoughts?
-
-Other than that I added too many [] in my example? :) :( :) I meant
-
-relation rf : write x read
-read <= range(rf)
-empty rf ;rf^-1 \ id
-
+--
+Qais Yousef
