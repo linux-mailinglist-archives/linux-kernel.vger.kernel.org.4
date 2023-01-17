@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5541666E71F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA6A66E728
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235008AbjAQTja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S230035AbjAQTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbjAQTfE (ORCPT
+        with ESMTP id S235422AbjAQTfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:35:04 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8627F59EB
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:36 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 12FA61EC05F1;
-        Tue, 17 Jan 2023 19:40:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673980835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=1F8maljyKQNt6VcbQsZw48UBmwgKmU5r3RYOnKqnc6w=;
-        b=OQW61y0WZJIhpiZ8GSDtNld9hj1Ja13IX/+s1jkrVSH+d8geiOWNO+bHDtLuM9dkdC1GFg
-        07TvawWaYzjjwg8q8/jIayM+7MZFmrHEfXwjzo7ZhsePAS4+AJkgWqnWooA0nSrkWuA2vs
-        NyvTYmqF9a/FtAR2+pGfjgh6ObGBx6I=
-Date:   Tue, 17 Jan 2023 19:40:31 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Ashok Raj <ashok.raj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Ingo Molnar <mingo@kernel.org>, alison.schofield@intel.com,
-        reinette.chatre@intel.com, Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v4 6/6] x86/microcode/intel: Print when early microcode
- loading fails
-Message-ID: <Y8brnyIltcgtUvPn@zn.tnic>
-References: <20230109153555.4986-1-ashok.raj@intel.com>
- <20230109153555.4986-7-ashok.raj@intel.com>
- <Y8ROaoJtUtj5bPcx@zn.tnic>
- <Y8bI4BBst78qrApD@a4bf019067fa.jf.intel.com>
- <e491fe87-2c2a-e9d2-3cd9-dfc7535f7c27@intel.com>
- <Y8bnEgP6iXCL+QmX@zn.tnic>
- <832b5c6c-cafa-e9e6-6e52-b741315d0865@intel.com>
+        Tue, 17 Jan 2023 14:35:08 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EAB38011
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:53 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id l125so13839536vsc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HzP1xFoLjj5jhJ3xNiat0BSRJmicxmV9UzOSz4HXrGI=;
+        b=lk2Ol42uH592eFDM/2k/N+xqYAdoODD5g/N7UJ7JKoDCDd9fEllMgDaV5J/zMwowGJ
+         sylAwhCm918hE3r70qdAMJnL6ktDsrxkF9TElCPUsfufClV394XIYhJBBgqfTl8ftiJ7
+         tbR78n4ln2EH8StsOtl5QJTYqIkA2qIC7hzkI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HzP1xFoLjj5jhJ3xNiat0BSRJmicxmV9UzOSz4HXrGI=;
+        b=LYLBLrZZiipmXh9iaV44vhRk0APpVVa+zCzPD8LKDscqN8wjSd05wd/pWFUOBoUA2l
+         S7O19gwlOH2PL6wXHE5YNgqLVc+k0Di2fSCqZX4p47HrdxcS3Bl0ttUkYqpWEOPbi1a9
+         PE7imW772M9BPSsNZY+85wEW/aGXj7evOcgUVLNjHuGWS1vq1KVDXCd2okQgkUEd42L/
+         +W6VGaPPuaqUNGvKAqOiYM/iC2y2hYf0akVRlmEpwpOgMAGazNz9ZtimM2A6iYNo3np8
+         5iE7jBke8p2a/LbfKEwl11D+Lnpi3biz9t1tM0gSeDfeBuQcM03ns9kSWrbBRbX6Jn43
+         +20Q==
+X-Gm-Message-State: AFqh2kqJcSv29m/pjcrKg1UZS4kIlGLXJDcs0tUoxOiRGsP74Ygx9qFm
+        /DdSLn0TcakZWgK6nYvHaeMVRlxHYhhf7r+J
+X-Google-Smtp-Source: AMrXdXuCkFNtk3b4zF85HMByvyito1T7PWWIv7b0CX7WwhEuOYORR4pJqioo1BOJdDFn4zA6hvs/uA==
+X-Received: by 2002:a05:6102:1482:b0:3d0:c56e:bc1d with SMTP id d2-20020a056102148200b003d0c56ebc1dmr2064705vsv.30.1673980852148;
+        Tue, 17 Jan 2023 10:40:52 -0800 (PST)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id b7-20020a0561023a0700b003d3fc32d3eesm142012vsu.30.2023.01.17.10.40.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 10:40:50 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id k6so24273758vsk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:40:50 -0800 (PST)
+X-Received: by 2002:a67:bb14:0:b0:3ce:acca:5b77 with SMTP id
+ m20-20020a67bb14000000b003ceacca5b77mr466044vsn.70.1673980850013; Tue, 17 Jan
+ 2023 10:40:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <832b5c6c-cafa-e9e6-6e52-b741315d0865@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117085212.1.If242b1cd61b2e87e312dd9cf81e20301bae2a5a4@changeid>
+In-Reply-To: <20230117085212.1.If242b1cd61b2e87e312dd9cf81e20301bae2a5a4@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 17 Jan 2023 10:40:38 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XNazmGuFkdUEcNoitkced4uuy5C1CJBK4vgpbdZU5AWg@mail.gmail.com>
+Message-ID: <CAD=FV=XNazmGuFkdUEcNoitkced4uuy5C1CJBK4vgpbdZU5AWg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180: set ath10k output power
+ calibration string
+To:     Yunlong Jia <ecs.beijing2022@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@chromium.org>,
+        Henry Sun <henrysun@google.com>,
+        Abhishek Kumar <kuabhs@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:32:50AM -0800, Dave Hansen wrote:
-> Well, we have an awful lot of pr_warn()'s in the kernel that talk about
-> something that was tried and failed.
+Hi,
 
-Well, is microcode loading failure worth to warn about?
+On Tue, Jan 17, 2023 at 12:57 AM Yunlong Jia <ecs.beijing2022@gmail.com> wrote:
+>
+> Add the string to load RF output power table for pazquel360 project.
+>
+> Signed-off-by: Yunlong Jia <ecs.beijing2022@gmail.com>
+>
+> ---
+>
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-What if there's no microcode for that CPU?
-
-Now imagine in that case you issue a warning and then you get all those
-bugzillas opened:
-
-"Heeey, is my CPU broken, it says it cannot load microcode"
-
-I sure don't want to be on the receiving end of this.
-
-I don't think you wanna be there either.
-
-> I actually kinda like the inverse.
-> 
-> The common (boring) case where an update was needed and was successful.
-> It's the one we don't need to tell users about at all.  It barely
-> deserves a message.  Users expect that if there's an early update
-> available, it'll get attempted, it will be successful and the kernel
-> won't say much.
-
-No argument there.
-
-> The time we need to spam dmesg is when something upends user
-> expectations and they might need to go do something.  An early loading
-> failure is exactly the place where they want to know.  They want to know
-> if they're running with known CPU bugs that would have been fixed by the
-> early update
-
-No, we already warn about that in the CPU mitigations code.
-
-> or if they somehow have a botched early loading image.
-
-If you can pick apart from this here:
-
-        /* write microcode via MSR 0x79 */
-        native_wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
-
-what type of failure it is, then sure, let's warn.
-
-But we should not warn just for every revision mismatch in there...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
