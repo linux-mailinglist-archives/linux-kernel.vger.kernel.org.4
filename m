@@ -2,116 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148D7670C3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B671A670C38
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjAQW6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S229712AbjAQW4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjAQW5g (ORCPT
+        with ESMTP id S229803AbjAQWzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:57:36 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E562C4392A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:39:20 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so221374pjg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:39:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hK7iCT/l53H8F02D5jWSmMF8OJg0mxY4hx/WOh8zXHQ=;
-        b=WeQcFSECVbAwjsxpoYAUDsDmT3LUgopGEqpjAQgQI1CIGKL0Aw2fjnbTlwHci2civl
-         f0Siy/nZinODvzTENbBnDhXli4GylTAUxiBI/VyHa82CtAxQ7gbT8igBoTEd5n4SA6vd
-         2VmR04LOt/8/0NYujHvKX8syEaz8kQJwSMYFMDQ4BPmRuvr2ZR8L8XlXcspW1n3KQlUu
-         tRz/LGOuU4EBu4uvrr8LdIIMT/ZsgrMo7ES4mwROwnXgemFdIR485MboWclY3XLZIjkF
-         MLFlKgyXOPpEStKfnPzGyUG5OnUhbxreOj1rEaGhEez7JwmuyyrERsC/ULIjoYV8fPbr
-         gPjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hK7iCT/l53H8F02D5jWSmMF8OJg0mxY4hx/WOh8zXHQ=;
-        b=pXxkgemDabRj2WyRpu+tdHFBgEZV2Q07ogQvhUqXQQrDVbt51HdEd1CEvAOrt7Zvzj
-         9PEdqeTH5icLBDZQWnS9F7AmyhKanb1fYAmbIgng7oGcDtM/NC51hZRX/wHysSuFG7vb
-         o/N6lgGJhCu8GpsLm94moLqNyVFf6tl75mbHckRnlkRvPrONzc/SQ9JoU4XUfdXYOLpz
-         h19P+rbPMEpsM6O3KF4tgwLQzA/c8xzuSgeDfCtWu+Wy9CdBGjymZOgYiApveTQci7Qb
-         jBJ+y0Cf4UuF4b/YwQCdSPwHdgcnn3YciGxbTho+XCJVnwEiRL1DBZjwx5bw/ptR4lQl
-         iMFQ==
-X-Gm-Message-State: AFqh2kpojlvXeFJAWtN4nCOb0ZyDK+IBfiAHIRiwvSgzdmCeCZrP+0pA
-        Q/61M9OFgsnCF5mzYA64wLb2BQ==
-X-Google-Smtp-Source: AMrXdXtz4++aL4Ab6dxo4T1C7BIxWZ7VFFwnA/Q6q1uy8e+3S2IXuSo+S89TSMhkxkMLQu5/dcJ+3g==
-X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr2989344plg.1.1673991560262;
-        Tue, 17 Jan 2023 13:39:20 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0019338ecad52sm16912238plh.190.2023.01.17.13.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:39:19 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:39:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <Y8cVhFIM1EoLHO/V@google.com>
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-2-vannapurve@google.com>
+        Tue, 17 Jan 2023 17:55:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8864D4DCEF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:40:19 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtg0-0003Ts-5Q; Tue, 17 Jan 2023 22:39:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtfv-006lgx-TT; Tue, 17 Jan 2023 22:39:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHtfv-00DhU5-7L; Tue, 17 Jan 2023 22:39:23 +0100
+Date:   Tue, 17 Jan 2023 22:39:19 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        thierry.reding@gmail.com, krzysztof.kozlowski+dt@linaro.org
+Cc:     robh+dt@kernel.org, matthias.bgg@gmail.com, john@phrozen.org,
+        sean.wang@mediatek.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v1 1/2] arm64: dts: mediatek: mt7622: Add missing
+ pwm-cells to pwm node
+Message-ID: <20230117213919.56cl74ffxzdpdcgp@pengutronix.de>
+References: <20221128112028.58021-1-angelogioacchino.delregno@collabora.com>
+ <20221128112028.58021-2-angelogioacchino.delregno@collabora.com>
+ <20221202180932.5k3vymrwds5ssivq@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="reopnm6bu5cdz26m"
 Content-Disposition: inline
-In-Reply-To: <20221205232341.4131240-2-vannapurve@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221202180932.5k3vymrwds5ssivq@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
-> @@ -272,13 +274,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		.rsvd = err & PFERR_RSVD_MASK,
->  		.user = err & PFERR_USER_MASK,
->  		.prefetch = prefetch,
-> -		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> +		.is_tdp = is_tdp,
->  		.nx_huge_page_workaround_enabled =
->  			is_nx_huge_page_enabled(vcpu->kvm),
->  
->  		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
->  		.req_level = PG_LEVEL_4K,
->  		.goal_level = PG_LEVEL_4K,
-> +		.is_private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
-> +				kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
 
-After looking at the SNP+UPM series, I think we should forego a dedicated Kconfig
-for testing and instead add a new VM type for UPM-capable guests.  The new type,
-e.g. KVM_X86_PROTECTED_VM, can then be used to leverage UPM for "legacy" SEV and
-SEV-ES guests, as well as for UPM-capable guests that don't utilize per-VM
-memory encryption, e.g. KVM selftests.
+--reopnm6bu5cdz26m
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Carrying test-only behavior is obviously never ideal, and it would pretty much have
-to be mutually exclusive with "real" usage of UPM, otherwise the KVM logics gets
-unnecessarily complex.
+Hello,
+
+On Fri, Dec 02, 2022 at 07:09:32PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Mon, Nov 28, 2022 at 12:20:27PM +0100, AngeloGioacchino Del Regno wrot=
+e:
+> > Specify #pwm-cells on pwm@11006000 to make it actually usable.
+> >=20
+> > Fixes: ae457b7679c4 ("arm64: dts: mt7622: add SoC and peripheral relate=
+d device nodes")
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
+llabora.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt7622.dtsi | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot=
+/dts/mediatek/mt7622.dtsi
+> > index 146e18b5b1f4..f321c6d0fd7c 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+> > @@ -435,6 +435,7 @@ uart3: serial@11005000 {
+> >  	pwm: pwm@11006000 {
+> >  		compatible =3D "mediatek,mt7622-pwm";
+> >  		reg =3D <0 0x11006000 0 0x1000>;
+> > +		#pwm-cells =3D <2>;
+>=20
+> 3 should be possible, too. The driver does only support one
+> polarity, so it's not really needed, but would be nice for consistency?
+>=20
+> Thierry, what's your take here?
+>=20
+> Other than that: Who would pick this up, I assume it to go via an ARM
+> tree together with the 2nd patch in this series?
+
+The questions here are still open and both patches unapplied. :-\
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--reopnm6bu5cdz26m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPHFYQACgkQwfwUeK3K
+7Akv5gf/SJFYiqZQ3e3k7+kMNq/B+6Dm6vLLOrHhY7dXMcF3Xl9CD/eMuHJ3f23K
+J99iGKEB0DLxV5P33FS7xbJKdCUc9LuZSdVJyn0O38dbk3r0JkWRuVyU03KbQ1F5
+bklzciXjRNjn0GjeZVVNKt77U27aQvYCH6sTf3pwm3Daswr2sZLczSApMP/Hxmo4
+4JUU7HoWFUyFekbH1Sdc/b2eFi8gTgSMsfQ2tCjmwsIDYuvEKJag7VKn91D3SZhL
+/YZD5rSW+enlPaLQPqgl3LblyW7eyaaCnjwdY8VTNKzKqEHdxfDywhkD0uNMNzR5
+L/3BJO7uE2sGE+y9hMx8I6jtMiCRzw==
+=m6Kf
+-----END PGP SIGNATURE-----
+
+--reopnm6bu5cdz26m--
