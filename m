@@ -2,89 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B604B66D3FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEB166D400
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 02:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233936AbjAQBzv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 16 Jan 2023 20:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S235141AbjAQB5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 20:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbjAQBzg (ORCPT
+        with ESMTP id S234697AbjAQB5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 20:55:36 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B4F29E11;
-        Mon, 16 Jan 2023 17:55:28 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A294F24DBCE;
-        Tue, 17 Jan 2023 09:55:26 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 09:55:26 +0800
-Received: from ubuntu.localdomain (202.190.108.220) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 17 Jan
- 2023 09:55:22 +0800
-From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
-To:     Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Mon, 16 Jan 2023 20:57:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEEA23133;
+        Mon, 16 Jan 2023 17:57:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70F04B810A1;
+        Tue, 17 Jan 2023 01:57:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420EBC433EF;
+        Tue, 17 Jan 2023 01:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673920636;
+        bh=j6kfoa3itOyva+gzVjTOyphyKodBRoESrjuevvVO07Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aDwO5Vw9BNy4rX8MjdMycG73Mi0Oh5q+yVUqlFfqi3Rzm0dgkcpEOZ7JnEedCgsZy
+         gs6RQcWQb/X3dRyA/M9sF+Si6vHSEZsltiuk7l4e6Doki5bXfTM4XynaDePirjaBOL
+         s2sblKTvMVWqwZ6ax9CrIFnFCwRjWivK6Kt3yQZ3p8xglhdDla9AaBwJTQ56PmWKno
+         3sHMMbROhPYgqnX8r0ACZ469PUKuK+oZ7ChILYgAIT9NezHW8Ak33+4tENR7cXroU1
+         dx3Xcf04F0Pu0HVg+okO1jbffksuajZx0LXjdJmHKXEwUdNKBdVVjNBHPLeq43OtEf
+         LPtzrQU9t4qQg==
+Date:   Mon, 16 Jan 2023 19:57:13 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v5 3/3] riscv: dts: starfive: Add TRNG node for VisionFive 2
-Date:   Tue, 17 Jan 2023 09:54:45 +0800
-Message-ID: <20230117015445.32500-4-jiajie.ho@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230117015445.32500-1-jiajie.ho@starfivetech.com>
-References: <20230117015445.32500-1-jiajie.ho@starfivetech.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Define CMA region for CRD
+ and X13s
+Message-ID: <20230117015713.j62qymja6bdbgxiu@builder.lan>
+References: <20230113041025.4188910-1-quic_bjorande@quicinc.com>
+ <c37bdea2-2154-975b-4ef3-570922944088@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [202.190.108.220]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c37bdea2-2154-975b-4ef3-570922944088@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding StarFive TRNG controller node to VisionFive 2 SoC.
+On Fri, Jan 13, 2023 at 03:17:05PM +0100, Konrad Dybcio wrote:
+> 
+> 
+> On 13.01.2023 05:10, Bjorn Andersson wrote:
+> > Booting the CRD needs roughly 64MB CMA, rather than relying on people
+> > adding boot parameters etc define a region for this, to remove the
+> > allocation errors from e.g. NVME.
+> > 
+> > While fixing the CRD define the same region for the X13s.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> So, to reiterate, the NVMe needs ~64M of contiguous RAM for
+> $reasons and without this patch, it is not guaranteed that
+> it can always find such a block which causes issues and
+> adding a CMA region resolves that, is that correct?
+> 
 
-Co-developed-by: Jenny Zhang <jenny.zhang@starfivetech.com>
-Signed-off-by: Jenny Zhang <jenny.zhang@starfivetech.com>
-Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+That's correct, $reasons being that NVMe complains about failures to
+allocate CMA memory. I'll post a v2 with this in the commit message.
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 4ac159d79d66..3c29e0bc6246 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -455,5 +455,15 @@ uart5: serial@12020000 {
- 			reg-shift = <2>;
- 			status = "disabled";
- 		};
-+
-+		rng: rng@1600c000 {
-+			compatible = "starfive,jh7110-trng";
-+			reg = <0x0 0x1600C000 0x0 0x4000>;
-+			clocks = <&stgcrg JH7110_STGCLK_SEC_HCLK>,
-+				 <&stgcrg JH7110_STGCLK_SEC_MISCAHB>;
-+			clock-names = "hclk", "ahb";
-+			resets = <&stgcrg JH7110_STGRST_SEC_TOP_HRESETN>;
-+			interrupts = <30>;
-+		};
- 	};
- };
--- 
-2.25.1
+Thanks,
+Bjorn
 
+> Konrad
+> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts                | 9 +++++++++
+> >  .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts      | 9 +++++++++
+> >  2 files changed, 18 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > index b29c02307839..e30a37c73b90 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > @@ -128,6 +128,15 @@ vreg_wwan: regulator-wwan {
+> >  
+> >  		regulator-boot-on;
+> >  	};
+> > +
+> > +	reserved-memory {
+> > +		linux,cma {
+> > +			compatible = "shared-dma-pool";
+> > +			size = <0x0 0x8000000>;
+> > +			reusable;
+> > +			linux,cma-default;
+> > +		};
+> > +	};
+> >  };
+> >  
+> >  &apps_rsc {
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > index 78e61a8184c5..5bfd1f0b2a24 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > @@ -153,6 +153,15 @@ vreg_wwan: regulator-wwan {
+> >  		regulator-boot-on;
+> >  	};
+> >  
+> > +	reserved-memory {
+> > +		linux,cma {
+> > +			compatible = "shared-dma-pool";
+> > +			size = <0x0 0x8000000>;
+> > +			reusable;
+> > +			linux,cma-default;
+> > +		};
+> > +	};
+> > +
+> >  	thermal-zones {
+> >  		skin-temp-thermal {
+> >  			polling-delay-passive = <250>;
