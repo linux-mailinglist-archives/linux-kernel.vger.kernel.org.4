@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0041C66DA1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F8266DA1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236607AbjAQJiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S236650AbjAQJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235783AbjAQJhw (ORCPT
+        with ESMTP id S236749AbjAQJiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:37:52 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3633333449;
-        Tue, 17 Jan 2023 01:35:49 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H7OLJK008832;
-        Tue, 17 Jan 2023 09:35:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=a3uCGNyveDE2VOg9aSlVRu17hXbzIyfZyjCVbxTfAdU=;
- b=QRNPkIIJHwE4M13MgaBGMKNHI4dZaH2a9AJ6Ew/A3m/+8NENgsBjTtkwcABN4KbEQ7zh
- fm2Er0YHX3EhZ46WUNbDRGJy0PjdEqDJ4dfeXjpn8zfSVdjjKG4v/Mndy9bLGbbnag8x
- NXDy5EQPwA/VPMnpUSaL1dvRLq/CqKDRaBPxLigfAh9DrkxYqYFBtKj98H0GFJHhASXi
- hnIFgGJyHwlGUDvTn5uR7VySIFbeIG5G4g4Ok5K+Pwzwsg8/AoaK9wMNUCup+UxoF/7b
- YfBYCODeqkBbtxBPrJj6ZBy3fNbhSBoc7EJooey5/E3P1IiHw8OQhXPsXdv4DilZvYBu dQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5b1897d9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 09:35:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H9Zjih009293
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 09:35:45 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
- 2023 01:35:43 -0800
-From:   Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Subject: [PATCH] arm64: dts: qcom: sm8550: fix xo clock source in cpufreq-hw node
-Date:   Tue, 17 Jan 2023 15:05:33 +0530
-Message-ID: <20230117093533.3710000-1-quic_pkondeti@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230117091446.GA3704192@hu-pkondeti-hyd.qualcomm.com>
-References: <20230117091446.GA3704192@hu-pkondeti-hyd.qualcomm.com>
+        Tue, 17 Jan 2023 04:38:51 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCD92529D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:36:22 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id l185so11310765vke.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:36:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YEbNl1l/q4Fnu+8d9D+L62Z+w9les95RQo/Y5UcOKmQ=;
+        b=RYij5spKeMtkBOpNHssp3ONvhFkceeFvNz3fqOShvMXrR+moIc7foFfbOrgCPGIKxC
+         jeiM/kGIIH5dh91GeGlziAbxHDGiHvP8j+XXSSwvT4Mn11lmIT9ZlDuTyg4bunLXMI9p
+         kfc8kHnNyE05triUJs41SFuoOOlwNoml9lRiN0RjE550EeWYDQEzj1+1rCv3b15ms3Ix
+         xAS8VKWkB2WAYEqfjNfM99Fin5MrmZW1OcKGp89MlJyCoj7zv4x7Q0Cu6HMa4SBNWfgc
+         nSEycrzdMg6K7stfVnoYV+CU4UXKs2f2pI1Q1EkkFUsj3ydRLxYgCL3beixd4sLUiFmn
+         GqDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YEbNl1l/q4Fnu+8d9D+L62Z+w9les95RQo/Y5UcOKmQ=;
+        b=MqPsHVy90ytIUhomVtn9CmrdkOhQyaYcghgp+4+fkcvzxx6hGbQYtvSV1iZ0YmuXNu
+         YZ5Ok5dZqWCJrPnwpLfis1MMdpQd9Vw/06VN8xmNqRGJxEx61J4tWtyEtQWhEzu88+7P
+         pl0biAM+7vHlansTePdb+OKQ4OziJ/3Zx56MOXXLG398y4oPSqdffbOBt60bpEuBpRl9
+         7FjiFI/3wgxUWmUCIopHn+Slih6IViQjiobgdD8FprqUeCmbRfOLsswy6L621rfKlrxs
+         qQs3f1+2rws6Oty1iAtFMFOUZM7ZFtuxhETA4xJIDhbUDyHrEHG+Vy2WT/1/UA60y2dS
+         4JZw==
+X-Gm-Message-State: AFqh2krSBQvVx+TGWEw3F2R/hOG8N+Lb9CANHoBiqfqDC0GjCB07tRRw
+        XW9h4wK+59UX1ICSunWrQUHqFUAk5jbcEwdzqNiDSg==
+X-Google-Smtp-Source: AMrXdXvFwOQaYs/Ay+3F1maDF78qpOzI1mjjG4wUYiCyM/jJ5K/LxlMb0q2ZshdBRTKrkY+Xo+w3C/brLvsCHDQfG5g=
+X-Received: by 2002:a1f:91d4:0:b0:3db:104:6d13 with SMTP id
+ t203-20020a1f91d4000000b003db01046d13mr329321vkd.25.1673948181819; Tue, 17
+ Jan 2023 01:36:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6ka9jqzARrwNqWyfPHgmAzREZT8yFDMT
-X-Proofpoint-ORIG-GUID: 6ka9jqzARrwNqWyfPHgmAzREZT8yFDMT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_04,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=959 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301170080
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230116140811.27201-1-pierluigi.p@variscite.com>
+In-Reply-To: <20230116140811.27201-1-pierluigi.p@variscite.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 17 Jan 2023 10:36:11 +0100
+Message-ID: <CAMRc=MfeQ_92Vb6inv-1_h=kc1d2as6LLPqJHHtbNk1pK1xRuA@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: fix linker errors when GPIOLIB is disabled
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, eran.m@variscite.com,
+        nate.d@variscite.com, francesco.f@variscite.com,
+        pierluigi.passaro@gmail.com, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, available frequencies for all CPUs are appearing as 2x
-of the actual frequencies. Use xo clock source as bi_tcxo in the
-cpufreq-hw node to fix this.
+On Mon, Jan 16, 2023 at 3:08 PM Pierluigi Passaro
+<pierluigi.p@variscite.com> wrote:
+>
+> Both the functions gpiochip_request_own_desc and
+> gpiochip_free_own_desc are exported from
+>     drivers/gpio/gpiolib.c
+> but this file is compiled only when CONFIG_GPIOLIB is enabled.
+> Move the protototypes under "#ifdef CONFIG_GPIOLIB" and provide
+> reasonable definitions in the "#else" branch.
+>
+> Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please add a Fixes tag.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 59756ec11564..a551ded31ddf 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -2522,7 +2522,7 @@ cpufreq_hw: cpufreq@17d91000 {
- 			      <0 0x17d92000 0 0x1000>,
- 			      <0 0x17d93000 0 0x1000>;
- 			reg-names = "freq-domain0", "freq-domain1", "freq-domain2";
--			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clocks = <&bi_tcxo_div2>, <&gcc GCC_GPLL0>;
- 			clock-names = "xo", "alternate";
- 			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
--- 
-2.25.1
+Bart
 
+> ---
+>  include/linux/gpio/driver.h | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index 44783fc16125..ed77c6fc0beb 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -758,6 +758,8 @@ gpiochip_remove_pin_ranges(struct gpio_chip *gc)
+>
+>  #endif /* CONFIG_PINCTRL */
+>
+> +#ifdef CONFIG_GPIOLIB
+> +
+>  struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+>                                             unsigned int hwnum,
+>                                             const char *label,
+> @@ -765,8 +767,6 @@ struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+>                                             enum gpiod_flags dflags);
+>  void gpiochip_free_own_desc(struct gpio_desc *desc);
+>
+> -#ifdef CONFIG_GPIOLIB
+> -
+>  /* lock/unlock as IRQ */
+>  int gpiochip_lock_as_irq(struct gpio_chip *gc, unsigned int offset);
+>  void gpiochip_unlock_as_irq(struct gpio_chip *gc, unsigned int offset);
+> @@ -776,6 +776,22 @@ struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc);
+>
+>  #else /* CONFIG_GPIOLIB */
+>
+> +static inline struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+> +                                           unsigned int hwnum,
+> +                                           const char *label,
+> +                                           enum gpio_lookup_flags lflags,
+> +                                           enum gpiod_flags dflags)
+> +{
+> +       /* GPIO can never have been requested */
+> +       WARN_ON(1);
+> +       return ERR_PTR(-ENODEV);
+> +}
+> +
+> +static inline void gpiochip_free_own_desc(struct gpio_desc *desc)
+> +{
+> +       WARN_ON(1);
+> +}
+> +
+>  static inline struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc)
+>  {
+>         /* GPIO can never have been requested */
+> --
+> 2.37.2
+>
