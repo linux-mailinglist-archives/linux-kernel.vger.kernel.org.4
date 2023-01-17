@@ -2,95 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8780F66E0C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345C966E0C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbjAQOdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
+        id S232377AbjAQOd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjAQOdA (ORCPT
+        with ESMTP id S231969AbjAQOdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:33:00 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3DC3C2A4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:32:58 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d30so42443142lfv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yhLGsprr4iGbKzba+JN1VXXF3TeC3cedN8+F9epKwY=;
-        b=BWKfON0ONcZ0E/73kUupX7eOFbsTtnf5zb0RLvmJL0YAhZl6oEvSZL3c/NoN0rNReU
-         TIh5gjrwA6Bj/3YkDzJiL+Gls11L2i8ze76yowGZvwzeuvcwTzbo+PdTF5RRopZcOu67
-         rqK/5DXAz0Cu8iK48baqurCP3Q8SHLQ3+La3MGi7OSiOLM50rap2pv9+NepuA7fvXVkZ
-         JbAIYTYmlyf3SaXzCtregYhzAezlqMgzZgLa7aRWrX3Ls8Vi1NxO2mSedec1z7gAhtZm
-         CjRS/N1ff7V0fQ/RSJMzu/O50kqFBmQcx8Ep1MMWXZfAdBITG7gqeNKqSuVwb7ryK8UD
-         4kmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7yhLGsprr4iGbKzba+JN1VXXF3TeC3cedN8+F9epKwY=;
-        b=NUwFjY9RwBu/Cp6Khuz8vqs1+gzJfPYw1cWrmCsYEyZog1s9e5A1/MFMcM4+DWHMIY
-         BBPknX8hfvwK7spKK8/OCJB+3Je4mvWKG+r9jKIax9bYwQz29WuhOAV5ZIQ8zWThoPXd
-         +Q9DjaUfxWc24FpG/SenzlPbm1SZITXfb3RPWXVkqAYItKlGpUohSkSN/mPltu8dD1W+
-         2333ZZeSAcuAKhGC3SYwgFivxqkufx4SqklrFYcAKEieJbpIlcejGI/QCOIBrys77KY5
-         vNyERk8DjHPmNHN171Ww0Gk56OrkzcK7ZvTAPUIkho0rX9Egcxamaz1djQVC7oMnMRYQ
-         2/Og==
-X-Gm-Message-State: AFqh2koo8YJvLODw5s/YgFZyR7uE696kWrOY0NTi+/nsJZpWcGdueaCy
-        FXpf7SYqiqJ4DPloiS3BIl1hMFyaOuHPP+V9Hb1Y6w==
-X-Google-Smtp-Source: AMrXdXsPS/EHa9ll4sjoGtdooNfVuEuQvNaydQDhDfaDKMnyvvZ6mWGGNpzl0ThBONl2d+/I1rYOtZu/xqsiIx9Cz3Y=
-X-Received: by 2002:a05:6512:3b9b:b0:4d5:850a:8330 with SMTP id
- g27-20020a0565123b9b00b004d5850a8330mr128086lfv.665.1673965976657; Tue, 17
- Jan 2023 06:32:56 -0800 (PST)
+        Tue, 17 Jan 2023 09:33:10 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0160013D43;
+        Tue, 17 Jan 2023 06:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673965986; x=1705501986;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7Yy9z2eopuNvLQei9fbFhi1riVoJfniZrk4wzro23HM=;
+  b=0ousSEgSsgtGvwHOVGzRDeKpbKxXw9RW0J2O69bbA3nUOCfZmlzGTWFe
+   AyCjs/5HzJai1chSmWXF3dRTTqMiAHzp+TjIRBqN2LadW5nZRUMdPtFcJ
+   hRjDdDCYdBOQ1Yf7IO37NAxhK9x1N6jvjDarhCJkjd7NqOEr9N++ludUA
+   qpT3IDLu3u4sKN1WblQdsYrcHSl/ZL++dSaIo6b/6iTqNjcOPIFCLM6px
+   z+MjF6OK6AIjujKv+uJrRBzi3ITCKivkUzikRaExEbhNJ5GU9vjaXReEq
+   owYKHd6gOeS+BqY7EQpPThxBn6kbk/FfBq0p18m7AuTyRvYqcrvOx17TN
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,224,1669100400"; 
+   d="scan'208";a="197001875"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Jan 2023 07:33:06 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 17 Jan 2023 07:33:05 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 17 Jan 2023 07:33:00 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>
+Subject: [Patch net-next 0/2] net: dsa: microchip: add support for credit based shaper
+Date:   Tue, 17 Jan 2023 20:02:50 +0530
+Message-ID: <20230117143252.8339-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com> <Y8H5Z3e4hZkFxAVS@google.com>
-In-Reply-To: <Y8H5Z3e4hZkFxAVS@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 17 Jan 2023 14:32:19 +0000
-Message-ID: <CA+EHjTyVfm5L0kch2rT1HwaDHjVOxnZozV2PKWViKY00igHawg@mail.gmail.com>
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,68 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+LAN937x switch family, KSZ9477, KSZ9567, KSZ9563 and KSZ8563 supports
+the credit based shaper. But there were few difference between LAN937x and KSZ
+switch like
+- number of queues for LAN937x is 8 and for others it is 4.
+- size of credit increment register for LAN937x is 24 and for other is 16-bit.
+This patch series add the credit based shaper with common implementation for
+LAN937x and KSZ swithes.
 
-On Sat, Jan 14, 2023 at 12:38 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Dec 02, 2022, Chao Peng wrote:
-> > This patch series implements KVM guest private memory for confidential
-> > computing scenarios like Intel TDX[1]. If a TDX host accesses
-> > TDX-protected guest memory, machine check can happen which can further
-> > crash the running host system, this is terrible for multi-tenant
-> > configurations. The host accesses include those from KVM userspace like
-> > QEMU. This series addresses KVM userspace induced crash by introducing
-> > new mm and KVM interfaces so KVM userspace can still manage guest memory
-> > via a fd-based approach, but it can never access the guest memory
-> > content.
-> >
-> > The patch series touches both core mm and KVM code. I appreciate
-> > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> > reviews are always welcome.
-> >   - 01: mm change, target for mm tree
-> >   - 02-09: KVM change, target for KVM tree
->
-> A version with all of my feedback, plus reworked versions of Vishal's selftest,
-> is available here:
->
->   git@github.com:sean-jc/linux.git x86/upm_base_support
->
-> It compiles and passes the selftest, but it's otherwise barely tested.  There are
-> a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-> a WIP.
->
-> As for next steps, can you (handwaving all of the TDX folks) take a look at what
-> I pushed and see if there's anything horrifically broken, and that it still works
-> for TDX?
->
-> Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
-> (and I mean that).
+RFC -> Patch v1
+- Rebased to latest net-next
 
-Thanks for sharing this. I've had a look at the patches, and have
-ported them to work with pKVM. At a high level, the new interface
-seems fine and it works with the arm64/pKVM port. I have a couple of
-comments regarding some of the details, but they can wait until v11 is
-posted.
+Arun Ramadoss (2):
+  net: dsa: microchip: enable port queues for tc mqprio
+  net: dsa: microchip: add support for credit based shaper
 
-Cheers,
-/fuad
+ drivers/net/dsa/microchip/ksz9477.c      |  11 ++
+ drivers/net/dsa/microchip/ksz9477.h      |   1 +
+ drivers/net/dsa/microchip/ksz9477_reg.h  |  32 ++----
+ drivers/net/dsa/microchip/ksz_common.c   | 123 +++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_common.h   |  21 ++++
+ drivers/net/dsa/microchip/lan937x.h      |   1 +
+ drivers/net/dsa/microchip/lan937x_main.c |   9 ++
+ drivers/net/dsa/microchip/lan937x_reg.h  |   9 +-
+ net/dsa/tag_ksz.c                        |  15 +++
+ 9 files changed, 195 insertions(+), 27 deletions(-)
 
 
+base-commit: 0349b8779cc949ad9e6aced32672ee48cf79b497
+-- 
+2.36.1
 
-> On my side, the two things on my mind are (a) tests and (b) downstream dependencies
-> (SEV and TDX).  For tests, I want to build a lists of tests that are required for
-> merging so that the criteria for merging are clear, and so that if the list is large
-> (haven't thought much yet), the work of writing and running tests can be distributed.
->
-> Regarding downstream dependencies, before this lands, I want to pull in all the
-> TDX and SNP series and see how everything fits together.  Specifically, I want to
-> make sure that we don't end up with a uAPI that necessitates ugly code, and that we
-> don't miss an opportunity to make things simpler.  The patches in the SNP series to
-> add "legacy" SEV support for UPM in particular made me slightly rethink some minor
-> details.  Nothing remotely major, but something that needs attention since it'll
-> be uAPI.
->
-> I'm off Monday, so it'll be at least Tuesday before I make any more progress on
-> my side.
->
-> Thanks!
