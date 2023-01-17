@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5313670E11
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE645670E15
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjAQXwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S229865AbjAQXwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjAQXvW (ORCPT
+        with ESMTP id S229659AbjAQXvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:51:22 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F07572E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:01:09 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id s21so3058592edi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:01:09 -0800 (PST)
+        Tue, 17 Jan 2023 18:51:54 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027054FACC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:03:20 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id s3so9120405edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 15:03:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=36ojNrGFeLlO1WRePHzVkOKkUUAt+mzyuzgpCW6PfVQ=;
-        b=jaENkkvKRPa/iJ4S60jFT8yAwmEyoPQlMWJNJ7EzqWGC+3vb+MJp6NKWHSK8JfZ+rt
-         CLjgK6fHyYjB0MJznyvWCSLjfcIYVpoSWp4bhJyCMXHTJ4XsXfk+ptd2OpscHNGfmMhu
-         MouGs4GP5Op8L/PuwT2YF9+S9w8YlnjcSehWgqvBMVQFDoUMR2JqqnCfmnrqN4zpZsEO
-         YJCdFF3fHlTdk4dlz0/I0mBGONaEezELtG1D/Lg9BtAJC9dt8zQsPPNCg6mn15OdSIAz
-         HwYhSUqyzEcxgQdmbPWSajo9Y1yhX6HpGnDZnKxqtXP7MB3wmnWMjdHP2hyVbp9lRJn+
-         AOYA==
+        bh=S0Utky4CcDja9H/9iX4tDNCU4emwig6oC4agaGJhUUc=;
+        b=OHrC/QTQCvGHxvqsw4stPInLZeBh5zNkTPdbPyqckyBMvQu5n2I6oZxzOIVhCDH1lA
+         AMLMW2FuQYBuhwNIPGrwCh+lOtyGPyVNw3XMv0+hq9AevSLYzjvpRLbjA2e+gQ6eY6p5
+         BGkfkbshhEUd7TJeK6SEp3JmXMv7y0aLAejGGYrMdRThup5OXqITNGZVNtmNooFkr2T7
+         HpwMLi6MiMZel6nw2TbZ5FniIwmyBLDQnZywjBGmcPLaDLxuDGvUcBdvnExBrUlW3HGC
+         3Pvsg+QvnFJ8QSesDm5Y3TgPw+FeR04hHsqGZiMUAd2z0LyvdvLwN4QNX+fWbz3SYiYs
+         9PVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=36ojNrGFeLlO1WRePHzVkOKkUUAt+mzyuzgpCW6PfVQ=;
-        b=twoIlYADKCuVeyYyCXS5Y9YFwKvUZbn1p5Y54ZuPHpllLd4Dx474pTkG2BiuXlyc1I
-         LTGhpypLm+PAIVDPC98gDqyus7zXdTLGlq5eqwgjrxkFy7Ok2DTNB67SmHINRDf/aAQ4
-         Ic90XWv8hyCjDJA6NJjfw5tRLnvS1OQhfH+S2Cr58Msf0k9ChEBLC26In+P1gyf0EHJd
-         7aoE8wPjJLn5IINPLZMXTwqH0ggTPIM9+9zZ//Pt4HkeUdKoto8mWNyFwcMvL+4bRo94
-         fBSGpmguFLPp6dKqGD+vFzBsk5quAP9ljSy+YNTNzN/TynPU+APtSeMjiaFg6MzJPmEK
-         qVbQ==
-X-Gm-Message-State: AFqh2kqMulx977ddf+mnT4gPm4Ifn2qu7ragfY5UYl9I2pz3SihREX7u
-        aESYOcUiMRFGqdAlBg0g1ElBrk5s/3ik+Yo9zORkmQ==
-X-Google-Smtp-Source: AMrXdXsGqLZTAXgdag+HHZacewzf5CT33O5WG5+Gy6NMYX06iOrS3y2ryIkO3mO8fcLcm9Kc17Q8hcS3vt42FRZ1e/I=
-X-Received: by 2002:aa7:db98:0:b0:49e:160c:e9b0 with SMTP id
- u24-20020aa7db98000000b0049e160ce9b0mr502864edt.425.1673996468046; Tue, 17
- Jan 2023 15:01:08 -0800 (PST)
+        bh=S0Utky4CcDja9H/9iX4tDNCU4emwig6oC4agaGJhUUc=;
+        b=h1qttcYZojOGORR6ChAznfx/oRUDiTw0wneciScmp8ZRvrwBt+ETsCK8wXvIIHucFT
+         /8B1/L6libQeN1bEp02K0Y6TvuLHgz6tKGvrxg2ypGJCyZsVHt4w1PRlSweJMjQbtBSJ
+         TtPCcv8QsPduRIQoRKdLoebO92HcUPGpNUh6Eo6p0323O0yr1CQAGa8oSXPuKvGcGmDM
+         m5R5W2VhLa9Ho5NKilrCuFPzNEV1iIvKPA9KjxqscC6lr/zewNTeuLRUZde2hRPUvdaL
+         gNRQ0vTqnkCIyMYcLsSr73npQ2V/CV8DW8eNczAhDyiswEIDrGUJaONV2QWFMRGgY5pp
+         xLAQ==
+X-Gm-Message-State: AFqh2koSshN000xyiLJMNqdX+GM2dKRcJUIlC8zEFm0klfdk2cdDhEYP
+        vKwiQZ0iGrXBPad2OJtZfrOYeaye4QlN/QVcbkiOcA==
+X-Google-Smtp-Source: AMrXdXvkOyq5MZjBOOsq4MiLIkJKFeCxVaiXzr1XNoCLZy3kjB0ruBBffvwH30VV28c3JrcgVvzIPJNOcBc7xKb7WeY=
+X-Received: by 2002:a05:6402:3d4:b0:491:6a35:9852 with SMTP id
+ t20-20020a05640203d400b004916a359852mr627295edw.182.1673996599128; Tue, 17
+ Jan 2023 15:03:19 -0800 (PST)
 MIME-Version: 1.0
-References: <b740c9fb-edba-92ba-59fb-7a5592e5dfc@google.com>
- <dc9f7bb0-77d4-8b0e-c6b6-ece3f77ed326@redhat.com> <32be06f-f64-6632-4c36-bed7c0695a3b@google.com>
- <7ff97950-b524-db06-9ad6-e98b80dcfefa@redhat.com> <CAHbLzkqjooxnAwqK7vZoJpP2bSUTCUgv3UtWsZgo444jpGSfoA@mail.gmail.com>
- <86d5f618-800d-9672-56c4-9309ef222a39@redhat.com> <CAAa6QmSByYrWkp+8K0NK+pocKT0CVj83RaVUB1VqMPvuPHnpNQ@mail.gmail.com>
- <d50eb6f2-0585-7441-081b-cadaa5901c6e@redhat.com>
-In-Reply-To: <d50eb6f2-0585-7441-081b-cadaa5901c6e@redhat.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Tue, 17 Jan 2023 15:00:30 -0800
-Message-ID: <CAAa6QmR6KeCCMHGyR9jkwk-KCwb_FTcEfnKeHRJ2U7+3SVz7hg@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: fix collapse_pte_mapped_thp() to allow anon_vma
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yang Shi <shy828301@gmail.com>, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jann Horn <jannh@google.com>, Song Liu <songliubraving@fb.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <20221205232341.4131240-3-vannapurve@google.com> <Y8cXMCBzNcuzniXS@google.com>
+In-Reply-To: <Y8cXMCBzNcuzniXS@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 17 Jan 2023 15:03:06 -0800
+Message-ID: <CAGtprH-jXuYs4MqNupxi2aEQ3ohp0PyqpNZd0UDu8yqF+57aXw@mail.gmail.com>
+Subject: Re: [V2 PATCH 2/6] KVM: Selftests: Add support for private memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -74,93 +85,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 12:50 AM David Hildenbrand <david@redhat.com> wrote:
+On Tue, Jan 17, 2023 at 1:46 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> >>>>>>
-> >>>>>> Side note: set_huge_pmd() wins the award of "ugliest mm function of early
-> >>>>>> 2023". I was briefly concerned how do_set_pmd() decides whether the PMD can be
-> >>>>>> writable or not. Turns out it's communicated via vm_fault->flags. Just
-> >>>>>> horrible.
+> On Mon, Dec 05, 2022, Vishal Annapurve wrote:
+> > Add support for registering private memory with kvm using
+> > KVM_SET_USER_MEMORY_REGION ioctl.
 > >
-
-Hey David,
-
-Sorry for the late response here.
-
-> > My first Linux award! :) At least it's not "worst mm security issue of
-> > early 2023". I'll take it!
->
-> Good that you're not taking my words the wrong way.
->
-> MADV_COLLAPSE is a very useful feature (especially also for THP tests
-> [1]). I wish I could have looked at some of the patches earlier. But we
-> cannot wait forever to get something merged, otherwise we'd never get
-> bigger changes upstream.
->
-> ... so there is plenty of time left in 2023 to cleanup khugepaged.c :P
->
->
-> [1] https://lkml.kernel.org/r/20230104144905.460075-1-david@redhat.com
-
-Yes, thank you for these tests. I have them open in another tab along
-with a mental TODO to take a closer look at them, and response
-half-written. In-place collapse of anonymous memory *is* something
-that I was interested in exploring later (I have a use-case for it;
-hugepage-aware malloc() implementations). I'm taking so long on it
-(sorry) b/c I need to review your point (2) (all PTE's mapping
-exclusively). Hopefully I can get to it shortly.
-
-> [...]
->
->
-> >> For example: why even *care* about the complexity of installing a PMD in
-> >> collapse_pte_mapped_thp() using set_huge_pmd() just for MADV_COLLAPSE?
-> >>
-> >> Sure, we avoid a single page fault afterwards, but is this *really*
-> >> worth the extra code here? I mean, after we installed the PMD, the page
-> >> could just get reclaimed either way, so there is no guarantee that we
-> >> have a PMD mapped once we return to user space IIUC.
+> > Helper function to query extended userspace mem region is introduced to
+> > allow memory conversion.
 > >
-> > A valid question. The first reason is just semantic symmetry for
-> > MADV_COLLAPSE called on anon vs file/shmem memory. It would be nice to
-> > say that "on success, the memory range provided will be backed by
-> > PMD-mapped hugepages", rather than special-casing file/shmem.
->
-> But there will never be such a guarantee, right? We could even see a
-> split before just before we return to user space IIRC.
-
-Absolutely. But at least we are *attempting* for symmetry here; though
-admittedly, even a successful return code provides no guarantees.
-Perhaps this is a weak argument by itself, though.
-
+> > vm_mem_backing_src types is extended to contain additional guest memory
+> > source types to cover the cases where guest memory can be backed by both
+> > anonymous memory and restricted memfd.
 > >
-> > The second reason has a more practical use case. In userfaultfd-based
-> > live migration (using  UFFDIO_REGISTER_MODE_MINOR) pages are migrated
-> > at 4KiB granularity, and it may take a long (O(many minutes)) for the
-> > transfer of all pages to complete. To avoid severe performance
-> > degradation on the target guest, the vmm wants to MADV_COLLAPSE
-> > hugepage-sized regions as they fill up. Since the guest memory is
-> > still uffd-registered, requiring refault post-MADV_COLLAPSE won't
-> > work, since the uffd machinery will intercept the fault, and no PMD
-> > will be mapped. As such, either uffd needs to be taught to install PMD
-> > mappings, or the PMD mapping already must be in-place.
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  .../selftests/kvm/include/kvm_util_base.h     | 12 +++-
+> >  .../testing/selftests/kvm/include/test_util.h |  4 ++
+> >  tools/testing/selftests/kvm/lib/kvm_util.c    | 58 +++++++++++++++++--
+> >  tools/testing/selftests/kvm/lib/test_util.c   | 11 ++++
+> >  4 files changed, 78 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > index c7685c7038ff..4ad99f295f2a 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -31,7 +31,10 @@ typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
+> >  typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
+> >
+> >  struct userspace_mem_region {
+> > -     struct kvm_userspace_memory_region region;
+> > +     union {
+> > +             struct kvm_userspace_memory_region region;
+> > +             struct kvm_userspace_memory_region_ext region_ext;
 >
-> That's an interesting point, thanks. I assume we'd get another minor
-> fault and when resolving that, we'll default to a PTE mapping.
+> As discussed in the UPM series, we're trending towards adding an entirely new
+> struct+ioctl(), kvm_userspace_memory_region2, instead of extending the existing
+> struct.  The == -> >= hack you had to add in kvm_do_ioctl() below is one of the
+> reason for that change.
+>
 
-Yes-ish; I think it depends on how userspace decides to deal with the
-event. At least in my own test cases, IIRC (hazy memory here), we
-ended up in some loop of:
+Ack.
 
-done faulting all 512 pages -> MADV_COLLAPSE -> fault -> copy page ->
-done faulting all 512 pages -> ...
+> > +     };
+> >       struct sparsebit *unused_phy_pages;
+> >       int fd;
+> >       off_t offset;
+> > @@ -196,7 +199,7 @@ static inline bool kvm_has_cap(long cap)
+> >
+> >  #define kvm_do_ioctl(fd, cmd, arg)                                           \
+> >  ({                                                                           \
+> > -     static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");   \
+> > +     static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) >= _IOC_SIZE(cmd), "");   \
+> >       ioctl(fd, cmd, arg);                                                    \
+> >  })
+> >
+> > @@ -384,6 +387,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+> >  void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
+> >  void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
+> >  void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
+> > +
+> >  struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
+> >  vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+> >  vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+> > @@ -715,6 +719,10 @@ struct kvm_userspace_memory_region *
+> >  kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
+> >                                uint64_t end);
+> >
+> > +struct kvm_userspace_memory_region_ext *
+> > +kvm_userspace_memory_region_ext_find(struct kvm_vm *vm, uint64_t start,
+> > +                              uint64_t end);
+> > +
+> >  #define sync_global_to_guest(vm, g) ({                               \
+> >       typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));     \
+> >       memcpy(_p, &(g), sizeof(g));                            \
+> > diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+> > index 80d6416f3012..aea80071f2b8 100644
+> > --- a/tools/testing/selftests/kvm/include/test_util.h
+> > +++ b/tools/testing/selftests/kvm/include/test_util.h
+> > @@ -103,6 +103,8 @@ enum vm_mem_backing_src_type {
+> >       VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
+> >       VM_MEM_SRC_SHMEM,
+> >       VM_MEM_SRC_SHARED_HUGETLB,
+> > +     VM_MEM_SRC_ANONYMOUS_AND_RESTRICTED_MEMFD,
+> > +     VM_MEM_SRC_ANON_HTLB2M_AND_RESTRICTED_MEMFD,
+>
+> There's no need for a dedicated flag in the backing type, vm_userspace_mem_region_add()
+> already takes the memslot's flags and can simply key off KVM_MEM_PRIVATE.
+>
 
-Thanks,
-Zach
+I switched to using a dedicated flag thinking that it might be handy
+when private memory can be backed by huge pages. For now it makes
+sense to avoid adding it.
 
-
+> > @@ -881,6 +915,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+> >       struct userspace_mem_region *region;
+> >       size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
+> >       size_t alignment;
+> > +     int restricted_memfd = -1;
+>
+> No need to initialize to -1, KVM is supposed to ignore the restrictedmem fd if
+> !KVM_MEM_PRIVATE, and if KVM_MEM_PRIVATE is set, selftests must provide a valid fd.
+>
+> >       TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
+> >               "Number of guest pages is not compatible with the host. "
+>
+> This is what I ended up with after splitting out the conversion to
+> KVM_SET_USER_MEMORY_REGION2 to a separate patch.
+>
 > --
-> Thanks,
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 7c1f81f93ba3..26c6830c1aa1 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -32,6 +32,11 @@ int open_path_or_exit(const char *path, int flags)
+>         return fd;
+>  }
 >
-> David / dhildenb
+> +static int memfd_restricted(unsigned int flags)
+> +{
+> +       return syscall(__NR_memfd_restricted, flags);
+> +}
+> +
+>  /*
+>   * Open KVM_DEV_PATH if available, otherwise exit the entire program.
+>   *
+> @@ -980,6 +985,15 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>         }
 >
+>         region->backing_src_type = src_type;
+> +
+> +       if (flags & KVM_MEM_PRIVATE) {
+> +               region->region.restricted_fd = memfd_restricted(0);
+> +               region->region.restricted_offset = 0;
+> +
+> +               TEST_ASSERT(region->region.restricted_fd >= 0,
+> +                           "Failed to create restricted memfd");
+> +       }
+> +
+>         region->unused_phy_pages = sparsebit_alloc();
+>         sparsebit_set_num(region->unused_phy_pages,
+>                 guest_paddr >> vm->page_shift, npages);
+> @@ -992,9 +1006,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>         TEST_ASSERT(ret == 0, "KVM_SET_USER_MEMORY_REGION2 IOCTL failed,\n"
+>                 "  rc: %i errno: %i\n"
+>                 "  slot: %u flags: 0x%x\n"
+> -               "  guest_phys_addr: 0x%lx size: 0x%lx",
+> +               "  guest_phys_addr: 0x%lx size: 0x%lx restricted fd: %d\n",
+>                 ret, errno, slot, flags,
+> -               guest_paddr, (uint64_t) region->region.memory_size);
+> +               guest_paddr, (uint64_t) region->region.memory_size,
+> +               region->region.restricted_fd);
+>
+>         /* Add to quick lookup data structures */
+>         vm_userspace_mem_region_gpa_insert(&vm->regions.gpa_tree, region);
+
+Ack.
