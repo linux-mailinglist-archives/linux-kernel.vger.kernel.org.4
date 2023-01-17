@@ -2,107 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66B66E825
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76566E826
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjAQVIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S229449AbjAQVI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjAQVGQ (ORCPT
+        with ESMTP id S229696AbjAQVGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:06:16 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8046C56B;
-        Tue, 17 Jan 2023 11:32:16 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id z3so85359pfb.2;
-        Tue, 17 Jan 2023 11:32:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DlLQTdoKsOZVDNxk9NL/UbvvDxhujJxGzQgZNmNgx0U=;
-        b=JXBX8KVj4Ffl+KJEJrfPsUrsxZRLXQkhl1iFB291/nmaQpGG1GOlYLFoGiRJIhDaeR
-         qq8s1vRb486jdTWKcvdRaKpDZy9w1PPqEHiXITMCeNqDPpV6CLycsms2aVn4ec6E5epu
-         2RTR5zNLfSikRyLyWBTv4OktwynBGLLlZhyoUoZNuV2oS7P4e7bheeAP9F7nHzqaDXfk
-         nHbjiLVn08yOEn37yKdX0LkTtcUJHgBxbjca9aoFUnfrWjX4q1feq6x35Xx4pUUUXYbU
-         xj7LmyCuyyKTWE9VXiAWKVCz/r5Ecc6dvpXGyP89Ts4gxj1Hndm5TMQDEz/tuFtHteO4
-         rEeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DlLQTdoKsOZVDNxk9NL/UbvvDxhujJxGzQgZNmNgx0U=;
-        b=QGc2vaNfxEaN+68mOydzKy8HsVusb82ly3YvHtke7zSdcO+OqLCEkmHScsB6bZktPX
-         MRADl8fbvL2wrKVFcMjTgBMxyzURnXW4ojVK1eShuqKsFbJGNtxB96dVgc9ZawaP5/iT
-         aODEN9WotfbFyqRbd6NtX5S8SveXScCqeEBjawtiVa444s8ICLsaQ/DkG5+eUPHqXXWx
-         oDWf1EDHLM0dXagv7ygZa8HHpMiGX+9hRuzzlwbnmVvt7Q3L3ZJaOagb7HqxBY+Tcvsb
-         FMA3PI3HPKojALUlCapbPlkSyyTpJwPtg3MQy0E57TBlspHX8Bma3bUqyb1slpxvNiSK
-         fUnQ==
-X-Gm-Message-State: AFqh2kqsHEPxirFnKMVBgrrwPLJQTD53LjRTiXCcRKorFtWVlMFx7YAk
-        OMSgnzHSvCbs5lSr2resJ7o=
-X-Google-Smtp-Source: AMrXdXtNKpWN7uz3qBQ+i7AEsePVao3aNrWvFpHQCQ0As59xfpRQeXFe0p6yqjitcWqnqXzVGe45hQ==
-X-Received: by 2002:a62:7b11:0:b0:586:e399:9cd4 with SMTP id w17-20020a627b11000000b00586e3999cd4mr25691538pfc.25.1673983935820;
-        Tue, 17 Jan 2023 11:32:15 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id h18-20020aa796d2000000b0058dbb5c5038sm3124010pfq.182.2023.01.17.11.32.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 11:32:15 -0800 (PST)
-Message-ID: <b19210c0-bfc7-f601-c8b3-4b4e263c9cd0@gmail.com>
-Date:   Tue, 17 Jan 2023 11:32:12 -0800
+        Tue, 17 Jan 2023 16:06:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A76390864;
+        Tue, 17 Jan 2023 11:32:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95E75B81A19;
+        Tue, 17 Jan 2023 19:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D85DC433D2;
+        Tue, 17 Jan 2023 19:32:26 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 14:32:24 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        fweisbec@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH v2 rcu/dev 1/2] rcu: Track laziness during boot and
+ suspend
+Message-ID: <20230117143224.6fbf7da8@gandalf.local.home>
+In-Reply-To: <CAEXW_YSNurO-hK+q2amP6wa96jr0KkZ_ggF+5x_sTHESC9vpNw@mail.gmail.com>
+References: <20230112005223.2329802-1-joel@joelfernandes.org>
+        <20230115162504.08ef72b0@rorschach.local.home>
+        <CAEXW_YSNurO-hK+q2amP6wa96jr0KkZ_ggF+5x_sTHESC9vpNw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5.4 000/622] 5.4.229-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230117124648.308618956@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230117124648.308618956@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 15 Jan 2023 16:34:58 -0500
+Joel Fernandes <joel@joelfernandes.org> wrote:
 
+> > > +EXPORT_SYMBOL_GPL(rcu_async_hurry);
+> > >  
+> >
+> > Where do you plan on calling these externally, as they are being
+> > marked exported?
+> >
+> > If you allow random drivers to enable this, I can see something
+> > enabling it and hitting an error path that causes it to never disable
+> > it.  
+> 
+> You mean, just like rcu_expedite_gp() ?
+> 
+> > I wouldn't have EXPORT_SYMBOL_GPL() unless you really know that it is
+> > needed externally.  
+> 
+> At the moment it is not called externally but in the future, it could
+> be from rcutorture. If you see rcu_expedite_gp(), that is exported
+> too. I was just modeling it around that API.
 
-On 1/17/2023 4:48 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.229 release.
-> There are 622 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 19 Jan 2023 12:45:11 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.229-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+The reason for the export should have been mentioned in the change log if
+the patch is not obvious to why it is being exported.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Thanks,
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+-- Steve
