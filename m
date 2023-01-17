@@ -2,183 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E1D66DE53
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D7266DE5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 14:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbjAQNC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 08:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S236908AbjAQNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 08:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbjAQNCm (ORCPT
+        with ESMTP id S236755AbjAQNEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 08:02:42 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD88E31E01
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:02:41 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so10584651pjg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 05:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jmIfKKj7U8Bcy9yj2YgmEfLZDpCS32pWFxDGk4zOAmQ=;
-        b=qASjWliaWCrKRQ9R7a3HdRD3wfjSMYeWigyGmwPIlQPT0evFxvqsL3mP4vjvxl0HXT
-         Xfd9p7NjAA+SyYxihPlOXeX2/DPGibynkITo2FypiWhKjgFeOvj6oym18lwCv1uT6cUZ
-         LRmlgXsoUGBbM39r6ME7ug1aSPsKzobn6azc7AXCppTSqSbFm+ITNXqZR3YWwz+0uFQ9
-         bsKgGsZ8B2WQtxJ1qDZEzeuZztgdPLl8apVmzxtqEvVsIP70h25SLCd3gZaVSRCuYa9n
-         OWmU9/YudYlAXzvGDv2cGUQE8j8ysK7Lk2seZ6V3a7BBzzdXFeMc/EPlwm3d8Faa9hIq
-         oryA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jmIfKKj7U8Bcy9yj2YgmEfLZDpCS32pWFxDGk4zOAmQ=;
-        b=FZS69RFveGroubKmjbSEHq8cayFu3hz0y2ouK2A3pRo7UfXPjLlBNNhhE4zc6Mz42i
-         Rcv4qzfEnEbDM1vHHK0LXCxGQOrrwtMhBq5HTsq1JoZXNipSzoO5nGqACNti/j4wDjLq
-         yxw9/agk4btf80tQOFoXnqkhmXzTCYnhCqU4jnqK2MdUroxaYIFGxLij7/wbY+z4MQJi
-         iJ4XRvTKKDhTmZ6RSGNYYdkb+oG+FGAP8Q/GK+d4MlvK4mcZb+XUFTekDbbPm3AbPdp0
-         vHQbfATFA1He9T06ZVq4ljt3FSc8ay5Lko13E1Q83rSoNLTtbuyHI+P0mbR3OP/cpjW0
-         yv3g==
-X-Gm-Message-State: AFqh2kpkMKyQ5n000gEVo7KZebA61UJE8qZz2UTf7//rm6dqtgeqp8Vd
-        3PjZWClwBk+dCuBu7Hhb5SYMVCocjzKaDuMxUpPycg==
-X-Google-Smtp-Source: AMrXdXv+i/hO3HrGWtPdleEamTrdv9t60Vx4JRXDr8oRauAlWP6HwqCLIuRipmrBsGIcaXtn+991HUpTrAVSyDKwif0=
-X-Received: by 2002:a17:90a:9413:b0:229:81a7:c5a7 with SMTP id
- r19-20020a17090a941300b0022981a7c5a7mr309318pjo.76.1673960561097; Tue, 17 Jan
- 2023 05:02:41 -0800 (PST)
+        Tue, 17 Jan 2023 08:04:21 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1BB30EB2;
+        Tue, 17 Jan 2023 05:04:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KhRb9zRxxMxrHIKl8h6kbthNeVQY0VR5fhPjYrTZlLgNxA4Jy9HTTa22FINDP+8teCn3FGQBRkLGMltlCN/2Ve/jXI1KKteQOWH5H9S0kEaSyPFy/yJOMZW9MkJxOycyeESyw7aUWMbB6RG9zhhTuMM6Ro5TL984K+JXqckFmQis2KovkhUq046YOnqJ4Y0XZsecivzN4laATx+i9jlsP03hymqxAeYpYkEOrYrdcyeWsHRlRK6MJuFdwPaq7Sfr6/rvec55nA9byOZ8TwicqviHoMo2LZa0HtbHl+kFDhpLGoZdP7Yl1SwvyY6SF83EMezRCCdFPOh+J+FRwA1/IA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Tb2rj8ATSr20Iy615KcmAnCYkh39k/9f0jxTvQmznI=;
+ b=csrEcZ+0Il+SkPr77BLmIXLCr58IFs82Ez8V1AF/6grYh4OQrXma5qrlCsxIWvUZzpxP+d0Zv+k/AkQG1JbwiFC2nbXNyOJf0G5O5V7JHCFrIckL9X+qXabmwqXEdQVzCijAikgFk/oagjF9YqnZgzWsPxGq7EmCkqADGaf0Zey8RgqUaOjuTLfkV4PzgbWexXMblji93YqMTyu39gHV/D9/914W2V2IPN229lpsO9I3RVC8a4eTU5IARv4sV+5qkmYkhslx0HPwRmTzl0Wf8qBto0YfG9qpG0KkoyOK50oZhufBMBD02Ucwr7ygqCVUjz1jXjWwTPuOowdGqJKjFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Tb2rj8ATSr20Iy615KcmAnCYkh39k/9f0jxTvQmznI=;
+ b=XB6yMotCBRpJW71OP8SPeos4VfsMISo7L5Xo3qIWF5c3bjzTNcGQTNTeyhPmlUdZ3d/Vu/DTGER2w6bYUZ7RTmVXz6m3UpbX6N0FzroNr3X6H5N9IT3R/qdilVm8aie1RhTiiIa8iRNs+r6jJadtcnwOuwBTqpZDv9LLMbRLpBzvd8HbT7gCTx/OW+MKaCKoWuYgJL9RRv/wmVZneNKGSq6gexWtGFBn5SOO+sVUk2pfING5hDpGHGlic84q+BvAKS1EUCyjXv9OVd2wINL/U2t/VAGyiN6jLWdjnQyZaTs+DLsmv56JcQmEvGkLnapMcFcOTC3hEuU4HSOG7x2/hw==
+Received: from CY5PR19CA0063.namprd19.prod.outlook.com (2603:10b6:930:69::6)
+ by LV2PR12MB5821.namprd12.prod.outlook.com (2603:10b6:408:17a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
+ 2023 13:04:19 +0000
+Received: from CY4PEPF0000C979.namprd02.prod.outlook.com
+ (2603:10b6:930:69:cafe::4a) by CY5PR19CA0063.outlook.office365.com
+ (2603:10b6:930:69::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
+ Transport; Tue, 17 Jan 2023 13:04:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000C979.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.11 via Frontend Transport; Tue, 17 Jan 2023 13:04:18 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
+ 2023 05:04:00 -0800
+Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
+ 2023 05:03:56 -0800
+Message-ID: <6f4dc52f-934e-283f-ac0d-917794c896a8@nvidia.com>
+Date:   Tue, 17 Jan 2023 18:33:53 +0530
 MIME-Version: 1.0
-References: <20230116124928.5440-1-mike.leach@linaro.org> <20230116124928.5440-2-mike.leach@linaro.org>
- <1896a73b-eb7b-7ffb-272d-115a10adeb71@arm.com>
-In-Reply-To: <1896a73b-eb7b-7ffb-272d-115a10adeb71@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 17 Jan 2023 13:02:29 +0000
-Message-ID: <CAJ9a7VixL9f2Cm7A780V311KH2G2giryeH9dG0p2e4zWBwA3iQ@mail.gmail.com>
-Subject: Re: [PATCH v7 01/15] coresight: trace-id: Add API to dynamically
- assign Trace ID values
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
+        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
+        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-2-sumitg@nvidia.com>
+ <f4e05666-d094-18cf-2641-ebf92da85dc8@gmail.com>
+ <221c1bab-8f4d-9dbb-bb12-4f7ab5dc5d90@nvidia.com>
+ <98b5a73d-be59-457f-e7ce-71cfbbdd025f@gmail.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <98b5a73d-be59-457f-e7ce-71cfbbdd025f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C979:EE_|LV2PR12MB5821:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9696b56a-6bad-47b6-ced6-08daf88b580d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ArPgJh/s/mNXAYqkmaqmGqUI0rDTXXvPhC8J+HmWjseX2IrIG/wxLOfhF59enqYdezSejCekd8MV4PM/liKH6iuboHkcfLAvFiWT+B/Fjc/Ab9+nVoCOW3TpceN85i1G2q+U2UvvcBDSaYG0XpxVEp+SRkJoK10j5CQulC7AEhcAV5dU4KBoTbRCp9//IQVKEsFSyMzF0psqC5pSbs+gT7b58s0osN1FxitDtc9vgXdYVBgp3rTITiOMySzIhAKt/7JDTaENywfC7repIFYsmHgkPlOVETfw0iYaqR+vpkMxqa6a80IK/DQN/LBA0qYXlbG60mHc8g+n8gQhuqp9y0sqDtFPpccSHeSnmUpWQmb9z6EPSDDHW8qyir8pZcO55N+AGcam93SMriYtnB9QM3t4koIa6/Un6JvOSD/NtnSpHYZHITDa8mpM22P3HL7V3Jt901PQ56RXW8of/fUiarhtrtJ9PxW3MivaTUtDR8w1W99jgY82adcuZCuLaFoFWFZ3Tl/psHJXn7mup7N+BLolmdqeIWDwwYiM59RxWJFqqa4Klp4sCxXtjoYq0mL/ltP5guVUtQxqFE2h/72op24KuDLSVirqQtPKld0D9kZZBrRTTEXkxltIY0IP2vPHhnD8MwRLyaFeE7R/zsNELfG/Rh0DgeltlXgOAQJO+P8D5Xcy8s2Wr9b1QFxelg+UTAZ8rgTZmRG0X3RPT4dv+Fs4g9cuFyDAPIhtnQto3ICt3GX7Z4PxIAWke1esGjIt
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(39860400002)(136003)(451199015)(46966006)(40470700004)(36840700001)(40460700003)(921005)(40480700001)(82740400003)(7636003)(356005)(82310400005)(86362001)(16526019)(26005)(186003)(478600001)(36756003)(31696002)(2616005)(336012)(110136005)(70586007)(316002)(16576012)(31686004)(70206006)(54906003)(53546011)(7416002)(5660300002)(36860700001)(2906002)(41300700001)(426003)(6666004)(107886003)(47076005)(8676002)(4326008)(8936002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 13:04:18.6070
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9696b56a-6bad-47b6-ced6-08daf88b580d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C979.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5821
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 Jan 2023 at 14:16, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> Hi Mike
->
-> On 16/01/2023 12:49, Mike Leach wrote:
-> > The existing mechanism to assign Trace ID values to sources is limited
-> > and does not scale for larger multicore / multi trace source systems.
-> >
-> > The API introduces functions that reserve IDs based on availabilty
-> > represented by a coresight_trace_id_map structure. This records the
-> > used and free IDs in a bitmap.
-> >
-> > CPU bound sources such as ETMs use the coresight_trace_id_get_cpu_id
-> > coresight_trace_id_put_cpu_id pair of functions. The API will record
-> > the ID associated with the CPU. This ensures that the same ID will be
-> > re-used while perf events are active on the CPU. The put_cpu_id function
-> > will pend release of the ID until all perf cs_etm sessions are complete.
-> >
-> > For backward compatibility the functions will attempt to use the same
-> > CPU IDs as the legacy system would have used if these are still available.
-> >
-> > Non-cpu sources, such as the STM can use coresight_trace_id_get_system_id /
-> > coresight_trace_id_put_system_id.
-> >
-> > Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> > ---
-> >   drivers/hwtracing/coresight/Makefile          |   2 +-
-> >   .../hwtracing/coresight/coresight-trace-id.c  | 265 ++++++++++++++++++
-> >   .../hwtracing/coresight/coresight-trace-id.h  | 156 +++++++++++
-> >   include/linux/coresight-pmu.h                 |  10 +
-> >   4 files changed, 432 insertions(+), 1 deletion(-)
-> >   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
-> >   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
-> >
-> > diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> > index b6c4a48140ec..329a0c704b87 100644
-> > --- a/drivers/hwtracing/coresight/Makefile
-> > +++ b/drivers/hwtracing/coresight/Makefile
-> > @@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
-> >   coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
-> >               coresight-sysfs.o coresight-syscfg.o coresight-config.o \
-> >               coresight-cfg-preload.o coresight-cfg-afdo.o \
-> > -             coresight-syscfg-configfs.o
-> > +             coresight-syscfg-configfs.o coresight-trace-id.o
-> >   obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
-> >   coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
-> >                     coresight-tmc-etr.o
-> > diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-> > new file mode 100644
-> > index 000000000000..9b85c376cb12
-> > --- /dev/null
-> > +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-> > @@ -0,0 +1,265 @@
-> > +// SPDX-License-Identifier: GPL-2.0
->
-> ...
->
-> > +int coresight_trace_id_read_cpu_id(int cpu)
-> > +{
-> > +     return _coresight_trace_id_read_cpu_id(cpu);
-> > +}
-> > +EXPORT_SYMBOL_GPL(coresight_trace_id_read_cpu_id);
-> > +
-> > +int coresight_trace_id_get_system_id(void)
-> > +{
-> > +     return coresight_trace_id_map_get_system_id(&id_map_default);
-> > +}
-> > +EXPORT_SYMBOL_GPL(coresight_trace_id_get_system_id);
-> > +
-> > +void coresight_trace_id_put_system_id(int id)
-> > +{
-> > +     coresight_trace_id_map_put_system_id(&id_map_default, id);
-> > +}
-> > +EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
-> > +
-> > +void coresight_trace_id_perf_start(void)
-> > +{
-> > +     atomic_inc(&perf_cs_etm_session_active);
-> > +}
-> > +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
-> > +
-> > +void coresight_trace_id_perf_stop(void)
-> > +{
-> > +     if (!atomic_dec_return(&perf_cs_etm_session_active))
-> > +             coresight_trace_id_release_all_pending();
-> > +}
-> > +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
-> > +
->
-> This blank new line at the end of the file generates a checkpatch
-> warning for me. I have fixed it locally and applied it.
->
-OK, thanks.
-
-The only thing I get out of checkpatch.pl for this patch (and indeed
-the entire set) is:
-
-WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-
-Mike
-
-> > diff --git a/drivers/hwtracing/coresight/coresight-trace-id.h b/drivers/hwtracing/coresight/coresight-trace-id.h
->
->
 
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+On 21/12/22 22:14, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> 21.12.2022 11:05, Sumit Gupta пишет:
+>> On 20/12/22 23:37, Dmitry Osipenko wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> 20.12.2022 19:02, Sumit Gupta пишет:
+>>>> +#ifndef MEMORY_TEGRA_ICC_H
+>>>> +#define MEMORY_TEGRA_ICC_H
+>>>> +
+>>>> +enum tegra_icc_client_type {
+>>>> +     TEGRA_ICC_NONE,
+>>>> +     TEGRA_ICC_NISO,
+>>>> +     TEGRA_ICC_ISO_DISPLAY,
+>>>> +     TEGRA_ICC_ISO_VI,
+>>>> +     TEGRA_ICC_ISO_AUDIO,
+>>>> +     TEGRA_ICC_ISO_VIFAL,
+>>>> +};
+>>>
+>>> You using only TEGRA_ICC_NISO and !TEGRA_ICC_NISO in the code.
+>>>
+>>> include/soc/tegra/mc.h defines TAG_DEFAULT/ISO, please drop all these
+>>> duplicated and unused "types" unless there is a good reason to keep them
+>>>
+>>
+>> These type are used while defining clients in "tegra234_mc_clients[]"
+>> and its passed to BPMP-FW which has handling for each client type.
+> 
+> The type should be based on the ICC tag, IMO. AFAICS, type isn't fixed
+> in FW and you can set both ISO and NISO BW, hence it's up to a device
+> driver to select the appropriate tag.
+> 
+
+Type for a MC client is fixed. So, adding the tag and giving option to 
+client driver won't have impact.
+Also, we need to pass the type to BPMP from bw set api. But the tag info 
+is available to aggregate api and not set.
