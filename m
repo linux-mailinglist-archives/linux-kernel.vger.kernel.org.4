@@ -2,71 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9424066D4F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A98B466D4F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbjAQDXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 22:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
+        id S234744AbjAQD0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 22:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbjAQDXs (ORCPT
+        with ESMTP id S235060AbjAQD0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 22:23:48 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA5A1ABCC
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:23:47 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 20so4878821plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:23:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e9SJzG3T1WTFrSpslWTUYlzbc2Fk3qfwj1AXBQ8D6lk=;
-        b=gPDVpx7NOcjKo/e/2gu7+waMnPlH3sV6KMbIM4+gLSv7YAW8gKHVMYq/m64BuR1vFk
-         vxmq63nHapZcoyz2sOuCjXoMsrsh0qZGusdjKl5HtrrPrq4lInCmh5vOkqkmWM7XDCF3
-         iHcMpDcG2BYG3kEPMeYypUEycg5QBTu+nGkosnNnGDkKSPGpkSxV2tB01eCbtZMEEFRY
-         FNBO3jXBiEUUof3nDXd3SGOIdf0JSGIC/mzGt6VEOImfuAaWycgJZWyLtR9ItuxeZgRV
-         pkClyGM9gyFgZrApVB9SZ6fpZTJYO4Zv7Tds4i91ki+PkidRsOyzUjOavcLT94t24mWa
-         oxwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e9SJzG3T1WTFrSpslWTUYlzbc2Fk3qfwj1AXBQ8D6lk=;
-        b=AIN1M3q9W2FtvaUCVdHcwafTYn9gcWA2bpnXSDRFc62ULHQCfmPnDU9uv32VR6pzfe
-         2+YatTE5PvE3MXNmE1FPMlKRRxVo7lr5gqK5aooXh9QyvQI7p4xNxADsuPeWwgB9f/9U
-         W0P8bEIcvNZFt4xvCoMuF5px1KBgArs5tBU3NECz3aOjhEn96j/8gLxJDCYiIn1EjKIM
-         q+6uqtfUe93hSQuN06Lraixq/jF7c3PKtQsLMfVI08sMwYrcAdixp1HVdSpPyw+jp70G
-         1xmqSQ1jaJnE0sVllih5E4fnW4pT0aW4R7aaCIUwajjhRERLSHZ+tRxGBzhktJEBjjvI
-         PzvA==
-X-Gm-Message-State: AFqh2kpvWrZ38ppgEyTsxmvOKzYcSK9VZ7CIZBvoViUfdpl22P2nWtL8
-        E67U/42ZBPD/yK+NJA8ho+IkZnG41XU/tA==
-X-Google-Smtp-Source: AMrXdXu2S35xjNKVjDpKW5GX9uQlkG3TWgu6HFaZ0IhYg6jLp2DaSuV2vzVKaXW0wCVkK6Hv++gZ1Q==
-X-Received: by 2002:a17:902:8a8a:b0:194:480d:6afc with SMTP id p10-20020a1709028a8a00b00194480d6afcmr1713962plo.48.1673925826721;
-        Mon, 16 Jan 2023 19:23:46 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-20.three.co.id. [180.214.233.20])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090311ce00b00189c536c72asm20076783plh.148.2023.01.16.19.23.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 19:23:46 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4B8ED100300; Tue, 17 Jan 2023 10:23:43 +0700 (WIB)
-Date:   Tue, 17 Jan 2023 10:23:42 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Semen Zhydenko <semen.zhydenko@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fixed typo in comments
-Message-ID: <Y8YUvsLVZZvGZo3T@debian.me>
-References: <20230116222254.74479-1-semen.zhydenko@gmail.com>
+        Mon, 16 Jan 2023 22:26:48 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299AD227A2;
+        Mon, 16 Jan 2023 19:26:46 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H1wCZ6015506;
+        Tue, 17 Jan 2023 03:26:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=odUyeb4Moo2RJygLWdv551YNqxNag5tHWg49OhqtLmQ=;
+ b=hK+xtphkfuY88FzegIZqcsgFdS6BIAUai4W7yFN+b/ZcIrulLVWlAQBoytW4PveSXgJe
+ emRJL6eFbyyCjMbR24vaIczf+fnkHj+sKEka4KnLxwqhBvEDoUHBC/VP4OuO1vd+ab1H
+ v7XMlVL+1GxiOIJTUKAVAkZmJet3ZflnmYFn8z1n1Hgpe9WyHe0bODLz+jNjK2iW51+m
+ 3v22cWIqjvcmmdmiF8JEDhmH4Lu7DA53w0y6rA7PolA/0GUc79ti3b+clqgOhjUECHaf
+ z1kVbL+/q6Qtm6ONfjMHfL/qtIKlt2YZGYY112GyIAO3r5fcodpjG2TcwmfPHI13cl/C OA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3n5qveh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 03:26:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H3QLLI000593
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 03:26:21 GMT
+Received: from [10.253.11.111] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 16 Jan
+ 2023 19:26:16 -0800
+Message-ID: <185c988d-4213-f1e3-b400-0f86845eaf78@quicinc.com>
+Date:   Tue, 17 Jan 2023 11:26:13 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AD3yerrt9pfHvLjN"
-Content-Disposition: inline
-In-Reply-To: <20230116222254.74479-1-semen.zhydenko@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v16 6/8] Coresight: Add TPDA link driver
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <20230106092119.20449-1-quic_jinlmao@quicinc.com>
+ <20230106092119.20449-7-quic_jinlmao@quicinc.com>
+ <c8831ad9-d867-d977-da5f-2cc1b71704cf@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <c8831ad9-d867-d977-da5f-2cc1b71704cf@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pKPaFg5SzYrcENuO3R7AYXodh0ZT45M2
+X-Proofpoint-ORIG-GUID: pKPaFg5SzYrcENuO3R7AYXodh0ZT45M2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-16_18,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=734 priorityscore=1501 impostorscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301170024
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,44 +98,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---AD3yerrt9pfHvLjN
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 1/16/2023 5:36 PM, Suzuki K Poulose wrote:
+> On 06/01/2023 09:21, Mao Jinlong wrote:
+>> TPDA(Trace, Profiling and Diagnostics Aggregator) is
+>> to provide packetization, funneling and timestamping of
+>> TPDM data. Multiple monitors are connected to different
+>> input ports of TPDA.This change is to add tpda
+>> enable/disable/probe functions for coresight tpda driver.
+>>
+>>   - - - -         - - - -        - - - -
+>> | TPDM 0|      | TPDM 1 |     | TPDM 2|
+>>   - - - -         - - - -        - - - -
+>>      |               |             |
+>>      |_ _ _ _ _ _    |     _ _ _ _ |
+>>                  |   |    |
+>>                  |   |    |
+>>             ------------------
+>>            |        TPDA      |
+>>             ------------------
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+>
+> Btw, do we expect to see these devices on an ACPI system ?
 
-On Mon, Jan 16, 2023 at 11:22:54PM +0100, Semen Zhydenko wrote:
-> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-> index 63a8ce7177dd..6430c00b05a9 100644
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -1324,7 +1324,7 @@ static int __timer_delete(struct timer_list *timer,=
- bool shutdown)
->  	 * If @shutdown is set then the lock has to be taken whether the
->  	 * timer is pending or not to protect against a concurrent rearm
->  	 * which might hit between the lockless pending check and the lock
-> -	 * aquisition. By taking the lock it is ensured that such a newly
-> +	 * acquisition. By taking the lock it is ensured that such a newly
->  	 * enqueued timer is dequeued and cannot end up with
->  	 * timer->function =3D=3D NULL in the expiry code.
->  	 *
+These devices are not supported on an ACPI system.
 
-No patch description, really?
-
-Also please read Documentation/process/submitting-patches.rst for how to
-properly submit kernel patches.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---AD3yerrt9pfHvLjN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY8YUugAKCRD2uYlJVVFO
-o/N6AQC3i10tp6N0K7qWRDdOBlPoa0P3Z3IuCCazmV1dbhuG9wEAgjrLstwM7GPQ
-OAL91lkSKTNzuJPEeV04COm/RMNDPAk=
-=W5uy
------END PGP SIGNATURE-----
-
---AD3yerrt9pfHvLjN--
+Thanks
+Jinlong Mao
+>
+> Suzuki
