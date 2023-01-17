@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169B866D9CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DC866D9CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbjAQJZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S236586AbjAQJZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235785AbjAQJYG (ORCPT
+        with ESMTP id S236583AbjAQJYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:24:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4082CFED;
-        Tue, 17 Jan 2023 01:21:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78CDFB811F8;
-        Tue, 17 Jan 2023 09:21:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852E3C433D2;
-        Tue, 17 Jan 2023 09:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673947298;
-        bh=xp+LF0wP9tlZDcaFx4O1myVai0CG+iwcsolU0+B9Zf0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t2upRhvT8/4knHAjg6IPzW/oBkEr7IP3lzIM4Q2x6xay2PmdSU67v/ge3AlhPVPTQ
-         +VRwZMsxcIa1JsZ1dvvsOrX8PSWSxQ9oACW6HFpT4dFXPoFxbkLNbWgQS15WJjRFIx
-         tapVz0aV+X0/KqYEAJDfV2SuU4hG31+/Uzcvm+jBfZFJepNxc6C/FivAW33jk+Th6j
-         CtPFND25Jzos9IGPWq7J0SDidubZCNcujFvqKGedgM/N+fa67ajOeL7cgsZ9CiIX26
-         nzXkDUy4Kka+a9S0bW1+Gn35lO4eQkFCwiT/xQiZNulZxHhG1UDUlTO1DahheS/Run
-         yDQDHE32T2CTw==
-Date:   Tue, 17 Jan 2023 11:21:34 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Maksim Davydov <davydov-max@yandex-team.ru>
-Cc:     rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, anish@chelsio.com,
-        hariprasad@chelsio.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net/ethernet/chelsio: fix cxgb4_getpgtccfg wrong
- memory access
-Message-ID: <Y8ZonuQJn8gO9GX5@unreal>
-References: <20230116152100.30094-1-davydov-max@yandex-team.ru>
- <20230116152100.30094-2-davydov-max@yandex-team.ru>
+        Tue, 17 Jan 2023 04:24:52 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8171E5D4;
+        Tue, 17 Jan 2023 01:23:13 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id u19so73806977ejm.8;
+        Tue, 17 Jan 2023 01:23:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1yTS8WZ7b7VFDo8nye8k9pelewOPAxy8Omflt0xq5o8=;
+        b=qgdAaSckTld8p8lQJOo4kGuY3T4C9u8d3t7peDU+fhIHYQ1OzGVHqYA4bm+5fRtbc/
+         MO/7D2Fws6uCBF3/NFI7ZeF6co1oK1pIBXOzzydc7xBOLps8fmSpBIPONik7YzrbAn05
+         x7WopuZtxM3l0abO3FnDMqUhtGmOhJxE+/S6HQE38Tkt0r4R0GH+K9STBUrdGDlfDsmq
+         xWaaFrNsHNZzV6Pq0FCxg4ACC5XefQnpSGm1iRily+d0fGzLZslkYFLkKxhDov/m3irv
+         fouly+YKX7lJVGXb4MCZbXdlJZdLZidht9RpYwftO2k8MPCJ8ev/dUMIdaCz/ValeSoG
+         z5hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1yTS8WZ7b7VFDo8nye8k9pelewOPAxy8Omflt0xq5o8=;
+        b=IDeKEiXKSx81NIhHFQMv3Ky7fK7V4TC3AtFiKQPbH4mBoJ7ZWFjEjWc1XJbYTgCNvN
+         Jt2CStQVEbx7aOx/zZouqqdOZ0DzJI5Zo6Sy7M5DPikGrRrUhxwmKFi40ax+T7GV2Qnc
+         s4Aog+oOPFSROvBAyhPp+C8iPh+6N6stusXH6W1aRCK6t4ILBRMHwqGQqBtB3cTPXqwu
+         satVXm8dMv86naPqA58++aBm3i7S5KESwPPbwSULpDQ6gV/W8vnE9QwGDWsrQPEb/OdT
+         yHB0L0qNZpUkEArqkx1AdsCL8BelC4H89lZytxESWz16MCKF1XEgLq1pJkTwyWORsa1k
+         9yKg==
+X-Gm-Message-State: AFqh2koSjA5RCfQI3QCjJXuNU2/jy9HPPt7KcL071+Bb/Dky1V0jGul2
+        3ZQd0SXGONRDu3+elNHLu1gJLFqvwkk=
+X-Google-Smtp-Source: AMrXdXsTS1iYWklNhMj3sHt+9xfuRTRiMQuLqulCASKn7OviJJySXWOr0HEp7yr37d8tkNlHolQE+Q==
+X-Received: by 2002:a17:906:b893:b0:872:1a0f:173e with SMTP id hb19-20020a170906b89300b008721a0f173emr1962026ejb.68.1673947392470;
+        Tue, 17 Jan 2023 01:23:12 -0800 (PST)
+Received: from gmail.com (1F2EF7EB.nat.pool.telekom.hu. [31.46.247.235])
+        by smtp.gmail.com with ESMTPSA id kw4-20020a170907770400b0084d397e0938sm11544207ejc.195.2023.01.17.01.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 01:23:11 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 17 Jan 2023 10:23:09 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Avadhut Naik <avadnaik@amd.com>
+Cc:     linux-edac@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, bp@alien8.de, tony.luck@intel.com,
+        yazen.ghannam@amd.com
+Subject: Re: [PATCH v1 3/3] x86/MCE/AMD: Handle reassigned bit definitions
+ for CS SMCA
+Message-ID: <Y8Zo+hj8qxYpZdAl@gmail.com>
+References: <20230116191102.4226-1-avadnaik@amd.com>
+ <20230116191102.4226-4-avadnaik@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116152100.30094-2-davydov-max@yandex-team.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230116191102.4226-4-avadnaik@amd.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 06:20:59PM +0300, Maksim Davydov wrote:
-> *pgid can be in range 0 to 0xF (bitmask 0xF) but valid values for PGID
-> are between 0 and 7. Also the size of pgrate is 8. Thus, we are needed
-> additional check to make sure that this code doesn't have access to tsa.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> static analysis tool.
-> 
-> Fixes: 76bcb31efc06 ("cxgb4 : Add DCBx support codebase and dcbnl_ops")
-> Signed-off-by: Maksim Davydov <davydov-max@yandex-team.ru>
-> ---
->  drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c
-> index 7d5204834ee2..3aa65f0f335e 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c
-> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_dcb.c
-> @@ -471,7 +471,10 @@ static void cxgb4_getpgtccfg(struct net_device *dev, int tc,
->  		return;
->  	}
+
+* Avadhut Naik <avadnaik@amd.com> wrote:
+
+> @@ -178,6 +178,8 @@ static const struct smca_hwid smca_hwid_mcatypes[] = {
+>  	{ SMCA_CS,	 HWID_MCATYPE(0x2E, 0x0)	},
+>  	{ SMCA_PIE,	 HWID_MCATYPE(0x2E, 0x1)	},
+>  	{ SMCA_CS_V2,	 HWID_MCATYPE(0x2E, 0x2)	},
+> +	/* Software defined SMCA bank type to handle erratum 1384*/
+> +	{ SMCA_CS_V2_QUIRK, HWID_MCATYPE(0x0, 0x1)  },
 >  
-> -	*bw_per = pcmd.u.dcb.pgrate.pgrate[*pgid];
-> +	/* Valid values are: 0-7 */
+>  	/* Unified Memory Controller MCA type */
+>  	{ SMCA_UMC,	 HWID_MCATYPE(0x96, 0x0)	},
+> @@ -259,6 +261,17 @@ static inline void fixup_hwid(unsigned int *hwid_mcatype)
+>  
+>  	if (c->x86 == 0x19) {
+>  		switch (c->x86_model) {
+> +		/*
+> +		 * Per Genoa's revision guide, erratum 1384, some SMCA Extended
+> +		 * Error Codes and SMCA Control bits are incorrect for SMCA CS
+> +		 * bank type.
+> +		 */
+> +		case 0x10 ... 0x1F:
+> +		case 0x60 ... 0x7B:
+> +		case 0xA0 ... 0xAF:
+> +			if (*hwid_mcatype == HWID_MCATYPE(0x2E, 0x2))
+> +				*hwid_mcatype = HWID_MCATYPE(0x0, 0x1);
 
-How do you see it?
+Why are we open-coding these types?
 
-There are lines below that assume something different.
-   477         /* prio_type is link strict */
-   478         if (*pgid != 0xF)
-   479                 *prio_type = 0x2;
+Why not use smca_hwid_mcatypes[SMCA_CS_V2], etc.?
 
+> +			if (*hwid_mcatype == HWID_MCATYPE(0x2E, 0x2))
+> +				*hwid_mcatype = HWID_MCATYPE(0x0, 0x1);
 
-> +	if (*pgid <= 7)
-> +		*bw_per = pcmd.u.dcb.pgrate.pgrate[*pgid];
+Ditto.
 
-Why do you think that it is valid simply do not set *bw_per?
+Thanks,
 
-Thanks
+	Ingo
