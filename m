@@ -2,91 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066AD66E414
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFB066E411
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbjAQQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S232973AbjAQQuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbjAQQu4 (ORCPT
+        with ESMTP id S231150AbjAQQub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:50:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850F345227;
-        Tue, 17 Jan 2023 08:50:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3740B81920;
-        Tue, 17 Jan 2023 16:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF20C433EF;
-        Tue, 17 Jan 2023 16:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673974244;
-        bh=N5P5R/zCQGnqefTt1bmQdpEkdGXGOW6hFukbHmPYNwU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GCVa1Pay/ap3Md79Lb1wOPXY7OdwqujYCYHkzOMB+93efY+ljbOr0AIB+g4QWU5sh
-         RCkonqIaLvgY5edr/ORkYTz31d+XnAkikRwH9Bb5c/RY9vW332u+7HwzTkLsjg+F27
-         k18acNiMDYKHFHXfEnn42auvqD1BigLCOX9y+S2slcgFGQEyqtEyCjBebQn6VHsstF
-         TA1XhT7o1xtdODv3PJkurMsPUWDdDgTG5ievLljPRtjAWLMeMtnbKjFtICWzNMh/7P
-         mAYk+LA8jDbExvP2jU72F7lX2O3s5NfSlU8ukk+U7kz2DAlEvaegc5yXdUKNoPxnaP
-         qxmpVXOMuBc+g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Joe Fradley <joefradley@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kunit: Export kunit_running()
-Date:   Tue, 17 Jan 2023 17:50:26 +0100
-Message-Id: <20230117165039.1871598-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 11:50:31 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A779EF2;
+        Tue, 17 Jan 2023 08:50:30 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id cc13-20020a05683061cd00b00684b8cf2f4dso9954474otb.12;
+        Tue, 17 Jan 2023 08:50:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fvuc6TjM15pVEhxNJlvL+6pzxQbFucyexQNcCZt/Obk=;
+        b=rQO0yBRQL5IzvAXRDYD0NagQ0qxsED/a19oVCb/nWMCjfkmekNgUluiONqIxFLOYF1
+         Z+5NF6Ny/GCXoQArz6lyKlCQJHdxKNwBuI+BZ70MlKq/1hjMYdEyFooCoYKnKBK/w4cM
+         mNCQeF8qMIHkIvWCmCpzpIw9rkr/miLRTJvxpQEt3OJUYcPH6DP2Szm0O7oahgSW1cvf
+         qH2BCSb4D8ndHmaKENMBtIx0WjpXL3WBM/GdbFhoSBqGoI59H7REQyTU2bkXBWvQREnk
+         h3ke56R0zsYVDMtWWZ8g3r9VTd3SFyfN3nFIUQu7T3L2/NiDsIvwbRP0iVQM7b/uqnZq
+         HfPQ==
+X-Gm-Message-State: AFqh2kpbCGZN5o01qyI9pwoMs+9UerdfsYQTZZVW5H4AC8fO51jF1Y+7
+        rK6KYBS6D+999Yg3y629NQ==
+X-Google-Smtp-Source: AMrXdXtpRB/FOy6cBnSBXmhohKcCcDRGTsqlFyeZQjY+LjpTHV89nHl1JhdrJ+trknfsrI4O7z/HjA==
+X-Received: by 2002:a05:6830:1498:b0:67a:1598:de18 with SMTP id s24-20020a056830149800b0067a1598de18mr1901579otq.6.1673974229623;
+        Tue, 17 Jan 2023 08:50:29 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g2-20020a9d6b02000000b006864b75be16sm987912otp.19.2023.01.17.08.50.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 08:50:29 -0800 (PST)
+Received: (nullmailer pid 3224869 invoked by uid 1000);
+        Tue, 17 Jan 2023 16:50:28 -0000
+Date:   Tue, 17 Jan 2023 10:50:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-clk@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>
+Subject: Re: [PATCH] dt-bindings: clock: qcom,videocc: correct clocks per
+ variant
+Message-ID: <167397422754.3224805.16727826269476784233.robh@kernel.org>
+References: <20221224154152.43272-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221224154152.43272-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-Using kunit_fail_current_test() in a loadable module causes a link
-error like:
+On Sat, 24 Dec 2022 16:41:52 +0100, Krzysztof Kozlowski wrote:
+> Different SoCs come with a bit different clock inputs:
+> 
+>   sm8250-mtp.dtb: clock-controller@abf0000: clock-names:0: 'bi_tcxo' was expected
+>   sm8250-mtp.dtb: clock-controller@abf0000: clock-names: ['iface', 'bi_tcxo', 'bi_tcxo_ao'] is too long
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/clock/qcom,videocc.yaml          | 59 +++++++++++++++++--
+>  1 file changed, 55 insertions(+), 4 deletions(-)
+> 
 
-ERROR: modpost: "kunit_running" [drivers/gpu/drm/vc4/vc4.ko] undefined!
-
-Export the symbol to allow using it from modules.
-
-Fixes: da43ff045c3f ("drm/vc4: tests: Fail the current test if we access a register")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- lib/kunit/test.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c9ebf975e56b..890ba5b3a981 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -21,6 +21,7 @@
- #include "try-catch-impl.h"
- 
- DEFINE_STATIC_KEY_FALSE(kunit_running);
-+EXPORT_SYMBOL_GPL(kunit_running);
- 
- #if IS_BUILTIN(CONFIG_KUNIT)
- /*
--- 
-2.39.0
-
+Applied, thanks!
