@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2903D66E33A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EB466E33B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 17:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjAQQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 11:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S231508AbjAQQQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 11:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjAQQQm (ORCPT
+        with ESMTP id S229686AbjAQQQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 11:16:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17363BDBF;
-        Tue, 17 Jan 2023 08:16:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 17 Jan 2023 11:16:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E593BDBF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 08:16:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673972204; x=1705508204;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XwlxHdD5rlND5VEwSoVAqP7En/H6Ew9PGTb3n39d0Xs=;
+  b=XJzAC11eKR/wiyYbgj1fXwbybnUpxZSD2eivKYeUXsXXA4G0lc6NqLIV
+   CuE9JL4rjNUObAbcJsKp/v63KiQ9+9dKXIpDTXSsgaIowKP/OxFgQ2NbB
+   0pCanuKWrauA96dO80GGG42meaYd++/uCDG8U7QKABWPUrOYxy2AqlCE7
+   PD2o44xZQDK5WXNDiso7LCdp0UuMdUr5zNYPx2SKqLKNlA7PttTSQDY2h
+   TUjhh8MmGa6kD6m2a2R0z4K8e/4efkLX5qSBd4Xqvf9CboLfjUZ8d/nDz
+   L0usbcjbfBziixL3PU4l90GsUfSI8fEU7d9OfppaU5AmM84cv1kJSjI3p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="410973909"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="410973909"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 08:16:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="833226900"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="833226900"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 17 Jan 2023 08:16:43 -0800
+Received: from [10.212.252.43] (kliang2-mobl1.ccr.corp.intel.com [10.212.252.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6873FB81889;
-        Tue, 17 Jan 2023 16:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9918AC433D2;
-        Tue, 17 Jan 2023 16:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1673972198;
-        bh=JDdKiExkdHHBvFjl0JAbqgCBVMtsUjtunEQuXNFiEeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hFIokIh8FPRI/MDifDwqLBbv7xE/Si8Fa9gf7NcCFI0/pWqu81fykNf9Y8T3MrlwT
-         KoJb79OKvPyjjiUFWAusoeIS2ZjlZ3BemvdsRCVWs6giySdiKVmdd0sel35e2iHIX7
-         1jvRyKtCqVSWS43YgQHD7UESDBj4X9y8PB7T7ziM=
-Date:   Tue, 17 Jan 2023 17:16:35 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     WritePaper <clangllvm@126.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: security enhancement by limiting the offensive eBPF
- helpers
-Message-ID: <Y8bJ48Q5mcDOxS3c@kroah.com>
-References: <20230117151256.605977-1-clangllvm@126.com>
+        by linux.intel.com (Postfix) with ESMTPS id 1C81E580DA6;
+        Tue, 17 Jan 2023 08:16:43 -0800 (PST)
+Message-ID: <7760ae92-e713-603a-217a-25035523b1b2@linux.intel.com>
+Date:   Tue, 17 Jan 2023 11:16:42 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117151256.605977-1-clangllvm@126.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] perf/x86/intel: Add Emerald Rapids
+Content-Language: en-US
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ak@linux.intel.com
+References: <20230106160449.3566477-1-kan.liang@linux.intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230106160449.3566477-1-kan.liang@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:12:56PM +0800, WritePaper wrote:
-> The bpf_send_singal and bpf_override_return is similar to
-> bpf_write_user and can affect userspace processes. Thus, these two
-> helpers should also be constraint by security lockdown.
+Hi Ingo,
+
+It seems that only the last two patches of the series are merged into
+the tip.git perf/urgent branch.
+
+Could you please take the first two patches as well? They similarly add
+the CPU model number for perf core driver and perf cstate driver.
+
+Please let me know if you have any questions regarding the first two
+patches. If you want me to resend the patches, please let me know as well.
+
+Thanks,
+Kan
+
+On 2023-01-06 11:04 a.m., kan.liang@linux.intel.com wrote:
+> From: Kan Liang <kan.liang@linux.intel.com>
 > 
-> Signed-off-by: WritePaper <clangllvm@126.com>
+> From core PMU's perspective, Emerald Rapids is the same as the Sapphire
+> Rapids. The only difference is the event list, which will be
+> supported in the perf tool later.
+> 
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 > ---
->  include/linux/security.h | 3 +++
->  kernel/trace/bpf_trace.c | 6 ++++--
->  2 files changed, 7 insertions(+), 2 deletions(-)
+>  arch/x86/events/intel/core.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 29d2d0411caf..72943243c95c 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -6487,6 +6487,7 @@ __init int intel_pmu_init(void)
+>  		break;
+>  
+>  	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+> +	case INTEL_FAM6_EMERALDRAPIDS_X:
+>  		pmem = true;
+>  		x86_pmu.late_ack = true;
+>  		memcpy(hw_cache_event_ids, spr_hw_cache_event_ids, sizeof(hw_cache_event_ids));
