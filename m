@@ -2,147 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948DD670A7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B1266E900
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjAQWBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S229721AbjAQV6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjAQVsF (ORCPT
+        with ESMTP id S230219AbjAQVve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:48:05 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA677495D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:10:21 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id e8so7252700qts.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:10:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dNFni7Rgr3eQM2tShZ3fPnjMab/wLpj7M+t9eYmmNw4=;
-        b=OiGs/qOOajehCduepkfEcpG8axNVtd4tbOgOWt02uJ83iC16JDlEf/zlF2d6GjReiB
-         c2GFYK1+u/tXXdt73yLm4VUQcW39gVKE5rF2mtzMzX+UMGHDE3VTw0nW+YlyiTh4UGrv
-         I+sqk4OwgrppTiVKoB5sCf19dVIgaNbLkKY5k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dNFni7Rgr3eQM2tShZ3fPnjMab/wLpj7M+t9eYmmNw4=;
-        b=BXro9fWH/Sg3aE/jnu1HE+uII5toTlFyK11w/2oum1DHCWdB3NBjDOwbn+Fj9JRTbA
-         Ca6IVQrIpwVCDkuuZ7guyqL8j+TsUbaB0pgJ+vtn2QFPjyitQdJbbp18bZAq636A/XJO
-         bx/5qfGMRble77Jes7s6chFwaa5CnBs2tidUrmY2gRWUdtw2iuaU3PdKrrogxZs7wLGF
-         Ai5WDC9J9GjXlgx10aa70ZalBVXswsnMFoJKvx07GCUqPGGaZZUT5EBvqfUPtmwXbpIR
-         WbcFpoSAdm/3/pyNGnHPW9KQq416wkvq0/7YnkjwuY1tySPUdK+QHNd7r9do0jKV0/FI
-         TBoA==
-X-Gm-Message-State: AFqh2kp68iLJF4tnaXK57g28+M0albzIjKzx83hNosbWOeCXGGYwhxcA
-        bTgVa9STOtd585jNDkljowRkgq68PnFZi4tw
-X-Google-Smtp-Source: AMrXdXsz+T2W8fq8J45nJk5Rk5UeMkUCNNfS2rhCiGTFzaNcd753xbBTmKWWsdeydSERAyorw5UKng==
-X-Received: by 2002:ac8:540a:0:b0:3b6:461e:afec with SMTP id b10-20020ac8540a000000b003b6461eafecmr1362388qtq.31.1673986220410;
-        Tue, 17 Jan 2023 12:10:20 -0800 (PST)
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com. [209.85.219.44])
-        by smtp.gmail.com with ESMTPSA id w17-20020ac843d1000000b003b62bc6cd1csm4525521qtn.82.2023.01.17.12.10.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 12:10:20 -0800 (PST)
-Received: by mail-qv1-f44.google.com with SMTP id k12so1500006qvj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:10:19 -0800 (PST)
-X-Received: by 2002:a05:6214:5d11:b0:531:7593:f551 with SMTP id
- me17-20020a0562145d1100b005317593f551mr220481qvb.89.1673986219572; Tue, 17
- Jan 2023 12:10:19 -0800 (PST)
+        Tue, 17 Jan 2023 16:51:34 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A3A442EE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:12:28 -0800 (PST)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 054FA6602D2A;
+        Tue, 17 Jan 2023 20:12:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673986346;
+        bh=g3+YFgRcvbPTz7/8xFzAI9AbV4cEoOAZFx1BS/KPOhE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HriWKgUC4gK3VT6GxZmqXhMEkKdnvgyPTaYrn3czuuSuc969Q06xGTbLJbTnv8Ldg
+         s5qUcH+57TWwoWcQkpPXqEk2MLDd9P+egXSdEBadZvrMsrjby7GnD0ifiWFsgHLYma
+         3bJm47Z3yjWWiHBdEhKURXUkX1NojJQMth1x1Zf9bVvYy9krbdCegj1fxsAWBctIFq
+         1AGP0c0s4xVLmxF6fFGq7CvIdvUrdnoLUqvDOsvNrGWQYKZyLP7M/PVUaGky7xUD1I
+         M4ENRXghARJYSTWRPgHU3vNACmDSsFg0HfIeLOPlkIlJSEhvcstBF5iHRNis1kXAU8
+         p+wIhYE4qSQMQ==
+Date:   Tue, 17 Jan 2023 15:11:59 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: defconfig: Enable missing configs for
+ mt8192-asurada
+Message-ID: <20230117201159.pcxnftapsjr2eotn@notapiano>
+References: <20230112151238.1930126-1-nfraprado@collabora.com>
+ <20230117155854.GE2350793@hu-bjorande-lv.qualcomm.com>
 MIME-Version: 1.0
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-9-kirill.shutemov@linux.intel.com> <Y8adEg2CYUSVpwtk@hirez.programming.kicks-ass.net>
- <20230117135703.voaumisreld7crfb@box> <Y8a4bmCU9wsenvvF@hirez.programming.kicks-ass.net>
- <CAHk-=wiwiA7FdSww9fTg59r5S7G-DZHtzAcq9u5zBJKYXc1agQ@mail.gmail.com>
- <CAHk-=wj4HUBvCvfX3oZLZAZTzPc2vdwsObFqnOsQ-UZrdzm_rQ@mail.gmail.com>
- <CAKwvOdnCJmcGurUpHcdO44vVazz67jGDTXzug9LGv6C84xGmPw@mail.gmail.com>
- <CAHk-=wjfmmYPw0wX1BW6gi_KAhdZi+81or024JFcRYHiQh-jpw@mail.gmail.com> <CAKwvOd=fcF=y-mBtPZ9QcVe++__jo11St4=+roPKrGh5D6FH_g@mail.gmail.com>
-In-Reply-To: <CAKwvOd=fcF=y-mBtPZ9QcVe++__jo11St4=+roPKrGh5D6FH_g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 17 Jan 2023 12:10:03 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wggKAKq1k0Z+EdWR0W9ULM7x9MhEbd_LmU2XPLM9WcjkQ@mail.gmail.com>
-Message-ID: <CAHk-=wggKAKq1k0Z+EdWR0W9ULM7x9MhEbd_LmU2XPLM9WcjkQ@mail.gmail.com>
-Subject: Re: [PATCHv14 08/17] x86/mm: Reduce untagged_addr() overhead until
- the first LAM user
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        joao@overdrivepizza.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230117155854.GE2350793@hu-bjorande-lv.qualcomm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:17 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Perhaps that was compiler version or config specific?
+On Tue, Jan 17, 2023 at 07:58:54AM -0800, Bjorn Andersson wrote:
+> On Thu, Jan 12, 2023 at 10:12:38AM -0500, Nícolas F. R. A. Prado wrote:
+> > Enable missing configs in the arm64 defconfig to get all devices probing
+> > on mt8192-asurada based machines.
+> > 
+> > The devices enabled are: MediaTek Bluetooth USB controller, MediaTek
+> > PCIe Gen3 MAC controller, MT7921E wireless adapter, Elan I2C Trackpad,
+> > MediaTek SPI NOR flash controller, Mediatek SPMI Controller, ChromeOS EC
+> > regulators, MT6315 PMIC, MediaTek Video Codec, MT8192 sound cards,
+> > ChromeOS EC rpmsg communication, all MT8192 clocks.
+> > 
+> > Support for DMA Restricted Pool is also enabled since it is used by the
+> > WiFi card on this platform.
+> > 
+> > REGULATOR_CROS_EC is enabled as builtin since it powers the MMC
+> > controller for the SD card, making it required for booting on some
+> > setups.
+> 
+> I presume this implies that there's no ramdisk to carry these additional
+> modules?
 
-Possible, but...
+There may or may not be, at the discretion of the user, so enable by default.
 
-The clang code generation annoyed me enough that I actually ended up
-rewriting the unlikely test to be outside the loop in commit
-ae2a823643d7 ("dcache: move the DCACHE_OP_COMPARE case out of the
-__d_lookup_rcu loop").
+> 
+> > 
+> > By enabling the support for all of this platform's devices on the
+> > defconfig we make it effortless to test the relevant hardware both by
+> > developers as well as CI systems like KernelCI.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > ---
+> > 
+> >  arch/arm64/configs/defconfig | 25 +++++++++++++++++++++++++
+> >  1 file changed, 25 insertions(+)
+> > 
+> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> > index f3053e7018fe..4e806d8068f6 100644
+> > --- a/arch/arm64/configs/defconfig
+> > +++ b/arch/arm64/configs/defconfig
+[..]
+> > @@ -1092,6 +1104,18 @@ CONFIG_CLK_IMX8QXP=y
+> >  CONFIG_CLK_IMX8ULP=y
+> >  CONFIG_CLK_IMX93=y
+> >  CONFIG_TI_SCI_CLK=y
+> > +CONFIG_COMMON_CLK_MT8192_AUDSYS=y
+> > +CONFIG_COMMON_CLK_MT8192_CAMSYS=y
+> > +CONFIG_COMMON_CLK_MT8192_IMGSYS=y
+> > +CONFIG_COMMON_CLK_MT8192_IMP_IIC_WRAP=y
+> > +CONFIG_COMMON_CLK_MT8192_IPESYS=y
+> > +CONFIG_COMMON_CLK_MT8192_MDPSYS=y
+> > +CONFIG_COMMON_CLK_MT8192_MFGCFG=y
+> > +CONFIG_COMMON_CLK_MT8192_MMSYS=y
+> > +CONFIG_COMMON_CLK_MT8192_MSDC=y
+> > +CONFIG_COMMON_CLK_MT8192_SCP_ADSP=y
+> > +CONFIG_COMMON_CLK_MT8192_VDECSYS=y
+> > +CONFIG_COMMON_CLK_MT8192_VENCSYS=y
+> 
+> Are all these clock drivers needed in order to reach a ramdisk, with
+> working uart, where further kernel modules could be loaded?
 
-I think that then made clang no longer have the whole "rotate loop
-with unlikely case in the middle" issue.
+No, but currently these configs can't be enabled as modules. So my intention is
+to enable all of them as builtin for now so we get the functionality there, and
+after the drivers and configs are reworked to allow building as modules (which
+should happen shortly after [1] is merged), I'll update the defconfig so that
+the non-essential ones for boot are set to =m.
 
-And then because clang *still* messed up by trying to be too clever (see
+[1] https://lore.kernel.org/all/20230113110616.111001-1-angelogioacchino.delregno@collabora.com/
 
-    https://lore.kernel.org/all/CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com/
+> 
+> >  CONFIG_COMMON_CLK_QCOM=y
+> >  CONFIG_QCOM_A53PLL=y
+> >  CONFIG_QCOM_CLK_APCS_MSM8916=y
+> > @@ -1398,6 +1422,7 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
+> >  CONFIG_CRYPTO_DEV_HISI_ZIP=m
+> >  CONFIG_CRYPTO_DEV_HISI_HPRE=m
+> >  CONFIG_CRYPTO_DEV_HISI_TRNG=m
+> > +CONFIG_DMA_RESTRICTED_POOL=y
+> 
+> As this would alter the behavior of other platforms and devices, could
+> we please carry this in a patch of its own to aid bisection?
 
-for details), I also ended up doing commit c4e34dd99f2e ("x86:
-simplify load_unaligned_zeropad() implementation").
+Sure.
 
-The end result is that now the compiler almost *cannot* mess up any more.
+Thanks,
+Nícolas
 
-So the reason clang now does a good job on __d_lookup_rcu() is largely
-that I took away all the places where it did badly ;)
-
-That said, clang still generates more register pressure than gcc,
-causing the function prologue and epilogue to be rather bigger
-(pushing and popping six registers, as opposed to gcc that only needs
-three)
-
-Gcc is also better able to schedule the prologue and epilogue together
-with the work of the function, which clang seems to always do it as a
-"push all" and "pop all" sequence.
-
-That scheduling doesn't matter in that particular place (although it
-does make the unlikely case of calling __d_lookup_rcu_op_compare
-pointlessly push all regs only to then pop them), but I've seen a few
-other cases where it ends up meaning that it always does that full
-function prologue even when the *likely* case then returns early and
-doesn't actually need any of that work because it didn't use any of
-those registers.
-
-But yeah, the RCU pathname lookup looks fine these days. And I don't
-actually think it was due to clang changes ;)
-
-                Linus
+> 
+> Thanks,
+> Bjorn
+> 
+> >  CONFIG_CMA_SIZE_MBYTES=32
+> >  CONFIG_PRINTK_TIME=y
+> >  CONFIG_DEBUG_KERNEL=y
+> > -- 
+> > 2.39.0
+> > 
