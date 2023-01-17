@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DAF670B4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B79E670B3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 23:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjAQWJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 17:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
+        id S229877AbjAQWHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 17:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjAQWII (ORCPT
+        with ESMTP id S230090AbjAQWF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:08:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EF83EC60;
-        Tue, 17 Jan 2023 12:27:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA2386149D;
-        Tue, 17 Jan 2023 20:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 813B8C433D2;
-        Tue, 17 Jan 2023 20:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673987227;
-        bh=r9S6GWZqtO98hixUabotCT9dNXxS/dfJjaNPyn+TipQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GFVJkIWukAG/4hoH/KvZs1ZQX+Zfk3eG87ciZxJV28q30TpQSOnHiD5UzNGHsM8vJ
-         dCgAxI2DS//fuL/AUEzCMojb+ZuOQx/AyJ4WD0uEfHlsnTKAhp82GPQToeqo0Omxqp
-         LcBIztjH6A14n+zmaxHTPGU5U1IoLJ3yT2qHMBevRez43e1IzTnTcDGEiwoo+dnrR9
-         nvZhL8zLdFf1SaJ3D/NfzC453F3ntM3qHj1D8c1L3AgelNFKyN41rxjT6u8Om2hnX9
-         fqzc0xW0Oa+Dexu8dXccc12ymY+8Ac2L8aIEARur4r6sleV+JhlFlVkgDK1bDX/rGa
-         XraAFntf7vGGA==
-From:   SeongJae Park <sj@kernel.org>
-Cc:     Alon Zahavi <zahavi.alon@gmail.com>,
-        almaz.alexandrovich@paragon-software.com, ntfs3@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Tal Lossos <tallossos@gmail.com>,
-        stable@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH] ntfs3: Fix attr_punch_hole() null pointer derenference
-Date:   Tue, 17 Jan 2023 20:27:03 +0000
-Message-Id: <20230117202703.116897-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220815110712.36982-1-zahavi.alon@gmail.com>
-References: 
+        Tue, 17 Jan 2023 17:05:58 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7533D5C0D9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:28:43 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id p66so15472222iof.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:28:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6lBLtQcwXXW0D4MwnkLaJbFSlKXy17eV5mc4KZgrNg=;
+        b=aJ1tuCqCEyVYlKQ3YOYO3zSRB48viA6UM19LIAhgZpv4eGDtYMK/hPPo5lfXgu+gTS
+         M+n1QCd/7KOhkd/YvSx5PKyIGahYeRaRSV3luKpLj+YUzBh1z1C4rdBug3i5gt6VJHD1
+         39PJ1/Yodm39kmb9guNck1iq5XvL2xrPhssLwKDLzrKFQnQ1xeFi+kC4I4GZpNT/eBpb
+         abGCyD4BAVT7vVVXEJdAV9lOIkQSg8qUbJc6A1EUb6vTmPXnnOMDcovrH9fQo2UpnH0l
+         cKSBU2d7t0U9wiJWBcBPmqXGrs0e92f8O5N9QZo7wxujcaSt0nmgoUC4wJTaq7OBQpsv
+         F8Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w6lBLtQcwXXW0D4MwnkLaJbFSlKXy17eV5mc4KZgrNg=;
+        b=F2l4XF+5F1Cp+61/C980b6L5MAv6aNCxUf26zMzwUMeSaU9siHQw6y0ecqat3F6DLW
+         hPsV5yIf4UACLF20DPsedAEVPti4AUo35gyJLx4DublPmttJnqcZJDsuQx1CEuyduewD
+         IdDpg6tjrdrorO1tMRvX4H7OorO1Hvn8NVPXOdwevu2UhuArrwq/bzf8VfiENFqQnFaQ
+         unkT59K0jpYlLLCCv6FraSNVCYHrA2o+f0nkwHcpFfB/8mX8oyPldR0ln7SghJWQ1Ly0
+         skgSn8IJv4MVb2Bvw4MfH9SKULNgQCM1pfSNKBjA6jM7+CbAIrttVfwRyYYGLeOOTgEL
+         hdZQ==
+X-Gm-Message-State: AFqh2kowV5Jlxv5MD2Nuv/gW2e/IE7byFXwLTiSjqpb2h9dm1TiXMaDH
+        7+GXdyXE4Qa3zCxlfpYC2wTpGAEOXU7Bqts5SYIDZw==
+X-Google-Smtp-Source: AMrXdXsdfz3ZSkVOQq7xodxuPXlHOjr2OrBoiOuZE3Eq2JZpQR9esxUP0A6G43/Zbr959H9oSQiEOLhkS8jLPG4mH0c=
+X-Received: by 2002:a02:c884:0:b0:39e:9d33:a47 with SMTP id
+ m4-20020a02c884000000b0039e9d330a47mr309615jao.58.1673987322674; Tue, 17 Jan
+ 2023 12:28:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-19-surenb@google.com>
+ <Y8a9+ywh65fmuKvv@dhcp22.suse.cz>
+In-Reply-To: <Y8a9+ywh65fmuKvv@dhcp22.suse.cz>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 21:28:06 +0100
+Message-ID: <CAG48ez2Adwqs8Vvm3YUKwpx8qzV1wWtnUdWVo1UphjzADjMZQQ@mail.gmail.com>
+Subject: Re: [PATCH 18/41] mm/khugepaged: write-lock VMA while collapsing a
+ huge page
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jan 17, 2023 at 4:25 PM Michal Hocko <mhocko@suse.com> wrote:
+> On Mon 09-01-23 12:53:13, Suren Baghdasaryan wrote:
+> > Protect VMA from concurrent page fault handler while collapsing a huge
+> > page. Page fault handler needs a stable PMD to use PTL and relies on
+> > per-VMA lock to prevent concurrent PMD changes. pmdp_collapse_flush(),
+> > set_huge_pmd() and collapse_and_free_pmd() can modify a PMD, which will
+> > not be detected by a page fault handler without proper locking.
+>
+> I am struggling with this changelog. Maybe because my recollection of
+> the THP collapsing subtleties is weak. But aren't you just trying to say
+> that the current #PF handling and THP collapsing need to be mutually
+> exclusive currently so in order to keep that assumption you have mark
+> the vma write locked?
+>
+> Also it is not really clear to me how that handles other vmas which can
+> share the same thp?
 
-On Mon, 15 Aug 2022 14:07:12 +0300 Alon Zahavi <zahavi.alon@gmail.com> wrote:
+It's not about the hugepage itself, it's about how the THP collapse
+operation frees page tables.
 
-> From: Alon Zahavi <zahavi.alon@gmail.com>
->
-> The bug occours due to a misuse of `attr` variable instead of `attr_b`.
-> `attr` is being initialized as NULL, then being derenfernced
-> as `attr->res.data_size`.
->
-> This bug causes a crash of the ntfs3 driver itself,
-> If compiled directly to the kernel, it crashes the whole system.
->
-> Signed-off-by: Alon Zahavi <zahavi.alon@gmail.com>
-> Co-developed-by: Tal Lossos <tallossos@gmail.com>
-> Signed-off-by: Tal Lossos <tallossos@gmail.com>
+Before this series, page tables can be walked under any one of the
+mmap lock, the mapping lock, and the anon_vma lock; so when khugepaged
+unlinks and frees page tables, it must ensure that all of those either
+are locked or don't exist. This series adds a fourth lock under which
+page tables can be traversed, and so khugepaged must also lock out that one.
 
-This patch has now merged in mainline as
-6d5c9e79b726cc473d40e9cb60976dbe8e669624.  stable@, could you please merge this
-in stable kernels?
-
-Fixes: be71b5cba2e64 ("fs/ntfs3: Add attrib operations") # 5.14
+There is a codepath in khugepaged that iterates through all mappings
+of a file to zap page tables (retract_page_tables()), which locks each
+visited mm with mmap_write_trylock() and now also does
+vma_write_lock().
 
 
-Thanks,
-SJ
+I think one aspect of this patch that might cause trouble later on, if
+support for non-anonymous VMAs is added, is that retract_page_tables()
+now does vma_write_lock() while holding the mapping lock; the page
+fault handling path would probably take the locks the other way
+around, leading to a deadlock? So the vma_write_lock() in
+retract_page_tables() might have to become a trylock later on.
 
-> ---
->  fs/ntfs3/attrib.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-> index e8c00dda42ad..4e74bc8f01ed 100644
-> --- a/fs/ntfs3/attrib.c
-> +++ b/fs/ntfs3/attrib.c
-> @@ -1949,7 +1949,7 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
->               return -ENOENT;
->
->       if (!attr_b->non_res) {
-> -             u32 data_size = le32_to_cpu(attr->res.data_size);
-> +             u32 data_size = le32_to_cpu(attr_b->res.data_size);
->               u32 from, to;
->
->               if (vbo > data_size)
-> --
-> 2.25.1
->
->
+Related: Please add the new VMA lock to the big lock ordering comments
+at the top of mm/rmap.c. (And maybe later mm/filemap.c, if/when you
+add file VMA support.)
