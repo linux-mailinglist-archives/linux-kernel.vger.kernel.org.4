@@ -2,149 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB3066DD52
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D006266DD53
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbjAQMQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
+        id S236825AbjAQMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbjAQMQJ (ORCPT
+        with ESMTP id S236975AbjAQMQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:16:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F17D1F5D0;
-        Tue, 17 Jan 2023 04:16:05 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C000C10C;
-        Tue, 17 Jan 2023 13:16:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673957762;
-        bh=KvclwtnjuRaXVCzpDi7t1ah9crNcHEqRblsfDbwF4gg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Xs0vlI7l299xFyHd/Zh7oo0K/OpUzw6cEH1SkpohZ/nC+DFBdYXB5RMpTsaEV7+12
-         rkIbIu3qbJ4DRC4ZYdyYK+mhzFPmjQBvPw6kO0Y4UUBkUD85rqGrbnd0Aiu9dYpv1x
-         8AUPJJtb5Il39P4XdMb85Qu7jnUByzo7XWX56HxA=
-Message-ID: <92c277d7-73a5-5d3f-b6fe-6328a5dbde54@ideasonboard.com>
-Date:   Tue, 17 Jan 2023 14:15:58 +0200
+        Tue, 17 Jan 2023 07:16:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F013235279
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 04:16:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B251BB815CC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 12:16:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FC4C433D2;
+        Tue, 17 Jan 2023 12:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673957786;
+        bh=CH00r/9Pn2XE7EulWgDqTXg/j/uImnDKxyYLPQzgINQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n4pAaYCijnR2Jh5ardSYMv+kNtARk43yKUR8aFoN1eAK1nSCtowM3er26Hk5owErw
+         qJF83rQVcLuw76etpoXDqglX6bl2e3yCWOA6185/HeUwfjtjzgK/xfXgMUDsZ+5XLy
+         ww9aSWVpLO5Od8LFZpHVZqvgSMb1x1o1U/qvEvPV0DsNQh0JMugR6ATQ2UFalaJqVc
+         Tms6XBCTyy5tM6vgoaWFuHZStKPmAS586riWX+TAhRVPgxSmcLxIcxT511GOLDGJFy
+         vWyR6KgnzKHYAe+tl0Cbkv7edbON6+kQmC/txTj0Qyqu3JAoFlkOGTcN7Nhdutfrnh
+         449aUVP27GDGQ==
+Date:   Tue, 17 Jan 2023 12:16:20 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>, vkoul@kernel.org,
+        alsa-devel@alsa-project.org, Mastan.Katragadda@amd.com,
+        Sunil-kumar.Dommati@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        arungopal.kondaveeti@amd.com
+Subject: Re: [PATCH 19/19] ASoC: amd: ps: increase runtime suspend delay
+Message-ID: <Y8aRlJRsCjIzYuqa@sirena.org.uk>
+References: <5a34e6f7-eaf1-8128-81e4-81f65541d9a8@linux.intel.com>
+ <1a14e117-4216-b98d-f972-c9a02cf79d1e@amd.com>
+ <eb12ed5d-a9f9-cb8d-28f5-ac84c75cf441@linux.intel.com>
+ <90782037-109b-b197-ca17-b7d199931f7d@amd.com>
+ <e73032b1-ac5b-4a3a-e2a0-8ac121853dee@linux.intel.com>
+ <Y8G3mPUDWWUu/3ZR@sirena.org.uk>
+ <ef05d550-c2aa-e256-58ec-612c2a3294ca@amd.com>
+ <62272f17-bb97-aa10-d5d9-0914595e5431@linux.intel.com>
+ <b61474ce-01a9-7602-e3c0-df8fdc5191c6@amd.com>
+ <625915d5-0c2a-ce63-e71b-ff4f4f2c6d07@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v11 0/5] Add support for CDNS DSI J721E wrapper
-Content-Language: en-US
-To:     Rahul T R <r-ravikumar@ti.com>, dri-devel@lists.freedesktop.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        jpawar@cadence.com, sjakhade@cadence.com, mparab@cadence.com,
-        a-bhatia1@ti.com, devicetree@vger.kernel.org, vigneshr@ti.com,
-        lee.jones@linaro.org
-References: <20230103101951.10963-1-r-ravikumar@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230103101951.10963-1-r-ravikumar@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tNkUA4FEK8u/5lc6"
+Content-Disposition: inline
+In-Reply-To: <625915d5-0c2a-ce63-e71b-ff4f4f2c6d07@linux.intel.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 03/01/2023 12:19, Rahul T R wrote:
-> Following series of patches adds supports for CDNS DSI
-> bridge on j721e.
-> 
-> v11:
->   - Wrap commmit messages at 72 chars
->   - Fix the order in Kconfig and Makefile
->   - Clean up the includes, move macros and some headers to .c file
->   - Add missing forward declarations
->   - Add __ prefix to header gaurds
->   - Change dsi_platform_ops to cdns_dsi_platform_ops
->   - Add documentation to struct cdns_dsi_platform_ops
-> 
-> v10:
->   - Rebased to v6.2-rc1
->   - Accumulated the Reviewed-by acks
-> 
-> v9:
->   - Fixed below based on review comments in v8
->   - Added more info on wrapper in the commit message
->   - Fixed the description in Kconfig
->   - Fixed the formatting of of_match table
->   - exit -> deinit in platform ops
->   - Remove duplicate of struct declaration in cdns-dsi-j721e.h
-> 
-> v8:
->   - Rebased to 6.1-rc1
-> 
-> v7:
->   - Rebased to next-20220920
->   - Accumulated the Reviewed-by acks
-> 
-> v6:
->   - Dropped generic definations for properties like reg, resets etc..
->   - Fixed the defination for port@0 and port@1
->   - removed the ti,sn65dsi86 node from the example, which is not related
-> 
-> v5:
->   - Remove power-domain property in the conversion commit
->   - Add power-domain only for j721e compatible
->   - Fix white space error in one of the commit
-> 
-> v4:
->   - split conversion txt to yaml
->   - seperate commit for addinig new compatible
->   - conditionally limit the items for reg property, based on the compatible
-> 
-> v3:
->   - Convert cdns-dsi.txt binding to yaml
->   - Move the bridge under display/bridge/cadence
->   - Add new compatible to enable the wrapper module
-> 
-> v2:
->   - Moved setting DPI0 to bridge_enable, since it
->     should be done after pm_runtime_get
-> 
-> Rahul T R (5):
->    dt-bindings: display: bridge: Convert cdns,dsi.txt to yaml
->    dt-bindings: display: bridge: cdns,dsi: Add compatible for dsi on
->      j721e
->    drm/bridge: cdns-dsi: Move to drm/bridge/cadence
->    drm/bridge: cdns-dsi: Create a header file
->    drm/bridge: cdns-dsi: Add support for J721E wrapper
-> 
->   .../bindings/display/bridge/cdns,dsi.txt      | 112 -----------
->   .../bindings/display/bridge/cdns,dsi.yaml     | 180 ++++++++++++++++++
->   drivers/gpu/drm/bridge/Kconfig                |  11 --
->   drivers/gpu/drm/bridge/Makefile               |   1 -
->   drivers/gpu/drm/bridge/cadence/Kconfig        |  21 ++
->   drivers/gpu/drm/bridge/cadence/Makefile       |   3 +
->   .../{cdns-dsi.c => cadence/cdns-dsi-core.c}   |  83 ++++----
->   .../gpu/drm/bridge/cadence/cdns-dsi-core.h    |  84 ++++++++
->   .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   |  51 +++++
->   .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   |  16 ++
->   10 files changed, 391 insertions(+), 171 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
->   create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
->   rename drivers/gpu/drm/bridge/{cdns-dsi.c => cadence/cdns-dsi-core.c} (97%)
->   create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
->   create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
->   create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-> 
+--tNkUA4FEK8u/5lc6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looks good to me. As Andrzej gave his Rb, I presume it's fine for me to 
-push this to drm-misc-next. I'll do this a bit later today.
+On Tue, Jan 17, 2023 at 05:51:03AM -0600, Pierre-Louis Bossart wrote:
+> On 1/17/23 05:33, Mukunda,Vijendar wrote:
 
-There was a small typo in the 5th patch, about which checkpatch gave a 
-warning. I'll fix that while applying.
+> [    2.758904] rt1316-sdca sdw:0:025d:1316:01:0: ASoC: error at
+> snd_soc_component_update_bits on sdw:0:025d:1316:01:0 for register:
+> [0x00003004] -110
 
-  Tomi
+> The last one is clearly listed in the regmap list.
 
+> You probably want to reverse-engineer what causes these accesses.
+> I see this suspicious kcontrol definition that might be related:
+
+> 	SOC_SINGLE("Left I Tag Select", 0x3004, 4, 7, 0),
+
+Looks like a case for putting the CODEC in cache only mode...
+
+--tNkUA4FEK8u/5lc6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPGkZQACgkQJNaLcl1U
+h9CzBwf+PhuLttG+/GNupysKygNCy0Z6q5gL3sKpB9KTyaLYIgN0ZY4bLEUHXQE6
+mQrf8QZG0TdQsxq9oAedn7rtOQ11ev/lXJ8mj0pF9xArwaWhfILwAW80qANdc6Wq
+pZuAU5JwqoAfib/5xCcoQmGK37giNEltn14fV2BnAwbYgUbFsfY479ydXUvsDoHl
+E/pOTZ/PotFq1mO0F/J0Wy2bh4kUSyNvnQ3Tu6tqU2BrViskQf9+AdkpKmD3qYZB
+YGunhLBrGdFmbAEz1meauMlIgI9qWwIuCxsqlgW4hXauuk49ZtUsLKokCkaQ04l7
+En1HWemmcmLjbHs/mTCxB4s6k1Qzvw==
+=VA1T
+-----END PGP SIGNATURE-----
+
+--tNkUA4FEK8u/5lc6--
