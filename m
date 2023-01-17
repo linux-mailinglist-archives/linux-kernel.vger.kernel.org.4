@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE4D66DE02
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B201D66DDE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 13:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236973AbjAQMq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 07:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S236695AbjAQMoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 07:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236744AbjAQMqK (ORCPT
+        with ESMTP id S236651AbjAQMoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 07:46:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37321207F;
-        Tue, 17 Jan 2023 04:46:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E9A061333;
-        Tue, 17 Jan 2023 12:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C23AC433F1;
-        Tue, 17 Jan 2023 12:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673959559;
-        bh=R4MUqRfYUuD7hD15Z2VAffe0lvOKWbQwgywpMdRQ0Y8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dIzQDTNa2+d8GV2wAYso+GyeWBDaiFO4GQ8XNuZOAN7CC2NlmKSz+Dgy0ITBFYGso
-         oN+yWT3CYO3ELix6rt/nMBT+zBiFu3Qc/sUwWbPJY3mRs3xmqxpDjtw463FH8ild2d
-         Rvit2N5RRjsRH16lsnWge6QOvTAwgMgrtJQPaW3k/z4KgKBHcZ6mrpleIul8liwbVO
-         KK5QPL5vsk75Va/Hm8idpXY32nYLKMEMwSsra4fbq7O1b2EszayTZDGvQseiZIqebW
-         Hyqdwovkz1V803neN10xbWWrbC/GrNoeyLjqRFOdU+T7oCBpphDePF8Jvw3zGVwoGI
-         VCX9qWuxlDX0g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pHlM5-0004Mp-JV; Tue, 17 Jan 2023 13:46:21 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Matthew Garrett <matthew.garrett@nebula.com>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 2/2] efi: efivars: make efivar_supports_writes() return bool
-Date:   Tue, 17 Jan 2023 13:43:10 +0100
-Message-Id: <20230117124310.16594-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.38.2
-In-Reply-To: <20230117124310.16594-1-johan+linaro@kernel.org>
-References: <20230117124310.16594-1-johan+linaro@kernel.org>
+        Tue, 17 Jan 2023 07:44:09 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87645113EA;
+        Tue, 17 Jan 2023 04:44:05 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so24336490wms.2;
+        Tue, 17 Jan 2023 04:44:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6sBlRrq3xEogAt7tAHbEeXzaCTTRziq/T8p3ux/5hj0=;
+        b=At2l8PbLlvpWYqlVDkmtncf6GV9Uo2jZsIe7XReevvrXLiyGVFVc6+tZH35hQgAEgl
+         3QTDKCiirZoSSep7UGm7QVnMFP+AHD3lSMVlqocCPDYN1nsHxMAQxlQCSlwQ6UVwOadF
+         BiC9vnqSZgatGj9/udLFEDw4AhMcDCIJUykIXrjt6CDLwIU3BuNGgqiatcQKrcEZC1Ni
+         cGIbDXyYS5HSG0y1t6MZJG6Cj+L7s71fJkDDL+djNlQtz/XbaAx4qbi4B++lGgKa0C1v
+         l4UNz0c+b3tg/odmRqs5W21kgiwhKuhqnMKugTNYrd7eWC6HbC4l2KrecpP3AhtMguAM
+         0VHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6sBlRrq3xEogAt7tAHbEeXzaCTTRziq/T8p3ux/5hj0=;
+        b=wo9msTgkFNNhpZUkjb39NQIamA9u8BTpRhhIL8prX0sz0PySju5g2mnMBTb9YriS3E
+         87R3F235p2NzOOdmX+I8qJwpKLEwwAtGizB7XHQQdZ+aGNe4OjvDEwu+pJgg2QEmbCQp
+         zMLK1wGuhVVhKQx4lFEcSTqWGeYR8Uae6RKwgQv0hfHOuKZ1VsNnfG0hc8l58ta1M6IM
+         7wv6PEqp7pj+GeG6ZQXvXy9sY7B+P4hBSpLKyuB9kRkvEmIi89u3EghZdPdUj+bru41z
+         uRYCT4OuJPBLI3CIzJE+yZUqH+PpWY2Qy1wxu+NDQ0nKTJYWMmXm7EkamR6qHv+LEVWu
+         mamw==
+X-Gm-Message-State: AFqh2kopOIuhDq8q5WPRNAoX+PW+W9iwWMKR3Ql0VI49z9l/uqidae7I
+        25eQlzifCUW+R2VGtJelxUY=
+X-Google-Smtp-Source: AMrXdXsG1xem8vC1jgKLFmv0kfx6zvU9tZ2Nf0M5Rxn4Ho9aapYvS4laZCVZrdPBQV+UBolQsDrFRg==
+X-Received: by 2002:a05:600c:3c8a:b0:3da:2a78:d7a4 with SMTP id bg10-20020a05600c3c8a00b003da2a78d7a4mr2927016wmb.21.1673959432094;
+        Tue, 17 Jan 2023 04:43:52 -0800 (PST)
+Received: from debian ([67.208.52.125])
+        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b003dafadd2f77sm7377031wms.1.2023.01.17.04.43.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 04:43:51 -0800 (PST)
+Date:   Tue, 17 Jan 2023 12:43:49 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/183] 6.1.7-rc1 review
+Message-ID: <Y8aYBRwC5Opnxdrp@debian>
+References: <20230116154803.321528435@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116154803.321528435@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For consistency with the new efivar_is_available() function, change the
-return type of efivar_supports_writes() to bool.
+Hi Greg,
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/firmware/efi/vars.c | 2 +-
- include/linux/efi.h         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Jan 16, 2023 at 04:48:43PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.7 release.
+> There are 183 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 18 Jan 2023 15:47:28 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-index d6b2c4f9a575..aa5ba38f81ff 100644
---- a/drivers/firmware/efi/vars.c
-+++ b/drivers/firmware/efi/vars.c
-@@ -110,7 +110,7 @@ int efivars_unregister(struct efivars *efivars)
- }
- EXPORT_SYMBOL_GPL(efivars_unregister);
- 
--int efivar_supports_writes(void)
-+bool efivar_supports_writes(void)
- {
- 	return __efivars && __efivars->ops->set_variable;
- }
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index 2124e55c02d6..f6b107da1cbc 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -1061,7 +1061,7 @@ bool efivar_is_available(void);
- static inline bool efivar_is_available(void) { return false; }
- #endif
- 
--int efivar_supports_writes(void);
-+bool efivar_supports_writes(void);
- 
- int efivar_lock(void);
- int efivar_trylock(void);
+Build test (gcc version 12.2.1 20221127):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2663
+[2]. https://openqa.qa.codethink.co.uk/tests/2665
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
 -- 
-2.38.2
-
+Regards
+Sudip
