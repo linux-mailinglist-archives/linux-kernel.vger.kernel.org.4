@@ -2,202 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7033C66E5BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1629066E5C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 19:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjAQSOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 13:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S230369AbjAQSPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 13:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjAQSM3 (ORCPT
+        with ESMTP id S232660AbjAQSM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 13:12:29 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA706A4C;
-        Tue, 17 Jan 2023 09:54:07 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id 7-20020a17090a098700b002298931e366so4952361pjo.2;
-        Tue, 17 Jan 2023 09:54:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8hEvDwlMSf2tfj591ozB94dwg3JRKRm8dUmMHqYxK0=;
-        b=Nl/0cscOZqJTcM/thrcHXxKH8AZL5FFhvXmHpuqUMucIk3p3UcIc440BVuwhGgyfOT
-         ilhS7N/N02uTlSfnBbsRr+k+wN/aiVoQyHQPovxUD6VX/69rNTHRnho1ibWP1i5WwklC
-         hg6Bej8hrB0UYF6pfUjTGZo1jEN+Po/EaPnlPppxN7RGysPYhmm11vrT2O3ePryy2pDB
-         Gld8wPFNLAYkoI/rCHLV1apvk4tnCwdTJNJfTpClmA+pUGvAOOiyokBoHPlUFqAfxoML
-         YuFLYooqK0LlQY28YS7/Ggu1wckIzrqp0SxGtcxg8loVo+uzV8N9H1mzjk1mjBpas/7q
-         /spA==
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47BF83E2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:54:16 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id c11-20020a056e020bcb00b0030be9d07d63so23109805ilu.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:54:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G8hEvDwlMSf2tfj591ozB94dwg3JRKRm8dUmMHqYxK0=;
-        b=wXddn6chPezn+z5C0LB5I69HCRo0XEWtyP4tp0Z0yrdZPbiN6alY3GlsZjo4SQGuq1
-         ZDg2n3HuYO8AzuKu4x3t4UwbCwnSwlue/MItU6mIhD5rLpdv/Tn6B2ca2Or+Xlsjh8BI
-         mzYzoJx6qIVQCcgnkAhiXMtY0Z7l5bS+fSUni7tI6X0N8bfjMgeaVpUbM7bJFgiCQkqn
-         F4XeGscFvvP4AaroAkieQLppqYvuHqDa6vFZdP/EwDV/q/oegRHXuldTYO4VfuFstmBd
-         Ggb+SBxuA9tRO37h8eX29iL1bEFCXMv1CJoyNF66mrEV+kmbyhSLJJu8f6LaY4isK0I1
-         kktg==
-X-Gm-Message-State: AFqh2ko5OZFTgyfecttfg7FrzkFa2ymPzwWisvjkouk1OAIbeBJJq1+V
-        0moROS8NNg/UQ/Kur3I6tQE=
-X-Google-Smtp-Source: AMrXdXsonDVhtVowwlGWbPKQPrwd3/OBWE4owFT4EVZnsBd1nRKKYJr++koerleABwUEjBrzPCfFrA==
-X-Received: by 2002:a17:903:2687:b0:192:8ec5:fd58 with SMTP id jf7-20020a170903268700b001928ec5fd58mr2738024plb.6.1673978047288;
-        Tue, 17 Jan 2023 09:54:07 -0800 (PST)
-Received: from KERNELXING-MB0.tencent.com ([114.253.32.172])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0019320b4f832sm10512521plg.178.2023.01.17.09.54.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:54:06 -0800 (PST)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: [PATCH v6 net] tcp: avoid the lookup process failing to get sk in ehash table
-Date:   Wed, 18 Jan 2023 01:53:40 +0800
-Message-Id: <20230117175340.91712-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nR84jRUUS+sHOxpl0ufjeJ4XRXCb+wZDRCZCEXcxPbE=;
+        b=SqyFELJNR3b1QnjfYXRUjw4VNLIpAib8/lzHqIH9i0emchf9ur898MkyheLWMhcYYx
+         HOWSYQ/fpUxnBIuMr7xKIl1s2fhU7jmIcnIBHegjx7vV4EvjH5SXJDWM0Avctt5G/NO/
+         fOYLc9cWMgoRjEI7DUbgSL4+fC5fD9EAO6bk8srwhIgkTAE1bPEdudqeJAraqbQX/zjK
+         zDbe3ZFFuVa4AJJQjfi7PY8LC3do9e64ngImRq4fQpCjJ2Bt3YhOH/4nE81VUs6/2EEw
+         tg+xNL+RqOUdzGauQyRvKWzyh/aMRKT4vz/8f2UCKEPrs3NUwAwdhz94wWjcjETmOeYD
+         q6LQ==
+X-Gm-Message-State: AFqh2kr37N6nREcsiKq4vJtI2esCuC5cmzDRrVPvvgALH4fGTZ6NxWgC
+        BuHXVnVqNyFkKJmY6TjqHAesP5OxFvZcypzmZaerwnZbOqYo
+X-Google-Smtp-Source: AMrXdXseQU0rA+yaCEc3zvBXq7h68vy9cfLAa6xeom0dqNP2Pf5nbfxTP0E+sSym2sbVIvDm2xurs7yhyrpdU1EX8zSPiIcz6YCQ
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:8dcf:0:b0:6e3:e793:a9c8 with SMTP id
+ p198-20020a6b8dcf000000b006e3e793a9c8mr284258iod.217.1673978056194; Tue, 17
+ Jan 2023 09:54:16 -0800 (PST)
+Date:   Tue, 17 Jan 2023 09:54:16 -0800
+In-Reply-To: <20230117093837.2433-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000066c54005f2796336@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in snd_pcm_post_stop
+From:   syzbot <syzbot+e29d28728f38190cecfc@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+Hello,
 
-While one cpu is working on looking up the right socket from ehash
-table, another cpu is done deleting the request socket and is about
-to add (or is adding) the big socket from the table. It means that
-we could miss both of them, even though it has little chance.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Read in io_fallback_tw
 
-Let me draw a call trace map of the server side.
-   CPU 0                           CPU 1
-   -----                           -----
-tcp_v4_rcv()                  syn_recv_sock()
-                            inet_ehash_insert()
-                            -> sk_nulls_del_node_init_rcu(osk)
-__inet_lookup_established()
-                            -> __sk_nulls_add_node_rcu(sk, list)
+==================================================================
+BUG: KASAN: use-after-free in io_fallback_tw+0x6d/0x119 io_uring/io_uring.c:1252
+Read of size 8 at addr ffff888070672948 by task syz-executor.0/5596
 
-Notice that the CPU 0 is receiving the data after the final ack
-during 3-way shakehands and CPU 1 is still handling the final ack.
+CPU: 0 PID: 5596 Comm: syz-executor.0 Not tainted 6.2.0-rc3-next-20230112-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xc0/0xf0 mm/kasan/report.c:517
+ io_fallback_tw+0x6d/0x119 io_uring/io_uring.c:1252
+ tctx_task_work.cold+0xf/0x2c io_uring/io_uring.c:1222
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb17/0x2a90 kernel/exit.c:867
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1012
+ get_signal+0x225f/0x24f0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fee6588c0c9
+Code: Unable to access opcode bytes at 0x7fee6588c09f.
+RSP: 002b:00007fee66584168 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: fffffffffffffe00 RBX: 00007fee659abf80 RCX: 00007fee6588c0c9
+RDX: 0000000000002020 RSI: 00000000200021c0 RDI: 0000000000000006
+RBP: 00007fee658e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff6c752b9f R14: 00007fee66584300 R15: 0000000000022000
+ </TASK>
 
-Why could this be a real problem?
-This case is happening only when the final ack and the first data
-receiving by different CPUs. Then the server receiving data with
-ACK flag tries to search one proper established socket from ehash
-table, but apparently it fails as my map shows above. After that,
-the server fetches a listener socket and then sends a RST because
-it finds a ACK flag in the skb (data), which obeys RST definition
-in RFC 793.
+Allocated by task 5596:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ kmem_cache_alloc_bulk+0x3aa/0x730 mm/slub.c:4033
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2415
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Besides, Eric pointed out there's one more race condition where it
-handles tw socket hashdance. Only by adding to the tail of the list
-before deleting the old one can we avoid the race if the reader has
-already begun the bucket traversal and it would possibly miss the head.
+Freed by task 2864:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0xec/0x4e0 mm/slub.c:3809
+ io_req_caches_free+0x1c4/0x201 io_uring/io_uring.c:2747
+ io_ring_exit_work+0x2e7/0xc80 io_uring/io_uring.c:2977
+ process_one_work+0x9bf/0x1750 kernel/workqueue.c:2293
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2440
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-Many thanks to Eric for great help from beginning to end.
+The buggy address belongs to the object at ffff8880706728c0
+ which belongs to the cache io_kiocb of size 224
+The buggy address is located 136 bytes inside of
+ 224-byte region [ffff8880706728c0, ffff8880706729a0)
 
-Fixes: 5e0724d027f0 ("tcp/dccp: fix hashdance race for passive sessions")
-Suggested-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Link: https://lore.kernel.org/lkml/20230112065336.41034-1-kerneljasonxing@gmail.com/
----
-v3,4,5,6:
-1) nit: adjust the coding style.
+The buggy address belongs to the physical page:
+page:ffffea0001c19c80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x70672
+memcg:ffff888029e25881
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff88801bf30780 dead000000000122 0000000000000000
+raw: 0000000000000000 00000000800c000c 00000001ffffffff ffff888029e25881
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 5596, tgid 5595 (syz-executor.0), ts 114425164040, free_ts 101753733828
+ prep_new_page mm/page_alloc.c:2549 [inline]
+ get_page_from_freelist+0x11bb/0x2d50 mm/page_alloc.c:4324
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5590
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2281
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x23d/0x730 mm/slub.c:4026
+ __io_alloc_req_refill+0xcc/0x40b io_uring/io_uring.c:1063
+ io_alloc_req_refill io_uring/io_uring.h:348 [inline]
+ io_submit_sqes.cold+0x7c/0xc2 io_uring/io_uring.c:2415
+ __do_sys_io_uring_enter+0x9e4/0x2c10 io_uring/io_uring.c:3439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1451 [inline]
+ free_pcp_prepare+0x4d0/0x910 mm/page_alloc.c:1501
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3482
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ __kmem_cache_alloc_node+0x17c/0x330 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0x4a/0xd0 mm/slab_common.c:980
+ kmalloc include/linux/slab.h:584 [inline]
+ tomoyo_realpath_from_path+0xc3/0x600 security/tomoyo/realpath.c:251
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_number_perm+0x217/0x570 security/tomoyo/file.c:723
+ security_file_ioctl+0x54/0xb0 security/security.c:1624
+ __do_sys_ioctl fs/ioctl.c:864 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0xb7/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-v2:
-1) add the sk node into the tail of list to prevent the race.
-2) fix the race condition when handling time-wait socket hashdance.
----
- net/ipv4/inet_hashtables.c    | 17 +++++++++++++++--
- net/ipv4/inet_timewait_sock.c | 12 ++++++------
- 2 files changed, 21 insertions(+), 8 deletions(-)
+Memory state around the buggy address:
+ ffff888070672800: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+ ffff888070672880: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+>ffff888070672900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                              ^
+ ffff888070672980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888070672a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 24a38b56fab9..f58d73888638 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -650,8 +650,20 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
- 	spin_lock(lock);
- 	if (osk) {
- 		WARN_ON_ONCE(sk->sk_hash != osk->sk_hash);
--		ret = sk_nulls_del_node_init_rcu(osk);
--	} else if (found_dup_sk) {
-+		ret = sk_hashed(osk);
-+		if (ret) {
-+			/* Before deleting the node, we insert a new one to make
-+			 * sure that the look-up-sk process would not miss either
-+			 * of them and that at least one node would exist in ehash
-+			 * table all the time. Otherwise there's a tiny chance
-+			 * that lookup process could find nothing in ehash table.
-+			 */
-+			__sk_nulls_add_node_tail_rcu(sk, list);
-+			sk_nulls_del_node_init_rcu(osk);
-+		}
-+		goto unlock;
-+	}
-+	if (found_dup_sk) {
- 		*found_dup_sk = inet_ehash_lookup_by_sk(sk, list);
- 		if (*found_dup_sk)
- 			ret = false;
-@@ -660,6 +672,7 @@ bool inet_ehash_insert(struct sock *sk, struct sock *osk, bool *found_dup_sk)
- 	if (ret)
- 		__sk_nulls_add_node_rcu(sk, list);
- 
-+unlock:
- 	spin_unlock(lock);
- 
- 	return ret;
-diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-index 1d77d992e6e7..b66f2dea5a78 100644
---- a/net/ipv4/inet_timewait_sock.c
-+++ b/net/ipv4/inet_timewait_sock.c
-@@ -91,20 +91,20 @@ void inet_twsk_put(struct inet_timewait_sock *tw)
- }
- EXPORT_SYMBOL_GPL(inet_twsk_put);
- 
--static void inet_twsk_add_node_rcu(struct inet_timewait_sock *tw,
--				   struct hlist_nulls_head *list)
-+static void inet_twsk_add_node_tail_rcu(struct inet_timewait_sock *tw,
-+					struct hlist_nulls_head *list)
- {
--	hlist_nulls_add_head_rcu(&tw->tw_node, list);
-+	hlist_nulls_add_tail_rcu(&tw->tw_node, list);
- }
- 
- static void inet_twsk_add_bind_node(struct inet_timewait_sock *tw,
--				    struct hlist_head *list)
-+					struct hlist_head *list)
- {
- 	hlist_add_head(&tw->tw_bind_node, list);
- }
- 
- static void inet_twsk_add_bind2_node(struct inet_timewait_sock *tw,
--				     struct hlist_head *list)
-+					struct hlist_head *list)
- {
- 	hlist_add_head(&tw->tw_bind2_node, list);
- }
-@@ -147,7 +147,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
- 
- 	spin_lock(lock);
- 
--	inet_twsk_add_node_rcu(tw, &ehead->chain);
-+	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
- 
- 	/* Step 3: Remove SK from hash chain */
- 	if (__sk_nulls_del_node_init_rcu(sk))
--- 
-2.37.3
+
+Tested on:
+
+commit:         0a093b28 Add linux-next specific files for 20230112
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1189dc39480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=835f3591019836d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=e29d28728f38190cecfc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1004dc7e480000
 
