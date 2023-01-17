@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDD766E86E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A85C66E870
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjAQV3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S229819AbjAQV3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjAQV2y (ORCPT
+        with ESMTP id S229622AbjAQV3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:28:54 -0500
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6822323867;
-        Tue, 17 Jan 2023 11:50:13 -0800 (PST)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1442977d77dso33145771fac.6;
-        Tue, 17 Jan 2023 11:50:13 -0800 (PST)
+        Tue, 17 Jan 2023 16:29:12 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C69C1A4A2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:51:38 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id v6so6406974ilq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:51:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OSFcPHbwPU7VuQqTvb7CRygx4qEQJSCX4opQ3eOpE/E=;
+        b=oK5gCq5xbP6niBRqF/QRL7Bq2gVthVqJQbspwhXXQ7OnRSHWI5AiE5QK1LTqtcMGRn
+         HeyRbfCQAKtC4T3gzbb8Wzg7491gbqjvpVBGSplHQdv+8mbaq/6L7WWL28izPBjIqoix
+         RcZwdqu/IkMGD9/tcQk+epsczoRPYFq75Ly73PSeVqekeXO1isqgk/+r+nTbDSVMXuGR
+         7D+jZPUfzbSoBt77De0gD6WjMDA5N64/6EgjY16694eHJ1oNyDGZlC2jU7fD9KrrnhM9
+         KHzaaaT+da49MDKCEZDrLz7ulbS8/gmsAhEEGJNDyRrKINMsAmuavctzqCV6f7UGaTFS
+         kFGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dVRN9WuFQqZQy8t/vvVMvysnKtLMLWxVtmq6SFpr+OY=;
-        b=cZxYL6S40bpSxV9RAsHlUK2VXV/O6y3pGRHZCC8OWQlBIAPjjkHazVofbKX972JcG8
-         YsHr6ZAdJ1OTN8bjfkkOrhdSHSNHZ2pePc9FOT7nMdi9rvmkLKZ/3IXSfuilbSyXt+yA
-         dlfgFPkN55mE46xoHFJ4blqDgzy8ruq59RqwlWTX1ZEnrA5t0BNwrmx8HBSfDeAzrj4P
-         sTDll9cNLVfvWQbdjXXC4Jkom2LVtzgL7NKhMTdAvKXf8sgkj5Wodq992Ggsa18YkXFf
-         ANGBFTIi/tl1Ag/oBUf6kr8sxtfD6h/wVXOKRjiz0uJI1KFvJBTTThT/yvg/uors32wU
-         aGKg==
-X-Gm-Message-State: AFqh2kqKnSePnxyLLBI6NzKDIXUdTpK1Mf+AyiHZJboNMwBBcU5L5iMd
-        kx7qRjAVGbKXTr9nMDLPgEfEL/VX/g==
-X-Google-Smtp-Source: AMrXdXtDWEQCAQKd90hHWf7/fvv4ZNpfThfphggEnd/a33sVVKdBxufs/RmFdfHxKmucc9XtTeDTNg==
-X-Received: by 2002:a05:6870:4985:b0:152:d0dc:2bba with SMTP id ho5-20020a056870498500b00152d0dc2bbamr2462922oab.15.1673985012635;
-        Tue, 17 Jan 2023 11:50:12 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bc31-20020a056820169f00b0049f8b4b2095sm15479404oob.44.2023.01.17.11.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 11:50:12 -0800 (PST)
-Received: (nullmailer pid 3526963 invoked by uid 1000);
-        Tue, 17 Jan 2023 19:50:11 -0000
-Date:   Tue, 17 Jan 2023 13:50:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     samuel@sholland.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, mark.rutland@arm.com,
-        atishp@rivosinc.com, will@kernel.org, robh+dt@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        apatel@ventanamicro.com, ajones@ventanamicro.com,
-        opensbi@lists.infradead.org, palmer@dabbelt.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v5] dt-bindings: riscv: add SBI PMU event mappings
-Message-ID: <167398500960.3526866.18235571341667319487.robh@kernel.org>
-References: <20230113205435.122712-1-conor@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OSFcPHbwPU7VuQqTvb7CRygx4qEQJSCX4opQ3eOpE/E=;
+        b=3Q05DoWYZc6YPf+LNAkb15wCQN3kMm6prZ+iAST4W9iyM3bBMEHx0XcCDzkiO395qu
+         WUriw9mGoCLkuRmHYJTqxChlKnQGn9RZ/zClAr9ct/rWaSE6eOKTS2haMaM9CY/vzFL2
+         2IHOqgE1WMMVByff+iXECljiDCq137oi1JCabGpvVX6QvD+en90c9wamalpFBoUL5ct3
+         1AIC7+Nq9Tc4mSwPLUUaDavbnYR3V69g804e+rcgJVG9N+3U5gyk1/zDQhy4DW/VRlLA
+         NisHZi0BCMe1b3QT1tFxYjVoVkZefKaeuOMe3IADH4eoc6K3kpsfZPSo5ljBF0SanIz4
+         2y0Q==
+X-Gm-Message-State: AFqh2kqYeU4qQSkOQN9ktBue6amnPXmfZxt/83RZLPUgEOXplYae7vyZ
+        UrQipoRovMDAxdKr8wel5SkFKo9/TBCjBBOJNGcbuA==
+X-Google-Smtp-Source: AMrXdXtN2czWy7s7z6riYeL+TaWTkUjkEXdbo5Qe/e5v9zxAXm+Abj+Br8dn7RO1A0aNN2qhpP5AND12ti3Cn4146c8=
+X-Received: by 2002:a92:c5c6:0:b0:30c:877:db26 with SMTP id
+ s6-20020a92c5c6000000b0030c0877db26mr453316ilt.101.1673985097438; Tue, 17 Jan
+ 2023 11:51:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113205435.122712-1-conor@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230109205336.3665937-1-surenb@google.com> <20230109205336.3665937-33-surenb@google.com>
+In-Reply-To: <20230109205336.3665937-33-surenb@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 17 Jan 2023 20:51:01 +0100
+Message-ID: <CAG48ez0Z-wnBLzCNDHgTviV0Ws+s4grX-sFRZ-43dxhJg+GzfA@mail.gmail.com>
+Subject: Re: [PATCH 32/41] mm: prevent userfaults to be handled under per-vma lock
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
+        gthelen@google.com, gurua@google.com, arjunroy@google.com,
+        soheil@google.com, hughlynch@google.com, leewalsh@google.com,
+        posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,55 +84,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 13 Jan 2023 20:54:35 +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The SBI PMU extension requires a firmware to be aware of the event to
-> counter/mhpmevent mappings supported by the hardware. OpenSBI may use
-> DeviceTree to describe the PMU mappings. This binding is currently
-> described in markdown in OpenSBI (since v1.0 in Dec 2021) & used by QEMU
-> since v7.2.0.
-> 
-> Import the binding for use while validating dtb dumps from QEMU and
-> upcoming hardware (eg JH7110 SoC) that will make use of the event
-> mapping.
-> 
-> Link: https://github.com/riscv-software-src/opensbi/blob/master/docs/pmu_support.md
-> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc # Performance Monitoring Unit Extension
-> Co-developed-by: Atish Patra <atishp@rivosinc.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+On Mon, Jan 9, 2023 at 9:55 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> Due to the possibility of handle_userfault dropping mmap_lock, avoid fault
+> handling under VMA lock and retry holding mmap_lock. This can be handled
+> more gracefully in the future.
+>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Suggested-by: Peter Xu <peterx@redhat.com>
 > ---
-> Changes in v5:
-> - Remove the word hook from top level description & reword some of the
->   statements that sound clumsy when removed from the context of OpenSBI.
-> 
-> Changes in v4:
-> - A bunch of minor description/comment changes suggested by Drew
-> 
-> Changes in v3:
-> - align descriptions to SBI spec (and fix a misinterpretation of mine)
-> - switch to a nested items description, since the descriptions are for
->   the elements of each entry, not the entries themselves
-> 
-> Changes in v2:
-> - use the schema mechanism for dependancies between properties
-> - +CC perf maintainers...
-> - move the matrix element descriptions into regular item descriptions
->   rather than doing so freeform in the property description
-> - drop some description text that no longer applies since changes were
->   made to the SBI spec
-> - drop mention of the "generic platform" which is OpenSBI specific
-> - drop the min/max items from the matrices, they don't appear to be
->   needed?
-> 
-> OpenSBI is BSD-2-Clause licensed, hence the license here.
-> ---
->  .../devicetree/bindings/perf/riscv,pmu.yaml   | 161 ++++++++++++++++++
->  1 file changed, 161 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/perf/riscv,pmu.yaml
-> 
+>  mm/memory.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 20806bc8b4eb..12508f4d845a 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5273,6 +5273,13 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+>         if (!vma->anon_vma)
+>                 goto inval;
+>
+> +       /*
+> +        * Due to the possibility of userfault handler dropping mmap_lock, avoid
+> +        * it for now and fall back to page fault handling under mmap_lock.
+> +        */
+> +       if (userfaultfd_armed(vma))
+> +               goto inval;
 
-Applied, thanks!
+This looks racy wrt concurrent userfaultfd_register(). I think you'll
+want to do the userfaultfd_armed(vma) check _after_ locking the VMA,
+and ensure that the userfaultfd code write-locks the VMA before
+changing the __VM_UFFD_FLAGS in vma->vm_flags.
+
+>         if (!vma_read_trylock(vma))
+>                 goto inval;
+>
+> --
+> 2.39.0
+>
