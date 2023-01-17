@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0E166DB3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6226E66DB50
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 11:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbjAQKeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 05:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S236242AbjAQKka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 05:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236865AbjAQKd7 (ORCPT
+        with ESMTP id S236481AbjAQKjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 05:33:59 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2219227987;
-        Tue, 17 Jan 2023 02:31:48 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id vm8so74244711ejc.2;
-        Tue, 17 Jan 2023 02:31:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U5q3UBZchnoCVIUVt8XmN98+cN/A2hPLkmxGQjqFfZQ=;
-        b=NE2ZkxgTnhWO1aCyeY7Y7nSrEPNWZKKlP+B26kOR8+9Ogq8MK8HMHetk+bEOfThVP3
-         vtFesPg4e6pckbaG+IT94VBsTCvsAN1pcwurzfKYane6VWM1r5YXg+/1Ud03boJ3xBLb
-         vquIqGv0pO8Vq+wDd93+Ux1V7vNBVePW8DQwkyvQzfL5Q/yoKQBA8u7bz4NWq5G7Db3s
-         Zyxh6ZpmntKHQwAYVhYcjrxRuT/ezkb4j2y0yS5b/fYo2rxk/2DuhnpvqyZ+7v7P0VjF
-         luMeQEJAVpm+0adKsx4QYHa6DS8Cvm+LYZQjVL7sdC7Iwl5F6+32kJPlbPV0f/FATz6X
-         /4lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U5q3UBZchnoCVIUVt8XmN98+cN/A2hPLkmxGQjqFfZQ=;
-        b=xiSIuFdP2c+T1lvOD8MczS0IYxXzzSYnoRllqjcW6Ssu5w6uQ9/3EYE6shPUSImKmv
-         +J1aKV8ZrUmBPMKmh/6qizwPb/TTch+SeZTatQFx/6uCGXZpLN7w5IBpEt3GEEQaSZgE
-         NML+Kn/iLMs26+G1LaGE+vvZ6Mhy+Y6XGIwUmNVK/KVF67Cj9vtSr5lEQN7V0gy26rqV
-         B3rYf4AnbgJbTh8qfbGaBE8eJmVYbtTJIVxXEj9J2ITmLrdgU3tGvY9oArl69JyTo/Q8
-         bhfYm6YxBeCGPCk8LSCLg8y1msbymtAA+iLNaBboBJKHfsEJEpDEidk/oKulT2nnmCj+
-         iaBQ==
-X-Gm-Message-State: AFqh2kos+WVmF+OfhT0SMLj2ZQZDyjN+ACeWGilgJOPFoW5Q+MpD5zZE
-        eQZUNoQsBKqSQR54kdJjhAAuNBdwU9IVm+QFG/AvmJBzPtDo/w==
-X-Google-Smtp-Source: AMrXdXt3Hiip4kLM0j6pOfDN05d1mi6mjmyXuep0BnopZ9LrsWf7BwM/W7wytIRcixuoMy1/D/yHarRFEIPFeCfMumM=
-X-Received: by 2002:a17:906:5a68:b0:86f:e36f:73ac with SMTP id
- my40-20020a1709065a6800b0086fe36f73acmr269341ejc.655.1673951506583; Tue, 17
- Jan 2023 02:31:46 -0800 (PST)
+        Tue, 17 Jan 2023 05:39:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30C7303F9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 02:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673951699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QQOt8ySyPNfsebwY1js22piNE2vG1l6hynTNM9Lu89A=;
+        b=TBHZrfsEXiSRrqJCqp8uoXo3iZpiWXsGS4L0Z/wLdQotPBBSlDKa4U7A9D5gYcAyMEp0+L
+        sFoNvIWQX2yMD4nLDt7JIfeBJn82YSp4o1SZcebw4W02JKw8TCPAKK93/T4P9EsUUGukk/
+        m4HDxZFp3BSwtop+XIpmdzf56NE6+hg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-513-R2m6b25aP3W36F_H3VIq-g-1; Tue, 17 Jan 2023 05:34:54 -0500
+X-MC-Unique: R2m6b25aP3W36F_H3VIq-g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E213E811E6E;
+        Tue, 17 Jan 2023 10:34:53 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F9981121315;
+        Tue, 17 Jan 2023 10:34:53 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 0DCDC1800097; Tue, 17 Jan 2023 11:34:51 +0100 (CET)
+Date:   Tue, 17 Jan 2023 11:34:51 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, jiewen.yao@intel.com, devel@edk2.groups.io,
+        Ard Biescheuvel <ardb@kernel.org>,
+        "Min M. Xu" <min.m.xu@intel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+Message-ID: <20230117103451.74k6eddipikhml3y@sirius.home.kraxel.org>
+References: <20230113212926.2904735-1-dionnaglaze@google.com>
+ <20230113222024.rp2erl54vx3grdbd@box.shutemov.name>
+ <20230116105648.63hsxnmj2juwudmu@sirius.home.kraxel.org>
+ <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
 MIME-Version: 1.0
-References: <20230113110738.1505973-1-keguang.zhang@gmail.com>
- <20230113110738.1505973-2-keguang.zhang@gmail.com> <63fdd223-c5e1-302d-ffef-9e582874e938@linaro.org>
-In-Reply-To: <63fdd223-c5e1-302d-ffef-9e582874e938@linaro.org>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Tue, 17 Jan 2023 18:31:29 +0800
-Message-ID: <CAJhJPsV5wC_fNgP9iSi1bUp+HFY=dgyh4-x0OueZ8fQO=p7r8w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add binding for Loongson-1 clock driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <def9b0b5-b880-be99-fa95-b05d76a91824@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,150 +73,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E4=BA=8E2023=E5=B9=B4=
-1=E6=9C=8813=E6=97=A5=E5=91=A8=E4=BA=94 19:17=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 13/01/2023 12:07, Keguang Zhang wrote:
-> > Add devicetree binding document for the Loongson-1 clock driver.
->
-> Subject: drop second/last, redundant "bindings". The "dt-bindings"
-> prefix is already stating that these are bindings.
->
-> Subject: Drop driver, not related to hardware.
+  Hi,
 
-Wil do.
->
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> >  .../bindings/clock/loongson,ls1x-clk.yaml     | 81 +++++++++++++++++++
-> >  1 file changed, 81 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls=
-1x-clk.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.=
-yaml b/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> > new file mode 100644
-> > index 000000000000..4709c6757f1e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
-> > @@ -0,0 +1,81 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/loongson,ls1x-clk.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson-1 Clock Controller
->
-> Wasn't this already sent?
-> https://lore.kernel.org/all/20190130194731.GA25716@bogus/
-> Then this is a v4? Aren't you duplicating efforts (and reviewers efforts)=
-?
+> In any case, the firmware side of things didn't seem like _that_ much
+> code.  So, I'm not protesting *that* strongly.  But, I also don't
+> believe for a second that this is going to be removed in 3-5 years.
 
-Sorry. I didn't notice that patch.
-This binding is totally different from that, which goes with the
-following driver re-implementation.
->
-> > +
-> > +maintainers:
-> > +  - Keguang Zhang <keguang.zhang@gmail.com>
-> > +
-> > +properties:
->
-> compatible is a first property.
+If things are going roughly as I expect them to go (both tdx support and
+unaccepted memory support land upstream this year; distros enable it by
+default) we should be able to drop this when the 6.1-lts kernel goes
+EOL.  First in edk2, later in linux too.
 
-Will do.
->
-> > +  "#clock-cells":
-> > +    const: 0
-> > +
-> > +  compatible:
-> > +    enum:
-> > +      - loongson,ls1b-clk-pll
-> > +      - loongson,ls1b-clk-cpu
-> > +      - loongson,ls1b-clk-ahb
-> > +      - loongson,ls1c-clk-pll
-> > +      - loongson,ls1c-clk-cpu
-> > +      - loongson,ls1c-clk-ahb
->
-> Are you registering single clocks? It looks like. No, make a proper
-> clock controller.
+take care,
+  Gerd
 
-This binding contains two types of clock, pll-clk and div-clk.
-Should I split the binding to two bindings files?
->
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - "#clock-cells"
-> > +  - compatible
-> > +  - clocks
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    clocks {
->
-> No, not really related to the binding.
-
-Should I remove the "clocks" section?
->
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <1>;
-> > +        ranges;
-> > +
-> > +        xtal: xtal {
->
-> Incorrect in this context. Missing unit address.
-
-XTAL doesn't have reg property.
->
-> > +            compatible =3D "fixed-clock";
-> > +            #clock-cells =3D <0>;
-> > +            clock-frequency =3D <33000000>;
-> > +        };
-> > +
-> > +        pll: pll@1fe78030 {
->
-> Node names should be generic, so "clock-controller"
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-device=
-tree-basics.html#generic-names-recommendation
-
-Will change the node name.
->
-> > +            compatible =3D "loongson,ls1b-clk-pll";
-> > +            #clock-cells =3D <0>;
-> > +            clocks =3D <&xtal>;
-> > +            reg =3D <0x1fe78030 0x4>;
->
-> compatible is first property, then reg, then the rest.
-
-Will do.
->
-> > +        };
-> > +
-> > +        cpu_clk: cpu_clk@1fe78034 {
->
-> No underscores in node names. Anyway this should be gone - make a proper
-> clock controller.
-
-Will change the node name.
->
->
-> Best regards,
-> Krzysztof
->
-
-
---=20
-Best regards,
-
-Kelvin Cheung
