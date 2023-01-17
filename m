@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A93F66D598
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C96FB66D59C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 06:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbjAQFZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 00:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S235347AbjAQF3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 00:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbjAQFZB (ORCPT
+        with ESMTP id S235177AbjAQF3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 00:25:01 -0500
+        Tue, 17 Jan 2023 00:29:02 -0500
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD37233D0;
-        Mon, 16 Jan 2023 21:24:59 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H5OpVd039873;
-        Mon, 16 Jan 2023 23:24:51 -0600
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB039233D2;
+        Mon, 16 Jan 2023 21:29:01 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30H5Si1c040614;
+        Mon, 16 Jan 2023 23:28:44 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673933091;
-        bh=dRoXJ22D6sH8S08Jr/pNYt8hJkG7iS/XRH81afbc1VM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=MCigl/XVG0X6r64OwW/nj400VU+MzKqNAXj8rYxe2NxGwvVZQGjv4pMPtomOT/0Ep
-         sEVpH7FWJiOhw5J+zb3INoZGK/BJrYRC7eIUeXKjSkpjZ6rybZg9STjHM4I88lBJlw
-         kkaCbQnULS2rrOtudCIhuWYU3bk/DRhMVRoZ25UI=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H5OpXd090263
+        s=ti-com-17Q1; t=1673933324;
+        bh=m6wYalfTMNF3q/k6hE7vf1IFXNcR4EAEmeW5euyuYvM=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=RKXAy2bbS6FTxJddeKuTqFdawGMytEIgbEVb57Z7Kz5Yz7TMI0HwTKNxkM2ZR12e5
+         b96HQIyDjXWFuy2la5tSTy/6q/3NPo8c1y9vYa2xxLk9BuWaqJxL2jCKeX5mG5pl2d
+         edebBk92rm2y4rAJ4HNui10ccs54MtlZ64COODcQ=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30H5Siwr124918
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 16 Jan 2023 23:24:51 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 16 Jan 2023 23:28:44 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 16
- Jan 2023 23:24:51 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2023 23:28:44 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 16 Jan 2023 23:24:51 -0600
-Received: from [172.24.145.199] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H5OkI1017008;
-        Mon, 16 Jan 2023 23:24:47 -0600
-Message-ID: <bd0460de-eff2-9162-4edb-d3527041d7a6@ti.com>
-Date:   Tue, 17 Jan 2023 10:54:46 +0530
+ Frontend Transport; Mon, 16 Jan 2023 23:28:44 -0600
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30H5Sdj1093170;
+        Mon, 16 Jan 2023 23:28:39 -0600
+Message-ID: <566700c6-df9b-739b-81ff-8745eea10ff3@ti.com>
+Date:   Tue, 17 Jan 2023 10:58:38 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v6 2/3] dt-bindings: remoteproc: ti: Add new compatible
- for AM62 SoC family
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>, <nm@ti.com>,
+        <kristo@kernel.org>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net-next 5/5] arm64: dts: ti: k3-am625-sk: Add cpsw3g cpts
+ PPS support
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andersson@kernel.org>, <devicetree@vger.kernel.org>,
-        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
-        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
-CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
-References: <20230116151906.549384-1-devarsht@ti.com>
- <20230116151906.549384-3-devarsht@ti.com>
- <1a70a28b-b406-4d84-ced9-4d66bad94652@linaro.org>
-From:   Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <1a70a28b-b406-4d84-ced9-4d66bad94652@linaro.org>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+References: <20230111114429.1297557-1-s-vadapalli@ti.com>
+ <20230111114429.1297557-6-s-vadapalli@ti.com>
+ <6ae650c9-d68d-d2fc-8319-b7784cd2a749@kernel.org>
+ <a889a47f-5f44-1ae6-1ab7-3b7e7011b4f7@ti.com>
+ <2007adb5-0980-eee3-8d2f-e30183cf408e@kernel.org>
+ <4d7ac24a-0a35-323c-045c-cc5b3d3c715a@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <4d7ac24a-0a35-323c-045c-cc5b3d3c715a@ti.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -74,39 +79,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Vignesh,
 
-On 17/01/23 00:36, Krzysztof Kozlowski wrote:
-> On 16/01/2023 16:19, Devarsh Thakkar wrote:
->> AM62 family of devices don't have a R5F cluster, instead
->> they have single core DM R5F.
->> Add new compatible string ti,am62-r5fss to support this scenario.
->>
+On 16/01/23 22:00, Vignesh Raghavendra wrote:
 > 
-> This is a friendly reminder during the review process.
 > 
-> It looks like you received a tag and forgot to add it.
+> On 16/01/23 9:35 pm, Roger Quadros wrote:
+>>>>> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>>> index 4f179b146cab..962a922cc94b 100644
+>>>>> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>>> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+>>>>> @@ -366,6 +366,10 @@ &cpsw3g {
+>>>>>  	pinctrl-names = "default";
+>>>>>  	pinctrl-0 = <&main_rgmii1_pins_default
+>>>>>  		     &main_rgmii2_pins_default>;
+>>>>> +
+>>>>> +	cpts@3d000 {
+>>>>> +		ti,pps = <2 1>;
+>>>>> +	};
+>>>>>  };
+>>>>>  
+>>>>>  &cpsw_port1 {
+>>>>> @@ -464,3 +468,19 @@ partition@3fc0000 {
+>>>>>  		};
+>>>>>  	};
+>>>>>  };
+>>>>> +
+>>>>> +#define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x10000 | val)
+>>>> Should this go in ./include/dt-bindings/pinctrl/k3.h ?
+>>>> That way every board DT file doesn't have to define it.
+>>>>
+>>>> The name should be made more platform specific.
+>>>> e.g. K3_TS_OFFSET if it is the same for all K3 platforms.
+>>>> If not then please add Platform name instead of K3.
+>>> The offsets are board specific. If it is acceptable, I will add board specific
+>>> macro for the TS_OFFSET definition in the ./include/dt-bindings/pinctrl/k3.h
+>>> file. Please let me know.
+>> If it is board specific then it should remain in the board file.
 > 
-> If you do not know the process, here is a short explanation:
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-> versions. However, there's no need to repost patches *only* to add the
-> tags. The upstream maintainer will do that for acks received on the
-> version they apply.
 > 
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+> The values you pass to macro maybe board specific. But the macro
+> definition itself same for a given SoC right? Also, is its same across
+> K3 family ?
 > 
-> If a tag was not added on purpose, please state why and what changed.
-I apologize if it was not clear but yes I didn't put the tag as
-patch was updated to use cluster-mode=3 for am62x as per review comments on
-https://lore.kernel.org/all/20230110183505.GA2741090@p14s/
+> Please use SoC specific prefix like AM62X_TS_OFFSET() or K3_TS_OFFSET()
+> accordingly.
 
-I'll append a note below commit message on Reviewed-By
-removal when I post the next series.
+For certain SoCs including AM62X, the macro is:
+#define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x10000 | val)
+while for other SoCs (refer [0]), the macro is:
+#define TS_OFFSET(pa, val)	(0x4+(pa)*4) (0x80000000 | val)
 
-Regards
-Devarsh
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+Therefore, I will use SoC specific prefix in the macro. Please let me know if
+the SoC specific macro can be added to the ./include/dt-bindings/pinctrl/k3.h
+file for each SoC. If not, I will add the SoC specific macro in the board file
+itself.
+
+[0] https://lwn.net/Articles/819313/
+
+Regards,
+Siddharth.
