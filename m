@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014C466D693
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 08:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C781A66D677
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbjAQHCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 02:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S235757AbjAQGoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 01:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235559AbjAQHCG (ORCPT
+        with ESMTP id S235672AbjAQGn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 02:02:06 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD7C23C59
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 23:02:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=cRt07Q3+pdSD2gi7rtN4qDUns/M6O0v8riQ6d6t9SAk=; b=blYYTCI71bhsKSDYIcB6uHRxdE
-        GreHgDxFAiS9bl0Y6SC1DJcpDkvQC0cu+OWIDaM3P55BPnsFQG0LI/JylBF4JT9G8jKIUqq+I4G/l
-        ugMpKdFXuNAoPJszeqSiXjVzRKt+9tRohD2QTH8sDTTNQA+1AR1bX3hCg77qC/T7eIG0KU6TE9zto
-        iDGFZfbKoHluQ7TffId9ilH23eogwZLPUngkpUu69lwbHt02oT5VmdZVrp83uWheRFulGXBJVKUXd
-        7gOje+cNbUa1wyFau0Qc+MpI/+3W/lXIqsideqVNbfMchlkJT91okQUKZ6INfZYajbDJpI/cteJIt
-        J1dNDeSw==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHfyq-00D79d-A0; Tue, 17 Jan 2023 07:02:00 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] firewire: init_ohci1394_dma: use correct function names in comments
-Date:   Mon, 16 Jan 2023 23:01:59 -0800
-Message-Id: <20230117070159.29763-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        Tue, 17 Jan 2023 01:43:57 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F0D1EFDD;
+        Mon, 16 Jan 2023 22:43:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nwzr25d6lz4f3nTG;
+        Tue, 17 Jan 2023 14:43:46 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgDX0R+jQ8ZjDSvYBg--.16287S4;
+        Tue, 17 Jan 2023 14:43:49 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH v4 0/5] blk-iocost: random bugfix
+Date:   Tue, 17 Jan 2023 15:08:01 +0800
+Message-Id: <20230117070806.3857142-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgDX0R+jQ8ZjDSvYBg--.16287S4
+X-Coremail-Antispam: 1UD129KBjvdXoWruFy8tF15ur18uFW3Kw4xtFb_yoW3Awb_ZF
+        97t3s0qr1xJayfWFWxGF4DJrW7Kw4F93yYva4DtFy0qF1UXr1Dta1xJrZ7Jrn8WFy2qrZ8
+        CFyUurWxJF1agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        XdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent kernel-doc complaints by using the correct function names in
-kernel-doc comments:
+From: Yu Kuai <yukuai3@huawei.com>
 
-drivers/firewire/init_ohci1394_dma.c:258: warning: expecting prototype for debug_init_ohci1394_dma(). Prototype was for init_ohci1394_dma_on_all_controllers() instead
-drivers/firewire/init_ohci1394_dma.c:289: warning: expecting prototype for setup_init_ohci1394_early(). Prototype was for setup_ohci1394_dma() instead
+changes in v4:
+ - a litter code optimization to make it easier to understand in patch
+ 4.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-Cc: linux1394-devel@lists.sourceforge.net
-Cc: Andrew Morton <akpm@linux-foundation.org>
----
- drivers/firewire/init_ohci1394_dma.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+changes in v3:
+ - move some patches into separate patchset
+ - don't return other error number for match_u64() in patch 1
+ - instead of checking user input separately, set page directly if
+ 'bps + IOC_PAGE_SIZE' will overflow.
 
-diff -- a/drivers/firewire/init_ohci1394_dma.c b/drivers/firewire/init_ohci1394_dma.c
---- a/drivers/firewire/init_ohci1394_dma.c
-+++ b/drivers/firewire/init_ohci1394_dma.c
-@@ -251,7 +251,7 @@ static inline void __init init_ohci1394_
- }
- 
- /**
-- * debug_init_ohci1394_dma - scan for OHCI1394 controllers and init DMA on them
-+ * init_ohci1394_dma_on_all_controllers - scan for OHCI1394 controllers and init DMA on them
-  * Scans the whole PCI space for OHCI1394 controllers and inits DMA on them
-  */
- void __init init_ohci1394_dma_on_all_controllers(void)
-@@ -283,7 +283,7 @@ void __init init_ohci1394_dma_on_all_con
- }
- 
- /**
-- * setup_init_ohci1394_early - enables early OHCI1394 DMA initialization
-+ * setup_ohci1394_dma - enables early OHCI1394 DMA initialization
-  */
- static int __init setup_ohci1394_dma(char *opt)
- {
+Li Nan (2):
+  blk-iocost: fix divide by 0 error in calc_lcoefs()
+  blk-iocost: change div64_u64 to DIV64_U64_ROUND_UP in
+    ioc_refresh_params()
+
+Yu Kuai (3):
+  blk-iocost: check return value of match_u64()
+  blk-iocost: don't allow to configure bio based device
+  blk-iocost: read params inside lock in sysfs apis
+
+ block/blk-iocost.c | 32 ++++++++++++++++++++++++++------
+ 1 file changed, 26 insertions(+), 6 deletions(-)
+
+-- 
+2.31.1
+
