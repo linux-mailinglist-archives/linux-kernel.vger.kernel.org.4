@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAD866D8F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 09:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F50466D8F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236219AbjAQI72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 03:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S235918AbjAQJAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236382AbjAQI7D (ORCPT
+        with ESMTP id S236176AbjAQI7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:59:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D413717CDE;
-        Tue, 17 Jan 2023 00:57:45 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H708MD030316;
-        Tue, 17 Jan 2023 08:57:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=5Ngmtp4YGXY+UVW/xuD6vNYTPLp1RqdeFxbJq2YJX0Q=;
- b=SU+V6jPQPQRXEpUT7hiyw6u74SZyWXh8WWMUe/4Ea+YRXBUs+NCayqB1L28YWUBq41yU
- /iezTPtXzRbTbXCa5ulgRzM3jwegA34Ht+CFLSA2piaqlSDeLDd7I8u7TJODyFOKLxXz
- HwCK/bwS18vEj1K9p4aQFfLHJMG9O6jqScZUTQtR9tjtnMww2+QOefjbq8KNUX25Ht+y
- 5V0YxipdZd+bF7+4aPvfo+VaNrQhaMHJuxuOh8Gn1KrwldMHh+RJP0N76ZnZid0OxCEm
- mw0xgsd3X9WI1ftdAtLXjBIFmr6HZw0MoWglF6GFyIBZ7DH8NFYENCZFiuiDwxvYnQuH oQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n5pwbtbf5-1
+        Tue, 17 Jan 2023 03:59:21 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FED01814D;
+        Tue, 17 Jan 2023 00:59:19 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H8HJKt017245;
+        Tue, 17 Jan 2023 08:59:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=P/am4zhMSVczKChKFHudBA/YOPhcB9emvw0DPfGFrGs=;
+ b=p5psJ6WukZc8ynnvMXtRhqugXXIYkfyz0FD+pZhTAeyZQjd0UF8jLVbqbRJrnrwM1kE5
+ 5EiCrxaxIF7tfikfQ9FbQTMm2Hb4UC1jk9Ur8wPJfzwbYL1rA3M7vdyk3MDSK/6+7IwC
+ 1llknOPKco0D2YXbKBmI/o6x+roPPuw35b26AQbO0G1+s5o+hrwiCMXXT/MCCovrBAxs
+ CsKBBxUYRcAwlUziev+1nuQHkd2xJS4shuHWoggUV2oA+hTt4XU7wz/2HCY17u+KsQXS
+ 9oeg1JAmRo31sV7QPa6l/gPSFekNgkEfiFyn2t5i8r4sqZGIfPx6VT4Dd8cYllZfrgkH ZA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3kqsw5uk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 08:57:30 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30H8VSsx023792;
-        Tue, 17 Jan 2023 08:57:28 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n3m16kjjj-1
+        Tue, 17 Jan 2023 08:59:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H8x4Mg027863
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 08:57:28 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30H8vOZd40436058
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 08:57:24 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA00320040;
-        Tue, 17 Jan 2023 08:57:24 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99D9A2004D;
-        Tue, 17 Jan 2023 08:57:24 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.250])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 17 Jan 2023 08:57:24 +0000 (GMT)
-Date:   Tue, 17 Jan 2023 09:57:23 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: Build regressions/improvements in v6.2-rc4
-Message-ID: <Y8Zi89nN+ONOEki7@osiris>
-References: <CAHk-=wgcOEWvT-WjmRf-zCCXyFJaVVFH=26BPQ+N1OFTTnN=RA@mail.gmail.com>
- <20230116122924.116745-1-geert@linux-m68k.org>
- <46ba7912-3df6-dff9-792-49f4eaadefec@linux-m68k.org>
- <Y8V94PKtaWO3yRS4@osiris>
- <20230116184127.GA1721129@roeck-us.net>
+        Tue, 17 Jan 2023 08:59:04 GMT
+Received: from blr-ubuntu-87.ap.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 17 Jan 2023 00:58:56 -0800
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <andersson@kernel.org>, <manivannan.sadhasivam@linaro.org>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <konrad.dybcio@somainline.org>, <amit.pundir@linaro.org>,
+        <regressions@leemhuis.info>, <sumit.semwal@linaro.org>,
+        <will@kernel.org>, <catalin.marinas@arm.com>,
+        <robin.murphy@arm.com>, Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH V4 00/11] Fix XPU violation during modem metadata authentication
+Date:   Tue, 17 Jan 2023 14:28:29 +0530
+Message-ID: <20230117085840.32356-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116184127.GA1721129@roeck-us.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gPRFidB2a5P05ZwQonyUUP6B62NBqaM7
-X-Proofpoint-ORIG-GUID: gPRFidB2a5P05ZwQonyUUP6B62NBqaM7
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Os2LjKjpmffLWIRXYk9H2PLc7XOVOVHn
+X-Proofpoint-ORIG-GUID: Os2LjKjpmffLWIRXYk9H2PLc7XOVOVHn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_03,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=555
- clxscore=1011 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301170066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ definitions=2023-01-17_04,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301170074
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:41:27AM -0800, Guenter Roeck wrote:
-> On Mon, Jan 16, 2023 at 05:40:00PM +0100, Heiko Carstens wrote:
-> > On Mon, Jan 16, 2023 at 01:36:34PM +0100, Geert Uytterhoeven wrote:
-> > > On Mon, 16 Jan 2023, Geert Uytterhoeven wrote:
-> > > > JFYI, when comparing v6.2-rc4[1] to v6.2-rc3-8-g1fe4fd6f5cad346e[3], the summaries are:
-> > > >  - build errors: +1/-5
-> > > 
-> > >   + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' reading 128 bytes from a region of size 0 [-Werror=stringop-overread]:  => 57:33
-> > > 
-> > > s390x-gcc11/s390-allmodconfig
-> > > 
-> > > /kisskb/src/arch/s390/kernel/setup.c: In function 'setup_lowcore_dat_on':
-> > > /kisskb/src/include/linux/fortify-string.h:57:33: error: '__builtin_memcpy' reading 128 bytes from a region of size 0 [-Werror=stringop-overread]
-> > >    57 | #define __underlying_memcpy     __builtin_memcpy
-> > >       |                                 ^
-> > > /kisskb/src/include/linux/fortify-string.h:578:9: note: in expansion of macro '__underlying_memcpy'
-> > >   578 |         __underlying_##op(p, q, __fortify_size);                        \
-> > >       |         ^~~~~~~~~~~~~
-> > > /kisskb/src/include/linux/fortify-string.h:623:26: note: in expansion of macro '__fortify_memcpy_chk'
-> > >   623 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-> > >       |                          ^~~~~~~~~~~~~~~~~~~~
-> > > /kisskb/src/arch/s390/kernel/setup.c:526:9: note: in expansion of macro 'memcpy'
-> > >   526 |         memcpy(abs_lc->cregs_save_area, S390_lowcore.cregs_save_area,
-> > >       |         ^~~~~~
-> > > 
-> > > Looks like this was "'__builtin_memcpy' offset [0, 127] is out of the bounds
-> > > [0, 0]" before.
-> > 
-> > Thanks for reporting. Of course this doesn't happen with gcc-12, and
-> > this code will be rewritten with the next merge window anyway.
-> > But to workaround this with gcc-11, we could go with the below:
-> > 
-> 
-> This is because of
-> 
-> #define S390_lowcore (*((struct lowcore *) 0))
-> 
-> and is fixed with something like
-> 
-> #define S390_lowcore (*((struct lowcore *) absolute_pointer(0)))
-> 
-> See commit f6b5f1a56987 ("compiler.h: Introduce absolute_pointer macro").
+The memory region allocated using dma_alloc_attr with no kernel mapping
+attribute set would still be a part of the linear kernel map. Any access
+to this region by the application processor after assigning it to the
+remote Q6 will result in a XPU violation. Fix this by replacing the
+dynamically allocated memory region with a no-map carveout and unmap the
+modem metadata memory region before passing control to the remote Q6.
+The addition of the carveout and memunmap is required only on SoCs that
+mandate memory protection before transferring control to Q6, hence the
+driver falls back to dynamic memory allocation in the absence of the
+modem metadata carveout.
 
-Yes, I'm aware of that. However absolute_pointer() is not an option for
-S390_lowcore. See also commit f0be87c42cbd ("gcc-12: disable
-'-Warray-bounds' universally for now") and the referenced s390 commit.
+V4:
+ * Pickup Christoph's revert [Mani]
+ * Use size/alloc-ranges instead of a specific address [Bjorn]
+ * Include size checks
+ * Pickup R-b
 
-> The problem is only seen with gcc 11.2. I don't see it with 11.3 or 12.2.
+V3:
+ * remove double space [Krzysztof]
+ * Pickup R-bs
+ * yaml description rewrite [Krzysztof]
+ * fix compatible property [Krzysztof]
+ * add blank lines and additionalProperties: false to mba/mpss
+   objects
+ * add blank lines and additionalProperties: false to mdata
+   objects [Krzysztof]
+ * Drop revert no_kernel_mapping since it's already on the list [Mani]
+ * kfree metadata from the branch for parity
 
-FWIW, the compile warning is seen with gcc 11.1 and 11.2, but not with any
-other compiler. Given that this isn't the first report, I'm tempted to
-workaround this now.
+V2:
+ * Convert legacy bindings to yaml
+ * Revert no_kernel_mapping [Mani/Robin]
+ * Pad commit message to explain bindings break [Krzysztof]
+ * Split dt/bindings per SoC [Krzysztof]
+
+Christoph Hellwig (1):
+  Revert "remoteproc: qcom_q6v5_mss: map/unmap metadata region
+    before/after use"
+
+Sibi Sankar (10):
+  dt-bindings: remoteproc: qcom,q6v5: Move MSM8996 to schema
+  dt-bindings: remoteproc: qcom,msm8996-mss-pil: Update memory region
+  dt-bindings: remoteproc: qcom,sc7180-mss-pil: Update memory-region
+  dt-bindings: remoteproc: qcom,sc7280-mss-pil: Update memory-region
+  remoteproc: qcom_q6v5_mss: Use a carveout to authenticate modem
+    headers
+  arm64: dts: qcom: msm8996: Add a carveout for modem metadata
+  arm64: dts: qcom: msm8998: Add a carveout for modem metadata
+  arm64: dts: qcom: sdm845: Add a carveout for modem metadata
+  arm64: dts: qcom: sc7180: Add a carveout for modem metadata
+  arm64: dts: qcom: sc7280: Add a carveout for modem metadata
+
+ .../remoteproc/qcom,msm8996-mss-pil.yaml      | 393 ++++++++++++++++++
+ .../bindings/remoteproc/qcom,q6v5.txt         | 137 +-----
+ .../remoteproc/qcom,sc7180-mss-pil.yaml       |   3 +-
+ .../remoteproc/qcom,sc7280-mss-pil.yaml       |   3 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  10 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |  10 +
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts       |   8 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |   8 +-
+ .../dts/qcom/sc7280-herobrine-lte-sku.dtsi    |   8 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  10 +
+ drivers/remoteproc/qcom_q6v5_mss.c            |  87 ++--
+ 11 files changed, 507 insertions(+), 170 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+
+-- 
+2.17.1
+
