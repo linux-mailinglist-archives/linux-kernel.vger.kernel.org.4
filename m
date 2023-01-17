@@ -2,283 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C60466DC51
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281CB66DC58
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235942AbjAQLZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 06:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S235764AbjAQL1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 06:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236550AbjAQLZp (ORCPT
+        with ESMTP id S236182AbjAQL1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 06:25:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC193C1C;
-        Tue, 17 Jan 2023 03:25:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 566D461261;
-        Tue, 17 Jan 2023 11:25:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B07C433D2;
-        Tue, 17 Jan 2023 11:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673954743;
-        bh=q+Rmu1SCkR+4L9yV7tU7o0EDPb/yktcBfTvU4XKR2WM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jZ3Jv79IlGz3m8xVtSAYg9ultutj17ISLapKhSLeHG84wdF0prGLtRptjDOPWGltV
-         fIQ3w5DJsthbUnTXLMheWjcN4BP4QujEaLV3ifoKZCviBmL8i14jiDyIUDMylj8oD8
-         F7I2TCfnXqP92QfieXL5jCy4f2fn6z7uJeRiDgqzk2woStkGzxW40gYevN5OplSU/K
-         gsm6V7dha4dBm7x2Ati+4AnwNja6eJL5reYi2tHXYyOthPqspGV3tybOhfXzzRLFBq
-         Xr0skOMrHK43fOpWt0vmRivSF5hdieC1Ad03B9wK7n9b1pNZ0oXzE3xtyQ01tb+6Mw
-         7xkKij4R1NPAQ==
-From:   rfoss@kernel.org
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v1] arm64: dts: qcom: sm8350: Add &tlmm gpio-line-names
-Date:   Tue, 17 Jan 2023 12:25:37 +0100
-Message-Id: <20230117112537.1016250-1-rfoss@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 17 Jan 2023 06:27:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4548F59CA
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:27:34 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHk7h-0005PN-Im; Tue, 17 Jan 2023 12:27:25 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHk7g-006f5W-QU; Tue, 17 Jan 2023 12:27:24 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pHk7g-00Da9f-3R; Tue, 17 Jan 2023 12:27:24 +0100
+Date:   Tue, 17 Jan 2023 12:27:24 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Sayyed, Mubin" <mubin.sayyed@amd.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "treding@nvidia.com" <treding@nvidia.com>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
+        "mubin10@gmail.com" <mubin10@gmail.com>,
+        "krzk@kernel.org" <krzk@kernel.org>
+Subject: Re: [LINUX PATCH 3/3] pwm: pwm-cadence: Add support for TTC PWM
+Message-ID: <20230117112724.nnokjmfffeb2wbnp@pengutronix.de>
+References: <20230112071526.3035949-1-mubin.sayyed@amd.com>
+ <20230112071526.3035949-4-mubin.sayyed@amd.com>
+ <20230112212514.aez6oj4zfcivknk5@pengutronix.de>
+ <DM4PR12MB5938E26F6A7DFC9A1875233D9DC69@DM4PR12MB5938.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qzo5pun4mtdcp2uq"
+Content-Disposition: inline
+In-Reply-To: <DM4PR12MB5938E26F6A7DFC9A1875233D9DC69@DM4PR12MB5938.namprd12.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Foss <robert.foss@linaro.org>
 
-Add GPIO line names as described by the sm8350-hdk schematic.
+--qzo5pun4mtdcp2uq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 205 ++++++++++++++++++++++++
- 1 file changed, 205 insertions(+)
+Hello Mubin,
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-index 26a608144886..1f990831af77 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
-@@ -241,6 +241,211 @@ &slpi {
- 
- &tlmm {
- 	gpio-reserved-ranges = <52 8>;
-+
-+	gpio-line-names =
-+		"APPS_I2C_SDA", /* GPIO_0 */
-+		"APPS_I2C_SCL",
-+		"FSA_INT_N",
-+		"USER_LED3_EN",
-+		"SMBUS_SDA_1P8",
-+		"SMBUS_SCL_1P8",
-+		"2M2_3P3_EN",
-+		"ALERT_DUAL_M2_N",
-+		"EXP_UART_CTS",
-+		"EXP_UART_RFR",
-+		"EXP_UART_TX", /* GPIO_10 */
-+		"EXP_UART_RX",
-+		"NC",
-+		"NC",
-+		"RCM_MARKER1",
-+		"WSA0_EN",
-+		"CAM1_RESET_N",
-+		"CAM0_RESET_N",
-+		"DEBUG_UART_TX",
-+		"DEBUG_UART_RX",
-+		"TS_I2C_SDA", /* GPIO_20 */
-+		"TS_I2C_SCL",
-+		"TS_RESET_N",
-+		"TS_INT_N",
-+		"DISP0_RESET_N",
-+		"DISP1_RESET_N",
-+		"ETH_RESET",
-+		"RCM_MARKER2",
-+		"CAM_DC_MIPI_MUX_EN",
-+		"CAM_DC_MIPI_MUX_SEL",
-+		"AFC_PHY_TA_D_PLUS", /* GPIO_30 */
-+		"AFC_PHY_TA_D_MINUS",
-+		"PM8008_1_IRQ",
-+		"PM8008_1_RESET_N",
-+		"PM8008_2_IRQ",
-+		"PM8008_2_RESET_N",
-+		"CAM_DC_I3C_SDA",
-+		"CAM_DC_I3C_SCL",
-+		"FP_INT_N",
-+		"FP_WUHB_INT_N",
-+		"SMB_SPMI_DATA", /* GPIO_40 */
-+		"SMB_SPMI_CLK",
-+		"USB_HUB_RESET",
-+		"FORCE_USB_BOOT",
-+		"LRF_IRQ",
-+		"NC",
-+		"IMU2_INT",
-+		"HDMI_3P3_EN",
-+		"HDMI_RSTN",
-+		"HDMI_1P2_EN",
-+		"HDMI_INT", /* GPIO_50 */
-+		"USB1_ID",
-+		"FP_SPI_MISO",
-+		"FP_SPI_MOSI",
-+		"FP_SPI_CLK",
-+		"FP_SPI_CS_N",
-+		"NFC_ESE_SPI_MISO",
-+		"NFC_ESE_SPI_MOSI",
-+		"NFC_ESE_SPI_CLK",
-+		"NFC_ESE_SPI_CS",
-+		"NFC_I2C_SDA", /* GPIO_60 */
-+		"NFC_I2C_SCLC",
-+		"NFC_EN",
-+		"NFC_CLK_REQ",
-+		"HST_WLAN_EN",
-+		"HST_BT_EN",
-+		"HST_SW_CTRL",
-+		"NC",
-+		"HST_BT_UART_CTS",
-+		"HST_BT_UART_RFR",
-+		"HST_BT_UART_TX", /* GPIO_70 */
-+		"HST_BT_UART_RX",
-+		"CAM_DC_SPI0_MISO",
-+		"CAM_DC_SPI0_MOSI",
-+		"CAM_DC_SPI0_CLK",
-+		"CAM_DC_SPI0_CS_N",
-+		"CAM_DC_SPI1_MISO",
-+		"CAM_DC_SPI1_MOSI",
-+		"CAM_DC_SPI1_CLK",
-+		"CAM_DC_SPI1_CS_N",
-+		"HALL_INT_N", /* GPIO_80 */
-+		"USB_PHY_PS",
-+		"MDP_VSYNC_P",
-+		"MDP_VSYNC_S",
-+		"ETH_3P3_EN",
-+		"RADAR_INT",
-+		"NFC_DWL_REQ",
-+		"SM_GPIO_87",
-+		"WCD_RESET_N",
-+		"ALSP_INT_N",
-+		"PRESS_INT", /* GPIO_90 */
-+		"SAR_INT_N",
-+		"SD_CARD_DET_N",
-+		"NC",
-+		"PCIE0_RESET_N",
-+		"PCIE0_CLK_REQ_N",
-+		"PCIE0_WAKE_N",
-+		"PCIE1_RESET_N",
-+		"PCIE1_CLK_REQ_N",
-+		"PCIE1_WAKE_N",
-+		"CAM_MCLK0", /* GPIO_100 */
-+		"CAM_MCLK1",
-+		"CAM_MCLK2",
-+		"CAM_MCLK3",
-+		"CAM_MCLK4",
-+		"CAM_MCLK5",
-+		"CAM2_RESET_N",
-+		"CCI_I2C0_SDA",
-+		"CCI_I2C0_SCL",
-+		"CCI_I2C1_SDA",
-+		"CCI_I2C1_SCL", /* GPIO_110 */
-+		"CCI_I2C2_SDA",
-+		"CCI_I2C2_SCL",
-+		"CCI_I2C3_SDA",
-+		"CCI_I2C3_SCL",
-+		"CAM5_RESET_N",
-+		"CAM4_RESET_N",
-+		"CAM3_RESET_N",
-+		"IMU1_INT",
-+		"MAG_INT_N",
-+		"MI2S2_I2S_SCK", /* GPIO_120 */
-+		"MI2S2_I2S_DAT0",
-+		"MI2S2_I2S_WS",
-+		"HIFI_DAC_I2S_MCLK",
-+		"MI2S2_I2S_DAT1",
-+		"HIFI_DAC_I2S_SCK",
-+		"HIFI_DAC_I2S_DAT0",
-+		"NC",
-+		"HIFI_DAC_I2S_WS",
-+		"HST_BT_WLAN_SLIMBUS_CLK",
-+		"HST_BT_WLAN_SLIMBUS_DAT0", /* GPIO_130 */
-+		"BT_LED_EN",
-+		"WLAN_LED_EN",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"UIM2_PRESENT",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"UIM1_PRESENT", /* GPIO_140 */
-+		"NC",
-+		"SM_RFFE0_DATA",
-+		"NC",
-+		"SM_RFFE1_DATA",
-+		"SM_MSS_GRFC4",
-+		"SM_MSS_GRFC5",
-+		"SM_MSS_GRFC6",
-+		"SM_MSS_GRFC7",
-+		"SM_RFFE4_CLK",
-+		"SM_RFFE4_DATA", /* GPIO_150 */
-+		"WLAN_COEX_UART1_RX",
-+		"WLAN_COEX_UART1_TX",
-+		"HST_SW_CTRL",
-+		"DSI0_STATUS",
-+		"DSI1_STATUS",
-+		"APPS_PBL_BOOT_SPEED_1",
-+		"APPS_BOOT_FROM_ROM",
-+		"APPS_PBL_BOOT_SPEED_0",
-+		"QLINK0_REQ",
-+		"QLINK0_EN", /* GPIO_160 */
-+		"QLINK0_WMSS_RESET_N",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"NC",
-+		"WCD_SWR_TX_CLK",
-+		"WCD_SWR_TX_DATA0",
-+		"WCD_SWR_TX_DATA1", /* GPIO_170 */
-+		"WCD_SWR_RX_CLK",
-+		"WCD_SWR_RX_DATA0",
-+		"WCD_SWR_RX_DATA1",
-+		"DMIC01_CLK",
-+		"DMIC01_DATA",
-+		"DMIC23_CLK",
-+		"DMIC23_DATA",
-+		"WSA_SWR_CLK",
-+		"WSA_SWR_DATA",
-+		"DMIC45_CLK", /* GPIO_180 */
-+		"DMIC45_DATA",
-+		"WCD_SWR_TX_DATA2",
-+		"SENSOR_I3C_SDA",
-+		"SENSOR_I3C_SCL",
-+		"CAM_OIS0_I3C_SDA",
-+		"CAM_OIS0_I3C_SCL",
-+		"IMU_SPI_MISO",
-+		"IMU_SPI_MOSI",
-+		"IMU_SPI_CLK",
-+		"IMU_SPI_CS_N", /* GPIO_190 */
-+		"MAG_I2C_SDA",
-+		"MAG_I2C_SCL",
-+		"SENSOR_I2C_SDA",
-+		"SENSOR_I2C_SCL",
-+		"RADAR_SPI_MISO",
-+		"RADAR_SPI_MOSI",
-+		"RADAR_SPI_CLK",
-+		"RADAR_SPI_CS_N",
-+		"HST_BLE_UART_TX",
-+		"HST_BLE_UART_RX", /* GPIO_200 */
-+		"HST_WLAN_UART_TX",
-+		"HST_WLAN_UART_RX";
- };
- 
- &uart2 {
--- 
-2.34.1
+On Tue, Jan 17, 2023 at 09:58:10AM +0000, Sayyed, Mubin wrote:
+> > On Thu, Jan 12, 2023 at 12:45:26PM +0530, Mubin Sayyed wrote:
+> > Is there a public manual for the hardware? If yes, please mention a lin=
+k here.
+> [Mubin]: I did not find any public manual from cadence. However, details =
+can be found in Zynq-7000/ Zynq UltraScale/Versal ACAP TRM available public=
+ly.
 
+Thenk please add a link to that one.
+
+> > how does the output pin behave between the writes in this function (and=
+ the
+> > others in .apply())?
+> [Mubin]:  ttc_pwm_apply  is disabling counters before calling this
+> function, and enabling it back immediately after it.  So, output pin
+> would be low during configuration.=20
+
+Please document this behaviour (i.e. "A disabled PWM emits a zero") in a
+paragraph at the top of the driver in the format that e.g.
+drivers/pwm/pwm-pxa.c is using. Also please test if it emits a zero or
+the inactive level, i.e. if the output depends on the polarity setting.
+
+> > > +		rate =3D clk_get_rate(priv->clk);
+> > > +
+> > > +		/* Prevent overflow by limiting to the maximum possible period */
+> > > +		period_cycles =3D min_t(u64, state->period, ULONG_MAX * NSEC_PER_S=
+EC);
+> > > +		period_cycles =3D DIV_ROUND_CLOSEST(period_cycles * rate, NSEC_PER=
+_SEC);
+> >=20
+> > DIV_ROUND_CLOSEST isn't suiteable to work with u64. (That's also the
+> > reason for the build bot report.)
+> >=20
+> > The usual alternative trick here is to do:
+> >=20
+> > 	if (rate > NSEC_PER_SEC)
+> > 		return -EINVAL;
+> >=20
+> > 	period_cycles =3D mul_u64_u64_div_u64(state->period, rate,
+> > NSEC_PER_SEC);
+> [Mubin]: Initially I tried mul_u64_u64_div_u64, it was impacting
+> accuracy while generating PWM signal of high frequency(output
+> frequency above 5 MHZ,  input 100 MHZ ). Usage of DIV_ROUND_CLOSEST
+> improved accuracy. Can you please suggest better alternative for
+> improving accuracy.
+
+Unless I'm missing something, you have to adjust your definition of
+accuracy :-)
+
+If you request (say) a period of 149 ns and the nearest actual values
+your hardware can provide left and right of that is 140 ns and 150 ns,
+140ns is the one to select. That is pick the biggest possible period not
+bigger than the requested period. And with that pick the biggest
+possible duty_cycle not bigger than the requested duty_cycle. (i.e. it's
+a bug to emit period=3D150ns if 149 was requested.)
+
+There are ideas to implement something like
+
+	pwm_apply_nearest(...);
+
+but that's still in the idea stage (and will depend on the lowlevel
+drivers implementing the strategy described above).
+
+> > Another possible glitch here.
+> [Mubin]: Can you please elaborate.
+
+If you switch polarity (say from normal to inverted) and duty/period you do=
+ (simplified)
+
+	ttc_pwm_disable(priv, pwm); // might yield a falling edge
+	set polarity                // might yield a raising edge
+	ttc_pwm_enable(priv, pwm);  // might yield a falling edge
+	... some calculations
+	ttc_pwm_disable(priv, pwm); // might yield a raising edge
+	setup counters
+	ttc_pwm_enable(priv, pwm);  // might yield a falling edge
+
+so during apply() the output might toggle several times at a high(?)
+frequency. Depending on what you have connected to the PWM this is bad.
+(A LED might blink, a backlight might flicker, a motor might stutter and
+enter an error state or accelerate for a moment.)
+
+> > > +	clksel =3D ttc_pwm_readl(priv, TTC_CLK_CNTRL_OFFSET);
+> >=20
+> > TTC_CLK_CNTRL_OFFSET is as parameter for ttc_pwm_ch_readl and
+> > ttc_pwm_readl, is this correct?
+> [Mubin]: Here TTC_CLK_CNTRL_OFFSET is being read only for 0th channel, so=
+ using ttc_pwm_readl does not impact offsets.
+
+So which clk is selected (for all channels?) depends on how channel 0's
+clock setting is setup by the bootloader (or bootrom)? Sounds strange.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qzo5pun4mtdcp2uq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPGhhkACgkQwfwUeK3K
+7AmfXAf/d79MZbbAZ2J8lxPnpNXsts7uzK2hIgAj7D8MEhGipbX4ifBjA/9lJqc6
+FX8zlLFmyNNXveQXS3ZDqV1iE/YaksQn17afWqIkuja8TQn9R6QQ4LEa/NYBJ9sJ
+gKYZ056ssshhplEHzoaPXzh7T8WeFO7ByWUBSKeDnUF5sOeDxqTwBA4dgaApsgqW
+0M4iIZF3nM7VddG0SqTd/auWDsJLOu1mwXzqW0Vn8wQ2ncoJ+56/7a0XCxwwIS+6
+WcPT0dmADPsJefEyaq/KInJiB2QUAFc6v12ew7swfW+6pepudV1PK/4Gv1hhPMgY
+Io2FQ4hu2cM+jGGyuuAAlnEpuZyKhA==
+=faKa
+-----END PGP SIGNATURE-----
+
+--qzo5pun4mtdcp2uq--
