@@ -2,212 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD3066E7B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A7966E7E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 21:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbjAQUde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 15:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S229891AbjAQUma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 15:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbjAQUbP (ORCPT
+        with ESMTP id S235421AbjAQUfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 15:31:15 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050E44FC3D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:17:37 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id e10so22747813pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:17:37 -0800 (PST)
+        Tue, 17 Jan 2023 15:35:37 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427722A25
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:20:47 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id q130so2397366iod.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:20:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xgV/SZ8ETts0p/F1SYwIOGkOPAJK3JwasEqgPm/ua9k=;
-        b=kxbltlCa5KiY2grjjE02ZlPoiDDLBMthuShIG5sqFiOtBMap+KYDWZYfjsUEIi5ioD
-         OAXYZM1hCGqb4uqPwVpfm+vgJkx/3GI8i1rDazC2IEXMPwUFOZvWqyL9nJmWQpnnEPD5
-         ZTv/LfN66Fkbj+tCTo3NizQDlvvT6wiBjYQ7zE85jP/MQzN5BD67dM2DzRhNE80vVwXy
-         +7gtsYmLduOf5oBnWupdrlIAxXTJl1QrTVRS8toI9TR6HZz1jWBw3kwc4MGqPkjYfJCW
-         UJINdxAE8fVN4RyRnGRiPS8Hw1W5goGXQUgK3Z/L50KeN0+ZbAxe5q1NOBz+PNd8L/RI
-         iFlw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bQQhGaa8ME/qD8GrOmb/LR8k+tyYKhHj8WpJOgJmL40=;
+        b=N7yg3KxlCKSsu1VLFwTpGLiGTU9blVjz991dhmvqJBNqTfCy4BzvkPgeUjMrUYfSy7
+         /FxMBE0zLvyO99Y2aDlH1urHHynquVL1ldUueDFvMzJymo9wh22fKm27wHn1OzcAvL2T
+         yYe+MedHIUiQkwelizE9HuJVyQAPyC7xpw4b03TB4gKah2lNdziKu2cPMS/vPNsx85zl
+         dM1VbsPr0pQDaJLu/4imj/uLvr2B1Se8zh2vsO17KX0Ev6i94T7OwXZ8UphY4LQePhVc
+         HxR2F3B+CsvOQAhA5VwqE7riipIdmRRGiSzUoS3JcMcwJdBOGWUZJlbWW8myUH+mk0Vh
+         ksGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xgV/SZ8ETts0p/F1SYwIOGkOPAJK3JwasEqgPm/ua9k=;
-        b=v80Ei5WQyDDFuPH8RrY2xL4hETDymAN1RG71asTQ3Se4z+2QOHxekXeu2g5swRLOXj
-         jT9DWyQpXanXHJnbwOJT5u1ChAyVf74I1rfRcmO//3JSO21C0ATmqm4SN+5DPNgkRRTa
-         WkTbvAbuTwtX+qdS88azJZjkcKoxvOm06BMyTqnZQTakk4dmry410esnz9qBMIDE7IV4
-         RVQPk4KpTo0DNRgWuP5nrNz7Yrvzm3Z0wrS1Ts2rPfEShZrubOJP5mf/Mouh9bcQE4AP
-         tfXkaJWZ0ISqmvvieJupeWjE3Ff3fyrd29rRvP/8HidzVYMIScc3Arnr/ghpHb2gXfj1
-         tKOg==
-X-Gm-Message-State: AFqh2krwu1Wu78MkJOInK6ET/5mP4jcSGFiFZOxCbTDn5l4pQ2vvKgUy
-        6uFosGSMmg74A/jv86+xZCwbwHjkjtNgHQPBaop7TQ==
-X-Google-Smtp-Source: AMrXdXtDqOG5QlMZYECRdGHEBBMMBUt8IoqHQDP1z5Ql6csgodRoRX705ojQtoQ11raWmQ/0ncdWiOvUp9wWtR3tTU4=
-X-Received: by 2002:a63:78a:0:b0:4ce:52b4:aff8 with SMTP id
- 132-20020a63078a000000b004ce52b4aff8mr300030pgh.427.1673983047213; Tue, 17
- Jan 2023 11:17:27 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bQQhGaa8ME/qD8GrOmb/LR8k+tyYKhHj8WpJOgJmL40=;
+        b=hWiaWHmUBFJpTjlnRPoQp8wt/S/VuU1fa/PjQxYQdr32xUXr7KymIWCKlNAV7N7XuC
+         KpVVFAXUWbyV1nrrudcu0Lw6P4pdKdRJYCpIY4tg7G5ofdDFkLD/xWgC2n5a4qgW/xtc
+         5KZdohK5bS4Z5nq3Btd4yshPn7F5DJTMt3TjGQc+RpP873wxc1sIXdSW1sd1SPG0m/sp
+         DWtnGioOjdyHMTQamRiTtGmTI524oNoGmb8DG5qmNdr7EnOpOVk/812KIbR2QGt+7skW
+         XbgWA8MYmR0QFvLzJNjO6gMrVW/hLs9OnLb0ppGND6AyFMMdacMVKpVk67PuGVkzF7iS
+         vEYQ==
+X-Gm-Message-State: AFqh2ko4P68F69NByL5/F3e5EVt0df2HqUhwsYizKqNCE2O735IKTGMt
+        xDnVFWS6oWHpIVareAutcfbXrHW2npo9CKLo
+X-Google-Smtp-Source: AMrXdXsRiQGWp5HyS8FdEGoGTMhjd2qK1yDflbDU2KXk0dOG/CUpT3PLJ7xrBuniiCZq5cJTQXdJqQ==
+X-Received: by 2002:a5e:df08:0:b0:704:6e8d:4891 with SMTP id f8-20020a5edf08000000b007046e8d4891mr3332526ioq.3.1673983246899;
+        Tue, 17 Jan 2023 11:20:46 -0800 (PST)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id o13-20020a0566022e0d00b006bb5af55ddfsm10651735iow.19.2023.01.17.11.20.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:20:46 -0800 (PST)
+Message-ID: <b9686ab1-8f18-4175-2581-df84ba58e3ce@linaro.org>
+Date:   Tue, 17 Jan 2023 13:20:44 -0600
 MIME-Version: 1.0
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-9-kirill.shutemov@linux.intel.com> <Y8adEg2CYUSVpwtk@hirez.programming.kicks-ass.net>
- <20230117135703.voaumisreld7crfb@box> <Y8a4bmCU9wsenvvF@hirez.programming.kicks-ass.net>
- <CAHk-=wiwiA7FdSww9fTg59r5S7G-DZHtzAcq9u5zBJKYXc1agQ@mail.gmail.com>
- <CAHk-=wj4HUBvCvfX3oZLZAZTzPc2vdwsObFqnOsQ-UZrdzm_rQ@mail.gmail.com>
- <CAKwvOdnCJmcGurUpHcdO44vVazz67jGDTXzug9LGv6C84xGmPw@mail.gmail.com> <CAHk-=wjfmmYPw0wX1BW6gi_KAhdZi+81or024JFcRYHiQh-jpw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjfmmYPw0wX1BW6gi_KAhdZi+81or024JFcRYHiQh-jpw@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 17 Jan 2023 11:17:15 -0800
-Message-ID: <CAKwvOd=fcF=y-mBtPZ9QcVe++__jo11St4=+roPKrGh5D6FH_g@mail.gmail.com>
-Subject: Re: [PATCHv14 08/17] x86/mm: Reduce untagged_addr() overhead until
- the first LAM user
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        joao@overdrivepizza.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Alex Elder <elder@linaro.org>
+Subject: Re: [PATCH v8 00/28] Drivers for gunyah hypervisor
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org
+References: <20221219225850.2397345-1-quic_eberman@quicinc.com>
+ <83b6dbc2-01da-04b6-64ec-9a69fd5c4c89@linaro.org>
+ <d945e654-9679-72d7-bb79-d09c45f6d5aa@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <d945e654-9679-72d7-bb79-d09c45f6d5aa@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 10:34 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Jan 17, 2023 at 10:26 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Tue, Jan 17, 2023 at 9:29 AM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > Side note: that's not something new or unusual. It's been the case
-> > > since I started testing clang - we have several code-paths where we
-> > > use "unlikely()" to try to get very unlikely cases to be out-of-line,
-> > > and clang just mostly ignores it, or treats it as a very weak hint. I
-> > > think the only way to get clang to treat it as a *strong* hint is to
-> > > use PGO.
-> >
-> > I'd be surprised if that were intentional or by design.
-> >
-> > Do you guys have a bug report we could look at?
->
-> Heh. I actually sent you an example long ago. Let me go fish it out of
-> my mail archives and quote some of it below so that you can find it in
-> yours..
->
->               Linus
->
-> [ Time passes. Found this email to you and Bill Wendling from Feb 16,
-> 2020, Message-ID
-> CAHk-=wigVshsByCMjkUiZyQSR5N5zi2aAeQc+VJCzQV=nm8E7g@mail.gmail.com ]:
->
->   Anyway, I'm looking at clang code generation, and comparing it with
->   gcc on one of my "this has been optimized to hell and back" functions:
->   __d_lookup_rcu().
->
->   It looks like clang does frame pointers, and ignores our
->   likely/unlikely annotations.
->
->   So this code:
->
->                 if (unlikely(parent->d_flags & DCACHE_OP_COMPARE)) {
->                         int tlen;
->                         const char *tname;
->                         ......
->
->   doesn't actually jump out of line, but instead generates the unlikely
->   case as the fallthrough:
->
->         testb   $2, (%r12)
->         je      .LBB50_9
->         ... unlikely code goes here...
+On 1/10/23 3:47 PM, Elliot Berman wrote:
+>>
+>> I haven't looked at the earlier reviews; perhaps the RFC stuff
+>> was requested.  I'm sure it's useful to see that but it doesn't
+>> seem directly helpful if your goal is to get this code upstream.
+>>
+> 
+> Right, the RFC patches were requested. Do you have a recommendation for 
+> sharing those later patches? I understand it's best practice not to post 
+> too many patches. The logical split was to have 1-20 go in first, and 
+> the remaining patches submitted later.
 
+If they're RFC they should be tagged "RFC".
 
-Perhaps that was compiler version or config specific?
+I do think it's easier for reviewers if you can divide up the
+code into a few smaller series, so reviewing each (sub-)series
+isn't such an overwhelming thing to consider.  I've started
+looking (IN GREAT DETAIL) the RPC core code, and haven't gone
+much past that, so I don't have any guidance about how things
+could be structured.  (I do appreciate that the early patches
+were small, and built things up gradually.)
 
-$ make LLVM=1 -j128 defconfig fs/dcache.o
-$ llvm-objdump -d  --no-show-raw-insn
---disassemble-symbols=__d_lookup_rcu fs/dcache.o
-0000000000003210 <__d_lookup_rcu>:
-    3210:      endbr64
-    3214:      pushq %rbp
-    3215:      pushq %r15
-    3217:      pushq %r14
-    3219:      pushq %r12
-    321b:      pushq %rbx
-    321c:      testb $0x2, (%rdi)
-    321f:      jne 0x32d7 <__d_lookup_rcu+0xc7>
-...
-    32d7:      popq %rbx
-    32d8:      popq %r12
-    32da:      popq %r14
-    32dc:      popq %r15
-    32de:      popq %rbp
-    32df:      jmp 0x3300 <__d_lookup_rcu_op_compare>
+I personally try to keep my series to closer to 5-10 patches,
+though the maintainer(s) involved need to agree to accept the
+smaller series before the full functionality gets enabled when
+it's all accepted.
 
-That looks like what you want, yeah?
+You'll get (lots) more feedback from me on the remaining patches,
+eventually.  If you decide to re-spin things soon I'd like to know
+your plan so I can review the latest when it's available.
 
-Your original report was from nearly 3 years ago; could have fixed a
-few instances of branch weights not getting propagated since then.
-
-What's going on in this case in this thread? I know we don't support
-hot/cold attributes on labels yet, but if static_branch_likely (or
-friends) is being used, we assign the indirect branches a 0%
-likeliness/branch-weight.
-
->
->   and then the likely case ends up having unfortunate reloads inside the
->   hot loop. Possibly because it has one fewer free registers than gcc
->   because of the frame pointer.
->
->   I didn't look into _why_ clang generates frame pointers but gcc
->   doesn't. It may be just a compiler default, I think we don't end up
->   explicitly asking either way.
->
-> [ And then Bill replied with this ]
->
->   It's not a no-op. We add branch probabilities to the IR, whether
->   they're honored or not depends on the transformation. But they
->   *should* be honored when available. I've seen in the past that instead
->   of moving unlikely blocks out of the way (like gcc, which moves them
->   below the function's "ret" instruction), LLVM will do something like
->   this:
->
->     <normal code>
->     <jmp to loop conditional test>
->         <unlikely code>
->         <more likely code>
->     <loop conditional test>
->     <...>
->
->   I.e. the loop is rotated and the unlikely code is first and the hotter
->   code is closer together but between the unlikely and conditional test.
->   Could this be what's going on? Otherwise, maybe clang decided that
->   it's not beneficial to move the code out-of-line because the benefit
->   was minimal? (I'm guessing here.)
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+					-Alex
