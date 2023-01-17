@@ -2,279 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A363966DFCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3234A66DFC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjAQOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S230195AbjAQOCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjAQOCL (ORCPT
+        with ESMTP id S230080AbjAQOCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:02:11 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CA038B7F;
-        Tue, 17 Jan 2023 06:02:09 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HCQlBq010581;
-        Tue, 17 Jan 2023 14:01:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VviILnZyVWkGxvkGB1/dVn87wzu/osCf11Yk7kCwkMo=;
- b=dQN0MIYdrFJR+v6Xzi+4YSPticDFUQ93W+5IEbdr57zCFDOw5g5LjiZBNlEpcNER45IR
- NPkDQ9Xl+dwMBYU4WsPir0WUwEZ7RaYquPu4L+Zq8SkgEGyDYtF9mr5Hl7od+W+ZvjMw
- j412BGPnBbieGJ+Dk2XVRXqRUocj3U7SexMqNL9PKp5zdjO6OSXsKJcn1boPhtcDul6X
- Fu/PtUMyYoUr7mmzQVS19qfQtPVrObP6dQ4eWmWS0NlOs1MmWIMVj+NrNdwZMg0t/sSs
- SNUJZL2T8HN7HJVAq8Cx62ZZrkQzi7nFDXSZK3UJnmGwtW2IIWkF2RJwgOvxYPxL0tt/ /g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n53172ktu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 14:01:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HE1rOx029557
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 14:01:53 GMT
-Received: from [10.216.62.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 17 Jan
- 2023 06:01:47 -0800
-Message-ID: <9671cade-1820-22e1-9db9-5c9836414908@quicinc.com>
-Date:   Tue, 17 Jan 2023 19:31:43 +0530
+        Tue, 17 Jan 2023 09:02:02 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B9538EAB;
+        Tue, 17 Jan 2023 06:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=iSq1n6fp+pgT1otyTi5I8F7lSDNIWrwaaMFHeTyn+qU=; b=1zA/3Nsyc+B66S/JfzShWC0dPM
+        6BYykR2G0bL45VrfcDV1kscfdJfvgFWxfLyN7eXcE6OYcNMUkF2z0DUugdVRQHEyuDAYo0mOLd4jI
+        zBlm+H+W2e9gCJxoNge2ZPu1vavnmiUnpzSilCsal/AHGPEDNCrVqVhKc2ffZnphN0K0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pHmX6-002KQU-Aa; Tue, 17 Jan 2023 15:01:48 +0100
+Date:   Tue, 17 Jan 2023 15:01:48 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc:     Pierluigi Passaro <pierluigi.passaro@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eran Matityahu <eran.m@variscite.com>,
+        Nate Drude <Nate.D@variscite.com>,
+        Francesco Ferraro <francesco.f@variscite.com>
+Subject: Re: [PATCH] net: mdio: force deassert MDIO reset signal
+Message-ID: <Y8aqTHyoFfzMILjl@lunn.ch>
+References: <20230115161006.16431-1-pierluigi.p@variscite.com>
+ <Y8QzI2VUY6//uBa/@lunn.ch>
+ <f691f339-9e50-b968-01e1-1821a2f696e7@metafoo.de>
+ <CAJ=UCjUo3t+D9S=J_yEhxCOo5OMj3d-UW6Z6HdwY+O+Q6JO0+A@mail.gmail.com>
+ <Y8SWPwM7V8yj9s+v@lunn.ch>
+ <AM6PR08MB437630CD49B50D66543EC3BDFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC v4 1/5] dt-bindings: usb: Add bindings to support multiport
- properties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>
-References: <20230115114146.12628-1-quic_kriskura@quicinc.com>
- <20230115114146.12628-2-quic_kriskura@quicinc.com>
- <20230116163401.GA2371990-robh@kernel.org>
- <4eb26a54-148b-942f-01c6-64e66541de8b@quicinc.com>
- <ca729f62-672e-d3de-4069-e2205c97e7d8@linaro.org>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ca729f62-672e-d3de-4069-e2205c97e7d8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DlY7iCIXBOyekOeOjf2G53_x7XDfiqtZ
-X-Proofpoint-ORIG-GUID: DlY7iCIXBOyekOeOjf2G53_x7XDfiqtZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_06,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
- impostorscore=0 malwarescore=0 mlxscore=0 spamscore=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170115
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM6PR08MB437630CD49B50D66543EC3BDFFC19@AM6PR08MB4376.eurprd08.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 16, 2023 at 09:44:01AM +0000, Pierluigi Passaro wrote:
+> On Mon, Jan 16, 2023 at 1:11 AM Andrew Lunn <andrew@lunn.ch> wrote:
+> > > IMHO, since the framework allows defining the reset GPIO, it does not sound
+> > > reasonable to manage it only after checking if the PHY can communicate:
+> > > if the reset is asserted, the PHY cannot communicate at all.
+> > > This patch just ensures that, if the reset GPIO is defined, it's not asserted
+> > > while checking the communication.
+> >
+> > The problem is, you are only solving 1/4 of the problem. What about
+> > the clock the PHY needs? And the regulator, and the linux reset
+> > controller? And what order to do enable these, and how long do you
+> > wait between each one?
+> >
+> Interesting point of view: I was thinking about solving one of 4 problems ;)
 
+Lots of small incremental 'improvements' sometimes get you into a real
+mess because you loose track of the big picture. And i do think we are
+now in a mess. But i also think we have a better understanding of the
+problem space. We know there can be arbitrate number of resources
+which need to be enabled before you can enumerate the bus. We need a
+generic solution to that problem. And Linux is good at solving a
+problem once and reusing it other places. So the generic solution
+should be applicable to other bus types.
 
-On 1/17/2023 4:32 PM, Krzysztof Kozlowski wrote:
-> On 17/01/2023 10:01, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 1/16/2023 10:04 PM, Rob Herring wrote:
->>> On Sun, Jan 15, 2023 at 05:11:42PM +0530, Krishna Kurapati wrote:
->>>> Add bindings to indicate properties required to support multiport
->>>> on Snps Dwc3 controller.
->>>>
->>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>>> ---
->>>>    .../devicetree/bindings/usb/snps,dwc3.yaml    | 53 ++++++++++++++++---
->>>>    1 file changed, 47 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>> index 6d78048c4613..3ea051beb2f8 100644
->>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>> @@ -81,15 +81,26 @@ properties:
->>>>    
->>>>      phys:
->>>>        minItems: 1
->>>> -    maxItems: 2
->>>> +    maxItems: 8
->>>>    
->>>>      phy-names:
->>>>        minItems: 1
->>>> -    maxItems: 2
->>>> -    items:
->>>> -      enum:
->>>> -        - usb2-phy
->>>> -        - usb3-phy
->>>> +    maxItems: 8
->>>> +    oneOf:
->>>> +    - items:
->>>> +        enum:
->>>> +          - usb2-phy
->>>> +          - usb3-phy
->>>> +    - items:
->>>> +        enum:
->>>> +          - usb2-phy_port0
->>>> +          - usb2-phy_port1
->>>> +          - usb2-phy_port2
->>>> +          - usb2-phy_port3
->>>> +          - usb3-phy_port0
->>>> +          - usb3-phy_port1
->>>> +          - usb3-phy_port2
->>>> +          - usb3-phy_port3
->>>
->>> usbN-portM
->>>
->>>>    
->>>>      resets:
->>>>        minItems: 1
->>>> @@ -360,6 +371,22 @@ properties:
->>>>        description:
->>>>          Enable USB remote wakeup.
->>>>    
->>>> +  num-ports:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    description:
->>>> +      This property indicates the number of ports present on the target that
->>>> +      are to be serviced by the DWC3 controller.
->>>> +    minimum: 1
->>>> +    maximum: 4
->>>> +
->>>> +  num-ss-ports:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    description:
->>>> +      This property indicates the number of SS capable ports present on the
->>>> +      target that are to be serviced by the DWC3 controller.
->>>> +    minimum: 1
->>>> +    maximum: 4
->>>
->>> This information is redundant. 'phy-names' tells you how many ports of
->>> each.
->>>
->> Hi Rob,
->>
->>    Thanks for the review. The reason I wanted to introduce two more
->> variables is to get info on number of ports  and ss-capable ports
->> present on hardware whether or not the user provides them in DTSI file.
->>
->> In the code there are two types of per port / per phy operations:
->> a) Modifying GUSB2PFYCFG and GUSB3PIPECTL registers per phy.
->> b) Generic Phy operations - per phy.
->>
->> In today's code, if someone doesn't mention the SSPHY in DTSI,
->> dwc->usb3_generic_phy will be NULL and any call to phy operations will
->> just bail out. And irrespective of whether we provide SS Phy in DTSI or
->> not, we still configure GUSB3PIPECTL register.
->>
->> Consider the following cases:
->>
->> 1. There are 3 ports and 2 of them are SS capable and all phy's are
->> mentioned in DTSI.
->>
->> phy-names= "usb2-port0", "usb3-port0", "usb2-port1", "usb3-port1",
->> "usb2-port2"
->>
->> When we count them in the driver, we get num ports as 3 (presuming
->> num-ports = num of hs ports) and num-ss-ports = 2.
->>
->> Since there is no ambiguity in which all ports to configure, we can
->> modify GUSB2PHYCFG registers for all 3 HS Phy's and GUSB3PIPECTL for
->> both SS Phy's.
->> This is a proper scenario.
->>
->> 2. If the user skips providing SS Phy on Port-0, then:
->>
->> phy-names= "usb2-port0", "usb2-port1", "usb3-port1", "usb2-port2"
->>
->> If we count the phys, we end up getting num-ports=3 and num-ss-ports=1.
->>
->> Since in the driver code, we are not keeping track of which ports are SS
->> capable and which ones are not, we end up configuring
->> GUSB2PIPECTL(port-0) instead of port-1  as the num-ss-ports is "1" which
->> is incorrect.
->>
->> 3. If the user skips providing one complete port, in this case port-1 is
->> skipped, then:
->>
->> phy-names= "usb2-port0", "usb3-port0", "usb2-port2"
->>
->> If we count the phys, we end up getting num-ports=2 and num-ss-ports=1.
->>
->> Since in the driver code, we are not keeping track of which ports are SS
->> capable and which ones are not, we end up configuring
->> GUSB2PHYCFG(port-0) and GUSB2PHYCFG(port-1) instead of port-2 which is
->> incorrect.
-> 
-> Why? You know you have port-2 from the phy name, so why would you ignore
-> this information?
-> 
-Hi Krzysztof,
+We also have a well understood workaround, put the IDs in DT. So as
+far as i'm concerned we don't need to add more incremental
+'improvements', we can wait for somebody to put in the effort to solve
+this properly with generic code.
 
-Thanks for the review,
+So i don't want to merge this change. Sorry.
 
-   The concern I had with that approach is that, we need to keep track 
-of per port supported speeds in some array /flags and check them 
-whenever we are modifying the dwc3-phy registers. This makes the code a 
-little unreadable.
->>
->> To avoid these scenarios, if we can get the exact number of SS Ports and
->> Ports in total present on the HW, we can configure all the registers
->> whether the phy's are provided in DTSI or not. (This is of no harm I
->> believe as it still works in today's code)
-> 
-> Doesn't the driver know how many phys it has in such case through
-> respective compatible?
-> 
-The core driver has only one compatible currently "snps,dwc3".
-
-Are you suggesting to add new compatible to driver core in case any 
-multiport device is being used and get this info from there ?
-
->>
->> Incase the 2nd and 3rd scenarios are not allowed and user *MUST* declare
->> all the phy's in the DTSI, then I can go ahead and remove these
->> properties and count them in the driver code.
-> 
-> 
-> Why you cannot then configure all phys in the driver all ports as some
-> safe default and then customize it depending on the actual port used?
-> 
-To do this, we still need to get info on number of hs/ss phy's present 
-on hardware and currently there is no register I believe in DWC3 core 
-global address space that can give this info. I see that HCSPARAMS1 Reg 
-gives some info but that is not accessible from driver core.
-
-According to databook:
-
-"Number of Ports (MaxPorts)
--> Number of ports implemented is defined by the parameter
-(`DWC_USB3_HOST_NUM_U2_ROOT_PORTS +
-`DWC_USB3_HOST_NUM_U3_ROOT_PORTS)
--> Number of ports enabled is controlled by the core input signals
-host_num_u2_port[3:0]+host_num_u3_port[3:0]"
-Regards,
-Krishna,
-
+	Andrew
