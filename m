@@ -2,349 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6E9670D5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8806670D54
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjAQX1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S229507AbjAQX0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjAQX0b (ORCPT
+        with ESMTP id S229628AbjAQX0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:26:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5935A37540
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673990578;
+        Tue, 17 Jan 2023 18:26:11 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04C838B4A;
+        Tue, 17 Jan 2023 13:23:21 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673990600;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QeSklMeMSoVeudTQC5ciHBckx9nBB5Aw6Kjov/8/jjI=;
-        b=cARcTlgnonmLOIvPea2MhBTm79ITJU43T6PYbpPJ5MffGKCnAzMEXnf6YtfERUueCauVIP
-        plo/oWigOkAyhEIQcWxOHSDyzqfoX0d7xWwMW3lcAFgu+3Jq6PkC3ggBFtClQmnymKi5Ji
-        ZilcUbGVD8YAq3i9H3F3BSAu5yhfuUU=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-204-tr67HynBMGeSIi4uQWu5Jw-1; Tue, 17 Jan 2023 16:22:57 -0500
-X-MC-Unique: tr67HynBMGeSIi4uQWu5Jw-1
-Received: by mail-io1-f71.google.com with SMTP id d24-20020a5d9bd8000000b006ee2ddf6d77so19794538ion.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 13:22:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QeSklMeMSoVeudTQC5ciHBckx9nBB5Aw6Kjov/8/jjI=;
-        b=VnMkgzLcfVhKK7j1pnjR0Hg6PEEDeeiBn2J0BAtO7qZ2sTYACP9CI3d2UXplmPdHSy
-         OwVhYSz7ZHIujVLwfMMEQ8twPnI+0lZH/pQMqqH+XDjL87dV+IvgFvJ4ALYsqKbfIsGX
-         aTnJptyPGRNXq29v7V/b29cewqkmUbnFlsPpu4PyehVzgiLTcHTn1be0M8CCNymwMEgz
-         WpTAfNT1+dQvYLs+KqUSSf7TvEx7ApXQC1Tywmb2RgajqCKep5TdSVqqvpPoJ57GjEzM
-         K+XMX8RDCex8aXEcdbWvH2QVBE5kHNiVuxMtRRyOmj4FWr1AlEq+yiI8mhplfFTDBhL5
-         a2lA==
-X-Gm-Message-State: AFqh2kpv+iRTHwEIaRw5xUMIRxxupIjhQizG1Xh/IStUS/8zwXPa4rMa
-        X3ffT0vhlH3aRuHsdIgGA6WAtPIE0S0a6DiibYVwwULcbFN7Dqh0Rq+ePBVpbm+7BB4K9PzscFE
-        YoMMthX5uxcfpMbwDmpzE57MU
-X-Received: by 2002:a05:6e02:50e:b0:30e:dcfb:6b9d with SMTP id d14-20020a056e02050e00b0030edcfb6b9dmr3964154ils.3.1673990576371;
-        Tue, 17 Jan 2023 13:22:56 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuwYzJIi7PTPrlEprlQbMxxydrTJmjaOJ4Q9jFc1jIJdvjOhgIIkYyHBtR5D65vkYIl3IuCsw==
-X-Received: by 2002:a05:6e02:50e:b0:30e:dcfb:6b9d with SMTP id d14-20020a056e02050e00b0030edcfb6b9dmr3964131ils.3.1673990576020;
-        Tue, 17 Jan 2023 13:22:56 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id f12-20020a056e020c6c00b0030c0217dde6sm9533440ilj.0.2023.01.17.13.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:22:55 -0800 (PST)
-Date:   Tue, 17 Jan 2023 14:22:52 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     pbonzini@redhat.com, jgg@nvidia.com, cohuck@redhat.com,
-        farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, akrowiak@linux.ibm.com,
-        jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, seanjc@google.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] vfio: fix potential deadlock on vfio group lock
-Message-ID: <20230117142252.70cc85c7.alex.williamson@redhat.com>
-In-Reply-To: <20230114000351.115444-1-mjrosato@linux.ibm.com>
-References: <20230114000351.115444-1-mjrosato@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        bh=9cR92r6412sVEgsFseieEmbL64hVIExQVx/uajzRUqs=;
+        b=4gvMSIqJNtFm0M4IlaLBv7hv9uh6wP/jv5tuk+SV8v0eTmaYmF1JpftSG0ZJy0oBApIwa0
+        w+F2HouWmAJVKfl5R+L+cea7gKk3FrL+h9hnITaMdz3/IS66/In2gga9M+EUwbEsl+YbY+
+        vP94ozvjRJSEvNh4gJ4qLAtMLC8W3wy3+HGT+21nDnmwNeuIrRVwCTg4degx5NlUuPF31m
+        F+VGgGqJAqEJjJfZ9a84Fi65CQtT2qryxyGVmG3p4UNaVPZVmyLGFuWDQH6OMlHYT1zkU/
+        cL3/8dMghsZ2FdahcLDDPgj1rmU533JPtI/aFr+MJE1GmoVtAMRxk8wCIZmXtg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673990600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9cR92r6412sVEgsFseieEmbL64hVIExQVx/uajzRUqs=;
+        b=IazwIGkx4PC9hoLOSFvpMA991cbQcJeJhX2yOasyZlxAXJ+KRq46Q/ubauNBbC2xEC/u7P
+        tjfvpSXkS3vXS1CA==
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v4 06/19] irqdomain: Drop revmap mutex
+In-Reply-To: <20230116135044.14998-7-johan+linaro@kernel.org>
+References: <20230116135044.14998-1-johan+linaro@kernel.org>
+ <20230116135044.14998-7-johan+linaro@kernel.org>
+Date:   Tue, 17 Jan 2023 22:23:20 +0100
+Message-ID: <871qnslut3.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 Jan 2023 19:03:51 -0500
-Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+On Mon, Jan 16 2023 at 14:50, Johan Hovold wrote:
+> The global irq_domain_mutex is now held in all paths that update the
+> revmap structures so there is no longer any need for the revmap mutex.
 
-> Currently it is possible that the final put of a KVM reference comes from
-> vfio during its device close operation.  This occurs while the vfio group
-> lock is held; however, if the vfio device is still in the kvm device list,
-> then the following call chain could result in a deadlock:
-> 
-> kvm_put_kvm
->  -> kvm_destroy_vm
->   -> kvm_destroy_devices
->    -> kvm_vfio_destroy
->     -> kvm_vfio_file_set_kvm
->      -> vfio_file_set_kvm
->       -> group->group_lock/group_rwsem  
-> 
-> Avoid this scenario by having vfio core code acquire a KVM reference
-> the first time a device is opened and hold that reference until right
-> after the group lock is released after the last device is closed.
-> 
-> Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
-> Reported-by: Alex Williamson <alex.williamson@redhat.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
-> Changes from v3:
-> * Can't check for open_count after the group lock has been dropped because
->   it would be possible for the count to change again once the group lock
->   is dropped (Jason)
->   Solve this by stashing a copy of the kvm and put_kvm while the group
->   lock is held, nullifying the device copies of these in device_close()
->   as soon as the open_count reaches 0, and then checking to see if the
->   device->kvm changed before dropping the group lock.  If it changed
->   during close, we can drop the reference using the stashed kvm and put
->   function after dropping the group lock.
-> 
-> Changes from v2:
-> * Re-arrange vfio_kvm_set_kvm_safe error path to still trigger
->   device_open with device->kvm=NULL (Alex)
-> * get device->dev_set->lock when checking device->open_count (Alex)
-> * but don't hold it over the kvm_put_kvm (Jason)
-> * get kvm_put symbol upfront and stash it in device until close (Jason)
-> * check CONFIG_HAVE_KVM to avoid build errors on architectures without
->   KVM support
-> 
-> Changes from v1:
-> * Re-write using symbol get logic to get kvm ref during first device
->   open, release the ref during device fd close after group lock is
->   released
-> * Drop kvm get/put changes to drivers; now that vfio core holds a
->   kvm ref until sometime after the device_close op is called, it
->   should be fine for drivers to get and put their own references to it.
-> ---
->  drivers/vfio/group.c     | 23 +++++++++++++--
->  drivers/vfio/vfio.h      |  9 ++++++
->  drivers/vfio/vfio_main.c | 61 +++++++++++++++++++++++++++++++++++++---
->  include/linux/vfio.h     |  2 +-
->  4 files changed, 87 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-> index bb24b2f0271e..b396c17d7390 100644
-> --- a/drivers/vfio/group.c
-> +++ b/drivers/vfio/group.c
-> @@ -165,9 +165,9 @@ static int vfio_device_group_open(struct vfio_device *device)
->  	}
->  
->  	/*
-> -	 * Here we pass the KVM pointer with the group under the lock.  If the
-> -	 * device driver will use it, it must obtain a reference and release it
-> -	 * during close_device.
-> +	 * Here we pass the KVM pointer with the group under the lock.  A
-> +	 * reference will be obtained the first time the device is opened and
-> +	 * will be held until the open_count reaches 0.
->  	 */
->  	ret = vfio_device_open(device, device->group->iommufd,
->  			       device->group->kvm);
-> @@ -179,9 +179,26 @@ static int vfio_device_group_open(struct vfio_device *device)
->  
->  void vfio_device_group_close(struct vfio_device *device)
+This can also go after the 3rd race fix, but ...
+
+>  static void irq_domain_clear_mapping(struct irq_domain *domain,
+>  				     irq_hw_number_t hwirq)
 >  {
-> +	void (*put_kvm)(struct kvm *kvm);
-> +	struct kvm *kvm;
-> +
->  	mutex_lock(&device->group->group_lock);
-> +	kvm = device->kvm;
-> +	put_kvm = device->put_kvm;
->  	vfio_device_close(device, device->group->iommufd);
-> +	if (kvm == device->kvm)
-> +		kvm = NULL;
+> +	lockdep_assert_held(&irq_domain_mutex);
 
-Hmm, so we're using whether the device->kvm pointer gets cleared in
-last_close to detect whether we should put the kvm reference.  That's a
-bit obscure.  Our get and put is also asymmetric.
+these lockdep asserts want to be part of the [dis]association race
+fixes. They are completely unrelated to the removal of the revmap_mutex.
 
-Did we decide that we couldn't do this via a schedule_work() from the
-last_close function, ie. implementing our own version of an async put?
-It seems like that potentially has a cleaner implementation, symmetric
-call points, handling all the storing and clearing of kvm related
-pointers within the get/put wrappers, passing only a vfio_device to the
-put wrapper, using the "vfio_device_" prefix for both.  Potentially
-we'd just want an unconditional flush outside of lock here for
-deterministic release.
+Your race fixes change the locking and you want to ensure that all
+callers comply right there, no?
 
-What's the downside?  Thanks,
+Thanks,
 
-Alex
-
->  	mutex_unlock(&device->group->group_lock);
-> +
-> +	/*
-> +	 * The last kvm reference will trigger kvm_destroy_vm, which
-> can in
-> +	 * turn re-enter vfio and attempt to acquire the group lock.
->  Therefore
-> +	 * we get a copy of the kvm pointer and the put function
-> under the
-> +	 * group lock but wait to put that reference until after
-> releasing the
-> +	 * lock.
-> +	 */
-> +	if (kvm)
-> +		vfio_kvm_put_kvm(put_kvm, kvm);
->  }
->  
->  static struct file *vfio_device_open_file(struct vfio_device *device)
-> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
-> index f8219a438bfb..08a5a23d6fef 100644
-> --- a/drivers/vfio/vfio.h
-> +++ b/drivers/vfio/vfio.h
-> @@ -251,4 +251,13 @@ extern bool vfio_noiommu __read_mostly;
->  enum { vfio_noiommu = false };
->  #endif
->  
-> +#ifdef CONFIG_HAVE_KVM
-> +void vfio_kvm_put_kvm(void (*put)(struct kvm *kvm), struct kvm *kvm);
-> +#else
-> +static inline void vfio_kvm_put_kvm(void (*put)(struct kvm *kvm),
-> +				    struct kvm *kvm)
-> +{
-> +}
-> +#endif
-> +
->  #endif
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 5177bb061b17..c6bb07af46b8 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -16,6 +16,9 @@
->  #include <linux/fs.h>
->  #include <linux/idr.h>
->  #include <linux/iommu.h>
-> +#ifdef CONFIG_HAVE_KVM
-> +#include <linux/kvm_host.h>
-> +#endif
->  #include <linux/list.h>
->  #include <linux/miscdevice.h>
->  #include <linux/module.h>
-> @@ -344,6 +347,49 @@ static bool vfio_assert_device_open(struct
-> vfio_device *device) return
-> !WARN_ON_ONCE(!READ_ONCE(device->open_count)); }
->  
-> +#ifdef CONFIG_HAVE_KVM
-> +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct
-> kvm *kvm) +{
-> +	void (*pfn)(struct kvm *kvm);
-> +	bool (*fn)(struct kvm *kvm);
-> +	bool ret;
-> +
-> +	pfn = symbol_get(kvm_put_kvm);
-> +	if (WARN_ON(!pfn))
-> +		return false;
-> +
-> +	fn = symbol_get(kvm_get_kvm_safe);
-> +	if (WARN_ON(!fn)) {
-> +		symbol_put(kvm_put_kvm);
-> +		return false;
-> +	}
-> +
-> +	ret = fn(kvm);
-> +	if (ret)
-> +		device->put_kvm = pfn;
-> +	else
-> +		symbol_put(kvm_put_kvm);
-> +
-> +	symbol_put(kvm_get_kvm_safe);
-> +
-> +	return ret;
-> +}
-> +
-> +void vfio_kvm_put_kvm(void (*put)(struct kvm *kvm), struct kvm *kvm)
-> +{
-> +	if (WARN_ON(!put))
-> +		return;
-> +
-> +	put(kvm);
-> +	symbol_put(kvm_put_kvm);
-> +}
-> +#else
-> +static bool vfio_kvm_get_kvm_safe(struct vfio_device *device, struct
-> kvm *kvm) +{
-> +	return false;
-> +}
-> +#endif
-> +
->  static int vfio_device_first_open(struct vfio_device *device,
->  				  struct iommufd_ctx *iommufd,
-> struct kvm *kvm) {
-> @@ -361,16 +407,22 @@ static int vfio_device_first_open(struct
-> vfio_device *device, if (ret)
->  		goto err_module_put;
->  
-> -	device->kvm = kvm;
-> +	if (kvm && vfio_kvm_get_kvm_safe(device, kvm))
-> +		device->kvm = kvm;
-> +
->  	if (device->ops->open_device) {
->  		ret = device->ops->open_device(device);
->  		if (ret)
-> -			goto err_unuse_iommu;
-> +			goto err_put_kvm;
->  	}
->  	return 0;
->  
-> -err_unuse_iommu:
-> -	device->kvm = NULL;
-> +err_put_kvm:
-> +	if (device->kvm) {
-> +		vfio_kvm_put_kvm(device->put_kvm, device->kvm);
-> +		device->put_kvm = NULL;
-> +		device->kvm = NULL;
-> +	}
->  	if (iommufd)
->  		vfio_iommufd_unbind(device);
->  	else
-> @@ -388,6 +440,7 @@ static void vfio_device_last_close(struct
-> vfio_device *device, if (device->ops->close_device)
->  		device->ops->close_device(device);
->  	device->kvm = NULL;
-> +	device->put_kvm = NULL;
->  	if (iommufd)
->  		vfio_iommufd_unbind(device);
->  	else
-> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-> index 35be78e9ae57..87ff862ff555 100644
-> --- a/include/linux/vfio.h
-> +++ b/include/linux/vfio.h
-> @@ -46,7 +46,6 @@ struct vfio_device {
->  	struct vfio_device_set *dev_set;
->  	struct list_head dev_set_list;
->  	unsigned int migration_flags;
-> -	/* Driver must reference the kvm during open_device or never
-> touch it */ struct kvm *kvm;
->  
->  	/* Members below here are private, not for driver use */
-> @@ -58,6 +57,7 @@ struct vfio_device {
->  	struct list_head group_next;
->  	struct list_head iommu_entry;
->  	struct iommufd_access *iommufd_access;
-> +	void (*put_kvm)(struct kvm *kvm);
->  #if IS_ENABLED(CONFIG_IOMMUFD)
->  	struct iommufd_device *iommufd_device;
->  	struct iommufd_ctx *iommufd_ictx;
-
+        tglx
