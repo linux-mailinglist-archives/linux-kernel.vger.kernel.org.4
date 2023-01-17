@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4C366D9A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7B866D9B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236391AbjAQJRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S236281AbjAQJTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236561AbjAQJQ4 (ORCPT
+        with ESMTP id S236616AbjAQJSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:16:56 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64667305D1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:11:22 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id z4-20020a17090a170400b00226d331390cso33507808pjd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:11:22 -0800 (PST)
+        Tue, 17 Jan 2023 04:18:35 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B1136FD5;
+        Tue, 17 Jan 2023 01:13:32 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id vw16so10663333ejc.12;
+        Tue, 17 Jan 2023 01:13:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nwlc/zHfPMoeWz/D3fuMtC8w9MBFuYRkpHYLyLdZQ7A=;
-        b=lU1i1BUrqv7UTW79S+LtO2HzhuPbZMBgUQ6Xu1WW89eMCALtY3vfyDeWmlM7eM9mYa
-         crzDEVdJCPJrD5yajjVMYCGfuA2ZewZIQzTuKnGZBGGOySHB+bclCNu2YhdfucND07LD
-         grmcq9X7GNNHSLFg5rn8aBfQzCIE5IoCw03h/jDJOugsYqzazvw0hjczGMmlqmvzOj4q
-         V7WtCx5Matex0+ElMO4XLAMB0TYXVVIsxbtWZgfgvv+vAUhrTWVvrXPgp/ssljiSv+jH
-         OvxY+lylwHw2WD2tnAirGZK3mqwJY7gu9e6+8b+jHD4QRDuC824+Zszd9PKmJG51tdT+
-         AAxw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5RK9gx2FO2xj5E74GBbtpYVjWU7Emn8D8XATkVEU73c=;
+        b=D9HrA7pT1mwiAD78O1+F9zB38a8vxWno1Pv48KGKFeJEW8YZlXdhCPfaUafbb/9QXI
+         Eb0unpSD/GF21wHdSMM+6gwcM+MlwEMf87bb9dZ8z9z7Zq6a0mbOlTuOhq/SHyECZ2Hu
+         Qv4t21zon64F6ccLIeVA6z5IEQGU4bQTr7tleUYgHQMRIiu4yabAUqXWQssvd40+Dy/C
+         yw8ryBMhlqp1jC4zhcB7q9EJM5y9mExLYw8FEWc/Gfq+VTJKzwFpA534U6X1yKGvGlBN
+         3rHs+R0C4ApVgcJrypC2Two/ExqtVBJeA82qDF3drI2MGvpB2yNj1YoHD4p0FIBulkW4
+         CLZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nwlc/zHfPMoeWz/D3fuMtC8w9MBFuYRkpHYLyLdZQ7A=;
-        b=ygXMYkIvt8vHlDK+Q+AXpDSqhBOQuPdLl+vsQ2rRWC+TGaX+3qPOMu92SuUPH88wKB
-         93C+C4f4NOO6NUsk2C+ahYB+rH+0BHjSW66X0IFWPgVU/4y0skikTsyQEmcj1vDDBTex
-         Ofa7ilI63zx9PsTTXIEvSsIvz7tH5tiWGnaaQLT7FCY4e/31orPTP2uhA/0Z5pMe8Vwb
-         PFErNLssSzzAQn9qfXPzUQeM7SwUMuZR6wgZtBng2ni5kDF0i4cnGyMkEt7CeR+sGYyt
-         +Lnh03YV3XUPHp1s+XagkosC9l05Gn5lZf2QXE1ylPYpcpztdP9TJpg3W9cNk+5wtFNz
-         zwog==
-X-Gm-Message-State: AFqh2kqXMeZlyXLQIO0WD2/NSzkxOcjfM4dOXiwkKbDSUICmtvUSkQED
-        D0t9/Vj/th2J3cuRjA+GTxPlemutr9pbpw==
-X-Google-Smtp-Source: AMrXdXtQdQ23TXzqPiblINa+EFfqM4r0Es7QTTGq6yj75OCDWJBxZWI8IYcSFmm03WiJPQhRSif0EA==
-X-Received: by 2002:a05:6a20:6f61:b0:b5:a231:107f with SMTP id gu33-20020a056a206f6100b000b5a231107fmr2184504pzb.12.1673946681919;
-        Tue, 17 Jan 2023 01:11:21 -0800 (PST)
-Received: from localhost.localdomain ([58.240.82.166])
-        by smtp.gmail.com with ESMTPSA id j22-20020a63cf16000000b0047899d0d62csm17026274pgg.52.2023.01.17.01.11.20
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5RK9gx2FO2xj5E74GBbtpYVjWU7Emn8D8XATkVEU73c=;
+        b=Puhl2z42RWlKcEJoKFDAMMKep8TebiQTuPpBra7fTWAF67VFayn+Rh4WhQXbkrhUuJ
+         HjHxE5vasQsrmNpSN1rmcip04Dici6odrqM5Th2J61IHO6fEzkffXRELCZJdwTGvb046
+         ErTQsgTpIbuSBF/552uwPpoU4ClyNp6M3Z9ANkBHzd5Ff6Wzj0xGS3w+e6CRPsYPDpeG
+         N8XAXKq7rDOwcB9N5TduCz2RtgEy0mt3UXFlybqJ1EE2xRv+jWS1HyHZWziAXaX1uWrO
+         tCaVmfNRs3wvy6N2n90Htx0e36HUMIOhqi+YTkJiwZ4xGi1N+G6mGim+4FzpGIM2znJO
+         d+tg==
+X-Gm-Message-State: AFqh2kr8C8sHGrfBYrv5pvuwD+UFU4oArG02U9s7UCiGeopdfgBlludq
+        aDHqYKHQkY+elgclRq0RefY=
+X-Google-Smtp-Source: AMrXdXsTE/VTZ//e99q1EewemnPQEv3c/W1akaXWmo5Oq/kEk/1Hzva1+qeFtfNWU8BmYXwf3UPxVg==
+X-Received: by 2002:a17:906:b004:b0:872:aa82:ac56 with SMTP id v4-20020a170906b00400b00872aa82ac56mr1663786ejy.47.1673946811060;
+        Tue, 17 Jan 2023 01:13:31 -0800 (PST)
+Received: from gvm01 (net-5-89-66-224.cust.vodafonedsl.it. [5.89.66.224])
+        by smtp.gmail.com with ESMTPSA id kz14-20020a17090777ce00b007c17b3a4163sm13080885ejc.15.2023.01.17.01.13.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 01:11:21 -0800 (PST)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     peterz@infradead.org, jpoimboe@kernel.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH] samples: ftrace: Pick a more reasonable function to trace
-Date:   Tue, 17 Jan 2023 17:11:01 +0800
-Message-Id: <20230117091101.3669996-1-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 17 Jan 2023 01:13:30 -0800 (PST)
+Date:   Tue, 17 Jan 2023 10:13:30 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        mailhol.vincent@wanadoo.fr, sudheer.mogilappagari@intel.com,
+        sbhatta@marvell.com, linux-doc@vger.kernel.org,
+        wangjie125@huawei.com, corbet@lwn.net, lkp@intel.com,
+        gal@nvidia.com, gustavoars@kernel.org, bagasdotme@gmail.com
+Subject: Re: [PATCH net-next 1/1] ethtool/plca: fix potential NULL pointer
+ access
+Message-ID: <Y8ZmupvQv/N8561y@gvm01>
+References: <6bb97c2304d9ab499c2831855f6bf3f6ee2b8676.1673913385.git.piergiorgio.beruto@gmail.com>
+ <20230117003426.pzioywqybaxq4pzm@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117003426.pzioywqybaxq4pzm@skbuf>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,56 +83,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ftrace-direct-multi*.c, the direct_caller - my_tramp works as
-the mcount for functions with one parameter declared.
+On Tue, Jan 17, 2023 at 02:34:26AM +0200, Vladimir Oltean wrote:
+> On Tue, Jan 17, 2023 at 12:57:19AM +0100, Piergiorgio Beruto wrote:
+> > Fix problem found by syzbot dereferencing a device pointer.
+> > 
+> > Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+> > Reported-by: syzbot+8cf35743af243e5f417e@syzkaller.appspotmail.com
+> > Fixes: 8580e16c28f3 ("net/ethtool: add netlink interface for the PLCA RS")
+> > ---
+> >  net/ethtool/plca.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/net/ethtool/plca.c b/net/ethtool/plca.c
+> > index be7404dc9ef2..bc3d31f99998 100644
+> > --- a/net/ethtool/plca.c
+> > +++ b/net/ethtool/plca.c
+> > @@ -155,6 +155,8 @@ int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+> >  		return ret;
+> >  
+> >  	dev = req_info.dev;
+> > +	if(!dev)
+> > +		return -ENODEV;
+> 
+> Shouldn't be necessary. The fact that you pass "true" to the
+> "require_dev" argument of ethnl_parse_header_dev_get() takes care
+> specifically of that.
+> 
+> Looking at that syzbot report, it looks like you solved it with commit
+> 28dbf774bc87 ("plca.c: fix obvious mistake in checking retval"). Or was
+> that not the only issue?
+Oh, I believe you are correct.
+I probably confused which version the bug was reported against.
 
-But schedule() actually has no parameter declared, so when it was
-traced, the tracing function - my_direct_func will print a senseless
-address.
+Please, ignore this patch...
+Thanks!
 
-Here replaces schedule() with kick_process() to make these samples
-more reasonable and deletes the unnecessary including of mm.h.
+Piergiorgio
 
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
----
- samples/ftrace/ftrace-direct-multi-modify.c | 2 +-
- samples/ftrace/ftrace-direct-multi.c        | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-index 63f92451f38b..ea8b6fef3032 100644
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -176,7 +176,7 @@ static int __init ftrace_direct_multi_init(void)
- 	int ret;
- 
- 	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
--	ftrace_set_filter_ip(&direct, (unsigned long) schedule, 0, 0);
-+	ftrace_set_filter_ip(&direct, (unsigned long) kick_process, 0, 0);
- 
- 	ret = register_ftrace_direct_multi(&direct, my_tramp);
- 
-diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-index 08442d631b48..2b850c3593d5 100644
---- a/samples/ftrace/ftrace-direct-multi.c
-+++ b/samples/ftrace/ftrace-direct-multi.c
-@@ -1,7 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <linux/module.h>
- 
--#include <linux/mm.h> /* for handle_mm_fault() */
- #include <linux/ftrace.h>
- #include <linux/sched/stat.h>
- #include <asm/asm-offsets.h>
-@@ -93,7 +92,7 @@ static struct ftrace_ops direct;
- static int __init ftrace_direct_multi_init(void)
- {
- 	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
--	ftrace_set_filter_ip(&direct, (unsigned long) schedule, 0, 0);
-+	ftrace_set_filter_ip(&direct, (unsigned long) kick_process, 0, 0);
- 
- 	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
- }
--- 
-2.20.1
-
+> 
+> >  
+> >  	rtnl_lock();
+> >  
+> > -- 
+> > 2.37.4
+> > 
