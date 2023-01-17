@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B5566DFD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B26166DFDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjAQODN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S229830AbjAQOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjAQODJ (ORCPT
+        with ESMTP id S229629AbjAQOEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:03:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0F538B78;
-        Tue, 17 Jan 2023 06:03:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C143B8163C;
-        Tue, 17 Jan 2023 14:03:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9463AC433D2;
-        Tue, 17 Jan 2023 14:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673964185;
-        bh=009ZkaKNNYtdbuuDx1qA9wZr22kzjPWN7yIb2q0DdEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dktz/WYJgv4QvyvDV2LbvZmxjtWZWLprYGVoku3jmdDH79C6Rr5ME968EUSWwVcih
-         5aouenxh36cnXsIEEFum2DRiZ7fyRn287tGrUNutJWRRQ9eRLncilq/HkQXZU5sozk
-         8LVH6IgiWeLZgkrL7aYIXc530jWklLqfNIt+Ic1JMHjSrXVsqoZ7oFOFwzvsYZ8Hb4
-         w9nXQds86zFR3FsxlHzM0KN0ABftoBpbKaEfnsnLlY4dXA4e6Zt4junWySb0wHm9nL
-         PPm5Gg7QZWrH9fxX7gsLBKdVJk/MWjV9FiUWvahoFRggZnIrjvjjyj5yJP5IzIB6dZ
-         Ai7kQS9PV+BNA==
-Date:   Tue, 17 Jan 2023 15:03:03 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     paulmck@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu: Remove impossible wakeup rcu GP kthread action
- from rcu_report_qs_rdp()
-Message-ID: <Y8aql+vHNcdth0T1@lothringen>
-References: <20230117074443.1982347-1-qiang1.zhang@intel.com>
+        Tue, 17 Jan 2023 09:04:08 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B433139CC8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:04:07 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id o7so32871120ljj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 06:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NzZzYWKNmnARWWDNBQqY5fo72EgCU0TUb5m6uPT/G+4=;
+        b=jK8+uYzumj6sHycb9SG4YRDyG3aJYaixccfazVmDWo4rpvuMmBgHxx0PUGVjtkBvfm
+         BbvmhCrKtPkxzPAfn7wrV//VbNaXATtWOxf1SrcO2CKx+4z6gRA15vxfx7O79L6FAn9P
+         +7aGUrWdIa5N4U0h2jjbr6V0487Qrt4/ddPOxotd5RK/xW/qPWEqBCKFssQIMLh8amB/
+         eNAonVXGlmqVjmhAUacuk/hReX5HL43eWm2iTca7wdaaQWnKN9V21II0UL3U/508QGi0
+         CrP6nmgFRw0U6Cu7pWKFHUGMCEwoUYFTbGIFmmmqLQHgTUikkGM77pbJeAHvpKIYTAei
+         L8/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NzZzYWKNmnARWWDNBQqY5fo72EgCU0TUb5m6uPT/G+4=;
+        b=tiIX5sRFLi8qgqP9+1Yq+NLORNMBJvMVI9xJdsqSWsSwcWU0F0Ue09mbRNq7RTYIcI
+         nzOo0lL1qUS+QcnB6pZWgKuFFsQ0SxJLVwXkx5sueANCEWNNmbkxxiCHiQ/8VUzRsuWw
+         svxYZXkpwh0LqzWHK19j3HpMuwGsFV7eYM5JrK8cGsMOChjrczp/8dGiJw75FoSWeR3+
+         oQhHoMsd0MK/Bgzwa/wdtfsvKvhTvP5ELVhN/CYUUQBdvFVhsMBlOXRQNWACeHxE18Uz
+         kxuzmnW9w6Wotupa+xvNhd0Rab0pfzmCrA8LwgdP1XzF058sKJFlY9HzWUch1Ii/OLax
+         7baQ==
+X-Gm-Message-State: AFqh2kon3nMCQENdXHNN5Ckx2JVWIgkkSVjzg4oatSegcyCRgTnZxREb
+        RC9VXWj+FafybTmO4VMUf0QhS3yF9MwgySbabkw=
+X-Google-Smtp-Source: AMrXdXt3P4Lo1b4Wol+2vl6IGXB7g+3AWZLsH7NtjaqfzbAuBdaATO0v37YgNuGDhEzqG4Jcj9tt65Mqne0WbVjaFJM=
+X-Received: by 2002:a2e:94ca:0:b0:27f:eef3:921d with SMTP id
+ r10-20020a2e94ca000000b0027feef3921dmr329644ljh.515.1673964245813; Tue, 17
+ Jan 2023 06:04:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117074443.1982347-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Tue, 17 Jan 2023 15:03:28 +0100
+Message-ID: <CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com>
+Subject: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
+To:     Huang Rui <ray.huang@amd.com>, Doug Smythies <dsmythies@telus.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 03:44:43PM +0800, Zqiang wrote:
-> When inovke rcu_report_qs_rdp(), if current CPU's rcu_data structure's ->
-> grpmask has not been cleared from the corresponding rcu_node structure's
-> ->qsmask, after that will clear and report quiescent state, but in this
-> time, this also means that current grace period is not end, the current
-> grace period is ongoing, because the rcu_gp_in_progress() currently return
-> true, so for non-offloaded rdp, invoke rcu_accelerate_cbs() is impossible
-> to return true.
-> 
-> This commit therefore remove impossible rcu_gp_kthread_wake() calling.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tree.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index b2c204529478..c78d48482583 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -1956,7 +1956,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
->  {
->  	unsigned long flags;
->  	unsigned long mask;
-> -	bool needwake = false;
->  	bool needacc = false;
->  	struct rcu_node *rnp;
->  
-> @@ -1988,7 +1987,7 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
->  		 * NOCB kthreads have their own way to deal with that...
->  		 */
->  		if (!rcu_rdp_is_offloaded(rdp)) {
-> -			needwake = rcu_accelerate_cbs(rnp, rdp);
-> +			WARN_ON_ONCE(rcu_accelerate_cbs(rnp, rdp));
+Hi,
 
-Please also add a comment explaining why we don't expect to have
-to wake up the GP kthread.
+I regularly test:
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+$ LANG=C LC_ALL=C make -C tools/ clean 2>&1 | tee ../make-log_tools-clean.txt
 
-Thanks!
+This removes:
 
+$ git status -s
+D tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+D tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
 
->  		} else if (!rcu_segcblist_completely_offloaded(&rdp->cblist)) {
->  			/*
->  			 * ...but NOCB kthreads may miss or delay callbacks acceleration
-> @@ -2000,8 +1999,6 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
->  		rcu_disable_urgency_upon_qs(rdp);
->  		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
->  		/* ^^^ Released rnp->lock */
-> -		if (needwake)
-> -			rcu_gp_kthread_wake();
->  
->  		if (needacc) {
->  			rcu_nocb_lock_irqsave(rdp, flags);
-> -- 
-> 2.25.1
-> 
+Checking the log:
+
+$ grep pstate_tracer.py ../make-log_tools-clean.txt
+89:rm -f -r   /home/dileks/src/linux/git/tools/testing/selftests/amd-pstate/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+/home/dileks/src/linux/git/tools/t
+esting/selftests/amd-pstate/../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+
+Is that intended or not?
+
+Thanks.
+
+Regards,
+-Sedat-
