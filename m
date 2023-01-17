@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A652C670D8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9430670D95
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 Jan 2023 00:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjAQXcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 18:32:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S230019AbjAQXdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 18:33:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjAQXbw (ORCPT
+        with ESMTP id S229817AbjAQXcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 18:31:52 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A4C460AD;
-        Tue, 17 Jan 2023 12:51:22 -0800 (PST)
-Date:   Tue, 17 Jan 2023 20:51:13 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1673988680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBfVFTcOroevwU21TT12BjG/YfB4gGjHAdUTut1zEfE=;
-        b=k3SfH990JxjLMD1azdUqAYV3qH2dpILCHNOUpFvPnnEGaH4o8DSODDMapBT1XqN7p/g17I
-        FDQg2C1oQtzrxNeH/+hJZ80tH9djmqM9cQTroEfpGdJahiPMqM3ol6tXjLcSH6C9cycGBq
-        tq4cav0IOHAblnomIdYMP6zRzfCCFw4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, maz@kernel.org, corbet@lwn.net,
-        james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, ricarkol@google.com,
-        eric.auger@redhat.com, yuzhe@nfschina.com, renzhengeek@gmail.com,
-        ardb@kernel.org, peterx@redhat.com, seanjc@google.com,
-        shan.gavin@gmail.com
-Subject: Re: [PATCH 1/4] KVM: arm64: Allow saving vgic3 LPI pending status in
- no running vcpu context
-Message-ID: <Y8cKQRIbpLWVcdcw@google.com>
-References: <20230116040405.260935-1-gshan@redhat.com>
- <20230116040405.260935-2-gshan@redhat.com>
+        Tue, 17 Jan 2023 18:32:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E070A5D11B;
+        Tue, 17 Jan 2023 12:52:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 895B8B81A22;
+        Tue, 17 Jan 2023 20:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A04C433D2;
+        Tue, 17 Jan 2023 20:52:04 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 15:52:03 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        ndesaulniers@google.com, ojeda@kernel.org, peterz@infradead.org,
+        rafael.j.wysocki@intel.com, revest@chromium.org,
+        robert.moore@intel.com, will@kernel.org
+Subject: Re: [PATCH v2 4/8] ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
+Message-ID: <20230117155203.3a66744e@gandalf.local.home>
+In-Reply-To: <20230113180355.2930042-5-mark.rutland@arm.com>
+References: <20230113180355.2930042-1-mark.rutland@arm.com>
+        <20230113180355.2930042-5-mark.rutland@arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116040405.260935-2-gshan@redhat.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,104 +49,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gavin,
+On Fri, 13 Jan 2023 18:03:51 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-On Mon, Jan 16, 2023 at 12:04:02PM +0800, Gavin Shan wrote:
-> When dirty ring is enabled, the dirty page information is pushed to
-> the dirty ring if there is a running VCPU context. Otherwise, the
-> dirty page information is still tracked by the backup dirty bitmap.
-> In order to detect if there is a running VCPU context when a guest
-> page becomes dirty, kvm_arch_allow_write_without_running_vcpu() was
-> introduced to warn when no running VCPU context exists on unknown
-> cases.
+> Architectures without dynamic ftrace trampolines incur an overhead when
+> multiple ftrace_ops are enabled with distinct filters. in these cases,
+> each call site calls a common trampoline which uses
+> ftrace_ops_list_func() to iterate over all enabled ftrace functions, and
+> so incurs an overhead relative to the size of this list (including RCU
+> protection overhead).
 > 
-> Other than the site of saving ITS tables, it's possible to save vgic3
-> LPI pending status in no running vcpu context because it can happen when
-> ITS ITE is restored through the command KVM_DEV_ARM_ITS_RESTORE_TABLES
-> on 'kvm-arm-vgic-its' device.
+> Architectures with dynamic ftrace trampolines avoid this overhead for
+> call sites which have a single associated ftrace_ops. In these cases,
+> the dynamic trampoline is customized to branch directly to the relevant
+> ftrace function, avoiding the list overhead.
 > 
-> Fix it by allowing to save vgic3 LPI pending status in no running
-> vcpu context.
+> On some architectures it's impractical and/or undesirable to implement
+> dynamic ftrace trampolines. For example, arm64 has limited branch ranges
+> and cannot always directly branch from a call site to an arbitrary
+> address (e.g. from a kernel text address to an arbitrary module
+> address). Calls from modules to core kernel text can be indirected via
+> PLTs (allocated at module load time) to address this, but the same is
+> not possible from calls from core kernel text.
 > 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> Using an indirect branch from a call site to an arbitrary trampoline is
+> possible, but requires several more instructions in the function
+> prologue (or immediately before it), and/or comes with far more complex
+> requirements for patching.
+> 
+> Instead, this patch adds a new option, where an architecture can
+> associate each call site with a pointer to an ftrace_ops, placed at a
+> fixed offset from the call site. A shared trampoline can recover this
+> pointer and call ftrace_ops::func() without needing to go via
+> ftrace_ops_list_func(), avoiding the associated overhead.
+> 
+> This avoids issues with branch range limitations, and avoids the need to
+> allocate and manipulate dynamic trampolines, making it far simpler to
+> implement and maintain, while having similar performance
+> characteristics.
+> 
+> Note that this allows for dynamic ftrace_ops to be invoked directly from
+> an architecture's ftrace_caller trampoline, whereas existing code forces
+> the use of ftrace_ops_get_list_func(), which is in part necessary to
+> permit the ftrace_ops to be freed once unregistereed *and* to avoid
+> branch/address-generation range limitation on some architectures (e.g.
+> where ops->func is a module address, and may be outside of the direct
+> branch range for callsites within the main kernel image).
+> 
+> The CALL_OPS approach avoids this problems and is safe as:
+> 
+> * The existing synchronization in ftrace_shutdown() using
+>   ftrace_shutdown() using synchronize_rcu_tasks_rude() (and
+>   synchronize_rcu_tasks()) ensures that no tasks hold a stale reference
+>   to an ftrace_ops (e.g. in the middle of the ftrace_caller trampoline,
+>   or while invoking ftrace_ops::func), when that ftrace_ops is
+>   unregistered.
+> 
+>   Arguably this could also be relied upon for the existing scheme,
+>   permitting dynamic ftrace_ops to be invoked directly when ops->func is
+>   in range, but this will require additional logic to handle branch
+>   range limitations, and is not handled by this patch.
+> 
+> * Each callsite's ftrace_ops pointer literal can hold any valid kernel
+>   address, and is updated atomically. As an architecture's ftrace_caller
+>   trampoline will atomically load the ops pointer then derefrence
+>   ops->func, there is no risk of invoking ops->func with a mismatches
+>   ops pointer, and updates to the ops pointer do not require special
+>   care.
+> 
+> A subsequent patch will implement architectures support for arm64. There
+> should be no functional change as a result of this patch alone.
+> 
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Florent Revest <revest@chromium.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Will Deacon <will@kernel.org>
 > ---
->  Documentation/virt/kvm/api.rst | 5 +++--
->  arch/arm64/kvm/vgic/vgic-its.c | 3 ++-
->  arch/arm64/kvm/vgic/vgic-v3.c  | 3 +++
->  include/kvm/arm_vgic.h         | 1 +
->  4 files changed, 9 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 9807b05a1b57..18b245a0ba02 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -8071,8 +8071,9 @@ state is final and avoid missing dirty pages from another ioctl ordered
->  after the bitmap collection.
->  
->  NOTE: One example of using the backup bitmap is saving arm64 vgic/its
-> -tables through KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_SAVE_TABLES} command on
-> -KVM device "kvm-arm-vgic-its" when dirty ring is enabled.
-> +tables and vgic3 LPI pending status through KVM_DEV_ARM_{VGIC_GRP_CTRL,
-> +ITS_SAVE_TABLES} and KVM_DEV_ARM_{VGIC_GRP_CTRL, ITS_RESTORE_TABLES}
-> +command on KVM device "kvm-arm-vgic-its" when dirty ring is enabled.
->  
->  8.30 KVM_CAP_XEN_HVM
->  --------------------
-> diff --git a/arch/arm64/kvm/vgic/vgic-its.c b/arch/arm64/kvm/vgic/vgic-its.c
-> index 94a666dd1443..119a9c7a0a52 100644
-> --- a/arch/arm64/kvm/vgic/vgic-its.c
-> +++ b/arch/arm64/kvm/vgic/vgic-its.c
-> @@ -2792,7 +2792,8 @@ bool kvm_arch_allow_write_without_running_vcpu(struct kvm *kvm)
->  {
->  	struct vgic_dist *dist = &kvm->arch.vgic;
->  
-> -	return dist->save_its_tables_in_progress;
-> +	return dist->save_vgic_v3_tables_in_progress ||
-> +	       dist->save_its_tables_in_progress;
 
-I'd much prefer using a single bool to keep track of this, i.e:
+Looks good. Looking through it, I don't see any issues. Although I didn't
+test it ;-)
 
-	return dist->save_tables_in_progress;
+I probably should, but in the mean time (as my tests are currently
+broken)...
 
->  }
->  
->  static int vgic_its_set_attr(struct kvm_device *dev,
-> diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
-> index 2074521d4a8c..32998c8587a8 100644
-> --- a/arch/arm64/kvm/vgic/vgic-v3.c
-> +++ b/arch/arm64/kvm/vgic/vgic-v3.c
-> @@ -304,6 +304,7 @@ void vgic_v3_enable(struct kvm_vcpu *vcpu)
->  int vgic_v3_lpi_sync_pending_status(struct kvm *kvm, struct vgic_irq *irq)
->  {
->  	struct kvm_vcpu *vcpu;
-> +	struct vgic_dist *dist = &kvm->arch.vgic;
->  	int byte_offset, bit_nr;
->  	gpa_t pendbase, ptr;
->  	bool status;
-> @@ -339,7 +340,9 @@ int vgic_v3_lpi_sync_pending_status(struct kvm *kvm, struct vgic_irq *irq)
->  	if (status) {
->  		/* clear consumed data */
->  		val &= ~(1 << bit_nr);
-> +		dist->save_vgic_v3_tables_in_progress = true;
->  		ret = kvm_write_guest_lock(kvm, ptr, &val, 1);
-> +		dist->save_vgic_v3_tables_in_progress = false;
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-With the above suggestion of using a bool, this should become a helper
-used at all the affected callsites:
-
-  static int vgic_write_guest_lock(struct kvm *kvm, gpa_t gpa,
-  				   const void *data, unsigned long len)
-  {
-  	struct vgic_dist *dist = &kvm->arch.vgic;
-	int ret;
-
-	dist->save_tables_in_progress = true;
-	ret = kvm_write_guest_lock(kvm, gpa, data, len);
-	dist->save_tables_in_progress = false;
-
-	return ret;
-  }
-
---
-Thanks,
-Oliver
+-- Steve
