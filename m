@@ -2,160 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8526D66E832
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EAA66E83B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 22:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjAQVLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 16:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S229718AbjAQVNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 16:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjAQVJY (ORCPT
+        with ESMTP id S229664AbjAQVMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:09:24 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA501F487;
-        Tue, 17 Jan 2023 11:35:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673984114; x=1705520114;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=AXcJSZehasHV7V5RMT3wteWiPBkSmKd8ANsFlDQZYxU=;
-  b=jkvjQuesAa+u9nyWHtL0gBm32W3SBxm62WofD4BLSo5scRB6Du10qMCj
-   OmmbU3H6ty6H0pCwflIH9DuKjAnQNpyRaFCHTZQOTnv+NNudCOwELshf8
-   YsCpGdOFB5gWRquQRP7+/Iv49OwQm/BxY0gZGV510WivsNx1liC1d+88Y
-   xgmPxcM2osvNkQbYi/aBgnR/I7isu+TkBzDSJNk7lFVxDVgp6FBBeqOM3
-   9z2L1g2x21mEEtoR6lnmeAG6vXECd0Okh+PcMijrHQ8FV4qGXW9wtD7HQ
-   Zh1QmU0YyqDUQSJ2iuvv3H4cvIQz53Y46hEWnmW+/1cdCBZrU8OuNoCG0
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="326870783"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="326870783"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 11:34:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="727892201"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="727892201"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jan 2023 11:34:55 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 17 Jan 2023 11:34:55 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 17 Jan 2023 11:34:54 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 17 Jan 2023 11:34:54 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 17 Jan 2023 11:34:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kg48naTDkV8iDINqWwCJCIKcZZIwwExxnTnk2tdoK1RbJKXbrvrtv3GaVeUtj6rIH7UiuYnbRsAEfhYgqGtkU2p/4c4Ktl7LMKlcPqYOPJTKBVqTmRMqkaQ/edJl2MEqtfnHtwyqrd+g8zJfqIpmWXS8z4TWy0wbMUdSOPPwUrf0FfvRaxwMIN39SH4ev7+x/RWXdp2BivdPv1S7sownPBdU5U+b9USLq62akG3wAwcpce5zAJ0dV1xotBCUk/jJK96+bP35GpK+sbRrHb+aWnnq79+CZnIYf4fN4Xp4dqGkwEwsGPo8fXReUTwsGyBbIKEV/lAdjIWYNmO1liXVcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2W1FDYuvss1aVNatPuW7gkvf/ipluQC2DBLDHb+NqVU=;
- b=gyYFB3zstsuraM5/53GkCFq6szWCVndxKkm9xDvBcHhiY4phSa9f8QfPZV9cBVjg0yJpaYj/gq1jpLpJHhQPdTg/euWqkiR/NxqT7JPMDWIh3vuKNPZ0hqd71syXYfaLITNZdtdHfy/cM7fmDy6xKCF8hUvmObkWDxCHvAklA40aRj+PDqawpbYWg7yrIt3DVq8FDNzr8aVuc2vElLoH6MKTE68jQWsXix57Bwq6mFNSvLO5Ar6+OWs+X24oUNhMlPz2/LRqisJeSRHWFk1jo+iH5rG+JUgZX4sb+pu5WYZH5in7qB/yHHxhRncdhERg4xE2ugQLBiPijJ2YdkuX8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
- by DS7PR11MB6127.namprd11.prod.outlook.com (2603:10b6:8:9d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 17 Jan
- 2023 19:34:51 +0000
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::5697:a11e:691e:6acf]) by CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::5697:a11e:691e:6acf%5]) with mapi id 15.20.5986.023; Tue, 17 Jan 2023
- 19:34:51 +0000
-Message-ID: <9f29ff29-62bb-c92b-6d69-ccc86938929e@intel.com>
-Date:   Tue, 17 Jan 2023 11:34:48 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] e1000e: Add ADP_I219_LM17 to ME S0ix blacklist
-Content-Language: en-US
-To:     Jiajia Liu <liujia6264@gmail.com>, <jesse.brandeburg@intel.com>,
-        <anthony.l.nguyen@intel.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230117102645.24920-1-liujia6264@gmail.com>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-In-Reply-To: <20230117102645.24920-1-liujia6264@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR16CA0021.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::34) To CO1PR11MB5089.namprd11.prod.outlook.com
- (2603:10b6:303:9b::16)
+        Tue, 17 Jan 2023 16:12:42 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24674A21D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:36:03 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id k13so2013282plg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 11:36:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Y/+6b+/J99MLnqP/RvN51sj3DHWazl0lw52Vf0WKHU=;
+        b=mO/P06835gXK/fd1eBgp4cGBD2kC3K+6imr5T+2jtDjdUBhDC2ZA6VrIPZfU/f9xjC
+         IEFaPiulMS/0ZqDbxbtw2cJsM7Tc3tGTV1WEaKwKEM7/onV7W8gwNEZgbjFg1D9VPFPt
+         zOrBnI+uh6uL/yAkjlKRTpwIo5mbtRcjK3EEpUEcbJ7VVRL/gSQAf4SQnwHxKqHb/sTQ
+         MXdsYhc4zLlGvKOCRi98eQbAPaNpu9G8SHim8g88Gvn8/JWvst4ReoqQ54dQnmQu9Cx8
+         q4mO4VJKRFbwHLXOegE1kYwL9GcvTKshaR6/+a9qCY329OuOlMsj+GHmm1PrfY3+znUl
+         l0+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Y/+6b+/J99MLnqP/RvN51sj3DHWazl0lw52Vf0WKHU=;
+        b=GbA3XVdix514gZjYXaLdcxXXcBywq5m9dzVWfKniyHUGJNkpx54UW28vyEEIFDJzg+
+         ay2eBhA32iLvXZzXCVAbWMa1Ei6bz5tzSjGHQSQsC5J12FoacbyVzZ7iJQAjoodHCDqm
+         nSMERz2LcFVd6JgdRNIfbXPTVwJh8taqvrEamP01YWmEssWKXZjUwYoh/pck2ETHv/wp
+         bVcIPN5daYijF4gInIrDvNKilHAyEYBmfhaqZE3KhZTHUZO0K5s6a+A1yyVxqnYzWeK0
+         DnHW04HwFWPWcov//vK1nVv3q8uFgGh9uBWxpnfLgNeXH8a01wlbKMsEt9yt+7WDkftI
+         BSvQ==
+X-Gm-Message-State: AFqh2ko7piMaj+PeYhZN69V1ZC730iJqb8ku58wm1gGPnURJWXkxK2jr
+        DGbibndR84XIidXM80Oy3h0i+w==
+X-Google-Smtp-Source: AMrXdXu1hk8ysrAGJplB4OjNB7xeVQaqK5fZ7KwLIxI5L/arUaD+5uicI01yTWHuGz/H+vtFbMLBdw==
+X-Received: by 2002:a05:6a20:93a4:b0:b8:e33c:f160 with SMTP id x36-20020a056a2093a400b000b8e33cf160mr178599pzh.0.1673984162308;
+        Tue, 17 Jan 2023 11:36:02 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t1-20020a63d241000000b004c974bb9a4esm5296842pgi.83.2023.01.17.11.36.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 11:36:01 -0800 (PST)
+Date:   Tue, 17 Jan 2023 19:35:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+Message-ID: <Y8b4nsMJm+4Hr/e0@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
+ <Y8HwvTik/2avrCOU@google.com>
+ <20230117131251.GC273037@chaop.bj.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB5089:EE_|DS7PR11MB6127:EE_
-X-MS-Office365-Filtering-Correlation-Id: c15e16fd-5933-4685-5688-08daf8c1e706
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P/oYMccYc3NWRC7uYvLq7UYbabJjNM7aRLFbRE8daSFBA8TNLkPja6NFHMII49pWgi2S4VNJpToZFT2nraBpwNscNjdSmIkiCGGHeHFO/JHY/XMTe+BkAgXpFAOUiRofBxeut1R9+KcPtna1iBfAxGo4q7sI19H7ZXzHr0Zv1noiyoNz7XQu7cbM48vX9uTBF1fMtIu95Q+IuIqWQAOedo6yYolpKj+MwM8WzbbHqWKaQ9Y8/9KREh2ottlXjho015ZBfc+gQQEyNDjbN+IeGvtt12igp0gvTYhaLqVMXbQodGuh3ES5R0qBUaHsxjfJaSYGVSGxcE5+DtrIIYsH+bjr8WBNope/NHJij/nJQYDpuEdfn0r/5KVM3NgH1xZfGrOdpl02d6kcv15rvjGaVC1boroX7BhWqbUrjYd37ICsUpsPg2KJCl+v7zBSsangI4Po+Fwd+tM3UHpkdULpvG3dh741b3nl2NjQic/e3yv0xbZ93Q5MC2kGfRpXlQ4rN0FEeR70hV4gUyEMeXa34sjIUYIYz/mXKE/7Y7vAC0hnf/2w7xJDlHx3z5h7s6jaM1JJZ9u6QMVcKzUgqg403xP/pjO6SfSv4Q/BbN42GHRgb9aKEpM113SY1PerTdwntVbhvKG134dlLaMmPCrXiVXuJhnbweLkC8O1FptZtNFoLSf1m6zz1M58wIKDAdg+QKK/DcwcxxGf2WVgD52l3VXy3NbZvIwpw7/9MtjnmR0P6OOJW0iep0DcKtvMQkx6L40TyNJpBuW7Qw5pafGmW5mkrrCACQ1xpbzMS64ez4I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(346002)(376002)(396003)(136003)(451199015)(36756003)(478600001)(82960400001)(31696002)(316002)(966005)(2906002)(6666004)(53546011)(6506007)(2616005)(83380400001)(6512007)(186003)(26005)(6486002)(86362001)(66946007)(4326008)(66476007)(8676002)(8936002)(66556008)(41300700001)(31686004)(38100700002)(5660300002)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aU81Q1dsenBoQWx5T25uMjdXZ2lnVGs0Z3FkZThQMWFqSzBHdlpiU294VGVl?=
- =?utf-8?B?L1JmbDlWK3pCclhFeWVkV1lqbUlNb3FvTmRlZlhKNGNrR2tpZjlPaTQrQ0RM?=
- =?utf-8?B?bUFZRE9VZXQvbDhjZHJJL0RSVjVwUnh2Y2l6TGlHbnJrbkpDZTNjWndnSlVW?=
- =?utf-8?B?djIxT0Z0ay9uM1drNXRSZWZ0ZFlXSXZ0OGFBMklZK0k3T1NJNUJHbXRtT2Fo?=
- =?utf-8?B?QnNwWE5XWGpIcS85bW93dWRiY0l2OHFKVFlqYS9BSVBTeDlIQU95WmxKTEhY?=
- =?utf-8?B?MC9rSG9zck9XdG9JTFAxRVIzRGtzSFRiNXo1Z0RoSUFDNnpMUUxQcXV5QUdY?=
- =?utf-8?B?c1M3VmdqbDFiZVpIUFdkeVE5UDJwTkxtdGlYY052Q2t5dHFHRTVJWmpRdTRp?=
- =?utf-8?B?TEJYREg5c2d4TzJJdnRXL1hHUEJpUG5VSGRMd1VxSkprSmJuUlFDNC8vVTVS?=
- =?utf-8?B?QW01OWxiQ3NJZFFUSmRvdFg4QjIwTS9tOWIxa1grbjJRSlNBZTZQYndRbkhM?=
- =?utf-8?B?bmRvZVo4VHlHWHY4MVR0OStvNFQ4QlVTNUUvZGNPODRQWllQT2RsaVc3VGxv?=
- =?utf-8?B?R1IrMGtMaHprZjlmWnN4NkZTT1NHZ3JSRHp6NWgydXcva2hnMUVFWTNrL29X?=
- =?utf-8?B?bW9iRlZWT2xyVW01bEdiM0pSZ3dMNUdUL3J1bDkxbzJ6RVI0VEgxQStOQXhu?=
- =?utf-8?B?b05OOUpiN3VxVFFhaXByeDF6OUt1aFFJWkdRMHk0NDBaeit4Mjc0TDJBbnNz?=
- =?utf-8?B?RklveWoyRVNsUitSN1RRMm5KaERsZjNQWUtiVGJ4bW9VVlpwdWZaWDRpZDJp?=
- =?utf-8?B?ZUtldUU0STNMMFVqV3Z3bHJGVHBQVDVUSFZCYTViWkQvL2tHVW93TlVJdjZ6?=
- =?utf-8?B?VVNqbHZOTnFoRFVIQm8yazBSa01CQS9LaW5uN081aE5nWjBjRjBWbGtSZks1?=
- =?utf-8?B?WGJWVWNDdXpIUVBQTGg2dTNQYmtGZFRvTEw5bUREZnNyMVREMjZvbXRHNDZW?=
- =?utf-8?B?Qk50SnYxVkNWZFFtbVg0ZWZpcHlKQnJncmZpTjF6Tm1Id3JFQ3F5N0RGaEdW?=
- =?utf-8?B?aGNlV0VtTzdqS3RsamY3YTA2S21IM0wxMXBBcDNUZW55dWJzelA5VE1DT0xy?=
- =?utf-8?B?V0NiVmNKR2tpY2lSeFpQK1VkMTR6cDJFME1YSmtlUVlodTk0MEgwOER1WDBJ?=
- =?utf-8?B?QUEwNnQ1VWNtc25GMGN6c3kwbUFnY1VYWnR5Skw4cjR6UTZ5NTNJWUlDVVFS?=
- =?utf-8?B?RDNyT0NyelRYckR0enNwNWh5b0xDeks5eHhjTFFwQVdGM2k1dkxLSlZqVnlu?=
- =?utf-8?B?bHVrWFIwUmxmN25nenhjMEVUVUF2WGlqNHVjMzlndE9nSi95dmlodFhjQm9t?=
- =?utf-8?B?QWpzRjlERlNtRWVRYmFYdUE5Nkg2cGtwSXkwZDNQSkczY0NZcE0rNmE1dm54?=
- =?utf-8?B?alZRdCtSak9jckpORno3TEJ5M0gyakYrVk5uYi9NUGNhVTBjL2ZjYVpEVFR0?=
- =?utf-8?B?cVJwc2JwakpPL3lhWUpid1JkamViYmVRZnlrendRa0R1a2tCZDE0OEp4WkZD?=
- =?utf-8?B?WlkrakhtZGFnMUgzZE1BaGVVM3JiRjlJWGdXSkJ1WGZKRTVSVVJPWW4vZEZh?=
- =?utf-8?B?eUppT1l3V29qNkVOVk5BY1FyVkhRMHdadXlOQlNYNVl3OXhVclRCeEs0Z1Fv?=
- =?utf-8?B?WU9LS09jRXYxcDcvcmhGekpaWWpWT0pkL2dTRFR4MTZGWUovTTEzRmQvWTBE?=
- =?utf-8?B?YjF4aFZrVDlZcUFhQUt5cy8vMWE5YXg3ZFFhRkowTlh5cWR5MnZiY3E3c1hk?=
- =?utf-8?B?cWUrbWs0UjBRRE1SdDBtbDNob0dqVDJLb3dvVFJVeDNJaE5meHpTT2R6K1RC?=
- =?utf-8?B?b2M3UnlrU1NrZkxjRU5PMlRGTmVub3dWakFBRXhrdkRnbCtpc09wbnFhYmU5?=
- =?utf-8?B?c1lJQXN4SW9PWTVwV0NGTENMazFIRCt1emVGSzh6VjlNa2IxUmZpUWpFY2Jp?=
- =?utf-8?B?MnZTNmF3MUxBV2JCSFNlVXRMNzQ4Y2hLL3RPL3oxQUpNK1ZaTmkzdXZRSjVN?=
- =?utf-8?B?NExXNnNYdnB0Zkk5T0NId3lmb0xoR0tJWHVCVFF0OEJielVEY1pIamZFWWNr?=
- =?utf-8?B?UHFQL2N0MFhsVE5leVNESi91WS9Jd0I4RU85VUtTeE1FWlFITnlKVnlMY1c0?=
- =?utf-8?B?c0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c15e16fd-5933-4685-5688-08daf8c1e706
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 19:34:51.6237
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /++/hWwwtsG5h8AMuKf/oogFmKjtZ0hSte20FcBxghZHOKMHWH47QU9NTXPhKvm6+0teSQI8plnoU9+SSBqbSBn1gzKEoaeKAbEKg/XMM34=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6127
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117131251.GC273037@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,104 +105,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/17/2023 2:26 AM, Jiajia Liu wrote:
-> I219 on HP EliteOne 840 All in One cannot work after s2idle resume
-> when the link speed is Gigabit, Wake-on-LAN is enabled and then set
-> the link down before suspend. No issue found when requesting driver
-> to configure S0ix. Add workround to let ADP_I219_LM17 use the dirver
-> configured S0ix.
+On Tue, Jan 17, 2023, Chao Peng wrote:
+> On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
+> > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > > @@ -10357,6 +10364,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+> > >  
+> > >  		if (kvm_check_request(KVM_REQ_UPDATE_CPU_DIRTY_LOGGING, vcpu))
+> > >  			static_call(kvm_x86_update_cpu_dirty_logging)(vcpu);
+> > > +
+> > > +		if (kvm_check_request(KVM_REQ_MEMORY_MCE, vcpu)) {
+> > > +			vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
+> > 
+> > Synthesizing triple fault shutdown is not the right approach.  Even with TDX's
+> > MCE "architecture" (heavy sarcasm), it's possible that host userspace and the
+> > guest have a paravirt interface for handling memory errors without killing the
+> > host.
 > 
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216926
-> Signed-off-by: Jiajia Liu <liujia6264@gmail.com>
-> ---
+> Agree shutdown is not the correct choice. I see you made below change:
 > 
-> It's regarding the bug above, it looks it's causued by the ME S0ix.
-> And is there a method to make the ME S0ix path work?
+> send_sig_mceerr(BUS_MCEERR_AR, (void __user *)hva, PAGE_SHIFT, current)
 > 
+> The MCE may happen in any thread than KVM thread, sending siginal to
+> 'current' thread may not be the expected behavior.
 
-No idea. It does seem better to disable S0ix if it doesn't work properly
-first though...
+This is already true today, e.g. a #MC in memory that is mapped into the guest can
+be triggered by a host access.  Hrm, but in this case we actually have a KVM
+instance, and we know that the #MC is relevant to the KVM instance, so I agree
+that signaling 'current' is kludgy.
 
->  drivers/net/ethernet/intel/e1000e/netdev.c | 25 ++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+>  Also how userspace can tell is the MCE on the shared page or private page?
+>  Do we care?
+
+We care.  I was originally thinking we could require userspace to keep track of
+things, but that's quite prescriptive and flawed, e.g. could race with conversions.
+
+One option would be to KVM_EXIT_MEMORY_FAULT, and then wire up a generic (not x86
+specific) KVM request to exit to userspace, e.g.
+
+		/* KVM_EXIT_MEMORY_FAULT */
+		struct {
+#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1ULL << 3)
+#define KVM_MEMORY_EXIT_FLAG_HW_ERROR	(1ULL << 4)
+			__u64 flags;
+			__u64 gpa;
+			__u64 size;
+		} memory;
+
+But I'm not sure that's the correct approach.  It kinda feels like we're reinventing
+the wheel.  It seems like restrictedmem_get_page() _must_ be able to reject attempts
+to get a poisoned page, i.e. restrictedmem_get_page() should yield KVM_PFN_ERR_HWPOISON.
+Assuming that's the case, then I believe KVM simply needs to zap SPTEs in response
+to an error notification in order to force vCPUs to fault on the poisoned page.
+
+> > > +		return -EINVAL;
+> > >  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
+> > >  		return -EINVAL;
+> > >  	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+> > > @@ -2020,6 +2154,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> > >  		if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
+> > >  			return -EINVAL;
+> > >  	} else { /* Modify an existing slot. */
+> > > +		/* Private memslots are immutable, they can only be deleted. */
+> > 
+> > I'm 99% certain I suggested this, but if we're going to make these memslots
+> > immutable, then we should straight up disallow dirty logging, otherwise we'll
+> > end up with a bizarre uAPI.
 > 
-> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-> index 04acd1a992fa..7ee759dbd09d 100644
-> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
-> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-> @@ -6330,6 +6330,23 @@ static void e1000e_flush_lpic(struct pci_dev *pdev)
->  	pm_runtime_put_sync(netdev->dev.parent);
->  }
->  
-> +static u16 me_s0ix_blacklist[] = {
-> +	E1000_DEV_ID_PCH_ADP_I219_LM17,
-> +	0
-> +};
-> +
-> +static bool e1000e_check_me_s0ix_blacklist(const struct e1000_adapter *adapter)
-> +{
-> +	u16 *list;
-> +
-> +	for (list = me_s0ix_blacklist; *list; list++) {
-> +		if (*list == adapter->pdev->device)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
+> But in my mind dirty logging will be needed in the very short time, when
+> live migration gets supported?
 
-The name of this function seems odd..? "check_me"? It also seems like we
-could just do a simple switch/case on the device ID or similar.
+Ya, but if/when live migration support is added, private memslots will no longer
+be immutable as userspace will want to enable dirty logging only when a VM is
+being migrated, i.e. something will need to change.
 
-Maybe: "e1000e_device_supports_s0ix"?
+Given that it looks like we have clear line of sight to SEV+UPM guests, my
+preference would be to allow toggling dirty logging from the get-go.  It doesn't
+necessarily have to be in the first patch, e.g. KVM could initially reject
+KVM_MEM_LOG_DIRTY_PAGES + KVM_MEM_PRIVATE and then add support separately to make
+the series easier to review, test, and bisect.
 
-> +
->  /* S0ix implementation */
->  static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
+static int check_memory_region_flags(struct kvm *kvm,
+				     const struct kvm_userspace_memory_region2 *mem)
+{
+	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+
+	if (kvm_arch_has_private_mem(kvm) &&
+	    ~(mem->flags & KVM_MEM_LOG_DIRTY_PAGES))
+		valid_flags |= KVM_MEM_PRIVATE;
+
+
+	...
+}
+
+> > > +		if (mem->flags & KVM_MEM_PRIVATE)
+> > > +			return -EINVAL;
+> > >  		if ((mem->userspace_addr != old->userspace_addr) ||
+> > >  		    (npages != old->npages) ||
+> > >  		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
+> > > @@ -2048,10 +2185,28 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> > >  	new->npages = npages;
+> > >  	new->flags = mem->flags;
+> > >  	new->userspace_addr = mem->userspace_addr;
+> > > +	if (mem->flags & KVM_MEM_PRIVATE) {
+> > > +		new->restricted_file = fget(mem->restricted_fd);
+> > > +		if (!new->restricted_file ||
+> > > +		    !file_is_restrictedmem(new->restricted_file)) {
+> > > +			r = -EINVAL;
+> > > +			goto out;
+> > > +		}
+> > > +		new->restricted_offset = mem->restricted_offset;
+> 
+> I see you changed slot->restricted_offset type from loff_t to gfn_t and
+> used pgoff_t when doing the restrictedmem_bind/unbind(). Using page
+> index is reasonable KVM internally and sounds simpler than loff_t. But
+> we also need initialize it to page index here as well as changes in
+> another two cases. This is needed when restricted_offset != 0.
+
+Oof.  I'm pretty sure I completely missed that loff_t is used for byte offsets,
+whereas pgoff_t is a frame index. 
+
+Given that the restrictmem APIs take pgoff_t, I definitely think it makes sense
+to the index, but I'm very tempted to store pgoff_t instead of gfn_t, and name
+the field "index" to help connect the dots to the rest of kernel, where "pgoff_t index"
+is quite common.
+
+And looking at those bits again, we should wrap all of the restrictedmem fields
+with CONFIG_KVM_PRIVATE_MEM.  It'll require minor tweaks to __kvm_set_memory_region(),
+but I think will yield cleaner code (and internal APIs) overall.
+
+And wrap the three fields in an anonymous struct?  E.g. this is a little more
+versbose (restrictedmem instead restricted), but at first glance it doesn't seem
+to cause widespared line length issues.
+
+#ifdef CONFIG_KVM_PRIVATE_MEM
+	struct {
+		struct file *file;
+		pgoff_t index;
+		struct restrictedmem_notifier notifier;
+	} restrictedmem;
+#endif
+
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 547b92215002..49e375e78f30 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -2364,8 +2364,7 @@ static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
+>                                              gfn_t gfn, kvm_pfn_t *pfn,
+>                                              int *order)
 >  {
-> @@ -6337,6 +6354,9 @@ static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
->  	u32 mac_data;
->  	u16 phy_data;
+> -       pgoff_t index = gfn - slot->base_gfn +
+> -                       (slot->restricted_offset >> PAGE_SHIFT);
+> +       pgoff_t index = gfn - slot->base_gfn + slot->restricted_offset;
+>         struct page *page;
+>         int ret;
 >  
-> +	if (e1000e_check_me_s0ix_blacklist(adapter))
-> +		goto req_driver;
-> +
->  	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
->  	    hw->mac.type >= e1000_pch_adp) {
->  		/* Request ME configure the device for S0ix */
-
-
-The related code also seems to already perform some set of mac checks
-here...
-
-> @@ -6346,6 +6366,7 @@ static void e1000e_s0ix_entry_flow(struct e1000_adapter *adapter)
->  		trace_e1000e_trace_mac_register(mac_data);
->  		ew32(H2ME, mac_data);
->  	} else {
-> +req_driver:>  		/* Request driver configure the device to S0ix */
->  		/* Disable the periodic inband message,
->  		 * don't request PCIe clock in K1 page770_17[10:9] = 10b
-> @@ -6488,6 +6509,9 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
->  	u16 phy_data;
->  	u32 i = 0;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 01db35ddd5b3..7439bdcb0d04 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -935,7 +935,7 @@ static bool restrictedmem_range_is_valid(struct kvm_memory_slot *slot,
+>                                          pgoff_t start, pgoff_t end,
+>                                          gfn_t *gfn_start, gfn_t *gfn_end)
+>  {
+> -       unsigned long base_pgoff = slot->restricted_offset >> PAGE_SHIFT;
+> +       unsigned long base_pgoff = slot->restricted_offset;
 >  
-> +	if (e1000e_check_me_s0ix_blacklist(adapter))
-> +		goto req_driver;
-> +
-
-Why not just combine this check into the statement below rather than
-adding a goto?
-
->  	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
->  	    hw->mac.type >= e1000_pch_adp) {
->  		/* Keep the GPT clock enabled for CSME */
-> @@ -6523,6 +6547,7 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
->  		else
->  			e_dbg("DPG_EXIT_DONE cleared after %d msec\n", i * 10);
->  	} else {
-> +req_driver:
->  		/* Request driver unconfigure the device from S0ix */
+>         if (start > base_pgoff)
+>                 *gfn_start = slot->base_gfn + start - base_pgoff;
+> @@ -2275,7 +2275,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>                         r = -EINVAL;
+>                         goto out;
+>                 }
+> -               new->restricted_offset = mem->restricted_offset;
+> +               new->restricted_offset = mem->restricted_offset >> PAGE_SHIFT;
+>         }
 >  
->  		/* Disable the Dynamic Power Gating in the MAC */
+>         r = kvm_set_memslot(kvm, old, new, change);
+> 
+> Chao
+> > > +	}
+> > > +
+> > > +	new->kvm = kvm;
+> > 
+> > Set this above, just so that the code flows better.
