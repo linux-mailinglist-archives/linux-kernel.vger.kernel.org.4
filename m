@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0411B66E69E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83EA66E6A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 20:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjAQTLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 14:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        id S232741AbjAQTM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 14:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjAQTJP (ORCPT
+        with ESMTP id S232187AbjAQTKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 14:09:15 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D3B37F31;
-        Tue, 17 Jan 2023 10:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673979788; x=1705515788;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IlDh+Dysr/T/XY5HyMKzy4u/jUEYxfwAxA0eTJ167wQ=;
-  b=AtBTZbxr9IYJgBvAgkQ0uoaHrX6gk4H+mmhAu40ivUwWTvWbrvgwxdXb
-   fJjL8MY+Vl3i5WG/tOfiJ4FYAAWDYKjjjFA65vch8VlIt0OBks3UEmq1r
-   drVnrQMC1EzqjoPNzXzPejj88C7fTyNQDXac1MHG3XefvANNO4MRY0YSr
-   3Nf2eB599FnzsaR7ENjUrYLjADfiSOvllmxCiBDTtJ2XNnzuT3r2YYkwL
-   lIcnsuELSrqV+IZFpEsXFgZQ0gTDBMYGul8o1DCybNTEsziFdwNRMjkQ4
-   gLdZ8dfPmOfdWYgenC1V10zKONPnL2bw83BbWpCzl2gyRC3pLjN89QPup
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="326850252"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="326850252"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 10:22:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="748133276"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="748133276"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jan 2023 10:22:54 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal/idle_inject: Support 100% idle injection
-Date:   Tue, 17 Jan 2023 10:22:40 -0800
-Message-Id: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 17 Jan 2023 14:10:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2A5C0D9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 10:24:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XSVCY3skPmpUfyMO6XuiNShJAohbJi5MJ+0Tl/OQUuk=; b=mEluEUKEDZTyyDRpL261mqgUP9
+        +oWDZVX/939c909IkEujz+5khCUlk0qOmmCBOOt8jtKddSVusCBFb9ScfvddAieediYlWLsZGvbPU
+        gGGXDadE03QIEDHX5V7yGFQsW7tadIpolftpzK+aHNUrxUhONvsFXMWrupAS+vHfu2z7nIdDpPLnr
+        sUr6vc584V1N2NE72pohE5J1oRqScKE6VlFtORFuIFpAcUiPgUB+duQxe9dZ7JbgOqu24MFvdIZpo
+        06YDcK8usO6+UsjwIgUQzhshHBEVMboByXpfHEdkep+Eov/2x34RXGz4SHfdJiNQc/QTDhwNOULG5
+        FkfgV8aQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHqcQ-009uA2-Oe; Tue, 17 Jan 2023 18:23:34 +0000
+Date:   Tue, 17 Jan 2023 18:23:34 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 41/41] mm: replace rw_semaphore with atomic_t in vma_lock
+Message-ID: <Y8bnpqw134CHenz/@casper.infradead.org>
+References: <20230109205336.3665937-1-surenb@google.com>
+ <20230109205336.3665937-42-surenb@google.com>
+ <Y8UxnqPCTLbbD+2F@localhost>
+ <Y8YgomKF189vmgLz@casper.infradead.org>
+ <CAJuCfpECJhUu3fvWbBzmAkEA3+1LTkKqJOVadQB_-_mEHME=xg@mail.gmail.com>
+ <Y8Y2JErbNQOhL8ee@casper.infradead.org>
+ <CAJuCfpEx6FJpm0Js=cvcHw6mY3izPfoskxseSMyxFAxLX97X_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpEx6FJpm0Js=cvcHw6mY3izPfoskxseSMyxFAxLX97X_w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,68 +70,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The users of idle injection framework allow 100% idle injection. For
-example: thermal/cpuidle_cooling.c driver. When the ratio set to 100%,
-the runtime_duration becomes zero.
+On Mon, Jan 16, 2023 at 09:58:35PM -0800, Suren Baghdasaryan wrote:
+> On Mon, Jan 16, 2023 at 9:46 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Mon, Jan 16, 2023 at 08:34:36PM -0800, Suren Baghdasaryan wrote:
+> > > On Mon, Jan 16, 2023 at 8:14 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > > >
+> > > > On Mon, Jan 16, 2023 at 11:14:38AM +0000, Hyeonggon Yoo wrote:
+> > > > > > @@ -643,20 +647,28 @@ static inline void vma_write_lock(struct vm_area_struct *vma)
+> > > > > >  static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> > > > > >  {
+> > > > > >     /* Check before locking. A race might cause false locked result. */
+> > > > > > -   if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > > > > > +   if (vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+> > > > > >             return false;
+> > > > > >
+> > > > > > -   if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+> > > > > > +   if (unlikely(!atomic_inc_unless_negative(&vma->vm_lock->count)))
+> > > > > >             return false;
+> > > > > >
+> > > > > > +   /* If atomic_t overflows, restore and fail to lock. */
+> > > > > > +   if (unlikely(atomic_read(&vma->vm_lock->count) < 0)) {
+> > > > > > +           if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > > > > +                   wake_up(&vma->vm_mm->vma_writer_wait);
+> > > > > > +           return false;
+> > > > > > +   }
+> > > > > > +
+> > > > > >     /*
+> > > > > >      * Overflow might produce false locked result.
+> > > > > >      * False unlocked result is impossible because we modify and check
+> > > > > >      * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+> > > > > >      * modification invalidates all existing locks.
+> > > > > >      */
+> > > > > > -   if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > > > > > -           up_read(&vma->vm_lock->lock);
+> > > > > > +   if (unlikely(vma->vm_lock->lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
+> > > > > > +           if (atomic_dec_and_test(&vma->vm_lock->count))
+> > > > > > +                   wake_up(&vma->vm_mm->vma_writer_wait);
+> > > > > >             return false;
+> > > > > >     }
+> > > > >
+> > > > > With this change readers can cause writers to starve.
+> > > > > What about checking waitqueue_active() before or after increasing
+> > > > > vma->vm_lock->count?
+> > > >
+> > > > I don't understand how readers can starve a writer.  Readers do
+> > > > atomic_inc_unless_negative() so a writer can always force readers
+> > > > to fail.
+> > >
+> > > I think the point here was that if page faults keep occuring and they
+> > > prevent vm_lock->count from reaching 0 then a writer will be blocked
+> > > and there is no reader throttling mechanism (no max time that writer
+> > > will be waiting).
+> >
+> > Perhaps I misunderstood your description; I thought that a _waiting_
+> > writer would make the count negative, not a successfully acquiring
+> > writer.
+> 
+> A waiting writer does not modify the counter, instead it's placed on
+> the wait queue and the last reader which sets the count to 0 while
+> releasing its read lock will wake it up. Once the writer is woken it
+> will try to set the count to negative and if successful will own the
+> lock, otherwise it goes back to sleep.
 
-In the function idle_inject_set_duration() in idle injection framework
-run_duration_us == 0 is silently ignored, without any error (it is a
-void function). So, the caller will assume that everything is fine and
-100% idle is effective. But in reality the idle inject will be whatever
-set before.
+Then yes, that's a starvable lock.  Preventing starvation on the mmap
+sem was the original motivation for making rwsems non-starvable, so
+changing that behaviour now seems like a bad idea.  For efficiency, I'd
+suggest that a waiting writer set the top bit of the counter.  That way,
+all new readers will back off without needing to check a second variable
+and old readers will know that they *may* need to do the wakeup when
+atomic_sub_return_release() is negative.
 
-There are two options:
-- The caller change their max state to 99% instead of 100% and
-document that 100% is not supported by idle inject framework
-- Support 100% idle support in idle inject framework
-
-Since there are other protections via RT throttling, this framework can
-allow 100% idle. The RT throttling will be activated at 95% idle by
-default. The caller disabling RT throttling and injecting 100% idle,
-should be aware that CPU can't be used at all.
-
-The idle inject timer is started for (run_duration_us + idle_duration_us)
-duration. Hence replace (run_duration_us && idle_duration_us) with
-(run_duration_us + idle_duration_us) in the function
-idle_inject_set_duration(). Also check for !(run_duration_us +
-idle_duration_us) to return -EINVAL in the function idle_inject_start().
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-Change log:
-Compared to RFC/RFT
-- Add a pr_debug for 100% idle
-
- drivers/powercap/idle_inject.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index c57b40477246..3ac81086d71f 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -170,10 +170,12 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
- 			      unsigned int run_duration_us,
- 			      unsigned int idle_duration_us)
- {
--	if (run_duration_us && idle_duration_us) {
-+	if (run_duration_us + idle_duration_us) {
- 		WRITE_ONCE(ii_dev->run_duration_us, run_duration_us);
- 		WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
- 	}
-+	if (!run_duration_us)
-+		pr_debug("CPU is forced to 100 percent idle\n");
- }
- EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
- 
-@@ -219,7 +221,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
- 	unsigned int idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
- 	unsigned int run_duration_us = READ_ONCE(ii_dev->run_duration_us);
- 
--	if (!idle_duration_us || !run_duration_us)
-+	if (!(idle_duration_us + run_duration_us))
- 		return -EINVAL;
- 
- 	pr_debug("Starting injecting idle cycles on CPUs '%*pbl'\n",
--- 
-2.31.1
-
+(rwsem.c has a more complex bitfield, but I don't think we need to go
+that far; the important point is that the waiting writer indicates its
+presence in the count field so that readers can modify their behaviour)
