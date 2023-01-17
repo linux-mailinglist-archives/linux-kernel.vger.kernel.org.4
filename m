@@ -2,304 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8967666DCF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C81AE66DCFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 12:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbjAQL4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 06:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S236902AbjAQL5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 06:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236588AbjAQL41 (ORCPT
+        with ESMTP id S236927AbjAQL5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 06:56:27 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529BD166CB;
-        Tue, 17 Jan 2023 03:56:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673956586; x=1705492586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gcnv7FtGXifpk5G8wjofQlyYGroL3+TkMBNsDwKKrQI=;
-  b=cL2avsgCpLWpUC7J2oA1lqUoWb27YJ0hPJh0p5233slMizyecsntduzQ
-   rErdTuODzbSRAc7Iux5LX5FCZ5YeNFKinm30msrsjM3ygHBp/PqYZYYoo
-   PXbaOAmsTMxW2/3fBI96Fzf8smi3KdidCxnJ9bvlUFvWB9gSYsxt52ew6
-   9vxB0vyRex68YxQLmkgximog58B1TcyrE5kx+/s6xsh+2btbF9H1Urc6G
-   xeWHnJYcJxBR1BfAwC2tIEcNpAxq/wO97+L6+xpjGSxDMrqpFCYeMMEqq
-   E13Fi4PoInGeciRUD1I33OzMdPzSLs8SVHN8DP0mxGDpxQSL14lcrNgPi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="387026941"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="387026941"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 03:56:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="801720509"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="801720509"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 17 Jan 2023 03:56:19 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Jan 2023 13:56:18 +0200
-Date:   Tue, 17 Jan 2023 13:56:18 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: typec: mux: Introduce GPIO-based SBU mux
-Message-ID: <Y8aM4kTCphTfEszc@kuha.fi.intel.com>
-References: <20230113041115.4189210-1-quic_bjorande@quicinc.com>
- <20230113041115.4189210-2-quic_bjorande@quicinc.com>
+        Tue, 17 Jan 2023 06:57:09 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A9C21966
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:57:08 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id y5so23255924pfe.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 03:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dANBMAp4RAENWRZ6t/H2cMtwy5dX1USGXnBc/Bo/Oe8=;
+        b=VSJnHLh7s1iiaeu991QJc0cXzh0unkpWjDRrnufHZZ/NNedjiL1s7qgJkBvmrOHl30
+         i1IM9SJQFmu0MIuhdOPR85sH+95e1Be8axjATAkD/eYuOFDPxAlGCzXuwSqM427jMT9S
+         v5qDzAhJ4YJvQOmMEOHEIGoIqiJIZpmPET651leAmkdgrl839LfFB6ILWRrK0zFAlXKX
+         skKHnQitn4iEU62djPMlj5G5WvUa4C9qBdj1O/W6nOYwn5+Jlf6dQobgk+zStP54SH/f
+         X4MHxvbGtjcv1AS4B79BJylW57zocqALfhjRRjx1Jweo+RBsW/L7oXlovO44fjE0nL9w
+         Q1Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dANBMAp4RAENWRZ6t/H2cMtwy5dX1USGXnBc/Bo/Oe8=;
+        b=bSCsqLeuu5BfxSpnxK/dSU5ZsHrXjtWPQJPwdcyuiogIsEk7h6pAVUR2zUkKcmJyfF
+         GBcW1hxeGqkvOAyJW9kTbzC1ntdvScfB8mq249ff1QoQFDertVn2+vNKYJheWWiaahCr
+         Y/lv7AahcD1dwFEoTv7Y4IgulfzH+r3b3X/rWmfQR7O3kh7hUWLx/xQK53gNsBcYRpbs
+         tA2vKhZVvNNF1UD26r5W9rQ//PQG5CvOzttg/+Nm3+T+w2Be2ceygDYrtZo+itF91jXa
+         q/wWkFAgOEywXxx6j76obqzWAVvwJj8pP4HgRFet/YRyHoDriaOzSLZKWVp/AC5VghuE
+         zUvg==
+X-Gm-Message-State: AFqh2krkBI4PfJZHf9mza3mAIvseUqDobqc/HiwJigZuvHXcP9pilGjm
+        WjFbGVabp4XB2g1O7/+1+qM=
+X-Google-Smtp-Source: AMrXdXsfsAPFEBXS0noewcd9K0vd1wBtAXFK4aZRGgMCXc+TGFLj77ymMookAnSv9l/iR4zJrPChGw==
+X-Received: by 2002:aa7:8f1a:0:b0:586:2f39:495a with SMTP id x26-20020aa78f1a000000b005862f39495amr3614019pfr.15.1673956628142;
+        Tue, 17 Jan 2023 03:57:08 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G4-MT ([43.224.245.252])
+        by smtp.gmail.com with ESMTPSA id b193-20020a621bca000000b005810c4286d6sm20066745pfb.0.2023.01.17.03.57.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 Jan 2023 03:57:07 -0800 (PST)
+Date:   Tue, 17 Jan 2023 19:57:02 +0800
+From:   qixiaoyu <qxy65535@gmail.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, xiongping1@xiaomi.com,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: set *_data_age_threshold according to
+ user_block_count
+Message-ID: <20230117115702.GA12653@mi-HP-ProDesk-680-G4-MT>
+References: <20230117103042.2509-1-frank.li@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113041115.4189210-2-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230117103042.2509-1-frank.li@vivo.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:11:15PM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+On Tue, Jan 17, 2023 at 06:30:42PM +0800, Yangtao Li via Linux-f2fs-devel wrote:
+> Commit 71644dff4811 ("f2fs: add block_age-based extent cache")
+> introduce age extent cache, which experimental data is based on
+> a 128G storage device, and hot and warm data age threshold are
+> set to 1G and 10G respectively. But it is unreasonable to set
+> this value to 1G or 10G by default, which varies depending on
+> the environment. For small storage devices, some storage devices
+> do not even have 10G.
 > 
-> A design found in various Qualcomm-based boards is to use a USB switch,
-> controlled through a pair of GPIO lines to connect, disconnect and
-> switch the orientation of the SBU lines in USB Type-C applications.
+> Let's change hot and warm data age threshold to 1% and 10% of
+> user_block_count respectively.
 > 
-> This introduces a generic driver, which implements the typec_switch and
-> typec_mux interfaces to perform these operations.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hi Yangtao,
 
+Thanks for your patch.
+
+The block age here refers to total data blocks allocated of filesystem
+between two consecutive updates. So, it has nothing to do with storage
+size.
+
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
+>  Documentation/ABI/testing/sysfs-fs-f2fs | 6 ++----
+>  fs/f2fs/extent_cache.c                  | 2 --
+>  fs/f2fs/f2fs.h                          | 9 +++++----
+>  fs/f2fs/super.c                         | 2 ++
+>  4 files changed, 9 insertions(+), 10 deletions(-)
 > 
-> Changes since v1:
-> - Fixed "swapped" being uninitialized for TYPEC_ORIENTATION_NONE in switch_set
-> 
->  drivers/usb/typec/mux/Kconfig        |   6 +
->  drivers/usb/typec/mux/Makefile       |   1 +
->  drivers/usb/typec/mux/gpio-sbu-mux.c | 172 +++++++++++++++++++++++++++
->  3 files changed, 179 insertions(+)
->  create mode 100644 drivers/usb/typec/mux/gpio-sbu-mux.c
-> 
-> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> index 5eb2c17d72c1..c46fa4f9d3df 100644
-> --- a/drivers/usb/typec/mux/Kconfig
-> +++ b/drivers/usb/typec/mux/Kconfig
-> @@ -12,6 +12,12 @@ config TYPEC_MUX_FSA4480
->  	  common USB Type-C connector.
->  	  If compiled as a module, the module will be named fsa4480.
+> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+> index 75420c242cc4..c7952f1baf59 100644
+> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
+> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+> @@ -660,15 +660,13 @@ What:		/sys/fs/f2fs/<disk>/hot_data_age_threshold
+>  Date:		November 2022
+>  Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
+>  Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
+> -		the data blocks as hot. By default it was initialized as 262144 blocks
+> -		(equals to 1GB).
+> +		the data blocks as hot. By default it was initialized as 1% of user_block_count.
 >  
-> +config TYPEC_MUX_GPIO_SBU
-> +	tristate "Generic GPIO based SBU mux for USB Type-C applications"
-> +	help
-> +	  Say Y or M if your system uses a GPIO based mux for managing the
-> +	  connected state and the swapping of the SBU lines in a Type-C port.
-> +
->  config TYPEC_MUX_PI3USB30532
->  	tristate "Pericom PI3USB30532 Type-C cross switch driver"
->  	depends on I2C
-> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-> index e52a56c16bfb..dda67e19b58b 100644
-> --- a/drivers/usb/typec/mux/Makefile
-> +++ b/drivers/usb/typec/mux/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
+>  What:		/sys/fs/f2fs/<disk>/warm_data_age_threshold
+>  Date:		November 2022
+>  Contact:	"Ping Xiong" <xiongping1@xiaomi.com>
+>  Description:	When DATA SEPARATION is on, it controls the age threshold to indicate
+> -		the data blocks as warm. By default it was initialized as 2621440 blocks
+> -		(equals to 10GB).
+> +		the data blocks as warm. By default it was initialized as 10% of user_block_count.
 >  
->  obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
-> +obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
->  obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
->  obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-> diff --git a/drivers/usb/typec/mux/gpio-sbu-mux.c b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> new file mode 100644
-> index 000000000000..f62516dafe8f
-> --- /dev/null
-> +++ b/drivers/usb/typec/mux/gpio-sbu-mux.c
-> @@ -0,0 +1,172 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Linaro Ltd.
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_mux.h>
-> +
-> +struct gpio_sbu_mux {
-> +	struct gpio_desc *enable_gpio;
-> +	struct gpio_desc *select_gpio;
-> +
-> +	struct typec_switch_dev *sw;
-> +	struct typec_mux_dev *mux;
-> +
-> +	struct mutex lock; /* protect enabled and swapped */
-> +	bool enabled;
-> +	bool swapped;
-> +};
-> +
-> +static int gpio_sbu_switch_set(struct typec_switch_dev *sw,
-> +			       enum typec_orientation orientation)
-> +{
-> +	struct gpio_sbu_mux *sbu_mux = typec_switch_get_drvdata(sw);
-> +	bool enabled;
-> +	bool swapped;
-> +
-> +	mutex_lock(&sbu_mux->lock);
-> +
-> +	enabled = sbu_mux->enabled;
-> +	swapped = sbu_mux->swapped;
-> +
-> +	switch (orientation) {
-> +	case TYPEC_ORIENTATION_NONE:
-> +		enabled = false;
-> +		break;
-> +	case TYPEC_ORIENTATION_NORMAL:
-> +		swapped = false;
-> +		break;
-> +	case TYPEC_ORIENTATION_REVERSE:
-> +		swapped = true;
-> +		break;
-> +	}
-> +
-> +	if (enabled != sbu_mux->enabled)
-> +		gpiod_set_value(sbu_mux->enable_gpio, enabled);
-> +
-> +	if (swapped != sbu_mux->swapped)
-> +		gpiod_set_value(sbu_mux->select_gpio, swapped);
-> +
-> +	sbu_mux->enabled = enabled;
-> +	sbu_mux->swapped = swapped;
-> +
-> +	mutex_unlock(&sbu_mux->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int gpio_sbu_mux_set(struct typec_mux_dev *mux,
-> +			    struct typec_mux_state *state)
-> +{
-> +	struct gpio_sbu_mux *sbu_mux = typec_mux_get_drvdata(mux);
-> +
-> +	mutex_lock(&sbu_mux->lock);
-> +
-> +	switch (state->mode) {
-> +	case TYPEC_STATE_SAFE:
-> +	case TYPEC_STATE_USB:
-> +		sbu_mux->enabled = false;
-> +		break;
-> +	case TYPEC_DP_STATE_C:
-> +	case TYPEC_DP_STATE_D:
-> +	case TYPEC_DP_STATE_E:
-> +		sbu_mux->enabled = true;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	gpiod_set_value(sbu_mux->enable_gpio, sbu_mux->enabled);
-> +
-> +	mutex_unlock(&sbu_mux->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int gpio_sbu_mux_probe(struct platform_device *pdev)
-> +{
-> +	struct typec_switch_desc sw_desc = { };
-> +	struct typec_mux_desc mux_desc = { };
-> +	struct device *dev = &pdev->dev;
-> +	struct gpio_sbu_mux *sbu_mux;
-> +
-> +	sbu_mux = devm_kzalloc(dev, sizeof(*sbu_mux), GFP_KERNEL);
-> +	if (!sbu_mux)
-> +		return -ENOMEM;
-> +
-> +	mutex_init(&sbu_mux->lock);
-> +
-> +	sbu_mux->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
-> +	if (IS_ERR(sbu_mux->enable_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(sbu_mux->enable_gpio),
-> +				     "unable to acquire enable gpio\n");
-> +
-> +	sbu_mux->select_gpio = devm_gpiod_get(dev, "select", GPIOD_OUT_LOW);
-> +	if (IS_ERR(sbu_mux->select_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(sbu_mux->select_gpio),
-> +				     "unable to acquire select gpio\n");
-> +
-> +	sw_desc.drvdata = sbu_mux;
-> +	sw_desc.fwnode = dev_fwnode(dev);
-> +	sw_desc.set = gpio_sbu_switch_set;
-> +
-> +	sbu_mux->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(sbu_mux->sw))
-> +		return dev_err_probe(dev, PTR_ERR(sbu_mux->sw),
-> +				     "failed to register typec switch\n");
-> +
-> +	mux_desc.drvdata = sbu_mux;
-> +	mux_desc.fwnode = dev_fwnode(dev);
-> +	mux_desc.set = gpio_sbu_mux_set;
-> +
-> +	sbu_mux->mux = typec_mux_register(dev, &mux_desc);
-> +	if (IS_ERR(sbu_mux->mux)) {
-> +		typec_switch_unregister(sbu_mux->sw);
-> +		return dev_err_probe(dev, PTR_ERR(sbu_mux->mux),
-> +				     "failed to register typec mux\n");
-> +	}
-> +
-> +	platform_set_drvdata(pdev, sbu_mux);
-> +
-> +	return 0;
-> +}
-> +
-> +static int gpio_sbu_mux_remove(struct platform_device *pdev)
-> +{
-> +	struct gpio_sbu_mux *sbu_mux = platform_get_drvdata(pdev);
-> +
-> +	gpiod_set_value(sbu_mux->enable_gpio, 0);
-> +
-> +	typec_mux_unregister(sbu_mux->mux);
-> +	typec_switch_unregister(sbu_mux->sw);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id gpio_sbu_mux_match[] = {
-> +	{ .compatible = "gpio-sbu-mux", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, gpio_sbu_mux_match);
-> +
-> +static struct platform_driver gpio_sbu_mux_driver = {
-> +	.probe = gpio_sbu_mux_probe,
-> +	.remove = gpio_sbu_mux_remove,
-> +	.driver = {
-> +		.name = "gpio_sbu_mux",
-> +		.of_match_table = gpio_sbu_mux_match,
-> +	},
-> +};
-> +module_platform_driver(gpio_sbu_mux_driver);
-> +
-> +MODULE_DESCRIPTION("GPIO based SBU mux driver");
-> +MODULE_LICENSE("GPL");
+>  What:		/sys/fs/f2fs/<disk>/fault_rate
+>  Date:		May 2016
+> diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+> index 1daf8c88c09b..9c7e304d5660 100644
+> --- a/fs/f2fs/extent_cache.c
+> +++ b/fs/f2fs/extent_cache.c
+> @@ -1235,8 +1235,6 @@ void f2fs_init_extent_cache_info(struct f2fs_sb_info *sbi)
+>  
+>  	/* initialize for block age extents */
+>  	atomic64_set(&sbi->allocated_data_blocks, 0);
+> -	sbi->hot_data_age_threshold = DEF_HOT_DATA_AGE_THRESHOLD;
+> -	sbi->warm_data_age_threshold = DEF_WARM_DATA_AGE_THRESHOLD;
+>  }
+>  
+>  int __init f2fs_create_extent_cache(void)
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index f3c5f7740c1a..3b853c302a43 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -615,11 +615,12 @@ enum {
+>  #define SAME_AGE_REGION			1024
+>  
+>  /*
+> - * Define data block with age less than 1GB as hot data
+> - * define data block with age less than 10GB but more than 1GB as warm data
+> + * Define data block with age less than 1% of user_block_count as hot data
+> + * Define data block with age less than 10% of user_block_count but more
+> + * than 1% of user_block_count as warm data
+>   */
+> -#define DEF_HOT_DATA_AGE_THRESHOLD	262144
+> -#define DEF_WARM_DATA_AGE_THRESHOLD	2621440
+> +#define DEF_HOT_DATA_AGE_THRESHOLD	1
+> +#define DEF_WARM_DATA_AGE_THRESHOLD	10
+>  
+>  /* extent cache type */
+>  enum extent_type {
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 5fc83771042d..8333ea5b8ffd 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -4088,6 +4088,8 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
+>  					BIT(F2FS_IPU_HONOR_OPU_WRITE);
+>  	}
+>  
+> +	sbi->hot_data_age_threshold = sbi->user_block_count * DEF_HOT_DATA_AGE_THRESHOLD / 100;
+> +	sbi->warm_data_age_threshold = sbi->user_block_count * DEF_WARM_DATA_AGE_THRESHOLD / 100;
+>  	sbi->readdir_ra = true;
+>  }
+>  
 > -- 
-> 2.37.3
-
--- 
-heikki
+> 2.25.1
+> 
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
