@@ -2,190 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16D566D9EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC9B66D9ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 10:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236577AbjAQJ31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 04:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S236309AbjAQJ3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 04:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236399AbjAQJ26 (ORCPT
+        with ESMTP id S236669AbjAQJ2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 04:28:58 -0500
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2074.outbound.protection.outlook.com [40.107.105.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A0218B04;
-        Tue, 17 Jan 2023 01:27:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aKf4K3GWFCb6/2rMcV1zXOhHvxcQCJZmhFijHWMXAgWvaZbBvd+WI5KWLfwAkEAzxRjtyceQX4EkzgEyPij0dOB6ORWFyd7RMuiI8ZqjuOEuiBxA/PIniUmQBuxJ9AD7bYF4YjE97l32P+7vxctVmGN8M5O68D3pIrwPwgTNRxrT1IZpuZwZCKz3I1nogJxwjR6LyMvD+bEd2ONbaRKPFUe8lhWL7xaMQa648btQt0zJC5hXeWFsIVPNRM1pwPxzlrAnFdZyVGwOBLIv3VP6rWuJiJeU4ic8HIJTjHT90G5ncM1mlwdp+Hyj632lDXgIacxQW2/m+fZOvAG0SC/x7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6wEIrlM3YYtOsWyY6bbyVhEpdD6zUn8nLkj1fIIequI=;
- b=ju+KqrMB/Zg+uvmyg04IJdL6XLfMRiG7zTdmN2VJ3xgtA0Srf+7RDCp2fHq1NnSjFKN1xz+LHDbDraXjZ4C925uawXK5ZaDGeYw9R9amz8KS9+RX92lY1vSvYROcPNCE+6p1EYQBFQEwYxoAt6jib0LUuISfavcMpOkqOPxx4qf4gjwZ016kg4JF9S2vQRuz8nDsGH3EAdnjoQoji7O7+ZSARHxKR8T27UWEYaOft3QhekUp2HB3KIw3+KAaj2uMsGGr1AETHEqRYBC7pMJu7YGE/5V+VXHfyxC6xLdfpvJ3hCZ8Ic8v7kqIcSSrtBVoqHd6P3PoxSi9PI03a1DA5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6wEIrlM3YYtOsWyY6bbyVhEpdD6zUn8nLkj1fIIequI=;
- b=WQX5Cz59BzJJkSsZCQ7BZTy3MeO+MPQ8AXayvQHaQvAu3LUE518u6FZWN+3OkBpVD7Stp0NuBq62bpwbOdY9xhb+jvgnT2lkJXNkp1NdvhmU0k5gpg7KEAtC8yQIZ/ObPEl5y4t2RyAGKf2ELW85hJakL/NWdy3O8XXiDmNhJb0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
- by GV1PR04MB9104.eurprd04.prod.outlook.com (2603:10a6:150:23::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 17 Jan
- 2023 09:27:10 +0000
-Received: from DB9PR04MB9628.eurprd04.prod.outlook.com
- ([fe80::aec2:20b6:cf99:2886]) by DB9PR04MB9628.eurprd04.prod.outlook.com
- ([fe80::aec2:20b6:cf99:2886%4]) with mapi id 15.20.5986.019; Tue, 17 Jan 2023
- 09:27:10 +0000
-From:   "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "S.J. Wang" <shengjiu.wang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        SOF-Team <sof-team@msteams.nxp.com>,
-        Mpuaudiosw <Mpuaudiosw@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>
-Cc:     linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v2] remoteproc: imx_dsp_rproc: add module parameter to ignore ready flag from remote processor
-Date:   Tue, 17 Jan 2023 11:26:47 +0200
-Message-Id: <20230117092647.15107-1-iuliana.prodan@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: AM4PR05CA0002.eurprd05.prod.outlook.com (2603:10a6:205::15)
- To DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
+        Tue, 17 Jan 2023 04:28:33 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE1014E9C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:27:01 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id bk15so16380384ejb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 01:27:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aG/8wcVo3iRFKTM15eP07bvogfZDNrsKDxEfzDzAxqQ=;
+        b=I0xtpXyMLKdw4YC1KQ+i/CO9seD/pJWEEKfI4ib77wLtEsrjFfaYTeXcnp4hnHrjA1
+         m8S5X9QeXhhav0yuntaQ7x2KuQqNzfK8YPV4nXEaBlL13kg35pHmSY7Dltq3VnWAdeKk
+         XAia9YcWJLOdosghZQn3U77KI60Ryy6jz4pK/TeEWA65+vdd8dwQxAcwmYWXRSUNa83t
+         2TEF87WC10QFXfWyW7RwEK8PoCTFXn5lT1m5HQrEi+P5RyY/Jr7WMnja41VsATUH2+Lt
+         IuUzpnlsFspRKgwmSuDxBIYPVh/VYnbvCzydKX7GgIcKh2xSos5mlvWiS1celQVLkr22
+         IfOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aG/8wcVo3iRFKTM15eP07bvogfZDNrsKDxEfzDzAxqQ=;
+        b=U7YcuCuhVJUoiue7vRWh9AXNMyux8TOgLycA8/khCJsL+0MgIDPgBpEkSKJYTFxoVZ
+         pYcBMxIxVRvpCWLFJ53+warLxVTfbetM/dYfiZD1130iXRaYSh9CkGDn+2ops7F/tni2
+         pSsIXGTVDWQe/gXICQAbxGOS3mC7zd7U4pKnZjqZ5f0v82moJLrfybLXXP/Wo70xm3eh
+         xYjHr9qHXS6tH1lETll1EqySsmNjaXEzJDScJegInnkq5AYXfOqh0eujWE5em8Pc3F59
+         Bxa5InDPudVuPrUzovTx11EWl53+h4+YWMXKqfnJsHQbgqtkC41201dzAs7hsejT3vMt
+         EG9w==
+X-Gm-Message-State: AFqh2koqmRtX6Q/5DyfQS+qELK0entUZRrl6A7jyiyRsjOVN1lK9AdBS
+        0PUkEuuqMD0QNVTKwjf9g5zssA==
+X-Google-Smtp-Source: AMrXdXu2si9HzTcy4nOGsEf7y8i21dY9vxEP7F2SyxnNBkvx0AeN1qN1paxsr2aPYTdtxPI9Z81GaQ==
+X-Received: by 2002:a17:907:2a56:b0:84d:35e1:2781 with SMTP id fe22-20020a1709072a5600b0084d35e12781mr14583345ejc.46.1673947620250;
+        Tue, 17 Jan 2023 01:27:00 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id et21-20020a170907295500b00871f66bf354sm1254923ejc.204.2023.01.17.01.26.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 01:26:59 -0800 (PST)
+Message-ID: <ed32ade2-41b1-5aa0-cc1f-0f40f1d9f099@linaro.org>
+Date:   Tue, 17 Jan 2023 11:26:58 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9628:EE_|GV1PR04MB9104:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7a4db2e-3202-4917-3ed8-08daf86d022c
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XVK+fACbh+bVGcEPKTe1n9NSdXR287O7PABQ7yIFqcaU9Dh9ETzs5z/FLQH38CXVAXp7ZOwR8bMJal3cdQgLwTBQmMge+bZeTpeMuliyZJ0azLqpNA7pFjGntQDCpk6BbcCcx9kg89MnthuPBdsj4WIsT62qnrQok2opgW9CtXhY9basHseD6NzOP7M3QOsi5RhXTAf6WyVRTckH6w9N0ImPvA50msCqoQ74/54HBxKm1AVF3bmzVjDhTM7UMSONMvOo4dvlwyvisfKTViDXJkogn+FBQhsC//Nh5p9yB+aZeiAduX9n6Lh7G6p5+fxugbkrY/RTakmRAX8EECGZpVxjH808u7gIQ1R0u6/eBBEjoksQHTjCAQelBhvPB+u99HWyYcr9atSpHknVH0zz8uvu07s0A358+dVB9OM7QAf8NEvlWyTKuVPMthjYLuDVGVa0j6Bt0RBStRKSJEYkqSwtZP3KqR33CavMva7WYfsNCV6aRukWwdLN2nNGfnub0UPDSOBkyFQVUDAdWn2U3yPcBsTi+uaY5sMm+P+fJfKwsrXpZEJgeeOIzuPwNkAOWgR9jSlDz1vDz4qitzw46uLX/crxV6/SPkwo2AO8gRJ6KuCfVFiqfEiSWecZlyfdtzkbollJxQ1grN9S89kFBBqUv2U/rhPkKwIguOVt9lHO9ZfwO+MLqSxn6DkPaCeTB1Ruyc+ry2rPKt9bRJij4A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9628.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(376002)(366004)(451199015)(2906002)(2616005)(6512007)(1076003)(6666004)(6506007)(186003)(26005)(66556008)(38350700002)(38100700002)(86362001)(4326008)(6486002)(5660300002)(478600001)(54906003)(52116002)(41300700001)(66476007)(66946007)(8936002)(110136005)(8676002)(921005)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7/XkhccMm9awIyjxxc/Z98jYf9tTJOoqAourRXvy8oQOXaRwMYCvo/CiPNGv?=
- =?us-ascii?Q?LUUHl1Lm94J+irlihQcizMXsMgNkWjlR96grXBCuNWJmBxPUcOBd3HInDKqi?=
- =?us-ascii?Q?Oq6L+EPNe9czp6ge8egdTap9reDRAP4io89F9jv7Ekp+VJRWEQbsEXayKgHW?=
- =?us-ascii?Q?1odLXWXkJ5MxX0b9AYXWWwB/C6n58ztKv+30Jiam1CptFMQvhH8C+ErWBuvH?=
- =?us-ascii?Q?tZ0shJp5D7Z5Zhm1dOkIYRj6BNNYgqxy9TXi+tpos5sxdvzUi4tQza3E9M7Y?=
- =?us-ascii?Q?wzZ10qO2OYcXYBhQzc3IESPuhHy3cdfS7+F22OlwHLWpjjtr/fSDkr61KXKe?=
- =?us-ascii?Q?VrqNur1/GSU1C5Uue9OHuhfxl3roX/6sVuYkWMpyshOOEzfxOKKPAREphDYd?=
- =?us-ascii?Q?XvTCZEHYqPkr52pay0ERz95ZYFy1mNmLrQU0Klo0zUjjsXx+KwT8+C78QBCe?=
- =?us-ascii?Q?gZ8oOfn/PPeYjJ9ZKw1XFb44NHKlWneLji5N2X3Ju542djSVAQmbWvY0BnT/?=
- =?us-ascii?Q?508xgu6S+cs4cY1aaFyQ5+hQOL3pUemPCG313CJsMDF+rqANoOCGJO0r11oR?=
- =?us-ascii?Q?ed3RyV8rVAdp5eeA7SWvwyoIKSIlIdpFuP/RqP5QZVRfA6zXZTqIK5SYdAND?=
- =?us-ascii?Q?uO71pdIBYRL4+xTydf1CflhJPrJzcIJMKY4tLU6w5WxDE81I9ypIFc7tXocV?=
- =?us-ascii?Q?KJlMPsdlvTgzSXtYy1UyurEFegLjlri0XuZlwoibIAFx+8HwwbePhQdBLijM?=
- =?us-ascii?Q?FixwSC99KvP5kHP23EXSqMDtmebCYqFib36OqhstnLfSlarzn0U9pAd3AvDv?=
- =?us-ascii?Q?3MLE8chFdoBcwMILXcuDAurBstEmW9bb+kv9Iy7TJaPWrkz7iFp9pLIBw/uc?=
- =?us-ascii?Q?WsQhEEwNcO0Pn4O48yYxIuvRan8ZKFzbIwCdR+y3XjZ0H9CuSK+3h7V43DG2?=
- =?us-ascii?Q?J5mI5v1S71NcrcuueV7MLtkq6vH9D7GDJwTsY++Sm9R2GrvgX9SgAyBB3MZa?=
- =?us-ascii?Q?S13m6WbgN1sXL1acd8DJXBxYxAlpFJhQnh0V2qXy1zT08P/W8Djt+eKrF23w?=
- =?us-ascii?Q?ZE0XD5/dg5ppO+rdF5/v4SWrR4HMAlXhkYQ/fDzvUh4NFKxELPHnLKfZPsk9?=
- =?us-ascii?Q?oxF9MaKFYHSlGA/w80x5DjH5CC2v0NE1SqzV2ZzjgB5QHzlZo3kgq2qH/Y2j?=
- =?us-ascii?Q?4QmBDFOywdIxvZ847S1XJKb5zo2kix1yfSL+/VEFWxmSbbfwS0kXUgMNEZ7O?=
- =?us-ascii?Q?+WFyXqLz6Onxfi3jdT37rcowLpM2rxRpzE82/l0i+PZ0SUSwmR5pcfjmae0X?=
- =?us-ascii?Q?FsKp4H8c+r3lsWcpCHxls9JTvR6+aSkYHyYTmQ+nW3RchwIw7StBRukDO/gB?=
- =?us-ascii?Q?gwpsN+P3CtETXRTYmiab5iCyDwWY4tN0rdexxZhVFIawUj8xZoXC8HogmabO?=
- =?us-ascii?Q?Be0kHVOEAKWYLhd+EYQxtWNFD+nfQPbpnIvt7LNU/2bx0PuWQt9m8VtumcUp?=
- =?us-ascii?Q?z/2cgNCoaq/nVjZ4rJx3bzYD3JyaYM36pSFucvbsGozEqyXJNXOFOHzKNCXj?=
- =?us-ascii?Q?4Ae2Gpq7itWH8liip3qtKX6m5wPZsYMnTZLeRuey?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7a4db2e-3202-4917-3ed8-08daf86d022c
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9628.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 09:27:10.1361
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xH3mVSZDo88FU+/h2e2z4AqsvyHpM3DDZNtvkjLR/wr6TFVazol0cSH8JLF/YIeg9p+E7Xh04bnuQU/N2o2p+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB9104
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 0/4] soc: qcom: Introduce PMIC GLINK
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+ <9e831252-7198-7983-8a52-0e745688452d@linaro.org>
+ <20230117023238.GB2350793@hu-bjorande-lv.qualcomm.com>
+ <c1e3db0d-7593-b0fc-043b-60538faf9ba2@linaro.org>
+ <20230117025818.GC2350793@hu-bjorande-lv.qualcomm.com>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230117025818.GC2350793@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Iuliana Prodan <iuliana.prodan@nxp.com>
+On 17/01/2023 04:58, Bjorn Andersson wrote:
+> On Tue, Jan 17, 2023 at 02:37:27AM +0000, Bryan O'Donoghue wrote:
+>> On 17/01/2023 02:32, Bjorn Andersson wrote:
+>>> On Fri, Jan 13, 2023 at 05:10:17PM +0000, Bryan O'Donoghue wrote:
+>>>> On 13/01/2023 04:11, Bjorn Andersson wrote:
+>>>>> This implements the base PMIC GLINK driver, a power_supply driver and a
+>>>>> driver for the USB Type-C altmode protocol. This has been tested and
+>>>>> shown to provide battery information, USB Type-C switch and mux requests
+>>>>> and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
+>>>>>
+>>>>> Bjorn Andersson (4):
+>>>>>      dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+>>>>>      soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+>>>>>      soc: qcom: pmic_glink: Introduce altmode support
+>>>>>      power: supply: Introduce Qualcomm PMIC GLINK power supply
+>>>>>
+>>>>>     .../bindings/soc/qcom/qcom,pmic-glink.yaml    |  102 ++
+>>>>>     drivers/power/supply/Kconfig                  |    9 +
+>>>>>     drivers/power/supply/Makefile                 |    1 +
+>>>>>     drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
+>>>>>     drivers/soc/qcom/Kconfig                      |   15 +
+>>>>>     drivers/soc/qcom/Makefile                     |    2 +
+>>>>>     drivers/soc/qcom/pmic_glink.c                 |  336 ++++
+>>>>>     drivers/soc/qcom/pmic_glink_altmode.c         |  477 ++++++
+>>>>>     include/linux/soc/qcom/pmic_glink.h           |   32 +
+>>>>>     9 files changed, 2395 insertions(+)
+>>>>>     create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+>>>>>     create mode 100644 drivers/power/supply/qcom_battmgr.c
+>>>>>     create mode 100644 drivers/soc/qcom/pmic_glink.c
+>>>>>     create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
+>>>>>     create mode 100644 include/linux/soc/qcom/pmic_glink.h
+>>>>>
+>>>>
+>>>> How does the USB PHY and a USB redriver fit into this ?
+>>>>
+>>>> Is the host supposed to manage both/neither ? Is the DSP responsible for
+>>>> configuring the PHY lanes and the turnaround on orientation switch ?
+>>>>
+>>>
+>>> As indicated above, the firmware deals with battery management and USB
+>>> Type-C handling.
+>>>
+>>> The battery/power management is handled by the battmgr implementation,
+>>> exposing the various properties through a set of power_supply objects.
+>>>
+>>> The USB Type-C handling comes in two forms. The "altmode" protocol
+>>> handles DisplayPort notifications - plug detect, orientation and mode
+>>> switches. The other part of the USB implementation exposes UCSI.
+>>>
+>>> The altmode implementation provides two things:
+>>> - A drm_bridge, per connector, which can be tied (of_graph) to a
+>>>     DisplayPort instance, and will invoke HPD notifications on the
+>>>     drm_bridge, based on notification messages thereof.
+>>>
+>>> - Acquire typec_switch and typec_mux handles through the of_graph and
+>>>     signal the remotes when notifications of state changes occur. Linking
+>>>     this to the FSA4480, is sufficient to get USB/DP combo (2+2 lanes)
+>>>     working on e.g. SM8350 HDK.
+>>>     Work in progress patches also exists for teaching QMP about
+>>>     orientation switching of the SS lines, but it seems this needs to be
+>>>     rebased onto the refactored QMP driver.
+>>>     I also have patches for QMP to make it switch USB/DP combo -> 4-lane
+>>>     DP, which allow 4k support without DSC, unfortunately switch back to
+>>>     USB has not been fully reliable, so this requires some more work
+>>>     (downstream involves DWC3 here as well, to reprogram the PHY).
+>>
+>> Oki doki that makes sense and is pretty much in-line with what I thought.
+>>
+>> We still have a bunch of typec-mux and phy work to do even with adsp/glink
+>> doing the TCPM.
+>>
+> 
+> Correct, the registration of QMP as a typec_switch and typec_mux and
+> handling of respective notification remains open and should (by design)
+> be independent of the TCPM implementation.
+> 
+> In particular the orientation switching is an itch worth scratching at
+> this time. But when the DPU becomes capable of producing 4k@60 output it
+> would obviously be nice to have the whole shebang :)
 
-There are cases when we want to test a simple "hello world"
-application on the DSP and we don't have IPC between the cores.
-Therefore, skip the wait for remote processor to start.
+Did you try it with the wide planes patchset at [1]? I was able to get 
+stable 4k@30 on RB3 (being limited only by the DSI-HDMI bridge).
 
-Added "ignoreready" flag while inserting the module to ignore
-remote processor reply after start.
-By default, this is off - do not ignore reply from rproc.
+[1] 
+https://lore.kernel.org/linux-arm-msm/20221229191856.3508092-1-dmitry.baryshkov@linaro.org/
 
-Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-
----
-Changes since v1
-- change BIT(31) to BIT(1) for REMOTE_SKIP_WAIT
-
----
- drivers/remoteproc/imx_dsp_rproc.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-index 95da1cbefacf..22e2ef068c67 100644
---- a/drivers/remoteproc/imx_dsp_rproc.c
-+++ b/drivers/remoteproc/imx_dsp_rproc.c
-@@ -26,9 +26,20 @@
- #include "remoteproc_elf_helpers.h"
- #include "remoteproc_internal.h"
- 
-+#define IMX_DSP_IGNORE_REMOTE_READY		0
-+
-+/*
-+ * Module parameters
-+ */
-+static unsigned int imx_dsp_rproc_ignoreready = IMX_DSP_IGNORE_REMOTE_READY;
-+module_param_named(ignoreready, imx_dsp_rproc_ignoreready, int, 0644);
-+MODULE_PARM_DESC(ignoreready,
-+		 "Ignore remote proc reply after start, default is 0 (off).");
-+
- #define DSP_RPROC_CLK_MAX			5
- 
- #define REMOTE_IS_READY				BIT(0)
-+#define REMOTE_SKIP_WAIT			BIT(1)
- #define REMOTE_READY_WAIT_MAX_RETRIES		500
- 
- /* att flags */
-@@ -285,6 +296,9 @@ static int imx_dsp_rproc_ready(struct rproc *rproc)
- 	if (!priv->rxdb_ch)
- 		return 0;
- 
-+	if (priv->flags & REMOTE_SKIP_WAIT)
-+		return 0;
-+
- 	for (i = 0; i < REMOTE_READY_WAIT_MAX_RETRIES; i++) {
- 		if (priv->flags & REMOTE_IS_READY)
- 			return 0;
-@@ -903,6 +917,9 @@ static int imx_dsp_rproc_probe(struct platform_device *pdev)
- 	priv->rproc = rproc;
- 	priv->dsp_dcfg = dsp_dcfg;
- 
-+	if (imx_dsp_rproc_ignoreready)
-+		priv->flags |= REMOTE_SKIP_WAIT;
-+
- 	dev_set_drvdata(dev, rproc);
- 
- 	INIT_WORK(&priv->rproc_work, imx_dsp_rproc_vq_work);
 -- 
-2.17.1
+With best wishes
+Dmitry
 
