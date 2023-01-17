@@ -2,227 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237F566D528
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1169766D52A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 04:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbjAQDtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 Jan 2023 22:49:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S235471AbjAQDub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 Jan 2023 22:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbjAQDtV (ORCPT
+        with ESMTP id S235399AbjAQDu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 Jan 2023 22:49:21 -0500
+        Mon, 16 Jan 2023 22:50:28 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83BF23331
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:48:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF72234D2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673927306;
+        s=mimecast20190719; t=1673927376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ox4Ah9tt80v/yWVYXdwLmBislsr/xQeepIzjgpV54dk=;
-        b=MdVx44YgHP3dGuUkrI5yXTS05toYp3M/fY3Nis0H5M1QqEa6F5oyyn6STXB8c5uOAqp7al
-        /dX8AZYffdOzNfjUSaiXYoVNuVtI1jwbU+NnuPG+iNgMV9lP1mGtufu9pQvFECxmK3wCPy
-        SFmJMxo9VVww8pY9xRTEYWNHm1yAAu8=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-650-H_CQDT1yN_CNkLQSUQBp8Q-1; Mon, 16 Jan 2023 22:48:25 -0500
-X-MC-Unique: H_CQDT1yN_CNkLQSUQBp8Q-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-14c90f25682so10142846fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 19:48:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ox4Ah9tt80v/yWVYXdwLmBislsr/xQeepIzjgpV54dk=;
-        b=g8OKev9VhZj6ZPPgbNHNW/BgNaEiq2H5lhA3dlRXtE8lphUVt9itSaGS2ZguV+mMkP
-         SM0g9sUwsPNgWsNwKK9OmqghYHQArHTiDdNewZvjsXJkPo6LskXuLUQPG2t2Bblxf3df
-         ztoOCsUMtfIctt+6NLwqlr3BljRiQLDfLaBvwwaIwSvKiihUVgElSmxJIyAaNtuhRugb
-         2QT3A3mgaZ4GF6pk225RCCQY3cJeyPRnU3XmrOru+qIGCYPfxa8sLe3zj8c3UJy3Hc9R
-         Divx4bHiT32TwLIh7jOq0MtbMYWNlCwA56NlPdryz/3OLcMxqjHIa4aj1X1AjUvIR8d9
-         eOfg==
-X-Gm-Message-State: AFqh2krhYVmIIQJHITqAzho3nWBApZXohmzvloYW+o+EHqC6xWBAK/S+
-        HlOgyasxCm2/5OWlkAdEiinxYuFyw3Q4NefrZxZ0D2F5CT2Du6PPHdGBr7PIOKVTVj28otUrk8N
-        d50D/uSwS+qpYPr6IF1Tz7xuxEf4k2DBBw1DeM6m8
-X-Received: by 2002:a05:6830:334d:b0:684:9f72:3fe3 with SMTP id l13-20020a056830334d00b006849f723fe3mr77550ott.201.1673927304621;
-        Mon, 16 Jan 2023 19:48:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsvPWHgmiuIC6ubfdkBMLXNoYQC3qKGVcUwBpPUbVPA4QslvV9B3BCnOvNItJrvKcEq//61NUmiljeMR3EA8k8=
-X-Received: by 2002:a05:6830:334d:b0:684:9f72:3fe3 with SMTP id
- l13-20020a056830334d00b006849f723fe3mr77542ott.201.1673927304388; Mon, 16 Jan
- 2023 19:48:24 -0800 (PST)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=d6j1pwwcrVA2VMufpYBThaFRk5AuLZLztdhG3ETtdEQ=;
+        b=B6B4q2quBl0RLf3y9f/7eeoKaDbl8DpYa8w54LinuRZ1A5oJRmR7qy24ySjSVGPnFbG5bI
+        Br6ooMv/1i2ln5vhHOKiWZbGvJzbsb1OGK84CiO4AlpJVoxAWjJrkBagIYq79xzhtwk3BS
+        sc19MVDefyUtzf4NSeKfzx0d0uyqHlE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-m9NhwEysOritgPQaMb4Hkg-1; Mon, 16 Jan 2023 22:49:30 -0500
+X-MC-Unique: m9NhwEysOritgPQaMb4Hkg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D72FD185A794;
+        Tue, 17 Jan 2023 03:49:29 +0000 (UTC)
+Received: from fedora.redhat.com (ovpn-12-229.pek2.redhat.com [10.72.12.229])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 336091415108;
+        Tue, 17 Jan 2023 03:49:24 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
+        wangkefeng.wang@huawei.com, Baoquan He <bhe@redhat.com>
+Subject: [PATCH 0/2] arm64: kdump: simplify the reservation behaviour of crashkernel=,high
+Date:   Tue, 17 Jan 2023 11:49:19 +0800
+Message-Id: <20230117034921.185150-1-bhe@redhat.com>
 MIME-Version: 1.0
-References: <20210526082423.47837-1-mst@redhat.com> <20210526082423.47837-5-mst@redhat.com>
- <a5990064-df57-f991-832d-56d1156dc3f8@redhat.com>
-In-Reply-To: <a5990064-df57-f991-832d-56d1156dc3f8@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 17 Jan 2023 11:48:13 +0800
-Message-ID: <CACGkMEuq3YOpQaZLD_dFsHsA=qpT=N22ZyLdtE83VNHjS6iVbQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] virtio_net: disable cb aggressively
-To:     Laurent Vivier <lvivier@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, Wei Wang <weiwan@google.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        virtualization@lists.linux-foundation.org,
-        Stefano Brivio <sbrivio@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_PDS_OTHER_BAD_TLD
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 9:41 PM Laurent Vivier <lvivier@redhat.com> wrote:
->
-> Hi Michael,
->
-> On 5/26/21 10:24, Michael S. Tsirkin wrote:
-> > There are currently two cases where we poll TX vq not in response to a
-> > callback: start xmit and rx napi.  We currently do this with callbacks
-> > enabled which can cause extra interrupts from the card.  Used not to be
-> > a big issue as we run with interrupts disabled but that is no longer the
-> > case, and in some cases the rate of spurious interrupts is so high
-> > linux detects this and actually kills the interrupt.
-> >
-> > Fix up by disabling the callbacks before polling the tx vq.
-> >
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> > ---
-> >   drivers/net/virtio_net.c | 16 ++++++++++++----
-> >   1 file changed, 12 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index c29f42d1e04f..a83dc038d8af 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -1433,7 +1433,10 @@ static void virtnet_poll_cleantx(struct receive_queue *rq)
-> >               return;
-> >
-> >       if (__netif_tx_trylock(txq)) {
-> > -             free_old_xmit_skbs(sq, true);
-> > +             do {
-> > +                     virtqueue_disable_cb(sq->vq);
-> > +                     free_old_xmit_skbs(sq, true);
-> > +             } while (unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> >
-> >               if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
-> >                       netif_tx_wake_queue(txq);
-> > @@ -1605,12 +1608,17 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
-> >       struct netdev_queue *txq = netdev_get_tx_queue(dev, qnum);
-> >       bool kick = !netdev_xmit_more();
-> >       bool use_napi = sq->napi.weight;
-> > +     unsigned int bytes = skb->len;
-> >
-> >       /* Free up any pending old buffers before queueing new ones. */
-> > -     free_old_xmit_skbs(sq, false);
-> > +     do {
-> > +             if (use_napi)
-> > +                     virtqueue_disable_cb(sq->vq);
-> >
-> > -     if (use_napi && kick)
-> > -             virtqueue_enable_cb_delayed(sq->vq);
-> > +             free_old_xmit_skbs(sq, false);
-> > +
-> > +     } while (use_napi && kick &&
-> > +            unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> >
-> >       /* timestamp packet in software */
-> >       skb_tx_timestamp(skb);
->
-> This patch seems to introduce a problem with QEMU connected to passt using netdev stream
-> backend.
->
-> When I run an iperf3 test I get after 1 or 2 seconds of test:
->
-> [  254.035559] NETDEV WATCHDOG: ens3 (virtio_net): transmit queue 0 timed out
-> ...
-> [  254.060962] virtio_net virtio1 ens3: TX timeout on queue: 0, sq: output.0, vq: 0x1,
-> name: output.0, 8856000 usecs ago
-> [  259.155150] virtio_net virtio1 ens3: TX timeout on queue: 0, sq: output.0, vq: 0x1,
-> name: output.0, 13951000 usecs ago
->
-> In QEMU, I can see in virtio_net_tx_bh() the function virtio_net_flush_tx() has flushed
-> all the queue entries and re-enabled the queue notification with
-> virtio_queue_set_notification() and tries to flush again the queue and as it is empty it
-> does nothing more and then rely on a kernel notification to re-enable the bottom half
-> function. As this notification never comes the queue is stuck and kernel add entries but
-> QEMU doesn't remove them:
->
-> 2812 static void virtio_net_tx_bh(void *opaque)
-> 2813 {
-> ...
-> 2833     ret = virtio_net_flush_tx(q);
->
-> -> flush the queue and ret is not an error and not n->tx_burst (that would re-schedule the
-> function)
->
-> ...
-> 2850     virtio_queue_set_notification(q->tx_vq, 1);
->
-> -> re-enable the queue notification
->
-> 2851     ret = virtio_net_flush_tx(q);
-> 2852     if (ret == -EINVAL) {
-> 2853         return;
-> 2854     } else if (ret > 0) {
-> 2855         virtio_queue_set_notification(q->tx_vq, 0);
-> 2856         qemu_bh_schedule(q->tx_bh);
-> 2857         q->tx_waiting = 1;
-> 2858     }
->
-> -> ret is 0, exit the function without re-scheduling the function.
-> ...
-> 2859 }
->
-> If I revert this patch in the kernel (a7766ef18b33 ("virtio_net: disable cb
-> aggressively")), it works fine.
->
-> How to reproduce it:
->
-> I start passt (https://passt.top/passt):
->
-> passt -f
->
-> and then QEMU
->
-> qemu-system-x86_64 ... --netdev
-> stream,id=netdev0,server=off,addr.type=unix,addr.path=/tmp/passt_1.socket -device
-> virtio-net,mac=9a:2b:2c:2d:2e:2f,netdev=netdev0
->
-> Host side:
->
-> sysctl -w net.core.rmem_max=134217728
-> sysctl -w net.core.wmem_max=134217728
-> iperf3 -s
->
-> Guest side:
->
-> sysctl -w net.core.rmem_max=536870912
-> sysctl -w net.core.wmem_max=536870912
->
-> ip link set dev $DEV mtu 256
-> iperf3 -c $HOST -t10 -i0 -Z -P 8 -l 1M --pacing-timer 1000000 -w 4M
->
-> Any idea of what is the problem?
+After crashkernel=,high support was added, our QE engineer surprisingly
+found the reserved crashkernel high region could cross the high low
+memory boundary. E.g on system with 4G as boundary, the crashkernel high
+region is [4G-64M, 4G+448M]. After investigation, I noticed on arm64,
+the area near 4G is contiguous. Not like x86, its firmware occupies the
+cpu address space below 4G. When memblock searches for available memory
+region top down, it could find a region across 4G boundary. Finally, we
+actually got two memory regions in low memory. This complicates the
+crashkernel=,high behaviour, people will be confused by this.
 
-This looks similar to what I spot and try to fix in:
+In this patchset, simpliyfy the behaviour of crashkernel=,high. When
+trying to reserve memory region for crashkernel high, we only search for
+the region in high memory, e.g above 4G. If failed, try searching in low
+memory. This makes sure the crashkernel high memory limited in high
+memory, confusion is removed.
 
-[PATCH net V3] virtio-net: correctly enable callback during start_xmit
+In patch 2, I add code comment above several crashkernel reservation
+case to ease code reading. I put them in a separate patch 2 because I
+want the code change in patch 1 to be straightforward and simpler for
+reviewing.
 
-(I've cced you in this version).
+Please help review and check if this is helpful and worth.
 
-Thanks
+Baoquan He (2):
+  arm64: kdump: simplify the reservation behaviour of crashkernel=,high
+  arm64/kdump: add code comments for crashkernel reservation cases
 
->
-> Thanks,
-> Laurent
->
->
+ arch/arm64/mm/init.c | 43 ++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 36 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
 
