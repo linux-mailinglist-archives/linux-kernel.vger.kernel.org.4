@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE6666E182
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68A866E186
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 15:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbjAQO6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 09:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S233219AbjAQO63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 09:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjAQO5k (ORCPT
+        with ESMTP id S230033AbjAQO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 17 Jan 2023 09:57:40 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E6E359D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DAC3E611;
         Tue, 17 Jan 2023 06:57:39 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HEbTEp005229;
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HEgXV3009373;
         Tue, 17 Jan 2023 14:57:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=5PcV4EjbwVxQbQROKWG6VF4HrVUTgnVHm7HS2j2rdJc=;
- b=Ld758OE+szB/gTZZagBXGHJ3IMPep1m3yS9mi8A+iC18lq26dceFL4asrupskag0NPgT
- yBYdM3jWMVTibmlCeRjMFMEq5ilAjgFpPfNbl++5dFfkmMmoRR2G6rdYKL9qoWju/BVQ
- tvBAGnj28Fc+6+Y/M7Ttfn8R2C0NjzFXcG+0RYGwevv3I8vwob3gp+jiJtMauAuBxnmF
- 695s/yWwip09VCPzxhX3/eyfbGwhYR3Ftd8ojKwFgSw2v+aFEZ7sz2oO2Q8aIuC0hvk+
- +VdUXMhepXqCyFmcIDnHAz3loW9TpFcDGMGSuBCs3K3UvC42v/Xe0qCUd6vS1yuxkfnN Gg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3npgdf93-1
+ bh=XJUS31OMejqMwAp10cRDrNALATh1Qi+y3CP7SptYo9g=;
+ b=UzAc3rKp+2GKKoOtC0/NA+DOEAPcN44P9fpF2NOCcM19d7AcL9oWckcZAIBhM43M5kOr
+ hDZonc+2rfIUwX7/6upiFdM//7GrrmKtALnLbIohGGbU/BgL+urI2/NX4yCd9ewM2RPw
+ hN6DDCYvzwKC5/i11bWK4OHYa8kYEcuZE4JDu2/4HrJWFT54wPlAyGMflNFIxV4Mn2LW
+ 3f+isPnMS2VDBihvb6KVDxGAhOaT1ZuU932uh244CWnu7EG18Zs3PNd8LDm+o1VtqkLX
+ In7tictf96Trum23sqvhrKrtl3O1tZWqypeMQgH5cmVtxew+kfj7lXq19X8BD3WDpA3T tQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5b189p2v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 17 Jan 2023 14:57:23 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HEvMLf018744
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HEvNR7015956
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Jan 2023 14:57:22 GMT
+        Tue, 17 Jan 2023 14:57:23 GMT
 Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -60,9 +60,9 @@ CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
         Hao Zhang <quic_hazha@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>,
         Bjorn Andersson <andersson@kernel.org>
-Subject: [PATCH v17 8/9] Documentation: trace: Add documentation for TPDM and TPDA
-Date:   Tue, 17 Jan 2023 06:57:07 -0800
-Message-ID: <20230117145708.16739-9-quic_jinlmao@quicinc.com>
+Subject: [PATCH v17 9/9] arm64: dts: qcom: sm8250: Add tpdm mm/prng
+Date:   Tue, 17 Jan 2023 06:57:08 -0800
+Message-ID: <20230117145708.16739-10-quic_jinlmao@quicinc.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230117145708.16739-1-quic_jinlmao@quicinc.com>
 References: <20230117145708.16739-1-quic_jinlmao@quicinc.com>
@@ -74,16 +74,16 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Ljxv1xhztqbXpqPxLywcJ5VjNJoVZbXM
-X-Proofpoint-ORIG-GUID: Ljxv1xhztqbXpqPxLywcJ5VjNJoVZbXM
+X-Proofpoint-GUID: kU3GiKP3oXPPRlsX9T2dmiNuc4TFU80w
+X-Proofpoint-ORIG-GUID: kU3GiKP3oXPPRlsX9T2dmiNuc4TFU80w
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-17_06,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
- impostorscore=0 phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170121
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
+ mlxlogscore=860 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301170121
 X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
@@ -94,123 +94,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the TPDM and TPDA under trace/coresight.
+Add tpdm mm and tpdm prng for sm8250.
 
++---------------+                +-------------+
+|  tpdm@6c08000 |                |tpdm@684C000 |
++-------|-------+                +------|------+
+        |                               |
++-------|-------+                       |
+| funnel@6c0b000|                       |
++-------|-------+                       |
+        |                               |
++-------|-------+                       |
+|funnel@6c2d000 |                       |
++-------|-------+                       |
+        |                               |
+        |    +---------------+          |
+        +----- tpda@6004000  -----------+
+             +-------|-------+
+                     |
+             +-------|-------+
+             |funnel@6005000 |
+             +---------------+
+
+Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 ---
- .../trace/coresight/coresight-tpda.rst        | 52 +++++++++++++++++++
- .../trace/coresight/coresight-tpdm.rst        | 43 +++++++++++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 Documentation/trace/coresight/coresight-tpda.rst
- create mode 100644 Documentation/trace/coresight/coresight-tpdm.rst
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 164 +++++++++++++++++++++++++++
+ 1 file changed, 164 insertions(+)
 
-diff --git a/Documentation/trace/coresight/coresight-tpda.rst b/Documentation/trace/coresight/coresight-tpda.rst
-new file mode 100644
-index 000000000000..350dad4eda47
---- /dev/null
-+++ b/Documentation/trace/coresight/coresight-tpda.rst
-@@ -0,0 +1,52 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index dab5579946f3..221fcbdb47a5 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -2746,6 +2746,73 @@ stm_out: endpoint {
+ 			};
+ 		};
+ 
++		tpda@6004000 {
++			compatible = "qcom,coresight-tpda", "arm,primecell";
++			reg = <0 0x06004000 0 0x1000>;
 +
-+==============================
-+The trace performance monitoring and diagnostics aggregator(TPDA).
-+==============================
++			clocks = <&aoss_qmp>;
++			clock-names = "apb_pclk";
 +
-+    :Author:   Jinlong Mao <quic_jinlmao@quicinc.com>
-+    :Date:     January 2023
++			out-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
 +
-+Hardware Description
-+--------------------
++				port@0 {
++					reg = <0>;
++					tpda_out_funnel_qatb: endpoint {
++						remote-endpoint = <&funnel_qatb_in_tpda>;
++					};
++				};
++			};
 +
-+TPDA - The trace performance monitoring and diagnostics aggregator or
-+TPDA in short serves as an arbitration and packetization engine for the
-+performance monitoring and diagnostics network specification.
-+The primary use case of the TPDA is to provide packetization, funneling
-+and timestamping of Monitor data.
++			in-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
 +
++				port@9 {
++					reg = <9>;
++					tpda_9_in_tpdm_mm: endpoint {
++						remote-endpoint = <&tpdm_mm_out_tpda9>;
++					};
++				};
 +
-+Sysfs files and directories
-+---------------------------
-+Root: ``/sys/bus/coresight/devices/tpda<N>``
++				port@17 {
++					reg = <23>;
++					tpda_23_in_tpdm_prng: endpoint {
++						remote-endpoint = <&tpdm_prng_out_tpda_23>;
++					};
++				};
++			};
++		};
 +
-+Config details
-+---------------------------
++		funnel@6005000 {
++			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++			reg = <0 0x06005000 0 0x1000>;
 +
-+The tpdm and tpda nodes should be observed at the coresight path
-+"/sys/bus/coresight/devices".
-+e.g.
-+/sys/bus/coresight/devices # ls -l | grep tpd
-+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
-+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
++			clocks = <&aoss_qmp>;
++			clock-names = "apb_pclk";
 +
-+We can use the commands are similar to the below to validate TPDMs.
-+Enable coresight sink first. The port of tpda which is connected to
-+the tpdm will be enabled after commands below.
++			out-ports {
++				port {
++					funnel_qatb_out_funnel_in0: endpoint {
++						remote-endpoint = <&funnel_in0_in_funnel_qatb>;
++					};
++				};
++			};
 +
-+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
-+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
-+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
-+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
++			in-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
 +
-+The test data will be collected in the coresight sink which is enabled.
-+If rwp register of the sink is keeping updating when do
-+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
-+generated from TPDM to sink.
++				port@0 {
++					reg = <0>;
++					funnel_qatb_in_tpda: endpoint {
++						remote-endpoint = <&tpda_out_funnel_qatb>;
++					};
++				};
++			};
++		};
 +
-+There must be a tpda between tpdm and the sink. When there are some
-+other trace event hw components in the same HW block with tpdm, tpdm
-+and these hw components will connect to the coresight funnel. When
-+there is only tpdm trace hw in the HW block, tpdm will connect to
-+tpda directly.
-diff --git a/Documentation/trace/coresight/coresight-tpdm.rst b/Documentation/trace/coresight/coresight-tpdm.rst
-new file mode 100644
-index 000000000000..4ba40b0db550
---- /dev/null
-+++ b/Documentation/trace/coresight/coresight-tpdm.rst
-@@ -0,0 +1,43 @@
-+.. SPDX-License-Identifier: GPL-2.0
+ 		funnel@6041000 {
+ 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+ 			reg = <0 0x06041000 0 0x1000>;
+@@ -2765,6 +2832,13 @@ in-ports {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+ 
++				port@6 {
++					reg = <6>;
++					funnel_in0_in_funnel_qatb: endpoint {
++						remote-endpoint = <&funnel_qatb_out_funnel_in0>;
++					};
++				};
 +
-+==============================
-+Trace performance monitoring and diagnostics monitor(TPDM).
-+==============================
+ 				port@7 {
+ 					reg = <7>;
+ 					funnel0_in7: endpoint {
+@@ -2882,6 +2956,22 @@ etr_in: endpoint {
+ 			};
+ 		};
+ 
++		tpdm@684c000 {
++			compatible = "qcom,coresight-tpdm", "arm,primecell";
++			reg = <0 0x0684c000 0 0x1000>;
 +
-+    :Author:   Jinlong Mao <quic_jinlmao@quicinc.com>
-+    :Date:     January 2023
++			clocks = <&aoss_qmp>;
++			clock-names = "apb_pclk";
 +
-+Hardware Description
-+--------------------
-+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
-+short serves as data collection component for various dataset types.
-+The primary use case of the TPDM is to collect data from different data
-+sources and send it to a TPDA for packetization, timestamping and funneling.
++			out-ports {
++				port {
++					tpdm_prng_out_tpda_23: endpoint {
++						remote-endpoint = <&tpda_23_in_tpdm_prng>;
++					};
++				};
++			};
++		};
 +
-+Sysfs files and directories
-+---------------------------
-+Root: ``/sys/bus/coresight/devices/tpdm<N>``
+ 		funnel@6b04000 {
+ 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+ 			arm,primecell-periphid = <0x000bb908>;
+@@ -2966,6 +3056,80 @@ replicator_in: endpoint {
+ 			};
+ 		};
+ 
++		tpdm@6c08000 {
++			compatible = "qcom,coresight-tpdm", "arm,primecell";
++			reg = <0 0x06c08000 0 0x1000>;
 +
-+----
++			clocks = <&aoss_qmp>;
++			clock-names = "apb_pclk";
 +
-+:File:            ``enable_source`` (RW)
-+:Notes:
-+    - > 0 : enable the datasets of TPDM.
++			out-ports {
++				port {
++					tpdm_mm_out_funnel_dl_mm: endpoint {
++						remote-endpoint = <&funnel_dl_mm_in_tpdm_mm>;
++					};
++				};
++			};
++		};
 +
-+    - = 0 : disable the datasets of TPDM.
++		funnel@6c0b000 {
++			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++			reg = <0 0x06c0b000 0 0x1000>;
 +
-+:Syntax:
-+    ``echo 1 > enable_source``
++			clocks = <&aoss_qmp>;
++			clock-names = "apb_pclk";
 +
-+----
++			out-ports {
++				port {
++					funnel_dl_mm_out_funnel_dl_center: endpoint {
++					remote-endpoint = <&funnel_dl_center_in_funnel_dl_mm>;
++					};
++				};
++			};
 +
-+:File:            ``integration_test`` (wo)
-+:Notes:
-+    Integration test will generate test data for tpdm.
++			in-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
 +
-+:Syntax:
-+    ``echo value > integration_test``
++				port@3 {
++					reg = <3>;
++					funnel_dl_mm_in_tpdm_mm: endpoint {
++						remote-endpoint = <&tpdm_mm_out_funnel_dl_mm>;
++					};
++				};
++			};
++		};
 +
-+    value -  1 or 2.
++		funnel@6c2d000 {
++			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++			reg = <0 0x06c2d000 0 0x1000>;
 +
-+----
++			clocks = <&aoss_qmp>;
++			clock-names = "apb_pclk";
++
++			out-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port {
++					tpdm_mm_out_tpda9: endpoint {
++						remote-endpoint = <&tpda_9_in_tpdm_mm>;
++					};
++				};
++			};
++
++			in-ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@2 {
++					reg = <2>;
++					funnel_dl_center_in_funnel_dl_mm: endpoint {
++					remote-endpoint = <&funnel_dl_mm_out_funnel_dl_center>;
++					};
++				};
++			};
++		};
++
+ 		etm@7040000 {
+ 			compatible = "arm,coresight-etm4x", "arm,primecell";
+ 			reg = <0 0x07040000 0 0x1000>;
 -- 
 2.39.0
 
