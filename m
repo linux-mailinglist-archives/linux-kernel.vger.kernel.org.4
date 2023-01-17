@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD14C66E52B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9B866E510
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 18:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjAQRqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 12:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S233169AbjAQRfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 12:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235514AbjAQRp0 (ORCPT
+        with ESMTP id S235786AbjAQRay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 12:45:26 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADC53F93
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:35:22 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id p66so15234765iof.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:35:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=prNnNsy5T4xsGuSVCbHAoEeKQx9E2Oycb0EFwKlDuO8=;
-        b=cBXaoSjv+haWHr24w4kmz0KG5HEm76xSSB94stcm2gzSbvIQWrxVUPu/ybPXmVDqw+
-         sWSz470KzDgVRCuSsXdGDl8U5o99BT8waqFmlR72/cTKlpgRz6UnLNxqQ7r7Nx4RHePN
-         a8Dk5piW3FOS3mk9DurMYeox+YIRIzoIW/vTQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=prNnNsy5T4xsGuSVCbHAoEeKQx9E2Oycb0EFwKlDuO8=;
-        b=xKPbQiDvPsfT0fR84GwUTLHFnBLJU0xYjCDM09nfbjZsIoHYLAmduYQil2LlM3nOak
-         ormoEpQ3SWa4OmI3zHH66D3BjKMrVCxAamx6tVCvnByJUKUqpE9Xbb5g1CyYfvEdCWwb
-         iGWGE720XC5nlz96UruUtHLsLzpPWv84jhBL30GHRlUW9reHJE4rdlS+OlV1zmZNNIOl
-         WmO2ow0jiqP+FglBbOEAWxtPQerDsuxRZoxcsfYvt89mpCPsS9sF11X5XnsenKtoJEyz
-         AGQvGqp1g6NpHJdycHgReShOq13JoqcHUVaDCeAHTEJs3VpRVx36iSaRg/JYTnr27vnV
-         cVBA==
-X-Gm-Message-State: AFqh2koHH+h62kIYNvDYxdTFa48F/p2cGXmLbbfZa7U0BKfD58r5iaJP
-        Q2ZOx75s4NQs2IUrxyJiCP+joWcc7ycTjN3k
-X-Google-Smtp-Source: AMrXdXsp9GSrctrHvSL+4drkKRKhClbPjEUfJGdajrGOGkmxfv0TFjMDJlJ94SQwMBqJIPU11uVKXw==
-X-Received: by 2002:a05:6602:368e:b0:704:6e73:d9af with SMTP id bf14-20020a056602368e00b007046e73d9afmr19065749iob.15.1673976921265;
-        Tue, 17 Jan 2023 09:35:21 -0800 (PST)
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com. [209.85.166.42])
-        by smtp.gmail.com with ESMTPSA id d16-20020a6b6810000000b006de73a731dbsm10485401ioc.51.2023.01.17.09.35.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 09:35:21 -0800 (PST)
-Received: by mail-io1-f42.google.com with SMTP id i70so5999441ioa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 Jan 2023 09:35:21 -0800 (PST)
-X-Received: by 2002:a05:620a:99d:b0:705:efa8:524c with SMTP id
- x29-20020a05620a099d00b00705efa8524cmr178735qkx.594.1673976555002; Tue, 17
- Jan 2023 09:29:15 -0800 (PST)
+        Tue, 17 Jan 2023 12:30:54 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D1E233F4;
+        Tue, 17 Jan 2023 09:30:04 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HFwnVo006833;
+        Tue, 17 Jan 2023 17:29:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=ghf5QjfvagPaFI53epsH4kOavDlkXLiG4G5OxHZ1B1w=;
+ b=XM6PiWpgCjQ74IEnJPmXn+h0JsMiuZ9Pf7sqEV7CpJlwWcoA1t14GakjDkMv8N20+5ff
+ UtTfDDO9mUX/BBiCv5XAAmXSW4nw32Wl4fq9O3Y2NSPJ3/QkR1ThFDF7U9eoq6D/bNhp
+ 4Od2FjBNXl9JKkpE9R1hn4Ooh5/g7qQumA2nThjM55xveA/viUx5y1xrpsy+oxRagw8l
+ 45FmiW5bOloioEBJNH0LIS2bfGgAzIaiXm5R4tLKUSfbHceIGUfTl5J/1hKnGlHbF6lq
+ 9jydt8u0U8hrsEMrFB9Ek+CeRaVvaKnXh9KR2k4MNnnJ2XEhbL6Yy1NEG/rUgx81V/dP dA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5nkq9cwq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 17:29:58 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30HHTvQQ024675
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 17:29:57 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 17 Jan 2023 09:29:56 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+CC:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp: Remove INIT_SETUP delay
+Date:   Tue, 17 Jan 2023 09:29:51 -0800
+Message-ID: <20230117172951.2748456-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230111123736.20025-1-kirill.shutemov@linux.intel.com>
- <20230111123736.20025-9-kirill.shutemov@linux.intel.com> <Y8adEg2CYUSVpwtk@hirez.programming.kicks-ass.net>
- <20230117135703.voaumisreld7crfb@box> <Y8a4bmCU9wsenvvF@hirez.programming.kicks-ass.net>
- <CAHk-=wiwiA7FdSww9fTg59r5S7G-DZHtzAcq9u5zBJKYXc1agQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiwiA7FdSww9fTg59r5S7G-DZHtzAcq9u5zBJKYXc1agQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 17 Jan 2023 09:28:59 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj4HUBvCvfX3oZLZAZTzPc2vdwsObFqnOsQ-UZrdzm_rQ@mail.gmail.com>
-Message-ID: <CAHk-=wj4HUBvCvfX3oZLZAZTzPc2vdwsObFqnOsQ-UZrdzm_rQ@mail.gmail.com>
-Subject: Re: [PATCHv14 08/17] x86/mm: Reduce untagged_addr() overhead until
- the first LAM user
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        ndesaulniers@google.com, joao@overdrivepizza.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CTQZUj5Sj9fGSZ8d58zMmdjQRLVdlPti
+X-Proofpoint-ORIG-GUID: CTQZUj5Sj9fGSZ8d58zMmdjQRLVdlPti
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-17_08,2023-01-17_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301170139
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 9:18 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> The reason clang seems to generate saner code is that clang seems to
-> largely ignore the whole "__builtin_expect()", at least not to the
-> point where it tries to make the unlikely case be out-of-line.
+During initalization of the DisplayPort controller an EV_HPD_INIT_SETUP
+event is generated, but with a delay of 100 units. This delay existed to
+circumvent bug in the QMP combo PHY driver, where if the DP part was
+powered up before USB, the common properties would not be properly
+initialized - and USB wouldn't work.
 
-Side note: that's not something new or unusual. It's been the case
-since I started testing clang - we have several code-paths where we
-use "unlikely()" to try to get very unlikely cases to be out-of-line,
-and clang just mostly ignores it, or treats it as a very weak hint. I
-think the only way to get clang to treat it as a *strong* hint is to
-use PGO.
+This issue was resolved in the recent refactoring of the QMP driver,
+so it's now possible to remove this delay.
 
-And in this case it actually made code generation look better,
-probably because this particular use of static_branch_likely() is a
-bit confused about which side should be the preferred one.  It's using
-the static branch to make the old case not have the masked load, but
-then it's saying that the new case is the likely one.
+While there is still a timing dependency in the current implementation,
+test indicates that it's now possible to boot with an external display
+on USB Type-C and have the display power up, without disconnecting and
+reconnecting the cable.
 
-So clang ignoring the likely() hint is probably the right thing here,
-and then the wrong thing in some other places.
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-              Linus
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index db9783ffd5cf..bde1a7ce442f 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1506,7 +1506,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+ 	dp = container_of(dp_display, struct dp_display_private, dp_display);
+ 
+ 	if (!dp_display->is_edp)
+-		dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
++		dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
+ }
+ 
+ bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+-- 
+2.37.3
+
