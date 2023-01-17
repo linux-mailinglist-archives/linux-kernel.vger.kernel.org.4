@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64FD66D636
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479D466D654
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 Jan 2023 07:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbjAQGR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 Jan 2023 01:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
+        id S235768AbjAQG01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 Jan 2023 01:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbjAQGQM (ORCPT
+        with ESMTP id S235720AbjAQG0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 Jan 2023 01:16:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF32885A
-        for <linux-kernel@vger.kernel.org>; Mon, 16 Jan 2023 22:15:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pHfFb-0002TJ-Do; Tue, 17 Jan 2023 07:15:15 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pHfFY-006bzx-US; Tue, 17 Jan 2023 07:15:12 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pHfFX-00Fcks-5a; Tue, 17 Jan 2023 07:15:11 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Russell King <linux@armlinux.org.uk>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 19/19] ARM: dts: imx6ul-prti6g: configure ethernet reference clock parent
-Date:   Tue, 17 Jan 2023 07:14:53 +0100
-Message-Id: <20230117061453.3723649-20-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230117061453.3723649-1-o.rempel@pengutronix.de>
-References: <20230117061453.3723649-1-o.rempel@pengutronix.de>
+        Tue, 17 Jan 2023 01:26:01 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6E6422032;
+        Mon, 16 Jan 2023 22:25:37 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80631C14;
+        Mon, 16 Jan 2023 22:19:12 -0800 (PST)
+Received: from R913NWR2.arm.com (unknown [10.162.42.84])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 26E013F445;
+        Mon, 16 Jan 2023 22:18:26 -0800 (PST)
+From:   Faiz Abbas <faiz.abbas@arm.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        kuninori.morimoto.gx@renesas.com, Anurag.Koul@arm.com,
+        Deepak.Pandey@arm.com, faiz.abbas@arm.com
+Subject: [PATCH v2] ASoC: dt-bindings: simple-card: Document simple-audio-card,plat
+Date:   Tue, 17 Jan 2023 11:48:08 +0530
+Message-Id: <20230117061808.18422-1-faiz.abbas@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On this board the PHY is the ref clock provider. So, configure ethernet
-reference clock as input.
+The simple card driver already has support for a simple-audio-card,plat
+property but its not reflected in the documentation. Add documentation
+for this plat property.
 
-Without this patch we have relatively high amount of dropped packets.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Faiz Abbas <faiz.abbas@arm.com>
 ---
- arch/arm/boot/dts/imx6ul-prti6g.dts | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Changes since v1:
+1. Updated commit message to indicate the property already exists
+2. Removed redundant example
+3. Fixed formatting issue found by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 
-diff --git a/arch/arm/boot/dts/imx6ul-prti6g.dts b/arch/arm/boot/dts/imx6ul-prti6g.dts
-index c18390f238e1..b7c96fbe7a91 100644
---- a/arch/arm/boot/dts/imx6ul-prti6g.dts
-+++ b/arch/arm/boot/dts/imx6ul-prti6g.dts
-@@ -26,6 +26,7 @@ clock_ksz8081_out: clock-ksz8081-out {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 		clock-frequency = <50000000>;
-+		clock-output-names = "enet1_ref_pad";
- 	};
+ Documentation/devicetree/bindings/sound/simple-card.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
+index ed19899bc94b..9abe99f15763 100644
+--- a/Documentation/devicetree/bindings/sound/simple-card.yaml
++++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
+@@ -205,6 +205,8 @@ patternProperties:
+     $ref: "#/definitions/dai"
+   "^simple-audio-card,codec(@[0-9a-f]+)?$":
+     $ref: "#/definitions/dai"
++  "^simple-audio-card,plat(@[0-9a-f]+)?$":
++    $ref: "#/definitions/dai"
  
- 	leds {
-@@ -60,6 +61,13 @@ &can2 {
- 	status = "okay";
- };
- 
-+&clks {
-+	clocks = <&ckil>, <&osc>, <&ipp_di0>, <&ipp_di1>, <&clock_ksz8081_out>;
-+	clock-names = "ckil", "osc", "ipp_di0", "ipp_di1", "enet1_ref_pad";
-+	assigned-clocks = <&clks IMX6UL_CLK_ENET1_REF_SEL>;
-+	assigned-clock-parents = <&clock_ksz8081_out>;
-+};
-+
- &ecspi1 {
- 	cs-gpios = <&gpio4 26 GPIO_ACTIVE_LOW>;
- 	pinctrl-names = "default";
-@@ -85,12 +93,6 @@ &fec1 {
- 	pinctrl-0 = <&pinctrl_eth1>;
- 	phy-mode = "rmii";
- 	phy-handle = <&rmii_phy>;
--	clocks = <&clks IMX6UL_CLK_ENET>,
--		 <&clks IMX6UL_CLK_ENET_AHB>,
--		 <&clks IMX6UL_CLK_ENET_PTP>,
--		 <&clock_ksz8081_out>;
--	clock-names = "ipg", "ahb", "ptp",
--		      "enet_clk_ref";
- 	status = "okay";
- 
- 	mdio {
+   "^simple-audio-card,dai-link(@[0-9a-f]+)?$":
+     description: |
 -- 
-2.30.2
+2.25.1
 
